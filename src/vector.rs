@@ -175,3 +175,241 @@ impl<'a> From<&'a [f32; 2]> for &'a Vector2 {
         unsafe { mem::transmute(v) }
     }
 }
+
+impl<'a> ops::Add<Vector2> for &'a Vector2 {
+    type Output = Vector2;
+
+    fn add(self, other: Vector2) -> Self::Output {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl ops::Add<Vector2> for Vector2 {
+    type Output = Vector2;
+
+    fn add(self, other: Vector2) -> Self::Output {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<'a> ops::Add<&'a Vector2> for Vector2 {
+    type Output = Vector2;
+
+    fn add(self, other: &'a Vector2) -> Self::Output {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<'a, 'b> ops::Add<&'b Vector2> for &'a Vector2 {
+    type Output = Vector2;
+
+    fn add(self, other: &'b Vector2) -> Self::Output {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl ops::Add<f32> for Vector2 {
+    type Output = Vector2;
+
+    fn add(self, other: f32) -> Self::Output {
+        Vector2 {
+            x: self.x + other,
+            y: self.y + other,
+        }
+    }
+}
+
+impl<'a> ops::Sub<Vector2> for &'a Vector2 {
+    type Output = Vector2;
+
+    fn sub(self, other: Vector2) -> Self::Output {
+        Vector2 {
+            x: self.x - other.y,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl ops::Sub<Vector2> for Vector2 {
+    type Output = Vector2;
+
+    fn sub(self, other: Vector2) -> Self::Output {
+        Vector2 {
+            x: self.x - other.y,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<'a> ops::Sub<&'a Vector2> for Vector2 {
+    type Output = Vector2;
+
+    fn sub(self, other: &'a Vector2) -> Self::Output {
+        Vector2 {
+            x: self.x - other.y,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<'a, 'b> ops::Sub<&'b Vector2> for &'a Vector2 {
+    type Output = Vector2;
+
+    fn sub(self, other: &'b Vector2) -> Self::Output {
+        Vector2 {
+            x: self.x - other.y,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl ops::Sub<f32> for Vector2 {
+    type Output = Vector2;
+
+    fn sub(self, other: f32) -> Self::Output {
+        Vector2 {
+            x: self.x - other,
+            y: self.y - other,
+        }
+    }
+}
+
+impl ops::AddAssign<Vector2> for Vector2 {
+    fn add_assign(&mut self, other: Vector2) {
+        self.x = self.x + other.x;
+        self.y = self.y + other.y;
+    }
+}
+
+impl<'a> ops::AddAssign<&'a Vector2> for Vector2 {
+    fn add_assign(&mut self, other: &'a Vector2) {
+        self.x = self.x + other.x;
+        self.y = self.y + other.y;
+    }
+}
+
+impl<'a> ops::AddAssign<Vector2> for &'a mut Vector2 {
+    fn add_assign(&mut self, other: Vector2) {
+        self.x = self.x + other.x;
+        self.y = self.y + other.y;
+    }
+}
+
+impl<'a, 'b> ops::AddAssign<&'a Vector2> for &'b mut Vector2 {
+    fn add_assign(&mut self, other: &'a Vector2) {
+        self.x = self.x + other.x;
+        self.y = self.y + other.y;
+    }
+}
+
+impl ops::AddAssign<f32> for Vector2 {
+    fn add_assign(&mut self, other: f32) {
+        self.x = self.x + other;
+        self.y = self.y + other;
+    }
+}
+
+impl ops::SubAssign<Vector2> for Vector2 {
+    fn sub_assign(&mut self, other: Vector2) {
+        self.x = self.x - other.x;
+        self.y = self.y - other.y;
+    }
+}
+
+impl<'a> ops::SubAssign<&'a Vector2> for Vector2 {
+    fn sub_assign(&mut self, other: &'a Vector2) {
+        self.x = self.x - other.x;
+        self.y = self.y - other.y;
+    }
+}
+
+impl<'a> ops::SubAssign<Vector2> for &'a mut Vector2 {
+    fn sub_assign(&mut self, other: Vector2) {
+        self.x = self.x - other.x;
+        self.y = self.y - other.y;
+    }
+}
+
+impl<'a, 'b> ops::SubAssign<&'a Vector2> for &'b mut Vector2 {
+    fn sub_assign(&mut self, other: &'a Vector2) {
+        self.x = self.x - other.x;
+        self.y = self.y - other.y;
+    }
+}
+
+impl ops::SubAssign<f32> for Vector2 {
+    fn sub_assign(&mut self, other: f32) {
+        self.x = self.x - other;
+        self.y = self.y - other;
+    }
+}
+
+impl ops::Mul<f32> for Vector2 {
+    type Output = Vector2;
+
+    fn mul(self, other: f32) -> Vector2 {
+        Vector2 {
+            x: self.x * other,
+            y: self.y * other,
+        }
+    }
+}
+
+impl<'a> ops::Mul<f32> for &'a Vector2 {
+    type Output = Vector2;
+
+    fn mul(self, other: f32) -> Vector2 {
+        Vector2 {
+            x: self.x * other,
+            y: self.y * other,
+        }
+    }
+}
+
+impl ops::Div<f32> for Vector2 {
+    type Output = Vector2;
+
+    fn div(self, other: f32) -> Vector2 {
+        Vector2 {
+            x: self.x / other,
+            y: self.y / other,
+        }
+    }
+}
+
+impl<'a> ops::Div<f32> for &'a Vector2 {
+    type Output = Vector2;
+
+    fn div(self, other: f32) -> Vector2 {
+        Vector2 {
+            x: self.x / other,
+            y: self.y / other,
+        }
+    }
+}
+
+impl ops::DivAssign<f32> for Vector2 {
+    fn div_assign(&mut self, other: f32) {
+        self.x = self.x / other;
+        self.y = self.y / other;
+    }
+}
+
+impl<'a> ops::DivAssign<f32> for &'a mut Vector2 {
+    fn div_assign(&mut self, other: f32) {
+        self.x = self.x / other;
+        self.y = self.y / other;
+    }
+}
