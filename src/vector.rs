@@ -8,8 +8,8 @@ use std::ops;
 ///
 #[derive(Copy, Clone, PartialEq)]
 pub struct Vector2 {
-   x: f32,
-   y: f32,
+   pub x: f32,
+   pub y: f32,
 }
 
 impl Vector2 {
@@ -99,3 +99,30 @@ impl fmt::Display for Vector2 {
     }
 }
 
+impl From<(f32, f32)> for Vector2 {
+    #[inline]
+    fn from((x, y): (f32, f32)) -> Vector2 {
+        Vector2 { x: x, y: y }
+    }
+}
+
+impl From<[f32; 2]> for Vector2 {
+    #[inline]
+    fn from(v: [f32; 2]) -> Vector2 {
+        Vector2 { x: v[0], y: v[1] }
+    }
+}
+
+impl<'a> From<&'a [f32; 2]> for Vector2 {
+    #[inline]
+    fn from(v: &'a [f32; 2]) -> Vector2 {
+        Vector2 { x: v[0], y: v[1] }
+    }
+}
+
+impl<'a> From<&'a [f32; 2]> for &'a Vector2 {
+    #[inline]
+    fn from(v: &'a [f32; 2]) -> &'a Vector2 {
+        unsafe { mem::transmute(v) }
+    }
+}
