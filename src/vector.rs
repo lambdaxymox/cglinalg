@@ -2,6 +2,16 @@ use std::fmt;
 use std::mem;
 use std::ops;
 
+
+///
+/// Construct a new two-dimensional vector in the style of
+/// a GLSL vec3 constructor.
+///
+#[inline]
+pub fn vec2<T: Into<Vector2>>(v: T) -> Vector2 {
+    v.into()
+}
+
 ///
 /// A representation of two-dimensional vectors, with a
 /// Euclidean metric.
