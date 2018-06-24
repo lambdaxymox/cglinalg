@@ -13,12 +13,51 @@ pub struct Vector2 {
 }
 
 impl Vector2 {
+    ///
+    /// Create a new vector.
+    ///
     pub fn new(x: f32, y: f32) -> Vector2 {
         Vector2 { x: x, y: y }
     }
 
+    ///
+    /// Generate a zero vector.
+    ///
     pub fn zero() -> Vector2 { 
         Vector2 { x: 0.0, y: 0.0 }
+    }
+
+    ///
+    /// Compute the norm (length) of a vector.
+    ///
+    pub fn norm(&self) -> f32 {
+        f32::sqrt(self.x * self.x + self.y * self.y)
+    }
+
+    ///
+    /// Compute the squared norm (length) of a vector.
+    ///
+    pub fn norm2(&self) -> f32 {
+        self.x * self.x + self.y * self.y
+    }
+
+    ///
+    /// Convert an arbitrary vector into a unit vector.
+    ///
+    pub fn normalize(&self) -> Vector2 {
+        let norm_v = self.norm();
+        if norm_v == 0.0 {
+            return Vector2::zero();
+        }
+
+        Vector2::new(self.x / norm_v, self.y / norm_v)
+    }
+
+    ///
+    /// Compute the dot product of two vectors.
+    ///
+    pub fn dot(&self, other: &Vector2) -> f32 {
+        self.x * other.x + self.y * other.y
     }
 }
 
