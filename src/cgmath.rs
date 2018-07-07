@@ -1364,9 +1364,9 @@ impl Matrix3 {
 
     pub fn transpose(&self) -> Matrix3 {
         Matrix3::new(
-            self.m[0], self.m[3], self.m[7],  
-            self.m[1], self.m[4], self.m[8],  
-            self.m[2], self.m[6], self.m[9]
+            self.m[0], self.m[3], self.m[6],  
+            self.m[1], self.m[4], self.m[7],  
+            self.m[2], self.m[5], self.m[8]
         )
     }
 
