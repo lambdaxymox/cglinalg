@@ -50,6 +50,15 @@ pub fn vec4<T: Into<Vector4>>(v: T) -> Vector4 {
     v.into()
 }
 
+///
+/// Create a new quaternion in the style of a GLSL type
+/// constructor.
+///
+#[inline]
+pub fn quat<T: Into<Quaternion>>(q: T) -> Quaternion {
+    q.into()
+}
+
 #[inline]
 fn mat3(m11: f32, m12: f32, m13: f32, 
         m21: f32, m22: f32, m23: f32, 
