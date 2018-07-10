@@ -327,17 +327,6 @@ impl<'a, 'b> ops::Add<&'b Vector2> for &'a Vector2 {
     }
 }
 
-impl ops::Add<f32> for Vector2 {
-    type Output = Vector2;
-
-    fn add(self, other: f32) -> Self::Output {
-        Vector2 {
-            x: self.x + other,
-            y: self.y + other,
-        }
-    }
-}
-
 impl<'a> ops::Sub<Vector2> for &'a Vector2 {
     type Output = Vector2;
 
@@ -382,17 +371,6 @@ impl<'a, 'b> ops::Sub<&'b Vector2> for &'a Vector2 {
     }
 }
 
-impl ops::Sub<f32> for Vector2 {
-    type Output = Vector2;
-
-    fn sub(self, other: f32) -> Self::Output {
-        Vector2 {
-            x: self.x - other,
-            y: self.y - other,
-        }
-    }
-}
-
 impl ops::AddAssign<Vector2> for Vector2 {
     fn add_assign(&mut self, other: Vector2) {
         self.x = self.x + other.x;
@@ -421,13 +399,6 @@ impl<'a, 'b> ops::AddAssign<&'a Vector2> for &'b mut Vector2 {
     }
 }
 
-impl ops::AddAssign<f32> for Vector2 {
-    fn add_assign(&mut self, other: f32) {
-        self.x = self.x + other;
-        self.y = self.y + other;
-    }
-}
-
 impl ops::SubAssign<Vector2> for Vector2 {
     fn sub_assign(&mut self, other: Vector2) {
         self.x = self.x - other.x;
@@ -453,13 +424,6 @@ impl<'a, 'b> ops::SubAssign<&'a Vector2> for &'b mut Vector2 {
     fn sub_assign(&mut self, other: &'a Vector2) {
         self.x = self.x - other.x;
         self.y = self.y - other.y;
-    }
-}
-
-impl ops::SubAssign<f32> for Vector2 {
-    fn sub_assign(&mut self, other: f32) {
-        self.x = self.x - other;
-        self.y = self.y - other;
     }
 }
 
@@ -987,6 +951,26 @@ impl Vector4 {
 
     pub fn zero() -> Vector4 {
         Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 }
+    }
+
+    ///
+    /// Compute the squared distance between two vectors.
+    ///
+    pub fn distance2(&self, to: &Vector4) -> f32 {
+        let x = (to.x - self.x) * (to.x - self.x);
+        let y = (to.y - self.y) * (to.y - self.y);
+        let z = (to.z - self.z) * (to.z - self.z);
+        let w = (to.w - self.w) * (to.w - self.w);
+    
+        x + y + z + w
+    }
+
+    ///
+    /// Compute the squared distance between two vectors.
+    ///
+    #[inline]
+    pub fn distance(&self, to: &Vector4) -> f32 {
+        f32::sqrt(self.distance2(to))
     }
 }
 
