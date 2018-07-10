@@ -178,6 +178,16 @@ impl Vector2 {
     pub fn distance(&self, to: &Vector3) -> f32 {
         f32::sqrt(self.distance2(to))
     }
+
+    #[inline]
+    pub fn as_ptr(&self) -> *const f32 {
+        &self.x
+    }
+
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut f32 {
+        &mut self.x
+    }
 }
 
 impl AsRef<[f32; 2]> for Vector2 {
@@ -599,6 +609,16 @@ impl Vector3 {
     pub fn distance(&self, to: &Vector3) -> f32 {
         f32::sqrt(self.distance2(to))
     }
+
+    #[inline]
+    pub fn as_ptr(&self) -> *const f32 {
+        &self.x
+    }
+
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut f32 {
+        &mut self.x
+    }
 }
 
 
@@ -991,6 +1011,16 @@ impl Vector4 {
     #[inline]
     pub fn distance(&self, to: &Vector4) -> f32 {
         f32::sqrt(self.distance2(to))
+    }
+
+    #[inline]
+    pub fn as_ptr(&self) -> *const f32 {
+        &self.x
+    }
+
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut f32 {
+        &mut self.x
     }
 }
 
