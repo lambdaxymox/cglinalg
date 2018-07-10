@@ -33,6 +33,24 @@ pub fn vec2<T: Into<Vector2>>(v: T) -> Vector2 {
 }
 
 ///
+/// Construct a new three-dimensional vector in the style of
+/// a GLSL vec3 constructor.
+///
+#[inline]
+pub fn vec3<T: Into<Vector3>>(v: T) -> Vector3 {
+    v.into()
+}
+
+///
+/// Construct a new four-dimensional vector in the style of
+/// a GLSL vec4 constructor.
+///
+#[inline]
+pub fn vec4<T: Into<Vector4>>(v: T) -> Vector4 {
+    v.into()
+}
+
+///
 /// A representation of two-dimensional vectors, with a
 /// Euclidean metric.
 ///
@@ -522,14 +540,7 @@ impl Vector3 {
     }
 }
 
-///
-/// Construct a new three-dimensional vector in the style of
-/// a GLSL vec3 constructor.
-///
-#[inline]
-pub fn vec3<T: Into<Vector3>>(v: T) -> Vector3 {
-    v.into()
-}
+
 
 impl AsRef<[f32; 3]> for Vector3 {
     fn as_ref(&self) -> &[f32; 3] {
@@ -923,11 +934,6 @@ impl Vector4 {
     pub fn zero() -> Vector4 {
         Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 }
     }
-}
-
-#[inline]
-pub fn vec4<T: Into<Vector4>>(v: T) -> Vector4 {
-    v.into()
 }
 
 impl AsRef<[f32; 4]> for Vector4 {
