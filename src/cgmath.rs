@@ -1471,7 +1471,7 @@ impl Matrix4 {
         )
     }
 
-    pub fn identity() -> Matrix4 {
+    pub fn one() -> Matrix4 {
         Matrix4::new(
             1.0, 0.0, 0.0, 0.0, 
             0.0, 1.0, 0.0, 0.0, 
@@ -1490,7 +1490,7 @@ impl Matrix4 {
     }
 
     pub fn translate(&self, v: &Vector3) -> Matrix4 {
-        let mut m_t = Matrix4::identity();
+        let mut m_t = Matrix4::one();
         m_t.m[12] = v.x;
         m_t.m[13] = v.y;
         m_t.m[14] = v.z;
@@ -1502,7 +1502,7 @@ impl Matrix4 {
     pub fn rotate_x_deg(&self, deg: f32) -> Matrix4 {
         // Convert to radians.
         let rad = deg * ONE_DEG_IN_RAD;
-        let mut m_r = Matrix4::identity();
+        let mut m_r = Matrix4::one();
         m_r.m[5]  =  f32::cos(rad);
         m_r.m[9]  = -f32::sin(rad);
         m_r.m[6]  =  f32::sin(rad);
@@ -1515,7 +1515,7 @@ impl Matrix4 {
     pub fn rotate_y_deg(&self, deg: f32) -> Matrix4 {
         // Convert to radians.
         let rad = deg * ONE_DEG_IN_RAD;
-        let mut m_r = Matrix4::identity();
+        let mut m_r = Matrix4::one();
         m_r.m[0]  =  f32::cos(rad);
         m_r.m[8]  =  f32::sin(rad);
         m_r.m[2]  = -f32::sin(rad);
@@ -1528,7 +1528,7 @@ impl Matrix4 {
     pub fn rotate_z_deg(&self, deg: f32) -> Matrix4 {
         // Convert to radians.
         let rad = deg * ONE_DEG_IN_RAD;
-        let mut m_r = Matrix4::identity();
+        let mut m_r = Matrix4::one();
         m_r.m[0] =  f32::cos(rad);
         m_r.m[4] = -f32::sin(rad);
         m_r.m[1] =  f32::sin(rad);
@@ -1539,7 +1539,7 @@ impl Matrix4 {
 
     // scale a matrix by [x, y, z]
     pub fn scale(&self, v: &Vector3) -> Matrix4 {
-        let mut m_s = Matrix4::identity();
+        let mut m_s = Matrix4::one();
         m_s.m[0]  = v.x;
         m_s.m[5]  = v.y;
         m_s.m[10] = v.z;
@@ -2270,8 +2270,8 @@ mod mat4_tests {
                 },
                 TestCase {
                     c: 6.2396,
-                    a_mat: Matrix4::identity(),
-                    b_mat: Matrix4::identity(),
+                    a_mat: Matrix4::one(),
+                    b_mat: Matrix4::one(),
                 },
                 TestCase {
                     c: 6.2396,
@@ -2300,8 +2300,8 @@ mod mat4_tests {
     #[test]
     fn test_mat_times_identity_equals_mat() {
         for test in test_cases().iter() {
-            let a_mat_times_identity = test.a_mat * Matrix4::identity();
-            let b_mat_times_identity = test.b_mat * Matrix4::identity();
+            let a_mat_times_identity = test.a_mat * Matrix4::one();
+            let b_mat_times_identity = test.b_mat * Matrix4::one();
 
             assert_eq!(a_mat_times_identity, test.a_mat);
             assert_eq!(b_mat_times_identity, test.b_mat);
@@ -2333,10 +2333,10 @@ mod mat4_tests {
     #[test]
     fn test_mat_times_identity_equals_identity_times_mat() {
         for test in test_cases().iter() {
-            let a_mat_times_identity = test.a_mat * Matrix4::identity();
-            let identity_times_a_mat = Matrix4::identity() * test.a_mat;
-            let b_mat_times_identity = test.b_mat * Matrix4::identity();
-            let identity_times_b_mat = Matrix4::identity() * test.b_mat;
+            let a_mat_times_identity = test.a_mat * Matrix4::one();
+            let identity_times_a_mat = Matrix4::one() * test.a_mat;
+            let b_mat_times_identity = test.b_mat * Matrix4::one();
+            let identity_times_b_mat = Matrix4::one() * test.b_mat;
 
             assert_eq!(a_mat_times_identity, identity_times_a_mat);
             assert_eq!(b_mat_times_identity, identity_times_b_mat);
@@ -2346,7 +2346,7 @@ mod mat4_tests {
     #[test]
     fn test_mat_times_mat_inverse_equals_identity() {
         for test in test_cases().iter() {
-            let identity = Matrix4::identity();
+            let identity = Matrix4::one();
             if test.a_mat.is_invertible() {
                 let a_mat_inverse = test.a_mat.inverse();
                 assert_eq!(a_mat_inverse * test.a_mat, identity);
@@ -2361,7 +2361,7 @@ mod mat4_tests {
     #[test]
     fn test_mat_inverse_times_mat_equals_identity() {
         for test in test_cases().iter() {
-            let identity = Matrix4::identity();
+            let identity = Matrix4::one();
             if test.a_mat.is_invertible() {
                 let a_mat_inverse = test.a_mat.inverse();
                 assert_eq!(test.a_mat * a_mat_inverse, identity);
@@ -2386,7 +2386,7 @@ mod mat4_tests {
 
     #[test]
     fn test_identity_transpose_equals_identity() {
-        let identity = Matrix4::identity();
+        let identity = Matrix4::one();
         let identity_tr = identity.transpose();
             
         assert_eq!(identity, identity_tr);
@@ -2395,7 +2395,7 @@ mod mat4_tests {
     #[test]
     fn test_identity_mat4_translates_vector_along_vector() {
         let v = super::vec3((2.0, 2.0, 2.0));
-        let trans_mat = Matrix4::identity().translate(&v);
+        let trans_mat = Matrix4::one().translate(&v);
         let zero_vec4 = super::vec4((0.0, 0.0, 0.0, 1.0));
         let zero_vec3 = super::vec3((0.0, 0.0, 0.0));
 
