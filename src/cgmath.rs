@@ -52,11 +52,23 @@ pub fn vec4<T: Into<Vector4>>(v: T) -> Vector4 {
 
 ///
 /// Create a new quaternion in the style of a GLSL type
-/// constructor.
+/// constructor. This is not a built-in function in GLSL, but it exists
+/// for convenience.
 ///
 #[inline]
 pub fn quat<T: Into<Quaternion>>(q: T) -> Quaternion {
     q.into()
+}
+
+///
+/// Create a new 2x2 matrix in the style of a GLSL type
+/// constructor.
+///
+#[inline]
+fn mat2(m11: f32, m12: f32,
+        m21: f32, m22: f32) -> Matrix2 {
+
+    Matrix2::new(m11, m12, m21, m22)
 }
 
 ///
