@@ -1766,6 +1766,14 @@ impl AsRef<[f32; 16]> for Matrix4 {
     }
 }
 
+impl AsRef<[[f32; 4]; 4]> for Matrix4 {
+    fn as_ref(&self) -> &[[f32; 4]; 4] {
+        unsafe {
+            mem::transmute(self)
+        }
+    }
+}
+
 impl AsMut<[f32; 16]> for Matrix4 {
     fn as_mut(&mut self) -> &mut [f32; 16] {
         &mut self.m
