@@ -1413,10 +1413,12 @@ impl Matrix2 {
         )
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const f32 {
         self.m.as_ptr()
     }
 
+    #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut f32 {
         self.m.as_mut_ptr()
     }
@@ -1492,10 +1494,12 @@ impl Matrix3 {
         )
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *const f32 {
         self.m.as_ptr()
     }
 
+    #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut f32 {
         self.m.as_mut_ptr()
     }
@@ -1759,10 +1763,12 @@ impl Matrix4 {
     /// Generate a pointer to the underlying array for passing a
     /// matrix to the graphics hardware.
     ///
+    #[inline]
     pub fn as_ptr(&self) -> *const f32 {
         self.m.as_ptr()
     }
 
+    #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut f32 {
         self.m.as_mut_ptr()
     }
