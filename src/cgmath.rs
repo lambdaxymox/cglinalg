@@ -134,6 +134,7 @@ impl Vector2 {
         Vector2 { x: 1.0, y: 0.0 }
     }
 
+    #[inline]
     pub fn unit_y() -> Vector2 {
         Vector2 { x: 0.0, y: 1.0 }
     }
@@ -561,7 +562,22 @@ impl Vector3 {
     pub fn zero() -> Vector3 {
         Vector3 { x: 0.0, y: 0.0, z: 0.0 }
     }
+
+    #[inline]
+    pub fn unit_x() -> Vector3 {
+        Vector3 { x: 1.0, y: 0.0, z: 0.0 }
+    }
+
+    #[inline]
+    pub fn unit_y() -> Vector3 {
+        Vector3 { x: 0.0, y: 1.0, z: 0.0 }
+    }
     
+    #[inline]
+    pub fn unit_z() -> Vector3 {
+        Vector3 { x: 0.0, y: 0.0, z: 1.0 }
+    }
+
     ///
     /// Compute the norm (length) of a vector.
     ///
@@ -1020,6 +1036,26 @@ impl Vector4 {
 
     pub fn zero() -> Vector4 {
         Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 }
+    }
+
+    #[inline]
+    pub fn unit_x() -> Vector4 {
+        Vector4 { x: 1.0, y: 0.0, z: 0.0, w: 0.0 }
+    }
+
+    #[inline]
+    pub fn unit_y() -> Vector4 {
+        Vector4 { x: 0.0, y: 1.0, z: 0.0, w: 0.0 }
+    }
+    
+    #[inline]
+    pub fn unit_z() -> Vector4 {
+        Vector4 { x: 0.0, y: 0.0, z: 1.0, w: 0.0 }
+    }
+
+    #[inline]
+    pub fn unit_w() -> Vector4 {
+        Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 1.0 }
     }
 
     ///
