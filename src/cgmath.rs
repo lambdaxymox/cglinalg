@@ -1715,6 +1715,70 @@ impl<'a> ops::Mul<Matrix2> for &'a Matrix2 {
     }
 }
 
+impl ops::Mul<f32> for Matrix2 {
+    type Output = Matrix2;
+
+    fn mul(self, other: f32) -> Self::Output {
+        let m11 = self.m[0] * other;
+        let m21 = self.m[1] * other;
+        let m12 = self.m[2] * other;
+        let m22 = self.m[3] * other;
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl<'a> ops::Mul<f32> for &'a Matrix2 {
+    type Output = Matrix2;
+
+    fn mul(self, other: f32) -> Self::Output {
+        let m11 = self.m[0] * other;
+        let m21 = self.m[1] * other;
+        let m12 = self.m[2] * other;
+        let m22 = self.m[3] * other;
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl ops::Div<f32> for Matrix2 {
+    type Output = Matrix2;
+
+    fn div(self, other: f32) -> Self::Output {
+        let m11 = self.m[0] / other;
+        let m21 = self.m[1] / other;
+        let m12 = self.m[2] / other;
+        let m22 = self.m[3] / other;
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl<'a> ops::Div<f32> for &'a Matrix2 {
+    type Output = Matrix2;
+
+    fn div(self, other: f32) -> Self::Output {
+        let m11 = self.m[0] / other;
+        let m21 = self.m[1] / other;
+        let m12 = self.m[2] / other;
+        let m22 = self.m[3] / other;
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
 ///
 /// The `Matrix3` type represents 3x3 matrices in column-major order.
 ///
