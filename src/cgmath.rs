@@ -139,6 +139,25 @@ impl Vector2 {
     pub fn dot(&self, other: &Vector2) -> f32 {
         self.x * other.x + self.y * other.y
     }
+
+    ///
+    /// Compute the squared distance between two vectors.
+    ///
+    #[inline]
+    pub fn distance2(&self, to: &Vector3) -> f32 {
+        let x = (to.x - self.x) * (to.x - self.x);
+        let y = (to.y - self.y) * (to.y - self.y);
+    
+        x + y
+    }
+
+    ///
+    /// Compute the Euclidean distance between two vectors.
+    ///
+    #[inline]
+    pub fn distance(&self, to: &Vector3) -> f32 {
+        f32::sqrt(self.distance2(to))
+    }
 }
 
 impl AsRef<[f32; 2]> for Vector2 {
@@ -581,12 +600,20 @@ impl Vector3 {
     ///
     /// Compute the squared distance between two vectors.
     ///
-    pub fn get_squared_dist(&self, to: &Vector3) -> f32 {
+    pub fn distance2(&self, to: &Vector3) -> f32 {
         let x = (to.x - self.x) * (to.x - self.x);
         let y = (to.y - self.y) * (to.y - self.y);
         let z = (to.z - self.z) * (to.z - self.z);
     
         x + y + z
+    }
+
+    ///
+    /// Compute the squared distance between two vectors.
+    ///
+    #[inline]
+    pub fn distance(&self, to: &Vector3) -> f32 {
+        f32::sqrt(self.distance2(to))
     }
 }
 
@@ -769,18 +796,6 @@ impl<'a, 'b> ops::Add<&'b Vector3> for &'a Vector3 {
     }
 }
 
-impl ops::Add<f32> for Vector3 {
-    type Output = Vector3;
-
-    fn add(self, other: f32) -> Self::Output {
-        Vector3 {
-            x: self.x + other,
-            y: self.y + other,
-            z: self.z + other,
-        }
-    }
-}
-
 impl<'a> ops::Sub<Vector3> for &'a Vector3 {
     type Output = Vector3;
 
@@ -829,18 +844,6 @@ impl<'a, 'b> ops::Sub<&'b Vector3> for &'a Vector3 {
     }
 }
 
-impl ops::Sub<f32> for Vector3 {
-    type Output = Vector3;
-
-    fn sub(self, other: f32) -> Self::Output {
-        Vector3 {
-            x: self.x - other,
-            y: self.y - other,
-            z: self.z - other,
-        }
-    }
-}
-
 impl ops::AddAssign<Vector3> for Vector3 {
     fn add_assign(&mut self, other: Vector3) {
         self.x += other.x;
@@ -873,14 +876,6 @@ impl<'a, 'b> ops::AddAssign<&'a Vector3> for &'b mut Vector3 {
     }
 }
 
-impl ops::AddAssign<f32> for Vector3 {
-    fn add_assign(&mut self, other: f32) {
-        self.x += other;
-        self.y += other;
-        self.z += other;
-    }
-}
-
 impl ops::SubAssign<Vector3> for Vector3 {
     fn sub_assign(&mut self, other: Vector3) {
         self.x -= other.x;
@@ -910,14 +905,6 @@ impl<'a, 'b> ops::SubAssign<&'a Vector3> for &'b mut Vector3 {
         self.x -= other.x;
         self.y -= other.y;
         self.z -= other.z;
-    }
-}
-
-impl ops::SubAssign<f32> for Vector3 {
-    fn sub_assign(&mut self, other: f32) {
-        self.x -= other;
-        self.y -= other;
-        self.z -= other;
     }
 }
 
@@ -1181,28 +1168,15 @@ impl<'a> ops::Add<&'a Vector4> for Vector4 {
     }
 }
 
-impl<'a, 'b> ops::Add<&'b Vector4> for &'a Vector4 {
+impl<'a, 'b> ops::Add<&'a Vector4> for &'b Vector4 {
     type Output = Vector4;
 
-    fn add(self, other: &'b Vector4) -> Self::Output {
+    fn add(self, other: &'a Vector4) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
             y: self.y + other.y,
             z: self.z + other.z,
             w: self.w + other.w,
-        }
-    }
-}
-
-impl ops::Add<f32> for Vector4 {
-    type Output = Vector4;
-
-    fn add(self, other: f32) -> Self::Output {
-        Vector4 {
-            x: self.x + other,
-            y: self.y + other,
-            z: self.z + other,
-            w: self.w + other,
         }
     }
 }
@@ -1259,19 +1233,6 @@ impl<'a, 'b> ops::Sub<&'b Vector4> for &'a Vector4 {
     }
 }
 
-impl ops::Sub<f32> for Vector4 {
-    type Output = Vector4;
-
-    fn sub(self, other: f32) -> Self::Output {
-        Vector4 {
-            x: self.x - other,
-            y: self.y - other,
-            z: self.z - other,
-            w: self.w - other,
-        }
-    }
-}
-
 impl ops::AddAssign<Vector4> for Vector4 {
     fn add_assign(&mut self, other: Vector4) {
         self.x += other.x;
@@ -1308,15 +1269,6 @@ impl<'a, 'b> ops::AddAssign<&'a Vector4> for &'b mut Vector4 {
     }
 }
 
-impl ops::AddAssign<f32> for Vector4 {
-    fn add_assign(&mut self, other: f32) {
-        self.x += other;
-        self.y += other;
-        self.z += other;
-        self.w += other;
-    }
-}
-
 impl ops::SubAssign<Vector4> for Vector4 {
     fn sub_assign(&mut self, other: Vector4) {
         self.x -= other.x;
@@ -1350,15 +1302,6 @@ impl<'a, 'b> ops::SubAssign<&'a Vector4> for &'b mut Vector4 {
         self.y -= other.y;
         self.z -= other.z;
         self.w -= other.w;
-    }
-}
-
-impl ops::SubAssign<f32> for Vector4 {
-    fn sub_assign(&mut self, other: f32) {
-        self.x -= other;
-        self.y -= other;
-        self.z -= other;
-        self.w -= other;
     }
 }
 
