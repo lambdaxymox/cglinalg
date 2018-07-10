@@ -1869,6 +1869,14 @@ impl Quaternion {
         self / norm
     }
 
+    ///
+    /// Create a unit quaternion who is also the multiplicative identity:
+    /// q * q^-1 == 1.
+    ///
+    pub fn one() -> Quaternion {
+        Quaternion { w: 1.0, x: 0.0, y: 0.0, z: 0.0 }
+    }
+
     pub fn dot(&self, r: &Quaternion) -> f32 {
         self.w * r.w + self.x * r.x + self.y * r.y + self.z * r.z
     }
