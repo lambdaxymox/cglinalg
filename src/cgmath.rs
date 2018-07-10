@@ -2169,18 +2169,30 @@ impl<'a> ops::Neg for &'a Quaternion {
     }
 }
 
-impl<'a> ops::Add<&'a Quaternion> for Quaternion {
+impl ops::Add<Quaternion> for Quaternion {
     type Output = Quaternion;
 
-    fn add(self, other: &'a Quaternion) -> Self::Output {
-        let result = Quaternion {
+    #[inline]
+    fn add(self, other: Quaternion) -> Self::Output {
+        Quaternion {
             s: other.s + self.s,
             x: other.x + self.x,
             y: other.y + self.y,
             z: other.z + self.z,
-        };
-        // Renormalize in case of mangling.
-        result.normalize()
+        }
+    }
+}
+
+impl<'a> ops::Add<&'a Quaternion> for Quaternion {
+    type Output = Quaternion;
+
+    fn add(self, other: &'a Quaternion) -> Self::Output {
+        Quaternion {
+            s: other.s + self.s,
+            x: other.x + self.x,
+            y: other.y + self.y,
+            z: other.z + self.z,
+        }
     }
 }
 
