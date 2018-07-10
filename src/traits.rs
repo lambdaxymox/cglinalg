@@ -5,5 +5,5 @@ pub trait AsArray {
 
     fn as_ptr(&self) -> *const Self::Element; 
 
-    fn as_mut_ptr(&self) -> *mut Self::Element; 
+    fn as_mut_ptr(&mut self) -> *mut Self::Element; 
 }

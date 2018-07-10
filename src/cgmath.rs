@@ -2,7 +2,8 @@ use std::fmt;
 use std::mem;
 use std::ops;
 use std::cmp;
-use ::traits;
+
+use ::traits::AsArray;
 
 
 // Constants used to convert degrees into radians.
@@ -66,7 +67,7 @@ pub fn quat<T: Into<Quaternion>>(q: T) -> Quaternion {
 /// constructor.
 ///
 #[inline]
-fn mat2(m11: f32, m12: f32,
+pub fn mat2(m11: f32, m12: f32,
         m21: f32, m22: f32) -> Matrix2 {
 
     Matrix2::new(m11, m12, m21, m22)
@@ -77,7 +78,7 @@ fn mat2(m11: f32, m12: f32,
 /// constructor.
 ///
 #[inline]
-fn mat3(m11: f32, m12: f32, m13: f32, 
+pub fn mat3(m11: f32, m12: f32, m13: f32, 
         m21: f32, m22: f32, m23: f32, 
         m31: f32, m32: f32, m33: f32) -> Matrix3 {
 
@@ -179,14 +180,23 @@ impl Vector2 {
     pub fn distance(&self, to: &Vector3) -> f32 {
         f32::sqrt(self.distance2(to))
     }
+}
+
+impl AsArray for Vector2 {
+    type Element = f32;
 
     #[inline]
-    pub fn as_ptr(&self) -> *const f32 {
+    fn len() -> usize {
+        2
+    }
+
+    #[inline]
+    fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
 
     #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut f32 {
+    fn as_mut_ptr(&mut self) -> *mut Self::Element {
         &mut self.x
     }
 }
