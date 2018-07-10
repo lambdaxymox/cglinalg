@@ -1899,6 +1899,10 @@ impl Quaternion {
         self.s * r.s + self.x * r.x + self.y * r.y + self.z * r.z
     }
 
+    pub fn from_sv(s: f32, v: Vector3) -> Quaternion {
+        Quaternion { s: s, x: v.x, y: v.y, z: v.z }
+    }
+
     pub fn from_axis_rad(radians: f32, axis: Vector3) -> Quaternion {
         Quaternion {
             s: f32::cos(radians / 2.0),
