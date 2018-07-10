@@ -50,6 +50,14 @@ pub fn vec4<T: Into<Vector4>>(v: T) -> Vector4 {
     v.into()
 }
 
+#[inline]
+fn mat3(m11: f32, m12: f32, m13: f32, 
+        m21: f32, m22: f32, m23: f32, 
+        m31: f32, m32: f32, m33: f32) -> Matrix3 {
+
+    Matrix3::new(m11, m12, m13, m21, m22, m23, m31, m32, m33)
+}
+
 ///
 /// A representation of two-dimensional vectors, with a
 /// Euclidean metric.
@@ -1407,13 +1415,7 @@ impl fmt::Display for Matrix3 {
     }
 }
 
-#[inline]
-fn mat3(m11: f32, m12: f32, m13: f32, 
-        m21: f32, m22: f32, m23: f32, 
-        m31: f32, m32: f32, m33: f32) -> Matrix3 {
 
-    Matrix3::new(m11, m12, m13, m21, m22, m23, m31, m32, m33)
-}
 
 impl AsRef<[f32; 9]> for Matrix3 {
     fn as_ref(&self) -> &[f32; 9] {
