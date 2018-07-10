@@ -1901,20 +1901,6 @@ impl Quaternion {
         Self::from_axis_rad(ONE_DEG_IN_RAD * degrees, axis)
     }
 
-    pub fn to_mat4(&self) -> Matrix4 {
-        let w = self.w;
-        let x = self.x;
-        let y = self.y;
-        let z = self.z;
-    
-        Matrix4::new(
-            1.0 - 2.0 * y * y - 2.0 * z * z, 2.0 * x * y + 2.0 * w * z,       2.0 * x * z - 2.0 * w * y,       0.0, 
-            2.0 * x * y - 2.0 * w * z,       1.0 - 2.0 * x * x - 2.0 * z * z, 2.0 * y * z + 2.0 * w * x,       0.0, 
-            2.0 * x * z + 2.0 * w * y,       2.0 * y * z - 2.0 * w * x,       1.0 - 2.0 * x * x - 2.0 * y * y, 0.0, 
-            0.0,                             0.0,                             0.0,                             1.0
-        )
-    }
-
     pub fn to_mut_mat4(&self, m: &mut Matrix4) {
         let w = self.w;
         let x = self.x;
@@ -1994,6 +1980,22 @@ impl AsRef<[f32; 4]> for Quaternion {
 impl AsRef<(f32, f32, f32, f32)> for Quaternion {
     fn as_ref(&self) -> &(f32, f32, f32, f32) {
         unsafe { mem::transmute(self) }
+    }
+}
+
+impl From<Quaternion> for Matrix4 {
+    fn from(quat: Quaternion) -> Matrix4 {
+        let w = quat.w;
+        let x = quat.x;
+        let y = quat.y;
+        let z = quat.z;
+    
+        Matrix4::new(
+            1.0 - 2.0 * y * y - 2.0 * z * z, 2.0 * x * y + 2.0 * w * z,       2.0 * x * z - 2.0 * w * y,       0.0, 
+            2.0 * x * y - 2.0 * w * z,       1.0 - 2.0 * x * x - 2.0 * z * z, 2.0 * y * z + 2.0 * w * x,       0.0, 
+            2.0 * x * z + 2.0 * w * y,       2.0 * y * z - 2.0 * w * x,       1.0 - 2.0 * x * x - 2.0 * y * y, 0.0, 
+            0.0,                             0.0,                             0.0,                             1.0
+        )
     }
 }
 
