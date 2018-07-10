@@ -1983,6 +1983,21 @@ impl AsRef<(f32, f32, f32, f32)> for Quaternion {
     }
 }
 
+impl From<Quaternion> for Matrix3 {
+    fn from(quat: Quaternion) -> Matrix3 {
+        let w = quat.w;
+        let x = quat.x;
+        let y = quat.y;
+        let z = quat.z;
+    
+        Matrix3::new(
+            1.0 - 2.0 * y * y - 2.0 * z * z, 2.0 * x * y + 2.0 * w * z,       2.0 * x * z - 2.0 * w * y,
+            2.0 * x * y - 2.0 * w * z,       1.0 - 2.0 * x * x - 2.0 * z * z, 2.0 * y * z + 2.0 * w * x,
+            2.0 * x * z + 2.0 * w * y,       2.0 * y * z - 2.0 * w * x,       1.0 - 2.0 * x * x - 2.0 * y * y,
+        )
+    }
+}
+
 impl From<Quaternion> for Matrix4 {
     fn from(quat: Quaternion) -> Matrix4 {
         let w = quat.w;
