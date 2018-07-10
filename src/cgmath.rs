@@ -2267,7 +2267,49 @@ impl ops::Mul<f32> for Quaternion {
     }
 }
 
+impl<'a> ops::Mul<Quaternion> for Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn mul(self, other: Quaternion) -> Self::Output {
+        Quaternion {
+            s: other.s * self.s - other.x * self.x - other.y * self.y - other.z * self.z,
+            x: other.s * self.x + other.x * self.s - other.y * self.z + other.z * self.y,
+            y: other.s * self.y + other.x * self.z + other.y * self.s - other.z * self.x,
+            z: other.s * self.z - other.x * self.y + other.y * self.x + other.z * self.s,
+        }
+    }
+}
+
 impl<'a> ops::Mul<&'a Quaternion> for Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn mul(self, other: &'a Quaternion) -> Self::Output {
+        Quaternion {
+            s: other.s * self.s - other.x * self.x - other.y * self.y - other.z * self.z,
+            x: other.s * self.x + other.x * self.s - other.y * self.z + other.z * self.y,
+            y: other.s * self.y + other.x * self.z + other.y * self.s - other.z * self.x,
+            z: other.s * self.z - other.x * self.y + other.y * self.x + other.z * self.s,
+        }
+    }
+}
+
+impl<'a> ops::Mul<Quaternion> for &'a Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn mul(self, other: Quaternion) -> Self::Output {
+        Quaternion {
+            s: other.s * self.s - other.x * self.x - other.y * self.y - other.z * self.z,
+            x: other.s * self.x + other.x * self.s - other.y * self.z + other.z * self.y,
+            y: other.s * self.y + other.x * self.z + other.y * self.s - other.z * self.x,
+            z: other.s * self.z - other.x * self.y + other.y * self.x + other.z * self.s,
+        }
+    }
+}
+
+impl<'a, 'b> ops::Mul<&'a Quaternion> for &'b Quaternion {
     type Output = Quaternion;
 
     #[inline]
