@@ -1613,6 +1613,78 @@ impl AsMut<[f32; 9]> for Matrix3 {
     }
 }
 
+impl<'a> ops::Mul<&'a Matrix3> for Matrix3 {
+    type Output = Matrix3;
+
+    fn mul(self, other: &'a Matrix3) -> Self::Output {
+        let m11 = self.m[0] * other.m[0] + self.m[3] * other.m[1] + self.m[6] * other.m[2]; // 0
+        let m21 = self.m[1] * other.m[0] + self.m[4] * other.m[1] + self.m[7] * other.m[2]; // 1
+        let m31 = self.m[2] * other.m[0] + self.m[5] * other.m[1] + self.m[8] * other.m[2]; // 2
+
+        let m12 = self.m[0] * other.m[3] + self.m[3] * other.m[4] + self.m[6] * other.m[5]; // 3
+        let m22 = self.m[1] * other.m[3] + self.m[4] * other.m[4] + self.m[7] * other.m[5]; // 4
+        let m32 = self.m[2] * other.m[3] + self.m[5] * other.m[4] + self.m[8] * other.m[5]; // 5
+
+        let m13 = self.m[0] * other.m[6] + self.m[3] * other.m[7] + self.m[6] * other.m[8]; // 6
+        let m23 = self.m[1] * other.m[6] + self.m[4] * other.m[7] + self.m[7] * other.m[8]; // 7
+        let m33 = self.m[2] * other.m[6] + self.m[5] * other.m[7] + self.m[8] * other.m[8]; // 8
+
+        Matrix3::new(
+            m11, m21, m31,
+            m12, m22, m32,
+            m13, m23, m33,
+        )
+    }
+}
+
+impl<'a, 'b> ops::Mul<&'a Matrix3> for &'b Matrix3 {
+    type Output = Matrix3;
+
+    fn mul(self, other: &'a Matrix3) -> Matrix3 {
+        let m11 = self.m[0] * other.m[0] + self.m[3] * other.m[1] + self.m[6] * other.m[2]; // 0
+        let m21 = self.m[1] * other.m[0] + self.m[4] * other.m[1] + self.m[7] * other.m[2]; // 1
+        let m31 = self.m[2] * other.m[0] + self.m[5] * other.m[1] + self.m[8] * other.m[2]; // 2
+
+        let m12 = self.m[0] * other.m[3] + self.m[3] * other.m[4] + self.m[6] * other.m[5]; // 3
+        let m22 = self.m[1] * other.m[3] + self.m[4] * other.m[4] + self.m[7] * other.m[5]; // 4
+        let m32 = self.m[2] * other.m[3] + self.m[5] * other.m[4] + self.m[8] * other.m[5]; // 5
+
+        let m13 = self.m[0] * other.m[6] + self.m[3] * other.m[7] + self.m[6] * other.m[8]; // 6
+        let m23 = self.m[1] * other.m[6] + self.m[4] * other.m[7] + self.m[7] * other.m[8]; // 7
+        let m33 = self.m[2] * other.m[6] + self.m[5] * other.m[7] + self.m[8] * other.m[8]; // 8
+
+        Matrix3::new(
+            m11, m21, m31,
+            m12, m22, m32,
+            m13, m23, m33,
+        )
+    }
+}
+
+impl ops::Mul<Matrix3> for Matrix3 {
+    type Output = Matrix3;
+
+    fn mul(self, other: Matrix3) -> Matrix3 {
+        let m11 = self.m[0] * other.m[0] + self.m[3] * other.m[1] + self.m[6] * other.m[2]; // 0
+        let m21 = self.m[1] * other.m[0] + self.m[4] * other.m[1] + self.m[7] * other.m[2]; // 1
+        let m31 = self.m[2] * other.m[0] + self.m[5] * other.m[1] + self.m[8] * other.m[2]; // 2
+
+        let m12 = self.m[0] * other.m[3] + self.m[3] * other.m[4] + self.m[6] * other.m[5]; // 3
+        let m22 = self.m[1] * other.m[3] + self.m[4] * other.m[4] + self.m[7] * other.m[5]; // 4
+        let m32 = self.m[2] * other.m[3] + self.m[5] * other.m[4] + self.m[8] * other.m[5]; // 5
+
+        let m13 = self.m[0] * other.m[6] + self.m[3] * other.m[7] + self.m[6] * other.m[8]; // 6
+        let m23 = self.m[1] * other.m[6] + self.m[4] * other.m[7] + self.m[7] * other.m[8]; // 7
+        let m33 = self.m[2] * other.m[6] + self.m[5] * other.m[7] + self.m[8] * other.m[8]; // 8
+
+        Matrix3::new(
+            m11, m21, m31,
+            m12, m22, m32,
+            m13, m23, m33,
+        )
+    }
+}
+
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFov {
