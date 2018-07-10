@@ -1522,6 +1522,135 @@ impl AsMut<[f32; 4]> for Matrix2 {
     }
 }
 
+
+impl ops::Add<Matrix2> for Matrix2 {
+    type Output = Matrix2;
+
+    fn add(self, other: Matrix2) -> Self::Output {
+        let m11 = self.m[0] + other.m[0];
+        let m21 = self.m[1] + other.m[1];
+        let m12 = self.m[2] + other.m[2];
+        let m22 = self.m[3] + other.m[3];
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl<'a> ops::Add<&'a Matrix2> for Matrix2 {
+    type Output = Matrix2;
+
+    fn add(self, other: &'a Matrix2) -> Self::Output {
+        let m11 = self.m[0] + other.m[0];
+        let m21 = self.m[1] + other.m[1];
+        let m12 = self.m[2] + other.m[2];
+        let m22 = self.m[3] + other.m[3];
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl<'a> ops::Add<Matrix2> for &'a Matrix2 {
+    type Output = Matrix2;
+
+    fn add(self, other: Matrix2) -> Self::Output {
+        let m11 = self.m[0] + other.m[0];
+        let m21 = self.m[1] + other.m[1];
+        let m12 = self.m[2] + other.m[2];
+        let m22 = self.m[3] + other.m[3];
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl<'a, 'b> ops::Add<&'a Matrix2> for &'b Matrix2 {
+    type Output = Matrix2;
+
+    fn add(self, other: &'a Matrix2) -> Self::Output {
+        let m11 = self.m[0] + other.m[0];
+        let m21 = self.m[1] + other.m[1];
+        let m12 = self.m[2] + other.m[2];
+        let m22 = self.m[3] + other.m[3];
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl ops::Sub<Matrix2> for Matrix2 {
+    type Output = Matrix2;
+
+    fn sub(self, other: Matrix2) -> Self::Output {
+        let m11 = self.m[0] + other.m[0];
+        let m21 = self.m[1] + other.m[1];
+        let m12 = self.m[2] + other.m[2];
+        let m22 = self.m[3] + other.m[3];
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl<'a> ops::Sub<&'a Matrix2> for Matrix2 {
+    type Output = Matrix2;
+
+    fn sub(self, other: &'a Matrix2) -> Self::Output {
+        let m11 = self.m[0] - other.m[0];
+        let m21 = self.m[1] - other.m[1];
+        let m12 = self.m[2] - other.m[2];
+        let m22 = self.m[3] - other.m[3];
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl<'a> ops::Sub<Matrix2> for &'a Matrix2 {
+    type Output = Matrix2;
+
+    fn sub(self, other: Matrix2) -> Self::Output {
+        let m11 = self.m[0] - other.m[0];
+        let m21 = self.m[1] - other.m[1];
+        let m12 = self.m[2] - other.m[2];
+        let m22 = self.m[3] - other.m[3];
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
+impl<'a, 'b> ops::Sub<&'a Matrix2> for &'b Matrix2 {
+    type Output = Matrix2;
+
+    fn sub(self, other: &'a Matrix2) -> Self::Output {
+        let m11 = self.m[0] - other.m[0];
+        let m21 = self.m[1] - other.m[1];
+        let m12 = self.m[2] - other.m[2];
+        let m22 = self.m[3] - other.m[3];
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
 impl<'a> ops::Mul<&'a Matrix2> for Matrix2 {
     type Output = Matrix2;
 
