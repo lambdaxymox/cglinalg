@@ -1498,6 +1498,14 @@ impl AsRef<[f32; 9]> for Matrix3 {
     }
 }
 
+impl AsRef<[[f32; 3]; 3]> for Matrix3 {
+    fn as_ref(&self) -> &[[f32; 3]; 3] {
+        unsafe {
+            mem::transmute(self)
+        }
+    }
+}
+
 impl AsMut<[f32; 9]> for Matrix3 {
     fn as_mut(&mut self) -> &mut [f32; 9] {
         &mut self.m
@@ -2095,6 +2103,34 @@ impl From<Quaternion> for Matrix4 {
             2.0 * x * z + 2.0 * s * y,       2.0 * y * z - 2.0 * s * x,       1.0 - 2.0 * x * x - 2.0 * y * y, 0.0, 
             0.0,                             0.0,                             0.0,                             1.0
         )
+    }
+}
+
+impl From<[f32; 4]> for Quaternion {
+    #[inline]
+    fn from(v: [f32; 4]) -> Quaternion {
+        Quaternion::new(v[0], v[1], v[2], v[3])
+    }
+}
+
+impl<'a> From<&'a [f32; 4]> for &'a Quaternion {
+    #[inline]
+    fn from(v: &'a [f32; 4]) -> &'a Quaternion {
+        unsafe { mem::transmute(v) }
+    }
+}
+
+impl From<(f32, f32, f32, f32)> for Quaternion {
+    #[inline]
+    fn from(v: (f32, f32, f32, f32)) -> Quaternion {
+        Quaternion::new(v.0, v.1, v.2, v.3)
+    }
+}
+
+impl<'a> From<&'a (f32, f32, f32, f32)> for &'a Quaternion {
+    #[inline]
+    fn from(v: &'a (f32, f32, f32, f32)) -> &'a Quaternion {
+        unsafe { mem::transmute(v) }
     }
 }
 
