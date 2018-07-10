@@ -2183,6 +2183,20 @@ impl ops::Add<Quaternion> for Quaternion {
     }
 }
 
+impl<'a> ops::Add<Quaternion> for &'a Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn add(self, other: Quaternion) -> Self::Output {
+        Quaternion {
+            s: other.s + self.s,
+            x: other.x + self.x,
+            y: other.y + self.y,
+            z: other.z + self.z,
+        }
+    }
+}
+
 impl<'a> ops::Add<&'a Quaternion> for Quaternion {
     type Output = Quaternion;
 
@@ -2193,6 +2207,48 @@ impl<'a> ops::Add<&'a Quaternion> for Quaternion {
             x: other.x + self.x,
             y: other.y + self.y,
             z: other.z + self.z,
+        }
+    }
+}
+
+impl ops::Sub<Quaternion> for Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn sub(self, other: Quaternion) -> Self::Output {
+        Quaternion {
+            s: other.s - self.s,
+            x: other.x - self.x,
+            y: other.y - self.y,
+            z: other.z - self.z,
+        }
+    }
+}
+
+impl<'a> ops::Sub<Quaternion> for &'a Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn sub(self, other: Quaternion) -> Self::Output {
+        Quaternion {
+            s: other.s - self.s,
+            x: other.x - self.x,
+            y: other.y - self.y,
+            z: other.z - self.z,
+        }
+    }
+}
+
+impl<'a> ops::Sub<&'a Quaternion> for Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn sub(self, other: &'a Quaternion) -> Self::Output {
+        Quaternion {
+            s: other.s - self.s,
+            x: other.x - self.x,
+            y: other.y - self.y,
+            z: other.z - self.z,
         }
     }
 }
