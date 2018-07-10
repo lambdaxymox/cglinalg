@@ -1429,8 +1429,6 @@ impl fmt::Display for Matrix3 {
     }
 }
 
-
-
 impl AsRef<[f32; 9]> for Matrix3 {
     fn as_ref(&self) -> &[f32; 9] {
         &self.m
@@ -1553,16 +1551,20 @@ impl Matrix4 {
         m_r * self
     }
 
-    pub fn scale()
+    #[inline]
+    pub fn from_scale(value: f32) -> Matrix4 {
+        Matrix4::from_nonuniform_scale(value, value, value)
+    }
 
     // scale a matrix by [x, y, z]
-    pub fn nonuniform_scale(&self, v: &Vector3) -> Matrix4 {
-        let mut m_s = Matrix4::one();
-        m_s.m[0]  = v.x;
-        m_s.m[5]  = v.y;
-        m_s.m[10] = v.z;
-    
-        m_s * self
+    #[inline]
+    pub fn from_nonuniform_scale(sx: f32, sy: f32, sz: f32) -> Matrix4 {
+        Matrix4::new(
+            sx,  0.0, 0.0, 0.0,
+            0.0, sy,  0.0, 0.0,
+            0.0, 0.0, sz,  0.0,
+            0.0, 0.0, 0.0, 1.0
+        )
     }
 
     /// returns a scalar value with the determinant for a 4x4 matrix
