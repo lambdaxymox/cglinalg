@@ -2151,29 +2151,36 @@ impl fmt::Display for Quaternion {
     }
 }
 
-impl ops::Div<f32> for Quaternion {
+impl ops::Neg for Quaternion {
     type Output = Quaternion;
 
-    fn div(self, other: f32) -> Quaternion {
-        Quaternion {
-            s: self.s / other, 
-            x: self.x / other, 
-            y: self.y / other, 
-            z: self.z / other,
-        }
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Quaternion { s: -self.s, x: -self.x, y: -self.y, z: -self.z }
     }
 }
 
-impl<'a> ops::Div<f32> for &'a Quaternion {
+impl<'a> ops::Neg for &'a Quaternion {
     type Output = Quaternion;
 
-    fn div(self, other: f32) -> Quaternion {
-        Quaternion {
-            s: self.s / other, 
-            x: self.x / other, 
-            y: self.y / other, 
-            z: self.z / other,
-        }
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Quaternion { s: -self.s, x: -self.x, y: -self.y, z: -self.z }
+    }
+}
+
+impl<'a> ops::Add<&'a Quaternion> for Quaternion {
+    type Output = Quaternion;
+
+    fn add(self, other: &'a Quaternion) -> Self::Output {
+        let result = Quaternion {
+            s: other.s + self.s,
+            x: other.x + self.x,
+            y: other.y + self.y,
+            z: other.z + self.z,
+        };
+        // Renormalize in case of mangling.
+        result.normalize()
     }
 }
 
@@ -2206,18 +2213,29 @@ impl<'a> ops::Mul<&'a Quaternion> for Quaternion {
     }
 }
 
-impl<'a> ops::Add<&'a Quaternion> for Quaternion {
+impl ops::Div<f32> for Quaternion {
     type Output = Quaternion;
 
-    fn add(self, other: &'a Quaternion) -> Self::Output {
-        let result = Quaternion {
-            s: other.s + self.s,
-            x: other.x + self.x,
-            y: other.y + self.y,
-            z: other.z + self.z,
-        };
-        // Renormalize in case of mangling.
-        result.normalize()
+    fn div(self, other: f32) -> Quaternion {
+        Quaternion {
+            s: self.s / other, 
+            x: self.x / other, 
+            y: self.y / other, 
+            z: self.z / other,
+        }
+    }
+}
+
+impl<'a> ops::Div<f32> for &'a Quaternion {
+    type Output = Quaternion;
+
+    fn div(self, other: f32) -> Quaternion {
+        Quaternion {
+            s: self.s / other, 
+            x: self.x / other, 
+            y: self.y / other, 
+            z: self.z / other,
+        }
     }
 }
 
