@@ -2,6 +2,7 @@ use std::fmt;
 use std::mem;
 use std::ops;
 use std::cmp;
+use ::traits;
 
 
 // Constants used to convert degrees into radians.
