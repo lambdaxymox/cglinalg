@@ -1397,7 +1397,7 @@ impl Matrix3 {
         Matrix3::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     }
 
-    pub fn identity() -> Matrix3 {
+    pub fn one() -> Matrix3 {
         Matrix3::new(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
     }
 
@@ -1553,8 +1553,10 @@ impl Matrix4 {
         m_r * self
     }
 
+    pub fn scale()
+
     // scale a matrix by [x, y, z]
-    pub fn scale(&self, v: &Vector3) -> Matrix4 {
+    pub fn nonuniform_scale(&self, v: &Vector3) -> Matrix4 {
         let mut m_s = Matrix4::one();
         m_s.m[0]  = v.x;
         m_s.m[5]  = v.y;
