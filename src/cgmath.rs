@@ -13,6 +13,17 @@ pub const EPSILON: f32 = 0.00001;
 
 
 ///
+/// Compute the perspective matrix for converting from camera space to 
+/// normalized device coordinates.
+///
+pub fn perspective(fovy: f32, aspect: f32, near: f32, far: f32) -> Matrix4 {
+    Matrix4::from(PerspectiveFov {
+        fovy: fovy, aspect: aspect, near: near, far: far,
+    })
+}
+
+
+///
 /// Construct a new two-dimensional vector in the style of
 /// a GLSL vec3 constructor.
 ///
@@ -1411,6 +1422,15 @@ impl AsMut<[f32; 9]> for Matrix3 {
 }
 
 
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct PerspectiveFov {
+    fovy: f32,
+    aspect: f32,
+    near: f32,
+    far: f32,
+}
+
+
 ///
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
 ///
@@ -1617,7 +1637,7 @@ impl Matrix4 {
                                     self.m[8] * self.m[1] * self.m[6] - self.m[0] * self.m[9] * self.m[6] -
                                     self.m[4] * self.m[1] * self.m[10] + self.m[0] * self.m[5] * self.m[10] ) );
     }
-
+    /*
     ///
     /// Compute the perspective matrix for converting from camera space to 
     /// normalized device coordinates.
@@ -1639,7 +1659,7 @@ impl Matrix4 {
         
         m
     }
-
+    */
     /// 
     /// Generate a pointer to the underlying array for passing a
     /// matrix to the graphics hardware.
@@ -1794,6 +1814,24 @@ impl cmp::PartialEq for Matrix4 {
         }
 
         true
+    }
+}
+
+impl From<PerspectiveFov> for Matrix4 {
+    fn from(persp: PerspectiveFov) -> Matrix4 {
+        let fov_rad = persp.fovy * ONE_DEG_IN_RAD;
+        let range = f32::tan(fov_rad / 2.0) * persp.near;
+        let sx = (2.0 * persp.near) / (range * persp.aspect + range * persp.aspect);
+        let sy = persp.near / range;
+        let sz = (persp.far + persp.near) / (persp.near - persp.far);
+        let pz = (2.0 * persp.far * persp.near) / (persp.near - persp.far);
+        
+        Matrix4::new(
+             sx, 0.0, 0.0,  0.0,
+            0.0,  sy, 0.0,  0.0,
+            0.0, 0.0,  sz, -1.0,
+            0.0, 0.0,  pz,  0.0
+        )
     }
 }
 
