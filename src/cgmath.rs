@@ -1925,6 +1925,13 @@ impl Quaternion {
         Self::from_axis_rad(ONE_DEG_IN_RAD * degrees, axis)
     }
 
+    ///
+    /// Compute the conjugate of a quaternion.
+    ///
+    pub fn conjugate(&self) -> Quaternion {
+        Quaternion { s: self.s, x: -self.x, y: -self.y, z: -self.z }
+    }
+
     pub fn to_mut_mat4(&self, m: &mut Matrix4) {
         let s = self.s;
         let x = self.x;
