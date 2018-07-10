@@ -2186,6 +2186,7 @@ impl ops::Add<Quaternion> for Quaternion {
 impl<'a> ops::Add<&'a Quaternion> for Quaternion {
     type Output = Quaternion;
 
+    #[inline]
     fn add(self, other: &'a Quaternion) -> Self::Output {
         Quaternion {
             s: other.s + self.s,
@@ -2199,6 +2200,7 @@ impl<'a> ops::Add<&'a Quaternion> for Quaternion {
 impl ops::Mul<f32> for Quaternion {
     type Output = Quaternion;
 
+    #[inline]
     fn mul(self, other: f32) -> Quaternion {
         Quaternion {
             s: self.s * other,
@@ -2212,6 +2214,7 @@ impl ops::Mul<f32> for Quaternion {
 impl<'a> ops::Mul<&'a Quaternion> for Quaternion {
     type Output = Quaternion;
 
+    #[inline]
     fn mul(self, other: &'a Quaternion) -> Self::Output {
         let result = Quaternion {
             s: other.s * self.s - other.x * self.x - other.y * self.y - other.z * self.z,
@@ -2228,6 +2231,7 @@ impl<'a> ops::Mul<&'a Quaternion> for Quaternion {
 impl ops::Div<f32> for Quaternion {
     type Output = Quaternion;
 
+    #[inline]
     fn div(self, other: f32) -> Quaternion {
         Quaternion {
             s: self.s / other, 
@@ -2241,6 +2245,7 @@ impl ops::Div<f32> for Quaternion {
 impl<'a> ops::Div<f32> for &'a Quaternion {
     type Output = Quaternion;
 
+    #[inline]
     fn div(self, other: f32) -> Quaternion {
         Quaternion {
             s: self.s / other, 
