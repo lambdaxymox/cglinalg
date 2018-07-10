@@ -1734,29 +1734,7 @@ impl Matrix4 {
                                     self.m[8] * self.m[1] * self.m[6] - self.m[0] * self.m[9] * self.m[6] -
                                     self.m[4] * self.m[1] * self.m[10] + self.m[0] * self.m[5] * self.m[10] ) );
     }
-    /*
-    ///
-    /// Compute the perspective matrix for converting from camera space to 
-    /// normalized device coordinates.
-    ///
-    pub fn perspective(fovy: f32, aspect: f32, near: f32, far: f32) -> Matrix4 {
-        let fov_rad = fovy * ONE_DEG_IN_RAD;
-        let range = f32::tan(fov_rad * 0.5) * near;
-        let sx = (2.0 * near) / (range * aspect + range * aspect);
-        let sy = near / range;
-        let sz = -(far + near) / (far - near);
-        let pz = -(2.0 * far * near) / (far - near);
-        // Make sure the bottom right corner is zero.
-        let mut m = Matrix4::zero();
-        m.m[0] = sx;
-        m.m[5] = sy;
-        m.m[10] = sz;
-        m.m[14] = pz;
-        m.m[11] = -1.0;
-        
-        m
-    }
-    */
+
     /// 
     /// Generate a pointer to the underlying array for passing a
     /// matrix to the graphics hardware.
