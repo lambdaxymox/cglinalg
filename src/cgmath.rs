@@ -620,14 +620,23 @@ impl Vector3 {
     pub fn distance(&self, to: &Vector3) -> f32 {
         f32::sqrt(self.distance2(to))
     }
+}
+
+impl AsArray for Vector3 {
+    type Element = f32;
 
     #[inline]
-    pub fn as_ptr(&self) -> *const f32 {
+    fn len() -> usize {
+        3
+    }
+
+    #[inline]
+    fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
 
     #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut f32 {
+    fn as_mut_ptr(&mut self) -> *mut Self::Element {
         &mut self.x
     }
 }
@@ -1023,14 +1032,23 @@ impl Vector4 {
     pub fn distance(&self, to: &Vector4) -> f32 {
         f32::sqrt(self.distance2(to))
     }
+}
+
+impl AsArray for Vector4 {
+    type Element = f32;
 
     #[inline]
-    pub fn as_ptr(&self) -> *const f32 {
+    fn len() -> usize {
+        4
+    }
+
+    #[inline]
+    fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
 
     #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut f32 {
+    fn as_mut_ptr(&mut self) -> *mut Self::Element {
         &mut self.x
     }
 }
@@ -1453,14 +1471,23 @@ impl Matrix2 {
             self.m[1], self.m[3],
         )
     }
+}
+
+impl AsArray for Matrix2 {
+    type Element = f32;
 
     #[inline]
-    pub fn as_ptr(&self) -> *const f32 {
+    fn len() -> usize {
+        4
+    }
+
+    #[inline]
+    fn as_ptr(&self) -> *const f32 {
         self.m.as_ptr()
     }
 
     #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut f32 {
+    fn as_mut_ptr(&mut self) -> *mut f32 {
         self.m.as_mut_ptr()
     }
 }
@@ -1534,14 +1561,23 @@ impl Matrix3 {
             self.m[2], self.m[5], self.m[8]
         )
     }
+}
+
+impl AsArray for Matrix3 {
+    type Element = f32;
 
     #[inline]
-    pub fn as_ptr(&self) -> *const f32 {
+    fn len() -> usize {
+        9
+    }
+
+    #[inline]
+    fn as_ptr(&self) -> *const f32 {
         self.m.as_ptr()
     }
 
     #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut f32 {
+    fn as_mut_ptr(&mut self) -> *mut f32 {
         self.m.as_mut_ptr()
     }
 }
@@ -1799,18 +1835,23 @@ impl Matrix4 {
                                     self.m[8] * self.m[1] * self.m[6] - self.m[0] * self.m[9] * self.m[6] -
                                     self.m[4] * self.m[1] * self.m[10] + self.m[0] * self.m[5] * self.m[10] ) );
     }
+}
 
-    /// 
-    /// Generate a pointer to the underlying array for passing a
-    /// matrix to the graphics hardware.
-    ///
+impl AsArray for Matrix4 {
+    type Element = f32;
+
     #[inline]
-    pub fn as_ptr(&self) -> *const f32 {
+    fn len() -> usize {
+        16
+    }
+
+    #[inline]
+    fn as_ptr(&self) -> *const f32 {
         self.m.as_ptr()
     }
 
     #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut f32 {
+    fn as_mut_ptr(&mut self) -> *mut f32 {
         self.m.as_mut_ptr()
     }
 }
