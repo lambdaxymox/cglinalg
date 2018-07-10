@@ -1699,6 +1699,22 @@ impl ops::Mul<Matrix2> for Matrix2 {
     }
 }
 
+impl<'a> ops::Mul<Matrix2> for &'a Matrix2 {
+    type Output = Matrix2;
+
+    fn mul(self, other: Matrix2) -> Self::Output {
+        let m11 = self.m[0] * other.m[0] + self.m[2] * other.m[1];
+        let m21 = self.m[1] * other.m[0] + self.m[3] * other.m[1];
+        let m12 = self.m[0] * other.m[2] + self.m[2] * other.m[3];
+        let m22 = self.m[1] * other.m[2] + self.m[3] * other.m[3];
+
+        Matrix2::new(
+            m11, m21,
+            m12, m22
+        )
+    }
+}
+
 ///
 /// The `Matrix3` type represents 3x3 matrices in column-major order.
 ///
