@@ -2272,15 +2272,12 @@ impl<'a> ops::Mul<&'a Quaternion> for Quaternion {
 
     #[inline]
     fn mul(self, other: &'a Quaternion) -> Self::Output {
-        let result = Quaternion {
+        Quaternion {
             s: other.s * self.s - other.x * self.x - other.y * self.y - other.z * self.z,
             x: other.s * self.x + other.x * self.s - other.y * self.z + other.z * self.y,
             y: other.s * self.y + other.x * self.z + other.y * self.s - other.z * self.x,
             z: other.s * self.z - other.x * self.y + other.y * self.x + other.z * self.s,
-        };
-
-        // Renormalize in case of mangling.
-        result.normalize()
+        }
     }
 }
 
