@@ -58,6 +58,20 @@ fn mat3(m11: f32, m12: f32, m13: f32,
     Matrix3::new(m11, m12, m13, m21, m22, m23, m31, m32, m33)
 }
 
+pub fn mat4(
+        m11: f32, m12: f32, m13: f32, m14: f32, 
+        m21: f32, m22: f32, m23: f32, m24: f32,
+        m31: f32, m32: f32, m33: f32, m34: f32,
+        m41: f32, m42: f32, m43: f32, m44: f32) -> Matrix4 {
+
+    Matrix4::new(
+        m11, m12, m13, m14, 
+        m21, m22, m23, m24, 
+        m31, m32, m33, m34, 
+        m41, m42, m43, m44
+    )
+}
+
 ///
 /// A representation of two-dimensional vectors, with a
 /// Euclidean metric.
@@ -1691,20 +1705,6 @@ impl fmt::Display for Matrix4 {
             self.m[3], self.m[7], self.m[11], self.m[15]
         )
     }
-}
-
-pub fn mat4(
-        m11: f32, m12: f32, m13: f32, m14: f32, 
-        m21: f32, m22: f32, m23: f32, m24: f32,
-        m31: f32, m32: f32, m33: f32, m34: f32,
-        m41: f32, m42: f32, m43: f32, m44: f32) -> Matrix4 {
-
-    Matrix4::new(
-        m11, m12, m13, m14, 
-        m21, m22, m23, m24, 
-        m31, m32, m33, m34, 
-        m41, m42, m43, m44
-    )
 }
 
 impl AsRef<[f32; 16]> for Matrix4 {
