@@ -246,6 +246,24 @@ impl<'a> From<&'a [f32; 2]> for &'a Vector2 {
     }
 }
 
+impl ops::Neg for Vector2 {
+    type Output = Vector2;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector2 { x: -self.x, y: -self.y }
+    }
+}
+
+impl<'a> ops::Neg for &'a Vector2 {
+    type Output = Vector2;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector2 { x: -self.x, y: -self.y }
+    }
+}
+
 impl<'a> ops::Add<Vector2> for &'a Vector2 {
     type Output = Vector2;
 
@@ -573,7 +591,6 @@ impl Vector3 {
 }
 
 
-
 impl AsRef<[f32; 3]> for Vector3 {
     fn as_ref(&self) -> &[f32; 3] {
         unsafe { mem::transmute(self) }
@@ -683,6 +700,24 @@ impl<'a> From<&'a Vector4> for Vector3 {
     #[inline]
     fn from(v: &'a Vector4) -> Vector3 {
         Vector3::new(v.x, v.y, v.z)
+    }
+}
+
+impl ops::Neg for Vector3 {
+    type Output = Vector3;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector3 { x: -self.x, y: -self.y, z: -self.z }
+    }
+}
+
+impl<'a> ops::Neg for &'a Vector3 {
+    type Output = Vector3;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector3 { x: -self.x, y: -self.y, z: -self.z }
     }
 }
 
@@ -1086,6 +1121,24 @@ impl cmp::PartialEq for Vector4 {
         (f32::abs(self.y - other.y) < EPSILON) &&
         (f32::abs(self.z - other.z) < EPSILON) &&
         (f32::abs(self.w - other.w) < EPSILON)
+    }
+}
+
+impl ops::Neg for Vector4 {
+    type Output = Vector4;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
+    }
+}
+
+impl<'a> ops::Neg for &'a Vector4 {
+    type Output = Vector4;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
     }
 }
 
