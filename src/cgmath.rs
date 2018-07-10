@@ -129,6 +129,15 @@ impl Vector2 {
         Vector2 { x: 0.0, y: 0.0 }
     }
 
+    #[inline]
+    pub fn unit_x() -> Vector2 {
+        Vector2 { x: 1.0, y: 0.0 }
+    }
+
+    pub fn unit_y() -> Vector2 {
+        Vector2 { x: 0.0, y: 1.0 }
+    }
+
     ///
     /// Compute the norm (length) of a vector.
     ///
