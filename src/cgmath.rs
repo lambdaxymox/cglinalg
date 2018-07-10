@@ -59,6 +59,10 @@ pub fn quat<T: Into<Quaternion>>(q: T) -> Quaternion {
     q.into()
 }
 
+///
+/// Create a new 3x3 matrix in the style of a GLSL type
+/// constructor.
+///
 #[inline]
 fn mat3(m11: f32, m12: f32, m13: f32, 
         m21: f32, m22: f32, m23: f32, 
@@ -67,6 +71,10 @@ fn mat3(m11: f32, m12: f32, m13: f32,
     Matrix3::new(m11, m12, m13, m21, m22, m23, m31, m32, m33)
 }
 
+///
+/// Create a new 4x4 matrix in the style of a GLSL type
+/// constructor.
+///
 #[inline]
 pub fn mat4(
         m11: f32, m12: f32, m13: f32, m14: f32, 
