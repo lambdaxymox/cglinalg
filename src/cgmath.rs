@@ -58,6 +58,7 @@ fn mat3(m11: f32, m12: f32, m13: f32,
     Matrix3::new(m11, m12, m13, m21, m22, m23, m31, m32, m33)
 }
 
+#[inline]
 pub fn mat4(
         m11: f32, m12: f32, m13: f32, m14: f32, 
         m21: f32, m22: f32, m23: f32, m24: f32,
