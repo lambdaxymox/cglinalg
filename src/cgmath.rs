@@ -18,10 +18,8 @@ pub const EPSILON: f32 = 0.00001;
 /// Compute the perspective matrix for converting from camera space to 
 /// normalized device coordinates.
 ///
-pub fn perspective(fovy: f32, aspect: f32, near: f32, far: f32) -> Matrix4 {
-    Matrix4::from(PerspectiveFov {
-        fovy: fovy, aspect: aspect, near: near, far: far,
-    })
+pub fn perspective<Spec: Into<PerspectiveFov>>(spec: Spec) -> Matrix4 {
+    Matrix4::from(spec.into())
 }
 
 
@@ -1995,6 +1993,37 @@ pub struct PerspectiveFov {
     far: f32,
 }
 
+impl Into<PerspectiveFov> for (f32, f32, f32, f32) {
+    #[inline]
+    fn into(self) -> PerspectiveFov {
+        match self {
+            (fovy, aspect, near, far) => {
+                PerspectiveFov {
+                    fovy: fovy,
+                    aspect: aspect,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
+impl<'a> Into<PerspectiveFov> for &'a (f32, f32, f32, f32) {
+    #[inline]
+    fn into(self) -> PerspectiveFov {
+        match *self {
+            (fovy, aspect, near, far) => {
+                PerspectiveFov {
+                    fovy: fovy,
+                    aspect: aspect,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
 
 ///
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
