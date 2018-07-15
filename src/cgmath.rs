@@ -65,8 +65,9 @@ pub fn quat<T: Into<Quaternion>>(q: T) -> Quaternion {
 /// constructor.
 ///
 #[inline]
-pub fn mat2(m11: f32, m12: f32,
-        m21: f32, m22: f32) -> Matrix2 {
+pub fn mat2(
+    m11: f32, m12: f32,
+    m21: f32, m22: f32) -> Matrix2 {
 
     Matrix2::new(m11, m12, m21, m22)
 }
@@ -76,9 +77,10 @@ pub fn mat2(m11: f32, m12: f32,
 /// constructor.
 ///
 #[inline]
-pub fn mat3(m11: f32, m12: f32, m13: f32, 
-        m21: f32, m22: f32, m23: f32, 
-        m31: f32, m32: f32, m33: f32) -> Matrix3 {
+pub fn mat3(
+    m11: f32, m12: f32, m13: f32,
+    m21: f32, m22: f32, m23: f32,
+    m31: f32, m32: f32, m33: f32) -> Matrix3 {
 
     Matrix3::new(m11, m12, m13, m21, m22, m23, m31, m32, m33)
 }
@@ -1502,7 +1504,7 @@ impl Matrix2 {
 
     ///
     /// Return the zero matrix.
-    /// 
+    ///
     pub fn zero() -> Matrix2 {
         Matrix2::new(0.0, 0.0, 0.0, 0.0)
     }
@@ -2099,7 +2101,7 @@ impl Matrix4 {
     /// Create a affine translation matrix.
     ///
     #[inline]
-    pub fn translate(distance: Vector3) -> Matrix4 {
+    pub fn from_translation(distance: Vector3) -> Matrix4 {
         Matrix4::new(
             1.0,        0.0,        0.0,        0.0,
             0.0,        1.0,        0.0,        0.0,
@@ -2108,43 +2110,49 @@ impl Matrix4 {
         )
     }
 
-    // Rotate around x axis by an angle in degrees.
-    pub fn rotate_x_deg(&self, deg: f32) -> Matrix4 {
+    ///
+    /// Create a rotation matrix around the x axis by an angle in `degrees` degrees.
+    ///
+    pub fn from_rotation_x(degrees: f32) -> Matrix4 {
         // Convert to radians.
-        let rad = deg * ONE_DEG_IN_RAD;
-        let mut m_r = Matrix4::one();
-        m_r.m[5]  =  f32::cos(rad);
-        m_r.m[9]  = -f32::sin(rad);
-        m_r.m[6]  =  f32::sin(rad);
-        m_r.m[10] =  f32::cos(rad);
+        let radians = degrees * ONE_DEG_IN_RAD;
+        let mut rot_mat = Matrix4::one();
+        rot_mat.m[5]  =  f32::cos(radians);
+        rot_mat.m[9]  = -f32::sin(radians);
+        rot_mat.m[6]  =  f32::sin(radians);
+        rot_mat.m[10] =  f32::cos(radians);
     
-        m_r * self
+        rot_mat
     }
 
-    // Rotate around y axis by an angle in degrees.
-    pub fn rotate_y_deg(&self, deg: f32) -> Matrix4 {
+    ///
+    /// Create a rotation matrix around the y axis by an angle in `degrees` degrees.
+    ///
+    pub fn from_rotation_y(degrees: f32) -> Matrix4 {
         // Convert to radians.
-        let rad = deg * ONE_DEG_IN_RAD;
-        let mut m_r = Matrix4::one();
-        m_r.m[0]  =  f32::cos(rad);
-        m_r.m[8]  =  f32::sin(rad);
-        m_r.m[2]  = -f32::sin(rad);
-        m_r.m[10] =  f32::cos(rad);
+        let radians = degrees * ONE_DEG_IN_RAD;
+        let mut rot_mat = Matrix4::one();
+        rot_mat.m[0]  =  f32::cos(radians);
+        rot_mat.m[8]  =  f32::sin(radians);
+        rot_mat.m[2]  = -f32::sin(radians);
+        rot_mat.m[10] =  f32::cos(radians);
     
-        m_r * self
+        rot_mat
     }
 
-    // Rotate around z axis by an angle in degrees.
-    pub fn rotate_z_deg(&self, deg: f32) -> Matrix4 {
+    ///
+    /// Create a rotation matrix around the z axis by an angle in `degrees` degrees.
+    ///
+    pub fn from_rotation_z(degrees: f32) -> Matrix4 {
         // Convert to radians.
-        let rad = deg * ONE_DEG_IN_RAD;
-        let mut m_r = Matrix4::one();
-        m_r.m[0] =  f32::cos(rad);
-        m_r.m[4] = -f32::sin(rad);
-        m_r.m[1] =  f32::sin(rad);
-        m_r.m[5] =  f32::cos(rad);
+        let radians = degrees * ONE_DEG_IN_RAD;
+        let mut rot_mat = Matrix4::one();
+        rot_mat.m[0] =  f32::cos(radians);
+        rot_mat.m[4] = -f32::sin(radians);
+        rot_mat.m[1] =  f32::sin(radians);
+        rot_mat.m[5] =  f32::cos(radians);
     
-        m_r * self
+        rot_mat
     }
 
     ///
@@ -3220,7 +3228,7 @@ mod mat4_tests {
     #[test]
     fn test_identity_mat4_translates_vector_along_vector() {
         let v = super::vec3((2.0, 2.0, 2.0));
-        let trans_mat = Matrix4::translate(v);
+        let trans_mat = Matrix4::from_translation(v);
         let zero_vec4 = super::vec4((0.0, 0.0, 0.0, 1.0));
         let zero_vec3 = super::vec3((0.0, 0.0, 0.0));
 
