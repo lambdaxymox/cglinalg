@@ -18,10 +18,10 @@ pub const EPSILON: f32 = 0.00001;
 /// Compute the perspective matrix for converting from camera space to 
 /// normalized device coordinates.
 ///
+#[inline]
 pub fn perspective<Spec: Into<PerspectiveFov>>(spec: Spec) -> Matrix4 {
     Matrix4::from(spec.into())
 }
-
 
 ///
 /// Construct a new two-dimensional vector in the style of
