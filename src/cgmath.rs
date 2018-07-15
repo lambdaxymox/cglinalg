@@ -2077,13 +2077,17 @@ impl Matrix4 {
         )
     }
 
-    pub fn translate(&self, v: &Vector3) -> Matrix4 {
-        let mut m_t = Matrix4::one();
-        m_t.m[12] = v.x;
-        m_t.m[13] = v.y;
-        m_t.m[14] = v.z;
-
-        m_t * self
+    ///
+    /// Create a affine translation matrix.
+    ///
+    #[inline]
+    pub fn translate(distance: Vector3) -> Matrix4 {
+        Matrix4::new(
+            1.0,        0.0,        0.0,        0.0,
+            0.0,        1.0,        0.0,        0.0,
+            0.0,        0.0,        1.0,        0.0,
+            distance.x, distance.y, distance.z, 1.0
+        )
     }
 
     // Rotate around x axis by an angle in degrees.
@@ -3193,7 +3197,7 @@ mod mat4_tests {
     #[test]
     fn test_identity_mat4_translates_vector_along_vector() {
         let v = super::vec3((2.0, 2.0, 2.0));
-        let trans_mat = Matrix4::one().translate(&v);
+        let trans_mat = Matrix4::translate(v);
         let zero_vec4 = super::vec4((0.0, 0.0, 0.0, 1.0));
         let zero_vec3 = super::vec3((0.0, 0.0, 0.0));
 
