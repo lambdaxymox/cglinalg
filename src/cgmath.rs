@@ -1483,7 +1483,7 @@ impl<'a> ops::DivAssign<f32> for &'a mut Vector4 {
 
 
 ///
-/// The `Matrix3` type represents 3x3 matrices in column-major order.
+/// The `Matrix2` type represents 2x2 matrices in column-major order.
 ///
 #[derive(Copy, Clone, Debug)]
 pub struct Matrix2 {
@@ -1500,14 +1500,23 @@ impl Matrix2 {
         }
     }
 
+    ///
+    /// Return the zero matrix.
+    /// 
     pub fn zero() -> Matrix2 {
         Matrix2::new(0.0, 0.0, 0.0, 0.0)
     }
 
+    ///
+    /// Return the identity matrix.
+    ///
     pub fn one() -> Matrix2 {
         Matrix2::new(1.0, 0.0, 0.0, 1.0)
     }
 
+    ///
+    /// Compute the transpose of a 2x2 matrix.
+    ///
     pub fn transpose(&self) -> Matrix2 {
         Matrix2::new(
             self.m[0], self.m[2],
@@ -2050,6 +2059,9 @@ impl Matrix4 {
         }
     }
 
+    ///
+    /// Return the zero matrix.
+    ///
     pub fn zero() -> Matrix4 {
         Matrix4::new(
             0.0, 0.0, 0.0, 0.0, 
@@ -2059,6 +2071,9 @@ impl Matrix4 {
         )
     }
 
+    ///
+    /// Return the identity matrix.
+    ///
     pub fn one() -> Matrix4 {
         Matrix4::new(
             1.0, 0.0, 0.0, 0.0, 
@@ -2068,6 +2083,9 @@ impl Matrix4 {
         )
     }
 
+    ///
+    /// Transpose a 4x4 matrix.
+    ///
     pub fn transpose(&self) -> Matrix4 {
         Matrix4::new(
             self.m[0], self.m[4], self.m[8],  self.m[12],
@@ -2129,12 +2147,17 @@ impl Matrix4 {
         m_r * self
     }
 
+    ///
+    /// Scale a matrix uniformly.
+    ///
     #[inline]
     pub fn from_scale(value: f32) -> Matrix4 {
         Matrix4::from_nonuniform_scale(value, value, value)
     }
 
-    // scale a matrix by [x, y, z]
+    ///
+    /// Scale a matrix in a nonuniform fashion.
+    ///
     #[inline]
     pub fn from_nonuniform_scale(sx: f32, sy: f32, sz: f32) -> Matrix4 {
         Matrix4::new(
