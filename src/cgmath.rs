@@ -2500,6 +2500,20 @@ impl Quaternion {
         self.s * r.s + self.x * r.x + self.y * r.y + self.z * r.z
     }
 
+    ///
+    /// Compute the euclidean norm of a quaternion.
+    ///
+    pub fn norm(&self) -> f32 {
+        f32::sqrt(self.s * self.s + self.x * self.x + self.y * self.y + self.z * self.z)
+    }
+
+    ///
+    /// Compute the squared Euclidean norm of a quaternion.
+    ///
+    pub fn norm2(&self) -> f32 {
+        self.s * self.s + self.x * self.x + self.y * self.y + self.z * self.z
+    }
+
     pub fn from_sv(s: f32, v: Vector3) -> Quaternion {
         Quaternion { s: s, x: v.x, y: v.y, z: v.z }
     }
