@@ -2961,10 +2961,13 @@ impl<'a> ops::Div<f32> for &'a Quaternion {
 }
 
 
+#[cfg(test)]
 mod vec2_tests {
 
 }
 
+
+#[cfg(test)]
 mod vec3_tests {
     use std::slice::Iter;
     use super::Vector3;
@@ -3063,6 +3066,7 @@ mod vec3_tests {
     }
 }
 
+#[cfg(test)]
 mod mat4_tests {
     use std::slice::Iter;
     use super::{Vector3, Matrix4};
