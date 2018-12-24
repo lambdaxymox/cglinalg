@@ -3637,7 +3637,7 @@ mod vec3_tests {
 #[cfg(test)]
 mod mat4_tests {
     use std::slice::Iter;
-    use super::{Vector3, Matrix4};
+    use super::{Matrix4};
 
     struct TestCase {
         c: f32,
