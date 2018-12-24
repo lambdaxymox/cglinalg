@@ -195,8 +195,15 @@ impl Vector1 {
     }
 
     ///
-    /// Compute the projection for a
+    /// Compute the projection for a vector onto another vector.
     ///
+    #[inline]
+    pub fn project(&self, onto: Vector1) -> Vector1 {
+        let onto_norm2 = onto.norm2();
+        let x = self.dot(&onto) / onto_norm2;
+
+        Vector1 { x: x }
+    }
 }
 
 impl AsArray for Vector1 {
