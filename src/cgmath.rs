@@ -278,6 +278,19 @@ impl ops::Index<ops::RangeFrom<usize>> for Vector1 {
     }
 }
 
+impl fmt::Debug for Vector1 {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        try!(write!(f, "Vector1 "));
+        <[f32; 1] as fmt::Debug>::fmt(self.as_ref(), f)
+    }
+}
+
+impl fmt::Display for Vector1 {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "[{:.2}]", self.x)
+    }
+}
+
 ///
 /// A representation of two-dimensional vectors, with a
 /// Euclidean metric.
