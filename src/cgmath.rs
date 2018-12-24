@@ -2513,6 +2513,16 @@ impl<'a> Into<Orthographic> for &'a [f32; 6] {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+pub struct Perspective {
+    left: f32,
+    right: f32,
+    bottom: f32,
+    top: f32,
+    near: f32,
+    far: f32,
+}
+
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFov {
     fovy: f32,
     aspect: f32,
