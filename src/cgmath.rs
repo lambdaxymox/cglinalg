@@ -180,7 +180,7 @@ impl Vector1 {
     /// Compute the squared distance between two vectors.
     ///
     #[inline]
-    pub fn distance2(&self, to: &Vector3) -> f32 {
+    pub fn distance2(&self, to: &Vector1) -> f32 {
         let x = (to.x - self.x) * (to.x - self.x);
 
         x
@@ -190,9 +190,13 @@ impl Vector1 {
     /// Compute the Euclidean distance between two vectors.
     ///
     #[inline]
-    pub fn distance(&self, to: &Vector3) -> f32 {
+    pub fn distance(&self, to: &Vector1) -> f32 {
         f32::sqrt(self.distance2(to))
     }
+
+    ///
+    /// Compute the projection for a
+    ///
 }
 
 impl AsArray for Vector1 {
