@@ -19,7 +19,7 @@ pub const EPSILON: f32 = 0.00001;
 /// normalized device coordinates.
 ///
 #[inline]
-pub fn orthographic<Spec: Into<Orthographic>>(spec: Spec) -> Matrix4 {
+pub fn ortho<Spec: Into<Orthographic>>(spec: Spec) -> Matrix4 {
     Matrix4::from(spec.into())
 }
 
