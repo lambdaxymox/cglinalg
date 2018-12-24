@@ -3,7 +3,7 @@ use std::mem;
 use std::ops;
 use std::cmp;
 
-use ::traits::AsArray;
+use ::traits::Array;
 
 
 // Constants used to convert degrees into radians.
@@ -206,7 +206,7 @@ impl Vector1 {
     }
 }
 
-impl AsArray for Vector1 {
+impl Array for Vector1 {
     type Element = f32;
 
     #[inline]
@@ -616,7 +616,7 @@ impl Vector2 {
     }
 }
 
-impl AsArray for Vector2 {
+impl Array for Vector2 {
     type Element = f32;
 
     #[inline]
@@ -1071,7 +1071,7 @@ impl Vector3 {
     }
 }
 
-impl AsArray for Vector3 {
+impl Array for Vector3 {
     type Element = f32;
 
     #[inline]
@@ -1503,7 +1503,7 @@ impl Vector4 {
     }
 }
 
-impl AsArray for Vector4 {
+impl Array for Vector4 {
     type Element = f32;
 
     #[inline]
@@ -1951,7 +1951,7 @@ impl Matrix2 {
     }
 }
 
-impl AsArray for Matrix2 {
+impl Array for Matrix2 {
     type Element = f32;
 
     #[inline]
@@ -2297,7 +2297,7 @@ impl Matrix3 {
     }
 }
 
-impl AsArray for Matrix3 {
+impl Array for Matrix3 {
     type Element = f32;
 
     #[inline]
@@ -2698,7 +2698,7 @@ impl Matrix4 {
     }
 }
 
-impl AsArray for Matrix4 {
+impl Array for Matrix4 {
     type Element = f32;
 
     #[inline]

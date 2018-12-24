@@ -1,4 +1,4 @@
-pub trait AsArray {
+pub trait Array {
     type Element: Copy;
 
     ///
