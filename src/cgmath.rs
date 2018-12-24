@@ -2462,6 +2462,38 @@ impl<'a> Into<PerspectiveFov> for &'a (f32, f32, f32, f32) {
     }
 }
 
+impl Into<PerspectiveFov> for [f32; 4] {
+    #[inline]
+    fn into(self) -> PerspectiveFov {
+        match self {
+            [fovy, aspect, near, far] => {
+                PerspectiveFov {
+                    fovy: fovy,
+                    aspect: aspect,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
+impl<'a> Into<PerspectiveFov> for &'a [f32; 4] {
+    #[inline]
+    fn into(self) -> PerspectiveFov {
+        match *self {
+            [fovy, aspect, near, far] => {
+                PerspectiveFov {
+                    fovy: fovy,
+                    aspect: aspect,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
 ///
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
 ///
