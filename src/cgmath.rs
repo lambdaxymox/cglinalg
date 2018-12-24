@@ -2421,6 +2421,87 @@ impl ops::Mul<Matrix3> for Matrix3 {
     }
 }
 
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct Orthographic {
+    left: f32,
+    right: f32,
+    bottom: f32,
+    top: f32,
+    near: f32,
+    far: f32,
+}
+
+impl Into<Orthographic> for (f32, f32, f32, f32, f32, f32) {
+    #[inline]
+    fn into(self) -> Orthographic {
+        match self {
+            (left, right, bottom, top, near, far) => {
+                Orthographic {
+                    left: left,
+                    right: right,
+                    bottom: bottom,
+                    top: top,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
+impl<'a> Into<Orthographic> for &'a (f32, f32, f32, f32, f32, f32) {
+    #[inline]
+    fn into(self) -> Orthographic {
+        match *self {
+            (left, right, bottom, top, near, far) => {
+                Orthographic {
+                    left: left,
+                    right: right,
+                    bottom: bottom,
+                    top: top,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
+impl Into<Orthographic> for [f32; 6] {
+    #[inline]
+    fn into(self) -> Orthographic {
+        match self {
+            [left, right, bottom, top, near, far] => {
+                Orthographic {
+                    left: left,
+                    right: right,
+                    bottom: bottom,
+                    top: top,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
+impl<'a> Into<Orthographic> for &'a [f32; 6] {
+    #[inline]
+    fn into(self) -> Orthographic {
+        match *self {
+            [left, right, bottom, top, near, far] => {
+                Orthographic {
+                    left: left,
+                    right: right,
+                    bottom: bottom,
+                    top: top,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFov {
