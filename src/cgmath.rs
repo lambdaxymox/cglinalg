@@ -204,6 +204,8 @@ impl AsArray for Vector1 {
     }
 }
 
+
+
 ///
 /// A representation of two-dimensional vectors, with a
 /// Euclidean metric.
