@@ -24,6 +24,16 @@ pub fn perspective<Spec: Into<PerspectiveFov>>(spec: Spec) -> Matrix4 {
 }
 
 ///
+/// Construct a new one-dimensional vector. This follows the style of
+/// other GLSL vector constructors even though GLSL itself lacks a
+/// `vec1()` function.
+///
+#[inline]
+pub fn vec1<T: Into<Vector1>>(v: T) -> Vector1 {
+    v.into()
+}
+
+///
 /// Construct a new two-dimensional vector in the style of
 /// a GLSL vec3 constructor.
 ///
