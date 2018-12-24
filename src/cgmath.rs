@@ -35,7 +35,7 @@ pub fn vec1<T: Into<Vector1>>(v: T) -> Vector1 {
 
 ///
 /// Construct a new two-dimensional vector in the style of
-/// a GLSL vec2 constructor.
+/// a GLSL `vec2` constructor.
 ///
 #[inline]
 pub fn vec2<T: Into<Vector2>>(v: T) -> Vector2 {
@@ -44,7 +44,7 @@ pub fn vec2<T: Into<Vector2>>(v: T) -> Vector2 {
 
 ///
 /// Construct a new three-dimensional vector in the style of
-/// a GLSL vec3 constructor.
+/// a GLSL `vec3` constructor.
 ///
 #[inline]
 pub fn vec3<T: Into<Vector3>>(v: T) -> Vector3 {
@@ -53,7 +53,7 @@ pub fn vec3<T: Into<Vector3>>(v: T) -> Vector3 {
 
 ///
 /// Construct a new four-dimensional vector in the style of
-/// a GLSL vec4 constructor.
+/// a GLSL `vec4` constructor.
 ///
 #[inline]
 pub fn vec4<T: Into<Vector4>>(v: T) -> Vector4 {
