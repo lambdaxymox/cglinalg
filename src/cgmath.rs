@@ -105,6 +105,87 @@ pub fn mat4(
 }
 
 ///
+/// A representation of one-dimensional vectors, with a
+/// Euclidean metric.
+///
+#[derive(Copy, Clone, PartialEq)]
+pub struct Vector1 {
+    pub x: f32,
+}
+
+impl Vector1 {
+    ///
+    /// Create a new vector.
+    ///
+    pub fn new(x: f32) -> Vector1 {
+        Vector1 { x: x }
+    }
+
+    ///
+    /// Generate a zero vector.
+    ///
+    pub fn zero() -> Vector1 {
+        Vector1 { x: 0.0 }
+    }
+
+    #[inline]
+    pub fn unit_x() -> Vector1 {
+        Vector1 { x: 1.0 }
+    }
+
+    ///
+    /// Compute the norm (length) of a vector.
+    ///
+    pub fn norm(&self) -> f32 {
+        f32::sqrt(self.x * self.x)
+    }
+
+    ///
+    /// Compute the squared norm (length) of a vector.
+    ///
+    pub fn norm2(&self) -> f32 {
+        self.x * self.x
+    }
+
+    ///
+    /// Convert an arbitrary vector into a unit vector.
+    ///
+    pub fn normalize(&self) -> Vector1 {
+        let norm_v = self.norm();
+        if norm_v == 0.0 {
+            return Vector1::zero();
+        }
+
+        Vector1::new(self.x / norm_v)
+    }
+
+    ///
+    /// Compute the dot product of two vectors.
+    ///
+    pub fn dot(&self, other: &Vector1) -> f32 {
+        self.x * other.x
+    }
+
+    ///
+    /// Compute the squared distance between two vectors.
+    ///
+    #[inline]
+    pub fn distance2(&self, to: &Vector3) -> f32 {
+        let x = (to.x - self.x) * (to.x - self.x);
+
+        x
+    }
+
+    ///
+    /// Compute the Euclidean distance between two vectors.
+    ///
+    #[inline]
+    pub fn distance(&self, to: &Vector3) -> f32 {
+        f32::sqrt(self.distance2(to))
+    }
+}
+
+///
 /// A representation of two-dimensional vectors, with a
 /// Euclidean metric.
 ///
