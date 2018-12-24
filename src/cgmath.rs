@@ -2522,6 +2522,78 @@ pub struct Perspective {
     far: f32,
 }
 
+impl Into<Perspective> for (f32, f32, f32, f32, f32, f32) {
+    #[inline]
+    fn into(self) -> Perspective {
+        match self {
+            (left, right, bottom, top, near, far) => {
+                Perspective {
+                    left: left,
+                    right: right,
+                    bottom: bottom,
+                    top: top,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
+impl<'a> Into<Perspective> for &'a (f32, f32, f32, f32, f32, f32) {
+    #[inline]
+    fn into(self) -> Perspective {
+        match *self {
+            (left, right, bottom, top, near, far) => {
+                Perspective {
+                    left: left,
+                    right: right,
+                    bottom: bottom,
+                    top: top,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
+impl Into<Perspective> for [f32; 6] {
+    #[inline]
+    fn into(self) -> Perspective {
+        match self {
+            [left, right, bottom, top, near, far] => {
+                Perspective {
+                    left: left,
+                    right: right,
+                    bottom: bottom,
+                    top: top,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
+impl<'a> Into<Perspective> for &'a [f32; 6] {
+    #[inline]
+    fn into(self) -> Perspective {
+        match *self {
+            [left, right, bottom, top, near, far] => {
+                Perspective {
+                    left: left,
+                    right: right,
+                    bottom: bottom,
+                    top: top,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFov {
     fovy: f32,
