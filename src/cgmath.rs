@@ -185,6 +185,25 @@ impl Vector1 {
     }
 }
 
+impl AsArray for Vector1 {
+    type Element = f32;
+
+    #[inline]
+    fn len() -> usize {
+        1
+    }
+
+    #[inline]
+    fn as_ptr(&self) -> *const Self::Element {
+        &self.x
+    }
+
+    #[inline]
+    fn as_mut_ptr(&mut self) -> *mut Self::Element {
+        &mut self.x
+    }
+}
+
 ///
 /// A representation of two-dimensional vectors, with a
 /// Euclidean metric.
