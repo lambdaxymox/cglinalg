@@ -24,6 +24,23 @@ pub fn ortho<Spec: Into<Orthographic>>(spec: Spec) -> Matrix4 {
 }
 
 ///
+/// Compute a perspective matrix from a view frustum.
+///
+/// This is the equivalent of the now deprecated [glFrustum]
+/// (http://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml) function.
+///
+pub fn frustum(left: f32, right: f32, bottom: f32, top: f32, near: f32, far: f32) -> Matrix4 {
+    Matrix4::from(Perspective {
+        left: left,
+        right: right,
+        bottom: bottom,
+        top: top,
+        near: near,
+        far: far,
+    })
+}
+
+///
 /// Compute the perspective matrix for converting from camera space to 
 /// normalized device coordinates. This is the equivalent to the
 /// [gluPerspective] (http://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
@@ -3078,6 +3095,37 @@ impl From<PerspectiveFov> for Matrix4 {
             0.0,  sy, 0.0,  0.0,
             0.0, 0.0,  sz, -1.0,
             0.0, 0.0,  pz,  0.0
+        )
+    }
+}
+
+impl From<Perspective> for Matrix4 {
+    fn from(persp: Perspective) -> Matrix4 {
+        let c0r0 = (2.0 * persp.near) / (persp.right - persp.left);
+        let c0r1 = 0.0;
+        let c0r2 = 0.0;
+        let c0r3 = 0.0;
+
+        let c1r0 = 0.0;
+        let c1r1 = (2.0 * persp.near) / (persp.top - persp.bottom);
+        let c1r2 = 0.0;
+        let c1r3 = 0.0;
+
+        let c2r0 =  (persp.right + persp.left)   / (persp.right - persp.left);
+        let c2r1 =  (persp.top   + persp.bottom) / (persp.top   - persp.bottom);
+        let c2r2 = -(persp.far   + persp.near)   / (persp.far   - persp.near);
+        let c2r3 = -1.0;
+
+        let c3r0 = 0.0;
+        let c3r1 = 0.0;
+        let c3r2 = -(2.0 * persp.far * persp.near) / (persp.far - persp.near);
+        let c3r3 = 0.0;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 }
