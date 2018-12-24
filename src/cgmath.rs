@@ -291,6 +291,34 @@ impl fmt::Display for Vector1 {
     }
 }
 
+impl From<f32> for Vector1 {
+    #[inline]
+    fn from(v: f32) -> Vector1 {
+        Vector1 { x: v }
+    }
+}
+
+impl From<[f32; 1]> for Vector1 {
+    #[inline]
+    fn from(v: [f32; 1]) -> Vector1 {
+        Vector1 { x: v[0] }
+    }
+}
+
+impl<'a> From<&'a [f32; 1]> for Vector1 {
+    #[inline]
+    fn from(v: &'a [f32; 1]) -> Vector1 {
+        Vector1 { x: v[0] }
+    }
+}
+
+impl<'a> From<&'a [f32; 1]> for &'a Vector1 {
+    #[inline]
+    fn from(v: &'a [f32; 1]) -> &'a Vector1 {
+        unsafe { mem::transmute(v) }
+    }
+}
+
 ///
 /// A representation of two-dimensional vectors, with a
 /// Euclidean metric.
