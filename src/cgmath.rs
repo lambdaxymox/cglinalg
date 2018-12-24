@@ -214,7 +214,69 @@ impl AsArray for Vector1 {
     }
 }
 
+impl AsRef<[f32; 1]> for Vector1 {
+    fn as_ref(&self) -> &[f32; 1] {
+        unsafe { mem::transmute(self) }
+    }
+}
 
+impl AsRef<f32> for Vector1 {
+    fn as_ref(&self) -> &f32 {
+        unsafe { mem::transmute(self) }
+    }
+}
+
+impl AsMut<[f32; 1]> for Vector1 {
+    fn as_mut(&mut self) -> &mut [f32; 1] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
+impl AsMut<f32> for Vector1 {
+    fn as_mut(&mut self) -> &mut f32 {
+        unsafe { mem::transmute(self) }
+    }
+}
+
+impl ops::Index<usize> for Vector1 {
+    type Output = f32;
+
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        let v: &[f32; 1] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl ops::Index<ops::Range<usize>> for Vector1 {
+    type Output = [f32];
+
+    #[inline]
+    fn index(&self, index: ops::Range<usize>) -> &Self::Output {
+        let v: &[f32; 1] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl ops::Index<ops::RangeTo<usize>> for Vector1 {
+    type Output = [f32];
+
+    #[inline]
+    fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
+        let v: &[f32; 1] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl ops::Index<ops::RangeFrom<usize>> for Vector1 {
+    type Output = [f32];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
+        let v: &[f32; 1] = self.as_ref();
+        &v[index]
+    }
+}
 
 ///
 /// A representation of two-dimensional vectors, with a
