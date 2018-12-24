@@ -16,7 +16,9 @@ pub const EPSILON: f32 = 0.00001;
 
 ///
 /// Compute the perspective matrix for converting from camera space to 
-/// normalized device coordinates.
+/// normalized device coordinates. This is the equivalent to the
+/// [gluPerspective] (http://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
+/// function.
 ///
 #[inline]
 pub fn perspective<Spec: Into<PerspectiveFov>>(spec: Spec) -> Matrix4 {
