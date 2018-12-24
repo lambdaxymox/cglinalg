@@ -15,6 +15,15 @@ pub const EPSILON: f32 = 0.00001;
 
 
 ///
+/// Compute the orthographic projection matrix for converting from camera space to
+/// normalized device coordinates.
+///
+#[inline]
+pub fn orthographic<Spec: Into<Orthographic>>(spec: Spec) -> Matrix4 {
+    Matrix4::from(spec.into())
+}
+
+///
 /// Compute the perspective matrix for converting from camera space to 
 /// normalized device coordinates. This is the equivalent to the
 /// [gluPerspective] (http://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
@@ -2715,9 +2724,9 @@ impl Matrix4 {
         )
     }
 
-    /// returns a scalar value with the determinant for a 4x4 matrix
-    /// see
-    /// http://www.euclideanspace.com/maths/algebra/matrix/functions/determinant/fourD/index.htm
+    ///
+    /// Computes the determinant of a 4x4 matrix.
+    ///
     pub fn determinant(&self) -> f32 {
         self.m[12] * self.m[9]  * self.m[6]  * self.m[3]  -
         self.m[8]  * self.m[13] * self.m[6]  * self.m[3]  -
@@ -2749,6 +2758,9 @@ impl Matrix4 {
         self.determinant() != 0.0
     }
 
+    ///
+    /// Compute the inverse of a 4x4 matrix.
+    ///
     pub fn inverse(&self) -> Matrix4 {
         let det = self.determinant();
         
