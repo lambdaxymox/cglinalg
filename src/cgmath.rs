@@ -29,6 +29,7 @@ pub fn ortho<Spec: Into<Orthographic>>(spec: Spec) -> Matrix4 {
 /// This is the equivalent of the now deprecated [glFrustum]
 /// (http://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml) function.
 ///
+#[inline]
 pub fn frustum<Spec: Into<Perspective>>(spec: Spec) -> Matrix4 {
     Matrix4::from(spec.into())
 }
