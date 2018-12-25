@@ -3205,10 +3205,16 @@ impl Quaternion {
         self.s * self.s + self.x * self.x + self.y * self.y + self.z * self.z
     }
 
+    ///
+    /// Compute a quaternion from it's scalar and vector parts.
+    ///
     pub fn from_sv(s: f32, v: Vector3) -> Quaternion {
         Quaternion { s: s, x: v.x, y: v.y, z: v.z }
     }
 
+    ///
+    /// Compute a quaternion corresponding to rotating about an axis in radians.
+    ///
     pub fn from_axis_rad(radians: f32, axis: Vector3) -> Quaternion {
         Quaternion {
             s: f32::cos(radians / 2.0),
@@ -3218,6 +3224,9 @@ impl Quaternion {
         }
     }
 
+    ///
+    /// Computer a quaternion corresponding to rotating about an axis in degrees.
+    ///
     pub fn from_axis_deg(degrees: f32, axis: Vector3) -> Quaternion {
         Self::from_axis_rad(ONE_DEG_IN_RAD * degrees, axis)
     }
@@ -3229,6 +3238,9 @@ impl Quaternion {
         Quaternion { s: self.s, x: -self.x, y: -self.y, z: -self.z }
     }
 
+    ///
+    /// Convert a quaternion to its equivalent matrix form using .
+    ///
     pub fn to_mut_mat4(&self, m: &mut Matrix4) {
         let s = self.s;
         let x = self.x;
