@@ -4059,7 +4059,7 @@ mod vec4_tests {
     fn test_scalar_division() {
         for test in test_cases().iter() {
             let expected = super::vec4((
-                test.v1.x / test.c, test.v1.y / test.c, test.v1.z / test.c, test.v2.w / test.c
+                test.v1.x / test.c, test.v1.y / test.c, test.v1.z / test.c, test.v1.w / test.c
             ));
             let result = test.v1 / test.c;
             assert_eq!(result, expected);
