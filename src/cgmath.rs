@@ -829,7 +829,7 @@ impl<'a> ops::Sub<Vector2> for &'a Vector2 {
 
     fn sub(self, other: Vector2) -> Self::Output {
         Vector2 {
-            x: self.x - other.y,
+            x: self.x - other.x,
             y: self.y - other.y,
         }
     }
@@ -840,7 +840,7 @@ impl ops::Sub<Vector2> for Vector2 {
 
     fn sub(self, other: Vector2) -> Self::Output {
         Vector2 {
-            x: self.x - other.y,
+            x: self.x - other.x,
             y: self.y - other.y,
         }
     }
@@ -851,7 +851,7 @@ impl<'a> ops::Sub<&'a Vector2> for Vector2 {
 
     fn sub(self, other: &'a Vector2) -> Self::Output {
         Vector2 {
-            x: self.x - other.y,
+            x: self.x - other.x,
             y: self.y - other.y,
         }
     }
@@ -862,7 +862,7 @@ impl<'a, 'b> ops::Sub<&'b Vector2> for &'a Vector2 {
 
     fn sub(self, other: &'b Vector2) -> Self::Output {
         Vector2 {
-            x: self.x - other.y,
+            x: self.x - other.x,
             y: self.y - other.y,
         }
     }
