@@ -3142,7 +3142,7 @@ impl From<Orthographic> for Matrix4 {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 pub struct Quaternion {
     s: f32,
     x: f32,
