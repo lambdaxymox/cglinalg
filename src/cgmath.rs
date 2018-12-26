@@ -3706,12 +3706,12 @@ mod vec1_tests {
                     v2: super::vec1(426.1),
                 },
                 TestCase {
-                    v1: super::vec1((27.6189)),
-                    v2: super::vec1((258.083))
+                    v1: super::vec1(27.6189),
+                    v2: super::vec1(258.083)
                 },
                 TestCase {
-                    v1: super::vec1((0.0)),
-                    v2: super::vec1((0.0)),
+                    v1: super::vec1(0.0),
+                    v2: super::vec1(0.0),
                 },
             ]
         }
@@ -3720,7 +3720,16 @@ mod vec1_tests {
     #[test]
     fn test_addition() {
         for test in test_cases().iter() {
-            let expected = super::vec1((test.v1.x + test.v2.x));
+            let expected = super::vec1(test.v1.x + test.v2.x);
+            let result = test.v1 + test.v2;
+            assert_eq!(result, expected);
+        }
+    }
+
+    #[test]
+    fn test_subtraction() {
+        for test in test_cases().iter() {
+            let expected = super::vec1(test.v1.x + test.v2.x);
             let result = test.v1 + test.v2;
             assert_eq!(result, expected);
         }
