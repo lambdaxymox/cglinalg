@@ -3670,6 +3670,7 @@ mod vec1_tests {
     use super::Vector1;
 
     struct TestCase {
+        c: f32,
         v1: Vector1,
         v2: Vector1,
     }
@@ -3702,14 +3703,17 @@ mod vec1_tests {
         Test {
             tests: vec![
                 TestCase {
+                    c: 802.3435169,
                     v1: super::vec1(-23.43),
                     v2: super::vec1(426.1),
                 },
                 TestCase {
+                    c: 33.249539,
                     v1: super::vec1(27.6189),
                     v2: super::vec1(258.083)
                 },
                 TestCase {
+                    c: 7.04217,
                     v1: super::vec1(0.0),
                     v2: super::vec1(0.0),
                 },
@@ -3731,6 +3735,24 @@ mod vec1_tests {
         for test in test_cases().iter() {
             let expected = super::vec1(test.v1.x + test.v2.x);
             let result = test.v1 + test.v2;
+            assert_eq!(result, expected);
+        }
+    }
+
+    #[test]
+    fn test_scalar_multiplication() {
+        for test in test_cases().iter() {
+            let expected = super::vec1(test.c * test.v1.x);
+            let result = test.v1 * test.c;
+            assert_eq!(result, expected);
+        }
+    }
+
+    #[test]
+    fn test_scalar_division() {
+        for test in test_cases().iter() {
+            let expected = super::vec1(test.v1.x / test.c);
+            let result = test.v1 / test.c;
             assert_eq!(result, expected);
         }
     }
