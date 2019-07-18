@@ -4,8 +4,7 @@ use std::ops;
 use std::cmp;
 
 use crate::traits::Array;
-use crate::vector1::*;
-use crate::vector2::*;
+use crate::vector::*;
 
 
 // Constants used to convert degrees into radians.
