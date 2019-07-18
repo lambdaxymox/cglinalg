@@ -71,12 +71,12 @@ impl Vector2 {
     pub fn dot(&self, other: &Vector2) -> f32 {
         self.x * other.x + self.y * other.y
     }
-    /*
+
     ///
     /// Compute the squared distance between two vectors.
     ///
     #[inline]
-    pub fn distance2(&self, to: &Vector3) -> f32 {
+    pub fn distance2(&self, to: &Vector2) -> f32 {
         let x = (to.x - self.x) * (to.x - self.x);
         let y = (to.y - self.y) * (to.y - self.y);
     
@@ -87,10 +87,9 @@ impl Vector2 {
     /// Compute the Euclidean distance between two vectors.
     ///
     #[inline]
-    pub fn distance(&self, to: &Vector3) -> f32 {
+    pub fn distance(&self, to: &Vector2) -> f32 {
         f32::sqrt(self.distance2(to))
     }
-    */
 }
 
 impl Array for Vector2 {
