@@ -3089,7 +3089,7 @@ impl From<PerspectiveFov> for Matrix4 {
             0.0,  sy, 0.0,  0.0,
             0.0, 0.0,  sz, -1.0,
             0.0, 0.0,  pz,  0.0
-        )
+        )F
     }
 }
 
@@ -3129,15 +3129,15 @@ impl From<Orthographic> for Matrix4 {
         let sx = 2.0 / (ortho.right - ortho.left);
         let sy = 2.0 / (ortho.top - ortho.bottom);
         let sz = 2.0 / (ortho.far - ortho.near);
-        let tx = -(ortho.right + ortho.left) / (ortho.right - ortho.left);
-        let ty = -(ortho.top + ortho.bottom) / (ortho.top - ortho.bottom);
-        let tz = -(ortho.far + ortho.near) / (ortho.far - ortho.near);
+        let tx = (ortho.right + ortho.left) / (ortho.right - ortho.left);
+        let ty = (ortho.top + ortho.bottom) / (ortho.top - ortho.bottom);
+        let tz = (ortho.far + ortho.near) / (ortho.far - ortho.near);
 
         Matrix4::new(
              sx, 0.0, 0.0, 0.0,
             0.0,  sy, 0.0, 0.0,
             0.0, 0.0,  sz, 0.0,
-             tx,  ty,  tz, 1.0
+             -tx, -ty, -tz, 1.0
         )
     }
 }
