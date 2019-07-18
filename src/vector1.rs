@@ -2,7 +2,6 @@ use traits::Array;
 use std::fmt;
 use std::mem;
 use std::ops;
-use std::cmp;
 
 
 ///
@@ -459,20 +458,14 @@ mod tests {
     fn test_cases() -> Test {
         Test {
             tests: vec![
-                TestCase {
-                    c: 802.3435169,
-                    v1: Vector1::from(-23.43),
-                    v2: Vector1::from(426.1),
+                TestCase { 
+                    c: 802.3435169, v1: Vector1::from(-23.43), v2: Vector1::from(426.1),
                 },
                 TestCase {
-                    c: 33.249539,
-                    v1: Vector1::from(27.6189),
-                    v2: Vector1::from(258.083)
+                    c: 33.249539, v1: Vector1::from(27.6189), v2: Vector1::from(258.083),
                 },
                 TestCase {
-                    c: 7.04217,
-                    v1: Vector1::from(0.0),
-                    v2: Vector1::from(0.0),
+                    c: 7.04217, v1: Vector1::from(0.0), v2: Vector1::from(0.0),
                 },
             ]
         }
