@@ -18,3 +18,12 @@ pub trait Array {
     ///
     fn as_mut_ptr(&mut self) -> *mut Self::Element; 
 }
+
+
+pub trait MetricSpace: Sized {
+    fn distance2(self, to: Self) -> f32;
+
+    fn distance(self, to: Self) -> f32 {
+        f32::sqrt(self.distance2(to))
+    }
+}
