@@ -418,3 +418,99 @@ impl<'a> ops::DivAssign<f32> for &'a mut Vector1 {
         self.x = self.x / other;
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use std::slice::Iter;
+    use super::Vector1;
+
+
+    struct TestCase {
+        c: f32,
+        v1: Vector1,
+        v2: Vector1,
+    }
+
+    struct Test {
+        tests: Vec<TestCase>,
+    }
+
+    impl Test {
+        fn iter(&self) -> TestIter {
+            TestIter {
+                inner: self.tests.iter()
+            }
+        }
+    }
+
+    struct TestIter<'a> {
+        inner: Iter<'a, TestCase>,
+    }
+
+    impl<'a> Iterator for TestIter<'a> {
+        type Item = &'a TestCase;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            self.inner.next()
+        }
+    }
+
+    fn test_cases() -> Test {
+        Test {
+            tests: vec![
+                TestCase {
+                    c: 802.3435169,
+                    v1: Vector1::from(-23.43),
+                    v2: Vector1::from(426.1),
+                },
+                TestCase {
+                    c: 33.249539,
+                    v1: Vector1::from(27.6189),
+                    v2: Vector1::from(258.083)
+                },
+                TestCase {
+                    c: 7.04217,
+                    v1: Vector1::from(0.0),
+                    v2: Vector1::from(0.0),
+                },
+            ]
+        }
+    }
+
+    #[test]
+    fn test_addition() {
+        for test in test_cases().iter() {
+            let expected = Vector1::from(test.v1.x + test.v2.x);
+            let result = test.v1 + test.v2;
+            assert_eq!(result, expected);
+        }
+    }
+
+    #[test]
+    fn test_subtraction() {
+        for test in test_cases().iter() {
+            let expected = Vector1::from(test.v1.x + test.v2.x);
+            let result = test.v1 + test.v2;
+            assert_eq!(result, expected);
+        }
+    }
+
+    #[test]
+    fn test_scalar_multiplication() {
+        for test in test_cases().iter() {
+            let expected = Vector1::from(test.c * test.v1.x);
+            let result = test.v1 * test.c;
+            assert_eq!(result, expected);
+        }
+    }
+
+    #[test]
+    fn test_scalar_division() {
+        for test in test_cases().iter() {
+            let expected = Vector1::from(test.v1.x / test.c);
+            let result = test.v1 / test.c;
+            assert_eq!(result, expected);
+        }
+    }
+}
