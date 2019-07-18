@@ -1,4 +1,4 @@
-use traits::Array;
+use traits::{Array, MetricSpace};
 use std::fmt;
 use std::mem;
 use std::ops;
@@ -71,24 +71,6 @@ impl Vector1 {
     }
 
     ///
-    /// Compute the squared distance between two vectors.
-    ///
-    #[inline]
-    pub fn distance2(&self, to: &Vector1) -> f32 {
-        let x = (to.x - self.x) * (to.x - self.x);
-
-        x
-    }
-
-    ///
-    /// Compute the Euclidean distance between two vectors.
-    ///
-    #[inline]
-    pub fn distance(&self, to: &Vector1) -> f32 {
-        f32::sqrt(self.distance2(to))
-    }
-
-    ///
     /// Compute the projection for a vector onto another vector.
     ///
     #[inline]
@@ -97,6 +79,24 @@ impl Vector1 {
         let x = self.dot(&onto) / onto_norm2;
 
         Vector1 { x: x }
+    }
+}
+
+impl MetricSpace for Vector1 {
+    #[inline]
+    fn distance2(self, to: Vector1) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+
+        dx_2
+    }
+}
+
+impl MetricSpace for &Vector1 {
+    #[inline]
+    fn distance2(self, to: &Vector1) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+
+        dx_2
     }
 }
 
@@ -490,24 +490,25 @@ impl Vector2 {
     pub fn dot(&self, other: &Vector2) -> f32 {
         self.x * other.x + self.y * other.y
     }
+}
 
-    ///
-    /// Compute the squared distance between two vectors.
-    ///
+impl MetricSpace for Vector2 {
     #[inline]
-    pub fn distance2(&self, to: &Vector2) -> f32 {
-        let x = (to.x - self.x) * (to.x - self.x);
-        let y = (to.y - self.y) * (to.y - self.y);
+    fn distance2(self, to: Vector2) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
     
-        x + y
+        dx_2 + dy_2
     }
+}
 
-    ///
-    /// Compute the Euclidean distance between two vectors.
-    ///
+impl MetricSpace for &Vector2 {
     #[inline]
-    pub fn distance(&self, to: &Vector2) -> f32 {
-        f32::sqrt(self.distance2(to))
+    fn distance2(self, to: &Vector2) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
     }
 }
 
@@ -945,24 +946,27 @@ impl Vector3 {
     
         Vector3::new(x, y, z)
     }
+}
 
-    ///
-    /// Compute the squared distance between two vectors.
-    ///
-    pub fn distance2(&self, to: &Vector3) -> f32 {
-        let x = (to.x - self.x) * (to.x - self.x);
-        let y = (to.y - self.y) * (to.y - self.y);
-        let z = (to.z - self.z) * (to.z - self.z);
-    
-        x + y + z
-    }
-
-    ///
-    /// Compute the squared distance between two vectors.
-    ///
+impl MetricSpace for Vector3 {
     #[inline]
-    pub fn distance(&self, to: &Vector3) -> f32 {
-        f32::sqrt(self.distance2(to))
+    fn distance2(self, to: Vector3) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+    
+        dx_2 + dy_2 + dz_2
+    }
+}
+
+impl MetricSpace for &Vector3 {
+    #[inline]
+    fn distance2(self, to: &Vector3) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+    
+        dx_2 + dy_2 + dz_2
     }
 }
 
@@ -1377,25 +1381,29 @@ impl Vector4 {
     pub fn unit_w() -> Vector4 {
         Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 1.0 }
     }
+}
 
-    ///
-    /// Compute the squared distance between two vectors.
-    ///
-    pub fn distance2(&self, to: &Vector4) -> f32 {
-        let x = (to.x - self.x) * (to.x - self.x);
-        let y = (to.y - self.y) * (to.y - self.y);
-        let z = (to.z - self.z) * (to.z - self.z);
-        let w = (to.w - self.w) * (to.w - self.w);
-    
-        x + y + z + w
-    }
-
-    ///
-    /// Compute the squared distance between two vectors.
-    ///
+impl MetricSpace for Vector4 {
     #[inline]
-    pub fn distance(&self, to: &Vector4) -> f32 {
-        f32::sqrt(self.distance2(to))
+    fn distance2(self, to: Vector4) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dw_2 = (to.w - self.w) * (to.w - self.w);
+    
+        dx_2 + dy_2 + dz_2 + dw_2
+    }
+}
+
+impl MetricSpace for &Vector4 {
+    #[inline]
+    fn distance2(self, to: &Vector4) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dw_2 = (to.w - self.w) * (to.w - self.w);
+
+        dx_2 + dy_2 + dz_2 + dw_2
     }
 }
 

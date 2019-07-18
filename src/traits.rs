@@ -21,8 +21,14 @@ pub trait Array {
 
 
 pub trait MetricSpace: Sized {
+    ///
+    /// Compute the squared distance between two vectors.
+    ///
     fn distance2(self, to: Self) -> f32;
 
+    ///
+    /// Compute the Euclidean distance between two vectors.
+    ///
     fn distance(self, to: Self) -> f32 {
         f32::sqrt(self.distance2(to))
     }
