@@ -1,1 +1,1 @@
-# Simple Graphics Math Library
+# Computer Graphics Math Library
