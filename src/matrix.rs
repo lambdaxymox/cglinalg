@@ -315,3 +315,146 @@ impl<'a> ops::Div<f32> for &'a Matrix2 {
     }
 }
 
+
+#[cfg(test)]
+mod mat2_tests {
+        use std::slice::Iter;
+    use super::{Matrix2};
+
+    struct TestCase {
+        c: f32,
+        a_mat: Matrix2,
+        b_mat: Matrix2,
+        expected: Matrix2,
+    }
+
+    struct Test {
+        tests: Vec<TestCase>,
+    }
+
+    impl Test {
+        fn iter(&self) -> TestIter {
+            TestIter {
+                inner: self.tests.iter()
+            }
+        }
+    }
+
+    struct TestIter<'a> {
+        inner: Iter<'a, TestCase>,
+    }
+
+    impl<'a> Iterator for TestIter<'a> {
+        type Item = &'a TestCase;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            self.inner.next()
+        }
+    }
+
+    fn test_cases() -> Test {
+        Test {
+            tests: vec![
+                TestCase {
+                    c: 802.3435169,
+                    a_mat: Matrix2::new(80.0,  23.43,     426.1,   23.5724),
+                    b_mat: Matrix2::new(36.84, 427.46894, 7.04217, 61.891390),
+                    expected: Matrix2::new(185.092, 10939.6, 26935.3, 1623.93),
+                },
+                TestCase {
+                    c: 6.2396,
+                    a_mat: Matrix2::one(),
+                    b_mat: Matrix2::one(),
+                    expected: Matrix2::one(),
+                },
+                TestCase {
+                    c: 6.2396,
+                    a_mat: Matrix2::zero(),
+                    b_mat: Matrix2::zero(),
+                    expected: Matrix2::one(),
+                },
+                TestCase {
+                    c:  14.5093,
+                    a_mat: Matrix2::new(68.32, 0.0, 0.0, 37.397),
+                    b_mat: Matrix2::new(57.72, 0.0, 0.0, 9.5433127),
+                    expected: Matrix2::new(3943.43, 0.0, 0.0, 356.891),
+                },
+            ]
+        }
+    }
+
+    #[test]
+    fn test_mat_times_identity_equals_mat() {
+        for test in test_cases().iter() {
+            let a_mat_times_identity = test.a_mat * Matrix2::one();
+            let b_mat_times_identity = test.b_mat * Matrix2::one();
+
+            assert_eq!(a_mat_times_identity, test.a_mat);
+            assert_eq!(b_mat_times_identity, test.b_mat);
+        }
+    }
+
+    #[test]
+    fn test_mat_times_zero_equals_zero() {
+        for test in test_cases().iter() {
+            let a_mat_times_zero = test.a_mat * Matrix2::zero();
+            let b_mat_times_zero = test.b_mat * Matrix2::zero();
+
+            assert_eq!(a_mat_times_zero, Matrix2::zero());
+            assert_eq!(b_mat_times_zero, Matrix2::zero());
+        }
+    }
+
+    #[test]
+    fn test_zero_times_mat_equals_zero() {
+        for test in test_cases().iter() {
+            let zero_times_a_mat = Matrix2::zero() * test.a_mat;
+            let zero_times_b_mat = Matrix2::zero() * test.b_mat;
+
+            assert_eq!(zero_times_a_mat, Matrix2::zero());
+            assert_eq!(zero_times_b_mat, Matrix2::zero());
+        }
+    }
+
+    #[test]
+    fn test_mat_times_identity_equals_identity_times_mat() {
+        for test in test_cases().iter() {
+            let a_mat_times_identity = test.a_mat * Matrix2::one();
+            let identity_times_a_mat = Matrix2::one() * test.a_mat;
+            let b_mat_times_identity = test.b_mat * Matrix2::one();
+            let identity_times_b_mat = Matrix2::one() * test.b_mat;
+
+            assert_eq!(a_mat_times_identity, identity_times_a_mat);
+            assert_eq!(b_mat_times_identity, identity_times_b_mat);
+        }
+    }
+
+    #[test]
+    fn test_mat_transpose_transpose_equals_mat() {
+        for test in test_cases().iter() {
+            let a_mat_tr_tr = test.a_mat.transpose().transpose();
+            let b_mat_tr_tr = test.b_mat.transpose().transpose();
+            
+            assert_eq!(a_mat_tr_tr, test.a_mat);
+            assert_eq!(b_mat_tr_tr, test.b_mat);
+        }
+    }
+
+    #[test]
+    fn test_identity_transpose_equals_identity() {
+        let identity = Matrix2::one();
+        let identity_tr = identity.transpose();
+            
+        assert_eq!(identity, identity_tr);
+    }
+
+    #[test]
+    fn test_matrix_multiplication() {
+        for test in test_cases().iter() {
+            let result = test.a_mat * test.b_mat;
+            let expected = test.expected;
+
+            assert_eq!(result, expected);
+        }
+    }
+}
