@@ -318,8 +318,9 @@ impl<'a> ops::Div<f32> for &'a Matrix2 {
 
 #[cfg(test)]
 mod mat2_tests {
-        use std::slice::Iter;
-    use super::{Matrix2};
+    use std::slice::Iter;
+    use vector::Vector2;
+    use super::Matrix2;
 
     struct TestCase {
         c: f32,
@@ -456,5 +457,15 @@ mod mat2_tests {
 
             assert_eq!(result, expected);
         }
+    }
+
+    #[test]
+    fn test_construction_from_cols() {
+        let c0 = Vector2::new(1.0, 2.0);
+        let c1 = Vector2::new(3.0, 4.0);
+        let expected = Matrix2::new(1.0, 2.0, 3.0, 4.0);
+        let result = Matrix2::from_cols(c0, c1);
+
+        assert_eq!(result, expected);
     }
 }
