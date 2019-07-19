@@ -30,20 +30,7 @@ impl Vector1 {
         Vector1 { x: 1.0 }
     }
 
-    ///
-    /// Compute the norm (length) of a vector.
-    ///
-    pub fn norm(&self) -> f32 {
-        f32::sqrt(self.x * self.x)
-    }
-
-    ///
-    /// Compute the squared norm (length) of a vector.
-    ///
-    pub fn norm2(&self) -> f32 {
-        self.x * self.x
-    }
-
+    /*
     ///
     /// Convert an arbitrary vector into a unit vector.
     ///
@@ -55,24 +42,7 @@ impl Vector1 {
 
         Vector1::new(self.x / norm_v)
     }
-
-    ///
-    /// Compute the dot product of two vectors.
-    ///
-    pub fn dot(&self, other: &Vector1) -> f32 {
-        self.x * other.x
-    }
-
-    ///
-    /// Compute the projection for a vector onto another vector.
-    ///
-    #[inline]
-    pub fn project(&self, onto: Vector1) -> Vector1 {
-        let onto_norm2 = onto.norm2();
-        let x = self.dot(&onto) / onto_norm2;
-
-        Vector1 { x: x }
-    }
+    */
 }
 
 impl MetricSpace for Vector1 {
@@ -415,6 +385,26 @@ impl ops::DivAssign<f32> for &mut Vector1 {
     }
 }
 
+impl ops::Rem<f32> for Vector1 {
+    type Output = Vector1;
+
+    fn rem(self, other: f32) -> Self::Output {
+        let x = self.x % other;
+        
+        Vector1 { x: x }
+    }
+}
+
+impl ops::Rem<f32> for &Vector1 {
+    type Output = Vector1;
+
+    fn rem(self, other: f32) -> Self::Output {
+        let x = self.x % other;
+        
+        Vector1 { x: x }
+    }
+}
+
 impl Zero for Vector1 {
     fn zero() -> Vector1 {
         Vector1 { x: 0.0 }
@@ -424,6 +414,8 @@ impl Zero for Vector1 {
         self.x == 0.0
     }
 }
+
+impl VectorSpace for Vector1 {}
 
 
 ///

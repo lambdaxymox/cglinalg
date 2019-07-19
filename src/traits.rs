@@ -85,5 +85,12 @@ pub trait DotProduct where Self: MetricSpace + VectorSpace {
     fn normalize(self) -> Self {
         self / self.norm()
     }
+
+    ///
+    /// Compute the projection for a vector onto another vector.
+    ///
+    fn project_on(&self, onto: Self) -> Self {
+        onto * (self.dot(onto) / onto.norm2())
+    }
 }
 
