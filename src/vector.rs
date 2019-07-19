@@ -895,32 +895,6 @@ impl Vector3 {
     }
 
     ///
-    /// Compute the norm (length) of a vector.
-    ///
-    pub fn norm(&self) -> f32 {
-        f32::sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
-    }
-
-    ///
-    /// Compute the squared norm (length) of a vector.
-    ///
-    pub fn norm2(&self) -> f32 {
-        self.x * self.x + self.y * self.y + self.z * self.z
-    }
-
-    ///
-    /// Convert an arbitrary vector into a unit vector.
-    ///
-    pub fn normalize(&self) -> Vector3 {
-        let norm_v = self.norm();
-        if norm_v == 0.0 {
-            return Vector3::zero();
-        }
-
-        Vector3::new(self.x / norm_v, self.y / norm_v, self.z / norm_v)
-    }
-
-    ///
     /// Compute the dot product of two vectors.
     ///
     pub fn dot(&self, other: &Vector3) -> f32 {
@@ -1340,6 +1314,30 @@ impl ops::DivAssign<f32> for &mut Vector3 {
     }
 }
 
+impl ops::Rem<f32> for Vector3 {
+    type Output = Vector3;
+
+    fn rem(self, other: f32) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        
+        Vector3 { x: x, y: y, z: z }
+    }
+}
+
+impl ops::Rem<f32> for &Vector3 {
+    type Output = Vector3;
+
+    fn rem(self, other: f32) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        
+        Vector3 { x: x, y: y, z: z }
+    }
+}
+
 impl Zero for Vector3 {
     #[inline]
     fn zero() -> Vector3 {
@@ -1351,6 +1349,7 @@ impl Zero for Vector3 {
     }
 }
 
+impl VectorSpace for Vector3 {}
 
 #[derive(Copy, Clone)]
 pub struct Vector4 {
