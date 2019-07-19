@@ -29,20 +29,6 @@ impl Vector1 {
     pub fn unit_x() -> Vector1 {
         Vector1 { x: 1.0 }
     }
-
-    /*
-    ///
-    /// Convert an arbitrary vector into a unit vector.
-    ///
-    pub fn normalize(&self) -> Vector1 {
-        let norm_v = self.norm();
-        if norm_v == 0.0 {
-            return Vector1::zero();
-        }
-
-        Vector1::new(self.x / norm_v)
-    }
-    */
 }
 
 impl MetricSpace for Vector1 {
@@ -456,20 +442,6 @@ impl Vector2 {
     pub fn unit_y() -> Vector2 {
         Vector2 { x: 0.0, y: 1.0 }
     }
-
-    /*
-    ///
-    /// Convert an arbitrary vector into a unit vector.
-    ///
-    pub fn normalize(&self) -> Vector2 {
-        let norm_v = self.norm();
-        if norm_v == 0.0 {
-            return Vector2::zero();
-        }
-
-        Vector2::new(self.x / norm_v, self.y / norm_v)
-    }
-    */
 }
 
 impl MetricSpace for Vector2 {
