@@ -43,6 +43,13 @@ impl Vector1 {
         Vector1::new(self.x / norm_v)
     }
     */
+
+    ///
+    /// Compute the dot product of two vectors.
+    ///
+    pub fn dot(&self, other: &Vector1) -> f32 {
+        self.x * other.x
+    }
 }
 
 impl MetricSpace for Vector1 {
@@ -459,6 +466,13 @@ impl Vector2 {
         Vector2::new(self.x / norm_v, self.y / norm_v)
     }
     */
+
+    ///
+    /// Compute the dot product of two vectors.
+    ///
+    pub fn dot(&self, other: &Vector2) -> f32 {
+        self.x * other.x + self.y * other.y
+    }
 }
 
 impl MetricSpace for Vector2 {
