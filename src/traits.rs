@@ -22,7 +22,14 @@ pub trait Array {
     fn as_mut_ptr(&mut self) -> *mut Self::Element; 
 }
 
+pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
+    fn zero() -> Self;
+
+    fn is_zero(self) -> bool;
+}
+
 pub trait VectorSpace: Copy + Clone where
+    Self: Zero,
     Self: ops::Add<Self, Output = Self>,
     Self: ops::Sub<Self, Output = Self>,
     Self: ops::Mul<f32, Output = Self>,
@@ -73,3 +80,5 @@ pub trait DotProduct where Self: MetricSpace + VectorSpace {
         self / self.norm()
     }
 }
+
+
