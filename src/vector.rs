@@ -430,7 +430,7 @@ impl Lerp for Vector1 {
 }
 
 ///
-/// A representation of two-dimensional vectors, with a
+/// A representation of two-dimensional vectors with a
 /// Euclidean metric.
 ///
 #[derive(Copy, Clone, PartialEq)]
@@ -1377,7 +1377,6 @@ impl Lerp for Vector3 {
         self + (other - self) * amount
     }
 }
-
 
 #[derive(Copy, Clone)]
 pub struct Vector4 {
