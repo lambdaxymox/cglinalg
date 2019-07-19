@@ -87,4 +87,3 @@ pub trait DotProduct where Self: MetricSpace + VectorSpace {
     }
 }
 
-

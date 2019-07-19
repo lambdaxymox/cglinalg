@@ -203,9 +203,9 @@ impl From<[f32; 1]> for Vector1 {
     }
 }
 
-impl<'a> From<&'a [f32; 1]> for Vector1 {
+impl From<&[f32; 1]> for Vector1 {
     #[inline]
-    fn from(v: &'a [f32; 1]) -> Vector1 {
+    fn from(v: &[f32; 1]) -> Vector1 {
         Vector1 { x: v[0] }
     }
 }
@@ -226,7 +226,7 @@ impl ops::Neg for Vector1 {
     }
 }
 
-impl<'a> ops::Neg for &'a Vector1 {
+impl ops::Neg for &Vector1 {
     type Output = Vector1;
 
     #[inline]
@@ -235,7 +235,7 @@ impl<'a> ops::Neg for &'a Vector1 {
     }
 }
 
-impl<'a> ops::Add<Vector1> for &'a Vector1 {
+impl ops::Add<Vector1> for &Vector1 {
     type Output = Vector1;
 
     fn add(self, other: Vector1) -> Self::Output {
@@ -255,10 +255,10 @@ impl ops::Add<Vector1> for Vector1 {
     }
 }
 
-impl<'a> ops::Add<&'a Vector1> for Vector1 {
+impl ops::Add<&Vector1> for Vector1 {
     type Output = Vector1;
 
-    fn add(self, other: &'a Vector1) -> Self::Output {
+    fn add(self, other: &Vector1) -> Self::Output {
         Vector1 {
             x: self.x + other.x,
         }
@@ -275,7 +275,7 @@ impl<'a, 'b> ops::Add<&'b Vector1> for &'a Vector1 {
     }
 }
 
-impl<'a> ops::Sub<Vector1> for &'a Vector1 {
+impl ops::Sub<Vector1> for &Vector1 {
     type Output = Vector1;
 
     fn sub(self, other: Vector1) -> Self::Output {
@@ -295,10 +295,10 @@ impl ops::Sub<Vector1> for Vector1 {
     }
 }
 
-impl<'a> ops::Sub<&'a Vector1> for Vector1 {
+impl ops::Sub<&Vector1> for Vector1 {
     type Output = Vector1;
 
-    fn sub(self, other: &'a Vector1) -> Self::Output {
+    fn sub(self, other: &Vector1) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
         }
@@ -321,20 +321,20 @@ impl ops::AddAssign<Vector1> for Vector1 {
     }
 }
 
-impl<'a> ops::AddAssign<&'a Vector1> for Vector1 {
-    fn add_assign(&mut self, other: &'a Vector1) {
+impl ops::AddAssign<&Vector1> for Vector1 {
+    fn add_assign(&mut self, other: &Vector1) {
         self.x = self.x + other.x;
     }
 }
 
-impl<'a> ops::AddAssign<Vector1> for &'a mut Vector1 {
+impl ops::AddAssign<Vector1> for &mut Vector1 {
     fn add_assign(&mut self, other: Vector1) {
         self.x = self.x + other.x;
     }
 }
 
 impl<'a, 'b> ops::AddAssign<&'a Vector1> for &'b mut Vector1 {
-    fn add_assign(&mut self, other: &'a Vector1) {
+    fn add_assign(&mut self, other: &Vector1) {
         self.x = self.x + other.x;
     }
 }
@@ -345,13 +345,13 @@ impl ops::SubAssign<Vector1> for Vector1 {
     }
 }
 
-impl<'a> ops::SubAssign<&'a Vector1> for Vector1 {
-    fn sub_assign(&mut self, other: &'a Vector1) {
+impl ops::SubAssign<&Vector1> for Vector1 {
+    fn sub_assign(&mut self, other: &Vector1) {
         self.x = self.x - other.x;
     }
 }
 
-impl<'a> ops::SubAssign<Vector1> for &'a mut Vector1 {
+impl ops::SubAssign<Vector1> for &mut Vector1 {
     fn sub_assign(&mut self, other: Vector1) {
         self.x = self.x - other.x;
     }
@@ -373,7 +373,7 @@ impl ops::Mul<f32> for Vector1 {
     }
 }
 
-impl<'a> ops::Mul<f32> for &'a Vector1 {
+impl ops::Mul<f32> for &Vector1 {
     type Output = Vector1;
 
     fn mul(self, other: f32) -> Vector1 {
@@ -393,7 +393,7 @@ impl ops::Div<f32> for Vector1 {
     }
 }
 
-impl<'a> ops::Div<f32> for &'a Vector1 {
+impl ops::Div<f32> for &Vector1 {
     type Output = Vector1;
 
     fn div(self, other: f32) -> Vector1 {
@@ -409,7 +409,7 @@ impl ops::DivAssign<f32> for Vector1 {
     }
 }
 
-impl<'a> ops::DivAssign<f32> for &'a mut Vector1 {
+impl ops::DivAssign<f32> for &mut Vector1 {
     fn div_assign(&mut self, other: f32) {
         self.x = self.x / other;
     }
@@ -618,9 +618,9 @@ impl From<[f32; 2]> for Vector2 {
     }
 }
 
-impl<'a> From<&'a [f32; 2]> for Vector2 {
+impl From<&[f32; 2]> for Vector2 {
     #[inline]
-    fn from(v: &'a [f32; 2]) -> Vector2 {
+    fn from(v: &[f32; 2]) -> Vector2 {
         Vector2 { x: v[0], y: v[1] }
     }
 }
@@ -641,7 +641,7 @@ impl ops::Neg for Vector2 {
     }
 }
 
-impl<'a> ops::Neg for &'a Vector2 {
+impl ops::Neg for &Vector2 {
     type Output = Vector2;
 
     #[inline]
@@ -650,7 +650,7 @@ impl<'a> ops::Neg for &'a Vector2 {
     }
 }
 
-impl<'a> ops::Add<Vector2> for &'a Vector2 {
+impl ops::Add<Vector2> for &Vector2 {
     type Output = Vector2;
 
     fn add(self, other: Vector2) -> Self::Output {
@@ -672,10 +672,10 @@ impl ops::Add<Vector2> for Vector2 {
     }
 }
 
-impl<'a> ops::Add<&'a Vector2> for Vector2 {
+impl ops::Add<&Vector2> for Vector2 {
     type Output = Vector2;
 
-    fn add(self, other: &'a Vector2) -> Self::Output {
+    fn add(self, other: &Vector2) -> Self::Output {
         Vector2 {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -694,7 +694,7 @@ impl<'a, 'b> ops::Add<&'b Vector2> for &'a Vector2 {
     }
 }
 
-impl<'a> ops::Sub<Vector2> for &'a Vector2 {
+impl ops::Sub<Vector2> for &Vector2 {
     type Output = Vector2;
 
     fn sub(self, other: Vector2) -> Self::Output {
@@ -716,10 +716,10 @@ impl ops::Sub<Vector2> for Vector2 {
     }
 }
 
-impl<'a> ops::Sub<&'a Vector2> for Vector2 {
+impl ops::Sub<&Vector2> for Vector2 {
     type Output = Vector2;
 
-    fn sub(self, other: &'a Vector2) -> Self::Output {
+    fn sub(self, other: &Vector2) -> Self::Output {
         Vector2 {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -745,14 +745,14 @@ impl ops::AddAssign<Vector2> for Vector2 {
     }
 }
 
-impl<'a> ops::AddAssign<&'a Vector2> for Vector2 {
-    fn add_assign(&mut self, other: &'a Vector2) {
+impl ops::AddAssign<&Vector2> for Vector2 {
+    fn add_assign(&mut self, other: &Vector2) {
         self.x = self.x + other.x;
         self.y = self.y + other.y;
     }
 }
 
-impl<'a> ops::AddAssign<Vector2> for &'a mut Vector2 {
+impl ops::AddAssign<Vector2> for &mut Vector2 {
     fn add_assign(&mut self, other: Vector2) {
         self.x = self.x + other.x;
         self.y = self.y + other.y;
@@ -773,14 +773,14 @@ impl ops::SubAssign<Vector2> for Vector2 {
     }
 }
 
-impl<'a> ops::SubAssign<&'a Vector2> for Vector2 {
-    fn sub_assign(&mut self, other: &'a Vector2) {
+impl ops::SubAssign<&Vector2> for Vector2 {
+    fn sub_assign(&mut self, other: &Vector2) {
         self.x = self.x - other.x;
         self.y = self.y - other.y;
     }
 }
 
-impl<'a> ops::SubAssign<Vector2> for &'a mut Vector2 {
+impl ops::SubAssign<Vector2> for &mut Vector2 {
     fn sub_assign(&mut self, other: Vector2) {
         self.x = self.x - other.x;
         self.y = self.y - other.y;
@@ -805,7 +805,7 @@ impl ops::Mul<f32> for Vector2 {
     }
 }
 
-impl<'a> ops::Mul<f32> for &'a Vector2 {
+impl ops::Mul<f32> for &Vector2 {
     type Output = Vector2;
 
     fn mul(self, other: f32) -> Vector2 {
@@ -827,7 +827,7 @@ impl ops::Div<f32> for Vector2 {
     }
 }
 
-impl<'a> ops::Div<f32> for &'a Vector2 {
+impl ops::Div<f32> for &Vector2 {
     type Output = Vector2;
 
     fn div(self, other: f32) -> Vector2 {
@@ -845,7 +845,7 @@ impl ops::DivAssign<f32> for Vector2 {
     }
 }
 
-impl<'a> ops::DivAssign<f32> for &'a mut Vector2 {
+impl ops::DivAssign<f32> for &mut Vector2 {
     fn div_assign(&mut self, other: f32) {
         self.x = self.x / other;
         self.y = self.y / other;
@@ -1080,23 +1080,23 @@ impl From<(Vector2, f32)> for Vector3 {
     }
 }
 
-impl<'a> From<(&'a Vector2, f32)> for Vector3 {
+impl From<(&Vector2, f32)> for Vector3 {
     #[inline]
-    fn from((v, z): (&'a Vector2, f32)) -> Vector3 {
+    fn from((v, z): (&Vector2, f32)) -> Vector3 {
         Vector3::new(v.x, v.y, z)
     }
 }
 
-impl<'a> From<Vector4> for Vector3 {
+impl From<Vector4> for Vector3 {
     #[inline]
     fn from(v: Vector4) -> Vector3 {
         Vector3::new(v.x, v.y, v.z)
     }
 }
 
-impl<'a> From<&'a Vector4> for Vector3 {
+impl From<&Vector4> for Vector3 {
     #[inline]
-    fn from(v: &'a Vector4) -> Vector3 {
+    fn from(v: &Vector4) -> Vector3 {
         Vector3::new(v.x, v.y, v.z)
     }
 }
@@ -1110,7 +1110,7 @@ impl ops::Neg for Vector3 {
     }
 }
 
-impl<'a> ops::Neg for &'a Vector3 {
+impl ops::Neg for &Vector3 {
     type Output = Vector3;
 
     #[inline]
@@ -1119,7 +1119,7 @@ impl<'a> ops::Neg for &'a Vector3 {
     }
 }
 
-impl<'a> ops::Add<Vector3> for &'a Vector3 {
+impl ops::Add<Vector3> for &Vector3 {
     type Output = Vector3;
 
     fn add(self, other: Vector3) -> Self::Output {
@@ -1143,10 +1143,10 @@ impl ops::Add<Vector3> for Vector3 {
     }
 }
 
-impl<'a> ops::Add<&'a Vector3> for Vector3 {
+impl ops::Add<&Vector3> for Vector3 {
     type Output = Vector3;
 
-    fn add(self, other: &'a Vector3) -> Self::Output {
+    fn add(self, other: &Vector3) -> Self::Output {
         Vector3 {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -1167,7 +1167,7 @@ impl<'a, 'b> ops::Add<&'b Vector3> for &'a Vector3 {
     }
 }
 
-impl<'a> ops::Sub<Vector3> for &'a Vector3 {
+impl ops::Sub<Vector3> for &Vector3 {
     type Output = Vector3;
 
     fn sub(self, other: Vector3) -> Self::Output {
@@ -1191,10 +1191,10 @@ impl ops::Sub<Vector3> for Vector3 {
     }
 }
 
-impl<'a> ops::Sub<&'a Vector3> for Vector3 {
+impl ops::Sub<&Vector3> for Vector3 {
     type Output = Vector3;
 
-    fn sub(self, other: &'a Vector3) -> Self::Output {
+    fn sub(self, other: &Vector3) -> Self::Output {
         Vector3 {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -1223,15 +1223,15 @@ impl ops::AddAssign<Vector3> for Vector3 {
     }
 }
 
-impl<'a> ops::AddAssign<&'a Vector3> for Vector3 {
-    fn add_assign(&mut self, other: &'a Vector3) {
+impl ops::AddAssign<&Vector3> for Vector3 {
+    fn add_assign(&mut self, other: &Vector3) {
         self.x += other.x;
         self.y += other.y;
         self.z += other.z;
     }
 }
 
-impl<'a> ops::AddAssign<Vector3> for &'a mut Vector3 {
+impl ops::AddAssign<Vector3> for &mut Vector3 {
     fn add_assign(&mut self, other: Vector3) {
         self.x += other.x;
         self.y += other.y;
@@ -1255,15 +1255,15 @@ impl ops::SubAssign<Vector3> for Vector3 {
     }
 }
 
-impl<'a> ops::SubAssign<&'a Vector3> for Vector3 {
-    fn sub_assign(&mut self, other: &'a Vector3) {
+impl ops::SubAssign<&Vector3> for Vector3 {
+    fn sub_assign(&mut self, other: &Vector3) {
         self.x -= other.x;
         self.y -= other.y;
         self.z -= other.z;
     }
 }
 
-impl<'a> ops::SubAssign<Vector3> for &'a mut Vector3 {
+impl ops::SubAssign<Vector3> for &mut Vector3 {
     fn sub_assign(&mut self, other: Vector3) {
         self.x -= other.x;
         self.y -= other.y;
@@ -1291,7 +1291,7 @@ impl ops::Mul<f32> for Vector3 {
     }
 }
 
-impl<'a> ops::Mul<f32> for &'a Vector3 {
+impl ops::Mul<f32> for &Vector3 {
     type Output = Vector3;
 
     fn mul(self, other: f32) -> Vector3 {
@@ -1315,7 +1315,7 @@ impl ops::Div<f32> for Vector3 {
     }
 }
 
-impl<'a> ops::Div<f32> for &'a Vector3 {
+impl ops::Div<f32> for &Vector3 {
     type Output = Vector3;
 
     fn div(self, other: f32) -> Vector3 {
@@ -1335,7 +1335,7 @@ impl ops::DivAssign<f32> for Vector3 {
     }
 }
 
-impl<'a> ops::DivAssign<f32> for &'a mut Vector3 {
+impl ops::DivAssign<f32> for &mut Vector3 {
     fn div_assign(&mut self, other: f32) {
         self.x /= other;
         self.y /= other;
@@ -1510,9 +1510,9 @@ impl From<(Vector2, f32, f32)> for Vector4 {
     }
 }
 
-impl<'a> From<(&'a Vector2, f32, f32)> for Vector4 {
+impl From<(&Vector2, f32, f32)> for Vector4 {
     #[inline]
-    fn from((v, z, w): (&'a Vector2, f32, f32)) -> Vector4 {
+    fn from((v, z, w): (&Vector2, f32, f32)) -> Vector4 {
         Vector4::new(v.x, v.y, z, w)
     }
 }
@@ -1524,9 +1524,9 @@ impl From<(Vector3, f32)> for Vector4 {
     }
 }
 
-impl<'a> From<(&'a Vector3, f32)> for Vector4 {
+impl From<(&Vector3, f32)> for Vector4 {
     #[inline]
-    fn from((v, w): (&'a Vector3, f32)) -> Vector4 {
+    fn from((v, w): (&Vector3, f32)) -> Vector4 {
         Vector4::new(v.x, v.y, v.z, w)
     }
 }
@@ -1562,7 +1562,7 @@ impl ops::Neg for Vector4 {
     }
 }
 
-impl<'a> ops::Neg for &'a Vector4 {
+impl ops::Neg for &Vector4 {
     type Output = Vector4;
 
     #[inline]
@@ -1571,7 +1571,7 @@ impl<'a> ops::Neg for &'a Vector4 {
     }
 }
 
-impl<'a> ops::Add<Vector4> for &'a Vector4 {
+impl ops::Add<Vector4> for &Vector4 {
     type Output = Vector4;
 
     fn add(self, other: Vector4) -> Self::Output {
@@ -1597,10 +1597,10 @@ impl ops::Add<Vector4> for Vector4 {
     }
 }
 
-impl<'a> ops::Add<&'a Vector4> for Vector4 {
+impl ops::Add<&Vector4> for Vector4 {
     type Output = Vector4;
 
-    fn add(self, other: &'a Vector4) -> Self::Output {
+    fn add(self, other: &Vector4) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -1623,7 +1623,7 @@ impl<'a, 'b> ops::Add<&'a Vector4> for &'b Vector4 {
     }
 }
 
-impl<'a> ops::Sub<Vector4> for &'a Vector4 {
+impl ops::Sub<Vector4> for &Vector4 {
     type Output = Vector4;
 
     fn sub(self, other: Vector4) -> Self::Output {
@@ -1649,10 +1649,10 @@ impl ops::Sub<Vector4> for Vector4 {
     }
 }
 
-impl<'a> ops::Sub<&'a Vector4> for Vector4 {
+impl ops::Sub<&Vector4> for Vector4 {
     type Output = Vector4;
 
-    fn sub(self, other: &'a Vector4) -> Self::Output {
+    fn sub(self, other: &Vector4) -> Self::Output {
         Vector4 {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -1684,8 +1684,8 @@ impl ops::AddAssign<Vector4> for Vector4 {
     }
 }
 
-impl<'a> ops::AddAssign<&'a Vector4> for Vector4 {
-    fn add_assign(&mut self, other: &'a Vector4) {
+impl ops::AddAssign<&Vector4> for Vector4 {
+    fn add_assign(&mut self, other: &Vector4) {
         self.x += other.x;
         self.y += other.y;
         self.z += other.z;
@@ -1693,7 +1693,7 @@ impl<'a> ops::AddAssign<&'a Vector4> for Vector4 {
     }
 }
 
-impl<'a> ops::AddAssign<Vector4> for &'a mut Vector4 {
+impl ops::AddAssign<Vector4> for &mut Vector4 {
     fn add_assign(&mut self, other: Vector4) {
         self.x += other.x;
         self.y += other.y;
@@ -1720,8 +1720,8 @@ impl ops::SubAssign<Vector4> for Vector4 {
     }
 }
 
-impl<'a> ops::SubAssign<&'a Vector4> for Vector4 {
-    fn sub_assign(&mut self, other: &'a Vector4) {
+impl ops::SubAssign<&Vector4> for Vector4 {
+    fn sub_assign(&mut self, other: &Vector4) {
         self.x -= other.x;
         self.y -= other.y;
         self.z -= other.z;
@@ -1729,7 +1729,7 @@ impl<'a> ops::SubAssign<&'a Vector4> for Vector4 {
     }
 }
 
-impl<'a> ops::SubAssign<Vector4> for &'a mut Vector4 {
+impl ops::SubAssign<Vector4> for &mut Vector4 {
     fn sub_assign(&mut self, other: Vector4) {
         self.x -= other.x;
         self.y -= other.y;
@@ -1760,7 +1760,7 @@ impl ops::Mul<f32> for Vector4 {
     }
 }
 
-impl<'a> ops::Mul<f32> for &'a Vector4 {
+impl ops::Mul<f32> for &Vector4 {
     type Output = Vector4;
 
     fn mul(self, other: f32) -> Vector4 {
@@ -1786,7 +1786,7 @@ impl ops::Div<f32> for Vector4 {
     }
 }
 
-impl<'a> ops::Div<f32> for &'a Vector4 {
+impl ops::Div<f32> for &Vector4 {
     type Output = Vector4;
 
     fn div(self, other: f32) -> Vector4 {
@@ -1808,7 +1808,7 @@ impl ops::DivAssign<f32> for Vector4 {
     }
 }
 
-impl<'a> ops::DivAssign<f32> for &'a mut Vector4 {
+impl ops::DivAssign<f32> for &mut Vector4 {
     fn div_assign(&mut self, other: f32) {
         self.x /= other;
         self.y /= other;
