@@ -9,8 +9,7 @@ const EPSILON: f32 = 0.00001;
 
 
 ///
-/// A representation of one-dimensional vectors, with a
-/// Euclidean metric.
+/// A representation of one-dimensional vectors with a Euclidean metric.
 ///
 #[derive(Copy, Clone, PartialEq)]
 pub struct Vector1 {
@@ -416,8 +415,7 @@ impl Lerp for Vector1 {
 }
 
 ///
-/// A representation of two-dimensional vectors with a
-/// Euclidean metric.
+/// A representation of two-dimensional vectors with a Euclidean metric.
 ///
 #[derive(Copy, Clone, PartialEq)]
 pub struct Vector2 {
@@ -855,8 +853,7 @@ impl Lerp for Vector2 {
 }
 
 ///
-/// A representation of three-dimensional vectors, with a
-/// Euclidean metric.
+/// A representation of three-dimensional vectors with a Euclidean metric.
 ///
 #[derive(Copy, Clone, PartialEq)]
 pub struct Vector3 {
@@ -1350,6 +1347,9 @@ impl Lerp for Vector3 {
     }
 }
 
+///
+/// A representation of four-dimensional vectors with a Euclidean metric.
+///
 #[derive(Copy, Clone)]
 pub struct Vector4 {
     pub x: f32,
