@@ -1,4 +1,4 @@
-use traits::{Array, Zero, VectorSpace, MetricSpace, DotProduct};
+use traits::{Array, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
 use std::fmt;
 use std::mem;
 use std::ops;
@@ -420,6 +420,12 @@ impl VectorSpace for Vector1 {}
 impl DotProduct for Vector1 {
     fn dot(self, other: Vector1) -> f32 {
         self.x * other.x
+    }
+}
+
+impl Lerp for Vector1 {
+    fn lerp(self, other: Vector1, amount: f32) -> Vector1 {
+        self + (other - self) * amount
     }
 }
 
@@ -867,6 +873,12 @@ impl VectorSpace for Vector2 {}
 impl DotProduct for Vector2 {
     fn dot(self, other: Vector2) -> f32 {
         self.x * other.x + self.y * other.y
+    }
+}
+
+impl Lerp for Vector2 {
+    fn lerp(self, other: Vector2, amount: f32) -> Vector2 {
+        self + (other - self) * amount
     }
 }
 
@@ -1357,6 +1369,12 @@ impl VectorSpace for Vector3 {}
 impl DotProduct for Vector3 {
     fn dot(self, other: Vector3) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl Lerp for Vector3 {
+    fn lerp(self, other: Vector3, amount: f32) -> Vector3 {
+        self + (other - self) * amount
     }
 }
 
@@ -1865,6 +1883,12 @@ impl VectorSpace for Vector4 {}
 impl DotProduct for Vector4 {
     fn dot(self, other: Vector4) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+    }
+}
+
+impl Lerp for Vector4 {
+    fn lerp(self, other: Vector4, amount: f32) -> Vector4 {
+        self + (other - self) * amount
     }
 }
 
