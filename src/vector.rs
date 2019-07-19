@@ -43,13 +43,6 @@ impl Vector1 {
         Vector1::new(self.x / norm_v)
     }
     */
-
-    ///
-    /// Compute the dot product of two vectors.
-    ///
-    pub fn dot(&self, other: &Vector1) -> f32 {
-        self.x * other.x
-    }
 }
 
 impl MetricSpace for Vector1 {
@@ -424,6 +417,11 @@ impl Zero for Vector1 {
 
 impl VectorSpace for Vector1 {}
 
+impl DotProduct for Vector1 {
+    fn dot(self, other: Vector1) -> f32 {
+        self.x * other.x
+    }
+}
 
 ///
 /// A representation of two-dimensional vectors, with a
@@ -466,13 +464,6 @@ impl Vector2 {
         Vector2::new(self.x / norm_v, self.y / norm_v)
     }
     */
-
-    ///
-    /// Compute the dot product of two vectors.
-    ///
-    pub fn dot(&self, other: &Vector2) -> f32 {
-        self.x * other.x + self.y * other.y
-    }
 }
 
 impl MetricSpace for Vector2 {
@@ -873,6 +864,11 @@ impl Zero for Vector2 {
 
 impl VectorSpace for Vector2 {}
 
+impl DotProduct for Vector2 {
+    fn dot(self, other: Vector2) -> f32 {
+        self.x * other.x + self.y * other.y
+    }
+}
 
 ///
 /// A representation of three-dimensional vectors, with a
@@ -906,13 +902,6 @@ impl Vector3 {
     #[inline]
     pub fn unit_z() -> Vector3 {
         Vector3 { x: 0.0, y: 0.0, z: 1.0 }
-    }
-
-    ///
-    /// Compute the dot product of two vectors.
-    ///
-    pub fn dot(&self, other: &Vector3) -> f32 {
-        self.x * other.x + self.y * other.y + self.z * other.z
     }
 
     ///
@@ -1364,6 +1353,13 @@ impl Zero for Vector3 {
 }
 
 impl VectorSpace for Vector3 {}
+
+impl DotProduct for Vector3 {
+    fn dot(self, other: Vector3) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
 
 #[derive(Copy, Clone)]
 pub struct Vector4 {
@@ -1865,6 +1861,12 @@ impl Zero for Vector4 {
 }
 
 impl VectorSpace for Vector4 {}
+
+impl DotProduct for Vector4 {
+    fn dot(self, other: Vector4) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+    }
+}
 
 
 #[cfg(test)]
