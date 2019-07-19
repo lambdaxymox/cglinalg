@@ -359,7 +359,7 @@ mod mat2_tests {
                     c: 802.3435169,
                     a_mat: Matrix2::new(80.0,  23.43,     426.1,   23.5724),
                     b_mat: Matrix2::new(36.84, 427.46894, 7.04217, 61.891390),
-                    expected: Matrix2::new(185.092, 10939.6, 26935.3, 1623.93),
+                    expected: Matrix2::new(185091.72, 10939.63, 26935.295, 1623.9266),
                 },
                 TestCase {
                     c: 6.2396,
@@ -371,13 +371,13 @@ mod mat2_tests {
                     c: 6.2396,
                     a_mat: Matrix2::zero(),
                     b_mat: Matrix2::zero(),
-                    expected: Matrix2::one(),
+                    expected: Matrix2::zero(),
                 },
                 TestCase {
                     c:  14.5093,
                     a_mat: Matrix2::new(68.32, 0.0, 0.0, 37.397),
                     b_mat: Matrix2::new(57.72, 0.0, 0.0, 9.5433127),
-                    expected: Matrix2::new(3943.43, 0.0, 0.0, 356.891),
+                    expected: Matrix2::new(3943.4304, 0.0, 0.0, 356.89127),
                 },
             ]
         }
