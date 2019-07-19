@@ -1827,6 +1827,32 @@ impl ops::DivAssign<f32> for &mut Vector4 {
     }
 }
 
+impl ops::Rem<f32> for Vector4 {
+    type Output = Vector4;
+
+    fn rem(self, other: f32) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        let w = self.w % other;
+
+        Vector4 { x: x, y: y, z: z, w: w }
+    }
+}
+
+impl ops::Rem<f32> for &Vector4 {
+    type Output = Vector4;
+
+    fn rem(self, other: f32) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        let w = self.w % other;
+        
+        Vector4 { x: x, y: y, z: z, w: w }
+    }
+}
+
 impl Zero for Vector4 {
     #[inline]
     fn zero() -> Vector4 {
@@ -1837,6 +1863,8 @@ impl Zero for Vector4 {
         self.x == 0.0 && self.y == 0.0 && self.z == 0.0 && self.w == 0.0
     }
 }
+
+impl VectorSpace for Vector4 {}
 
 
 #[cfg(test)]
