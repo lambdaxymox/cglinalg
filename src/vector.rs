@@ -894,7 +894,7 @@ impl Vector3 {
     /// the cross product is defined only in three dimensions. Also note that the 
     /// cross product is the hodge dual of the corresponding 2-vector representing 
     /// the surface element that the crossed vector is normal to. That is, 
-    /// given vectors u and v, u x v == *(u /\ v), where *(.) denotes the hodge dual.
+    /// given vectors `u` and `v`, `u x v == *(u /\ v)`, where `*(.)` denotes the hodge dual.
     ///
     pub fn cross(&self, other: &Vector3) -> Vector3 {
         let x = self.y * other.z - self.z * other.y;
