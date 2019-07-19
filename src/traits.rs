@@ -23,9 +23,15 @@ pub trait Array {
 }
 
 pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
+    ///
+    /// Create a element.
+    ///
     fn zero() -> Self;
 
-    fn is_zero(self) -> bool;
+    ///
+    /// Test whether an element is equal to the zero element.
+    ///
+    fn is_zero(&self) -> bool;
 }
 
 pub trait VectorSpace: Copy + Clone where

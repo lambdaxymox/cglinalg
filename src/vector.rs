@@ -1,4 +1,4 @@
-use traits::{Array, MetricSpace};
+use traits::{Array, Zero, VectorSpace, MetricSpace, DotProduct};
 use std::fmt;
 use std::mem;
 use std::ops;
@@ -23,13 +23,6 @@ impl Vector1 {
     ///
     pub fn new(x: f32) -> Vector1 {
         Vector1 { x: x }
-    }
-
-    ///
-    /// Generate a zero vector.
-    ///
-    pub fn zero() -> Vector1 {
-        Vector1 { x: 0.0 }
     }
 
     #[inline]
@@ -422,6 +415,16 @@ impl<'a> ops::DivAssign<f32> for &'a mut Vector1 {
     }
 }
 
+impl Zero for Vector1 {
+    fn zero() -> Vector1 {
+        Vector1 { x: 0.0 }
+    }
+
+    fn is_zero(&self) -> bool {
+        self.x == 0.0
+    }
+}
+
 
 ///
 /// A representation of two-dimensional vectors, with a
@@ -439,13 +442,6 @@ impl Vector2 {
     ///
     pub fn new(x: f32, y: f32) -> Vector2 {
         Vector2 { x: x, y: y }
-    }
-
-    ///
-    /// Generate a zero vector.
-    ///
-    pub fn zero() -> Vector2 { 
-        Vector2 { x: 0.0, y: 0.0 }
     }
 
     #[inline]
@@ -856,6 +852,16 @@ impl<'a> ops::DivAssign<f32> for &'a mut Vector2 {
     }
 }
 
+impl Zero for Vector2 {
+    fn zero() -> Vector2 {
+        Vector2 { x: 0.0, y: 0.0 }
+    }
+
+    fn is_zero(&self) -> bool {
+        self.x == 0.0 && self.y == 0.0
+    }
+}
+
 
 ///
 /// A representation of three-dimensional vectors, with a
@@ -874,13 +880,6 @@ impl Vector3 {
     ///
     pub fn new(x: f32, y: f32, z: f32) -> Vector3 {
         Vector3 { x: x, y: y, z: z }
-    }
-
-    ///
-    /// Generate a zero vector.
-    ///
-    pub fn zero() -> Vector3 {
-        Vector3 { x: 0.0, y: 0.0, z: 0.0 }
     }
 
     #[inline]
@@ -1344,6 +1343,17 @@ impl<'a> ops::DivAssign<f32> for &'a mut Vector3 {
     }
 }
 
+impl Zero for Vector3 {
+    #[inline]
+    fn zero() -> Vector3 {
+        Vector3 { x: 0.0, y: 0.0, z: 0.0 }
+    }
+
+    fn is_zero(&self) -> bool {
+        self.x == 0.0 && self.y == 0.0 && self.z == 0.0
+    }
+}
+
 
 #[derive(Copy, Clone)]
 pub struct Vector4 {
@@ -1356,10 +1366,6 @@ pub struct Vector4 {
 impl Vector4 {
     pub fn new(x: f32, y: f32, z: f32, w: f32) -> Vector4 {
         Vector4 { x: x, y: y, z: z, w: w }
-    }
-
-    pub fn zero() -> Vector4 {
-        Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 }
     }
 
     #[inline]
@@ -1808,6 +1814,17 @@ impl<'a> ops::DivAssign<f32> for &'a mut Vector4 {
         self.y /= other;
         self.z /= other;
         self.w /= other;
+    }
+}
+
+impl Zero for Vector4 {
+    #[inline]
+    fn zero() -> Vector4 {
+        Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 }
+    }
+
+    fn is_zero(&self) -> bool {
+        self.x == 0.0 && self.y == 0.0 && self.z == 0.0 && self.w == 0.0
     }
 }
 
