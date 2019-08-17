@@ -1453,3 +1453,192 @@ mod matrix3_tests {
     }
 }
 
+#[cfg(test)]
+mod matrix4_tests {
+    use std::slice::Iter;
+    use vector::{Vector3, Vector4};
+    use super::{Matrix4};
+
+    struct TestCase {
+        c: f32,
+        a_mat: Matrix4,
+        b_mat: Matrix4,
+    }
+
+    struct Test {
+        tests: Vec<TestCase>,
+    }
+
+    impl Test {
+        fn iter(&self) -> TestIter {
+            TestIter {
+                inner: self.tests.iter()
+            }
+        }
+    }
+
+    struct TestIter<'a> {
+        inner: Iter<'a, TestCase>,
+    }
+
+    impl<'a> Iterator for TestIter<'a> {
+        type Item = &'a TestCase;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            self.inner.next()
+        }
+    }
+
+    fn test_cases() -> Test {
+        Test {
+            tests: vec![
+                TestCase {
+                    c: 802.3435169,
+                    a_mat: Matrix4::new(
+                        80.0,   23.43,   43.569,  6.741, 
+                        426.1,  23.5724, 27.6189, 13.90,
+                        4.2219, 258.083, 31.70,   42.17, 
+                        70.0,   49.0,    95.0,    89.9138
+                    ),
+                    b_mat: Matrix4::new(
+                        36.84,   427.46894, 8827.1983, 89.5049494, 
+                        7.04217, 61.891390, 56.31,     89.0, 
+                        72.0,    936.5,     413.80,    50.311160,  
+                        37.6985,  311.8,    60.81,     73.8393
+                    ),
+                },
+                TestCase {
+                    c: 6.2396,
+                    a_mat: Matrix4::one(),
+                    b_mat: Matrix4::one(),
+                },
+                TestCase {
+                    c: 6.2396,
+                    a_mat: Matrix4::zero(),
+                    b_mat: Matrix4::zero(),
+                },
+                TestCase {
+                    c:  14.5093,
+                    a_mat: Matrix4::new(
+                        68.32, 0.0,    0.0,   0.0,
+                        0.0,   37.397, 0.0,   0.0,
+                        0.0,   0.0,    9.483, 0.0,
+                        0.0,   0.0,    0.0,   887.710
+                    ),
+                    b_mat: Matrix4::new(
+                        57.72, 0.0,       0.0,       0.0, 
+                        0.0,   9.5433127, 0.0,       0.0, 
+                        0.0,   0.0,       86.731265, 0.0,
+                        0.0,   0.0,       0.0,       269.1134546
+                    )
+                },
+            ]
+        }
+    }
+
+    #[test]
+    fn test_mat_times_identity_equals_mat() {
+        for test in test_cases().iter() {
+            let a_mat_times_identity = test.a_mat * Matrix4::one();
+            let b_mat_times_identity = test.b_mat * Matrix4::one();
+
+            assert_eq!(a_mat_times_identity, test.a_mat);
+            assert_eq!(b_mat_times_identity, test.b_mat);
+        }
+    }
+
+    #[test]
+    fn test_mat_times_zero_equals_zero() {
+        for test in test_cases().iter() {
+            let a_mat_times_zero = test.a_mat * Matrix4::zero();
+            let b_mat_times_zero = test.b_mat * Matrix4::zero();
+
+            assert_eq!(a_mat_times_zero, Matrix4::zero());
+            assert_eq!(b_mat_times_zero, Matrix4::zero());
+        }
+    }
+
+    #[test]
+    fn test_zero_times_mat_equals_zero() {
+        for test in test_cases().iter() {
+            let zero_times_a_mat = Matrix4::zero() * test.a_mat;
+            let zero_times_b_mat = Matrix4::zero() * test.b_mat;
+
+            assert_eq!(zero_times_a_mat, Matrix4::zero());
+            assert_eq!(zero_times_b_mat, Matrix4::zero());
+        }
+    }
+
+    #[test]
+    fn test_mat_times_identity_equals_identity_times_mat() {
+        for test in test_cases().iter() {
+            let a_mat_times_identity = test.a_mat * Matrix4::one();
+            let identity_times_a_mat = Matrix4::one() * test.a_mat;
+            let b_mat_times_identity = test.b_mat * Matrix4::one();
+            let identity_times_b_mat = Matrix4::one() * test.b_mat;
+
+            assert_eq!(a_mat_times_identity, identity_times_a_mat);
+            assert_eq!(b_mat_times_identity, identity_times_b_mat);
+        }
+    }
+
+    #[test]
+    fn test_mat_times_mat_inverse_equals_identity() {
+        for test in test_cases().iter() {
+            let identity = Matrix4::one();
+            if test.a_mat.is_invertible() {
+                let a_mat_inverse = test.a_mat.inverse();
+                assert_eq!(a_mat_inverse * test.a_mat, identity);
+            }
+            if test.b_mat.is_invertible() {
+                let b_mat_inverse = test.b_mat.inverse();
+                assert_eq!(b_mat_inverse * test.b_mat, identity);
+            }
+        }
+    }
+
+    #[test]
+    fn test_mat_inverse_times_mat_equals_identity() {
+        for test in test_cases().iter() {
+            let identity = Matrix4::one();
+            if test.a_mat.is_invertible() {
+                let a_mat_inverse = test.a_mat.inverse();
+                assert_eq!(test.a_mat * a_mat_inverse, identity);
+            }
+            if test.b_mat.is_invertible() {
+                let b_mat_inverse = test.b_mat.inverse();
+                assert_eq!(test.b_mat * b_mat_inverse, identity);
+            }
+        }
+    }
+
+    #[test]
+    fn test_mat_transpose_transpose_equals_mat() {
+        for test in test_cases().iter() {
+            let a_mat_tr_tr = test.a_mat.transpose().transpose();
+            let b_mat_tr_tr = test.b_mat.transpose().transpose();
+            
+            assert_eq!(a_mat_tr_tr, test.a_mat);
+            assert_eq!(b_mat_tr_tr, test.b_mat);
+        }
+    }
+
+    #[test]
+    fn test_identity_transpose_equals_identity() {
+        let identity = Matrix4::one();
+        let identity_tr = identity.transpose();
+            
+        assert_eq!(identity, identity_tr);
+    }
+
+    #[test]
+    fn test_identity_mat4_translates_vector_along_vector() {
+        let v = Vector3::from((2.0, 2.0, 2.0));
+        let trans_mat = Matrix4::from_translation(v);
+        let zero_vec4 = Vector4::from((0.0, 0.0, 0.0, 1.0));
+        let zero_vec3 = Vector3::from((0.0, 0.0, 0.0));
+
+        let result = trans_mat * zero_vec4;
+        assert_eq!(result, Vector4::from((zero_vec3 + v, 1.0)));
+    }
+}
