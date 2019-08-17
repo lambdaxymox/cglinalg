@@ -317,7 +317,7 @@ impl<'a> ops::Div<f32> for &'a Matrix2 {
 
 
 #[cfg(test)]
-mod mat2_tests {
+mod matrix2_tests {
     use std::slice::Iter;
     use vector::Vector2;
     use super::Matrix2;
