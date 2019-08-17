@@ -339,6 +339,15 @@ impl Matrix3 {
         }
     }
 
+    /// Create a 3x3 matrix from a triple of three-dimensional column vectors.
+    pub fn from_cols(c0: Vector3, c1: Vector3, c2: Vector3) -> Matrix3 {
+        Matrix3 {
+            m: [
+                c0.x, c0.y, c0.z, c1.x, c1.y, c1.z, c2.x, c2.y, c2.z
+            ]
+        }
+    }
+
     /// Generate a 3x3 matrix of zeros.
     pub fn zero() -> Matrix3 {
         Matrix3::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
@@ -779,16 +788,16 @@ mod matrix3_tests {
             assert_eq!(result, expected);
         }
     }
-    /*
+
     #[test]
     fn test_construction_from_cols() {
-        let c0 = Vector3::new(1.0, 2.0);
-        let c1 = Vector3::new(3.0, 4.0);
-        let expected = Matrix3::new(1.0, 2.0, 3.0, 4.0);
-        let result = Matrix3::from_cols(c0, c1);
+        let c0 = Vector3::new(1.0, 2.0, 3.0);
+        let c1 = Vector3::new(4.0, 5.0, 6.0);
+        let c2 = Vector3::new(7.0, 8.0, 9.0);
+        let expected = Matrix3::new(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+        let result = Matrix3::from_cols(c0, c1, c2);
 
         assert_eq!(result, expected);
     }
-    */
 }
 
