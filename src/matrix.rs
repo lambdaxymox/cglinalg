@@ -256,7 +256,7 @@ impl ops::Mul<Matrix2> for Matrix2 {
     }
 }
 
-impl<'a> ops::Mul<Matrix2> for &'a Matrix2 {
+impl ops::Mul<Matrix2> for &Matrix2 {
     type Output = Matrix2;
 
     fn mul(self, other: Matrix2) -> Self::Output {
@@ -282,7 +282,7 @@ impl ops::Mul<f32> for Matrix2 {
     }
 }
 
-impl<'a> ops::Mul<f32> for &'a Matrix2 {
+impl ops::Mul<f32> for &Matrix2 {
     type Output = Matrix2;
 
     fn mul(self, other: f32) -> Self::Output {
@@ -308,7 +308,7 @@ impl ops::Div<f32> for Matrix2 {
     }
 }
 
-impl<'a> ops::Div<f32> for &'a Matrix2 {
+impl ops::Div<f32> for &Matrix2 {
     type Output = Matrix2;
 
     fn div(self, other: f32) -> Self::Output {
