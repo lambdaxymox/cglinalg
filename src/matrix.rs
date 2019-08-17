@@ -434,6 +434,150 @@ impl AsMut<[f32; 9]> for Matrix3 {
     }
 }
 
+impl ops::Add<Matrix3> for Matrix3 {
+    type Output = Matrix3;
+
+    fn add(self, other: Matrix3) -> Self::Output {
+        let c0r0 = self.c0r0 + other.c0r0;
+        let c0r1 = self.c0r1 + other.c0r1;
+        let c0r2 = self.c0r2 + other.c0r2;
+        let c1r0 = self.c1r0 + other.c1r0;
+        let c1r1 = self.c1r1 + other.c1r1;
+        let c1r2 = self.c1r2 + other.c1r2;
+        let c2r0 = self.c2r0 + other.c2r0;
+        let c2r1 = self.c2r1 + other.c2r1;
+        let c2r2 = self.c2r2 + other.c2r2;
+
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+    }
+}
+
+impl ops::Add<&Matrix3> for Matrix3 {
+    type Output = Matrix3;
+
+    fn add(self, other: &Matrix3) -> Self::Output {
+        let c0r0 = self.c0r0 + other.c0r0;
+        let c0r1 = self.c0r1 + other.c0r1;
+        let c0r2 = self.c0r2 + other.c0r2;
+        let c1r0 = self.c1r0 + other.c1r0;
+        let c1r1 = self.c1r1 + other.c1r1;
+        let c1r2 = self.c1r2 + other.c1r2;
+        let c2r0 = self.c2r0 + other.c2r0;
+        let c2r1 = self.c2r1 + other.c2r1;
+        let c2r2 = self.c2r2 + other.c2r2;
+
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+    }
+}
+
+impl ops::Add<Matrix3> for &Matrix3 {
+    type Output = Matrix3;
+
+    fn add(self, other: Matrix3) -> Self::Output {
+        let c0r0 = self.c0r0 + other.c0r0;
+        let c0r1 = self.c0r1 + other.c0r1;
+        let c0r2 = self.c0r2 + other.c0r2;
+        let c1r0 = self.c1r0 + other.c1r0;
+        let c1r1 = self.c1r1 + other.c1r1;
+        let c1r2 = self.c1r2 + other.c1r2;
+        let c2r0 = self.c2r0 + other.c2r0;
+        let c2r1 = self.c2r1 + other.c2r1;
+        let c2r2 = self.c2r2 + other.c2r2;
+
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+    }
+}
+
+impl<'a, 'b> ops::Add<&'a Matrix3> for &'b Matrix3 {
+    type Output = Matrix3;
+
+    fn add(self, other: &'a Matrix3) -> Self::Output {
+        let c0r0 = self.c0r0 + other.c0r0;
+        let c0r1 = self.c0r1 + other.c0r1;
+        let c0r2 = self.c0r2 + other.c0r2;
+        let c1r0 = self.c1r0 + other.c1r0;
+        let c1r1 = self.c1r1 + other.c1r1;
+        let c1r2 = self.c1r2 + other.c1r2;
+        let c2r0 = self.c2r0 + other.c2r0;
+        let c2r1 = self.c2r1 + other.c2r1;
+        let c2r2 = self.c2r2 + other.c2r2;
+
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+    }
+}
+
+impl ops::Sub<Matrix3> for Matrix3 {
+    type Output = Matrix3;
+
+    fn sub(self, other: Matrix3) -> Self::Output {
+        let c0r0 = self.c0r0 - other.c0r0;
+        let c0r1 = self.c0r1 - other.c0r1;
+        let c0r2 = self.c0r2 - other.c0r2;
+        let c1r0 = self.c1r0 - other.c1r0;
+        let c1r1 = self.c1r1 - other.c1r1;
+        let c1r2 = self.c1r2 - other.c1r2;
+        let c2r0 = self.c2r0 - other.c2r0;
+        let c2r1 = self.c2r1 - other.c2r1;
+        let c2r2 = self.c2r2 - other.c2r2;
+
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+    }
+}
+
+impl ops::Sub<&Matrix3> for Matrix3 {
+    type Output = Matrix3;
+
+    fn sub(self, other: &Matrix3) -> Self::Output {
+        let c0r0 = self.c0r0 - other.c0r0;
+        let c0r1 = self.c0r1 - other.c0r1;
+        let c0r2 = self.c0r2 - other.c0r2;
+        let c1r0 = self.c1r0 - other.c1r0;
+        let c1r1 = self.c1r1 - other.c1r1;
+        let c1r2 = self.c1r2 - other.c1r2;
+        let c2r0 = self.c2r0 - other.c2r0;
+        let c2r1 = self.c2r1 - other.c2r1;
+        let c2r2 = self.c2r2 - other.c2r2;
+
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+    }
+}
+
+impl ops::Sub<Matrix3> for &Matrix3 {
+    type Output = Matrix3;
+
+    fn sub(self, other: Matrix3) -> Self::Output {
+        let c0r0 = self.c0r0 - other.c0r0;
+        let c0r1 = self.c0r1 - other.c0r1;
+        let c0r2 = self.c0r2 - other.c0r2;
+        let c1r0 = self.c1r0 - other.c1r0;
+        let c1r1 = self.c1r1 - other.c1r1;
+        let c1r2 = self.c1r2 - other.c1r2;
+        let c2r0 = self.c2r0 - other.c2r0;
+        let c2r1 = self.c2r1 - other.c2r1;
+        let c2r2 = self.c2r2 - other.c2r2;
+
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+    }
+}
+
+impl<'a, 'b> ops::Sub<&'a Matrix3> for &'b Matrix3 {
+    type Output = Matrix3;
+
+    fn sub(self, other: &'a Matrix3) -> Self::Output {
+        let c0r0 = self.c0r0 - other.c0r0;
+        let c0r1 = self.c0r1 - other.c0r1;
+        let c0r2 = self.c0r2 - other.c0r2;
+        let c1r0 = self.c1r0 - other.c1r0;
+        let c1r1 = self.c1r1 - other.c1r1;
+        let c1r2 = self.c1r2 - other.c1r2;
+        let c2r0 = self.c2r0 - other.c2r0;
+        let c2r1 = self.c2r1 - other.c2r1;
+        let c2r2 = self.c2r2 - other.c2r2;
+
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+    }
+}
+
 impl ops::Mul<&Matrix3> for Matrix3 {
     type Output = Matrix3;
 
