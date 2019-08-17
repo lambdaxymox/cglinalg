@@ -339,14 +339,17 @@ impl Matrix3 {
         }
     }
 
+    /// Generate a 3x3 matrix of zeros.
     pub fn zero() -> Matrix3 {
         Matrix3::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     }
 
+    /// Generate a 3x3 diagonal matrix of ones.
     pub fn one() -> Matrix3 {
         Matrix3::new(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
     }
 
+    /// Compute the transpose of a 3x3 matrix.
     pub fn transpose(&self) -> Matrix3 {
         Matrix3::new(
             self.m[0], self.m[3], self.m[6],  
