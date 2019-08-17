@@ -21,10 +21,16 @@ pub struct Matrix2 {
 }
 
 impl Matrix2 {
+    ///
+    /// Construct a new 2x2 matrix from its field elements.
+    /// 
     pub fn new(c0r0: f32, c0r1: f32, c1r0: f32, c1r1: f32) -> Matrix2 {
         Matrix2 { c0r0: c0r0, c0r1: c0r1, c1r0: c1r0, c1r1: c1r1 }
     }
 
+    ///
+    /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
+    /// 
     pub fn from_cols(c0: Vector2, c1: Vector2) -> Matrix2 {
         Matrix2 { c0r0: c0.x, c0r1: c0.y, c1r0: c1.x, c1r1: c1.y }
     }
