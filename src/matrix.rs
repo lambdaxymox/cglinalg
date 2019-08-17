@@ -6,8 +6,9 @@ use std::ops;
 use std::cmp;
 
 
-const EPSILON: f32 = 0.00001; 
-
+const EPSILON: f32 = 0.00001;
+const M_PI: f32 = 3.14159265358979323846264338327950288;
+const ONE_DEG_IN_RAD: f32 = (2.0 * M_PI) / 360.0; // == 0.017444444
 
 ///
 /// The `Matrix2` type represents 2x2 matrices in column-major order.
@@ -735,6 +736,405 @@ impl ops::Div<f32> for &Matrix3 {
         let c2r2 = self.c2r2 / other;
 
         Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+    }
+}
+
+
+///
+/// The `Matrix4` type represents 4x4 matrices in column-major order.
+///
+#[derive(Copy, Clone, Debug)]
+pub struct Matrix4 {
+    pub m: [f32; 16],
+}
+
+impl Matrix4 {
+    pub fn new(
+        m11: f32, m12: f32, m13: f32, m14: f32,
+        m21: f32, m22: f32, m23: f32, m24: f32,
+        m31: f32, m32: f32, m33: f32, m34: f32,
+        m41: f32, m42: f32, m43: f32, m44: f32) -> Matrix4 {
+
+        Matrix4 {
+            m: [
+                m11, m12, m13, m14, // Column 1
+                m21, m22, m23, m24, // Column 2
+                m31, m32, m33, m34, // Column 3
+                m41, m42, m43, m44  // Column 4
+            ]
+        }
+    }
+
+    ///
+    /// Return the zero matrix.
+    ///
+    pub fn zero() -> Matrix4 {
+        Matrix4::new(
+            0.0, 0.0, 0.0, 0.0, 
+            0.0, 0.0, 0.0, 0.0, 
+            0.0, 0.0, 0.0, 0.0, 
+            0.0, 0.0, 0.0, 0.0
+        )
+    }
+
+    ///
+    /// Return the identity matrix.
+    ///
+    pub fn one() -> Matrix4 {
+        Matrix4::new(
+            1.0, 0.0, 0.0, 0.0, 
+            0.0, 1.0, 0.0, 0.0, 
+            0.0, 0.0, 1.0, 0.0, 
+            0.0, 0.0, 0.0, 1.0
+        )
+    }
+
+    ///
+    /// Transpose a 4x4 matrix.
+    ///
+    pub fn transpose(&self) -> Matrix4 {
+        Matrix4::new(
+            self.m[0], self.m[4], self.m[8],  self.m[12],
+            self.m[1], self.m[5], self.m[9],  self.m[13], 
+            self.m[2], self.m[6], self.m[10], self.m[14], 
+            self.m[3], self.m[7], self.m[11], self.m[15]
+        )
+    }
+
+    ///
+    /// Create a affine translation matrix.
+    ///
+    #[inline]
+    pub fn from_translation(distance: Vector3) -> Matrix4 {
+        Matrix4::new(
+            1.0,        0.0,        0.0,        0.0,
+            0.0,        1.0,        0.0,        0.0,
+            0.0,        0.0,        1.0,        0.0,
+            distance.x, distance.y, distance.z, 1.0
+        )
+    }
+
+    ///
+    /// Create a rotation matrix around the x axis by an angle in `degrees` degrees.
+    ///
+    pub fn from_rotation_x(degrees: f32) -> Matrix4 {
+        // Convert to radians.
+        let radians = degrees * ONE_DEG_IN_RAD;
+        let mut rot_mat = Matrix4::one();
+        rot_mat.m[5]  =  f32::cos(radians);
+        rot_mat.m[9]  = -f32::sin(radians);
+        rot_mat.m[6]  =  f32::sin(radians);
+        rot_mat.m[10] =  f32::cos(radians);
+    
+        rot_mat
+    }
+
+    ///
+    /// Create a rotation matrix around the y axis by an angle in `degrees` degrees.
+    ///
+    pub fn from_rotation_y(degrees: f32) -> Matrix4 {
+        // Convert to radians.
+        let radians = degrees * ONE_DEG_IN_RAD;
+        let mut rot_mat = Matrix4::one();
+        rot_mat.m[0]  =  f32::cos(radians);
+        rot_mat.m[8]  =  f32::sin(radians);
+        rot_mat.m[2]  = -f32::sin(radians);
+        rot_mat.m[10] =  f32::cos(radians);
+    
+        rot_mat
+    }
+
+    ///
+    /// Create a rotation matrix around the z axis by an angle in `degrees` degrees.
+    ///
+    pub fn from_rotation_z(degrees: f32) -> Matrix4 {
+        // Convert to radians.
+        let radians = degrees * ONE_DEG_IN_RAD;
+        let mut rot_mat = Matrix4::one();
+        rot_mat.m[0] =  f32::cos(radians);
+        rot_mat.m[4] = -f32::sin(radians);
+        rot_mat.m[1] =  f32::sin(radians);
+        rot_mat.m[5] =  f32::cos(radians);
+    
+        rot_mat
+    }
+
+    ///
+    /// Scale a matrix uniformly.
+    ///
+    #[inline]
+    pub fn from_scale(value: f32) -> Matrix4 {
+        Matrix4::from_nonuniform_scale(value, value, value)
+    }
+
+    ///
+    /// Scale a matrix in a nonuniform fashion.
+    ///
+    #[inline]
+    pub fn from_nonuniform_scale(sx: f32, sy: f32, sz: f32) -> Matrix4 {
+        Matrix4::new(
+            sx,  0.0, 0.0, 0.0,
+            0.0, sy,  0.0, 0.0,
+            0.0, 0.0, sz,  0.0,
+            0.0, 0.0, 0.0, 1.0
+        )
+    }
+
+    ///
+    /// Computes the determinant of a 4x4 matrix.
+    ///
+    pub fn determinant(&self) -> f32 {
+        self.m[12] * self.m[9]  * self.m[6]  * self.m[3]  -
+        self.m[8]  * self.m[13] * self.m[6]  * self.m[3]  -
+        self.m[12] * self.m[5]  * self.m[10] * self.m[3]  +
+        self.m[4]  * self.m[13] * self.m[10] * self.m[3]  +
+        self.m[8]  * self.m[5]  * self.m[14] * self.m[3]  -
+        self.m[4]  * self.m[9]  * self.m[14] * self.m[3]  -
+        self.m[12] * self.m[9]  * self.m[2]  * self.m[7]  +
+        self.m[8]  * self.m[13] * self.m[2]  * self.m[7]  +
+        self.m[12] * self.m[1]  * self.m[10] * self.m[7]  -
+        self.m[0]  * self.m[13] * self.m[10] * self.m[7]  -
+        self.m[8]  * self.m[1]  * self.m[14] * self.m[7]  +
+        self.m[0]  * self.m[9]  * self.m[14] * self.m[7]  +
+        self.m[12] * self.m[5]  * self.m[2]  * self.m[11] -
+        self.m[4]  * self.m[13] * self.m[2]  * self.m[11] -
+        self.m[12] * self.m[1]  * self.m[6]  * self.m[11] +
+        self.m[0]  * self.m[13] * self.m[6]  * self.m[11] +
+        self.m[4]  * self.m[1]  * self.m[14] * self.m[11] -
+        self.m[0]  * self.m[5]  * self.m[14] * self.m[11] -
+        self.m[8]  * self.m[5]  * self.m[2]  * self.m[15] +
+        self.m[4]  * self.m[9]  * self.m[2]  * self.m[15] +
+        self.m[8]  * self.m[1]  * self.m[6]  * self.m[15] -
+        self.m[0]  * self.m[9]  * self.m[6]  * self.m[15] -
+        self.m[4]  * self.m[1]  * self.m[10] * self.m[15] +
+        self.m[0]  * self.m[5]  * self.m[10] * self.m[15]
+    }
+
+    pub fn is_invertible(&self) -> bool {
+        self.determinant() != 0.0
+    }
+
+    ///
+    /// Compute the inverse of a 4x4 matrix.
+    ///
+    pub fn inverse(&self) -> Matrix4 {
+        let det = self.determinant();
+        
+        // A matrix with zero determinant has no inverse.
+        if det == 0.0 {
+            eprintln!("WARNING. Matrix has zero determinant. It cannot be inverted.");
+            
+            return *self;
+        }
+
+        let inv_det = 1.0 / det;
+
+        return Matrix4::new(
+            inv_det * ( self.m[9] * self.m[14] * self.m[7] - self.m[13] * self.m[10] * self.m[7] +
+                                    self.m[13] * self.m[6] * self.m[11] - self.m[5] * self.m[14] * self.m[11] -
+                                    self.m[9] * self.m[6] * self.m[15] + self.m[5] * self.m[10] * self.m[15] ),
+            inv_det * ( self.m[13] * self.m[10] * self.m[3] - self.m[9] * self.m[14] * self.m[3] -
+                                    self.m[13] * self.m[2] * self.m[11] + self.m[1] * self.m[14] * self.m[11] +
+                                    self.m[9] * self.m[2] * self.m[15] - self.m[1] * self.m[10] * self.m[15] ),
+            inv_det * ( self.m[5] * self.m[14] * self.m[3] - self.m[13] * self.m[6] * self.m[3] +
+                                    self.m[13] * self.m[2] * self.m[7] - self.m[1] * self.m[14] * self.m[7] -
+                                    self.m[5] * self.m[2] * self.m[15] + self.m[1] * self.m[6] * self.m[15] ),
+            inv_det * ( self.m[9] * self.m[6] * self.m[3] - self.m[5] * self.m[10] * self.m[3] -
+                                    self.m[9] * self.m[2] * self.m[7] + self.m[1] * self.m[10] * self.m[7] +
+                                    self.m[5] * self.m[2] * self.m[11] - self.m[1] * self.m[6] * self.m[11] ),
+            inv_det * ( self.m[12] * self.m[10] * self.m[7] - self.m[8] * self.m[14] * self.m[7] -
+                                    self.m[12] * self.m[6] * self.m[11] + self.m[4] * self.m[14] * self.m[11] +
+                                    self.m[8] * self.m[6] * self.m[15] - self.m[4] * self.m[10] * self.m[15] ),
+            inv_det * ( self.m[8] * self.m[14] * self.m[3] - self.m[12] * self.m[10] * self.m[3] +
+                                    self.m[12] * self.m[2] * self.m[11] - self.m[0] * self.m[14] * self.m[11] -
+                                    self.m[8] * self.m[2] * self.m[15] + self.m[0] * self.m[10] * self.m[15] ),
+            inv_det * ( self.m[12] * self.m[6] * self.m[3] - self.m[4] * self.m[14] * self.m[3] -
+                                    self.m[12] * self.m[2] * self.m[7] + self.m[0] * self.m[14] * self.m[7] +
+                                    self.m[4] * self.m[2] * self.m[15] - self.m[0] * self.m[6] * self.m[15] ),
+            inv_det * ( self.m[4] * self.m[10] * self.m[3] - self.m[8] * self.m[6] * self.m[3] +
+                                    self.m[8] * self.m[2] * self.m[7] - self.m[0] * self.m[10] * self.m[7] -
+                                    self.m[4] * self.m[2] * self.m[11] + self.m[0] * self.m[6] * self.m[11] ),
+            inv_det * ( self.m[8] * self.m[13] * self.m[7] - self.m[12] * self.m[9] * self.m[7] +
+                                    self.m[12] * self.m[5] * self.m[11] - self.m[4] * self.m[13] * self.m[11] -
+                                    self.m[8] * self.m[5] * self.m[15] + self.m[4] * self.m[9] * self.m[15] ),
+            inv_det * ( self.m[12] * self.m[9] * self.m[3] - self.m[8] * self.m[13] * self.m[3] -
+                                    self.m[12] * self.m[1] * self.m[11] + self.m[0] * self.m[13] * self.m[11] +
+                                    self.m[8] * self.m[1] * self.m[15] - self.m[0] * self.m[9] * self.m[15] ),
+            inv_det * ( self.m[4] * self.m[13] * self.m[3] - self.m[12] * self.m[5] * self.m[3] +
+                                    self.m[12] * self.m[1] * self.m[7] - self.m[0] * self.m[13] * self.m[7] -
+                                    self.m[4] * self.m[1] * self.m[15] + self.m[0] * self.m[5] * self.m[15] ),
+            inv_det * ( self.m[8] * self.m[5] * self.m[3] - self.m[4] * self.m[9] * self.m[3] -
+                                    self.m[8] * self.m[1] * self.m[7] + self.m[0] * self.m[9] * self.m[7] +
+                                    self.m[4] * self.m[1] * self.m[11] - self.m[0] * self.m[5] * self.m[11] ),
+            inv_det * ( self.m[12] * self.m[9] * self.m[6] - self.m[8] * self.m[13] * self.m[6] -
+                                    self.m[12] * self.m[5] * self.m[10] + self.m[4] * self.m[13] * self.m[10] +
+                                    self.m[8] * self.m[5] * self.m[14] - self.m[4] * self.m[9] * self.m[14] ),
+            inv_det * ( self.m[8] * self.m[13] * self.m[2] - self.m[12] * self.m[9] * self.m[2] +
+                                    self.m[12] * self.m[1] * self.m[10] - self.m[0] * self.m[13] * self.m[10] -
+                                    self.m[8] * self.m[1] * self.m[14] + self.m[0] * self.m[9] * self.m[14] ),
+            inv_det * ( self.m[12] * self.m[5] * self.m[2] - self.m[4] * self.m[13] * self.m[2] -
+                                    self.m[12] * self.m[1] * self.m[6] + self.m[0] * self.m[13] * self.m[6] +
+                                    self.m[4] * self.m[1] * self.m[14] - self.m[0] * self.m[5] * self.m[14] ),
+            inv_det * ( self.m[4] * self.m[9] * self.m[2] - self.m[8] * self.m[5] * self.m[2] +
+                                    self.m[8] * self.m[1] * self.m[6] - self.m[0] * self.m[9] * self.m[6] -
+                                    self.m[4] * self.m[1] * self.m[10] + self.m[0] * self.m[5] * self.m[10] ) );
+    }
+}
+
+impl Array for Matrix4 {
+    type Element = f32;
+
+    #[inline]
+    fn len() -> usize {
+        16
+    }
+
+    #[inline]
+    fn as_ptr(&self) -> *const f32 {
+        self.m.as_ptr()
+    }
+
+    #[inline]
+    fn as_mut_ptr(&mut self) -> *mut f32 {
+        self.m.as_mut_ptr()
+    }
+}
+
+impl fmt::Display for Matrix4 {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        writeln!(f, 
+            "\n[{:.2}][{:.2}][{:.2}][{:.2}]\n[{:.2}][{:.2}][{:.2}][{:.2}]\n[{:.2}][{:.2}][{:.2}][{:.2}]\n[{:.2}][{:.2}][{:.2}][{:.2}]", 
+            self.m[0], self.m[4], self.m[8],  self.m[12],
+            self.m[1], self.m[5], self.m[9],  self.m[13],
+            self.m[2], self.m[6], self.m[10], self.m[14],
+            self.m[3], self.m[7], self.m[11], self.m[15]
+        )
+    }
+}
+
+impl AsRef<[f32; 16]> for Matrix4 {
+    fn as_ref(&self) -> &[f32; 16] {
+        &self.m
+    }
+}
+
+impl AsRef<[[f32; 4]; 4]> for Matrix4 {
+    fn as_ref(&self) -> &[[f32; 4]; 4] {
+        unsafe {
+            mem::transmute(self)
+        }
+    }
+}
+
+impl AsMut<[f32; 16]> for Matrix4 {
+    fn as_mut(&mut self) -> &mut [f32; 16] {
+        &mut self.m
+    }
+}
+
+impl ops::Mul<Vector4> for Matrix4 {
+    type Output = Vector4;
+
+    fn mul(self, other: Vector4) -> Self::Output {
+        let x = self.m[0] * other[0] + self.m[4] * other[1] + self.m[8]  * other[2] + self.m[12] * other[3];
+        let y = self.m[1] * other[0] + self.m[5] * other[1] + self.m[9]  * other[2] + self.m[13] * other[3];
+        let z = self.m[2] * other[0] + self.m[6] * other[1] + self.m[10] * other[2] + self.m[14] * other[3];
+        let w = self.m[3] * other[0] + self.m[7] * other[1] + self.m[11] * other[2] + self.m[15] * other[3];
+        
+        Vector4::new(x, y, z, w)
+    }
+}
+
+impl<'a> ops::Mul<&'a Matrix4> for Matrix4 {
+    type Output = Matrix4;
+
+    fn mul(self, other: &'a Matrix4) -> Matrix4 {
+        let mut mm = Matrix4::zero();
+
+        mm.m[0]  = self.m[0] * other.m[0]  + self.m[4] * other.m[1]  + self.m[8]  * other.m[2]  + self.m[12] * other.m[3];
+        mm.m[1]  = self.m[1] * other.m[0]  + self.m[5] * other.m[1]  + self.m[9]  * other.m[2]  + self.m[13] * other.m[3];
+        mm.m[2]  = self.m[2] * other.m[0]  + self.m[6] * other.m[1]  + self.m[10] * other.m[2]  + self.m[14] * other.m[3];
+        mm.m[3]  = self.m[3] * other.m[0]  + self.m[7] * other.m[1]  + self.m[11] * other.m[2]  + self.m[15] * other.m[3];
+        mm.m[4]  = self.m[0] * other.m[4]  + self.m[4] * other.m[5]  + self.m[8]  * other.m[6]  + self.m[12] * other.m[7];
+        mm.m[5]  = self.m[1] * other.m[4]  + self.m[5] * other.m[5]  + self.m[9]  * other.m[6]  + self.m[13] * other.m[7];
+        mm.m[6]  = self.m[2] * other.m[4]  + self.m[6] * other.m[5]  + self.m[10] * other.m[6]  + self.m[14] * other.m[7];
+        mm.m[7]  = self.m[3] * other.m[4]  + self.m[7] * other.m[5]  + self.m[11] * other.m[6]  + self.m[15] * other.m[7];
+        mm.m[8]  = self.m[0] * other.m[8]  + self.m[4] * other.m[9]  + self.m[8]  * other.m[10] + self.m[12] * other.m[11];
+        mm.m[9]  = self.m[1] * other.m[8]  + self.m[5] * other.m[9]  + self.m[9]  * other.m[10] + self.m[13] * other.m[11];
+        mm.m[10] = self.m[2] * other.m[8]  + self.m[6] * other.m[9]  + self.m[10] * other.m[10] + self.m[14] * other.m[11];
+        mm.m[11] = self.m[3] * other.m[8]  + self.m[7] * other.m[9]  + self.m[11] * other.m[10] + self.m[15] * other.m[11];
+        mm.m[12] = self.m[0] * other.m[12] + self.m[4] * other.m[13] + self.m[8]  * other.m[14] + self.m[12] * other.m[15];
+        mm.m[13] = self.m[1] * other.m[12] + self.m[5] * other.m[13] + self.m[9]  * other.m[14] + self.m[13] * other.m[15];
+        mm.m[14] = self.m[2] * other.m[12] + self.m[6] * other.m[13] + self.m[10] * other.m[14] + self.m[14] * other.m[15];
+        mm.m[15] = self.m[3] * other.m[12] + self.m[7] * other.m[13] + self.m[11] * other.m[14] + self.m[15] * other.m[15];
+
+        mm
+    }
+}
+
+impl<'a, 'b> ops::Mul<&'a Matrix4> for &'b Matrix4 {
+    type Output = Matrix4;
+
+    fn mul(self, other: &'a Matrix4) -> Matrix4 {
+        let mut mm = Matrix4::zero();
+
+        mm.m[0]  = self.m[0]*other.m[0]  + self.m[4]*other.m[1]  + self.m[8]*other.m[2]   + self.m[12]*other.m[3];
+        mm.m[1]  = self.m[1]*other.m[0]  + self.m[5]*other.m[1]  + self.m[9]*other.m[2]   + self.m[13]*other.m[3];
+        mm.m[2]  = self.m[2]*other.m[0]  + self.m[6]*other.m[1]  + self.m[10]*other.m[2]  + self.m[14]*other.m[3];
+        mm.m[3]  = self.m[3]*other.m[0]  + self.m[7]*other.m[1]  + self.m[11]*other.m[2]  + self.m[15]*other.m[3];
+        mm.m[4]  = self.m[0]*other.m[4]  + self.m[4]*other.m[5]  + self.m[8]*other.m[6]   + self.m[12]*other.m[7];
+        mm.m[5]  = self.m[1]*other.m[4]  + self.m[5]*other.m[5]  + self.m[9]*other.m[6]   + self.m[13]*other.m[7];
+        mm.m[6]  = self.m[2]*other.m[4]  + self.m[6]*other.m[5]  + self.m[10]*other.m[6]  + self.m[14]*other.m[7];
+        mm.m[7]  = self.m[3]*other.m[4]  + self.m[7]*other.m[5]  + self.m[11]*other.m[6]  + self.m[15]*other.m[7];
+        mm.m[8]  = self.m[0]*other.m[8]  + self.m[4]*other.m[9]  + self.m[8]*other.m[10]  + self.m[12]*other.m[11];
+        mm.m[9]  = self.m[1]*other.m[8]  + self.m[5]*other.m[9]  + self.m[9]*other.m[10]  + self.m[13]*other.m[11];
+        mm.m[10] = self.m[2]*other.m[8]  + self.m[6]*other.m[9]  + self.m[10]*other.m[10] + self.m[14]*other.m[11];
+        mm.m[11] = self.m[3]*other.m[8]  + self.m[7]*other.m[9]  + self.m[11]*other.m[10] + self.m[15]*other.m[11];
+        mm.m[12] = self.m[0]*other.m[12] + self.m[4]*other.m[13] + self.m[8]*other.m[14]  + self.m[12]*other.m[15];
+        mm.m[13] = self.m[1]*other.m[12] + self.m[5]*other.m[13] + self.m[9]*other.m[14]  + self.m[13]*other.m[15];
+        mm.m[14] = self.m[2]*other.m[12] + self.m[6]*other.m[13] + self.m[10]*other.m[14] + self.m[14]*other.m[15];
+        mm.m[15] = self.m[3]*other.m[12] + self.m[7]*other.m[13] + self.m[11]*other.m[14] + self.m[15]*other.m[15];
+
+        mm
+    }
+}
+
+impl ops::Mul<Matrix4> for Matrix4 {
+    type Output = Matrix4;
+
+    fn mul(self, other: Matrix4) -> Matrix4 {
+        let mut mm = Matrix4::zero();
+
+        mm.m[0]  = self.m[0]*other.m[0]  + self.m[4]*other.m[1]  + self.m[8]*other.m[2]   + self.m[12]*other.m[3];
+        mm.m[1]  = self.m[1]*other.m[0]  + self.m[5]*other.m[1]  + self.m[9]*other.m[2]   + self.m[13]*other.m[3];
+        mm.m[2]  = self.m[2]*other.m[0]  + self.m[6]*other.m[1]  + self.m[10]*other.m[2]  + self.m[14]*other.m[3];
+        mm.m[3]  = self.m[3]*other.m[0]  + self.m[7]*other.m[1]  + self.m[11]*other.m[2]  + self.m[15]*other.m[3];
+        mm.m[4]  = self.m[0]*other.m[4]  + self.m[4]*other.m[5]  + self.m[8]*other.m[6]   + self.m[12]*other.m[7];
+        mm.m[5]  = self.m[1]*other.m[4]  + self.m[5]*other.m[5]  + self.m[9]*other.m[6]   + self.m[13]*other.m[7];
+        mm.m[6]  = self.m[2]*other.m[4]  + self.m[6]*other.m[5]  + self.m[10]*other.m[6]  + self.m[14]*other.m[7];
+        mm.m[7]  = self.m[3]*other.m[4]  + self.m[7]*other.m[5]  + self.m[11]*other.m[6]  + self.m[15]*other.m[7];
+        mm.m[8]  = self.m[0]*other.m[8]  + self.m[4]*other.m[9]  + self.m[8]*other.m[10]  + self.m[12]*other.m[11];
+        mm.m[9]  = self.m[1]*other.m[8]  + self.m[5]*other.m[9]  + self.m[9]*other.m[10]  + self.m[13]*other.m[11];
+        mm.m[10] = self.m[2]*other.m[8]  + self.m[6]*other.m[9]  + self.m[10]*other.m[10] + self.m[14]*other.m[11];
+        mm.m[11] = self.m[3]*other.m[8]  + self.m[7]*other.m[9]  + self.m[11]*other.m[10] + self.m[15]*other.m[11];
+        mm.m[12] = self.m[0]*other.m[12] + self.m[4]*other.m[13] + self.m[8]*other.m[14]  + self.m[12]*other.m[15];
+        mm.m[13] = self.m[1]*other.m[12] + self.m[5]*other.m[13] + self.m[9]*other.m[14]  + self.m[13]*other.m[15];
+        mm.m[14] = self.m[2]*other.m[12] + self.m[6]*other.m[13] + self.m[10]*other.m[14] + self.m[14]*other.m[15];
+        mm.m[15] = self.m[3]*other.m[12] + self.m[7]*other.m[13] + self.m[11]*other.m[14] + self.m[15]*other.m[15];
+
+        mm
+    }
+}
+
+impl cmp::PartialEq for Matrix4 {
+    fn eq(&self, other: &Matrix4) -> bool {
+        for i in 0..self.m.len() {
+            if f32::abs(self.m[i] - other.m[i]) > EPSILON {
+                return false;
+            }
+        }
+
+        true
     }
 }
 
