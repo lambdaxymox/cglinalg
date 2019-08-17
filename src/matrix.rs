@@ -126,10 +126,10 @@ impl ops::Add<Matrix2> for Matrix2 {
     }
 }
 
-impl<'a> ops::Add<&'a Matrix2> for Matrix2 {
+impl ops::Add<&Matrix2> for Matrix2 {
     type Output = Matrix2;
 
-    fn add(self, other: &'a Matrix2) -> Self::Output {
+    fn add(self, other: &Matrix2) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
         let c1r0 = self.c1r0 + other.c1r0;
@@ -139,7 +139,7 @@ impl<'a> ops::Add<&'a Matrix2> for Matrix2 {
     }
 }
 
-impl<'a> ops::Add<Matrix2> for &'a Matrix2 {
+impl ops::Add<Matrix2> for &Matrix2 {
     type Output = Matrix2;
 
     fn add(self, other: Matrix2) -> Self::Output {
@@ -178,10 +178,10 @@ impl ops::Sub<Matrix2> for Matrix2 {
     }
 }
 
-impl<'a> ops::Sub<&'a Matrix2> for Matrix2 {
+impl ops::Sub<&Matrix2> for Matrix2 {
     type Output = Matrix2;
 
-    fn sub(self, other: &'a Matrix2) -> Self::Output {
+    fn sub(self, other: &Matrix2) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c1r0 = self.c1r0 - other.c1r0;
@@ -191,7 +191,7 @@ impl<'a> ops::Sub<&'a Matrix2> for Matrix2 {
     }
 }
 
-impl<'a> ops::Sub<Matrix2> for &'a Matrix2 {
+impl ops::Sub<Matrix2> for &Matrix2 {
     type Output = Matrix2;
 
     fn sub(self, other: Matrix2) -> Self::Output {
@@ -217,10 +217,10 @@ impl<'a, 'b> ops::Sub<&'a Matrix2> for &'b Matrix2 {
     }
 }
 
-impl<'a> ops::Mul<&'a Matrix2> for Matrix2 {
+impl ops::Mul<&Matrix2> for Matrix2 {
     type Output = Matrix2;
 
-    fn mul(self, other: &'a Matrix2) -> Self::Output {
+    fn mul(self, other: &Matrix2) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1;
         let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1;
