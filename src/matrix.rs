@@ -1014,7 +1014,9 @@ impl fmt::Display for Matrix4 {
 
 impl AsRef<[f32; 16]> for Matrix4 {
     fn as_ref(&self) -> &[f32; 16] {
-        &self.m
+        unsafe {
+            mem::transmute(self)
+        }
     }
 }
 
@@ -1028,7 +1030,9 @@ impl AsRef<[[f32; 4]; 4]> for Matrix4 {
 
 impl AsMut<[f32; 16]> for Matrix4 {
     fn as_mut(&mut self) -> &mut [f32; 16] {
-        &mut self.m
+        unsafe {
+            mem::transmute(self)
+        }
     }
 }
 
