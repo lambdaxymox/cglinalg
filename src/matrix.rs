@@ -327,30 +327,36 @@ impl<'a> ops::Div<f32> for &'a Matrix2 {
 ///
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Matrix3 {
-    m: [f32; 9],
+    /// Column 1 of the matrix.
+    c0r0: f32, c0r1: f32, c0r2: f32,
+    /// Column 2 of the matrix.
+    c1r0: f32, c1r1: f32, c1r2: f32,
+    /// Column 3 of the matrix.
+    c2r0: f32, c2r1: f32, c2r2: f32,
 }
 
 impl Matrix3 {
     pub fn new(
-        m11: f32, m12: f32, m13: f32, 
-        m21: f32, m22: f32, m23: f32, 
-        m31: f32, m32: f32, m33: f32) -> Matrix3 {
+        c0r0: f32, c0r1: f32, c0r2: f32,
+        c1r0: f32, c1r1: f32, c1r2: f32,
+        c2r0: f32, c2r1: f32, c2r2: f32) -> Matrix3 {
 
         Matrix3 {
-            m: [
-                m11, m12, m13, // Column 1
-                m21, m22, m23, // Column 2
-                m31, m32, m33  // Column 3
-            ]
+            // Column 1 of the matrix.
+            c0r0: c0r0, c0r1: c0r1, c0r2: c0r2,
+            // Column 2 of the matrix.
+            c1r0: c1r0, c1r1: c1r1, c1r2: c1r2,
+            // Column 3 of the matrix.
+            c2r0: c2r0, c2r1: c2r1, c2r2: c2r2,
         }
     }
 
     /// Create a 3x3 matrix from a triple of three-dimensional column vectors.
     pub fn from_cols(c0: Vector3, c1: Vector3, c2: Vector3) -> Matrix3 {
         Matrix3 {
-            m: [
-                c0.x, c0.y, c0.z, c1.x, c1.y, c1.z, c2.x, c2.y, c2.z
-            ]
+            c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, 
+            c1r0: c1.x, c1r1: c1.y, c1r2: c1.z,
+            c2r0: c2.x, c2r1: c2.y, c2r2: c2.z,
         }
     }
 
@@ -367,9 +373,9 @@ impl Matrix3 {
     /// Compute the transpose of a 3x3 matrix.
     pub fn transpose(&self) -> Matrix3 {
         Matrix3::new(
-            self.m[0], self.m[3], self.m[6],  
-            self.m[1], self.m[4], self.m[7],  
-            self.m[2], self.m[5], self.m[8]
+            self.c0r0, self.c1r0, self.c2r0,
+            self.c0r1, self.c1r1, self.c2r1,
+            self.c0r2, self.c1r2, self.c2r2,
         )
     }
 }
@@ -384,12 +390,12 @@ impl Array for Matrix3 {
 
     #[inline]
     fn as_ptr(&self) -> *const f32 {
-        self.m.as_ptr()
+        &self.c0r0
     }
 
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut f32 {
-        self.m.as_mut_ptr()
+        &mut self.c0r0
     }
 }
 
@@ -397,16 +403,18 @@ impl fmt::Display for Matrix3 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, 
             "\n[{:.2}][{:.2}][{:.2}]\n[{:.2}][{:.2}][{:.2}]\n[{:.2}][{:.2}][{:.2}]", 
-            self.m[0], self.m[3], self.m[6],
-            self.m[1], self.m[4], self.m[7],
-            self.m[2], self.m[5], self.m[8],
+            self.c0r0, self.c1r0, self.c2r0,
+            self.c0r1, self.c1r1, self.c2r1,
+            self.c0r2, self.c1r2, self.c2r2,
         )
     }
 }
 
 impl AsRef<[f32; 9]> for Matrix3 {
     fn as_ref(&self) -> &[f32; 9] {
-        &self.m
+        unsafe {
+            mem::transmute(self)
+        }
     }
 }
 
@@ -420,7 +428,9 @@ impl AsRef<[[f32; 3]; 3]> for Matrix3 {
 
 impl AsMut<[f32; 9]> for Matrix3 {
     fn as_mut(&mut self) -> &mut [f32; 9] {
-        &mut self.m
+        unsafe {
+            mem::transmute(self)
+        }
     }
 }
 
@@ -428,23 +438,19 @@ impl<'a> ops::Mul<&'a Matrix3> for Matrix3 {
     type Output = Matrix3;
 
     fn mul(self, other: &'a Matrix3) -> Self::Output {
-        let m11 = self.m[0] * other.m[0] + self.m[3] * other.m[1] + self.m[6] * other.m[2]; // 0
-        let m21 = self.m[1] * other.m[0] + self.m[4] * other.m[1] + self.m[7] * other.m[2]; // 1
-        let m31 = self.m[2] * other.m[0] + self.m[5] * other.m[1] + self.m[8] * other.m[2]; // 2
+        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
+        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
+        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2;
 
-        let m12 = self.m[0] * other.m[3] + self.m[3] * other.m[4] + self.m[6] * other.m[5]; // 3
-        let m22 = self.m[1] * other.m[3] + self.m[4] * other.m[4] + self.m[7] * other.m[5]; // 4
-        let m32 = self.m[2] * other.m[3] + self.m[5] * other.m[4] + self.m[8] * other.m[5]; // 5
+        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2;
+        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2;
+        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2;
 
-        let m13 = self.m[0] * other.m[6] + self.m[3] * other.m[7] + self.m[6] * other.m[8]; // 6
-        let m23 = self.m[1] * other.m[6] + self.m[4] * other.m[7] + self.m[7] * other.m[8]; // 7
-        let m33 = self.m[2] * other.m[6] + self.m[5] * other.m[7] + self.m[8] * other.m[8]; // 8
+        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2;
+        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2;
+        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2;
 
-        Matrix3::new(
-            m11, m21, m31,
-            m12, m22, m32,
-            m13, m23, m33,
-        )
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
     }
 }
 
@@ -452,23 +458,19 @@ impl<'a, 'b> ops::Mul<&'a Matrix3> for &'b Matrix3 {
     type Output = Matrix3;
 
     fn mul(self, other: &'a Matrix3) -> Matrix3 {
-        let m11 = self.m[0] * other.m[0] + self.m[3] * other.m[1] + self.m[6] * other.m[2]; // 0
-        let m21 = self.m[1] * other.m[0] + self.m[4] * other.m[1] + self.m[7] * other.m[2]; // 1
-        let m31 = self.m[2] * other.m[0] + self.m[5] * other.m[1] + self.m[8] * other.m[2]; // 2
+        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
+        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
+        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2;
 
-        let m12 = self.m[0] * other.m[3] + self.m[3] * other.m[4] + self.m[6] * other.m[5]; // 3
-        let m22 = self.m[1] * other.m[3] + self.m[4] * other.m[4] + self.m[7] * other.m[5]; // 4
-        let m32 = self.m[2] * other.m[3] + self.m[5] * other.m[4] + self.m[8] * other.m[5]; // 5
+        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2;
+        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2;
+        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2;
 
-        let m13 = self.m[0] * other.m[6] + self.m[3] * other.m[7] + self.m[6] * other.m[8]; // 6
-        let m23 = self.m[1] * other.m[6] + self.m[4] * other.m[7] + self.m[7] * other.m[8]; // 7
-        let m33 = self.m[2] * other.m[6] + self.m[5] * other.m[7] + self.m[8] * other.m[8]; // 8
+        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2;
+        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2;
+        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2;
 
-        Matrix3::new(
-            m11, m21, m31,
-            m12, m22, m32,
-            m13, m23, m33,
-        )
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
     }
 }
 
@@ -476,23 +478,19 @@ impl ops::Mul<Matrix3> for Matrix3 {
     type Output = Matrix3;
 
     fn mul(self, other: Matrix3) -> Matrix3 {
-        let m11 = self.m[0] * other.m[0] + self.m[3] * other.m[1] + self.m[6] * other.m[2]; // 0
-        let m21 = self.m[1] * other.m[0] + self.m[4] * other.m[1] + self.m[7] * other.m[2]; // 1
-        let m31 = self.m[2] * other.m[0] + self.m[5] * other.m[1] + self.m[8] * other.m[2]; // 2
+        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
+        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
+        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2;
 
-        let m12 = self.m[0] * other.m[3] + self.m[3] * other.m[4] + self.m[6] * other.m[5]; // 3
-        let m22 = self.m[1] * other.m[3] + self.m[4] * other.m[4] + self.m[7] * other.m[5]; // 4
-        let m32 = self.m[2] * other.m[3] + self.m[5] * other.m[4] + self.m[8] * other.m[5]; // 5
+        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2;
+        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2;
+        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2;
 
-        let m13 = self.m[0] * other.m[6] + self.m[3] * other.m[7] + self.m[6] * other.m[8]; // 6
-        let m23 = self.m[1] * other.m[6] + self.m[4] * other.m[7] + self.m[7] * other.m[8]; // 7
-        let m33 = self.m[2] * other.m[6] + self.m[5] * other.m[7] + self.m[8] * other.m[8]; // 8
+        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2;
+        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2;
+        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2;
 
-        Matrix3::new(
-            m11, m21, m31,
-            m12, m22, m32,
-            m13, m23, m33,
-        )
+        Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
     }
 }
 
