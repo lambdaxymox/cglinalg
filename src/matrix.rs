@@ -434,10 +434,10 @@ impl AsMut<[f32; 9]> for Matrix3 {
     }
 }
 
-impl<'a> ops::Mul<&'a Matrix3> for Matrix3 {
+impl ops::Mul<&Matrix3> for Matrix3 {
     type Output = Matrix3;
 
-    fn mul(self, other: &'a Matrix3) -> Self::Output {
+    fn mul(self, other: &Matrix3) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
         let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2;
