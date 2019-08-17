@@ -319,7 +319,7 @@ impl<'a> ops::Div<f32> for &'a Matrix2 {
 ///
 /// The `Matrix3` type represents 3x3 matrices in column-major order.
 ///
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Matrix3 {
     m: [f32; 9],
 }
@@ -632,3 +632,160 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 }
+
+
+#[cfg(test)]
+mod matrix3_tests {
+    use std::slice::Iter;
+    use vector::Vector3;
+    use super::Matrix3;
+
+    struct TestCase {
+        c: f32,
+        a_mat: Matrix3,
+        b_mat: Matrix3,
+        expected: Matrix3,
+    }
+
+    struct Test {
+        tests: Vec<TestCase>,
+    }
+
+    impl Test {
+        fn iter(&self) -> TestIter {
+            TestIter {
+                inner: self.tests.iter()
+            }
+        }
+    }
+
+    struct TestIter<'a> {
+        inner: Iter<'a, TestCase>,
+    }
+
+    impl<'a> Iterator for TestIter<'a> {
+        type Item = &'a TestCase;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            self.inner.next()
+        }
+    }
+
+    fn test_cases() -> Test {
+        Test {
+            tests: vec![
+                TestCase {
+                    c: 802.3435169,
+                    a_mat: Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36),
+                    b_mat: Matrix3::new(36.84, 7.04217, 5.74, 427.46894, 61.89139, 96.27, 152.66, 86.333, 26.71),
+                    expected: Matrix3::new(3579.6579, 15933.496, 1856.4281, 43487.7660, 184776.9752, 22802.0289, 16410.8178, 67409.1000, 7892.1646),
+                },
+                TestCase {
+                    c: 6.2396,
+                    a_mat: Matrix3::one(),
+                    b_mat: Matrix3::one(),
+                    expected: Matrix3::one(),
+                },
+                TestCase {
+                    c: 6.2396,
+                    a_mat: Matrix3::zero(),
+                    b_mat: Matrix3::zero(),
+                    expected: Matrix3::zero(),
+                },
+                TestCase {
+                    c:  14.5093,
+                    a_mat: Matrix3::new(68.32, 0.0, 0.0, 0.0, 37.397, 0.0, 0.0, 0.0, 43.393),
+                    b_mat: Matrix3::new(57.72, 0.0, 0.0, 0.0, 9.5433127, 0.0, 0.0, 0.0, 12.19),
+                    expected: Matrix3::new(3943.4304, 0.0, 0.0, 0.0, 356.89127, 0.0, 0.0, 0.0, 528.96067),
+                },
+            ]
+        }
+    }
+
+    #[test]
+    fn test_mat_times_identity_equals_mat() {
+        for test in test_cases().iter() {
+            let a_mat_times_identity = test.a_mat * Matrix3::one();
+            let b_mat_times_identity = test.b_mat * Matrix3::one();
+
+            assert_eq!(a_mat_times_identity, test.a_mat);
+            assert_eq!(b_mat_times_identity, test.b_mat);
+        }
+    }
+
+    #[test]
+    fn test_mat_times_zero_equals_zero() {
+        for test in test_cases().iter() {
+            let a_mat_times_zero = test.a_mat * Matrix3::zero();
+            let b_mat_times_zero = test.b_mat * Matrix3::zero();
+
+            assert_eq!(a_mat_times_zero, Matrix3::zero());
+            assert_eq!(b_mat_times_zero, Matrix3::zero());
+        }
+    }
+
+    #[test]
+    fn test_zero_times_mat_equals_zero() {
+        for test in test_cases().iter() {
+            let zero_times_a_mat = Matrix3::zero() * test.a_mat;
+            let zero_times_b_mat = Matrix3::zero() * test.b_mat;
+
+            assert_eq!(zero_times_a_mat, Matrix3::zero());
+            assert_eq!(zero_times_b_mat, Matrix3::zero());
+        }
+    }
+
+    #[test]
+    fn test_mat_times_identity_equals_identity_times_mat() {
+        for test in test_cases().iter() {
+            let a_mat_times_identity = test.a_mat * Matrix3::one();
+            let identity_times_a_mat = Matrix3::one() * test.a_mat;
+            let b_mat_times_identity = test.b_mat * Matrix3::one();
+            let identity_times_b_mat = Matrix3::one() * test.b_mat;
+
+            assert_eq!(a_mat_times_identity, identity_times_a_mat);
+            assert_eq!(b_mat_times_identity, identity_times_b_mat);
+        }
+    }
+
+    #[test]
+    fn test_mat_transpose_transpose_equals_mat() {
+        for test in test_cases().iter() {
+            let a_mat_tr_tr = test.a_mat.transpose().transpose();
+            let b_mat_tr_tr = test.b_mat.transpose().transpose();
+            
+            assert_eq!(a_mat_tr_tr, test.a_mat);
+            assert_eq!(b_mat_tr_tr, test.b_mat);
+        }
+    }
+
+    #[test]
+    fn test_identity_transpose_equals_identity() {
+        let identity = Matrix3::one();
+        let identity_tr = identity.transpose();
+            
+        assert_eq!(identity, identity_tr);
+    }
+
+    #[test]
+    fn test_matrix_multiplication() {
+        for test in test_cases().iter() {
+            let result = test.a_mat * test.b_mat;
+            let expected = test.expected;
+
+            assert_eq!(result, expected);
+        }
+    }
+    /*
+    #[test]
+    fn test_construction_from_cols() {
+        let c0 = Vector3::new(1.0, 2.0);
+        let c1 = Vector3::new(3.0, 4.0);
+        let expected = Matrix3::new(1.0, 2.0, 3.0, 4.0);
+        let result = Matrix3::from_cols(c0, c1);
+
+        assert_eq!(result, expected);
+    }
+    */
+}
+
