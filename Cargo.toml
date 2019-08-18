@@ -1,6 +1,6 @@
 [package]
 name = "lean_cgmath"
-version = "0.5.1"
+version = "0.5.2"
 authors = ["Stallmanifold <stallmanifold@gmail.com>"]
 
 [lib]
