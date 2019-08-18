@@ -1,9 +1,10 @@
-use crate::traits::{Array, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
-use crate::vector::*;
 use std::fmt;
 use std::mem;
 use std::ops;
 use std::cmp;
+
+use crate::traits::{Array, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
+use crate::vector::*;
 
 
 const EPSILON: f32 = 0.00001;

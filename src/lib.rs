@@ -1,13 +1,15 @@
 mod cgmath;
-mod vector;
 mod matrix;
+mod projection;
 mod quaternion;
+mod vector;
 mod traits;
 
 
-pub use traits::*;
 pub use cgmath::*;
-pub use vector::*;
 pub use matrix::*;
+pub use projection::*;
 pub use quaternion::*;
+pub use vector::*;
+pub use traits::*;
 
