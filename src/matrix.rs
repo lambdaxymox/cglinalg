@@ -743,7 +743,7 @@ impl ops::Div<f32> for &Matrix3 {
 ///
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
 ///
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug)]
 pub struct Matrix4 {
     /// Column 1 of the matrix.
     pub c0r0: f32, pub c0r1: f32, pub c0r2: f32, pub c0r3: f32,
@@ -1038,6 +1038,27 @@ impl AsMut<[f32; 16]> for Matrix4 {
         unsafe {
             mem::transmute(self)
         }
+    }
+}
+
+impl PartialEq for Matrix4 {
+    fn eq(&self, other: &Matrix4) -> bool {
+        f32::abs(self.c0r0 - other.c0r0) < EPSILON &&
+        f32::abs(self.c0r1 - other.c0r1) < EPSILON &&
+        f32::abs(self.c0r2 - other.c0r2) < EPSILON &&
+        f32::abs(self.c0r3 - other.c0r3) < EPSILON &&
+        f32::abs(self.c1r0 - other.c1r0) < EPSILON &&
+        f32::abs(self.c1r1 - other.c1r1) < EPSILON &&
+        f32::abs(self.c1r2 - other.c1r2) < EPSILON &&
+        f32::abs(self.c1r3 - other.c1r3) < EPSILON &&
+        f32::abs(self.c2r0 - other.c2r0) < EPSILON &&
+        f32::abs(self.c2r1 - other.c2r1) < EPSILON &&
+        f32::abs(self.c2r2 - other.c2r2) < EPSILON &&
+        f32::abs(self.c2r3 - other.c2r3) < EPSILON &&
+        f32::abs(self.c3r0 - other.c3r0) < EPSILON &&
+        f32::abs(self.c3r1 - other.c3r1) < EPSILON &&
+        f32::abs(self.c3r2 - other.c3r2) < EPSILON &&
+        f32::abs(self.c3r3 - other.c3r3) < EPSILON
     }
 }
 
