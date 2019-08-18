@@ -547,22 +547,22 @@ impl Quaternion {
         let x = self.x;
         let y = self.y;
         let z = self.z;
-        m.m[0] = 1.0 - 2.0 * y * y - 2.0 * z * z;
-        m.m[1] = 2.0 * x * y + 2.0 * s * z;
-        m.m[2] = 2.0 * x * z - 2.0 * s * y;
-        m.m[3] = 0.0;
-        m.m[4] = 2.0 * x * y - 2.0 * s * z;
-        m.m[5] = 1.0 - 2.0 * x * x - 2.0 * z * z;
-        m.m[6] = 2.0 * y * z + 2.0 * s * x;
-        m.m[7] = 0.0;
-        m.m[8] = 2.0 * x * z + 2.0 * s * y;
-        m.m[9] = 2.0 * y * z - 2.0 * s * x;
-        m.m[10] = 1.0 - 2.0 * x * x - 2.0 * y * y;
-        m.m[11] = 0.0;
-        m.m[12] = 0.0;
-        m.m[13] = 0.0;
-        m.m[14] = 0.0;
-        m.m[15] = 1.0;
+        m.c0r0 = 1.0 - 2.0 * y * y - 2.0 * z * z;
+        m.c0r1 = 2.0 * x * y + 2.0 * s * z;
+        m.c0r2 = 2.0 * x * z - 2.0 * s * y;
+        m.c0r3 = 0.0;
+        m.c1r0 = 2.0 * x * y - 2.0 * s * z;
+        m.c1r1 = 1.0 - 2.0 * x * x - 2.0 * z * z;
+        m.c1r2 = 2.0 * y * z + 2.0 * s * x;
+        m.c1r3 = 0.0;
+        m.c2r0 = 2.0 * x * z + 2.0 * s * y;
+        m.c2r1 = 2.0 * y * z - 2.0 * s * x;
+        m.c2r2 = 1.0 - 2.0 * x * x - 2.0 * y * y;
+        m.c2r3 = 0.0;
+        m.c3r0 = 0.0;
+        m.c3r1 = 0.0;
+        m.c3r2 = 0.0;
+        m.c3r3 = 1.0;
     }
 
     pub fn slerp(q: &mut Quaternion, r: &Quaternion, t: f32) -> Quaternion {
