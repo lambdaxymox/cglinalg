@@ -996,12 +996,12 @@ impl Array for Matrix4 {
 
     #[inline]
     fn as_ptr(&self) -> *const f32 {
-        self.as_ptr()
+        &self.c0r0
     }
 
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut f32 {
-        self.as_mut_ptr()
+        &mut self.c0r0
     }
 }
 
@@ -1075,10 +1075,10 @@ impl ops::Mul<Vector4> for Matrix4 {
     }
 }
 
-impl<'a> ops::Mul<&'a Matrix4> for Matrix4 {
+impl ops::Mul<&Matrix4> for Matrix4 {
     type Output = Matrix4;
 
-    fn mul(self, other: &'a Matrix4) -> Self::Output {
+    fn mul(self, other: &Matrix4) -> Self::Output {
         let mut m = Matrix4::zero();
 
         m.c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
