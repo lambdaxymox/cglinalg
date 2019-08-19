@@ -1475,6 +1475,15 @@ mod matrix3_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_constant_time_identity_is_identity_along_diagonal() {
+        let c = 802.3435169;
+        let id = Matrix3::one();
+        let expected = Matrix3::new(c, 0.0, 0.0, 0.0, c, 0.0, 0.0, 0.0, c);
+
+        assert_eq!(id * c, expected);
+    }
 }
 
 #[cfg(test)]
@@ -1665,4 +1674,17 @@ mod matrix4_tests {
         let result = trans_mat * zero_vec4;
         assert_eq!(result, Vector4::from((zero_vec3 + v, 1.0)));
     }
+
+    /*
+    #[test]
+    fn test_constant_time_identity_is_identity_along_diagonal() {
+        let c = 802.3435169;
+        let id = Matrix4::one();
+        let expected = Matrix4::new(
+            c, 0.0, 0.0, 0.0, 0.0, c, 0.0, 0.0, 0.0, 0.0, c, 0.0, 0.0, 0.0, 0.0, c
+        );
+
+        assert_eq!(id * c, expected);
+    }
+    */
 }
