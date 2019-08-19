@@ -34,6 +34,17 @@ pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
     fn is_zero(&self) -> bool;
 }
 
+pub trait One where Self: Sized + ops::Mul<Self, Output = Self> {
+    /// Create a multiplicative unit element.
+    fn one() -> Self;
+
+    /// Determine whether an element is equal to the multiplicative unit element.
+    #[inline]
+    fn is_one(&self) -> bool where Self: PartialEq<Self> {
+        *self == Self::one()
+    }
+}
+
 pub trait VectorSpace: Copy + Clone where
     Self: Zero,
     Self: ops::Add<Self, Output = Self>,
