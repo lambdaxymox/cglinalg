@@ -1,7 +1,8 @@
 [package]
 name = "lean_cgmath"
-version = "0.5.3"
+version = "0.5.4"
 authors = ["Stallmanifold <stallmanifold@gmail.com>"]
+description = "A low-dimensional linear algebra library for computer graphics and real-time physics applications."
 
 [lib]
 name = "cgmath"
