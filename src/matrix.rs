@@ -1310,6 +1310,15 @@ mod matrix2_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_constant_time_identity_is_identity_along_diagonal() {
+        let c = 802.3435169;
+        let id = Matrix2::one();
+        let expected = Matrix2::new(c, 0.0, 0.0, c);
+
+        assert_eq!(id * c, expected);
+    }
 }
 
 
