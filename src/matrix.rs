@@ -93,25 +93,19 @@ impl fmt::Display for Matrix2 {
 
 impl AsRef<[f32; 4]> for Matrix2 {
     fn as_ref(&self) -> &[f32; 4] {
-        unsafe {
-            mem::transmute(self)
-        }
+        unsafe { mem::transmute(self) }
     }
 }
 
 impl AsRef<[[f32; 2]; 2]> for Matrix2 {
     fn as_ref(&self) -> &[[f32; 2]; 2] {
-        unsafe {
-            mem::transmute(self)
-        }
+        unsafe { mem::transmute(self) }
     }
 }
 
 impl AsMut<[f32; 4]> for Matrix2 {
     fn as_mut(&mut self) -> &mut [f32; 4] {
-        unsafe {
-            mem::transmute(self)
-        }
+        unsafe { mem::transmute(self) }
     }
 }
 
@@ -414,25 +408,19 @@ impl fmt::Display for Matrix3 {
 
 impl AsRef<[f32; 9]> for Matrix3 {
     fn as_ref(&self) -> &[f32; 9] {
-        unsafe {
-            mem::transmute(self)
-        }
+        unsafe { mem::transmute(self) }
     }
 }
 
 impl AsRef<[[f32; 3]; 3]> for Matrix3 {
     fn as_ref(&self) -> &[[f32; 3]; 3] {
-        unsafe {
-            mem::transmute(self)
-        }
+        unsafe { mem::transmute(self) }
     }
 }
 
 impl AsMut<[f32; 9]> for Matrix3 {
     fn as_mut(&mut self) -> &mut [f32; 9] {
-        unsafe {
-            mem::transmute(self)
-        }
+        unsafe { mem::transmute(self) }
     }
 }
 
@@ -1020,25 +1008,19 @@ impl fmt::Display for Matrix4 {
 
 impl AsRef<[f32; 16]> for Matrix4 {
     fn as_ref(&self) -> &[f32; 16] {
-        unsafe {
-            mem::transmute(self)
-        }
+        unsafe { mem::transmute(self) }
     }
 }
 
 impl AsRef<[[f32; 4]; 4]> for Matrix4 {
     fn as_ref(&self) -> &[[f32; 4]; 4] {
-        unsafe {
-            mem::transmute(self)
-        }
+        unsafe { mem::transmute(self) }
     }
 }
 
 impl AsMut<[f32; 16]> for Matrix4 {
     fn as_mut(&mut self) -> &mut [f32; 16] {
-        unsafe {
-            mem::transmute(self)
-        }
+        unsafe { mem::transmute(self) }
     }
 }
 
