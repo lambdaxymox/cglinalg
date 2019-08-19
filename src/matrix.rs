@@ -38,13 +38,6 @@ impl Matrix2 {
     }
 
     ///
-    /// Return the zero matrix.
-    ///
-    pub fn zero() -> Matrix2 {
-        Matrix2::new(0.0, 0.0, 0.0, 0.0)
-    }
-
-    ///
     /// Return the identity matrix.
     ///
     pub fn one() -> Matrix2 {
@@ -78,6 +71,17 @@ impl Array for Matrix2 {
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut f32 {
         &mut self.c0r0
+    }
+}
+
+impl Zero for Matrix2 {
+    fn zero() -> Matrix2 {
+        Matrix2::new(0.0, 0.0, 0.0, 0.0)
+    }
+
+    fn is_zero(&self) -> bool {
+        self.c0r0 == 0.0 && self.c0r1 == 0.0 &&
+        self.c1r0 == 0.0 && self.c1r1 == 0.0
     }
 }
 
@@ -356,11 +360,6 @@ impl Matrix3 {
         }
     }
 
-    /// Generate a 3x3 matrix of zeros.
-    pub fn zero() -> Matrix3 {
-        Matrix3::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-    }
-
     /// Generate a 3x3 diagonal matrix of ones.
     pub fn one() -> Matrix3 {
         Matrix3::new(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
@@ -392,6 +391,18 @@ impl Array for Matrix3 {
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut f32 {
         &mut self.c0r0
+    }
+}
+
+impl Zero for Matrix3 {
+    fn zero() -> Matrix3 {
+        Matrix3::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    }
+
+    fn is_zero(&self) -> bool {
+        self.c0r0 == 0.0 && self.c0r1 == 0.0 && self.c0r2 == 0.0 &&
+        self.c1r0 == 0.0 && self.c1r1 == 0.0 && self.c1r2 == 0.0 &&
+        self.c2r0 == 0.0 && self.c2r1 == 0.0 && self.c2r2 == 0.0
     }
 }
 
@@ -760,18 +771,6 @@ impl Matrix4 {
     }
 
     ///
-    /// Return the zero matrix.
-    ///
-    pub fn zero() -> Matrix4 {
-        Matrix4::new(
-            0.0, 0.0, 0.0, 0.0, 
-            0.0, 0.0, 0.0, 0.0, 
-            0.0, 0.0, 0.0, 0.0, 
-            0.0, 0.0, 0.0, 0.0
-        )
-    }
-
-    ///
     /// Return the identity matrix.
     ///
     pub fn one() -> Matrix4 {
@@ -994,6 +993,22 @@ impl Array for Matrix4 {
     }
 }
 
+impl Zero for Matrix4 {
+    fn zero() -> Matrix4 {
+        Matrix4::new(
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        )
+    }
+
+    fn is_zero(&self) -> bool {
+        self.c0r0 == 0.0 && self.c0r1 == 0.0 && self.c0r2 == 0.0 && self.c0r3 == 0.0 &&
+        self.c1r0 == 0.0 && self.c1r1 == 0.0 && self.c1r2 == 0.0 && self.c1r3 == 0.0 &&
+        self.c2r0 == 0.0 && self.c2r1 == 0.0 && self.c2r2 == 0.0 && self.c2r3 == 0.0 &&
+        self.c3r0 == 0.0 && self.c3r1 == 0.0 && self.c3r2 == 0.0 && self.c3r3 == 0.0
+    }
+}
+
 impl fmt::Display for Matrix4 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, 
@@ -1042,6 +1057,254 @@ impl PartialEq for Matrix4 {
         f32::abs(self.c3r1 - other.c3r1) < EPSILON &&
         f32::abs(self.c3r2 - other.c3r2) < EPSILON &&
         f32::abs(self.c3r3 - other.c3r3) < EPSILON
+    }
+}
+
+impl ops::Add<Matrix4> for Matrix4 {
+    type Output = Matrix4;
+
+    fn add(self, other: Matrix4) -> Self::Output {
+        let c0r0 = self.c0r0 + other.c0r0;
+        let c0r1 = self.c0r1 + other.c0r1;
+        let c0r2 = self.c0r2 + other.c0r2;
+        let c0r3 = self.c0r3 + other.c0r3;
+
+        let c1r0 = self.c1r0 + other.c1r0;
+        let c1r1 = self.c1r1 + other.c1r1;
+        let c1r2 = self.c1r2 + other.c1r2;
+        let c1r3 = self.c1r3 + other.c1r3;
+
+        let c2r0 = self.c2r0 + other.c2r0;
+        let c2r1 = self.c2r1 + other.c2r1;
+        let c2r2 = self.c2r2 + other.c2r2;
+        let c2r3 = self.c2r3 + other.c2r3;
+
+        let c3r0 = self.c3r0 + other.c3r0;
+        let c3r1 = self.c3r1 + other.c3r1;
+        let c3r2 = self.c3r2 + other.c3r2;
+        let c3r3 = self.c3r3 + other.c3r3;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+        )
+    }
+}
+
+impl ops::Add<&Matrix4> for Matrix4 {
+    type Output = Matrix4;
+
+    fn add(self, other: &Matrix4) -> Self::Output {
+        let c0r0 = self.c0r0 + other.c0r0;
+        let c0r1 = self.c0r1 + other.c0r1;
+        let c0r2 = self.c0r2 + other.c0r2;
+        let c0r3 = self.c0r3 + other.c0r3;
+
+        let c1r0 = self.c1r0 + other.c1r0;
+        let c1r1 = self.c1r1 + other.c1r1;
+        let c1r2 = self.c1r2 + other.c1r2;
+        let c1r3 = self.c1r3 + other.c1r3;
+
+        let c2r0 = self.c2r0 + other.c2r0;
+        let c2r1 = self.c2r1 + other.c2r1;
+        let c2r2 = self.c2r2 + other.c2r2;
+        let c2r3 = self.c2r3 + other.c2r3;
+
+        let c3r0 = self.c3r0 + other.c3r0;
+        let c3r1 = self.c3r1 + other.c3r1;
+        let c3r2 = self.c3r2 + other.c3r2;
+        let c3r3 = self.c3r3 + other.c3r3;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+        )
+    }
+}
+
+impl ops::Add<Matrix4> for &Matrix4 {
+    type Output = Matrix4;
+
+    fn add(self, other: Matrix4) -> Self::Output {
+        let c0r0 = self.c0r0 + other.c0r0;
+        let c0r1 = self.c0r1 + other.c0r1;
+        let c0r2 = self.c0r2 + other.c0r2;
+        let c0r3 = self.c0r3 + other.c0r3;
+
+        let c1r0 = self.c1r0 + other.c1r0;
+        let c1r1 = self.c1r1 + other.c1r1;
+        let c1r2 = self.c1r2 + other.c1r2;
+        let c1r3 = self.c1r3 + other.c1r3;
+
+        let c2r0 = self.c2r0 + other.c2r0;
+        let c2r1 = self.c2r1 + other.c2r1;
+        let c2r2 = self.c2r2 + other.c2r2;
+        let c2r3 = self.c2r3 + other.c2r3;
+
+        let c3r0 = self.c3r0 + other.c3r0;
+        let c3r1 = self.c3r1 + other.c3r1;
+        let c3r2 = self.c3r2 + other.c3r2;
+        let c3r3 = self.c3r3 + other.c3r3;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+        )
+    }
+}
+
+impl<'a, 'b> ops::Add<&'a Matrix4> for &'b Matrix4 {
+    type Output = Matrix4;
+
+    fn add(self, other: &'a Matrix4) -> Self::Output {
+        let c0r0 = self.c0r0 + other.c0r0;
+        let c0r1 = self.c0r1 + other.c0r1;
+        let c0r2 = self.c0r2 + other.c0r2;
+        let c0r3 = self.c0r3 + other.c0r3;
+
+        let c1r0 = self.c1r0 + other.c1r0;
+        let c1r1 = self.c1r1 + other.c1r1;
+        let c1r2 = self.c1r2 + other.c1r2;
+        let c1r3 = self.c1r3 + other.c1r3;
+
+        let c2r0 = self.c2r0 + other.c2r0;
+        let c2r1 = self.c2r1 + other.c2r1;
+        let c2r2 = self.c2r2 + other.c2r2;
+        let c2r3 = self.c2r3 + other.c2r3;
+
+        let c3r0 = self.c3r0 + other.c3r0;
+        let c3r1 = self.c3r1 + other.c3r1;
+        let c3r2 = self.c3r2 + other.c3r2;
+        let c3r3 = self.c3r3 + other.c3r3;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+        )
+    }
+}
+
+impl ops::Sub<Matrix4> for Matrix4 {
+    type Output = Matrix4;
+
+    fn sub(self, other: Matrix4) -> Self::Output {
+        let c0r0 = self.c0r0 - other.c0r0;
+        let c0r1 = self.c0r1 - other.c0r1;
+        let c0r2 = self.c0r2 - other.c0r2;
+        let c0r3 = self.c0r3 - other.c0r3;
+
+        let c1r0 = self.c1r0 - other.c1r0;
+        let c1r1 = self.c1r1 - other.c1r1;
+        let c1r2 = self.c1r2 - other.c1r2;
+        let c1r3 = self.c1r3 - other.c1r3;
+
+        let c2r0 = self.c2r0 - other.c2r0;
+        let c2r1 = self.c2r1 - other.c2r1;
+        let c2r2 = self.c2r2 - other.c2r2;
+        let c2r3 = self.c2r3 - other.c2r3;
+
+        let c3r0 = self.c3r0 - other.c3r0;
+        let c3r1 = self.c3r1 - other.c3r1;
+        let c3r2 = self.c3r2 - other.c3r2;
+        let c3r3 = self.c3r3 - other.c3r3;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+        )
+    }
+}
+
+impl ops::Sub<&Matrix4> for Matrix4 {
+    type Output = Matrix4;
+
+    fn sub(self, other: &Matrix4) -> Self::Output {
+        let c0r0 = self.c0r0 - other.c0r0;
+        let c0r1 = self.c0r1 - other.c0r1;
+        let c0r2 = self.c0r2 - other.c0r2;
+        let c0r3 = self.c0r3 - other.c0r3;
+
+        let c1r0 = self.c1r0 - other.c1r0;
+        let c1r1 = self.c1r1 - other.c1r1;
+        let c1r2 = self.c1r2 - other.c1r2;
+        let c1r3 = self.c1r3 - other.c1r3;
+
+        let c2r0 = self.c2r0 - other.c2r0;
+        let c2r1 = self.c2r1 - other.c2r1;
+        let c2r2 = self.c2r2 - other.c2r2;
+        let c2r3 = self.c2r3 - other.c2r3;
+
+        let c3r0 = self.c3r0 - other.c3r0;
+        let c3r1 = self.c3r1 - other.c3r1;
+        let c3r2 = self.c3r2 - other.c3r2;
+        let c3r3 = self.c3r3 - other.c3r3;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+        )
+    }
+}
+
+impl ops::Sub<Matrix4> for &Matrix4 {
+    type Output = Matrix4;
+
+    fn sub(self, other: Matrix4) -> Self::Output {
+        let c0r0 = self.c0r0 - other.c0r0;
+        let c0r1 = self.c0r1 - other.c0r1;
+        let c0r2 = self.c0r2 - other.c0r2;
+        let c0r3 = self.c0r3 - other.c0r3;
+
+        let c1r0 = self.c1r0 - other.c1r0;
+        let c1r1 = self.c1r1 - other.c1r1;
+        let c1r2 = self.c1r2 - other.c1r2;
+        let c1r3 = self.c1r3 - other.c1r3;
+
+        let c2r0 = self.c2r0 - other.c2r0;
+        let c2r1 = self.c2r1 - other.c2r1;
+        let c2r2 = self.c2r2 - other.c2r2;
+        let c2r3 = self.c2r3 - other.c2r3;
+
+        let c3r0 = self.c3r0 - other.c3r0;
+        let c3r1 = self.c3r1 - other.c3r1;
+        let c3r2 = self.c3r2 - other.c3r2;
+        let c3r3 = self.c3r3 - other.c3r3;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+        )
+    }
+}
+
+impl<'a, 'b> ops::Sub<&'a Matrix4> for &'b Matrix4 {
+    type Output = Matrix4;
+
+    fn sub(self, other: &'a Matrix4) -> Self::Output {
+        let c0r0 = self.c0r0 - other.c0r0;
+        let c0r1 = self.c0r1 - other.c0r1;
+        let c0r2 = self.c0r2 - other.c0r2;
+        let c0r3 = self.c0r3 - other.c0r3;
+
+        let c1r0 = self.c1r0 - other.c1r0;
+        let c1r1 = self.c1r1 - other.c1r1;
+        let c1r2 = self.c1r2 - other.c1r2;
+        let c1r3 = self.c1r3 - other.c1r3;
+
+        let c2r0 = self.c2r0 - other.c2r0;
+        let c2r1 = self.c2r1 - other.c2r1;
+        let c2r2 = self.c2r2 - other.c2r2;
+        let c2r3 = self.c2r3 - other.c2r3;
+
+        let c3r0 = self.c3r0 - other.c3r0;
+        let c3r1 = self.c3r1 - other.c3r1;
+        let c3r2 = self.c3r2 - other.c3r2;
+        let c3r3 = self.c3r3 - other.c3r3;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+        )
     }
 }
 
@@ -1269,6 +1532,8 @@ mod matrix2_tests {
     use std::slice::Iter;
     use vector::Vector2;
     use super::Matrix2;
+    use traits::{Zero};
+
 
     struct TestCase {
         c: f32,
@@ -1442,6 +1707,7 @@ mod matrix3_tests {
     use std::slice::Iter;
     use vector::Vector3;
     use super::Matrix3;
+    use traits::{Zero};
 
     struct TestCase {
         c: f32,
@@ -1615,6 +1881,8 @@ mod matrix4_tests {
     use std::slice::Iter;
     use vector::{Vector3, Vector4};
     use super::{Matrix4};
+    use traits::{Zero};
+
 
     struct TestCase {
         c: f32,

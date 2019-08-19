@@ -24,7 +24,7 @@ pub trait Array {
 
 pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
     ///
-    /// Create a element.
+    /// Create a zero element.
     ///
     fn zero() -> Self;
 
