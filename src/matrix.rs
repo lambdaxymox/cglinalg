@@ -3,7 +3,7 @@ use std::mem;
 use std::ops;
 use std::cmp;
 
-use crate::traits::{Array, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
+use crate::traits::{Array, One, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
 use crate::vector::*;
 
 
@@ -35,13 +35,6 @@ impl Matrix2 {
     /// 
     pub fn from_cols(c0: Vector2, c1: Vector2) -> Matrix2 {
         Matrix2 { c0r0: c0.x, c0r1: c0.y, c1r0: c1.x, c1r1: c1.y }
-    }
-
-    ///
-    /// Return the identity matrix.
-    ///
-    pub fn one() -> Matrix2 {
-        Matrix2::new(1.0, 0.0, 0.0, 1.0)
     }
 
     ///
@@ -82,6 +75,12 @@ impl Zero for Matrix2 {
     fn is_zero(&self) -> bool {
         self.c0r0 == 0.0 && self.c0r1 == 0.0 &&
         self.c1r0 == 0.0 && self.c1r1 == 0.0
+    }
+}
+
+impl One for Matrix2 {
+    fn one() -> Matrix2 {
+        Matrix2::new(1.0, 0.0, 0.0, 1.0)
     }
 }
 
@@ -403,6 +402,12 @@ impl Zero for Matrix3 {
         self.c0r0 == 0.0 && self.c0r1 == 0.0 && self.c0r2 == 0.0 &&
         self.c1r0 == 0.0 && self.c1r1 == 0.0 && self.c1r2 == 0.0 &&
         self.c2r0 == 0.0 && self.c2r1 == 0.0 && self.c2r2 == 0.0
+    }
+}
+
+impl One for Matrix3 {
+    fn one() -> Matrix3 {
+        Matrix3::new(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
     }
 }
 
@@ -771,18 +776,6 @@ impl Matrix4 {
     }
 
     ///
-    /// Return the identity matrix.
-    ///
-    pub fn one() -> Matrix4 {
-        Matrix4::new(
-            1.0, 0.0, 0.0, 0.0, 
-            0.0, 1.0, 0.0, 0.0, 
-            0.0, 0.0, 1.0, 0.0, 
-            0.0, 0.0, 0.0, 1.0
-        )
-    }
-
-    ///
     /// Transpose a 4x4 matrix.
     ///
     pub fn transpose(&self) -> Matrix4 {
@@ -1006,6 +999,17 @@ impl Zero for Matrix4 {
         self.c1r0 == 0.0 && self.c1r1 == 0.0 && self.c1r2 == 0.0 && self.c1r3 == 0.0 &&
         self.c2r0 == 0.0 && self.c2r1 == 0.0 && self.c2r2 == 0.0 && self.c2r3 == 0.0 &&
         self.c3r0 == 0.0 && self.c3r1 == 0.0 && self.c3r2 == 0.0 && self.c3r3 == 0.0
+    }
+}
+
+impl One for Matrix4 {
+    fn one() -> Matrix4 {
+        Matrix4::new(
+            1.0, 0.0, 0.0, 0.0, 
+            0.0, 1.0, 0.0, 0.0, 
+            0.0, 0.0, 1.0, 0.0, 
+            0.0, 0.0, 0.0, 1.0
+        )
     }
 }
 
@@ -1532,7 +1536,7 @@ mod matrix2_tests {
     use std::slice::Iter;
     use vector::Vector2;
     use super::Matrix2;
-    use traits::{Zero};
+    use traits::{One, Zero};
 
 
     struct TestCase {
@@ -1707,7 +1711,7 @@ mod matrix3_tests {
     use std::slice::Iter;
     use vector::Vector3;
     use super::Matrix3;
-    use traits::{Zero};
+    use traits::{One, Zero};
 
     struct TestCase {
         c: f32,
@@ -1881,7 +1885,7 @@ mod matrix4_tests {
     use std::slice::Iter;
     use vector::{Vector3, Vector4};
     use super::{Matrix4};
-    use traits::{Zero};
+    use traits::{One, Zero};
 
 
     struct TestCase {
