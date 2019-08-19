@@ -1219,6 +1219,68 @@ impl ops::Mul<f32> for &Matrix4 {
     }
 }
 
+impl ops::Div<f32> for Matrix4 {
+    type Output = Matrix4;
+
+    fn div(self, other: f32) -> Self::Output {
+        let c0r0 = self.c0r0 / other;
+        let c0r1 = self.c0r1 / other;
+        let c0r2 = self.c0r2 / other;
+        let c0r3 = self.c0r3 / other;
+
+        let c1r0 = self.c1r0 / other;
+        let c1r1 = self.c1r1 / other;
+        let c1r2 = self.c1r2 / other;
+        let c1r3 = self.c1r3 / other;
+        
+        let c2r0 = self.c2r0 / other;
+        let c2r1 = self.c2r1 / other;
+        let c2r2 = self.c2r2 / other;
+        let c2r3 = self.c2r3 / other;
+
+        let c3r0 = self.c3r0 / other;
+        let c3r1 = self.c3r1 / other;
+        let c3r2 = self.c3r2 / other;
+        let c3r3 = self.c3r3 / other;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
+        )
+    }
+}
+
+impl ops::Div<f32> for &Matrix4 {
+    type Output = Matrix4;
+
+    fn div(self, other: f32) -> Self::Output {
+        let c0r0 = self.c0r0 / other;
+        let c0r1 = self.c0r1 / other;
+        let c0r2 = self.c0r2 / other;
+        let c0r3 = self.c0r3 / other;
+
+        let c1r0 = self.c1r0 / other;
+        let c1r1 = self.c1r1 / other;
+        let c1r2 = self.c1r2 / other;
+        let c1r3 = self.c1r3 / other;
+        
+        let c2r0 = self.c2r0 / other;
+        let c2r1 = self.c2r1 / other;
+        let c2r2 = self.c2r2 / other;
+        let c2r3 = self.c2r3 / other;
+
+        let c3r0 = self.c3r0 / other;
+        let c3r1 = self.c3r1 / other;
+        let c3r2 = self.c3r2 / other;
+        let c3r3 = self.c3r3 / other;
+
+        Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
+        )
+    }
+}
+
 
 #[cfg(test)]
 mod matrix2_tests {
@@ -1374,12 +1436,21 @@ mod matrix2_tests {
     }
 
     #[test]
-    fn test_constant_time_identity_is_identity_along_diagonal() {
+    fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169;
         let id = Matrix2::one();
         let expected = Matrix2::new(c, 0.0, 0.0, c);
 
         assert_eq!(id * c, expected);
+    }
+
+    #[test]
+    fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
+        let c = 802.3435169;
+        let id = Matrix2::one();
+        let expected = Matrix2::new(1.0/c, 0.0, 0.0, 1.0/c);
+
+        assert_eq!(id / c, expected);
     }
 }
 
@@ -1539,12 +1610,21 @@ mod matrix3_tests {
     }
 
     #[test]
-    fn test_constant_time_identity_is_identity_along_diagonal() {
+    fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169;
         let id = Matrix3::one();
         let expected = Matrix3::new(c, 0.0, 0.0, 0.0, c, 0.0, 0.0, 0.0, c);
 
         assert_eq!(id * c, expected);
+    }
+
+    #[test]
+    fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
+        let c = 802.3435169;
+        let id = Matrix3::one();
+        let expected = Matrix3::new(1.0/c, 0.0, 0.0, 0.0, 1.0/c, 0.0, 0.0, 0.0, 1.0/c);
+
+        assert_eq!(id / c, expected);
     }
 }
 
@@ -1738,7 +1818,7 @@ mod matrix4_tests {
     }
 
     #[test]
-    fn test_constant_time_identity_is_identity_along_diagonal() {
+    fn test_constant_times_identity_is_identity_along_diagonal() {
         let c = 802.3435169;
         let id = Matrix4::one();
         let expected = Matrix4::new(
@@ -1746,5 +1826,16 @@ mod matrix4_tests {
         );
 
         assert_eq!(id * c, expected);
+    }
+
+    #[test]
+    fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
+        let c = 802.3435169;
+        let id = Matrix4::one();
+        let expected = Matrix4::new(
+            1.0/c, 0.0, 0.0, 0.0, 0.0, 1.0/c, 0.0, 0.0, 0.0, 0.0, 1.0/c, 0.0, 0.0, 0.0, 0.0, 1.0/c
+        );
+
+        assert_eq!(id / c, expected);
     }
 }
