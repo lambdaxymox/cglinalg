@@ -1703,6 +1703,22 @@ mod matrix2_tests {
 
         assert_eq!(id / c, expected);
     }
+
+    #[test]
+    fn test_matrix_plus_zero_equals_matrix() {
+        let zero = Matrix2::zero();
+        let matrix = Matrix2::new(36.84, 427.46, 7.47, 61.89);
+
+        assert_eq!(matrix + zero, matrix);
+    }
+
+        #[test]
+    fn test_zero_plus_matrix_equals_matrix() {
+        let zero = Matrix2::zero();
+        let matrix = Matrix2::new(36.84, 427.46, 7.47, 61.89);
+
+        assert_eq!(zero + matrix, matrix);
+    }
 }
 
 
@@ -1877,6 +1893,22 @@ mod matrix3_tests {
         let expected = Matrix3::new(1.0/c, 0.0, 0.0, 0.0, 1.0/c, 0.0, 0.0, 0.0, 1.0/c);
 
         assert_eq!(id / c, expected);
+    }
+
+    #[test]
+    fn test_matrix_plus_zero_equals_matrix() {
+        let zero = Matrix3::zero();
+        let matrix = Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36);
+
+        assert_eq!(matrix + zero, matrix);
+    }
+
+        #[test]
+    fn test_zero_plus_matrix_equals_matrix() {
+        let zero = Matrix3::zero();
+        let matrix = Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36);
+
+        assert_eq!(zero + matrix, matrix);
     }
 }
 
@@ -2091,5 +2123,31 @@ mod matrix4_tests {
         );
 
         assert_eq!(id / c, expected);
+    }
+
+        #[test]
+    fn test_matrix_plus_zero_equals_matrix() {
+        let zero = Matrix4::zero();
+        let matrix = Matrix4::new(
+            36.84,   427.46894, 8827.1983, 89.5049494, 
+            7.04217, 61.891390, 56.31,     89.0, 
+            72.0,    936.5,     413.80,    50.311160,  
+            37.6985,  311.8,    60.81,     73.8393
+        );
+
+        assert_eq!(matrix + zero, matrix);
+    }
+
+        #[test]
+    fn test_zero_plus_matrix_equals_matrix() {
+        let zero = Matrix4::zero();
+        let matrix = Matrix4::new(
+            36.84,   427.46894, 8827.1983, 89.5049494, 
+            7.04217, 61.891390, 56.31,     89.0, 
+            72.0,    936.5,     413.80,    50.311160,  
+            37.6985,  311.8,    60.81,     73.8393
+        );
+
+        assert_eq!(zero + matrix, matrix);
     }
 }
