@@ -473,9 +473,11 @@ impl ops::Add<Matrix3> for Matrix3 {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
         let c0r2 = self.c0r2 + other.c0r2;
+
         let c1r0 = self.c1r0 + other.c1r0;
         let c1r1 = self.c1r1 + other.c1r1;
         let c1r2 = self.c1r2 + other.c1r2;
+
         let c2r0 = self.c2r0 + other.c2r0;
         let c2r1 = self.c2r1 + other.c2r1;
         let c2r2 = self.c2r2 + other.c2r2;
@@ -491,9 +493,11 @@ impl ops::Add<&Matrix3> for Matrix3 {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
         let c0r2 = self.c0r2 + other.c0r2;
+
         let c1r0 = self.c1r0 + other.c1r0;
         let c1r1 = self.c1r1 + other.c1r1;
         let c1r2 = self.c1r2 + other.c1r2;
+
         let c2r0 = self.c2r0 + other.c2r0;
         let c2r1 = self.c2r1 + other.c2r1;
         let c2r2 = self.c2r2 + other.c2r2;
@@ -509,9 +513,11 @@ impl ops::Add<Matrix3> for &Matrix3 {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
         let c0r2 = self.c0r2 + other.c0r2;
+
         let c1r0 = self.c1r0 + other.c1r0;
         let c1r1 = self.c1r1 + other.c1r1;
         let c1r2 = self.c1r2 + other.c1r2;
+
         let c2r0 = self.c2r0 + other.c2r0;
         let c2r1 = self.c2r1 + other.c2r1;
         let c2r2 = self.c2r2 + other.c2r2;
@@ -527,9 +533,11 @@ impl<'a, 'b> ops::Add<&'a Matrix3> for &'b Matrix3 {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
         let c0r2 = self.c0r2 + other.c0r2;
+
         let c1r0 = self.c1r0 + other.c1r0;
         let c1r1 = self.c1r1 + other.c1r1;
         let c1r2 = self.c1r2 + other.c1r2;
+
         let c2r0 = self.c2r0 + other.c2r0;
         let c2r1 = self.c2r1 + other.c2r1;
         let c2r2 = self.c2r2 + other.c2r2;
@@ -545,9 +553,11 @@ impl ops::Sub<Matrix3> for Matrix3 {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c0r2 = self.c0r2 - other.c0r2;
+
         let c1r0 = self.c1r0 - other.c1r0;
         let c1r1 = self.c1r1 - other.c1r1;
         let c1r2 = self.c1r2 - other.c1r2;
+
         let c2r0 = self.c2r0 - other.c2r0;
         let c2r1 = self.c2r1 - other.c2r1;
         let c2r2 = self.c2r2 - other.c2r2;
@@ -563,9 +573,11 @@ impl ops::Sub<&Matrix3> for Matrix3 {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c0r2 = self.c0r2 - other.c0r2;
+
         let c1r0 = self.c1r0 - other.c1r0;
         let c1r1 = self.c1r1 - other.c1r1;
         let c1r2 = self.c1r2 - other.c1r2;
+
         let c2r0 = self.c2r0 - other.c2r0;
         let c2r1 = self.c2r1 - other.c2r1;
         let c2r2 = self.c2r2 - other.c2r2;
@@ -581,9 +593,11 @@ impl ops::Sub<Matrix3> for &Matrix3 {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c0r2 = self.c0r2 - other.c0r2;
+
         let c1r0 = self.c1r0 - other.c1r0;
         let c1r1 = self.c1r1 - other.c1r1;
         let c1r2 = self.c1r2 - other.c1r2;
+
         let c2r0 = self.c2r0 - other.c2r0;
         let c2r1 = self.c2r1 - other.c2r1;
         let c2r2 = self.c2r2 - other.c2r2;
@@ -599,9 +613,11 @@ impl<'a, 'b> ops::Sub<&'a Matrix3> for &'b Matrix3 {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c0r2 = self.c0r2 - other.c0r2;
+
         let c1r0 = self.c1r0 - other.c1r0;
         let c1r1 = self.c1r1 - other.c1r1;
         let c1r2 = self.c1r2 - other.c1r2;
+
         let c2r0 = self.c2r0 - other.c2r0;
         let c2r1 = self.c2r1 - other.c2r1;
         let c2r2 = self.c2r2 - other.c2r2;
@@ -1401,14 +1417,17 @@ impl ops::Mul<&Matrix4> for Matrix4 {
         m.c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
         m.c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2 + self.c3r2 * other.c0r3;
         m.c0r3 = self.c0r3 * other.c0r0 + self.c1r3 * other.c0r1 + self.c2r3 * other.c0r2 + self.c3r3 * other.c0r3;
+
         m.c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2 + self.c3r0 * other.c1r3;
         m.c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2 + self.c3r1 * other.c1r3;
         m.c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2 + self.c3r2 * other.c1r3;
         m.c1r3 = self.c0r3 * other.c1r0 + self.c1r3 * other.c1r1 + self.c2r3 * other.c1r2 + self.c3r3 * other.c1r3;
+
         m.c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2 + self.c3r0 * other.c2r3;
         m.c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2 + self.c3r1 * other.c2r3;
         m.c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2 + self.c3r2 * other.c2r3;
         m.c2r3 = self.c0r3 * other.c2r0 + self.c1r3 * other.c2r1 + self.c2r3 * other.c2r2 + self.c3r3 * other.c2r3;
+
         m.c3r0 = self.c0r0 * other.c3r0 + self.c1r0 * other.c3r1 + self.c2r0 * other.c3r2 + self.c3r0 * other.c3r3;
         m.c3r1 = self.c0r1 * other.c3r0 + self.c1r1 * other.c3r1 + self.c2r1 * other.c3r2 + self.c3r1 * other.c3r3;
         m.c3r2 = self.c0r2 * other.c3r0 + self.c1r2 * other.c3r1 + self.c2r2 * other.c3r2 + self.c3r2 * other.c3r3;
@@ -1428,14 +1447,17 @@ impl<'a, 'b> ops::Mul<&'a Matrix4> for &'b Matrix4 {
         m.c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
         m.c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2 + self.c3r2 * other.c0r3;
         m.c0r3 = self.c0r3 * other.c0r0 + self.c1r3 * other.c0r1 + self.c2r3 * other.c0r2 + self.c3r3 * other.c0r3;
+
         m.c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2 + self.c3r0 * other.c1r3;
         m.c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2 + self.c3r1 * other.c1r3;
         m.c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2 + self.c3r2 * other.c1r3;
         m.c1r3 = self.c0r3 * other.c1r0 + self.c1r3 * other.c1r1 + self.c2r3 * other.c1r2 + self.c3r3 * other.c1r3;
+
         m.c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2 + self.c3r0 * other.c2r3;
         m.c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2 + self.c3r1 * other.c2r3;
         m.c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2 + self.c3r2 * other.c2r3;
         m.c2r3 = self.c0r3 * other.c2r0 + self.c1r3 * other.c2r1 + self.c2r3 * other.c2r2 + self.c3r3 * other.c2r3;
+
         m.c3r0 = self.c0r0 * other.c3r0 + self.c1r0 * other.c3r1 + self.c2r0 * other.c3r2 + self.c3r0 * other.c3r3;
         m.c3r1 = self.c0r1 * other.c3r0 + self.c1r1 * other.c3r1 + self.c2r1 * other.c3r2 + self.c3r1 * other.c3r3;
         m.c3r2 = self.c0r2 * other.c3r0 + self.c1r2 * other.c3r1 + self.c2r2 * other.c3r2 + self.c3r2 * other.c3r3;
@@ -1455,14 +1477,17 @@ impl ops::Mul<Matrix4> for Matrix4 {
         m.c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
         m.c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2 + self.c3r2 * other.c0r3;
         m.c0r3 = self.c0r3 * other.c0r0 + self.c1r3 * other.c0r1 + self.c2r3 * other.c0r2 + self.c3r3 * other.c0r3;
+
         m.c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2 + self.c3r0 * other.c1r3;
         m.c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2 + self.c3r1 * other.c1r3;
         m.c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2 + self.c3r2 * other.c1r3;
         m.c1r3 = self.c0r3 * other.c1r0 + self.c1r3 * other.c1r1 + self.c2r3 * other.c1r2 + self.c3r3 * other.c1r3;
+
         m.c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2 + self.c3r0 * other.c2r3;
         m.c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2 + self.c3r1 * other.c2r3;
         m.c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2 + self.c3r2 * other.c2r3;
         m.c2r3 = self.c0r3 * other.c2r0 + self.c1r3 * other.c2r1 + self.c2r3 * other.c2r2 + self.c3r3 * other.c2r3;
+
         m.c3r0 = self.c0r0 * other.c3r0 + self.c1r0 * other.c3r1 + self.c2r0 * other.c3r2 + self.c3r0 * other.c3r3;
         m.c3r1 = self.c0r1 * other.c3r0 + self.c1r1 * other.c3r1 + self.c2r1 * other.c3r2 + self.c3r1 * other.c3r3;
         m.c3r2 = self.c0r2 * other.c3r0 + self.c1r2 * other.c3r1 + self.c2r2 * other.c3r2 + self.c3r2 * other.c3r3;
