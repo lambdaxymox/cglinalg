@@ -1086,6 +1086,7 @@ impl Matrix4 {
     /// Computes the determinant of a 4x4 matrix.
     ///
     pub fn determinant(&self) -> f32 {
+        /*
         self.c3r0 * self.c2r1 * self.c1r2 * self.c0r3 -
         self.c2r0 * self.c3r1 * self.c1r2 * self.c0r3 -
         self.c3r0 * self.c1r1 * self.c2r2 * self.c0r3 +
@@ -1110,6 +1111,31 @@ impl Matrix4 {
         self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 -
         self.c1r0 * self.c0r1 * self.c2r2 * self.c3r3 +
         self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3
+        */
+        self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
+        self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
+        self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
+        self.c0r0 * self.c2r1 * self.c1r3 * self.c3r2 +
+        self.c0r0 * self.c3r1 * self.c1r2 * self.c2r3 -
+        self.c0r0 * self.c3r1 * self.c1r3 * self.c2r2 -
+        self.c1r0 * self.c0r1 * self.c2r2 * self.c3r3 +
+        self.c1r0 * self.c0r1 * self.c2r3 * self.c3r2 +
+        self.c1r0 * self.c2r1 * self.c0r2 * self.c3r3 -
+        self.c1r0 * self.c2r1 * self.c0r3 * self.c3r2 -
+        self.c1r0 * self.c3r1 * self.c0r2 * self.c2r3 +
+        self.c1r0 * self.c3r1 * self.c0r3 * self.c2r2 +
+        self.c2r0 * self.c0r1 * self.c1r2 * self.c3r3 -
+        self.c2r0 * self.c0r1 * self.c1r3 * self.c3r2 -
+        self.c2r0 * self.c1r1 * self.c0r2 * self.c3r3 +
+        self.c2r0 * self.c1r1 * self.c0r3 * self.c3r2 +
+        self.c2r0 * self.c3r1 * self.c0r2 * self.c1r3 -
+        self.c2r0 * self.c3r1 * self.c0r3 * self.c1r2 -
+        self.c3r0 * self.c0r1 * self.c1r2 * self.c2r3 +
+        self.c3r0 * self.c0r1 * self.c1r3 * self.c2r2 +
+        self.c3r0 * self.c1r1 * self.c0r2 * self.c2r3 -
+        self.c3r0 * self.c1r1 * self.c0r3 * self.c2r2 -
+        self.c3r0 * self.c2r1 * self.c0r2 * self.c1r3 +
+        self.c3r0 * self.c2r1 * self.c0r3 * self.c1r2
     }
 
     pub fn is_invertible(&self) -> bool {
