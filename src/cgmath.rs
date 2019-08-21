@@ -101,11 +101,8 @@ pub fn quat<T: Into<Quaternion>>(q: T) -> Quaternion {
 /// constructor.
 ///
 #[inline]
-pub fn mat2(
-    m11: f32, m12: f32,
-    m21: f32, m22: f32) -> Matrix2 {
-
-    Matrix2::new(m11, m12, m21, m22)
+pub fn mat2(c0r0: f32, c0r1: f32, c1r0: f32, c1r1: f32) -> Matrix2 {
+    Matrix2::new(c0r0, c0r1, c1r0, c1r1)
 }
 
 ///
@@ -114,11 +111,11 @@ pub fn mat2(
 ///
 #[inline]
 pub fn mat3(
-    m11: f32, m12: f32, m13: f32,
-    m21: f32, m22: f32, m23: f32,
-    m31: f32, m32: f32, m33: f32) -> Matrix3 {
+    c0r0: f32, c0r1: f32, c0r2: f32,
+    c1r0: f32, c1r1: f32, c1r2: f32,
+    c2r0: f32, c2r1: f32, c2r2: f32) -> Matrix3 {
 
-    Matrix3::new(m11, m12, m13, m21, m22, m23, m31, m32, m33)
+    Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
 }
 
 ///
@@ -127,16 +124,14 @@ pub fn mat3(
 ///
 #[inline]
 pub fn mat4(
-        m11: f32, m12: f32, m13: f32, m14: f32, 
-        m21: f32, m22: f32, m23: f32, m24: f32,
-        m31: f32, m32: f32, m33: f32, m34: f32,
-        m41: f32, m42: f32, m43: f32, m44: f32) -> Matrix4 {
+    c0r0: f32, c0r1: f32, c0r2: f32, c0r3: f32,
+    c1r0: f32, c1r1: f32, c1r2: f32, c1r3: f32,
+    c2r0: f32, c2r1: f32, c2r2: f32, c2r3: f32,
+    c3r0: f32, c3r1: f32, c3r2: f32, c3r3: f32) -> Matrix4 {
 
     Matrix4::new(
-        m11, m12, m13, m14, 
-        m21, m22, m23, m24, 
-        m31, m32, m33, m34, 
-        m41, m42, m43, m44
+        c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3,
+        c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
     )
 }
 
