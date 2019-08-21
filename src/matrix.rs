@@ -1329,7 +1329,7 @@ impl ops::Add<Matrix4> for Matrix4 {
 
         Matrix4::new(
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
     }
 }
@@ -1360,7 +1360,7 @@ impl ops::Add<&Matrix4> for Matrix4 {
 
         Matrix4::new(
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
     }
 }
@@ -1391,7 +1391,7 @@ impl ops::Add<Matrix4> for &Matrix4 {
 
         Matrix4::new(
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
     }
 }
@@ -1422,7 +1422,7 @@ impl<'a, 'b> ops::Add<&'a Matrix4> for &'b Matrix4 {
 
         Matrix4::new(
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
     }
 }
@@ -1453,7 +1453,7 @@ impl ops::Sub<Matrix4> for Matrix4 {
 
         Matrix4::new(
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
     }
 }
@@ -1484,7 +1484,7 @@ impl ops::Sub<&Matrix4> for Matrix4 {
 
         Matrix4::new(
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
     }
 }
@@ -1515,7 +1515,7 @@ impl ops::Sub<Matrix4> for &Matrix4 {
 
         Matrix4::new(
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
     }
 }
@@ -1546,7 +1546,7 @@ impl<'a, 'b> ops::Sub<&'a Matrix4> for &'b Matrix4 {
 
         Matrix4::new(
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c3r3, c3r0, c3r1, c3r2, c3r3
+            c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
     }
 }
