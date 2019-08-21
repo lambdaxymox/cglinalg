@@ -2082,6 +2082,14 @@ mod matrix2_tests {
     }
 
     #[test]
+    fn test_noninvertible_matrix_returns_none() {
+        let matrix = Matrix2::new(1f32, 2f32, 4f32, 8f32);
+        
+        assert!(matrix.inverse().is_none());
+    }
+
+
+    #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix = Matrix2::new(36.84, 427.46, 7.47, 61.89);
         let matrix_inv = matrix.inverse().unwrap();
@@ -2288,6 +2296,39 @@ mod matrix3_tests {
         let matrix = Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36);
 
         assert_eq!(zero + matrix, matrix);
+    }
+
+    #[test]
+    fn test_matrix_with_zero_determinant_is_not_invertible() {
+        let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 4f32, 5f32, 6f32);
+        
+        assert_eq!(matrix.determinant(), 0.0);
+        assert!(!matrix.is_invertible());
+    }
+
+    #[test]
+    fn test_noninvertible_matrix_returns_none() {
+        let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 4f32, 5f32, 6f32);
+        
+        assert!(matrix.inverse().is_none());
+    }
+
+    #[test]
+    fn test_matrix_times_inverse_is_identity() {
+        let matrix = Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36);
+        let matrix_inv = matrix.inverse().unwrap();
+        let one = Matrix3::one();
+
+        assert_eq!(matrix * matrix_inv, one);
+    }
+
+    #[test]
+    fn test_inverse_times_matrix_is_identity() {
+        let matrix = Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36);
+        let matrix_inv = matrix.inverse().unwrap();
+        let one = Matrix3::one();
+
+        assert_eq!(matrix_inv * matrix, one);        
     }
 }
 
