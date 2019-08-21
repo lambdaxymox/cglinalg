@@ -1051,67 +1051,64 @@ impl Matrix4 {
     ///
     /// Compute the inverse of a 4x4 matrix.
     ///
-    pub fn inverse(&self) -> Matrix4 {
+    pub fn inverse(&self) -> Option<Matrix4> {
         let det = self.determinant();
-        
         // A matrix with zero determinant has no inverse.
         if det == 0.0 {
-            eprintln!("WARNING. Matrix has zero determinant. It cannot be inverted.");
-            
-            return *self;
+            None
+        } else {
+            let inv_det = 1.0 / det;
+
+            Some(Matrix4::new(
+                inv_det * ( self.c2r1 * self.c3r2 * self.c1r3 - self.c3r1 * self.c2r2 * self.c1r3 +
+                                        self.c3r1 * self.c1r2 * self.c2r3 - self.c1r1 * self.c3r2 * self.c2r3 -
+                                        self.c2r1 * self.c1r2 * self.c3r3 + self.c1r1 * self.c2r2 * self.c3r3 ),
+                inv_det * ( self.c3r1 * self.c2r2 * self.c0r3 - self.c2r1 * self.c3r2 * self.c0r3 -
+                                        self.c3r1 * self.c0r2 * self.c2r3 + self.c0r1 * self.c3r2 * self.c2r3 +
+                                        self.c2r1 * self.c0r2 * self.c3r3 - self.c0r1 * self.c2r2 * self.c3r3 ),
+                inv_det * ( self.c1r1 * self.c3r2 * self.c0r3 - self.c3r1 * self.c1r1 * self.c0r3 +
+                                        self.c3r1 * self.c0r2 * self.c1r2 - self.c0r1 * self.c3r2 * self.c1r3 -
+                                        self.c1r1 * self.c0r2 * self.c3r3 + self.c0r1 * self.c1r2 * self.c3r3 ),
+                inv_det * ( self.c2r1 * self.c1r2 * self.c0r3 - self.c1r1 * self.c2r2 * self.c0r3 -
+                                        self.c2r1 * self.c0r2 * self.c1r3 + self.c0r1 * self.c2r2 * self.c1r3 +
+                                        self.c1r1 * self.c0r2 * self.c2r3 - self.c0r1 * self.c1r2 * self.c2r3 ),
+                inv_det * ( self.c3r0 * self.c2r2 * self.c1r3 - self.c2r0 * self.c3r2 * self.c1r3 -
+                                        self.c3r0 * self.c1r2 * self.c2r3 + self.c1r0 * self.c3r2 * self.c2r3 +
+                                        self.c2r0 * self.c1r2 * self.c3r3 - self.c1r0 * self.c2r2 * self.c3r3 ),
+                inv_det * ( self.c2r0 * self.c3r2 * self.c0r3 - self.c3r0 * self.c2r2 * self.c0r3 +
+                                        self.c3r0 * self.c0r2 * self.c2r3 - self.c0r0 * self.c3r2 * self.c2r3 -
+                                        self.c2r0 * self.c0r2 * self.c3r3 + self.c0r0 * self.c2r2 * self.c3r3 ),
+                inv_det * ( self.c3r0 * self.c1r2 * self.c0r3 - self.c1r0 * self.c3r2 * self.c0r3 -
+                                        self.c3r0 * self.c0r2 * self.c1r3 + self.c0r0 * self.c3r2 * self.c1r3 +
+                                        self.c1r0 * self.c0r2 * self.c3r3 - self.c0r0 * self.c1r2 * self.c3r3 ),
+                inv_det * ( self.c1r0 * self.c2r2 * self.c0r3 - self.c2r0 * self.c1r2 * self.c0r3 +
+                                        self.c2r0 * self.c0r2 * self.c1r3 - self.c0r0 * self.c2r2 * self.c1r3 -
+                                        self.c1r0 * self.c0r2 * self.c2r3 + self.c0r0 * self.c1r2 * self.c2r3 ),
+                inv_det * ( self.c2r0 * self.c3r1 * self.c1r3 - self.c3r0 * self.c2r1 * self.c1r3 +
+                                        self.c3r0 * self.c1r1 * self.c2r3 - self.c1r0 * self.c3r1 * self.c2r3 -
+                                        self.c2r0 * self.c1r1 * self.c3r3 + self.c1r0 * self.c2r1 * self.c3r3 ),
+                inv_det * ( self.c3r0 * self.c2r1 * self.c0r3 - self.c2r0 * self.c3r1 * self.c0r3 -
+                                        self.c3r0 * self.c0r1 * self.c2r3 + self.c0r0 * self.c3r1 * self.c2r3 +
+                                        self.c2r0 * self.c0r1 * self.c3r3 - self.c0r0 * self.c2r1 * self.c3r3 ),
+                inv_det * ( self.c1r0 * self.c3r1 * self.c0r3 - self.c3r0 * self.c1r1 * self.c0r3 +
+                                        self.c3r0 * self.c0r1 * self.c1r3 - self.c0r0 * self.c3r1 * self.c1r3 -
+                                        self.c1r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c1r1 * self.c3r3 ),
+                inv_det * ( self.c2r0 * self.c1r1 * self.c0r3 - self.c1r0 * self.c2r1 * self.c0r3 -
+                                        self.c2r0 * self.c0r1 * self.c1r3 + self.c0r0 * self.c2r1 * self.c1r3 +
+                                        self.c1r0 * self.c0r1 * self.c2r3 - self.c0r0 * self.c1r1 * self.c2r3 ),
+                inv_det * ( self.c3r0 * self.c2r1 * self.c1r2 - self.c2r0 * self.c3r1 * self.c1r2 -
+                                        self.c3r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c3r1 * self.c2r2 +
+                                        self.c2r0 * self.c1r1 * self.c3r2 - self.c1r0 * self.c2r1 * self.c3r2 ),
+                inv_det * ( self.c2r0 * self.c3r1 * self.c0r2 - self.c3r0 * self.c2r1 * self.c0r2 +
+                                        self.c3r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c3r1 * self.c2r2 -
+                                        self.c2r0 * self.c0r1 * self.c3r2 + self.c0r0 * self.c2r1 * self.c3r2 ),
+                inv_det * ( self.c3r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c3r1 * self.c0r2 -
+                                        self.c3r0 * self.c0r1 * self.c1r2 + self.c0r0 * self.c3r1 * self.c1r2 +
+                                        self.c1r0 * self.c0r1 * self.c3r2 - self.c0r0 * self.c1r1 * self.c3r2 ),
+                inv_det * ( self.c1r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c1r1 * self.c0r2 +
+                                        self.c2r0 * self.c0r1 * self.c1r2 - self.c0r0 * self.c2r1 * self.c1r2 -
+                                        self.c1r0 * self.c0r1 * self.c2r2 + self.c0r0 * self.c1r1 * self.c2r2 ) ) )
         }
-
-        let inv_det = 1.0 / det;
-
-        return Matrix4::new(
-            inv_det * ( self.c2r1 * self.c3r2 * self.c1r3 - self.c3r1 * self.c2r2 * self.c1r3 +
-                                    self.c3r1 * self.c1r2 * self.c2r3 - self.c1r1 * self.c3r2 * self.c2r3 -
-                                    self.c2r1 * self.c1r2 * self.c3r3 + self.c1r1 * self.c2r2 * self.c3r3 ),
-            inv_det * ( self.c3r1 * self.c2r2 * self.c0r3 - self.c2r1 * self.c3r2 * self.c0r3 -
-                                    self.c3r1 * self.c0r2 * self.c2r3 + self.c0r1 * self.c3r2 * self.c2r3 +
-                                    self.c2r1 * self.c0r2 * self.c3r3 - self.c0r1 * self.c2r2 * self.c3r3 ),
-            inv_det * ( self.c1r1 * self.c3r2 * self.c0r3 - self.c3r1 * self.c1r1 * self.c0r3 +
-                                    self.c3r1 * self.c0r2 * self.c1r2 - self.c0r1 * self.c3r2 * self.c1r3 -
-                                    self.c1r1 * self.c0r2 * self.c3r3 + self.c0r1 * self.c1r2 * self.c3r3 ),
-            inv_det * ( self.c2r1 * self.c1r2 * self.c0r3 - self.c1r1 * self.c2r2 * self.c0r3 -
-                                    self.c2r1 * self.c0r2 * self.c1r3 + self.c0r1 * self.c2r2 * self.c1r3 +
-                                    self.c1r1 * self.c0r2 * self.c2r3 - self.c0r1 * self.c1r2 * self.c2r3 ),
-            inv_det * ( self.c3r0 * self.c2r2 * self.c1r3 - self.c2r0 * self.c3r2 * self.c1r3 -
-                                    self.c3r0 * self.c1r2 * self.c2r3 + self.c1r0 * self.c3r2 * self.c2r3 +
-                                    self.c2r0 * self.c1r2 * self.c3r3 - self.c1r0 * self.c2r2 * self.c3r3 ),
-            inv_det * ( self.c2r0 * self.c3r2 * self.c0r3 - self.c3r0 * self.c2r2 * self.c0r3 +
-                                    self.c3r0 * self.c0r2 * self.c2r3 - self.c0r0 * self.c3r2 * self.c2r3 -
-                                    self.c2r0 * self.c0r2 * self.c3r3 + self.c0r0 * self.c2r2 * self.c3r3 ),
-            inv_det * ( self.c3r0 * self.c1r2 * self.c0r3 - self.c1r0 * self.c3r2 * self.c0r3 -
-                                    self.c3r0 * self.c0r2 * self.c1r3 + self.c0r0 * self.c3r2 * self.c1r3 +
-                                    self.c1r0 * self.c0r2 * self.c3r3 - self.c0r0 * self.c1r2 * self.c3r3 ),
-            inv_det * ( self.c1r0 * self.c2r2 * self.c0r3 - self.c2r0 * self.c1r2 * self.c0r3 +
-                                    self.c2r0 * self.c0r2 * self.c1r3 - self.c0r0 * self.c2r2 * self.c1r3 -
-                                    self.c1r0 * self.c0r2 * self.c2r3 + self.c0r0 * self.c1r2 * self.c2r3 ),
-            inv_det * ( self.c2r0 * self.c3r1 * self.c1r3 - self.c3r0 * self.c2r1 * self.c1r3 +
-                                    self.c3r0 * self.c1r1 * self.c2r3 - self.c1r0 * self.c3r1 * self.c2r3 -
-                                    self.c2r0 * self.c1r1 * self.c3r3 + self.c1r0 * self.c2r1 * self.c3r3 ),
-            inv_det * ( self.c3r0 * self.c2r1 * self.c0r3 - self.c2r0 * self.c3r1 * self.c0r3 -
-                                    self.c3r0 * self.c0r1 * self.c2r3 + self.c0r0 * self.c3r1 * self.c2r3 +
-                                    self.c2r0 * self.c0r1 * self.c3r3 - self.c0r0 * self.c2r1 * self.c3r3 ),
-            inv_det * ( self.c1r0 * self.c3r1 * self.c0r3 - self.c3r0 * self.c1r1 * self.c0r3 +
-                                    self.c3r0 * self.c0r1 * self.c1r3 - self.c0r0 * self.c3r1 * self.c1r3 -
-                                    self.c1r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c1r1 * self.c3r3 ),
-            inv_det * ( self.c2r0 * self.c1r1 * self.c0r3 - self.c1r0 * self.c2r1 * self.c0r3 -
-                                    self.c2r0 * self.c0r1 * self.c1r3 + self.c0r0 * self.c2r1 * self.c1r3 +
-                                    self.c1r0 * self.c0r1 * self.c2r3 - self.c0r0 * self.c1r1 * self.c2r3 ),
-            inv_det * ( self.c3r0 * self.c2r1 * self.c1r2 - self.c2r0 * self.c3r1 * self.c1r2 -
-                                    self.c3r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c3r1 * self.c2r2 +
-                                    self.c2r0 * self.c1r1 * self.c3r2 - self.c1r0 * self.c2r1 * self.c3r2 ),
-            inv_det * ( self.c2r0 * self.c3r1 * self.c0r2 - self.c3r0 * self.c2r1 * self.c0r2 +
-                                    self.c3r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c3r1 * self.c2r2 -
-                                    self.c2r0 * self.c0r1 * self.c3r2 + self.c0r0 * self.c2r1 * self.c3r2 ),
-            inv_det * ( self.c3r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c3r1 * self.c0r2 -
-                                    self.c3r0 * self.c0r1 * self.c1r2 + self.c0r0 * self.c3r1 * self.c1r2 +
-                                    self.c1r0 * self.c0r1 * self.c3r2 - self.c0r0 * self.c1r1 * self.c3r2 ),
-            inv_det * ( self.c1r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c1r1 * self.c0r2 +
-                                    self.c2r0 * self.c0r1 * self.c1r2 - self.c0r0 * self.c2r1 * self.c1r2 -
-                                    self.c1r0 * self.c0r1 * self.c2r2 + self.c0r0 * self.c1r1 * self.c2r2 ) );
     }
 }
 
@@ -2330,11 +2327,11 @@ mod matrix4_tests {
         for test in test_cases().iter() {
             let identity = Matrix4::one();
             if test.a_mat.is_invertible() {
-                let a_mat_inverse = test.a_mat.inverse();
+                let a_mat_inverse = test.a_mat.inverse().unwrap();
                 assert_eq!(a_mat_inverse * test.a_mat, identity);
             }
             if test.b_mat.is_invertible() {
-                let b_mat_inverse = test.b_mat.inverse();
+                let b_mat_inverse = test.b_mat.inverse().unwrap();
                 assert_eq!(b_mat_inverse * test.b_mat, identity);
             }
         }
@@ -2345,11 +2342,11 @@ mod matrix4_tests {
         for test in test_cases().iter() {
             let identity = Matrix4::one();
             if test.a_mat.is_invertible() {
-                let a_mat_inverse = test.a_mat.inverse();
+                let a_mat_inverse = test.a_mat.inverse().unwrap();
                 assert_eq!(test.a_mat * a_mat_inverse, identity);
             }
             if test.b_mat.is_invertible() {
-                let b_mat_inverse = test.b_mat.inverse();
+                let b_mat_inverse = test.b_mat.inverse().unwrap();
                 assert_eq!(test.b_mat * b_mat_inverse, identity);
             }
         }
