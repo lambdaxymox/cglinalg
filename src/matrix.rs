@@ -46,6 +46,37 @@ impl Matrix2 {
             self.c0r1, self.c1r1,
         )
     }
+
+    ///
+    /// Compute the determinant of a 2x2 matrix.
+    ///
+    pub fn determinant(&self) -> f32 {
+        self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
+    }
+
+    ///
+    /// Determine whether a 2x2 matrix is invertible.
+    /// 
+    pub fn is_invertible(&self) -> bool {
+        self.determinant() != 0.0
+    }
+
+    ///
+    /// Compute the inverse of a 2x2 matrix.
+    /// 
+    pub fn invert(&self) -> Option<Matrix2> {
+        let det = self.determinant();
+        // A matrix with zero determinant has no inverse.
+        if det == 0.0 {
+            None
+        } else {
+            let inv_det = 1.0 / det;
+            Some(Matrix2::new(
+                inv_det *  self.c1r1, inv_det * -self.c0r1,
+                inv_det * -self.c1r0, inv_det *  self.c0r0
+            ))
+        }
+    }
 }
 
 impl Array for Matrix2 {
