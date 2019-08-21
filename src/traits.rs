@@ -108,4 +108,3 @@ pub trait DotProduct where Self: MetricSpace + VectorSpace {
 pub trait Lerp: VectorSpace {
     fn lerp(self, other: Self, amount: f32) -> Self;
 }
-
