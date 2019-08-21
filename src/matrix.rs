@@ -64,7 +64,7 @@ impl Matrix2 {
     ///
     /// Compute the inverse of a 2x2 matrix.
     /// 
-    pub fn invert(&self) -> Option<Matrix2> {
+    pub fn inverse(&self) -> Option<Matrix2> {
         let det = self.determinant();
         // A matrix with zero determinant has no inverse.
         if det == 0.0 {
@@ -2059,12 +2059,44 @@ mod matrix2_tests {
         assert_eq!(matrix + zero, matrix);
     }
 
-        #[test]
+    #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero = Matrix2::zero();
         let matrix = Matrix2::new(36.84, 427.46, 7.47, 61.89);
 
         assert_eq!(zero + matrix, matrix);
+    }
+
+    #[test]
+    fn test_matrix_with_nonzero_determinant_is_invertible() {
+        let matrix = Matrix2::new(1f32, 2f32, 3f32, 4f32);
+        
+        assert!(matrix.is_invertible());
+    }
+
+    #[test]
+    fn test_matrix_with_zero_determinant_is_not_invertible() {
+        let matrix = Matrix2::new(1f32, 2f32, 4f32, 8f32);
+        
+        assert!(!matrix.is_invertible());
+    }
+
+    #[test]
+    fn test_matrix_times_inverse_is_identity() {
+        let matrix = Matrix2::new(36.84, 427.46, 7.47, 61.89);
+        let matrix_inv = matrix.inverse().unwrap();
+        let one = Matrix2::one();
+
+        assert_eq!(matrix * matrix_inv, one);
+    }
+
+    #[test]
+    fn test_inverse_times_matrix_is_identity() {
+        let matrix = Matrix2::new(36.84, 427.46, 7.47, 61.89);
+        let matrix_inv = matrix.inverse().unwrap();
+        let one = Matrix2::one();
+
+        assert_eq!(matrix_inv * matrix, one);        
     }
 }
 
