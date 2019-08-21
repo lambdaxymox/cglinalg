@@ -3,7 +3,7 @@ use std::mem;
 use std::ops;
 use std::cmp;
 
-use crate::traits::Array;
+use crate::traits::*;
 use crate::vector::*;
 use crate::matrix::*;
 use crate::quaternion::*;
@@ -135,3 +135,7 @@ pub fn mat4(
     )
 }
 
+#[inline]
+pub fn dot<V: DotProduct>(a: V, b: V) -> f32 {
+    V::dot(a, b)
+}
