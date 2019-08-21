@@ -455,6 +455,43 @@ impl Matrix3 {
             self.c0r2, self.c1r2, self.c2r2,
         )
     }
+
+    /// Calculate the determinant of a 3x3 matrix.
+    pub fn determinant(&self) -> f32 {
+        self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
+        self.c1r0 * self.c0r1 * self.c2r2 + self.c1r0 * self.c0r2 * self.c2r1 +
+        self.c2r0 * self.c0r1 * self.c1r2 - self.c2r0 * self.c0r2 * self.c1r1
+    }
+
+    /// Determine whether a 3x3 matrix is invertible.
+    pub fn is_invertible(&self) -> bool {
+        self.determinant() != 0.0
+    }
+
+    /// Calculate the inverser of a 3x3 matrix, if it exists.
+    /// A matrix with zero determinant has no inverse.
+    pub fn inverse(&self) -> Option<Matrix3> {
+        let det = self.determinant();
+        if det == 0.0 {
+            None
+        } else {
+            let inv_det = 1.0 / det;
+
+            Some(Matrix3::new(
+                inv_det * (self.c1r1 * self.c2r2 - self.c1r2 * self.c2r1), 
+                inv_det * (self.c0r2 * self.c2r1 - self.c0r1 * self.c2r2), 
+                inv_det * (self.c0r1 * self.c1r2 - self.c0r2 * self.c1r1),
+    
+                inv_det * (self.c1r2 * self.c2r0 - self.c1r0 * self.c2r2),
+                inv_det * (self.c0r0 * self.c2r2 - self.c0r2 * self.c2r0),
+                inv_det * (self.c0r2 * self.c1r0 - self.c0r0 * self.c1r2),
+
+                inv_det * (self.c1r0 * self.c2r1 - self.c1r1 * self.c2r0), 
+                inv_det * (self.c0r1 * self.c2r0 - self.c0r0 * self.c2r1), 
+                inv_det * (self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0)
+            ))
+        }
+    }
 }
 
 impl Array for Matrix3 {
