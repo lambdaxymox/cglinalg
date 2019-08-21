@@ -2068,6 +2068,13 @@ mod matrix2_tests {
     }
 
     #[test]
+    fn test_matrix_with_zero_determinant() {
+        let matrix = Matrix2::new(1f32, 2f32, 4f32, 8f32);
+        
+        assert_eq!(matrix.determinant(), 0.0);
+    }
+
+    #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
         let matrix = Matrix2::new(1f32, 2f32, 3f32, 4f32);
         
@@ -2299,10 +2306,16 @@ mod matrix3_tests {
     }
 
     #[test]
-    fn test_matrix_with_zero_determinant_is_not_invertible() {
+    fn test_matrix_with_zero_determinant() {
         let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 4f32, 5f32, 6f32);
         
         assert_eq!(matrix.determinant(), 0.0);
+    }
+
+    #[test]
+    fn test_matrix_with_zero_determinant_is_not_invertible() {
+        let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 4f32, 5f32, 6f32);
+        
         assert!(!matrix.is_invertible());
     }
 
@@ -2572,13 +2585,22 @@ mod matrix4_tests {
     }
 
     #[test]
-    fn test_matrix_with_zero_determinant_is_not_invertible() {
+    fn test_matrix_with_zero_determinant() {
         let matrix = Matrix4::new(
             1f32,  2f32,  3f32,  4f32, 5f32,  6f32,  7f32,  8f32,
             5f32,  6f32,  7f32,  8f32, 9f32, 10f32, 11f32, 12f32
         );
         
         assert_eq!(matrix.determinant(), 0.0);
+    }
+
+    #[test]
+    fn test_matrix_with_zero_determinant_is_not_invertible() {
+        let matrix = Matrix4::new(
+            1f32,  2f32,  3f32,  4f32, 5f32,  6f32,  7f32,  8f32,
+            5f32,  6f32,  7f32,  8f32, 9f32, 10f32, 11f32, 12f32
+        );
+        
         assert!(!matrix.is_invertible());
     }
 
