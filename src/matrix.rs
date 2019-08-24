@@ -1887,7 +1887,6 @@ mod matrix2_tests {
 
 
     struct TestCase {
-        c: f32,
         a_mat: Matrix2,
         b_mat: Matrix2,
         expected: Matrix2,
@@ -1921,25 +1920,21 @@ mod matrix2_tests {
         Test {
             tests: vec![
                 TestCase {
-                    c: 802.3435169,
                     a_mat: Matrix2::new(80.0,  23.43,     426.1,   23.5724),
                     b_mat: Matrix2::new(36.84, 427.46894, 7.04217, 61.891390),
                     expected: Matrix2::new(185091.72, 10939.63, 26935.295, 1623.9266),
                 },
                 TestCase {
-                    c: 6.2396,
                     a_mat: Matrix2::one(),
                     b_mat: Matrix2::one(),
                     expected: Matrix2::one(),
                 },
                 TestCase {
-                    c: 6.2396,
                     a_mat: Matrix2::zero(),
                     b_mat: Matrix2::zero(),
                     expected: Matrix2::zero(),
                 },
                 TestCase {
-                    c:  14.5093,
                     a_mat: Matrix2::new(68.32, 0.0, 0.0, 37.397),
                     b_mat: Matrix2::new(57.72, 0.0, 0.0, 9.5433127),
                     expected: Matrix2::new(3943.4304, 0.0, 0.0, 356.89127),
@@ -2124,7 +2119,6 @@ mod matrix3_tests {
     use traits::{One, Zero};
 
     struct TestCase {
-        c: f32,
         a_mat: Matrix3,
         b_mat: Matrix3,
         expected: Matrix3,
@@ -2158,25 +2152,21 @@ mod matrix3_tests {
         Test {
             tests: vec![
                 TestCase {
-                    c: 802.3435169,
                     a_mat: Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36),
                     b_mat: Matrix3::new(36.84, 7.04217, 5.74, 427.46894, 61.89139, 96.27, 152.66, 86.333, 26.71),
                     expected: Matrix3::new(3579.6579, 15933.496, 1856.4281, 43487.7660, 184776.9752, 22802.0289, 16410.8178, 67409.1000, 7892.1646),
                 },
                 TestCase {
-                    c: 6.2396,
                     a_mat: Matrix3::one(),
                     b_mat: Matrix3::one(),
                     expected: Matrix3::one(),
                 },
                 TestCase {
-                    c: 6.2396,
                     a_mat: Matrix3::zero(),
                     b_mat: Matrix3::zero(),
                     expected: Matrix3::zero(),
                 },
                 TestCase {
-                    c:  14.5093,
                     a_mat: Matrix3::new(68.32, 0.0, 0.0, 0.0, 37.397, 0.0, 0.0, 0.0, 43.393),
                     b_mat: Matrix3::new(57.72, 0.0, 0.0, 0.0, 9.5433127, 0.0, 0.0, 0.0, 12.19),
                     expected: Matrix3::new(3943.4304, 0.0, 0.0, 0.0, 356.89127, 0.0, 0.0, 0.0, 528.96067),
@@ -2354,7 +2344,6 @@ mod matrix4_tests {
 
 
     struct TestCase {
-        c: f32,
         a_mat: Matrix4,
         b_mat: Matrix4,
     }
@@ -2387,7 +2376,6 @@ mod matrix4_tests {
         Test {
             tests: vec![
                 TestCase {
-                    c: 802.3435169,
                     a_mat: Matrix4::new(
                         80.0,   23.43,   43.569,  6.741, 
                         426.1,  23.5724, 27.6189, 13.90,
@@ -2402,17 +2390,14 @@ mod matrix4_tests {
                     ),
                 },
                 TestCase {
-                    c: 6.2396,
                     a_mat: Matrix4::one(),
                     b_mat: Matrix4::one(),
                 },
                 TestCase {
-                    c: 6.2396,
                     a_mat: Matrix4::zero(),
                     b_mat: Matrix4::zero(),
                 },
                 TestCase {
-                    c:  14.5093,
                     a_mat: Matrix4::new(
                         68.32, 0.0,    0.0,   0.0,
                         0.0,   37.397, 0.0,   0.0,
