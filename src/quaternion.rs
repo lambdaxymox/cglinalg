@@ -451,6 +451,20 @@ impl ops::Mul<f32> for Quaternion {
     }
 }
 
+impl ops::Mul<f32> for &Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn mul(self, other: f32) -> Quaternion {
+        Quaternion {
+            s: self.s * other,
+            x: self.x * other,
+            y: self.y * other,
+            z: self.z * other,
+        }
+    }
+}
+
 impl<'a> ops::Mul<Quaternion> for Quaternion {
     type Output = Quaternion;
 
