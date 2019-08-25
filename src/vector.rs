@@ -1,4 +1,4 @@
-use traits::{Array, Zero, Metric, ProjectOn, DotProduct, Lerp};
+use traits::{Array, Zero, Metric, ProjectOn, DotProduct, Lerp, Magnitude};
 use std::fmt;
 use std::mem;
 use std::ops;
@@ -472,6 +472,8 @@ impl<'a, 'b> Lerp<&'a Vector1> for &'b Vector1 {
         self + (other - self) * amount
     }
 }
+
+impl Magnitude<Vector1> for Vector1 {}
 
 ///
 /// A representation of two-dimensional vectors with a Euclidean metric.
