@@ -403,6 +403,8 @@ impl ops::Rem<f32> for &Matrix2 {
     }
 }
 
+impl VectorSpace for Matrix2 { }
+
 
 ///
 /// The `Matrix3` type represents 3x3 matrices in column-major order.
@@ -959,6 +961,8 @@ impl ops::Rem<f32> for &Matrix3 {
         Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)     
     }
 }
+
+impl VectorSpace for Matrix3 { }
 
 
 ///
@@ -1876,6 +1880,7 @@ impl ops::Rem<f32> for &Matrix4 {
     }
 }
 
+impl VectorSpace for Matrix4  { }
 
 
 #[cfg(test)]
