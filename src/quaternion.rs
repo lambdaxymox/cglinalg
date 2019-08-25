@@ -5,7 +5,7 @@ use std::cmp;
 
 use crate::vector::Vector3;
 use crate::matrix::{Matrix3, Matrix4};
-use crate::traits::{Array, One, Zero, Metric, DotProduct, Lerp};
+use crate::traits::{Array, One, Zero, Metric, DotProduct, Lerp, Magnitude};
 
 
 const EPSILON: f32 = 0.00001;
@@ -640,4 +640,7 @@ impl<'a, 'b> DotProduct<&'a Quaternion> for &'b Quaternion {
         self.s * other.s + self.x * other.x + self.y * other.y + self.z * other.z
     }
 }
+
+impl Magnitude<Quaternion> for Quaternion {}
+impl Magnitude<Quaternion> for &Quaternion {}
 
