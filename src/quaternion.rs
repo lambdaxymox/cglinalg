@@ -534,3 +534,31 @@ impl<'a> ops::Div<f32> for &'a Quaternion {
         }
     }
 }
+
+impl ops::Rem<f32> for Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn rem(self, other: f32) -> Self::Output {
+        Quaternion {
+            s: self.s % other,
+            x: self.x % other,
+            y: self.y % other,
+            z: self.z % other,
+        }
+    }
+}
+
+impl ops::Rem<f32> for &Quaternion {
+    type Output = Quaternion;
+
+    #[inline]
+    fn rem(self, other: f32) -> Self::Output {
+        Quaternion {
+            s: self.s % other,
+            x: self.x % other,
+            y: self.y % other,
+            z: self.z % other,
+        }
+    }
+}
