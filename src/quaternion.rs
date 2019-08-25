@@ -609,7 +609,7 @@ impl Metric<Quaternion> for &Quaternion {
     }
 }
 
-impl Metric<&Quaternion> for &Quaternion {
+impl<'a, 'b> Metric<&'a Quaternion> for &'b Quaternion {
     fn distance2(self, other: &Quaternion) -> f32 {
         (self.s - other.s) * (self.s - other.s) + 
         (self.x - other.x) * (self.x - other.x) + 

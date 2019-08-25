@@ -56,9 +56,9 @@ impl Metric<Vector1> for &Vector1 {
     }
 }
 
-impl Metric<&Vector1> for &Vector1 {
+impl<'a, 'b> Metric<&'a Vector1> for &'b Vector1 {
     #[inline]
-    fn distance2(self, to: &Vector1) -> f32 {
+    fn distance2(self, to: &'a Vector1) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
 
         dx_2
@@ -489,9 +489,9 @@ impl Metric<Vector2> for &Vector2 {
     }
 }
 
-impl Metric<&Vector2> for &Vector2 {
+impl<'a, 'b> Metric<&'a Vector2> for &'b Vector2 {
     #[inline]
-    fn distance2(self, to: &Vector2) -> f32 {
+    fn distance2(self, to: &'a Vector2) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
         let dy_2 = (to.y - self.y) * (to.y - self.y);
     
@@ -972,7 +972,7 @@ impl Metric<Vector3> for &Vector3 {
     }
 }
 
-impl Metric<&Vector3> for &Vector3 {
+impl<'a, 'b> Metric<&'a Vector3> for &'b Vector3 {
     #[inline]
     fn distance2(self, to: &Vector3) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -1479,7 +1479,7 @@ impl Metric<Vector4> for &Vector4 {
     }
 }
 
-impl Metric<&Vector4> for &Vector4 {
+impl<'a, 'b> Metric<&'a Vector4> for &'b Vector4 {
     #[inline]
     fn distance2(self, to: &Vector4) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
