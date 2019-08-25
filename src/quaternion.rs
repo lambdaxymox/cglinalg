@@ -5,7 +5,7 @@ use std::cmp;
 
 use crate::vector::Vector3;
 use crate::matrix::{Matrix3, Matrix4};
-use crate::traits::{Array, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
+use crate::traits::{Array, One, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
 
 
 const EPSILON: f32 = 0.00001;
@@ -38,22 +38,6 @@ impl Quaternion {
 
         let norm = f32::sqrt(sum);
         self / norm
-    }
-
-    ///
-    /// Create a zero quaterion. It is a quaternion such that 
-    /// q - q = 0.
-    ///
-    pub fn zero() -> Quaternion {
-        Quaternion { s: 0.0, x: 0.0, y: 0.0, z: 0.0 }
-    }
-
-    ///
-    /// Create a unit quaternion who is also the multiplicative identity:
-    /// q * q^-1 == 1.
-    ///
-    pub fn one() -> Quaternion {
-        Quaternion { s: 1.0, x: 0.0, y: 0.0, z: 0.0 }
     }
 
     ///
@@ -180,6 +164,22 @@ impl Quaternion {
         result.z = q.z * a + r.z * b;
 
         result
+    }
+}
+
+impl Zero for Quaternion {
+    fn zero() -> Quaternion {
+        Quaternion { s: 0.0, x: 0.0, y: 0.0, z: 0.0 }
+    }
+
+    fn is_zero(&self) -> bool {
+        self.s == 0.0 && self.x == 0.0 && self.y == 0.0 && self.z == 0.0
+    }
+}
+
+impl One for Quaternion {
+    fn one() -> Quaternion {
+        Quaternion { s: 1.0, x: 0.0, y: 0.0, z: 0.0 }
     }
 }
 
