@@ -474,6 +474,7 @@ impl<'a, 'b> Lerp<&'a Vector1> for &'b Vector1 {
 }
 
 impl Magnitude<Vector1> for Vector1 {}
+impl Magnitude<Vector1> for &Vector1 {}
 
 ///
 /// A representation of two-dimensional vectors with a Euclidean metric.
@@ -1026,50 +1027,6 @@ impl Vector3 {
     }
 }
 
-impl Metric<Vector3> for Vector3 {
-    #[inline]
-    fn distance2(self, to: Vector3) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-    
-        dx_2 + dy_2 + dz_2
-    }
-}
-
-impl Metric<&Vector3> for Vector3 {
-    #[inline]
-    fn distance2(self, to: &Vector3) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-    
-        dx_2 + dy_2 + dz_2
-    }
-}
-
-impl Metric<Vector3> for &Vector3 {
-    #[inline]
-    fn distance2(self, to: Vector3) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-    
-        dx_2 + dy_2 + dz_2
-    }
-}
-
-impl<'a, 'b> Metric<&'a Vector3> for &'b Vector3 {
-    #[inline]
-    fn distance2(self, to: &Vector3) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-    
-        dx_2 + dy_2 + dz_2
-    }
-}
-
 impl Array for Vector3 {
     type Element = f32;
 
@@ -1479,6 +1436,50 @@ impl Zero for Vector3 {
     }
 }
 
+impl Metric<Vector3> for Vector3 {
+    #[inline]
+    fn distance2(self, to: Vector3) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+    
+        dx_2 + dy_2 + dz_2
+    }
+}
+
+impl Metric<&Vector3> for Vector3 {
+    #[inline]
+    fn distance2(self, to: &Vector3) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+    
+        dx_2 + dy_2 + dz_2
+    }
+}
+
+impl Metric<Vector3> for &Vector3 {
+    #[inline]
+    fn distance2(self, to: Vector3) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+    
+        dx_2 + dy_2 + dz_2
+    }
+}
+
+impl<'a, 'b> Metric<&'a Vector3> for &'b Vector3 {
+    #[inline]
+    fn distance2(self, to: &Vector3) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+    
+        dx_2 + dy_2 + dz_2
+    }
+}
+
 impl DotProduct<Vector3> for Vector3 {
     fn dot(self, other: Vector3) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z
@@ -1535,6 +1536,9 @@ impl<'a, 'b> Lerp<&'a Vector3> for &'b Vector3 {
     }
 }
 
+impl Magnitude<Vector3> for Vector3 {}
+impl Magnitude<Vector3> for &Vector3 {}
+
 ///
 /// A representation of four-dimensional vectors with a Euclidean metric.
 ///
@@ -1569,54 +1573,6 @@ impl Vector4 {
     #[inline]
     pub fn unit_w() -> Vector4 {
         Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 1.0 }
-    }
-}
-
-impl Metric<Vector4> for Vector4 {
-    #[inline]
-    fn distance2(self, to: Vector4) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-        let dw_2 = (to.w - self.w) * (to.w - self.w);
-    
-        dx_2 + dy_2 + dz_2 + dw_2
-    }
-}
-
-impl Metric<&Vector4> for Vector4 {
-    #[inline]
-    fn distance2(self, to: &Vector4) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-        let dw_2 = (to.w - self.w) * (to.w - self.w);
-    
-        dx_2 + dy_2 + dz_2 + dw_2
-    }
-}
-
-impl Metric<Vector4> for &Vector4 {
-    #[inline]
-    fn distance2(self, to: Vector4) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-        let dw_2 = (to.w - self.w) * (to.w - self.w);
-    
-        dx_2 + dy_2 + dz_2 + dw_2
-    }
-}
-
-impl<'a, 'b> Metric<&'a Vector4> for &'b Vector4 {
-    #[inline]
-    fn distance2(self, to: &Vector4) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-        let dw_2 = (to.w - self.w) * (to.w - self.w);
-
-        dx_2 + dy_2 + dz_2 + dw_2
     }
 }
 
@@ -2061,6 +2017,54 @@ impl Zero for Vector4 {
     }
 }
 
+impl Metric<Vector4> for Vector4 {
+    #[inline]
+    fn distance2(self, to: Vector4) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dw_2 = (to.w - self.w) * (to.w - self.w);
+    
+        dx_2 + dy_2 + dz_2 + dw_2
+    }
+}
+
+impl Metric<&Vector4> for Vector4 {
+    #[inline]
+    fn distance2(self, to: &Vector4) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dw_2 = (to.w - self.w) * (to.w - self.w);
+    
+        dx_2 + dy_2 + dz_2 + dw_2
+    }
+}
+
+impl Metric<Vector4> for &Vector4 {
+    #[inline]
+    fn distance2(self, to: Vector4) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dw_2 = (to.w - self.w) * (to.w - self.w);
+    
+        dx_2 + dy_2 + dz_2 + dw_2
+    }
+}
+
+impl<'a, 'b> Metric<&'a Vector4> for &'b Vector4 {
+    #[inline]
+    fn distance2(self, to: &Vector4) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dw_2 = (to.w - self.w) * (to.w - self.w);
+
+        dx_2 + dy_2 + dz_2 + dw_2
+    }
+}
+
 impl DotProduct<Vector4> for Vector4 {
     fn dot(self, other: Vector4) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
@@ -2116,6 +2120,9 @@ impl<'a, 'b> Lerp<&'a Vector4> for &'b Vector4 {
         self + (other - self) * amount
     }
 }
+
+impl Magnitude<Vector4> for Vector4 {}
+impl Magnitude<Vector4> for &Vector4 {}
 
 
 #[cfg(test)]
