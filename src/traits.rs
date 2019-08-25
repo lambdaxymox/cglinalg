@@ -65,23 +65,7 @@ pub trait Metric<V: Sized>: Sized {
         f32::sqrt(self.distance2(other))
     }
 }
-/*
-pub trait MetricSpace where
-    Self: Metric<Self> + Metric<Self>
-{
-    ///
-    /// Compute the squared distance between two vectors.
-    ///
-    fn distance2(self, to: Self) -> f32;
 
-    ///
-    /// Compute the Euclidean distance between two vectors.
-    ///
-    fn distance(self, to: Self) -> f32 {
-        f32::sqrt(self.distance2(to))
-    }
-}
-*/
 pub trait DotProduct where Self: VectorSpace {
     ///
     /// Compute the dot product of two vectors.
