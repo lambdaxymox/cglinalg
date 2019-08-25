@@ -40,7 +40,7 @@ impl Into<Orthographic> for (f32, f32, f32, f32, f32, f32) {
     }
 }
 
-impl<'a> Into<Orthographic> for &'a (f32, f32, f32, f32, f32, f32) {
+impl Into<Orthographic> for &(f32, f32, f32, f32, f32, f32) {
     #[inline]
     fn into(self) -> Orthographic {
         match *self {
@@ -76,7 +76,7 @@ impl Into<Orthographic> for [f32; 6] {
     }
 }
 
-impl<'a> Into<Orthographic> for &'a [f32; 6] {
+impl Into<Orthographic> for &[f32; 6] {
     #[inline]
     fn into(self) -> Orthographic {
         match *self {
@@ -122,7 +122,7 @@ impl Into<Perspective> for (f32, f32, f32, f32, f32, f32) {
     }
 }
 
-impl<'a> Into<Perspective> for &'a (f32, f32, f32, f32, f32, f32) {
+impl Into<Perspective> for &(f32, f32, f32, f32, f32, f32) {
     #[inline]
     fn into(self) -> Perspective {
         match *self {
@@ -158,7 +158,7 @@ impl Into<Perspective> for [f32; 6] {
     }
 }
 
-impl<'a> Into<Perspective> for &'a [f32; 6] {
+impl Into<Perspective> for &[f32; 6] {
     #[inline]
     fn into(self) -> Perspective {
         match *self {
@@ -200,7 +200,7 @@ impl Into<PerspectiveFov> for (f32, f32, f32, f32) {
     }
 }
 
-impl<'a> Into<PerspectiveFov> for &'a (f32, f32, f32, f32) {
+impl Into<PerspectiveFov> for &(f32, f32, f32, f32) {
     #[inline]
     fn into(self) -> PerspectiveFov {
         match *self {
@@ -232,7 +232,7 @@ impl Into<PerspectiveFov> for [f32; 4] {
     }
 }
 
-impl<'a> Into<PerspectiveFov> for &'a [f32; 4] {
+impl Into<PerspectiveFov> for &[f32; 4] {
     #[inline]
     fn into(self) -> PerspectiveFov {
         match *self {
