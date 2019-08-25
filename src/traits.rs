@@ -56,7 +56,19 @@ pub trait VectorSpace: Copy + Clone where
 
 }
 
-pub trait MetricSpace: Sized {
+pub trait Metric<V: Sized>: Sized {
+    /// Compute the squared distance between two vectors.
+    fn distance2(self, other: V) -> f32;
+
+    /// Compute the Euclidean distance between two vectors.
+    fn distance(self, other: V) -> f32 {
+        f32::sqrt(self.distance2(other))
+    }
+}
+/*
+pub trait MetricSpace where
+    Self: Metric<Self> + Metric<Self>
+{
     ///
     /// Compute the squared distance between two vectors.
     ///
@@ -69,8 +81,8 @@ pub trait MetricSpace: Sized {
         f32::sqrt(self.distance2(to))
     }
 }
-
-pub trait DotProduct where Self: MetricSpace + VectorSpace {
+*/
+pub trait DotProduct where Self: VectorSpace {
     ///
     /// Compute the dot product of two vectors.
     ///

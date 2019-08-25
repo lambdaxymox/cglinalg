@@ -1,4 +1,4 @@
-use traits::{Array, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
+use traits::{Array, Zero, VectorSpace, Metric, DotProduct, Lerp};
 use std::fmt;
 use std::mem;
 use std::ops;
@@ -30,7 +30,7 @@ impl Vector1 {
     }
 }
 
-impl MetricSpace for Vector1 {
+impl Metric<Vector1> for Vector1 {
     #[inline]
     fn distance2(self, to: Vector1) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -39,7 +39,7 @@ impl MetricSpace for Vector1 {
     }
 }
 
-impl MetricSpace for &Vector1 {
+impl Metric<&Vector1> for &Vector1 {
     #[inline]
     fn distance2(self, to: &Vector1) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -442,7 +442,7 @@ impl Vector2 {
     }
 }
 
-impl MetricSpace for Vector2 {
+impl Metric<Vector2> for Vector2 {
     #[inline]
     fn distance2(self, to: Vector2) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -452,7 +452,7 @@ impl MetricSpace for Vector2 {
     }
 }
 
-impl MetricSpace for &Vector2 {
+impl Metric<&Vector2> for &Vector2 {
     #[inline]
     fn distance2(self, to: &Vector2) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -902,7 +902,7 @@ impl Vector3 {
     }
 }
 
-impl MetricSpace for Vector3 {
+impl Metric<Vector3> for Vector3 {
     #[inline]
     fn distance2(self, to: Vector3) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -913,7 +913,7 @@ impl MetricSpace for Vector3 {
     }
 }
 
-impl MetricSpace for &Vector3 {
+impl Metric<&Vector3> for &Vector3 {
     #[inline]
     fn distance2(self, to: &Vector3) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -1384,7 +1384,7 @@ impl Vector4 {
     }
 }
 
-impl MetricSpace for Vector4 {
+impl Metric<Vector4> for Vector4 {
     #[inline]
     fn distance2(self, to: Vector4) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -1396,7 +1396,7 @@ impl MetricSpace for Vector4 {
     }
 }
 
-impl MetricSpace for &Vector4 {
+impl Metric<&Vector4> for &Vector4 {
     #[inline]
     fn distance2(self, to: &Vector4) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);

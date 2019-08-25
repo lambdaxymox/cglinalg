@@ -3,7 +3,7 @@ use std::mem;
 use std::ops;
 use std::cmp;
 
-use crate::traits::{Array, One, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
+use crate::traits::{Array, One, Zero, VectorSpace, Metric, DotProduct, Lerp};
 use crate::vector::*;
 
 

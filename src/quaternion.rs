@@ -5,7 +5,7 @@ use std::cmp;
 
 use crate::vector::Vector3;
 use crate::matrix::{Matrix3, Matrix4};
-use crate::traits::{Array, One, Zero, VectorSpace, MetricSpace, DotProduct, Lerp};
+use crate::traits::{Array, One, Zero, VectorSpace, Metric, DotProduct, Lerp};
 
 
 const EPSILON: f32 = 0.00001;
@@ -125,7 +125,7 @@ impl Quaternion {
 
     pub fn slerp(q: &mut Quaternion, r: &Quaternion, t: f32) -> Quaternion {
         // angle between q0-q1
-        let mut cos_half_theta = q.dot(r);
+        let mut cos_half_theta = q.dot(*r);
         // as found here
         // http://stackoverflow.com/questions/2886606/flipping-issue-when-interpolating-rotations-using-quaternions
         // if dot product is negative then one quaternion should be negated, to make
@@ -137,7 +137,7 @@ impl Quaternion {
             q.y *= -1.0;
             q.z *= -1.0;
 
-            cos_half_theta = q.dot(r);
+            cos_half_theta = q.dot(*r);
         }
         // if qa=qb or qa=-qb then theta = 0 and we can return qa
         if f32::abs(cos_half_theta) >= 1.0 {
@@ -581,6 +581,24 @@ impl ops::Rem<f32> for &Quaternion {
 }
 
 impl VectorSpace for Quaternion { }
+
+impl Metric<Quaternion> for Quaternion {
+    fn distance2(self, other: Quaternion) -> f32 {
+        (self.s - other.s) * (self.s - other.s) + 
+        (self.x - other.x) * (self.x - other.x) + 
+        (self.x - other.y) * (self.x - other.y) + 
+        (self.x - other.z) * (self.x - other.z)
+    }
+}
+
+impl Metric<&Quaternion> for &Quaternion {
+    fn distance2(self, other: &Quaternion) -> f32 {
+        (self.s - other.s) * (self.s - other.s) + 
+        (self.x - other.x) * (self.x - other.x) + 
+        (self.x - other.y) * (self.x - other.y) + 
+        (self.x - other.z) * (self.x - other.z)
+    }
+}
 
 impl DotProduct for Quaternion {
     fn dot(self, other: Self) -> f32 {
