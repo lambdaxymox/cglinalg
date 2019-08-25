@@ -576,3 +576,5 @@ impl ops::Rem<f32> for &Quaternion {
         }
     }
 }
+
+impl VectorSpace for Quaternion { }
