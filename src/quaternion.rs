@@ -591,6 +591,24 @@ impl Metric<Quaternion> for Quaternion {
     }
 }
 
+impl Metric<&Quaternion> for Quaternion {
+    fn distance2(self, other: &Quaternion) -> f32 {
+        (self.s - other.s) * (self.s - other.s) + 
+        (self.x - other.x) * (self.x - other.x) + 
+        (self.x - other.y) * (self.x - other.y) + 
+        (self.x - other.z) * (self.x - other.z)
+    }
+}
+
+impl Metric<Quaternion> for &Quaternion {
+    fn distance2(self, other: Quaternion) -> f32 {
+        (self.s - other.s) * (self.s - other.s) + 
+        (self.x - other.x) * (self.x - other.x) + 
+        (self.x - other.y) * (self.x - other.y) + 
+        (self.x - other.z) * (self.x - other.z)
+    }
+}
+
 impl Metric<&Quaternion> for &Quaternion {
     fn distance2(self, other: &Quaternion) -> f32 {
         (self.s - other.s) * (self.s - other.s) + 
