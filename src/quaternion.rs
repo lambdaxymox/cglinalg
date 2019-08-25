@@ -5,7 +5,7 @@ use std::cmp;
 
 use crate::vector::Vector3;
 use crate::matrix::{Matrix3, Matrix4};
-use crate::traits::{Array, One, Zero, VectorSpace, Metric, DotProduct, Lerp};
+use crate::traits::{Array, One, Zero, Metric, DotProduct, Lerp};
 
 
 const EPSILON: f32 = 0.00001;
@@ -28,7 +28,7 @@ impl Quaternion {
         q.normalize()
     }
 
-    /*
+    
     pub fn normalize(&self) -> Quaternion {
         let sum = self.s * self.s + self.x * self.x + self.y * self.y + self.z * self.z;
         // NOTE: f32s have min 6 digits of precision.
@@ -40,7 +40,7 @@ impl Quaternion {
         let norm = f32::sqrt(sum);
         self / norm
     }
-
+    /*
     ///
     /// Compute the inner (dot) product of two quaternions.
     ///
@@ -580,7 +580,6 @@ impl ops::Rem<f32> for &Quaternion {
     }
 }
 
-impl VectorSpace for Quaternion { }
 
 impl Metric<Quaternion> for Quaternion {
     fn distance2(self, other: Quaternion) -> f32 {
@@ -618,8 +617,26 @@ impl<'a, 'b> Metric<&'a Quaternion> for &'b Quaternion {
     }
 }
 
-impl DotProduct for Quaternion {
-    fn dot(self, other: Self) -> f32 {
+impl DotProduct<Quaternion> for Quaternion {
+    fn dot(self, other: Quaternion) -> f32 {
+        self.s * other.s + self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl DotProduct<&Quaternion> for Quaternion {
+    fn dot(self, other: &Quaternion) -> f32 {
+        self.s * other.s + self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl DotProduct<Quaternion> for &Quaternion {
+    fn dot(self, other: Quaternion) -> f32 {
+        self.s * other.s + self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl<'a, 'b> DotProduct<&'a Quaternion> for &'b Quaternion {
+    fn dot(self, other: &'a Quaternion) -> f32 {
         self.s * other.s + self.x * other.x + self.y * other.y + self.z * other.z
     }
 }

@@ -1,4 +1,4 @@
-use traits::{Array, Zero, VectorSpace, Metric, DotProduct, Lerp};
+use traits::{Array, Zero, Metric, ProjectOn, DotProduct, Lerp};
 use std::fmt;
 use std::mem;
 use std::ops;
@@ -417,16 +417,34 @@ impl Zero for Vector1 {
     }
 }
 
-impl VectorSpace for Vector1 {}
-
-impl DotProduct for Vector1 {
+impl DotProduct<Vector1> for Vector1 {
     fn dot(self, other: Vector1) -> f32 {
         self.x * other.x
     }
 }
 
-impl Lerp for Vector1 {
-    fn lerp(self, other: Vector1, amount: f32) -> Vector1 {
+impl DotProduct<&Vector1> for Vector1 {
+    fn dot(self, other: &Vector1) -> f32 {
+        self.x * other.x
+    }
+}
+
+impl DotProduct<Vector1> for &Vector1 {
+    fn dot(self, other: Vector1) -> f32 {
+        self.x * other.x
+    }
+}
+
+impl<'a, 'b> DotProduct<&'a Vector1> for &'b Vector1 {
+    fn dot(self, other: &'a Vector1) -> f32 {
+        self.x * other.x
+    }
+}
+
+impl Lerp<Vector1> for Vector1 {
+    type Output = Vector1;
+
+    fn lerp(self, other: Vector1, amount: f32) -> Self::Output {
         self + (other - self) * amount
     }
 }
@@ -875,16 +893,35 @@ impl Zero for Vector2 {
     }
 }
 
-impl VectorSpace for Vector2 {}
 
-impl DotProduct for Vector2 {
+impl DotProduct<Vector2> for Vector2 {
     fn dot(self, other: Vector2) -> f32 {
         self.x * other.x + self.y * other.y
     }
 }
 
-impl Lerp for Vector2 {
-    fn lerp(self, other: Vector2, amount: f32) -> Vector2 {
+impl DotProduct<&Vector2> for Vector2 {
+    fn dot(self, other: &Vector2) -> f32 {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl DotProduct<Vector2> for &Vector2 {
+    fn dot(self, other: Vector2) -> f32 {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl<'a, 'b> DotProduct<&'a Vector2> for &'b Vector2 {
+    fn dot(self, other: &'a Vector2) -> f32 {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl Lerp<Vector2> for Vector2 {
+    type Output = Vector2;
+
+    fn lerp(self, other: Vector2, amount: f32) -> Self::Output {
         self + (other - self) * amount
     }
 }
@@ -1392,16 +1429,34 @@ impl Zero for Vector3 {
     }
 }
 
-impl VectorSpace for Vector3 {}
-
-impl DotProduct for Vector3 {
+impl DotProduct<Vector3> for Vector3 {
     fn dot(self, other: Vector3) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 }
 
-impl Lerp for Vector3 {
-    fn lerp(self, other: Vector3, amount: f32) -> Vector3 {
+impl DotProduct<&Vector3> for Vector3 {
+    fn dot(self, other: &Vector3) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl DotProduct<Vector3> for &Vector3 {
+    fn dot(self, other: Vector3) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl<'a, 'b> DotProduct<&'a Vector3> for &'b Vector3 {
+    fn dot(self, other: &'a Vector3) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl Lerp<Vector3> for Vector3 {
+    type Output = Vector3;
+
+    fn lerp(self, other: Vector3, amount: f32) -> Self::Output {
         self + (other - self) * amount
     }
 }
@@ -1932,16 +1987,34 @@ impl Zero for Vector4 {
     }
 }
 
-impl VectorSpace for Vector4 {}
-
-impl DotProduct for Vector4 {
+impl DotProduct<Vector4> for Vector4 {
     fn dot(self, other: Vector4) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
 }
 
-impl Lerp for Vector4 {
-    fn lerp(self, other: Vector4, amount: f32) -> Vector4 {
+impl DotProduct<&Vector4> for Vector4 {
+    fn dot(self, other: &Vector4) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+    }
+}
+
+impl DotProduct<Vector4> for &Vector4 {
+    fn dot(self, other: Vector4) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+    }
+}
+
+impl<'a, 'b> DotProduct<&'a Vector4> for &'b Vector4 {
+    fn dot(self, other: &'a Vector4) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+    }
+}
+
+impl Lerp<Vector4> for Vector4 {
+    type Output = Vector4;
+
+    fn lerp(self, other: Vector4, amount: f32) -> Self::Output {
         self + (other - self) * amount
     }
 }

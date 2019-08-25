@@ -35,17 +35,6 @@ pub trait One where Self: Sized + ops::Mul<Self, Output = Self> {
     }
 }
 
-pub trait VectorSpace: Copy + Clone where
-    Self: Zero,
-    Self: ops::Add<Self, Output = Self>,
-    Self: ops::Sub<Self, Output = Self>,
-    Self: ops::Mul<f32, Output = Self>,
-    Self: ops::Div<f32, Output = Self>,
-    Self: ops::Rem<f32, Output = Self> 
-{
-
-}
-
 pub trait Metric<V: Sized>: Sized {
     /// Compute the squared distance between two vectors.
     fn distance2(self, other: V) -> f32;
@@ -56,10 +45,12 @@ pub trait Metric<V: Sized>: Sized {
     }
 }
 
-pub trait DotProduct where Self: VectorSpace {
+pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
     /// Compute the dot product of two vectors.
-    fn dot(self, other: Self) -> f32;
+    fn dot(self, other: V) -> f32;
+}
 
+pub trait Magnitude where Self: DotProduct<Self> + ops::Div<f32, Output = Self> {
     /// Compute the norm (length) of a vector.
     fn norm(self) -> f32 {
         f32::sqrt(self.dot(self))
@@ -74,13 +65,17 @@ pub trait DotProduct where Self: VectorSpace {
     fn normalize(self) -> Self {
         self / self.norm()
     }
-
-    /// Compute the projection for a vector onto another vector.
-    fn project_on(self, onto: Self) -> Self {
-        onto * (self.dot(onto) / onto.norm2())
-    }
 }
 
-pub trait Lerp: VectorSpace {
-    fn lerp(self, other: Self, amount: f32) -> Self;
+pub trait ProjectOn<V: Copy + Clone> where Self: DotProduct<V> {
+    type Output;
+
+    /// Compute the projection for a vector onto another vector.
+    fn project_on(self, onto: V) -> Self::Output;
+}
+
+pub trait Lerp<V: Copy + Clone> where Self: Copy + Clone {
+    type Output;
+
+    fn lerp(self, other: V, amount: f32) -> Self::Output;
 }

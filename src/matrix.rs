@@ -3,7 +3,7 @@ use std::mem;
 use std::ops;
 use std::cmp;
 
-use crate::traits::{Array, One, Zero, VectorSpace, Metric, DotProduct, Lerp};
+use crate::traits::{Array, One, Zero, Metric, DotProduct, ProjectOn, Lerp};
 use crate::vector::*;
 
 
@@ -402,8 +402,6 @@ impl ops::Rem<f32> for &Matrix2 {
         Matrix2::new(c0r0, c0r1, c1r0, c1r1)        
     }
 }
-
-impl VectorSpace for Matrix2 { }
 
 
 ///
@@ -961,8 +959,6 @@ impl ops::Rem<f32> for &Matrix3 {
         Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)     
     }
 }
-
-impl VectorSpace for Matrix3 { }
 
 
 ///
@@ -1879,8 +1875,6 @@ impl ops::Rem<f32> for &Matrix4 {
         )
     }
 }
-
-impl VectorSpace for Matrix4  { }
 
 
 #[cfg(test)]

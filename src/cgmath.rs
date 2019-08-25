@@ -136,6 +136,6 @@ pub fn mat4(
 }
 
 #[inline]
-pub fn dot<V: DotProduct>(a: V, b: V) -> f32 {
+pub fn dot<V: DotProduct<V>>(a: V, b: V) -> f32 {
     V::dot(a, b)
 }
