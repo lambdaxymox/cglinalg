@@ -8,9 +8,8 @@ use std::cmp;
 const EPSILON: f32 = 0.00001; 
 
 
-///
-/// A representation of one-dimensional vectors with a Euclidean metric.
-///
+
+/// A representation of one-dimensional vectors.
 #[derive(Copy, Clone, PartialEq)]
 pub struct Vector1 {
     pub x: f32,
@@ -31,6 +30,24 @@ impl Vector1 {
 }
 
 impl Metric<Vector1> for Vector1 {
+    #[inline]
+    fn distance2(self, to: Vector1) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+
+        dx_2
+    }
+}
+
+impl Metric<&Vector1> for Vector1 {
+    #[inline]
+    fn distance2(self, to: &Vector1) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+
+        dx_2
+    }
+}
+
+impl Metric<Vector1> for &Vector1 {
     #[inline]
     fn distance2(self, to: Vector1) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -443,6 +460,26 @@ impl Vector2 {
 }
 
 impl Metric<Vector2> for Vector2 {
+    #[inline]
+    fn distance2(self, to: Vector2) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
+    }
+}
+
+impl Metric<&Vector2> for Vector2 {
+    #[inline]
+    fn distance2(self, to: &Vector2) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
+    }
+}
+
+impl Metric<Vector2> for &Vector2 {
     #[inline]
     fn distance2(self, to: Vector2) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -903,6 +940,28 @@ impl Vector3 {
 }
 
 impl Metric<Vector3> for Vector3 {
+    #[inline]
+    fn distance2(self, to: Vector3) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+    
+        dx_2 + dy_2 + dz_2
+    }
+}
+
+impl Metric<&Vector3> for Vector3 {
+    #[inline]
+    fn distance2(self, to: &Vector3) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+    
+        dx_2 + dy_2 + dz_2
+    }
+}
+
+impl Metric<Vector3> for &Vector3 {
     #[inline]
     fn distance2(self, to: Vector3) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
@@ -1385,6 +1444,30 @@ impl Vector4 {
 }
 
 impl Metric<Vector4> for Vector4 {
+    #[inline]
+    fn distance2(self, to: Vector4) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dw_2 = (to.w - self.w) * (to.w - self.w);
+    
+        dx_2 + dy_2 + dz_2 + dw_2
+    }
+}
+
+impl Metric<&Vector4> for Vector4 {
+    #[inline]
+    fn distance2(self, to: &Vector4) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dw_2 = (to.w - self.w) * (to.w - self.w);
+    
+        dx_2 + dy_2 + dz_2 + dw_2
+    }
+}
+
+impl Metric<Vector4> for &Vector4 {
     #[inline]
     fn distance2(self, to: Vector4) -> f32 {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
