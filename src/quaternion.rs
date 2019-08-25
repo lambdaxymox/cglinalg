@@ -28,7 +28,7 @@ impl Quaternion {
         q.normalize()
     }
 
-    
+    /*
     pub fn normalize(&self) -> Quaternion {
         let sum = self.s * self.s + self.x * self.x + self.y * self.y + self.z * self.z;
         // NOTE: f32s have min 6 digits of precision.
@@ -40,6 +40,7 @@ impl Quaternion {
         let norm = f32::sqrt(sum);
         self / norm
     }
+    */
 
     ///
     /// Compute a quaternion from it's scalar and vector parts.
