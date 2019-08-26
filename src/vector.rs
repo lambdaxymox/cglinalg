@@ -162,7 +162,7 @@ impl ops::Index<ops::RangeFrom<usize>> for Vector1 {
 
 impl fmt::Debug for Vector1 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        try!(write!(f, "Vector1 "));
+        write!(f, "Vector1 ")?;
         <[f32; 1] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
@@ -601,7 +601,7 @@ impl ops::Index<ops::RangeFrom<usize>> for Vector2 {
 
 impl fmt::Debug for Vector2 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        try!(write!(f, "Vector2 "));
+        write!(f, "Vector2 ")?;
         <[f32; 2] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
@@ -932,7 +932,6 @@ impl<'a, 'b> Metric<&'a Vector2> for &'b Vector2 {
     }
 }
 
-
 impl DotProduct<Vector2> for Vector2 {
     fn dot(self, other: Vector2) -> f32 {
         self.x * other.x + self.y * other.y
@@ -1125,7 +1124,7 @@ impl ops::Index<ops::RangeFrom<usize>> for Vector3 {
 
 impl fmt::Debug for Vector3 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        try!(write!(f, "Vector3 "));
+        write!(f, "Vector3 ")?;
         <[f32; 3] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
@@ -1764,7 +1763,7 @@ impl<'a> From<&'a (f32, f32, f32, f32)> for &'a Vector4 {
 
 impl fmt::Debug for Vector4 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        try!(write!(f, "Vector4 "));
+        write!(f, "Vector4 ")?;
         <[f32; 4] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
