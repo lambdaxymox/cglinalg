@@ -96,6 +96,12 @@ impl AsRef<f32> for Vector1 {
     }
 }
 
+impl AsRef<(f32,)> for Vector1 {
+    fn as_ref(&self) -> &(f32,) {
+        unsafe { mem::transmute(self) }
+    }
+}
+
 impl AsMut<[f32; 1]> for Vector1 {
     fn as_mut(&mut self) -> &mut [f32; 1] {
         unsafe { mem::transmute(self) }
@@ -104,6 +110,12 @@ impl AsMut<[f32; 1]> for Vector1 {
 
 impl AsMut<f32> for Vector1 {
     fn as_mut(&mut self) -> &mut f32 {
+        unsafe { mem::transmute(self) }
+    }
+}
+
+impl AsMut<(f32,)> for Vector1 {
+    fn as_mut(&mut self) -> &mut (f32,) {
         unsafe { mem::transmute(self) }
     }
 }
@@ -504,46 +516,6 @@ impl Vector2 {
     }
 }
 
-impl Metric<Vector2> for Vector2 {
-    #[inline]
-    fn distance2(self, to: Vector2) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-    
-        dx_2 + dy_2
-    }
-}
-
-impl Metric<&Vector2> for Vector2 {
-    #[inline]
-    fn distance2(self, to: &Vector2) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-    
-        dx_2 + dy_2
-    }
-}
-
-impl Metric<Vector2> for &Vector2 {
-    #[inline]
-    fn distance2(self, to: Vector2) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-    
-        dx_2 + dy_2
-    }
-}
-
-impl<'a, 'b> Metric<&'a Vector2> for &'b Vector2 {
-    #[inline]
-    fn distance2(self, to: &'a Vector2) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-    
-        dx_2 + dy_2
-    }
-}
-
 impl Array for Vector2 {
     type Element = f32;
 
@@ -917,6 +889,46 @@ impl Zero for Vector2 {
 
     fn is_zero(&self) -> bool {
         self.x == 0.0 && self.y == 0.0
+    }
+}
+
+impl Metric<Vector2> for Vector2 {
+    #[inline]
+    fn distance2(self, to: Vector2) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
+    }
+}
+
+impl Metric<&Vector2> for Vector2 {
+    #[inline]
+    fn distance2(self, to: &Vector2) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
+    }
+}
+
+impl Metric<Vector2> for &Vector2 {
+    #[inline]
+    fn distance2(self, to: Vector2) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
+    }
+}
+
+impl<'a, 'b> Metric<&'a Vector2> for &'b Vector2 {
+    #[inline]
+    fn distance2(self, to: &'a Vector2) -> f32 {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
     }
 }
 

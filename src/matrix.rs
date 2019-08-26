@@ -154,6 +154,12 @@ impl AsMut<[f32; 4]> for Matrix2 {
     }
 }
 
+impl AsMut<[[f32; 2]; 2]> for Matrix2 {
+    fn as_mut(&mut self) -> &mut [[f32; 2]; 2] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
 impl Zero for Matrix2 {
     fn zero() -> Matrix2 {
         Matrix2::new(0.0, 0.0, 0.0, 0.0)
@@ -624,6 +630,12 @@ impl AsRef<[[f32; 3]; 3]> for Matrix3 {
 
 impl AsMut<[f32; 9]> for Matrix3 {
     fn as_mut(&mut self) -> &mut [f32; 9] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
+impl AsMut<[[f32; 3]; 3]> for Matrix3 {
+    fn as_mut(&mut self) -> &mut [[f32; 3];3 ] {
         unsafe { mem::transmute(self) }
     }
 }
@@ -1371,6 +1383,12 @@ impl AsRef<[[f32; 4]; 4]> for Matrix4 {
 
 impl AsMut<[f32; 16]> for Matrix4 {
     fn as_mut(&mut self) -> &mut [f32; 16] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
+impl AsMut<[[f32; 4]; 4]> for Matrix4 {
+    fn as_mut(&mut self) -> &mut [[f32; 4]; 4] {
         unsafe { mem::transmute(self) }
     }
 }
