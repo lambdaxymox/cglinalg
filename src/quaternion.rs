@@ -252,8 +252,7 @@ impl ops::Index<ops::RangeFrom<usize>> for Quaternion {
 
 impl fmt::Debug for Quaternion {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Quaternion ")?;
-        writeln!(f, "[s: {}, v: [{}, {}, {}]]", self.s, self.v.x, self.v.y, self.v.z)
+        writeln!(f, "Quaternion [s: {}, v: [{}, {}, {}]]", self.s, self.v.x, self.v.y, self.v.z)
     }
 }
 
