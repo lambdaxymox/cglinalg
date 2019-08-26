@@ -1121,6 +1121,118 @@ impl ops::Rem<f32> for &Matrix3 {
     }
 }
 
+impl ops::AddAssign<Matrix3> for Matrix3 {
+    fn add_assign(&mut self, other: Matrix3) {
+        self.c0r0 += other.c0r0;
+        self.c0r1 += other.c0r1;
+        self.c0r2 += other.c0r2;
+        
+        self.c1r0 += other.c1r0;
+        self.c1r1 += other.c1r1;
+        self.c1r2 += other.c1r2;
+
+        self.c2r0 += other.c2r0;
+        self.c2r1 += other.c2r1;
+        self.c2r2 += other.c2r2;
+    }
+}
+
+impl ops::AddAssign<&Matrix3> for Matrix3 {
+    fn add_assign(&mut self, other: &Matrix3) {
+        self.c0r0 += other.c0r0;
+        self.c0r1 += other.c0r1;
+        self.c0r2 += other.c0r2;
+        
+        self.c1r0 += other.c1r0;
+        self.c1r1 += other.c1r1;
+        self.c1r2 += other.c1r2;
+
+        self.c2r0 += other.c2r0;
+        self.c2r1 += other.c2r1;
+        self.c2r2 += other.c2r2;
+    }
+}
+
+impl ops::SubAssign<Matrix3> for Matrix3 {
+    fn sub_assign(&mut self, other: Matrix3) {
+        self.c0r0 -= other.c0r0;
+        self.c0r1 -= other.c0r1;
+        self.c0r2 -= other.c0r2;
+        
+        self.c1r0 -= other.c1r0;
+        self.c1r1 -= other.c1r1;
+        self.c1r2 -= other.c1r2;
+
+        self.c2r0 -= other.c2r0;
+        self.c2r1 -= other.c2r1;
+        self.c2r2 -= other.c2r2;
+    }
+}
+
+impl ops::SubAssign<&Matrix3> for Matrix3 {
+    fn sub_assign(&mut self, other: &Matrix3) {
+        self.c0r0 -= other.c0r0;
+        self.c0r1 -= other.c0r1;
+        self.c0r2 -= other.c0r2;
+        
+        self.c1r0 -= other.c1r0;
+        self.c1r1 -= other.c1r1;
+        self.c1r2 -= other.c1r2;
+
+        self.c2r0 -= other.c2r0;
+        self.c2r1 -= other.c2r1;
+        self.c2r2 -= other.c2r2;
+    }
+}
+
+impl ops::MulAssign<f32> for Matrix3 {
+    fn mul_assign(&mut self, other: f32) {
+        self.c0r0 *= other;
+        self.c0r1 *= other;
+        self.c0r2 *= other;
+        
+        self.c1r0 *= other;
+        self.c1r1 *= other;
+        self.c1r2 *= other;
+
+        self.c2r0 *= other;
+        self.c2r1 *= other;
+        self.c2r2 *= other;
+    }
+}
+
+impl ops::DivAssign<f32> for Matrix3 {
+    fn div_assign(&mut self, other: f32) {
+        self.c0r0 /= other;
+        self.c0r1 /= other;
+        self.c0r2 /= other;
+        
+        self.c1r0 /= other;
+        self.c1r1 /= other;
+        self.c1r2 /= other;
+
+        self.c2r0 /= other;
+        self.c2r1 /= other;
+        self.c2r2 /= other;
+    }
+}
+
+impl ops::RemAssign<f32> for Matrix3 {
+    fn rem_assign(&mut self, other: f32) {
+        self.c0r0 %= other;
+        self.c0r1 %= other;
+        self.c0r2 %= other;
+        
+        self.c1r0 %= other;
+        self.c1r1 %= other;
+        self.c1r2 %= other;
+
+        self.c2r0 %= other;
+        self.c2r1 %= other;
+        self.c2r2 %= other;
+    }
+}
+
 impl Lerp<Matrix3> for Matrix3 {
     type Output = Matrix3;
 
@@ -2100,6 +2212,174 @@ impl ops::Rem<f32> for &Matrix4 {
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
             c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
+    }
+}
+
+impl ops::AddAssign<Matrix4> for Matrix4 {
+    fn add_assign(&mut self, other: Matrix4) {
+        self.c0r0 += other.c0r0;
+        self.c0r1 += other.c0r1;
+        self.c0r2 += other.c0r2;
+        self.c0r3 += other.c0r3;
+        
+        self.c1r0 += other.c1r0;
+        self.c1r1 += other.c1r1;
+        self.c1r2 += other.c1r2;
+        self.c1r3 += other.c1r3;
+
+        self.c2r0 += other.c2r0;
+        self.c2r1 += other.c2r1;
+        self.c2r2 += other.c2r2;
+        self.c2r3 += other.c2r3;
+
+        self.c3r0 += other.c3r0;
+        self.c3r1 += other.c3r1;
+        self.c3r2 += other.c3r2;
+        self.c3r3 += other.c3r3;
+    }
+}
+
+impl ops::AddAssign<&Matrix4> for Matrix4 {
+    fn add_assign(&mut self, other: &Matrix4) {
+        self.c0r0 += other.c0r0;
+        self.c0r1 += other.c0r1;
+        self.c0r2 += other.c0r2;
+        self.c0r3 += other.c0r3;
+        
+        self.c1r0 += other.c1r0;
+        self.c1r1 += other.c1r1;
+        self.c1r2 += other.c1r2;
+        self.c1r3 += other.c1r3;
+
+        self.c2r0 += other.c2r0;
+        self.c2r1 += other.c2r1;
+        self.c2r2 += other.c2r2;
+        self.c2r3 += other.c2r3;
+
+        self.c3r0 += other.c3r0;
+        self.c3r1 += other.c3r1;
+        self.c3r2 += other.c3r2;
+        self.c3r3 += other.c3r3;
+    }
+}
+
+impl ops::SubAssign<Matrix4> for Matrix4 {
+    fn sub_assign(&mut self, other: Matrix4) {
+        self.c0r0 -= other.c0r0;
+        self.c0r1 -= other.c0r1;
+        self.c0r2 -= other.c0r2;
+        self.c0r3 -= other.c0r3;
+        
+        self.c1r0 -= other.c1r0;
+        self.c1r1 -= other.c1r1;
+        self.c1r2 -= other.c1r2;
+        self.c1r3 -= other.c1r3;
+
+        self.c2r0 -= other.c2r0;
+        self.c2r1 -= other.c2r1;
+        self.c2r2 -= other.c2r2;
+        self.c2r3 -= other.c2r3;
+
+        self.c3r0 -= other.c3r0;
+        self.c3r1 -= other.c3r1;
+        self.c3r2 -= other.c3r2;
+        self.c3r3 -= other.c3r3;
+    }
+}
+
+impl ops::SubAssign<&Matrix4> for Matrix4 {
+    fn sub_assign(&mut self, other: &Matrix4) {
+        self.c0r0 -= other.c0r0;
+        self.c0r1 -= other.c0r1;
+        self.c0r2 -= other.c0r2;
+        self.c0r3 -= other.c0r3;
+        
+        self.c1r0 -= other.c1r0;
+        self.c1r1 -= other.c1r1;
+        self.c1r2 -= other.c1r2;
+        self.c1r3 -= other.c1r3;
+
+        self.c2r0 -= other.c2r0;
+        self.c2r1 -= other.c2r1;
+        self.c2r2 -= other.c2r2;
+        self.c2r3 -= other.c2r3;
+
+        self.c3r0 -= other.c3r0;
+        self.c3r1 -= other.c3r1;
+        self.c3r2 -= other.c3r2;
+        self.c3r3 -= other.c3r3;
+    }
+}
+
+impl ops::MulAssign<f32> for Matrix4 {
+    fn mul_assign(&mut self, other: f32) {
+        self.c0r0 *= other;
+        self.c0r1 *= other;
+        self.c0r2 *= other;
+        self.c0r3 *= other;
+        
+        self.c1r0 *= other;
+        self.c1r1 *= other;
+        self.c1r2 *= other;
+        self.c1r3 *= other;
+
+        self.c2r0 *= other;
+        self.c2r1 *= other;
+        self.c2r2 *= other;
+        self.c2r3 *= other;
+
+        self.c3r0 *= other;
+        self.c3r1 *= other;
+        self.c3r2 *= other;
+        self.c3r3 *= other;
+    }
+}
+
+impl ops::DivAssign<f32> for Matrix4 {
+    fn div_assign(&mut self, other: f32) {
+        self.c0r0 /= other;
+        self.c0r1 /= other;
+        self.c0r2 /= other;
+        self.c0r3 /= other;
+        
+        self.c1r0 /= other;
+        self.c1r1 /= other;
+        self.c1r2 /= other;
+        self.c1r3 /= other;
+
+        self.c2r0 /= other;
+        self.c2r1 /= other;
+        self.c2r2 /= other;
+        self.c2r3 /= other;
+
+        self.c3r0 /= other;
+        self.c3r1 /= other;
+        self.c3r2 /= other;
+        self.c3r3 /= other;
+    }
+}
+
+impl ops::RemAssign<f32> for Matrix4 {
+    fn rem_assign(&mut self, other: f32) {
+        self.c0r0 %= other;
+        self.c0r1 %= other;
+        self.c0r2 %= other;
+        self.c0r3 %= other;
+        
+        self.c1r0 %= other;
+        self.c1r1 %= other;
+        self.c1r2 %= other;
+        self.c1r3 %= other;
+
+        self.c2r0 %= other;
+        self.c2r1 %= other;
+        self.c2r2 %= other;
+        self.c2r3 %= other;
+
+        self.c3r0 %= other;
+        self.c3r1 %= other;
+        self.c3r2 %= other;
+        self.c3r3 %= other;
     }
 }
 
