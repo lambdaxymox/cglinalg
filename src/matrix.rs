@@ -98,20 +98,31 @@ impl Array for Matrix2 {
     }
 }
 
-impl Zero for Matrix2 {
-    fn zero() -> Matrix2 {
-        Matrix2::new(0.0, 0.0, 0.0, 0.0)
-    }
-
-    fn is_zero(&self) -> bool {
-        self.c0r0 == 0.0 && self.c0r1 == 0.0 &&
-        self.c1r0 == 0.0 && self.c1r1 == 0.0
+impl From<[[f32; 2]; 2]> for Matrix2 {
+    #[inline]
+    fn from(m: [[f32; 2]; 2]) -> Matrix2 {
+        unsafe { mem::transmute(m) }
     }
 }
 
-impl One for Matrix2 {
-    fn one() -> Matrix2 {
-        Matrix2::new(1.0, 0.0, 0.0, 1.0)
+impl<'a> From<&'a [[f32; 2]; 2]> for &'a Matrix2 {
+    #[inline]
+    fn from(m: &'a [[f32; 2]; 2]) -> &'a Matrix2 {
+        unsafe { mem::transmute(m) }
+    }    
+}
+
+impl From<[f32; 4]> for Matrix2 {
+    #[inline]
+    fn from(m: [f32; 4]) -> Matrix2 {
+        unsafe { mem::transmute(m) }
+    }
+}
+
+impl<'a> From<&'a [f32; 4]> for &'a Matrix2 {
+    #[inline]
+    fn from(m: &'a [f32; 4]) -> &'a Matrix2 {
+        unsafe { mem::transmute(m) }
     }
 }
 
@@ -140,6 +151,23 @@ impl AsRef<[[f32; 2]; 2]> for Matrix2 {
 impl AsMut<[f32; 4]> for Matrix2 {
     fn as_mut(&mut self) -> &mut [f32; 4] {
         unsafe { mem::transmute(self) }
+    }
+}
+
+impl Zero for Matrix2 {
+    fn zero() -> Matrix2 {
+        Matrix2::new(0.0, 0.0, 0.0, 0.0)
+    }
+
+    fn is_zero(&self) -> bool {
+        self.c0r0 == 0.0 && self.c0r1 == 0.0 &&
+        self.c1r0 == 0.0 && self.c1r1 == 0.0
+    }
+}
+
+impl One for Matrix2 {
+    fn one() -> Matrix2 {
+        Matrix2::new(1.0, 0.0, 0.0, 1.0)
     }
 }
 
@@ -543,21 +571,31 @@ impl Array for Matrix3 {
     }
 }
 
-impl Zero for Matrix3 {
-    fn zero() -> Matrix3 {
-        Matrix3::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-    }
-
-    fn is_zero(&self) -> bool {
-        self.c0r0 == 0.0 && self.c0r1 == 0.0 && self.c0r2 == 0.0 &&
-        self.c1r0 == 0.0 && self.c1r1 == 0.0 && self.c1r2 == 0.0 &&
-        self.c2r0 == 0.0 && self.c2r1 == 0.0 && self.c2r2 == 0.0
+impl From<[[f32; 3]; 3]> for Matrix3 {
+    #[inline]
+    fn from(m: [[f32; 3]; 3]) -> Matrix3 {
+        unsafe { mem::transmute(m) }
     }
 }
 
-impl One for Matrix3 {
-    fn one() -> Matrix3 {
-        Matrix3::new(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+impl<'a> From<&'a [[f32; 3]; 3]> for &'a Matrix3 {
+    #[inline]
+    fn from(m: &'a [[f32; 3]; 3]) -> &'a Matrix3 {
+        unsafe { mem::transmute(m) }
+    }    
+}
+
+impl From<[f32; 9]> for Matrix3 {
+    #[inline]
+    fn from(m: [f32; 9]) -> Matrix3 {
+        unsafe { mem::transmute(m) }
+    }
+}
+
+impl<'a> From<&'a [f32; 9]> for &'a Matrix3 {
+    #[inline]
+    fn from(m: &'a [f32; 9]) -> &'a Matrix3 {
+        unsafe { mem::transmute(m) }
     }
 }
 
@@ -587,6 +625,24 @@ impl AsRef<[[f32; 3]; 3]> for Matrix3 {
 impl AsMut<[f32; 9]> for Matrix3 {
     fn as_mut(&mut self) -> &mut [f32; 9] {
         unsafe { mem::transmute(self) }
+    }
+}
+
+impl Zero for Matrix3 {
+    fn zero() -> Matrix3 {
+        Matrix3::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    }
+
+    fn is_zero(&self) -> bool {
+        self.c0r0 == 0.0 && self.c0r1 == 0.0 && self.c0r2 == 0.0 &&
+        self.c1r0 == 0.0 && self.c1r1 == 0.0 && self.c1r2 == 0.0 &&
+        self.c2r0 == 0.0 && self.c2r1 == 0.0 && self.c2r2 == 0.0
+    }
+}
+
+impl One for Matrix3 {
+    fn one() -> Matrix3 {
+        Matrix3::new(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
     }
 }
 
@@ -1261,30 +1317,31 @@ impl Array for Matrix4 {
     }
 }
 
-impl Zero for Matrix4 {
-    fn zero() -> Matrix4 {
-        Matrix4::new(
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-        )
-    }
-
-    fn is_zero(&self) -> bool {
-        self.c0r0 == 0.0 && self.c0r1 == 0.0 && self.c0r2 == 0.0 && self.c0r3 == 0.0 &&
-        self.c1r0 == 0.0 && self.c1r1 == 0.0 && self.c1r2 == 0.0 && self.c1r3 == 0.0 &&
-        self.c2r0 == 0.0 && self.c2r1 == 0.0 && self.c2r2 == 0.0 && self.c2r3 == 0.0 &&
-        self.c3r0 == 0.0 && self.c3r1 == 0.0 && self.c3r2 == 0.0 && self.c3r3 == 0.0
+impl From<[[f32; 4]; 4]> for Matrix4 {
+    #[inline]
+    fn from(m: [[f32; 4]; 4]) -> Matrix4 {
+        unsafe { mem::transmute(m) }
     }
 }
 
-impl One for Matrix4 {
-    fn one() -> Matrix4 {
-        Matrix4::new(
-            1.0, 0.0, 0.0, 0.0, 
-            0.0, 1.0, 0.0, 0.0, 
-            0.0, 0.0, 1.0, 0.0, 
-            0.0, 0.0, 0.0, 1.0
-        )
+impl<'a> From<&'a [[f32; 4]; 4]> for &'a Matrix4 {
+    #[inline]
+    fn from(m: &'a [[f32; 4]; 4]) -> &'a Matrix4 {
+        unsafe { mem::transmute(m) }
+    }    
+}
+
+impl From<[f32; 16]> for Matrix4 {
+    #[inline]
+    fn from(m: [f32; 16]) -> Matrix4 {
+        unsafe { mem::transmute(m) }
+    }
+}
+
+impl<'a> From<&'a [f32; 16]> for &'a Matrix4 {
+    #[inline]
+    fn from(m: &'a [f32; 16]) -> &'a Matrix4 {
+        unsafe { mem::transmute(m) }
     }
 }
 
@@ -1336,6 +1393,33 @@ impl PartialEq for Matrix4 {
         f32::abs(self.c3r1 - other.c3r1) < EPSILON &&
         f32::abs(self.c3r2 - other.c3r2) < EPSILON &&
         f32::abs(self.c3r3 - other.c3r3) < EPSILON
+    }
+}
+
+impl Zero for Matrix4 {
+    fn zero() -> Matrix4 {
+        Matrix4::new(
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        )
+    }
+
+    fn is_zero(&self) -> bool {
+        self.c0r0 == 0.0 && self.c0r1 == 0.0 && self.c0r2 == 0.0 && self.c0r3 == 0.0 &&
+        self.c1r0 == 0.0 && self.c1r1 == 0.0 && self.c1r2 == 0.0 && self.c1r3 == 0.0 &&
+        self.c2r0 == 0.0 && self.c2r1 == 0.0 && self.c2r2 == 0.0 && self.c2r3 == 0.0 &&
+        self.c3r0 == 0.0 && self.c3r1 == 0.0 && self.c3r2 == 0.0 && self.c3r3 == 0.0
+    }
+}
+
+impl One for Matrix4 {
+    fn one() -> Matrix4 {
+        Matrix4::new(
+            1.0, 0.0, 0.0, 0.0, 
+            0.0, 1.0, 0.0, 0.0, 
+            0.0, 0.0, 1.0, 0.0, 
+            0.0, 0.0, 0.0, 1.0
+        )
     }
 }
 
