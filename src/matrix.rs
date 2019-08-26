@@ -621,11 +621,6 @@ impl Matrix3 {
         }
     }
 
-    /// Generate a 3x3 diagonal matrix of ones.
-    pub fn one() -> Matrix3 {
-        Matrix3::new(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
-    }
-
     /// Calculate the determinant of a 3x3 matrix.
     pub fn determinant(&self) -> f32 {
         self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
