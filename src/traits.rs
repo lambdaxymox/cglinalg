@@ -114,10 +114,10 @@ pub trait Matrix {
     fn row(&self, r: usize) -> Self::Row;
     
     /// Swap two rows of a matrix.
-    fn swap_rows(&mut self, a: usize, b: usize);
+    fn swap_rows(&mut self, row_a: usize, row_b: usize);
     
     /// Swap two columns of a matrix.
-    fn swap_columns(&mut self, a: usize, b: usize);
+    fn swap_columns(&mut self, col_a: usize, col_b: usize);
     
     /// Swap two elements of a matrix.
     fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize));

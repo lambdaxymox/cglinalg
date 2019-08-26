@@ -3,7 +3,7 @@ use std::mem;
 use std::ops;
 use std::cmp;
 
-use crate::traits::{Array, One, Zero, Metric, DotProduct, ProjectOn, Lerp};
+use crate::traits::{Array, One, Zero, Matrix, Metric, DotProduct, ProjectOn, Lerp};
 use crate::vector::*;
 
 
@@ -87,6 +87,44 @@ impl Array for Matrix2 {
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut f32 {
         &mut self.c0r0
+    }
+}
+
+impl Matrix for Matrix2 {
+    type Row = Vector2;
+    type Column = Vector2;
+    type Transpose = Matrix2;
+
+    fn row(&self, r: usize) -> Self::Row {
+        Vector2::new(self[0][r], self[1][r])
+    }
+    
+    fn swap_rows(&mut self, row_a: usize, row_b: usize) {
+        let c0ra = self[0][row_a];
+        let c1ra = self[1][row_a];
+        self[0][row_a] = self[0][row_b];
+        self[1][row_a] = self[0][row_b];
+        self[0][row_b] = c0ra;
+        self[1][row_b] = c1ra;
+    }
+    
+    fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        let car0 = self[col_a][0];
+        let car1 = self[col_a][1];
+        self[col_a][0] = self[col_b][0];
+        self[col_a][1] = self[col_b][1];
+        self[col_b][0] = car0;
+        self[col_b][1] = car1;
+    }
+    
+    fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
+        let element_a = self[a.0][a.1];
+        self[a.0][a.1] = self[b.0][b.1];
+        self[b.0][b.1] = element_a;
+    }
+    
+    fn transpose(&self) -> Self::Transpose {
+        Matrix2::new(self.c0r0, self.c1r0, self.c0r1, self.c1r1)
     }
 }
 
@@ -664,6 +702,54 @@ impl Array for Matrix3 {
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut f32 {
         &mut self.c0r0
+    }
+}
+
+impl Matrix for Matrix3 {
+    type Row = Vector3;
+    type Column = Vector3;
+    type Transpose = Matrix3;
+
+    fn row(&self, r: usize) -> Self::Row {
+        Vector3::new(self[0][r], self[1][r], self[2][r])
+    }
+    
+    fn swap_rows(&mut self, row_a: usize, row_b: usize) {
+        let c0ra = self[0][row_a];
+        let c1ra = self[1][row_a];
+        let c2ra = self[2][row_a];
+        self[0][row_a] = self[0][row_b];
+        self[1][row_a] = self[0][row_b];
+        self[2][row_a] = self[0][row_b];
+        self[0][row_b] = c0ra;
+        self[1][row_b] = c1ra;
+        self[2][row_b] = c2ra;
+    }
+    
+    fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        let car0 = self[col_a][0];
+        let car1 = self[col_a][1];
+        let car2 = self[col_a][2];
+        self[col_a][0] = self[col_b][0];
+        self[col_a][1] = self[col_b][1];
+        self[col_a][2] = self[col_b][2];
+        self[col_b][0] = car0;
+        self[col_b][1] = car1;
+        self[col_b][2] = car2;
+    }
+    
+    fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
+        let element_a = self[a.0][a.1];
+        self[a.0][a.1] = self[b.0][b.1];
+        self[b.0][b.1] = element_a;
+    }
+    
+    fn transpose(&self) -> Self::Transpose {
+        Matrix3::new(
+            self.c0r0, self.c1r0, self.c2r0,
+            self.c0r1, self.c1r1, self.c2r1,
+            self.c0r2, self.c1r2, self.c2r2
+        )
     }
 }
 
@@ -1383,16 +1469,6 @@ impl Matrix4 {
         }
     }
 
-    /// Transpose a 4x4 matrix.
-    pub fn transpose(&self) -> Matrix4 {
-        Matrix4::new(
-            self.c0r0, self.c1r0, self.c2r0, self.c3r0,
-            self.c0r1, self.c1r1, self.c2r1, self.c3r1, 
-            self.c0r2, self.c1r2, self.c2r2, self.c3r2, 
-            self.c0r3, self.c1r3, self.c2r3, self.c3r3
-        )
-    }
-
     /// Create a affine translation matrix.
     #[inline]
     pub fn from_translation(distance: Vector3) -> Matrix4 {
@@ -1578,6 +1654,61 @@ impl Array for Matrix4 {
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut f32 {
         &mut self.c0r0
+    }
+}
+
+impl Matrix for Matrix4 {
+    type Row = Vector4;
+    type Column = Vector4;
+    type Transpose = Matrix4;
+
+    fn row(&self, r: usize) -> Self::Row {
+        Vector4::new(self[0][r], self[1][r], self[2][r], self[3][r])
+    }
+    
+    fn swap_rows(&mut self, row_a: usize, row_b: usize) {
+        let c0ra = self[0][row_a];
+        let c1ra = self[1][row_a];
+        let c2ra = self[2][row_a];
+        let c3ra = self[3][row_a];
+        self[0][row_a] = self[0][row_b];
+        self[1][row_a] = self[0][row_b];
+        self[2][row_a] = self[0][row_b];
+        self[3][row_a] = self[0][row_b];
+        self[0][row_b] = c0ra;
+        self[1][row_b] = c1ra;
+        self[2][row_b] = c2ra;
+        self[3][row_b] = c3ra;
+    }
+    
+    fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        let car0 = self[col_a][0];
+        let car1 = self[col_a][1];
+        let car2 = self[col_a][2];
+        let car3 = self[col_a][3];
+        self[col_a][0] = self[col_b][0];
+        self[col_a][1] = self[col_b][1];
+        self[col_a][2] = self[col_b][2];
+        self[col_a][3] = self[col_b][3];
+        self[col_b][0] = car0;
+        self[col_b][1] = car1;
+        self[col_b][2] = car2;
+        self[col_b][3] = car3;
+    }
+    
+    fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
+        let element_a = self[a.0][a.1];
+        self[a.0][a.1] = self[b.0][b.1];
+        self[b.0][b.1] = element_a;
+    }
+    
+    fn transpose(&self) -> Self::Transpose {
+        Matrix4::new(
+            self.c0r0, self.c1r0, self.c2r0, self.c3r0,
+            self.c0r1, self.c1r1, self.c2r1, self.c3r1, 
+            self.c0r2, self.c1r2, self.c2r2, self.c3r2, 
+            self.c0r3, self.c1r3, self.c2r3, self.c3r3
+        )
     }
 }
 
@@ -3033,7 +3164,7 @@ mod matrix4_tests {
     use std::slice::Iter;
     use vector::{Vector3, Vector4};
     use super::{Matrix4};
-    use traits::{One, Zero};
+    use traits::{One, Zero, Matrix};
 
 
     struct TestCase {
