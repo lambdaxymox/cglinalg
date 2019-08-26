@@ -2690,7 +2690,7 @@ mod matrix2_tests {
     use std::slice::Iter;
     use vector::Vector2;
     use super::Matrix2;
-    use traits::{One, Zero};
+    use traits::{One, Zero, Matrix};
 
 
     struct TestCase {
@@ -2923,7 +2923,7 @@ mod matrix3_tests {
     use std::slice::Iter;
     use vector::Vector3;
     use super::Matrix3;
-    use traits::{One, Zero};
+    use traits::{One, Zero, Matrix};
 
     struct TestCase {
         a_mat: Matrix3,
