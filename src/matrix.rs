@@ -403,10 +403,40 @@ impl ops::Rem<f32> for &Matrix2 {
     }
 }
 
+impl Lerp<Matrix2> for Matrix2 {
+    type Output = Matrix2;
 
-///
+    fn lerp(self, other: Matrix2, amount: f32) -> Matrix2 {
+        self + ((other - self) * amount)
+    }
+}
+
+impl Lerp<&Matrix2> for Matrix2 {
+    type Output = Matrix2;
+
+    fn lerp(self, other: &Matrix2, amount: f32) -> Matrix2 {
+        self + ((other - self) * amount)
+    }
+}
+
+impl Lerp<Matrix2> for &Matrix2 {
+    type Output = Matrix2;
+
+    fn lerp(self, other: Matrix2, amount: f32) -> Matrix2 {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<'a, 'b> Lerp<&'a Matrix2> for &'b Matrix2 {
+    type Output = Matrix2;
+
+    fn lerp(self, other: &'a Matrix2, amount: f32) -> Matrix2 {
+        self + ((other - self) * amount)
+    }
+}
+
+
 /// The `Matrix3` type represents 3x3 matrices in column-major order.
-///
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Matrix3 {
     /// Column 1 of the matrix.
@@ -957,6 +987,38 @@ impl ops::Rem<f32> for &Matrix3 {
         let c2r2 = self.c2r2 % other;
 
         Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)     
+    }
+}
+
+impl Lerp<Matrix3> for Matrix3 {
+    type Output = Matrix3;
+
+    fn lerp(self, other: Matrix3, amount: f32) -> Matrix3 {
+        self + ((other - self) * amount)
+    }
+}
+
+impl Lerp<&Matrix3> for Matrix3 {
+    type Output = Matrix3;
+
+    fn lerp(self, other: &Matrix3, amount: f32) -> Matrix3 {
+        self + ((other - self) * amount)
+    }
+}
+
+impl Lerp<Matrix3> for &Matrix3 {
+    type Output = Matrix3;
+
+    fn lerp(self, other: Matrix3, amount: f32) -> Matrix3 {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<'a, 'b> Lerp<&'a Matrix3> for &'b Matrix3 {
+    type Output = Matrix3;
+
+    fn lerp(self, other: &'a Matrix3, amount: f32) -> Matrix3 {
+        self + ((other - self) * amount)
     }
 }
 
@@ -1873,6 +1935,38 @@ impl ops::Rem<f32> for &Matrix4 {
             c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
             c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
         )
+    }
+}
+
+impl Lerp<Matrix4> for Matrix4 {
+    type Output = Matrix4;
+
+    fn lerp(self, other: Matrix4, amount: f32) -> Matrix4 {
+        self + ((other - self) * amount)
+    }
+}
+
+impl Lerp<&Matrix4> for Matrix4 {
+    type Output = Matrix4;
+
+    fn lerp(self, other: &Matrix4, amount: f32) -> Matrix4 {
+        self + ((other - self) * amount)
+    }
+}
+
+impl Lerp<Matrix4> for &Matrix4 {
+    type Output = Matrix4;
+
+    fn lerp(self, other: Matrix4, amount: f32) -> Matrix4 {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<'a, 'b> Lerp<&'a Matrix4> for &'b Matrix4 {
+    type Output = Matrix4;
+
+    fn lerp(self, other: &'a Matrix4, amount: f32) -> Matrix4 {
+        self + ((other - self) * amount)
     }
 }
 

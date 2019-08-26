@@ -75,6 +75,12 @@ pub trait Magnitude<Out>
     }
 }
 
+pub trait Lerp<V: Copy + Clone> where Self: Copy + Clone {
+    type Output;
+
+    fn lerp(self, other: V, amount: f32) -> Self::Output;
+}
+
 pub trait ProjectOn<V: Copy + Clone> where Self: DotProduct<V> {
     type Output;
 
@@ -82,8 +88,3 @@ pub trait ProjectOn<V: Copy + Clone> where Self: DotProduct<V> {
     fn project_on(self, onto: V) -> Self::Output;
 }
 
-pub trait Lerp<V: Copy + Clone> where Self: Copy + Clone {
-    type Output;
-
-    fn lerp(self, other: V, amount: f32) -> Self::Output;
-}
