@@ -1,6 +1,6 @@
 [package]
 name = "lean_cgmath"
-version = "0.6.0"
+version = "0.6.1"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for computer graphics and real-time physics applications."
 
