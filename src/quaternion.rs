@@ -152,6 +152,18 @@ impl AsRef<(f32, f32, f32, f32)> for Quaternion {
     }
 }
 
+impl AsMut<[f32; 4]> for Quaternion {
+    fn as_mut(&mut self) -> &mut [f32; 4] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
+impl AsMut<(f32, f32, f32, f32)> for Quaternion {
+    fn as_mut(&mut self) -> &mut (f32, f32, f32, f32) {
+        unsafe { mem::transmute(self) }
+    }
+}
+
 impl From<Quaternion> for Matrix3 {
     fn from(quat: Quaternion) -> Matrix3 {
         let s = quat.s;
@@ -258,6 +270,46 @@ impl ops::Index<ops::RangeFull> for Quaternion {
     fn index(&self, index: ops::RangeFull) -> &Self::Output {
         let v: &[f32; 4] = self.as_ref();
         &v[index]
+    }
+}
+
+impl ops::IndexMut<usize> for Quaternion {
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut f32 {
+        let v: &mut [f32; 4] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl ops::IndexMut<ops::Range<usize>> for Quaternion {
+    #[inline]
+    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [f32] {
+        let v: &mut [f32; 4] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl ops::IndexMut<ops::RangeTo<usize>> for Quaternion {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [f32] {
+        let v: &mut [f32; 4] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl ops::IndexMut<ops::RangeFrom<usize>> for Quaternion {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [f32] {
+        let v: &mut [f32; 4] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl ops::IndexMut<ops::RangeFull> for Quaternion {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [f32] {
+        let v: &mut [f32; 4] = self.as_mut();
+        &mut v[index]
     }
 }
 
