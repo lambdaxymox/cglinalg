@@ -11,9 +11,8 @@ const EPSILON: f32 = 0.00001;
 const M_PI: f32 = 3.14159265358979323846264338327950288;
 const ONE_DEG_IN_RAD: f32 = (2.0 * M_PI) / 360.0; // == 0.017444444
 
-///
+
 /// The `Matrix2` type represents 2x2 matrices in column-major order.
-///
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Matrix2 {
     /// Column 1 of the matrix.
@@ -23,23 +22,17 @@ pub struct Matrix2 {
 }
 
 impl Matrix2 {
-    ///
     /// Construct a new 2x2 matrix from its field elements.
-    /// 
     pub fn new(c0r0: f32, c0r1: f32, c1r0: f32, c1r1: f32) -> Matrix2 {
         Matrix2 { c0r0: c0r0, c0r1: c0r1, c1r0: c1r0, c1r1: c1r1 }
     }
 
-    ///
     /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
-    /// 
     pub fn from_cols(c0: Vector2, c1: Vector2) -> Matrix2 {
         Matrix2 { c0r0: c0.x, c0r1: c0.y, c1r0: c1.x, c1r1: c1.y }
     }
 
-    ///
     /// Compute the transpose of a 2x2 matrix.
-    ///
     pub fn transpose(&self) -> Matrix2 {
         Matrix2::new(
             self.c0r0, self.c1r0,
@@ -47,23 +40,17 @@ impl Matrix2 {
         )
     }
 
-    ///
     /// Compute the determinant of a 2x2 matrix.
-    ///
     pub fn determinant(&self) -> f32 {
         self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
     }
 
-    ///
     /// Determine whether a 2x2 matrix is invertible.
-    /// 
     pub fn is_invertible(&self) -> bool {
         self.determinant() != 0.0
     }
 
-    ///
     /// Compute the inverse of a 2x2 matrix.
-    /// 
     pub fn inverse(&self) -> Option<Matrix2> {
         let det = self.determinant();
         // A matrix with zero determinant has no inverse.
@@ -1326,9 +1313,7 @@ impl<'a, 'b> Lerp<&'a Matrix3> for &'b Matrix3 {
 }
 
 
-///
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
-///
 #[derive(Copy, Clone, Debug)]
 pub struct Matrix4 {
     /// Column 1 of the matrix.
@@ -1356,9 +1341,7 @@ impl Matrix4 {
         }
     }
 
-    ///
     /// Transpose a 4x4 matrix.
-    ///
     pub fn transpose(&self) -> Matrix4 {
         Matrix4::new(
             self.c0r0, self.c1r0, self.c2r0, self.c3r0,
@@ -1368,9 +1351,7 @@ impl Matrix4 {
         )
     }
 
-    ///
     /// Create a affine translation matrix.
-    ///
     #[inline]
     pub fn from_translation(distance: Vector3) -> Matrix4 {
         Matrix4::new(
@@ -1381,9 +1362,7 @@ impl Matrix4 {
         )
     }
 
-    ///
     /// Create a rotation matrix around the x axis by an angle in `degrees` degrees.
-    ///
     pub fn from_rotation_x(degrees: f32) -> Matrix4 {
         // Convert to radians.
         let radians = degrees * ONE_DEG_IN_RAD;
@@ -1396,9 +1375,7 @@ impl Matrix4 {
         rot_mat
     }
 
-    ///
     /// Create a rotation matrix around the y axis by an angle in `degrees` degrees.
-    ///
     pub fn from_rotation_y(degrees: f32) -> Matrix4 {
         // Convert to radians.
         let radians = degrees * ONE_DEG_IN_RAD;
@@ -1411,9 +1388,7 @@ impl Matrix4 {
         rot_mat
     }
 
-    ///
     /// Create a rotation matrix around the z axis by an angle in `degrees` degrees.
-    ///
     pub fn from_rotation_z(degrees: f32) -> Matrix4 {
         // Convert to radians.
         let radians = degrees * ONE_DEG_IN_RAD;
@@ -1426,17 +1401,13 @@ impl Matrix4 {
         rot_mat
     }
 
-    ///
     /// Scale a matrix uniformly.
-    ///
     #[inline]
     pub fn from_scale(value: f32) -> Matrix4 {
         Matrix4::from_nonuniform_scale(value, value, value)
     }
 
-    ///
     /// Scale a matrix in a nonuniform fashion.
-    ///
     #[inline]
     pub fn from_nonuniform_scale(sx: f32, sy: f32, sz: f32) -> Matrix4 {
         Matrix4::new(
@@ -1447,9 +1418,7 @@ impl Matrix4 {
         )
     }
 
-    ///
     /// Computes the determinant of a 4x4 matrix.
-    ///
     pub fn determinant(&self) -> f32 {
         self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
         self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
@@ -1481,9 +1450,7 @@ impl Matrix4 {
         self.determinant() != 0.0
     }
 
-    ///
     /// Compute the inverse of a 4x4 matrix.
-    ///
     pub fn inverse(&self) -> Option<Matrix4> {
         let det = self.determinant();
         // A matrix with zero determinant has no inverse.
