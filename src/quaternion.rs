@@ -1,11 +1,10 @@
 use std::fmt;
 use std::mem;
 use std::ops;
-use std::cmp;
 
 use crate::vector::Vector3;
 use crate::matrix::{Matrix3, Matrix4};
-use crate::traits::{Array, One, Zero, Metric, DotProduct, Lerp, Magnitude};
+use crate::traits::{One, Zero, Metric, DotProduct, Magnitude};
 
 
 const EPSILON: f32 = 0.00001;

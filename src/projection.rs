@@ -1,11 +1,4 @@
-use std::fmt;
-use std::mem;
-use std::ops;
-use std::cmp;
-
-use crate::vector::Vector3;
-use crate::matrix::{Matrix3, Matrix4};
-use crate::traits::{Array, Zero, Metric, DotProduct, Lerp};
+use crate::matrix::{Matrix4};
 
 
 const M_PI: f32 = 3.14159265358979323846264338327950288;
