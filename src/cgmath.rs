@@ -1,8 +1,3 @@
-use std::fmt;
-use std::mem;
-use std::ops;
-use std::cmp;
-
 use crate::traits::*;
 use crate::vector::*;
 use crate::matrix::*;
