@@ -160,6 +160,16 @@ impl ops::Index<ops::RangeFrom<usize>> for Vector1 {
     }
 }
 
+impl ops::Index<ops::RangeFull> for Vector1 {
+    type Output = [f32];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFull) -> &Self::Output {
+        let v: &[f32; 1] = self.as_ref();
+        &v[index]
+    }
+}
+
 impl fmt::Debug for Vector1 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector1 ")?;
@@ -576,6 +586,16 @@ impl ops::Index<ops::RangeFrom<usize>> for Vector2 {
 
     #[inline]
     fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
+        let v: &[f32; 2] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl ops::Index<ops::RangeFull> for Vector2 {
+    type Output = [f32];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFull) -> &Self::Output {
         let v: &[f32; 2] = self.as_ref();
         &v[index]
     }
@@ -1072,6 +1092,16 @@ impl ops::Index<ops::RangeFrom<usize>> for Vector3 {
 
     #[inline]
     fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
+        let v: &[f32; 3] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl ops::Index<ops::RangeFull> for Vector3 {
+    type Output = [f32];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFull) -> &Self::Output {
         let v: &[f32; 3] = self.as_ref();
         &v[index]
     }
@@ -1617,6 +1647,16 @@ impl ops::Index<ops::RangeFrom<usize>> for Vector4 {
 
     #[inline]
     fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
+        let v: &[f32; 4] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl ops::Index<ops::RangeFull> for Vector4 {
+    type Output = [f32];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFull) -> &Self::Output {
         let v: &[f32; 4] = self.as_ref();
         &v[index]
     }
