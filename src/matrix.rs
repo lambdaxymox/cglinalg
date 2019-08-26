@@ -160,6 +160,16 @@ impl AsMut<[[f32; 2]; 2]> for Matrix2 {
     }
 }
 
+impl ops::Index<usize> for Matrix2 {
+    type Output = [f32; 2];
+
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        let v: &[[f32; 2]; 2] = self.as_ref();
+        &v[index]
+    }
+}
+
 impl Zero for Matrix2 {
     fn zero() -> Matrix2 {
         Matrix2::new(0.0, 0.0, 0.0, 0.0)
@@ -700,6 +710,16 @@ impl AsMut<[f32; 9]> for Matrix3 {
 impl AsMut<[[f32; 3]; 3]> for Matrix3 {
     fn as_mut(&mut self) -> &mut [[f32; 3];3 ] {
         unsafe { mem::transmute(self) }
+    }
+}
+
+impl ops::Index<usize> for Matrix3 {
+    type Output = [f32; 3];
+
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        let v: &[[f32; 3]; 3] = self.as_ref();
+        &v[index]
     }
 }
 
@@ -1565,6 +1585,16 @@ impl AsMut<[f32; 16]> for Matrix4 {
 impl AsMut<[[f32; 4]; 4]> for Matrix4 {
     fn as_mut(&mut self) -> &mut [[f32; 4]; 4] {
         unsafe { mem::transmute(self) }
+    }
+}
+
+impl ops::Index<usize> for Matrix4 {
+    type Output = [f32; 4];
+
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        let v: &[[f32; 4]; 4] = self.as_ref();
+        &v[index]
     }
 }
 
