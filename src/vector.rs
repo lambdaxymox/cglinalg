@@ -1145,6 +1145,13 @@ impl From<(&Vector2, f32)> for Vector3 {
     }
 }
 
+impl From<[f32; 3]> for Vector3 {
+    #[inline]
+    fn from(v: [f32; 3]) -> Vector3 {
+        Vector3::new(v[0], v[1], v[2])
+    }
+}
+
 impl From<Vector4> for Vector3 {
     #[inline]
     fn from(v: Vector4) -> Vector3 {
@@ -1156,6 +1163,20 @@ impl From<&Vector4> for Vector3 {
     #[inline]
     fn from(v: &Vector4) -> Vector3 {
         Vector3::new(v.x, v.y, v.z)
+    }
+}
+
+impl<'a> From<&'a [f32; 3]> for &'a Vector3 {
+    #[inline]
+    fn from(v: &'a [f32; 3]) -> &'a Vector3 {
+        unsafe { mem::transmute(v) }
+    }
+}
+
+impl<'a> From<&'a (f32, f32, f32)> for &'a Vector3 {
+    #[inline]
+    fn from(v: &'a (f32, f32, f32)) -> &'a Vector3 {
+        unsafe { mem::transmute(v) }
     }
 }
 
@@ -1691,6 +1712,41 @@ impl From<(&Vector3, f32)> for Vector4 {
     #[inline]
     fn from((v, w): (&Vector3, f32)) -> Vector4 {
         Vector4::new(v.x, v.y, v.z, w)
+    }
+}
+
+impl From<[f32; 4]> for Vector4 {
+    #[inline]
+    fn from(v: [f32; 4]) -> Vector4 {
+        unsafe { mem::transmute(v) }
+    }
+}
+
+impl From<&[f32; 4]> for Vector4 {
+    #[inline]
+    fn from(v: &[f32; 4]) -> Vector4 {
+        Vector4::new(v[0], v[1], v[2], v[3])
+    }
+}
+
+impl From<&(f32, f32, f32, f32)> for Vector4 {
+    #[inline]
+    fn from(v: &(f32, f32, f32, f32)) -> Vector4 {
+        Vector4::new(v.0, v.1, v.2, v.3)
+    }
+}
+
+impl<'a> From<&'a [f32; 4]> for &'a Vector4 {
+    #[inline]
+    fn from(v: &'a [f32; 4]) -> &'a Vector4 {
+        unsafe { mem::transmute(v) }
+    }
+}
+
+impl<'a> From<&'a (f32, f32, f32, f32)> for &'a Vector4 {
+    #[inline]
+    fn from(v: &'a (f32, f32, f32, f32)) -> &'a Vector4 {
+        unsafe { mem::transmute(v) }
     }
 }
 
