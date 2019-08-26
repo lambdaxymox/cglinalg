@@ -16,9 +16,7 @@ pub struct Vector1 {
 }
 
 impl Vector1 {
-    ///
     /// Create a new vector.
-    ///
     pub fn new(x: f32) -> Vector1 {
         Vector1 { x: x }
     }
@@ -520,9 +518,8 @@ impl<'a, 'b> Lerp<&'a Vector1> for &'b Vector1 {
 impl Magnitude<Vector1> for Vector1 {}
 impl Magnitude<Vector1> for &Vector1 {}
 
-///
+
 /// A representation of two-dimensional vectors with a Euclidean metric.
-///
 #[derive(Copy, Clone, PartialEq)]
 pub struct Vector2 {
    pub x: f32,
@@ -530,9 +527,7 @@ pub struct Vector2 {
 }
 
 impl Vector2 {
-    ///
     /// Create a new vector.
-    ///
     pub fn new(x: f32, y: f32) -> Vector2 {
         Vector2 { x: x, y: y }
     }
@@ -1652,9 +1647,8 @@ impl<'a, 'b> Lerp<&'a Vector3> for &'b Vector3 {
 impl Magnitude<Vector3> for Vector3 {}
 impl Magnitude<Vector3> for &Vector3 {}
 
-///
+
 /// A representation of four-dimensional vectors with a Euclidean metric.
-///
 #[derive(Copy, Clone)]
 pub struct Vector4 {
     pub x: f32,
