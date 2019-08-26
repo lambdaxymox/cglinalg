@@ -50,20 +50,28 @@ pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
     fn dot(self, other: V) -> f32;
 }
 
-pub trait Magnitude<Out> where Self: DotProduct<Self> + ops::Div<f32, Output = Out> {    
+pub trait Magnitude<Out> 
+    where Self: DotProduct<Self>,
+          Self: ops::Mul<f32, Output = Out> + ops::Div<f32, Output = Out> {
+
     /// Compute the norm (length) of a vector.
-    fn norm(self) -> f32 {
+    fn magnitude(self) -> f32 {
         f32::sqrt(self.dot(self))
     }
 
-    /// Compute the squared norm (length) of a vector.
-    fn norm2(self) -> f32 {
+    /// Compute the squared length of a vector.
+    fn magnitude2(self) -> f32 {
         self.dot(self)
     }
 
-    /// Convert an arbitrary vector into a unit vector.
+    /// Convert a vector into a unit vector.
     fn normalize(self) -> Out {
-        self / self.norm()
+        self / self.magnitude()
+    }
+
+    /// Normalize a vector with a specified magnitude.
+    fn normalize_to(self, magnitude: f32) -> Out {
+        self * (magnitude / self.magnitude())
     }
 }
 
