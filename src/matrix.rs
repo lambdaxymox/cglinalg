@@ -685,6 +685,28 @@ impl<'a> From<&'a [f32; 9]> for &'a Matrix3 {
     }
 }
 
+impl From<Matrix2> for Matrix3 {
+    #[inline]
+    fn from(m: Matrix2) -> Matrix3 {
+        Matrix3::new(
+            m.c0r0, m.c0r1, 0.0,
+            m.c1r0, m.c1r1, 0.0,
+               0.0,    0.0, 1.0
+        )
+    }
+}
+
+impl From<&Matrix2> for Matrix3 {
+    #[inline]
+    fn from(m: &Matrix2) -> Matrix3 {
+        Matrix3::new(
+            m.c0r0, m.c0r1, 0.0,
+            m.c1r0, m.c1r1, 0.0,
+               0.0,    0.0, 1.0
+        )
+    }
+}
+
 impl fmt::Display for Matrix3 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, 
@@ -1556,6 +1578,54 @@ impl<'a> From<&'a [f32; 16]> for &'a Matrix4 {
     #[inline]
     fn from(m: &'a [f32; 16]) -> &'a Matrix4 {
         unsafe { mem::transmute(m) }
+    }
+}
+
+impl From<Matrix2> for Matrix4 {
+    #[inline]
+    fn from(m: Matrix2) -> Matrix4 {
+        Matrix4::new(
+            m.c0r0, m.c0r1, 0.0, 0.0,
+            m.c1r0, m.c1r1, 0.0, 0.0,
+               0.0,    0.0, 1.0, 0.0,
+               0.0,    0.0, 0.0, 1.0
+        )
+    }
+}
+
+impl From<&Matrix2> for Matrix4 {
+    #[inline]
+    fn from(m: &Matrix2) -> Matrix4 {
+        Matrix4::new(
+            m.c0r0, m.c0r1, 0.0, 0.0,
+            m.c1r0, m.c1r1, 0.0, 0.0,
+               0.0,    0.0, 1.0, 0.0,
+               0.0,    0.0, 0.0, 1.0
+        )
+    }
+}
+
+impl From<Matrix3> for Matrix4 {
+    #[inline]
+    fn from(m: Matrix3) -> Matrix4 {
+        Matrix4::new(
+            m.c0r0, m.c0r1, m.c0r2, 0.0,
+            m.c1r0, m.c1r1, m.c1r2, 0.0,
+            m.c2r0, m.c2r1, m.c2r2, 0.0,
+               0.0,    0.0,    0.0, 1.0
+        )
+    }
+}
+
+impl From<&Matrix3> for Matrix4 {
+    #[inline]
+    fn from(m: &Matrix3) -> Matrix4 {
+        Matrix4::new(
+            m.c0r0, m.c0r1, m.c0r2, 0.0,
+            m.c1r0, m.c1r1, m.c1r2, 0.0,
+            m.c2r0, m.c2r1, m.c2r2, 0.0,
+               0.0,    0.0,    0.0, 1.0
+        )
     }
 }
 
