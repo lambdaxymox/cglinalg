@@ -72,6 +72,11 @@ impl Array for Vector1 {
     }
 
     #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Vector1::new(value)
+    }
+
+    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -549,6 +554,11 @@ impl Array for Vector2 {
     #[inline]
     fn len() -> usize {
         2
+    }
+
+    #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Vector2::new(value, value)
     }
 
     #[inline]
@@ -1094,6 +1104,11 @@ impl Array for Vector3 {
     #[inline]
     fn len() -> usize {
         3
+    }
+
+    #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Vector3::new(value, value, value)
     }
 
     #[inline]
@@ -1689,6 +1704,11 @@ impl Array for Vector4 {
     #[inline]
     fn len() -> usize {
         4
+    }
+
+    #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Vector4::new(value, value, value, value)
     }
 
     #[inline]

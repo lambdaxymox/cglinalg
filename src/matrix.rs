@@ -75,6 +75,11 @@ impl Array for Matrix2 {
     }
 
     #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Matrix2::new(value, value, value, value)
+    }
+
+    #[inline]
     fn as_ptr(&self) -> *const f32 {
         &self.c0r0
     }
@@ -644,6 +649,11 @@ impl Array for Matrix3 {
     #[inline]
     fn len() -> usize {
         9
+    }
+
+    #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Matrix3::new(value, value, value, value, value, value, value, value, value)
     }
 
     #[inline]
@@ -1550,6 +1560,14 @@ impl Array for Matrix4 {
     #[inline]
     fn len() -> usize {
         16
+    }
+
+    #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Matrix4::new(
+            value, value, value, value, value, value, value, value, 
+            value, value, value, value, value, value, value, value
+        )
     }
 
     #[inline]
