@@ -157,7 +157,7 @@ impl fmt::Debug for Vector1 {
 
 impl fmt::Display for Vector1 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "[{:.2}]", self.x)
+        write!(f, "Vector2 [{:.2}]", self.x)
     }
 }
 
@@ -636,7 +636,7 @@ impl fmt::Debug for Vector2 {
 
 impl fmt::Display for Vector2 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "[{:.2}, {:.2}]", self.x, self.y)
+        write!(f, "Vector2 [{:.2}, {:.2}]", self.x, self.y)
     }
 }
 
@@ -1120,7 +1120,7 @@ impl fmt::Debug for Vector3 {
 
 impl fmt::Display for Vector3 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "[{:.2}, {:.2}, {:.2}]", self.x, self.y, self.z)
+        write!(f, "Vector3 [{:.2}, {:.2}, {:.2}]", self.x, self.y, self.z)
     }
 }
 
@@ -1759,7 +1759,7 @@ impl fmt::Debug for Vector4 {
 
 impl fmt::Display for Vector4 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "[{:.2}, {:.2}, {:.2}, {:.2}]", self.x, self.y, self.z, self.w)
+        write!(f, "Vector4 [{:.2}, {:.2}, {:.2}, {:.2}]", self.x, self.y, self.z, self.w)
     }
 }
 
