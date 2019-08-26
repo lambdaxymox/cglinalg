@@ -445,7 +445,7 @@ impl Lerp<Vector1> for Vector1 {
     type Output = Vector1;
 
     fn lerp(self, other: Vector1, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -453,7 +453,7 @@ impl Lerp<&Vector1> for Vector1 {
     type Output = Vector1;
 
     fn lerp(self, other: &Vector1, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -461,7 +461,7 @@ impl Lerp<Vector1> for &Vector1 {
     type Output = Vector1;
 
     fn lerp(self, other: Vector1, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -469,7 +469,7 @@ impl<'a, 'b> Lerp<&'a Vector1> for &'b Vector1 {
     type Output = Vector1;
 
     fn lerp(self, other: &'a Vector1, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -949,7 +949,7 @@ impl Lerp<Vector2> for Vector2 {
     type Output = Vector2;
 
     fn lerp(self, other: Vector2, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -957,7 +957,7 @@ impl Lerp<&Vector2> for Vector2 {
     type Output = Vector2;
 
     fn lerp(self, other: &Vector2, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -965,7 +965,7 @@ impl Lerp<Vector2> for &Vector2 {
     type Output = Vector2;
 
     fn lerp(self, other: Vector2, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -973,7 +973,7 @@ impl<'a, 'b> Lerp<&'a Vector2> for &'b Vector2 {
     type Output = Vector2;
 
     fn lerp(self, other: &'a Vector2, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -1508,7 +1508,7 @@ impl Lerp<Vector3> for Vector3 {
     type Output = Vector3;
 
     fn lerp(self, other: Vector3, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -1516,7 +1516,7 @@ impl Lerp<&Vector3> for Vector3 {
     type Output = Vector3;
 
     fn lerp(self, other: &Vector3, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -1524,7 +1524,7 @@ impl Lerp<Vector3> for &Vector3 {
     type Output = Vector3;
 
     fn lerp(self, other: Vector3, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -1532,7 +1532,7 @@ impl<'a, 'b> Lerp<&'a Vector3> for &'b Vector3 {
     type Output = Vector3;
 
     fn lerp(self, other: &'a Vector3, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -2093,7 +2093,7 @@ impl Lerp<Vector4> for Vector4 {
     type Output = Vector4;
 
     fn lerp(self, other: Vector4, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -2101,7 +2101,7 @@ impl Lerp<&Vector4> for Vector4 {
     type Output = Vector4;
 
     fn lerp(self, other: &Vector4, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -2109,7 +2109,7 @@ impl Lerp<Vector4> for &Vector4 {
     type Output = Vector4;
 
     fn lerp(self, other: Vector4, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
@@ -2117,7 +2117,7 @@ impl<'a, 'b> Lerp<&'a Vector4> for &'b Vector4 {
     type Output = Vector4;
 
     fn lerp(self, other: &'a Vector4, amount: f32) -> Self::Output {
-        self + (other - self) * amount
+        self + ((other - self) * amount)
     }
 }
 
