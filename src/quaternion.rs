@@ -15,7 +15,9 @@ const ONE_DEG_IN_RAD: f32 = (2.0 * M_PI) / 360.0; // == 0.017444444
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct Quaternion {
+    /// The scalar component.
     s: f32,
+    /// The vector component.
     v: Vector3,
 }
 
@@ -114,7 +116,7 @@ impl Quaternion {
         let a = f32::sin((1.0 - t) * half_theta) / sin_half_theta;
         let b = f32::sin(t * half_theta) / sin_half_theta;
         
-        result.s   = q.s * a   + r.s * b;
+        result.s   = q.s   * a + r.s   * b;
         result.v.x = q.v.x * a + r.v.x * b;
         result.v.y = q.v.y * a + r.v.y * b;
         result.v.z = q.v.z * a + r.v.z * b;
