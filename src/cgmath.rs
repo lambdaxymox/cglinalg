@@ -103,13 +103,35 @@ pub fn dot<W: Copy + Clone, V: DotProduct<W>>(a: V, b: W) -> f32 {
 
 
 #[cfg(test)]
-mod test {
-    use matrix::Matrix2;
+mod tests {
+    use matrix::{Matrix2, Matrix3, Matrix4};
 
     #[test]
     fn test_mat2() {
         let expected = Matrix2::new(1f32, 2f32, 3f32, 4f32);
         let result = super::mat2([1f32, 2f32, 3f32, 4f32]);
+
+        assert_eq!(result, expected);
+    }
+
+        #[test]
+    fn test_mat3() {
+        let expected = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 7f32, 8f32, 9f32);
+        let result = super::mat3([1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 7f32, 8f32, 9f32]);
+
+        assert_eq!(result, expected);
+    }
+
+        #[test]
+    fn test_mat4() {
+        let expected = Matrix4::new(
+            1f32,  2f32,  3f32,  4f32,  5f32,  6f32,  7f32,  8f32, 
+            9f32, 10f32, 11f32, 12f32, 13f32, 14f32, 15f32, 15f32
+        );
+        let result = super::mat4([
+            1f32,  2f32,  3f32,  4f32,  5f32,  6f32,  7f32,  8f32, 
+            9f32, 10f32, 11f32, 12f32, 13f32, 14f32, 15f32, 15f32
+        ]);
 
         assert_eq!(result, expected);
     }
