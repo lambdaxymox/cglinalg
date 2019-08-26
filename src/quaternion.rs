@@ -13,7 +13,7 @@ const M_PI: f32 = 3.14159265358979323846264338327950288;
 const ONE_DEG_IN_RAD: f32 = (2.0 * M_PI) / 360.0; // == 0.017444444
 
 
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Quaternion {
     /// The scalar component.
     s: f32,
@@ -252,15 +252,9 @@ impl ops::Index<ops::RangeFrom<usize>> for Quaternion {
     }
 }
 
-impl fmt::Debug for Quaternion {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        writeln!(f, "Quaternion [s: {}, v: [{}, {}, {}]]", self.s, self.v.x, self.v.y, self.v.z)
-    }
-}
-
 impl fmt::Display for Quaternion {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        writeln!(f, "[{:.2}, [{:.2}, {:.2}, {:.2}]]", self.s, self.v.x, self.v.y, self.v.z)
+        writeln!(f, "Quaternion [s: {}, v: [{}, {}, {}]]", self.s, self.v.x, self.v.y, self.v.z)
     }
 }
 
