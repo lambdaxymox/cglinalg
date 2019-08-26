@@ -499,6 +499,54 @@ impl ops::Rem<f32> for &Quaternion {
     }
 }
 
+impl ops::AddAssign<Quaternion> for Quaternion {
+    fn add_assign(&mut self, other: Quaternion) {
+        self.s += other.s;
+        self.v += other.v;
+    }
+}
+
+impl ops::AddAssign<&Quaternion> for Quaternion {
+    fn add_assign(&mut self, other: &Quaternion) {
+        self.s += other.s;
+        self.v += other.v;
+    }
+}
+
+impl ops::SubAssign<Quaternion> for Quaternion {
+    fn sub_assign(&mut self, other: Quaternion) {
+        self.s -= other.s;
+        self.v -= other.v;
+    }
+}
+
+impl ops::SubAssign<&Quaternion> for Quaternion {
+    fn sub_assign(&mut self, other: &Quaternion) {
+        self.s -= other.s;
+        self.v -= other.v;
+    }
+}
+
+impl ops::MulAssign<f32> for Quaternion {
+    fn mul_assign(&mut self, other: f32) {
+        self.s *= other;
+        self.v *= other;
+    }
+}
+
+impl ops::DivAssign<f32> for Quaternion {
+    fn div_assign(&mut self, other: f32) {
+        self.s /= other;
+        self.v /= other;
+    }
+}
+
+impl ops::RemAssign<f32> for Quaternion {
+    fn rem_assign(&mut self, other: f32) {
+        self.s %= other;
+        self.v %= other;
+    }
+}
 
 impl Metric<Quaternion> for Quaternion {
     fn distance2(self, other: Quaternion) -> f32 {

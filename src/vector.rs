@@ -311,18 +311,6 @@ impl ops::AddAssign<&Vector1> for Vector1 {
     }
 }
 
-impl ops::AddAssign<Vector1> for &mut Vector1 {
-    fn add_assign(&mut self, other: Vector1) {
-        self.x = self.x + other.x;
-    }
-}
-
-impl<'a, 'b> ops::AddAssign<&'a Vector1> for &'b mut Vector1 {
-    fn add_assign(&mut self, other: &Vector1) {
-        self.x = self.x + other.x;
-    }
-}
-
 impl ops::SubAssign<Vector1> for Vector1 {
     fn sub_assign(&mut self, other: Vector1) {
         self.x = self.x - other.x;
@@ -331,18 +319,6 @@ impl ops::SubAssign<Vector1> for Vector1 {
 
 impl ops::SubAssign<&Vector1> for Vector1 {
     fn sub_assign(&mut self, other: &Vector1) {
-        self.x = self.x - other.x;
-    }
-}
-
-impl ops::SubAssign<Vector1> for &mut Vector1 {
-    fn sub_assign(&mut self, other: Vector1) {
-        self.x = self.x - other.x;
-    }
-}
-
-impl<'a, 'b> ops::SubAssign<&'a Vector1> for &'b mut Vector1 {
-    fn sub_assign(&mut self, other: &'a Vector1) {
         self.x = self.x - other.x;
     }
 }
@@ -364,6 +340,12 @@ impl ops::Mul<f32> for &Vector1 {
         Vector1 {
             x: self.x * other,
         }
+    }
+}
+
+impl ops::MulAssign<f32> for Vector1 {
+    fn mul_assign(&mut self, other: f32) {
+        self.x *= other;
     }
 }
 
@@ -393,12 +375,6 @@ impl ops::DivAssign<f32> for Vector1 {
     }
 }
 
-impl ops::DivAssign<f32> for &mut Vector1 {
-    fn div_assign(&mut self, other: f32) {
-        self.x = self.x / other;
-    }
-}
-
 impl ops::Rem<f32> for Vector1 {
     type Output = Vector1;
 
@@ -416,6 +392,12 @@ impl ops::Rem<f32> for &Vector1 {
         let x = self.x % other;
         
         Vector1 { x: x }
+    }
+}
+
+impl ops::RemAssign<f32> for Vector1 {
+    fn rem_assign(&mut self, other: f32) {
+        self.x %= other;
     }
 }
 
@@ -760,20 +742,6 @@ impl ops::AddAssign<&Vector2> for Vector2 {
     }
 }
 
-impl ops::AddAssign<Vector2> for &mut Vector2 {
-    fn add_assign(&mut self, other: Vector2) {
-        self.x = self.x + other.x;
-        self.y = self.y + other.y;
-    }
-}
-
-impl<'a, 'b> ops::AddAssign<&'a Vector2> for &'b mut Vector2 {
-    fn add_assign(&mut self, other: &'a Vector2) {
-        self.x = self.x + other.x;
-        self.y = self.y + other.y;
-    }
-}
-
 impl ops::SubAssign<Vector2> for Vector2 {
     fn sub_assign(&mut self, other: Vector2) {
         self.x = self.x - other.x;
@@ -783,20 +751,6 @@ impl ops::SubAssign<Vector2> for Vector2 {
 
 impl ops::SubAssign<&Vector2> for Vector2 {
     fn sub_assign(&mut self, other: &Vector2) {
-        self.x = self.x - other.x;
-        self.y = self.y - other.y;
-    }
-}
-
-impl ops::SubAssign<Vector2> for &mut Vector2 {
-    fn sub_assign(&mut self, other: Vector2) {
-        self.x = self.x - other.x;
-        self.y = self.y - other.y;
-    }
-}
-
-impl<'a, 'b> ops::SubAssign<&'a Vector2> for &'b mut Vector2 {
-    fn sub_assign(&mut self, other: &'a Vector2) {
         self.x = self.x - other.x;
         self.y = self.y - other.y;
     }
@@ -821,6 +775,13 @@ impl ops::Mul<f32> for &Vector2 {
             x: self.x * other,
             y: self.y * other,
         }
+    }
+}
+
+impl ops::MulAssign<f32> for Vector2 {
+    fn mul_assign(&mut self, other: f32) {
+        self.x *= other;
+        self.y *= other;
     }
 }
 
@@ -853,13 +814,6 @@ impl ops::DivAssign<f32> for Vector2 {
     }
 }
 
-impl ops::DivAssign<f32> for &mut Vector2 {
-    fn div_assign(&mut self, other: f32) {
-        self.x = self.x / other;
-        self.y = self.y / other;
-    }
-}
-
 impl ops::Rem<f32> for Vector2 {
     type Output = Vector2;
 
@@ -879,6 +833,13 @@ impl ops::Rem<f32> for &Vector2 {
         let y = self.y % other;
         
         Vector2 { x: x, y: y }
+    }
+}
+
+impl ops::RemAssign<f32> for Vector2 {
+    fn rem_assign(&mut self, other: f32) {
+        self.x %= other;
+        self.y %= other;
     }
 }
 
@@ -988,9 +949,7 @@ impl<'a, 'b> Lerp<&'a Vector2> for &'b Vector2 {
     }
 }
 
-///
 /// A representation of three-dimensional vectors with a Euclidean metric.
-///
 #[derive(Copy, Clone, PartialEq)]
 pub struct Vector3 {
     pub x: f32,
@@ -999,9 +958,7 @@ pub struct Vector3 {
 }
 
 impl Vector3 {
-    ///
     /// Create a new vector.
-    ///
     pub fn new(x: f32, y: f32, z: f32) -> Vector3 {
         Vector3 { x: x, y: y, z: z }
     }
@@ -1021,14 +978,12 @@ impl Vector3 {
         Vector3 { x: 0.0, y: 0.0, z: 1.0 }
     }
 
-    ///
     /// Compute the cross product of two three-dimensional vectors. Note that
     /// with the vectors used in computer graphics (two, three, and four dimensions),
     /// the cross product is defined only in three dimensions. Also note that the 
     /// cross product is the hodge dual of the corresponding 2-vector representing 
     /// the surface element that the crossed vector is normal to. That is, 
     /// given vectors `u` and `v`, `u x v == *(u /\ v)`, where `*(.)` denotes the hodge dual.
-    ///
     pub fn cross(&self, other: &Vector3) -> Vector3 {
         let x = self.y * other.z - self.z * other.y;
         let y = self.z * other.x - self.x * other.z;
@@ -1321,22 +1276,6 @@ impl ops::AddAssign<&Vector3> for Vector3 {
     }
 }
 
-impl ops::AddAssign<Vector3> for &mut Vector3 {
-    fn add_assign(&mut self, other: Vector3) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-    }
-}
-
-impl<'a, 'b> ops::AddAssign<&'a Vector3> for &'b mut Vector3 {
-    fn add_assign(&mut self, other: &'a Vector3) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-    }
-}
-
 impl ops::SubAssign<Vector3> for Vector3 {
     fn sub_assign(&mut self, other: Vector3) {
         self.x -= other.x;
@@ -1347,22 +1286,6 @@ impl ops::SubAssign<Vector3> for Vector3 {
 
 impl ops::SubAssign<&Vector3> for Vector3 {
     fn sub_assign(&mut self, other: &Vector3) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-    }
-}
-
-impl ops::SubAssign<Vector3> for &mut Vector3 {
-    fn sub_assign(&mut self, other: Vector3) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-    }
-}
-
-impl<'a, 'b> ops::SubAssign<&'a Vector3> for &'b mut Vector3 {
-    fn sub_assign(&mut self, other: &'a Vector3) {
         self.x -= other.x;
         self.y -= other.y;
         self.z -= other.z;
@@ -1390,6 +1313,14 @@ impl ops::Mul<f32> for &Vector3 {
             y: self.y * other,
             z: self.z * other,
         }
+    }
+}
+
+impl ops::MulAssign<f32> for Vector3 {
+    fn mul_assign(&mut self, other: f32) {
+        self.x *= other;
+        self.y *= other;
+        self.z *= other;
     }
 }
 
@@ -1425,14 +1356,6 @@ impl ops::DivAssign<f32> for Vector3 {
     }
 }
 
-impl ops::DivAssign<f32> for &mut Vector3 {
-    fn div_assign(&mut self, other: f32) {
-        self.x /= other;
-        self.y /= other;
-        self.z /= other;
-    }
-}
-
 impl ops::Rem<f32> for Vector3 {
     type Output = Vector3;
 
@@ -1454,6 +1377,14 @@ impl ops::Rem<f32> for &Vector3 {
         let z = self.z % other;
         
         Vector3 { x: x, y: y, z: z }
+    }
+}
+
+impl ops::RemAssign<f32> for Vector3 {
+    fn rem_assign(&mut self, other: f32) {
+        self.x %= other;
+        self.y %= other;
+        self.z %= other;
     }
 }
 
@@ -1923,24 +1854,6 @@ impl ops::AddAssign<&Vector4> for Vector4 {
     }
 }
 
-impl ops::AddAssign<Vector4> for &mut Vector4 {
-    fn add_assign(&mut self, other: Vector4) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-        self.w += other.w;
-    }
-}
-
-impl<'a, 'b> ops::AddAssign<&'a Vector4> for &'b mut Vector4 {
-    fn add_assign(&mut self, other: &'a Vector4) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-        self.w += other.w;
-    }
-}
-
 impl ops::SubAssign<Vector4> for Vector4 {
     fn sub_assign(&mut self, other: Vector4) {
         self.x -= other.x;
@@ -1952,24 +1865,6 @@ impl ops::SubAssign<Vector4> for Vector4 {
 
 impl ops::SubAssign<&Vector4> for Vector4 {
     fn sub_assign(&mut self, other: &Vector4) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-        self.w -= other.w;
-    }
-}
-
-impl ops::SubAssign<Vector4> for &mut Vector4 {
-    fn sub_assign(&mut self, other: Vector4) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-        self.w -= other.w;
-    }
-}
-
-impl<'a, 'b> ops::SubAssign<&'a Vector4> for &'b mut Vector4 {
-    fn sub_assign(&mut self, other: &'a Vector4) {
         self.x -= other.x;
         self.y -= other.y;
         self.z -= other.z;
@@ -2000,6 +1895,15 @@ impl ops::Mul<f32> for &Vector4 {
             z: self.z * other,
             w: self.w * other,
         }
+    }
+}
+
+impl ops::MulAssign<f32> for Vector4 {
+    fn mul_assign(&mut self, other: f32) {
+        self.x *= other;
+        self.y *= other;
+        self.z *= other;
+        self.w *= other;
     }
 }
 
@@ -2038,15 +1942,6 @@ impl ops::DivAssign<f32> for Vector4 {
     }
 }
 
-impl ops::DivAssign<f32> for &mut Vector4 {
-    fn div_assign(&mut self, other: f32) {
-        self.x /= other;
-        self.y /= other;
-        self.z /= other;
-        self.w /= other;
-    }
-}
-
 impl ops::Rem<f32> for Vector4 {
     type Output = Vector4;
 
@@ -2070,6 +1965,15 @@ impl ops::Rem<f32> for &Vector4 {
         let w = self.w % other;
         
         Vector4 { x: x, y: y, z: z, w: w }
+    }
+}
+
+impl ops::RemAssign<f32> for Vector4 {
+    fn rem_assign(&mut self, other: f32) {
+        self.x %= other;
+        self.y %= other;
+        self.z %= other;
+        self.w %= other;
     }
 }
 
