@@ -251,6 +251,16 @@ impl ops::Index<ops::RangeFrom<usize>> for Quaternion {
     }
 }
 
+impl ops::Index<ops::RangeFull> for Quaternion {
+    type Output = [f32];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFull) -> &Self::Output {
+        let v: &[f32; 4] = self.as_ref();
+        &v[index]
+    }
+}
+
 impl fmt::Display for Quaternion {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "Quaternion [s: {}, v: [{}, {}, {}]]", self.s, self.v.x, self.v.y, self.v.z)
