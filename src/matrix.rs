@@ -32,14 +32,6 @@ impl Matrix2 {
         Matrix2 { c0r0: c0.x, c0r1: c0.y, c1r0: c1.x, c1r1: c1.y }
     }
 
-    /// Compute the transpose of a 2x2 matrix.
-    pub fn transpose(&self) -> Matrix2 {
-        Matrix2::new(
-            self.c0r0, self.c1r0,
-            self.c0r1, self.c1r1,
-        )
-    }
-
     /// Compute the determinant of a 2x2 matrix.
     pub fn determinant(&self) -> f32 {
         self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
@@ -632,15 +624,6 @@ impl Matrix3 {
     /// Generate a 3x3 diagonal matrix of ones.
     pub fn one() -> Matrix3 {
         Matrix3::new(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
-    }
-
-    /// Compute the transpose of a 3x3 matrix.
-    pub fn transpose(&self) -> Matrix3 {
-        Matrix3::new(
-            self.c0r0, self.c1r0, self.c2r0,
-            self.c0r1, self.c1r1, self.c2r1,
-            self.c0r2, self.c1r2, self.c2r2,
-        )
     }
 
     /// Calculate the determinant of a 3x3 matrix.
