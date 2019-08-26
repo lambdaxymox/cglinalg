@@ -170,6 +170,14 @@ impl ops::Index<usize> for Matrix2 {
     }
 }
 
+impl ops::IndexMut<usize> for Matrix2 {
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut [f32; 2] {
+        let v: &mut [[f32; 2]; 2] = self.as_mut();
+        &mut v[index]
+    }
+}
+
 impl Zero for Matrix2 {
     fn zero() -> Matrix2 {
         Matrix2::new(0.0, 0.0, 0.0, 0.0)
@@ -720,6 +728,14 @@ impl ops::Index<usize> for Matrix3 {
     fn index(&self, index: usize) -> &Self::Output {
         let v: &[[f32; 3]; 3] = self.as_ref();
         &v[index]
+    }
+}
+
+impl ops::IndexMut<usize> for Matrix3 {
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut [f32; 3] {
+        let v: &mut [[f32; 3]; 3] = self.as_mut();
+        &mut v[index]
     }
 }
 
@@ -1595,6 +1611,14 @@ impl ops::Index<usize> for Matrix4 {
     fn index(&self, index: usize) -> &Self::Output {
         let v: &[[f32; 4]; 4] = self.as_ref();
         &v[index]
+    }
+}
+
+impl ops::IndexMut<usize> for Matrix4 {
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut [f32; 4] {
+        let v: &mut [[f32; 4]; 4] = self.as_mut();
+        &mut v[index]
     }
 }
 
