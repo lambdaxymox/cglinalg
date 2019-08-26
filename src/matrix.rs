@@ -1363,6 +1363,16 @@ impl Matrix4 {
         }
     }
 
+    /// Construct a 4x4 matrix from column vectors.
+    pub fn from_cols(c0: Vector4, c1: Vector4, c2: Vector4, c3: Vector4) -> Matrix4 {
+        Matrix4 {
+            c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, c0r3: c0.w,
+            c1r0: c1.x, c1r1: c1.y, c1r2: c1.z, c1r3: c1.w,
+            c2r0: c2.x, c2r1: c2.y, c2r2: c2.z, c2r3: c2.w,
+            c3r0: c3.x, c3r1: c3.y, c3r2: c3.z, c3r3: c3.w,
+        }
+    }
+
     /// Transpose a 4x4 matrix.
     pub fn transpose(&self) -> Matrix4 {
         Matrix4::new(
