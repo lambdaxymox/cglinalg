@@ -24,12 +24,11 @@ pub struct Quaternion {
 impl Quaternion {
     #[inline]
     pub fn new(s: f32, x: f32, y: f32, z: f32) -> Quaternion {
-        let q = Self::from_sv(s, Vector3::new(x, y, z));
-
-        q.normalize()
+        Self::from_sv(s, Vector3::new(x, y, z))
     }
 
     /// Compute a quaternion from it's scalar and vector parts.
+    #[inline]
     pub fn from_sv(s: f32, v: Vector3) -> Quaternion {
         Quaternion { s: s, v: v }
     }
