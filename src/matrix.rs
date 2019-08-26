@@ -148,6 +148,12 @@ impl AsRef<[[f32; 2]; 2]> for Matrix2 {
     }
 }
 
+impl AsRef<[Vector2; 2]> for Matrix2 {
+    fn as_ref(&self) -> &[Vector2; 2] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
 impl AsMut<[f32; 4]> for Matrix2 {
     fn as_mut(&mut self) -> &mut [f32; 4] {
         unsafe { mem::transmute(self) }
@@ -160,20 +166,26 @@ impl AsMut<[[f32; 2]; 2]> for Matrix2 {
     }
 }
 
+impl AsMut<[Vector2; 2]> for Matrix2 {
+    fn as_mut(&mut self) -> &mut [Vector2; 2] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
 impl ops::Index<usize> for Matrix2 {
-    type Output = [f32; 2];
+    type Output = Vector2;
 
     #[inline]
     fn index(&self, index: usize) -> &Self::Output {
-        let v: &[[f32; 2]; 2] = self.as_ref();
+        let v: &[Vector2; 2] = self.as_ref();
         &v[index]
     }
 }
 
 impl ops::IndexMut<usize> for Matrix2 {
     #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut [f32; 2] {
-        let v: &mut [[f32; 2]; 2] = self.as_mut();
+    fn index_mut(&mut self, index: usize) -> &mut Vector2 {
+        let v: &mut [Vector2; 2] = self.as_mut();
         &mut v[index]
     }
 }
@@ -709,6 +721,12 @@ impl AsRef<[[f32; 3]; 3]> for Matrix3 {
     }
 }
 
+impl AsRef<[Vector3; 3]> for Matrix3 {
+    fn as_ref(&self) -> &[Vector3; 3] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
 impl AsMut<[f32; 9]> for Matrix3 {
     fn as_mut(&mut self) -> &mut [f32; 9] {
         unsafe { mem::transmute(self) }
@@ -721,20 +739,26 @@ impl AsMut<[[f32; 3]; 3]> for Matrix3 {
     }
 }
 
+impl AsMut<[Vector3; 3]> for Matrix3 {
+    fn as_mut(&mut self) -> &mut [Vector3; 3] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
 impl ops::Index<usize> for Matrix3 {
-    type Output = [f32; 3];
+    type Output = Vector3;
 
     #[inline]
     fn index(&self, index: usize) -> &Self::Output {
-        let v: &[[f32; 3]; 3] = self.as_ref();
+        let v: &[Vector3; 3] = self.as_ref();
         &v[index]
     }
 }
 
 impl ops::IndexMut<usize> for Matrix3 {
     #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut [f32; 3] {
-        let v: &mut [[f32; 3]; 3] = self.as_mut();
+    fn index_mut(&mut self, index: usize) -> &mut Vector3 {
+        let v: &mut [Vector3; 3] = self.as_mut();
         &mut v[index]
     }
 }
@@ -1592,6 +1616,12 @@ impl AsRef<[[f32; 4]; 4]> for Matrix4 {
     }
 }
 
+impl AsRef<[Vector4; 4]> for Matrix4 {
+    fn as_ref(&self) -> &[Vector4; 4] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
 impl AsMut<[f32; 16]> for Matrix4 {
     fn as_mut(&mut self) -> &mut [f32; 16] {
         unsafe { mem::transmute(self) }
@@ -1604,20 +1634,26 @@ impl AsMut<[[f32; 4]; 4]> for Matrix4 {
     }
 }
 
+impl AsMut<[Vector4; 4]> for Matrix4 {
+    fn as_mut(&mut self) -> &mut [Vector4; 4] {
+        unsafe { mem::transmute(self) }
+    }
+}
+
 impl ops::Index<usize> for Matrix4 {
-    type Output = [f32; 4];
+    type Output = Vector4;
 
     #[inline]
     fn index(&self, index: usize) -> &Self::Output {
-        let v: &[[f32; 4]; 4] = self.as_ref();
+        let v: &[Vector4; 4] = self.as_ref();
         &v[index]
     }
 }
 
 impl ops::IndexMut<usize> for Matrix4 {
     #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut [f32; 4] {
-        let v: &mut [[f32; 4]; 4] = self.as_mut();
+    fn index_mut(&mut self, index: usize) -> &mut Vector4 {
+        let v: &mut [Vector4; 4] = self.as_mut();
         &mut v[index]
     }
 }
