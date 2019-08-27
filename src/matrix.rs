@@ -2,7 +2,7 @@ use std::fmt;
 use std::mem;
 use std::ops;
 
-use crate::traits::{Array, One, Zero, Matrix, Lerp};
+use crate::structure::{Array, One, Zero, Matrix, Lerp};
 use crate::vector::*;
 
 
@@ -2684,7 +2684,7 @@ mod matrix2_tests {
     use std::slice::Iter;
     use vector::Vector2;
     use super::Matrix2;
-    use traits::{One, Zero, Matrix};
+    use structure::{One, Zero, Matrix};
 
 
     struct TestCase {
@@ -2917,7 +2917,7 @@ mod matrix3_tests {
     use std::slice::Iter;
     use vector::Vector3;
     use super::Matrix3;
-    use traits::{One, Zero, Matrix};
+    use structure::{One, Zero, Matrix};
 
     struct TestCase {
         a_mat: Matrix3,
@@ -3141,7 +3141,7 @@ mod matrix4_tests {
     use std::slice::Iter;
     use vector::{Vector3, Vector4};
     use super::{Matrix4};
-    use traits::{One, Zero, Matrix};
+    use structure::{One, Zero, Matrix};
 
 
     struct TestCase {

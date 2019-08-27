@@ -1,4 +1,4 @@
-use traits::{Array, Zero, Metric, ProjectOn, DotProduct, Lerp, Magnitude};
+use structure::{Array, Zero, Metric, ProjectOn, DotProduct, Lerp, Magnitude};
 use std::fmt;
 use std::mem;
 use std::ops;

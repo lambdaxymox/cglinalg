@@ -1,4 +1,4 @@
-use crate::traits::*;
+use crate::structure::*;
 use crate::vector::*;
 use crate::matrix::*;
 use crate::quaternion::*;

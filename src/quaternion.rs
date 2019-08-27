@@ -4,7 +4,7 @@ use std::ops;
 
 use crate::vector::Vector3;
 use crate::matrix::{Matrix3, Matrix4};
-use crate::traits::{One, Zero, Metric, DotProduct, Magnitude};
+use crate::structure::{One, Zero, Metric, DotProduct, Magnitude};
 
 
 const EPSILON: f32 = 0.00001;
