@@ -42,7 +42,7 @@ pub fn perspective<Spec: Into<PerspectiveFov>>(spec: Spec) -> Matrix4 {
 /// other GLSL vector constructors even though GLSL itself lacks a
 /// `vec1()` function.
 #[inline]
-pub fn vec1<T: Into<Vector1>>(v: T) -> Vector1 {
+pub fn vec1<S, T: Into<Vector1<S>>>(v: T) -> Vector1<S> {
     v.into()
 }
 

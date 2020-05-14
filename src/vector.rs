@@ -1,70 +1,88 @@
-use structure::{Array, Zero, Metric, ProjectOn, DotProduct, Lerp, Magnitude};
+use structure::{
+    Array,
+    Zero,
+    VectorSpace,
+    //ProjectOn,
+    InnerProductSpace,
+    NormedSpace,
+    //Lerp,
+    MetricSpace,
+};
 use std::fmt;
 use std::mem;
 use std::ops;
 use std::cmp;
 
+use base::{
+    Scalar,
+    ScalarFloat,   
+};
 
 const EPSILON: f32 = 0.00001; 
 
 
 
 /// A representation of one-dimensional vectors.
-#[derive(Copy, Clone, PartialEq)]
-pub struct Vector1 {
-    pub x: f32,
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
+pub struct Vector1<S> {
+    pub x: S,
 }
 
-impl Vector1 {
+impl<S> Vector1<S> {
     /// Create a new vector.
-    pub fn new(x: f32) -> Vector1 {
+    pub fn new(x: S) -> Vector1<S> {
         Vector1 { x: x }
     }
+}
 
+impl<S> Vector1<S> where S: Scalar {
     #[inline]
-    pub fn unit_x() -> Vector1 {
-        Vector1 { x: 1.0 }
+    pub fn unit_x() -> Vector1<S> {
+        Vector1 { x: S::one() }
     }
 }
 
-impl Metric<Vector1> for Vector1 {
+impl<S> MetricSpace for Vector1<S> where S: ScalarFloat {
+    type Metric = S;
+
     #[inline]
-    fn distance2(self, to: Vector1) -> f32 {
+    fn distance_squared(&self, to: &Vector1<S>) -> S {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+
+        dx_2
+    }
+}
+/*
+impl<S> Metric<&Vector1<S>> for Vector1<S> where S: Scalar {
+    #[inline]
+    fn distance2(self, to: &Vector1<S>) -> S {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
 
         dx_2
     }
 }
 
-impl Metric<&Vector1> for Vector1 {
+impl<S> Metric<Vector1<S>> for &Vector1<S> where S: Scalar {
     #[inline]
-    fn distance2(self, to: &Vector1) -> f32 {
+    fn distance2(self, to: Vector1<S>) -> S {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
 
         dx_2
     }
 }
 
-impl Metric<Vector1> for &Vector1 {
+impl<'a, 'b, S> Metric<&'a Vector1<S>> for &'b Vector1<S> where S: Scalar {
     #[inline]
-    fn distance2(self, to: Vector1) -> f32 {
+    fn distance2(self, to: &'a Vector1<S>) -> S {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
 
         dx_2
     }
 }
-
-impl<'a, 'b> Metric<&'a Vector1> for &'b Vector1 {
-    #[inline]
-    fn distance2(self, to: &'a Vector1) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-
-        dx_2
-    }
-}
-
-impl Array for Vector1 {
-    type Element = f32;
+*/
+/*
+impl<S> Array for Vector1<S> {
+    type Element = S;
 
     #[inline]
     fn len() -> usize {
@@ -86,176 +104,177 @@ impl Array for Vector1 {
         &mut self.x
     }
 }
+*/
 
-impl AsRef<[f32; 1]> for Vector1 {
-    fn as_ref(&self) -> &[f32; 1] {
+impl<S> AsRef<[S; 1]> for Vector1<S> {
+    fn as_ref(&self) -> &[S; 1] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsRef<f32> for Vector1 {
-    fn as_ref(&self) -> &f32 {
+impl<S> AsRef<S> for Vector1<S> {
+    fn as_ref(&self) -> &S {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsRef<(f32,)> for Vector1 {
-    fn as_ref(&self) -> &(f32,) {
+impl<S> AsRef<(S,)> for Vector1<S> {
+    fn as_ref(&self) -> &(S,) {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsMut<[f32; 1]> for Vector1 {
-    fn as_mut(&mut self) -> &mut [f32; 1] {
+impl<S> AsMut<[S; 1]> for Vector1<S> {
+    fn as_mut(&mut self) -> &mut [S; 1] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsMut<f32> for Vector1 {
-    fn as_mut(&mut self) -> &mut f32 {
+impl<S> AsMut<S> for Vector1<S> {
+    fn as_mut(&mut self) -> &mut S {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsMut<(f32,)> for Vector1 {
-    fn as_mut(&mut self) -> &mut (f32,) {
+impl<S> AsMut<(S,)> for Vector1<S> {
+    fn as_mut(&mut self) -> &mut (S,) {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl ops::Index<usize> for Vector1 {
-    type Output = f32;
+impl<S> ops::Index<usize> for Vector1<S> {
+    type Output = S;
 
     #[inline]
     fn index(&self, index: usize) -> &Self::Output {
-        let v: &[f32; 1] = self.as_ref();
+        let v: &[S; 1] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::Index<ops::Range<usize>> for Vector1 {
-    type Output = [f32];
+impl<S> ops::Index<ops::Range<usize>> for Vector1<S> {
+    type Output = [S];
 
     #[inline]
     fn index(&self, index: ops::Range<usize>) -> &Self::Output {
-        let v: &[f32; 1] = self.as_ref();
+        let v: &[S; 1] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::Index<ops::RangeTo<usize>> for Vector1 {
-    type Output = [f32];
+impl<S> ops::Index<ops::RangeTo<usize>> for Vector1<S> {
+    type Output = [S];
 
     #[inline]
     fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
-        let v: &[f32; 1] = self.as_ref();
+        let v: &[S; 1] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::Index<ops::RangeFrom<usize>> for Vector1 {
-    type Output = [f32];
+impl<S> ops::Index<ops::RangeFrom<usize>> for Vector1<S> {
+    type Output = [S];
 
     #[inline]
     fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
-        let v: &[f32; 1] = self.as_ref();
+        let v: &[S; 1] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::Index<ops::RangeFull> for Vector1 {
-    type Output = [f32];
+impl<S> ops::Index<ops::RangeFull> for Vector1<S> {
+    type Output = [S];
 
     #[inline]
     fn index(&self, index: ops::RangeFull) -> &Self::Output {
-        let v: &[f32; 1] = self.as_ref();
+        let v: &[S; 1] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::IndexMut<usize> for Vector1 {
+impl<S> ops::IndexMut<usize> for Vector1<S> {
     #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut f32 {
-        let v: &mut [f32; 1] = self.as_mut();
+    fn index_mut(&mut self, index: usize) -> &mut S {
+        let v: &mut [S; 1] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl ops::IndexMut<ops::Range<usize>> for Vector1 {
+impl<S> ops::IndexMut<ops::Range<usize>> for Vector1<S> {
     #[inline]
-    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [f32] {
-        let v: &mut [f32; 1] = self.as_mut();
+    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
+        let v: &mut [S; 1] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl ops::IndexMut<ops::RangeTo<usize>> for Vector1 {
+impl<S> ops::IndexMut<ops::RangeTo<usize>> for Vector1<S> {
     #[inline]
-    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [f32] {
-        let v: &mut [f32; 1] = self.as_mut();
+    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
+        let v: &mut [S; 1] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl ops::IndexMut<ops::RangeFrom<usize>> for Vector1 {
+impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Vector1<S> {
     #[inline]
-    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [f32] {
-        let v: &mut [f32; 1] = self.as_mut();
+    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
+        let v: &mut [S; 1] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl ops::IndexMut<ops::RangeFull> for Vector1 {
+impl<S> ops::IndexMut<ops::RangeFull> for Vector1<S> {
     #[inline]
-    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [f32] {
-        let v: &mut [f32; 1] = self.as_mut();
+    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
+        let v: &mut [S; 1] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl fmt::Debug for Vector1 {
+impl<S> fmt::Debug for Vector1<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector1 ")?;
-        <[f32; 1] as fmt::Debug>::fmt(self.as_ref(), f)
+        <[S; 1] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
 
-impl fmt::Display for Vector1 {
+impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector2 [{:.2}]", self.x)
     }
 }
 
-impl From<f32> for Vector1 {
+impl<S> From<S> for Vector1<S> where S: Scalar {
     #[inline]
-    fn from(v: f32) -> Vector1 {
+    fn from(v: S) -> Vector1<S> {
         Vector1 { x: v }
     }
 }
 
-impl From<[f32; 1]> for Vector1 {
+impl<S> From<[S; 1]> for Vector1<S> where S: Scalar {
     #[inline]
-    fn from(v: [f32; 1]) -> Vector1 {
+    fn from(v: [S; 1]) -> Vector1<S> {
         Vector1 { x: v[0] }
     }
 }
 
-impl From<&[f32; 1]> for Vector1 {
+impl<S> From<&[S; 1]> for Vector1<S> where S: Scalar {
     #[inline]
-    fn from(v: &[f32; 1]) -> Vector1 {
+    fn from(v: &[S; 1]) -> Vector1<S> {
         Vector1 { x: v[0] }
     }
 }
 
-impl<'a> From<&'a [f32; 1]> for &'a Vector1 {
+impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> where S: Scalar {
     #[inline]
-    fn from(v: &'a [f32; 1]) -> &'a Vector1 {
+    fn from(v: &'a [S; 1]) -> &'a Vector1<S> {
         unsafe { mem::transmute(v) }
     }
 }
 
-impl ops::Neg for Vector1 {
-    type Output = Vector1;
+impl<S> ops::Neg for Vector1<S> where S: ScalarFloat {
+    type Output = Vector1<S>;
 
     #[inline]
     fn neg(self) -> Self::Output {
@@ -263,8 +282,8 @@ impl ops::Neg for Vector1 {
     }
 }
 
-impl ops::Neg for &Vector1 {
-    type Output = Vector1;
+impl<S> ops::Neg for &Vector1<S> where S: ScalarFloat {
+    type Output = Vector1<S>;
 
     #[inline]
     fn neg(self) -> Self::Output {
@@ -272,258 +291,266 @@ impl ops::Neg for &Vector1 {
     }
 }
 
-impl ops::Add<Vector1> for &Vector1 {
-    type Output = Vector1;
+impl<S> ops::Add<Vector1<S>> for &Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn add(self, other: Vector1) -> Self::Output {
+    fn add(self, other: Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x + other.x,
         }
     }
 }
 
-impl ops::Add<Vector1> for Vector1 {
-    type Output = Vector1;
+impl<S> ops::Add<Vector1<S>> for Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn add(self, other: Vector1) -> Self::Output {
+    fn add(self, other: Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x + other.x,
         }
     }
 }
 
-impl ops::Add<&Vector1> for Vector1 {
-    type Output = Vector1;
+impl<S> ops::Add<&Vector1<S>> for Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn add(self, other: &Vector1) -> Self::Output {
+    fn add(self, other: &Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x + other.x,
         }
     }
 }
 
-impl<'a, 'b> ops::Add<&'b Vector1> for &'a Vector1 {
-    type Output = Vector1;
+impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn add(self, other: &'b Vector1) -> Self::Output {
+    fn add(self, other: &'b Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x + other.x,
         }
     }
 }
 
-impl ops::Sub<Vector1> for &Vector1 {
-    type Output = Vector1;
+impl<S> ops::Sub<Vector1<S>> for &Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn sub(self, other: Vector1) -> Self::Output {
+    fn sub(self, other: Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
         }
     }
 }
 
-impl ops::Sub<Vector1> for Vector1 {
-    type Output = Vector1;
+impl<S> ops::Sub<Vector1<S>> for Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn sub(self, other: Vector1) -> Self::Output {
+    fn sub(self, other: Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
         }
     }
 }
 
-impl ops::Sub<&Vector1> for Vector1 {
-    type Output = Vector1;
+impl<S> ops::Sub<&Vector1<S>> for Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn sub(self, other: &Vector1) -> Self::Output {
+    fn sub(self, other: &Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
         }
     }
 }
 
-impl<'a, 'b> ops::Sub<&'b Vector1> for &'a Vector1 {
-    type Output = Vector1;
+impl<'a, 'b, S> ops::Sub<&'b Vector1<S>> for &'a Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn sub(self, other: &'b Vector1) -> Self::Output {
+    fn sub(self, other: &'b Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
         }
     }
 }
 
-impl ops::AddAssign<Vector1> for Vector1 {
-    fn add_assign(&mut self, other: Vector1) {
+impl<S> ops::AddAssign<Vector1<S>> for Vector1<S> where S: Scalar {
+    fn add_assign(&mut self, other: Vector1<S>) {
         self.x = self.x + other.x;
     }
 }
 
-impl ops::AddAssign<&Vector1> for Vector1 {
-    fn add_assign(&mut self, other: &Vector1) {
+impl<S> ops::AddAssign<&Vector1<S>> for Vector1<S> where S: Scalar {
+    fn add_assign(&mut self, other: &Vector1<S>) {
         self.x = self.x + other.x;
     }
 }
 
-impl ops::SubAssign<Vector1> for Vector1 {
-    fn sub_assign(&mut self, other: Vector1) {
+impl<S> ops::SubAssign<Vector1<S>> for Vector1<S> where S: Scalar {
+    fn sub_assign(&mut self, other: Vector1<S>) {
         self.x = self.x - other.x;
     }
 }
 
-impl ops::SubAssign<&Vector1> for Vector1 {
-    fn sub_assign(&mut self, other: &Vector1) {
+impl<S> ops::SubAssign<&Vector1<S>> for Vector1<S> where S: Scalar {
+    fn sub_assign(&mut self, other: &Vector1<S>) {
         self.x = self.x - other.x;
     }
 }
 
-impl ops::Mul<f32> for Vector1 {
-    type Output = Vector1;
+impl<S> ops::Mul<S> for Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn mul(self, other: f32) -> Vector1 {
+    fn mul(self, other: S) -> Vector1<S> {
         Vector1 {
             x: self.x * other,
         }
     }
 }
 
-impl ops::Mul<f32> for &Vector1 {
-    type Output = Vector1;
+impl<S> ops::Mul<S> for &Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn mul(self, other: f32) -> Vector1 {
+    fn mul(self, other: S) -> Vector1<S> {
         Vector1 {
             x: self.x * other,
         }
     }
 }
 
-impl ops::MulAssign<f32> for Vector1 {
-    fn mul_assign(&mut self, other: f32) {
+impl<S> ops::MulAssign<S> for Vector1<S> where S: Scalar {
+    fn mul_assign(&mut self, other: S) {
         self.x *= other;
     }
 }
 
-impl ops::Div<f32> for Vector1 {
-    type Output = Vector1;
+impl<S> ops::Div<S> for Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn div(self, other: f32) -> Vector1 {
+    fn div(self, other: S) -> Vector1<S> {
         Vector1 {
             x: self.x / other,
         }
     }
 }
 
-impl ops::Div<f32> for &Vector1 {
-    type Output = Vector1;
+impl<S> ops::Div<S> for &Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn div(self, other: f32) -> Vector1 {
+    fn div(self, other: S) -> Vector1<S> {
         Vector1 {
             x: self.x / other,
         }
     }
 }
 
-impl ops::DivAssign<f32> for Vector1 {
-    fn div_assign(&mut self, other: f32) {
+impl<S> ops::DivAssign<S> for Vector1<S> where S: Scalar {
+    fn div_assign(&mut self, other: S) {
         self.x = self.x / other;
     }
 }
 
-impl ops::Rem<f32> for Vector1 {
-    type Output = Vector1;
+impl<S> ops::Rem<S> for Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         
         Vector1 { x: x }
     }
 }
 
-impl ops::Rem<f32> for &Vector1 {
-    type Output = Vector1;
+impl<S> ops::Rem<S> for &Vector1<S> where S: Scalar {
+    type Output = Vector1<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         
         Vector1 { x: x }
     }
 }
 
-impl ops::RemAssign<f32> for Vector1 {
-    fn rem_assign(&mut self, other: f32) {
+impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
+    fn rem_assign(&mut self, other: S) {
         self.x %= other;
     }
 }
 
-impl Zero for Vector1 {
-    fn zero() -> Vector1 {
-        Vector1 { x: 0.0 }
+impl<S> Zero for Vector1<S> where S: Scalar {
+    fn zero() -> Vector1<S> {
+        Vector1 { x: S::zero() }
     }
 
     fn is_zero(&self) -> bool {
-        self.x == 0.0
+        self.x == S::zero()
     }
 }
 
-impl DotProduct<Vector1> for Vector1 {
-    fn dot(self, other: Vector1) -> f32 {
+impl<S> VectorSpace for Vector1<S> where S: Scalar {
+    type Scalar = S;
+}
+
+impl<S> InnerProductSpace for Vector1<S> where S: Scalar {
+    type InnerProduct = S; 
+
+    fn inner_product(&self, other: &Vector1<S>) -> Self::InnerProduct {
+        self.x * other.x
+    }
+}
+/*
+impl<S> DotProduct<&Vector1<S>> for Vector1<S> {
+    fn dot(self, other: &Vector1<S>) -> S {
         self.x * other.x
     }
 }
 
-impl DotProduct<&Vector1> for Vector1 {
-    fn dot(self, other: &Vector1) -> f32 {
+impl<S> DotProduct<Vector1<S>> for &Vector1<S> {
+    fn dot(self, other: Vector1<S>) -> S {
         self.x * other.x
     }
 }
 
-impl DotProduct<Vector1> for &Vector1 {
-    fn dot(self, other: Vector1) -> f32 {
+impl<'a, 'b, S> DotProduct<&'a Vector1<S>> for &'b Vector1<S> {
+    fn dot(self, other: &'a Vector1<S>) -> S {
         self.x * other.x
     }
 }
 
-impl<'a, 'b> DotProduct<&'a Vector1> for &'b Vector1 {
-    fn dot(self, other: &'a Vector1) -> f32 {
-        self.x * other.x
-    }
-}
+impl<S> Lerp<Vector1<S>> for Vector1<S> {
+    type Output = Vector1<S>;
 
-impl Lerp<Vector1> for Vector1 {
-    type Output = Vector1;
-
-    fn lerp(self, other: Vector1, amount: f32) -> Self::Output {
+    fn lerp(self, other: Vector1<S>, amount: S) -> Self::Output {
         self + ((other - self) * amount)
     }
 }
 
-impl Lerp<&Vector1> for Vector1 {
-    type Output = Vector1;
+impl<S> Lerp<&Vector1<S>> for Vector1<S> {
+    type Output = Vector1<S>;
 
-    fn lerp(self, other: &Vector1, amount: f32) -> Self::Output {
+    fn lerp(self, other: &Vector1<S>, amount: f32) -> Self::Output {
         self + ((other - self) * amount)
     }
 }
 
-impl Lerp<Vector1> for &Vector1 {
-    type Output = Vector1;
+impl<S> Lerp<Vector1<S>> for &Vector1<S> {
+    type Output = Vector1<S>;
 
-    fn lerp(self, other: Vector1, amount: f32) -> Self::Output {
+    fn lerp(self, other: Vector1<S>, amount: S) -> Self::Output {
         self + ((other - self) * amount)
     }
 }
 
-impl<'a, 'b> Lerp<&'a Vector1> for &'b Vector1 {
-    type Output = Vector1;
+impl<'a, 'b, S> Lerp<&'a Vector1<S>> for &'b Vector1<S> {
+    type Output = Vector1<S>;
 
-    fn lerp(self, other: &'a Vector1, amount: f32) -> Self::Output {
+    fn lerp(self, other: &'a Vector1<S>, amount: S) -> Self::Output {
         self + ((other - self) * amount)
     }
 }
+*/
+/*
+impl<S> NormedSpace for Vector1<S> {
 
-impl Magnitude<Vector1> for Vector1 {}
-impl Magnitude<Vector1> for &Vector1 {}
-
-
+}
+*/
+/*
 /// A representation of two-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, PartialEq)]
 pub struct Vector2 {
@@ -2308,7 +2335,7 @@ impl<'a, 'b> Lerp<&'a Vector4> for &'b Vector4 {
 
 impl Magnitude<Vector4> for Vector4 {}
 impl Magnitude<Vector4> for &Vector4 {}
-
+*/
 
 #[cfg(test)]
 mod vec1_tests {
@@ -2318,8 +2345,8 @@ mod vec1_tests {
 
     struct TestCase {
         c: f32,
-        v1: Vector1,
-        v2: Vector1,
+        v1: Vector1<f32>,
+        v2: Vector1<f32>,
     }
 
     struct Test {
@@ -2398,7 +2425,7 @@ mod vec1_tests {
         }
     }
 }
-
+/*
 
 #[cfg(test)]
 mod vec2_tests {
@@ -2708,3 +2735,4 @@ mod vec4_tests {
     }
 }
 
+*/

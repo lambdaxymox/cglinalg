@@ -2,10 +2,11 @@
 name = "lean_cgmath"
 version = "0.6.5"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
-description = "A low-dimensional linear algebra library for real-time computer graphics and multi-agent simulations."
+description = "A low-dimensional linear algebra library for real-time computer graphics."
 
 [lib]
 name = "cgmath"
 
 [dependencies]
 proptest = "0.9.6"
+num-traits = "0.2"

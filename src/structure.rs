@@ -1,3 +1,7 @@
+use base::{
+    Scalar,
+    ScalarFloat,   
+};
 use std::ops;
 
 
@@ -5,7 +9,7 @@ use std::ops;
 /// of its elements in its underlying storage. In this way we can manipulate
 /// underlying storage directly for operations such as passing geometric data 
 /// across an API boundary to the GPU, or other external hardware.
-pub trait Array {
+pub trait Array<S> {
     /// The elements of an array.
     type Element: Copy;
 
@@ -13,7 +17,7 @@ pub trait Array {
     fn len() -> usize;
 
     /// Construct an array whose entries are all an input value.
-    fn from_value(value: f32) -> Self;
+    fn from_value(value: S) -> Self;
 
     /// Generate a pointer to the underlying array for passing a
     /// matrix or vector to the graphics hardware.
@@ -43,46 +47,62 @@ pub trait One where Self: Sized + ops::Mul<Self, Output = Self> {
     }
 }
 
-pub trait Metric<V: Sized>: Sized {
+pub trait VectorSpace where
+    Self: Copy + Clone,
+    Self: Zero,
+    Self: ops::Add<Self, Output = Self>, 
+    Self: ops::Sub<Self, Output = Self>,
+    Self: ops::Mul<<Self as VectorSpace>::Scalar, Output = Self>,
+    Self: ops::Div<<Self as VectorSpace>::Scalar, Output = Self>,
+    Self: ops::Rem<<Self as VectorSpace>::Scalar, Output = Self>
+{
+    type Scalar: Scalar;
+}
+
+pub trait MetricSpace: Sized {
+    type Metric: ScalarFloat;
+
     /// Compute the squared distance between two vectors.
-    fn distance2(self, other: V) -> f32;
+    fn distance_squared(&self, other: &Self) -> Self::Metric;
 
     /// Compute the Euclidean distance between two vectors.
-    fn distance(self, other: V) -> f32 {
-        f32::sqrt(self.distance2(other))
+    fn distance(&self, other: &Self) -> Self::Metric {
+        use num_traits::Float;
+        Self::Metric::sqrt(self.distance_squared(other))
     }
 }
 
-pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
+pub trait InnerProductSpace: VectorSpace where Self: Copy + Clone {
+    type InnerProduct: Scalar;
+
     /// Compute the dot product of two vectors.
-    fn dot(self, other: V) -> f32;
+    fn inner_product(&self, other: &Self) -> Self::InnerProduct;
+
+    /// Compute the inner product of two vectors. This is a synonym for the 
+    /// inner product.
+    #[inline]
+    fn dot(&self, other: &Self) -> Self::InnerProduct {
+        Self::inner_product(self, other)
+    }
 }
 
-pub trait Magnitude<Out> 
-    where Self: DotProduct<Self>,
-          Self: ops::Mul<f32, Output = Out> + ops::Div<f32, Output = Out> {
+
+pub trait NormedSpace: VectorSpace {
+    type Magnitude: Scalar;
 
     /// Compute the norm (length) of a vector.
-    fn magnitude(self) -> f32 {
-        f32::sqrt(self.dot(self))
-    }
+    fn magnitude(&self) -> Self::Magnitude;
 
     /// Compute the squared length of a vector.
-    fn magnitude2(self) -> f32 {
-        self.dot(self)
-    }
+    fn magnitude_squared(&self) -> Self::Magnitude;
 
     /// Convert a vector into a unit vector.
-    fn normalize(self) -> Out {
-        self / self.magnitude()
-    }
+    fn normalize(&self) -> Self::Magnitude;
 
     /// Normalize a vector with a specified magnitude.
-    fn normalize_to(self, magnitude: f32) -> Out {
-        self * (magnitude / self.magnitude())
-    }
+    fn normalize_to(&self, magnitude: Self::Magnitude) -> Self::Magnitude;
 }
-
+/*
 pub trait Lerp<V: Copy + Clone> where Self: Copy + Clone {
     type Output;
 
@@ -126,3 +146,4 @@ pub trait Matrix {
     fn transpose(&self) -> Self::Transpose;
 }
 
+*/
