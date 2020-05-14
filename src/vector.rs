@@ -289,6 +289,7 @@ impl<S> ops::Neg for &Vector1<S> where S: ScalarFloat {
     }
 }
 
+/*
 impl<S> ops::Add<Vector1<S>> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
@@ -328,7 +329,7 @@ impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Vector1<S> where S: Scalar {
         }
     }
 }
-
+*/
 impl<S> ops::Sub<Vector1<S>> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
@@ -493,6 +494,96 @@ impl<S> InnerProductSpace for Vector1<S> where S: Scalar {
     }
 }
 
+/*
+macro_rules! impl_unary_operator {
+
+}
+*/
+
+/// Generate implementation of an operator for a pair of types.
+macro_rules! impl_operator {
+    // Implement a binary operator where the right-hand side is non-scalar.
+    (<$S:ident: $Constraint:ident> $Op:ident<$Rhs:ty> for $Lhs:ty where {
+        fn $op:ident($lhs:ident, $rhs:ident) -> $Output:ty { $body:expr }
+    }) => {
+        impl<$S> $Op<$Rhs> for $Lhs where $S: $Constraint {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $Rhs) -> $Output {
+                let $lhs = self;
+                let $rhs = other; 
+                $body
+            }
+        }
+
+        impl<'a, $S> $Op<$Rhs> for &'a $Lhs where $S: $Constraint {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $Rhs) -> $Output {
+                let $lhs = self;
+                let $rhs = other; 
+                $body
+            }
+        }
+
+        impl<'a, $S> $Op<&'a $Rhs> for $Lhs where $S: $Constraint {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &'a $Rhs) -> $Output {
+                let $lhs = self;
+                let $rhs = other; 
+                $body
+            }
+        }
+
+        impl<'a, 'b, $S> $Op<&'a $Rhs> for &'b $Lhs where $S: $Constraint {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &'a $Rhs) -> $Output {
+                let $lhs = self;
+                let $rhs = other; 
+                $body
+            }
+        }
+    };
+    // Implement a binary operator where the right-hand side is scalar.
+    (<$S:ident: $Constraint:ident> $Op:ident<$Rhs:ident> for $Lhs:ty where {
+        fn $op:ident($lhs:ident, $rhs:ident) -> $Output:ty { $body:expr }
+    }) => {
+        impl<$S> $Op for $Lhs where $S: $Constraint {
+            type Output = $Output;
+    
+            #[inline]
+            fn $op(self) -> $Output {
+                let $lhs = self;
+                let $rhs = other; 
+                $body
+            }
+        }
+    
+        impl<'a, $S> $Op for &'a $Lhs where $S: $Constraint {
+            type Output = $Output;
+    
+            #[inline]
+            fn $op(self) -> $Output {
+                let $lhs = self;
+                let $rhs = other; 
+                $body
+            }
+        }
+    }
+}
+use std::ops::Add;
+impl_operator!(<S: Scalar> Add<Vector1<S>> for Vector1<S> where {
+    fn add(lhs, rhs) -> Vector1<S> { Vector1::new(lhs.x + rhs.x) }
+});
+
+
+
 macro_rules! impl_mul_operator {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
@@ -515,18 +606,21 @@ macro_rules! impl_mul_operator {
     }
 }
 
+
 impl_mul_operator!(u8, Vector1<u8>, Vector1<u8>, { x });
 impl_mul_operator!(u16, Vector1<u16>, Vector1<u16>, { x });
 impl_mul_operator!(u32, Vector1<u32>, Vector1<u32>, { x });
 impl_mul_operator!(u64, Vector1<u64>, Vector1<u64>, { x });
 impl_mul_operator!(u128, Vector1<u128>, Vector1<u128>, { x });
 impl_mul_operator!(usize, Vector1<usize>, Vector1<usize>, { x });
+
 impl_mul_operator!(i8, Vector1<i8>, Vector1<i8>, { x });
 impl_mul_operator!(i16, Vector1<i16>, Vector1<i16>, { x });
 impl_mul_operator!(i32, Vector1<i32>, Vector1<i32>, { x });
 impl_mul_operator!(i64, Vector1<i64>, Vector1<i64>, { x });
 impl_mul_operator!(i128, Vector1<i128>, Vector1<i128>, { x });
 impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
+
 impl_mul_operator!(f32, Vector1<f32>, Vector1<f32>, { x });
 impl_mul_operator!(f64, Vector1<f64>, Vector1<f64>, { x });
 
