@@ -2341,6 +2341,7 @@ impl Magnitude<Vector4> for &Vector4 {}
 mod vec1_tests {
     use std::slice::Iter;
     use super::Vector1;
+    use structure::Zero;
 
 
     struct TestCase {
@@ -2390,7 +2391,7 @@ mod vec1_tests {
     }
 
     #[test]
-    fn test_addition() {
+    fn addition() {
         for test in test_cases().iter() {
             let expected = Vector1::from(test.v1.x + test.v2.x);
             let result = test.v1 + test.v2;
@@ -2399,7 +2400,7 @@ mod vec1_tests {
     }
 
     #[test]
-    fn test_subtraction() {
+    fn subtraction() {
         for test in test_cases().iter() {
             let expected = Vector1::from(test.v1.x + test.v2.x);
             let result = test.v1 + test.v2;
@@ -2408,7 +2409,7 @@ mod vec1_tests {
     }
 
     #[test]
-    fn test_scalar_multiplication() {
+    fn scalar_multiplication() {
         for test in test_cases().iter() {
             let expected = Vector1::from(test.c * test.v1.x);
             let result = test.v1 * test.c;
@@ -2417,12 +2418,25 @@ mod vec1_tests {
     }
 
     #[test]
-    fn test_scalar_division() {
+    fn scalar_division() {
         for test in test_cases().iter() {
             let expected = Vector1::from(test.v1.x / test.c);
             let result = test.v1 / test.c;
             assert_eq!(result, expected);
         }
+    }
+
+    #[test]
+    #[should_panic]
+    fn out_of_bounds_array_access() {
+        let v = Vector1::new(1_f32);
+        assert_eq!(v[1], v[1]);
+    }
+
+    #[test]
+    fn vector_times_zero_equals_zero() {
+        let v = Vector1::new(1_f32);
+        assert_eq!(v * 0_f32, Vector1::zero());
     }
 }
 /*
