@@ -18,8 +18,6 @@ use base::{
     ScalarFloat,   
 };
 
-const EPSILON: f32 = 0.00001; 
-
 
 
 /// A representation of one-dimensional vectors.
@@ -495,13 +493,43 @@ impl<S> InnerProductSpace for Vector1<S> where S: Scalar {
     }
 }
 
-impl ops::Mul<Vector1<f32>> for f32 {
-    type Output = Vector1<f32>;
+macro_rules! impl_mul_operator {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
 
-    fn mul(self, other: Vector1<f32>) -> Self::Output {
-        Vector1 { x: self * other.x }
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field,),*)
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field,),*)
+            }
+        }
     }
 }
+
+impl_mul_operator!(u8, Vector1<u8>, Vector1<u8>, { x });
+impl_mul_operator!(u16, Vector1<u16>, Vector1<u16>, { x });
+impl_mul_operator!(u32, Vector1<u32>, Vector1<u32>, { x });
+impl_mul_operator!(u64, Vector1<u64>, Vector1<u64>, { x });
+impl_mul_operator!(u128, Vector1<u128>, Vector1<u128>, { x });
+impl_mul_operator!(usize, Vector1<usize>, Vector1<usize>, { x });
+impl_mul_operator!(i8, Vector1<i8>, Vector1<i8>, { x });
+impl_mul_operator!(i16, Vector1<i16>, Vector1<i16>, { x });
+impl_mul_operator!(i32, Vector1<i32>, Vector1<i32>, { x });
+impl_mul_operator!(i64, Vector1<i64>, Vector1<i64>, { x });
+impl_mul_operator!(i128, Vector1<i128>, Vector1<i128>, { x });
+impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
+impl_mul_operator!(f32, Vector1<f32>, Vector1<f32>, { x });
+impl_mul_operator!(f64, Vector1<f64>, Vector1<f64>, { x });
+
 /*
 impl<S> DotProduct<&Vector1<S>> for Vector1<S> {
     fn dot(self, other: &Vector1<S>) -> S {
