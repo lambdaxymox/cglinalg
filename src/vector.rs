@@ -494,6 +494,14 @@ impl<S> InnerProductSpace for Vector1<S> where S: Scalar {
         self.x * other.x
     }
 }
+
+impl ops::Mul<Vector1<f32>> for f32 {
+    type Output = Vector1<f32>;
+
+    fn mul(self, other: Vector1<f32>) -> Self::Output {
+        Vector1 { x: self * other.x }
+    }
+}
 /*
 impl<S> DotProduct<&Vector1<S>> for Vector1<S> {
     fn dot(self, other: &Vector1<S>) -> S {
@@ -2437,6 +2445,12 @@ mod vec1_tests {
     fn vector_times_zero_equals_zero() {
         let v = Vector1::new(1_f32);
         assert_eq!(v * 0_f32, Vector1::zero());
+    }
+
+    #[test]
+    fn zero_times_vector_equals_zero() {
+        let v = Vector1::new(1_f32);
+        assert_eq!(0_f32 * v, Vector1::zero());
     }
 }
 /*
