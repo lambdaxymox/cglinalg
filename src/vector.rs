@@ -613,7 +613,7 @@ macro_rules! impl_mul_operator {
 
             #[inline]
             fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field,),*)
+                <$Output>::new( $(self * other.$field),*)
             }
         }
 
@@ -622,29 +622,11 @@ macro_rules! impl_mul_operator {
 
             #[inline]
             fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field,),*)
+                <$Output>::new( $(self * other.$field),*)
             }
         }
     }
 }
-
-
-impl_mul_operator!(u8, Vector1<u8>, Vector1<u8>, { x });
-impl_mul_operator!(u16, Vector1<u16>, Vector1<u16>, { x });
-impl_mul_operator!(u32, Vector1<u32>, Vector1<u32>, { x });
-impl_mul_operator!(u64, Vector1<u64>, Vector1<u64>, { x });
-impl_mul_operator!(u128, Vector1<u128>, Vector1<u128>, { x });
-impl_mul_operator!(usize, Vector1<usize>, Vector1<usize>, { x });
-
-impl_mul_operator!(i8, Vector1<i8>, Vector1<i8>, { x });
-impl_mul_operator!(i16, Vector1<i16>, Vector1<i16>, { x });
-impl_mul_operator!(i32, Vector1<i32>, Vector1<i32>, { x });
-impl_mul_operator!(i64, Vector1<i64>, Vector1<i64>, { x });
-impl_mul_operator!(i128, Vector1<i128>, Vector1<i128>, { x });
-impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
-
-impl_mul_operator!(f32, Vector1<f32>, Vector1<f32>, { x });
-impl_mul_operator!(f64, Vector1<f64>, Vector1<f64>, { x });
 
 
 impl<S> Lerp<Vector1<S>> for Vector1<S> where S: Scalar {
@@ -707,6 +689,27 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
         self * (magnitude / self.magnitude())
     }
 }
+
+
+impl_mul_operator!(u8, Vector1<u8>, Vector1<u8>, { x });
+impl_mul_operator!(u16, Vector1<u16>, Vector1<u16>, { x });
+impl_mul_operator!(u32, Vector1<u32>, Vector1<u32>, { x });
+impl_mul_operator!(u64, Vector1<u64>, Vector1<u64>, { x });
+impl_mul_operator!(u128, Vector1<u128>, Vector1<u128>, { x });
+impl_mul_operator!(usize, Vector1<usize>, Vector1<usize>, { x });
+
+impl_mul_operator!(i8, Vector1<i8>, Vector1<i8>, { x });
+impl_mul_operator!(i16, Vector1<i16>, Vector1<i16>, { x });
+impl_mul_operator!(i32, Vector1<i32>, Vector1<i32>, { x });
+impl_mul_operator!(i64, Vector1<i64>, Vector1<i64>, { x });
+impl_mul_operator!(i128, Vector1<i128>, Vector1<i128>, { x });
+impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
+
+impl_mul_operator!(f32, Vector1<f32>, Vector1<f32>, { x });
+impl_mul_operator!(f64, Vector1<f64>, Vector1<f64>, { x });
+
+
+
 
 
 /// A representation of two-dimensional vectors with a Euclidean metric.
@@ -1262,6 +1265,29 @@ impl<'a, 'b, S> Lerp<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
         self + ((other - self) * amount)
     }
 }
+
+
+impl_mul_operator!(u8, Vector2<u8>, Vector2<u8>, { x, y });
+impl_mul_operator!(u16, Vector2<u16>, Vector2<u16>, { x, y });
+impl_mul_operator!(u32, Vector2<u32>, Vector2<u32>, { x, y });
+impl_mul_operator!(u64, Vector2<u64>, Vector2<u64>, { x, y });
+impl_mul_operator!(u128, Vector2<u128>, Vector2<u128>, { x, y });
+impl_mul_operator!(usize, Vector2<usize>, Vector2<usize>, { x, y });
+
+impl_mul_operator!(i8, Vector2<i8>, Vector2<i8>, { x, y });
+impl_mul_operator!(i16, Vector2<i16>, Vector2<i16>, { x, y });
+impl_mul_operator!(i32, Vector2<i32>, Vector2<i32>, { x, y });
+impl_mul_operator!(i64, Vector2<i64>, Vector2<i64>, { x, y });
+impl_mul_operator!(i128, Vector2<i128>, Vector2<i128>, { x, y });
+impl_mul_operator!(isize, Vector2<isize>, Vector2<isize>, { x, y });
+
+impl_mul_operator!(f32, Vector2<f32>, Vector2<f32>, { x, y });
+impl_mul_operator!(f64, Vector2<f64>, Vector2<f64>, { x, y });
+
+
+
+
+
 /*
 /// A representation of three-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, PartialEq)]
@@ -2632,6 +2658,7 @@ mod vec1_tests {
 #[cfg(test)]
 mod vec2_tests {
     use std::slice::Iter;
+    use structure::Zero;
     use super::Vector2;
 
     struct TestCase {
@@ -2725,6 +2752,25 @@ mod vec2_tests {
             let result = test.v1 / test.c;
             assert_eq!(result, expected);
         }
+    }
+
+    #[test]
+    #[should_panic]
+    fn out_of_bounds_array_access() {
+        let v = Vector2::new(1_f32, 2_f32);
+        assert_eq!(v[2], v[2]);
+    }
+
+    #[test]
+    fn vector_times_zero_equals_zero() {
+        let v = Vector2::new(1_f32, 2_f32);
+        assert_eq!(v * 0_f32, Vector2::zero());
+    }
+
+    #[test]
+    fn zero_times_vector_equals_zero() {
+        let v = Vector2::new(1_f32, 2_f32);
+        assert_eq!(0_f32 * v, Vector2::zero());
     }
 }
 /*
