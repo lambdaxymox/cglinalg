@@ -1916,10 +1916,33 @@ impl<'a, 'b, S> Lerp<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar {
         self + ((other - self) * amount)
     }
 }
-/*
-impl Magnitude<Vector3> for Vector3 {}
-impl Magnitude<Vector3> for &Vector3 {}
-*/
+
+impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
+    type Magnitude = S;
+
+    /// Compute the norm (length) of a vector.
+    fn magnitude(&self) -> Self::Magnitude {
+        Self::Magnitude::sqrt(self.magnitude_squared())
+    }
+
+    /// Compute the squared length of a vector.
+    fn magnitude_squared(&self) -> Self::Magnitude {
+        DotProduct::dot(self, self)
+    }
+
+    /// Convert a vector into a unit vector.
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+
+    /// Normalize a vector with a specified magnitude.
+    fn normalize_to(&self, magnitude: Self::Magnitude) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+}
+
+// impl Magnitude<Vector3> for &Vector3 {}
+
 
 /// A representation of four-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone)]
