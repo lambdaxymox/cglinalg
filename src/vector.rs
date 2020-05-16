@@ -1330,9 +1330,9 @@ impl<S> Vector3<S> where S: Scalar {
         Vector3::new(x, y, z)
     }
 }
-/*
-impl Array for Vector3 {
-    type Element = f32;
+
+impl<S> Array for Vector3<S> where S: Scalar {
+    type Element = S;
 
     #[inline]
     fn len() -> usize {
@@ -1355,7 +1355,7 @@ impl Array for Vector3 {
     }
 }
 
-
+/*
 impl AsRef<[f32; 3]> for Vector3 {
     fn as_ref(&self) -> &[f32; 3] {
         unsafe { mem::transmute(self) }
