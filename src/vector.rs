@@ -1103,11 +1103,11 @@ impl<S> ops::DivAssign<S> for Vector2<S> where S: Scalar {
         self.y = self.y / other;
     }
 }
-/*
-impl ops::Rem<f32> for Vector2 {
-    type Output = Vector2;
 
-    fn rem(self, other: f32) -> Self::Output {
+impl<S> ops::Rem<S> for Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
         
@@ -1115,10 +1115,10 @@ impl ops::Rem<f32> for Vector2 {
     }
 }
 
-impl ops::Rem<f32> for &Vector2 {
-    type Output = Vector2;
+impl<S> ops::Rem<S> for &Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
         
@@ -1126,23 +1126,23 @@ impl ops::Rem<f32> for &Vector2 {
     }
 }
 
-impl ops::RemAssign<f32> for Vector2 {
-    fn rem_assign(&mut self, other: f32) {
+impl<S> ops::RemAssign<S> for Vector2<S> where S: Scalar {
+    fn rem_assign(&mut self, other: S) {
         self.x %= other;
         self.y %= other;
     }
 }
 
-impl Zero for Vector2 {
-    fn zero() -> Vector2 {
-        Vector2 { x: 0.0, y: 0.0 }
+impl<S> Zero for Vector2<S> where S: Scalar {
+    fn zero() -> Vector2<S> {
+        Vector2 { x: S::zero(), y: S::zero() }
     }
 
     fn is_zero(&self) -> bool {
-        self.x == 0.0 && self.y == 0.0
+        self.x == S::zero() && self.y == S::zero()
     }
 }
-
+/*
 impl Metric<Vector2> for Vector2 {
     #[inline]
     fn distance2(self, to: Vector2) -> f32 {
