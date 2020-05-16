@@ -1142,47 +1142,55 @@ impl<S> Zero for Vector2<S> where S: Scalar {
         self.x == S::zero() && self.y == S::zero()
     }
 }
+
+impl<S> Metric<Vector2<S>> for Vector2<S> where S: ScalarFloat {
+    type Metric = S;
+
+    #[inline]
+    fn distance_squared(self, to: Vector2<S>) -> Self::Metric {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
+    }
+}
+
+impl<S> Metric<&Vector2<S>> for Vector2<S> where S: ScalarFloat {
+    type Metric = S;
+
+    #[inline]
+    fn distance_squared(self, to: &Vector2<S>) -> Self::Metric {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
+    }
+}
+
+impl<S> Metric<Vector2<S>> for &Vector2<S> where S: ScalarFloat {
+    type Metric = S;
+
+    #[inline]
+    fn distance_squared(self, to: Vector2<S>) -> Self::Metric {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
+    }
+}
+
+impl<'a, 'b, S> Metric<&'a Vector2<S>> for &'b Vector2<S> where S: ScalarFloat {
+    type Metric = S;
+
+    #[inline]
+    fn distance_squared(self, to: &'a Vector2<S>) -> Self::Metric {
+        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dy_2 = (to.y - self.y) * (to.y - self.y);
+    
+        dx_2 + dy_2
+    }
+}
 /*
-impl Metric<Vector2> for Vector2 {
-    #[inline]
-    fn distance2(self, to: Vector2) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-    
-        dx_2 + dy_2
-    }
-}
-
-impl Metric<&Vector2> for Vector2 {
-    #[inline]
-    fn distance2(self, to: &Vector2) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-    
-        dx_2 + dy_2
-    }
-}
-
-impl Metric<Vector2> for &Vector2 {
-    #[inline]
-    fn distance2(self, to: Vector2) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-    
-        dx_2 + dy_2
-    }
-}
-
-impl<'a, 'b> Metric<&'a Vector2> for &'b Vector2 {
-    #[inline]
-    fn distance2(self, to: &'a Vector2) -> f32 {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-    
-        dx_2 + dy_2
-    }
-}
-
 impl DotProduct<Vector2> for Vector2 {
     fn dot(self, other: Vector2) -> f32 {
         self.x * other.x + self.y * other.y
