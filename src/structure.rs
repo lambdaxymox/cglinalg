@@ -73,10 +73,10 @@ pub trait Metric<V: Sized>: Sized {
 }
 
 pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
-    type DotProduct: Scalar;
+    type Output: Scalar;
 
     /// Compute the inner product (dot product) of two vectors.
-    fn dot(self, other: V) -> Self::DotProduct;
+    fn dot(self, other: V) -> Self::Output;
 }
 
 
@@ -103,11 +103,11 @@ pub trait Lerp<V: Copy + Clone> {
     fn lerp(self, other: V, amount: Self::Scalar) -> Self::Output;
 }
 
-pub trait ProjectOn<V: Copy + Clone> where Self: DotProduct<V> {
+pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
     type Output;
 
     /// Compute the projection for a vector onto another vector.
-    fn project_on(self, onto: V) -> Self::Output;
+    fn project_on(self, onto: V) -> <Self as ProjectOn<V>>::Output;
 }
 /*
 /// A data type implementing the `Matrix` trait has the structure of a matrix 
