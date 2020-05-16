@@ -2627,7 +2627,7 @@ mod vec1_tests {
         assert_eq!(0_f32 * v, Vector1::zero());
     }
 }
-/*
+
 
 #[cfg(test)]
 mod vec2_tests {
@@ -2636,8 +2636,8 @@ mod vec2_tests {
 
     struct TestCase {
         c: f32,
-        v1: Vector2,
-        v2: Vector2,
+        v1: Vector2<f32>,
+        v2: Vector2<f32>,
     }
 
     struct Test {
@@ -2727,7 +2727,7 @@ mod vec2_tests {
         }
     }
 }
-
+/*
 #[cfg(test)]
 mod vec3_tests {
     use std::slice::Iter;
