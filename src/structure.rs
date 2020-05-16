@@ -81,19 +81,19 @@ pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
 
 
 pub trait Magnitude {
-    type Magnitude: Scalar;
+    type Output: Scalar;
 
     /// Compute the norm (length) of a vector.
-    fn magnitude(&self) -> Self::Magnitude;
+    fn magnitude(&self) -> Self::Output;
 
     /// Compute the squared length of a vector.
-    fn magnitude_squared(&self) -> Self::Magnitude;
+    fn magnitude_squared(&self) -> Self::Output;
 
     /// Convert a vector into a unit vector.
     fn normalize(&self) -> Self;
 
     /// Normalize a vector with a specified magnitude.
-    fn normalize_to(&self, magnitude: Self::Magnitude) -> Self;
+    fn normalize_to(&self, magnitude: Self::Output) -> Self;
 }
 
 pub trait Lerp<V: Copy + Clone> {

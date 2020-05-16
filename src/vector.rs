@@ -666,16 +666,16 @@ impl<'a, 'b, S> Lerp<&'a Vector1<S>> for &'b Vector1<S> where S: Scalar {
 }
 
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
-    type Magnitude = S;
+    type Output = S;
     
     /// Compute the squared length of a vector.
-    fn magnitude_squared(&self) -> Self::Magnitude {
+    fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
     /// Compute the norm (length) of a vector.
     #[inline]
-    fn magnitude(&self) -> Self::Magnitude {
+    fn magnitude(&self) -> Self::Output {
         S::sqrt(DotProduct::dot(self, self))
     }
     
@@ -685,7 +685,7 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     }
     
     /// Normalize a vector with a specified magnitude.
-    fn normalize_to(&self, magnitude: Self::Magnitude) -> Self {
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
 }
@@ -1918,15 +1918,15 @@ impl<'a, 'b, S> Lerp<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar {
 }
 
 impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
-    type Magnitude = S;
+    type Output = S;
 
     /// Compute the norm (length) of a vector.
-    fn magnitude(&self) -> Self::Magnitude {
-        Self::Magnitude::sqrt(self.magnitude_squared())
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
     }
 
     /// Compute the squared length of a vector.
-    fn magnitude_squared(&self) -> Self::Magnitude {
+    fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
@@ -1936,7 +1936,7 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     }
 
     /// Normalize a vector with a specified magnitude.
-    fn normalize_to(&self, magnitude: Self::Magnitude) -> Self {
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
 }
