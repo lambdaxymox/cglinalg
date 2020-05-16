@@ -1469,48 +1469,48 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector3<S> {
         &mut v[index]
     }
 }
-/*
-impl fmt::Debug for Vector3 {
+
+impl<S> fmt::Debug for Vector3<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector3 ")?;
-        <[f32; 3] as fmt::Debug>::fmt(self.as_ref(), f)
+        <[S; 3] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
 
-impl fmt::Display for Vector3 {
+impl<S> fmt::Display for Vector3<S> where S: fmt::Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector3 [{:.2}, {:.2}, {:.2}]", self.x, self.y, self.z)
     }
 }
 
-impl From<(f32, f32, f32)> for Vector3 {
+impl<S> From<(S, S, S)> for Vector3<S> where S: Scalar {
     #[inline]
-    fn from((x, y, z): (f32, f32, f32)) -> Vector3 {
+    fn from((x, y, z): (S, S, S)) -> Vector3<S> {
         Vector3::new(x, y, z)
     }
 }
 
-impl From<(Vector2, f32)> for Vector3 {
+impl<S> From<(Vector2<S>, S)> for Vector3<S> where S: Scalar {
     #[inline]
-    fn from((v, z): (Vector2, f32)) -> Vector3 {
+    fn from((v, z): (Vector2<S>, S)) -> Vector3<S> {
         Vector3::new(v.x, v.y, z)
     }
 }
 
-impl From<(&Vector2, f32)> for Vector3 {
+impl<S> From<(&Vector2<S>, S)> for Vector3<S> where S: Scalar {
     #[inline]
-    fn from((v, z): (&Vector2, f32)) -> Vector3 {
+    fn from((v, z): (&Vector2<S>, S)) -> Vector3<S> {
         Vector3::new(v.x, v.y, z)
     }
 }
 
-impl From<[f32; 3]> for Vector3 {
+impl<S> From<[S; 3]> for Vector3<S> where S: Scalar {
     #[inline]
-    fn from(v: [f32; 3]) -> Vector3 {
+    fn from(v: [S; 3]) -> Vector3<S> {
         Vector3::new(v[0], v[1], v[2])
     }
 }
-
+/*
 impl From<Vector4> for Vector3 {
     #[inline]
     fn from(v: Vector4) -> Vector3 {
@@ -1524,21 +1524,21 @@ impl From<&Vector4> for Vector3 {
         Vector3::new(v.x, v.y, v.z)
     }
 }
-
-impl<'a> From<&'a [f32; 3]> for &'a Vector3 {
+*/
+impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> where S: Scalar {
     #[inline]
-    fn from(v: &'a [f32; 3]) -> &'a Vector3 {
+    fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
         unsafe { mem::transmute(v) }
     }
 }
 
-impl<'a> From<&'a (f32, f32, f32)> for &'a Vector3 {
+impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
     #[inline]
-    fn from(v: &'a (f32, f32, f32)) -> &'a Vector3 {
+    fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
         unsafe { mem::transmute(v) }
     }
 }
-
+/*
 impl ops::Neg for Vector3 {
     type Output = Vector3;
 
