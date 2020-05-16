@@ -1942,6 +1942,22 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
 }
 
 // impl Magnitude<Vector3> for &Vector3 {}
+impl_mul_operator!(u8, Vector3<u8>, Vector3<u8>, { x, y, z });
+impl_mul_operator!(u16, Vector3<u16>, Vector3<u16>, { x, y, z });
+impl_mul_operator!(u32, Vector3<u32>, Vector3<u32>, { x, y, z });
+impl_mul_operator!(u64, Vector3<u64>, Vector3<u64>, { x, y, z });
+impl_mul_operator!(u128, Vector3<u128>, Vector3<u128>, { x, y, z });
+impl_mul_operator!(usize, Vector3<usize>, Vector3<usize>, { x, y, z });
+
+impl_mul_operator!(i8, Vector3<i8>, Vector3<i8>, { x, y, z });
+impl_mul_operator!(i16, Vector3<i16>, Vector3<i16>, { x, y, z });
+impl_mul_operator!(i32, Vector3<i32>, Vector3<i32>, { x, y, z });
+impl_mul_operator!(i64, Vector3<i64>, Vector3<i64>, { x, y, z });
+impl_mul_operator!(i128, Vector3<i128>, Vector3<i128>, { x, y, z });
+impl_mul_operator!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
+
+impl_mul_operator!(f32, Vector3<f32>, Vector3<f32>, { x, y, z });
+impl_mul_operator!(f64, Vector3<f64>, Vector3<f64>, { x, y, z });
 
 
 /// A representation of four-dimensional vectors with a Euclidean metric.
@@ -2819,16 +2835,18 @@ mod vec2_tests {
         assert_eq!(0_f32 * v, Vector2::zero());
     }
 }
-/*
+
 #[cfg(test)]
 mod vec3_tests {
     use std::slice::Iter;
     use super::Vector3;
+    use structure::Zero;
 
+    
     struct TestCase {
         c: f32,
-        x: Vector3,
-        y: Vector3,
+        x: Vector3<f32>,
+        y: Vector3<f32>,
     }
 
     struct Test {
@@ -2917,8 +2935,27 @@ mod vec3_tests {
             assert_eq!(result, expected);
         }
     }
-}
 
+    #[test]
+    #[should_panic]
+    fn out_of_bounds_array_access() {
+        let v = Vector3::new(1_f32, 2_f32, 3_f32);
+        assert_eq!(v[3], v[3]);
+    }
+
+    #[test]
+    fn vector_times_zero_equals_zero() {
+        let v = Vector3::new(1_f32, 2_f32, 3_f32);
+        assert_eq!(v * 0_f32, Vector3::zero());
+    }
+
+    #[test]
+    fn zero_times_vector_equals_zero() {
+        let v = Vector3::new(1_f32, 2_f32, 3_f32);
+        assert_eq!(0_f32 * v, Vector3::zero());
+    }
+}
+/*
 
 #[cfg(test)]
 mod vec4_tests {
