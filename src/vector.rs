@@ -974,17 +974,6 @@ impl<'a, 'b, S> ops::Add<&'b Vector2<S>> for &'a Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Sub<Vector2<S>> for &Vector2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    fn sub(self, other: Vector2<S>) -> Self::Output {
-        Vector2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
 impl<S> ops::Sub<Vector2<S>> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
@@ -996,7 +985,18 @@ impl<S> ops::Sub<Vector2<S>> for Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Sub<&Vector2<S>> for Vector2<S> where S: ScalarFloat {
+impl<S> ops::Sub<Vector2<S>> for &Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn sub(self, other: Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<S> ops::Sub<&Vector2<S>> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
     fn sub(self, other: &Vector2<S>) -> Self::Output {
@@ -1226,39 +1226,43 @@ impl<'a, 'b, S> DotProduct<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
         self.x * other.x + self.y * other.y
     }
 }
+
+impl<S> Lerp<Vector2<S>> for Vector2<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Vector2<S>;
+
+    fn lerp(self, other: Vector2<S>, amount: S) -> Self::Output {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<S> Lerp<&Vector2<S>> for Vector2<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Vector2<S>;
+
+    fn lerp(self, other: &Vector2<S>, amount: S) -> Self::Output {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<S> Lerp<Vector2<S>> for &Vector2<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Vector2<S>;
+
+    fn lerp(self, other: Vector2<S>, amount: S) -> Self::Output {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<'a, 'b, S> Lerp<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Vector2<S>;
+
+    fn lerp(self, other: &'a Vector2<S>, amount: S) -> Self::Output {
+        self + ((other - self) * amount)
+    }
+}
 /*
-impl Lerp<Vector2> for Vector2 {
-    type Output = Vector2;
-
-    fn lerp(self, other: Vector2, amount: f32) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl Lerp<&Vector2> for Vector2 {
-    type Output = Vector2;
-
-    fn lerp(self, other: &Vector2, amount: f32) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl Lerp<Vector2> for &Vector2 {
-    type Output = Vector2;
-
-    fn lerp(self, other: Vector2, amount: f32) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b> Lerp<&'a Vector2> for &'b Vector2 {
-    type Output = Vector2;
-
-    fn lerp(self, other: &'a Vector2, amount: f32) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
 /// A representation of three-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, PartialEq)]
 pub struct Vector3 {
