@@ -9,7 +9,7 @@ use std::ops;
 /// of its elements in its underlying storage. In this way we can manipulate
 /// underlying storage directly for operations such as passing geometric data 
 /// across an API boundary to the GPU, or other external hardware.
-pub trait Array<S> {
+pub trait Array {
     /// The elements of an array.
     type Element: Copy;
 
@@ -17,7 +17,7 @@ pub trait Array<S> {
     fn len() -> usize;
 
     /// Construct an array whose entries are all an input value.
-    fn from_value(value: S) -> Self;
+    fn from_value(value: Self::Element) -> Self;
 
     /// Generate a pointer to the underlying array for passing a
     /// matrix or vector to the graphics hardware.

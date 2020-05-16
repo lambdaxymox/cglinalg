@@ -84,8 +84,7 @@ impl<'a, 'b, S> Metric<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloat {
     }
 }
 
-/*
-impl<S> Array for Vector1<S> {
+impl<S> Array for Vector1<S> where S: Scalar {
     type Element = S;
 
     #[inline]
@@ -108,7 +107,7 @@ impl<S> Array for Vector1<S> {
         &mut self.x
     }
 }
-*/
+
 
 impl<S> AsRef<[S; 1]> for Vector1<S> {
     fn as_ref(&self) -> &[S; 1] {
@@ -709,31 +708,31 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     }
 }
 
-/*
+
 /// A representation of two-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, PartialEq)]
-pub struct Vector2 {
-   pub x: f32,
-   pub y: f32,
+pub struct Vector2<S> {
+   pub x: S,
+   pub y: S,
 }
 
-impl Vector2 {
+impl<S> Vector2<S> where S: Scalar {
     /// Create a new vector.
-    pub fn new(x: f32, y: f32) -> Vector2 {
+    pub fn new(x: S, y: S) -> Vector2<S> {
         Vector2 { x: x, y: y }
     }
 
     #[inline]
-    pub fn unit_x() -> Vector2 {
-        Vector2 { x: 1.0, y: 0.0 }
+    pub fn unit_x() -> Vector2<S> {
+        Vector2 { x: S::one(), y: S::zero() }
     }
 
     #[inline]
-    pub fn unit_y() -> Vector2 {
-        Vector2 { x: 0.0, y: 1.0 }
+    pub fn unit_y() -> Vector2<S> {
+        Vector2 { x: S::zero(), y: S::one() }
     }
 }
-
+/*
 impl Array for Vector2 {
     type Element = f32;
 
