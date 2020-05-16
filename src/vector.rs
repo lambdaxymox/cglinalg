@@ -1355,121 +1355,121 @@ impl<S> Array for Vector3<S> where S: Scalar {
     }
 }
 
-/*
-impl AsRef<[f32; 3]> for Vector3 {
-    fn as_ref(&self) -> &[f32; 3] {
+
+impl<S> AsRef<[S; 3]> for Vector3<S> {
+    fn as_ref(&self) -> &[S; 3] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsRef<(f32, f32, f32)> for Vector3 {
-    fn as_ref(&self) -> &(f32, f32, f32) {
+impl<S> AsRef<(S, S, S)> for Vector3<S> {
+    fn as_ref(&self) -> &(S, S, S) {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsMut<[f32; 3]> for Vector3 {
-    fn as_mut(&mut self) -> &mut [f32; 3] {
+impl<S> AsMut<[S; 3]> for Vector3<S> {
+    fn as_mut(&mut self) -> &mut [S; 3] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsMut<(f32, f32, f32)> for Vector3 {
-    fn as_mut(&mut self) -> &mut (f32, f32, f32) {
+impl<S> AsMut<(S, S, S)> for Vector3<S> {
+    fn as_mut(&mut self) -> &mut (S, S, S) {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl ops::Index<usize> for Vector3 {
-    type Output = f32;
+impl<S> ops::Index<usize> for Vector3<S> {
+    type Output = S;
 
     #[inline]
     fn index(&self, index: usize) -> &Self::Output {
-        let v: &[f32; 3] = self.as_ref();
+        let v: &[S; 3] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::Index<ops::Range<usize>> for Vector3 {
-    type Output = [f32];
+impl<S> ops::Index<ops::Range<usize>> for Vector3<S> {
+    type Output = [S];
 
     #[inline]
     fn index(&self, index: ops::Range<usize>) -> &Self::Output {
-        let v: &[f32; 3] = self.as_ref();
+        let v: &[S; 3] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::Index<ops::RangeTo<usize>> for Vector3 {
-    type Output = [f32];
+impl<S> ops::Index<ops::RangeTo<usize>> for Vector3<S> {
+    type Output = [S];
 
     #[inline]
     fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
-        let v: &[f32; 3] = self.as_ref();
+        let v: &[S; 3] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::Index<ops::RangeFrom<usize>> for Vector3 {
-    type Output = [f32];
+impl<S> ops::Index<ops::RangeFrom<usize>> for Vector3<S> {
+    type Output = [S];
 
     #[inline]
     fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
-        let v: &[f32; 3] = self.as_ref();
+        let v: &[S; 3] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::Index<ops::RangeFull> for Vector3 {
-    type Output = [f32];
+impl<S> ops::Index<ops::RangeFull> for Vector3<S> {
+    type Output = [S];
 
     #[inline]
     fn index(&self, index: ops::RangeFull) -> &Self::Output {
-        let v: &[f32; 3] = self.as_ref();
+        let v: &[S; 3] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::IndexMut<usize> for Vector3 {
+impl<S> ops::IndexMut<usize> for Vector3<S> {
     #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut f32 {
-        let v: &mut [f32; 3] = self.as_mut();
+    fn index_mut(&mut self, index: usize) -> &mut S {
+        let v: &mut [S; 3] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl ops::IndexMut<ops::Range<usize>> for Vector3 {
+impl<S> ops::IndexMut<ops::Range<usize>> for Vector3<S> {
     #[inline]
-    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [f32] {
-        let v: &mut [f32; 3] = self.as_mut();
+    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
+        let v: &mut [S; 3] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl ops::IndexMut<ops::RangeTo<usize>> for Vector3 {
+impl<S> ops::IndexMut<ops::RangeTo<usize>> for Vector3<S> {
     #[inline]
-    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [f32] {
-        let v: &mut [f32; 3] = self.as_mut();
+    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
+        let v: &mut [S; 3] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl ops::IndexMut<ops::RangeFrom<usize>> for Vector3 {
+impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Vector3<S> {
     #[inline]
-    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [f32] {
-        let v: &mut [f32; 3] = self.as_mut();
+    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
+        let v: &mut [S; 3] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl ops::IndexMut<ops::RangeFull> for Vector3 {
+impl<S> ops::IndexMut<ops::RangeFull> for Vector3<S> {
     #[inline]
-    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [f32] {
-        let v: &mut [f32; 3] = self.as_mut();
+    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
+        let v: &mut [S; 3] = self.as_mut();
         &mut v[index]
     }
 }
-
+/*
 impl fmt::Debug for Vector3 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector3 ")?;
