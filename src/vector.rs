@@ -1287,35 +1287,33 @@ impl_mul_operator!(f64, Vector2<f64>, Vector2<f64>, { x, y });
 
 
 
-
-/*
 /// A representation of three-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, PartialEq)]
-pub struct Vector3 {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
+pub struct Vector3<S> {
+    pub x: S,
+    pub y: S,
+    pub z: S,
 }
 
-impl Vector3 {
+impl<S> Vector3<S> where S: Scalar {
     /// Create a new vector.
-    pub fn new(x: f32, y: f32, z: f32) -> Vector3 {
+    pub fn new(x: S, y: S, z: S) -> Vector3<S> {
         Vector3 { x: x, y: y, z: z }
     }
 
     #[inline]
-    pub fn unit_x() -> Vector3 {
-        Vector3 { x: 1.0, y: 0.0, z: 0.0 }
+    pub fn unit_x() -> Vector3<S> {
+        Vector3 { x: S::one(), y: S::zero(), z: S::zero() }
     }
 
     #[inline]
-    pub fn unit_y() -> Vector3 {
-        Vector3 { x: 0.0, y: 1.0, z: 0.0 }
+    pub fn unit_y() -> Vector3<S> {
+        Vector3 { x: S::zero(), y: S::one(), z: S::zero() }
     }
     
     #[inline]
-    pub fn unit_z() -> Vector3 {
-        Vector3 { x: 0.0, y: 0.0, z: 1.0 }
+    pub fn unit_z() -> Vector3<S> {
+        Vector3 { x: S::zero(), y: S::zero(), z: S::one() }
     }
 
     /// Compute the cross product of two three-dimensional vectors. Note that
@@ -1324,7 +1322,7 @@ impl Vector3 {
     /// cross product is the hodge dual of the corresponding 2-vector representing 
     /// the surface element that the crossed vector is normal to. That is, 
     /// given vectors `u` and `v`, `u x v == *(u /\ v)`, where `*(.)` denotes the hodge dual.
-    pub fn cross(&self, other: &Vector3) -> Vector3 {
+    pub fn cross(&self, other: &Vector3<S>) -> Vector3<S> {
         let x = self.y * other.z - self.z * other.y;
         let y = self.z * other.x - self.x * other.z;
         let z = self.x * other.y - self.y * other.x;
@@ -1332,7 +1330,7 @@ impl Vector3 {
         Vector3::new(x, y, z)
     }
 }
-
+/*
 impl Array for Vector3 {
     type Element = f32;
 
