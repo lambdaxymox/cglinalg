@@ -1653,39 +1653,39 @@ impl<'a, 'b, S> ops::Sub<&'b Vector3<S>> for &'a Vector3<S> where S: Scalar {
     }
 }
 
+
+impl<S> ops::AddAssign<Vector3<S>> for Vector3<S> where S: Scalar {
+    fn add_assign(&mut self, other: Vector3<S>) {
+        self.x += other.x;
+        self.y += other.y;
+        self.z += other.z;
+    }
+}
+
+impl<S> ops::AddAssign<&Vector3<S>> for Vector3<S> where S: Scalar {
+    fn add_assign(&mut self, other: &Vector3<S>) {
+        self.x += other.x;
+        self.y += other.y;
+        self.z += other.z;
+    }
+}
+
+impl<S> ops::SubAssign<Vector3<S>> for Vector3<S> where S: Scalar {
+    fn sub_assign(&mut self, other: Vector3<S>) {
+        self.x -= other.x;
+        self.y -= other.y;
+        self.z -= other.z;
+    }
+}
+
+impl<S> ops::SubAssign<&Vector3<S>> for Vector3<S> where S: Scalar {
+    fn sub_assign(&mut self, other: &Vector3<S>) {
+        self.x -= other.x;
+        self.y -= other.y;
+        self.z -= other.z;
+    }
+}
 /*
-impl ops::AddAssign<Vector3> for Vector3 {
-    fn add_assign(&mut self, other: Vector3) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-    }
-}
-
-impl ops::AddAssign<&Vector3> for Vector3 {
-    fn add_assign(&mut self, other: &Vector3) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-    }
-}
-
-impl ops::SubAssign<Vector3> for Vector3 {
-    fn sub_assign(&mut self, other: Vector3) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-    }
-}
-
-impl ops::SubAssign<&Vector3> for Vector3 {
-    fn sub_assign(&mut self, other: &Vector3) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-    }
-}
-
 impl ops::Mul<f32> for Vector3 {
     type Output = Vector3;
 
