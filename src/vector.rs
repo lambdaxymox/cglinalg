@@ -678,11 +678,31 @@ impl<'a, 'b, S> Lerp<&'a Vector1<S>> for &'b Vector1<S> where S: Scalar {
     }
 }
 
-/*
-impl<S> NormedSpace for Vector1<S> {
+impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
+    type Magnitude = S;
+    
+    /// Compute the squared length of a vector.
+    fn magnitude_squared(&self) -> Self::Magnitude {
+        DotProduct::dot(self, self)
+    }
 
+    /// Compute the norm (length) of a vector.
+    #[inline]
+    fn magnitude(&self) -> Self::Magnitude {
+        S::sqrt(DotProduct::dot(self, self))
+    }
+    
+    /// Convert a vector into a unit vector.
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+    
+    /// Normalize a vector with a specified magnitude.
+    fn normalize_to(&self, magnitude: Self::Magnitude) -> Self {
+        self * (magnitude / self.magnitude())
+    }
 }
-*/
+
 /*
 /// A representation of two-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, PartialEq)]

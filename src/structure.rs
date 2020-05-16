@@ -90,10 +90,10 @@ pub trait Magnitude {
     fn magnitude_squared(&self) -> Self::Magnitude;
 
     /// Convert a vector into a unit vector.
-    fn normalize(&self) -> Self::Magnitude;
+    fn normalize(&self) -> Self;
 
     /// Normalize a vector with a specified magnitude.
-    fn normalize_to(&self, magnitude: Self::Magnitude) -> Self::Magnitude;
+    fn normalize_to(&self, magnitude: Self::Magnitude) -> Self;
 }
 
 pub trait Lerp<V: Copy + Clone> {
