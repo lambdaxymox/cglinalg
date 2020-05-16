@@ -732,9 +732,9 @@ impl<S> Vector2<S> where S: Scalar {
         Vector2 { x: S::zero(), y: S::one() }
     }
 }
-/*
-impl Array for Vector2 {
-    type Element = f32;
+
+impl<S> Array for Vector2<S> where S: Scalar {
+    type Element = S;
 
     #[inline]
     fn len() -> usize {
@@ -756,7 +756,7 @@ impl Array for Vector2 {
         &mut self.x
     }
 }
-
+/*
 impl AsRef<[f32; 2]> for Vector2 {
     fn as_ref(&self) -> &[f32; 2] {
         unsafe { mem::transmute(self) }
