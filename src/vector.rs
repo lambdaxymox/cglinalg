@@ -1510,21 +1510,21 @@ impl<S> From<[S; 3]> for Vector3<S> where S: Scalar {
         Vector3::new(v[0], v[1], v[2])
     }
 }
-/*
-impl From<Vector4> for Vector3 {
+
+impl<S> From<Vector4<S>> for Vector3<S> where S: Scalar {
     #[inline]
-    fn from(v: Vector4) -> Vector3 {
+    fn from(v: Vector4<S>) -> Vector3<S> {
         Vector3::new(v.x, v.y, v.z)
     }
 }
 
-impl From<&Vector4> for Vector3 {
+impl<S> From<&Vector4<S>> for Vector3<S> where S: Scalar {
     #[inline]
-    fn from(v: &Vector4) -> Vector3 {
+    fn from(v: &Vector4<S>) -> Vector3<S> {
         Vector3::new(v.x, v.y, v.z)
     }
 }
-*/
+
 impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
@@ -1894,43 +1894,43 @@ impl<'a, 'b> Lerp<&'a Vector3> for &'b Vector3 {
 
 impl Magnitude<Vector3> for Vector3 {}
 impl Magnitude<Vector3> for &Vector3 {}
-
+*/
 
 /// A representation of four-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone)]
-pub struct Vector4 {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
-    pub w: f32,
+pub struct Vector4<S> {
+    pub x: S,
+    pub y: S,
+    pub z: S,
+    pub w: S,
 }
 
-impl Vector4 {
-    pub fn new(x: f32, y: f32, z: f32, w: f32) -> Vector4 {
+impl<S> Vector4<S> where S: Scalar {
+    pub fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
         Vector4 { x: x, y: y, z: z, w: w }
     }
 
     #[inline]
-    pub fn unit_x() -> Vector4 {
-        Vector4 { x: 1.0, y: 0.0, z: 0.0, w: 0.0 }
+    pub fn unit_x() -> Vector4<S> {
+        Vector4 { x: S::one(), y: S::zero(), z: S::zero(), w: S::zero() }
     }
 
     #[inline]
-    pub fn unit_y() -> Vector4 {
-        Vector4 { x: 0.0, y: 1.0, z: 0.0, w: 0.0 }
+    pub fn unit_y() -> Vector4<S> {
+        Vector4 { x: S::zero(), y: S::one(), z: S::zero(), w: S::zero() }
     }
     
     #[inline]
-    pub fn unit_z() -> Vector4 {
-        Vector4 { x: 0.0, y: 0.0, z: 1.0, w: 0.0 }
+    pub fn unit_z() -> Vector4<S> {
+        Vector4 { x: S::zero(), y: S::zero(), z: S::one(), w: S::zero() }
     }
 
     #[inline]
-    pub fn unit_w() -> Vector4 {
-        Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 1.0 }
+    pub fn unit_w() -> Vector4<S> {
+        Vector4 { x: S::zero(), y: S::zero(), z: S::zero(), w: S::one() }
     }
 }
-
+/*
 impl Array for Vector4 {
     type Element = f32;
 
