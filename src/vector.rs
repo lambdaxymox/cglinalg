@@ -1749,11 +1749,11 @@ impl<S> ops::DivAssign<S> for Vector3<S> where S: Scalar {
         self.z /= other;
     }
 }
-/*
-impl ops::Rem<f32> for Vector3 {
-    type Output = Vector3;
 
-    fn rem(self, other: f32) -> Self::Output {
+impl<S> ops::Rem<S> for Vector3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
         let z = self.z % other;
@@ -1762,10 +1762,10 @@ impl ops::Rem<f32> for Vector3 {
     }
 }
 
-impl ops::Rem<f32> for &Vector3 {
-    type Output = Vector3;
+impl<S> ops::Rem<S> for &Vector3<S> where S: Scalar {
+    type Output = Vector3<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
         let z = self.z % other;
@@ -1774,14 +1774,14 @@ impl ops::Rem<f32> for &Vector3 {
     }
 }
 
-impl ops::RemAssign<f32> for Vector3 {
-    fn rem_assign(&mut self, other: f32) {
+impl<S> ops::RemAssign<S> for Vector3<S> where S: Scalar {
+    fn rem_assign(&mut self, other: S) {
         self.x %= other;
         self.y %= other;
         self.z %= other;
     }
 }
-
+/*
 impl Zero for Vector3 {
     #[inline]
     fn zero() -> Vector3 {
