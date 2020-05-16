@@ -911,113 +911,113 @@ impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
         unsafe { mem::transmute(v) }
     }
 }
+
+impl<S> ops::Neg for Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector2 { x: -self.x, y: -self.y }
+    }
+}
+
+impl<S> ops::Neg for &Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector2 { x: -self.x, y: -self.y }
+    }
+}
+
+impl<S> ops::Add<Vector2<S>> for &Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn add(self, other: Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<S> ops::Add<Vector2<S>> for Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn add(self, other: Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<S> ops::Add<&Vector2<S>> for Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn add(self, other: &Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Add<&'b Vector2<S>> for &'a Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn add(self, other: &'b Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<S> ops::Sub<Vector2<S>> for &Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn sub(self, other: Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<S> ops::Sub<Vector2<S>> for Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn sub(self, other: Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<S> ops::Sub<&Vector2<S>> for Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn sub(self, other: &Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Sub<&'b Vector2<S>> for &'a Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn sub(self, other: &'b Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
 /*
-impl ops::Neg for Vector2 {
-    type Output = Vector2;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector2 { x: -self.x, y: -self.y }
-    }
-}
-
-impl ops::Neg for &Vector2 {
-    type Output = Vector2;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector2 { x: -self.x, y: -self.y }
-    }
-}
-
-impl ops::Add<Vector2> for &Vector2 {
-    type Output = Vector2;
-
-    fn add(self, other: Vector2) -> Self::Output {
-        Vector2 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-impl ops::Add<Vector2> for Vector2 {
-    type Output = Vector2;
-
-    fn add(self, other: Vector2) -> Self::Output {
-        Vector2 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-impl ops::Add<&Vector2> for Vector2 {
-    type Output = Vector2;
-
-    fn add(self, other: &Vector2) -> Self::Output {
-        Vector2 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-impl<'a, 'b> ops::Add<&'b Vector2> for &'a Vector2 {
-    type Output = Vector2;
-
-    fn add(self, other: &'b Vector2) -> Self::Output {
-        Vector2 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-impl ops::Sub<Vector2> for &Vector2 {
-    type Output = Vector2;
-
-    fn sub(self, other: Vector2) -> Self::Output {
-        Vector2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
-impl ops::Sub<Vector2> for Vector2 {
-    type Output = Vector2;
-
-    fn sub(self, other: Vector2) -> Self::Output {
-        Vector2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
-impl ops::Sub<&Vector2> for Vector2 {
-    type Output = Vector2;
-
-    fn sub(self, other: &Vector2) -> Self::Output {
-        Vector2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
-impl<'a, 'b> ops::Sub<&'b Vector2> for &'a Vector2 {
-    type Output = Vector2;
-
-    fn sub(self, other: &'b Vector2) -> Self::Output {
-        Vector2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
 impl ops::AddAssign<Vector2> for Vector2 {
     fn add_assign(&mut self, other: Vector2) {
         self.x = self.x + other.x;
