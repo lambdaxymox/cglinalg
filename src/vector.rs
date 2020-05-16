@@ -1266,6 +1266,29 @@ impl<'a, 'b, S> Lerp<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
     }
 }
 
+impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
+    type Output = S;
+
+    /// Compute the norm (length) of a vector.
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
+    }
+
+    /// Compute the squared length of a vector.
+    fn magnitude_squared(&self) -> Self::Output {
+        DotProduct::dot(self, self)
+    }
+
+    /// Convert a vector into a unit vector.
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+
+    /// Normalize a vector with a specified magnitude.
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+}
 
 impl_mul_operator!(u8, Vector2<u8>, Vector2<u8>, { x, y });
 impl_mul_operator!(u16, Vector2<u16>, Vector2<u16>, { x, y });
