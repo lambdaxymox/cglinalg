@@ -713,7 +713,7 @@ impl_mul_operator!(f64, Vector1<f64>, Vector1<f64>, { x });
 
 
 /// A representation of two-dimensional vectors with a Euclidean metric.
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Vector2<S> {
    pub x: S,
    pub y: S,
@@ -1311,7 +1311,7 @@ impl_mul_operator!(f64, Vector2<f64>, Vector2<f64>, { x, y });
 
 
 /// A representation of three-dimensional vectors with a Euclidean metric.
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Vector3<S> {
     pub x: S,
     pub y: S,
@@ -1984,7 +1984,7 @@ impl_mul_operator!(f64, Vector3<f64>, Vector3<f64>, { x, y, z });
 
 
 /// A representation of four-dimensional vectors with a Euclidean metric.
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Vector4<S> {
     pub x: S,
     pub y: S,
@@ -2239,15 +2239,6 @@ impl<S> fmt::Display for Vector4<S> where S: fmt::Display {
     }
 }
 /*
-impl cmp::PartialEq for Vector4 {
-    fn eq(&self, other: &Vector4) -> bool {
-        (f32::abs(self.x - other.x) < EPSILON) &&
-        (f32::abs(self.y - other.y) < EPSILON) &&
-        (f32::abs(self.z - other.z) < EPSILON) &&
-        (f32::abs(self.w - other.w) < EPSILON)
-    }
-}
-
 impl ops::Neg for Vector4 {
     type Output = Vector4;
 
