@@ -2608,7 +2608,7 @@ impl Magnitude<Vector4> for &Vector4 {}
 */
 
 #[cfg(test)]
-mod vec1_tests {
+mod vector1_tests {
     use std::slice::Iter;
     use super::Vector1;
     use structure::Zero;
@@ -2718,7 +2718,7 @@ mod vec1_tests {
 
 
 #[cfg(test)]
-mod vec2_tests {
+mod vector2_tests {
     use std::slice::Iter;
     use structure::Zero;
     use super::Vector2;
@@ -2837,12 +2837,12 @@ mod vec2_tests {
 }
 
 #[cfg(test)]
-mod vec3_tests {
+mod vector3_tests {
     use std::slice::Iter;
     use super::Vector3;
     use structure::Zero;
 
-    
+
     struct TestCase {
         c: f32,
         x: Vector3<f32>,
@@ -2958,7 +2958,7 @@ mod vec3_tests {
 /*
 
 #[cfg(test)]
-mod vec4_tests {
+mod vector4_tests {
     use std::slice::Iter;
     use super::Vector4;
 
