@@ -102,14 +102,14 @@ pub trait Lerp<V: Copy + Clone> {
 
     fn lerp(self, other: V, amount: Self::Scalar) -> Self::Output;
 }
-/*
+
 pub trait ProjectOn<V: Copy + Clone> where Self: DotProduct<V> {
     type Output;
 
     /// Compute the projection for a vector onto another vector.
     fn project_on(self, onto: V) -> Self::Output;
 }
-
+/*
 /// A data type implementing the `Matrix` trait has the structure of a matrix 
 /// in column major order. If a type represents a matrix, we can perform 
 /// operations such as swapping rows, swapping columns, getting a row of 
