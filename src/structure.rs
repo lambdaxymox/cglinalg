@@ -59,7 +59,7 @@ pub trait VectorSpace where
     type Scalar: Scalar;
 }
 
-pub trait MetricSpace: Sized {
+pub trait Metric<V: Sized>: Sized {
     type Metric: ScalarFloat;
 
     /// Compute the squared distance between two vectors.
@@ -72,22 +72,15 @@ pub trait MetricSpace: Sized {
     }
 }
 
-pub trait InnerProductSpace: VectorSpace where Self: Copy + Clone {
-    type InnerProduct: Scalar;
+pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
+    type DotProduct: Scalar;
 
-    /// Compute the dot product of two vectors.
-    fn inner_product(&self, other: &Self) -> Self::InnerProduct;
-
-    /// Compute the inner product of two vectors. This is a synonym for the 
-    /// inner product.
-    #[inline]
-    fn dot(&self, other: &Self) -> Self::InnerProduct {
-        Self::inner_product(self, other)
-    }
+    /// Compute the inner product (dot product) of two vectors.
+    fn dot(self, other: V) -> Self::DotProduct;
 }
 
 
-pub trait NormedSpace: VectorSpace {
+pub trait Magnitude {
     type Magnitude: Scalar;
 
     /// Compute the norm (length) of a vector.
@@ -102,13 +95,14 @@ pub trait NormedSpace: VectorSpace {
     /// Normalize a vector with a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Magnitude) -> Self::Magnitude;
 }
-/*
-pub trait Lerp<V: Copy + Clone> where Self: Copy + Clone {
+
+pub trait Lerp<V: Copy + Clone> {
+    type Scalar: Scalar;
     type Output;
 
-    fn lerp(self, other: V, amount: f32) -> Self::Output;
+    fn lerp(self, other: V, amount: Self::Scalar) -> Self::Output;
 }
-
+/*
 pub trait ProjectOn<V: Copy + Clone> where Self: DotProduct<V> {
     type Output;
 

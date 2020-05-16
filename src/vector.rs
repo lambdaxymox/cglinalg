@@ -3,10 +3,10 @@ use structure::{
     Zero,
     VectorSpace,
     //ProjectOn,
-    InnerProductSpace,
-    NormedSpace,
-    //Lerp,
-    MetricSpace,
+    DotProduct,
+    Magnitude,
+    Lerp,
+    Metric,
 };
 use std::fmt;
 use std::mem;
@@ -40,7 +40,7 @@ impl<S> Vector1<S> where S: Scalar {
     }
 }
 
-impl<S> MetricSpace for Vector1<S> where S: ScalarFloat {
+impl<S> Metric<Vector1<S>> for Vector1<S> where S: ScalarFloat {
     type Metric = S;
 
     #[inline]
@@ -289,7 +289,7 @@ impl<S> ops::Neg for &Vector1<S> where S: ScalarFloat {
     }
 }
 
-/*
+
 impl<S> ops::Add<Vector1<S>> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
@@ -329,7 +329,7 @@ impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Vector1<S> where S: Scalar {
         }
     }
 }
-*/
+
 impl<S> ops::Sub<Vector1<S>> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
@@ -486,24 +486,45 @@ impl<S> VectorSpace for Vector1<S> where S: Scalar {
     type Scalar = S;
 }
 
-impl<S> InnerProductSpace for Vector1<S> where S: Scalar {
-    type InnerProduct = S; 
+impl<S> DotProduct<Vector1<S>> for Vector1<S> where S: Scalar {
+    type DotProduct = S; 
 
-    fn inner_product(&self, other: &Vector1<S>) -> Self::InnerProduct {
+    fn dot(self, other: Vector1<S>) -> Self::DotProduct {
         self.x * other.x
     }
 }
 
-/*
-macro_rules! impl_unary_operator {
+impl<S> DotProduct<&Vector1<S>> for Vector1<S> where S: Scalar {
+    type DotProduct = S; 
 
+    fn dot(self, other: &Vector1<S>) -> Self::DotProduct {
+        self.x * other.x
+    }
 }
-*/
 
+impl<S> DotProduct<Vector1<S>> for &Vector1<S> where S: Scalar {
+    type DotProduct = S; 
+
+    fn dot(self, other: Vector1<S>) -> Self::DotProduct {
+        self.x * other.x
+    }
+}
+
+impl<S> DotProduct<&Vector1<S>> for &Vector1<S> where S: Scalar {
+    type DotProduct = S; 
+
+    fn dot(self, other: &Vector1<S>) -> Self::DotProduct {
+        self.x * other.x
+    }
+}
+
+
+/*
 /// Generate implementation of an operator for a pair of types.
 macro_rules! impl_operator {
-    // Implement a binary operator where the right-hand side is non-scalar.
-    (<$S:ident: $Constraint:ident> $Op:ident<$Rhs:ty> for $Lhs:ty where {
+    // Implement a binary operator where the left-hand side is non-scalar and the 
+    // right-hand side is non-scalar.
+    (<$S:ident: $Constraint:ident> $Op:ident<$Rhs:ty> for $Lhs:ty {
         fn $op:ident($lhs:ident, $rhs:ident) -> $Output:ty { $body:expr }
     }) => {
         impl<$S> $Op<$Rhs> for $Lhs where $S: $Constraint {
@@ -550,8 +571,9 @@ macro_rules! impl_operator {
             }
         }
     };
-    // Implement a binary operator where the right-hand side is scalar.
-    (<$S:ident: $Constraint:ident> $Op:ident<$Rhs:ident> for $Lhs:ty where {
+    // Implement a binary operator where the left-hand side is non-scalar and the
+    // right-hand side is scalar.
+    (<$S:ident: $Constraint:ident> $Op:ident<$Rhs:ident> for $Lhs:ty {
         fn $op:ident($lhs:ident, $rhs:ident) -> $Output:ty { $body:expr }
     }) => {
         impl<$S> $Op for $Lhs where $S: $Constraint {
@@ -577,12 +599,7 @@ macro_rules! impl_operator {
         }
     }
 }
-use std::ops::Add;
-impl_operator!(<S: Scalar> Add<Vector1<S>> for Vector1<S> where {
-    fn add(lhs, rhs) -> Vector1<S> { Vector1::new(lhs.x + rhs.x) }
-});
-
-
+*/
 
 macro_rules! impl_mul_operator {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
@@ -624,26 +641,9 @@ impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
 impl_mul_operator!(f32, Vector1<f32>, Vector1<f32>, { x });
 impl_mul_operator!(f64, Vector1<f64>, Vector1<f64>, { x });
 
-/*
-impl<S> DotProduct<&Vector1<S>> for Vector1<S> {
-    fn dot(self, other: &Vector1<S>) -> S {
-        self.x * other.x
-    }
-}
 
-impl<S> DotProduct<Vector1<S>> for &Vector1<S> {
-    fn dot(self, other: Vector1<S>) -> S {
-        self.x * other.x
-    }
-}
-
-impl<'a, 'b, S> DotProduct<&'a Vector1<S>> for &'b Vector1<S> {
-    fn dot(self, other: &'a Vector1<S>) -> S {
-        self.x * other.x
-    }
-}
-
-impl<S> Lerp<Vector1<S>> for Vector1<S> {
+impl<S> Lerp<Vector1<S>> for Vector1<S> where S: Scalar {
+    type Scalar = S;
     type Output = Vector1<S>;
 
     fn lerp(self, other: Vector1<S>, amount: S) -> Self::Output {
@@ -651,15 +651,17 @@ impl<S> Lerp<Vector1<S>> for Vector1<S> {
     }
 }
 
-impl<S> Lerp<&Vector1<S>> for Vector1<S> {
+impl<S> Lerp<&Vector1<S>> for Vector1<S> where S: Scalar {
+    type Scalar = S;
     type Output = Vector1<S>;
 
-    fn lerp(self, other: &Vector1<S>, amount: f32) -> Self::Output {
+    fn lerp(self, other: &Vector1<S>, amount: S) -> Self::Output {
         self + ((other - self) * amount)
     }
 }
 
-impl<S> Lerp<Vector1<S>> for &Vector1<S> {
+impl<S> Lerp<Vector1<S>> for &Vector1<S> where S: Scalar {
+    type Scalar = S;
     type Output = Vector1<S>;
 
     fn lerp(self, other: Vector1<S>, amount: S) -> Self::Output {
@@ -667,14 +669,15 @@ impl<S> Lerp<Vector1<S>> for &Vector1<S> {
     }
 }
 
-impl<'a, 'b, S> Lerp<&'a Vector1<S>> for &'b Vector1<S> {
+impl<'a, 'b, S> Lerp<&'a Vector1<S>> for &'b Vector1<S> where S: Scalar {
+    type Scalar = S;
     type Output = Vector1<S>;
 
     fn lerp(self, other: &'a Vector1<S>, amount: S) -> Self::Output {
         self + ((other - self) * amount)
     }
 }
-*/
+
 /*
 impl<S> NormedSpace for Vector1<S> {
 
