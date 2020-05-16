@@ -2225,20 +2225,20 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
         unsafe { mem::transmute(v) }
     }
 }
-/*
-impl fmt::Debug for Vector4 {
+
+impl<S> fmt::Debug for Vector4<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector4 ")?;
-        <[f32; 4] as fmt::Debug>::fmt(self.as_ref(), f)
+        <[S; 4] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
 
-impl fmt::Display for Vector4 {
+impl<S> fmt::Display for Vector4<S> where S: fmt::Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector4 [{:.2}, {:.2}, {:.2}, {:.2}]", self.x, self.y, self.z, self.w)
     }
 }
-
+/*
 impl cmp::PartialEq for Vector4 {
     fn eq(&self, other: &Vector4) -> bool {
         (f32::abs(self.x - other.x) < EPSILON) &&
