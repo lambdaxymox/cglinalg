@@ -870,48 +870,48 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector2<S> {
         &mut v[index]
     }
 }
-/*
-impl fmt::Debug for Vector2 {
+
+impl<S> fmt::Debug for Vector2<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector2 ")?;
-        <[f32; 2] as fmt::Debug>::fmt(self.as_ref(), f)
+        <[S; 2] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
 
-impl fmt::Display for Vector2 {
+impl<S> fmt::Display for Vector2<S> where S: fmt::Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector2 [{:.2}, {:.2}]", self.x, self.y)
     }
 }
 
-impl From<(f32, f32)> for Vector2 {
+impl<S> From<(S, S)> for Vector2<S> where S: Scalar {
     #[inline]
-    fn from((x, y): (f32, f32)) -> Vector2 {
+    fn from((x, y): (S, S)) -> Vector2<S> {
         Vector2 { x: x, y: y }
     }
 }
 
-impl From<[f32; 2]> for Vector2 {
+impl<S> From<[S; 2]> for Vector2<S> where S: Scalar {
     #[inline]
-    fn from(v: [f32; 2]) -> Vector2 {
+    fn from(v: [S; 2]) -> Vector2<S> {
         Vector2 { x: v[0], y: v[1] }
     }
 }
 
-impl From<&[f32; 2]> for Vector2 {
+impl<S> From<&[S; 2]> for Vector2<S> where S: Scalar {
     #[inline]
-    fn from(v: &[f32; 2]) -> Vector2 {
+    fn from(v: &[S; 2]) -> Vector2<S> {
         Vector2 { x: v[0], y: v[1] }
     }
 }
 
-impl<'a> From<&'a [f32; 2]> for &'a Vector2 {
+impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
     #[inline]
-    fn from(v: &'a [f32; 2]) -> &'a Vector2 {
+    fn from(v: &'a [S; 2]) -> &'a Vector2<S> {
         unsafe { mem::transmute(v) }
     }
 }
-
+/*
 impl ops::Neg for Vector2 {
     type Output = Vector2;
 
