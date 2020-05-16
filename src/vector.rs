@@ -1045,11 +1045,11 @@ impl<S> ops::SubAssign<&Vector2<S>> for Vector2<S> where S: Scalar {
         self.y = self.y - other.y;
     }
 }
-/*
-impl ops::Mul<f32> for Vector2 {
-    type Output = Vector2;
 
-    fn mul(self, other: f32) -> Vector2 {
+impl<S> ops::Mul<S> for Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn mul(self, other: S) -> Vector2<S> {
         Vector2 {
             x: self.x * other,
             y: self.y * other,
@@ -1057,10 +1057,10 @@ impl ops::Mul<f32> for Vector2 {
     }
 }
 
-impl ops::Mul<f32> for &Vector2 {
-    type Output = Vector2;
+impl<S> ops::Mul<S> for &Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
 
-    fn mul(self, other: f32) -> Vector2 {
+    fn mul(self, other: S) -> Vector2<S> {
         Vector2 {
             x: self.x * other,
             y: self.y * other,
@@ -1068,17 +1068,17 @@ impl ops::Mul<f32> for &Vector2 {
     }
 }
 
-impl ops::MulAssign<f32> for Vector2 {
-    fn mul_assign(&mut self, other: f32) {
+impl<S> ops::MulAssign<S> for Vector2<S> where S: Scalar {
+    fn mul_assign(&mut self, other: S) {
         self.x *= other;
         self.y *= other;
     }
 }
 
-impl ops::Div<f32> for Vector2 {
-    type Output = Vector2;
+impl<S> ops::Div<S> for Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
 
-    fn div(self, other: f32) -> Vector2 {
+    fn div(self, other: S) -> Vector2<S> {
         Vector2 {
             x: self.x / other,
             y: self.y / other,
@@ -1086,10 +1086,10 @@ impl ops::Div<f32> for Vector2 {
     }
 }
 
-impl ops::Div<f32> for &Vector2 {
-    type Output = Vector2;
+impl<S> ops::Div<S> for &Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
 
-    fn div(self, other: f32) -> Vector2 {
+    fn div(self, other: S) -> Vector2<S> {
         Vector2 {
             x: self.x / other,
             y: self.y / other,
@@ -1097,13 +1097,13 @@ impl ops::Div<f32> for &Vector2 {
     }
 }
 
-impl ops::DivAssign<f32> for Vector2 {
-    fn div_assign(&mut self, other: f32) {
+impl<S> ops::DivAssign<S> for Vector2<S> where S: Scalar {
+    fn div_assign(&mut self, other: S) {
         self.x = self.x / other;
         self.y = self.y / other;
     }
 }
-
+/*
 impl ops::Rem<f32> for Vector2 {
     type Output = Vector2;
 
