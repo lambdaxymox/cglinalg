@@ -1190,31 +1190,43 @@ impl<'a, 'b, S> Metric<&'a Vector2<S>> for &'b Vector2<S> where S: ScalarFloat {
         dx_2 + dy_2
     }
 }
+
+impl<S> DotProduct<Vector2<S>> for Vector2<S> where S: Scalar {
+    type DotProduct = S;
+
+    #[inline]
+    fn dot(self, other: Vector2<S>) -> Self::DotProduct {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl<S> DotProduct<&Vector2<S>> for Vector2<S> where S: Scalar {
+    type DotProduct = S;
+
+    #[inline]
+    fn dot(self, other: &Vector2<S>) -> Self::DotProduct {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl<S> DotProduct<Vector2<S>> for &Vector2<S> where S: Scalar {
+    type DotProduct = S;
+
+    #[inline]
+    fn dot(self, other: Vector2<S>) -> Self::DotProduct {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl<'a, 'b, S> DotProduct<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
+    type DotProduct = S;
+
+    #[inline]
+    fn dot(self, other: &'a Vector2<S>) -> Self::DotProduct {
+        self.x * other.x + self.y * other.y
+    }
+}
 /*
-impl DotProduct<Vector2> for Vector2 {
-    fn dot(self, other: Vector2) -> f32 {
-        self.x * other.x + self.y * other.y
-    }
-}
-
-impl DotProduct<&Vector2> for Vector2 {
-    fn dot(self, other: &Vector2) -> f32 {
-        self.x * other.x + self.y * other.y
-    }
-}
-
-impl DotProduct<Vector2> for &Vector2 {
-    fn dot(self, other: Vector2) -> f32 {
-        self.x * other.x + self.y * other.y
-    }
-}
-
-impl<'a, 'b> DotProduct<&'a Vector2> for &'b Vector2 {
-    fn dot(self, other: &'a Vector2) -> f32 {
-        self.x * other.x + self.y * other.y
-    }
-}
-
 impl Lerp<Vector2> for Vector2 {
     type Output = Vector2;
 
