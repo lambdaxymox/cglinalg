@@ -63,10 +63,10 @@ pub trait Metric<V: Sized>: Sized {
     type Metric: ScalarFloat;
 
     /// Compute the squared distance between two vectors.
-    fn distance_squared(&self, other: &Self) -> Self::Metric;
+    fn distance_squared(self, other: V) -> Self::Metric;
 
     /// Compute the Euclidean distance between two vectors.
-    fn distance(&self, other: &Self) -> Self::Metric {
+    fn distance(self, other: V) -> Self::Metric {
         use num_traits::Float;
         Self::Metric::sqrt(self.distance_squared(other))
     }
