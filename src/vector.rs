@@ -2155,77 +2155,77 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector4<S> {
         &mut v[index]
     }
 }
-/*
-impl From<(f32, f32, f32, f32)> for Vector4 {
+
+impl<S> From<(S, S, S, S)> for Vector4<S> where S: Scalar {
     #[inline]
-    fn from((x, y, z, w): (f32, f32, f32, f32)) -> Vector4 {
+    fn from((x, y, z, w): (S, S, S, S)) -> Vector4<S> {
         Vector4::new(x, y, z, w)
     }
 }
 
-impl From<(Vector2, f32, f32)> for Vector4 {
+impl<S> From<(Vector2<S>, S, S)> for Vector4<S> where S: Scalar {
     #[inline]
-    fn from((v, z, w): (Vector2, f32, f32)) -> Vector4 {
+    fn from((v, z, w): (Vector2<S>, S, S)) -> Vector4<S> {
         Vector4::new(v.x, v.y, z, w)
     }
 }
 
-impl From<(&Vector2, f32, f32)> for Vector4 {
+impl<S> From<(&Vector2<S>, S, S)> for Vector4<S> where S: Scalar {
     #[inline]
-    fn from((v, z, w): (&Vector2, f32, f32)) -> Vector4 {
+    fn from((v, z, w): (&Vector2<S>, S, S)) -> Vector4<S> {
         Vector4::new(v.x, v.y, z, w)
     }
 }
 
-impl From<(Vector3, f32)> for Vector4 {
+impl<S> From<(Vector3<S>, S)> for Vector4<S> where S: Scalar {
     #[inline]
-    fn from((v, w): (Vector3, f32)) -> Vector4 {
+    fn from((v, w): (Vector3<S>, S)) -> Vector4<S> {
         Vector4::new(v.x, v.y, v.z, w)
     }
 }
 
-impl From<(&Vector3, f32)> for Vector4 {
+impl<S> From<(&Vector3<S>, S)> for Vector4<S> where S: Scalar {
     #[inline]
-    fn from((v, w): (&Vector3, f32)) -> Vector4 {
+    fn from((v, w): (&Vector3<S>, S)) -> Vector4<S> {
         Vector4::new(v.x, v.y, v.z, w)
     }
 }
 
-impl From<[f32; 4]> for Vector4 {
+impl<S> From<[S; 4]> for Vector4<S> where S: Scalar {
     #[inline]
-    fn from(v: [f32; 4]) -> Vector4 {
-        unsafe { mem::transmute(v) }
-    }
-}
-
-impl From<&[f32; 4]> for Vector4 {
-    #[inline]
-    fn from(v: &[f32; 4]) -> Vector4 {
+    fn from(v: [S; 4]) -> Vector4<S> {
         Vector4::new(v[0], v[1], v[2], v[3])
     }
 }
 
-impl From<&(f32, f32, f32, f32)> for Vector4 {
+impl<S> From<&[S; 4]> for Vector4<S> where S: Scalar {
     #[inline]
-    fn from(v: &(f32, f32, f32, f32)) -> Vector4 {
+    fn from(v: &[S; 4]) -> Vector4<S> {
+        Vector4::new(v[0], v[1], v[2], v[3])
+    }
+}
+
+impl<S> From<&(S, S, S, S)> for Vector4<S> where S: Scalar {
+    #[inline]
+    fn from(v: &(S, S, S, S)) -> Vector4<S> {
         Vector4::new(v.0, v.1, v.2, v.3)
     }
 }
 
-impl<'a> From<&'a [f32; 4]> for &'a Vector4 {
+impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> where S: Scalar {
     #[inline]
-    fn from(v: &'a [f32; 4]) -> &'a Vector4 {
+    fn from(v: &'a [S; 4]) -> &'a Vector4<S> {
         unsafe { mem::transmute(v) }
     }
 }
 
-impl<'a> From<&'a (f32, f32, f32, f32)> for &'a Vector4 {
+impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
     #[inline]
-    fn from(v: &'a (f32, f32, f32, f32)) -> &'a Vector4 {
+    fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
         unsafe { mem::transmute(v) }
     }
 }
-
+/*
 impl fmt::Debug for Vector4 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Vector4 ")?;
