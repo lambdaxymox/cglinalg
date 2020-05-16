@@ -1538,25 +1538,25 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
         unsafe { mem::transmute(v) }
     }
 }
+
+impl<S> ops::Neg for Vector3<S> where S: ScalarFloat {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector3 { x: -self.x, y: -self.y, z: -self.z }
+    }
+}
+
+impl<S> ops::Neg for &Vector3<S> where S: ScalarFloat {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector3 { x: -self.x, y: -self.y, z: -self.z }
+    }
+}
 /*
-impl ops::Neg for Vector3 {
-    type Output = Vector3;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector3 { x: -self.x, y: -self.y, z: -self.z }
-    }
-}
-
-impl ops::Neg for &Vector3 {
-    type Output = Vector3;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector3 { x: -self.x, y: -self.y, z: -self.z }
-    }
-}
-
 impl ops::Add<Vector3> for &Vector3 {
     type Output = Vector3;
 
@@ -1652,7 +1652,8 @@ impl<'a, 'b> ops::Sub<&'b Vector3> for &'a Vector3 {
         }
     }
 }
-
+*/
+/*
 impl ops::AddAssign<Vector3> for Vector3 {
     fn add_assign(&mut self, other: Vector3) {
         self.x += other.x;
