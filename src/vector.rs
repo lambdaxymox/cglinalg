@@ -1781,21 +1781,23 @@ impl<S> ops::RemAssign<S> for Vector3<S> where S: Scalar {
         self.z %= other;
     }
 }
-/*
-impl Zero for Vector3 {
+
+impl<S> Zero for Vector3<S> where S: Scalar {
     #[inline]
-    fn zero() -> Vector3 {
-        Vector3 { x: 0.0, y: 0.0, z: 0.0 }
+    fn zero() -> Vector3<S> {
+        Vector3 { x: S::zero(), y: S::zero(), z: S::zero() }
     }
 
     fn is_zero(&self) -> bool {
-        self.x == 0.0 && self.y == 0.0 && self.z == 0.0
+        self.x == S::zero() && self.y == S::zero() && self.z == S::zero()
     }
 }
 
-impl Metric<Vector3> for Vector3 {
+impl<S> Metric<Vector3<S>> for Vector3<S> where S: ScalarFloat {
+    type Metric = S;
+
     #[inline]
-    fn distance2(self, to: Vector3) -> f32 {
+    fn distance_squared(self, to: Vector3<S>) -> Self::Metric {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
         let dy_2 = (to.y - self.y) * (to.y - self.y);
         let dz_2 = (to.z - self.z) * (to.z - self.z);
@@ -1804,9 +1806,11 @@ impl Metric<Vector3> for Vector3 {
     }
 }
 
-impl Metric<&Vector3> for Vector3 {
+impl<S> Metric<&Vector3<S>> for Vector3<S> where S: ScalarFloat {
+    type Metric = S;
+
     #[inline]
-    fn distance2(self, to: &Vector3) -> f32 {
+    fn distance_squared(self, to: &Vector3<S>) -> Self::Metric {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
         let dy_2 = (to.y - self.y) * (to.y - self.y);
         let dz_2 = (to.z - self.z) * (to.z - self.z);
@@ -1815,9 +1819,11 @@ impl Metric<&Vector3> for Vector3 {
     }
 }
 
-impl Metric<Vector3> for &Vector3 {
+impl<S> Metric<Vector3<S>> for &Vector3<S> where S: ScalarFloat {
+    type Metric = S;
+
     #[inline]
-    fn distance2(self, to: Vector3) -> f32 {
+    fn distance_squared(self, to: Vector3<S>) -> Self::Metric {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
         let dy_2 = (to.y - self.y) * (to.y - self.y);
         let dz_2 = (to.z - self.z) * (to.z - self.z);
@@ -1826,9 +1832,11 @@ impl Metric<Vector3> for &Vector3 {
     }
 }
 
-impl<'a, 'b> Metric<&'a Vector3> for &'b Vector3 {
+impl<'a, 'b, S> Metric<&'a Vector3<S>> for &'b Vector3<S> where S: ScalarFloat {
+    type Metric = S;
+
     #[inline]
-    fn distance2(self, to: &Vector3) -> f32 {
+    fn distance_squared(self, to: &Vector3<S>) -> Self::Metric {
         let dx_2 = (to.x - self.x) * (to.x - self.x);
         let dy_2 = (to.y - self.y) * (to.y - self.y);
         let dz_2 = (to.z - self.z) * (to.z - self.z);
@@ -1837,30 +1845,42 @@ impl<'a, 'b> Metric<&'a Vector3> for &'b Vector3 {
     }
 }
 
-impl DotProduct<Vector3> for Vector3 {
-    fn dot(self, other: Vector3) -> f32 {
+impl<S> DotProduct<Vector3<S>> for Vector3<S> where S: Scalar {
+    type DotProduct = S;
+
+    #[inline]
+    fn dot(self, other: Vector3<S>) -> Self::DotProduct {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 }
 
-impl DotProduct<&Vector3> for Vector3 {
-    fn dot(self, other: &Vector3) -> f32 {
+impl<S> DotProduct<&Vector3<S>> for Vector3<S> where S: Scalar {
+    type DotProduct = S;
+
+    #[inline]
+    fn dot(self, other: &Vector3<S>) -> Self::DotProduct {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 }
 
-impl DotProduct<Vector3> for &Vector3 {
-    fn dot(self, other: Vector3) -> f32 {
+impl<S> DotProduct<Vector3<S>> for &Vector3<S> where S: Scalar {
+    type DotProduct = S;
+
+    #[inline]
+    fn dot(self, other: Vector3<S>) -> Self::DotProduct {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 }
 
-impl<'a, 'b> DotProduct<&'a Vector3> for &'b Vector3 {
-    fn dot(self, other: &'a Vector3) -> f32 {
+impl<'a, 'b, S> DotProduct<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar {
+    type DotProduct = S;
+    
+    #[inline]
+    fn dot(self, other: &'a Vector3<S>) -> Self::DotProduct {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 }
-
+/*
 impl Lerp<Vector3> for Vector3 {
     type Output = Vector3;
 
