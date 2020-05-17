@@ -85,7 +85,19 @@ macro_rules! vector_arithmetic_props {
             fn prop_vector_times_zero_equals_zero(v in super::$Generator()) {
                 let zero: $FieldType = num_traits::Zero::zero();
                 let zero_vec = $VectorN::zero();
-                prop_assert_eq!(zero * v, zero_vec);
+                prop_assert_eq!(v * zero, zero_vec);
+            }
+
+            #[test]
+            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
+                let zero_vec = $VectorN::<$FieldType>::zero();
+                prop_assert_eq!(v + zero_vec, v);
+            }
+
+            #[test]
+            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
+                let zero_vec = $VectorN::<$FieldType>::zero();
+                prop_assert_eq!(zero_vec + v, v);
             }
         }
     }
@@ -100,6 +112,12 @@ vector_arithmetic_props!(Vector1, u32, any_vector1, vector1_u32_arithmetic_props
 vector_arithmetic_props!(Vector1, u64, any_vector1, vector1_u64_arithmetic_props);
 vector_arithmetic_props!(Vector1, u128, any_vector1, vector1_u128_arithmetic_props);
 vector_arithmetic_props!(Vector1, usize, any_vector1, vector1_usize_arithmetic_props);
+vector_arithmetic_props!(Vector1, i8, any_vector1, vector1_i8_arithmetic_props);
+vector_arithmetic_props!(Vector1, i16, any_vector1, vector1_i16_arithmetic_props);
+vector_arithmetic_props!(Vector1, i32, any_vector1, vector1_i32_arithmetic_props);
+vector_arithmetic_props!(Vector1, i64, any_vector1, vector1_i64_arithmetic_props);
+vector_arithmetic_props!(Vector1, i128, any_vector1, vector1_i128_arithmetic_props);
+vector_arithmetic_props!(Vector1, isize, any_vector1, vector1_isize_arithmetic_props);
 
 vector_arithmetic_props!(Vector2, f32, any_vector2, vector2_f32_arithmetic_props);
 vector_arithmetic_props!(Vector2, f64, any_vector2, vector2_f64_arithmetic_props);
@@ -109,6 +127,12 @@ vector_arithmetic_props!(Vector2, u32, any_vector2, vector2_u32_arithmetic_props
 vector_arithmetic_props!(Vector2, u64, any_vector2, vector2_u64_arithmetic_props);
 vector_arithmetic_props!(Vector2, u128, any_vector2, vector2_u128_arithmetic_props);
 vector_arithmetic_props!(Vector2, usize, any_vector2, vector2_usize_arithmetic_props);
+vector_arithmetic_props!(Vector2, i8, any_vector2, vector2_i8_arithmetic_props);
+vector_arithmetic_props!(Vector2, i16, any_vector2, vector2_i16_arithmetic_props);
+vector_arithmetic_props!(Vector2, i32, any_vector2, vector2_i32_arithmetic_props);
+vector_arithmetic_props!(Vector2, i64, any_vector2, vector2_i64_arithmetic_props);
+vector_arithmetic_props!(Vector2, i128, any_vector2, vector2_i128_arithmetic_props);
+vector_arithmetic_props!(Vector2, isize, any_vector2, vector2_isize_arithmetic_props);
 
 vector_arithmetic_props!(Vector3, f32, any_vector3, vector3_f32_arithmetic_props);
 vector_arithmetic_props!(Vector3, f64, any_vector3, vector3_f64_arithmetic_props);
@@ -118,6 +142,12 @@ vector_arithmetic_props!(Vector3, u32, any_vector3, vector3_u32_arithmetic_props
 vector_arithmetic_props!(Vector3, u64, any_vector3, vector3_u64_arithmetic_props);
 vector_arithmetic_props!(Vector3, u128, any_vector3, vector3_u128_arithmetic_props);
 vector_arithmetic_props!(Vector3, usize, any_vector3, vector3_usize_arithmetic_props);
+vector_arithmetic_props!(Vector3, i8, any_vector3, vector3_i8_arithmetic_props);
+vector_arithmetic_props!(Vector3, i16, any_vector3, vector3_i16_arithmetic_props);
+vector_arithmetic_props!(Vector3, i32, any_vector3, vector3_i32_arithmetic_props);
+vector_arithmetic_props!(Vector3, i64, any_vector3, vector3_i64_arithmetic_props);
+vector_arithmetic_props!(Vector3, i128, any_vector3, vector3_i128_arithmetic_props);
+vector_arithmetic_props!(Vector3, isize, any_vector3, vector3_isize_arithmetic_props);
 
 vector_arithmetic_props!(Vector4, f32, any_vector4, vector4_f32_arithmetic_props);
 vector_arithmetic_props!(Vector4, f64, any_vector4, vector4_f64_arithmetic_props);
@@ -127,4 +157,9 @@ vector_arithmetic_props!(Vector4, u32, any_vector4, vector4_u32_arithmetic_props
 vector_arithmetic_props!(Vector4, u64, any_vector4, vector4_u64_arithmetic_props);
 vector_arithmetic_props!(Vector4, u128, any_vector4, vector4_u128_arithmetic_props);
 vector_arithmetic_props!(Vector4, usize, any_vector4, vector4_usize_arithmetic_props);
-
+vector_arithmetic_props!(Vector4, i8, any_vector4, vector4_i8_arithmetic_props);
+vector_arithmetic_props!(Vector4, i16, any_vector4, vector4_i16_arithmetic_props);
+vector_arithmetic_props!(Vector4, i32, any_vector4, vector4_i32_arithmetic_props);
+vector_arithmetic_props!(Vector4, i64, any_vector4, vector4_i64_arithmetic_props);
+vector_arithmetic_props!(Vector4, i128, any_vector4, vector4_i128_arithmetic_props);
+vector_arithmetic_props!(Vector4, isize, any_vector4, vector4_isize_arithmetic_props);
