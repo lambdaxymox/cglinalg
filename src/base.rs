@@ -31,7 +31,7 @@ pub trait Scalar where
 }
 
 impl<T> Scalar for T where 
-    T: Copy 
+    T: Copy
      + Clone 
      + Debug 
      + Num 

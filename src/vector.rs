@@ -1,5 +1,5 @@
 use structure::{
-    Array,
+    Storage,
     Zero,
     VectorSpace,
     //ProjectOn,
@@ -28,7 +28,7 @@ pub struct Vector1<S> {
 
 impl<S> Vector1<S> {
     /// Create a new vector.
-    pub fn new(x: S) -> Vector1<S> {
+    pub const fn new(x: S) -> Vector1<S> {
         Vector1 { x: x }
     }
 }
@@ -84,12 +84,17 @@ impl<'a, 'b, S> Metric<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Vector1<S> where S: Scalar {
+impl<S> Storage for Vector1<S> where S: Scalar {
     type Element = S;
 
     #[inline]
     fn len() -> usize {
         1
+    }
+
+    #[inline]
+    fn shape() -> (usize, usize) {
+        (1, 1)
     }
 
     #[inline]
@@ -105,6 +110,11 @@ impl<S> Array for Vector1<S> where S: Scalar {
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut Self::Element {
         &mut self.x
+    }
+
+    #[inline]
+    fn as_slice(&self) -> &[Self::Element] {
+        <Self as AsRef<[Self::Element; 1]>>::as_ref(self)
     }
 }
 
@@ -737,12 +747,17 @@ impl<S> Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> Array for Vector2<S> where S: Scalar {
+impl<S> Storage for Vector2<S> where S: Scalar {
     type Element = S;
 
     #[inline]
     fn len() -> usize {
         2
+    }
+
+    #[inline]
+    fn shape() -> (usize, usize) {
+        (2, 1)
     }
 
     #[inline]
@@ -758,6 +773,11 @@ impl<S> Array for Vector2<S> where S: Scalar {
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut Self::Element {
         &mut self.x
+    }
+
+    #[inline]
+    fn as_slice(&self) -> &[Self::Element] {
+        <Self as AsRef<[Self::Element; 2]>>::as_ref(self)
     }
 }
 
@@ -1356,12 +1376,17 @@ impl<S> Vector3<S> where S: Scalar {
     }
 }
 
-impl<S> Array for Vector3<S> where S: Scalar {
+impl<S> Storage for Vector3<S> where S: Scalar {
     type Element = S;
 
     #[inline]
     fn len() -> usize {
         3
+    }
+
+    #[inline]
+    fn shape() -> (usize, usize) {
+        (3, 1)
     }
 
     #[inline]
@@ -1377,6 +1402,11 @@ impl<S> Array for Vector3<S> where S: Scalar {
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut Self::Element {
         &mut self.x
+    }
+
+    #[inline]
+    fn as_slice(&self) -> &[Self::Element] {
+        <Self as AsRef<[Self::Element; 3]>>::as_ref(self)
     }
 }
 
@@ -2021,12 +2051,17 @@ impl<S> Vector4<S> where S: Scalar {
     }
 }
 
-impl<S> Array for Vector4<S> where S: Scalar {
+impl<S> Storage for Vector4<S> where S: Scalar {
     type Element = S;
 
     #[inline]
     fn len() -> usize {
         4
+    }
+
+    #[inline]
+    fn shape() -> (usize, usize) {
+        (4, 1)
     }
 
     #[inline]
@@ -2042,6 +2077,11 @@ impl<S> Array for Vector4<S> where S: Scalar {
     #[inline]
     fn as_mut_ptr(&mut self) -> *mut Self::Element {
         &mut self.x
+    }
+
+    #[inline]
+    fn as_slice(&self) -> &[Self::Element] {
+        <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
     }
 }
 
