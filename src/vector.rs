@@ -2835,6 +2835,12 @@ mod vector1_tests {
         let v_ref: &[i32; 1] = v.as_ref();
         assert_eq!(v_ref, &[1]);
     }
+
+    #[test]
+    fn test_indexes_and_variables() {
+        let v = Vector1::new(1);
+        assert_eq!(v[0], v.x);
+    }
 }
 
 
@@ -2961,6 +2967,13 @@ mod vector2_tests {
         let v: Vector2<i32> = Vector2::new(1, 2);
         let v_ref: &[i32; 2] = v.as_ref();
         assert_eq!(v_ref, &[1, 2]);
+    }
+
+    #[test]
+    fn test_indexes_and_variables() {
+        let v = Vector2::new(1, 2);
+        assert_eq!(v[0], v.x);
+        assert_eq!(v[1], v.y);
     }
 }
 
@@ -3089,6 +3102,14 @@ mod vector3_tests {
         let v: Vector3<i32> = Vector3::new(1, 2, 3);
         let v_ref: &[i32; 3] = v.as_ref();
         assert_eq!(v_ref, &[1, 2, 3]);
+    }
+
+    #[test]
+    fn test_indexes_and_variables() {
+        let v = Vector3::new(1, 2, 3);
+        assert_eq!(v[0], v.x);
+        assert_eq!(v[1], v.y);
+        assert_eq!(v[2], v.z);
     }
 }
 
@@ -3227,5 +3248,14 @@ mod vector4_tests {
         let v: Vector4<i32> = Vector4::new(1, 2, 3, 4);
         let v_ref: &[i32; 4] = v.as_ref();
         assert_eq!(v_ref, &[1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn test_indexes_and_variables() {
+        let v = Vector4::new(1, 2, 3, 4);
+        assert_eq!(v[0], v.x);
+        assert_eq!(v[1], v.y);
+        assert_eq!(v[2], v.z);
+        assert_eq!(v[3], v.w);
     }
 }
