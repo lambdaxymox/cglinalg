@@ -2604,39 +2604,43 @@ impl<'a, 'b, S> DotProduct<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
 }
+
+impl<S> Lerp<Vector4<S>> for Vector4<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Vector4<S>;
+
+    fn lerp(self, other: Vector4<S>, amount: Self::Scalar) -> Self::Output {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<S> Lerp<&Vector4<S>> for Vector4<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Vector4<S>;
+
+    fn lerp(self, other: &Vector4<S>, amount: S) -> Self::Output {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<S> Lerp<Vector4<S>> for &Vector4<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Vector4<S>;
+
+    fn lerp(self, other: Vector4<S>, amount: Self::Scalar) -> Self::Output {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<'a, 'b, S> Lerp<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Vector4<S>;
+
+    fn lerp(self, other: &'a Vector4<S>, amount: Self::Scalar) -> Self::Output {
+        self + ((other - self) * amount)
+    }
+}
 /*
-impl Lerp<Vector4> for Vector4 {
-    type Output = Vector4;
-
-    fn lerp(self, other: Vector4, amount: f32) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl Lerp<&Vector4> for Vector4 {
-    type Output = Vector4;
-
-    fn lerp(self, other: &Vector4, amount: f32) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl Lerp<Vector4> for &Vector4 {
-    type Output = Vector4;
-
-    fn lerp(self, other: Vector4, amount: f32) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b> Lerp<&'a Vector4> for &'b Vector4 {
-    type Output = Vector4;
-
-    fn lerp(self, other: &'a Vector4, amount: f32) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
 impl Magnitude<Vector4> for Vector4 {}
 impl Magnitude<Vector4> for &Vector4 {}
 */
