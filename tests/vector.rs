@@ -1,8 +1,9 @@
 extern crate cgmath;
+extern crate num_traits;
 extern crate proptest;
 
 use proptest::prelude::*;
-use cgmath::{Vector1, Zero};
+use cgmath::{Vector1, Zero, Scalar};
 
 /// A macro that generates the property tests for vector indexing.
 /// `$VectorN` denotes the name of the vector type.
@@ -18,15 +19,15 @@ macro_rules! index_props {
         use cgmath::{$VectorN, Zero};
 
         proptest! {
-            /// Given a vector, it should return the entry at position `index` in the vector 
+            /// Given a vector of type `$VectorN`, it should return the entry at position `index` in the vector 
             /// when the given index is inbounds.
             #[test]
-            fn prop_accepts_all_indices_in_of_bounds(index in (0 as usize..$UpperBound as usize)) {
+            fn prop_accepts_all_indices_in_of_bounds(index in 0..$UpperBound as usize) {
                 let v: $VectorN<$FieldType> = $VectorN::zero();
                 prop_assert_eq!(v[index], v[index]);
             }
     
-            /// Given a vector, when the entry position is out of bounds, it should 
+            /// Given a vector of type `$VectorN`, when the entry position is out of bounds, it should 
             /// generate a panic just like an array or vector indexed out of bounds.
             #[test]
             #[should_panic]
@@ -39,18 +40,52 @@ macro_rules! index_props {
     }
 }
 
-index_props!(Vector1, f32, 1, vector1_f32_props);
-index_props!(Vector1, f64, 1, vector1_f64_props);
-index_props!(Vector2, f32, 2, vector2_f32_props);
-index_props!(Vector2, f64, 2, vector2_f64_props);
-index_props!(Vector3, f32, 3, vector3_f32_props);
-index_props!(Vector3, f64, 3, vector3_f64_props);
-index_props!(Vector4, f32, 4, vector4_f32_props);
-index_props!(Vector4, f64, 4, vector4_f64_props);
+index_props!(Vector1, f32, 1, vector1_f32_index_props);
+index_props!(Vector1, f64, 1, vector1_f64_index_props);
+index_props!(Vector2, f32, 2, vector2_f32_index_props);
+index_props!(Vector2, f64, 2, vector2_f64_index_props);
+index_props!(Vector3, f32, 3, vector3_f32_index_props);
+index_props!(Vector3, f64, 3, vector3_f64_index_props);
+index_props!(Vector4, f32, 4, vector4_f32_index_props);
+index_props!(Vector4, f64, 4, vector4_f64_index_props);
 
-/*
-proptest! {
-    #[test]
-    fn 
+
+fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> where S: Scalar + Arbitrary {
+    any::<S>().prop_map(|x| Vector1::new(x))
 }
-*/
+
+
+macro_rules! vector_arithmetic_props {
+    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cgmath::{$VectorN, Zero};
+
+        proptest! {
+            #[test]
+            fn prop_zero_times_vector_equals_zero(v in super::$Generator()) {
+                let zero: $FieldType = num_traits::Zero::zero();
+                let zero_vec = $VectorN::zero();
+                prop_assert_eq!(zero * v, zero_vec);
+            }
+        
+            #[test]
+            fn prop_vector_times_zero_equals_zero(v in super::$Generator()) {
+                let zero: $FieldType = num_traits::Zero::zero();
+                let zero_vec = $VectorN::zero();
+                prop_assert_eq!(zero * v, zero_vec);
+            }
+        }
+    }
+    }
+}
+
+vector_arithmetic_props!(Vector1, f32, any_vector1, vector1_f32_arithmetic_props);
+vector_arithmetic_props!(Vector1, f64, any_vector1, vector1_f64_arithmetic_props);
+vector_arithmetic_props!(Vector1, u8, any_vector1, vector1_u8_arithmetic_props);
+vector_arithmetic_props!(Vector1, u16, any_vector1, vector1_u16_arithmetic_props);
+vector_arithmetic_props!(Vector1, u32, any_vector1, vector1_u32_arithmetic_props);
+vector_arithmetic_props!(Vector1, u64, any_vector1, vector1_u64_arithmetic_props);
+vector_arithmetic_props!(Vector1, u128, any_vector1, vector1_u128_arithmetic_props);
+vector_arithmetic_props!(Vector1, usize, any_vector1, vector1_usize_arithmetic_props);

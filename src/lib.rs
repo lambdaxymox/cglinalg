@@ -16,6 +16,7 @@ pub use matrix::*;
 pub use projection::*;
 pub use quaternion::*;
 */
+pub use base::*;
 pub use vector::*;
 pub use structure::*;
 
