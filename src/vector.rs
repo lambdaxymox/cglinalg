@@ -22,6 +22,7 @@ use base::{
 
 /// A representation of one-dimensional vectors.
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
+#[repr(C)]
 pub struct Vector1<S> {
     pub x: S,
 }
@@ -714,6 +715,7 @@ impl_mul_operator!(f64, Vector1<f64>, Vector1<f64>, { x });
 
 /// A representation of two-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
+#[repr(C)]
 pub struct Vector2<S> {
    pub x: S,
    pub y: S,
@@ -1312,6 +1314,7 @@ impl_mul_operator!(f64, Vector2<f64>, Vector2<f64>, { x, y });
 
 /// A representation of three-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
+#[repr(C)]
 pub struct Vector3<S> {
     pub x: S,
     pub y: S,
@@ -1985,6 +1988,7 @@ impl_mul_operator!(f64, Vector3<f64>, Vector3<f64>, { x, y, z });
 
 /// A representation of four-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
+#[repr(C)]
 pub struct Vector4<S> {
     pub x: S,
     pub y: S,
