@@ -2776,38 +2776,38 @@ mod vector1_tests {
 
     #[test]
     fn addition() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.v1.x + test.v2.x);
             let result = test.v1 + test.v2;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn subtraction() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.v1.x + test.v2.x);
             let result = test.v1 + test.v2;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn scalar_multiplication() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.c * test.v1.x);
             let result = test.v1 * test.c;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn scalar_division() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.v1.x / test.c);
             let result = test.v1 / test.c;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
@@ -2903,38 +2903,38 @@ mod vector2_tests {
 
     #[test]
     fn test_addition() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector2::from((test.v1.x + test.v2.x, test.v1.y + test.v2.y));
             let result = test.v1 + test.v2;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn test_subtraction() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector2::from((test.v1.x - test.v2.x, test.v1.y - test.v2.y));
             let result = test.v1 - test.v2;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn test_scalar_multiplication() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector2::from((test.c * test.v1.x, test.c * test.v1.y));
             let result = test.v1 * test.c;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn test_scalar_division() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector2::from((test.v1.x / test.c, test.v1.y / test.c));
             let result = test.v1 / test.c;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
@@ -3031,38 +3031,38 @@ mod vector3_tests {
 
     #[test]
     fn test_addition() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector3::from((test.x.x + test.y.x, test.x.y + test.y.y, test.x.z + test.y.z));
             let result = test.x + test.y;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn test_subtraction() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector3::from((test.x.x - test.y.x, test.x.y - test.y.y, test.x.z - test.y.z));
             let result = test.x - test.y;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn test_scalar_multiplication() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector3::from((test.c * test.x.x, test.c * test.x.y, test.c * test.x.z));
             let result = test.x * test.c;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn test_scalar_division() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector3::from((test.x.x / test.c, test.x.y / test.c, test.x.z / test.c));
             let result = test.x / test.c;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
@@ -3159,48 +3159,48 @@ mod vector4_tests {
 
     #[test]
     fn test_addition() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector4::from((
                 test.v1.x + test.v2.x, test.v1.y + test.v2.y,
                 test.v1.z + test.v2.z, test.v1.w + test.v2.w
             ));
             let result = test.v1 + test.v2;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn test_subtraction() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector4::from((
                 test.v1.x - test.v2.x, test.v1.y - test.v2.y,
                 test.v1.z - test.v2.z, test.v1.w - test.v2.w
             ));
             let result = test.v1 - test.v2;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn test_scalar_multiplication() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector4::from((
                 test.c * test.v1.x, test.c * test.v1.y, test.c * test.v1.z, test.c * test.v1.w
             ));
             let result = test.v1 * test.c;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
     fn test_scalar_division() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let expected = Vector4::from((
                 test.v1.x / test.c, test.v1.y / test.c, test.v1.z / test.c, test.v1.w / test.c
             ));
             let result = test.v1 / test.c;
             assert_eq!(result, expected);
-        }
+        });
     }
 
     #[test]
