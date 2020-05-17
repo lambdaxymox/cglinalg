@@ -2242,25 +2242,25 @@ impl<S> fmt::Display for Vector4<S> where S: fmt::Display {
         write!(f, "Vector4 [{:.2}, {:.2}, {:.2}, {:.2}]", self.x, self.y, self.z, self.w)
     }
 }
+
+impl<S> ops::Neg for Vector4<S> where S: ScalarFloat {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
+    }
+}
+
+impl<S> ops::Neg for &Vector4<S> where S: ScalarFloat {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
+    }
+}
 /*
-impl ops::Neg for Vector4 {
-    type Output = Vector4;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
-    }
-}
-
-impl ops::Neg for &Vector4 {
-    type Output = Vector4;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
-    }
-}
-
 impl ops::Add<Vector4> for &Vector4 {
     type Output = Vector4;
 
