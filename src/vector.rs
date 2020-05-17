@@ -2640,10 +2640,30 @@ impl<'a, 'b, S> Lerp<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
         self + ((other - self) * amount)
     }
 }
-/*
-impl Magnitude<Vector4> for Vector4 {}
-impl Magnitude<Vector4> for &Vector4 {}
-*/
+
+impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
+    type Output = S;
+
+    /// Compute the norm (length) of a vector.
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
+    }
+
+    /// Compute the squared length of a vector.
+    fn magnitude_squared(&self) -> Self::Output {
+        DotProduct::dot(self, self)
+    }
+
+    /// Convert a vector into a unit vector.
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+
+    /// Normalize a vector with a specified magnitude.
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+}
 
 #[cfg(test)]
 mod vector1_tests {
