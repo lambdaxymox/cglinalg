@@ -8,5 +8,8 @@ description = "A low-dimensional linear algebra library for real-time computer g
 name = "cgmath"
 
 [dependencies]
-proptest = "0.9.6"
 num-traits = "0.2"
+approx = "0.3.2"
+
+[dev-dependencies]
+proptest = "0.9.6"

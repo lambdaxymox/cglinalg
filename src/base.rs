@@ -3,6 +3,7 @@ use num_traits::{
     NumCast, 
     Float
 };
+use approx;
 use std::fmt::{
     Debug,
 };
@@ -53,6 +54,9 @@ pub trait ScalarFloat:
 
 impl<T> ScalarFloat for T where 
     T: Scalar 
-    +  Float
+     + Float
+     + approx::AbsDiffEq
+     + approx::RelativeEq
+     + approx::UlpsEq
 {
 }

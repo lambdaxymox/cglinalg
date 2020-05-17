@@ -1,3 +1,4 @@
+pub extern crate approx;
 pub extern crate num_traits;
 
 mod base;
