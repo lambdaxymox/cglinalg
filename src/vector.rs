@@ -2364,43 +2364,43 @@ impl<'a, 'b, S> ops::Sub<&'b Vector4<S>> for &'a Vector4<S> where S: Scalar {
         }
     }
 }
+
+impl<S> ops::AddAssign<Vector4<S>> for Vector4<S> where S: Scalar {
+    fn add_assign(&mut self, other: Vector4<S>) {
+        self.x += other.x;
+        self.y += other.y;
+        self.z += other.z;
+        self.w += other.w;
+    }
+}
+
+impl<S> ops::AddAssign<&Vector4<S>> for Vector4<S> where S: Scalar {
+    fn add_assign(&mut self, other: &Vector4<S>) {
+        self.x += other.x;
+        self.y += other.y;
+        self.z += other.z;
+        self.w += other.w;
+    }
+}
+
+impl<S> ops::SubAssign<Vector4<S>> for Vector4<S> where S: Scalar {
+    fn sub_assign(&mut self, other: Vector4<S>) {
+        self.x -= other.x;
+        self.y -= other.y;
+        self.z -= other.z;
+        self.w -= other.w;
+    }
+}
+
+impl<S> ops::SubAssign<&Vector4<S>> for Vector4<S> where S: Scalar {
+    fn sub_assign(&mut self, other: &Vector4<S>) {
+        self.x -= other.x;
+        self.y -= other.y;
+        self.z -= other.z;
+        self.w -= other.w;
+    }
+}
 /*
-impl ops::AddAssign<Vector4> for Vector4 {
-    fn add_assign(&mut self, other: Vector4) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-        self.w += other.w;
-    }
-}
-
-impl ops::AddAssign<&Vector4> for Vector4 {
-    fn add_assign(&mut self, other: &Vector4) {
-        self.x += other.x;
-        self.y += other.y;
-        self.z += other.z;
-        self.w += other.w;
-    }
-}
-
-impl ops::SubAssign<Vector4> for Vector4 {
-    fn sub_assign(&mut self, other: Vector4) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-        self.w -= other.w;
-    }
-}
-
-impl ops::SubAssign<&Vector4> for Vector4 {
-    fn sub_assign(&mut self, other: &Vector4) {
-        self.x -= other.x;
-        self.y -= other.y;
-        self.z -= other.z;
-        self.w -= other.w;
-    }
-}
-
 impl ops::Mul<f32> for Vector4 {
     type Output = Vector4;
 
