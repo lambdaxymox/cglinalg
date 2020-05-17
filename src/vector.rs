@@ -2505,18 +2505,18 @@ impl<S> ops::RemAssign<S> for Vector4<S> where S: Scalar {
         self.w %= other;
     }
 }
-/*
-impl Zero for Vector4 {
+
+impl<S> Zero for Vector4<S> where S: Scalar {
     #[inline]
-    fn zero() -> Vector4 {
-        Vector4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 }
+    fn zero() -> Vector4<S> {
+        Vector4 { x: S::zero(), y: S::zero(), z: S::zero(), w: S::zero() }
     }
 
     fn is_zero(&self) -> bool {
-        self.x == 0.0 && self.y == 0.0 && self.z == 0.0 && self.w == 0.0
+        self.x == S::zero() && self.y == S::zero() && self.z == S::zero() && self.w == S::zero()
     }
 }
-
+/*
 impl Metric<Vector4> for Vector4 {
     #[inline]
     fn distance2(self, to: Vector4) -> f32 {
