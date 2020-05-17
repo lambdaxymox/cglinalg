@@ -2828,6 +2828,13 @@ mod vector1_tests {
         let v = Vector1::new(1_f32);
         assert_eq!(0_f32 * v, Vector1::zero());
     }
+
+    #[test]
+    fn test_as_ref() {
+        let v: Vector1<i32> = Vector1::new(1);
+        let v_ref: &[i32; 1] = v.as_ref();
+        assert_eq!(v_ref, &[1]);
+    }
 }
 
 
@@ -2947,6 +2954,13 @@ mod vector2_tests {
     fn zero_times_vector_equals_zero() {
         let v = Vector2::new(1_f32, 2_f32);
         assert_eq!(0_f32 * v, Vector2::zero());
+    }
+
+    #[test]
+    fn test_as_ref() {
+        let v: Vector2<i32> = Vector2::new(1, 2);
+        let v_ref: &[i32; 2] = v.as_ref();
+        assert_eq!(v_ref, &[1, 2]);
     }
 }
 
@@ -3068,6 +3082,13 @@ mod vector3_tests {
     fn zero_times_vector_equals_zero() {
         let v = Vector3::new(1_f32, 2_f32, 3_f32);
         assert_eq!(0_f32 * v, Vector3::zero());
+    }
+
+    #[test]
+    fn test_as_ref() {
+        let v: Vector3<i32> = Vector3::new(1, 2, 3);
+        let v_ref: &[i32; 3] = v.as_ref();
+        assert_eq!(v_ref, &[1, 2, 3]);
     }
 }
 
@@ -3199,5 +3220,12 @@ mod vector4_tests {
     fn zero_times_vector_equals_zero() {
         let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
         assert_eq!(0_f32 * v, Vector4::zero());
+    }
+
+    #[test]
+    fn test_as_ref() {
+        let v: Vector4<i32> = Vector4::new(1, 2, 3, 4);
+        let v_ref: &[i32; 4] = v.as_ref();
+        assert_eq!(v_ref, &[1, 2, 3, 4]);
     }
 }
