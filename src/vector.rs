@@ -2665,6 +2665,23 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     }
 }
 
+impl_mul_operator!(u8, Vector4<u8>, Vector4<u8>, { x, y, z, w });
+impl_mul_operator!(u16, Vector4<u16>, Vector4<u16>, { x, y, z, w });
+impl_mul_operator!(u32, Vector4<u32>, Vector4<u32>, { x, y, z, w });
+impl_mul_operator!(u64, Vector4<u64>, Vector4<u64>, { x, y, z, w });
+impl_mul_operator!(u128, Vector4<u128>, Vector4<u128>, { x, y, z, w });
+impl_mul_operator!(usize, Vector4<usize>, Vector4<usize>, { x, y, z, w });
+
+impl_mul_operator!(i8, Vector4<i8>, Vector4<i8>, { x, y, z, w });
+impl_mul_operator!(i16, Vector4<i16>, Vector4<i16>, { x, y, z, w });
+impl_mul_operator!(i32, Vector4<i32>, Vector4<i32>, { x, y, z, w });
+impl_mul_operator!(i64, Vector4<i64>, Vector4<i64>, { x, y, z, w });
+impl_mul_operator!(i128, Vector4<i128>, Vector4<i128>, { x, y, z, w });
+impl_mul_operator!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
+
+impl_mul_operator!(f32, Vector4<f32>, Vector4<f32>, { x, y, z, w });
+impl_mul_operator!(f64, Vector4<f64>, Vector4<f64>, { x, y, z, w });
+
 #[cfg(test)]
 mod vector1_tests {
     use std::slice::Iter;
@@ -2894,6 +2911,7 @@ mod vector2_tests {
     }
 }
 
+
 #[cfg(test)]
 mod vector3_tests {
     use std::slice::Iter;
@@ -3013,17 +3031,19 @@ mod vector3_tests {
         assert_eq!(0_f32 * v, Vector3::zero());
     }
 }
-/*
+
 
 #[cfg(test)]
 mod vector4_tests {
     use std::slice::Iter;
     use super::Vector4;
+    use structure::Zero;
+
 
     struct TestCase {
         c: f32,
-        v1: Vector4,
-        v2: Vector4,
+        v1: Vector4<f32>,
+        v2: Vector4<f32>,
     }
 
     struct Test {
@@ -3122,6 +3142,23 @@ mod vector4_tests {
             assert_eq!(result, expected);
         }
     }
-}
 
-*/
+    #[test]
+    #[should_panic]
+    fn out_of_bounds_array_access() {
+        let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
+        assert_eq!(v[4], v[4]);
+    }
+
+    #[test]
+    fn vector_times_zero_equals_zero() {
+        let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
+        assert_eq!(v * 0_f32, Vector4::zero());
+    }
+
+    #[test]
+    fn zero_times_vector_equals_zero() {
+        let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
+        assert_eq!(0_f32 * v, Vector4::zero());
+    }
+}
