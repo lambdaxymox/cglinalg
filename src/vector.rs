@@ -2260,11 +2260,11 @@ impl<S> ops::Neg for &Vector4<S> where S: ScalarFloat {
         Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
     }
 }
-/*
-impl ops::Add<Vector4> for &Vector4 {
-    type Output = Vector4;
 
-    fn add(self, other: Vector4) -> Self::Output {
+impl<S> ops::Add<Vector4<S>> for &Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    fn add(self, other: Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -2274,10 +2274,10 @@ impl ops::Add<Vector4> for &Vector4 {
     }
 }
 
-impl ops::Add<Vector4> for Vector4 {
-    type Output = Vector4;
+impl<S> ops::Add<Vector4<S>> for Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
 
-    fn add(self, other: Vector4) -> Self::Output {
+    fn add(self, other: Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -2287,10 +2287,10 @@ impl ops::Add<Vector4> for Vector4 {
     }
 }
 
-impl ops::Add<&Vector4> for Vector4 {
-    type Output = Vector4;
+impl<S> ops::Add<&Vector4<S>> for Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
 
-    fn add(self, other: &Vector4) -> Self::Output {
+    fn add(self, other: &Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -2300,10 +2300,10 @@ impl ops::Add<&Vector4> for Vector4 {
     }
 }
 
-impl<'a, 'b> ops::Add<&'a Vector4> for &'b Vector4 {
-    type Output = Vector4;
+impl<'a, 'b, S> ops::Add<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
 
-    fn add(self, other: &'a Vector4) -> Self::Output {
+    fn add(self, other: &'a Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -2313,10 +2313,10 @@ impl<'a, 'b> ops::Add<&'a Vector4> for &'b Vector4 {
     }
 }
 
-impl ops::Sub<Vector4> for &Vector4 {
-    type Output = Vector4;
+impl<S> ops::Sub<Vector4<S>> for &Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
 
-    fn sub(self, other: Vector4) -> Self::Output {
+    fn sub(self, other: Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -2326,10 +2326,10 @@ impl ops::Sub<Vector4> for &Vector4 {
     }
 }
 
-impl ops::Sub<Vector4> for Vector4 {
-    type Output = Vector4;
+impl<S> ops::Sub<Vector4<S>> for Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
 
-    fn sub(self, other: Vector4) -> Self::Output {
+    fn sub(self, other: Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -2339,10 +2339,10 @@ impl ops::Sub<Vector4> for Vector4 {
     }
 }
 
-impl ops::Sub<&Vector4> for Vector4 {
-    type Output = Vector4;
+impl<S> ops::Sub<&Vector4<S>> for Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
 
-    fn sub(self, other: &Vector4) -> Self::Output {
+    fn sub(self, other: &Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -2352,10 +2352,10 @@ impl ops::Sub<&Vector4> for Vector4 {
     }
 }
 
-impl<'a, 'b> ops::Sub<&'b Vector4> for &'a Vector4 {
-    type Output = Vector4;
+impl<'a, 'b, S> ops::Sub<&'b Vector4<S>> for &'a Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
 
-    fn sub(self, other: &'b Vector4) -> Self::Output {
+    fn sub(self, other: &'b Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -2364,7 +2364,7 @@ impl<'a, 'b> ops::Sub<&'b Vector4> for &'a Vector4 {
         }
     }
 }
-
+/*
 impl ops::AddAssign<Vector4> for Vector4 {
     fn add_assign(&mut self, other: Vector4) {
         self.x += other.x;
