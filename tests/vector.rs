@@ -3,7 +3,16 @@ extern crate num_traits;
 extern crate proptest;
 
 use proptest::prelude::*;
-use cgmath::{Vector1, Vector2, Vector3, Vector4, Zero, Scalar};
+use cgmath::{
+    Vector1, 
+    Vector2, 
+    Vector3, 
+    Vector4, 
+    Zero, 
+    Scalar
+};
+
+
 
 /// A macro that generates the property tests for vector indexing.
 /// `$VectorN` denotes the name of the vector type.
@@ -170,6 +179,14 @@ macro_rules! vector_add_props {
                 prop_assert_eq!(&v1 + v2, &v1 + &v2);
                 prop_assert_eq!(v1 + &v2, &v1 + &v2);
             }
+
+            #[test]
+            fn prop_vector_addition_almost_commutative(
+                v1 in super::$Generator::<$FieldType>(), v2 in super::$Generator::<$FieldType>()) {
+                
+                let zero: $VectorN<$FieldType> = Zero::zero();
+                prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
+            }
         }
     }
     }
@@ -194,8 +211,6 @@ macro_rules! vector_sub_props {
                 let zero_vec = $VectorN::<$FieldType>::zero();
                 prop_assert_eq!(v - v, zero_vec);
             }
-
-
         }
     }
     }
