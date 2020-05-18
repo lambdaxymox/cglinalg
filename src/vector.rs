@@ -467,7 +467,7 @@ impl<S> ops::Rem<S> for Vector1<S> where S: Scalar {
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         
-        Vector1 { x: x }
+        Vector1::new(x)
     }
 }
 
@@ -477,7 +477,7 @@ impl<S> ops::Rem<S> for &Vector1<S> where S: Scalar {
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         
-        Vector1 { x: x }
+        Vector1::new(x)
     }
 }
 
@@ -1135,7 +1135,7 @@ impl<S> ops::Rem<S> for Vector2<S> where S: Scalar {
         let x = self.x % other;
         let y = self.y % other;
         
-        Vector2 { x: x, y: y }
+        Vector2::new(x, y)
     }
 }
 
@@ -1146,7 +1146,7 @@ impl<S> ops::Rem<S> for &Vector2<S> where S: Scalar {
         let x = self.x % other;
         let y = self.y % other;
         
-        Vector2 { x: x, y: y }
+        Vector2::new(x, y)
     }
 }
 
@@ -1813,7 +1813,7 @@ impl<S> ops::Rem<S> for Vector3<S> where S: Scalar {
         let y = self.y % other;
         let z = self.z % other;
         
-        Vector3 { x: x, y: y, z: z }
+        Vector3::new(x, y, z)
     }
 }
 
@@ -1825,7 +1825,7 @@ impl<S> ops::Rem<S> for &Vector3<S> where S: Scalar {
         let y = self.y % other;
         let z = self.z % other;
         
-        Vector3 { x: x, y: y, z: z }
+        Vector3::new(x, y, z)
     }
 }
 
@@ -2519,7 +2519,7 @@ impl<S> ops::Rem<S> for Vector4<S> where S: Scalar {
         let z = self.z % other;
         let w = self.w % other;
 
-        Vector4 { x: x, y: y, z: z, w: w }
+        Vector4::new(x, y, z, w)
     }
 }
 
@@ -2532,7 +2532,7 @@ impl<S> ops::Rem<S> for &Vector4<S> where S: Scalar {
         let z = self.z % other;
         let w = self.w % other;
         
-        Vector4 { x: x, y: y, z: z, w: w }
+        Vector4::new(x, y, z, w)
     }
 }
 
