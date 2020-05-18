@@ -49,14 +49,17 @@ impl<T> Scalar for T where
 pub trait ScalarFloat:
       Scalar
     + Float
+    + approx::AbsDiffEq<Epsilon = Self>
+    + approx::RelativeEq<Epsilon = Self>
+    + approx::UlpsEq<Epsilon = Self>
 {
 }
 
 impl<T> ScalarFloat for T where 
     T: Scalar 
      + Float
-     + approx::AbsDiffEq
-     + approx::RelativeEq
-     + approx::UlpsEq
+     + approx::AbsDiffEq<Epsilon = Self>
+     + approx::RelativeEq<Epsilon = Self>
+     + approx::UlpsEq<Epsilon = Self>
 {
 }

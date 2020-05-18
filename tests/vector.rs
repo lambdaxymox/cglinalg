@@ -194,6 +194,8 @@ macro_rules! vector_sub_props {
                 let zero_vec = $VectorN::<$FieldType>::zero();
                 prop_assert_eq!(v - v, zero_vec);
             }
+
+
         }
     }
     }

@@ -618,6 +618,44 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     }
 }
 
+impl<S> approx::AbsDiffEq for Vector1<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.x, &other.x, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Vector1<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.x, &other.x, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Vector1<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
+    }
+}
+
 
 impl_mul_operator!(u8, Vector1<u8>, Vector1<u8>, { x });
 impl_mul_operator!(u16, Vector1<u16>, Vector1<u16>, { x });
@@ -1228,6 +1266,48 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
         self * (magnitude / self.magnitude())
     }
 }
+
+impl<S> approx::AbsDiffEq for Vector2<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.x, &other.x, epsilon) && 
+        S::abs_diff_eq(&self.y, &other.y, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Vector2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.x, &other.x, epsilon, max_relative) &&
+        S::relative_eq(&self.y, &other.y, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Vector2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
+        S::ulps_eq(&self.y, &other.y, epsilon, max_ulps)
+    }
+}
+
 
 impl_mul_operator!(u8, Vector2<u8>, Vector2<u8>, { x, y });
 impl_mul_operator!(u16, Vector2<u16>, Vector2<u16>, { x, y });
@@ -1913,6 +1993,51 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
         self * (magnitude / self.magnitude())
     }
 }
+
+impl<S> approx::AbsDiffEq for Vector3<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.x, &other.x, epsilon) && 
+        S::abs_diff_eq(&self.y, &other.y, epsilon) &&
+        S::abs_diff_eq(&self.z, &other.z, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Vector3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.x, &other.x, epsilon, max_relative) &&
+        S::relative_eq(&self.y, &other.y, epsilon, max_relative) &&
+        S::relative_eq(&self.z, &other.z, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Vector3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
+        S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) &&
+        S::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
+    }
+}
+
 
 // impl Magnitude<Vector3> for &Vector3 {}
 impl_mul_operator!(u8, Vector3<u8>, Vector3<u8>, { x, y, z });
@@ -2621,6 +2746,54 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
         self * (magnitude / self.magnitude())
     }
 }
+
+impl<S> approx::AbsDiffEq for Vector4<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.x, &other.x, epsilon) && 
+        S::abs_diff_eq(&self.y, &other.y, epsilon) &&
+        S::abs_diff_eq(&self.z, &other.z, epsilon) &&
+        S::abs_diff_eq(&self.w, &other.w, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Vector4<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.x, &other.x, epsilon, max_relative) &&
+        S::relative_eq(&self.y, &other.y, epsilon, max_relative) &&
+        S::relative_eq(&self.z, &other.z, epsilon, max_relative) &&
+        S::relative_eq(&self.w, &other.w, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Vector4<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
+        S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) &&
+        S::ulps_eq(&self.z, &other.z, epsilon, max_ulps) &&
+        S::ulps_eq(&self.w, &other.w, epsilon, max_ulps)
+    }
+}
+
 
 impl_mul_operator!(u8, Vector4<u8>, Vector4<u8>, { x, y, z, w });
 impl_mul_operator!(u16, Vector4<u16>, Vector4<u16>, { x, y, z, w });
