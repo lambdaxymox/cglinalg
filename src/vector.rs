@@ -2679,15 +2679,9 @@ mod vector1_tests {
     fn test_cases() -> Test {
         Test {
             tests: vec![
-                TestCase { 
-                    c: 802.3435169, v1: Vector1::from(-23.43), v2: Vector1::from(426.1),
-                },
-                TestCase {
-                    c: 33.249539, v1: Vector1::from(27.6189), v2: Vector1::from(258.083),
-                },
-                TestCase {
-                    c: 7.04217, v1: Vector1::from(0.0), v2: Vector1::from(0.0),
-                },
+                TestCase { c: 802.3435169, v1: Vector1::from(-23.43),  v2: Vector1::from(426.1),   },
+                TestCase { c: 33.249539,   v1: Vector1::from(27.6189), v2: Vector1::from(258.083), },
+                TestCase { c: 7.04217,     v1: Vector1::from(0.0),     v2: Vector1::from(0.0),     },
             ]
         }
     }
@@ -2759,6 +2753,21 @@ mod vector1_tests {
         let v = Vector1::new(1);
         assert_eq!(v[0], v.x);
     }
+
+    #[test]
+    fn test_as_mut() {
+        let mut v: Vector1<i32> = Vector1::new(1);
+        let v_ref: &mut [i32; 1] = v.as_mut();
+        v_ref[0] = 5;
+        assert_eq!(v.x, 5);
+    }
+
+    #[test]
+    fn test_vector_addition_over_integers_commutative() {
+        let v = Vector1::new(2);
+        let w = Vector1::new(3);
+        assert_eq!(v + w, w + v);
+    }
 }
 
 
@@ -2801,26 +2810,10 @@ mod vector2_tests {
     fn test_cases() -> Test {
         Test {
             tests: vec![
-                TestCase {
-                    c: 802.3435169,
-                    v1: Vector2::from((80.0,  43.569)),
-                    v2: Vector2::from((6.741, 23.5724)),
-                },
-                TestCase {
-                    c: 33.249539,
-                    v1: Vector2::from((27.6189, 4.2219)),
-                    v2: Vector2::from((258.083, 42.17))
-                },
-                TestCase {
-                    c: 7.04217,
-                    v1: Vector2::from((70.0,  49.0)),
-                    v2: Vector2::from((89.9138, 427.46894)),
-                },
-                TestCase {
-                    c: 61.891390,
-                    v1: Vector2::from((8827.1983, 56.31)),
-                    v2: Vector2::from((89.0, 936.5)),
-                }
+                TestCase { c: 802.3435169, v1: Vector2::from((80.0,  43.569)),    v2: Vector2::from((6.741, 23.5724)),     },
+                TestCase { c: 33.249539,   v1: Vector2::from((27.6189, 4.2219)),  v2: Vector2::from((258.083, 42.17))      },
+                TestCase { c: 7.04217,     v1: Vector2::from((70.0,  49.0)),      v2: Vector2::from((89.9138, 427.46894)), },
+                TestCase { c: 61.891390,   v1: Vector2::from((8827.1983, 56.31)), v2: Vector2::from((89.0, 936.5)),        }
             ]
         }
     }
@@ -2892,6 +2885,21 @@ mod vector2_tests {
         let v = Vector2::new(1, 2);
         assert_eq!(v[0], v.x);
         assert_eq!(v[1], v.y);
+    }
+
+    #[test]
+    fn test_as_mut() {
+        let mut v: Vector2<i32> = Vector2::new(1, 2);
+        let v_ref: &mut [i32; 2] = v.as_mut();
+        v_ref[0] = 5;
+        assert_eq!(v.x, 5);
+    }
+
+    #[test]
+    fn test_vector_addition_over_integers_commutative() {
+        let v = Vector2::new(2, 3);
+        let w = Vector2::new(4, 5);
+        assert_eq!(v + w, w + v);
     }
 }
 
@@ -3028,6 +3036,21 @@ mod vector3_tests {
         assert_eq!(v[0], v.x);
         assert_eq!(v[1], v.y);
         assert_eq!(v[2], v.z);
+    }
+
+    #[test]
+    fn test_as_mut() {
+        let mut v: Vector3<i32> = Vector3::new(1, 2, 3);
+        let v_ref: &mut [i32; 3] = v.as_mut();
+        v_ref[2] = 5;
+        assert_eq!(v.z, 5);
+    }
+
+    #[test]
+    fn test_vector_addition_over_integers_commutative() {
+        let v = Vector3::new(1, 2, 3);
+        let w = Vector3::new(4, 5, 6);
+        assert_eq!(v + w, w + v);
     }
 }
 
@@ -3175,5 +3198,20 @@ mod vector4_tests {
         assert_eq!(v[1], v.y);
         assert_eq!(v[2], v.z);
         assert_eq!(v[3], v.w);
+    }
+
+    #[test]
+    fn test_as_mut() {
+        let mut v: Vector4<i32> = Vector4::new(1, 2, 3, 4);
+        let v_ref: &mut [i32; 4] = v.as_mut();
+        v_ref[2] = 5;
+        assert_eq!(v.z, 5);
+    }
+
+    #[test]
+    fn test_vector_addition_over_integers_commutative() {
+        let v = Vector4::new(1, 2, 3, 4);
+        let w = Vector4::new(5, 6, 7, 8);
+        assert_eq!(v + w, w + v);
     }
 }
