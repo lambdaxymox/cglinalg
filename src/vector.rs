@@ -2816,7 +2816,10 @@ impl_mul_operator!(f64, Vector4<f64>, Vector4<f64>, { x, y, z, w });
 mod vector1_tests {
     use std::slice::Iter;
     use super::Vector1;
-    use structure::Zero;
+    use structure::{
+        Magnitude,   
+        Zero,
+    };
 
 
     struct TestCase {
@@ -2947,14 +2950,23 @@ mod vector1_tests {
         let zero: Vector1<f32> = Vector1::zero();
         assert_eq!(zero, -zero);
     }
+
+    #[test]
+    fn test_zero_vector_zero_magnitude() {
+        let zero: Vector1<f32> = Vector1::zero();
+        assert_eq!(zero.magnitude(), 0_f32);
+    }
 }
 
 
 #[cfg(test)]
 mod vector2_tests {
     use std::slice::Iter;
-    use structure::Zero;
     use super::Vector2;
+    use structure::{
+        Magnitude,   
+        Zero,
+    };
 
     struct TestCase {
         c: f32,
@@ -3086,6 +3098,12 @@ mod vector2_tests {
         let zero: Vector2<f32> = Vector2::zero();
         assert_eq!(zero, -zero);
     }
+
+    #[test]
+    fn test_zero_vector_zero_magnitude() {
+        let zero: Vector2<f32> = Vector2::zero();
+        assert_eq!(zero.magnitude(), 0_f32);
+    }
 }
 
 
@@ -3093,7 +3111,10 @@ mod vector2_tests {
 mod vector3_tests {
     use std::slice::Iter;
     use super::Vector3;
-    use structure::Zero;
+    use structure::{
+        Magnitude,   
+        Zero,
+    };
 
 
     struct TestCase {
@@ -3243,6 +3264,12 @@ mod vector3_tests {
         let zero: Vector3<f32> = Vector3::zero();
         assert_eq!(zero, -zero);
     }
+
+    #[test]
+    fn test_zero_vector_zero_magnitude() {
+        let zero: Vector3<f32> = Vector3::zero();
+        assert_eq!(zero.magnitude(), 0_f32);
+    }
 }
 
 
@@ -3250,7 +3277,10 @@ mod vector3_tests {
 mod vector4_tests {
     use std::slice::Iter;
     use super::Vector4;
-    use structure::Zero;
+    use structure::{
+        Magnitude,   
+        Zero,
+    };
 
 
     struct TestCase {
@@ -3410,5 +3440,11 @@ mod vector4_tests {
     fn test_negative_zero_equals_positive_zero() {
         let zero: Vector4<f32> = Vector4::zero();
         assert_eq!(zero, -zero);
+    }
+
+    #[test]
+    fn test_zero_vector_zero_magnitude() {
+        let zero: Vector4<f32> = Vector4::zero();
+        assert_eq!(zero.magnitude(), 0_f32);
     }
 }
