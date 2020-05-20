@@ -345,3 +345,28 @@ vector_mul_props!(Vector1, f64, any_vector1, vector1_f64_mul_props, 1e-7);
 vector_mul_props!(Vector2, f64, any_vector2, vector2_f64_mul_props, 1e-7);
 vector_mul_props!(Vector3, f64, any_vector3, vector3_f64_mul_props, 1e-7);
 vector_mul_props!(Vector4, f64, any_vector4, vector4_f64_mul_props, 1e-7);
+
+
+macro_rules! vector_int_mul_props {
+    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cgmath::{$VectorN, Magnitude, Zero};
+
+        proptest! {
+            #[test]
+            fn prop_scalar_times_vector_equals_vector_times_scalar(
+                c in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
+                
+                prop_assert_eq!(c * v, v * c);
+            }
+        }
+    }
+    }
+}
+
+vector_int_mul_props!(Vector1, i32, any_vector1, vector1_i32_mul_props);
+vector_int_mul_props!(Vector2, i32, any_vector2, vector2_i32_mul_props);
+vector_int_mul_props!(Vector3, i32, any_vector3, vector3_i32_mul_props);
+vector_int_mul_props!(Vector4, i32, any_vector4, vector4_i32_mul_props);
