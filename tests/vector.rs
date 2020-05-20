@@ -8,8 +8,8 @@ use cgmath::{
     Vector2, 
     Vector3, 
     Vector4, 
-    Zero, 
-    Scalar
+    Scalar,
+    ScalarFloat,
 };
 
 
@@ -277,3 +277,111 @@ vector_sub_props!(Vector4, f32, any_vector4_no_overflow, vector4_f32_sub_props);
 vector_sub_props!(Vector4, f64, any_vector4_no_overflow, vector4_f64_sub_props);
 vector_sub_props!(Vector4, u32, any_vector4_no_overflow, vector4_u32_sub_props);
 vector_sub_props!(Vector4, i32, any_vector4_no_overflow, vector4_i32_sub_props);
+
+
+macro_rules! vector_magnitude_props {
+    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cgmath::{$VectorN, Magnitude, Zero};
+
+        proptest! {
+            #[test]
+            fn prop_magnitude_satisfies_triangle_inequality(
+                v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
+                
+                prop_assume!((v + w).magnitude().is_finite());
+                prop_assume!(v.magnitude().is_finite());
+                prop_assume!(w.magnitude().is_finite());
+                prop_assume!((v.magnitude() + w.magnitude()).is_finite());
+                prop_assert!((v + w).magnitude() <= v.magnitude() + w.magnitude(), 
+                    "\n|v + w| = {}\n|v| = {}\n|w| = {}\n|v| + |w| = {}\n",
+                    (v + w).magnitude(), v.magnitude(), w.magnitude(), v.magnitude() + w.magnitude()
+                );
+            }
+
+            #[test]
+            fn prop_magnitude_nonnegative(v in super::$Generator::<$FieldType>()) {
+                let zero = <$FieldType as num_traits::Zero>::zero();
+                prop_assert!(v.magnitude() >= zero);
+            }
+
+            #[test]
+            fn prop_magnitude_preserves_scale(
+                v in super::$Generator::<$FieldType>(), c in any::<$FieldType>()) {
+                use cgmath::approx::ulps_eq;
+                
+                let abs_c = <$FieldType as num_traits::Float>::abs(c);
+                let zero = <$FieldType as num_traits::Zero>::zero();
+                let one = <$FieldType as num_traits::One>::one();
+                let epsilon: $FieldType = <$FieldType as approx::AbsDiffEq>::default_epsilon();
+                
+                prop_assume!((abs_c * v.magnitude()).is_finite());
+                prop_assume!((c * v).magnitude().is_finite());
+                prop_assert!(
+                    ulps_eq!( (c * v).magnitude(), abs_c * v.magnitude(), max_ulps = 4),
+                    "\n||c * v|| = {}\n|c| * ||v|| = {}\n", (c * v).magnitude(), abs_c * v.magnitude(),
+                );
+            }
+        }
+    }
+    }
+}
+
+vector_magnitude_props!(Vector1, f32, any_vector1, vector1_f32_magnitude_props);
+vector_magnitude_props!(Vector1, f64, any_vector1, vector1_f64_magnitude_props);
+vector_magnitude_props!(Vector2, f32, any_vector2, vector2_f32_magnitude_props);
+vector_magnitude_props!(Vector2, f64, any_vector2, vector2_f64_magnitude_props);
+vector_magnitude_props!(Vector3, f32, any_vector3, vector3_f32_magnitude_props);
+vector_magnitude_props!(Vector3, f64, any_vector3, vector3_f64_magnitude_props);
+vector_magnitude_props!(Vector4, f32, any_vector4, vector4_f32_magnitude_props);
+vector_magnitude_props!(Vector4, f64, any_vector4, vector4_f64_magnitude_props);
+
+
+macro_rules! vector_mul_props {
+    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident, $epsilon:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cgmath::{$VectorN, Magnitude, Zero};
+
+        proptest! {
+            #[test]
+            fn prop_scalar_times_vector_equals_vector_times_scalar(
+                c in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
+                
+                use cgmath::approx::abs_diff_eq;
+                //let zero = Zero::zero();
+
+                prop_assume!(c.is_finite());
+                prop_assume!(v.magnitude().is_finite());
+                prop_assert!(
+                    abs_diff_eq!(c * v, v * c, epsilon = $epsilon)
+                );
+            }
+        }
+    }
+    }
+}
+
+vector_mul_props!(Vector1, f32, any_vector1, vector1_f32_mul_props, 10.0 * f32::EPSILON);
+
+use cgmath::Magnitude;
+#[test]
+fn test_magnitude_satisfies_triangle_inequality() {
+    let v: Vector4<f32> = Vector4::new(-0.0, 0.00000000000000000000000034669853, 0.0, 0.0);
+    let w: Vector4<f32> = Vector4::new(0.0, 0.00000000000000000000824291, 0.0, 0.0);
+    assert!((v + w).magnitude() <= v.magnitude() + w.magnitude(), 
+        "\n|v + w| = {}\n|v| = {}\n|w| = {}\n|v| + |w| = {}\n",
+        (v + w).magnitude(), v.magnitude(), w.magnitude(), v.magnitude() + w.magnitude()
+    );
+}
+
+#[test]
+fn test_negative_zero() {
+    use cgmath::Zero;
+    let zero: Vector4<f32> = Vector4::new(-0.0, 0.0, 0.0, 0.0);
+    let neg_zero = Vector4::new(0.0, 0.0, 0.0, 0.0);
+    assert_eq!(zero, neg_zero);
+}

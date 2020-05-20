@@ -2941,6 +2941,12 @@ mod vector1_tests {
         let w = Vector1::new(3);
         assert_eq!(v + w, w + v);
     }
+
+    #[test]
+    fn test_negative_zero_equals_positive_zero() {
+        let zero: Vector1<f32> = Vector1::zero();
+        assert_eq!(zero, -zero);
+    }
 }
 
 
@@ -3073,6 +3079,12 @@ mod vector2_tests {
         let v = Vector2::new(2, 3);
         let w = Vector2::new(4, 5);
         assert_eq!(v + w, w + v);
+    }
+
+    #[test]
+    fn test_negative_zero_equals_positive_zero() {
+        let zero: Vector2<f32> = Vector2::zero();
+        assert_eq!(zero, -zero);
     }
 }
 
@@ -3224,6 +3236,12 @@ mod vector3_tests {
         let v = Vector3::new(1, 2, 3);
         let w = Vector3::new(4, 5, 6);
         assert_eq!(v + w, w + v);
+    }
+
+    #[test]
+    fn test_negative_zero_equals_positive_zero() {
+        let zero: Vector3<f32> = Vector3::zero();
+        assert_eq!(zero, -zero);
     }
 }
 
@@ -3386,5 +3404,11 @@ mod vector4_tests {
         let v = Vector4::new(1, 2, 3, 4);
         let w = Vector4::new(5, 6, 7, 8);
         assert_eq!(v + w, w + v);
+    }
+
+    #[test]
+    fn test_negative_zero_equals_positive_zero() {
+        let zero: Vector4<f32> = Vector4::zero();
+        assert_eq!(zero, -zero);
     }
 }
