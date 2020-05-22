@@ -370,3 +370,8 @@ vector_int_mul_props!(Vector1, i32, any_vector1, vector1_i32_mul_props);
 vector_int_mul_props!(Vector2, i32, any_vector2, vector2_i32_mul_props);
 vector_int_mul_props!(Vector3, i32, any_vector3, vector3_i32_mul_props);
 vector_int_mul_props!(Vector4, i32, any_vector4, vector4_i32_mul_props);
+vector_int_mul_props!(Vector1, u32, any_vector1, vector1_u32_mul_props);
+vector_int_mul_props!(Vector2, u32, any_vector2, vector2_u32_mul_props);
+vector_int_mul_props!(Vector3, u32, any_vector3, vector3_u32_mul_props);
+vector_int_mul_props!(Vector4, u32, any_vector4, vector4_u32_mul_props);
+
