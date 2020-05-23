@@ -183,6 +183,14 @@ macro_rules! vector_add_props {
                 let zero: $VectorN<$FieldType> = Zero::zero();
                 prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
             }
+
+            #[test]
+            fn prop_vector_addition_associate(
+                u in super::$Generator::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
+
+                prop_assert_eq!((u + v) + w, u + (v + w));
+            }
         }
     }
     }
