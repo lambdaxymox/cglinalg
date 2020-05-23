@@ -397,3 +397,74 @@ vector_int_mul_props!(Vector2, u32, any_vector2, vector2_u32_mul_props);
 vector_int_mul_props!(Vector3, u32, any_vector3, vector3_u32_mul_props);
 vector_int_mul_props!(Vector4, u32, any_vector4, vector4_u32_mul_props);
 
+
+macro_rules! vector_distributive_props {
+    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cgmath::{$VectorN, Magnitude, Zero};
+    
+        proptest! {
+            #[test]
+            fn prop_distribution_over_vector_addition(
+                a in any::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
+                    
+                prop_assert_eq!(a * (v + w), a * v + a * w);
+            }
+    
+            #[test]
+            fn prop_distribution_over_scalar_addition(
+                a in any::<$FieldType>(), b in any::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>()) {
+    
+                prop_assert_eq!((a + b) * v, a * v + b * v);
+            }
+        }
+    }
+    }    
+}
+
+vector_distributive_props!(Vector1, f64, any_vector1, vector1_f64_distributive_props);
+vector_distributive_props!(Vector2, f64, any_vector2, vector2_f64_distributive_props);
+vector_distributive_props!(Vector3, f64, any_vector3, vector3_f64_distributive_props);
+vector_distributive_props!(Vector4, f64, any_vector4, vector4_f64_distributive_props);
+
+
+macro_rules! vector_int_distributive_props {
+    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cgmath::{$VectorN, Magnitude, Zero};
+    
+        proptest! {
+            #[test]
+            fn prop_distribution_over_vector_addition(
+                a in any::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
+                    
+                prop_assert_eq!(a * (v + w), a * v + a * w);
+            }
+    
+            #[test]
+            fn prop_distribution_over_scalar_addition(
+                a in any::<$FieldType>(), b in any::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>()) {
+    
+                prop_assert_eq!((a + b) * v, a * v + b * v);
+            }
+        }
+    }
+    }    
+}
+
+vector_int_distributive_props!(Vector1, i32, any_vector1, vector1_i32_distributive_props);
+vector_int_distributive_props!(Vector2, i32, any_vector2, vector2_i32_distributive_props);
+vector_int_distributive_props!(Vector3, i32, any_vector3, vector3_i32_distributive_props);
+vector_int_distributive_props!(Vector4, i32, any_vector4, vector4_i32_distributive_props);
+vector_int_distributive_props!(Vector1, u32, any_vector1, vector1_u32_distributive_props);
+vector_int_distributive_props!(Vector2, u32, any_vector2, vector2_u32_distributive_props);
+vector_int_distributive_props!(Vector3, u32, any_vector3, vector3_u32_distributive_props);
+vector_int_distributive_props!(Vector4, u32, any_vector4, vector4_u32_distributive_props);
