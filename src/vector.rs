@@ -2956,6 +2956,12 @@ mod vector1_tests {
         let zero: Vector1<f32> = Vector1::zero();
         assert_eq!(zero.magnitude(), 0_f32);
     }
+
+    #[test]
+    fn test_vector_index_matches_component() {
+        let v = Vector1::new(1);
+        assert_eq!(v.x, v[0]);
+    }
 }
 
 
@@ -3103,6 +3109,13 @@ mod vector2_tests {
     fn test_zero_vector_zero_magnitude() {
         let zero: Vector2<f32> = Vector2::zero();
         assert_eq!(zero.magnitude(), 0_f32);
+    }
+
+    #[test]
+    fn test_vector_index_matches_component() {
+        let v = Vector2::new(1, 2);
+        assert_eq!(v.x, v[0]);
+        assert_eq!(v.y, v[1]);
     }
 }
 
@@ -3269,6 +3282,14 @@ mod vector3_tests {
     fn test_zero_vector_zero_magnitude() {
         let zero: Vector3<f32> = Vector3::zero();
         assert_eq!(zero.magnitude(), 0_f32);
+    }
+
+    #[test]
+    fn test_vector_index_matches_component() {
+        let v = Vector3::new(1, 2, 3);
+        assert_eq!(v.x, v[0]);
+        assert_eq!(v.y, v[1]);
+        assert_eq!(v.z, v[2]);
     }
 }
 
@@ -3446,5 +3467,14 @@ mod vector4_tests {
     fn test_zero_vector_zero_magnitude() {
         let zero: Vector4<f32> = Vector4::zero();
         assert_eq!(zero.magnitude(), 0_f32);
+    }
+
+    #[test]
+    fn test_vector_index_matches_component() {
+        let v = Vector4::new(1, 2, 3, 4);
+        assert_eq!(v.x, v[0]);
+        assert_eq!(v.y, v[1]);
+        assert_eq!(v.z, v[2]);
+        assert_eq!(v.w, v[3]);
     }
 }

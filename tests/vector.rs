@@ -13,48 +13,6 @@ use cgmath::{
 };
 
 
-
-/// A macro that generates the property tests for vector indexing.
-/// `$VectorN` denotes the name of the vector type.
-/// `$FieldType` denotes the underlying system of numbers that we access using indexing.
-/// `$UpperBound` denotes the upperbound on the range of acceptable indexes.
-/// `$TestModuleName` is a name we give to the module we place the tests in to separate them
-/// from each other for each field type to prevent namespace collisions.
-macro_rules! index_props {
-    ($VectorN:ident, $FieldType:ty, $UpperBound:expr, $TestModuleName:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cgmath::{$VectorN, Zero};
-
-        proptest! {
-            /// Given a vector of type `$VectorN`, it should return the entry at position `index` in the vector 
-            /// when the given index is inbounds.
-            #[test]
-            fn prop_accepts_all_indices_in_of_bounds(index in 0..$UpperBound as usize) {
-                let v: $VectorN<$FieldType> = $VectorN::zero();
-                prop_assert_eq!(v[index], v[index]);
-            }
-    
-            /// Given a vector of type `$VectorN`, when the entry position is out of bounds, it should 
-            /// generate a panic just like an array or vector indexed out of bounds.
-            #[test]
-            #[should_panic]
-            fn prop_panics_when_index_out_of_bounds(index in $UpperBound..usize::MAX) {
-                let v: $VectorN<$FieldType> = $VectorN::zero();
-                prop_assert_eq!(v[index], v[index]);
-            }
-        }
-    }
-    }
-}
-
-index_props!(Vector1, f64, 1, vector1_f64_index_props);
-index_props!(Vector2, f64, 2, vector2_f64_index_props);
-index_props!(Vector3, f64, 3, vector3_f64_index_props);
-index_props!(Vector4, f64, 4, vector4_f64_index_props);
-
-
 fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> where S: Scalar + Arbitrary {
     any::<S>().prop_map(|x| Vector1::new(x))
 }
@@ -98,6 +56,50 @@ fn any_vector4_no_overflow<S>() -> impl Strategy<Value = Vector4<S>> where S: Sc
         Vector4::new(x / two, y / two, z / two, w / two)
     })
 }
+
+/// A macro that generates the property tests for vector indexing.
+///
+/// `$VectorN` denotes the name of the vector type.
+/// `$FieldType` denotes the underlying system of numbers that we access using indexing.
+/// `$UpperBound` denotes the upperbound on the range of acceptable indexes.
+/// `$TestModuleName` is a name we give to the module we place the tests in to separate them
+///     from each other for each field type to prevent namespace collisions.
+macro_rules! index_props {
+    ($VectorN:ident, $FieldType:ty, $Generator:ident, $UpperBound:expr, $TestModuleName:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cgmath::{$VectorN, Zero};
+
+        proptest! {
+            /// Given a vector of type `$VectorN`, it should return the entry at position `index` in the vector 
+            /// when the given index is inbounds.
+            #[test]
+            fn prop_accepts_all_indices_in_of_bounds(
+                v in super::$Generator::<$FieldType>(), index in 0..$UpperBound as usize) {
+
+                prop_assert_eq!(v[index], v[index]);
+            }
+    
+            /// Given a vector of type `$VectorN`, when the entry position is out of bounds, it should 
+            /// generate a panic just like an array or vector indexed out of bounds.
+            #[test]
+            #[should_panic]
+            fn prop_panics_when_index_out_of_bounds(
+                v in super::$Generator::<$FieldType>(), index in $UpperBound..usize::MAX) {
+                
+                prop_assert_eq!(v[index], v[index]);
+            }
+        }
+    }
+    }
+}
+
+index_props!(Vector1, f64, any_vector1, 1, vector1_f64_index_props);
+index_props!(Vector2, f64, any_vector2, 2, vector2_f64_index_props);
+index_props!(Vector3, f64, any_vector3, 3, vector3_f64_index_props);
+index_props!(Vector4, f64, any_vector4, 4, vector4_f64_index_props);
+
 
 macro_rules! exact_arithmetic_props {
     ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
@@ -157,7 +159,6 @@ exact_arithmetic_props!(Vector1, u32, any_vector1, vector1_u32_arithmetic_props)
 exact_arithmetic_props!(Vector2, u32, any_vector2, vector2_u32_arithmetic_props);
 exact_arithmetic_props!(Vector3, u32, any_vector3, vector3_u32_arithmetic_props);
 exact_arithmetic_props!(Vector4, u32, any_vector4, vector4_u32_arithmetic_props);
-
 
 
 macro_rules! exact_add_props {
@@ -294,7 +295,6 @@ exact_sub_props!(Vector3, u32, any_vector3_no_overflow, vector3_u32_sub_props);
 exact_sub_props!(Vector4, u32, any_vector4_no_overflow, vector4_u32_sub_props);
 
 
-
 macro_rules! vector_magnitude_props {
     ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident, $epsilon:expr) => {
     mod $TestModuleName {
@@ -425,6 +425,7 @@ exact_mul_props!(Vector1, i32, any_vector1, vector1_i32_mul_props);
 exact_mul_props!(Vector2, i32, any_vector2, vector2_i32_mul_props);
 exact_mul_props!(Vector3, i32, any_vector3, vector3_i32_mul_props);
 exact_mul_props!(Vector4, i32, any_vector4, vector4_i32_mul_props);
+
 exact_mul_props!(Vector1, u32, any_vector1, vector1_u32_mul_props);
 exact_mul_props!(Vector2, u32, any_vector2, vector2_u32_mul_props);
 exact_mul_props!(Vector3, u32, any_vector3, vector3_u32_mul_props);
@@ -493,7 +494,8 @@ macro_rules! exact_distributive_props {
             fn prop_distribution_over_vector_addition(
                 a in any::<$FieldType>(), 
                 v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
-                    
+                
+                
                 prop_assert_eq!(a * (v + w), a * v + a * w);
             }
     
@@ -529,6 +531,7 @@ exact_distributive_props!(Vector1, i32, any_vector1, vector1_i32_distributive_pr
 exact_distributive_props!(Vector2, i32, any_vector2, vector2_i32_distributive_props);
 exact_distributive_props!(Vector3, i32, any_vector3, vector3_i32_distributive_props);
 exact_distributive_props!(Vector4, i32, any_vector4, vector4_i32_distributive_props);
+
 exact_distributive_props!(Vector1, u32, any_vector1, vector1_u32_distributive_props);
 exact_distributive_props!(Vector2, u32, any_vector2, vector2_u32_distributive_props);
 exact_distributive_props!(Vector3, u32, any_vector3, vector3_u32_distributive_props);
