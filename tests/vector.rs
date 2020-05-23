@@ -336,6 +336,16 @@ macro_rules! vector_magnitude_props {
                     (v + w).magnitude(), v.magnitude(), w.magnitude(), v.magnitude() + w.magnitude()
                 );
             }
+
+            #[test]
+            fn prop_magnitude_point_separating(v in super::$Generator::<$FieldType>()) {
+                use cgmath::{$VectorN, Magnitude, Zero};
+
+                let zero = <$FieldType as num_traits::Zero>::zero();
+                let zero_vec = <$VectorN<$FieldType> as cgmath::Zero>::zero();
+                prop_assume!(v != zero_vec);
+                prop_assert_ne!(v.magnitude(), zero);
+            }
         }
     }
     }
