@@ -143,6 +143,23 @@ macro_rules! vector_arithmetic_props {
     }
 }
 
+vector_arithmetic_props!(Vector1, f64, any_vector1, vector1_f64_arithmetic_props);
+vector_arithmetic_props!(Vector2, f64, any_vector2, vector2_f64_arithmetic_props);
+vector_arithmetic_props!(Vector3, f64, any_vector3, vector3_f64_arithmetic_props);
+vector_arithmetic_props!(Vector4, f64, any_vector4, vector4_f64_arithmetic_props);
+
+vector_arithmetic_props!(Vector1, i32, any_vector1, vector1_i32_arithmetic_props);
+vector_arithmetic_props!(Vector2, i32, any_vector2, vector2_i32_arithmetic_props);
+vector_arithmetic_props!(Vector3, i32, any_vector3, vector3_i32_arithmetic_props);
+vector_arithmetic_props!(Vector4, i32, any_vector4, vector4_i32_arithmetic_props);
+
+vector_arithmetic_props!(Vector1, u32, any_vector1, vector1_u32_arithmetic_props);
+vector_arithmetic_props!(Vector2, u32, any_vector2, vector2_u32_arithmetic_props);
+vector_arithmetic_props!(Vector3, u32, any_vector3, vector3_u32_arithmetic_props);
+vector_arithmetic_props!(Vector4, u32, any_vector4, vector4_u32_arithmetic_props);
+
+
+
 macro_rules! vector_add_props {
     ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
     #[cfg(test)]
@@ -196,6 +213,22 @@ macro_rules! vector_add_props {
     }
 }
 
+vector_add_props!(Vector1, f64, any_vector1_no_overflow, vector1_f64_add_props);
+vector_add_props!(Vector2, f64, any_vector2_no_overflow, vector2_f64_add_props);
+vector_add_props!(Vector3, f64, any_vector3_no_overflow, vector3_f64_add_props);
+vector_add_props!(Vector4, f64, any_vector4_no_overflow, vector4_f64_add_props);
+
+vector_add_props!(Vector1, i32, any_vector1_no_overflow, vector1_i32_add_props);
+vector_add_props!(Vector2, i32, any_vector2_no_overflow, vector2_i32_add_props);
+vector_add_props!(Vector3, i32, any_vector3_no_overflow, vector3_i32_add_props);
+vector_add_props!(Vector4, i32, any_vector4_no_overflow, vector4_i32_add_props);
+
+vector_add_props!(Vector1, u32, any_vector1_no_overflow, vector1_u32_add_props);
+vector_add_props!(Vector2, u32, any_vector2_no_overflow, vector2_u32_add_props);
+vector_add_props!(Vector3, u32, any_vector3_no_overflow, vector3_u32_add_props);
+vector_add_props!(Vector4, u32, any_vector4_no_overflow, vector4_u32_add_props);
+
+
 macro_rules! vector_sub_props {
     ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
     #[cfg(test)]
@@ -220,56 +253,46 @@ macro_rules! vector_sub_props {
     }
 }
 
-vector_arithmetic_props!(Vector1, f64, any_vector1, vector1_f64_arithmetic_props);
-vector_arithmetic_props!(Vector1, u32, any_vector1, vector1_u32_arithmetic_props);
-vector_arithmetic_props!(Vector1, i32, any_vector1, vector1_i32_arithmetic_props);
-
-vector_arithmetic_props!(Vector2, f64, any_vector2, vector2_f64_arithmetic_props);
-vector_arithmetic_props!(Vector2, u32, any_vector2, vector2_u32_arithmetic_props);
-vector_arithmetic_props!(Vector2, i32, any_vector2, vector2_i32_arithmetic_props);
-
-vector_arithmetic_props!(Vector3, f64, any_vector3, vector3_f64_arithmetic_props);
-vector_arithmetic_props!(Vector3, u32, any_vector3, vector3_u32_arithmetic_props);
-vector_arithmetic_props!(Vector3, i32, any_vector3, vector3_i32_arithmetic_props);
-
-vector_arithmetic_props!(Vector4, f64, any_vector4, vector4_f64_arithmetic_props);
-vector_arithmetic_props!(Vector4, u32, any_vector4, vector4_u32_arithmetic_props);
-vector_arithmetic_props!(Vector4, i32, any_vector4, vector4_i32_arithmetic_props);
-
-
-
-vector_add_props!(Vector1, f64, any_vector1_no_overflow, vector1_f64_add_props);
-vector_add_props!(Vector1, u32, any_vector1_no_overflow, vector1_u32_add_props);
-vector_add_props!(Vector1, i32, any_vector1_no_overflow, vector1_i32_add_props);
-
-vector_add_props!(Vector2, f64, any_vector2_no_overflow, vector2_f64_add_props);
-vector_add_props!(Vector2, u32, any_vector2_no_overflow, vector2_u32_add_props);
-vector_add_props!(Vector2, i32, any_vector2_no_overflow, vector2_i32_add_props);
-
-vector_add_props!(Vector3, f64, any_vector3_no_overflow, vector3_f64_add_props);
-vector_add_props!(Vector3, u32, any_vector3_no_overflow, vector3_u32_add_props);
-vector_add_props!(Vector3, i32, any_vector3_no_overflow, vector3_i32_add_props);
-
-vector_add_props!(Vector4, f64, any_vector4_no_overflow, vector4_f64_add_props);
-vector_add_props!(Vector4, u32, any_vector4_no_overflow, vector4_u32_add_props);
-vector_add_props!(Vector4, i32, any_vector4_no_overflow, vector4_i32_add_props);
-
-
 vector_sub_props!(Vector1, f64, any_vector1_no_overflow, vector1_f64_sub_props);
-vector_sub_props!(Vector1, u32, any_vector1_no_overflow, vector1_u32_sub_props);
-vector_sub_props!(Vector1, i32, any_vector1_no_overflow, vector1_i32_sub_props);
-
 vector_sub_props!(Vector2, f64, any_vector2_no_overflow, vector2_f64_sub_props);
-vector_sub_props!(Vector2, u32, any_vector2_no_overflow, vector2_u32_sub_props);
-vector_sub_props!(Vector2, i32, any_vector2_no_overflow, vector2_i32_sub_props);
-
 vector_sub_props!(Vector3, f64, any_vector3_no_overflow, vector3_f64_sub_props);
-vector_sub_props!(Vector3, u32, any_vector3_no_overflow, vector3_u32_sub_props);
-vector_sub_props!(Vector3, i32, any_vector3_no_overflow, vector3_i32_sub_props);
-
 vector_sub_props!(Vector4, f64, any_vector4_no_overflow, vector4_f64_sub_props);
-vector_sub_props!(Vector4, u32, any_vector4_no_overflow, vector4_u32_sub_props);
-vector_sub_props!(Vector4, i32, any_vector4_no_overflow, vector4_i32_sub_props);
+
+
+macro_rules! vector_int_sub_props {
+    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cgmath::{$VectorN, Zero};
+
+        proptest! {
+            #[test]
+            fn prop_vector_minus_zero_equals_vector(v in super::$Generator()) {
+                let zero_vec = $VectorN::<$FieldType>::zero();
+                prop_assert_eq!(v - zero_vec, v);
+            }
+
+            #[test]
+            fn prop_vector_minus_vector_equals_zero(v in super::$Generator::<$FieldType>()) {
+                let zero_vec = $VectorN::<$FieldType>::zero();
+                prop_assert_eq!(v - v, zero_vec);
+            }
+        }
+    }
+    }
+}
+
+vector_int_sub_props!(Vector1, i32, any_vector1_no_overflow, vector1_i32_sub_props);
+vector_int_sub_props!(Vector2, i32, any_vector2_no_overflow, vector2_i32_sub_props);
+vector_int_sub_props!(Vector3, i32, any_vector3_no_overflow, vector3_i32_sub_props);
+vector_int_sub_props!(Vector4, i32, any_vector4_no_overflow, vector4_i32_sub_props);
+
+vector_int_sub_props!(Vector1, u32, any_vector1_no_overflow, vector1_u32_sub_props);
+vector_int_sub_props!(Vector2, u32, any_vector2_no_overflow, vector2_u32_sub_props);
+vector_int_sub_props!(Vector3, u32, any_vector3_no_overflow, vector3_u32_sub_props);
+vector_int_sub_props!(Vector4, u32, any_vector4_no_overflow, vector4_u32_sub_props);
+
 
 
 macro_rules! vector_magnitude_props {
@@ -421,6 +444,22 @@ macro_rules! vector_distributive_props {
     
                 prop_assert_eq!((a + b) * v, a * v + b * v);
             }
+
+            #[test]
+            fn prop_distribution_over_vector_addition1(
+                a in any::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
+                    
+                prop_assert_eq!((v + w) * a,  v * a + w * a);
+            }
+    
+            #[test]
+            fn prop_distribution_over_scalar_addition1(
+                a in any::<$FieldType>(), b in any::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>()) {
+    
+                prop_assert_eq!(v * (a + b), v * a + v * b);
+            }
         }
     }
     }    
@@ -454,6 +493,22 @@ macro_rules! vector_int_distributive_props {
                 v in super::$Generator::<$FieldType>()) {
     
                 prop_assert_eq!((a + b) * v, a * v + b * v);
+            }
+
+            #[test]
+            fn prop_distribution_over_vector_addition1(
+                a in any::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
+                    
+                prop_assert_eq!((v + w) * a,  v * a + w * a);
+            }
+    
+            #[test]
+            fn prop_distribution_over_scalar_addition1(
+                a in any::<$FieldType>(), b in any::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>()) {
+    
+                prop_assert_eq!(v * (a + b), v * a + v * b);
             }
         }
     }
