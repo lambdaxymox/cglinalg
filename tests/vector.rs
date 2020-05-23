@@ -344,6 +344,13 @@ macro_rules! vector_mul_props {
                     relative_eq!(c * v, v * c, epsilon = $epsilon)
                 );
             }
+
+            #[test]
+            fn prop_scalar_multiplication_compatability(
+                a in any::<$FieldType>(), b in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
+
+                prop_assert_eq!(a * (b * v), (a * b) * v);
+            }
         }
     }
     }
@@ -368,6 +375,13 @@ macro_rules! vector_int_mul_props {
                 c in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
                 
                 prop_assert_eq!(c * v, v * c);
+            }
+
+            #[test]
+            fn prop_scalar_multiplication_compatability(
+                a in any::<$FieldType>(), b in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
+
+                prop_assert_eq!(a * (b * v), (a * b) * v);
             }
         }
     }
