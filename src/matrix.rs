@@ -434,11 +434,11 @@ impl<S> ops::Mul<S> for &Matrix2<S> where S: Scalar {
         Matrix2::new(c0r0, c0r1, c1r0, c1r1)
     }
 }
-/*
-impl ops::Div<f32> for Matrix2 {
-    type Output = Matrix2;
 
-    fn div(self, other: f32) -> Self::Output {
+impl<S> ops::Div<S> for Matrix2<S> where S: Scalar {
+    type Output = Matrix2<S>;
+
+    fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
         let c1r0 = self.c1r0 / other;
@@ -448,10 +448,10 @@ impl ops::Div<f32> for Matrix2 {
     }
 }
 
-impl ops::Div<f32> for &Matrix2 {
-    type Output = Matrix2;
+impl<S> ops::Div<S> for &Matrix2<S> where S: Scalar {
+    type Output = Matrix2<S>;
 
-    fn div(self, other: f32) -> Self::Output {
+    fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
         let c1r0 = self.c1r0 / other;
@@ -461,8 +461,8 @@ impl ops::Div<f32> for &Matrix2 {
     }
 }
 
-impl ops::Neg for Matrix2 {
-    type Output = Matrix2;
+impl<S> ops::Neg for Matrix2<S> where S: ScalarFloat {
+    type Output = Matrix2<S>;
 
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
@@ -474,8 +474,8 @@ impl ops::Neg for Matrix2 {
     }
 }
 
-impl ops::Neg for &Matrix2 {
-    type Output = Matrix2;
+impl<S> ops::Neg for &Matrix2<S> where S: ScalarFloat {
+    type Output = Matrix2<S>;
 
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
@@ -487,10 +487,10 @@ impl ops::Neg for &Matrix2 {
     }
 }
 
-impl ops::Rem<f32> for Matrix2 {
-    type Output = Matrix2;
+impl<S> ops::Rem<S> for Matrix2<S> where S: Scalar {
+    type Output = Matrix2<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
         let c1r0 = self.c1r0 % other;
@@ -500,10 +500,10 @@ impl ops::Rem<f32> for Matrix2 {
     }
 }
 
-impl ops::Rem<f32> for &Matrix2 {
-    type Output = Matrix2;
+impl<S> ops::Rem<S> for &Matrix2<S> where S: Scalar {
+    type Output = Matrix2<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
         let c1r0 = self.c1r0 % other;
@@ -512,7 +512,7 @@ impl ops::Rem<f32> for &Matrix2 {
         Matrix2::new(c0r0, c0r1, c1r0, c1r1)        
     }
 }
-
+/*
 impl ops::AddAssign<Matrix2> for Matrix2 {
     fn add_assign(&mut self, other: Matrix2) {
         self.c0r0 += other.c0r0;
