@@ -64,9 +64,9 @@ fn any_vector4_no_overflow<S>() -> impl Strategy<Value = Vector4<S>> where S: Sc
 /// `$FieldType` denotes the underlying system of numbers that we access using indexing.
 /// `$UpperBound` denotes the upperbound on the range of acceptable indexes.
 /// `$TestModuleName` is a name we give to the module we place the tests in to separate them
-///     from each other for each field type to prevent namespace collisions.
+/// from each other for each field type to prevent namespace collisions.
 macro_rules! index_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $UpperBound:expr, $TestModuleName:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident, $UpperBound:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -95,14 +95,14 @@ macro_rules! index_props {
     }
 }
 
-index_props!(Vector1, f64, any_vector1, 1, vector1_f64_index_props);
-index_props!(Vector2, f64, any_vector2, 2, vector2_f64_index_props);
-index_props!(Vector3, f64, any_vector3, 3, vector3_f64_index_props);
-index_props!(Vector4, f64, any_vector4, 4, vector4_f64_index_props);
+index_props!(vector1_f64_index_props, Vector1, f64, any_vector1, 1);
+index_props!(vector2_f64_index_props, Vector2, f64, any_vector2, 2);
+index_props!(vector3_f64_index_props, Vector3, f64, any_vector3, 3);
+index_props!(vector4_f64_index_props, Vector4, f64, any_vector4, 4);
 
 
 macro_rules! exact_arithmetic_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -145,20 +145,20 @@ macro_rules! exact_arithmetic_props {
     }
 }
 
-exact_arithmetic_props!(Vector1, f64, any_vector1, vector1_f64_arithmetic_props);
-exact_arithmetic_props!(Vector2, f64, any_vector2, vector2_f64_arithmetic_props);
-exact_arithmetic_props!(Vector3, f64, any_vector3, vector3_f64_arithmetic_props);
-exact_arithmetic_props!(Vector4, f64, any_vector4, vector4_f64_arithmetic_props);
+exact_arithmetic_props!(vector1_f64_arithmetic_props, Vector1, f64, any_vector1);
+exact_arithmetic_props!(vector2_f64_arithmetic_props, Vector2, f64, any_vector2);
+exact_arithmetic_props!(vector3_f64_arithmetic_props, Vector3, f64, any_vector3);
+exact_arithmetic_props!(vector4_f64_arithmetic_props, Vector4, f64, any_vector4);
 
-exact_arithmetic_props!(Vector1, i32, any_vector1, vector1_i32_arithmetic_props);
-exact_arithmetic_props!(Vector2, i32, any_vector2, vector2_i32_arithmetic_props);
-exact_arithmetic_props!(Vector3, i32, any_vector3, vector3_i32_arithmetic_props);
-exact_arithmetic_props!(Vector4, i32, any_vector4, vector4_i32_arithmetic_props);
+exact_arithmetic_props!(vector1_i32_arithmetic_props, Vector1, i32, any_vector1);
+exact_arithmetic_props!(vector2_i32_arithmetic_props, Vector2, i32, any_vector2);
+exact_arithmetic_props!(vector3_i32_arithmetic_props, Vector3, i32, any_vector3);
+exact_arithmetic_props!(vector4_i32_arithmetic_props, Vector4, i32, any_vector4);
 
-exact_arithmetic_props!(Vector1, u32, any_vector1, vector1_u32_arithmetic_props);
-exact_arithmetic_props!(Vector2, u32, any_vector2, vector2_u32_arithmetic_props);
-exact_arithmetic_props!(Vector3, u32, any_vector3, vector3_u32_arithmetic_props);
-exact_arithmetic_props!(Vector4, u32, any_vector4, vector4_u32_arithmetic_props);
+exact_arithmetic_props!(vector1_u32_arithmetic_props, Vector1, u32, any_vector1);
+exact_arithmetic_props!(vector2_u32_arithmetic_props, Vector2, u32, any_vector2);
+exact_arithmetic_props!(vector3_u32_arithmetic_props, Vector3, u32, any_vector3);
+exact_arithmetic_props!(vector4_u32_arithmetic_props, Vector4, u32, any_vector4);
 
 
 macro_rules! approx_add_props {
@@ -221,7 +221,7 @@ approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4_no_overflow);
 
 
 macro_rules! exact_add_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -273,19 +273,19 @@ macro_rules! exact_add_props {
     }
 }
 
-exact_add_props!(Vector1, i32, any_vector1_no_overflow, vector1_i32_add_props);
-exact_add_props!(Vector2, i32, any_vector2_no_overflow, vector2_i32_add_props);
-exact_add_props!(Vector3, i32, any_vector3_no_overflow, vector3_i32_add_props);
-exact_add_props!(Vector4, i32, any_vector4_no_overflow, vector4_i32_add_props);
+exact_add_props!(vector1_i32_add_props, Vector1, i32, any_vector1_no_overflow);
+exact_add_props!(vector2_i32_add_props, Vector2, i32, any_vector2_no_overflow);
+exact_add_props!(vector3_i32_add_props, Vector3, i32, any_vector3_no_overflow);
+exact_add_props!(vector4_i32_add_props, Vector4, i32, any_vector4_no_overflow);
 
-exact_add_props!(Vector1, u32, any_vector1_no_overflow, vector1_u32_add_props);
-exact_add_props!(Vector2, u32, any_vector2_no_overflow, vector2_u32_add_props);
-exact_add_props!(Vector3, u32, any_vector3_no_overflow, vector3_u32_add_props);
-exact_add_props!(Vector4, u32, any_vector4_no_overflow, vector4_u32_add_props);
+exact_add_props!(vector1_u32_add_props, Vector1, u32, any_vector1_no_overflow);
+exact_add_props!(vector2_u32_add_props, Vector2, u32, any_vector2_no_overflow);
+exact_add_props!(vector3_u32_add_props, Vector3, u32, any_vector3_no_overflow);
+exact_add_props!(vector4_u32_add_props, Vector4, u32, any_vector4_no_overflow);
 
 
 macro_rules! approx_sub_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -308,14 +308,14 @@ macro_rules! approx_sub_props {
     }
 }
 
-approx_sub_props!(Vector1, f64, any_vector1_no_overflow, vector1_f64_sub_props);
-approx_sub_props!(Vector2, f64, any_vector2_no_overflow, vector2_f64_sub_props);
-approx_sub_props!(Vector3, f64, any_vector3_no_overflow, vector3_f64_sub_props);
-approx_sub_props!(Vector4, f64, any_vector4_no_overflow, vector4_f64_sub_props);
+approx_sub_props!(vector1_f64_sub_props, Vector1, f64, any_vector1_no_overflow);
+approx_sub_props!(vector2_f64_sub_props, Vector2, f64, any_vector2_no_overflow);
+approx_sub_props!(vector3_f64_sub_props, Vector3, f64, any_vector3_no_overflow);
+approx_sub_props!(vector4_f64_sub_props, Vector4, f64, any_vector4_no_overflow);
 
 
 macro_rules! exact_sub_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -338,15 +338,15 @@ macro_rules! exact_sub_props {
     }
 }
 
-exact_sub_props!(Vector1, i32, any_vector1_no_overflow, vector1_i32_sub_props);
-exact_sub_props!(Vector2, i32, any_vector2_no_overflow, vector2_i32_sub_props);
-exact_sub_props!(Vector3, i32, any_vector3_no_overflow, vector3_i32_sub_props);
-exact_sub_props!(Vector4, i32, any_vector4_no_overflow, vector4_i32_sub_props);
+exact_sub_props!(vector1_i32_sub_props, Vector1, i32, any_vector1_no_overflow);
+exact_sub_props!(vector2_i32_sub_props, Vector2, i32, any_vector2_no_overflow);
+exact_sub_props!(vector3_i32_sub_props, Vector3, i32, any_vector3_no_overflow);
+exact_sub_props!(vector4_i32_sub_props, Vector4, i32, any_vector4_no_overflow);
 
-exact_sub_props!(Vector1, u32, any_vector1_no_overflow, vector1_u32_sub_props);
-exact_sub_props!(Vector2, u32, any_vector2_no_overflow, vector2_u32_sub_props);
-exact_sub_props!(Vector3, u32, any_vector3_no_overflow, vector3_u32_sub_props);
-exact_sub_props!(Vector4, u32, any_vector4_no_overflow, vector4_u32_sub_props);
+exact_sub_props!(vector1_u32_sub_props, Vector1, u32, any_vector1_no_overflow);
+exact_sub_props!(vector2_u32_sub_props, Vector2, u32, any_vector2_no_overflow);
+exact_sub_props!(vector3_u32_sub_props, Vector3, u32, any_vector3_no_overflow);
+exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4_no_overflow);
 
 
 macro_rules! vector_magnitude_props {
@@ -407,7 +407,7 @@ vector_magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, 
 
 
 macro_rules! approx_mul_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident, $epsilon:expr) => {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident, $epsilon:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -437,14 +437,14 @@ macro_rules! approx_mul_props {
     }
 }
 
-approx_mul_props!(Vector1, f64, any_vector1, vector1_f64_mul_props, 1e-7);
-approx_mul_props!(Vector2, f64, any_vector2, vector2_f64_mul_props, 1e-7);
-approx_mul_props!(Vector3, f64, any_vector3, vector3_f64_mul_props, 1e-7);
-approx_mul_props!(Vector4, f64, any_vector4, vector4_f64_mul_props, 1e-7);
+approx_mul_props!(vector1_f64_mul_props, Vector1, f64, any_vector1, 1e-7);
+approx_mul_props!(vector2_f64_mul_props, Vector2, f64, any_vector2, 1e-7);
+approx_mul_props!(vector3_f64_mul_props, Vector3, f64, any_vector3, 1e-7);
+approx_mul_props!(vector4_f64_mul_props, Vector4, f64, any_vector4, 1e-7);
 
 
 macro_rules! exact_mul_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -468,19 +468,19 @@ macro_rules! exact_mul_props {
     }
 }
 
-exact_mul_props!(Vector1, i32, any_vector1, vector1_i32_mul_props);
-exact_mul_props!(Vector2, i32, any_vector2, vector2_i32_mul_props);
-exact_mul_props!(Vector3, i32, any_vector3, vector3_i32_mul_props);
-exact_mul_props!(Vector4, i32, any_vector4, vector4_i32_mul_props);
+exact_mul_props!(vector1_i32_mul_props, Vector1, i32, any_vector1);
+exact_mul_props!(vector2_i32_mul_props, Vector2, i32, any_vector2);
+exact_mul_props!(vector3_i32_mul_props, Vector3, i32, any_vector3);
+exact_mul_props!(vector4_i32_mul_props, Vector4, i32, any_vector4);
 
-exact_mul_props!(Vector1, u32, any_vector1, vector1_u32_mul_props);
-exact_mul_props!(Vector2, u32, any_vector2, vector2_u32_mul_props);
-exact_mul_props!(Vector3, u32, any_vector3, vector3_u32_mul_props);
-exact_mul_props!(Vector4, u32, any_vector4, vector4_u32_mul_props);
+exact_mul_props!(vector1_u32_mul_props, Vector1, u32, any_vector1);
+exact_mul_props!(vector2_u32_mul_props, Vector2, u32, any_vector2);
+exact_mul_props!(vector3_u32_mul_props, Vector3, u32, any_vector3);
+exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 
 
 macro_rules! approx_distributive_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -531,14 +531,14 @@ macro_rules! approx_distributive_props {
     }    
 }
 
-approx_distributive_props!(Vector1, f64, any_vector1, vector1_f64_distributive_props);
-approx_distributive_props!(Vector2, f64, any_vector2, vector2_f64_distributive_props);
-approx_distributive_props!(Vector3, f64, any_vector3, vector3_f64_distributive_props);
-approx_distributive_props!(Vector4, f64, any_vector4, vector4_f64_distributive_props);
+approx_distributive_props!(vector1_f64_distributive_props, Vector1, f64, any_vector1);
+approx_distributive_props!(vector2_f64_distributive_props, Vector2, f64, any_vector2);
+approx_distributive_props!(vector3_f64_distributive_props, Vector3, f64, any_vector3);
+approx_distributive_props!(vector4_f64_distributive_props, Vector4, f64, any_vector4);
 
 
 macro_rules! exact_distributive_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -550,6 +550,7 @@ macro_rules! exact_distributive_props {
                 v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
                 
                 prop_assert_eq!(a * (v + w), a * v + a * w);
+                prop_assert_eq!((v + w) * a,  v * a + w * a);
             }
     
             #[test]
@@ -558,21 +559,6 @@ macro_rules! exact_distributive_props {
                 v in super::$Generator::<$FieldType>()) {
     
                 prop_assert_eq!((a + b) * v, a * v + b * v);
-            }
-
-            #[test]
-            fn prop_distribution_over_vector_addition1(
-                a in any::<$FieldType>(), 
-                v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
-                    
-                prop_assert_eq!((v + w) * a,  v * a + w * a);
-            }
-    
-            #[test]
-            fn prop_distribution_over_scalar_addition1(
-                a in any::<$FieldType>(), b in any::<$FieldType>(), 
-                v in super::$Generator::<$FieldType>()) {
-    
                 prop_assert_eq!(v * (a + b), v * a + v * b);
             }
         }
@@ -580,12 +566,12 @@ macro_rules! exact_distributive_props {
     }    
 }
 
-exact_distributive_props!(Vector1, i32, any_vector1, vector1_i32_distributive_props);
-exact_distributive_props!(Vector2, i32, any_vector2, vector2_i32_distributive_props);
-exact_distributive_props!(Vector3, i32, any_vector3, vector3_i32_distributive_props);
-exact_distributive_props!(Vector4, i32, any_vector4, vector4_i32_distributive_props);
+exact_distributive_props!(vector1_i32_distributive_props, Vector1, i32, any_vector1);
+exact_distributive_props!(vector2_i32_distributive_props, Vector2, i32, any_vector2);
+exact_distributive_props!(vector3_i32_distributive_props, Vector3, i32, any_vector3);
+exact_distributive_props!(vector4_i32_distributive_props, Vector4, i32, any_vector4);
 
-exact_distributive_props!(Vector1, u32, any_vector1, vector1_u32_distributive_props);
-exact_distributive_props!(Vector2, u32, any_vector2, vector2_u32_distributive_props);
-exact_distributive_props!(Vector3, u32, any_vector3, vector3_u32_distributive_props);
-exact_distributive_props!(Vector4, u32, any_vector4, vector4_u32_distributive_props);
+exact_distributive_props!(vector1_u32_distributive_props, Vector1, u32, any_vector1);
+exact_distributive_props!(vector2_u32_distributive_props, Vector2, u32, any_vector2);
+exact_distributive_props!(vector3_u32_distributive_props, Vector3, u32, any_vector3);
+exact_distributive_props!(vector4_u32_distributive_props, Vector4, u32, any_vector4);
