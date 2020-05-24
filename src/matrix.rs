@@ -304,11 +304,11 @@ impl<'a, 'b, S> ops::Add<&'a Matrix2<S>> for &'b Matrix2<S> where S: Scalar {
         Matrix2::new(c0r0, c0r1, c1r0, c1r1)
     }
 }
-/*
-impl ops::Sub<Matrix2> for Matrix2 {
-    type Output = Matrix2;
 
-    fn sub(self, other: Matrix2) -> Self::Output {
+impl<S> ops::Sub<Matrix2<S>> for Matrix2<S> where S: Scalar {
+    type Output = Matrix2<S>;
+
+    fn sub(self, other: Matrix2<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c1r0 = self.c1r0 - other.c1r0;
@@ -318,10 +318,10 @@ impl ops::Sub<Matrix2> for Matrix2 {
     }
 }
 
-impl ops::Sub<&Matrix2> for Matrix2 {
-    type Output = Matrix2;
+impl<S> ops::Sub<&Matrix2<S>> for Matrix2<S> where S: Scalar {
+    type Output = Matrix2<S>;
 
-    fn sub(self, other: &Matrix2) -> Self::Output {
+    fn sub(self, other: &Matrix2<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c1r0 = self.c1r0 - other.c1r0;
@@ -331,10 +331,10 @@ impl ops::Sub<&Matrix2> for Matrix2 {
     }
 }
 
-impl ops::Sub<Matrix2> for &Matrix2 {
-    type Output = Matrix2;
+impl<S> ops::Sub<Matrix2<S>> for &Matrix2<S> where S: Scalar {
+    type Output = Matrix2<S>;
 
-    fn sub(self, other: Matrix2) -> Self::Output {
+    fn sub(self, other: Matrix2<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c1r0 = self.c1r0 - other.c1r0;
@@ -344,10 +344,10 @@ impl ops::Sub<Matrix2> for &Matrix2 {
     }
 }
 
-impl<'a, 'b> ops::Sub<&'a Matrix2> for &'b Matrix2 {
-    type Output = Matrix2;
+impl<'a, 'b, S> ops::Sub<&'a Matrix2<S>> for &'b Matrix2<S> where S: Scalar {
+    type Output = Matrix2<S>;
 
-    fn sub(self, other: &'a Matrix2) -> Self::Output {
+    fn sub(self, other: &'a Matrix2<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c1r0 = self.c1r0 - other.c1r0;
@@ -356,7 +356,6 @@ impl<'a, 'b> ops::Sub<&'a Matrix2> for &'b Matrix2 {
         Matrix2::new(c0r0, c0r1, c1r0, c1r1)
     }
 }
-*/
 
 impl<S> ops::Mul<&Matrix2<S>> for Matrix2<S> where S: Scalar {
     type Output = Matrix2<S>;
