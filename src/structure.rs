@@ -115,20 +115,22 @@ pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
     /// Compute the projection for a vector onto another vector.
     fn project_on(self, onto: V) -> <Self as ProjectOn<V>>::Output;
 }
-/*
+
 /// A data type implementing the `Matrix` trait has the structure of a matrix 
 /// in column major order. If a type represents a matrix, we can perform 
 /// operations such as swapping rows, swapping columns, getting a row of 
 /// the the matrix, or swapping elements.
 pub trait Matrix {
+    type Element: Copy;
+
     /// The row vector of a matrix.
-    type Row: Array<Element = f32>;
+    type Row: Storage<Element = Self::Element>;
 
     /// The column vector of a matrix.
-    type Column: Array<Element = f32>;
+    type Column: Storage<Element = Self::Element>;
 
     /// The type signature of the tranpose of the matrix.
-    type Transpose: Matrix<Row = Self::Column, Column = Self::Row>;
+    type Transpose: Matrix<Element = Self::Element, Row = Self::Column, Column = Self::Row>;
 
     /// Get the row of the matrix by value.
     fn row(&self, r: usize) -> Self::Row;
@@ -145,5 +147,3 @@ pub trait Matrix {
     /// Transpose a matrix.
     fn transpose(&self) -> Self::Transpose;
 }
-
-*/

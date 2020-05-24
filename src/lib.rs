@@ -2,12 +2,12 @@ pub extern crate approx;
 pub extern crate num_traits;
 
 mod base;
-/*
-mod cgmath;
+
+//mod cgmath;
 mod matrix;
-mod projection;
-mod quaternion;
-*/
+//mod projection;
+//mod quaternion;
+
 mod vector;
 mod structure;
 /*
