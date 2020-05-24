@@ -2986,6 +2986,15 @@ mod matrix2_tests {
 
         assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));        
     }
+
+    #[test]
+    fn test_matrix_elements_should_be_column_major_order() {
+        let matrix = Matrix2::new(1, 2, 3, 4);
+        assert_eq!(matrix.c0r0, matrix[0][0]);
+        assert_eq!(matrix.c0r1, matrix[0][1]);
+        assert_eq!(matrix.c1r0, matrix[1][0]);
+        assert_eq!(matrix.c1r1, matrix[1][1]);
+    }
 }
 /*
 
