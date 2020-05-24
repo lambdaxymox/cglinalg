@@ -512,9 +512,9 @@ impl<S> ops::Rem<S> for &Matrix2<S> where S: Scalar {
         Matrix2::new(c0r0, c0r1, c1r0, c1r1)        
     }
 }
-/*
-impl ops::AddAssign<Matrix2> for Matrix2 {
-    fn add_assign(&mut self, other: Matrix2) {
+
+impl<S> ops::AddAssign<Matrix2<S>> for Matrix2<S> where S: Scalar {
+    fn add_assign(&mut self, other: Matrix2<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
         self.c1r0 += other.c1r0;
@@ -522,8 +522,8 @@ impl ops::AddAssign<Matrix2> for Matrix2 {
     }
 }
 
-impl ops::AddAssign<&Matrix2> for Matrix2 {
-    fn add_assign(&mut self, other: &Matrix2) {
+impl<S> ops::AddAssign<&Matrix2<S>> for Matrix2<S> where S: Scalar {
+    fn add_assign(&mut self, other: &Matrix2<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
         self.c1r0 += other.c1r0;
@@ -531,8 +531,8 @@ impl ops::AddAssign<&Matrix2> for Matrix2 {
     }
 }
 
-impl ops::SubAssign<Matrix2> for Matrix2 {
-    fn sub_assign(&mut self, other: Matrix2) {
+impl<S> ops::SubAssign<Matrix2<S>> for Matrix2<S> where S: Scalar {
+    fn sub_assign(&mut self, other: Matrix2<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
         self.c1r0 -= other.c1r0;
@@ -540,8 +540,8 @@ impl ops::SubAssign<Matrix2> for Matrix2 {
     }
 }
 
-impl ops::SubAssign<&Matrix2> for Matrix2 {
-    fn sub_assign(&mut self, other: &Matrix2) {
+impl<S> ops::SubAssign<&Matrix2<S>> for Matrix2<S> where S: Scalar {
+    fn sub_assign(&mut self, other: &Matrix2<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
         self.c1r0 -= other.c1r0;
@@ -549,8 +549,8 @@ impl ops::SubAssign<&Matrix2> for Matrix2 {
     }
 }
 
-impl ops::MulAssign<f32> for Matrix2 {
-    fn mul_assign(&mut self, other: f32) {
+impl<S> ops::MulAssign<S> for Matrix2<S> where S: Scalar {
+    fn mul_assign(&mut self, other: S) {
         self.c0r0 *= other;
         self.c0r1 *= other;
         self.c1r0 *= other;
@@ -558,8 +558,8 @@ impl ops::MulAssign<f32> for Matrix2 {
     }
 }
 
-impl ops::DivAssign<f32> for Matrix2 {
-    fn div_assign(&mut self, other: f32) {
+impl<S> ops::DivAssign<S> for Matrix2<S> where S: Scalar {
+    fn div_assign(&mut self, other: S) {
         self.c0r0 /= other;
         self.c0r1 /= other;
         self.c1r0 /= other;
@@ -567,15 +567,15 @@ impl ops::DivAssign<f32> for Matrix2 {
     }
 }
 
-impl ops::RemAssign<f32> for Matrix2 {
-    fn rem_assign(&mut self, other: f32) {
+impl<S> ops::RemAssign<S> for Matrix2<S> where S: Scalar {
+    fn rem_assign(&mut self, other: S) {
         self.c0r0 %= other;
         self.c0r1 %= other;
         self.c1r0 %= other;
         self.c1r1 %= other;
     }
 }
-
+/*
 impl Lerp<Matrix2> for Matrix2 {
     type Output = Matrix2;
 
