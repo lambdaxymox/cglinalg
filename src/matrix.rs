@@ -612,6 +612,53 @@ impl<'a, 'b, S> Lerp<&'a Matrix2<S>> for &'b Matrix2<S> where S: Scalar {
     }
 }
 
+impl<S> approx::AbsDiffEq for Matrix2<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.c0r0, &other.c0r0, epsilon) && 
+        S::abs_diff_eq(&self.c0r1, &other.c0r1, epsilon) &&
+        S::abs_diff_eq(&self.c1r0, &other.c1r0, epsilon) && 
+        S::abs_diff_eq(&self.c1r1, &other.c1r1, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Matrix2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.c0r0, &other.c0r0, epsilon, max_relative) &&
+        S::relative_eq(&self.c0r1, &other.c0r1, epsilon, max_relative) &&
+        S::relative_eq(&self.c1r0, &other.c1r0, epsilon, max_relative) &&
+        S::relative_eq(&self.c1r1, &other.c1r1, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Matrix2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.c0r0, &other.c0r0, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c0r1, &other.c0r1, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c1r0, &other.c1r0, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c1r1, &other.c1r1, epsilon, max_ulps)
+    }
+}
+
 /*
 /// The `Matrix3` type represents 3x3 matrices in column-major order.
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -2706,7 +2753,7 @@ impl<'a, 'b> Lerp<&'a Matrix4> for &'b Matrix4 {
         self + ((other - self) * amount)
     }
 }
-
+*/
 
 #[cfg(test)]
 mod matrix2_tests {
@@ -2714,12 +2761,13 @@ mod matrix2_tests {
     use vector::Vector2;
     use super::Matrix2;
     use structure::{One, Zero, Matrix};
+    use crate::approx::relative_eq;
 
 
     struct TestCase {
-        a_mat: Matrix2,
-        b_mat: Matrix2,
-        expected: Matrix2,
+        a_mat: Matrix2<f32>,
+        b_mat: Matrix2<f32>,
+        expected: Matrix2<f32>,
     }
 
     struct Test {
@@ -2832,7 +2880,7 @@ mod matrix2_tests {
 
     #[test]
     fn test_identity_transpose_equals_identity() {
-        let identity = Matrix2::one();
+        let identity = Matrix2::<f32>::one();
         let identity_tr = identity.transpose();
             
         assert_eq!(identity, identity_tr);
@@ -2927,7 +2975,7 @@ mod matrix2_tests {
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix2::one();
 
-        assert_eq!(matrix * matrix_inv, one);
+        assert!(relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7));
     }
 
     #[test]
@@ -2936,10 +2984,10 @@ mod matrix2_tests {
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix2::one();
 
-        assert_eq!(matrix_inv * matrix, one);        
+        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));        
     }
 }
-
+/*
 
 #[cfg(test)]
 mod matrix3_tests {
