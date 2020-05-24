@@ -57,6 +57,7 @@ fn any_vector4_no_overflow<S>() -> impl Strategy<Value = Vector4<S>> where S: Sc
     })
 }
 
+
 /// A macro that generates the property tests for vector indexing.
 ///
 /// `$VectorN` denotes the name of the vector type.
@@ -69,7 +70,6 @@ macro_rules! index_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Zero};
 
         proptest! {
             /// Given a vector of type `$VectorN`, it should return the entry at position `index` in the vector 
@@ -161,8 +161,8 @@ exact_arithmetic_props!(Vector3, u32, any_vector3, vector3_u32_arithmetic_props)
 exact_arithmetic_props!(Vector4, u32, any_vector4, vector4_u32_arithmetic_props);
 
 
-macro_rules! exact_add_props {
-    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+macro_rules! approx_add_props {
+    ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -214,10 +214,64 @@ macro_rules! exact_add_props {
     }
 }
 
-exact_add_props!(Vector1, f64, any_vector1_no_overflow, vector1_f64_add_props);
-exact_add_props!(Vector2, f64, any_vector2_no_overflow, vector2_f64_add_props);
-exact_add_props!(Vector3, f64, any_vector3_no_overflow, vector3_f64_add_props);
-exact_add_props!(Vector4, f64, any_vector4_no_overflow, vector4_f64_add_props);
+approx_add_props!(vector1_f64_add_props, Vector1, f64, any_vector1_no_overflow);
+approx_add_props!(vector2_f64_add_props, Vector2, f64, any_vector2_no_overflow);
+approx_add_props!(vector3_f64_add_props, Vector3, f64, any_vector3_no_overflow);
+approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4_no_overflow);
+
+
+macro_rules! exact_add_props {
+    ($VectorN:ident, $FieldType:ty, $Generator:ident, $TestModuleName:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cgmath::{$VectorN, Zero};
+
+        proptest! {
+            #[test]
+            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
+                let zero_vec = $VectorN::<$FieldType>::zero();
+                prop_assert_eq!(v + zero_vec, v);
+            }
+
+            #[test]
+            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
+                let zero_vec = $VectorN::<$FieldType>::zero();
+                prop_assert_eq!(zero_vec + v, v);
+            }
+
+            #[test]
+            fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
+                v1 in super::$Generator::<$FieldType>(), v2 in super::$Generator::<$FieldType>()) {
+                
+                prop_assert_eq!(v1 + v2, &v1 + v2);
+                prop_assert_eq!(v1 + v2, v1 + &v2);
+                prop_assert_eq!(v1 + v2, &v1 + &v2);
+                prop_assert_eq!(v1 + &v2, &v1 + v2);
+                prop_assert_eq!(&v1 + v2, v1 + &v2);
+                prop_assert_eq!(&v1 + v2, &v1 + &v2);
+                prop_assert_eq!(v1 + &v2, &v1 + &v2);
+            }
+
+            #[test]
+            fn prop_vector_addition_commutative(
+                v1 in super::$Generator::<$FieldType>(), v2 in super::$Generator::<$FieldType>()) {
+                
+                let zero: $VectorN<$FieldType> = Zero::zero();
+                prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
+            }
+
+            #[test]
+            fn prop_vector_addition_associate(
+                u in super::$Generator::<$FieldType>(), 
+                v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
+
+                prop_assert_eq!((u + v) + w, u + (v + w));
+            }
+        }
+    }
+    }
+}
 
 exact_add_props!(Vector1, i32, any_vector1_no_overflow, vector1_i32_add_props);
 exact_add_props!(Vector2, i32, any_vector2_no_overflow, vector2_i32_add_props);
@@ -299,12 +353,13 @@ macro_rules! vector_magnitude_props {
     ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident, $epsilon:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
+        use cgmath::{$VectorN, Magnitude};
+        use cgmath::approx::relative_eq;
+
         proptest! {
             #[test]
             fn prop_magnitude_preserves_scale(
                 v in super::$Generator::<$FieldType>(), c in any::<$FieldType>()) {
-                use cgmath::approx::relative_eq;
-                use cgmath::{$VectorN, Magnitude, Zero};
                 
                 let abs_c = <$FieldType as num_traits::Float>::abs(c);                
                 prop_assume!((abs_c * v.magnitude()).is_finite());
@@ -317,7 +372,6 @@ macro_rules! vector_magnitude_props {
 
             #[test]
             fn prop_magnitude_nonnegative(v in super::$Generator::<$FieldType>()) {
-                use cgmath::{$VectorN, Magnitude, Zero};
                 let zero = <$FieldType as num_traits::Zero>::zero();
                 prop_assert!(v.magnitude() >= zero);
             }
@@ -326,10 +380,7 @@ macro_rules! vector_magnitude_props {
             fn prop_magnitude_satisfies_triangle_inequality(
                 v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
             
-                use cgmath::{$VectorN, Magnitude, Zero};
                 prop_assume!((v + w).magnitude().is_finite());
-                prop_assume!(v.magnitude().is_finite());
-                prop_assume!(w.magnitude().is_finite());
                 prop_assume!((v.magnitude() + w.magnitude()).is_finite());
                 prop_assert!((v + w).magnitude() <= v.magnitude() + w.magnitude(), 
                     "\n|v + w| = {}\n|v| = {}\n|w| = {}\n|v| + |w| = {}\n",
@@ -339,8 +390,6 @@ macro_rules! vector_magnitude_props {
 
             #[test]
             fn prop_magnitude_point_separating(v in super::$Generator::<$FieldType>()) {
-                use cgmath::{$VectorN, Magnitude, Zero};
-
                 let zero = <$FieldType as num_traits::Zero>::zero();
                 let zero_vec = <$VectorN<$FieldType> as cgmath::Zero>::zero();
                 prop_assume!(v != zero_vec);
@@ -350,7 +399,6 @@ macro_rules! vector_magnitude_props {
     }
     }
 }
-
 
 vector_magnitude_props!(vector1_f64_magnitude_props, Vector1, f64, any_vector1, 1e-7);
 vector_magnitude_props!(vector2_f64_magnitude_props, Vector2, f64, any_vector2, 1e-7);
@@ -363,7 +411,7 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Magnitude, Zero};
+        use cgmath::Magnitude;
 
         proptest! {
             #[test]
@@ -400,7 +448,6 @@ macro_rules! exact_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Magnitude, Zero};
 
         proptest! {
             #[test]
@@ -437,14 +484,16 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Magnitude, Zero};
+        use cgmath::Magnitude;
     
         proptest! {
             #[test]
             fn prop_distribution_over_vector_addition(
                 a in any::<$FieldType>(), 
                 v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
-                    
+                
+                prop_assume!((a * (v + w)).magnitude().is_finite());
+                prop_assume!((a * v + a * w).magnitude().is_finite());
                 prop_assert_eq!(a * (v + w), a * v + a * w);
             }
     
@@ -453,6 +502,8 @@ macro_rules! approx_distributive_props {
                 a in any::<$FieldType>(), b in any::<$FieldType>(), 
                 v in super::$Generator::<$FieldType>()) {
     
+                prop_assume!(((a + b) * v).magnitude().is_finite());
+                prop_assume!((a * v + b * v).magnitude().is_finite());
                 prop_assert_eq!((a + b) * v, a * v + b * v);
             }
 
@@ -461,6 +512,8 @@ macro_rules! approx_distributive_props {
                 a in any::<$FieldType>(), 
                 v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
                     
+                prop_assume!(((v + w) * a).magnitude().is_finite());
+                prop_assume!((v * a + w * a).magnitude().is_finite());
                 prop_assert_eq!((v + w) * a,  v * a + w * a);
             }
     
@@ -469,6 +522,8 @@ macro_rules! approx_distributive_props {
                 a in any::<$FieldType>(), b in any::<$FieldType>(), 
                 v in super::$Generator::<$FieldType>()) {
     
+                prop_assume!((v * (a + b)).magnitude().is_finite());
+                prop_assume!((v * a + v * b).magnitude().is_finite());
                 prop_assert_eq!(v * (a + b), v * a + v * b);
             }
         }
@@ -487,14 +542,12 @@ macro_rules! exact_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Magnitude, Zero};
     
         proptest! {
             #[test]
             fn prop_distribution_over_vector_addition(
                 a in any::<$FieldType>(), 
                 v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
-                
                 
                 prop_assert_eq!(a * (v + w), a * v + a * w);
             }
