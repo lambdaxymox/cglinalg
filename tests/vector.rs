@@ -542,7 +542,7 @@ macro_rules! exact_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-    
+
         proptest! {
             #[test]
             fn prop_distribution_over_vector_addition(

@@ -659,23 +659,24 @@ impl<S> approx::UlpsEq for Matrix2<S> where S: ScalarFloat {
     }
 }
 
-/*
+
 /// The `Matrix3` type represents 3x3 matrices in column-major order.
 #[derive(Copy, Clone, PartialEq, Debug)]
-pub struct Matrix3 {
+#[repr(C)]
+pub struct Matrix3<S> {
     /// Column 1 of the matrix.
-    pub c0r0: f32, pub c0r1: f32, pub c0r2: f32,
+    pub c0r0: S, pub c0r1: S, pub c0r2: S,
     /// Column 2 of the matrix.
-    pub c1r0: f32, pub c1r1: f32, pub c1r2: f32,
+    pub c1r0: S, pub c1r1: S, pub c1r2: S,
     /// Column 3 of the matrix.
-    pub c2r0: f32, pub c2r1: f32, pub c2r2: f32,
+    pub c2r0: S, pub c2r1: S, pub c2r2: S,
 }
 
-impl Matrix3 {
+impl<S> Matrix3<S> {
     pub fn new(
-        c0r0: f32, c0r1: f32, c0r2: f32,
-        c1r0: f32, c1r1: f32, c1r2: f32,
-        c2r0: f32, c2r1: f32, c2r2: f32) -> Matrix3 {
+        c0r0: S, c0r1: S, c0r2: S,
+        c1r0: S, c1r1: S, c1r2: S,
+        c2r0: S, c2r1: S, c2r2: S) -> Matrix3<S> {
 
         Matrix3 {
             // Column 1 of the matrix.
@@ -688,16 +689,18 @@ impl Matrix3 {
     }
 
     /// Create a 3x3 matrix from a triple of three-dimensional column vectors.
-    pub fn from_cols(c0: Vector3, c1: Vector3, c2: Vector3) -> Matrix3 {
+    pub fn from_cols(c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3<S> {
         Matrix3 {
             c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, 
             c1r0: c1.x, c1r1: c1.y, c1r2: c1.z,
             c2r0: c2.x, c2r1: c2.y, c2r2: c2.z,
         }
     }
+}
 
+impl<S> Matrix3<S> where S: ScalarFloat {
     /// Calculate the determinant of a 3x3 matrix.
-    pub fn determinant(&self) -> f32 {
+    pub fn determinant(&self) -> S {
         self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
         self.c1r0 * self.c0r1 * self.c2r2 + self.c1r0 * self.c0r2 * self.c2r1 +
         self.c2r0 * self.c0r1 * self.c1r2 - self.c2r0 * self.c0r2 * self.c1r1
@@ -705,17 +708,17 @@ impl Matrix3 {
 
     /// Determine whether a 3x3 matrix is invertible.
     pub fn is_invertible(&self) -> bool {
-        self.determinant() != 0.0
+        self.determinant() != S::zero()
     }
 
     /// Calculate the inverser of a 3x3 matrix, if it exists.
     /// A matrix with zero determinant has no inverse.
-    pub fn inverse(&self) -> Option<Matrix3> {
+    pub fn inverse(&self) -> Option<Matrix3<S>> {
         let det = self.determinant();
-        if det == 0.0 {
+        if det == S::zero() {
             None
         } else {
-            let inv_det = 1.0 / det;
+            let inv_det = S::one() / det;
 
             Some(Matrix3::new(
                 inv_det * (self.c1r1 * self.c2r2 - self.c1r2 * self.c2r1), 
@@ -733,7 +736,7 @@ impl Matrix3 {
         }
     }
 }
-
+/*
 impl Array for Matrix3 {
     type Element = f32;
 
