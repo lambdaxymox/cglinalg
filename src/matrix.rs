@@ -3306,6 +3306,20 @@ mod matrix3_tests {
 
         assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));
     }
+
+    #[test]
+    fn test_matrix_elements_should_be_column_major_order() {
+        let matrix = Matrix3::new(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        assert_eq!(matrix.c0r0, matrix[0][0]);
+        assert_eq!(matrix.c0r1, matrix[0][1]);
+        assert_eq!(matrix.c0r2, matrix[0][2]);
+        assert_eq!(matrix.c1r0, matrix[1][0]);
+        assert_eq!(matrix.c1r1, matrix[1][1]);
+        assert_eq!(matrix.c1r2, matrix[1][2]);
+        assert_eq!(matrix.c2r0, matrix[2][0]);
+        assert_eq!(matrix.c2r1, matrix[2][1]);
+        assert_eq!(matrix.c2r2, matrix[2][2]);
+    }
 }
 /*
 #[cfg(test)]
