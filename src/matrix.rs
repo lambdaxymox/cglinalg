@@ -3150,40 +3150,40 @@ mod matrix3_tests {
 
     #[test]
     fn test_mat_times_identity_equals_mat() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let a_mat_times_identity = test.a_mat * Matrix3::one();
             let b_mat_times_identity = test.b_mat * Matrix3::one();
 
             assert_eq!(a_mat_times_identity, test.a_mat);
             assert_eq!(b_mat_times_identity, test.b_mat);
-        }
+        })
     }
 
     #[test]
     fn test_mat_times_zero_equals_zero() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let a_mat_times_zero = test.a_mat * Matrix3::zero();
             let b_mat_times_zero = test.b_mat * Matrix3::zero();
 
             assert_eq!(a_mat_times_zero, Matrix3::zero());
             assert_eq!(b_mat_times_zero, Matrix3::zero());
-        }
+        })
     }
 
     #[test]
     fn test_zero_times_mat_equals_zero() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let zero_times_a_mat = Matrix3::zero() * test.a_mat;
             let zero_times_b_mat = Matrix3::zero() * test.b_mat;
 
             assert_eq!(zero_times_a_mat, Matrix3::zero());
             assert_eq!(zero_times_b_mat, Matrix3::zero());
-        }
+        })
     }
 
     #[test]
     fn test_mat_times_identity_equals_identity_times_mat() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let a_mat_times_identity = test.a_mat * Matrix3::one();
             let identity_times_a_mat = Matrix3::one() * test.a_mat;
             let b_mat_times_identity = test.b_mat * Matrix3::one();
@@ -3191,18 +3191,18 @@ mod matrix3_tests {
 
             assert_eq!(a_mat_times_identity, identity_times_a_mat);
             assert_eq!(b_mat_times_identity, identity_times_b_mat);
-        }
+        })
     }
 
     #[test]
     fn test_mat_transpose_transpose_equals_mat() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let a_mat_tr_tr = test.a_mat.transpose().transpose();
             let b_mat_tr_tr = test.b_mat.transpose().transpose();
             
             assert_eq!(a_mat_tr_tr, test.a_mat);
             assert_eq!(b_mat_tr_tr, test.b_mat);
-        }
+        })
     }
 
     #[test]
@@ -3215,12 +3215,12 @@ mod matrix3_tests {
 
     #[test]
     fn test_matrix_multiplication() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let result = test.a_mat * test.b_mat;
             let expected = test.expected;
 
             assert_eq!(result, expected);
-        }
+        })
     }
 
     #[test]
