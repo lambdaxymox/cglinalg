@@ -1467,40 +1467,44 @@ impl<S> ops::RemAssign<S> for Matrix3<S> where S: Scalar {
         self.c2r2 %= other;
     }
 }
+
+impl<S> Lerp<Matrix3<S>> for Matrix3<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Matrix3<S>;
+
+    fn lerp(self, other: Matrix3<S>, amount: Self::Scalar) -> Matrix3<S> {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<S> Lerp<&Matrix3<S>> for Matrix3<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Matrix3<S>;
+
+    fn lerp(self, other: &Matrix3<S>, amount: Self::Scalar) -> Matrix3<S> {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<S> Lerp<Matrix3<S>> for &Matrix3<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Matrix3<S>;
+
+    fn lerp(self, other: Matrix3<S>, amount: Self::Scalar) -> Matrix3<S> {
+        self + ((other - self) * amount)
+    }
+}
+
+impl<'a, 'b, S> Lerp<&'a Matrix3<S>> for &'b Matrix3<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Matrix3<S>;
+
+    fn lerp(self, other: &'a Matrix3<S>, amount: Self::Scalar) -> Matrix3<S> {
+        self + ((other - self) * amount)
+    }
+}
+
 /*
-impl Lerp<Matrix3> for Matrix3 {
-    type Output = Matrix3;
-
-    fn lerp(self, other: Matrix3, amount: f32) -> Matrix3 {
-        self + ((other - self) * amount)
-    }
-}
-
-impl Lerp<&Matrix3> for Matrix3 {
-    type Output = Matrix3;
-
-    fn lerp(self, other: &Matrix3, amount: f32) -> Matrix3 {
-        self + ((other - self) * amount)
-    }
-}
-
-impl Lerp<Matrix3> for &Matrix3 {
-    type Output = Matrix3;
-
-    fn lerp(self, other: Matrix3, amount: f32) -> Matrix3 {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b> Lerp<&'a Matrix3> for &'b Matrix3 {
-    type Output = Matrix3;
-
-    fn lerp(self, other: &'a Matrix3, amount: f32) -> Matrix3 {
-        self + ((other - self) * amount)
-    }
-}
-
-
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
 #[derive(Copy, Clone, Debug)]
 pub struct Matrix4 {
