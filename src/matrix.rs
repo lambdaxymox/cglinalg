@@ -1235,11 +1235,11 @@ impl<S> ops::Mul<S> for &Matrix3<S> where S: Scalar {
         Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
     }
 }
-/*
-impl ops::Div<f32> for Matrix3 {
-    type Output = Matrix3;
 
-    fn div(self, other: f32) -> Self::Output {
+impl<S> ops::Div<S> for Matrix3<S> where S: Scalar {
+    type Output = Matrix3<S>;
+
+    fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
         let c0r2 = self.c0r2 / other;
@@ -1256,10 +1256,10 @@ impl ops::Div<f32> for Matrix3 {
     }
 }
 
-impl ops::Div<f32> for &Matrix3 {
-    type Output = Matrix3;
+impl<S> ops::Div<S> for &Matrix3<S> where S: Scalar {
+    type Output = Matrix3<S>;
 
-    fn div(self, other: f32) -> Self::Output {
+    fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
         let c0r2 = self.c0r2 / other;
@@ -1276,8 +1276,8 @@ impl ops::Div<f32> for &Matrix3 {
     }
 }
 
-impl ops::Neg for Matrix3 {
-    type Output = Matrix3;
+impl<S> ops::Neg for Matrix3<S> where S: ScalarFloat {
+    type Output = Matrix3<S>;
 
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
@@ -1296,8 +1296,8 @@ impl ops::Neg for Matrix3 {
     }
 }
 
-impl ops::Neg for &Matrix3 {
-    type Output = Matrix3;
+impl<S> ops::Neg for &Matrix3<S> where S: ScalarFloat {
+    type Output = Matrix3<S>;
 
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
@@ -1316,10 +1316,10 @@ impl ops::Neg for &Matrix3 {
     }
 }
 
-impl ops::Rem<f32> for Matrix3 {
-    type Output = Matrix3;
+impl<S> ops::Rem<S> for Matrix3<S> where S: Scalar {
+    type Output = Matrix3<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
         let c0r2 = self.c0r2 % other;
@@ -1336,10 +1336,10 @@ impl ops::Rem<f32> for Matrix3 {
     }
 }
 
-impl ops::Rem<f32> for &Matrix3 {
-    type Output = Matrix3;
+impl<S> ops::Rem<S> for &Matrix3<S> where S: Scalar {
+    type Output = Matrix3<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
         let c0r2 = self.c0r2 % other;
@@ -1356,8 +1356,8 @@ impl ops::Rem<f32> for &Matrix3 {
     }
 }
 
-impl ops::AddAssign<Matrix3> for Matrix3 {
-    fn add_assign(&mut self, other: Matrix3) {
+impl<S> ops::AddAssign<Matrix3<S>> for Matrix3<S> where S: Scalar {
+    fn add_assign(&mut self, other: Matrix3<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
         self.c0r2 += other.c0r2;
@@ -1372,8 +1372,8 @@ impl ops::AddAssign<Matrix3> for Matrix3 {
     }
 }
 
-impl ops::AddAssign<&Matrix3> for Matrix3 {
-    fn add_assign(&mut self, other: &Matrix3) {
+impl<S> ops::AddAssign<&Matrix3<S>> for Matrix3<S> where S: Scalar {
+    fn add_assign(&mut self, other: &Matrix3<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
         self.c0r2 += other.c0r2;
@@ -1388,8 +1388,8 @@ impl ops::AddAssign<&Matrix3> for Matrix3 {
     }
 }
 
-impl ops::SubAssign<Matrix3> for Matrix3 {
-    fn sub_assign(&mut self, other: Matrix3) {
+impl<S> ops::SubAssign<Matrix3<S>> for Matrix3<S> where S: Scalar {
+    fn sub_assign(&mut self, other: Matrix3<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
         self.c0r2 -= other.c0r2;
@@ -1404,8 +1404,8 @@ impl ops::SubAssign<Matrix3> for Matrix3 {
     }
 }
 
-impl ops::SubAssign<&Matrix3> for Matrix3 {
-    fn sub_assign(&mut self, other: &Matrix3) {
+impl<S> ops::SubAssign<&Matrix3<S>> for Matrix3<S> where S: Scalar {
+    fn sub_assign(&mut self, other: &Matrix3<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
         self.c0r2 -= other.c0r2;
@@ -1420,8 +1420,8 @@ impl ops::SubAssign<&Matrix3> for Matrix3 {
     }
 }
 
-impl ops::MulAssign<f32> for Matrix3 {
-    fn mul_assign(&mut self, other: f32) {
+impl<S> ops::MulAssign<S> for Matrix3<S> where S: Scalar {
+    fn mul_assign(&mut self, other: S) {
         self.c0r0 *= other;
         self.c0r1 *= other;
         self.c0r2 *= other;
@@ -1436,8 +1436,8 @@ impl ops::MulAssign<f32> for Matrix3 {
     }
 }
 
-impl ops::DivAssign<f32> for Matrix3 {
-    fn div_assign(&mut self, other: f32) {
+impl<S> ops::DivAssign<S> for Matrix3<S> where S: Scalar {
+    fn div_assign(&mut self, other: S) {
         self.c0r0 /= other;
         self.c0r1 /= other;
         self.c0r2 /= other;
@@ -1452,8 +1452,8 @@ impl ops::DivAssign<f32> for Matrix3 {
     }
 }
 
-impl ops::RemAssign<f32> for Matrix3 {
-    fn rem_assign(&mut self, other: f32) {
+impl<S> ops::RemAssign<S> for Matrix3<S> where S: Scalar {
+    fn rem_assign(&mut self, other: S) {
         self.c0r0 %= other;
         self.c0r1 %= other;
         self.c0r2 %= other;
@@ -1467,7 +1467,7 @@ impl ops::RemAssign<f32> for Matrix3 {
         self.c2r2 %= other;
     }
 }
-
+/*
 impl Lerp<Matrix3> for Matrix3 {
     type Output = Matrix3;
 
