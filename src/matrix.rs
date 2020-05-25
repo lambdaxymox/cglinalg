@@ -770,11 +770,12 @@ impl<S> Storage for Matrix3<S> where S: Scalar {
         <Self as AsRef<[Self::Element; 9]>>::as_ref(self)
     }
 }
-/*
-impl Matrix for Matrix3 {
-    type Row = Vector3;
-    type Column = Vector3;
-    type Transpose = Matrix3;
+
+impl<S> Matrix for Matrix3<S> where S: Scalar {
+    type Element = S;
+    type Row = Vector3<S>;
+    type Column = Vector3<S>;
+    type Transpose = Matrix3<S>;
 
     fn row(&self, r: usize) -> Self::Row {
         Vector3::new(self[0][r], self[1][r], self[2][r])
@@ -818,7 +819,7 @@ impl Matrix for Matrix3 {
         )
     }
 }
-*/
+
 impl<S> From<[[S; 3]; 3]> for Matrix3<S> where S: Scalar {
     #[inline]
     fn from(m: [[S; 3]; 3]) -> Matrix3<S> {
@@ -3017,7 +3018,7 @@ mod matrix2_tests {
         assert_eq!(matrix.c1r1, matrix[1][1]);
     }
 }
-/*
+
 
 #[cfg(test)]
 mod matrix3_tests {
@@ -3027,9 +3028,9 @@ mod matrix3_tests {
     use structure::{One, Zero, Matrix};
 
     struct TestCase {
-        a_mat: Matrix3,
-        b_mat: Matrix3,
-        expected: Matrix3,
+        a_mat: Matrix3<f32>,
+        b_mat: Matrix3<f32>,
+        expected: Matrix3<f32>,
     }
 
     struct Test {
@@ -3142,7 +3143,7 @@ mod matrix3_tests {
 
     #[test]
     fn test_identity_transpose_equals_identity() {
-        let identity = Matrix3::one();
+        let identity = Matrix3::<f32>::one();
         let identity_tr = identity.transpose();
             
         assert_eq!(identity, identity_tr);
@@ -3242,7 +3243,7 @@ mod matrix3_tests {
         assert_eq!(matrix_inv * matrix, one);        
     }
 }
-
+/*
 #[cfg(test)]
 mod matrix4_tests {
     use std::slice::Iter;
