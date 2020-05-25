@@ -3274,6 +3274,13 @@ mod matrix3_tests {
         
         assert_eq!(matrix.determinant(), 0.0);
     }
+    
+    #[test]
+    fn test_matrix_with_nonzero_determinant_is_invertible() {
+        let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 7f32, 8f32, 9f32);
+        
+        assert!(matrix.is_invertible());
+    }
 
     #[test]
     fn test_matrix_with_zero_determinant_is_not_invertible() {
