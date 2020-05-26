@@ -3137,6 +3137,19 @@ mod matrix2_tests {
     }
 
     #[test]
+    fn test_identity_is_invertible() {
+        assert!(Matrix2::<f64>::one().is_invertible());
+    }
+
+    #[test]
+    fn test_identity_inverse_is_identity() {
+        let result: Matrix2<f64> = Matrix2::one().inverse().unwrap();
+        let expected: Matrix2<f64> = Matrix2::one();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
         let matrix = Matrix2::new(1f32, 2f32, 3f32, 4f32);
         
@@ -3381,6 +3394,19 @@ mod matrix3_tests {
     }
 
     #[test]
+    fn test_identity_is_invertible() {
+        assert!(Matrix3::<f64>::one().is_invertible());
+    }
+
+    #[test]
+    fn test_identity_inverse_is_identity() {
+        let result: Matrix3<f64> = Matrix3::one().inverse().unwrap();
+        let expected: Matrix3<f64> = Matrix3::one();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
         let matrix = Matrix3::new(1f32, 2f32, 3f32, 0f32, 4f32, 5f32, 0f32, 0f32, 6f32);
         
@@ -3532,40 +3558,40 @@ mod matrix4_tests {
 
     #[test]
     fn test_mat_times_identity_equals_mat() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let a_mat_times_identity = test.a_mat * Matrix4::one();
             let b_mat_times_identity = test.b_mat * Matrix4::one();
 
             assert_eq!(a_mat_times_identity, test.a_mat);
             assert_eq!(b_mat_times_identity, test.b_mat);
-        }
+        })
     }
 
     #[test]
     fn test_mat_times_zero_equals_zero() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let a_mat_times_zero = test.a_mat * Matrix4::zero();
             let b_mat_times_zero = test.b_mat * Matrix4::zero();
 
             assert_eq!(a_mat_times_zero, Matrix4::zero());
             assert_eq!(b_mat_times_zero, Matrix4::zero());
-        }
+        })
     }
 
     #[test]
     fn test_zero_times_mat_equals_zero() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let zero_times_a_mat = Matrix4::zero() * test.a_mat;
             let zero_times_b_mat = Matrix4::zero() * test.b_mat;
 
             assert_eq!(zero_times_a_mat, Matrix4::zero());
             assert_eq!(zero_times_b_mat, Matrix4::zero());
-        }
+        })
     }
 
     #[test]
     fn test_mat_times_identity_equals_identity_times_mat() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let a_mat_times_identity = test.a_mat * Matrix4::one();
             let identity_times_a_mat = Matrix4::one() * test.a_mat;
             let b_mat_times_identity = test.b_mat * Matrix4::one();
@@ -3573,18 +3599,18 @@ mod matrix4_tests {
 
             assert_eq!(a_mat_times_identity, identity_times_a_mat);
             assert_eq!(b_mat_times_identity, identity_times_b_mat);
-        }
+        })
     }
 
     #[test]
     fn test_mat_transpose_transpose_equals_mat() {
-        for test in test_cases().iter() {
+        test_cases().iter().for_each(|test| {
             let a_mat_tr_tr = test.a_mat.transpose().transpose();
             let b_mat_tr_tr = test.b_mat.transpose().transpose();
             
             assert_eq!(a_mat_tr_tr, test.a_mat);
             assert_eq!(b_mat_tr_tr, test.b_mat);
-        }
+        })
     }
 
     #[test]
@@ -3685,6 +3711,19 @@ mod matrix4_tests {
         );
         
         assert_eq!(matrix.determinant(), 0.0);
+    }
+
+    #[test]
+    fn test_identity_is_invertible() {
+        assert!(Matrix4::<f64>::one().is_invertible());
+    }
+
+    #[test]
+    fn test_identity_inverse_is_identity() {
+        let result: Matrix4<f64> = Matrix4::one().inverse().unwrap();
+        let expected: Matrix4<f64> = Matrix4::one();
+
+        assert_eq!(result, expected);
     }
 
     #[test]
