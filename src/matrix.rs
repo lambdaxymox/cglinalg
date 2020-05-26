@@ -3339,6 +3339,15 @@ mod matrix2_tests {
     }
 
     #[test]
+    fn test_inverse_diagonal_matrix() {
+        let matrix: Matrix2<f64> = 4_f64 * Matrix2::one();
+        let expected: Matrix2<f64> = (1_f64 / 4_f64) * Matrix2::one();
+        let result = matrix.inverse().unwrap();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
         let matrix = Matrix2::new(1f32, 2f32, 3f32, 4f32);
         
@@ -3682,6 +3691,15 @@ mod matrix3_tests {
     fn test_identity_inverse_is_identity() {
         let result: Matrix3<f64> = Matrix3::one().inverse().unwrap();
         let expected: Matrix3<f64> = Matrix3::one();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_inverse_diagonal_matrix() {
+        let matrix: Matrix3<f64> = 4_f64 * Matrix3::one();
+        let expected: Matrix3<f64> = (1_f64 / 4_f64) * Matrix3::one();
+        let result = matrix.inverse().unwrap();
 
         assert_eq!(result, expected);
     }
@@ -4101,6 +4119,15 @@ mod matrix4_tests {
     fn test_identity_inverse_is_identity() {
         let result: Matrix4<f64> = Matrix4::one().inverse().unwrap();
         let expected: Matrix4<f64> = Matrix4::one();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_inverse_diagonal_matrix() {
+        let matrix: Matrix4<f64> = 4_f64 * Matrix4::one();
+        let expected: Matrix4<f64> = (1_f64 / 4_f64) * Matrix4::one();
+        let result = matrix.inverse().unwrap();
 
         assert_eq!(result, expected);
     }
