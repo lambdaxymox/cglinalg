@@ -4281,24 +4281,36 @@ mod matrix4_tests {
     }
 
     #[test]
+    fn test_matrix_inversion2() {
+        let matrix: Matrix4<f64> = Matrix4::new(
+            36.84,   427.468, 882.198,  89.504, 
+            7.042,   61.891,  56.31,    89.0, 
+            72.0,    936.5,   413.80,   50.311,  
+            37.698,  311.8,   60.81,    73.839
+        );
+        let result = matrix.inverse().unwrap();
+        let expected: Matrix4<f64> = Matrix4::new(
+             0.01146093272878252,  -0.06212100841992658, -0.02771783718075694,    0.07986947998777854,
+            -0.00148039611514755,   0.004464130960444646, 0.003417891441120325,  -0.005915083057511776,
+             0.001453087396607042, -0.0009538600348427,  -0.0005129477357421059, -0.0002621470728476185,
+            -0.0007967195911958656, 0.01365031989418242,  0.0001408581712825875, -0.002040325515611523
+        );
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            36.84,  427.468, 827.198, 89.504, 
+            36.84,  427.468, 882.198, 89.504, 
             7.042 , 61.891,  56.31,   89.0, 
             72.0,   936.5,   413.80,  50.311,  
             37.698, 311.8,   60.81,   73.839
-        );
-        let expected: Matrix4<f64> = Matrix4::new(
-            0.01146093272878252,  -0.06212100841992658, -0.02771783718075694,    0.07986947998777854,
-           -0.00148039611514755,   0.004464130960444646, 0.003417891441120325,  -0.005915083057511776,
-            0.001453087396607042, -0.0009538600348427,  -0.0005129477357421059, -0.0002621470728476185,
-           -0.0007967195911958656, 0.01365031989418242,  0.0001408581712825875, -0.002040325515611523
         );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4::one();
         let epsilon = 1e-7;
 
-        //assert_eq!(matrix_inv, expected);
         assert!(relative_eq!(matrix * matrix_inv, one, epsilon = epsilon),
             "\nmatrix = {:?}\nmatrix_inv = {:?}\nmmatrix * matrix_inv = {:?}\nepsilon = {:?}\n",
             matrix, matrix_inv, matrix * matrix_inv, epsilon
@@ -4308,7 +4320,7 @@ mod matrix4_tests {
     #[test]
     fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            36.84,  427.468, 827.198, 89.504, 
+            36.84,  427.468, 882.198, 89.504, 
             7.042 , 61.891,  56.31,   89.0, 
             72.0,   936.5,   413.80,  50.311,  
             37.698, 311.8,   60.81,   73.839
@@ -4323,7 +4335,7 @@ mod matrix4_tests {
     #[test]
     fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            36.84,  427.468, 827.198, 89.504, 
+            36.84,  427.468, 882.198, 89.504, 
             7.042 , 61.891,  56.31,   89.0, 
             72.0,   936.5,   413.80,  50.311,  
             37.698, 311.8,   60.81,   73.839
@@ -4337,22 +4349,15 @@ mod matrix4_tests {
     #[test]
     fn test_inverse_times_matrix_is_identity() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            36.84,   427.468, 827.198,  89.504, 
+            36.84,   427.468, 882.198,  89.504, 
             7.042,   61.891,  56.31,    89.0, 
             72.0,    936.5,   413.80,   50.311,  
             37.698,  311.8,   60.81,    73.839
         );
         let matrix_inv = matrix.inverse().unwrap();
-        let expected: Matrix4<f64> = Matrix4::new(
-             0.01146093272878252,  -0.06212100841992658, -0.02771783718075694,    0.07986947998777854,
-            -0.00148039611514755,   0.004464130960444646, 0.003417891441120325,  -0.005915083057511776,
-             0.001453087396607042, -0.0009538600348427,  -0.0005129477357421059, -0.0002621470728476185,
-            -0.0007967195911958656, 0.01365031989418242,  0.0001408581712825875, -0.002040325515611523
-        );
         let one = Matrix4::one();
         let epsilon = 1e-7;
         
-        //assert_eq!(matrix_inv, expected);
         assert!(relative_eq!(matrix_inv * matrix, one, epsilon = epsilon),
             "\nmatrix = {:?}\nmatrix_inv = {:?}\nmatrix_inv * matrix = {:?}\nepsilon = {:?}\n",
             matrix, matrix_inv, matrix_inv * matrix, epsilon
@@ -4362,7 +4367,7 @@ mod matrix4_tests {
     #[test]
     fn test_matrix_inverse_inverse_equals_matrix() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            36.84,  427.468, 827.198, 89.504, 
+            36.84,  427.468, 882.198, 89.504, 
             7.042 , 61.891,  56.31,   89.0, 
             72.0,   936.5,   413.80,  50.311,  
             37.698, 311.8,   60.81,   73.839
