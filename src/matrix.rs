@@ -3388,6 +3388,31 @@ mod matrix2_tests {
     }
 
     #[test]
+    fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
+        let matrix: Matrix2<f64> = Matrix2::new(
+            80.0,   426.1,
+            23.43,  23.5724
+        );
+        let constant: f64 = 4_f64;
+        let constant_times_matrix_inverse = (constant * matrix).inverse().unwrap();
+        let constant_inverse_times_matrix_inverse = (1_f64 / constant) * matrix.inverse().unwrap();
+
+        assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
+    }
+
+    #[test]
+    fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
+        let matrix: Matrix2<f64> = Matrix2::new(
+            80.0,   426.1, 
+            23.43,  23.5724
+        );
+        let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
+        let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
+
+        assert_eq!(matrix_transpose_inverse, matrix_inverse_transpose);
+    }
+
+    #[test]
     fn test_matrix_elements_should_be_column_major_order() {
         let matrix = Matrix2::new(1, 2, 3, 4);
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -3748,6 +3773,33 @@ mod matrix3_tests {
         let one = Matrix3::one();
 
         assert!(relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
+        let matrix: Matrix3<f64> = Matrix3::new(
+            80.0,   426.1,   43.393, 
+            23.43,  23.5724, 1.27, 
+            81.439, 12.19,   43.36
+        );
+        let constant: f64 = 4_f64;
+        let constant_times_matrix_inverse = (constant * matrix).inverse().unwrap();
+        let constant_inverse_times_matrix_inverse = (1_f64 / constant) * matrix.inverse().unwrap();
+
+        assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
+    }
+
+    #[test]
+    fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
+        let matrix: Matrix3<f64> = Matrix3::new(
+            80.0,   426.1,   43.393, 
+            23.43,  23.5724, 1.27, 
+            81.439, 12.19,   43.36
+        );
+        let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
+        let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
+
+        assert_eq!(matrix_transpose_inverse, matrix_inverse_transpose);
     }
 
     #[test]
@@ -4192,6 +4244,35 @@ mod matrix4_tests {
             "\nmatrix = {:?}\nmatrix_inv = {:?}\nmmatrix * matrix_inv = {:?}\nepsilon = {:?}\n",
             matrix, matrix_inv, matrix * matrix_inv, epsilon
         );
+    }
+
+    #[test]
+    fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
+        let matrix: Matrix4<f64> = Matrix4::new(
+            36.84,  427.468, 827.198, 89.504, 
+            7.042 , 61.891,  56.31,   89.0, 
+            72.0,   936.5,   413.80,  50.311,  
+            37.698, 311.8,   60.81,   73.839
+        );
+        let constant: f64 = 4_f64;
+        let constant_times_matrix_inverse = (constant * matrix).inverse().unwrap();
+        let constant_inverse_times_matrix_inverse = (1_f64 / constant) * matrix.inverse().unwrap();
+
+        assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
+    }
+
+    #[test]
+    fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
+        let matrix: Matrix4<f64> = Matrix4::new(
+            36.84,  427.468, 827.198, 89.504, 
+            7.042 , 61.891,  56.31,   89.0, 
+            72.0,   936.5,   413.80,  50.311,  
+            37.698, 311.8,   60.81,   73.839
+        );
+        let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
+        let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
+
+        assert_eq!(matrix_transpose_inverse, matrix_inverse_transpose);
     }
 
     #[test]
