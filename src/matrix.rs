@@ -3045,7 +3045,10 @@ mod matrix2_tests {
     use vector::Vector2;
     use super::Matrix2;
     use structure::{One, Zero, Matrix};
-    use crate::approx::relative_eq;
+    use crate::approx::{
+        assert_relative_eq,
+        relative_eq
+    };
 
 
     struct TestCase {
@@ -3232,6 +3235,16 @@ mod matrix2_tests {
     }
 
     #[test]
+    fn test_matrix_inverse() {
+        let matrix: Matrix2<f64> = Matrix2::new(5_f64, 1_f64, 1_f64, 5_f64);
+        let expected: Matrix2<f64> = (1_f64 / 24_f64) * Matrix2::new(5_f64, -1_f64,-1_f64,  5_f64);
+        let result = matrix.inverse().unwrap();
+        let epsilon = 1e-7;
+
+        assert_relative_eq!(result, expected, epsilon = epsilon);
+    }
+
+    #[test]
     fn test_identity_is_invertible() {
         assert!(Matrix2::<f64>::one().is_invertible());
     }
@@ -3301,7 +3314,10 @@ mod matrix3_tests {
     use vector::Vector3;
     use super::Matrix3;
     use structure::{One, Zero, Matrix};
-    use crate::approx::relative_eq;
+    use crate::approx::{
+        assert_relative_eq, 
+        relative_eq
+    };
 
 
     struct TestCase {
@@ -3486,6 +3502,24 @@ mod matrix3_tests {
         let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 4f32, 5f32, 6f32);
         
         assert_eq!(matrix.determinant(), 0.0);
+    }
+
+    #[test]
+    fn test_matrix_inverse() {
+        let matrix: Matrix3<f64> = Matrix3::new(
+            5_f64, 1_f64, 1_f64,
+            1_f64, 5_f64, 1_f64,
+            1_f64, 1_f64, 5_f64
+        );
+        let expected: Matrix3<f64> = (1_f64 / 28_f64) * Matrix3::new(
+             6_f64, -1_f64, -1_f64, 
+            -1_f64,  6_f64, -1_f64, 
+            -1_f64, -1_f64,  6_f64,
+        );
+        let result = matrix.inverse().unwrap();
+        let epsilon = 1e-7;
+
+        assert_relative_eq!(result, expected, epsilon = epsilon);
     }
 
     #[test]
@@ -3822,6 +3856,10 @@ mod matrix4_tests {
             -1_f64, -1_f64,  7_f64, -1_f64,
             -1_f64, -1_f64, -1_f64,  7_f64
         );
+        let result = matrix.inverse().unwrap();
+        let epsilon = 1e-7;
+
+        assert_relative_eq!(result, expected, epsilon = epsilon);
     }
 
     #[test]
