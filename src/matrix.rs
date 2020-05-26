@@ -3592,10 +3592,13 @@ mod matrix3_tests {
 #[cfg(test)]
 mod matrix4_tests {
     use std::slice::Iter;
-    use vector::{Vector3, Vector4};
-    use super::{Matrix4};
+    use vector::{
+        Vector3, 
+        Vector4
+    };
+    use super::Matrix4;
     use structure::{One, Zero, Matrix};
-    use approx::assert_relative_eq;
+    use approx::relative_eq;
 
 
     struct TestCase {
@@ -3757,7 +3760,7 @@ mod matrix4_tests {
             let expected = test.expected;
             let epsilon = 1e-7;
 
-            assert_relative_eq!(result, expected, epsilon = epsilon);
+            assert!(relative_eq!(result, expected, epsilon = epsilon));
         })
     }
 
@@ -3841,6 +3844,7 @@ mod matrix4_tests {
     #[test]
     fn test_matrix_with_zero_determinant() {
         // This matrix should have a zero determinant since it has two repeating columns.
+        use num_traits::Zero;
         let matrix: Matrix4<f64> = Matrix4::new(
             1_f64,  2_f64,  3_f64,  4_f64, 
             5_f64,  6_f64,  7_f64,  8_f64,
@@ -3848,7 +3852,7 @@ mod matrix4_tests {
             9_f64,  10_f64, 11_f64, 12_f64
         );
         
-        assert_eq!(matrix.determinant(), 0.0);
+        assert!(matrix.determinant().is_zero());
     }
 
     #[test]
@@ -3868,7 +3872,10 @@ mod matrix4_tests {
         let result = matrix.inverse().unwrap();
         let epsilon = 1e-7;
 
-        assert_relative_eq!(result, expected, epsilon = epsilon);
+        assert!(relative_eq!(result, expected, epsilon = epsilon),
+            "\nmatrix = {:?}\nmatrix_inv = {:?}\nmatrix * matrix_inv = {:?}\nexpected = {:?}\nepsilon = {:?}\n",
+            matrix, result, matrix * result, expected, epsilon
+        );
     }
 
     #[test]
@@ -3924,16 +3931,19 @@ mod matrix4_tests {
     #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            36.84,   427.4689, 827.1983, 89.5049, 
-            7.0421 , 61.8913,  56.31,    89.0, 
-            72.0,    936.5,    413.80,   50.3111,  
-            37.6985, 311.8,    60.81,    73.8393
+            36.84,  427.468, 827.198, 89.504, 
+            7.042 , 61.891,  56.31,   89.0, 
+            72.0,   936.5,   413.80,  50.311,  
+            37.698, 311.8,   60.81,   73.839
         );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4::one();
         let epsilon = 1e-7;
 
-        assert_relative_eq!(matrix_inv * matrix, one, epsilon = epsilon);
+        assert!(relative_eq!(matrix * matrix_inv, one, epsilon = epsilon),
+            "\nmatrix = {:?}\nmatrix_inv = {:?}\nmmatrix * matrix_inv = {:?}\nepsilon = {:?}\n",
+            matrix, matrix_inv, matrix * matrix_inv, epsilon
+        );
     }
 
     #[test]
@@ -3948,7 +3958,10 @@ mod matrix4_tests {
         let one = Matrix4::one();
         let epsilon = 1e-7;
         
-        assert_relative_eq!(matrix_inv * matrix, one, epsilon = epsilon);        
+        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = epsilon),
+            "\nmatrix = {:?}\nmatrix_inv = {:?}\nmatrix_inv * matrix = {:?}\nepsilon = {:?}\n",
+            matrix, matrix_inv, matrix_inv * matrix, epsilon
+        );
     }
 
     #[test]
