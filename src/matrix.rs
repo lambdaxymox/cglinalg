@@ -3688,8 +3688,10 @@ mod matrix4_tests {
     #[test]
     fn test_noninvertible_matrix_returns_none() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            1_f64,  2_f64,  3_f64,  4_f64, 5_f64,  6_f64,  7_f64,  8_f64,
-            5_f64,  6_f64,  7_f64,  8_f64, 9_f64, 10_f64, 11_f64, 12_f64
+            1_f64,  2_f64,  3_f64,  4_f64, 
+            5_f64,  6_f64,  7_f64,  8_f64,
+            5_f64,  6_f64,  7_f64,  8_f64, 
+            9_f64,  10_f64, 11_f64, 12_f64
         );
         
         assert!(matrix.inverse().is_none());
@@ -3713,10 +3715,10 @@ mod matrix4_tests {
     #[test]
     fn test_inverse_times_matrix_is_identity() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            36.84,    427.4689, 827.1983,  89.5049, 
-            7.0421,   61.8913,  56.31,     89.0, 
-            72.0,     936.5,    413.80,    50.3111,  
-            37.6985,  311.8,    60.81,     73.8393
+            36.84,   427.468, 827.198,  89.504, 
+            7.042,   61.891,  56.31,    89.0, 
+            72.0,    936.5,   413.80,   50.311,  
+            37.698,  311.8,   60.81,    73.839
         );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4::one();
