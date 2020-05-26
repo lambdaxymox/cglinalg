@@ -1773,8 +1773,8 @@ impl<S> Matrix4<S> where S: Scalar {
             let _c0r0 = self.c1r1 * self.c2r2 * self.c3r3 + self.c2r1 * self.c3r2 * self.c1r3 + self.c3r1 * self.c1r2 * self.c2r3
                       - self.c3r1 * self.c2r2 * self.c1r3 - self.c2r1 * self.c1r2 * self.c3r3 - self.c1r1 * self.c3r2 * self.c2r3;
             let _c1r0 = self.c3r0 * self.c2r2 * self.c1r3 + self.c2r0 * self.c1r2 * self.c3r3 + self.c1r0 * self.c3r2 * self.c2r3
-                      - self.c0r1 * self.c2r2 * self.c3r3 - self.c2r0 * self.c3r2 * self.c1r3 - self.c3r0 * self.c1r2 * self.c2r3;
-            let _c2r0 = self.c1r0 * self.c2r1 * self.c3r3 + self.c2r1 * self.c3r1 * self.c1r3 + self.c3r0 * self.c1r1 * self.c2r3
+                      - self.c1r0 * self.c2r2 * self.c3r3 - self.c2r0 * self.c3r2 * self.c1r3 - self.c3r0 * self.c1r2 * self.c2r3;
+            let _c2r0 = self.c1r0 * self.c2r1 * self.c3r3 + self.c2r0 * self.c3r1 * self.c1r3 + self.c3r0 * self.c1r1 * self.c2r3
                       - self.c3r0 * self.c2r1 * self.c1r3 - self.c2r0 * self.c1r1 * self.c3r3 - self.c1r0 * self.c3r1 * self.c2r3;
             let _c3r0 = self.c3r0 * self.c2r1 * self.c1r2 + self.c2r0 * self.c1r1 * self.c3r2 + self.c1r0 * self.c3r1 * self.c2r2
                       - self.c1r0 * self.c2r1 * self.c3r2 - self.c2r0 * self.c3r1 * self.c1r2 - self.c3r0 * self.c1r1 * self.c2r2;
@@ -4295,8 +4295,9 @@ mod matrix4_tests {
              0.001453087396607042, -0.0009538600348427,  -0.0005129477357421059, -0.0002621470728476185,
             -0.0007967195911958656, 0.01365031989418242,  0.0001408581712825875, -0.002040325515611523
         );
+        let epsilon = 1e-7;
 
-        assert_eq!(result, expected);
+        assert!(relative_eq!(result, expected, epsilon = epsilon));
     }
 
     #[test]
