@@ -3840,9 +3840,12 @@ mod matrix4_tests {
 
     #[test]
     fn test_matrix_with_zero_determinant() {
+        // This matrix should have a zero determinant since it has two repeating columns.
         let matrix: Matrix4<f64> = Matrix4::new(
-            1_f64,  2_f64,  3_f64,  4_f64, 5_f64,  6_f64,  7_f64,  8_f64,
-            5_f64,  6_f64,  7_f64,  8_f64, 9_f64, 10_f64, 11_f64, 12_f64
+            1_f64,  2_f64,  3_f64,  4_f64, 
+            5_f64,  6_f64,  7_f64,  8_f64,
+            5_f64,  6_f64,  7_f64,  8_f64, 
+            9_f64,  10_f64, 11_f64, 12_f64
         );
         
         assert_eq!(matrix.determinant(), 0.0);
