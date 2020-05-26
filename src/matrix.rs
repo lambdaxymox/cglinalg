@@ -2860,6 +2860,89 @@ impl<'a, 'b, S> Lerp<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
     }
 }
 
+impl<S> approx::AbsDiffEq for Matrix4<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.c0r0, &other.c0r0, epsilon) && 
+        S::abs_diff_eq(&self.c0r1, &other.c0r1, epsilon) &&
+        S::abs_diff_eq(&self.c0r2, &other.c0r2, epsilon) &&
+        S::abs_diff_eq(&self.c0r3, &other.c0r3, epsilon) && 
+        S::abs_diff_eq(&self.c1r0, &other.c1r0, epsilon) && 
+        S::abs_diff_eq(&self.c1r1, &other.c1r1, epsilon) &&
+        S::abs_diff_eq(&self.c1r2, &other.c1r2, epsilon) &&
+        S::abs_diff_eq(&self.c1r3, &other.c1r3, epsilon) && 
+        S::abs_diff_eq(&self.c2r0, &other.c2r0, epsilon) && 
+        S::abs_diff_eq(&self.c2r1, &other.c2r1, epsilon) &&
+        S::abs_diff_eq(&self.c2r2, &other.c2r2, epsilon) &&
+        S::abs_diff_eq(&self.c2r3, &other.c2r3, epsilon) && 
+        S::abs_diff_eq(&self.c3r0, &other.c3r0, epsilon) && 
+        S::abs_diff_eq(&self.c3r1, &other.c3r1, epsilon) &&
+        S::abs_diff_eq(&self.c3r2, &other.c3r2, epsilon) &&
+        S::abs_diff_eq(&self.c3r3, &other.c3r3, epsilon) 
+    }
+}
+
+impl<S> approx::RelativeEq for Matrix4<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.c0r0, &other.c0r0, epsilon, max_relative) &&
+        S::relative_eq(&self.c0r1, &other.c0r1, epsilon, max_relative) &&
+        S::relative_eq(&self.c0r2, &other.c0r2, epsilon, max_relative) &&
+        S::relative_eq(&self.c0r3, &other.c0r3, epsilon, max_relative) &&
+        S::relative_eq(&self.c1r0, &other.c1r0, epsilon, max_relative) &&
+        S::relative_eq(&self.c1r1, &other.c1r1, epsilon, max_relative) &&
+        S::relative_eq(&self.c1r2, &other.c1r2, epsilon, max_relative) &&
+        S::relative_eq(&self.c1r3, &other.c1r3, epsilon, max_relative) &&
+        S::relative_eq(&self.c2r0, &other.c2r0, epsilon, max_relative) &&
+        S::relative_eq(&self.c2r1, &other.c2r1, epsilon, max_relative) &&
+        S::relative_eq(&self.c2r2, &other.c2r2, epsilon, max_relative) &&
+        S::relative_eq(&self.c2r3, &other.c2r3, epsilon, max_relative) &&
+        S::relative_eq(&self.c3r0, &other.c3r0, epsilon, max_relative) &&
+        S::relative_eq(&self.c3r1, &other.c3r1, epsilon, max_relative) &&
+        S::relative_eq(&self.c3r2, &other.c3r2, epsilon, max_relative) &&
+        S::relative_eq(&self.c3r3, &other.c3r3, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Matrix4<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.c0r0, &other.c0r0, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c0r1, &other.c0r1, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c0r2, &other.c0r2, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c0r3, &other.c0r3, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c1r0, &other.c1r0, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c1r1, &other.c1r1, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c1r2, &other.c1r2, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c1r3, &other.c1r3, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c2r0, &other.c2r0, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c2r1, &other.c2r1, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c2r2, &other.c2r2, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c2r3, &other.c2r3, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c3r0, &other.c3r0, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c3r1, &other.c3r1, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c3r2, &other.c3r2, epsilon, max_ulps) &&
+        S::ulps_eq(&self.c3r3, &other.c3r3, epsilon, max_ulps)
+    }
+}
+
 
 #[cfg(test)]
 mod matrix2_tests {
@@ -3357,6 +3440,7 @@ mod matrix4_tests {
     use vector::{Vector3, Vector4};
     use super::{Matrix4};
     use structure::{One, Zero, Matrix};
+    use approx::relative_eq;
 
 
     struct TestCase {
@@ -3617,7 +3701,7 @@ mod matrix4_tests {
 
     #[test]
     fn test_matrix_times_inverse_is_identity() {
-        let matrix = Matrix4::new(
+        let matrix: Matrix4<f64> = Matrix4::new(
             36.84,   427.46894, 8827.1983, 89.5049494, 
             7.04217, 61.891390, 56.31,     89.0, 
             72.0,    936.5,     413.80,    50.311160,  
@@ -3626,12 +3710,12 @@ mod matrix4_tests {
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4::one();
 
-        assert_eq!(matrix * matrix_inv, one);
+        assert!(relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7));
     }
 
     #[test]
     fn test_inverse_times_matrix_is_identity() {
-        let matrix = Matrix4::new(
+        let matrix: Matrix4<f64> = Matrix4::new(
             36.84,   427.46894, 8827.1983, 89.5049494, 
             7.04217, 61.891390, 56.31,     89.0, 
             72.0,    936.5,     413.80,    50.311160,  
@@ -3640,6 +3724,6 @@ mod matrix4_tests {
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4::one();
 
-        assert_eq!(matrix_inv * matrix, one);        
+        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));        
     }
 }
