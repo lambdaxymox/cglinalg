@@ -1782,7 +1782,7 @@ impl<S> Matrix4<S> where S: Scalar {
                       - self.c0r1 * self.c2r2 * self.c3r3 - self.c2r1 * self.c3r2 * self.c0r3 - self.c3r1 * self.c0r2 * self.c2r3;
             let _c1r1 = self.c0r0 * self.c2r2 * self.c3r3 + self.c2r0 * self.c3r2 * self.c0r3 + self.c3r0 * self.c0r2 * self.c2r3
                       - self.c3r0 * self.c2r2 * self.c0r3 - self.c2r0 * self.c0r2 * self.c3r3 - self.c0r0 * self.c3r2 * self.c2r3;
-            let _c2r1 = self.c3r0 * self.c2r1 * self.c0r3 + self.c2r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c3r1 * self.c2r2
+            let _c2r1 = self.c3r0 * self.c2r1 * self.c0r3 + self.c2r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c3r1 * self.c2r3
                       - self.c0r0 * self.c2r1 * self.c3r3 - self.c2r0 * self.c3r1 * self.c0r3 - self.c3r0 * self.c0r1 * self.c2r3;
             let _c3r1 = self.c0r0 * self.c2r1 * self.c3r2 + self.c2r0 * self.c3r1 * self.c0r2 + self.c3r0 * self.c0r1 * self.c2r2
                       - self.c3r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c0r1 * self.c3r2 - self.c0r0 * self.c3r1 * self.c2r2;
@@ -1803,11 +1803,27 @@ impl<S> Matrix4<S> where S: Scalar {
             let _c3r3 = self.c0r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c2r1 * self.c0r2 + self.c2r0 * self.c0r1 * self.c1r2
                       - self.c2r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c2r1 * self.c1r2; 
             
-            let c0r0 = det_inv * _c0r0; let c0r1 = det_inv * _c0r1; let c0r2 = det_inv * _c0r2; let c0r3 = det_inv * _c0r3;
-            let c1r0 = det_inv * _c1r0; let c1r1 = det_inv * _c1r1; let c1r2 = det_inv * _c1r2; let c1r3 = det_inv * _c1r3;
-            let c2r0 = det_inv * _c2r0; let c2r1 = det_inv * _c2r1; let c2r2 = det_inv * _c2r2; let c2r3 = det_inv * _c2r3;
-            let c3r0 = det_inv * _c3r0; let c3r1 = det_inv * _c3r1; let c3r2 = det_inv * _c3r2; let c3r3 = det_inv * _c3r3;
+            let c0r0 = det_inv * _c0r0; 
+            let c0r1 = det_inv * _c0r1; 
+            let c0r2 = det_inv * _c0r2; 
+            let c0r3 = det_inv * _c0r3;
 
+            let c1r0 = det_inv * _c1r0; 
+            let c1r1 = det_inv * _c1r1; 
+            let c1r2 = det_inv * _c1r2; 
+            let c1r3 = det_inv * _c1r3;
+
+            let c2r0 = det_inv * _c2r0; 
+            let c2r1 = det_inv * _c2r1; 
+            let c2r2 = det_inv * _c2r2; 
+            let c2r3 = det_inv * _c2r3;
+
+            let c3r0 = det_inv * _c3r0; 
+            let c3r1 = det_inv * _c3r1; 
+            let c3r2 = det_inv * _c3r2; 
+            let c3r3 = det_inv * _c3r3;
+
+            eprintln!("c3r0 = {:?}", c3r0);
             Some(Matrix4::new(
                 c0r0, c0r1, c0r2, c0r3,
                 c1r0, c1r1, c1r2, c1r3,
@@ -4036,6 +4052,24 @@ mod matrix4_tests {
     }
 
     #[test]
+    fn test_scalar_multiplication() {
+        let result: Matrix4<f64> = (1_f64 / 32_f64) * Matrix4::new(
+            7_f64, -1_f64, -1_f64, -1_f64,
+           -1_f64,  7_f64, -1_f64, -1_f64,
+           -1_f64, -1_f64,  7_f64, -1_f64,
+           -1_f64, -1_f64, -1_f64,  7_f64
+       );
+       let expected: Matrix4<f64> = Matrix4::new(
+        (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64,
+        (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64,
+        (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64,
+        (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64
+       );
+
+       assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_matrix_inverse() {
         let matrix: Matrix4<f64> = Matrix4::new(
             5_f64, 1_f64, 1_f64, 1_f64, 
@@ -4116,10 +4150,17 @@ mod matrix4_tests {
             72.0,   936.5,   413.80,  50.311,  
             37.698, 311.8,   60.81,   73.839
         );
+        let expected: Matrix4<f64> = Matrix4::new(
+            0.01146093272878252,  -0.06212100841992658, -0.02771783718075694,    0.07986947998777854,
+           -0.00148039611514755,   0.004464130960444646, 0.003417891441120325,  -0.005915083057511776,
+            0.001453087396607042, -0.0009538600348427,  -0.0005129477357421059, -0.0002621470728476185,
+           -0.0007967195911958656, 0.01365031989418242,  0.0001408581712825875, -0.002040325515611523
+        );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4::one();
         let epsilon = 1e-7;
 
+        //assert_eq!(matrix_inv, expected);
         assert!(relative_eq!(matrix * matrix_inv, one, epsilon = epsilon),
             "\nmatrix = {:?}\nmatrix_inv = {:?}\nmmatrix * matrix_inv = {:?}\nepsilon = {:?}\n",
             matrix, matrix_inv, matrix * matrix_inv, epsilon
@@ -4135,9 +4176,16 @@ mod matrix4_tests {
             37.698,  311.8,   60.81,    73.839
         );
         let matrix_inv = matrix.inverse().unwrap();
+        let expected: Matrix4<f64> = Matrix4::new(
+             0.01146093272878252,  -0.06212100841992658, -0.02771783718075694,    0.07986947998777854,
+            -0.00148039611514755,   0.004464130960444646, 0.003417891441120325,  -0.005915083057511776,
+             0.001453087396607042, -0.0009538600348427,  -0.0005129477357421059, -0.0002621470728476185,
+            -0.0007967195911958656, 0.01365031989418242,  0.0001408581712825875, -0.002040325515611523
+        );
         let one = Matrix4::one();
         let epsilon = 1e-7;
         
+        //assert_eq!(matrix_inv, expected);
         assert!(relative_eq!(matrix_inv * matrix, one, epsilon = epsilon),
             "\nmatrix = {:?}\nmatrix_inv = {:?}\nmatrix_inv * matrix = {:?}\nepsilon = {:?}\n",
             matrix, matrix_inv, matrix_inv * matrix, epsilon
