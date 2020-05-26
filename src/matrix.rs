@@ -852,9 +852,9 @@ impl<S> From<Matrix2<S>> for Matrix3<S> where S: Scalar {
     #[inline]
     fn from(m: Matrix2<S>) -> Matrix3<S> {
         Matrix3::new(
-            m.c0r0, m.c0r1, S::zero(),
-            m.c1r0, m.c1r1, S::zero(),
-            S::zero(),    S::zero(), S::one()
+            m.c0r0,    m.c0r1,    S::zero(),
+            m.c1r0,    m.c1r1,    S::zero(),
+            S::zero(), S::zero(), S::one()
         )
     }
 }
@@ -863,9 +863,9 @@ impl<S> From<&Matrix2<S>> for Matrix3<S> where S: Scalar {
     #[inline]
     fn from(m: &Matrix2<S>) -> Matrix3<S> {
         Matrix3::new(
-            m.c0r0, m.c0r1, S::zero(),
-            m.c1r0, m.c1r1, S::zero(),
-            S::zero(),    S::zero(), S::one()
+            m.c0r0,    m.c0r1,    S::zero(),
+            m.c1r0,    m.c1r1,    S::zero(),
+            S::zero(), S::zero(), S::one()
         )
     }
 }
@@ -1955,7 +1955,7 @@ impl<S> From<&Matrix3<S>> for Matrix4<S> where S: Scalar {
             m.c0r0, m.c0r1, m.c0r2, zero,
             m.c1r0, m.c1r1, m.c1r2, zero,
             m.c2r0, m.c2r1, m.c2r2, zero,
-               zero,    zero,    zero, one
+          zero, zero,    zero, one
         )
     }
 }
@@ -3374,9 +3374,21 @@ mod matrix3_tests {
         Test {
             tests: vec![
                 TestCase {
-                    a_mat: Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36),
-                    b_mat: Matrix3::new(36.84, 7.04217, 5.74, 427.46894, 61.89139, 96.27, 152.66, 86.333, 26.71),
-                    expected: Matrix3::new(3579.6579, 15933.496, 1856.4281, 43487.7660, 184776.9752, 22802.0289, 16410.8178, 67409.1000, 7892.1646),
+                    a_mat: Matrix3::new(
+                        80.0,   426.1,   43.393, 
+                        23.43,  23.5724, 1.27, 
+                        81.439, 12.19,   43.36
+                    ),
+                    b_mat: Matrix3::new(
+                        36.84,     7.04217,  5.74, 
+                        427.46894, 61.89139, 96.27, 
+                        152.66,    86.333,   26.71
+                    ),
+                    expected: Matrix3::new(
+                        3579.6579,  15933.496,   1856.4281, 
+                        43487.7660, 184776.9752, 22802.0289, 
+                        16410.8178, 67409.1000,  7892.1646
+                    ),
                 },
                 TestCase {
                     a_mat: Matrix3::one(),
@@ -3389,9 +3401,21 @@ mod matrix3_tests {
                     expected: Matrix3::zero(),
                 },
                 TestCase {
-                    a_mat: Matrix3::new(68.32, 0.0, 0.0, 0.0, 37.397, 0.0, 0.0, 0.0, 43.393),
-                    b_mat: Matrix3::new(57.72, 0.0, 0.0, 0.0, 9.5433127, 0.0, 0.0, 0.0, 12.19),
-                    expected: Matrix3::new(3943.4304, 0.0, 0.0, 0.0, 356.89127, 0.0, 0.0, 0.0, 528.96067),
+                    a_mat: Matrix3::new(
+                        68.32, 0.0,    0.0, 
+                        0.0,   37.397, 0.0, 
+                        0.0,   0.0,    43.393
+                    ),
+                    b_mat: Matrix3::new(
+                        57.72, 0.0,       0.0, 
+                        0.0,   9.5433127, 0.0, 
+                        0.0,   0.0,       12.19
+                    ),
+                    expected: Matrix3::new(
+                        3943.4304, 0.0,       0.0, 
+                        0.0,       356.89127, 0.0, 
+                        0.0,       0.0,       528.96067
+                    ),
                 },
             ]
         }
@@ -3477,7 +3501,11 @@ mod matrix3_tests {
         let c0 = Vector3::new(1.0, 2.0, 3.0);
         let c1 = Vector3::new(4.0, 5.0, 6.0);
         let c2 = Vector3::new(7.0, 8.0, 9.0);
-        let expected = Matrix3::new(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+        let expected = Matrix3::new(
+            1.0, 2.0, 3.0, 
+            4.0, 5.0, 6.0, 
+            7.0, 8.0, 9.0
+        );
         let result = Matrix3::from_cols(c0, c1, c2);
 
         assert_eq!(result, expected);
@@ -3487,7 +3515,11 @@ mod matrix3_tests {
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169;
         let id = Matrix3::one();
-        let expected = Matrix3::new(c, 0.0, 0.0, 0.0, c, 0.0, 0.0, 0.0, c);
+        let expected = Matrix3::new(
+            c,   0.0, 0.0, 
+            0.0, c,   0.0, 
+            0.0, 0.0, c
+        );
 
         assert_eq!(id * c, expected);
     }
@@ -3496,7 +3528,11 @@ mod matrix3_tests {
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169;
         let id = Matrix3::one();
-        let expected = Matrix3::new(1.0/c, 0.0, 0.0, 0.0, 1.0/c, 0.0, 0.0, 0.0, 1.0/c);
+        let expected = Matrix3::new(
+            1.0/c, 0.0,   0.0, 
+            0.0,   1.0/c, 0.0, 
+            0.0,   0.0,   1.0/c
+        );
 
         assert_eq!(id / c, expected);
     }
@@ -3504,7 +3540,11 @@ mod matrix3_tests {
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero = Matrix3::zero();
-        let matrix = Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36);
+        let matrix = Matrix3::new(
+            80.0,   426.1,   43.393, 
+            23.43,  23.5724, 1.27, 
+            81.439, 12.19,   43.36
+        );
 
         assert_eq!(matrix + zero, matrix);
     }
@@ -3512,14 +3552,22 @@ mod matrix3_tests {
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero = Matrix3::zero();
-        let matrix = Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36);
+        let matrix = Matrix3::new(
+            80.0,   426.1,   43.393, 
+            23.43,  23.5724, 1.27, 
+            81.439, 12.19,   43.36
+        );
 
         assert_eq!(zero + matrix, matrix);
     }
 
     #[test]
     fn test_matrix_with_zero_determinant() {
-        let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 4f32, 5f32, 6f32);
+        let matrix = Matrix3::new(
+            1f32, 2f32, 3f32, 
+            4f32, 5f32, 6f32, 
+            4f32, 5f32, 6f32
+        );
         
         assert_eq!(matrix.determinant(), 0.0);
     }
@@ -3579,28 +3627,44 @@ mod matrix3_tests {
 
     #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
-        let matrix = Matrix3::new(1f32, 2f32, 3f32, 0f32, 4f32, 5f32, 0f32, 0f32, 6f32);
+        let matrix = Matrix3::new(
+            1f32, 2f32, 3f32, 
+            0f32, 4f32, 5f32, 
+            0f32, 0f32, 6f32
+        );
         
         assert!(matrix.is_invertible());
     }
 
     #[test]
     fn test_matrix_with_zero_determinant_is_not_invertible() {
-        let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 4f32, 5f32, 6f32);
+        let matrix = Matrix3::new(
+            1f32, 2f32, 3f32, 
+            4f32, 5f32, 6f32, 
+            4f32, 5f32, 6f32
+        );
         
         assert!(!matrix.is_invertible());
     }
 
     #[test]
     fn test_noninvertible_matrix_returns_none() {
-        let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 4f32, 5f32, 6f32);
+        let matrix = Matrix3::new(
+            1f32, 2f32, 3f32, 
+            4f32, 5f32, 6f32, 
+            4f32, 5f32, 6f32
+        );
         
         assert!(matrix.inverse().is_none());
     }
 
     #[test]
     fn test_matrix_times_inverse_is_identity() {
-        let matrix = Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36);
+        let matrix = Matrix3::new(
+            80.0,   426.1,   43.393, 
+            23.43,  23.5724, 1.27, 
+            81.439, 12.19,   43.36
+        );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix3::one();
 
