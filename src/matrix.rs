@@ -3440,7 +3440,7 @@ mod matrix4_tests {
     use vector::{Vector3, Vector4};
     use super::{Matrix4};
     use structure::{One, Zero, Matrix};
-    use approx::relative_eq;
+    use approx::assert_relative_eq;
 
 
     struct TestCase {
@@ -3602,10 +3602,7 @@ mod matrix4_tests {
             let expected = test.expected;
             let epsilon = 1e-7;
 
-            assert!(relative_eq!(result, expected, epsilon = epsilon),
-                "\nresult = {:?}\nexpected = {:?}\nepsilon = {}\n",
-                result, expected, epsilon
-            );
+            assert_relative_eq!(result, expected, epsilon = epsilon);
         })
     }
 
@@ -3710,10 +3707,7 @@ mod matrix4_tests {
         let one = Matrix4::one();
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = epsilon),
-            "\nmatrix_inv = {}\nmatrix= {}\nmatrix_inv * matrix = {}\n epsilon = {}\n",
-            matrix_inv, matrix, matrix_inv * matrix, epsilon
-        );
+        assert_relative_eq!(matrix_inv * matrix, one, epsilon = epsilon);
     }
 
     #[test]
@@ -3727,10 +3721,31 @@ mod matrix4_tests {
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4::one();
         let epsilon = 1e-7;
+        
+        assert_relative_eq!(matrix_inv * matrix, one, epsilon = epsilon);        
+    }
 
-        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = epsilon),
-            "\nmatrix_inv = {}\nmatrix= {}\nmatrix_inv * matrix = {}\n epsilon = {}\n",
-            matrix_inv, matrix, matrix_inv * matrix, epsilon
-        );        
+    #[test]
+    fn test_matrix_elements_should_be_column_major_order() {
+        let matrix = Matrix4::new(
+            1, 2, 3, 4, 5, 6, 7, 8, 
+            9, 10, 11, 12, 13, 14, 15, 16
+        );
+        assert_eq!(matrix.c0r0, matrix[0][0]);
+        assert_eq!(matrix.c0r1, matrix[0][1]);
+        assert_eq!(matrix.c0r2, matrix[0][2]);
+        assert_eq!(matrix.c0r3, matrix[0][3]);
+        assert_eq!(matrix.c1r0, matrix[1][0]);
+        assert_eq!(matrix.c1r1, matrix[1][1]);
+        assert_eq!(matrix.c1r2, matrix[1][2]);
+        assert_eq!(matrix.c1r3, matrix[1][3]);
+        assert_eq!(matrix.c2r0, matrix[2][0]);
+        assert_eq!(matrix.c2r1, matrix[2][1]);
+        assert_eq!(matrix.c2r2, matrix[2][2]);
+        assert_eq!(matrix.c2r3, matrix[2][3]);
+        assert_eq!(matrix.c3r0, matrix[3][0]);
+        assert_eq!(matrix.c3r1, matrix[3][1]);
+        assert_eq!(matrix.c3r2, matrix[3][2]);
+        assert_eq!(matrix.c3r3, matrix[3][3]);
     }
 }
