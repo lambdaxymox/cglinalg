@@ -22,7 +22,7 @@ const ONE_DEG_IN_RAD: f32 = (2.0 * M_PI) / 360.0; // == 0.017444444
 
 
 /// The `Matrix2` type represents 2x2 matrices in column-major order.
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
 pub struct Matrix2<S> {
     /// Column 1 of the matrix.
@@ -661,7 +661,7 @@ impl<S> approx::UlpsEq for Matrix2<S> where S: ScalarFloat {
 
 
 /// The `Matrix3` type represents 3x3 matrices in column-major order.
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
 pub struct Matrix3<S> {
     /// Column 1 of the matrix.
@@ -1567,26 +1567,26 @@ impl<S> approx::UlpsEq for Matrix3<S> where S: ScalarFloat {
     }
 }
 
-/*
+
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
-#[derive(Copy, Clone, Debug)]
-pub struct Matrix4 {
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+pub struct Matrix4<S> {
     /// Column 1 of the matrix.
-    pub c0r0: f32, pub c0r1: f32, pub c0r2: f32, pub c0r3: f32,
+    pub c0r0: S, pub c0r1: S, pub c0r2: S, pub c0r3: S,
     /// Column 2 of the matrix.
-    pub c1r0: f32, pub c1r1: f32, pub c1r2: f32, pub c1r3: f32,
+    pub c1r0: S, pub c1r1: S, pub c1r2: S, pub c1r3: S,
     /// Column 3 of the matrix.
-    pub c2r0: f32, pub c2r1: f32, pub c2r2: f32, pub c2r3: f32,
+    pub c2r0: S, pub c2r1: S, pub c2r2: S, pub c2r3: S,
     /// Column 4 of the matrix.
-    pub c3r0: f32, pub c3r1: f32, pub c3r2: f32, pub c3r3: f32,
+    pub c3r0: S, pub c3r1: S, pub c3r2: S, pub c3r3: S,
 }
 
-impl Matrix4 {
+impl<S> Matrix4<S> {
     pub fn new(
-        c0r0: f32, c0r1: f32, c0r2: f32, c0r3: f32,
-        c1r0: f32, c1r1: f32, c1r2: f32, c1r3: f32,
-        c2r0: f32, c2r1: f32, c2r2: f32, c2r3: f32,
-        c3r0: f32, c3r1: f32, c3r2: f32, c3r3: f32) -> Matrix4 {
+        c0r0: S, c0r1: S, c0r2: S, c0r3: S,
+        c1r0: S, c1r1: S, c1r2: S, c1r3: S,
+        c2r0: S, c2r1: S, c2r2: S, c2r3: S,
+        c3r0: S, c3r1: S, c3r2: S, c3r3: S) -> Matrix4<S> {
 
         Matrix4 {
             c0r0: c0r0, c0r1: c0r1, c0r2: c0r2, c0r3: c0r3,
@@ -1597,7 +1597,7 @@ impl Matrix4 {
     }
 
     /// Construct a 4x4 matrix from column vectors.
-    pub fn from_cols(c0: Vector4, c1: Vector4, c2: Vector4, c3: Vector4) -> Matrix4 {
+    pub fn from_cols(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4<S> {
         Matrix4 {
             c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, c0r3: c0.w,
             c1r0: c1.x, c1r1: c1.y, c1r2: c1.z, c1r3: c1.w,
@@ -1605,20 +1605,24 @@ impl Matrix4 {
             c3r0: c3.x, c3r1: c3.y, c3r2: c3.z, c3r3: c3.w,
         }
     }
+}
 
+impl<S> Matrix4<S> where S: Scalar {
     /// Create a affine translation matrix.
     #[inline]
-    pub fn from_translation(distance: Vector3) -> Matrix4 {
+    pub fn from_translation(distance: Vector3<S>) -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
         Matrix4::new(
-            1.0,        0.0,        0.0,        0.0,
-            0.0,        1.0,        0.0,        0.0,
-            0.0,        0.0,        1.0,        0.0,
-            distance.x, distance.y, distance.z, 1.0
+            one,        zero,       zero,       zero,
+            zero,       one,        zero,       zero,
+            zero,       zero,       one,        zero,
+            distance.x, distance.y, distance.z, one
         )
     }
-
+    /*
     /// Create a rotation matrix around the x axis by an angle in `degrees` degrees.
-    pub fn from_rotation_x(degrees: f32) -> Matrix4 {
+    pub fn from_rotation_x(degrees: S) -> Matrix4<S> {
         // Convert to radians.
         let radians = degrees * ONE_DEG_IN_RAD;
         let mut rot_mat = Matrix4::one();
@@ -1629,9 +1633,9 @@ impl Matrix4 {
     
         rot_mat
     }
-
+    
     /// Create a rotation matrix around the y axis by an angle in `degrees` degrees.
-    pub fn from_rotation_y(degrees: f32) -> Matrix4 {
+    pub fn from_rotation_y(degrees: S) -> Matrix4<S> {
         // Convert to radians.
         let radians = degrees * ONE_DEG_IN_RAD;
         let mut rot_mat = Matrix4::one();
@@ -1644,7 +1648,7 @@ impl Matrix4 {
     }
 
     /// Create a rotation matrix around the z axis by an angle in `degrees` degrees.
-    pub fn from_rotation_z(degrees: f32) -> Matrix4 {
+    pub fn from_rotation_z(degrees: S) -> Matrix4<S> {
         // Convert to radians.
         let radians = degrees * ONE_DEG_IN_RAD;
         let mut rot_mat = Matrix4::one();
@@ -1655,26 +1659,28 @@ impl Matrix4 {
     
         rot_mat
     }
-
+    */
     /// Scale a matrix uniformly.
     #[inline]
-    pub fn from_scale(value: f32) -> Matrix4 {
+    pub fn from_scale(value: S) -> Matrix4<S> {
         Matrix4::from_nonuniform_scale(value, value, value)
     }
 
     /// Scale a matrix in a nonuniform fashion.
     #[inline]
-    pub fn from_nonuniform_scale(sx: f32, sy: f32, sz: f32) -> Matrix4 {
+    pub fn from_nonuniform_scale(sx: S, sy: S, sz: S) -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
         Matrix4::new(
-            sx,  0.0, 0.0, 0.0,
-            0.0, sy,  0.0, 0.0,
-            0.0, 0.0, sz,  0.0,
-            0.0, 0.0, 0.0, 1.0
+            sx,   zero, zero, zero,
+            zero, sy,   zero, zero,
+            zero, zero, sz,   zero,
+            zero, zero, zero, one
         )
     }
 
     /// Computes the determinant of a 4x4 matrix.
-    pub fn determinant(&self) -> f32 {
+    pub fn determinant(&self) -> S {
         self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
         self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
         self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
@@ -1702,17 +1708,17 @@ impl Matrix4 {
     }
 
     pub fn is_invertible(&self) -> bool {
-        self.determinant() != 0.0
+        !self.determinant().is_zero()
     }
 
     /// Compute the inverse of a 4x4 matrix.
-    pub fn inverse(&self) -> Option<Matrix4> {
+    pub fn inverse(&self) -> Option<Matrix4<S>> {
         let det = self.determinant();
         // A matrix with zero determinant has no inverse.
-        if det == 0.0 {
+        if det == S::zero() {
             None
         } else {
-            let inv_det = 1.0 / det;
+            let inv_det = S::one() / det;
 
             Some(Matrix4::new(
                 inv_det * ( self.c2r1 * self.c3r2 * self.c1r3 - self.c3r1 * self.c2r2 * self.c1r3 +
@@ -1767,12 +1773,17 @@ impl Matrix4 {
     }
 }
 
-impl Array for Matrix4 {
-    type Element = f32;
+impl<S> Storage for Matrix4<S> where S: Scalar {
+    type Element = S;
 
     #[inline]
     fn len() -> usize {
         16
+    }
+
+    #[inline]
+    fn shape() -> (usize, usize) {
+        (4, 4)
     }
 
     #[inline]
@@ -1784,20 +1795,26 @@ impl Array for Matrix4 {
     }
 
     #[inline]
-    fn as_ptr(&self) -> *const f32 {
+    fn as_ptr(&self) -> *const S {
         &self.c0r0
     }
 
     #[inline]
-    fn as_mut_ptr(&mut self) -> *mut f32 {
+    fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.c0r0
+    }
+
+    #[inline]
+    fn as_slice(&self) -> &[Self::Element] {
+        <Self as AsRef<[Self::Element; 16]>>::as_ref(self)
     }
 }
 
-impl Matrix for Matrix4 {
-    type Row = Vector4;
-    type Column = Vector4;
-    type Transpose = Matrix4;
+impl<S> Matrix for Matrix4<S> where S: Scalar {
+    type Element = S;
+    type Row = Vector4<S>;
+    type Column = Vector4<S>;
+    type Transpose = Matrix4<S>;
 
     fn row(&self, r: usize) -> Self::Row {
         Vector4::new(self[0][r], self[1][r], self[2][r], self[3][r])
@@ -1849,83 +1866,101 @@ impl Matrix for Matrix4 {
     }
 }
 
-impl From<[[f32; 4]; 4]> for Matrix4 {
+impl<S> From<[[S; 4]; 4]> for Matrix4<S> where S: Scalar {
     #[inline]
-    fn from(m: [[f32; 4]; 4]) -> Matrix4 {
-        unsafe { mem::transmute(m) }
+    fn from(m: [[S; 4]; 4]) -> Matrix4<S> {
+        Matrix4::new(
+            m[0][0], m[0][1], m[0][2], m[0][3], 
+            m[1][0], m[1][1], m[1][2], m[1][3],
+            m[2][0], m[2][1], m[2][2], m[2][3], 
+            m[3][0], m[3][1], m[3][2], m[3][3]
+        )
     }
 }
 
-impl<'a> From<&'a [[f32; 4]; 4]> for &'a Matrix4 {
+impl<'a, S> From<&'a [[S; 4]; 4]> for &'a Matrix4<S> where S: Scalar {
     #[inline]
-    fn from(m: &'a [[f32; 4]; 4]) -> &'a Matrix4 {
+    fn from(m: &'a [[S; 4]; 4]) -> &'a Matrix4<S> {
         unsafe { mem::transmute(m) }
     }    
 }
 
-impl From<[f32; 16]> for Matrix4 {
+impl<S> From<[S; 16]> for Matrix4<S> where S: Scalar {
     #[inline]
-    fn from(m: [f32; 16]) -> Matrix4 {
+    fn from(m: [S; 16]) -> Matrix4<S> {
+        Matrix4::new(
+            m[0], m[1], m[2], m[3], 
+            m[4], m[5], m[6], m[7],
+            m[8], m[9], m[10], m[11], 
+            m[12],m[13], m[14], m[15]
+        )
+    }
+}
+
+impl<'a, S> From<&'a [S; 16]> for &'a Matrix4<S> where S: Scalar {
+    #[inline]
+    fn from(m: &'a [S; 16]) -> &'a Matrix4<S> {
         unsafe { mem::transmute(m) }
     }
 }
 
-impl<'a> From<&'a [f32; 16]> for &'a Matrix4 {
+impl<S> From<Matrix2<S>> for Matrix4<S> where S: Scalar {
     #[inline]
-    fn from(m: &'a [f32; 16]) -> &'a Matrix4 {
-        unsafe { mem::transmute(m) }
-    }
-}
-
-impl From<Matrix2> for Matrix4 {
-    #[inline]
-    fn from(m: Matrix2) -> Matrix4 {
+    fn from(m: Matrix2<S>) -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1, 0.0, 0.0,
-            m.c1r0, m.c1r1, 0.0, 0.0,
-               0.0,    0.0, 1.0, 0.0,
-               0.0,    0.0, 0.0, 1.0
+            m.c0r0, m.c0r1, zero, zero,
+            m.c1r0, m.c1r1, zero, zero,
+                zero, zero,  one, zero,
+                zero, zero, zero, one
         )
     }
 }
 
-impl From<&Matrix2> for Matrix4 {
+impl<S> From<&Matrix2<S>> for Matrix4<S> where S: Scalar {
     #[inline]
-    fn from(m: &Matrix2) -> Matrix4 {
+    fn from(m: &Matrix2<S>) -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1, 0.0, 0.0,
-            m.c1r0, m.c1r1, 0.0, 0.0,
-               0.0,    0.0, 1.0, 0.0,
-               0.0,    0.0, 0.0, 1.0
+            m.c0r0, m.c0r1, zero, zero,
+            m.c1r0, m.c1r1, zero, zero,
+        zero,zero,  one, zero,
+        zero, zero, zero, one
         )
     }
 }
 
-impl From<Matrix3> for Matrix4 {
+impl<S> From<Matrix3<S>> for Matrix4<S> where S: Scalar {
     #[inline]
-    fn from(m: Matrix3) -> Matrix4 {
+    fn from(m: Matrix3<S>) -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1, m.c0r2, 0.0,
-            m.c1r0, m.c1r1, m.c1r2, 0.0,
-            m.c2r0, m.c2r1, m.c2r2, 0.0,
-               0.0,    0.0,    0.0, 1.0
+            m.c0r0, m.c0r1, m.c0r2, zero,
+            m.c1r0, m.c1r1, m.c1r2, zero,
+            m.c2r0, m.c2r1, m.c2r2, zero,
+               zero,    zero,    zero, one
         )
     }
 }
 
-impl From<&Matrix3> for Matrix4 {
+impl<S> From<&Matrix3<S>> for Matrix4<S> where S: Scalar {
     #[inline]
-    fn from(m: &Matrix3) -> Matrix4 {
+    fn from(m: &Matrix3<S>) -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1, m.c0r2, 0.0,
-            m.c1r0, m.c1r1, m.c1r2, 0.0,
-            m.c2r0, m.c2r1, m.c2r2, 0.0,
-               0.0,    0.0,    0.0, 1.0
+            m.c0r0, m.c0r1, m.c0r2, zero,
+            m.c1r0, m.c1r1, m.c1r2, zero,
+            m.c2r0, m.c2r1, m.c2r2, zero,
+               zero,    zero,    zero, one
         )
     }
 }
 
-impl fmt::Display for Matrix4 {
+impl<S> fmt::Display for Matrix4<S> where S: fmt::Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, 
             "\n[{:.2}][{:.2}][{:.2}][{:.2}]\n[{:.2}][{:.2}][{:.2}][{:.2}]\n[{:.2}][{:.2}][{:.2}][{:.2}]\n[{:.2}][{:.2}][{:.2}][{:.2}]", 
@@ -1937,112 +1972,95 @@ impl fmt::Display for Matrix4 {
     }
 }
 
-impl AsRef<[f32; 16]> for Matrix4 {
-    fn as_ref(&self) -> &[f32; 16] {
+impl<S> AsRef<[S; 16]> for Matrix4<S> where S: Scalar {
+    fn as_ref(&self) -> &[S; 16] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsRef<[[f32; 4]; 4]> for Matrix4 {
-    fn as_ref(&self) -> &[[f32; 4]; 4] {
+impl<S> AsRef<[[S; 4]; 4]> for Matrix4<S> where S: Scalar {
+    fn as_ref(&self) -> &[[S; 4]; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsRef<[Vector4; 4]> for Matrix4 {
-    fn as_ref(&self) -> &[Vector4; 4] {
+impl<S> AsRef<[Vector4<S>; 4]> for Matrix4<S> where S: Scalar {
+    fn as_ref(&self) -> &[Vector4<S>; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsMut<[f32; 16]> for Matrix4 {
-    fn as_mut(&mut self) -> &mut [f32; 16] {
+impl<S> AsMut<[S; 16]> for Matrix4<S> where S: Scalar {
+    fn as_mut(&mut self) -> &mut [S; 16] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsMut<[[f32; 4]; 4]> for Matrix4 {
-    fn as_mut(&mut self) -> &mut [[f32; 4]; 4] {
+impl<S> AsMut<[[S; 4]; 4]> for Matrix4<S> where S: Scalar {
+    fn as_mut(&mut self) -> &mut [[S; 4]; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl AsMut<[Vector4; 4]> for Matrix4 {
-    fn as_mut(&mut self) -> &mut [Vector4; 4] {
+impl<S> AsMut<[Vector4<S>; 4]> for Matrix4<S> where S: Scalar {
+    fn as_mut(&mut self) -> &mut [Vector4<S>; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl ops::Index<usize> for Matrix4 {
-    type Output = Vector4;
+impl<S> ops::Index<usize> for Matrix4<S> where S: Scalar {
+    type Output = Vector4<S>;
 
     #[inline]
     fn index(&self, index: usize) -> &Self::Output {
-        let v: &[Vector4; 4] = self.as_ref();
+        let v: &[Vector4<S>; 4] = self.as_ref();
         &v[index]
     }
 }
 
-impl ops::IndexMut<usize> for Matrix4 {
+impl<S> ops::IndexMut<usize> for Matrix4<S> where S: Scalar {
     #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut Vector4 {
-        let v: &mut [Vector4; 4] = self.as_mut();
+    fn index_mut(&mut self, index: usize) -> &mut Vector4<S> {
+        let v: &mut [Vector4<S>; 4] = self.as_mut();
         &mut v[index]
     }
 }
 
-impl PartialEq for Matrix4 {
-    fn eq(&self, other: &Matrix4) -> bool {
-        f32::abs(self.c0r0 - other.c0r0) < EPSILON &&
-        f32::abs(self.c0r1 - other.c0r1) < EPSILON &&
-        f32::abs(self.c0r2 - other.c0r2) < EPSILON &&
-        f32::abs(self.c0r3 - other.c0r3) < EPSILON &&
-        f32::abs(self.c1r0 - other.c1r0) < EPSILON &&
-        f32::abs(self.c1r1 - other.c1r1) < EPSILON &&
-        f32::abs(self.c1r2 - other.c1r2) < EPSILON &&
-        f32::abs(self.c1r3 - other.c1r3) < EPSILON &&
-        f32::abs(self.c2r0 - other.c2r0) < EPSILON &&
-        f32::abs(self.c2r1 - other.c2r1) < EPSILON &&
-        f32::abs(self.c2r2 - other.c2r2) < EPSILON &&
-        f32::abs(self.c2r3 - other.c2r3) < EPSILON &&
-        f32::abs(self.c3r0 - other.c3r0) < EPSILON &&
-        f32::abs(self.c3r1 - other.c3r1) < EPSILON &&
-        f32::abs(self.c3r2 - other.c3r2) < EPSILON &&
-        f32::abs(self.c3r3 - other.c3r3) < EPSILON
-    }
-}
-
-impl Zero for Matrix4 {
-    fn zero() -> Matrix4 {
+impl<S> Zero for Matrix4<S> where S: Scalar {
+    fn zero() -> Matrix4<S> {
+        let zero = S::zero();
         Matrix4::new(
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+            zero, zero, zero, zero, zero, zero, zero, zero, 
+            zero, zero, zero, zero, zero, zero, zero, zero
         )
     }
 
     fn is_zero(&self) -> bool {
-        self.c0r0 == 0.0 && self.c0r1 == 0.0 && self.c0r2 == 0.0 && self.c0r3 == 0.0 &&
-        self.c1r0 == 0.0 && self.c1r1 == 0.0 && self.c1r2 == 0.0 && self.c1r3 == 0.0 &&
-        self.c2r0 == 0.0 && self.c2r1 == 0.0 && self.c2r2 == 0.0 && self.c2r3 == 0.0 &&
-        self.c3r0 == 0.0 && self.c3r1 == 0.0 && self.c3r2 == 0.0 && self.c3r3 == 0.0
+        let zero = S::zero();
+        self.c0r0 == zero && self.c0r1 == zero && self.c0r2 == zero && self.c0r3 == zero &&
+        self.c1r0 == zero && self.c1r1 == zero && self.c1r2 == zero && self.c1r3 == zero &&
+        self.c2r0 == zero && self.c2r1 == zero && self.c2r2 == zero && self.c2r3 == zero &&
+        self.c3r0 == zero && self.c3r1 == zero && self.c3r2 == zero && self.c3r3 == zero
     }
 }
 
-impl One for Matrix4 {
-    fn one() -> Matrix4 {
+impl<S> One for Matrix4<S> where S: Scalar {
+    fn one() -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
         Matrix4::new(
-            1.0, 0.0, 0.0, 0.0, 
-            0.0, 1.0, 0.0, 0.0, 
-            0.0, 0.0, 1.0, 0.0, 
-            0.0, 0.0, 0.0, 1.0
+             one, zero, zero, zero, 
+            zero,  one, zero, zero, 
+            zero, zero,  one, zero, 
+            zero, zero, zero,  one
         )
     }
 }
 
-impl ops::Add<Matrix4> for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Add<Matrix4<S>> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn add(self, other: Matrix4) -> Self::Output {
+    fn add(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
         let c0r2 = self.c0r2 + other.c0r2;
@@ -2070,10 +2088,10 @@ impl ops::Add<Matrix4> for Matrix4 {
     }
 }
 
-impl ops::Add<&Matrix4> for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Add<&Matrix4<S>> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn add(self, other: &Matrix4) -> Self::Output {
+    fn add(self, other: &Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
         let c0r2 = self.c0r2 + other.c0r2;
@@ -2101,10 +2119,10 @@ impl ops::Add<&Matrix4> for Matrix4 {
     }
 }
 
-impl ops::Add<Matrix4> for &Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Add<Matrix4<S>> for &Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn add(self, other: Matrix4) -> Self::Output {
+    fn add(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
         let c0r2 = self.c0r2 + other.c0r2;
@@ -2132,10 +2150,10 @@ impl ops::Add<Matrix4> for &Matrix4 {
     }
 }
 
-impl<'a, 'b> ops::Add<&'a Matrix4> for &'b Matrix4 {
-    type Output = Matrix4;
+impl<'a, 'b, S> ops::Add<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn add(self, other: &'a Matrix4) -> Self::Output {
+    fn add(self, other: &'a Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
         let c0r2 = self.c0r2 + other.c0r2;
@@ -2163,10 +2181,10 @@ impl<'a, 'b> ops::Add<&'a Matrix4> for &'b Matrix4 {
     }
 }
 
-impl ops::Sub<Matrix4> for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Sub<Matrix4<S>> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn sub(self, other: Matrix4) -> Self::Output {
+    fn sub(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c0r2 = self.c0r2 - other.c0r2;
@@ -2194,10 +2212,10 @@ impl ops::Sub<Matrix4> for Matrix4 {
     }
 }
 
-impl ops::Sub<&Matrix4> for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Sub<&Matrix4<S>> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn sub(self, other: &Matrix4) -> Self::Output {
+    fn sub(self, other: &Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c0r2 = self.c0r2 - other.c0r2;
@@ -2225,10 +2243,10 @@ impl ops::Sub<&Matrix4> for Matrix4 {
     }
 }
 
-impl ops::Sub<Matrix4> for &Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Sub<Matrix4<S>> for &Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn sub(self, other: Matrix4) -> Self::Output {
+    fn sub(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c0r2 = self.c0r2 - other.c0r2;
@@ -2256,10 +2274,10 @@ impl ops::Sub<Matrix4> for &Matrix4 {
     }
 }
 
-impl<'a, 'b> ops::Sub<&'a Matrix4> for &'b Matrix4 {
-    type Output = Matrix4;
+impl<'a, 'b, S> ops::Sub<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn sub(self, other: &'a Matrix4) -> Self::Output {
+    fn sub(self, other: &'a Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
         let c0r2 = self.c0r2 - other.c0r2;
@@ -2287,10 +2305,10 @@ impl<'a, 'b> ops::Sub<&'a Matrix4> for &'b Matrix4 {
     }
 }
 
-impl ops::Mul<Vector4> for Matrix4 {
-    type Output = Vector4;
+impl<S> ops::Mul<Vector4<S>> for Matrix4<S> where S: Scalar {
+    type Output = Vector4<S>;
 
-    fn mul(self, other: Vector4) -> Self::Output {
+    fn mul(self, other: Vector4<S>) -> Self::Output {
         let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
         let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
         let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2] + self.c3r2 * other[3];
@@ -2300,10 +2318,10 @@ impl ops::Mul<Vector4> for Matrix4 {
     }
 }
 
-impl ops::Mul<&Matrix4> for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Mul<&Matrix4<S>> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn mul(self, other: &Matrix4) -> Self::Output {
+    fn mul(self, other: &Matrix4<S>) -> Self::Output {
         let mut m = Matrix4::zero();
 
         m.c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
@@ -2330,10 +2348,10 @@ impl ops::Mul<&Matrix4> for Matrix4 {
     }
 }
 
-impl<'a, 'b> ops::Mul<&'a Matrix4> for &'b Matrix4 {
-    type Output = Matrix4;
+impl<'a, 'b,S> ops::Mul<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn mul(self, other: &'a Matrix4) -> Self::Output {
+    fn mul(self, other: &'a Matrix4<S>) -> Self::Output {
         let mut m = Matrix4::zero();
 
         m.c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
@@ -2360,10 +2378,10 @@ impl<'a, 'b> ops::Mul<&'a Matrix4> for &'b Matrix4 {
     }
 }
 
-impl ops::Mul<Matrix4> for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Mul<Matrix4<S>> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn mul(self, other: Matrix4) -> Self::Output {
+    fn mul(self, other: Matrix4<S>) -> Self::Output {
         let mut m = Matrix4::zero();
 
         m.c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
@@ -2390,10 +2408,10 @@ impl ops::Mul<Matrix4> for Matrix4 {
     }
 }
 
-impl ops::Mul<f32> for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Mul<S> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn mul(self, other: f32) -> Self::Output {
+    fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
         let c0r2 = self.c0r2 * other;
@@ -2421,10 +2439,10 @@ impl ops::Mul<f32> for Matrix4 {
     }
 }
 
-impl ops::Mul<f32> for &Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Mul<S> for &Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn mul(self, other: f32) -> Self::Output {
+    fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
         let c0r2 = self.c0r2 * other;
@@ -2452,10 +2470,10 @@ impl ops::Mul<f32> for &Matrix4 {
     }
 }
 
-impl ops::Div<f32> for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Div<S> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn div(self, other: f32) -> Self::Output {
+    fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
         let c0r2 = self.c0r2 / other;
@@ -2483,10 +2501,10 @@ impl ops::Div<f32> for Matrix4 {
     }
 }
 
-impl ops::Div<f32> for &Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Div<S> for &Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn div(self, other: f32) -> Self::Output {
+    fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
         let c0r2 = self.c0r2 / other;
@@ -2514,8 +2532,8 @@ impl ops::Div<f32> for &Matrix4 {
     }
 }
 
-impl ops::Neg for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Neg for Matrix4<S> where S: ScalarFloat {
+    type Output = Matrix4<S>;
 
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
@@ -2545,8 +2563,8 @@ impl ops::Neg for Matrix4 {
     }
 }
 
-impl ops::Neg for &Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Neg for &Matrix4<S> where S: ScalarFloat {
+    type Output = Matrix4<S>;
 
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
@@ -2576,10 +2594,10 @@ impl ops::Neg for &Matrix4 {
     }
 }
 
-impl ops::Rem<f32> for Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Rem<S> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
         let c0r2 = self.c0r2 % other;
@@ -2607,10 +2625,10 @@ impl ops::Rem<f32> for Matrix4 {
     }
 }
 
-impl ops::Rem<f32> for &Matrix4 {
-    type Output = Matrix4;
+impl<S> ops::Rem<S> for &Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
 
-    fn rem(self, other: f32) -> Self::Output {
+    fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
         let c0r2 = self.c0r2 % other;
@@ -2638,8 +2656,8 @@ impl ops::Rem<f32> for &Matrix4 {
     }
 }
 
-impl ops::AddAssign<Matrix4> for Matrix4 {
-    fn add_assign(&mut self, other: Matrix4) {
+impl<S> ops::AddAssign<Matrix4<S>> for Matrix4<S> where S: Scalar {
+    fn add_assign(&mut self, other: Matrix4<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
         self.c0r2 += other.c0r2;
@@ -2662,8 +2680,8 @@ impl ops::AddAssign<Matrix4> for Matrix4 {
     }
 }
 
-impl ops::AddAssign<&Matrix4> for Matrix4 {
-    fn add_assign(&mut self, other: &Matrix4) {
+impl<S> ops::AddAssign<&Matrix4<S>> for Matrix4<S> where S: Scalar {
+    fn add_assign(&mut self, other: &Matrix4<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
         self.c0r2 += other.c0r2;
@@ -2686,8 +2704,8 @@ impl ops::AddAssign<&Matrix4> for Matrix4 {
     }
 }
 
-impl ops::SubAssign<Matrix4> for Matrix4 {
-    fn sub_assign(&mut self, other: Matrix4) {
+impl<S> ops::SubAssign<Matrix4<S>> for Matrix4<S> where S: Scalar {
+    fn sub_assign(&mut self, other: Matrix4<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
         self.c0r2 -= other.c0r2;
@@ -2710,8 +2728,8 @@ impl ops::SubAssign<Matrix4> for Matrix4 {
     }
 }
 
-impl ops::SubAssign<&Matrix4> for Matrix4 {
-    fn sub_assign(&mut self, other: &Matrix4) {
+impl<S> ops::SubAssign<&Matrix4<S>> for Matrix4<S> where S: Scalar {
+    fn sub_assign(&mut self, other: &Matrix4<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
         self.c0r2 -= other.c0r2;
@@ -2734,8 +2752,8 @@ impl ops::SubAssign<&Matrix4> for Matrix4 {
     }
 }
 
-impl ops::MulAssign<f32> for Matrix4 {
-    fn mul_assign(&mut self, other: f32) {
+impl<S> ops::MulAssign<S> for Matrix4<S> where S: Scalar {
+    fn mul_assign(&mut self, other: S) {
         self.c0r0 *= other;
         self.c0r1 *= other;
         self.c0r2 *= other;
@@ -2758,8 +2776,8 @@ impl ops::MulAssign<f32> for Matrix4 {
     }
 }
 
-impl ops::DivAssign<f32> for Matrix4 {
-    fn div_assign(&mut self, other: f32) {
+impl<S> ops::DivAssign<S> for Matrix4<S> where S: Scalar {
+    fn div_assign(&mut self, other: S) {
         self.c0r0 /= other;
         self.c0r1 /= other;
         self.c0r2 /= other;
@@ -2782,8 +2800,8 @@ impl ops::DivAssign<f32> for Matrix4 {
     }
 }
 
-impl ops::RemAssign<f32> for Matrix4 {
-    fn rem_assign(&mut self, other: f32) {
+impl<S> ops::RemAssign<S> for Matrix4<S> where S: Scalar {
+    fn rem_assign(&mut self, other: S) {
         self.c0r0 %= other;
         self.c0r1 %= other;
         self.c0r2 %= other;
@@ -2805,7 +2823,7 @@ impl ops::RemAssign<f32> for Matrix4 {
         self.c3r3 %= other;
     }
 }
-
+/*
 impl Lerp<Matrix4> for Matrix4 {
     type Output = Matrix4;
 
