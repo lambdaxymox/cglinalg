@@ -3350,7 +3350,7 @@ mod matrix3_tests {
         assert_eq!(matrix.c2r2, matrix[2][2]);
     }
 }
-/*
+
 #[cfg(test)]
 mod matrix4_tests {
     use std::slice::Iter;
@@ -3360,8 +3360,8 @@ mod matrix4_tests {
 
 
     struct TestCase {
-        a_mat: Matrix4,
-        b_mat: Matrix4,
+        a_mat: Matrix4<f32>,
+        b_mat: Matrix4<f32>,
     }
 
     struct Test {
@@ -3520,7 +3520,7 @@ mod matrix4_tests {
 
     #[test]
     fn test_identity_transpose_equals_identity() {
-        let identity = Matrix4::one();
+        let identity = Matrix4::<f32>::one();
         let identity_tr = identity.transpose();
             
         assert_eq!(identity, identity_tr);
@@ -3643,4 +3643,3 @@ mod matrix4_tests {
         assert_eq!(matrix_inv * matrix, one);        
     }
 }
-*/
