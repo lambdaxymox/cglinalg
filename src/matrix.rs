@@ -4333,6 +4333,15 @@ mod matrix4_tests {
         assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
     }
 
+    /// Test whether the inverse of the transpose of a matrix is approximately equal to the 
+    /// transpose of the inverse of a matrix. when the matrices are defined over the real numbers,
+    /// we have the equality
+    /// ```
+    /// Inverse(Transpose(M)) == Transpose(Inverse(M)).
+    /// ```
+    /// The equality does not hold over a set of floating point numbers because floating point arithmetic
+    /// is not commutative, so we cannot guarantee exact equality even though transposing a matrix does not
+    /// cause a loss of precesion in the matrix entries. We can only guarantee approximate equality.
     #[test]
     fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
         let matrix: Matrix4<f64> = Matrix4::new(
@@ -4343,8 +4352,9 @@ mod matrix4_tests {
         );
         let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
         let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
+        let epsilon = 1e-7;
 
-        assert_eq!(matrix_transpose_inverse, matrix_inverse_transpose);
+        assert!(relative_eq!(matrix_transpose_inverse, matrix_inverse_transpose, epsilon = epsilon));
     }
 
     #[test]
@@ -4375,8 +4385,9 @@ mod matrix4_tests {
         );
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
+        let epsilon = 1e-7;
 
-        assert_eq!(result, expected);
+        assert!(relative_eq!(result, expected, epsilon = epsilon));
     }
 
     #[test]
