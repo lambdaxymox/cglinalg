@@ -3413,6 +3413,19 @@ mod matrix2_tests {
     }
 
     #[test]
+    fn test_matrix_inverse_inverse_equals_matrix() {
+        let matrix: Matrix2<f64> = Matrix2::new(
+            80.0,   426.1, 
+            23.43,  23.5724
+        );
+        let result = matrix.inverse().unwrap().inverse().unwrap();
+        let expected = matrix;
+        let epsilon = 1e-7;
+
+        assert!(relative_eq!(result, expected, epsilon = epsilon));
+    }
+
+    #[test]
     fn test_matrix_elements_should_be_column_major_order() {
         let matrix = Matrix2::new(1, 2, 3, 4);
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -3809,6 +3822,20 @@ mod matrix3_tests {
         let one = Matrix3::one();
 
         assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_matrix_inverse_inverse_equals_matrix() {
+        let matrix: Matrix3<f64> = Matrix3::new(
+            80.0,   426.1,   43.393, 
+            23.43,  23.5724, 1.27, 
+            81.439, 12.19,   43.36
+        );
+        let result = matrix.inverse().unwrap().inverse().unwrap();
+        let expected = matrix;
+        let epsilon = 1e-7;
+
+        assert!(relative_eq!(result, expected, epsilon = epsilon));
     }
 
     #[test]
@@ -4298,6 +4325,20 @@ mod matrix4_tests {
             "\nmatrix = {:?}\nmatrix_inv = {:?}\nmatrix_inv * matrix = {:?}\nepsilon = {:?}\n",
             matrix, matrix_inv, matrix_inv * matrix, epsilon
         );
+    }
+
+    #[test]
+    fn test_matrix_inverse_inverse_equals_matrix() {
+        let matrix: Matrix4<f64> = Matrix4::new(
+            36.84,  427.468, 827.198, 89.504, 
+            7.042 , 61.891,  56.31,   89.0, 
+            72.0,   936.5,   413.80,  50.311,  
+            37.698, 311.8,   60.81,   73.839
+        );
+        let result = matrix.inverse().unwrap().inverse().unwrap();
+        let expected = matrix;
+
+        assert_eq!(result, expected);
     }
 
     #[test]
