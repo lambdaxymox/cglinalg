@@ -3235,6 +3235,26 @@ mod matrix2_tests {
     }
 
     #[test]
+    fn test_lower_triangular_matrix_determinant() {
+        let matrix: Matrix2<f64> = Matrix2::new(
+            2_f64,  0_f64,
+            5_f64,  3_f64
+        );
+
+        assert_eq!(matrix.determinant(), 2_f64 * 3_f64);
+    }
+
+    #[test]
+    fn test_upper_triangular_matrix_determinant() {
+        let matrix: Matrix2<f64> = Matrix2::new(
+            2_f64,  5_f64,
+            0_f64,  3_f64
+        );
+
+        assert_eq!(matrix.determinant(), 2_f64 * 3_f64);
+    }
+
+    #[test]
     fn test_matrix_inverse() {
         let matrix: Matrix2<f64> = Matrix2::new(5_f64, 1_f64, 1_f64, 5_f64);
         let expected: Matrix2<f64> = (1_f64 / 24_f64) * Matrix2::new(5_f64, -1_f64,-1_f64,  5_f64);
@@ -3502,6 +3522,28 @@ mod matrix3_tests {
         let matrix = Matrix3::new(1f32, 2f32, 3f32, 4f32, 5f32, 6f32, 4f32, 5f32, 6f32);
         
         assert_eq!(matrix.determinant(), 0.0);
+    }
+
+    #[test]
+    fn test_lower_triangular_matrix_determinant() {
+        let matrix: Matrix3<f64> = Matrix3::new(
+            1_f64,  0_f64,  0_f64,
+            5_f64,  2_f64,  0_f64,
+            5_f64,  5_f64,  3_f64
+        );
+
+        assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64);
+    }
+
+    #[test]
+    fn test_upper_triangular_matrix_determinant() {
+        let matrix: Matrix3<f64> = Matrix3::new(
+            1_f64,  5_f64,  5_f64,
+            0_f64,  2_f64,  5_f64,
+            0_f64,  0_f64,  3_f64
+        );
+
+        assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64);
     }
 
     #[test]
@@ -3853,6 +3895,30 @@ mod matrix4_tests {
         );
         
         assert!(matrix.determinant().is_zero());
+    }
+
+    #[test]
+    fn test_lower_triangular_matrix_determinant() {
+        let matrix: Matrix4<f64> = Matrix4::new(
+            1_f64,  0_f64,  0_f64,  0_f64, 
+            5_f64,  2_f64,  0_f64,  0_f64,
+            5_f64,  5_f64,  3_f64,  0_f64, 
+            5_f64,  5_f64,  5_f64, 4_f64
+        );
+
+        assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64 * 4_f64);
+    }
+
+    #[test]
+    fn test_upper_triangular_matrix_determinant() {
+        let matrix: Matrix4<f64> = Matrix4::new(
+            1_f64,  5_f64,  5_f64,  5_f64, 
+            0_f64,  2_f64,  5_f64,  5_f64,
+            0_f64,  0_f64,  3_f64,  5_f64, 
+            0_f64,  0_f64,  0_f64,  4_f64
+        );
+
+        assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64 * 4_f64);
     }
 
     #[test]
