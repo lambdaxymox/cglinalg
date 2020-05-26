@@ -3440,7 +3440,7 @@ mod matrix4_tests {
     use vector::{Vector3, Vector4};
     use super::{Matrix4};
     use structure::{One, Zero, Matrix};
-    use approx::assert_relative_eq;
+    use approx::{assert_ulps_eq, assert_relative_eq};
 
 
     struct TestCase {
@@ -3607,6 +3607,18 @@ mod matrix4_tests {
     }
 
     #[test]
+    fn test_construction_from_cols() {
+        let c0 = Vector4::new(1, 2, 3, 4);
+        let c1 = Vector4::new(5, 6, 7, 8);
+        let c2 = Vector4::new(9, 10, 11, 12);
+        let c3 = Vector4::new(13, 14, 15, 16);
+        let expected = Matrix4::new(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15, 16);
+        let result = Matrix4::from_cols(c0, c1, c2, c3);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_identity_mat4_translates_vector_along_vector() {
         let v = Vector3::from((2.0, 2.0, 2.0));
         let trans_mat = Matrix4::from_translation(v);
@@ -3618,7 +3630,7 @@ mod matrix4_tests {
     }
 
     #[test]
-    fn test_constant_times_identity_is_identity_along_diagonal() {
+    fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169;
         let id = Matrix4::one();
         let expected = Matrix4::new(
@@ -3673,6 +3685,18 @@ mod matrix4_tests {
         );
         
         assert_eq!(matrix.determinant(), 0.0);
+    }
+
+    #[test]
+    fn test_matrix_with_nonzero_determinant_is_invertible() {
+        let matrix = Matrix4::new(
+            1_f64,  2_f64,  3_f64,  4_f64,
+            5_f64,  60_f64,  7_f64,  8_f64,
+            9_f64,  10_f64, 11_f64, 12_f64,
+            13_f64, 14_f64, 150_f64, 16_f64
+        );
+        
+        assert!(matrix.is_invertible());
     }
 
     #[test]
