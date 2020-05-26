@@ -2823,39 +2823,43 @@ impl<S> ops::RemAssign<S> for Matrix4<S> where S: Scalar {
         self.c3r3 %= other;
     }
 }
-/*
-impl Lerp<Matrix4> for Matrix4 {
-    type Output = Matrix4;
 
-    fn lerp(self, other: Matrix4, amount: f32) -> Matrix4 {
+impl<S> Lerp<Matrix4<S>> for Matrix4<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Matrix4<S>;
+
+    fn lerp(self, other: Matrix4<S>, amount: S) -> Matrix4<S> {
         self + ((other - self) * amount)
     }
 }
 
-impl Lerp<&Matrix4> for Matrix4 {
-    type Output = Matrix4;
+impl<S> Lerp<&Matrix4<S>> for Matrix4<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Matrix4<S>;
 
-    fn lerp(self, other: &Matrix4, amount: f32) -> Matrix4 {
+    fn lerp(self, other: &Matrix4<S>, amount: S) -> Matrix4<S> {
         self + ((other - self) * amount)
     }
 }
 
-impl Lerp<Matrix4> for &Matrix4 {
-    type Output = Matrix4;
+impl<S> Lerp<Matrix4<S>> for &Matrix4<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Matrix4<S>;
 
-    fn lerp(self, other: Matrix4, amount: f32) -> Matrix4 {
+    fn lerp(self, other: Matrix4<S>, amount: S) -> Matrix4<S> {
         self + ((other - self) * amount)
     }
 }
 
-impl<'a, 'b> Lerp<&'a Matrix4> for &'b Matrix4 {
-    type Output = Matrix4;
+impl<'a, 'b, S> Lerp<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
+    type Scalar = S;
+    type Output = Matrix4<S>;
 
-    fn lerp(self, other: &'a Matrix4, amount: f32) -> Matrix4 {
+    fn lerp(self, other: &'a Matrix4<S>, amount: S) -> Matrix4<S> {
         self + ((other - self) * amount)
     }
 }
-*/
+
 
 #[cfg(test)]
 mod matrix2_tests {
