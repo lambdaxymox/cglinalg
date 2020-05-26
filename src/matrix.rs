@@ -3248,7 +3248,10 @@ mod matrix2_tests {
     fn test_construction_from_cols() {
         let c0 = Vector2::new(1.0, 2.0);
         let c1 = Vector2::new(3.0, 4.0);
-        let expected = Matrix2::new(1.0, 2.0, 3.0, 4.0);
+        let expected = Matrix2::new(
+            1.0, 2.0, 
+            3.0, 4.0
+        );
         let result = Matrix2::from_cols(c0, c1);
 
         assert_eq!(result, expected);
@@ -3258,7 +3261,10 @@ mod matrix2_tests {
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169;
         let id = Matrix2::one();
-        let expected = Matrix2::new(c, 0.0, 0.0, c);
+        let expected = Matrix2::new(
+            c, 0.0, 
+            0.0, c
+        );
 
         assert_eq!(id * c, expected);
     }
@@ -3267,7 +3273,10 @@ mod matrix2_tests {
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169;
         let id = Matrix2::one();
-        let expected = Matrix2::new(1.0/c, 0.0, 0.0, 1.0/c);
+        let expected = Matrix2::new(
+            1.0 / c, 0.0, 
+            0.0,     1.0 / c
+        );
 
         assert_eq!(id / c, expected);
     }
@@ -3275,7 +3284,10 @@ mod matrix2_tests {
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero = Matrix2::zero();
-        let matrix = Matrix2::new(36.84, 427.46, 7.47, 61.89);
+        let matrix = Matrix2::new(
+            36.84, 427.46, 
+            7.47,  61.89
+        );
 
         assert_eq!(matrix + zero, matrix);
     }
@@ -3283,14 +3295,20 @@ mod matrix2_tests {
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero = Matrix2::zero();
-        let matrix = Matrix2::new(36.84, 427.46, 7.47, 61.89);
+        let matrix = Matrix2::new(
+            36.84, 427.46, 
+            7.47,  61.89
+        );
 
         assert_eq!(zero + matrix, matrix);
     }
 
     #[test]
     fn test_matrix_with_zero_determinant() {
-        let matrix = Matrix2::new(1f32, 2f32, 4f32, 8f32);
+        let matrix: Matrix2<f64> = Matrix2::new(
+            1_f64, 2_f64, 
+            4_f64, 8_f64
+        );
         
         assert_eq!(matrix.determinant(), 0.0);
     }
@@ -3317,8 +3335,14 @@ mod matrix2_tests {
 
     #[test]
     fn test_matrix_inverse() {
-        let matrix: Matrix2<f64> = Matrix2::new(5_f64, 1_f64, 1_f64, 5_f64);
-        let expected: Matrix2<f64> = (1_f64 / 24_f64) * Matrix2::new(5_f64, -1_f64,-1_f64,  5_f64);
+        let matrix: Matrix2<f64> = Matrix2::new(
+            5_f64, 1_f64, 
+            1_f64, 5_f64
+        );
+        let expected: Matrix2<f64> = (1_f64 / 24_f64) * Matrix2::new(
+             5_f64, -1_f64,
+            -1_f64,  5_f64
+        );
         let result = matrix.inverse().unwrap();
         let epsilon = 1e-7;
 
@@ -3817,7 +3841,11 @@ mod matrix3_tests {
 
     #[test]
     fn test_inverse_times_matrix_is_identity() {
-        let matrix = Matrix3::new(80.0, 426.1, 43.393, 23.43, 23.5724, 1.27, 81.439, 12.19, 43.36);
+        let matrix = Matrix3::new(
+            80.0,   426.1,   43.393, 
+            23.43,  23.5724, 1.27, 
+            81.439, 12.19,   43.36
+        );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix3::one();
 
@@ -3840,7 +3868,12 @@ mod matrix3_tests {
 
     #[test]
     fn test_matrix_elements_should_be_column_major_order() {
-        let matrix = Matrix3::new(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        let matrix = Matrix3::new(
+            1, 2, 3, 
+            4, 5, 6, 
+            7, 8, 9
+        );
+
         assert_eq!(matrix.c0r0, matrix[0][0]);
         assert_eq!(matrix.c0r1, matrix[0][1]);
         assert_eq!(matrix.c0r2, matrix[0][2]);
