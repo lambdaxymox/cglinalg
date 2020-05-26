@@ -3444,8 +3444,9 @@ mod matrix4_tests {
 
 
     struct TestCase {
-        a_mat: Matrix4<f32>,
-        b_mat: Matrix4<f32>,
+        a_mat: Matrix4<f64>,
+        b_mat: Matrix4<f64>,
+        expected: Matrix4<f64>,
     }
 
     struct Test {
@@ -3483,19 +3484,27 @@ mod matrix4_tests {
                         70.0,   49.0,    95.0,    89.9138
                     ),
                     b_mat: Matrix4::new(
-                        36.84,   427.46894, 8827.1983, 89.5049494, 
-                        7.04217, 61.891390, 56.31,     89.0, 
-                        72.0,    936.5,     413.80,    50.311160,  
-                        37.6985,  311.8,    60.81,     73.8393
+                        36.84,   427.4689, 882.1983, 89.5049, 
+                        7.0421,  61.8913,  56.31,    89.0, 
+                        72.0,    936.5,    413.80,   50.3111,  
+                        37.6985, 311.8,    60.81,    73.8393
+                    ),
+                    expected: Matrix4::new(
+                        195081.59429, 243005.75305, 49879.95437, 51440.18413,
+                        33402.98611,  20517.57661,  12256.21388, 11284.68076,
+                        410071.44922, 133022.5019,  46899.08235, 35476.31018,
+                        141299.34473, 27545.30310,  19196.46946, 13791.67534
                     ),
                 },
                 TestCase {
                     a_mat: Matrix4::one(),
                     b_mat: Matrix4::one(),
+                    expected: Matrix4::one(),
                 },
                 TestCase {
                     a_mat: Matrix4::zero(),
                     b_mat: Matrix4::zero(),
+                    expected: Matrix4::zero(),
                 },
                 TestCase {
                     a_mat: Matrix4::new(
@@ -3505,11 +3514,17 @@ mod matrix4_tests {
                         0.0,   0.0,    0.0,   887.710
                     ),
                     b_mat: Matrix4::new(
-                        57.72, 0.0,       0.0,       0.0, 
-                        0.0,   9.5433127, 0.0,       0.0, 
-                        0.0,   0.0,       86.731265, 0.0,
-                        0.0,   0.0,       0.0,       269.1134546
-                    )
+                        57.72, 0.0,    0.0,     0.0, 
+                        0.0,   9.5433, 0.0,     0.0, 
+                        0.0,   0.0,    86.7312, 0.0,
+                        0.0,   0.0,    0.0,     269.1134
+                    ),
+                    expected: Matrix4::new(
+                        3943.4304, 0.0,         0.0,         0.0,
+                        0.0,       356.8907901, 0.0,         0.0,
+                        0.0,       0.0,         822.4719696, 0.0,
+                        0.0,       0.0,         0.0,         238894.65631
+                    ),
                 },
             ]
         }
@@ -3562,36 +3577,6 @@ mod matrix4_tests {
     }
 
     #[test]
-    fn test_mat_times_mat_inverse_equals_identity() {
-        for test in test_cases().iter() {
-            let identity = Matrix4::one();
-            if test.a_mat.is_invertible() {
-                let a_mat_inverse = test.a_mat.inverse().unwrap();
-                assert_eq!(a_mat_inverse * test.a_mat, identity);
-            }
-            if test.b_mat.is_invertible() {
-                let b_mat_inverse = test.b_mat.inverse().unwrap();
-                assert_eq!(b_mat_inverse * test.b_mat, identity);
-            }
-        }
-    }
-
-    #[test]
-    fn test_mat_inverse_times_mat_equals_identity() {
-        for test in test_cases().iter() {
-            let identity = Matrix4::one();
-            if test.a_mat.is_invertible() {
-                let a_mat_inverse = test.a_mat.inverse().unwrap();
-                assert_eq!(test.a_mat * a_mat_inverse, identity);
-            }
-            if test.b_mat.is_invertible() {
-                let b_mat_inverse = test.b_mat.inverse().unwrap();
-                assert_eq!(test.b_mat * b_mat_inverse, identity);
-            }
-        }
-    }
-
-    #[test]
     fn test_mat_transpose_transpose_equals_mat() {
         for test in test_cases().iter() {
             let a_mat_tr_tr = test.a_mat.transpose().transpose();
@@ -3608,6 +3593,20 @@ mod matrix4_tests {
         let identity_tr = identity.transpose();
             
         assert_eq!(identity, identity_tr);
+    }
+
+    #[test]
+    fn test_matrix_multiplication() {
+        test_cases().iter().for_each(|test| {
+            let result = test.a_mat * test.b_mat;
+            let expected = test.expected;
+            let epsilon = 1e-7;
+
+            assert!(relative_eq!(result, expected, epsilon = epsilon),
+                "\nresult = {:?}\nexpected = {:?}\nepsilon = {}\n",
+                result, expected, epsilon
+            );
+        })
     }
 
     #[test]
@@ -3671,9 +3670,9 @@ mod matrix4_tests {
 
     #[test]
     fn test_matrix_with_zero_determinant() {
-        let matrix = Matrix4::new(
-            1f32,  2f32,  3f32,  4f32, 5f32,  6f32,  7f32,  8f32,
-            5f32,  6f32,  7f32,  8f32, 9f32, 10f32, 11f32, 12f32
+        let matrix: Matrix4<f64> = Matrix4::new(
+            1_f64,  2_f64,  3_f64,  4_f64, 5_f64,  6_f64,  7_f64,  8_f64,
+            5_f64,  6_f64,  7_f64,  8_f64, 9_f64, 10_f64, 11_f64, 12_f64
         );
         
         assert_eq!(matrix.determinant(), 0.0);
@@ -3681,9 +3680,9 @@ mod matrix4_tests {
 
     #[test]
     fn test_matrix_with_zero_determinant_is_not_invertible() {
-        let matrix = Matrix4::new(
-            1f32,  2f32,  3f32,  4f32, 5f32,  6f32,  7f32,  8f32,
-            5f32,  6f32,  7f32,  8f32, 9f32, 10f32, 11f32, 12f32
+        let matrix: Matrix4<f64> = Matrix4::new(
+            1_f64,  2_f64,  3_f64,  4_f64, 5_f64,  6_f64,  7_f64,  8_f64,
+            5_f64,  6_f64,  7_f64,  8_f64, 9_f64, 10_f64, 11_f64, 12_f64
         );
         
         assert!(!matrix.is_invertible());
@@ -3691,9 +3690,9 @@ mod matrix4_tests {
 
     #[test]
     fn test_noninvertible_matrix_returns_none() {
-        let matrix = Matrix4::new(
-            1f32,  2f32,  3f32,  4f32, 5f32,  6f32,  7f32,  8f32,
-            5f32,  6f32,  7f32,  8f32, 9f32, 10f32, 11f32, 12f32
+        let matrix: Matrix4<f64> = Matrix4::new(
+            1_f64,  2_f64,  3_f64,  4_f64, 5_f64,  6_f64,  7_f64,  8_f64,
+            5_f64,  6_f64,  7_f64,  8_f64, 9_f64, 10_f64, 11_f64, 12_f64
         );
         
         assert!(matrix.inverse().is_none());
@@ -3702,28 +3701,36 @@ mod matrix4_tests {
     #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            36.84,   427.46894, 8827.1983, 89.5049494, 
-            7.04217, 61.891390, 56.31,     89.0, 
-            72.0,    936.5,     413.80,    50.311160,  
-            37.6985,  311.8,    60.81,     73.8393
+            36.84,   427.4689, 827.1983, 89.5049, 
+            7.0421 , 61.8913,  56.31,    89.0, 
+            72.0,    936.5,    413.80,   50.3111,  
+            37.6985, 311.8,    60.81,    73.8393
         );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4::one();
+        let epsilon = 1e-7;
 
-        assert!(relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7));
+        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = epsilon),
+            "\nmatrix_inv = {}\nmatrix= {}\nmatrix_inv * matrix = {}\n epsilon = {}\n",
+            matrix_inv, matrix, matrix_inv * matrix, epsilon
+        );
     }
 
     #[test]
     fn test_inverse_times_matrix_is_identity() {
         let matrix: Matrix4<f64> = Matrix4::new(
-            36.84,   427.46894, 8827.1983, 89.5049494, 
-            7.04217, 61.891390, 56.31,     89.0, 
-            72.0,    936.5,     413.80,    50.311160,  
+            36.84,    427.4689, 827.1983,  89.5049, 
+            7.0421,   61.8913,  56.31,     89.0, 
+            72.0,     936.5,    413.80,    50.3111,  
             37.6985,  311.8,    60.81,     73.8393
         );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4::one();
+        let epsilon = 1e-7;
 
-        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));        
+        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = epsilon),
+            "\nmatrix_inv = {}\nmatrix= {}\nmatrix_inv * matrix = {}\n epsilon = {}\n",
+            matrix_inv, matrix, matrix_inv * matrix, epsilon
+        );        
     }
 }

@@ -10,12 +10,12 @@ mod matrix;
 
 mod vector;
 mod structure;
-/*
-pub use cgmath::*;
+
+//pub use cgmath::*;
 pub use matrix::*;
-pub use projection::*;
-pub use quaternion::*;
-*/
+//pub use projection::*;
+//pub use quaternion::*;
+
 pub use base::*;
 pub use vector::*;
 pub use structure::*;
