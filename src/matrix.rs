@@ -1718,8 +1718,8 @@ impl<S> Matrix4<S> where S: Scalar {
         if det == S::zero() {
             None
         } else {
-            let inv_det = S::one() / det;
-
+            let det_inv = S::one() / det;
+            /*
             Some(Matrix4::new(
                 inv_det * ( self.c2r1 * self.c3r2 * self.c1r3 - self.c3r1 * self.c2r2 * self.c1r3 +
                                         self.c3r1 * self.c1r2 * self.c2r3 - self.c1r1 * self.c3r2 * self.c2r3 -
@@ -1769,6 +1769,51 @@ impl<S> Matrix4<S> where S: Scalar {
                 inv_det * ( self.c1r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c1r1 * self.c0r2 +
                                         self.c2r0 * self.c0r1 * self.c1r2 - self.c0r0 * self.c2r1 * self.c1r2 -
                                         self.c1r0 * self.c0r1 * self.c2r2 + self.c0r0 * self.c1r1 * self.c2r2 ) ) )
+                */
+            let _c0r0 = self.c1r1 * self.c2r2 * self.c3r3 + self.c2r1 * self.c3r2 * self.c1r3 + self.c3r1 * self.c1r2 * self.c2r3
+                      - self.c3r1 * self.c2r2 * self.c1r3 - self.c2r1 * self.c1r2 * self.c3r3 - self.c1r1 * self.c3r2 * self.c2r3;
+            let _c1r0 = self.c3r0 * self.c2r2 * self.c1r3 + self.c2r0 * self.c1r2 * self.c3r3 + self.c1r0 * self.c3r2 * self.c2r3
+                      - self.c0r1 * self.c2r2 * self.c3r3 - self.c2r0 * self.c3r2 * self.c1r3 - self.c3r0 * self.c1r2 * self.c2r3;
+            let _c2r0 = self.c1r0 * self.c2r1 * self.c3r3 + self.c2r1 * self.c3r1 * self.c1r3 + self.c3r0 * self.c1r1 * self.c2r3
+                      - self.c3r0 * self.c2r1 * self.c1r3 - self.c2r0 * self.c1r1 * self.c3r3 - self.c1r0 * self.c3r1 * self.c2r3;
+            let _c3r0 = self.c3r0 * self.c2r1 * self.c1r2 + self.c2r0 + self.c1r1 * self.c3r2 + self.c1r0 * self.c3r1 * self.c2r2
+                      - self.c1r0 * self.c2r1 * self.c3r2 - self.c2r0 * self.c3r1 * self.c1r2 - self.c3r0 * self.c1r1 * self.c2r2;
+            let _c0r1 = self.c3r1 * self.c2r2 * self.c0r3 + self.c2r1 * self.c0r2 * self.c3r3 + self.c0r1 * self.c3r2 * self.c2r3
+                      - self.c0r1 * self.c2r2 * self.c3r3 - self.c2r1 * self.c3r2 * self.c0r3 - self.c3r1 * self.c0r2 * self.c2r3;
+            let _c1r1 = self.c0r0 * self.c2r2 * self.c3r3 + self.c2r0 * self.c3r2 * self.c0r3 + self.c3r0 * self.c0r2 * self.c2r3
+                      - self.c3r0 * self.c2r2 * self.c0r3 - self.c2r0 * self.c0r2 * self.c3r3 - self.c0r0 * self.c3r2 * self.c2r3;
+            let _c2r1 = self.c3r0 * self.c2r1 * self.c0r3 + self.c2r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c3r1 * self.c2r2
+                      - self.c0r0 * self.c2r1 * self.c3r3 - self.c2r0 * self.c3r1 * self.c0r3 - self.c3r0 * self.c0r1 * self.c2r3;
+            let _c3r1 = self.c0r0 * self.c2r1 * self.c3r2 + self.c2r0 * self.c3r1 * self.c0r2 + self.c3r0 * self.c0r1 * self.c2r2
+                      - self.c3r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c0r1 * self.c3r2 - self.c0r0 * self.c3r1 * self.c2r2;
+            let _c0r2 = self.c0r1 * self.c1r2 * self.c3r3 + self.c1r1 * self.c3r2 * self.c0r3 + self.c3r1 * self.c0r2 * self.c1r3 
+                      - self.c3r1 * self.c1r2 * self.c0r3 - self.c1r1 * self.c0r2 * self.c3r3 - self.c0r1 * self.c3r2 * self.c1r3;
+            let _c1r2 = self.c3r0 * self.c1r2 * self.c0r3 + self.c1r0 * self.c0r2 * self.c3r3 + self.c0r0 * self.c3r2 * self.c1r3
+                      - self.c0r0 * self.c1r2 * self.c3r3 - self.c1r0 * self.c3r2 * self.c0r3 - self.c3r0 * self.c0r2 * self.c1r3;
+            let _c2r2 = self.c0r0 * self.c1r1 * self.c3r3 + self.c1r0 * self.c3r1 * self.c0r3 + self.c3r0 * self.c0r1 * self.c1r3
+                      - self.c3r0 * self.c1r1 * self.c0r3 - self.c1r0 * self.c0r1 * self.c3r3 - self.c0r0 * self.c3r1 * self.c1r3;
+            let _c3r2 = self.c3r0 * self.c1r1 * self.c0r2 + self.c1r0 * self.c0r1 * self.c3r2 + self.c0r0 * self.c3r1 * self.c1r2
+                      - self.c0r0 * self.c1r1 * self.c3r2 - self.c1r0 * self.c3r1 * self.c0r2 - self.c3r0 * self.c0r1 * self.c1r2;
+            let _c0r3 = self.c2r1 * self.c1r2 * self.c0r3 + self.c1r1 * self.c0r2 * self.c2r3 + self.c0r1 * self.c2r2 * self.c1r3
+                      - self.c0r1 * self.c1r2 * self.c2r3 - self.c1r1 * self.c2r2 * self.c0r3 - self.c2r1 * self.c0r2 * self.c1r3;  
+            let _c1r3 = self.c0r0 * self.c1r2 * self.c2r3 + self.c1r0 * self.c2r2 * self.c0r3 + self.c2r0 * self.c0r2 * self.c1r3
+                      - self.c2r0 * self.c1r2 * self.c0r3 - self.c1r0 * self.c0r2 * self.c2r3 - self.c0r0 * self.c2r2 * self.c1r3;
+            let _c2r3 = self.c2r0 * self.c1r1 * self.c0r3 + self.c1r0 * self.c0r1 * self.c2r3 + self.c0r0 * self.c2r1 * self.c1r3
+                      - self.c0r0 * self.c1r1 * self.c2r3 - self.c1r0 * self.c2r1 * self.c0r3 - self.c2r0 * self.c0r1 * self.c1r3;
+            let _c3r3 = self.c0r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c2r1 * self.c0r2 + self.c2r0 * self.c0r1 * self.c1r2
+                      - self.c2r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c2r1 * self.c1r2; 
+            
+            let c0r0 = det_inv * _c0r0; let c0r1 = det_inv * _c0r1; let c0r2 = det_inv * _c0r2; let c0r3 = det_inv * _c0r3;
+            let c1r0 = det_inv * _c1r0; let c1r1 = det_inv * _c1r1; let c1r2 = det_inv * _c1r2; let c1r3 = det_inv * _c1r3;
+            let c2r0 = det_inv * _c2r0; let c2r1 = det_inv * _c2r1; let c2r2 = det_inv * _c2r2; let c2r3 = det_inv * _c2r3;
+            let c3r0 = det_inv * _c3r0; let c3r1 = det_inv * _c3r1; let c3r2 = det_inv * _c3r2; let c3r3 = det_inv * _c3r3;
+
+            Some(Matrix4::new(
+                c0r0, c0r1, c0r2, c0r3,
+                c1r0, c1r1, c1r2, c1r3,
+                c2r0, c2r1, c2r2, c2r3,
+                c3r0, c3r1, c3r2, c3r3
+            ))
         }
     }
 }
@@ -3876,7 +3921,12 @@ mod matrix4_tests {
         let c1 = Vector4::new(5, 6, 7, 8);
         let c2 = Vector4::new(9, 10, 11, 12);
         let c3 = Vector4::new(13, 14, 15, 16);
-        let expected = Matrix4::new(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15, 16);
+        let expected = Matrix4::new(
+            1,  2,  3,  4, 
+            5,  6,  7,  8, 
+            9,  10, 11, 12, 
+            13, 14 ,15, 16
+        );
         let result = Matrix4::from_cols(c0, c1, c2, c3);
 
         assert_eq!(result, expected);
