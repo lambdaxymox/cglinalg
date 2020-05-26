@@ -657,22 +657,20 @@ impl<S> approx::UlpsEq for Vector1<S> where S: ScalarFloat {
 }
 
 
-impl_mul_operator!(u8, Vector1<u8>, Vector1<u8>, { x });
-impl_mul_operator!(u16, Vector1<u16>, Vector1<u16>, { x });
-impl_mul_operator!(u32, Vector1<u32>, Vector1<u32>, { x });
-impl_mul_operator!(u64, Vector1<u64>, Vector1<u64>, { x });
-impl_mul_operator!(u128, Vector1<u128>, Vector1<u128>, { x });
+impl_mul_operator!(u8,    Vector1<u8>,    Vector1<u8>,    { x });
+impl_mul_operator!(u16,   Vector1<u16>,   Vector1<u16>,   { x });
+impl_mul_operator!(u32,   Vector1<u32>,   Vector1<u32>,   { x });
+impl_mul_operator!(u64,   Vector1<u64>,   Vector1<u64>,   { x });
+impl_mul_operator!(u128,  Vector1<u128>,  Vector1<u128>,  { x });
 impl_mul_operator!(usize, Vector1<usize>, Vector1<usize>, { x });
-
-impl_mul_operator!(i8, Vector1<i8>, Vector1<i8>, { x });
-impl_mul_operator!(i16, Vector1<i16>, Vector1<i16>, { x });
-impl_mul_operator!(i32, Vector1<i32>, Vector1<i32>, { x });
-impl_mul_operator!(i64, Vector1<i64>, Vector1<i64>, { x });
-impl_mul_operator!(i128, Vector1<i128>, Vector1<i128>, { x });
+impl_mul_operator!(i8,    Vector1<i8>,    Vector1<i8>,    { x });
+impl_mul_operator!(i16,   Vector1<i16>,   Vector1<i16>,   { x });
+impl_mul_operator!(i32,   Vector1<i32>,   Vector1<i32>,   { x });
+impl_mul_operator!(i64,   Vector1<i64>,   Vector1<i64>,   { x });
+impl_mul_operator!(i128,  Vector1<i128>,  Vector1<i128>,  { x });
 impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
-
-impl_mul_operator!(f32, Vector1<f32>, Vector1<f32>, { x });
-impl_mul_operator!(f64, Vector1<f64>, Vector1<f64>, { x });
+impl_mul_operator!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
+impl_mul_operator!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
 
 
@@ -1309,22 +1307,20 @@ impl<S> approx::UlpsEq for Vector2<S> where S: ScalarFloat {
 }
 
 
-impl_mul_operator!(u8, Vector2<u8>, Vector2<u8>, { x, y });
-impl_mul_operator!(u16, Vector2<u16>, Vector2<u16>, { x, y });
-impl_mul_operator!(u32, Vector2<u32>, Vector2<u32>, { x, y });
-impl_mul_operator!(u64, Vector2<u64>, Vector2<u64>, { x, y });
-impl_mul_operator!(u128, Vector2<u128>, Vector2<u128>, { x, y });
+impl_mul_operator!(u8,    Vector2<u8>,    Vector2<u8>,    { x, y });
+impl_mul_operator!(u16,   Vector2<u16>,   Vector2<u16>,   { x, y });
+impl_mul_operator!(u32,   Vector2<u32>,   Vector2<u32>,   { x, y });
+impl_mul_operator!(u64,   Vector2<u64>,   Vector2<u64>,   { x, y });
+impl_mul_operator!(u128,  Vector2<u128>,  Vector2<u128>,  { x, y });
 impl_mul_operator!(usize, Vector2<usize>, Vector2<usize>, { x, y });
-
-impl_mul_operator!(i8, Vector2<i8>, Vector2<i8>, { x, y });
-impl_mul_operator!(i16, Vector2<i16>, Vector2<i16>, { x, y });
-impl_mul_operator!(i32, Vector2<i32>, Vector2<i32>, { x, y });
-impl_mul_operator!(i64, Vector2<i64>, Vector2<i64>, { x, y });
-impl_mul_operator!(i128, Vector2<i128>, Vector2<i128>, { x, y });
+impl_mul_operator!(i8,    Vector2<i8>,    Vector2<i8>,    { x, y });
+impl_mul_operator!(i16,   Vector2<i16>,   Vector2<i16>,   { x, y });
+impl_mul_operator!(i32,   Vector2<i32>,   Vector2<i32>,   { x, y });
+impl_mul_operator!(i64,   Vector2<i64>,   Vector2<i64>,   { x, y });
+impl_mul_operator!(i128,  Vector2<i128>,  Vector2<i128>,  { x, y });
 impl_mul_operator!(isize, Vector2<isize>, Vector2<isize>, { x, y });
-
-impl_mul_operator!(f32, Vector2<f32>, Vector2<f32>, { x, y });
-impl_mul_operator!(f64, Vector2<f64>, Vector2<f64>, { x, y });
+impl_mul_operator!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
+impl_mul_operator!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
 
 
 
@@ -2039,23 +2035,20 @@ impl<S> approx::UlpsEq for Vector3<S> where S: ScalarFloat {
 }
 
 
-// impl Magnitude<Vector3> for &Vector3 {}
-impl_mul_operator!(u8, Vector3<u8>, Vector3<u8>, { x, y, z });
-impl_mul_operator!(u16, Vector3<u16>, Vector3<u16>, { x, y, z });
-impl_mul_operator!(u32, Vector3<u32>, Vector3<u32>, { x, y, z });
-impl_mul_operator!(u64, Vector3<u64>, Vector3<u64>, { x, y, z });
-impl_mul_operator!(u128, Vector3<u128>, Vector3<u128>, { x, y, z });
+impl_mul_operator!(u8,    Vector3<u8>,    Vector3<u8>,    { x, y, z });
+impl_mul_operator!(u16,   Vector3<u16>,   Vector3<u16>,   { x, y, z });
+impl_mul_operator!(u32,   Vector3<u32>,   Vector3<u32>,   { x, y, z });
+impl_mul_operator!(u64,   Vector3<u64>,   Vector3<u64>,   { x, y, z });
+impl_mul_operator!(u128,  Vector3<u128>,  Vector3<u128>,  { x, y, z });
 impl_mul_operator!(usize, Vector3<usize>, Vector3<usize>, { x, y, z });
-
-impl_mul_operator!(i8, Vector3<i8>, Vector3<i8>, { x, y, z });
-impl_mul_operator!(i16, Vector3<i16>, Vector3<i16>, { x, y, z });
-impl_mul_operator!(i32, Vector3<i32>, Vector3<i32>, { x, y, z });
-impl_mul_operator!(i64, Vector3<i64>, Vector3<i64>, { x, y, z });
-impl_mul_operator!(i128, Vector3<i128>, Vector3<i128>, { x, y, z });
+impl_mul_operator!(i8,    Vector3<i8>,    Vector3<i8>,    { x, y, z });
+impl_mul_operator!(i16,   Vector3<i16>,   Vector3<i16>,   { x, y, z });
+impl_mul_operator!(i32,   Vector3<i32>,   Vector3<i32>,   { x, y, z });
+impl_mul_operator!(i64,   Vector3<i64>,   Vector3<i64>,   { x, y, z });
+impl_mul_operator!(i128,  Vector3<i128>,  Vector3<i128>,  { x, y, z });
 impl_mul_operator!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
-
-impl_mul_operator!(f32, Vector3<f32>, Vector3<f32>, { x, y, z });
-impl_mul_operator!(f64, Vector3<f64>, Vector3<f64>, { x, y, z });
+impl_mul_operator!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
+impl_mul_operator!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
 
 
 /// A representation of four-dimensional vectors with a Euclidean metric.
@@ -2795,22 +2788,22 @@ impl<S> approx::UlpsEq for Vector4<S> where S: ScalarFloat {
 }
 
 
-impl_mul_operator!(u8, Vector4<u8>, Vector4<u8>, { x, y, z, w });
-impl_mul_operator!(u16, Vector4<u16>, Vector4<u16>, { x, y, z, w });
-impl_mul_operator!(u32, Vector4<u32>, Vector4<u32>, { x, y, z, w });
-impl_mul_operator!(u64, Vector4<u64>, Vector4<u64>, { x, y, z, w });
-impl_mul_operator!(u128, Vector4<u128>, Vector4<u128>, { x, y, z, w });
+impl_mul_operator!(u8,    Vector4<u8>,    Vector4<u8>,    { x, y, z, w });
+impl_mul_operator!(u16,   Vector4<u16>,   Vector4<u16>,   { x, y, z, w });
+impl_mul_operator!(u32,   Vector4<u32>,   Vector4<u32>,   { x, y, z, w });
+impl_mul_operator!(u64,   Vector4<u64>,   Vector4<u64>,   { x, y, z, w });
+impl_mul_operator!(u128,  Vector4<u128>,  Vector4<u128>,  { x, y, z, w });
 impl_mul_operator!(usize, Vector4<usize>, Vector4<usize>, { x, y, z, w });
-
-impl_mul_operator!(i8, Vector4<i8>, Vector4<i8>, { x, y, z, w });
-impl_mul_operator!(i16, Vector4<i16>, Vector4<i16>, { x, y, z, w });
-impl_mul_operator!(i32, Vector4<i32>, Vector4<i32>, { x, y, z, w });
-impl_mul_operator!(i64, Vector4<i64>, Vector4<i64>, { x, y, z, w });
-impl_mul_operator!(i128, Vector4<i128>, Vector4<i128>, { x, y, z, w });
+impl_mul_operator!(i8,    Vector4<i8>,    Vector4<i8>,    { x, y, z, w });
+impl_mul_operator!(i16,   Vector4<i16>,   Vector4<i16>,   { x, y, z, w });
+impl_mul_operator!(i32,   Vector4<i32>,   Vector4<i32>,   { x, y, z, w });
+impl_mul_operator!(i64,   Vector4<i64>,   Vector4<i64>,   { x, y, z, w });
+impl_mul_operator!(i128,  Vector4<i128>,  Vector4<i128>,  { x, y, z, w });
 impl_mul_operator!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
+impl_mul_operator!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
+impl_mul_operator!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
 
-impl_mul_operator!(f32, Vector4<f32>, Vector4<f32>, { x, y, z, w });
-impl_mul_operator!(f64, Vector4<f64>, Vector4<f64>, { x, y, z, w });
+
 
 #[cfg(test)]
 mod vector1_tests {

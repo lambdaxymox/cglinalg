@@ -2943,6 +2943,101 @@ impl<S> approx::UlpsEq for Matrix4<S> where S: ScalarFloat {
     }
 }
 
+macro_rules! impl_mul_operator {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field),*)
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field),*)
+            }
+        }
+    }
+}
+
+impl_mul_operator!(u8,    Matrix2<u8>,    Matrix2<u8>,    { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(u16,   Matrix2<u16>,   Matrix2<u16>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(u32,   Matrix2<u32>,   Matrix2<u32>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(u64,   Matrix2<u64>,   Matrix2<u64>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(u128,  Matrix2<u128>,  Matrix2<u128>,  { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(usize, Matrix2<usize>, Matrix2<usize>, { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(i8,    Matrix2<i8>,    Matrix2<i8>,    { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(i16,   Matrix2<i16>,   Matrix2<i16>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(i32,   Matrix2<i32>,   Matrix2<i32>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(i64,   Matrix2<i64>,   Matrix2<i64>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(i128,  Matrix2<i128>,  Matrix2<i128>,  { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(isize, Matrix2<isize>, Matrix2<isize>, { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(f32,   Matrix2<f32>,   Matrix2<f32>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_mul_operator!(f64,   Matrix2<f64>,   Matrix2<f64>,   { c0r0, c0r1, c1r0, c1r1 });
+
+impl_mul_operator!(u8,    Matrix3<u8>,    Matrix3<u8>,    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(u16,   Matrix3<u16>,   Matrix3<u16>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(u32,   Matrix3<u32>,   Matrix3<u32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(u64,   Matrix3<u64>,   Matrix3<u64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(u128,  Matrix3<u128>,  Matrix3<u128>,  { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(usize, Matrix3<usize>, Matrix3<usize>, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(i8,    Matrix3<i8>,    Matrix3<i8>,    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(i16,   Matrix3<i16>,   Matrix3<i16>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(i32,   Matrix3<i32>,   Matrix3<i32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(i64,   Matrix3<i64>,   Matrix3<i64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(i128,  Matrix3<i128>,  Matrix3<i128>,  { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(isize, Matrix3<isize>, Matrix3<isize>, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(f32,   Matrix3<f32>,   Matrix3<f32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_mul_operator!(f64,   Matrix3<f64>,   Matrix3<f64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+
+impl_mul_operator!(u8,    Matrix4<u8>,    Matrix4<u8>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(u16,   Matrix4<u16>,   Matrix4<u16>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(u32,   Matrix4<u32>,   Matrix4<u32>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(u64,   Matrix4<u64>,   Matrix4<u64>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(u128,  Matrix4<u128>,  Matrix4<u128>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(usize, Matrix4<usize>, Matrix4<usize>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(i8,    Matrix4<i8>,    Matrix4<i8>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(i16,   Matrix4<i16>,   Matrix4<i16>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(i32,   Matrix4<i32>,   Matrix4<i32>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(i64,   Matrix4<i64>,   Matrix4<i64>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(i128,  Matrix4<i128>,  Matrix4<i128>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(isize, Matrix4<isize>, Matrix4<isize>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(f32,   Matrix4<f32>,   Matrix4<f32>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+impl_mul_operator!(f64,   Matrix4<f64>,   Matrix4<f64>, 
+    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
+);
+
 
 #[cfg(test)]
 mod matrix2_tests {
@@ -3711,6 +3806,22 @@ mod matrix4_tests {
         );
         
         assert_eq!(matrix.determinant(), 0.0);
+    }
+
+    #[test]
+    fn test_matrix_inverse() {
+        let matrix: Matrix4<f64> = Matrix4::new(
+            5_f64, 1_f64, 1_f64, 1_f64, 
+            1_f64, 5_f64, 1_f64, 1_f64,
+            1_f64, 1_f64, 5_f64, 1_f64,
+            1_f64, 1_f64, 1_f64, 5_f64, 
+        );
+        let expected: Matrix4<f64> = (1_f64 / 32_f64) * Matrix4::new(
+             7_f64, -1_f64, -1_f64, -1_f64,
+            -1_f64,  7_f64, -1_f64, -1_f64,
+            -1_f64, -1_f64,  7_f64, -1_f64,
+            -1_f64, -1_f64, -1_f64,  7_f64
+        );
     }
 
     #[test]
