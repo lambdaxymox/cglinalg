@@ -1570,6 +1570,7 @@ impl<S> approx::UlpsEq for Matrix3<S> where S: ScalarFloat {
 
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
+#[repr(C)]
 pub struct Matrix4<S> {
     /// Column 1 of the matrix.
     pub c0r0: S, pub c0r1: S, pub c0r2: S, pub c0r3: S,
