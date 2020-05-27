@@ -17,7 +17,7 @@ fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> where S: Scalar + Arbit
     any::<S>().prop_map(|x| Vector1::new(x))
 }
 
-fn any_vector1_no_overflow<S>() -> impl Strategy<Value = Vector1<S>> where S: Scalar + num_traits::One + Arbitrary {
+fn any_vector1_no_overflow<S>() -> impl Strategy<Value = Vector1<S>> where S: Scalar + Arbitrary {
     any::<S>().prop_map(|x| { 
         let two = <S as num_traits::One>::one() + <S as num_traits::One>::one();
         Vector1::new(x / two)
@@ -28,7 +28,7 @@ fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>> where S: Scalar + Arbit
     any::<(S, S)>().prop_map(|(x, y)| Vector2::new(x, y))
 }
 
-fn any_vector2_no_overflow<S>() -> impl Strategy<Value = Vector2<S>> where S: Scalar + num_traits::One + Arbitrary {
+fn any_vector2_no_overflow<S>() -> impl Strategy<Value = Vector2<S>> where S: Scalar + Arbitrary {
     any::<(S, S)>().prop_map(|(x, y)| { 
         let two = <S as num_traits::One>::one() + <S as num_traits::One>::one();
         Vector2::new(x / two, y / two) 
@@ -39,7 +39,7 @@ fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>> where S: Scalar + Arbit
     any::<(S, S, S)>().prop_map(|(x, y, z)| Vector3::new(x, y, z))
 }
 
-fn any_vector3_no_overflow<S>() -> impl Strategy<Value = Vector3<S>> where S: Scalar + num_traits::One + Arbitrary {
+fn any_vector3_no_overflow<S>() -> impl Strategy<Value = Vector3<S>> where S: Scalar + Arbitrary {
     any::<(S, S, S)>().prop_map(|(x, y, z)| { 
         let two = <S as num_traits::One>::one() + <S as num_traits::One>::one();
         Vector3::new(x / two, y / two, z / two)
@@ -50,7 +50,7 @@ fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>> where S: Scalar + Arbit
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| Vector4::new(x, y, z, w))
 }
 
-fn any_vector4_no_overflow<S>() -> impl Strategy<Value = Vector4<S>> where S: Scalar + num_traits::One + Arbitrary {
+fn any_vector4_no_overflow<S>() -> impl Strategy<Value = Vector4<S>> where S: Scalar + Arbitrary {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
         let two = <S as num_traits::One>::one() + <S as num_traits::One>::one();
         Vector4::new(x / two, y / two, z / two, w / two)
