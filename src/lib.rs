@@ -6,7 +6,7 @@ mod base;
 //mod cgmath;
 mod matrix;
 //mod projection;
-//mod quaternion;
+mod quaternion;
 
 mod vector;
 mod structure;
@@ -14,7 +14,7 @@ mod structure;
 //pub use cgmath::*;
 pub use matrix::*;
 //pub use projection::*;
-//pub use quaternion::*;
+pub use quaternion::*;
 
 pub use base::*;
 pub use vector::*;
