@@ -744,3 +744,38 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
     }
 }
 
+impl<S> Lerp<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
+    fn lerp(self, other: Quaternion<S>, amount: Self::Scalar) -> Self::Output {
+        self + (other - self) * amount
+    }
+}
+
+impl<S> Lerp<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
+    fn lerp(self, other: &Quaternion<S>, amount: Self::Scalar) -> Self::Output {
+        self + (other - self) * amount
+    }
+}
+
+impl<S> Lerp<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
+    fn lerp(self, other: Quaternion<S>, amount: Self::Scalar) -> Self::Output {
+        self + (other - self) * amount
+    }
+}
+
+impl<'a, 'b, S> Lerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
+    fn lerp(self, other: &'a Quaternion<S>, amount: Self::Scalar) -> Self::Output {
+        self + (other - self) * amount
+    }
+}

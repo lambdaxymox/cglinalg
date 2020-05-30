@@ -109,6 +109,10 @@ pub trait Lerp<V: Copy + Clone> {
     fn lerp(self, other: V, amount: Self::Scalar) -> Self::Output;
 }
 
+pub trait Nlerp<V: Copy + Clone>: Lerp<V> + Magnitude<Output = <Self as Lerp<V>>::Scalar> {
+    fn nlerp(self, other: V, amount: <Self as Lerp<V>>::Scalar) -> <Self as Lerp<V>>::Output;
+} 
+
 pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
     type Output;
 
