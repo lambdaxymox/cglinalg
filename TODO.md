@@ -1,2 +1,2 @@
 # TODO
-* Handle approximate equality comparisons in a more principled way.
+* Handle angles in a princpled way.
