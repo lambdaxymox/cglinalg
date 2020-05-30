@@ -1,9 +1,9 @@
-extern crate cgmath;
+extern crate gdmath;
 extern crate num_traits;
 extern crate proptest;
 
 use proptest::prelude::*;
-use cgmath::{
+use gdmath::{
     Vector1, 
     Vector2, 
     Vector3, 
@@ -106,7 +106,7 @@ macro_rules! exact_arithmetic_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Zero};
+        use gdmath::{$VectorN, Zero};
 
         proptest! {
             #[test]
@@ -166,7 +166,7 @@ macro_rules! approx_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Zero};
+        use gdmath::{$VectorN, Zero};
 
         proptest! {
             #[test]
@@ -225,7 +225,7 @@ macro_rules! exact_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Zero};
+        use gdmath::{$VectorN, Zero};
 
         proptest! {
             #[test]
@@ -289,7 +289,7 @@ macro_rules! approx_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Zero};
+        use gdmath::{$VectorN, Zero};
 
         proptest! {
             #[test]
@@ -319,7 +319,7 @@ macro_rules! exact_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Zero};
+        use gdmath::{$VectorN, Zero};
 
         proptest! {
             #[test]
@@ -353,8 +353,8 @@ macro_rules! magnitude_props {
     ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident, $epsilon:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::{$VectorN, Magnitude};
-        use cgmath::approx::relative_eq;
+        use gdmath::{$VectorN, Magnitude};
+        use gdmath::approx::relative_eq;
 
         proptest! {
             #[test]
@@ -391,7 +391,7 @@ macro_rules! magnitude_props {
             #[test]
             fn prop_magnitude_point_separating(v in super::$Generator::<$FieldType>()) {
                 let zero = <$FieldType as num_traits::Zero>::zero();
-                let zero_vec = <$VectorN<$FieldType> as cgmath::Zero>::zero();
+                let zero_vec = <$VectorN<$FieldType> as gdmath::Zero>::zero();
                 prop_assume!(v != zero_vec);
                 prop_assert_ne!(v.magnitude(), zero);
             }
@@ -411,14 +411,14 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::Magnitude;
+        use gdmath::Magnitude;
 
         proptest! {
             #[test]
             fn prop_scalar_times_vector_equals_vector_times_scalar(
                 c in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
                 
-                use cgmath::approx::relative_eq;
+                use gdmath::approx::relative_eq;
                 prop_assume!(c.is_finite());
                 prop_assume!(v.magnitude().is_finite());
                 prop_assert!(
@@ -484,7 +484,7 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cgmath::Magnitude;
+        use gdmath::Magnitude;
     
         proptest! {
             #[test]
