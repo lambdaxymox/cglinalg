@@ -349,7 +349,7 @@ exact_sub_props!(vector3_u32_sub_props, Vector3, u32, any_vector3_no_overflow);
 exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4_no_overflow);
 
 
-macro_rules! vector_magnitude_props {
+macro_rules! magnitude_props {
     ($TestModuleName:ident, $VectorN:ident, $FieldType:ty, $Generator:ident, $epsilon:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -400,10 +400,10 @@ macro_rules! vector_magnitude_props {
     }
 }
 
-vector_magnitude_props!(vector1_f64_magnitude_props, Vector1, f64, any_vector1, 1e-7);
-vector_magnitude_props!(vector2_f64_magnitude_props, Vector2, f64, any_vector2, 1e-7);
-vector_magnitude_props!(vector3_f64_magnitude_props, Vector3, f64, any_vector3, 1e-7);
-vector_magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, 1e-7);
+magnitude_props!(vector1_f64_magnitude_props, Vector1, f64, any_vector1, 1e-7);
+magnitude_props!(vector2_f64_magnitude_props, Vector2, f64, any_vector2, 1e-7);
+magnitude_props!(vector3_f64_magnitude_props, Vector3, f64, any_vector3, 1e-7);
+magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, 1e-7);
 
 
 macro_rules! approx_mul_props {
