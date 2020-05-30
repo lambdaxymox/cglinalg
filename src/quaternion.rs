@@ -99,8 +99,8 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         m.c3r2 = zero;
         m.c3r3 = one;
     }
-    /*
-    pub fn slerp(q: &mut Quaternion<S>, r: &Quaternion<S>, t: S) -> Quaternion<S> {
+
+    pub fn slerp(q: &mut Quaternion<S>, r: &Quaternion<S>, amount: S) -> Quaternion<S> {
         // angle between q0-q1
         let mut cos_half_theta = q.dot(r);
         // as found here
@@ -128,17 +128,18 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         // if theta = 180 degrees then result is not fully defined
         // we could rotate around any axis normal to qa or qb
         let mut result = Quaternion::new(one, zero, zero, zero);
-        if f32::abs(sin_half_theta) < 0.001 {
-            result.s   = (one - t) * q.s   + t * r.s;
-            result.v.x = (one - t) * q.v.x + t * r.v.x;
-            result.v.y = (one - t) * q.v.y + t * r.v.y;
-            result.v.z = (one - t) * q.v.z + t * r.v.z;
+        let threshold = num_traits::cast(0.001).unwrap();
+        if S::abs(sin_half_theta) < threshold {
+            result.s   = (one - amount) * q.s   + amount * r.s;
+            result.v.x = (one - amount) * q.v.x + amount * r.v.x;
+            result.v.y = (one - amount) * q.v.y + amount * r.v.y;
+            result.v.z = (one - amount) * q.v.z + amount * r.v.z;
 
             return result;
         }
         let half_theta = S::acos(cos_half_theta);
-        let a = S::sin((one - t) * half_theta) / sin_half_theta;
-        let b = S::sin(t * half_theta) / sin_half_theta;
+        let a = S::sin((one - amount) * half_theta) / sin_half_theta;
+        let b = S::sin(amount * half_theta) / sin_half_theta;
         
         result.s   = q.s   * a + r.s   * b;
         result.v.x = q.v.x * a + r.v.x * b;
@@ -147,7 +148,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
         result
     }
-    */
+
 }
 
 impl<S> Zero for Quaternion<S> where S: Scalar {
