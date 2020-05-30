@@ -7,6 +7,7 @@ use structure::{
     DotProduct,
     Magnitude,
     Lerp,
+    Nlerp,
     Metric,
 };
 use base::{
@@ -777,5 +778,29 @@ impl<'a, 'b, S> Lerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFlo
 
     fn lerp(self, other: &'a Quaternion<S>, amount: Self::Scalar) -> Self::Output {
         self + (other - self) * amount
+    }
+}
+
+impl<S> Nlerp<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    fn nlerp(self, other: Quaternion<S>, amount: S) -> Quaternion<S> {
+        self.lerp(other, amount).normalize()
+    }
+}
+
+impl<S> Nlerp<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    fn nlerp(self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
+        self.lerp(other, amount).normalize()
+    }
+}
+
+impl<S> Nlerp<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
+    fn nlerp(self, other: Quaternion<S>, amount: S) -> Quaternion<S> {
+        self.lerp(other, amount).normalize()
+    }
+}
+
+impl<'a, 'b, S> Nlerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
+    fn nlerp(self, other: &'a Quaternion<S>, amount: S) -> Quaternion<S> {
+        self.lerp(other, amount).normalize()
     }
 }
