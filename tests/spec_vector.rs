@@ -354,7 +354,7 @@ macro_rules! magnitude_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::{$VectorN, Magnitude};
-        use gdmath::approx::relative_eq;
+        use gdmath::approx::{ulps_ne, relative_eq, relative_ne};
 
         proptest! {
             #[test]
@@ -364,6 +364,7 @@ macro_rules! magnitude_props {
                 let abs_c = <$FieldType as num_traits::Float>::abs(c);                
                 prop_assume!((abs_c * v.magnitude()).is_finite());
                 prop_assume!((c * v).magnitude().is_finite());
+                
                 prop_assert!(
                     relative_eq!( (c * v).magnitude(), abs_c * v.magnitude(), epsilon = $epsilon),
                     "\n||c * v|| = {}\n|c| * ||v|| = {}\n", (c * v).magnitude(), abs_c * v.magnitude(),
@@ -389,11 +390,13 @@ macro_rules! magnitude_props {
             }
 
             #[test]
-            fn prop_magnitude_point_separating(v in super::$Generator::<$FieldType>()) {
-                let zero = <$FieldType as num_traits::Zero>::zero();
+            fn prop_magnitude_approx_point_separating(v in super::$Generator::<$FieldType>()) {
                 let zero_vec = <$VectorN<$FieldType> as gdmath::Zero>::zero();
-                prop_assume!(v != zero_vec);
-                prop_assert_ne!(v.magnitude(), zero);
+
+                prop_assume!(relative_ne!(v, zero_vec, epsilon = $epsilon));
+                prop_assert!(relative_ne!(v.magnitude(), zero_vec.magnitude(), epsilon = $epsilon),
+                    "\n|v| = {}\n|zero_vec| = {}\n", v.magnitude(), zero_vec.magnitude()
+                );
             }
         }
     }
@@ -412,13 +415,13 @@ macro_rules! approx_mul_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::Magnitude;
+        use gdmath::approx::relative_eq;
 
         proptest! {
             #[test]
             fn prop_scalar_times_vector_equals_vector_times_scalar(
                 c in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
                 
-                use gdmath::approx::relative_eq;
                 prop_assume!(c.is_finite());
                 prop_assume!(v.magnitude().is_finite());
                 prop_assert!(
@@ -430,7 +433,7 @@ macro_rules! approx_mul_props {
             fn prop_scalar_multiplication_compatability(
                 a in any::<$FieldType>(), b in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
 
-                prop_assert_eq!(a * (b * v), (a * b) * v);
+                prop_assert!(relative_eq!(a * (b * v), (a * b) * v, epsilon = $epsilon));
             }
         }
     }
