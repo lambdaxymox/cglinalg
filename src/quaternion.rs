@@ -968,6 +968,7 @@ mod magnitude_tests {
     use super::Quaternion;
     use structure::Magnitude;
     use vector::Vector3;
+    use approx::relative_eq;
 
 
     #[test]
@@ -997,5 +998,16 @@ mod magnitude_tests {
         let expected = 1_f64;
 
         assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaternion_normalized_to() {
+        let q = Quaternion::from_sv(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
+        let magnitude = 12_f64;
+        let result = q.normalize_to(magnitude).magnitude();
+        let expected = magnitude;
+        let tolerance = 1e-7;
+
+        assert!(relative_eq!(result, expected, epsilon = tolerance));
     }
 }
