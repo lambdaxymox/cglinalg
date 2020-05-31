@@ -381,10 +381,7 @@ impl<S> ops::Add<Quaternion<S>> for Quaternion<S> where S: Scalar {
 
     #[inline]
     fn add(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::new(
-            other.s + self.s,
-            other.v.x + self.v.x, other.v.y + self.v.y, other.v.z + self.v.z,
-        )
+        Quaternion::from_sv(self.s + other.s, self.v + other.v)
     }
 }
 
@@ -393,10 +390,7 @@ impl<'a, S> ops::Add<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
 
     #[inline]
     fn add(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::new(
-            other.s + self.s,
-            other.v.x + self.v.x, other.v.y + self.v.y, other.v.z + self.v.z,
-        )
+        Quaternion::from_sv(self.s + other.s, self.v + other.v)
     }
 }
 
@@ -405,10 +399,7 @@ impl<'a, S> ops::Add<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
 
     #[inline]
     fn add(self, other: &'a Quaternion<S>) -> Self::Output {
-        Quaternion::new(
-            other.s + self.s,
-            other.v.x + self.v.x, other.v.y + self.v.y, other.v.z + self.v.z,
-        )
+        Quaternion::from_sv(self.s + other.s, self.v + other.v)
     }
 }
 
@@ -417,10 +408,7 @@ impl<'a, 'b, S> ops::Add<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
 
     #[inline]
     fn add(self, other: &'a Quaternion<S>) -> Self::Output {
-        Quaternion::new(
-            other.s + self.s,
-            other.v.x + self.v.x, other.v.y + self.v.y, other.v.z + self.v.z,
-        )
+        Quaternion::from_sv(self.s + other.s, self.v + other.v)
     }
 }
 
@@ -429,10 +417,7 @@ impl<S> ops::Sub<Quaternion<S>> for Quaternion<S> where S: Scalar {
 
     #[inline]
     fn sub(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::new(
-            other.s - self.s,
-            other.v.x - self.v.x, other.v.y - self.v.y, other.v.z - self.v.z,
-        )
+        Quaternion::from_sv(self.s - other.s, self.v - other.v)
     }
 }
 
@@ -441,10 +426,7 @@ impl<'a, S> ops::Sub<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
 
     #[inline]
     fn sub(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::new(
-            other.s - self.s,
-            other.v.x - self.v.x, other.v.y - self.v.y, other.v.z - self.v.z,
-        )
+        Quaternion::from_sv(self.s - other.s, self.v - other.v)
     }
 }
 
@@ -453,10 +435,7 @@ impl<'a, S> ops::Sub<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
 
     #[inline]
     fn sub(self, other: &'a Quaternion<S>) -> Self::Output {
-        Quaternion::new(
-            other.s - self.s,
-            other.v.x - self.v.x, other.v.y - self.v.y, other.v.z - self.v.z,
-        )
+        Quaternion::from_sv(self.s - other.s, self.v - other.v)
     }
 }
 
@@ -465,10 +444,7 @@ impl<'a, 'b, S> ops::Sub<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
 
     #[inline]
     fn sub(self, other: &'a Quaternion<S>) -> Self::Output {
-        Quaternion::new(
-            other.s - self.s,
-            other.v.x - self.v.x, other.v.y - self.v.y, other.v.z - self.v.z,
-        )
+        Quaternion::from_sv(self.s - other.s, self.v - other.v)
     }
 }
 
