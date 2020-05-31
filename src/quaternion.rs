@@ -705,7 +705,7 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
     type Output = S;
 
     fn magnitude(&self) -> Self::Output {
-        Self::Output::abs(self.magnitude_squared())
+        Self::Output::sqrt(Self::Output::abs(self.magnitude_squared()))
     }
 
     fn magnitude_squared(&self) -> Self::Output {
@@ -965,11 +965,10 @@ mod arithmetic_tests {
 
 #[cfg(test)]
 mod magnitude_tests {
-    use super::{
-        Quaternion
-    };
+    use super::Quaternion;
     use structure::Magnitude;
     use vector::Vector3;
+
 
     #[test]
     fn unit_axis_quaternions_should_have_unit_norms() {
@@ -980,5 +979,23 @@ mod magnitude_tests {
         assert_eq!(i.magnitude(), 1_f64);
         assert_eq!(j.magnitude(), 1_f64);
         assert_eq!(k.magnitude(), 1_f64);
+    }
+
+    #[test]
+    fn test_quaternion_magnitude() {
+        let q = Quaternion::from_sv(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
+        let result = q.magnitude_squared();
+        let expected = 6875.23713677;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaternion_normalized() {
+        let q = Quaternion::from_sv(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
+        let result = q.normalize().magnitude();
+        let expected = 1_f64;
+
+        assert_eq!(result, expected);
     }
 }
