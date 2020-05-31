@@ -928,6 +928,26 @@ mod arithmetic_tests {
         assert_eq!(result_j, expected_j);
         assert_eq!(result_k, expected_k);
     }
+
+    #[test]
+    fn test_quaternion_addition() {
+        let q1 = Quaternion::new(1, 2, 3, 4);
+        let q2 = Quaternion::new(5, 6, 7, 8);
+        let expected = Quaternion::new(6, 8, 10, 12);
+        let result = q1 + q2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaternion_subtraction() {
+        let q1 = Quaternion::new(1, 2, 3, 4);
+        let q2 = Quaternion::new(5, 6, 7, 8);
+        let expected = Quaternion::new(-4, -4, -4, -4);
+        let result = q1 - q2;
+
+        assert_eq!(result, expected);
+    }
 }
 
 #[cfg(test)]
