@@ -851,3 +851,75 @@ mod lerp_tests {
         assert_eq!(result, q2);
     }
 }
+
+macro_rules! impl_mul_operator {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $scalar:ident, { $($field:ident),* } }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            }
+        }
+    }
+}
+
+impl_mul_operator!(u8,    Quaternion<u8>,    Quaternion<u8>,    { s, { x, y, z } });
+impl_mul_operator!(u16,   Quaternion<u16>,   Quaternion<u16>,   { s, { x, y, z } });
+impl_mul_operator!(u32,   Quaternion<u32>,   Quaternion<u32>,   { s, { x, y, z } });
+impl_mul_operator!(u64,   Quaternion<u64>,   Quaternion<u64>,   { s, { x, y, z } });
+impl_mul_operator!(u128,  Quaternion<u128>,  Quaternion<u128>,  { s, { x, y, z } });
+impl_mul_operator!(usize, Quaternion<usize>, Quaternion<usize>, { s, { x, y, z } });
+impl_mul_operator!(i8,    Quaternion<i8>,    Quaternion<i8>,    { s, { x, y, z } });
+impl_mul_operator!(i16,   Quaternion<i16>,   Quaternion<i16>,   { s, { x, y, z } });
+impl_mul_operator!(i32,   Quaternion<i32>,   Quaternion<i32>,   { s, { x, y, z } });
+impl_mul_operator!(i64,   Quaternion<i64>,   Quaternion<i64>,   { s, { x, y, z } });
+impl_mul_operator!(i128,  Quaternion<i128>,  Quaternion<i128>,  { s, { x, y, z } });
+impl_mul_operator!(isize, Quaternion<isize>, Quaternion<isize>, { s, { x, y, z } });
+impl_mul_operator!(f32,   Quaternion<f32>,   Quaternion<f32>,   { s, { x, y, z } });
+impl_mul_operator!(f64,   Quaternion<f64>,   Quaternion<f64>,   { s, { x, y, z } });
+
+
+
+#[cfg(test)]
+mod arithmetic_tests {
+    use super::Quaternion;
+    use vector::Vector3;
+
+
+    #[test]
+    fn test_unit_axis_quaternions() {
+        let i = Quaternion::from_sv(0_f64, Vector3::unit_x());
+        let j = Quaternion::from_sv(0_f64, Vector3::unit_y());
+        let k = Quaternion::from_sv(0_f64, Vector3::unit_z());
+
+        let result_i = 4_f64 * i;
+        let expected_i = Quaternion::from_sv(0_f64, Vector3::new(4_f64, 0_f64, 0_f64));
+        let result_j = 4_f64 * j;
+        let expected_j = Quaternion::from_sv(0_f64, Vector3::new(0_f64, 4_f64, 0_f64));
+        let result_k = 4_f64 * k;
+        let expected_k = Quaternion::from_sv(0_f64, Vector3::new(0_f64, 0_f64, 4_f64));
+
+        assert_eq!(result_i, expected_i);
+        assert_eq!(result_j, expected_j);
+        assert_eq!(result_k, expected_k);
+    }
+}
+
+#[cfg(test)]
+mod magnitude_tests {
+    use super::{
+        Quaternion
+    };
+    use vector::Vector3;
+}

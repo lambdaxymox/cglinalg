@@ -534,29 +534,6 @@ impl<S> DotProduct<&Vector1<S>> for &Vector1<S> where S: Scalar {
 }
 
 
-macro_rules! impl_mul_operator {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
-            }
-        }
-
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
-            }
-        }
-    }
-}
-
-
 impl<S> Lerp<Vector1<S>> for Vector1<S> where S: Scalar {
     type Scalar = S;
     type Output = Vector1<S>;
@@ -656,6 +633,28 @@ impl<S> approx::UlpsEq for Vector1<S> where S: ScalarFloat {
     }
 }
 
+
+macro_rules! impl_mul_operator {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field),*)
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field),*)
+            }
+        }
+    }
+}
 
 impl_mul_operator!(u8,    Vector1<u8>,    Vector1<u8>,    { x });
 impl_mul_operator!(u16,   Vector1<u16>,   Vector1<u16>,   { x });
