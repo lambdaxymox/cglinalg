@@ -782,25 +782,72 @@ impl<'a, 'b, S> Lerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFlo
 }
 
 impl<S> Nlerp<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
     fn nlerp(self, other: Quaternion<S>, amount: S) -> Quaternion<S> {
-        self.lerp(other, amount).normalize()
+        (self * (S::one() - amount) + other * amount).normalize()
     }
 }
 
 impl<S> Nlerp<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
     fn nlerp(self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
-        self.lerp(other, amount).normalize()
+        (self * (S::one() - amount) + other * amount).normalize()
     }
 }
 
 impl<S> Nlerp<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
     fn nlerp(self, other: Quaternion<S>, amount: S) -> Quaternion<S> {
-        self.lerp(other, amount).normalize()
+        (self * (S::one() - amount) + other * amount).normalize()
     }
 }
 
 impl<'a, 'b, S> Nlerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
     fn nlerp(self, other: &'a Quaternion<S>, amount: S) -> Quaternion<S> {
-        self.lerp(other, amount).normalize()
+        (self * (S::one() - amount) + other * amount).normalize()
+    }
+}
+
+
+#[cfg(test)]
+mod lerp_tests {
+    use structure::{
+        Lerp, 
+        Nlerp,
+    };
+    use super::Quaternion;
+
+
+    #[test]
+    fn test_nlerp() {
+        let q1 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
+        let q2 = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
+        let amount = 0.5;
+        let result = q1.nlerp(q2, amount);
+        let expected = Quaternion::new(0.5, 0.5, 0.5, 0.5);
+
+        assert_eq!(result, expected);
+
+    }
+
+    #[test]
+    fn test_lerp_should_interpolate_to_endoints() {
+        let q1 = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
+        let q2 = Quaternion::new(2_f64, 2_f64, 2_f64, 2_f64);
+        
+        let result = q1.lerp(q2, 0_f64);
+        assert_eq!(result, q1);
+
+        let result = q1.lerp(q2, 1_f64);
+        assert_eq!(result, q2);
     }
 }
