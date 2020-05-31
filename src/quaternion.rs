@@ -885,6 +885,7 @@ mod lerp_tests {
 mod arithmetic_tests {
     use super::Quaternion;
     use vector::Vector3;
+    use structure::One;
 
 
     #[test]
@@ -923,6 +924,42 @@ mod arithmetic_tests {
         let result = q1 - q2;
 
         assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaternion_unit_squares() {
+        let i = Quaternion::from_sv(0_f64, Vector3::unit_x());
+        let j = Quaternion::from_sv(0_f64, Vector3::unit_y());
+        let k = Quaternion::from_sv(0_f64, Vector3::unit_z());
+        let minus_one = -Quaternion::one();
+
+        assert_eq!(i * i, minus_one);
+        assert_eq!(j * j, minus_one);
+        assert_eq!(k * k, minus_one);
+    }
+
+    #[test]
+    fn test_quaternion_product_of_all_unit_axis_quaternions() {
+        let i = Quaternion::from_sv(0_f64, Vector3::unit_x());
+        let j = Quaternion::from_sv(0_f64, Vector3::unit_y());
+        let k = Quaternion::from_sv(0_f64, Vector3::unit_z());
+        let minus_one = -Quaternion::one();
+
+        assert_eq!(i * j * k, minus_one);
+    }
+
+    #[test]
+    fn test_quaternion_unit_products() {
+        let i = Quaternion::from_sv(0_f64, Vector3::unit_x());
+        let j = Quaternion::from_sv(0_f64, Vector3::unit_y());
+        let k = Quaternion::from_sv(0_f64, Vector3::unit_z());
+
+        assert_eq!(i * j, k);
+        assert_eq!(j * i, -k);
+        assert_eq!(j * k, i);
+        assert_eq!(k * j, -i);
+        assert_eq!(k * i, j);
+        assert_eq!(i * k, -j);
     }
 }
 
