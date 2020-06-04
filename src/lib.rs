@@ -2,7 +2,7 @@ pub extern crate approx;
 pub extern crate num_traits;
 
 mod base;
-
+mod angle;
 //mod cgmath;
 mod matrix;
 //mod projection;

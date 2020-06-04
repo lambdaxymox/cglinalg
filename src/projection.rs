@@ -6,16 +6,16 @@ const ONE_DEG_IN_RAD: f32 = (2.0 * M_PI) / 360.0; // == 0.017444444
 
 
 #[derive(Copy, Clone, Debug, PartialEq)]
-pub struct Orthographic {
-    left: f32,
-    right: f32,
-    bottom: f32,
-    top: f32,
-    near: f32,
-    far: f32,
+pub struct Orthographic<S> {
+    left: S,
+    right: S,
+    bottom: S,
+    top: S,
+    near: S,
+    far: S,
 }
 
-impl Into<Orthographic> for (f32, f32, f32, f32, f32, f32) {
+impl Into<Orthographic> for (S, S, S, S, S, S) {
     #[inline]
     fn into(self) -> Orthographic {
         match self {
@@ -33,7 +33,7 @@ impl Into<Orthographic> for (f32, f32, f32, f32, f32, f32) {
     }
 }
 
-impl Into<Orthographic> for &(f32, f32, f32, f32, f32, f32) {
+impl Into<Orthographic> for &(S, S, S, S, S, S) {
     #[inline]
     fn into(self) -> Orthographic {
         match *self {
@@ -51,7 +51,7 @@ impl Into<Orthographic> for &(f32, f32, f32, f32, f32, f32) {
     }
 }
 
-impl Into<Orthographic> for [f32; 6] {
+impl Into<Orthographic> for [S; 6] {
     #[inline]
     fn into(self) -> Orthographic {
         match self {
@@ -69,7 +69,7 @@ impl Into<Orthographic> for [f32; 6] {
     }
 }
 
-impl Into<Orthographic> for &[f32; 6] {
+impl Into<Orthographic> for &[S; 6] {
     #[inline]
     fn into(self) -> Orthographic {
         match *self {
@@ -89,15 +89,15 @@ impl Into<Orthographic> for &[f32; 6] {
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Perspective {
-    left: f32,
-    right: f32,
-    bottom: f32,
-    top: f32,
-    near: f32,
-    far: f32,
+    left: S,
+    right: S,
+    bottom: S,
+    top: S,
+    near: S,
+    far: S,
 }
 
-impl Into<Perspective> for (f32, f32, f32, f32, f32, f32) {
+impl Into<Perspective> for (S, S, S, S, S, S) {
     #[inline]
     fn into(self) -> Perspective {
         match self {
@@ -115,7 +115,7 @@ impl Into<Perspective> for (f32, f32, f32, f32, f32, f32) {
     }
 }
 
-impl Into<Perspective> for &(f32, f32, f32, f32, f32, f32) {
+impl Into<Perspective> for &(S, S, S, S, S, S) {
     #[inline]
     fn into(self) -> Perspective {
         match *self {
@@ -133,7 +133,7 @@ impl Into<Perspective> for &(f32, f32, f32, f32, f32, f32) {
     }
 }
 
-impl Into<Perspective> for [f32; 6] {
+impl Into<Perspective> for [S; 6] {
     #[inline]
     fn into(self) -> Perspective {
         match self {
@@ -151,7 +151,7 @@ impl Into<Perspective> for [f32; 6] {
     }
 }
 
-impl Into<Perspective> for &[f32; 6] {
+impl Into<Perspective> for &[S; 6] {
     #[inline]
     fn into(self) -> Perspective {
         match *self {
@@ -171,13 +171,13 @@ impl Into<Perspective> for &[f32; 6] {
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFov {
-    fovy: f32,
-    aspect: f32,
-    near: f32,
-    far: f32,
+    fovy: S,
+    aspect: S,
+    near: S,
+    far: S,
 }
 
-impl Into<PerspectiveFov> for (f32, f32, f32, f32) {
+impl Into<PerspectiveFov> for (S, S, S, S) {
     #[inline]
     fn into(self) -> PerspectiveFov {
         match self {
@@ -193,7 +193,7 @@ impl Into<PerspectiveFov> for (f32, f32, f32, f32) {
     }
 }
 
-impl Into<PerspectiveFov> for &(f32, f32, f32, f32) {
+impl Into<PerspectiveFov> for &(S, S, S, S) {
     #[inline]
     fn into(self) -> PerspectiveFov {
         match *self {
@@ -209,7 +209,7 @@ impl Into<PerspectiveFov> for &(f32, f32, f32, f32) {
     }
 }
 
-impl Into<PerspectiveFov> for [f32; 4] {
+impl Into<PerspectiveFov> for [S; 4] {
     #[inline]
     fn into(self) -> PerspectiveFov {
         match self {
@@ -225,7 +225,7 @@ impl Into<PerspectiveFov> for [f32; 4] {
     }
 }
 
-impl Into<PerspectiveFov> for &[f32; 4] {
+impl Into<PerspectiveFov> for &[S; 4] {
     #[inline]
     fn into(self) -> PerspectiveFov {
         match *self {
@@ -245,7 +245,7 @@ impl Into<PerspectiveFov> for &[f32; 4] {
 impl From<PerspectiveFov> for Matrix4 {
     fn from(persp: PerspectiveFov) -> Matrix4 {
         let fov_rad = persp.fovy * ONE_DEG_IN_RAD;
-        let range = f32::tan(fov_rad / 2.0) * persp.near;
+        let range = S::tan(fov_rad / 2.0) * persp.near;
         let sx = (2.0 * persp.near) / (range * persp.aspect + range * persp.aspect);
         let sy = persp.near / range;
         let sz = (persp.far + persp.near) / (persp.near - persp.far);
