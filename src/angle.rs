@@ -3,6 +3,8 @@ use base::{
     ScalarFloat,
 };
 use std::f64;
+use std::ops;
+
 
 #[derive(Copy, Clone, Debug, PartialEq, PartialOrd)]
 #[repr(C)]
@@ -22,7 +24,43 @@ impl<S> From<Degrees<S>> for Radians<S> where S: ScalarFloat {
 
 impl<S> From<Radians<S>> for Degrees<S> where S: ScalarFloat {
     fn from(radians: Radians<S>) -> Degrees<S> {
-        Degrees(radians.0 * num_traits::cast(f64::consts::PI).unwrap())
+        Degrees(radians.0 * num_traits::cast(180_f64 / f64::consts::PI).unwrap())
     }
+}
+
+impl<S> ops::Add<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn add(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 + other.0)
+    } 
+}
+
+impl<'a, S> ops::Add<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn add(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 + other.0)
+    } 
+}
+
+impl<'a, S> ops::Add<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn add(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 + other.0)
+    } 
+}
+
+impl<'a, 'b, S> ops::Add<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn add(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 + other.0)
+    } 
 }
 
