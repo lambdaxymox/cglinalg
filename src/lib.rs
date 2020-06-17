@@ -12,6 +12,7 @@ mod vector;
 mod structure;
 
 //pub use cgmath::*;
+pub use angle::*;
 pub use matrix::*;
 //pub use projection::*;
 pub use quaternion::*;
