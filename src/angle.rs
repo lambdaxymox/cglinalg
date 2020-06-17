@@ -99,3 +99,111 @@ impl<'a, 'b, S> ops::Sub<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat
         Degrees(self.0 + other.0)
     } 
 }
+
+impl<S> ops::Mul<S> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Degrees(self.0 * other)
+    }
+}
+
+impl<'a, S> ops::Mul<S> for &'a Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Degrees(self.0 * other)
+    }
+}
+
+impl<S> ops::Mul<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn mul(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 * other.0)
+    }
+}
+
+impl<'a, S> ops::Mul<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 * other.0)
+    }
+}
+
+impl<'a, S> ops::Mul<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn mul(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 * other.0)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 * other.0)
+    }
+}
+
+impl<S> ops::Div<S> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Degrees(self.0 / other)
+    }
+}
+
+impl<'a, S> ops::Div<S> for &'a Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Degrees(self.0 / other)
+    }
+}
+
+impl<S> ops::Div<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn div(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 / other.0)
+    }
+}
+
+impl<'a, S> ops::Div<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn div(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 / other.0)
+    }
+}
+
+impl<'a, S> ops::Div<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn div(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 / other.0)
+    }
+}
+
+impl<'a, 'b, S> ops::Div<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn div(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 / other.0)
+    }
+}
