@@ -261,3 +261,38 @@ impl<'a, S> ops::Neg for &'a Degrees<S> where S: ScalarFloat {
         Degrees(-self.0)
     }
 }
+
+impl<S> ops::AddAssign<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn add_assign(&mut self, other: Degrees<S>) {
+        *self = *self + other;
+    } 
+}
+
+impl<S> ops::SubAssign<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn sub_assign(&mut self, other: Degrees<S>) {
+        *self = *self - other;
+    } 
+}
+
+impl<S> ops::MulAssign<S> for Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn mul_assign(&mut self, other: S) {
+        *self = *self * other;
+    } 
+}
+
+impl<S> ops::DivAssign<S> for Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn div_assign(&mut self, other: S) {
+        *self = *self / other;
+    } 
+}
+
+impl<S> ops::RemAssign<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn rem_assign(&mut self, other: Degrees<S>) {
+        *self = *self % other;
+    } 
+}
