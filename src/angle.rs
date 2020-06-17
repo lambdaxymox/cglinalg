@@ -207,3 +207,57 @@ impl<'a, 'b, S> ops::Div<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat
         Degrees(self.0 / other.0)
     }
 }
+
+impl<S> ops::Rem<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn rem(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 % other.0)
+    }
+}
+
+impl<'a, S> ops::Rem<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn rem(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 % other.0)
+    }
+}
+
+impl<'a, S> ops::Rem<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn rem(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 % other.0)
+    }
+}
+
+impl<'a, 'b, S> ops::Rem<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn rem(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 % other.0)
+    }
+}
+
+impl<S> ops::Neg for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Degrees(-self.0)
+    }
+}
+
+impl<'a, S> ops::Neg for &'a Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Degrees(-self.0)
+    }
+}
