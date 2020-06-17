@@ -64,3 +64,38 @@ impl<'a, 'b, S> ops::Add<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat
     } 
 }
 
+impl<S> ops::Sub<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn sub(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 + other.0)
+    } 
+}
+
+impl<'a, S> ops::Sub<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn sub(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 + other.0)
+    } 
+}
+
+impl<'a, S> ops::Sub<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn sub(self, other: Degrees<S>) -> Self::Output {
+        Degrees(self.0 + other.0)
+    } 
+}
+
+impl<'a, 'b, S> ops::Sub<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat {
+    type Output = Degrees<S>;
+
+    #[inline]
+    fn sub(self, other: &'a Degrees<S>) -> Self::Output {
+        Degrees(self.0 + other.0)
+    } 
+}
