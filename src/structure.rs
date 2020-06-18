@@ -198,8 +198,14 @@ pub trait Angle where
     }
 
     #[inline]
-    fn half_turn() -> Self {
+    fn full_turn_div_2() -> Self {
         let denominator: Self::Scalar = num_traits::cast(2).unwrap();
+        Self::full_turn() / denominator
+    }
+
+    #[inline]
+    fn full_turn_div_4() -> Self {
+        let denominator: Self::Scalar = num_traits::cast(4).unwrap();
         Self::full_turn() / denominator
     }
 
@@ -216,7 +222,7 @@ pub trait Angle where
     #[inline]
     fn normalize_signed(self) -> Self {
         let remainder = self.normalize();
-        if remainder > Self::half_turn() {
+        if remainder > Self::full_turn_div_2() {
             remainder - Self::full_turn()
         } else {
             remainder
@@ -225,7 +231,7 @@ pub trait Angle where
 
     #[inline]
     fn opposite(self) -> Self {
-        Self::normalize(self + Self::half_turn())
+        Self::normalize(self + Self::full_turn_div_2())
     }
 
     #[inline]
