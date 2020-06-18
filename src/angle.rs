@@ -838,7 +838,29 @@ mod conversion_tests {
 
 #[cfg(test)]
 mod degrees_arithmetic_tests {
+    use super::{
+        Degrees,
+    };
 
+    #[test]
+    fn test_addition() {
+        let angle1 = Degrees(30_f64); 
+        let angle2 = Degrees(45_f64);
+        let expected = Degrees(75_f64);
+        let result = angle1 + angle2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction() {
+        let angle1 = Degrees(30_f64);
+        let angle2 = Degrees(45_f64);
+        let expected = -Degrees(15_f64);
+        let result = angle1 - angle2;
+
+        assert_eq!(result, expected);
+    }
 }
 
 #[cfg(test)]
