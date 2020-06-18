@@ -1,6 +1,7 @@
-use base::{
-    Scalar,
-    ScalarFloat,
+use base::ScalarFloat;
+use structure::{
+    Angle,
+    Zero,
 };
 use std::f64;
 use std::fmt;
@@ -310,7 +311,7 @@ impl<S> ops::RemAssign<Degrees<S>> for Degrees<S> where S: ScalarFloat {
     } 
 }
 
-impl<S> num_traits::Zero for Degrees<S> where S: ScalarFloat {
+impl<S> Zero for Degrees<S> where S: ScalarFloat {
     #[inline]
     fn zero() -> Degrees<S> {
         Degrees(S::zero())
@@ -632,7 +633,7 @@ impl<S> ops::RemAssign<Radians<S>> for Radians<S> where S: ScalarFloat {
     } 
 }
 
-impl<S> num_traits::Zero for Radians<S> where S: ScalarFloat {
+impl<S> Zero for Radians<S> where S: ScalarFloat {
     #[inline]
     fn zero() -> Radians<S> {
         Radians(S::zero())
@@ -679,5 +680,41 @@ impl<S> approx::UlpsEq for Radians<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.0, &other.0, epsilon, max_ulps)
+    }
+}
+
+impl<S> Angle for Radians<S> where S: ScalarFloat {
+    type Scalar = S;
+
+    fn full_turn() -> Self {
+        Radians(num_traits::cast(2_f64 * f64::consts::PI).unwrap())
+    }
+
+    fn sin(self) -> Self::Scalar {
+        S::sin(self.0)
+    }
+
+    fn cos(self) -> Self::Scalar {
+        S::cos(self.0)
+    }
+
+    fn tan(self) -> Self::Scalar {
+        S::tan(self.0)
+    }
+
+    fn asin(ratio: Self::Scalar) -> Self {
+        Radians(Self::Scalar::asin(ratio))
+    }
+
+    fn acos(ratio: Self::Scalar) -> Self {
+        Radians(Self::Scalar::acos(ratio))
+    }
+
+    fn atan(ratio: Self::Scalar) -> Self {
+        Radians(Self::Scalar::atan(ratio))
+    }
+
+    fn atan2(a: Self::Scalar, b: Self::Scalar) -> Self {
+        Radians(Self::Scalar::atan2(a, b))
     }
 }

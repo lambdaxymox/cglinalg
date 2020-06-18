@@ -190,7 +190,7 @@ pub trait Angle where
 
     fn atan(ratio: Self::Scalar) -> Self;
 
-    fn atan2(self, other: Self) -> Self;
+    fn atan2(a: Self::Scalar, b: Self::Scalar) -> Self;
 
     #[inline]
     fn sin_cos(self) -> (Self::Scalar, Self::Scalar) {
