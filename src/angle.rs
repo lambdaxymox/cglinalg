@@ -8,11 +8,11 @@ use std::fmt;
 use std::ops;
 
 
-#[derive(Copy, Clone, Debug, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd)]
 #[repr(C)]
 pub struct Radians<S>(S);
 
-#[derive(Copy, Clone, Debug, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd)]
 #[repr(C)]
 pub struct Degrees<S>(S);
 
@@ -847,8 +847,17 @@ mod degrees_arithmetic_tests {
         let angle1 = Degrees(30_f64); 
         let angle2 = Degrees(45_f64);
         let expected = Degrees(75_f64);
+        
         let result = angle1 + angle2;
+        assert_eq!(result, expected);
 
+        let result = &angle1 + angle2;
+        assert_eq!(result, expected);
+
+        let result = angle1 + &angle2;
+        assert_eq!(result, expected);
+
+        let result = &angle1 + &angle2;
         assert_eq!(result, expected);
     }
 
@@ -857,8 +866,17 @@ mod degrees_arithmetic_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(45_f64);
         let expected = -Degrees(15_f64);
+        
         let result = angle1 - angle2;
+        assert_eq!(result, expected);
 
+        let result = &angle1 - angle2;
+        assert_eq!(result, expected);
+
+        let result = angle1 - &angle2;
+        assert_eq!(result, expected);
+
+        let result = &angle1 - &angle2;
         assert_eq!(result, expected);
     }
 
@@ -867,8 +885,17 @@ mod degrees_arithmetic_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(45_f64);
         let expected = Degrees(30_f64 * 45_f64);
+        
         let result = angle1 * angle2;
+        assert_eq!(result, expected);
 
+        let result = &angle1 * angle2;
+        assert_eq!(result, expected);
+
+        let result = angle1 * &angle2;
+        assert_eq!(result, expected);
+
+        let result = &angle1 * &angle2;
         assert_eq!(result, expected);
     }
 
@@ -877,8 +904,17 @@ mod degrees_arithmetic_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(45_f64);
         let expected = Degrees(30_f64 / 45_f64);
+        
         let result = angle1 / angle2;
+        assert_eq!(result, expected);
 
+        let result = &angle1 / angle2;
+        assert_eq!(result, expected);
+
+        let result = angle1 / &angle2;
+        assert_eq!(result, expected);
+
+        let result = &angle1 / &angle2;
         assert_eq!(result, expected);
     }
 }
@@ -901,8 +937,17 @@ mod radians_arithmetic_tests {
         let angle1 = PI / 6_f64; 
         let angle2 = PI / 4_f64;
         let expected = PI * 10_f64 / 24_f64;
-        let result = angle1 + angle2;
 
+        let result = angle1 + angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = &angle1 + angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = angle1 + &angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = &angle1 + &angle2;
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 
@@ -911,8 +956,17 @@ mod radians_arithmetic_tests {
         let angle1 = PI / 6_f64;
         let angle2 = PI / 4_f64;
         let expected = -PI / 12_f64;
-        let result = angle1 - angle2;
 
+        let result = angle1 - angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = &angle1 - angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = angle1 - &angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = &angle1 - &angle2;
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 
@@ -921,8 +975,17 @@ mod radians_arithmetic_tests {
         let angle1 = PI / 6_f64;
         let angle2 = PI / 4_f64;
         let expected = Radians(f64::consts::PI * f64::consts::PI / 24_f64);
-        let result = angle1 * angle2;
 
+        let result = angle1 * angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = &angle1 * angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = angle1 * &angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = &angle1 * &angle2;
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 
@@ -931,8 +994,17 @@ mod radians_arithmetic_tests {
         let angle1 = PI / 6_f64;
         let angle2 = PI / 4_f64;
         let expected = Radians(4_f64 / 6_f64);
-        let result = angle1 / angle2;
 
+        let result = angle1 / angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = &angle1 / angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = angle1 / &angle2;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = &angle1 / &angle2;
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 }
