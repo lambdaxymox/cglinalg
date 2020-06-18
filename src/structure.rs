@@ -2,6 +2,10 @@ use base::{
     Scalar,
     ScalarFloat,   
 };
+use num_traits::{
+    Float,
+};
+use std::f64;
 use std::ops;
 
 
@@ -153,4 +157,95 @@ pub trait Matrix {
     
     /// Transpose a matrix.
     fn transpose(&self) -> Self::Transpose;
+}
+
+pub trait Angle where 
+    Self: Copy + Clone,
+    Self: PartialEq + PartialOrd,
+    Self: Zero,
+    Self: ops::Neg<Output = Self>,
+    Self: ops::Add<Self, Output = Self>,
+    Self: ops::Sub<Self, Output = Self>,
+    Self: ops::Mul<<Self as Angle>::Scalar, Output = Self>,
+    Self: ops::Div<Self, Output = Self>,
+    Self: ops::Div<<Self as Angle>::Scalar, Output = Self>,
+    Self: ops::Rem<Self, Output = Self>,
+    Self: approx::AbsDiffEq<Epsilon = <Self as Angle>::Scalar>,
+    Self: approx::RelativeEq<Epsilon = <Self as Angle>::Scalar>,
+    Self: approx::UlpsEq<Epsilon = <Self as Angle>::Scalar>,
+{
+    type Scalar: ScalarFloat;
+
+    fn full_turn() -> Self;
+
+    fn sin(self) -> Self::Scalar;
+
+    fn cos(self) -> Self::Scalar;
+
+    fn tan(self) -> Self::Scalar;
+
+    fn asin(ratio: Self::Scalar) -> Self;
+
+    fn acos(ratio: Self::Scalar) -> Self;
+
+    fn atan(ratio: Self::Scalar) -> Self;
+
+    fn atan2(self, other: Self) -> Self;
+
+    #[inline]
+    fn sin_cos(self) -> (Self::Scalar, Self::Scalar) {
+        (Self::sin(self), Self::cos(self))
+    }
+
+    #[inline]
+    fn half_turn() -> Self {
+        let denominator: Self::Scalar = num_traits::cast(2).unwrap();
+        Self::full_turn() / denominator
+    }
+
+    #[inline]
+    fn normalize(self) -> Self {
+        let remainder = self % Self::full_turn();
+        if remainder < Self::zero() {
+            remainder + Self::full_turn()
+        } else {
+            remainder
+        }
+    }
+
+    #[inline]
+    fn normalize_signed(self) -> Self {
+        let remainder = self.normalize();
+        if remainder > Self::half_turn() {
+            remainder - Self::full_turn()
+        } else {
+            remainder
+        }
+    }
+
+    #[inline]
+    fn opposite(self) -> Self {
+        Self::normalize(self + Self::half_turn())
+    }
+
+    #[inline]
+    fn bisect(self, other: Self) -> Self {
+        let one_half = num_traits::cast(0.5_f64).unwrap();
+        Self::normalize((self - other) * one_half + self)
+    }
+
+    #[inline]
+    fn csc(self) -> Self::Scalar {
+        Self::sin(self).recip()
+    }
+
+    #[inline]
+    fn cot(self) -> Self::Scalar {
+        Self::tan(self).recip()
+    }
+
+    #[inline]
+    fn sec(self) -> Self::Scalar {
+        Self::cos(self).recip()
+    }
 }
