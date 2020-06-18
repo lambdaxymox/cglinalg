@@ -865,5 +865,34 @@ mod degrees_arithmetic_tests {
 
 #[cfg(test)]
 mod radians_arithmetic_tests {
+    use super::{
+        Radians,
+    };
+    use approx::{
+        relative_eq,
+    };
+    use std::f64;
 
+    const PI: Radians<f64> = Radians(f64::consts::PI);
+
+
+    #[test]
+    fn test_addition() {
+        let angle1 = PI / 6_f64; 
+        let angle2 = PI / 4_f64;
+        let expected = PI * 10_f64 / 24_f64;
+        let result = angle1 + angle2;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_subtraction() {
+        let angle1 = PI / 6_f64; 
+        let angle2 = PI / 4_f64;
+        let expected = -PI / 12_f64;
+        let result = angle1 - angle2;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
 }
