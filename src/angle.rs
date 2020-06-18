@@ -3,6 +3,7 @@ use base::{
     ScalarFloat,
 };
 use std::f64;
+use std::fmt;
 use std::ops;
 
 
@@ -25,6 +26,18 @@ impl<S> From<Degrees<S>> for Radians<S> where S: ScalarFloat {
 impl<S> From<Radians<S>> for Degrees<S> where S: ScalarFloat {
     fn from(radians: Radians<S>) -> Degrees<S> {
         Degrees(radians.0 * num_traits::cast(180_f64 / f64::consts::PI).unwrap())
+    }
+}
+
+impl<S> fmt::Display for Degrees<S> where S: fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} degrees", self.0)
+    }
+}
+
+impl<S> fmt::Display for Radians<S> where S: fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} radians", self.0)
     }
 }
 
