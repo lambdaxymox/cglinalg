@@ -296,3 +296,53 @@ impl<S> ops::RemAssign<Degrees<S>> for Degrees<S> where S: ScalarFloat {
         *self = *self % other;
     } 
 }
+
+impl<S> num_traits::Zero for Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn zero() -> Degrees<S> {
+        Degrees(S::zero())
+    }
+
+    #[inline]
+    fn is_zero(&self) -> bool {
+        self.0.is_zero()
+    }
+}
+
+impl<S> approx::AbsDiffEq for Degrees<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.0, &other.0, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.0, &other.0, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.0, &other.0, epsilon, max_ulps)
+    }
+}
