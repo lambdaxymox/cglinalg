@@ -83,7 +83,7 @@ impl<S> ops::Sub<Degrees<S>> for Degrees<S> where S: ScalarFloat {
 
     #[inline]
     fn sub(self, other: Degrees<S>) -> Self::Output {
-        Degrees(self.0 + other.0)
+        Degrees(self.0 - other.0)
     } 
 }
 
@@ -92,7 +92,7 @@ impl<'a, S> ops::Sub<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
 
     #[inline]
     fn sub(self, other: &'a Degrees<S>) -> Self::Output {
-        Degrees(self.0 + other.0)
+        Degrees(self.0 - other.0)
     } 
 }
 
@@ -101,7 +101,7 @@ impl<'a, S> ops::Sub<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
 
     #[inline]
     fn sub(self, other: Degrees<S>) -> Self::Output {
-        Degrees(self.0 + other.0)
+        Degrees(self.0 - other.0)
     } 
 }
 
@@ -110,7 +110,7 @@ impl<'a, 'b, S> ops::Sub<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat
 
     #[inline]
     fn sub(self, other: &'a Degrees<S>) -> Self::Output {
-        Degrees(self.0 + other.0)
+        Degrees(self.0 - other.0)
     } 
 }
 
@@ -405,7 +405,7 @@ impl<S> ops::Sub<Radians<S>> for Radians<S> where S: ScalarFloat {
 
     #[inline]
     fn sub(self, other: Radians<S>) -> Self::Output {
-        Radians(self.0 + other.0)
+        Radians(self.0 - other.0)
     } 
 }
 
@@ -414,7 +414,7 @@ impl<'a, S> ops::Sub<&'a Radians<S>> for Radians<S> where S: ScalarFloat {
 
     #[inline]
     fn sub(self, other: &'a Radians<S>) -> Self::Output {
-        Radians(self.0 + other.0)
+        Radians(self.0 - other.0)
     } 
 }
 
@@ -423,7 +423,7 @@ impl<'a, S> ops::Sub<Radians<S>> for &'a Radians<S> where S: ScalarFloat {
 
     #[inline]
     fn sub(self, other: Radians<S>) -> Self::Output {
-        Radians(self.0 + other.0)
+        Radians(self.0 - other.0)
     } 
 }
 
@@ -432,7 +432,7 @@ impl<'a, 'b, S> ops::Sub<&'a Radians<S>> for &'b Radians<S> where S: ScalarFloat
 
     #[inline]
     fn sub(self, other: &'a Radians<S>) -> Self::Output {
-        Radians(self.0 + other.0)
+        Radians(self.0 - other.0)
     } 
 }
 
