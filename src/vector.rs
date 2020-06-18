@@ -412,7 +412,7 @@ impl<S> ops::SubAssign<&Vector1<S>> for Vector1<S> where S: Scalar {
 impl<S> ops::Mul<S> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
-    fn mul(self, other: S) -> Vector1<S> {
+    fn mul(self, other: S) -> Self::Output {
         Vector1 {
             x: self.x * other,
         }
@@ -422,7 +422,7 @@ impl<S> ops::Mul<S> for Vector1<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
-    fn mul(self, other: S) -> Vector1<S> {
+    fn mul(self, other: S) -> Self::Output {
         Vector1 {
             x: self.x * other,
         }
@@ -438,7 +438,7 @@ impl<S> ops::MulAssign<S> for Vector1<S> where S: Scalar {
 impl<S> ops::Div<S> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
-    fn div(self, other: S) -> Vector1<S> {
+    fn div(self, other: S) -> Self::Output {
         Vector1 {
             x: self.x / other,
         }
@@ -448,7 +448,7 @@ impl<S> ops::Div<S> for Vector1<S> where S: Scalar {
 impl<S> ops::Div<S> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
-    fn div(self, other: S) -> Vector1<S> {
+    fn div(self, other: S) -> Self::Output {
         Vector1 {
             x: self.x / other,
         }
@@ -1026,7 +1026,7 @@ impl<S> ops::SubAssign<&Vector2<S>> for Vector2<S> where S: Scalar {
 impl<S> ops::Mul<S> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
-    fn mul(self, other: S) -> Vector2<S> {
+    fn mul(self, other: S) -> Self::Output {
         Vector2 {
             x: self.x * other,
             y: self.y * other,
@@ -1037,7 +1037,7 @@ impl<S> ops::Mul<S> for Vector2<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
-    fn mul(self, other: S) -> Vector2<S> {
+    fn mul(self, other: S) -> Self::Output {
         Vector2 {
             x: self.x * other,
             y: self.y * other,
@@ -1055,7 +1055,7 @@ impl<S> ops::MulAssign<S> for Vector2<S> where S: Scalar {
 impl<S> ops::Div<S> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
-    fn div(self, other: S) -> Vector2<S> {
+    fn div(self, other: S) -> Self::Output {
         Vector2 {
             x: self.x / other,
             y: self.y / other,
@@ -1066,7 +1066,7 @@ impl<S> ops::Div<S> for Vector2<S> where S: Scalar {
 impl<S> ops::Div<S> for &Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
-    fn div(self, other: S) -> Vector2<S> {
+    fn div(self, other: S) -> Self::Output {
         Vector2 {
             x: self.x / other,
             y: self.y / other,
@@ -1737,7 +1737,7 @@ impl<S> ops::SubAssign<&Vector3<S>> for Vector3<S> where S: Scalar {
 impl<S> ops::Mul<S> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
-    fn mul(self, other: S) -> Vector3<S> {
+    fn mul(self, other: S) -> Self::Output {
         Vector3 {
             x: self.x * other,
             y: self.y * other,
@@ -1749,7 +1749,7 @@ impl<S> ops::Mul<S> for Vector3<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
-    fn mul(self, other: S) -> Vector3<S> {
+    fn mul(self, other: S) -> Self::Output {
         Vector3 {
             x: self.x * other,
             y: self.y * other,
@@ -1769,7 +1769,7 @@ impl<S> ops::MulAssign<S> for Vector3<S> where S: Scalar {
 impl<S> ops::Div<S> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
-    fn div(self, other: S) -> Vector3<S> {
+    fn div(self, other: S) -> Self::Output {
         Vector3 {
             x: self.x / other,
             y: self.y / other,
@@ -1781,7 +1781,7 @@ impl<S> ops::Div<S> for Vector3<S> where S: Scalar {
 impl<S> ops::Div<S> for &Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
-    fn div(self, other: S) -> Vector3<S> {
+    fn div(self, other: S) -> Self::Output {
         Vector3 {
             x: self.x / other,
             y: self.y / other,
@@ -2478,7 +2478,7 @@ impl<S> ops::SubAssign<&Vector4<S>> for Vector4<S> where S: Scalar {
 impl<S> ops::Mul<S> for Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
-    fn mul(self, other: S) -> Vector4<S> {
+    fn mul(self, other: S) -> Self::Output {
         Vector4 {
             x: self.x * other,
             y: self.y * other,
@@ -2491,7 +2491,7 @@ impl<S> ops::Mul<S> for Vector4<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
-    fn mul(self, other: S) -> Vector4<S> {
+    fn mul(self, other: S) -> Self::Output {
         Vector4 {
             x: self.x * other,
             y: self.y * other,
@@ -2513,7 +2513,7 @@ impl<S> ops::MulAssign<S> for Vector4<S> where S: Scalar {
 impl<S> ops::Div<S> for Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
-    fn div(self, other: S) -> Vector4<S> {
+    fn div(self, other: S) -> Self::Output {
         Vector4 {
             x: self.x / other,
             y: self.y / other,
@@ -2526,7 +2526,7 @@ impl<S> ops::Div<S> for Vector4<S> where S: Scalar {
 impl<S> ops::Div<S> for &Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
-    fn div(self, other: S) -> Vector4<S> {
+    fn div(self, other: S) -> Self::Output {
         Vector4 {
             x: self.x / other,
             y: self.y / other,
