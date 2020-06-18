@@ -686,35 +686,87 @@ impl<S> approx::UlpsEq for Radians<S> where S: ScalarFloat {
 impl<S> Angle for Radians<S> where S: ScalarFloat {
     type Scalar = S;
 
+    #[inline]
     fn full_turn() -> Self {
         Radians(num_traits::cast(2_f64 * f64::consts::PI).unwrap())
     }
 
+    #[inline]
     fn sin(self) -> Self::Scalar {
         S::sin(self.0)
     }
 
+    #[inline]
     fn cos(self) -> Self::Scalar {
         S::cos(self.0)
     }
 
+    #[inline]
     fn tan(self) -> Self::Scalar {
         S::tan(self.0)
     }
 
+    #[inline]
     fn asin(ratio: Self::Scalar) -> Self {
         Radians(Self::Scalar::asin(ratio))
     }
 
+    #[inline]
     fn acos(ratio: Self::Scalar) -> Self {
         Radians(Self::Scalar::acos(ratio))
     }
 
+    #[inline]
     fn atan(ratio: Self::Scalar) -> Self {
         Radians(Self::Scalar::atan(ratio))
     }
 
+    #[inline]
     fn atan2(a: Self::Scalar, b: Self::Scalar) -> Self {
         Radians(Self::Scalar::atan2(a, b))
+    }
+}
+
+impl<S> Angle for Degrees<S> where S: ScalarFloat {
+    type Scalar = S;
+
+    #[inline]
+    fn full_turn() -> Self {
+        Degrees(num_traits::cast(360).unwrap())
+    }
+
+    #[inline]
+    fn sin(self) -> Self::Scalar {
+        Radians::from(self).sin()
+    }
+
+    #[inline]
+    fn cos(self) -> Self::Scalar {
+        Radians::from(self).cos()
+    }
+
+    #[inline]
+    fn tan(self) -> Self::Scalar {
+        Radians::from(self).tan()
+    }
+
+    #[inline]
+    fn asin(ratio: Self::Scalar) -> Self {
+        Radians(ratio.asin()).into()
+    }
+
+    #[inline]
+    fn acos(ratio: Self::Scalar) -> Self {
+        Radians(ratio.acos()).into()
+    }
+
+    #[inline]
+    fn atan(ratio: Self::Scalar) -> Self {
+        Radians(ratio.atan()).into()
+    }
+
+    #[inline]
+    fn atan2(a: Self::Scalar, b: Self::Scalar) -> Self {
+        Radians(Self::Scalar::atan2(a, b)).into()
     }
 }
