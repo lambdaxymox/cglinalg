@@ -1,3 +1,6 @@
+use crate::base::{
+    ScalarFloat
+};
 use crate::structure::*;
 use crate::vector::*;
 use crate::matrix::*;
@@ -16,7 +19,7 @@ pub const EPSILON: f32 = 0.00001;
 /// Compute the orthographic projection matrix for converting from camera space to
 /// normalized device coordinates.
 #[inline]
-pub fn ortho<Spec: Into<Orthographic>>(spec: Spec) -> Matrix4 {
+pub fn ortho<S, Spec: Into<Orthographic<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
     Matrix4::from(spec.into())
 }
 
@@ -25,7 +28,7 @@ pub fn ortho<Spec: Into<Orthographic>>(spec: Spec) -> Matrix4 {
 /// This is the equivalent of the now deprecated [glFrustum]
 /// (http://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml) function.
 #[inline]
-pub fn frustum<Spec: Into<Perspective>>(spec: Spec) -> Matrix4 {
+pub fn frustum<S, Spec: Into<Perspective<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
     Matrix4::from(spec.into())
 }
 
@@ -34,7 +37,7 @@ pub fn frustum<Spec: Into<Perspective>>(spec: Spec) -> Matrix4 {
 /// [gluPerspective] (http://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
 /// function.
 #[inline]
-pub fn perspective<Spec: Into<PerspectiveFov>>(spec: Spec) -> Matrix4 {
+pub fn perspective<S, Spec: Into<PerspectiveFov<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
     Matrix4::from(spec.into())
 }
 
@@ -49,21 +52,21 @@ pub fn vec1<S, T: Into<Vector1<S>>>(v: T) -> Vector1<S> {
 /// Construct a new two-dimensional vector in the style of
 /// a GLSL `vec2` constructor.
 #[inline]
-pub fn vec2<T: Into<Vector2>>(v: T) -> Vector2 {
+pub fn vec2<S, T: Into<Vector2<S>>>(v: T) -> Vector2<S> {
     v.into()
 }
 
 /// Construct a new three-dimensional vector in the style of
 /// a GLSL `vec3` constructor.
 #[inline]
-pub fn vec3<T: Into<Vector3>>(v: T) -> Vector3 {
+pub fn vec3<S, T: Into<Vector3<S>>>(v: T) -> Vector3<S> {
     v.into()
 }
 
 /// Construct a new four-dimensional vector in the style of
 /// a GLSL `vec4` constructor.
 #[inline]
-pub fn vec4<T: Into<Vector4>>(v: T) -> Vector4 {
+pub fn vec4<S, T: Into<Vector4<S>>>(v: T) -> Vector4<S> {
     v.into()
 }
 
@@ -71,33 +74,33 @@ pub fn vec4<T: Into<Vector4>>(v: T) -> Vector4 {
 /// constructor. This is not a built-in function in GLSL, but it exists
 /// for convenience.
 #[inline]
-pub fn quat<T: Into<Quaternion>>(q: T) -> Quaternion {
+pub fn quat<S, T: Into<Quaternion<S>>>(q: T) -> Quaternion<S> {
     q.into()
 }
 
 /// Create a new 2x2 matrix in the style of a GLSL type
 /// constructor.
 #[inline]
-pub fn mat2<T: Into<Matrix2>>(m: T) -> Matrix2 {
+pub fn mat2<S, T: Into<Matrix2<S>>>(m: T) -> Matrix2<S> {
     m.into()
 }
 
 /// Create a new 3x3 matrix in the style of a GLSL type
 /// constructor.
 #[inline]
-pub fn mat3<T: Into<Matrix3>>(m: T) -> Matrix3 {
+pub fn mat3<S, T: Into<Matrix3<S>>>(m: T) -> Matrix3<S> {
     m.into()
 }
 
 /// Create a new 4x4 matrix in the style of a GLSL type
 /// constructor.
 #[inline]
-pub fn mat4<T: Into<Matrix4>>(m: T) -> Matrix4 {
+pub fn mat4<S, T: Into<Matrix4<S>>>(m: T) -> Matrix4<S> {
     m.into()
 }
 
 #[inline]
-pub fn dot<W: Copy + Clone, V: DotProduct<W>>(a: V, b: W) -> f32 {
+pub fn dot<W: Copy + Clone, V: DotProduct<W>>(a: V, b: W) -> <V as DotProduct<W>>::Output {
     V::dot(a, b)
 }
 
