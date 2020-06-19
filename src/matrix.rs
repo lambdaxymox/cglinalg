@@ -1750,7 +1750,7 @@ impl<S> Matrix4<S> where S: Scalar {
 }
 
 impl<S> Matrix4<S> where S: ScalarFloat {
-    /// Create a rotation matrix around the x axis by an angle in `degrees` degrees.
+    /// Create a rotation matrix around the x axis by an angle in `angle` radians/degrees.
     pub fn from_rotation_x<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
@@ -1764,7 +1764,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
         )
     }
         
-    /// Create a rotation matrix around the y axis by an angle in `degrees` degrees.
+    /// Create a rotation matrix around the y axis by an angle in `angle` radians/degrees.
     pub fn from_rotation_y<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
@@ -1778,7 +1778,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
         )
     }
     
-    /// Create a rotation matrix around the z axis by an angle in `degrees` degrees.
+    /// Create a rotation matrix around the z axis by an angle in `angle` radians/degrees.
     pub fn from_rotation_z<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
