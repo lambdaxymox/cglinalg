@@ -3,7 +3,7 @@ pub extern crate num_traits;
 
 mod base;
 mod angle;
-mod cgmath;
+mod prelude;
 mod matrix;
 mod projection;
 mod quaternion;
@@ -11,7 +11,7 @@ mod quaternion;
 mod vector;
 mod structure;
 
-pub use cgmath::*;
+pub use prelude::*;
 pub use angle::*;
 pub use matrix::*;
 pub use projection::*;
