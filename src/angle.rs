@@ -917,6 +917,56 @@ mod degrees_arithmetic_tests {
         let result = &angle1 / &angle2;
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_negation() {
+        let angle = Degrees(30_f64);
+        let expected = Degrees(-30_f64);
+        
+        let result = -angle;
+        assert_eq!(result, expected);
+
+        let result = -&angle;
+        assert_eq!(result, expected)
+    }
+
+    #[test]
+    fn test_remainder_less_than_modulus() {
+        let angle = Degrees(45_f64);
+        let modulus = Degrees(360_f64);
+        let expected = angle;
+
+        let result = angle % modulus;
+        assert_eq!(result, expected);
+
+        let result = &angle % modulus;
+        assert_eq!(result, expected);
+
+        let result = angle % &modulus;
+        assert_eq!(result, expected);
+
+        let result = &angle % &modulus;
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_remainder_greater_than_modulus() {
+        let angle = Degrees(405_f64);
+        let modulus = Degrees(360_f64);
+        let expected = Degrees(45_f64);
+
+        let result = angle % modulus;
+        assert_eq!(result, expected);
+
+        let result = &angle % modulus;
+        assert_eq!(result, expected);
+
+        let result = angle % &modulus;
+        assert_eq!(result, expected);
+
+        let result = &angle % &modulus;
+        assert_eq!(result, expected);
+    }
 }
 
 #[cfg(test)]
@@ -1006,5 +1056,55 @@ mod radians_arithmetic_tests {
 
         let result = &angle1 / &angle2;
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_negation() {
+        let angle = PI / 6_f64;
+        let expected = -PI / 6_f64;
+        
+        let result = -angle;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+
+        let result = -&angle;
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_remainder_less_than_modulus() {
+        let angle = PI / 4_f64;
+        let modulus = PI * 2_f64;
+        let expected = angle;
+
+        let result = angle % modulus;
+        assert_eq!(result, expected);
+
+        let result = &angle % modulus;
+        assert_eq!(result, expected);
+
+        let result = angle % &modulus;
+        assert_eq!(result, expected);
+
+        let result = &angle % &modulus;
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_remainder_greater_than_modulus() {
+        let angle = PI * 2_f64 + PI / 4_f64;
+        let modulus = PI * 2_f64;
+        let expected = PI / 4_f64;
+
+        let result = angle % modulus;
+        assert_eq!(result, expected);
+
+        let result = &angle % modulus;
+        assert_eq!(result, expected);
+
+        let result = angle % &modulus;
+        assert_eq!(result, expected);
+
+        let result = &angle % &modulus;
+        assert_eq!(result, expected);
     }
 }
