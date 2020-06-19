@@ -1,3 +1,7 @@
+use base::{
+    Scalar,
+    ScalarFloat,   
+};
 use structure::{
     Storage,
     Zero,
@@ -11,12 +15,6 @@ use structure::{
 use std::fmt;
 use std::mem;
 use std::ops;
-
-use base::{
-    Scalar,
-    ScalarFloat,   
-};
-
 
 
 /// A representation of one-dimensional vectors.

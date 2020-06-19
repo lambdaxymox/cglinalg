@@ -2,10 +2,7 @@ use base::{
     Scalar,
     ScalarFloat,   
 };
-use num_traits::{
-    Float,
-};
-use std::f64;
+use num_traits::Float;
 use std::ops;
 
 
@@ -77,7 +74,6 @@ pub trait Metric<V: Sized>: Sized {
 
     /// Compute the Euclidean distance between two vectors.
     fn distance(self, other: V) -> Self::Output {
-        use num_traits::Float;
         Self::Output::sqrt(Self::distance_squared(self, other))
     }
 }

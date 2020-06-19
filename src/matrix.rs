@@ -6,10 +6,7 @@ use base::{
     Scalar,
     ScalarFloat,
 };
-use angle::{
-    Radians,
-    Degrees,
-};
+use angle::Radians;
 use structure::{
     Angle,
     Storage, 
@@ -19,11 +16,6 @@ use structure::{
     Lerp
 };
 use vector::*;
-
-
-const EPSILON: f32 = 0.00001;
-const M_PI: f32 = 3.14159265358979323846264338327950288;
-const ONE_DEG_IN_RAD: f32 = (2.0 * M_PI) / 360.0; // == 0.017444444
 
 
 /// The `Matrix2` type represents 2x2 matrices in column-major order.

@@ -30,11 +30,6 @@ use std::mem;
 use std::ops;
 
 
-const EPSILON: f32 = 0.00001;
-const M_PI: f32 = 3.14159265358979323846264338327950288;
-const ONE_DEG_IN_RAD: f32 = (2.0 * M_PI) / 360.0; // == 0.017444444
-
-
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Quaternion<S> {
@@ -208,7 +203,6 @@ impl<S> From<Quaternion<S>> for Matrix3<S> where S: Scalar {
         let x = quat.v.x;
         let y = quat.v.y;
         let z = quat.v.z;
-        let zero = S::zero();
         let one = S::one();
         let two = one + one;
     
