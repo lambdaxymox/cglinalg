@@ -6,7 +6,12 @@ use base::{
     Scalar,
     ScalarFloat,
 };
+use angle::{
+    Radians,
+    Degrees,
+};
 use structure::{
+    Angle,
     Storage, 
     One, 
     Zero, 
@@ -1621,46 +1626,7 @@ impl<S> Matrix4<S> where S: Scalar {
             distance.x, distance.y, distance.z, one
         )
     }
-    /*
-    /// Create a rotation matrix around the x axis by an angle in `degrees` degrees.
-    pub fn from_rotation_x(degrees: S) -> Matrix4<S> {
-        // Convert to radians.
-        let radians = degrees * ONE_DEG_IN_RAD;
-        let mut rot_mat = Matrix4::one();
-        rot_mat.c1r1 =  f32::cos(radians);
-        rot_mat.c2r1 = -f32::sin(radians);
-        rot_mat.c1r2 =  f32::sin(radians);
-        rot_mat.c2r2 =  f32::cos(radians);
-    
-        rot_mat
-    }
-    
-    /// Create a rotation matrix around the y axis by an angle in `degrees` degrees.
-    pub fn from_rotation_y(degrees: S) -> Matrix4<S> {
-        // Convert to radians.
-        let radians = degrees * ONE_DEG_IN_RAD;
-        let mut rot_mat = Matrix4::one();
-        rot_mat.c0r0 =  f32::cos(radians);
-        rot_mat.c2r0 =  f32::sin(radians);
-        rot_mat.c0r2 = -f32::sin(radians);
-        rot_mat.c2r2 =  f32::cos(radians);
-    
-        rot_mat
-    }
 
-    /// Create a rotation matrix around the z axis by an angle in `degrees` degrees.
-    pub fn from_rotation_z(degrees: S) -> Matrix4<S> {
-        // Convert to radians.
-        let radians = degrees * ONE_DEG_IN_RAD;
-        let mut rot_mat = Matrix4::one();
-        rot_mat.c0r0 =  f32::cos(radians);
-        rot_mat.c1r0 = -f32::sin(radians);
-        rot_mat.c0r1 =  f32::sin(radians);
-        rot_mat.c1r1 =  f32::cos(radians);
-    
-        rot_mat
-    }
-    */
     /// Scale a matrix uniformly.
     #[inline]
     pub fn from_scale(value: S) -> Matrix4<S> {
@@ -1780,6 +1746,50 @@ impl<S> Matrix4<S> where S: Scalar {
                 c3r0, c3r1, c3r2, c3r3
             ))
         }
+    }
+}
+
+impl<S> Matrix4<S> where S: ScalarFloat {
+    /// Create a rotation matrix around the x axis by an angle in `degrees` degrees.
+    pub fn from_rotation_x<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
+        let (sin_angle, cos_angle) = angle.into().sin_cos();
+        let one = S::one();
+        let zero = S::zero();
+
+        Matrix4::new(
+            one,   zero,      zero,      zero,
+            zero,  cos_angle, sin_angle, zero,
+            zero, -sin_angle, cos_angle, zero,
+            zero,  zero,      zero,      one
+        )
+    }
+        
+    /// Create a rotation matrix around the y axis by an angle in `degrees` degrees.
+    pub fn from_rotation_y<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
+        let (sin_angle, cos_angle) = angle.into().sin_cos();
+        let one = S::one();
+        let zero = S::zero();
+
+        Matrix4::new(
+            cos_angle, zero, -sin_angle, zero,
+            zero,      one,   zero,      zero,
+            sin_angle, zero,  cos_angle, zero,
+            zero,      zero,  zero,      one
+        )
+    }
+    
+    /// Create a rotation matrix around the z axis by an angle in `degrees` degrees.
+    pub fn from_rotation_z<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
+        let (sin_angle, cos_angle) = angle.into().sin_cos();
+        let one = S::one();
+        let zero = S::zero();
+        
+        Matrix4::new(
+             sin_angle, cos_angle, zero, zero,
+            -sin_angle, cos_angle, zero, zero,
+             zero,      zero,      one,  zero,
+             zero,      zero,      zero, one
+        )
     }
 }
 
