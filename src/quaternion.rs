@@ -1,4 +1,5 @@
 use structure::{
+    Angle,
     Storage,
     Zero,
     One,
@@ -9,6 +10,10 @@ use structure::{
     Lerp,
     Nlerp,
     Metric,
+};
+use angle::{
+    Radians,
+    Degrees,
 };
 use base::{
     Scalar,
@@ -54,21 +59,21 @@ impl<S> Quaternion<S> where S: Scalar {
 
 impl<S> Quaternion<S> where S: ScalarFloat {
     /// Compute a quaternion corresponding to rotating about an axis in radians.
-    pub fn from_axis_rad(radians: S, axis: Vector3<S>) -> Quaternion<S> {
+    pub fn from_axis_rad(radians: Radians<S>, axis: Vector3<S>) -> Quaternion<S> {
         let two = S::one() + S::one();
         Quaternion::new(
-            S::cos(radians / two),
-            S::sin(radians / two) * axis.x,
-            S::sin(radians / two) * axis.y,
-            S::sin(radians / two) * axis.z,
+            Radians::cos(radians / two),
+            Radians::sin(radians / two) * axis.x,
+            Radians::sin(radians / two) * axis.y,
+            Radians::sin(radians / two) * axis.z,
         )
     }
-    /*
-    /// Computer a quaternion corresponding to rotating about an axis in degrees.
-    pub fn from_axis_deg(degrees: S, axis: Vector3<S>) -> Quaternion<S> {
-        Self::from_axis_rad(ONE_DEG_IN_RAD * degrees, axis)
+
+    /// Compute a quaternion corresponding to rotating about an axis in degrees.
+    pub fn from_axis_deg(degrees: Degrees<S>, axis: Vector3<S>) -> Quaternion<S> {
+        Self::from_axis_rad(degrees.into(), axis)
     }
-    */
+
     /// Compute the conjugate of a quaternion.
     pub fn conjugate(&self) -> Quaternion<S> {
         Quaternion::from_sv(self.s, -self.v)

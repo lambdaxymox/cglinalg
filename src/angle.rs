@@ -601,35 +601,35 @@ impl<'a, S> ops::Neg for &'a Radians<S> where S: ScalarFloat {
 impl<S> ops::AddAssign<Radians<S>> for Radians<S> where S: ScalarFloat {
     #[inline]
     fn add_assign(&mut self, other: Radians<S>) {
-        *self = *self + other;
+        self.0 += other.0;
     } 
 }
 
 impl<S> ops::SubAssign<Radians<S>> for Radians<S> where S: ScalarFloat {
     #[inline]
     fn sub_assign(&mut self, other: Radians<S>) {
-        *self = *self - other;
+        self.0 -= other.0;
     } 
 }
 
 impl<S> ops::MulAssign<S> for Radians<S> where S: ScalarFloat {
     #[inline]
     fn mul_assign(&mut self, other: S) {
-        *self = *self * other;
+        self.0 *= other;
     } 
 }
 
 impl<S> ops::DivAssign<S> for Radians<S> where S: ScalarFloat {
     #[inline]
     fn div_assign(&mut self, other: S) {
-        *self = *self / other;
+        self.0 /= other;
     } 
 }
 
 impl<S> ops::RemAssign<Radians<S>> for Radians<S> where S: ScalarFloat {
     #[inline]
     fn rem_assign(&mut self, other: Radians<S>) {
-        *self = *self % other;
+        self.0 = self.0 % other.0;
     } 
 }
 
@@ -1107,4 +1107,14 @@ mod radians_arithmetic_tests {
         let result = &angle % &modulus;
         assert_eq!(result, expected);
     }
+}
+
+#[cfg(test)]
+mod radian_angle_tests {
+
+}
+
+#[cfg(test)]
+mod degree_angle_tests {
+
 }
