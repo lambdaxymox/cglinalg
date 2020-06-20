@@ -6,7 +6,7 @@ use num_traits::Float;
 use std::ops;
 
 
-/// A type implementing the Array trait has the structure of an array
+/// A type implementing this trait has the structure of an array
 /// of its elements in its underlying storage. In this way we can manipulate
 /// underlying storage directly for operations such as passing geometric data 
 /// across an API boundary to the GPU, or other external hardware.
@@ -35,6 +35,7 @@ pub trait Storage {
     fn as_slice(&self) -> &[Self::Element];
 }
 
+/// This trait indicates that a type has an arithmetical zero element.
 pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
     /// Create a zero element.
     fn zero() -> Self;
@@ -43,6 +44,7 @@ pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
     fn is_zero(&self) -> bool;
 }
 
+/// This trait indicates that a type has a multiplicative unit element.
 pub trait One where Self: Sized + ops::Mul<Self, Output = Self> {
     /// Create a multiplicative unit element.
     fn one() -> Self;
@@ -66,6 +68,9 @@ pub trait VectorSpace where
     type Scalar: Scalar;
 }
 
+/// A type with this trait has a notion of comparing the distance (metric) between
+/// two elements of that type. For example, one can use this trait to compute the 
+/// Euclidean distance between two vectors. 
 pub trait Metric<V: Sized>: Sized {
     type Output: ScalarFloat;
 
@@ -78,6 +83,7 @@ pub trait Metric<V: Sized>: Sized {
     }
 }
 
+/// This trait enables one to define the dot product of two elements of a vector space.
 pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
     type Output: Scalar;
 
@@ -106,6 +112,7 @@ pub trait Lerp<V: Copy + Clone> {
     type Scalar: Scalar;
     type Output;
 
+    /// Linearly interpolate between two vectors.
     fn lerp(self, other: V, amount: Self::Scalar) -> Self::Output;
 }
 
@@ -155,6 +162,10 @@ pub trait Matrix {
     fn transpose(&self) -> Self::Transpose;
 }
 
+/// A trait that enables trigonometry for typed angles. This enables a rigorous distinction between 
+/// different units of angles to prevent trigonometric errors that arise from using incorrect angular units.
+/// For example, adding radians to degrees, or passing an angle in degrees to a trigonometric function 
+/// when one meant to pass an angle in units of radians.
 pub trait Angle where 
     Self: Copy + Clone,
     Self: PartialEq + PartialOrd,
@@ -172,39 +183,73 @@ pub trait Angle where
 {
     type Scalar: ScalarFloat;
 
+    /// The value of a full rotation around the unit circle for a typed angle.
     fn full_turn() -> Self;
 
+    /// Compute the sine of a typed angle.
     fn sin(self) -> Self::Scalar;
 
+    /// Compute the cosine of a typed angle.
     fn cos(self) -> Self::Scalar;
 
+    /// Computer the tangent of a typed angle.
     fn tan(self) -> Self::Scalar;
 
+    /// Compute the arcsin of a scalar value, returning a corresponding typed angle.
     fn asin(ratio: Self::Scalar) -> Self;
 
+    /// Compute the arc cosine of a scalar value, returning a corresponding typed angle.
     fn acos(ratio: Self::Scalar) -> Self;
 
+    /// Compute the arc tangent of a scalar value, returning a corresponding typed angle.
     fn atan(ratio: Self::Scalar) -> Self;
 
+    /// Computes the four quadrant arc tangent of two angles, returning a typed angle.
+    /// The return values fall into the following value ranges.
+    /// ```text
+    /// x = 0 and y = 0 -> 0
+    /// x >= 0          -> arctan(y / x) in [-pi / 2, pi / 2]
+    /// y >= 0          -> (arctan(y / x) + pi) in (pi / 2, pi]
+    /// y < 0           -> (arctan(y / x) - pi) in (-pi, -pi / 2)
+    /// ```
     fn atan2(a: Self::Scalar, b: Self::Scalar) -> Self;
 
+    /// Simultaneously compute the sin and cosine of an angle. In applications
+    /// there are frequently computed together.
     #[inline]
     fn sin_cos(self) -> (Self::Scalar, Self::Scalar) {
         (Self::sin(self), Self::cos(self))
     }
 
+    /// The value of half of a full turn around the unit circle.
     #[inline]
     fn full_turn_div_2() -> Self {
         let denominator: Self::Scalar = num_traits::cast(2).unwrap();
         Self::full_turn() / denominator
     }
 
+    /// The value of a one fourth of a full turn around the unit circle.
     #[inline]
     fn full_turn_div_4() -> Self {
         let denominator: Self::Scalar = num_traits::cast(4).unwrap();
         Self::full_turn() / denominator
     }
 
+    /// The value of one sixth of a full turn around the unit circle.
+    #[inline]
+    fn full_turn_div_6() -> Self {
+        let denominator: Self::Scalar = num_traits::cast(6).unwrap();
+        Self::full_turn() / denominator
+    }
+
+    /// The value of one eighth of a full turn around the unit circle.
+    #[inline]
+    fn full_turn_div_8() -> Self {
+        let denominator: Self::Scalar = num_traits::cast(8).unwrap();
+        Self::full_turn() / denominator
+    }
+
+    /// Map an angle to its smallest congruent angle in the range `[0, full_turn)`.
     #[inline]
     fn normalize(self) -> Self {
         let remainder = self % Self::full_turn();
@@ -215,6 +260,7 @@ pub trait Angle where
         }
     }
 
+    /// Map an angle to its smallest congruent angle in the range `[-full_turn / 2, full_turn / 2)`.
     #[inline]
     fn normalize_signed(self) -> Self {
         let remainder = self.normalize();
@@ -225,27 +271,33 @@ pub trait Angle where
         }
     }
 
+    /// Compute the angle rotated by half of a turn.
     #[inline]
     fn opposite(self) -> Self {
         Self::normalize(self + Self::full_turn_div_2())
     }
 
+    /// Compute the interior bisector (the angle that is half-way between the angles) 
+    /// of `self` and `other`.
     #[inline]
     fn bisect(self, other: Self) -> Self {
         let one_half = num_traits::cast(0.5_f64).unwrap();
         Self::normalize((self - other) * one_half + self)
     }
 
+    /// Compute the cosecant of a typed angle.
     #[inline]
     fn csc(self) -> Self::Scalar {
         Self::sin(self).recip()
     }
 
+    /// Compute the cotangent of a typed angle.
     #[inline]
     fn cot(self) -> Self::Scalar {
         Self::tan(self).recip()
     }
 
+    /// Compute the secant of a typed angle.
     #[inline]
     fn sec(self) -> Self::Scalar {
         Self::cos(self).recip()

@@ -8,10 +8,12 @@ use std::fmt;
 use std::ops;
 
 
+/// The angle (arc length) along the unit circle in units of radians.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd)]
 #[repr(C)]
 pub struct Radians<S>(S);
 
+/// The angle (arc length) along the unit circle in units of degrees.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd)]
 #[repr(C)]
 pub struct Degrees<S>(S);
@@ -815,6 +817,8 @@ mod conversion_tests {
         ]
     }
 
+    /// Converting an angle from radians to degrees should yield the correct angle in
+    /// in degrees.
     #[test]
     fn convert_radians_to_degrees() {
         radians_to_degrees_tests().iter().for_each(|test| {
@@ -825,6 +829,8 @@ mod conversion_tests {
         })
     }
 
+    /// Converting an angle from degrees to radians should yield the correct angle
+    /// in radians.
     #[test]
     fn convert_degrees_to_radians() {
         degrees_to_radians_tests().iter().for_each(|test| {
@@ -930,6 +936,13 @@ mod degrees_arithmetic_tests {
         assert_eq!(result, expected)
     }
 
+    /// The remainder of an angle by a modulus smaller than the modulus should be
+    /// the same as the original angle. That is, angles satisfy
+    /// ```
+    /// For each angle smaller than modulus angle is congruent to itself modulo modulus.
+    /// That is,
+    /// For all angle < modulus, angle = angle (mod modulus).
+    /// ``` 
     #[test]
     fn test_remainder_less_than_modulus() {
         let angle = Degrees(45_f64);
@@ -949,6 +962,11 @@ mod degrees_arithmetic_tests {
         assert_eq!(result, expected);
     }
 
+    /// The remainder of an angle by a modulus larger than the modulus should be
+    /// smaller then the modulus. That is, angles satisfy
+    /// ```
+    /// For each angle larger than modulus, angle mod modulus < modulus.
+    /// ``` 
     #[test]
     fn test_remainder_greater_than_modulus() {
         let angle = Degrees(405_f64);
@@ -1070,6 +1088,13 @@ mod radians_arithmetic_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 
+    /// The remainder of an angle by a modulus smaller than the modulus should be
+    /// the same as the original angle. That is, angles satisfy
+    /// ```
+    /// For each angle smaller than modulus angle is congruent to itself modulo modulus.
+    /// That is,
+    /// For all angle < modulus, angle = angle (mod modulus).
+    /// ``` 
     #[test]
     fn test_remainder_less_than_modulus() {
         let angle = PI / 4_f64;
@@ -1089,6 +1114,11 @@ mod radians_arithmetic_tests {
         assert_eq!(result, expected);
     }
 
+    /// The remainder of an angle by a modulus larger than the modulus should be
+    /// smaller then the modulus. That is, angles satisfy
+    /// ```
+    /// For each angle larger than modulus, angle mod modulus < modulus.
+    /// ``` 
     #[test]
     fn test_remainder_greater_than_modulus() {
         let angle = PI * 2_f64 + PI / 4_f64;
