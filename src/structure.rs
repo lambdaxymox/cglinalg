@@ -192,7 +192,7 @@ pub trait Angle where
     /// Compute the cosine of a typed angle.
     fn cos(self) -> Self::Scalar;
 
-    /// Computer the tangent of a typed angle.
+    /// Compute the tangent of a typed angle.
     fn tan(self) -> Self::Scalar;
 
     /// Compute the arcsin of a scalar value, returning a corresponding typed angle.
@@ -204,7 +204,7 @@ pub trait Angle where
     /// Compute the arc tangent of a scalar value, returning a corresponding typed angle.
     fn atan(ratio: Self::Scalar) -> Self;
 
-    /// Computes the four quadrant arc tangent of two angles, returning a typed angle.
+    /// Compute the four quadrant arc tangent of two angles, returning a typed angle.
     /// The return values fall into the following value ranges.
     /// ```text
     /// x = 0 and y = 0 -> 0

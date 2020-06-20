@@ -1141,7 +1141,83 @@ mod radians_arithmetic_tests {
 
 #[cfg(test)]
 mod radian_angle_tests {
+    use super::Radians;
+    use approx::relative_eq;
+    use structure::Angle;
+    use std::f64;
 
+
+    #[test]
+    fn test_full_turn() {
+        let expected = Radians(2_f64 * f64::consts::PI);
+        let result = Radians::full_turn();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_sin() {
+        let expected = 1_f64 / 2_f64;
+        let result = Radians(f64::consts::PI / 6_f64).sin();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_cos() {
+        let expected = f64::sqrt(3_f64) / 2_f64;
+        let result = Radians(f64::consts::PI / 6_f64).cos();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_tan() {
+        let expected = f64::sqrt(3_f64) / 3_f64;
+        let result = Radians(f64::consts::PI / 6_f64).tan();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_tangent_of_vertical_angle_should_be_infinite() {
+        let expected = f64::INFINITY;
+        let result = Radians(f64::consts::FRAC_PI_2).tan();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_asin() {
+        let expected = Radians(f64::consts::PI / 6_f64);
+        let result = Radians::asin(1_f64 / 2_f64);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_acos() {
+        let expected = Radians(f64::consts::PI / 6_f64);
+        let result = Radians::acos(f64::sqrt(3_f64) / 2_f64);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_atan() {
+        let expected = Radians(f64::consts::PI / 6_f64);
+        let result = Radians::atan(f64::sqrt(3_f64) / 3_f64);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_atan_of_infinity_should_be_pi_over_two() {
+        let expected = Radians(f64::consts::FRAC_PI_2);
+        let result = Radians::atan(f64::INFINITY);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
 }
 
 #[cfg(test)]

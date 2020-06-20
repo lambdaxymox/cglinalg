@@ -91,6 +91,7 @@ pub fn mat4<S, T: Into<Matrix4<S>>>(m: T) -> Matrix4<S> {
     m.into()
 }
 
+/// Compute the dot product between two vectors.
 #[inline]
 pub fn dot<W: Copy + Clone, V: DotProduct<W>>(a: V, b: W) -> <V as DotProduct<W>>::Output {
     V::dot(a, b)
