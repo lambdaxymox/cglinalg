@@ -1,1 +1,1 @@
-# Computer Graphics Math Library
+# Game Development Math Library
