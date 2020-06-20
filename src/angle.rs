@@ -1218,6 +1218,108 @@ mod radian_angle_tests {
 
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
+
+    #[test]
+    fn test_sin_cos() {
+        let angle = Radians(f64::consts::PI / 6_f64);
+        let expected = (angle.sin(), angle.cos());
+        let result = angle.sin_cos();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_full_turn_div_2() {
+        let expected = Radians(2_f64 * f64::consts::PI / 2_f64);
+        let result = Radians::full_turn_div_2();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_full_turn_div_4() {
+        let expected = Radians(2_f64 * f64::consts::PI / 4_f64);
+        let result = Radians::full_turn_div_4();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_full_turn_div_6() {
+        let expected = Radians(2_f64 * f64::consts::PI / 6_f64);
+        let result = Radians::full_turn_div_6();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_full_turn_div_8() {
+        let expected = Radians(2_f64 * f64::consts::PI / 8_f64);
+        let result = Radians::full_turn_div_8();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_normalize() {
+        let angle = Radians::full_turn() + Radians(f64::consts::PI / 4_f64);
+        let expected = Radians(f64::consts::PI / 4_f64);
+        let result = angle.normalize();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_normalize_signed() {
+        let angle = Radians::full_turn() + Radians(f64::consts::PI / 4_f64);
+        let expected = Radians(f64::consts::PI / 4_f64);
+        let result = angle.normalize_signed();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_opposite() {
+        let angle = Radians(f64::consts::PI / 4_f64);
+        let expected = Radians(5_f64 * f64::consts::PI / 4_f64);
+        let result = angle.opposite();
+
+        assert_eq!(result, expected);    
+    }
+
+    #[test]
+    fn test_bisect() {
+        let angle1 = Radians(0_f64);
+        let angle2 = Radians(f64::consts::PI / 2_f64);
+        let expected = Radians(f64::consts::PI / 4_f64);
+        let result = angle1.bisect(angle2);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_csc() {
+        let expected = 2_f64;
+        let result = Radians(f64::consts::PI / 6_f64).csc();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_cot() {
+        let expected = 3_f64 / f64::sqrt(3_f64);
+        let result = Radians(f64::consts::PI / 6_f64).cot();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_sec() {
+        let expected = 2_f64 / f64::sqrt(3_f64);
+        let result = Radians(f64::consts::PI / 6_f64).sec();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
 }
 
 #[cfg(test)]
