@@ -1324,5 +1324,183 @@ mod radian_angle_tests {
 
 #[cfg(test)]
 mod degree_angle_tests {
+    use super::Degrees;
+    use approx::relative_eq;
+    use structure::Angle;
+    use std::f64;
 
+
+    #[test]
+    fn test_full_turn() {
+        let expected = Degrees(360_f64);
+        let result = Degrees::full_turn();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_sin() {
+        let expected = 1_f64 / 2_f64;
+        let result = Degrees(30_f64).sin();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_cos() {
+        let expected = f64::sqrt(3_f64) / 2_f64;
+        let result = Degrees(30_f64).cos();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_tan() {
+        let expected = f64::sqrt(3_f64) / 3_f64;
+        let result = Degrees(30_f64).tan();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_tangent_of_vertical_angle_should_be_infinite() {
+        let expected = f64::INFINITY;
+        let result = Degrees(f64::consts::FRAC_PI_2).tan();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_asin() {
+        let expected = Degrees(30_f64);
+        let result = Degrees::asin(1_f64 / 2_f64);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_acos() {
+        let expected = Degrees(30_f64);
+        let result = Degrees::acos(f64::sqrt(3_f64) / 2_f64);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_atan() {
+        let expected = Degrees(30_f64);
+        let result = Degrees::atan(f64::sqrt(3_f64) / 3_f64);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_atan_of_infinity_should_be_pi_over_two() {
+        let expected = Degrees(90_f64);
+        let result = Degrees::atan(f64::INFINITY);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_sin_cos() {
+        let angle = Degrees(30_f64);
+        let expected = (angle.sin(), angle.cos());
+        let result = angle.sin_cos();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_full_turn_div_2() {
+        let expected = Degrees(180_f64);
+        let result = Degrees::full_turn_div_2();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_full_turn_div_4() {
+        let expected = Degrees(90_f64);
+        let result = Degrees::full_turn_div_4();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_full_turn_div_6() {
+        let expected = Degrees(60_f64);
+        let result = Degrees::full_turn_div_6();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_full_turn_div_8() {
+        let expected = Degrees(45_f64);
+        let result = Degrees::full_turn_div_8();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_normalize() {
+        let angle = Degrees::full_turn() + Degrees(45_f64);
+        let expected = Degrees(45_f64);
+        let result = angle.normalize();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_normalize_signed() {
+        let angle = Degrees::full_turn() + Degrees(45_f64);
+        let expected = Degrees(45_f64);
+        let result = angle.normalize_signed();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_opposite() {
+        let angle = Degrees(45_f64);
+        let expected = Degrees(225_f64);
+        let result = angle.opposite();
+
+        assert_eq!(result, expected);    
+    }
+
+    #[test]
+    fn test_bisect() {
+        let angle1 = Degrees(0_f64);
+        let angle2 = Degrees(90_f64);
+        let expected = Degrees(45_f64);
+        let result = angle1.bisect(angle2);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_csc() {
+        let expected = 2_f64;
+        let result = Degrees(30_f64).csc();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_cot() {
+        let expected = 3_f64 / f64::sqrt(3_f64);
+        let result = Degrees(30_f64).cot();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_sec() {
+        let expected = 2_f64 / f64::sqrt(3_f64);
+        let result = Degrees(30_f64).sec();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
 }
