@@ -109,6 +109,10 @@ macro_rules! exact_arithmetic_props {
         use gdmath::{$VectorN, Zero};
 
         proptest! {
+            /// A scalar zero times a vector should be zero. That is, vector algebra satisfies
+            /// ```
+            /// For each vector v, 0 * v = 0.
+            /// ```
             #[test]
             fn prop_zero_times_vector_equals_zero(v in super::$Generator()) {
                 let zero: $FieldType = num_traits::Zero::zero();
@@ -116,6 +120,13 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(zero * v, zero_vec);
             }
         
+            /// A scalar zero times a vector should be zero. That is, vector algebra satisfies
+            /// ```
+            /// For each vector v, v * 0 = 0.
+            /// ```
+            /// Note that we deviate from the usual formalisms of vector algebra in that we 
+            /// allow the ability to mulitply scalars from the left, or from the right of a vector.
+            /// In each case the result should be the same.
             #[test]
             fn prop_vector_times_zero_equals_zero(v in super::$Generator()) {
                 let zero: $FieldType = num_traits::Zero::zero();
@@ -123,20 +134,49 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(v * zero, zero_vec);
             }
 
+            /// A zero vector should act as the additive unit element of a vector space.
+            /// In particular, we have
+            /// ```
+            /// For every vector v, v + 0 = v.
+            /// ```
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
                 let zero_vec = $VectorN::<$FieldType>::zero();
                 prop_assert_eq!(v + zero_vec, v);
             }
 
+            /// A zero vector should act as the additive unit element of a vector space.
+            /// In particular, we have
+            /// ```
+            /// For every vector v, 0 + v = v.
+            /// ```
             #[test]
             fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
                 let zero_vec = $VectorN::<$FieldType>::zero();
                 prop_assert_eq!(zero_vec + v, v);
             }
 
+            /// Multiplying a vector by one should give the original vector.
+            /// In particular, we have
+            /// ```
+            /// For every vector v, 1 * v = v.
+            /// ```
             #[test]
             fn prop_one_times_vector_equal_vector(v in super::$Generator()) {
+                let one: $FieldType = num_traits::One::one();
+                prop_assert_eq!(one * v, v);
+            }
+
+            /// Multiplying a vector by one should give the original vector.
+            /// In particular, we have
+            /// ```
+            /// For every vector v, v * 1 = v.
+            /// ```
+            /// Note that we deviate from the usual formalisms of vector algebra in that we 
+            /// allow the ability to mulitply scalars from the left, or from the right of a vector.
+            /// In each case the result should be the same.
+            #[test]
+            fn prop_vector_times_one_equals_vector(v in super::$Generator()) {
                 let one: $FieldType = num_traits::One::one();
                 prop_assert_eq!(one * v, v);
             }
