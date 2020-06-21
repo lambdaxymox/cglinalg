@@ -572,6 +572,15 @@ macro_rules! approx_mul_props {
         use gdmath::approx::relative_eq;
 
         proptest! {
+            /// Multiplication of a scalar and a vector should be approximately commutative.
+            /// Given a constant `c` and a vector `v`
+            /// ```
+            /// c * v ~= v * c
+            /// ```
+            /// We deviate from the usual formalisms of vector algebra in that we 
+            /// allow the ability to mulitply scalars from the left, or from the right of a vector.
+            /// Note that floating point vector multiplication cannot be commutative because 
+            /// multiplication in the underlying floating point scalars is not commutative.
             #[test]
             fn prop_scalar_times_vector_equals_vector_times_scalar(
                 c in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
@@ -583,6 +592,15 @@ macro_rules! approx_mul_props {
                 );
             }
 
+            /// Multiplication of two scalars and a vector should be compatible with multiplication of 
+            /// all scalars. In other words, scalar multiplication of two scalar with a vector should 
+            /// look act associatively, just like the multiplication of three scalars. 
+            /// Given scalars `a` and `b`, and a vector `v`, we have
+            /// ```
+            /// (a * b) * v ~= a * (b * v)
+            /// ```
+            /// Note that the compatability of scalars with vectors can only be approximate and not 
+            /// exact because multiplication of the underlying scalars is not associative. 
             #[test]
             fn prop_scalar_multiplication_compatability(
                 a in any::<$FieldType>(), b in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
@@ -607,6 +625,13 @@ macro_rules! exact_mul_props {
         use proptest::prelude::*;
 
         proptest! {
+            /// Exact multiplication of a scalar and a vector should be commutative.
+            /// Given a constant `c` and a vector `v`
+            /// ```
+            /// c * v ~= v * c
+            /// ```
+            /// We deviate from the usual formalisms of vector algebra in that we 
+            /// allow the ability to mulitply scalars from the left, or from the right of a vector.
             #[test]
             fn prop_scalar_times_vector_equals_vector_times_scalar(
                 c in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
@@ -614,6 +639,13 @@ macro_rules! exact_mul_props {
                 prop_assert_eq!(c * v, v * c);
             }
 
+            /// Exact multiplication of two scalars and a vector should be compatible with multiplication of 
+            /// all scalars. In other words, scalar multiplication of two scalars with a vector should 
+            /// look act associatively just like the multiplication of three scalars. 
+            /// Given scalars `a` and `b`, and a vector `v`, we have
+            /// ```
+            /// (a * b) * v ~= a * (b * v)
+            /// ```
             #[test]
             fn prop_scalar_multiplication_compatability(
                 a in any::<$FieldType>(), b in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
@@ -644,6 +676,11 @@ macro_rules! approx_distributive_props {
         use gdmath::Magnitude;
     
         proptest! {
+            /// Scalar multiplication should approximately distribute over vector addition.
+            /// Given a scalar `a` and vectors `v` and `w`
+            /// ```
+            /// a * (v + w) ~= a * v + a * w
+            /// ```
             #[test]
             fn prop_distribution_over_vector_addition(
                 a in any::<$FieldType>(), 
@@ -654,6 +691,11 @@ macro_rules! approx_distributive_props {
                 prop_assert_eq!(a * (v + w), a * v + a * w);
             }
     
+            /// Multiplication of a sum of scalars should approximately distribute over a vector.
+            /// Given scalars `a` and `b` and a vector `v`, we have
+            /// ```
+            /// (a + b) * v = a * v + b * v
+            /// ```
             #[test]
             fn prop_distribution_over_scalar_addition(
                 a in any::<$FieldType>(), b in any::<$FieldType>(), 
@@ -664,6 +706,11 @@ macro_rules! approx_distributive_props {
                 prop_assert_eq!((a + b) * v, a * v + b * v);
             }
 
+            /// Multiplication of two vectors by a scalar on the right should approximately distribute.
+            /// Given vectors `v` and `w` and a scalar `a`
+            /// ```
+            /// (v + w) * a ~= v * a + w * a
+            /// ```
             #[test]
             fn prop_distribution_over_vector_addition1(
                 a in any::<$FieldType>(), 
@@ -673,7 +720,13 @@ macro_rules! approx_distributive_props {
                 prop_assume!((v * a + w * a).magnitude().is_finite());
                 prop_assert_eq!((v + w) * a,  v * a + w * a);
             }
-    
+
+            /// Multiplication of a vector on the right by the sum of two scalars should approximately 
+            /// distribute over the two scalars. 
+            /// Given a vector `v` and scalars `a` and `b`
+            /// ```
+            /// v * (a + b) ~= v * a + v * b
+            /// ```
             #[test]
             fn prop_distribution_over_scalar_addition1(
                 a in any::<$FieldType>(), b in any::<$FieldType>(), 
