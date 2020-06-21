@@ -125,7 +125,7 @@ macro_rules! exact_arithmetic_props {
             /// For each vector v, v * 0 = 0.
             /// ```
             /// Note that we deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to mulitply scalars from the left, or from the right of a vector.
+            /// allow the ability to multiply scalars from the left, or from the right of a vector.
             /// In each case the result should be the same.
             #[test]
             fn prop_vector_times_zero_equals_zero(v in super::$Generator()) {
@@ -173,7 +173,7 @@ macro_rules! exact_arithmetic_props {
             /// For every vector v, v * 1 = v.
             /// ```
             /// Note that we deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to mulitply scalars from the left, or from the right of a vector.
+            /// allow the ability to multiply scalars from the left, or from the right of a vector.
             /// In each case the result should be the same.
             #[test]
             fn prop_vector_times_one_equals_vector(v in super::$Generator()) {
@@ -578,7 +578,7 @@ macro_rules! approx_mul_props {
             /// c * v ~= v * c
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to mulitply scalars from the left, or from the right of a vector.
+            /// allow the ability to multiply scalars from the left, or from the right of a vector.
             /// Note that floating point vector multiplication cannot be commutative because 
             /// multiplication in the underlying floating point scalars is not commutative.
             #[test]
@@ -628,10 +628,10 @@ macro_rules! exact_mul_props {
             /// Exact multiplication of a scalar and a vector should be commutative.
             /// Given a constant `c` and a vector `v`
             /// ```
-            /// c * v ~= v * c
+            /// c * v = v * c
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to mulitply scalars from the left, or from the right of a vector.
+            /// allow the ability to multiply scalars from the left, or from the right of a vector.
             #[test]
             fn prop_scalar_times_vector_equals_vector_times_scalar(
                 c in any::<$FieldType>(), v in super::$Generator::<$FieldType>()) {
@@ -644,7 +644,7 @@ macro_rules! exact_mul_props {
             /// look act associatively just like the multiplication of three scalars. 
             /// Given scalars `a` and `b`, and a vector `v`, we have
             /// ```
-            /// (a * b) * v ~= a * (b * v)
+            /// (a * b) * v = a * (b * v)
             /// ```
             #[test]
             fn prop_scalar_multiplication_compatability(
@@ -694,7 +694,7 @@ macro_rules! approx_distributive_props {
             /// Multiplication of a sum of scalars should approximately distribute over a vector.
             /// Given scalars `a` and `b` and a vector `v`, we have
             /// ```
-            /// (a + b) * v = a * v + b * v
+            /// (a + b) * v ~= a * v + b * v
             /// ```
             #[test]
             fn prop_distribution_over_scalar_addition(
@@ -711,6 +711,8 @@ macro_rules! approx_distributive_props {
             /// ```
             /// (v + w) * a ~= v * a + w * a
             /// ```
+            /// We deviate from the usual formalisms of vector algebra in that we 
+            /// allow the ability to multiply scalars from the left, or from the right of a vector.
             #[test]
             fn prop_distribution_over_vector_addition1(
                 a in any::<$FieldType>(), 
@@ -727,6 +729,8 @@ macro_rules! approx_distributive_props {
             /// ```
             /// v * (a + b) ~= v * a + v * b
             /// ```
+            /// We deviate from the usual formalisms of vector algebra in that we 
+            /// allow the ability to multiply scalars from the left, or from the right of a vector.
             #[test]
             fn prop_distribution_over_scalar_addition1(
                 a in any::<$FieldType>(), b in any::<$FieldType>(), 
@@ -754,6 +758,11 @@ macro_rules! exact_distributive_props {
         use proptest::prelude::*;
 
         proptest! {
+            /// Scalar multiplication should distribute over vector addition.
+            /// Given a scalar `a` and vectors `v` and `w`
+            /// ```
+            /// a * (v + w) = a * v + a * w
+            /// ```
             #[test]
             fn prop_distribution_over_vector_addition(
                 a in any::<$FieldType>(), 
@@ -762,7 +771,12 @@ macro_rules! exact_distributive_props {
                 prop_assert_eq!(a * (v + w), a * v + a * w);
                 prop_assert_eq!((v + w) * a,  v * a + w * a);
             }
-    
+
+            /// Multiplication of a sum of scalars should distribute over a vector.
+            /// Given scalars `a` and `b` and a vector `v`, we have
+            /// ```
+            /// (a + b) * v = a * v + b * v
+            /// ```
             #[test]
             fn prop_distribution_over_scalar_addition(
                 a in any::<$FieldType>(), b in any::<$FieldType>(), 
