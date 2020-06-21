@@ -209,18 +209,38 @@ macro_rules! approx_add_props {
         use gdmath::{$VectorN, Zero};
 
         proptest! {
+            /// A vector plus a zero vector equals the same vector. The vector algebra satisfies
+            /// ```
+            /// For each vector v, v + 0 = v.
+            /// ```
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
                 let zero_vec = $VectorN::<$FieldType>::zero();
                 prop_assert_eq!(v + zero_vec, v);
             }
 
+            /// A vector plus a zero vector equals the same vector. The vector algebra satisfies
+            /// ```
+            /// For each vector v, 0 + v = v.
+            /// ```
             #[test]
             fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
                 let zero_vec = $VectorN::<$FieldType>::zero();
                 prop_assert_eq!(zero_vec + v, v);
             }
 
+            /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
+            /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors. 
+            /// In the case of vector addition, the vectors should satisfy
+            /// ```
+            ///  v1 +  v2 = &v1 +  v2
+            ///  v1 +  v2 =  v1 + &v2
+            ///  v1 +  v2 = &v1 + &v2
+            ///  v1 + &v2 = &v1 +  v2
+            /// &v1 +  v2 =  v1 + &v2
+            /// &v1 +  v2 = &v1 + &v2
+            ///  v1 + &v2 = &v1 + &v2
+            /// ```
             #[test]
             fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
                 v1 in super::$Generator::<$FieldType>(), v2 in super::$Generator::<$FieldType>()) {
@@ -234,6 +254,13 @@ macro_rules! approx_add_props {
                 prop_assert_eq!(v1 + &v2, &v1 + &v2);
             }
 
+            /// Given two vectors of floating point scalars, vector addition should  be approximately
+            /// commutative. Given vectors `v1` and `v2`, we have
+            /// ```
+            /// v1 + v2 ~= v2 + v1.
+            /// ```
+            /// Note that floating point vector addition cannot be exactly commutative because arithmetic
+            /// with floating point numbers is not commutative.
             #[test]
             fn prop_vector_addition_almost_commutative(
                 v1 in super::$Generator::<$FieldType>(), v2 in super::$Generator::<$FieldType>()) {
@@ -242,6 +269,13 @@ macro_rules! approx_add_props {
                 prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
             }
 
+            /// Given three vectors of floating point scalars, vector addition should  be approximately
+            /// associative. Given vectors `v1`, `v2`, and `v3` we have
+            /// ```
+            /// (v1 + v2) + v3 ~= v1 + (v2 + v3).
+            /// ```
+            /// Note that floating point vector addition cannot be exactly associative because arithmetic
+            /// with floating point numbers is not associative.
             #[test]
             fn prop_vector_addition_associate(
                 u in super::$Generator::<$FieldType>(), 
