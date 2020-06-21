@@ -9,7 +9,6 @@ use gdmath::{
     Vector3, 
     Vector4, 
     Scalar,
-    ScalarFloat,
 };
 
 
@@ -58,13 +57,13 @@ fn any_vector4_no_overflow<S>() -> impl Strategy<Value = Vector4<S>> where S: Sc
 }
 
 
-/// A macro that generates the property tests for vector indexing.
+/// Generates the properties tests for vector indexing.
 ///
-/// `$VectorN` denotes the name of the vector type.
-/// `$ScalarType` denotes the underlying system of numbers that we access using indexing.
-/// `$UpperBound` denotes the upperbound on the range of acceptable indexes.
 /// `$TestModuleName` is a name we give to the module we place the tests in to separate them
-/// from each other for each field type to prevent namespace collisions.
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$UpperBound` denotes the upperbound on the range of acceptable indices.
 macro_rules! index_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
     #[cfg(test)]
@@ -101,14 +100,14 @@ index_props!(vector3_f64_index_props, Vector3, f64, any_vector3, 3);
 index_props!(vector4_f64_index_props, Vector4, f64, any_vector4, 4);
 
 
-/// Generates the property tests for vector arithmetic over exact scalars. We define an exact
-/// scalar type as a type where scalar arithmetic is exact.
+/// Generate the properties for vector arithmetic over exact scalars. We define an exact
+/// scalar type as a type where scalar arithmetic is exact (e.g. integers).
 ///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
 /// `$VectorN` denotes the name of the vector type.
-/// `$ScalarType` denotes the underlying system of numbers that we access using indexing.
-/// `$UpperBound` denotes the upperbound on the range of acceptable indexes.
-/// `$TestModuleName` is a name we give to the module we place the tests in to separate them
-/// from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_arithmetic_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -209,6 +208,16 @@ exact_arithmetic_props!(vector3_u32_arithmetic_props, Vector3, u32, any_vector3)
 exact_arithmetic_props!(vector4_u32_arithmetic_props, Vector4, u32, any_vector4);
 
 
+/// Generate the properties for vector arithmetic over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
 macro_rules! approx_add_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -304,6 +313,13 @@ approx_add_props!(vector3_f64_add_props, Vector3, f64, any_vector3_no_overflow);
 approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4_no_overflow);
 
 
+/// Generate the properties for vector arithmetic over exact scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_add_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -400,6 +416,16 @@ exact_add_props!(vector3_u32_add_props, Vector3, u32, any_vector3_no_overflow);
 exact_add_props!(vector4_u32_add_props, Vector4, u32, any_vector4_no_overflow);
 
 
+/// Generate the properties for vector subtraction over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
 macro_rules! approx_sub_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -441,6 +467,13 @@ approx_sub_props!(vector3_f64_sub_props, Vector3, f64, any_vector3_no_overflow);
 approx_sub_props!(vector4_f64_sub_props, Vector4, f64, any_vector4_no_overflow);
 
 
+/// Generate the properties for vector arithmetic over exact scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_sub_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -487,8 +520,18 @@ exact_sub_props!(vector3_u32_sub_props, Vector3, u32, any_vector3_no_overflow);
 exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4_no_overflow);
 
 
+/// Generate the properties for vector magnitudes.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
 macro_rules! magnitude_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $epsilon:expr) => {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::{$VectorN, Magnitude};
@@ -509,7 +552,7 @@ macro_rules! magnitude_props {
                 prop_assume!((c * v).magnitude().is_finite());
                 
                 prop_assert!(
-                    relative_eq!( (c * v).magnitude(), abs_c * v.magnitude(), epsilon = $epsilon),
+                    relative_eq!( (c * v).magnitude(), abs_c * v.magnitude(), epsilon = $tolerance),
                     "\n||c * v|| = {}\n|c| * ||v|| = {}\n", (c * v).magnitude(), abs_c * v.magnitude(),
                 );
             }
@@ -555,8 +598,8 @@ macro_rules! magnitude_props {
             fn prop_magnitude_approx_point_separating(v in super::$Generator::<$ScalarType>()) {
                 let zero_vec = <$VectorN<$ScalarType> as gdmath::Zero>::zero();
 
-                prop_assume!(relative_ne!(v, zero_vec, epsilon = $epsilon));
-                prop_assert!(relative_ne!(v.magnitude(), zero_vec.magnitude(), epsilon = $epsilon),
+                prop_assume!(relative_ne!(v, zero_vec, epsilon = $tolerance));
+                prop_assert!(relative_ne!(v.magnitude(), zero_vec.magnitude(), epsilon = $tolerance),
                     "\n|v| = {}\n|zero_vec| = {}\n", v.magnitude(), zero_vec.magnitude()
                 );
             }
@@ -571,8 +614,21 @@ magnitude_props!(vector3_f64_magnitude_props, Vector3, f64, any_vector3, 1e-7);
 magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, 1e-7);
 
 
+/// Generate the properties for vector multiplication over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
 macro_rules! approx_mul_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $epsilon:expr) => {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -596,7 +652,7 @@ macro_rules! approx_mul_props {
                 prop_assume!(c.is_finite());
                 prop_assume!(v.magnitude().is_finite());
                 prop_assert!(
-                    relative_eq!(c * v, v * c, epsilon = $epsilon)
+                    relative_eq!(c * v, v * c, epsilon = $tolerance)
                 );
             }
 
@@ -613,7 +669,7 @@ macro_rules! approx_mul_props {
             fn prop_scalar_multiplication_compatability(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
 
-                prop_assert!(relative_eq!(a * (b * v), (a * b) * v, epsilon = $epsilon));
+                prop_assert!(relative_eq!(a * (b * v), (a * b) * v, epsilon = $tolerance));
             }
         }
     }
@@ -626,6 +682,13 @@ approx_mul_props!(vector3_f64_mul_props, Vector3, f64, any_vector3, 1e-7);
 approx_mul_props!(vector4_f64_mul_props, Vector4, f64, any_vector4, 1e-7);
 
 
+/// Generate the properties for vector multiplication over exact scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_mul_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -676,6 +739,16 @@ exact_mul_props!(vector3_u32_mul_props, Vector3, u32, any_vector3);
 exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 
 
+/// Generate the properties for vector distribution over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
 macro_rules! approx_distributive_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -759,6 +832,13 @@ approx_distributive_props!(vector3_f64_distributive_props, Vector3, f64, any_vec
 approx_distributive_props!(vector4_f64_distributive_props, Vector4, f64, any_vector4);
 
 
+/// Generate the properties for vector distribution over exact scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_distributive_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
