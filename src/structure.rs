@@ -91,7 +91,7 @@ pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
     fn dot(self, other: V) -> Self::Output;
 }
 
-
+/// This trait enables one to assign lengths to vectors.
 pub trait Magnitude {
     type Output: Scalar;
 
@@ -108,6 +108,8 @@ pub trait Magnitude {
     fn normalize_to(&self, magnitude: Self::Output) -> Self;
 }
 
+/// A vector type with the `Lerp` trait has the ability to interpolate between two elements
+/// of that type. 
 pub trait Lerp<V: Copy + Clone> {
     type Scalar: Scalar;
     type Output;
