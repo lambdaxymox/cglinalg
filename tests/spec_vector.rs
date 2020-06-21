@@ -488,6 +488,11 @@ macro_rules! magnitude_props {
 
         proptest! {
             #[test]
+            /// The magnitude of a vector preserves scales. Given a scalar constant `c`, and a 
+            /// vector `v` of scalars, the magnitude function satisfies
+            /// ```
+            /// magnitude(c * v) = abs(c) * magnitude(v)
+            /// ```
             fn prop_magnitude_preserves_scale(
                 v in super::$Generator::<$FieldType>(), c in any::<$FieldType>()) {
                 
@@ -501,12 +506,21 @@ macro_rules! magnitude_props {
                 );
             }
 
+            /// The magnitude of a vector is nonnegative. Given a vector `v`
+            /// ```
+            /// magnitude(v) >= 0
+            /// ```
             #[test]
             fn prop_magnitude_nonnegative(v in super::$Generator::<$FieldType>()) {
                 let zero = <$FieldType as num_traits::Zero>::zero();
                 prop_assert!(v.magnitude() >= zero);
             }
 
+            /// The magnitude of a vector satisfies the triangle inequality. Given a vector `v` and a 
+            /// vector `w`, the magnitude function satisfies
+            /// ```
+            /// magnitude(v + w) <= magnitude(v) + magnitude(w)
+            /// ```
             #[test]
             fn prop_magnitude_satisfies_triangle_inequality(
                 v in super::$Generator::<$FieldType>(), w in super::$Generator::<$FieldType>()) {
@@ -519,6 +533,16 @@ macro_rules! magnitude_props {
                 );
             }
 
+            /// The magnitude function is point separating. In particular, if the distance between two 
+            /// vectors `v` and `w` is zero, then v = w:
+            /// ```
+            /// magnitude(v - w) = 0 => v = w 
+            /// ```
+            /// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+            /// ```
+            /// v != w => magnitude(v - w) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the magnitude function.
             #[test]
             fn prop_magnitude_approx_point_separating(v in super::$Generator::<$FieldType>()) {
                 let zero_vec = <$VectorN<$FieldType> as gdmath::Zero>::zero();
