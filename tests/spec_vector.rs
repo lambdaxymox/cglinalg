@@ -63,6 +63,7 @@ fn any_vector4_no_overflow<S>() -> impl Strategy<Value = Vector4<S>> where S: Sc
 ///  from each other for each field type to prevent namespace collisions.
 /// `$VectorN` denotes the name of the vector type.
 /// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
 /// `$UpperBound` denotes the upperbound on the range of acceptable indices.
 macro_rules! index_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {

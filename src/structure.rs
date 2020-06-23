@@ -287,7 +287,7 @@ pub trait Angle where
     #[inline]
     fn bisect(self, other: Self) -> Self {
         let one_half = num_traits::cast(0.5_f64).unwrap();
-        Self::normalize((self - other) * one_half + self)
+        Self::normalize((other - self) * one_half + self)
     }
 
     /// Compute the cosecant of a typed angle.
