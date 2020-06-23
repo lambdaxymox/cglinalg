@@ -40,6 +40,7 @@ pub struct Quaternion<S> {
 }
 
 impl<S> Quaternion<S> where S: Scalar {
+    /// Construct a new quaternion.
     #[inline]
     pub fn new(s: S, x: S, y: S, z: S) -> Quaternion<S> {
         Self::from_sv(s, Vector3::new(x, y, z))
