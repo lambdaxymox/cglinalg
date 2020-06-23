@@ -18,7 +18,7 @@ fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> where S: Scalar +
 ///
 /// `$TestModuleName` is a name we give to the module we place the tests in to separate them
 ///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose a quaternion.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
 /// `$Generator` is the name of a function or closure for generating examples.
 /// `$UpperBound` denotes the upperbound on the range of acceptable indices.
 macro_rules! index_props {
@@ -148,7 +148,7 @@ exact_arithmetic_props!(quaternion_u32_arithmetic_props, u32, any_quaternion);
 ///
 /// `$TestModuleName` is a name we give to the module we place the properties in to separate them
 ///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
 /// `$Generator` is the name of a function or closure for generating examples.
 /// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
 ///  that still defines a correct computation. We cannot guarantee floating point computations
@@ -301,13 +301,13 @@ macro_rules! exact_add_props {
             fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
                 q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
                 
-                prop_assert_eq!(q1 + q2, &q1 + q2);
-                prop_assert_eq!(q1 + q2, q1 + &q2);
-                prop_assert_eq!(q1 + q2, &q1 + &q2);
-                prop_assert_eq!(q1 + &q2, &q1 + q2);
-                prop_assert_eq!(&q1 + q2, q1 + &q2);
-                prop_assert_eq!(&q1 + q2, &q1 + &q2);
-                prop_assert_eq!(q1 + &q2, &q1 + &q2);
+                prop_assert_eq!( q1 +  q2, &q1 +  q2);
+                prop_assert_eq!( q1 +  q2,  q1 + &q2);
+                prop_assert_eq!( q1 +  q2, &q1 + &q2);
+                prop_assert_eq!( q1 + &q2, &q1 +  q2);
+                prop_assert_eq!(&q1 +  q2,  q1 + &q2);
+                prop_assert_eq!(&q1 +  q2, &q1 + &q2);
+                prop_assert_eq!( q1 + &q2, &q1 + &q2);
             }
 
             /// Given two quaternions of integer scalars, quaternion addition should be
@@ -343,4 +343,97 @@ macro_rules! exact_add_props {
 exact_add_props!(quaternion_i32_add_props, i32, any_quaternion);
 exact_add_props!(quaternion_u32_add_props, u32, any_quaternion);
 
+
+/// Generate the properties for quaternion subtraction over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternion.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
+macro_rules! approx_sub_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::{Quaternion, Zero};
+
+        proptest! {
+            /// The zero quaternion over of floating point scalars should act as an additive unit. 
+            /// That is, given a quaternion `q`, we have
+            /// ```
+            /// q - 0 = q
+            /// ```
+            #[test]
+            fn prop_quaternion_minus_zero_equals_quaternion(q in super::$Generator()) {
+                let zero_quat = Quaternion::<$ScalarType>::zero();
+                prop_assert_eq!(q - zero_quat, q);
+            }
+
+            /// Every quaternion should have an additive inverse. That is, given a quaternion `q`,
+            /// there is a quaternion `-q` such that
+            /// ```
+            /// q - q = q + (-q) = 0
+            /// ```
+            #[test]
+            fn prop_quaternion_minus_quaternion_equals_zero(q in super::$Generator::<$ScalarType>()) {
+                let zero_quat = Quaternion::<$ScalarType>::zero();
+                prop_assert_eq!(q - q, zero_quat);
+            }
+        }
+    }
+    }
+}
+
+approx_sub_props!(quaternion_f64_sub_props, f64, any_quaternion, 1e-7);
+
+
+/// Generate the properties for quaternion arithmetic over exact scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_sub_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::{Quaternion, Zero};
+
+        proptest! {
+            /// The zero quaternion should act as an additive unit. That is, given a quaternion `q`,
+            /// we have
+            /// ```
+            /// q - 0 = q
+            /// ```
+            #[test]
+            fn prop_quaternion_minus_zero_equals_quaternion(q in super::$Generator()) {
+                let zero_quat = Quaternion::<$ScalarType>::zero();
+                prop_assert_eq!(q - zero_quat, q);
+            }
+
+            /// Every quaternion should have an additive inverse. That is, given a quaternion `q`,
+            /// there is a quaternion `-q` such that
+            /// we have
+            /// ```
+            /// q - q = q + (-q) = 0
+            /// ```
+            #[test]
+            fn prop_quaternion_minus_quaternion_equals_zero(q in super::$Generator::<$ScalarType>()) {
+                let zero_quat = Quaternion::<$ScalarType>::zero();
+                prop_assert_eq!(q - q, zero_quat);
+            }
+        }
+    }
+    }
+}
+
+exact_sub_props!(quaternion_i32_sub_props, i32, any_quaternion);
+exact_sub_props!(quaternion_u32_sub_props, u32, any_quaternion);
 
