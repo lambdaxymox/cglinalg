@@ -142,3 +142,205 @@ macro_rules! exact_arithmetic_props {
 exact_arithmetic_props!(quaternion_f64_arithmetic_props, f64, any_quaternion);
 exact_arithmetic_props!(quaternion_i32_arithmetic_props, i32, any_quaternion);
 exact_arithmetic_props!(quaternion_u32_arithmetic_props, u32, any_quaternion);
+
+
+/// Generate the properties for quaternion arithmetic over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
+macro_rules! approx_add_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::{Quaternion, Zero};
+        use gdmath::approx::relative_eq;
+
+        proptest! {
+            /// A quaternion plus a zero quaternion equals the same quaternion. The quaternion algebra satisfies
+            /// the following: given a quaternion `q`
+            /// ```
+            /// q + 0 = q
+            /// ```
+            #[test]
+            fn prop_quaternion_plus_zero_equals_quaternion(q in super::$Generator()) {
+                let zero_quat = Quaternion::<$ScalarType>::zero();
+                prop_assert_eq!(q + zero_quat, q);
+            }
+
+            /// A quaternion plus a zero quaternion equals the same quaternion. The quaternion algebra satisfies
+            /// the following: Given a quaternion `q`
+            /// ```
+            /// 0 + q = q
+            /// ```
+            #[test]
+            fn prop_zero_plus_quaternion_equals_quaternion(q in super::$Generator()) {
+                let zero_quat = Quaternion::<$ScalarType>::zero();
+                prop_assert_eq!(zero_quat + q, q);
+            }
+
+            /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
+            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions. 
+            /// In the case of quaternion addition, the quaternions should satisfy
+            /// ```
+            ///  q1 +  q2 = &q1 +  q2
+            ///  q1 +  q2 =  q1 + &q2
+            ///  q1 +  q2 = &q1 + &q2
+            ///  q1 + &q2 = &q1 +  q2
+            /// &q1 +  q2 =  q1 + &q2
+            /// &q1 +  q2 = &q1 + &q2
+            ///  q1 + &q2 = &q1 + &vq
+            /// ```
+            #[test]
+            fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!(q1 + q2, &q1 + q2);
+                prop_assert_eq!(q1 + q2, q1 + &q2);
+                prop_assert_eq!(q1 + q2, &q1 + &q2);
+                prop_assert_eq!(q1 + &q2, &q1 + q2);
+                prop_assert_eq!(&q1 + q2, q1 + &q2);
+                prop_assert_eq!(&q1 + q2, &q1 + &q2);
+                prop_assert_eq!(q1 + &q2, &q1 + &q2);
+            }
+
+            /// Given two quaternions of floating point scalars, quaternion addition should  be approximately
+            /// commutative. Given quaternions `q1` and `q2`, we have
+            /// ```
+            /// q1 + q2 ~= q2 + q1
+            /// ```
+            /// Note that floating point quaternion addition cannot be exactly commutative because arithmetic
+            /// with floating point numbers is not commutative.
+            #[test]
+            fn prop_quaternion_addition_almost_commutative(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                
+                let zero: Quaternion<$ScalarType> = Zero::zero();
+                prop_assert_eq!((q1 + q2) - (q2 + q1), zero);
+            }
+
+            /// Given three quaternions of floating point scalars, quaternion addition should be approximately
+            /// associative. Given quaternions `q1`, `q2`, and `q3` we have
+            /// ```
+            /// (q1 + q2) + q3 ~= q1 + (q2 + q3).
+            /// ```
+            /// Note that floating point quaternion addition cannot be exactly associative because arithmetic
+            /// with floating point numbers is not associative.
+            #[test]
+            fn prop_quaternion_addition_almost_associative(
+                q1 in super::$Generator::<$ScalarType>(), 
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert!(relative_eq!((q1 + q2) + q3, q1 + (q2 + q3), epsilon = $tolerance));
+            }
+        }
+    }
+    }
+}
+
+approx_add_props!(quaternion_f64_add_props, f64, any_quaternion, 1e-7);
+
+
+/// Generate the properties for quaternion arithmetic over exact scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_add_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::{Quaternion, Zero};
+
+        proptest! {
+            /// A quaternion plus a zero quaternion equals the same quaternion. The quaternion algebra satisfies
+            /// the following: Given a quaternion `q`
+            /// ```
+            /// q + 0 = q
+            /// ```
+            #[test]
+            fn prop_quaternion_plus_zero_equals_quaternion(q in super::$Generator()) {
+                let zero_quat = Quaternion::<$ScalarType>::zero();
+                prop_assert_eq!(q + zero_quat, q);
+            }
+
+            /// A zero quaternion plus a quaternion equals the same quaternion. The quaternion algebra satisfies
+            /// the following: Given a quaternion `q`
+            /// ```
+            /// 0 + q = q
+            /// ```
+            #[test]
+            fn prop_zero_plus_quaternion_equals_quaternion(q in super::$Generator()) {
+                let zero_quat = Quaternion::<$ScalarType>::zero();
+                prop_assert_eq!(zero_quat + q, q);
+            }
+
+            /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
+            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions. 
+            /// In the case of quaternion addition, the quaternions should satisfy
+            /// ```
+            ///  q1 +  q2 = &q1 +  q2
+            ///  q1 +  q2 =  q1 + &q2
+            ///  q1 +  q2 = &q1 + &q2
+            ///  q1 + &q2 = &q1 +  q2
+            /// &q1 +  q2 =  q1 + &q2
+            /// &q1 +  q2 = &q1 + &q2
+            ///  q1 + &q2 = &q1 + &q2
+            /// ```
+            #[test]
+            fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!(q1 + q2, &q1 + q2);
+                prop_assert_eq!(q1 + q2, q1 + &q2);
+                prop_assert_eq!(q1 + q2, &q1 + &q2);
+                prop_assert_eq!(q1 + &q2, &q1 + q2);
+                prop_assert_eq!(&q1 + q2, q1 + &q2);
+                prop_assert_eq!(&q1 + q2, &q1 + &q2);
+                prop_assert_eq!(q1 + &q2, &q1 + &q2);
+            }
+
+            /// Given two quaternions of integer scalars, quaternion addition should be
+            /// commutative. Given quaternions `q1` and `q2`, we have
+            /// ```
+            /// q1 + q2 = q2 + q1.
+            /// ```
+            #[test]
+            fn prop_quaternion_addition_commutative(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                
+                let zero = Quaternion::<$ScalarType>::zero();
+                prop_assert_eq!((q1 + q2) - (q2 + q1), zero);
+            }
+
+            /// Given three quaternions of integer scalars, quaternion addition should be associative.
+            /// Given quaternions `q1`, `q2`, and `q3`, we have
+            /// ```
+            /// (q1 + q2) + q3 = q1 + (q2 + q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_addition_associative(
+                q1 in super::$Generator::<$ScalarType>(), 
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((q1 + q2) + q3, q1 + (q2 + q3));
+            }
+        }
+    }
+    }
+}
+
+exact_add_props!(quaternion_i32_add_props, i32, any_quaternion);
+exact_add_props!(quaternion_u32_add_props, u32, any_quaternion);
+
+

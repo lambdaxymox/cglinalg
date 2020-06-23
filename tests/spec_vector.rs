@@ -269,7 +269,7 @@ macro_rules! approx_add_props {
             /// Note that floating point vector addition cannot be exactly associative because arithmetic
             /// with floating point numbers is not associative.
             #[test]
-            fn prop_vector_addition_associate(
+            fn prop_vector_addition_associative(
                 u in super::$Generator::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
 
@@ -367,7 +367,7 @@ macro_rules! exact_add_props {
             /// (v1 + v2) + v3 = v1 + (v2 + v3)
             /// ```
             #[test]
-            fn prop_vector_addition_associate(
+            fn prop_vector_addition_associative(
                 u in super::$Generator::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
 
