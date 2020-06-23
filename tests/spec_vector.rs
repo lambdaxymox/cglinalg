@@ -16,44 +16,16 @@ fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> where S: Scalar + Arbit
     any::<S>().prop_map(|x| Vector1::new(x))
 }
 
-fn any_vector1_no_overflow<S>() -> impl Strategy<Value = Vector1<S>> where S: Scalar + Arbitrary {
-    any::<S>().prop_map(|x| { 
-        let two = <S as num_traits::One>::one() + <S as num_traits::One>::one();
-        Vector1::new(x / two)
-    })
-}
-
 fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>> where S: Scalar + Arbitrary {
     any::<(S, S)>().prop_map(|(x, y)| Vector2::new(x, y))
-}
-
-fn any_vector2_no_overflow<S>() -> impl Strategy<Value = Vector2<S>> where S: Scalar + Arbitrary {
-    any::<(S, S)>().prop_map(|(x, y)| { 
-        let two = <S as num_traits::One>::one() + <S as num_traits::One>::one();
-        Vector2::new(x / two, y / two) 
-    })
 }
 
 fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>> where S: Scalar + Arbitrary {
     any::<(S, S, S)>().prop_map(|(x, y, z)| Vector3::new(x, y, z))
 }
 
-fn any_vector3_no_overflow<S>() -> impl Strategy<Value = Vector3<S>> where S: Scalar + Arbitrary {
-    any::<(S, S, S)>().prop_map(|(x, y, z)| { 
-        let two = <S as num_traits::One>::one() + <S as num_traits::One>::one();
-        Vector3::new(x / two, y / two, z / two)
-    })
-}
-
 fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>> where S: Scalar + Arbitrary {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| Vector4::new(x, y, z, w))
-}
-
-fn any_vector4_no_overflow<S>() -> impl Strategy<Value = Vector4<S>> where S: Scalar + Arbitrary {
-    any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
-        let two = <S as num_traits::One>::one() + <S as num_traits::One>::one();
-        Vector4::new(x / two, y / two, z / two, w / two)
-    })
 }
 
 
@@ -308,10 +280,10 @@ macro_rules! approx_add_props {
     }
 }
 
-approx_add_props!(vector1_f64_add_props, Vector1, f64, any_vector1_no_overflow);
-approx_add_props!(vector2_f64_add_props, Vector2, f64, any_vector2_no_overflow);
-approx_add_props!(vector3_f64_add_props, Vector3, f64, any_vector3_no_overflow);
-approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4_no_overflow);
+approx_add_props!(vector1_f64_add_props, Vector1, f64, any_vector1);
+approx_add_props!(vector2_f64_add_props, Vector2, f64, any_vector2);
+approx_add_props!(vector3_f64_add_props, Vector3, f64, any_vector3);
+approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4);
 
 
 /// Generate the properties for vector arithmetic over exact scalars.
@@ -406,15 +378,15 @@ macro_rules! exact_add_props {
     }
 }
 
-exact_add_props!(vector1_i32_add_props, Vector1, i32, any_vector1_no_overflow);
-exact_add_props!(vector2_i32_add_props, Vector2, i32, any_vector2_no_overflow);
-exact_add_props!(vector3_i32_add_props, Vector3, i32, any_vector3_no_overflow);
-exact_add_props!(vector4_i32_add_props, Vector4, i32, any_vector4_no_overflow);
+exact_add_props!(vector1_i32_add_props, Vector1, i32, any_vector1);
+exact_add_props!(vector2_i32_add_props, Vector2, i32, any_vector2);
+exact_add_props!(vector3_i32_add_props, Vector3, i32, any_vector3);
+exact_add_props!(vector4_i32_add_props, Vector4, i32, any_vector4);
 
-exact_add_props!(vector1_u32_add_props, Vector1, u32, any_vector1_no_overflow);
-exact_add_props!(vector2_u32_add_props, Vector2, u32, any_vector2_no_overflow);
-exact_add_props!(vector3_u32_add_props, Vector3, u32, any_vector3_no_overflow);
-exact_add_props!(vector4_u32_add_props, Vector4, u32, any_vector4_no_overflow);
+exact_add_props!(vector1_u32_add_props, Vector1, u32, any_vector1);
+exact_add_props!(vector2_u32_add_props, Vector2, u32, any_vector2);
+exact_add_props!(vector3_u32_add_props, Vector3, u32, any_vector3);
+exact_add_props!(vector4_u32_add_props, Vector4, u32, any_vector4);
 
 
 /// Generate the properties for vector subtraction over floating point scalars.
@@ -462,10 +434,10 @@ macro_rules! approx_sub_props {
     }
 }
 
-approx_sub_props!(vector1_f64_sub_props, Vector1, f64, any_vector1_no_overflow);
-approx_sub_props!(vector2_f64_sub_props, Vector2, f64, any_vector2_no_overflow);
-approx_sub_props!(vector3_f64_sub_props, Vector3, f64, any_vector3_no_overflow);
-approx_sub_props!(vector4_f64_sub_props, Vector4, f64, any_vector4_no_overflow);
+approx_sub_props!(vector1_f64_sub_props, Vector1, f64, any_vector1);
+approx_sub_props!(vector2_f64_sub_props, Vector2, f64, any_vector2);
+approx_sub_props!(vector3_f64_sub_props, Vector3, f64, any_vector3);
+approx_sub_props!(vector4_f64_sub_props, Vector4, f64, any_vector4);
 
 
 /// Generate the properties for vector arithmetic over exact scalars.
@@ -510,15 +482,15 @@ macro_rules! exact_sub_props {
     }
 }
 
-exact_sub_props!(vector1_i32_sub_props, Vector1, i32, any_vector1_no_overflow);
-exact_sub_props!(vector2_i32_sub_props, Vector2, i32, any_vector2_no_overflow);
-exact_sub_props!(vector3_i32_sub_props, Vector3, i32, any_vector3_no_overflow);
-exact_sub_props!(vector4_i32_sub_props, Vector4, i32, any_vector4_no_overflow);
+exact_sub_props!(vector1_i32_sub_props, Vector1, i32, any_vector1);
+exact_sub_props!(vector2_i32_sub_props, Vector2, i32, any_vector2);
+exact_sub_props!(vector3_i32_sub_props, Vector3, i32, any_vector3);
+exact_sub_props!(vector4_i32_sub_props, Vector4, i32, any_vector4);
 
-exact_sub_props!(vector1_u32_sub_props, Vector1, u32, any_vector1_no_overflow);
-exact_sub_props!(vector2_u32_sub_props, Vector2, u32, any_vector2_no_overflow);
-exact_sub_props!(vector3_u32_sub_props, Vector3, u32, any_vector3_no_overflow);
-exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4_no_overflow);
+exact_sub_props!(vector1_u32_sub_props, Vector1, u32, any_vector1);
+exact_sub_props!(vector2_u32_sub_props, Vector2, u32, any_vector2);
+exact_sub_props!(vector3_u32_sub_props, Vector3, u32, any_vector3);
+exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 
 
 /// Generate the properties for vector magnitudes.
@@ -536,7 +508,7 @@ macro_rules! magnitude_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::{$VectorN, Magnitude};
-        use gdmath::approx::{ulps_ne, relative_eq, relative_ne};
+        use gdmath::approx::{relative_eq, relative_ne};
 
         proptest! {
             #[test]
