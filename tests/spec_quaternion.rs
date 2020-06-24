@@ -437,3 +437,115 @@ macro_rules! exact_sub_props {
 exact_sub_props!(quaternion_i32_sub_props, i32, any_quaternion);
 exact_sub_props!(quaternion_u32_sub_props, u32, any_quaternion);
 
+
+/// Generate the properties for quaternion multiplication over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
+macro_rules! approx_mul_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::Magnitude;
+        use gdmath::approx::relative_eq;
+
+        proptest! {
+            /// Multiplication of a scalar and a quaternion should be approximately commutative.
+            /// Given a constant `c` and a quaternion `q`
+            /// ```
+            /// c * q ~= q * c
+            /// ```
+            /// Note that floating point quaternion multiplication cannot be commutative because 
+            /// multiplication in the underlying floating point scalars is not commutative.
+            #[test]
+            fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
+                c in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
+                
+                prop_assume!(c.is_finite());
+                prop_assume!(q.magnitude().is_finite());
+                prop_assert!(
+                    relative_eq!(c * q, q * c, epsilon = $tolerance)
+                );
+            }
+
+            /// Multiplication of two scalars and a quaternion should be compatible with multiplication of 
+            /// all scalars. In other words, scalar multiplication of two scalar with a quaternion should 
+            /// act associatively, just like the multiplication of three scalars. 
+            /// Given scalars `a` and `b`, and a quaternion `q`, we have
+            /// ```
+            /// (a * b) * q ~= a * (b * q)
+            /// ```
+            /// Note that the compatability of scalars with quaternions can only be approximate and not 
+            /// exact because multiplication of the underlying scalars is not associative. 
+            #[test]
+            fn prop_scalar_multiplication_compatability(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
+
+                prop_assert!(relative_eq!(a * (b * q), (a * b) * q, epsilon = $tolerance));
+            }
+        }
+    }
+    }
+}
+
+approx_mul_props!(quaternion_f64_mul_props, f64, any_quaternion, 1e-7);
+
+
+/// Generate the properties for quaternion multiplication over exact scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_mul_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+
+        proptest! {
+            /// Exact multiplication of a scalar and a quaternion should be commutative.
+            /// Given a constant `c` and a quaternion `q`
+            /// ```
+            /// c * q = q * c
+            /// ```
+            /// We deviate from the usual formalisms of quaternion algebra in that we 
+            /// allow the ability to multiply scalars from the left, or from the right of a quaternion.
+            #[test]
+            fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
+                c in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!(c * q, q * c);
+            }
+
+            /// Exact multiplication of two scalars and a quaternion should be compatible with multiplication of 
+            /// all scalars. In other words, scalar multiplication of two scalars with a quaternion should 
+            /// act associatively just like the multiplication of three scalars. 
+            /// Given scalars `a` and `b`, and a quaternion `q`, we have
+            /// ```
+            /// (a * b) * q = a * (b * q)
+            /// ```
+            #[test]
+            fn prop_scalar_multiplication_compatability(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(a * (b * q), (a * b) * q);
+            }
+        }
+    }
+    }
+}
+
+exact_mul_props!(quaternion_i32_mul_props, i32, any_quaternion);
+exact_mul_props!(quaternion_u32_mul_props, u32, any_quaternion);
+
+

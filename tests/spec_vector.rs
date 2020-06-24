@@ -631,7 +631,7 @@ macro_rules! approx_mul_props {
 
             /// Multiplication of two scalars and a vector should be compatible with multiplication of 
             /// all scalars. In other words, scalar multiplication of two scalar with a vector should 
-            /// look act associatively, just like the multiplication of three scalars. 
+            /// act associatively, just like the multiplication of three scalars. 
             /// Given scalars `a` and `b`, and a vector `v`, we have
             /// ```
             /// (a * b) * v ~= a * (b * v)
@@ -685,7 +685,7 @@ macro_rules! exact_mul_props {
 
             /// Exact multiplication of two scalars and a vector should be compatible with multiplication of 
             /// all scalars. In other words, scalar multiplication of two scalars with a vector should 
-            /// look act associatively just like the multiplication of three scalars. 
+            /// act associatively just like the multiplication of three scalars. 
             /// Given scalars `a` and `b`, and a vector `v`, we have
             /// ```
             /// (a * b) * v = a * (b * v)
