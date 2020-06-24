@@ -595,7 +595,7 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Magnitude;
+        use gdmath::Finite;
         use gdmath::approx::relative_eq;
     
         proptest! {
@@ -609,8 +609,8 @@ macro_rules! approx_distributive_props {
                 a in any::<$ScalarType>(), 
                 q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
                 
-                prop_assume!((a * (q1 + q2)).magnitude().is_finite());
-                prop_assume!((a * q1 + a * q2).magnitude().is_finite());
+                prop_assume!((a * (q1 + q2)).is_finite());
+                prop_assume!((a * q1 + a * q2).is_finite());
                 prop_assert_eq!(a * (q1 + q2), a * q1 + a * q2);
             }
     
@@ -624,8 +624,8 @@ macro_rules! approx_distributive_props {
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
                 q in super::$Generator::<$ScalarType>()) {
     
-                prop_assume!(((a + b) * q).magnitude().is_finite());
-                prop_assume!((a * q + b * q).magnitude().is_finite());
+                prop_assume!(((a + b) * q).is_finite());
+                prop_assume!((a * q + b * q).is_finite());
                 prop_assert_eq!((a + b) * q, a * q + b * q);
             }
 
@@ -639,9 +639,9 @@ macro_rules! approx_distributive_props {
                 a in any::<$ScalarType>(), 
                 q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
                     
-                prop_assume!(((q1 + q2) * a).magnitude().is_finite());
-                prop_assume!((q1 * a + q2 * a).magnitude().is_finite());
-                prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
+                prop_assume!(((q1 + q2) * a).is_finite());
+                prop_assume!((q1 * a + q2 * a).is_finite());
+                prop_assert_eq!(relative_eq!((q1 + q2) * a,  q1 * a + q2 * a, epsilon = $tolerance)));
             }
 
             /// Multiplication of a quaternion on the right by the sum of two scalars should approximately 
@@ -655,9 +655,9 @@ macro_rules! approx_distributive_props {
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
                 q in super::$Generator::<$ScalarType>()) {
     
-                prop_assume!((q * (a + b)).magnitude().is_finite());
-                prop_assume!((q * a + q * b).magnitude().is_finite());
-                prop_assert_eq!(q * (a + b), q * a + q * b);
+                prop_assume!((q * (a + b)).is_finite());
+                prop_assume!((q * a + q * b).is_finite());
+                prop_assert_eq!(relative_eq!(q * (a + b), q * a + q * b, epsilon = $tolerance));
             }
 
             /// Quaternion multiplication over floating point numbers should be 
@@ -672,9 +672,9 @@ macro_rules! approx_distributive_props {
                 q1 in super::$Generator::<$ScalarType>(), 
                 q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()
             ) {
-                prop_assume!(((q1 + q2) * q3).magnitude().is_finite());
-                prop_assume!((q1 * q3 + q2 * q3).magnitude().is_finite());
-                prop_assert_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3);
+                prop_assume!(((q1 + q2) * q3).is_finite());
+                prop_assume!((q1 * q3 + q2 * q3).is_finite());
+                prop_assert_eq!(relative_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3, epsilon = $tolerance));
             }
 
             /// Quaternion multiplication over floating point numbers should be approximately 
@@ -689,8 +689,8 @@ macro_rules! approx_distributive_props {
                 q1 in super::$Generator::<$ScalarType>(), 
                 q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()
             ) {
-                prop_assume!(((q1 + q2) * q3).magnitude().is_finite());
-                prop_assume!((q1 * q3 + q2 * q3).magnitude().is_finite());
+                prop_assume!(((q1 + q2) * q3).is_finite());
+                prop_assume!((q1 * q3 + q2 * q3).is_finite());
                 prop_assert!(relative_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3, epsilon = $tolerance));
             }
         }
