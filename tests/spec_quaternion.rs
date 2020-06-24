@@ -492,6 +492,21 @@ macro_rules! approx_mul_props {
 
                 prop_assert!(relative_eq!(a * (b * q), (a * b) * q, epsilon = $tolerance));
             }
+
+            /// Quaternion multiplication over floating point numbers is approximately associative.
+            /// Given quaternions `q1`, `q2`, and `q3`, we have
+            /// ```
+            /// (q1 * q2) * q3 ~= q1 * (q2 * q3)
+            /// ```
+            /// Note that the quaternion multiplication can only be approximately associative and not 
+            /// exactly associative because multiplication of the underlying scalars is not associative. 
+            #[test]
+            fn prop_quaternion_multiplication_associative(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>(), 
+                q3 in super::$Generator::<$ScalarType>()
+            ) {
+                prop_assert!(relative_eq!(q1 * (q2 * q3), (q1 * q2) * q3, epsilon = $tolerance));
+            }
         }
     }
     }
@@ -539,6 +554,19 @@ macro_rules! exact_mul_props {
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(a * (b * q), (a * b) * q);
+            }
+
+            /// Quaternion multiplication over integer numbers is exactly associative.
+            /// Given quaternions `q1`, `q2`, and `q3`, we have
+            /// ```
+            /// (q1 * q2) * q3 = q1 * (q2 * q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_multiplication_associative(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>(), 
+                q3 in super::$Generator::<$ScalarType>()
+            ) {
+                prop_assert_eq!(q1 * (q2 * q3), (q1 * q2) * q3);
             }
         }
     }
