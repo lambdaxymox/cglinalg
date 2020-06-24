@@ -455,8 +455,8 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Magnitude;
         use gdmath::approx::relative_eq;
+        use gdmath::Finite;
 
         proptest! {
             /// Multiplication of a scalar and a quaternion should be approximately commutative.
@@ -471,7 +471,7 @@ macro_rules! approx_mul_props {
                 c in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
                 
                 prop_assume!(c.is_finite());
-                prop_assume!(q.magnitude().is_finite());
+                prop_assume!(q.is_finite());
                 prop_assert!(
                     relative_eq!(c * q, q * c, epsilon = $tolerance)
                 );
@@ -490,6 +490,8 @@ macro_rules! approx_mul_props {
             fn prop_scalar_multiplication_compatability(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
 
+                prop_assume!((a * (b * q)).is_finite());
+                prop_assume!(((a * b) * q).is_finite());
                 prop_assert!(relative_eq!(a * (b * q), (a * b) * q, epsilon = $tolerance));
             }
 
@@ -505,6 +507,8 @@ macro_rules! approx_mul_props {
                 q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>(), 
                 q3 in super::$Generator::<$ScalarType>()
             ) {
+                prop_assume!((q1 * (q2 * q3)).is_finite());
+                prop_assume!(((q1 * q2) * q3).is_finite());
                 prop_assert!(relative_eq!(q1 * (q2 * q3), (q1 * q2) * q3, epsilon = $tolerance));
             }
         }
@@ -611,7 +615,7 @@ macro_rules! approx_distributive_props {
                 
                 prop_assume!((a * (q1 + q2)).is_finite());
                 prop_assume!((a * q1 + a * q2).is_finite());
-                prop_assert_eq!(a * (q1 + q2), a * q1 + a * q2);
+                prop_assert!(relative_eq!(a * (q1 + q2), a * q1 + a * q2, epsilon = $tolerance));
             }
     
             /// Multiplication of a sum of scalars should approximately distribute over a quaternion.
@@ -626,7 +630,7 @@ macro_rules! approx_distributive_props {
     
                 prop_assume!(((a + b) * q).is_finite());
                 prop_assume!((a * q + b * q).is_finite());
-                prop_assert_eq!((a + b) * q, a * q + b * q);
+                prop_assert!(relative_eq!((a + b) * q, a * q + b * q, epsilon = $tolerance));
             }
 
             /// Multiplication of two quaternions by a scalar on the right should approximately distribute.
@@ -641,7 +645,7 @@ macro_rules! approx_distributive_props {
                     
                 prop_assume!(((q1 + q2) * a).is_finite());
                 prop_assume!((q1 * a + q2 * a).is_finite());
-                prop_assert_eq!(relative_eq!((q1 + q2) * a,  q1 * a + q2 * a, epsilon = $tolerance)));
+                prop_assert!(relative_eq!((q1 + q2) * a,  q1 * a + q2 * a, epsilon = $tolerance));
             }
 
             /// Multiplication of a quaternion on the right by the sum of two scalars should approximately 
@@ -657,7 +661,7 @@ macro_rules! approx_distributive_props {
     
                 prop_assume!((q * (a + b)).is_finite());
                 prop_assume!((q * a + q * b).is_finite());
-                prop_assert_eq!(relative_eq!(q * (a + b), q * a + q * b, epsilon = $tolerance));
+                prop_assert!(relative_eq!(q * (a + b), q * a + q * b, epsilon = $tolerance));
             }
 
             /// Quaternion multiplication over floating point numbers should be 
@@ -674,7 +678,7 @@ macro_rules! approx_distributive_props {
             ) {
                 prop_assume!(((q1 + q2) * q3).is_finite());
                 prop_assume!((q1 * q3 + q2 * q3).is_finite());
-                prop_assert_eq!(relative_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3, epsilon = $tolerance));
+                prop_assert!(relative_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3, epsilon = $tolerance));
             }
 
             /// Quaternion multiplication over floating point numbers should be approximately 
@@ -689,9 +693,9 @@ macro_rules! approx_distributive_props {
                 q1 in super::$Generator::<$ScalarType>(), 
                 q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()
             ) {
-                prop_assume!(((q1 + q2) * q3).is_finite());
-                prop_assume!((q1 * q3 + q2 * q3).is_finite());
-                prop_assert!(relative_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3, epsilon = $tolerance));
+                prop_assume!(((q1 * (q2 + q3)).is_finite()));
+                prop_assume!((q1 * q2 + q1 * q3).is_finite());
+                prop_assert!(relative_eq!(q1 * (q2 + q3), q1 * q2 + q1 * q3, epsilon = $tolerance));
             }
         }
     }
