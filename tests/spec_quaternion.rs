@@ -549,3 +549,162 @@ exact_mul_props!(quaternion_i32_mul_props, i32, any_quaternion);
 exact_mul_props!(quaternion_u32_mul_props, u32, any_quaternion);
 
 
+/// Generate the properties for quaternion distribution over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
+macro_rules! approx_distributive_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::Magnitude;
+    
+        proptest! {
+            /// Scalar multiplication should approximately distribute over quaternion addition.
+            /// Given a scalar `a` and quaternions `q1` and `q2`
+            /// ```
+            /// a * (q1 + q2) ~= a * q1 + a * q2
+            /// ```
+            #[test]
+            fn prop_distribution_over_quaternion_addition(
+                a in any::<$ScalarType>(), 
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assume!((a * (q1 + q2)).magnitude().is_finite());
+                prop_assume!((a * q1 + a * q2).magnitude().is_finite());
+                prop_assert_eq!(a * (q1 + q2), a * q1 + a * q2);
+            }
+    
+            /// Multiplication of a sum of scalars should approximately distribute over a quaternion.
+            /// Given scalars `a` and `b` and a quaternion `q`, we have
+            /// ```
+            /// (a + b) * q ~= a * q + b * q
+            /// ```
+            #[test]
+            fn prop_distribution_over_scalar_addition(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
+                q in super::$Generator::<$ScalarType>()) {
+    
+                prop_assume!(((a + b) * q).magnitude().is_finite());
+                prop_assume!((a * q + b * q).magnitude().is_finite());
+                prop_assert_eq!((a + b) * q, a * q + b * q);
+            }
+
+            /// Multiplication of two quaternions by a scalar on the right should approximately distribute.
+            /// Given quaternions `q1` and `q2` and a scalar `a`
+            /// ```
+            /// (q1 + q2) * a ~= q1 * a + q2 * a
+            /// ```
+            #[test]
+            fn prop_distribution_over_quaternion_addition1(
+                a in any::<$ScalarType>(), 
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                    
+                prop_assume!(((q1 + q2) * a).magnitude().is_finite());
+                prop_assume!((q1 * a + q2 * a).magnitude().is_finite());
+                prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
+            }
+
+            /// Multiplication of a quaternion on the right by the sum of two scalars should approximately 
+            /// distribute over the two scalars. 
+            /// Given a quaternion `q` and scalars `a` and `b`
+            /// ```
+            /// q * (a + b) ~= q * a + q * b
+            /// ```
+            #[test]
+            fn prop_distribution_over_scalar_addition1(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
+                q in super::$Generator::<$ScalarType>()) {
+    
+                prop_assume!((q * (a + b)).magnitude().is_finite());
+                prop_assume!((q * a + q * b).magnitude().is_finite());
+                prop_assert_eq!(q * (a + b), q * a + q * b);
+            }
+        }
+    }
+    }    
+}
+
+approx_distributive_props!(quaternion_f64_distributive_props, f64, any_quaternion);
+
+
+/// Generate the properties for quaternion distribution over exact scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_distributive_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+
+        proptest! {
+            /// Scalar multiplication should distribute over quaternion addition.
+            /// Given a scalar `a` and quaternions `q1` and `q2`
+            /// ```
+            /// a * (q1 + q2) = a * q1 + a * q2
+            /// ```
+            #[test]
+            fn prop_distribution_over_quaternion_addition(
+                a in any::<$ScalarType>(), 
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!(a * (q1 + q2), a * q1 + a * q2);
+                prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
+            }
+
+            /// Multiplication of a sum of scalars should distribute over a quaternion.
+            /// Given scalars `a` and `b` and a quaternion `q`, we have
+            /// ```
+            /// (a + b) * q = a * q + b * q
+            /// ```
+            #[test]
+            fn prop_distribution_over_scalar_addition(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
+                q in super::$Generator::<$ScalarType>()) {
+    
+                prop_assert_eq!((a + b) * q, a * q + b * q);
+                prop_assert_eq!(q * (a + b), q * a + q * b);
+            }
+
+            /// Multiplication of two quaternions by a scalar on the right should distribute.
+            /// Given quaternions `q1` and `q2` and a scalar `a`
+            /// ```
+            /// (q1 + q2) * a = q1 * a + q2 * a
+            /// ```
+            #[test]
+            fn prop_distribution_over_quaternion_addition1(
+                a in any::<$ScalarType>(), 
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                    
+                prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
+            }
+
+            /// Multiplication of a quaternion on the right by the sum of two scalars should
+            /// distribute over the two scalars. Given a quaternion `q` and scalars `a` and `b`
+            /// ```
+            /// q * (a + b) = q * a + q * b
+            /// ```
+            #[test]
+            fn prop_distribution_over_scalar_addition1(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
+                q in super::$Generator::<$ScalarType>()) {
+    
+                prop_assert_eq!(q * (a + b), q * a + q * b);
+            }
+        }
+    }
+    }    
+}
+
+exact_distributive_props!(quaternion_i32_distributive_props, i32, any_quaternion);
+exact_distributive_props!(quaternion_u32_distributive_props, u32, any_quaternion);
+
