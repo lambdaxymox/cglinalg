@@ -10,6 +10,7 @@ use structure::{
     Lerp,
     Nlerp,
     Metric,
+    Finite,
 };
 use angle::{
     Radians,
@@ -869,6 +870,18 @@ impl<S> approx::UlpsEq for Quaternion<S> where S: ScalarFloat {
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.s, &other.s, epsilon, max_ulps) &&
         Vector3::ulps_eq(&self.v, &other.v, epsilon, max_ulps)
+    }
+}
+
+impl<S> Finite for Quaternion<S> where S: ScalarFloat {
+    #[inline]
+    fn is_finite(self) -> bool {
+        self.s.is_finite() && self.v.is_finite()
+    }
+
+    #[inline]
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
     }
 }
 

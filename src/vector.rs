@@ -11,6 +11,7 @@ use structure::{
     Magnitude,
     Lerp,
     Metric,
+    Finite,
 };
 use std::fmt;
 use std::mem;
@@ -670,7 +671,25 @@ impl_mul_operator!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
 impl_mul_operator!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
 
+impl<S> Finite for Vector1<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.x.is_finite()
+    }
 
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
+
+impl<S> Finite for &Vector1<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.x.is_finite()
+    }
+
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
 
 
 /// A representation of two-dimensional vectors with a Euclidean metric.
@@ -1319,6 +1338,26 @@ impl_mul_operator!(isize, Vector2<isize>, Vector2<isize>, { x, y });
 impl_mul_operator!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
 impl_mul_operator!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
 
+
+impl<S> Finite for Vector2<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.x.is_finite() && self.y.is_finite()
+    }
+
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
+
+impl<S> Finite for &Vector2<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.x.is_finite() && self.y.is_finite()
+    }
+
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
 
 
 
@@ -2046,6 +2085,27 @@ impl_mul_operator!(i128,  Vector3<i128>,  Vector3<i128>,  { x, y, z });
 impl_mul_operator!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
 impl_mul_operator!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
 impl_mul_operator!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
+
+
+impl<S> Finite for Vector3<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
+    }
+
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
+
+impl<S> Finite for &Vector3<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
+    }
+
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
 
 
 /// A representation of four-dimensional vectors with a Euclidean metric.
@@ -2800,6 +2860,26 @@ impl_mul_operator!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
 impl_mul_operator!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
 impl_mul_operator!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
 
+
+impl<S> Finite for Vector4<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
+    }
+
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
+
+impl<S> Finite for &Vector4<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
+    }
+
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
 
 
 #[cfg(test)]

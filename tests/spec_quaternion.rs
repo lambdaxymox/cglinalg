@@ -579,19 +579,24 @@ exact_mul_props!(quaternion_u32_mul_props, u32, any_quaternion);
 
 /// Generate the properties for quaternion distribution over floating point scalars.
 ///
+/// Here are what the different macro parameters mean:
 /// `$TestModuleName` is a name we give to the module we place the properties in to separate them
 ///  from each other for each field type to prevent namespace collisions.
 /// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
 /// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite precision floating point
 /// scalar types.
 macro_rules! approx_distributive_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::Magnitude;
+        use gdmath::approx::relative_eq;
     
         proptest! {
             /// Scalar multiplication should approximately distribute over quaternion addition.
@@ -654,12 +659,46 @@ macro_rules! approx_distributive_props {
                 prop_assume!((q * a + q * b).magnitude().is_finite());
                 prop_assert_eq!(q * (a + b), q * a + q * b);
             }
+
+            /// Quaternion multiplication over floating point numbers should be 
+            /// approximately distributive on the right.
+            ///
+            /// Given three quaternions `q1`, `q2`, and `q3`
+            /// ```
+            /// (q1 + q2) * q3 ~= q1 * q3 + q2 * q3
+            /// ```
+            #[test]
+            fn prop_quaternion_multiplication_right_distributive(
+                q1 in super::$Generator::<$ScalarType>(), 
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()
+            ) {
+                prop_assume!(((q1 + q2) * q3).magnitude().is_finite());
+                prop_assume!((q1 * q3 + q2 * q3).magnitude().is_finite());
+                prop_assert_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3);
+            }
+
+            /// Quaternion multiplication over floating point numbers should be approximately 
+            /// distributive on the left.
+            ///
+            /// Given three quaternions `q1`, `q2`, and `q3`
+            /// ```
+            /// q1 * (q2 + q3) ~= q1 * q2 + q1 * q3
+            /// ```
+            #[test]
+            fn prop_quaternion_multiplication_left_distributive(
+                q1 in super::$Generator::<$ScalarType>(), 
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()
+            ) {
+                prop_assume!(((q1 + q2) * q3).magnitude().is_finite());
+                prop_assume!((q1 * q3 + q2 * q3).magnitude().is_finite());
+                prop_assert!(relative_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3, epsilon = $tolerance));
+            }
         }
     }
     }    
 }
 
-approx_distributive_props!(quaternion_f64_distributive_props, f64, any_quaternion);
+approx_distributive_props!(quaternion_f64_distributive_props, f64, any_quaternion, 1e-7);
 
 
 /// Generate the properties for quaternion distribution over exact scalars.
@@ -727,6 +766,34 @@ macro_rules! exact_distributive_props {
                 q in super::$Generator::<$ScalarType>()) {
     
                 prop_assert_eq!(q * (a + b), q * a + q * b);
+            }
+
+            /// Quaternion multiplication should be distributive on the right.
+            ///
+            /// Given three quaternions `q1`, `q2`, and `q3`
+            /// ```
+            /// (q1 + q2) * q3 = q1 * q3 + q2 * q3
+            /// ```
+            #[test]
+            fn prop_quaternion_multiplication_right_distributive(
+                q1 in super::$Generator::<$ScalarType>(), 
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()
+            ) {
+                prop_assert_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3);
+            }
+
+            /// Quaternion multiplication should be distributive on the left.
+            ///
+            /// Given three quaternions `q1`, `q2`, and `q3`
+            /// ```
+            /// q1 * (q2 + q3) = q1 * q2 + q1 * q3
+            /// ```
+            #[test]
+            fn prop_quaternion_multiplication_left_distributive(
+                q1 in super::$Generator::<$ScalarType>(), 
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()
+            ) {
+                prop_assert_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3);
             }
         }
     }

@@ -56,6 +56,21 @@ pub trait One where Self: Sized + ops::Mul<Self, Output = Self> {
     }
 }
 
+/// A trait that defines features for specifying when a vector is finite. A vector is finite when
+/// all of its elements are finite. This is useful for vector and matrix types working with fixed 
+/// precision floating point values.
+pub trait Finite {
+    /// Returns `true` if the elements of this vector are all finite. Otherwise, it returns `false`. 
+    ///
+    /// For example, when the vector elements are `f64`, the vector is finite when the elements are
+    /// neither `NaN` nor infinite.
+    fn is_finite(self) -> bool;
+
+    /// Returns `true` if any of the elements of this vector are not finite. 
+    /// Otherwise, it returns `false`.
+    fn is_not_finite(self) -> bool;
+}
+
 pub trait VectorSpace where
     Self: Copy + Clone,
     Self: Zero,
