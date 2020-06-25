@@ -487,7 +487,7 @@ macro_rules! approx_mul_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::approx::relative_eq;
-        use gdmath::{Quaternion, One, Finite};
+        use gdmath::{Quaternion, One, Zero, Finite};
 
         proptest! {
             /// Multiplication of a scalar and a quaternion should be approximately commutative.
@@ -554,11 +554,56 @@ macro_rules! approx_mul_props {
             /// q * 1 = 1 * q = q
             /// ```
             #[test]
-            fn prop_quaternion_multiplication_unit(q in super::$Generator::<$ScalarType>()) {
+            fn prop_quaternion_multiplicative_unit(q in super::$Generator::<$ScalarType>()) {
                 let one = Quaternion::one();
                 prop_assert_eq!(q * one, q);
                 prop_assert_eq!(one * q, q);
                 prop_assert_eq!(q * one, one * q);
+            }
+
+            /// Every nonzero quaternion over floating point scalars has an approximate multiplicative inverse.
+            ///
+            /// Given a quaternion `q` and its inverse `q_inv`, we have
+            /// ```
+            /// q * q_inv ~= q_inv * q ~= 1
+            /// ```
+            /// Note that quaternion algebra over floating point scalars is not commutative because
+            /// multiplication of the underlying scalars is not commutative. As a result, we can only
+            /// guarantee an appoximate equality.
+            #[test]
+            fn prop_quaternion_multiplicative_inverse(q in super::$Generator::<$ScalarType>()) {
+                prop_assume!(q.is_finite());
+                prop_assume!(q.is_invertible());
+
+                let one = Quaternion::one();
+                let q_inv = q.inverse().unwrap();
+                prop_assert!(relative_eq!(q * q_inv, one, epsilon = $tolerance));
+                prop_assert!(relative_eq!(q_inv * q, one, epsilon = $tolerance));
+            }
+
+            /// Quaternion multiplication transposes under inverion.
+            ///
+            /// Given two invertible quaternions `q1` and `q2`
+            /// ```
+            /// inverse(q1 * q2) = inverse(q2) * inverse(q1)
+            /// ```
+            /// Note that quaternion multiplication is noncommutative.
+            #[test]
+            fn prop_quaternion_inversion_involutive(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!(q1.is_finite());
+                prop_assume!(q1.is_invertible());
+                prop_assume!(q2.is_finite());
+                prop_assume!(q2.is_invertible());
+                prop_assume!((q1 * q2).is_finite());
+                prop_assume!((q1 * q2).is_invertible());
+
+                let q1_inv = q1.inverse().unwrap();
+                let q2_inv = q2.inverse().unwrap();
+                let q1_times_q2_inv = (q1 * q2).inverse().unwrap();
+
+                prop_assert!(relative_eq!(q1_times_q2_inv, q2_inv * q1_inv, epsilon = $tolerance));
             }
         }
     }
@@ -588,8 +633,6 @@ macro_rules! exact_mul_props {
             /// ```
             /// c * q = q * c
             /// ```
-            /// We deviate from the usual formalisms of quaternion algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the right of a quaternion.
             #[test]
             fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
                 c in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
@@ -634,7 +677,7 @@ macro_rules! exact_mul_props {
             /// q * 1 = 1 * q = q
             /// ```
             #[test]
-            fn prop_quaternion_multiplication_unit(q in super::$Generator::<$ScalarType>()) {
+            fn prop_quaternion_multiplicative_unit(q in super::$Generator::<$ScalarType>()) {
                 let one = Quaternion::one();
                 prop_assert_eq!(q * one, q);
                 prop_assert_eq!(one * q, q);

@@ -103,6 +103,24 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         m.c3r3 = one;
     }
 
+    /// Compute the inverse of a quaternion.
+    ///
+    /// If `self` has zero magnitude, no inverse exists for it. In this 
+    /// case the function return `None`. Otherwise it returns the inverse of `self`.
+    pub fn inverse(&self) -> Option<Quaternion<S>> {
+        let magnitude_squared = self.magnitude_squared();
+        if magnitude_squared == S::zero() {
+            None
+        } else {
+            Some(self.conjugate() / magnitude_squared)
+        }
+    }
+
+    /// Determine whether a quaternion is invertible.
+    pub fn is_invertible(&self) -> bool {
+        self.magnitude_squared() > S::zero()
+    }
+
     pub fn slerp(q: &mut Quaternion<S>, r: &Quaternion<S>, amount: S) -> Quaternion<S> {
         // angle between q0-q1
         let mut cos_half_theta = q.dot(r);
