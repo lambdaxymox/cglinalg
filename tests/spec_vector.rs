@@ -729,6 +729,19 @@ macro_rules! approx_mul_props {
 
                 prop_assert!(relative_eq!(a * (b * v), (a * b) * v, epsilon = $tolerance));
             }
+
+            /// A scalar `1` acts like a multiplicative identity element.
+            ///
+            /// Given a vector `v`
+            /// ```
+            /// 1 * v = v * 1 = v
+            /// ```
+            #[test]
+            fn prop_one_times_vector_equals_vector(v in super::$Generator::<$ScalarType>()) {
+                let one = num_traits::One::one();
+                prop_assert_eq!(one * v, v);
+                prop_assert_eq!(v * one, v);
+            }
         }
     }
     }
@@ -782,6 +795,19 @@ macro_rules! exact_mul_props {
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(a * (b * v), (a * b) * v);
+            }
+
+            /// A scalar `1` acts like a multiplicative identity element.
+            ///
+            /// Given a vector `v`
+            /// ```
+            /// 1 * v = v * 1 = v
+            /// ```
+            #[test]
+            fn prop_one_times_vector_equals_vector(v in super::$Generator::<$ScalarType>()) {
+                let one = num_traits::One::one();
+                prop_assert_eq!(one * v, v);
+                prop_assert_eq!(v * one, v);
             }
         }
     }
