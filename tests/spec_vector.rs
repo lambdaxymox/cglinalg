@@ -282,7 +282,7 @@ macro_rules! approx_add_props {
             /// 
             /// Given vectors `v1`, `v2`, and `v3` we have
             /// ```
-            /// (v1 + v2) + v3 ~= v1 + (v2 + v3).
+            /// (v1 + v2) + v3 ~= v1 + (v2 + v3)
             /// ```
             /// Note that floating point vector addition cannot be exactly associative because arithmetic
             /// with floating point numbers is not associative.
@@ -319,10 +319,11 @@ macro_rules! exact_add_props {
         use gdmath::{$VectorN, Zero};
 
         proptest! {
-            /// A vector plus a zero vector equals the same vector. The vector algebra satisfies
-            /// the following: Given a vector `v`
+            /// A vector plus a zero vector equals the same vector.
+            ///
+            /// Given a vector `v`
             /// ```
-            /// v + 0 = v.
+            /// v + 0 = v
             /// ```
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
@@ -330,10 +331,11 @@ macro_rules! exact_add_props {
                 prop_assert_eq!(v + zero_vec, v);
             }
 
-            /// A zero vector plus a vector equals the same vector. The vector algebra satisfies
-            /// the following: Given a vector `v`
+            /// A zero vector plus a vector equals the same vector.
+            ///
+            /// Given a vector `v`
             /// ```
-            /// 0 + v = v.
+            /// 0 + v = v
             /// ```
             #[test]
             fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
@@ -342,8 +344,9 @@ macro_rules! exact_add_props {
             }
 
             /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
-            /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors. 
-            /// In the case of vector addition, the vectors should satisfy
+            /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors.
+            ///
+            /// Given two vectors `v1` and `v2`, and their references `&v1` and `&v2`, we have
             /// ```
             ///  v1 +  v2 = &v1 +  v2
             ///  v1 +  v2 =  v1 + &v2
@@ -357,19 +360,20 @@ macro_rules! exact_add_props {
             fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
                 v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
                 
-                prop_assert_eq!(v1 + v2, &v1 + v2);
-                prop_assert_eq!(v1 + v2, v1 + &v2);
-                prop_assert_eq!(v1 + v2, &v1 + &v2);
-                prop_assert_eq!(v1 + &v2, &v1 + v2);
-                prop_assert_eq!(&v1 + v2, v1 + &v2);
-                prop_assert_eq!(&v1 + v2, &v1 + &v2);
-                prop_assert_eq!(v1 + &v2, &v1 + &v2);
+                prop_assert_eq!( v1 +  v2, &v1 +  v2);
+                prop_assert_eq!( v1 +  v2,  v1 + &v2);
+                prop_assert_eq!( v1 +  v2, &v1 + &v2);
+                prop_assert_eq!( v1 + &v2, &v1 +  v2);
+                prop_assert_eq!(&v1 +  v2,  v1 + &v2);
+                prop_assert_eq!(&v1 +  v2, &v1 + &v2);
+                prop_assert_eq!( v1 + &v2, &v1 + &v2);
             }
 
-            /// Given two vectors of integer scalars, vector addition should be
-            /// commutative. Given vectors `v1` and `v2`, we have
+            /// Vector addition over integer scalars should be commutative.
+            /// 
+            /// Given vectors `v1` and `v2`
             /// ```
-            /// v1 + v2 = v2 + v1.
+            /// v1 + v2 = v2 + v1
             /// ```
             #[test]
             fn prop_vector_addition_commutative(
@@ -379,8 +383,9 @@ macro_rules! exact_add_props {
                 prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
             }
 
-            /// Given three vectors of integer scalars, vector addition should be associative.
-            /// Given vectors `v1`, `v2`, and `v3`, we have
+            /// Vector addition over integer scalars should be associative.
+            ///
+            /// Given three vectors `v1`, `v2`, and `v3`, we have
             /// ```
             /// (v1 + v2) + v3 = v1 + (v2 + v3)
             /// ```
@@ -425,8 +430,9 @@ macro_rules! approx_sub_props {
         use gdmath::{$VectorN, Zero};
 
         proptest! {
-            /// The zero vector over of floating point scalars should act as an additive unit. 
-            /// That is, given a vector `v`, we have
+            /// The zero vector over vectors of floating point scalars should act as an additive unit. 
+            ///
+            /// Given a vector `v`, we have
             /// ```
             /// v - 0 = v
             /// ```
@@ -436,9 +442,9 @@ macro_rules! approx_sub_props {
                 prop_assert_eq!(v - zero_vec, v);
             }
 
-            /// Every vector should have an additive inverse. That is, given a vector `v`,
-            /// there is a vector `-v` such that
-            /// we have
+            /// Every vector of floating point scalars should have an additive inverse.
+            ///
+            /// Given a vector `v`, there is a vector `-v` such that
             /// ```
             /// v - v = 0
             /// ```
@@ -473,8 +479,9 @@ macro_rules! exact_sub_props {
         use gdmath::{$VectorN, Zero};
 
         proptest! {
-            /// The zero vector should act as an additive unit. That is, given a vector `v`,
-            /// we have
+            /// The zero vector should act as an additive unit.
+            ///
+            /// Given a vector `v`
             /// ```
             /// v - 0 = v
             /// ```
@@ -484,11 +491,11 @@ macro_rules! exact_sub_props {
                 prop_assert_eq!(v - zero_vec, v);
             }
 
-            /// Every vector should have an additive inverse. That is, given a vector `v`,
-            /// there is a vector `-v` such that
-            /// we have
+            /// Every vector should have an additive inverse.
+            ///
+            /// Given a vector `v`, there is a vector `-v` such that
             /// ```
-            /// v - v = 0
+            /// v - v = v + (-v) = (-v) + v = 0
             /// ```
             #[test]
             fn prop_vector_minus_vector_equals_zero(v in super::$Generator::<$ScalarType>()) {
@@ -530,8 +537,9 @@ macro_rules! magnitude_props {
 
         proptest! {
             #[test]
-            /// The magnitude of a vector preserves scales. Given a scalar constant `c`, and a 
-            /// vector `v` of scalars, the magnitude function satisfies
+            /// The magnitude of a vector preserves scales. 
+            /// 
+            /// Given a scalar constant `c`, and a vector `v` of scalars, the magnitude function satisfies
             /// ```
             /// magnitude(c * v) = abs(c) * magnitude(v)
             /// ```
@@ -548,7 +556,9 @@ macro_rules! magnitude_props {
                 );
             }
 
-            /// The magnitude of a vector is nonnegative. Given a vector `v`
+            /// The magnitude of a vector is nonnegative. 
+            ///
+            /// Given a vector `v`
             /// ```
             /// magnitude(v) >= 0
             /// ```
@@ -558,8 +568,9 @@ macro_rules! magnitude_props {
                 prop_assert!(v.magnitude() >= zero);
             }
 
-            /// The magnitude of a vector satisfies the triangle inequality. Given a vector `v` and a 
-            /// vector `w`, the magnitude function satisfies
+            /// The magnitude of a vector satisfies the triangle inequality. 
+            ///
+            /// Given a vectors `v` and `w`, the magnitude function satisfies
             /// ```
             /// magnitude(v + w) <= magnitude(v) + magnitude(w)
             /// ```
@@ -576,7 +587,9 @@ macro_rules! magnitude_props {
             }
 
             /// The magnitude function is point separating. In particular, if the distance between two 
-            /// vectors `v` and `w` is zero, then v = w:
+            /// vectors `v` and `w` is zero, then v = w.
+            ///
+            /// Given vectors `v` and `w`
             /// ```
             /// magnitude(v - w) = 0 => v = w 
             /// ```
@@ -628,12 +641,13 @@ macro_rules! approx_mul_props {
 
         proptest! {
             /// Multiplication of a scalar and a vector should be approximately commutative.
+            ///
             /// Given a constant `c` and a vector `v`
             /// ```
             /// c * v ~= v * c
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the right of a vector.
+            /// allow the ability to multiply scalars from the left of a vector, or from the right of a vector.
             /// Note that floating point vector multiplication cannot be commutative because 
             /// multiplication in the underlying floating point scalars is not commutative.
             #[test]
@@ -649,7 +663,8 @@ macro_rules! approx_mul_props {
 
             /// Multiplication of two scalars and a vector should be compatible with multiplication of 
             /// all scalars. In other words, scalar multiplication of two scalar with a vector should 
-            /// act associatively, just like the multiplication of three scalars. 
+            /// act associatively, just like the multiplication of three scalars.
+            ///
             /// Given scalars `a` and `b`, and a vector `v`, we have
             /// ```
             /// (a * b) * v ~= a * (b * v)
@@ -688,6 +703,7 @@ macro_rules! exact_mul_props {
 
         proptest! {
             /// Exact multiplication of a scalar and a vector should be commutative.
+            ///
             /// Given a constant `c` and a vector `v`
             /// ```
             /// c * v = v * c
@@ -704,6 +720,7 @@ macro_rules! exact_mul_props {
             /// Exact multiplication of two scalars and a vector should be compatible with multiplication of 
             /// all scalars. In other words, scalar multiplication of two scalars with a vector should 
             /// act associatively just like the multiplication of three scalars. 
+            ///
             /// Given scalars `a` and `b`, and a vector `v`, we have
             /// ```
             /// (a * b) * v = a * (b * v)
@@ -749,6 +766,7 @@ macro_rules! approx_distributive_props {
     
         proptest! {
             /// Scalar multiplication should approximately distribute over vector addition.
+            ///
             /// Given a scalar `a` and vectors `v` and `w`
             /// ```
             /// a * (v + w) ~= a * v + a * w
@@ -796,7 +814,8 @@ macro_rules! approx_distributive_props {
             }
 
             /// Multiplication of a vector on the right by the sum of two scalars should approximately 
-            /// distribute over the two scalars. 
+            /// distribute over the two scalars.
+            ///
             /// Given a vector `v` and scalars `a` and `b`
             /// ```
             /// v * (a + b) ~= v * a + v * b
@@ -838,6 +857,7 @@ macro_rules! exact_distributive_props {
 
         proptest! {
             /// Scalar multiplication should distribute over vector addition.
+            ///
             /// Given a scalar `a` and vectors `v` and `w`
             /// ```
             /// a * (v + w) = a * v + a * w
@@ -852,6 +872,7 @@ macro_rules! exact_distributive_props {
             }
 
             /// Multiplication of a sum of scalars should distribute over a vector.
+            ///
             /// Given scalars `a` and `b` and a vector `v`, we have
             /// ```
             /// (a + b) * v = a * v + b * v
@@ -865,7 +886,8 @@ macro_rules! exact_distributive_props {
                 prop_assert_eq!(v * (a + b), v * a + v * b);
             }
 
-            /// Multiplication of two vectors by a scalar on the right should distribute.
+            /// Multiplication of two vectors by a scalar on the right should be right distributive.
+            ///
             /// Given vectors `v` and `w` and a scalar `a`
             /// ```
             /// (v + w) * a = v * a + w * a
@@ -880,8 +902,9 @@ macro_rules! exact_distributive_props {
                 prop_assert_eq!((v + w) * a,  v * a + w * a);
             }
 
-            /// Multiplication of a vector on the right by the sum of two scalars should
-            /// distribute over the two scalars. 
+            /// Multiplication of a vector on the right by the sum of two scalars should 
+            /// distribute over the two scalars.
+            /// 
             /// Given a vector `v` and scalars `a` and `b`
             /// ```
             /// v * (a + b) = v * a + v * b
