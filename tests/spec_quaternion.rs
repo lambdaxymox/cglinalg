@@ -28,8 +28,11 @@ macro_rules! index_props {
         use proptest::prelude::*;
 
         proptest! {
-            /// Given a quaternion `q`, it should return the element at position `index` in the quaternion 
-            /// when the given index is inbounds.
+            /// When a quaternion is treated like an array, it should accept all indices
+            /// below the length of the array.
+            ///
+            /// Given a quaternion `q`, it should return the element at position `index` in the 
+            /// underlying storage of the quaternion when the given index is inbounds.
             #[test]
             fn prop_accepts_all_indices_in_of_bounds(
                 q in super::$Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
@@ -37,6 +40,9 @@ macro_rules! index_props {
                 prop_assert_eq!(q[index], q[index]);
             }
     
+            /// When a quaternion is treated like an array, it should reject any input index outside
+            /// the length of the array.
+            ///
             /// Given a quaternion `q`, when the element index `index` is out of bounds, it should 
             /// generate a panic just like an array indexed out of bounds.
             #[test]
@@ -69,9 +75,11 @@ macro_rules! exact_arithmetic_props {
         use gdmath::{Quaternion, Zero};
 
         proptest! {
-            /// A scalar zero times a quaternion should be zero. That is, quaternion algebra satisfies
+            /// A scalar `0` times a quaternion should be a zero quaternion.
+            ///
+            /// Given a quaternion `q`, it satisfies
             /// ```
-            /// For each quaternion q, 0 * q = 0.
+            /// 0 * q = 0.
             /// ```
             #[test]
             fn prop_zero_times_quaternion_equals_zero(q in super::$Generator()) {
@@ -80,9 +88,11 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(zero * q, zero_quat);
             }
         
-            /// A scalar zero times a quaternion should be zero. That is, quaternion algebra satisfies
+            /// A scalar `0` times a quaternion should be zero.
+            ///
+            /// Given a quaternion `q`, it satisfies
             /// ```
-            /// For each quaternion q, q * 0 = 0.
+            /// q * 0 = 0
             /// ```
             #[test]
             fn prop_quaternion_times_zero_equals_zero(q in super::$Generator()) {
@@ -91,10 +101,11 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(q * zero, zero_quat);
             }
 
-            /// A zero quaternion should act as the additive unit element of a quaternion algebra.
-            /// In particular, we have
+            /// A zero quaternion should act as the additive unit element of a set of quaternions.
+            ///
+            /// Given a quaternion `q`
             /// ```
-            /// For every quaternion q, q + 0 = q.
+            /// q + 0 = q
             /// ```
             #[test]
             fn prop_quaternion_plus_zero_equals_quaternion(q in super::$Generator()) {
@@ -103,9 +114,10 @@ macro_rules! exact_arithmetic_props {
             }
 
             /// A zero quaternion should act as the additive unit element of a set of quaternions.
-            /// In particular, we have
+            ///
+            /// Given a quaternion `q`
             /// ```
-            /// For every quaternion q, 0 + q = q.
+            /// 0 + q = q
             /// ```
             #[test]
             fn prop_zero_plus_quaternion_equals_quaternion(q in super::$Generator()) {
@@ -113,10 +125,11 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(zero_quat + q, q);
             }
 
-            /// Multiplying a quaternion by one should give the original quaternion.
-            /// In particular, we have
+            /// Multiplying a quaternion by a scalar `1` should give the original quaternion.
+            ///
+            /// Given a quaternion `q`
             /// ```
-            /// For every quaternion q, 1 * q = q.
+            /// 1 * q = q
             /// ```
             #[test]
             fn prop_one_times_quaternion_equal_quaternion(q in super::$Generator()) {
@@ -124,10 +137,11 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(one * q, q);
             }
 
-            /// Multiplying a quaternion by one should give the original quaternion.
-            /// In particular, we have
+            /// Multiplying a quaternion by a scalar `1` should give the original quaternion.
+            ///
+            /// Given a quaternion `q`
             /// ```
-            /// For every quaternion q, q * 1 = q.
+            /// q * 1 = q.
             /// ```
             #[test]
             fn prop_quaternion_times_one_equals_quaternion(v in super::$Generator()) {
@@ -165,8 +179,9 @@ macro_rules! approx_add_props {
         use gdmath::approx::relative_eq;
 
         proptest! {
-            /// A quaternion plus a zero quaternion equals the same quaternion. The quaternion algebra satisfies
-            /// the following: given a quaternion `q`
+            /// A quaternion plus a zero quaternion equals the same quaternion. 
+            ///
+            /// Given a quaternion `q`
             /// ```
             /// q + 0 = q
             /// ```
@@ -176,8 +191,9 @@ macro_rules! approx_add_props {
                 prop_assert_eq!(q + zero_quat, q);
             }
 
-            /// A quaternion plus a zero quaternion equals the same quaternion. The quaternion algebra satisfies
-            /// the following: Given a quaternion `q`
+            /// A quaternion plus a zero quaternion equals the same quaternion.
+            /// 
+            /// Given a quaternion `q`
             /// ```
             /// 0 + q = q
             /// ```
@@ -188,8 +204,10 @@ macro_rules! approx_add_props {
             }
 
             /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
-            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions. 
-            /// In the case of quaternion addition, the quaternions should satisfy
+            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions.
+            ///
+            /// Given quaternions `q1` and `q2`, and their references `&q1` and `&q2`, they 
+            /// should satisfy
             /// ```
             ///  q1 +  q2 = &q1 +  q2
             ///  q1 +  q2 =  q1 + &q2
@@ -212,8 +230,9 @@ macro_rules! approx_add_props {
                 prop_assert_eq!(q1 + &q2, &q1 + &q2);
             }
 
-            /// Given two quaternions of floating point scalars, quaternion addition should  be approximately
-            /// commutative. Given quaternions `q1` and `q2`, we have
+            /// Quaternion addition over floating point scalars should  be approximately commutative.
+            /// 
+            /// Given quaternions `q1` and `q2`, we have
             /// ```
             /// q1 + q2 ~= q2 + q1
             /// ```
@@ -227,8 +246,9 @@ macro_rules! approx_add_props {
                 prop_assert_eq!((q1 + q2) - (q2 + q1), zero);
             }
 
-            /// Given three quaternions of floating point scalars, quaternion addition should be approximately
-            /// associative. Given quaternions `q1`, `q2`, and `q3` we have
+            /// Quaternion addition over floating point scalars should be approximately associative. 
+            ///
+            /// Given quaternions `q1`, `q2`, and `q3` we have
             /// ```
             /// (q1 + q2) + q3 ~= q1 + (q2 + q3).
             /// ```
@@ -263,8 +283,9 @@ macro_rules! exact_add_props {
         use gdmath::{Quaternion, Zero};
 
         proptest! {
-            /// A quaternion plus a zero quaternion equals the same quaternion. The quaternion algebra satisfies
-            /// the following: Given a quaternion `q`
+            /// A quaternion plus a zero quaternion equals the same quaternion. 
+            ///
+            /// Given a quaternion `q`, it should satisfy
             /// ```
             /// q + 0 = q
             /// ```
@@ -274,8 +295,9 @@ macro_rules! exact_add_props {
                 prop_assert_eq!(q + zero_quat, q);
             }
 
-            /// A zero quaternion plus a quaternion equals the same quaternion. The quaternion algebra satisfies
-            /// the following: Given a quaternion `q`
+            /// A zero quaternion plus a quaternion equals the same quaternion.
+            ///
+            /// Given a quaternion `q`, it should satisfy
             /// ```
             /// 0 + q = q
             /// ```
@@ -286,8 +308,10 @@ macro_rules! exact_add_props {
             }
 
             /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
-            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions. 
-            /// In the case of quaternion addition, the quaternions should satisfy
+            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions.
+            ///
+            /// Given quaternions `q1` and `q2`, and their references `&q1` and `&q2`, they 
+            /// should satisfy
             /// ```
             ///  q1 +  q2 = &q1 +  q2
             ///  q1 +  q2 =  q1 + &q2
@@ -310,8 +334,9 @@ macro_rules! exact_add_props {
                 prop_assert_eq!( q1 + &q2, &q1 + &q2);
             }
 
-            /// Given two quaternions of integer scalars, quaternion addition should be
-            /// commutative. Given quaternions `q1` and `q2`, we have
+            /// Quaternion addition over integer scalars should be commutative.
+            ///
+            /// Given quaternions `q1` and `q2`, we have
             /// ```
             /// q1 + q2 = q2 + q1.
             /// ```
@@ -324,6 +349,7 @@ macro_rules! exact_add_props {
             }
 
             /// Given three quaternions of integer scalars, quaternion addition should be associative.
+            ///
             /// Given quaternions `q1`, `q2`, and `q3`, we have
             /// ```
             /// (q1 + q2) + q3 = q1 + (q2 + q3)
@@ -364,8 +390,9 @@ macro_rules! approx_sub_props {
         use gdmath::{Quaternion, Zero};
 
         proptest! {
-            /// The zero quaternion over of floating point scalars should act as an additive unit. 
-            /// That is, given a quaternion `q`, we have
+            /// The zero quaternion over floating point scalars should act as an additive unit.
+            ///
+            /// Given a quaternion `q`, we have
             /// ```
             /// q - 0 = q
             /// ```
@@ -375,15 +402,18 @@ macro_rules! approx_sub_props {
                 prop_assert_eq!(q - zero_quat, q);
             }
 
-            /// Every quaternion should have an additive inverse. That is, given a quaternion `q`,
-            /// there is a quaternion `-q` such that
+            /// Every quaternion should have an additive inverse.
+            ///
+            /// Given a quaternion `q`, there is a quaternion `-q` such that
             /// ```
-            /// q - q = q + (-q) = 0
+            /// q - q = q + (-q) = (-q) + q = 0
             /// ```
             #[test]
             fn prop_quaternion_minus_quaternion_equals_zero(q in super::$Generator::<$ScalarType>()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
                 prop_assert_eq!(q - q, zero_quat);
+                prop_assert_eq!((-q) + q, zero_quat);
+                prop_assert_eq!(q + (-q), zero_quat);
             }
         }
     }
@@ -407,8 +437,9 @@ macro_rules! exact_sub_props {
         use gdmath::{Quaternion, Zero};
 
         proptest! {
-            /// The zero quaternion should act as an additive unit. That is, given a quaternion `q`,
-            /// we have
+            /// The zero quaternion should act as an additive unit. 
+            ///
+            /// Given a quaternion `q`, we have
             /// ```
             /// q - 0 = q
             /// ```
@@ -418,11 +449,11 @@ macro_rules! exact_sub_props {
                 prop_assert_eq!(q - zero_quat, q);
             }
 
-            /// Every quaternion should have an additive inverse. That is, given a quaternion `q`,
-            /// there is a quaternion `-q` such that
-            /// we have
+            /// Every quaternion should have an additive inverse. 
+            ///
+            /// Given a quaternion `q`, there is a quaternion `-q` such that
             /// ```
-            /// q - q = q + (-q) = 0
+            /// q - q = q + (-q) = (-q) + q = 0
             /// ```
             #[test]
             fn prop_quaternion_minus_quaternion_equals_zero(q in super::$Generator::<$ScalarType>()) {
@@ -460,6 +491,7 @@ macro_rules! approx_mul_props {
 
         proptest! {
             /// Multiplication of a scalar and a quaternion should be approximately commutative.
+            ///
             /// Given a constant `c` and a quaternion `q`
             /// ```
             /// c * q ~= q * c
@@ -478,7 +510,9 @@ macro_rules! approx_mul_props {
             }
 
             /// Multiplication of two scalars and a quaternion should be compatible with multiplication of 
-            /// all scalars. In other words, scalar multiplication of two scalar with a quaternion should 
+            /// all scalars. 
+            ///
+            /// In other words, scalar multiplication of two scalar with a quaternion should 
             /// act associatively, just like the multiplication of three scalars. 
             /// Given scalars `a` and `b`, and a quaternion `q`, we have
             /// ```
@@ -496,6 +530,7 @@ macro_rules! approx_mul_props {
             }
 
             /// Quaternion multiplication over floating point numbers is approximately associative.
+            ///
             /// Given quaternions `q1`, `q2`, and `q3`, we have
             /// ```
             /// (q1 * q2) * q3 ~= q1 * (q2 * q3)
@@ -532,7 +567,8 @@ macro_rules! exact_mul_props {
         use proptest::prelude::*;
 
         proptest! {
-            /// Exact multiplication of a scalar and a quaternion should be commutative.
+            /// Multiplication of an integer scalar and a quaternion over integer scalars should be commutative.
+            ///
             /// Given a constant `c` and a quaternion `q`
             /// ```
             /// c * q = q * c
@@ -547,7 +583,9 @@ macro_rules! exact_mul_props {
             }
 
             /// Exact multiplication of two scalars and a quaternion should be compatible with multiplication of 
-            /// all scalars. In other words, scalar multiplication of two scalars with a quaternion should 
+            /// all scalars. 
+            ///
+            /// In other words, scalar multiplication of two scalars with a quaternion should 
             /// act associatively just like the multiplication of three scalars. 
             /// Given scalars `a` and `b`, and a quaternion `q`, we have
             /// ```
@@ -560,7 +598,8 @@ macro_rules! exact_mul_props {
                 prop_assert_eq!(a * (b * q), (a * b) * q);
             }
 
-            /// Quaternion multiplication over integer numbers is exactly associative.
+            /// Quaternion multiplication over integer scalars is exactly associative.
+            ///
             /// Given quaternions `q1`, `q2`, and `q3`, we have
             /// ```
             /// (q1 * q2) * q3 = q1 * (q2 * q3)
@@ -604,6 +643,7 @@ macro_rules! approx_distributive_props {
     
         proptest! {
             /// Scalar multiplication should approximately distribute over quaternion addition.
+            ///
             /// Given a scalar `a` and quaternions `q1` and `q2`
             /// ```
             /// a * (q1 + q2) ~= a * q1 + a * q2
@@ -619,6 +659,7 @@ macro_rules! approx_distributive_props {
             }
     
             /// Multiplication of a sum of scalars should approximately distribute over a quaternion.
+            ///
             /// Given scalars `a` and `b` and a quaternion `q`, we have
             /// ```
             /// (a + b) * q ~= a * q + b * q
@@ -634,6 +675,7 @@ macro_rules! approx_distributive_props {
             }
 
             /// Multiplication of two quaternions by a scalar on the right should approximately distribute.
+            ///
             /// Given quaternions `q1` and `q2` and a scalar `a`
             /// ```
             /// (q1 + q2) * a ~= q1 * a + q2 * a
@@ -649,7 +691,8 @@ macro_rules! approx_distributive_props {
             }
 
             /// Multiplication of a quaternion on the right by the sum of two scalars should approximately 
-            /// distribute over the two scalars. 
+            /// distribute over the two scalars.
+            ///
             /// Given a quaternion `q` and scalars `a` and `b`
             /// ```
             /// q * (a + b) ~= q * a + q * b
@@ -719,6 +762,7 @@ macro_rules! exact_distributive_props {
 
         proptest! {
             /// Scalar multiplication should distribute over quaternion addition.
+            ///
             /// Given a scalar `a` and quaternions `q1` and `q2`
             /// ```
             /// a * (q1 + q2) = a * q1 + a * q2
@@ -733,6 +777,7 @@ macro_rules! exact_distributive_props {
             }
 
             /// Multiplication of a sum of scalars should distribute over a quaternion.
+            ///
             /// Given scalars `a` and `b` and a quaternion `q`, we have
             /// ```
             /// (a + b) * q = a * q + b * q
@@ -747,6 +792,7 @@ macro_rules! exact_distributive_props {
             }
 
             /// Multiplication of two quaternions by a scalar on the right should distribute.
+            ///
             /// Given quaternions `q1` and `q2` and a scalar `a`
             /// ```
             /// (q1 + q2) * a = q1 * a + q2 * a
@@ -760,7 +806,9 @@ macro_rules! exact_distributive_props {
             }
 
             /// Multiplication of a quaternion on the right by the sum of two scalars should
-            /// distribute over the two scalars. Given a quaternion `q` and scalars `a` and `b`
+            /// distribute over the two scalars. 
+            ///
+            /// Given a quaternion `q` and scalars `a` and `b`
             /// ```
             /// q * (a + b) = q * a + q * b
             /// ```
