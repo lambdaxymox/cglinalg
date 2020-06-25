@@ -487,7 +487,7 @@ macro_rules! approx_mul_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::approx::relative_eq;
-        use gdmath::Finite;
+        use gdmath::{Quaternion, One, Finite};
 
         proptest! {
             /// Multiplication of a scalar and a quaternion should be approximately commutative.
@@ -546,6 +546,20 @@ macro_rules! approx_mul_props {
                 prop_assume!(((q1 * q2) * q3).is_finite());
                 prop_assert!(relative_eq!(q1 * (q2 * q3), (q1 * q2) * q3, epsilon = $tolerance));
             }
+
+            /// Quaternions have a multiplicative unit element.
+            ///
+            /// Given a quaternion `q`, and the unit quaternion `1`, we have
+            /// ```
+            /// q * 1 = 1 * q = q
+            /// ```
+            #[test]
+            fn prop_quaternion_multiplication_unit(q in super::$Generator::<$ScalarType>()) {
+                let one = Quaternion::one();
+                prop_assert_eq!(q * one, q);
+                prop_assert_eq!(one * q, q);
+                prop_assert_eq!(q * one, one * q);
+            }
         }
     }
     }
@@ -565,6 +579,7 @@ macro_rules! exact_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
+        use gdmath::{Quaternion, One};
 
         proptest! {
             /// Multiplication of an integer scalar and a quaternion over integer scalars should be commutative.
@@ -610,6 +625,20 @@ macro_rules! exact_mul_props {
                 q3 in super::$Generator::<$ScalarType>()
             ) {
                 prop_assert_eq!(q1 * (q2 * q3), (q1 * q2) * q3);
+            }
+
+            /// Quaternions have a multiplicative unit element.
+            ///
+            /// Given a quaternion `q`, and the unit quaternion `1`, we have
+            /// ```
+            /// q * 1 = 1 * q = q
+            /// ```
+            #[test]
+            fn prop_quaternion_multiplication_unit(q in super::$Generator::<$ScalarType>()) {
+                let one = Quaternion::one();
+                prop_assert_eq!(q * one, q);
+                prop_assert_eq!(one * q, q);
+                prop_assert_eq!(q * one, one * q);
             }
         }
     }
