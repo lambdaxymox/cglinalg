@@ -415,6 +415,33 @@ macro_rules! approx_sub_props {
                 prop_assert_eq!((-q) + q, zero_quat);
                 prop_assert_eq!(q + (-q), zero_quat);
             }
+
+            /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
+            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions.
+            ///
+            /// Given quaternions `q1` and `q2`, and their references `&q1` and `&q2`, they 
+            /// should satisfy
+            /// ```
+            ///  q1 -  q2 = &q1 -  q2
+            ///  q1 -  q2 =  q1 - &q2
+            ///  q1 -  q2 = &q1 - &q2
+            ///  q1 - &q2 = &q1 -  q2
+            /// &q1 -  q2 =  q1 - &q2
+            /// &q1 -  q2 = &q1 - &q2
+            ///  q1 - &q2 = &q1 - &q2
+            /// ```
+            #[test]
+            fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!( q1 -  q2, &q1 -  q2);
+                prop_assert_eq!( q1 -  q2,  q1 - &q2);
+                prop_assert_eq!( q1 -  q2, &q1 - &q2);
+                prop_assert_eq!( q1 - &q2, &q1 -  q2);
+                prop_assert_eq!(&q1 -  q2,  q1 - &q2);
+                prop_assert_eq!(&q1 -  q2, &q1 - &q2);
+                prop_assert_eq!( q1 - &q2, &q1 - &q2);
+            }
         }
     }
     }
@@ -459,6 +486,33 @@ macro_rules! exact_sub_props {
             fn prop_quaternion_minus_quaternion_equals_zero(q in super::$Generator::<$ScalarType>()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
                 prop_assert_eq!(q - q, zero_quat);
+            }
+
+            /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
+            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions.
+            ///
+            /// Given quaternions `q1` and `q2`, and their references `&q1` and `&q2`, they 
+            /// should satisfy
+            /// ```
+            ///  q1 -  q2 = &q1 -  q2
+            ///  q1 -  q2 =  q1 - &q2
+            ///  q1 -  q2 = &q1 - &q2
+            ///  q1 - &q2 = &q1 -  q2
+            /// &q1 -  q2 =  q1 - &q2
+            /// &q1 -  q2 = &q1 - &q2
+            ///  q1 - &q2 = &q1 - &q2
+            /// ```
+            #[test]
+            fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!( q1 -  q2, &q1 -  q2);
+                prop_assert_eq!( q1 -  q2,  q1 - &q2);
+                prop_assert_eq!( q1 -  q2, &q1 - &q2);
+                prop_assert_eq!( q1 - &q2, &q1 -  q2);
+                prop_assert_eq!(&q1 -  q2,  q1 - &q2);
+                prop_assert_eq!(&q1 -  q2, &q1 - &q2);
+                prop_assert_eq!( q1 - &q2, &q1 - &q2);
             }
         }
     }
@@ -604,6 +658,20 @@ macro_rules! approx_mul_props {
                 let q1_times_q2_inv = (q1 * q2).inverse().unwrap();
 
                 prop_assert!(relative_eq!(q1_times_q2_inv, q2_inv * q1_inv, epsilon = $tolerance));
+            }
+
+            /// Quaternion multiplication is anti-commutative.
+            ///
+            /// Given quaternions `q1` and `q2`, we have
+            /// ```
+            /// q1 * q2 = -q2 * q1
+            /// ```
+            #[test]
+            fn prop_quaternion_multiplication_anti_commutative(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!((q1 * q2).is_finite());
+                prop_assert!(relative_eq!(q1 * q2, -q2 * q1, epsilon = $tolerance));
             }
         }
     }
