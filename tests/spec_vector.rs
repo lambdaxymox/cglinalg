@@ -824,7 +824,7 @@ macro_rules! approx_distributive_props {
             /// a * (v + w) ~= a * v + a * w
             /// ```
             #[test]
-            fn prop_distribution_over_vector_addition(
+            fn prop_scalar_vector_addition_right_distributive(
                 a in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
                 
@@ -840,7 +840,7 @@ macro_rules! approx_distributive_props {
             /// (a + b) * v ~= a * v + b * v
             /// ```
             #[test]
-            fn prop_distribution_over_scalar_addition(
+            fn prop_vector_scalar_addition_left_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>()) {
     
@@ -858,7 +858,7 @@ macro_rules! approx_distributive_props {
             /// We deviate from the usual formalisms of vector algebra in that we 
             /// allow the ability to multiply scalars from the left, or from the right of a vector.
             #[test]
-            fn prop_distribution_over_vector_addition1(
+            fn prop_scalar_vector_addition_left_distributive(
                 a in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
                     
@@ -877,7 +877,7 @@ macro_rules! approx_distributive_props {
             /// We deviate from the usual formalisms of vector algebra in that we 
             /// allow the ability to multiply scalars from the left, or from the right of a vector.
             #[test]
-            fn prop_distribution_over_scalar_addition1(
+            fn prop_vector_scalar_addition_right_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>()) {
     
@@ -917,7 +917,7 @@ macro_rules! exact_distributive_props {
             /// a * (v + w) = a * v + a * w
             /// ```
             #[test]
-            fn prop_distribution_over_vector_addition(
+            fn prop_scalar_vector_addition_right_distributive(
                 a in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
                 
@@ -932,7 +932,7 @@ macro_rules! exact_distributive_props {
             /// (a + b) * v = a * v + b * v
             /// ```
             #[test]
-            fn prop_distribution_over_scalar_addition(
+            fn prop_vector_scalar_addition_left_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>()) {
     
@@ -949,7 +949,7 @@ macro_rules! exact_distributive_props {
             /// We deviate from the usual formalisms of vector algebra in that we 
             /// allow the ability to multiply scalars from the left, or from the right of a vector.
             #[test]
-            fn prop_distribution_over_vector_addition1(
+            fn prop_scalar_vector_addition_left_distributive(
                 a in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
                     
@@ -966,7 +966,7 @@ macro_rules! exact_distributive_props {
             /// We deviate from the usual formalisms of vector algebra in that we 
             /// allow the ability to multiply scalars from the left, or from the right of a vector.
             #[test]
-            fn prop_distribution_over_scalar_addition1(
+            fn prop_vector_scalar_addition_right_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>()) {
     
