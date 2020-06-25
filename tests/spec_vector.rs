@@ -1012,3 +1012,264 @@ exact_distributive_props!(vector1_u32_distributive_props, Vector1, u32, any_vect
 exact_distributive_props!(vector2_u32_distributive_props, Vector2, u32, any_vector2);
 exact_distributive_props!(vector3_u32_distributive_props, Vector3, u32, any_vector3);
 exact_distributive_props!(vector4_u32_distributive_props, Vector4, u32, any_vector4);
+
+
+/// Generate the properties for vector dot products over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
+macro_rules! approx_dot_product_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::DotProduct;
+        use gdmath::approx::relative_eq;
+    
+        proptest! {
+            /// The dot product of vectors over floating point scalars is 
+            /// approximately commutative.
+            ///
+            /// Given vectors `v` and `w`
+            /// ```
+            /// dot(v, w) = dot(w, v)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_commutative(
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!(v.dot(w).is_finite());
+                prop_assume!(w.dot(v).is_finite());
+                prop_assert!(relative_eq!(v.dot(w), w.dot(v), epsilon = $tolerance));
+
+            }
+
+            /// The dot product of vectors over floating point scalars is 
+            /// approximately right distributive.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// dot(u, v + w) = dot(u, v) + dot(u, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_right_distributive(
+                u in super::$Generator::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+            
+                prop_assume!(u.dot(v + w).is_finite());
+                prop_assume!((u.dot(v) + u.dot(w)).is_finite());
+                prop_assert!(
+                    relative_eq!(u.dot(v + w), u.dot(v) + u.dot(w), epsilon = $tolerance)
+                );
+            }
+
+            /// The dot product of vectors over floating point scalars is 
+            /// approximately left distributive.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// dot(u + v,  w) = dot(u, w) + dot(v, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_left_distributive(
+                u in super::$Generator::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+            
+                prop_assume!((u + v).dot(w).is_finite());
+                prop_assume!((u.dot(w) + v.dot(w)).is_finite());
+                prop_assert!(
+                    relative_eq!((u + v).dot(w), u.dot(w) + v.dot(w), epsilon = $tolerance)
+                );
+            }
+
+            /// The dot product of vectors over floating point scalars is approximately 
+            /// commutative with scalars.
+            ///
+            /// Given vectors `v` and `w`, and scalars `a` and `b`
+            /// ```
+            /// dot(a * v, b * w) = a * b * dot(v, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_times_scalars_commutative(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!((a * v).dot(b * w).is_finite());
+                prop_assume!((a * b * v.dot(w)).is_finite());
+                prop_assert!(relative_eq!((a * v).dot(b * w), a * b * v.dot(w), epsilon = $tolerance));
+            }
+
+            /// The dot product of vectors over floating point scalars is 
+            /// approximately right bilinear.
+            ///
+            /// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
+            /// ```
+            /// dot(u, a * v + b * w) = a * dot(u, v) + b * dot(u, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_right_bilinear(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                u in super::$Generator::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!((u.dot(a * v + b * w)).is_finite());
+                prop_assume!((a * u.dot(v) + b * u.dot(w)).is_finite());
+                prop_assert!(
+                    relative_eq!(u.dot(a * v + b * w), a * u.dot(v) + b * u.dot(w), epsilon = $tolerance)
+                );
+            }
+
+            /// The dot product of vectors over floating point scalars is 
+            /// approximately left bilinear.
+            ///
+            /// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
+            /// ```
+            /// dot(a * u + b * v, w) = a * dot(u, w) + b * dot(v, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_left_bilinear(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                u in super::$Generator::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!(((a * u + b * v).dot(w)).is_finite());
+                prop_assume!((a * u.dot(w) + b * v.dot(w)).is_finite());
+                prop_assert!(relative_eq!((
+                    a * u + b * v).dot(w), a * u.dot(w) + b * v.dot(w), epsilon = $tolerance
+                ));
+            }
+        }
+    }
+    }
+}
+
+approx_dot_product_props!(vector1_f64_dot_product_props, Vector1, f64, any_vector1, 1e-7);
+approx_dot_product_props!(vector2_f64_dot_product_props, Vector2, f64, any_vector2, 1e-7);
+approx_dot_product_props!(vector3_f64_dot_product_props, Vector3, f64, any_vector3, 1e-7);
+approx_dot_product_props!(vector4_f64_dot_product_props, Vector4, f64, any_vector4, 1e-7);
+
+
+/// Generate the properties for vector dot products over integer scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$VectorN` denotes the name of the vector type.
+/// `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_dot_product_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::DotProduct;
+    
+        proptest! {
+            /// The dot product of vectors over integer scalars is commutative.
+            ///
+            /// Given vectors `v` and `w`
+            /// ```
+            /// dot(v, w) = dot(w, v)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_commutative(
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(v.dot(w), w.dot(v));
+
+            }
+
+            /// The dot product of vectors over integer scalars is right distributive.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// dot(u, v + w) = dot(u, v) + dot(u, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_right_distributive(
+                u in super::$Generator::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+            
+                prop_assert_eq!(u.dot(v + w), u.dot(v) + u.dot(w));
+            }
+
+            /// The dot product of vectors over integer scalars is left distributive.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// dot(u + v,  w) = dot(u, w) + dot(v, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_left_distributive(
+                u in super::$Generator::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+            
+                prop_assert_eq!((u + v).dot(w), u.dot(w) + v.dot(w));
+            }
+
+            /// The dot product of vectors over integer scalars is commutative with scalars.
+            ///
+            /// Given vectors `v` and `w`, and scalars `a` and `b`
+            /// ```
+            /// dot(a * v, b * w) = a * b * dot(v, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_times_scalars_commutative(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((a * v).dot(b * w), a * b * v.dot(w));
+            }
+
+            /// The dot product of vectors over integer scalars is right bilinear.
+            ///
+            /// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
+            /// ```
+            /// dot(u, a * v + b * w) = a * dot(u, v) + b * dot(u, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_right_bilinear(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                u in super::$Generator::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(u.dot(a * v + b * w), a * u.dot(v) + b * u.dot(w));
+            }
+
+            /// The dot product of vectors over integer scalars is left bilinear.
+            ///
+            /// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
+            /// ```
+            /// dot(a * u + b * v, w) = a * dot(u, w) + b * dot(v, w)
+            /// ```
+            #[test]
+            fn prop_vector_dot_product_left_bilinear(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                u in super::$Generator::<$ScalarType>(),
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((a * u + b * v).dot(w), a * u.dot(w) + b * v.dot(w));
+            }
+        }
+    }
+    }
+}
+
+exact_dot_product_props!(vector1_i32_dot_product_props, Vector1, i32, any_vector1);
+exact_dot_product_props!(vector2_i32_dot_product_props, Vector2, i32, any_vector2);
+exact_dot_product_props!(vector3_i32_dot_product_props, Vector3, i32, any_vector3);
+exact_dot_product_props!(vector4_i32_dot_product_props, Vector4, i32, any_vector4);
+
+exact_dot_product_props!(vector1_u32_dot_product_props, Vector1, u32, any_vector1);
+exact_dot_product_props!(vector2_u32_dot_product_props, Vector2, u32, any_vector2);
+exact_dot_product_props!(vector3_u32_dot_product_props, Vector3, u32, any_vector3);
+exact_dot_product_props!(vector4_u32_dot_product_props, Vector4, u32, any_vector4);
+
