@@ -238,7 +238,7 @@ macro_rules! approx_add_props {
             /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
             /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors. 
             ///
-            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, the should satisfy
+            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, they should satisfy
             /// ```
             ///  v1 +  v2 = &v1 +  v2
             ///  v1 +  v2 =  v1 + &v2
@@ -252,13 +252,13 @@ macro_rules! approx_add_props {
             fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
                 v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
                 
-                prop_assert_eq!(v1 + v2, &v1 + v2);
-                prop_assert_eq!(v1 + v2, v1 + &v2);
-                prop_assert_eq!(v1 + v2, &v1 + &v2);
-                prop_assert_eq!(v1 + &v2, &v1 + v2);
-                prop_assert_eq!(&v1 + v2, v1 + &v2);
-                prop_assert_eq!(&v1 + v2, &v1 + &v2);
-                prop_assert_eq!(v1 + &v2, &v1 + &v2);
+                prop_assert_eq!( v1 +  v2, &v1 +  v2);
+                prop_assert_eq!( v1 +  v2,  v1 + &v2);
+                prop_assert_eq!( v1 +  v2, &v1 + &v2);
+                prop_assert_eq!( v1 + &v2, &v1 +  v2);
+                prop_assert_eq!(&v1 +  v2,  v1 + &v2);
+                prop_assert_eq!(&v1 +  v2, &v1 + &v2);
+                prop_assert_eq!( v1 + &v2, &v1 + &v2);
             }
 
             /// Given two vectors of floating point scalars, vector addition should  be approximately
@@ -446,12 +446,38 @@ macro_rules! approx_sub_props {
             ///
             /// Given a vector `v`, there is a vector `-v` such that
             /// ```
-            /// v - v = 0
+            /// v - v = v + (-v) = (-v) + v = 0
             /// ```
             #[test]
             fn prop_vector_minus_vector_equals_zero(v in super::$Generator::<$ScalarType>()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(v - v, zero_vec);
+            }
+
+            /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
+            /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors. 
+            ///
+            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, they should satisfy
+            /// ```
+            ///  v1 -  v2 = &v1 -  v2
+            ///  v1 -  v2 =  v1 - &v2
+            ///  v1 -  v2 = &v1 - &v2
+            ///  v1 - &v2 = &v1 -  v2
+            /// &v1 -  v2 =  v1 - &v2
+            /// &v1 -  v2 = &v1 - &v2
+            ///  v1 - &v2 = &v1 - &v2
+            /// ```
+            #[test]
+            fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
+                v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!( v1 +  v2, &v1 +  v2);
+                prop_assert_eq!( v1 +  v2,  v1 + &v2);
+                prop_assert_eq!( v1 +  v2, &v1 + &v2);
+                prop_assert_eq!( v1 + &v2, &v1 +  v2);
+                prop_assert_eq!(&v1 +  v2,  v1 + &v2);
+                prop_assert_eq!(&v1 +  v2, &v1 + &v2);
+                prop_assert_eq!( v1 + &v2, &v1 + &v2);
             }
         }
     }
@@ -501,6 +527,32 @@ macro_rules! exact_sub_props {
             fn prop_vector_minus_vector_equals_zero(v in super::$Generator::<$ScalarType>()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(v - v, zero_vec);
+            }
+
+            /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
+            /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors. 
+            ///
+            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, they should satisfy
+            /// ```
+            ///  v1 -  v2 = &v1 -  v2
+            ///  v1 -  v2 =  v1 - &v2
+            ///  v1 -  v2 = &v1 - &v2
+            ///  v1 - &v2 = &v1 -  v2
+            /// &v1 -  v2 =  v1 - &v2
+            /// &v1 -  v2 = &v1 - &v2
+            ///  v1 - &v2 = &v1 - &v2
+            /// ```
+            #[test]
+            fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
+                v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!( v1 +  v2, &v1 +  v2);
+                prop_assert_eq!( v1 +  v2,  v1 + &v2);
+                prop_assert_eq!( v1 +  v2, &v1 + &v2);
+                prop_assert_eq!( v1 + &v2, &v1 +  v2);
+                prop_assert_eq!(&v1 +  v2,  v1 + &v2);
+                prop_assert_eq!(&v1 +  v2, &v1 + &v2);
+                prop_assert_eq!( v1 + &v2, &v1 + &v2);
             }
         }
     }
@@ -636,7 +688,7 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Magnitude;
+        use gdmath::Finite;
         use gdmath::approx::relative_eq;
 
         proptest! {
@@ -655,7 +707,7 @@ macro_rules! approx_mul_props {
                 c in any::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
                 
                 prop_assume!(c.is_finite());
-                prop_assume!(v.magnitude().is_finite());
+                prop_assume!(v.is_finite());
                 prop_assert!(
                     relative_eq!(c * v, v * c, epsilon = $tolerance)
                 );
@@ -762,7 +814,7 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Magnitude;
+        use gdmath::Finite;
     
         proptest! {
             /// Scalar multiplication should approximately distribute over vector addition.
@@ -776,12 +828,13 @@ macro_rules! approx_distributive_props {
                 a in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
                 
-                prop_assume!((a * (v + w)).magnitude().is_finite());
-                prop_assume!((a * v + a * w).magnitude().is_finite());
+                prop_assume!((a * (v + w)).is_finite());
+                prop_assume!((a * v + a * w).is_finite());
                 prop_assert_eq!(a * (v + w), a * v + a * w);
             }
     
             /// Multiplication of a sum of scalars should approximately distribute over a vector.
+            ///
             /// Given scalars `a` and `b` and a vector `v`, we have
             /// ```
             /// (a + b) * v ~= a * v + b * v
@@ -791,12 +844,13 @@ macro_rules! approx_distributive_props {
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>()) {
     
-                prop_assume!(((a + b) * v).magnitude().is_finite());
-                prop_assume!((a * v + b * v).magnitude().is_finite());
+                prop_assume!(((a + b) * v).is_finite());
+                prop_assume!((a * v + b * v).is_finite());
                 prop_assert_eq!((a + b) * v, a * v + b * v);
             }
 
             /// Multiplication of two vectors by a scalar on the right should approximately distribute.
+            ///
             /// Given vectors `v` and `w` and a scalar `a`
             /// ```
             /// (v + w) * a ~= v * a + w * a
@@ -808,8 +862,8 @@ macro_rules! approx_distributive_props {
                 a in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
                     
-                prop_assume!(((v + w) * a).magnitude().is_finite());
-                prop_assume!((v * a + w * a).magnitude().is_finite());
+                prop_assume!(((v + w) * a).is_finite());
+                prop_assume!((v * a + w * a).is_finite());
                 prop_assert_eq!((v + w) * a,  v * a + w * a);
             }
 
@@ -827,8 +881,8 @@ macro_rules! approx_distributive_props {
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
                 v in super::$Generator::<$ScalarType>()) {
     
-                prop_assume!((v * (a + b)).magnitude().is_finite());
-                prop_assume!((v * a + v * b).magnitude().is_finite());
+                prop_assume!((v * (a + b)).is_finite());
+                prop_assume!((v * a + v * b).is_finite());
                 prop_assert_eq!(v * (a + b), v * a + v * b);
             }
         }
