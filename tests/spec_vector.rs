@@ -44,8 +44,11 @@ macro_rules! index_props {
         use proptest::prelude::*;
 
         proptest! {
-            /// Given a vector `v`, it should return the entry at position `index` in the vector 
-            /// when the given index is inbounds.
+            /// When a vector is treated like an array, it should accept all indices
+            /// below the length of the array.
+            ///
+            /// Given a vector `v`, it should return the entry at position `index` in the 
+            /// underlying storage of the vector when the given index is inbounds.
             #[test]
             fn prop_accepts_all_indices_in_of_bounds(
                 v in super::$Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
@@ -53,8 +56,11 @@ macro_rules! index_props {
                 prop_assert_eq!(v[index], v[index]);
             }
     
-            /// Given a vector `v`, when the entry position is out of bounds, it should 
-            /// generate a panic just like an array or vector indexed out of bounds.
+            /// When a vector is treated like an array, it should reject any input index outside
+            /// the length of the array.
+            ///
+            /// Given a vector `v`, when the element index `index` is out of bounds, it should 
+            /// generate a panic just like an array indexed out of bounds.
             #[test]
             #[should_panic]
             fn prop_panics_when_index_out_of_bounds(
@@ -89,9 +95,11 @@ macro_rules! exact_arithmetic_props {
         use gdmath::{$VectorN, Zero};
 
         proptest! {
-            /// A scalar zero times a vector should be zero. That is, vector algebra satisfies
+            /// A scalar zero times a vector should be a zero vector. 
+            ///
+            /// Given a vector `v`
             /// ```
-            /// For each vector v, 0 * v = 0.
+            /// 0 * v = 0
             /// ```
             #[test]
             fn prop_zero_times_vector_equals_zero(v in super::$Generator()) {
@@ -100,13 +108,14 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(zero * v, zero_vec);
             }
         
-            /// A scalar zero times a vector should be zero. That is, vector algebra satisfies
+            /// A vector times a scalar zero should be a zero vector.
+            ///
+            /// Given a vector `v`
             /// ```
-            /// For each vector v, v * 0 = 0.
+            /// v * 0 = 0
             /// ```
             /// Note that we deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the right of a vector.
-            /// In each case the result should be the same.
+            /// allow the ability to multiply scalars from the right of a vector.
             #[test]
             fn prop_vector_times_zero_equals_zero(v in super::$Generator()) {
                 let zero: $ScalarType = num_traits::Zero::zero();
@@ -115,9 +124,10 @@ macro_rules! exact_arithmetic_props {
             }
 
             /// A zero vector should act as the additive unit element of a vector space.
-            /// In particular, we have
+            ///
+            /// Given a vector `v`
             /// ```
-            /// For every vector v, v + 0 = v.
+            /// v + 0 = v
             /// ```
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
@@ -126,9 +136,10 @@ macro_rules! exact_arithmetic_props {
             }
 
             /// A zero vector should act as the additive unit element of a vector space.
-            /// In particular, we have
+            ///
+            /// Given a vector `v`
             /// ```
-            /// For every vector v, 0 + v = v.
+            /// 0 + v = v
             /// ```
             #[test]
             fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
@@ -136,10 +147,11 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(zero_vec + v, v);
             }
 
-            /// Multiplying a vector by one should give the original vector.
-            /// In particular, we have
+            /// Multiplying a vector by scalar one should give the original vector.
+            ///
+            /// Given a vector `v`
             /// ```
-            /// For every vector v, 1 * v = v.
+            /// 1 * v = v
             /// ```
             #[test]
             fn prop_one_times_vector_equal_vector(v in super::$Generator()) {
@@ -148,13 +160,13 @@ macro_rules! exact_arithmetic_props {
             }
 
             /// Multiplying a vector by one should give the original vector.
-            /// In particular, we have
+            ///
+            /// Given a vector `v`
             /// ```
-            /// For every vector v, v * 1 = v.
+            /// v * 1 = v
             /// ```
             /// Note that we deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the right of a vector.
-            /// In each case the result should be the same.
+            /// allow the ability to multiply scalars to the right of a vector.
             #[test]
             fn prop_vector_times_one_equals_vector(v in super::$Generator()) {
                 let one: $ScalarType = num_traits::One::one();
@@ -199,10 +211,11 @@ macro_rules! approx_add_props {
         use gdmath::{$VectorN, Zero};
 
         proptest! {
-            /// A vector plus a zero vector equals the same vector. The vector algebra satisfies
-            /// the following: given a vector `v`
+            /// A vector plus a zero vector equals the same vector.
+            ///
+            /// Given a vector `v`
             /// ```
-            /// v + 0 = v.
+            /// v + 0 = v
             /// ```
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
@@ -210,10 +223,11 @@ macro_rules! approx_add_props {
                 prop_assert_eq!(v + zero_vec, v);
             }
 
-            /// A vector plus a zero vector equals the same vector. The vector algebra satisfies
-            /// the following: Given a vector `v`
+            /// A zero vector plus a vector equals the same vector.
+            ///
+            /// Given a vector `v`
             /// ```
-            /// 0 + v = v.
+            /// 0 + v = v
             /// ```
             #[test]
             fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
@@ -223,7 +237,8 @@ macro_rules! approx_add_props {
 
             /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
             /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors. 
-            /// In the case of vector addition, the vectors should satisfy
+            ///
+            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, the should satisfy
             /// ```
             ///  v1 +  v2 = &v1 +  v2
             ///  v1 +  v2 =  v1 + &v2
@@ -247,9 +262,11 @@ macro_rules! approx_add_props {
             }
 
             /// Given two vectors of floating point scalars, vector addition should  be approximately
-            /// commutative. Given vectors `v1` and `v2`, we have
+            /// commutative. 
+            ///
+            /// Given vectors `v1` and `v2`, we have
             /// ```
-            /// v1 + v2 ~= v2 + v1.
+            /// v1 + v2 ~= v2 + v1
             /// ```
             /// Note that floating point vector addition cannot be exactly commutative because arithmetic
             /// with floating point numbers is not commutative.
@@ -261,8 +278,9 @@ macro_rules! approx_add_props {
                 prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
             }
 
-            /// Given three vectors of floating point scalars, vector addition should  be approximately
-            /// associative. Given vectors `v1`, `v2`, and `v3` we have
+            /// Vector addition should be approximately associative. 
+            /// 
+            /// Given vectors `v1`, `v2`, and `v3` we have
             /// ```
             /// (v1 + v2) + v3 ~= v1 + (v2 + v3).
             /// ```
