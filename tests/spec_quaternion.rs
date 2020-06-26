@@ -1242,3 +1242,50 @@ macro_rules! exact_dot_product_props {
 exact_dot_product_props!(quaternion_i32_dot_product_props, i32, any_quaternion);
 exact_dot_product_props!(quaternion_u32_dot_product_props, u32, any_quaternion);
 
+
+/// Generate the properties for quaternion conjugation over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the set of quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! conjugation_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::DotProduct;
+        use gdmath::approx::relative_eq;
+    
+        proptest! {
+            /// Conjugating a quaternion twice should give the original quaternion.
+            ///
+            /// Given a quaternion `q`
+            /// ```
+            /// q** = conjugate(conjugate(q)) = q
+            /// ```
+            #[test]
+            fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::$Generator::<$ScalarType>()) {
+                prop_assert_eq!(q.conjugate().conjugate(), q);
+            }
+
+            /// Quaternion conjugation is linear.
+            ///
+            /// Given quaternions `q1` and `q2`, quaternion conjugation satisfies
+            /// ```
+            /// (q1 + q2)* = q1* + q2*
+            /// conjugate(q1 + q2) = conjugate(q1) + conjugate(q2)
+            /// ```
+            #[test]
+            fn prop_quaternion_conjugation_linear(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((q1 + q2).conjugate(), q1.conjugate() + q2.conjugate());
+            }
+        }
+    }
+    }
+}
+
+conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion);
+
