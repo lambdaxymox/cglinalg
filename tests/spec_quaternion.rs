@@ -995,3 +995,250 @@ macro_rules! exact_distributive_props {
 exact_distributive_props!(quaternion_i32_distributive_props, i32, any_quaternion);
 exact_distributive_props!(quaternion_u32_distributive_props, u32, any_quaternion);
 
+
+/// Generate the properties for quaternion dot products over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the set of quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
+macro_rules! approx_dot_product_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::DotProduct;
+        use gdmath::approx::relative_eq;
+    
+        proptest! {
+            /// The dot product of quaternions over floating point scalars is 
+            /// approximately commutative.
+            ///
+            /// Given quaternions `q1` and `q2`
+            /// ```
+            /// dot(q1, q2) ~= dot(q2, q1)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_commutative(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!(q1.dot(q2).is_finite());
+                prop_assume!(q2.dot(q1).is_finite());
+                prop_assert!(relative_eq!(q1.dot(q2), q2.dot(q1), epsilon = $tolerance));
+            }
+
+            /// The dot product of quaternions over floating point scalars is 
+            /// approximately right distributive.
+            ///
+            /// Given quaternions `q1`, `q2`, and `q3`
+            /// ```
+            /// dot(q1, q2 + q3) ~= dot(q1, q2) + dot(q1, q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_right_distributive(
+                q1 in super::$Generator::<$ScalarType>(),
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+            
+                prop_assume!(q1.dot(q2 + q3).is_finite());
+                prop_assume!((q1.dot(q2) + q1.dot(q3)).is_finite());
+                prop_assert!(
+                    relative_eq!(q1.dot(q2 + q3), q1.dot(q2) + q1.dot(q3), epsilon = $tolerance)
+                );
+            }
+
+            /// The dot product of quaternions over floating point scalars is 
+            /// approximately left distributive.
+            ///
+            /// Given quaternions `q1`, `q2`, and `q3`
+            /// ```
+            /// dot(q1 + q2,  q3) ~= dot(q1, q3) + dot(q2, q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_left_distributive(
+                q1 in super::$Generator::<$ScalarType>(),
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+            
+                prop_assume!((q1 + q2).dot(q3).is_finite());
+                prop_assume!((q1.dot(q3) + q2.dot(q3)).is_finite());
+                prop_assert!(
+                    relative_eq!((q1 + q2).dot(q3), q1.dot(q3) + q2.dot(q3), epsilon = $tolerance)
+                );
+            }
+
+            /// The dot product of quaternions over floating point scalars is approximately 
+            /// commutative with scalars.
+            ///
+            /// Given quaternions `q1` and `q2`, and scalars `a` and `b`
+            /// ```
+            /// dot(a * q1, b * q2) ~= a * b * dot(q1, q2)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_times_scalars_commutative(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!((a * q1).dot(b * q2).is_finite());
+                prop_assume!((a * b * q1.dot(q2)).is_finite());
+                prop_assert!(relative_eq!((a * q1).dot(b * q2), a * b * q1.dot(q2), epsilon = $tolerance));
+            }
+
+            /// The dot product of quaternions over floating point scalars is 
+            /// approximately right bilinear.
+            ///
+            /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
+            /// ```
+            /// dot(q1, a * q2 + b * q3) ~= a * dot(q1, q2) + b * dot(q1, q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_right_bilinear(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                q1 in super::$Generator::<$ScalarType>(),
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!((q1.dot(a * q2 + b * q3)).is_finite());
+                prop_assume!((a * q1.dot(q2) + b * q1.dot(q3)).is_finite());
+                prop_assert!(
+                    relative_eq!(q1.dot(a * q2 + b * q3), a * q1.dot(q2) + b * q1.dot(q3), epsilon = $tolerance)
+                );
+            }
+
+            /// The dot product of quaternions over floating point scalars is 
+            /// approximately left bilinear.
+            ///
+            /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
+            /// ```
+            /// dot(a * q1 + b * q2, q3) ~= a * dot(q1, q3) + b * dot(q2, q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_left_bilinear(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                q1 in super::$Generator::<$ScalarType>(),
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!(((a * q1 + b * q2).dot(q3)).is_finite());
+                prop_assume!((a * q1.dot(q3) + b * q2.dot(q3)).is_finite());
+                prop_assert!(relative_eq!(
+                    (a * q1 + b * q2).dot(q3), a * q1.dot(q3) + b * q2.dot(q3), epsilon = $tolerance
+                ));
+            }
+        }
+    }
+    }
+}
+
+approx_dot_product_props!(quaternion_f64_dot_product_props, f64, any_quaternion, 1e-7);
+
+
+/// Generate the properties for quaternion dot products over integer scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_dot_product_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::DotProduct;
+    
+        proptest! {
+            /// The dot product of quaternions over integer scalars is commutative.
+            ///
+            /// Given quaternions `q1` and `q2`
+            /// ```
+            /// dot(q1, q2) = dot(q2, q1)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_commutative(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(q1.dot(q2), q2.dot(q1));
+
+            }
+
+            /// The dot product of quaternions over integer scalars is right distributive.
+            ///
+            /// Given quaternions `q1`, `q2`, and `q3`
+            /// ```
+            /// dot(q1, q2 + q3) = dot(q1, q2) + dot(q1, q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_right_distributive(
+                q1 in super::$Generator::<$ScalarType>(),
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+            
+                prop_assert_eq!(q1.dot(q2 + q3), q1.dot(q2) + q1.dot(q3));
+            }
+
+            /// The dot product of quaternions over integer scalars is left distributive.
+            ///
+            /// Given quaternions `q1`, `q2`, and `q3`
+            /// ```
+            /// dot(q1 + q2,  q3) = dot(q1, q3) + dot(q2, q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_left_distributive(
+                q1 in super::$Generator::<$ScalarType>(),
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+            
+                prop_assert_eq!((q1 + q2).dot(q3), q1.dot(q3) + q2.dot(q3));
+            }
+
+            /// The dot product of quaternions over integer scalars is commutative with scalars.
+            ///
+            /// Given quaternions `q1` and `q2`, and scalars `a` and `b`
+            /// ```
+            /// dot(a * q1, b * q2) = a * b * dot(q1, q2)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_times_scalars_commutative(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((a * q1).dot(b * q2), a * b * q1.dot(q2));
+            }
+
+            /// The dot product of quaternions over integer scalars is right bilinear.
+            ///
+            /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
+            /// ```
+            /// dot(q1, a * q2 + b * q3) = a * dot(q1, q2) + b * dot(q1, q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_right_bilinear(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                q1 in super::$Generator::<$ScalarType>(),
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(q1.dot(a * q2 + b * q3), a * q1.dot(q2) + b * q1.dot(q3));
+            }
+
+            /// The dot product of quaternions over integer scalars is left bilinear.
+            ///
+            /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
+            /// ```
+            /// dot(a * q1 + b * q2, q3) = a * dot(q1, q3) + b * dot(q2, q3)
+            /// ```
+            #[test]
+            fn prop_quaternion_dot_product_left_bilinear(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                q1 in super::$Generator::<$ScalarType>(),
+                q2 in super::$Generator::<$ScalarType>(), q3 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((a * q1 + b * q2).dot(q3), a * q1.dot(q3) + b * q2.dot(q3));
+            }
+        }
+    }
+    }
+}
+
+exact_dot_product_props!(quaternion_i32_dot_product_props, i32, any_quaternion);
+exact_dot_product_props!(quaternion_u32_dot_product_props, u32, any_quaternion);
+

@@ -1050,7 +1050,6 @@ macro_rules! approx_dot_product_props {
                 prop_assume!(v.dot(w).is_finite());
                 prop_assume!(w.dot(v).is_finite());
                 prop_assert!(relative_eq!(v.dot(w), w.dot(v), epsilon = $tolerance));
-
             }
 
             /// The dot product of vectors over floating point scalars is 
