@@ -584,7 +584,7 @@ macro_rules! magnitude_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$VectorN, Magnitude};
+        use gdmath::Magnitude;
         use gdmath::approx::{relative_eq, relative_ne};
 
         proptest! {
@@ -651,12 +651,14 @@ macro_rules! magnitude_props {
             /// ```
             /// For the sake of testability, we use the second form to test the magnitude function.
             #[test]
-            fn prop_magnitude_approx_point_separating(v in super::$Generator::<$ScalarType>()) {
-                let zero_vec = <$VectorN<$ScalarType> as gdmath::Zero>::zero();
+            fn prop_magnitude_approx_point_separating(
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                
+                let zero = <$ScalarType as num_traits::Zero>::zero();
 
-                prop_assume!(relative_ne!(v, zero_vec, epsilon = $tolerance));
-                prop_assert!(relative_ne!(v.magnitude(), zero_vec.magnitude(), epsilon = $tolerance),
-                    "\n|v| = {}\n|zero_vec| = {}\n", v.magnitude(), zero_vec.magnitude()
+                prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
+                prop_assert!(relative_ne!((v - w).magnitude(), zero, epsilon = $tolerance),
+                    "\n|v - w| = {}\n", (v - w).magnitude()
                 );
             }
         }
