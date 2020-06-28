@@ -1254,8 +1254,6 @@ macro_rules! conjugation_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::DotProduct;
-        use gdmath::approx::relative_eq;
     
         proptest! {
             /// Conjugating a quaternion twice should give the original quaternion.
@@ -1288,4 +1286,103 @@ macro_rules! conjugation_props {
 }
 
 conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion);
+
+
+/// Generate the properties for quaternion magnitudes.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+macro_rules! magnitude_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::Magnitude;
+        use gdmath::approx::{relative_eq, relative_ne};
+
+        proptest! {
+            #[test]
+            /// The magnitude of a quaternion preserves scales. 
+            /// 
+            /// Given a scalar constant `c`, and a quaternion `q` of scalars, the magnitude function satisfies
+            /// ```
+            /// magnitude(c * q) = abs(c) * magnitude(q)
+            /// ```
+            fn prop_magnitude_preserves_scale(
+                q in super::$Generator::<$ScalarType>(), c in any::<$ScalarType>()) {
+                
+                let abs_c = <$ScalarType as num_traits::Float>::abs(c);                
+                prop_assume!((abs_c * q.magnitude()).is_finite());
+                prop_assume!((c * q).magnitude().is_finite());
+                
+                prop_assert!(
+                    relative_eq!( (c * q).magnitude(), abs_c * q.magnitude(), epsilon = $tolerance),
+                    "\n||c * q|| = {}\n|c| * ||q|| = {}\n", (c * q).magnitude(), abs_c * q.magnitude(),
+                );
+            }
+
+            /// The magnitude of a quaternion is nonnegative. 
+            ///
+            /// Given a quaternion `q`
+            /// ```
+            /// magnitude(q) >= 0
+            /// ```
+            #[test]
+            fn prop_magnitude_nonnegative(q in super::$Generator::<$ScalarType>()) {
+                let zero = <$ScalarType as num_traits::Zero>::zero();
+                prop_assert!(q.magnitude() >= zero);
+            }
+
+            /// The magnitude of a quaternion satisfies the triangle inequality. 
+            ///
+            /// Given a quaternions `q1` and `q2`, the magnitude function satisfies
+            /// ```
+            /// magnitude(q1 + q2) <= magnitude(q1) + magnitude(q2)
+            /// ```
+            #[test]
+            fn prop_magnitude_satisfies_triangle_inequality(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+            
+                prop_assume!((q1 + q2).magnitude().is_finite());
+                prop_assume!((q1.magnitude() + q2.magnitude()).is_finite());
+                prop_assert!((q1 + q2).magnitude() <= q1.magnitude() + q2.magnitude(), 
+                    "\n|q1 + q2| = {}\n|q1| = {}\n|q2| = {}\n|q1| + |q2| = {}\n",
+                    (q1 + q2).magnitude(), q1.magnitude(), q2.magnitude(), q1.magnitude() + q2.magnitude()
+                );
+            }
+
+            /// The magnitude function is point separating. In particular, if the distance between two 
+            /// quaternions `q1` and `q2` is zero, then q1 = q2.
+            ///
+            /// Given quaternions `q1` and `q2`
+            /// ```
+            /// magnitude(q1 - q2) = 0 => q1 = q2 
+            /// ```
+            /// Equivalently, if `q1` is not equal to `q2`, then their distance is nonzero
+            /// ```
+            /// q1 != q2 => magnitude(q1 - q2) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the magnitude function.
+            #[test]
+            fn prop_magnitude_approx_point_separating(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assume!(relative_ne!(q1, q2, epsilon = $tolerance));
+                
+                let zero = <$ScalarType as num_traits::Zero>::zero();
+                prop_assert!(relative_ne!((q1 - q2).magnitude(), zero, epsilon = $tolerance),
+                    "\n|q1 - q2| = {}\n", (q1 - q2).magnitude()
+                );
+            }
+        }
+    }
+    }
+}
+
+magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, 1e-7);
+
 
