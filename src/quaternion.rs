@@ -120,9 +120,9 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         self.magnitude_squared() > S::zero()
     }
 
-    pub fn slerp(q: &mut Quaternion<S>, r: &Quaternion<S>, amount: S) -> Quaternion<S> {
+    pub fn slerp(&mut self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
         // angle between q0-q1
-        let mut cos_half_theta = q.dot(r);
+        let mut cos_half_theta = self.dot(other);
         // as found here
         // http://stackoverflow.com/questions/2886606/flipping-issue-when-interpolating-rotations-using-quaternions
         // if dot product is negative then one quaternion should be negated, to make
@@ -131,16 +131,16 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let zero = S::zero();
         let one = S::one();
         if cos_half_theta < zero {
-            q.s *= -one;
-            q.v.x *= -one;
-            q.v.y *= -one;
-            q.v.z *= -one;
+            self.s *= -one;
+            self.v.x *= -one;
+            self.v.y *= -one;
+            self.v.z *= -one;
 
-            cos_half_theta = q.dot(r);
+            cos_half_theta = self.dot(other);
         }
         // if qa=qb or qa=-qb then theta = 0 and we can return qa
         if S::abs(cos_half_theta) >= one {
-            return *q;
+            return *self;
         }
 
         // Calculate temporary values
@@ -151,10 +151,10 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let threshold = num_traits::cast(0.001).unwrap();
         if S::abs(sin_half_theta) < threshold {
             // linearly interpolate if the arc between quaternions is small enough.
-            result.s   = (one - amount) * q.s   + amount * r.s;
-            result.v.x = (one - amount) * q.v.x + amount * r.v.x;
-            result.v.y = (one - amount) * q.v.y + amount * r.v.y;
-            result.v.z = (one - amount) * q.v.z + amount * r.v.z;
+            result.s   = (one - amount) * self.s   + amount * other.s;
+            result.v.x = (one - amount) * self.v.x + amount * other.v.x;
+            result.v.y = (one - amount) * self.v.y + amount * other.v.y;
+            result.v.z = (one - amount) * self.v.z + amount * other.v.z;
 
             return result;
         }
@@ -162,10 +162,10 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let a = S::sin((one - amount) * half_theta) / sin_half_theta;
         let b = S::sin(amount * half_theta) / sin_half_theta;
         
-        result.s   = q.s   * a + r.s   * b;
-        result.v.x = q.v.x * a + r.v.x * b;
-        result.v.y = q.v.y * a + r.v.y * b;
-        result.v.z = q.v.z * a + r.v.z * b;
+        result.s   = self.s   * a + other.s   * b;
+        result.v.x = self.v.x * a + other.v.x * b;
+        result.v.y = self.v.y * a + other.v.y * b;
+        result.v.z = self.v.z * a + other.v.z * b;
 
         result
     }
@@ -1081,5 +1081,38 @@ mod magnitude_tests {
         let tolerance = 1e-7;
 
         assert!(relative_eq!(result, expected, epsilon = tolerance));
+    }
+}
+
+#[cfg(test)]
+mod slerp_tests {
+    use super::Quaternion;
+    use approx::relative_eq;
+    use structure::Angle;
+    use angle::Degrees;
+    use vector::Vector3;
+
+
+    #[test]
+    fn test_slerp_upper_right_quadrant() {
+        let angle1 = Degrees(30_f64);
+        let angle2 = Degrees(60_f64);
+        let z_hat = Vector3::unit_z();
+        let mut q1 = Quaternion::from_sv(
+            Angle::cos(angle1 / 2_f64), 
+            Angle::sin(angle1 / 2_f64) * z_hat
+        );
+        let q2 = Quaternion::from_sv(
+            Angle::cos(angle2 / 2_f64), 
+            Angle::sin(angle2 / 2_f64) * z_hat
+        );
+        let angle_expected = Degrees(45_f64);
+        let expected = Quaternion::from_sv(
+            Angle::cos(angle_expected / 2_f64), 
+            Angle::sin(angle_expected / 2_f64) * z_hat
+        );
+        let result = q1.slerp(&q2, 0.5);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
 }

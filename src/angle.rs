@@ -11,12 +11,12 @@ use std::ops;
 /// The angle (arc length) along the unit circle in units of radians.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd)]
 #[repr(C)]
-pub struct Radians<S>(S);
+pub struct Radians<S>(pub S);
 
 /// The angle (arc length) along the unit circle in units of degrees.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd)]
 #[repr(C)]
-pub struct Degrees<S>(S);
+pub struct Degrees<S>(pub S);
 
 
 impl<S> From<Degrees<S>> for Radians<S> where S: ScalarFloat {
