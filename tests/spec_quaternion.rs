@@ -1425,6 +1425,23 @@ macro_rules! slerp_props {
                 prop_assume!(q2.is_invertible());
                 prop_assert!(false);
             }
+
+            /// Quaternion spherical linear interpolation should yield the respective
+            /// interpolants at the endpoints.
+            ///
+            /// Given quaternions `q0` and `q1`
+            /// ```
+            /// slerp(q0, q1, 0) = q0
+            /// slerp(q0, q1, 1) = q1
+            /// ```
+            #[test]
+            fn prop_quaternion_slerp_endpoints(
+                q0 in super::$Generator::<$ScalarType>(), q1 in super::$Generator::<$ScalarType>()) {
+
+                //prop_assert_eq!(q0.slerp(q1, 0.0), q0);
+                //prop_assert_eq!(q0.slerp(q1, 1.0), q1);
+                prop_assert!(false);
+            }
         }
     }
     }

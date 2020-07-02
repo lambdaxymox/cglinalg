@@ -1097,19 +1097,42 @@ mod slerp_tests {
     fn test_slerp_upper_right_quadrant() {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(60_f64);
-        let z_hat = Vector3::unit_z();
+        let unit_z = Vector3::unit_z();
         let mut q1 = Quaternion::from_sv(
             Angle::cos(angle1 / 2_f64), 
-            Angle::sin(angle1 / 2_f64) * z_hat
+            Angle::sin(angle1 / 2_f64) * unit_z
         );
         let q2 = Quaternion::from_sv(
             Angle::cos(angle2 / 2_f64), 
-            Angle::sin(angle2 / 2_f64) * z_hat
+            Angle::sin(angle2 / 2_f64) * unit_z
         );
         let angle_expected = Degrees(45_f64);
         let expected = Quaternion::from_sv(
             Angle::cos(angle_expected / 2_f64), 
-            Angle::sin(angle_expected / 2_f64) * z_hat
+            Angle::sin(angle_expected / 2_f64) * unit_z
+        );
+        let result = q1.slerp(&q2, 0.5);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_slerp_upper_half_plane() {
+        let angle1 = Degrees(30_f64);
+        let angle2 = Degrees(60_f64);
+        let unit_z = Vector3::unit_z();
+        let mut q1 = Quaternion::from_sv(
+            Angle::cos(angle1 / 2_f64), 
+            Angle::sin(angle1 / 2_f64) * unit_z
+        );
+        let q2 = Quaternion::from_sv(
+            Angle::cos(angle2 / 2_f64), 
+            Angle::sin(angle2 / 2_f64) * unit_z
+        );
+        let angle_expected = Degrees(45_f64);
+        let expected = Quaternion::from_sv(
+            Angle::cos(angle_expected / 2_f64), 
+            Angle::sin(angle_expected / 2_f64) * unit_z
         );
         let result = q1.slerp(&q2, 0.5);
 
