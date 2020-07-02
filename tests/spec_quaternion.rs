@@ -6,11 +6,20 @@ use proptest::prelude::*;
 use gdmath::{
     Quaternion, 
     Scalar,
+    ScalarFloat,
 };
 
 
 fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> where S: Scalar + Arbitrary {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| Quaternion::new(x, y, z, w))
+}
+
+fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> where S: ScalarFloat + Arbitrary {
+    use gdmath::Magnitude;
+    any::<(S, S, S, S)>()
+        .prop_map(|(x, y, z, w)| Quaternion::new(x, y, z, w))
+        .prop_filter("Zero length quaternions are not invertible.", |q| !q.magnitude().is_zero())
+        .prop_map(|q| q.normalize())
 }
 
 
@@ -1385,4 +1394,41 @@ macro_rules! magnitude_props {
 
 magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, 1e-7);
 
+
+/// Generate the properties for quaternion spherical linear interpolation (slerp).
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+macro_rules! slerp_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+
+        proptest! {
+            /// Quaternion spherical linear interpolation should act like a quaternion rotor
+            /// between two quaternions.
+            ///
+            /// Given quaternions `q1` and `q2`
+            /// ```
+            /// slerp(q1, q2, t) = q1 * (inverse(q1) * q2) ^ t
+            /// ```
+            #[test]
+            fn prop_quaternion_slerp_as_quaternion_rotor(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assume!(q1.is_invertible());
+                prop_assume!(q2.is_invertible());
+                prop_assert!(false);
+            }
+        }
+    }
+    }
+}
+
+slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, 1e-7);
 
