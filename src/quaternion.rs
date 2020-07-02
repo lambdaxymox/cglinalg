@@ -120,6 +120,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         self.magnitude_squared() > S::zero()
     }
 
+    /// Spherically linearly interpolate between two quaternions.
     pub fn slerp(&mut self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
         // angle between q0-q1
         let mut cos_half_theta = self.dot(other);
@@ -147,27 +148,27 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
         // if theta = 180 degrees then result is not fully defined
         // we could rotate around any axis normal to qa or qb
-        let mut result = Quaternion::new(one, zero, zero, zero);
+        // let mut result = Quaternion::new(one, zero, zero, zero);
         let threshold = num_traits::cast(0.001).unwrap();
         if S::abs(sin_half_theta) < threshold {
             // linearly interpolate if the arc between quaternions is small enough.
-            result.s   = (one - amount) * self.s   + amount * other.s;
-            result.v.x = (one - amount) * self.v.x + amount * other.v.x;
-            result.v.y = (one - amount) * self.v.y + amount * other.v.y;
-            result.v.z = (one - amount) * self.v.z + amount * other.v.z;
+            let s   = (one - amount) * self.s   + amount * other.s;
+            let v_x = (one - amount) * self.v.x + amount * other.v.x;
+            let v_y = (one - amount) * self.v.y + amount * other.v.y;
+            let v_z = (one - amount) * self.v.z + amount * other.v.z;
 
-            return result;
+            return Quaternion::new(s, v_x, v_y, v_z);
         }
         let half_theta = S::acos(cos_half_theta);
         let a = S::sin((one - amount) * half_theta) / sin_half_theta;
         let b = S::sin(amount * half_theta) / sin_half_theta;
         
-        result.s   = self.s   * a + other.s   * b;
-        result.v.x = self.v.x * a + other.v.x * b;
-        result.v.y = self.v.y * a + other.v.y * b;
-        result.v.z = self.v.z * a + other.v.z * b;
+        let s   = self.s   * a + other.s   * b;
+        let v_x = self.v.x * a + other.v.x * b;
+        let v_y = self.v.y * a + other.v.y * b;
+        let v_z = self.v.z * a + other.v.z * b;
 
-        result
+        Quaternion::new(s, v_x, v_y, v_z)
     }
 
 }
