@@ -3,7 +3,6 @@ use structure::{
     Storage,
     Zero,
     One,
-    VectorSpace,
     //ProjectOn,
     DotProduct,
     Magnitude,
