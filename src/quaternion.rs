@@ -121,36 +121,53 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Spherically linearly interpolate between two unit quaternions.
+    ///
+    /// In the case where the angle between quaternions is `180 degrees`, the
+    /// slerp function is not well defined because we can rotate about any axis
+    /// normal to the plane swept out by the quaternions to get from one to the other.
+    /// The vector normal to the quaternions is not unique in this case.
     pub fn slerp(&self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
         let zero = S::zero();
         let one = S::one();
-        // angle between q0-q1
-        // as found here
-        // http://stackoverflow.com/questions/2886606/flipping-issue-when-interpolating-rotations-using-quaternions
-        // if dot product is negative then one quaternion should be negated, to make
-        // it take the short way around, rather than the long way
-        // yeah! and furthermore Susan, I had to recalculate the d.p. after this
-        let (cos_half_theta, result) = if self.dot(other) < zero {
-            ((self * -one).dot(other), self * -one)
+        // There are two possible routes along a great circle arc between two quaternions on the three-sphere.
+        // By definition the slerp function computes the shortest path between two points on a sphere, hence
+        // we must determine which of two directions around the great circle arc swept out by the slerp
+        // function is the shortest one. 
+        let (result, cos_half_theta) = if self.dot(other) < zero {
+            // If the dot product is negative, the shortest path between two points on the great circle arc
+            // swept out by the quaternions runs in the opposite direction from the positive case, so we
+            // must negate one of the quaterions to take the short way around instead of the long way around.
+            let _result = self * -one;
+            (_result, (_result).dot(other))
         } else {
-            (self.dot(other), *self)
+            (*self, self.dot(other))
         };
 
-        // if qa=qb or qa=-qb then theta = 0 and we can return qa
+        // We have two opportunities for performance optimizations:
+        //
+        // If `result` == `other`, there is no curve to interpolate; the angle between `result` and 
+        // `other` is zero. In this case we can return `result`.
         if S::abs(cos_half_theta) >= one {
             return result;
         }
 
-        // Calculate temporary values
+        // If `result` == `-other` then the angle between them is 180 degrees.
+        // In this case the slerp function is not well defined because we can 
+        // rotate around any axis normal to the plane swept out by `result` and `other`.
+        //
+        // For very small angles, `sin_half_theta` is approximately equal to the angle `half_theta`.
+        // That is, `sin(theta / 2) ~= theta / 2` as `theta -> 0`.
+        // Therefore, we can use the sine of the angle between two quaternions to determine when to
+        // approximate spherical linear interpolation with normalized linear interpolation.
+        // Using the sine of the angle is also cheaper to calculate since we can derive it from the
+        // cosine we already calculated instead of calculating the angle from an inverse trigonometric
+        // function.
         let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
-        // if theta = 180 degrees then result is not fully defined
-        // we could rotate around any axis normal to qa or qb
-        // let mut result = Quaternion::new(one, zero, zero, zero);
         let threshold = num_traits::cast(0.001).unwrap();
         if S::abs(sin_half_theta) < threshold {
-            // Linearly interpolate if the arc between quaternions is small enough.
             return result.nlerp(other, amount);
         }
+        
         let half_theta = S::acos(cos_half_theta);
         let a = S::sin((one - amount) * half_theta) / sin_half_theta;
         let b = S::sin(amount * half_theta) / sin_half_theta;
