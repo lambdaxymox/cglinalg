@@ -1420,6 +1420,7 @@ macro_rules! slerp_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
+        use gdmath::Slerp;
 
         proptest! {
             /// Quaternion spherical linear interpolation should act like a quaternion rotor
@@ -1450,9 +1451,8 @@ macro_rules! slerp_props {
             fn prop_quaternion_slerp_endpoints(
                 q0 in super::$Generator::<$ScalarType>(), q1 in super::$Generator::<$ScalarType>()) {
 
-                //prop_assert_eq!(q0.slerp(q1, 0.0), q0);
-                //prop_assert_eq!(q0.slerp(q1, 1.0), q1);
-                prop_assert!(false);
+                prop_assert_eq!(q0.slerp(q1, 0.0), q0);
+                prop_assert_eq!(q0.slerp(q1, 1.0), q1);
             }
         }
     }
