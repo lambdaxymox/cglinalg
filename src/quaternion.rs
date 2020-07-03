@@ -133,9 +133,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let one = S::one();
         if cos_half_theta < zero {
             self.s *= -one;
-            self.v.x *= -one;
-            self.v.y *= -one;
-            self.v.z *= -one;
+            self.v *= -one;
 
             cos_half_theta = self.dot(other);
         }

@@ -1280,7 +1280,6 @@ macro_rules! conjugation_props {
             ///
             /// Given quaternions `q1` and `q2`, quaternion conjugation satisfies
             /// ```
-            /// (q1 + q2)* = q1* + q2*
             /// conjugate(q1 + q2) = conjugate(q1) + conjugate(q2)
             /// ```
             #[test]
@@ -1289,6 +1288,19 @@ macro_rules! conjugation_props {
 
                 prop_assert_eq!((q1 + q2).conjugate(), q1.conjugate() + q2.conjugate());
             }
+
+            /// Quaternion multiplication transposes under conjugation.
+            ///
+            /// Given quaternions `q1` and `q2`
+            /// ```
+            /// conjugate(q1 * q2) = conjugate(q2) * conjugate(q1)
+            /// ```
+            #[test]
+            fn prop_quaternion_conjugation_transposes_products(
+                q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((q1 * q2).conjugate(), q2.conjugate() * q1.conjugate());
+            } 
         }
     }
     }
