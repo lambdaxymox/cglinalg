@@ -141,6 +141,16 @@ pub trait Nlerp<V: Copy + Clone> {
 
     /// Compute the normalized linear interpolation between two vectors.
     fn nlerp(self, other: V, amount: Self::Scalar) -> Self::Output;
+}
+
+/// A vector or quaternion with this trait can perform spherical linear interpolation
+/// between two elements of that type on the unit sphere.
+pub trait Slerp<V: Copy + Clone> {
+    type Scalar: Scalar;
+    type Output;
+
+    /// Spherically linearly interpolate between two unit elements.
+    fn slerp(self, other: V, amount: Self::Scalar) -> Self::Output;
 } 
 
 pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {

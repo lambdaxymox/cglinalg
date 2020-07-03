@@ -10,6 +10,7 @@ use structure::{
     Nlerp,
     Metric,
     Finite,
+    Slerp,
 };
 use angle::{
     Radians,
@@ -558,6 +559,44 @@ impl<'a, 'b, S> ops::Mul<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
     }
 }
 
+macro_rules! impl_mul_operator {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $scalar:ident, { $($field:ident),* } }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            }
+        }
+    }
+}
+
+impl_mul_operator!(u8,    Quaternion<u8>,    Quaternion<u8>,    { s, { x, y, z } });
+impl_mul_operator!(u16,   Quaternion<u16>,   Quaternion<u16>,   { s, { x, y, z } });
+impl_mul_operator!(u32,   Quaternion<u32>,   Quaternion<u32>,   { s, { x, y, z } });
+impl_mul_operator!(u64,   Quaternion<u64>,   Quaternion<u64>,   { s, { x, y, z } });
+impl_mul_operator!(u128,  Quaternion<u128>,  Quaternion<u128>,  { s, { x, y, z } });
+impl_mul_operator!(usize, Quaternion<usize>, Quaternion<usize>, { s, { x, y, z } });
+impl_mul_operator!(i8,    Quaternion<i8>,    Quaternion<i8>,    { s, { x, y, z } });
+impl_mul_operator!(i16,   Quaternion<i16>,   Quaternion<i16>,   { s, { x, y, z } });
+impl_mul_operator!(i32,   Quaternion<i32>,   Quaternion<i32>,   { s, { x, y, z } });
+impl_mul_operator!(i64,   Quaternion<i64>,   Quaternion<i64>,   { s, { x, y, z } });
+impl_mul_operator!(i128,  Quaternion<i128>,  Quaternion<i128>,  { s, { x, y, z } });
+impl_mul_operator!(isize, Quaternion<isize>, Quaternion<isize>, { s, { x, y, z } });
+impl_mul_operator!(f32,   Quaternion<f32>,   Quaternion<f32>,   { s, { x, y, z } });
+impl_mul_operator!(f64,   Quaternion<f64>,   Quaternion<f64>,   { s, { x, y, z } });
+
+
 impl<S> ops::Div<S> for Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
@@ -823,43 +862,270 @@ impl<'a, 'b, S> Nlerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFl
     }
 }
 
-macro_rules! impl_mul_operator {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $scalar:ident, { $($field:ident),* } }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
 
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
-            }
+impl<S> Slerp<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
+    /// Spherically linearly interpolate between two unit quaternions.
+    ///
+    /// In the case where the angle between quaternions is `180 degrees`, the
+    /// slerp function is not well defined because we can rotate about any axis
+    /// normal to the plane swept out by the quaternions to get from one to the other.
+    /// The vector normal to the quaternions is not unique in this case.
+    fn slerp(self, other: Quaternion<S>, amount: S) -> Quaternion<S> {
+        let zero = S::zero();
+        let one = S::one();
+        // There are two possible routes along a great circle arc between two quaternions on the three-sphere.
+        // By definition the slerp function computes the shortest path between two points on a sphere, hence
+        // we must determine which of two directions around the great circle arc swept out by the slerp
+        // function is the shortest one. 
+        let (result, cos_half_theta) = if self.dot(other) < zero {
+            // If the dot product is negative, the shortest path between two points on the great circle arc
+            // swept out by the quaternions runs in the opposite direction from the positive case, so we
+            // must negate one of the quaterions to take the short way around instead of the long way around.
+            let _result = self * -one;
+            (_result, (_result).dot(other))
+        } else {
+            let _result = self;
+            (_result, _result.dot(other))
+        };
+
+        // We have two opportunities for performance optimizations:
+        //
+        // If `result` == `other`, there is no curve to interpolate; the angle between `result` and 
+        // `other` is zero. In this case we can return `result`.
+        if S::abs(cos_half_theta) >= one {
+            return result;
         }
 
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
-            }
+        // If `result` == `-other` then the angle between them is 180 degrees.
+        // In this case the slerp function is not well defined because we can 
+        // rotate around any axis normal to the plane swept out by `result` and `other`.
+        //
+        // For very small angles, `sin_half_theta` is approximately equal to the angle `half_theta`.
+        // That is, `sin(theta / 2) ~= theta / 2` as `theta -> 0`.
+        // Therefore, we can use the sine of the angle between two quaternions to determine when to
+        // approximate spherical linear interpolation with normalized linear interpolation.
+        // Using the sine of the angle is also cheaper to calculate since we can derive it from the
+        // cosine we already calculated instead of calculating the angle from an inverse trigonometric
+        // function.
+        let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
+        let threshold = num_traits::cast(0.001).unwrap();
+        if S::abs(sin_half_theta) < threshold {
+            return result.nlerp(other, amount);
         }
+        
+        let half_theta = S::acos(cos_half_theta);
+        let a = S::sin((one - amount) * half_theta) / sin_half_theta;
+        let b = S::sin(amount * half_theta) / sin_half_theta;
+        
+        let s   = result.s   * a + other.s   * b;
+        let v_x = result.v.x * a + other.v.x * b;
+        let v_y = result.v.y * a + other.v.y * b;
+        let v_z = result.v.z * a + other.v.z * b;
+
+        Quaternion::new(s, v_x, v_y, v_z)
     }
 }
 
-impl_mul_operator!(u8,    Quaternion<u8>,    Quaternion<u8>,    { s, { x, y, z } });
-impl_mul_operator!(u16,   Quaternion<u16>,   Quaternion<u16>,   { s, { x, y, z } });
-impl_mul_operator!(u32,   Quaternion<u32>,   Quaternion<u32>,   { s, { x, y, z } });
-impl_mul_operator!(u64,   Quaternion<u64>,   Quaternion<u64>,   { s, { x, y, z } });
-impl_mul_operator!(u128,  Quaternion<u128>,  Quaternion<u128>,  { s, { x, y, z } });
-impl_mul_operator!(usize, Quaternion<usize>, Quaternion<usize>, { s, { x, y, z } });
-impl_mul_operator!(i8,    Quaternion<i8>,    Quaternion<i8>,    { s, { x, y, z } });
-impl_mul_operator!(i16,   Quaternion<i16>,   Quaternion<i16>,   { s, { x, y, z } });
-impl_mul_operator!(i32,   Quaternion<i32>,   Quaternion<i32>,   { s, { x, y, z } });
-impl_mul_operator!(i64,   Quaternion<i64>,   Quaternion<i64>,   { s, { x, y, z } });
-impl_mul_operator!(i128,  Quaternion<i128>,  Quaternion<i128>,  { s, { x, y, z } });
-impl_mul_operator!(isize, Quaternion<isize>, Quaternion<isize>, { s, { x, y, z } });
-impl_mul_operator!(f32,   Quaternion<f32>,   Quaternion<f32>,   { s, { x, y, z } });
-impl_mul_operator!(f64,   Quaternion<f64>,   Quaternion<f64>,   { s, { x, y, z } });
+impl<'a, S> Slerp<&'a Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
 
+    /// Spherically linearly interpolate between two unit quaternions.
+    ///
+    /// In the case where the angle between quaternions is `180 degrees`, the
+    /// slerp function is not well defined because we can rotate about any axis
+    /// normal to the plane swept out by the quaternions to get from one to the other.
+    /// The vector normal to the quaternions is not unique in this case.
+    fn slerp(self, other: &'a Quaternion<S>, amount: S) -> Quaternion<S> {
+        let zero = S::zero();
+        let one = S::one();
+        // There are two possible routes along a great circle arc between two quaternions on the three-sphere.
+        // By definition the slerp function computes the shortest path between two points on a sphere, hence
+        // we must determine which of two directions around the great circle arc swept out by the slerp
+        // function is the shortest one. 
+        let (result, cos_half_theta) = if self.dot(other) < zero {
+            // If the dot product is negative, the shortest path between two points on the great circle arc
+            // swept out by the quaternions runs in the opposite direction from the positive case, so we
+            // must negate one of the quaterions to take the short way around instead of the long way around.
+            let _result = self * -one;
+            (_result, (_result).dot(other))
+        } else {
+            let _result = self;
+            (_result, _result.dot(other))
+        };
+
+        // We have two opportunities for performance optimizations:
+        //
+        // If `result` == `other`, there is no curve to interpolate; the angle between `result` and 
+        // `other` is zero. In this case we can return `result`.
+        if S::abs(cos_half_theta) >= one {
+            return result;
+        }
+
+        // If `result` == `-other` then the angle between them is 180 degrees.
+        // In this case the slerp function is not well defined because we can 
+        // rotate around any axis normal to the plane swept out by `result` and `other`.
+        //
+        // For very small angles, `sin_half_theta` is approximately equal to the angle `half_theta`.
+        // That is, `sin(theta / 2) ~= theta / 2` as `theta -> 0`.
+        // Therefore, we can use the sine of the angle between two quaternions to determine when to
+        // approximate spherical linear interpolation with normalized linear interpolation.
+        // Using the sine of the angle is also cheaper to calculate since we can derive it from the
+        // cosine we already calculated instead of calculating the angle from an inverse trigonometric
+        // function.
+        let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
+        let threshold = num_traits::cast(0.001).unwrap();
+        if S::abs(sin_half_theta) < threshold {
+            return result.nlerp(other, amount);
+        }
+        
+        let half_theta = S::acos(cos_half_theta);
+        let a = S::sin((one - amount) * half_theta) / sin_half_theta;
+        let b = S::sin(amount * half_theta) / sin_half_theta;
+        
+        let s   = result.s   * a + other.s   * b;
+        let v_x = result.v.x * a + other.v.x * b;
+        let v_y = result.v.y * a + other.v.y * b;
+        let v_z = result.v.z * a + other.v.z * b;
+
+        Quaternion::new(s, v_x, v_y, v_z)
+    }
+}
+
+impl<'a, S> Slerp<Quaternion<S>> for &'a Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
+    /// Spherically linearly interpolate between two unit quaternions.
+    ///
+    /// In the case where the angle between quaternions is `180 degrees`, the
+    /// slerp function is not well defined because we can rotate about any axis
+    /// normal to the plane swept out by the quaternions to get from one to the other.
+    /// The vector normal to the quaternions is not unique in this case.
+    fn slerp(self, other: Quaternion<S>, amount: S) -> Quaternion<S> {
+        let zero = S::zero();
+        let one = S::one();
+        // There are two possible routes along a great circle arc between two quaternions on the three-sphere.
+        // By definition the slerp function computes the shortest path between two points on a sphere, hence
+        // we must determine which of two directions around the great circle arc swept out by the slerp
+        // function is the shortest one. 
+        let (result, cos_half_theta) = if self.dot(other) < zero {
+            // If the dot product is negative, the shortest path between two points on the great circle arc
+            // swept out by the quaternions runs in the opposite direction from the positive case, so we
+            // must negate one of the quaterions to take the short way around instead of the long way around.
+            let _result = self * -one;
+            (_result, (_result).dot(other))
+        } else {
+            let _result = *self;
+            (_result, _result.dot(other))
+        };
+
+        // We have two opportunities for performance optimizations:
+        //
+        // If `result` == `other`, there is no curve to interpolate; the angle between `result` and 
+        // `other` is zero. In this case we can return `result`.
+        if S::abs(cos_half_theta) >= one {
+            return result;
+        }
+
+        // If `result` == `-other` then the angle between them is 180 degrees.
+        // In this case the slerp function is not well defined because we can 
+        // rotate around any axis normal to the plane swept out by `result` and `other`.
+        //
+        // For very small angles, `sin_half_theta` is approximately equal to the angle `half_theta`.
+        // That is, `sin(theta / 2) ~= theta / 2` as `theta -> 0`.
+        // Therefore, we can use the sine of the angle between two quaternions to determine when to
+        // approximate spherical linear interpolation with normalized linear interpolation.
+        // Using the sine of the angle is also cheaper to calculate since we can derive it from the
+        // cosine we already calculated instead of calculating the angle from an inverse trigonometric
+        // function.
+        let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
+        let threshold = num_traits::cast(0.001).unwrap();
+        if S::abs(sin_half_theta) < threshold {
+            return result.nlerp(other, amount);
+        }
+        
+        let half_theta = S::acos(cos_half_theta);
+        let a = S::sin((one - amount) * half_theta) / sin_half_theta;
+        let b = S::sin(amount * half_theta) / sin_half_theta;
+        
+        let s   = result.s   * a + other.s   * b;
+        let v_x = result.v.x * a + other.v.x * b;
+        let v_y = result.v.y * a + other.v.y * b;
+        let v_z = result.v.z * a + other.v.z * b;
+
+        Quaternion::new(s, v_x, v_y, v_z)
+    }
+}
+
+impl<'a, 'b, S> Slerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
+    type Scalar = S;
+    type Output = Quaternion<S>;
+
+    /// Spherically linearly interpolate between two unit quaternions.
+    ///
+    /// In the case where the angle between quaternions is `180 degrees`, the
+    /// slerp function is not well defined because we can rotate about any axis
+    /// normal to the plane swept out by the quaternions to get from one to the other.
+    /// The vector normal to the quaternions is not unique in this case.
+    fn slerp(self, other: &'a Quaternion<S>, amount: S) -> Quaternion<S> {
+        let zero = S::zero();
+        let one = S::one();
+        // There are two possible routes along a great circle arc between two quaternions on the three-sphere.
+        // By definition the slerp function computes the shortest path between two points on a sphere, hence
+        // we must determine which of two directions around the great circle arc swept out by the slerp
+        // function is the shortest one. 
+        let (result, cos_half_theta) = if self.dot(other) < zero {
+            // If the dot product is negative, the shortest path between two points on the great circle arc
+            // swept out by the quaternions runs in the opposite direction from the positive case, so we
+            // must negate one of the quaterions to take the short way around instead of the long way around.
+            let _result = self * -one;
+            (_result, (_result).dot(other))
+        } else {
+            let _result = *self;
+            (_result, _result.dot(other))
+        };
+
+        // We have two opportunities for performance optimizations:
+        //
+        // If `result` == `other`, there is no curve to interpolate; the angle between `result` and 
+        // `other` is zero. In this case we can return `result`.
+        if S::abs(cos_half_theta) >= one {
+            return result;
+        }
+
+        // If `result` == `-other` then the angle between them is 180 degrees.
+        // In this case the slerp function is not well defined because we can 
+        // rotate around any axis normal to the plane swept out by `result` and `other`.
+        //
+        // For very small angles, `sin_half_theta` is approximately equal to the angle `half_theta`.
+        // That is, `sin(theta / 2) ~= theta / 2` as `theta -> 0`.
+        // Therefore, we can use the sine of the angle between two quaternions to determine when to
+        // approximate spherical linear interpolation with normalized linear interpolation.
+        // Using the sine of the angle is also cheaper to calculate since we can derive it from the
+        // cosine we already calculated instead of calculating the angle from an inverse trigonometric
+        // function.
+        let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
+        let threshold = num_traits::cast(0.001).unwrap();
+        if S::abs(sin_half_theta) < threshold {
+            return result.nlerp(other, amount);
+        }
+        
+        let half_theta = S::acos(cos_half_theta);
+        let a = S::sin((one - amount) * half_theta) / sin_half_theta;
+        let b = S::sin(amount * half_theta) / sin_half_theta;
+        
+        let s   = result.s   * a + other.s   * b;
+        let v_x = result.v.x * a + other.v.x * b;
+        let v_y = result.v.y * a + other.v.y * b;
+        let v_z = result.v.z * a + other.v.z * b;
+
+        Quaternion::new(s, v_x, v_y, v_z)
+    }
+}
 
 impl<S> approx::AbsDiffEq for Quaternion<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
