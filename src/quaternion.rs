@@ -51,29 +51,6 @@ impl<S> Quaternion<S> where S: Scalar {
     pub fn from_sv(s: S, v: Vector3<S>) -> Quaternion<S> {
         Quaternion { s: s, v: v }
     }
-}
-
-impl<S> Quaternion<S> where S: ScalarFloat {
-    /// Compute a quaternion corresponding to rotating about an axis in radians.
-    pub fn from_axis_rad(radians: Radians<S>, axis: Vector3<S>) -> Quaternion<S> {
-        let two = S::one() + S::one();
-        Quaternion::new(
-            Radians::cos(radians / two),
-            Radians::sin(radians / two) * axis.x,
-            Radians::sin(radians / two) * axis.y,
-            Radians::sin(radians / two) * axis.z,
-        )
-    }
-
-    /// Compute a quaternion corresponding to rotating about an axis in degrees.
-    pub fn from_axis_deg(degrees: Degrees<S>, axis: Vector3<S>) -> Quaternion<S> {
-        Self::from_axis_rad(degrees.into(), axis)
-    }
-
-    /// Compute the conjugate of a quaternion.
-    pub fn conjugate(&self) -> Quaternion<S> {
-        Quaternion::from_sv(self.s, -self.v)
-    }
 
     /// Convert a quaternion to its equivalent matrix form using .
     pub fn to_mut_mat4(&self, m: &mut Matrix4<S>) {
@@ -100,6 +77,29 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         m.c3r1 = zero;
         m.c3r2 = zero;
         m.c3r3 = one;
+    }
+}
+
+impl<S> Quaternion<S> where S: ScalarFloat {
+    /// Compute a quaternion corresponding to rotating about an axis in radians.
+    pub fn from_axis_rad(radians: Radians<S>, axis: Vector3<S>) -> Quaternion<S> {
+        let two = S::one() + S::one();
+        Quaternion::new(
+            Radians::cos(radians / two),
+            Radians::sin(radians / two) * axis.x,
+            Radians::sin(radians / two) * axis.y,
+            Radians::sin(radians / two) * axis.z,
+        )
+    }
+
+    /// Compute a quaternion corresponding to rotating about an axis in degrees.
+    pub fn from_axis_deg(degrees: Degrees<S>, axis: Vector3<S>) -> Quaternion<S> {
+        Self::from_axis_rad(degrees.into(), axis)
+    }
+
+    /// Compute the conjugate of a quaternion.
+    pub fn conjugate(&self) -> Quaternion<S> {
+        Quaternion::from_sv(self.s, -self.v)
     }
 
     /// Compute the inverse of a quaternion.
@@ -132,9 +132,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let zero = S::zero();
         let one = S::one();
         if cos_half_theta < zero {
-            self.s *= -one;
-            self.v *= -one;
-
+            *self *= -one;
             cos_half_theta = self.dot(other);
         }
         // if qa=qb or qa=-qb then theta = 0 and we can return qa
