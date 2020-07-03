@@ -151,13 +151,8 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         // let mut result = Quaternion::new(one, zero, zero, zero);
         let threshold = num_traits::cast(0.001).unwrap();
         if S::abs(sin_half_theta) < threshold {
-            // linearly interpolate if the arc between quaternions is small enough.
-            let s   = (one - amount) * self.s   + amount * other.s;
-            let v_x = (one - amount) * self.v.x + amount * other.v.x;
-            let v_y = (one - amount) * self.v.y + amount * other.v.y;
-            let v_z = (one - amount) * self.v.z + amount * other.v.z;
-
-            return Quaternion::new(s, v_x, v_y, v_z);
+            // Linearly interpolate if the arc between quaternions is small enough.
+            return self.nlerp(other, amount);
         }
         let half_theta = S::acos(cos_half_theta);
         let a = S::sin((one - amount) * half_theta) / sin_half_theta;
