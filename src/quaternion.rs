@@ -52,7 +52,7 @@ impl<S> Quaternion<S> where S: Scalar {
         Quaternion { s: s, v: v }
     }
 
-    /// Convert a quaternion to its equivalent matrix form using .
+    /// Convert a quaternion to its equivalent matrix form writing the terms into preallocated storage.
     pub fn to_mut_mat4(&self, m: &mut Matrix4<S>) {
         let s = self.s;
         let x = self.v.x;
@@ -138,7 +138,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
         // if qa=qb or qa=-qb then theta = 0 and we can return qa
         if S::abs(cos_half_theta) >= one {
-            return *self;
+            return result;
         }
 
         // Calculate temporary values
