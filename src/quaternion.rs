@@ -116,6 +116,8 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Determine whether a quaternion is invertible.
+    ///
+    /// Returns `true` is there exists a quaternion `r` such that `q * r = 1`.
     pub fn is_invertible(&self) -> bool {
         self.magnitude_squared() > S::zero()
     }
@@ -1108,7 +1110,7 @@ mod slerp_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(60_f64);
         let unit_z = Vector3::unit_z();
-        let mut q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_sv(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
@@ -1131,7 +1133,7 @@ mod slerp_tests {
         let angle1 = Degrees(20_f64);
         let angle2 = Degrees(70_f64);
         let unit_z = Vector3::unit_z();
-        let mut q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_sv(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
@@ -1154,7 +1156,7 @@ mod slerp_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(150_f64);
         let unit_z = Vector3::unit_z();
-        let mut q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_sv(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
@@ -1177,7 +1179,7 @@ mod slerp_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(240_f64);
         let unit_z = Vector3::unit_z();
-        let mut q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_sv(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
