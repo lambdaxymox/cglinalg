@@ -130,3 +130,35 @@ macro_rules! approx_arithmetic_props {
 
 approx_arithmetic_props!(radians_f64_arithmetic_props, Radians, f64, any_radians, 1e-7);
 approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees, 1e-7);
+
+/// Generate the properties for typed angle trigonometry over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$AngleType` is the name of the typed angle type, e.g. Radians or Degrees.
+/// `$ScalarType` denotes the underlying system of numbers that compose the typed angles.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
+macro_rules! approx_trigonometry_props {
+    ($TestModuleName:ident, $AngleType:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::approx::relative_eq;
+        use gdmath::{$AngleType, Zero};
+    
+        proptest! {
+
+        }
+    }
+    }
+}
+
+approx_trigonometry_props!(radians_f64_trigonometry_props, Radians, f64, any_radians, 1e-7);
+approx_trigonometry_props!(degrees_f64_trigonometry_props, Radians, f64, any_radians, 1e-7);
+
