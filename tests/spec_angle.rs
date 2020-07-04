@@ -66,6 +66,54 @@ macro_rules! approx_arithmetic_props {
 
                 prop_assert!(relative_eq!(angle1 * angle2, angle2 * angle1, epsilon = $tolerance));
             }
+
+            /// Angle arithmetic is approximately distributive.
+            /// 
+            /// Given typed angles `angle1`, `angle2, and `angle3`
+            /// ```
+            /// angle1 * (angle2 + angle3) = angle1 * angle2 + angle1 * angle3
+            /// ```
+            #[test]
+            fn prop_angle_arithmetic_distributive(
+                angle1 in super::$Generator::<$ScalarType>(), 
+                angle2 in super::$Generator::<$ScalarType>(), angle3 in super::$Generator::<$ScalarType>()) {
+            
+                prop_assert!(relative_eq!(
+                    angle1 * (angle2 + angle3), angle1 * angle2 + angle1 * angle3, epsilon = $tolerance)
+                );
+            }
+
+            /// Angle addition is approximately associative.
+            /// 
+            /// Given typed angles `angle1`, `angle2, and `angle3`
+            /// ```
+            /// (angle1 + angle2) + angle3 ~= angle1 + (angle2 + angle3)
+            /// ```
+            #[test]
+            fn prop_angle_addition_associative(
+                angle1 in super::$Generator::<$ScalarType>(), 
+                angle2 in super::$Generator::<$ScalarType>(), angle3 in super::$Generator::<$ScalarType>()) {
+            
+                prop_assert!(
+                    relative_eq!((angle1 + angle2) + angle3, angle1 + (angle2 + angle3), epsilon = $tolerance)
+                );
+            }
+
+            /// Angle multiplication is approximately associative.
+            ///
+            /// Given typed angles `angle1`, `angle2`, and `angle3`
+            /// ```
+            /// (angle1 * angle2) * angle3 ~= angle1 * (angle2 * angle3)
+            /// ```
+            #[test]
+            fn prop_angle_multiplication_associative(
+                angle1 in super::$Generator::<$ScalarType>(), 
+                angle2 in super::$Generator::<$ScalarType>(), angle3 in super::$Generator::<$ScalarType>()) {
+            
+                prop_assert!(
+                    relative_eq!((angle1 * angle2) * angle3, angle1 * (angle2 * angle3), epsilon = $tolerance)
+                );
+            }
         }
     }
     }
