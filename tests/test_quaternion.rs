@@ -4,6 +4,28 @@ extern crate proptest;
 
 
 #[cfg(test)]
+mod storage_tests {
+    use gdmath::Quaternion;
+
+    #[test]
+    fn test_as_ref() {
+        let v: Quaternion<i32> = Quaternion::new(1, 2, 3, 4);
+        let v_ref: &[i32; 4] = v.as_ref();
+        assert_eq!(v_ref, &[1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn test_indices_match_components() {
+        let q = Quaternion::new(1, 2, 3, 4);
+        assert_eq!(q[0], q.s);
+        assert_eq!(q[1], q.v.x);
+        assert_eq!(q[2], q.v.y);
+        assert_eq!(q[3], q.v.z);
+    }
+
+}
+
+#[cfg(test)]
 mod lerp_tests {
     use gdmath::{
         Quaternion,

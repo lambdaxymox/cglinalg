@@ -35,9 +35,9 @@ use std::ops;
 #[repr(C)]
 pub struct Quaternion<S> {
     /// The scalar component.
-    s: S,
+    pub s: S,
     /// The vector component.
-    v: Vector3<S>,
+    pub v: Vector3<S>,
 }
 
 impl<S> Quaternion<S> where S: Scalar {
@@ -165,6 +165,40 @@ impl<S> AsMut<[S; 4]> for Quaternion<S> where S: Scalar {
 impl<S> AsMut<(S, S, S, S)> for Quaternion<S> where S: Scalar {
     fn as_mut(&mut self) -> &mut (S, S, S, S) {
         unsafe { mem::transmute(self) }
+    }
+}
+
+impl<S> Storage for Quaternion<S> where S: Scalar {
+    type Element = S;
+
+    #[inline]
+    fn len() -> usize {
+        4
+    }
+
+    #[inline]
+    fn shape() -> (usize, usize) {
+        (4, 1)
+    }
+
+    #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Quaternion::new(S::zero(), value, value, value)
+    }
+
+    #[inline]
+    fn as_ptr(&self) -> *const Self::Element {
+        &self.s
+    }
+
+    #[inline]
+    fn as_mut_ptr(&mut self) -> *mut Self::Element {
+        &mut self.s
+    }
+
+    #[inline]
+    fn as_slice(&self) -> &[Self::Element] {
+        <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
     }
 }
 

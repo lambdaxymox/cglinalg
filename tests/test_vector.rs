@@ -619,22 +619,6 @@ mod vector4_tests {
     }
 
     #[test]
-    fn test_as_ref() {
-        let v: Vector4<i32> = Vector4::new(1, 2, 3, 4);
-        let v_ref: &[i32; 4] = v.as_ref();
-        assert_eq!(v_ref, &[1, 2, 3, 4]);
-    }
-
-    #[test]
-    fn test_indexes_and_variables() {
-        let v = Vector4::new(1, 2, 3, 4);
-        assert_eq!(v[0], v.x);
-        assert_eq!(v[1], v.y);
-        assert_eq!(v[2], v.z);
-        assert_eq!(v[3], v.w);
-    }
-
-    #[test]
     fn test_as_mut() {
         let mut v: Vector4<i32> = Vector4::new(1, 2, 3, 4);
         let v_ref: &mut [i32; 4] = v.as_mut();
@@ -659,6 +643,13 @@ mod vector4_tests {
     fn test_zero_vector_zero_magnitude() {
         let zero: Vector4<f32> = Vector4::zero();
         assert_eq!(zero.magnitude(), 0_f32);
+    }
+
+    #[test]
+    fn test_as_ref() {
+        let v: Vector4<i32> = Vector4::new(1, 2, 3, 4);
+        let v_ref: &[i32; 4] = v.as_ref();
+        assert_eq!(v_ref, &[1, 2, 3, 4]);
     }
 
     #[test]
