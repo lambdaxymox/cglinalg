@@ -6,9 +6,7 @@ use proptest::prelude::*;
 use gdmath::{
     Degrees,
     Radians,
-    Angle, 
     Scalar,
-    ScalarFloat,
 };
 
 
