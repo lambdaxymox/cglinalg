@@ -5,7 +5,6 @@ use base::{
 use structure::{
     Storage,
     Zero,
-    VectorSpace,
     //ProjectOn,
     DotProduct,
     Magnitude,
@@ -494,10 +493,6 @@ impl<S> Zero for Vector1<S> where S: Scalar {
     fn is_zero(&self) -> bool {
         self.x == S::zero()
     }
-}
-
-impl<S> VectorSpace for Vector1<S> where S: Scalar {
-    type Scalar = S;
 }
 
 impl<S> DotProduct<Vector1<S>> for Vector1<S> where S: Scalar {

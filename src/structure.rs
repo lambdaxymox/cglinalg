@@ -71,18 +71,6 @@ pub trait Finite {
     fn is_not_finite(self) -> bool;
 }
 
-pub trait VectorSpace where
-    Self: Copy + Clone,
-    Self: Zero,
-    Self: ops::Add<Self, Output = Self>, 
-    Self: ops::Sub<Self, Output = Self>,
-    Self: ops::Mul<<Self as VectorSpace>::Scalar, Output = Self>,
-    Self: ops::Div<<Self as VectorSpace>::Scalar, Output = Self>,
-    Self: ops::Rem<<Self as VectorSpace>::Scalar, Output = Self>
-{
-    type Scalar: Scalar;
-}
-
 /// A type with this trait has a notion of comparing the distance (metric) between
 /// two elements of that type. For example, one can use this trait to compute the 
 /// Euclidean distance between two vectors. 
