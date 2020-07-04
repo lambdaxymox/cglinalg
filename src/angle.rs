@@ -1089,11 +1089,12 @@ mod radians_arithmetic_tests {
     }
 
     /// The remainder of an angle by a modulus smaller than the modulus should be
-    /// the same as the original angle. That is, angles satisfy
+    /// the same as the original angle.
+    ///
+    /// That is, given an angle `angle` smaller than modulus `modulus`, `angle` is congruent to itself
+    /// modulo `modulus`
     /// ```
-    /// For each angle smaller than modulus angle is congruent to itself modulo modulus.
-    /// That is,
-    /// For all angle < modulus, angle = angle (mod modulus).
+    /// angle = angle (mod modulus).
     /// ``` 
     #[test]
     fn test_remainder_less_than_modulus() {
