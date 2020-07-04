@@ -653,7 +653,7 @@ mod vector4_tests {
     }
 
     #[test]
-    fn test_vector_index_matches_component() {
+    fn test_vector_indices_matches_components() {
         let v = Vector4::new(1, 2, 3, 4);
         assert_eq!(v.x, v[0]);
         assert_eq!(v.y, v[1]);

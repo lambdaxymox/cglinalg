@@ -2,6 +2,7 @@ use base::ScalarFloat;
 use structure::{
     Angle,
     Zero,
+    Finite,
 };
 use std::f64;
 use std::fmt;
@@ -327,6 +328,17 @@ impl<S> approx::UlpsEq for Degrees<S> where S: ScalarFloat {
     }
 }
 
+impl<S> Finite for Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn is_finite(self) -> bool {
+        self.0.is_finite()
+    }
+
+    #[inline]
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
 
 
 
@@ -612,6 +624,19 @@ impl<S> approx::UlpsEq for Radians<S> where S: ScalarFloat {
         S::ulps_eq(&self.0, &other.0, epsilon, max_ulps)
     }
 }
+
+impl<S> Finite for Radians<S> where S: ScalarFloat {
+    #[inline]
+    fn is_finite(self) -> bool {
+        self.0.is_finite()
+    }
+
+    #[inline]
+    fn is_not_finite(self) -> bool {
+        !self.is_finite()
+    }
+}
+
 
 impl<S> Angle for Radians<S> where S: ScalarFloat {
     type Scalar = S;
