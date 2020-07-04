@@ -34,11 +34,12 @@ fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>> where S: Scalar + Arbit
 /// We use approximate comparisons because arithmetic is not exact over finite precision floating point
 /// scalar types.
 macro_rules! approx_arithmetic_props {
-    ($TestModuleName:ident, $AngleType:ty, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $AngleType:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::approx::relative_eq;
+        use gdmath::{$AngleType, Zero};
     
         proptest! {
             /// Angle addition should be approximately commutative.
@@ -52,35 +53,6 @@ macro_rules! approx_arithmetic_props {
                 angle1 in super::$Generator::<$ScalarType>(), angle2 in super::$Generator::<$ScalarType>()) {
 
                 prop_assert!(relative_eq!(angle1 + angle2, angle2 + angle1, epsilon = $tolerance));
-            }
-
-            /// Angle multiplication is approximately commutative.
-            ///
-            /// Given typed angles `angle1` and `angle2`
-            /// ```
-            /// angle1 * angle2 ~= angle2 * angle1
-            /// ```
-            #[test]
-            fn prop_angle_multiplication_commutative(
-                angle1 in super::$Generator::<$ScalarType>(), angle2 in super::$Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!(angle1 * angle2, angle2 * angle1, epsilon = $tolerance));
-            }
-
-            /// Angle arithmetic is approximately distributive.
-            /// 
-            /// Given typed angles `angle1`, `angle2, and `angle3`
-            /// ```
-            /// angle1 * (angle2 + angle3) = angle1 * angle2 + angle1 * angle3
-            /// ```
-            #[test]
-            fn prop_angle_arithmetic_distributive(
-                angle1 in super::$Generator::<$ScalarType>(), 
-                angle2 in super::$Generator::<$ScalarType>(), angle3 in super::$Generator::<$ScalarType>()) {
-            
-                prop_assert!(relative_eq!(
-                    angle1 * (angle2 + angle3), angle1 * angle2 + angle1 * angle3, epsilon = $tolerance)
-                );
             }
 
             /// Angle addition is approximately associative.
@@ -99,20 +71,57 @@ macro_rules! approx_arithmetic_props {
                 );
             }
 
-            /// Angle multiplication is approximately associative.
+            /// Multiplication of typed angles is compatible with unitless constants.
             ///
-            /// Given typed angles `angle1`, `angle2`, and `angle3`
+            /// Given a typed angle `angle`, and unitless constants `a`, and `b`
             /// ```
-            /// (angle1 * angle2) * angle3 ~= angle1 * (angle2 * angle3)
+            /// (a * b) * angle ~= a * (b * angle3)
             /// ```
             #[test]
-            fn prop_angle_multiplication_associative(
-                angle1 in super::$Generator::<$ScalarType>(), 
-                angle2 in super::$Generator::<$ScalarType>(), angle3 in super::$Generator::<$ScalarType>()) {
+            fn prop_angle_multiplication_compatible(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), angle in super::$Generator::<$ScalarType>()) {
             
                 prop_assert!(
-                    relative_eq!((angle1 * angle2) * angle3, angle1 * (angle2 * angle3), epsilon = $tolerance)
+                    relative_eq!(angle * (a * b), (angle * a) * b, epsilon = $tolerance)
                 );
+            }
+
+            /// Typed angles have an additive unit element.
+            ///
+            /// Given a typed angle `angle`
+            /// ```
+            /// angle + 0 = angle
+            /// ```
+            #[test]
+            fn prop_angle_additive_zero(angle in super::$Generator::<$ScalarType>()) {
+                let zero = $AngleType::zero();
+                prop_assert_eq!(angle + zero, angle);
+            }
+
+            /// Typed angles have additive inverses.
+            ///
+            /// Given a typed angle `angle`, there is a typed angle `-angle` satisfying
+            /// ```
+            /// angle - angle = angle + (-angle) = (-angle) + angle = 0
+            /// ```
+            #[test]
+            fn prop_angle_additive_identity(angle in super::$Generator::<$ScalarType>()) {
+                let zero = $AngleType::zero();
+                prop_assert_eq!(angle - angle, zero);
+                prop_assert_eq!(angle + (-angle), zero);
+                prop_assert_eq!((-angle) + angle, zero);
+            }
+
+            /// Typed angles are compatible with unitless multiplicative unit element.
+            ///
+            /// Given a typed angle `angle`, and the unitless constant `1`
+            /// ```
+            /// angle * 1 = angle
+            /// ```
+            #[test]
+            fn prop_angle_multiplication_unitless_unit_element(angle in super::$Generator::<$ScalarType>()) {
+                let one = <$ScalarType as num_traits::One>::one();
+                prop_assert_eq!(angle * one, angle);
             }
         }
     }
@@ -120,4 +129,4 @@ macro_rules! approx_arithmetic_props {
 }
 
 approx_arithmetic_props!(radians_f64_arithmetic_props, Radians, f64, any_radians, 1e-7);
-approx_arithmetic_props!(degrees_f64_arithmetic_props, degrees, f64, any_degrees, 1e-7);
+approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees, 1e-7);

@@ -192,7 +192,7 @@ pub trait Matrix {
     fn transpose(&self) -> Self::Transpose;
 }
 
-/// A trait that enables trigonometry for typed angles. This enables a rigorous distinction between 
+/// Implement trigonometry for typed angles. This enables a rigorous distinction between 
 /// different units of angles to prevent trigonometric errors that arise from using incorrect angular units.
 /// For example, adding radians to degrees, or passing an angle in degrees to a trigonometric function 
 /// when one meant to pass an angle in units of radians.
@@ -204,7 +204,7 @@ pub trait Angle where
     Self: ops::Add<Self, Output = Self>,
     Self: ops::Sub<Self, Output = Self>,
     Self: ops::Mul<<Self as Angle>::Scalar, Output = Self>,
-    Self: ops::Div<Self, Output = Self>,
+    Self: ops::Div<Self, Output = <Self as Angle>::Scalar>,
     Self: ops::Div<<Self as Angle>::Scalar, Output = Self>,
     Self: ops::Rem<Self, Output = Self>,
     Self: approx::AbsDiffEq<Epsilon = <Self as Angle>::Scalar>,

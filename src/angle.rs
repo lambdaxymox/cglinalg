@@ -134,42 +134,6 @@ impl<'a, S> ops::Mul<S> for &'a Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Degrees<S>> for Degrees<S> where S: ScalarFloat {
-    type Output = Degrees<S>;
-
-    #[inline]
-    fn mul(self, other: Degrees<S>) -> Self::Output {
-        Degrees(self.0 * other.0)
-    }
-}
-
-impl<'a, S> ops::Mul<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
-    type Output = Degrees<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Degrees<S>) -> Self::Output {
-        Degrees(self.0 * other.0)
-    }
-}
-
-impl<'a, S> ops::Mul<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
-    type Output = Degrees<S>;
-
-    #[inline]
-    fn mul(self, other: Degrees<S>) -> Self::Output {
-        Degrees(self.0 * other.0)
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat {
-    type Output = Degrees<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Degrees<S>) -> Self::Output {
-        Degrees(self.0 * other.0)
-    }
-}
-
 impl<S> ops::Div<S> for Degrees<S> where S: ScalarFloat {
     type Output = Degrees<S>;
 
@@ -189,38 +153,38 @@ impl<'a, S> ops::Div<S> for &'a Degrees<S> where S: ScalarFloat {
 }
 
 impl<S> ops::Div<Degrees<S>> for Degrees<S> where S: ScalarFloat {
-    type Output = Degrees<S>;
+    type Output = S;
 
     #[inline]
     fn div(self, other: Degrees<S>) -> Self::Output {
-        Degrees(self.0 / other.0)
+        self.0 / other.0
     }
 }
 
 impl<'a, S> ops::Div<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
-    type Output = Degrees<S>;
+    type Output = S;
 
     #[inline]
     fn div(self, other: &'a Degrees<S>) -> Self::Output {
-        Degrees(self.0 / other.0)
+        self.0 / other.0
     }
 }
 
 impl<'a, S> ops::Div<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
-    type Output = Degrees<S>;
+    type Output = S;
 
     #[inline]
     fn div(self, other: Degrees<S>) -> Self::Output {
-        Degrees(self.0 / other.0)
+        self.0 / other.0
     }
 }
 
 impl<'a, 'b, S> ops::Div<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat {
-    type Output = Degrees<S>;
+    type Output = S;
 
     #[inline]
     fn div(self, other: &'a Degrees<S>) -> Self::Output {
-        Degrees(self.0 / other.0)
+        self.0 / other.0
     }
 }
 
@@ -456,42 +420,6 @@ impl<'a, S> ops::Mul<S> for &'a Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Radians<S>> for Radians<S> where S: ScalarFloat {
-    type Output = Radians<S>;
-
-    #[inline]
-    fn mul(self, other: Radians<S>) -> Self::Output {
-        Radians(self.0 * other.0)
-    }
-}
-
-impl<'a, S> ops::Mul<&'a Radians<S>> for Radians<S> where S: ScalarFloat {
-    type Output = Radians<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Radians<S>) -> Self::Output {
-        Radians(self.0 * other.0)
-    }
-}
-
-impl<'a, S> ops::Mul<Radians<S>> for &'a Radians<S> where S: ScalarFloat {
-    type Output = Radians<S>;
-
-    #[inline]
-    fn mul(self, other: Radians<S>) -> Self::Output {
-        Radians(self.0 * other.0)
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Radians<S>> for &'b Radians<S> where S: ScalarFloat {
-    type Output = Radians<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Radians<S>) -> Self::Output {
-        Radians(self.0 * other.0)
-    }
-}
-
 impl<S> ops::Div<S> for Radians<S> where S: ScalarFloat {
     type Output = Radians<S>;
 
@@ -511,38 +439,38 @@ impl<'a, S> ops::Div<S> for &'a Radians<S> where S: ScalarFloat {
 }
 
 impl<S> ops::Div<Radians<S>> for Radians<S> where S: ScalarFloat {
-    type Output = Radians<S>;
+    type Output = S;
 
     #[inline]
     fn div(self, other: Radians<S>) -> Self::Output {
-        Radians(self.0 / other.0)
+        self.0 / other.0
     }
 }
 
 impl<'a, S> ops::Div<&'a Radians<S>> for Radians<S> where S: ScalarFloat {
-    type Output = Radians<S>;
+    type Output = S;
 
     #[inline]
     fn div(self, other: &'a Radians<S>) -> Self::Output {
-        Radians(self.0 / other.0)
+        self.0 / other.0
     }
 }
 
 impl<'a, S> ops::Div<Radians<S>> for &'a Radians<S> where S: ScalarFloat {
-    type Output = Radians<S>;
+    type Output = S;
 
     #[inline]
     fn div(self, other: Radians<S>) -> Self::Output {
-        Radians(self.0 / other.0)
+        self.0 / other.0
     }
 }
 
 impl<'a, 'b, S> ops::Div<&'a Radians<S>> for &'b Radians<S> where S: ScalarFloat {
-    type Output = Radians<S>;
+    type Output = S;
 
     #[inline]
     fn div(self, other: &'a Radians<S>) -> Self::Output {
-        Radians(self.0 / other.0)
+        self.0 / other.0
     }
 }
 
@@ -888,20 +816,14 @@ mod degrees_arithmetic_tests {
 
     #[test]
     fn test_multiplication() {
-        let angle1 = Degrees(30_f64);
-        let angle2 = Degrees(45_f64);
+        let angle = Degrees(30_f64);
+        let c = 45_f64;
         let expected = Degrees(30_f64 * 45_f64);
         
-        let result = angle1 * angle2;
+        let result = angle * c;
         assert_eq!(result, expected);
 
-        let result = &angle1 * angle2;
-        assert_eq!(result, expected);
-
-        let result = angle1 * &angle2;
-        assert_eq!(result, expected);
-
-        let result = &angle1 * &angle2;
+        let result = &angle * c;
         assert_eq!(result, expected);
     }
 
@@ -909,7 +831,7 @@ mod degrees_arithmetic_tests {
     fn test_division() {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(45_f64);
-        let expected = Degrees(30_f64 / 45_f64);
+        let expected = 30_f64 / 45_f64;
         
         let result = angle1 / angle2;
         assert_eq!(result, expected);
@@ -1040,20 +962,14 @@ mod radians_arithmetic_tests {
 
     #[test]
     fn test_multiplication() {
-        let angle1 = PI / 6_f64;
-        let angle2 = PI / 4_f64;
-        let expected = Radians(f64::consts::PI * f64::consts::PI / 24_f64);
+        let angle = PI / 6_f64;
+        let c = 4_f64;
+        let expected = Radians(f64::consts::PI * 4_f64 / 6_f64);
 
-        let result = angle1 * angle2;
+        let result = angle * c;
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
 
-        let result = &angle1 * angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
-
-        let result = angle1 * &angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
-
-        let result = &angle1 * &angle2;
+        let result = &angle * c;
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 
@@ -1061,7 +977,7 @@ mod radians_arithmetic_tests {
     fn test_division() {
         let angle1 = PI / 6_f64;
         let angle2 = PI / 4_f64;
-        let expected = Radians(4_f64 / 6_f64);
+        let expected = 4_f64 / 6_f64;
 
         let result = angle1 / angle2;
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
