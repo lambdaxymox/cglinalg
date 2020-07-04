@@ -153,7 +153,7 @@ macro_rules! approx_trigonometry_props {
         use gdmath::{$AngleType, Zero};
     
         proptest! {
-
+            
         }
     }
     }
