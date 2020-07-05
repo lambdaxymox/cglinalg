@@ -148,15 +148,81 @@ macro_rules! approx_trigonometry_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::approx::relative_eq;
-        use gdmath::{$AngleType, Zero};
+        use gdmath::{$AngleType, Angle};
     
         proptest! {
-            
+            /// The sine and arcsine functions should be inverses to each other.
+            ///
+            /// Given a typed angle `angle`
+            /// ```
+            /// asin(sin(angle)) = angle
+            /// ```
+            #[test]
+            fn prop_sine_and_arcsine_inverses(angle in super::$Generator::<$ScalarType>()) {
+                let recovered_angle = <$AngleType<$ScalarType> as Angle>::asin(angle.sin());
+                prop_assert!(relative_eq!(recovered_angle, angle, epsilon = $tolerance));
+            }
+
+            /// The cosine and arccosine functions should be inverses to each other.
+            ///
+            /// Given a typed angle `angle`
+            /// ```
+            /// acos(cos(angle)) = angle
+            /// ```
+            #[test]
+            fn prop_cosine_and_arccosine_inverses(angle in super::$Generator::<$ScalarType>()) {
+                let recovered_angle = <$AngleType<$ScalarType> as Angle>::acos(angle.cos());
+                prop_assert!(relative_eq!(recovered_angle, angle, epsilon = $tolerance));
+            }
+
+            /// The tangent and arctangent functions should be inverses to each other.
+            ///
+            /// Given a typed angle `angle`
+            /// ```
+            /// atan(tan(angle)) = angle
+            /// ```
+            #[test]
+            fn prop_tangent_and_arctangent_inverses(angle in super::$Generator::<$ScalarType>()) {
+                let recovered_angle = <$AngleType<$ScalarType> as Angle>::atan(angle.tan());
+                prop_assert!(relative_eq!(recovered_angle, angle, epsilon = $tolerance));
+            }
+
+            /// A typed angle and its congruent typed angles modulo `full_turn` should give the same trigonometric
+            /// outputs.
+            ///
+            /// Given a typed angle `angle` and an integer `k`
+            /// ```
+            /// sin(angle) = sin(angle + k * full_turn())
+            /// cos(angle) = cos(angle + k * full_turn())
+            /// tan(angle) = tan(angle + k * full_turn())
+            /// ```
+            #[test]
+            fn prop_congruent_angles(angle in super::$Generator::<$ScalarType>()) {
+                let angle_plus_full_turn = angle + <$AngleType<$ScalarType> as Angle>::full_turn();
+                prop_assert!(relative_eq!(angle.sin(), angle_plus_full_turn.sin(), epsilon = $tolerance));
+                prop_assert!(relative_eq!(angle.cos(), angle_plus_full_turn.cos(), epsilon = $tolerance));
+                prop_assert!(relative_eq!(angle.tan(), angle_plus_full_turn.tan(), epsilon = $tolerance));
+            }
+
+            /// Typed angle trigonometry satisfies the pythagorean identity.
+            ///
+            /// Given a typed angle `angle`
+            /// ```
+            /// sin(angle)^2 + cos(angle)^2 = 1
+            /// ```
+            #[test]
+            fn prop_pythagorean_identity(angle in super::$Generator::<$ScalarType>()) {
+                use num_traits::One;
+                let one = <$ScalarType as One>::one();
+                prop_assert!(relative_eq!(
+                    angle.cos() * angle.cos() + angle.sin() * angle.sin(), one, epsilon = $tolerance
+                ));
+            }
         }
     }
     }
 }
 
 approx_trigonometry_props!(radians_f64_trigonometry_props, Radians, f64, any_radians, 1e-7);
-approx_trigonometry_props!(degrees_f64_trigonometry_props, Radians, f64, any_radians, 1e-7);
+approx_trigonometry_props!(degrees_f64_trigonometry_props, Degrees, f64, any_degrees, 1e-7);
 
