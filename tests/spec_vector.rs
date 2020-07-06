@@ -1274,3 +1274,195 @@ exact_dot_product_props!(vector2_u32_dot_product_props, Vector2, u32, any_vector
 exact_dot_product_props!(vector3_u32_dot_product_props, Vector3, u32, any_vector3);
 exact_dot_product_props!(vector4_u32_dot_product_props, Vector4, u32, any_vector4);
 
+
+/// Generate the properties for three-dimensional vector cross products over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the vectors.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+///
+/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
+/// scalar types.
+macro_rules! approx_cross_product_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::approx::relative_eq;
+        use gdmath::DotProduct;
+    
+        proptest! {
+            /// The three-dimensional cross product should commute with multiplication by a
+            /// scalar.
+            ///
+            /// Given vectors `u` and `v` and a scalar constant `c`
+            /// ```
+            /// (c * u) x v ~= c * (u x v) ~= u x (c * v)
+            #[test]
+            fn prop_vector_cross_product_multiplication_by_scalars(
+                c in any::<$ScalarType>(),
+                u in super::$Generator::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+
+                prop_assert!(relative_eq!((c * u).cross(&v), c * u.cross(&v), epsilon = $tolerance));
+                prop_assert!(relative_eq!(u.cross(&(c * v)), c * u.cross(&v), epsilon = $tolerance));
+            }
+
+            /// The three-dimensional vector cross product is distributive.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// u x (v + w) ~= u x v + u x w
+            /// ```
+            #[test]
+            fn prop_vector_cross_product_distribute(
+                u in super::$Generator::<$ScalarType>(), 
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assert!(
+                    relative_eq!(u.cross(&(v + w)), u.cross(&v) + u.cross(&w), epsilon = $tolerance)
+                );
+            }
+
+            /// The three-dimensional vector cross product satisfies the scalar triple product.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// u . (v x w) ~= (u x v) . w
+            /// ```
+            #[test]
+            fn prop_vector_cross_product_scalar_triple_product(
+                u in super::$Generator::<$ScalarType>(), 
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assert!(relative_eq!(u.dot(v.cross(&w)), u.cross(&v).dot(w), epsilon = $tolerance));
+            }
+
+            /// The three-dimensional vector cross product is anti-commutative.
+            ///
+            /// Given vectors `u` and `v`
+            /// ```
+            /// u x v ~= - v x u
+            /// ```
+            #[test]
+            fn prop_vector_cross_product_anticommutative(
+                u in super::$Generator::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+
+                prop_assert!(relative_eq!(u.cross(&v), -v.cross(&u), epsilon = $tolerance));
+            }
+
+            /// The three-dimensions vector cross product satisfies the vector triple product.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// u x (v x w) ~= (u . w) * v - (u . v) * w
+            /// ```
+            #[test]
+            fn prop_vector_cross_product_satisfies_vector_triple_product(
+                u in super::$Generator::<$ScalarType>(), 
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+            
+                prop_assert!(relative_eq!(u.cross(&v).cross(&w), u.dot(w) * v - u.dot(v) * w, epsilon = $tolerance));
+            }
+        }
+    }
+    }
+}
+
+approx_cross_product_props!(vector3_f64_cross_product_props, f64, any_vector3, 1e-7);
+
+
+/// Generate the properties for three-dimensional vector cross products over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the vectors.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_cross_product_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::approx::relative_eq;
+        use gdmath::DotProduct;
+    
+        proptest! {
+            /// The three-dimensional cross product should commute with multiplication by a
+            /// scalar.
+            ///
+            /// Given vectors `u` and `v` and a scalar constant `c`
+            /// ```
+            /// (c * u) x v = c * (u x v) = u x (c * v)
+            #[test]
+            fn prop_vector_cross_product_multiplication_by_scalars(
+                c in any::<$ScalarType>(),
+                u in super::$Generator::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((c * u).cross(&v), c * u.cross(&v));
+                prop_assert_eq!(u.cross(&(c * v)), c * u.cross(&v));
+            }
+
+            /// The three-dimensional vector cross product is distributive.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// u x (v + w) = u x v + u x w
+            /// ```
+            #[test]
+            fn prop_vector_cross_product_distribute(
+                u in super::$Generator::<$ScalarType>(), 
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(u.cross(&(v + w)), u.cross(&v) + u.cross(&w));
+            }
+
+            /// The three-dimensional vector cross product satisfies the scalar triple product.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// u . (v x w) = (u x v) . w
+            /// ```
+            #[test]
+            fn prop_vector_cross_product_scalar_triple_product(
+                u in super::$Generator::<$ScalarType>(), 
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(u.dot(v.cross(&w)), u.cross(&v).dot(w));
+            }
+
+            /// The three-dimensional vector cross product is anti-commutative.
+            ///
+            /// Given vectors `u` and `v`
+            /// ```
+            /// u x v = - v x u
+            /// ```
+            #[test]
+            fn prop_vector_cross_product_anticommutative(
+                u in super::$Generator::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(u.cross(&v), -v.cross(&u));
+            }
+
+            /// The three-dimensions vector cross product satisfies the vector triple product.
+            ///
+            /// Given vectors `u`, `v`, and `w`
+            /// ```
+            /// u x (v x w) = (u . w) * v - (u . v) * w
+            /// ```
+            #[test]
+            fn prop_vector_cross_product_satisfies_vector_triple_product(
+                u in super::$Generator::<$ScalarType>(), 
+                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+            
+                prop_assert_eq!(u.cross(&v).cross(&w), u.dot(w) * v - u.dot(v) * w);
+            }
+        }
+    }
+    }
+}
+
+//exact_cross_product_props!(vector3_i32_cross_product_props, i32, any_vector3);
+
