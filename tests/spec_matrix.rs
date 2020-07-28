@@ -54,7 +54,7 @@ macro_rules! approx_addition_props {
             /// A zero matrix should act as the additive unit element for matrices over 
             /// their underlying scalars. 
             ///
-            /// Given a matrix `m`
+            /// Given a matrix `m` and a zero matrix `0`
             /// ```
             /// 0 + m = m
             /// ```
@@ -67,7 +67,7 @@ macro_rules! approx_addition_props {
             /// A zero matrix should act as the additive unit element for matrices over 
             /// their underlying scalars. 
             ///
-            /// Given a matrix `m`
+            /// Given a matrix `m` and a zero matrix `0`
             /// ```
             /// m + 0 = m
             /// ```
@@ -96,9 +96,24 @@ macro_rules! approx_addition_props {
             /// ```
             #[test]
             fn prop_matrix_addition_approx_associative(
-                m1 in super::$Generator(), m2 in super::$Generator(), m3 in super::$Generator::<$ScalarType>()) {
+                m1 in super::$Generator::<$ScalarType>(), 
+                m2 in super::$Generator::<$ScalarType>(), m3 in super::$Generator::<$ScalarType>()) {
 
                 prop_assert!(relative_eq!((m1 + m2) + m3, m1 + (m2 + m3), epsilon = $tolerance));
+            }
+
+            /// The sum of a matrix and it's additive inverse is the same as subtracting the two matrices from
+            /// each other.
+            ///
+            /// Given matrices `m1` and `m2`
+            /// ```
+            /// m1 + (-m2) = m1 - m2
+            /// ```
+            #[test]
+            fn prop_matrix_subtraction(
+                m1 in super::$Generator::<$ScalarType>(), m2 in super::$Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!(m1 + (-m2), m1 - m2);
             }
         }
     }
@@ -262,6 +277,22 @@ macro_rules! approx_scalar_multiplication_props {
                 let one: $ScalarType = num_traits::One::one();
                 prop_assert_eq!(one * m, m);
                 prop_assert_eq!(m * one, m);
+            }
+
+            /// Multiplication of a matrix by a scalar negative one is the additive inverse of the 
+            /// original matrix.
+            ///
+            /// Given a matrix `m` and a negative unit scalar `-1`
+            /// ```
+            /// (-1) * m = = m * (-1) = -m
+            /// ```
+            /// Note that we diverge from tradition formalisms of matrix arithmetic in that we allow
+            /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
+            #[test]
+            fn prop_negative_one_times_matrix_equals_negative_matrix(m in super::$Generator::<$ScalarType>()) {
+                let one: $ScalarType = num_traits::One::one();
+                let minus_one = -one;
+                prop_assert_eq!(minus_one * m, -m);
             }
         }
     }
