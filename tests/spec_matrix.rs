@@ -34,6 +34,82 @@ fn any_matrix4<S>() -> impl Strategy<Value = Matrix4<S>> where S: Scalar + Arbit
     )
 }
 
+
+/// Generate the properties for matrix addition over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$MatrixN` denotes the name of the matrix type.
+/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! approx_addition_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::approx::relative_eq;
+        use gdmath::{$MatrixN, Zero};
+
+        proptest! {
+            /// A zero matrix should act as the additive unit element for matrices over 
+            /// their underlying scalars. 
+            ///
+            /// Given a matrix `m`
+            /// ```
+            /// 0 + m = m
+            /// ```
+            #[test]
+            fn prop_matrix_additive_identity(m in super::$Generator::<$ScalarType>()) {
+                let zero_mat = $MatrixN::zero();
+                prop_assert_eq!(zero_mat + m, m);
+            }
+        
+            /// A zero matrix should act as the additive unit element for matrices over 
+            /// their underlying scalars. 
+            ///
+            /// Given a matrix `m`
+            /// ```
+            /// m + 0 = m
+            /// ```
+            #[test]
+            fn prop_vector_times_zero_equals_zero(m in super::$Generator::<$ScalarType>()) {
+                let zero_mat = $MatrixN::zero();
+                prop_assert_eq!(m + zero_mat, m);
+            }
+
+            /// Matrix addition over exact scalars is commutative.
+            ///
+            /// Given matrices `m1` and `m2`
+            /// ```
+            /// m1 + m2 ~= m2 + m1
+            /// ```
+            #[test]
+            fn prop_matrix_addition_approx_commutative(m1 in super::$Generator(), m2 in super::$Generator::<$ScalarType>()) {
+                prop_assert!(relative_eq!(m1 + m2, m2 + m1, epsilon = $tolerance));
+            }
+
+            /// Matrix addition over exact scalars is associative.
+            ///
+            /// Given matrices `m1`, `m2`, and `m3`
+            /// ```
+            /// (m1 + m2) + m3 ~= m1 + (m2 + m3)
+            /// ```
+            #[test]
+            fn prop_matrix_addition_approx_associative(
+                m1 in super::$Generator(), m2 in super::$Generator(), m3 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert!(relative_eq!((m1 + m2) + m3, m1 + (m2 + m3), epsilon = $tolerance));
+            }
+        }
+    }
+    }
+}
+
+approx_addition_props!(matrix2_f64_addition_props, Matrix2, f64, any_matrix2, 1e-7);
+approx_addition_props!(matrix3_f64_addition_props, Matrix3, f64, any_matrix3, 1e-7);
+approx_addition_props!(matrix4_f64_addition_props, Matrix4, f64, any_matrix4, 1e-7);
+
+
 /// Generate the properties for matrix addition over exact scalars. We define an exact
 /// scalar type as a type where scalar arithmetic is exact (e.g. integers).
 ///
