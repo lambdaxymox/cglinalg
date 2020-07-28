@@ -303,3 +303,90 @@ approx_scalar_multiplication_props!(matrix2_f64_scalar_multiplication_props, Mat
 approx_scalar_multiplication_props!(matrix3_f64_scalar_multiplication_props, Matrix3, f64, any_matrix3, 1e-7);
 approx_scalar_multiplication_props!(matrix4_f64_scalar_multiplication_props, Matrix4, f64, any_matrix4, 1e-7);
 
+
+/// Generate the properties for the multiplication of matrices of integer scalars 
+/// by integers.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$MatrixN` denotes the name of the matrix type.
+/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_scalar_multiplication_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::{$MatrixN, Zero};
+
+        proptest! {
+            /// Multiplication of matrices by scalars is compatible with matrix addition.
+            ///
+            /// Given matrices `m1` and `m2`, and a scalar `c`
+            /// ```
+            /// c * (m1 + m2) = c * m1 + c * m2
+            /// ```
+            #[test]
+            fn prop_scalar_matrix_multiplication_compatible_addition(
+                c in any::<$ScalarType>(),
+                m1 in super::$Generator::<$ScalarType>(), m2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(c * (m1 + m2), c * m1 + c * m2);
+            }
+
+            /// Multiplication of matrices by scalars is compatible with matrix subtraction.
+            ///
+            /// Given matrices `m1` and `m2`, and a scalar `c`
+            /// ```
+            /// c * (m1 - m2) = c * m1 - c * m2
+            /// ```
+            #[test]
+            fn prop_scalar_matrix_multiplication_compatible_subtraction(
+                c in any::<$ScalarType>(),
+                m1 in super::$Generator::<$ScalarType>(), m2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(c * (m1 - m2), c * m1 - c * m2);
+            }
+
+            /// Multiplication of a matrix by a scalar zero is the zero matrix.
+            ///
+            /// Given a matrix `m` and a zero scalar `0`
+            /// ```
+            /// 0 * m = m * 0 = 0
+            /// ```
+            /// Note that we diverge from tradition formalisms of matrix arithmetic in that we allow
+            /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
+            #[test]
+            fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::Zero::zero();
+                let zero_mat = $MatrixN::zero();
+                prop_assert_eq!(zero * m, zero_mat);
+                prop_assert_eq!(m * zero, zero_mat);
+            }
+
+            /// Multiplication of a matrix by a scalar one is the original matrix.
+            ///
+            /// Given a matrix `m` and a unit scalar `1`
+            /// ```
+            /// 1 * m = m * 1 = m
+            /// ```
+            /// Note that we diverge from tradition formalisms of matrix arithmetic in that we allow
+            /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
+            #[test]
+            fn prop_one_times_matrix_equals_matrix(m in super::$Generator::<$ScalarType>()) {
+                let one: $ScalarType = num_traits::One::one();
+                prop_assert_eq!(one * m, m);
+                prop_assert_eq!(m * one, m);
+            }
+        }
+    }
+    }
+}
+
+exact_scalar_multiplication_props!(matrix2_u32_scalar_multiplication_props, Matrix2, u32, any_matrix2);
+exact_scalar_multiplication_props!(matrix2_i32_scalar_multiplication_props, Matrix2, i32, any_matrix2);
+exact_scalar_multiplication_props!(matrix3_u32_scalar_multiplication_props, Matrix3, u32, any_matrix3);
+exact_scalar_multiplication_props!(matrix3_i32_scalar_multiplication_props, Matrix3, i32, any_matrix3);
+exact_scalar_multiplication_props!(matrix4_u32_scalar_multiplication_props, Matrix4, u32, any_matrix4);
+exact_scalar_multiplication_props!(matrix4_i32_scalar_multiplication_props, Matrix4, i32, any_matrix4);
+
