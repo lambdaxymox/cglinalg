@@ -436,7 +436,7 @@ macro_rules! approx_multiplication_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::approx::relative_eq;
-        use gdmath::{$MatrixN, One, Zero};
+        use gdmath::{$MatrixN, One};
 
         proptest! {
             /// Matrix multiplication is associative.
@@ -515,3 +515,99 @@ macro_rules! approx_multiplication_props {
 approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2, f64, any_matrix2, 1e-7);
 approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3, f64, any_matrix3, 1e-7);
 approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4, f64, any_matrix4, 1e-7);
+
+
+/// Generate the properties for the multiplication of matrices of floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$MatrixN` denotes the name of the matrix type.
+/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_multiplication_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::{$MatrixN, One};
+
+        proptest! {
+            /// Matrix multiplication is associative.
+            ///
+            /// Given matrices `m1`, `m2`, and `m3`
+            /// ```
+            /// (m1 * m2) * m3 = m1 * (m2 * m3)
+            /// ```
+            #[test]
+            fn prop_matrix_multiplication_associative(
+                m1 in super::$Generator::<$ScalarType>(),
+                m2 in super::$Generator::<$ScalarType>(), m3 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((m1 * m2) * m3, m1* (m2 * m3));
+            }
+
+            /// Matrix multiplication is distributive over matrix addition.
+            ///
+            /// Given matrices `m1`, `m2`, and `m3`
+            /// ```
+            /// m1 * (m2 + m3) = m1 * m2 + m1 * m3
+            /// ```
+            #[test]
+            fn prop_matrix_multiplication_distributive(                
+                m1 in super::$Generator::<$ScalarType>(),
+                m2 in super::$Generator::<$ScalarType>(), m3 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(m1 * (m2 + m3), m1 * m2 + m1 * m3);
+            }
+
+            /// Matrix multiplication is compatible with scalar multiplication.
+            ///
+            /// Given matrices `m1` and `m2` and a scalar `c`
+            /// ```
+            /// c * (m1 * m2) = (c * m1) * m2 = m1 * (c * m2)
+            /// ```
+            #[test]
+            fn prop_matrix_multiplication_compatible_with_scalar_multiplication(
+                c in any::<$ScalarType>(),
+                m1 in super::$Generator::<$ScalarType>(), m2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(c * (m1 * m2), (c * m1) * m2);
+                prop_assert_eq!((c * m1) * m2, m1 * (c * m2));
+            }
+
+            /// Matrix multiplication is compatible with scalar multiplication.
+            ///
+            /// Given a matrix `m`, scalars `c1` and `c2`
+            /// ```
+            /// (c1 * c2) * m = c1 * (c2 * m)
+            /// ```
+            #[test]
+            fn prop_matrix_multiplication_compatible_with_scalar_multiplication1(
+                c1 in any::<$ScalarType>(), c2 in any::<$ScalarType>(), m in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((c1 * c2) * m, c1 * (c2 * m));
+            }
+
+            /// Matrices over a set of floating point scalars have a multiplicative identity.
+            /// 
+            /// Given a matrix `m` there is a matrix `identity` such that
+            /// ```
+            /// m * identity = identity * m = m
+            /// ```
+            #[test]
+            fn prop_matrix_multiplication_identity(m in super::$Generator::<$ScalarType>()) {
+                let identity = $MatrixN::one();
+                prop_assert_eq!(m * identity, m);
+                prop_assert_eq!(identity * m, m);
+            }
+        }
+    }
+    }
+}
+
+exact_multiplication_props!(matrix2_u32_matrix_multiplication_props, Matrix2, u32, any_matrix2);
+exact_multiplication_props!(matrix2_i32_matrix_multiplication_props, Matrix2, i32, any_matrix2);
+exact_multiplication_props!(matrix3_u32_matrix_multiplication_props, Matrix3, u32, any_matrix3);
+exact_multiplication_props!(matrix3_i32_matrix_multiplication_props, Matrix3, i32, any_matrix3);
+exact_multiplication_props!(matrix4_u32_matrix_multiplication_props, Matrix4, u32, any_matrix4);
+exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4, i32, any_matrix4);
