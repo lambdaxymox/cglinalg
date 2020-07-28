@@ -611,3 +611,80 @@ exact_multiplication_props!(matrix3_u32_matrix_multiplication_props, Matrix3, u3
 exact_multiplication_props!(matrix3_i32_matrix_multiplication_props, Matrix3, i32, any_matrix3);
 exact_multiplication_props!(matrix4_u32_matrix_multiplication_props, Matrix4, u32, any_matrix4);
 exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4, i32, any_matrix4);
+
+
+/// Generate the properties for the transposition of matrices over floating point scalars.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$MatrixN` denotes the name of the matrix type.
+/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! approx_transposition_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::{$MatrixN, Matrix};
+
+        proptest! {
+            /// The double transpose of a matrix is the original matrix.
+            ///
+            /// Given a matrix `m`
+            /// ```
+            /// transpose(transpose(m)) = m
+            /// ```
+            #[test]
+            fn prop_matrix_transpose_transpose_equals_matrix(m in super::$Generator::<$ScalarType>()) {
+                prop_assert_eq!(m.transpose().transpose(), m);
+            }
+
+            /// The transposition operation is linear.
+            /// 
+            /// Given matrices `m1` and `m2`
+            /// ```
+            /// transpose(m1 + m2) = transpose(m1) + transpose(m2)
+            /// ```
+            #[test]
+            fn prop_transpose_linear(
+                m1 in super::$Generator::<$ScalarType>(), m2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((m1 + m2).transpose(), m1.transpose() + m2.transpose());
+            }
+
+            /// Scalar multiplication of a matrix and a scalar commutes with transposition.
+            /// 
+            /// Given a matrix `m` and a scalar `c`
+            /// ```
+            /// transpose(c * m) = c * transpose(m)
+            /// ```
+            #[test]
+            fn prop_transpose_scalar_multiplication(
+                c in any::<$ScalarType>(), m in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((c * m).transpose(), c * m.transpose());
+            }
+
+            /// The transpose of the product of two matrices equals the product of the transposes
+            /// of the two matrices swapped.
+            /// 
+            /// Given matrices `m1` and `m2`
+            /// ```
+            /// transpose(m1 * m2) = transpose(m2) * transpose(m1)
+            /// ```
+            #[test]
+            fn prop_transpose_product(
+                m1 in super::$Generator::<$ScalarType>(), m2 in super::$Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((m1 * m2).transpose(), m2.transpose() * m1.transpose());
+            }
+        }
+    }
+    }
+}
+
+approx_transposition_props!(matrix2_f64_transposition_props, Matrix2, f64, any_matrix2, 1e-7);
+approx_transposition_props!(matrix3_f64_transposition_props, Matrix3, f64, any_matrix3, 1e-7);
+approx_transposition_props!(matrix4_f64_transposition_props, Matrix4, f64, any_matrix4, 1e-7);
+
+
