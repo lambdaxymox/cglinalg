@@ -4,6 +4,7 @@ use std::ops;
 
 use base::{
     Scalar,
+    ScalarSigned,
     ScalarFloat,
 };
 use angle::Radians;
@@ -458,7 +459,7 @@ impl<S> ops::Div<S> for &Matrix2<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Neg for Matrix2<S> where S: ScalarFloat {
+impl<S> ops::Neg for Matrix2<S> where S: ScalarSigned {
     type Output = Matrix2<S>;
 
     fn neg(self) -> Self::Output {
@@ -471,7 +472,7 @@ impl<S> ops::Neg for Matrix2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Neg for &Matrix2<S> where S: ScalarFloat {
+impl<S> ops::Neg for &Matrix2<S> where S: ScalarSigned {
     type Output = Matrix2<S>;
 
     fn neg(self) -> Self::Output {
@@ -1274,7 +1275,7 @@ impl<S> ops::Div<S> for &Matrix3<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Neg for Matrix3<S> where S: ScalarFloat {
+impl<S> ops::Neg for Matrix3<S> where S: ScalarSigned {
     type Output = Matrix3<S>;
 
     fn neg(self) -> Self::Output {
@@ -1294,7 +1295,7 @@ impl<S> ops::Neg for Matrix3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Neg for &Matrix3<S> where S: ScalarFloat {
+impl<S> ops::Neg for &Matrix3<S> where S: ScalarSigned {
     type Output = Matrix3<S>;
 
     fn neg(self) -> Self::Output {
@@ -2544,7 +2545,7 @@ impl<S> ops::Div<S> for &Matrix4<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Neg for Matrix4<S> where S: ScalarFloat {
+impl<S> ops::Neg for Matrix4<S> where S: ScalarSigned {
     type Output = Matrix4<S>;
 
     fn neg(self) -> Self::Output {
@@ -2575,7 +2576,7 @@ impl<S> ops::Neg for Matrix4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Neg for &Matrix4<S> where S: ScalarFloat {
+impl<S> ops::Neg for &Matrix4<S> where S: ScalarSigned {
     type Output = Matrix4<S>;
 
     fn neg(self) -> Self::Output {

@@ -13,6 +13,7 @@ use std::ops::{
     MulAssign,
     DivAssign,
     RemAssign,
+    Neg,
 };
 
 
@@ -45,6 +46,10 @@ impl<T> Scalar for T where
      + RemAssign 
 { 
 }
+
+pub trait ScalarSigned where Self: Scalar + Neg<Output = Self> {}
+
+impl<T> ScalarSigned for T where T: Scalar + Neg<Output = T> {}
 
 pub trait ScalarFloat:
       Scalar

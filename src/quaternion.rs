@@ -18,7 +18,8 @@ use angle::{
 };
 use base::{
     Scalar,
-    ScalarFloat,   
+    ScalarSigned,
+    ScalarFloat,
 };
 use matrix::{
     Matrix3, 
@@ -362,7 +363,7 @@ impl<S> fmt::Display for Quaternion<S> where S: fmt::Display {
     }
 }
 
-impl<S> ops::Neg for Quaternion<S> where S: ScalarFloat {
+impl<S> ops::Neg for Quaternion<S> where S: ScalarSigned {
     type Output = Quaternion<S>;
 
     #[inline]
@@ -371,7 +372,7 @@ impl<S> ops::Neg for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Neg for &'a Quaternion<S> where S: ScalarFloat {
+impl<'a, S> ops::Neg for &'a Quaternion<S> where S: ScalarSigned {
     type Output = Quaternion<S>;
 
     #[inline]

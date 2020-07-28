@@ -1,5 +1,6 @@
 use base::{
     Scalar,
+    ScalarSigned,
     ScalarFloat,   
 };
 use structure::{
@@ -284,7 +285,7 @@ impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Neg for Vector1<S> where S: ScalarFloat {
+impl<S> ops::Neg for Vector1<S> where S: ScalarSigned {
     type Output = Vector1<S>;
 
     #[inline]
@@ -293,7 +294,7 @@ impl<S> ops::Neg for Vector1<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Neg for &Vector1<S> where S: ScalarFloat {
+impl<S> ops::Neg for &Vector1<S> where S: ScalarSigned {
     type Output = Vector1<S>;
 
     #[inline]
@@ -901,7 +902,7 @@ impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Neg for Vector2<S> where S: ScalarFloat {
+impl<S> ops::Neg for Vector2<S> where S: ScalarSigned {
     type Output = Vector2<S>;
 
     #[inline]
@@ -910,7 +911,7 @@ impl<S> ops::Neg for Vector2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Neg for &Vector2<S> where S: ScalarFloat {
+impl<S> ops::Neg for &Vector2<S> where S: ScalarSigned {
     type Output = Vector2<S>;
 
     #[inline]
@@ -1619,7 +1620,7 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Neg for Vector3<S> where S: ScalarFloat {
+impl<S> ops::Neg for Vector3<S> where S: ScalarSigned {
     type Output = Vector3<S>;
 
     #[inline]
@@ -1628,7 +1629,7 @@ impl<S> ops::Neg for Vector3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Neg for &Vector3<S> where S: ScalarFloat {
+impl<S> ops::Neg for &Vector3<S> where S: ScalarSigned {
     type Output = Vector3<S>;
 
     #[inline]
@@ -2370,7 +2371,7 @@ impl<S> fmt::Display for Vector4<S> where S: fmt::Display {
     }
 }
 
-impl<S> ops::Neg for Vector4<S> where S: ScalarFloat {
+impl<S> ops::Neg for Vector4<S> where S: ScalarSigned {
     type Output = Vector4<S>;
 
     #[inline]
@@ -2379,7 +2380,7 @@ impl<S> ops::Neg for Vector4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Neg for &Vector4<S> where S: ScalarFloat {
+impl<S> ops::Neg for &Vector4<S> where S: ScalarSigned {
     type Output = Vector4<S>;
 
     #[inline]
