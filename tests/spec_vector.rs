@@ -1386,7 +1386,6 @@ macro_rules! exact_cross_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        //use gdmath::approx::relative_eq;
         use gdmath::DotProduct;
     
         proptest! {
