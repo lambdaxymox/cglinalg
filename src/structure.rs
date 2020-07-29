@@ -181,9 +181,9 @@ pub trait Matrix {
 }
 
 /// Implement trigonometry for typed angles. This enables a rigorous distinction between 
-/// different units of angles to prevent trigonometric errors that arise from using incorrect angular units.
-/// For example, adding radians to degrees, or passing an angle in degrees to a trigonometric function 
-/// when one meant to pass an angle in units of radians.
+/// different units of angles to prevent trigonometric errors that arise from using incorrect 
+/// angular units. For example, adding radians to degrees, or passing an angle in degrees to 
+/// a trigonometric function when one meant to pass an angle in units of radians.
 pub trait Angle where 
     Self: Copy + Clone,
     Self: PartialEq + PartialOrd,

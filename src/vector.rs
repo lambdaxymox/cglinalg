@@ -6,7 +6,7 @@ use base::{
 use structure::{
     Storage,
     Zero,
-    //ProjectOn,
+    ProjectOn,
     DotProduct,
     Magnitude,
     Lerp,
@@ -687,6 +687,38 @@ impl<S> Finite for &Vector1<S> where S: ScalarFloat {
     }
 }
 
+impl<S> ProjectOn<Vector1<S>> for Vector1<S> where S: ScalarFloat {
+    type Output = Vector1<S>;
+
+    fn project_on(self, onto: Vector1<S>) -> Vector1<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<&Vector1<S>> for Vector1<S> where S: ScalarFloat {
+    type Output = Vector1<S>;
+
+    fn project_on(self, onto: &Vector1<S>) -> Vector1<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<Vector1<S>> for &Vector1<S> where S: ScalarFloat {
+    type Output = Vector1<S>;
+
+    fn project_on(self, onto: Vector1<S>) -> Vector1<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<'a, 'b, S> ProjectOn<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloat {
+    type Output = Vector1<S>;
+
+    fn project_on(self, onto: &'a Vector1<S>) -> Vector1<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
 
 /// A representation of two-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -1355,6 +1387,37 @@ impl<S> Finite for &Vector2<S> where S: ScalarFloat {
     }
 }
 
+impl<S> ProjectOn<Vector2<S>> for Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn project_on(self, onto: Vector2<S>) -> Vector2<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<&Vector2<S>> for Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn project_on(self, onto: &Vector2<S>) -> Vector2<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<Vector2<S>> for &Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn project_on(self, onto: Vector2<S>) -> Vector2<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<'a, 'b, S> ProjectOn<&'a Vector2<S>> for &'b Vector2<S> where S: ScalarFloat {
+    type Output = Vector2<S>;
+
+    fn project_on(self, onto: &'a Vector2<S>) -> Vector2<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
 
 
 /// A representation of three-dimensional vectors with a Euclidean metric.
@@ -2100,6 +2163,38 @@ impl<S> Finite for &Vector3<S> where S: ScalarFloat {
 
     fn is_not_finite(self) -> bool {
         !self.is_finite()
+    }
+}
+
+impl<S> ProjectOn<Vector3<S>> for Vector3<S> where S: ScalarFloat {
+    type Output = Vector3<S>;
+
+    fn project_on(self, onto: Vector3<S>) -> Vector3<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<&Vector3<S>> for Vector3<S> where S: ScalarFloat {
+    type Output = Vector3<S>;
+
+    fn project_on(self, onto: &Vector3<S>) -> Vector3<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<Vector3<S>> for &Vector3<S> where S: ScalarFloat {
+    type Output = Vector3<S>;
+
+    fn project_on(self, onto: Vector3<S>) -> Vector3<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<'a, 'b, S> ProjectOn<&'a Vector3<S>> for &'b Vector3<S> where S: ScalarFloat {
+    type Output = Vector3<S>;
+
+    fn project_on(self, onto: &'a Vector3<S>) -> Vector3<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 
@@ -2874,6 +2969,38 @@ impl<S> Finite for &Vector4<S> where S: ScalarFloat {
 
     fn is_not_finite(self) -> bool {
         !self.is_finite()
+    }
+}
+
+impl<S> ProjectOn<Vector4<S>> for Vector4<S> where S: ScalarFloat {
+    type Output = Vector4<S>;
+
+    fn project_on(self, onto: Vector4<S>) -> Vector4<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<&Vector4<S>> for Vector4<S> where S: ScalarFloat {
+    type Output = Vector4<S>;
+
+    fn project_on(self, onto: &Vector4<S>) -> Vector4<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<Vector4<S>> for &Vector4<S> where S: ScalarFloat {
+    type Output = Vector4<S>;
+
+    fn project_on(self, onto: Vector4<S>) -> Vector4<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<'a, 'b, S> ProjectOn<&'a Vector4<S>> for &'b Vector4<S> where S: ScalarFloat {
+    type Output = Vector4<S>;
+
+    fn project_on(self, onto: &'a Vector4<S>) -> Vector4<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 

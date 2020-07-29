@@ -3,7 +3,7 @@ use structure::{
     Storage,
     Zero,
     One,
-    //ProjectOn,
+    ProjectOn,
     DotProduct,
     Magnitude,
     Lerp,
@@ -1151,6 +1151,38 @@ impl<S> Finite for Quaternion<S> where S: ScalarFloat {
     #[inline]
     fn is_not_finite(self) -> bool {
         !self.is_finite()
+    }
+}
+
+impl<S> ProjectOn<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    type Output = Quaternion<S>;
+
+    fn project_on(self, onto: Quaternion<S>) -> Quaternion<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+    type Output = Quaternion<S>;
+
+    fn project_on(self, onto: &Quaternion<S>) -> Quaternion<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S> ProjectOn<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
+    type Output = Quaternion<S>;
+
+    fn project_on(self, onto: Quaternion<S>) -> Quaternion<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<'a, 'b, S> ProjectOn<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
+    type Output = Quaternion<S>;
+
+    fn project_on(self, onto: &'a Quaternion<S>) -> Quaternion<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 
