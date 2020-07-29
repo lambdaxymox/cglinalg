@@ -7,9 +7,7 @@ use gdmath::{
     Matrix2,
     Matrix3,
     Matrix4,
-    Matrix, 
     Scalar,
-    ScalarFloat,
 };
 
 fn any_matrix2<S>() -> impl Strategy<Value = Matrix2<S>> where S: Scalar + Arbitrary {
@@ -625,7 +623,7 @@ macro_rules! approx_transposition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$MatrixN, Matrix};
+        use gdmath::Matrix;
 
         proptest! {
             /// The double transpose of a matrix is the original matrix.
@@ -700,7 +698,7 @@ macro_rules! exact_transposition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$MatrixN, Matrix};
+        use gdmath::Matrix;
 
         proptest! {
             /// The double transpose of a matrix is the original matrix.
@@ -764,4 +762,190 @@ exact_transposition_props!(matrix3_u32_transposition_props, Matrix3, u32, any_ma
 exact_transposition_props!(matrix3_i32_transposition_props, Matrix3, i32, any_matrix3);
 exact_transposition_props!(matrix4_u32_transposition_props, Matrix4, u32, any_matrix4);
 exact_transposition_props!(matrix4_i32_transposition_props, Matrix4, i32, any_matrix4);
+
+
+/// Generate the properties for the sqap operations on matrices.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$MatrixN` denotes the name of the matrix type.
+/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
+/// `$Generator` is the name of a function or closure for generating examples.
+macro_rules! swap_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use gdmath::Matrix;
+
+        proptest! {
+            /// Swapping rows is commutative in the row arguments.
+            ///
+            /// Given a matrix `m`, and rows `row1` and `row2`
+            /// ```
+            /// m.swap_rows(row1, row2) = m.swap_rows(row2, row1)
+            /// ```
+            #[test]
+            fn prop_swap_rows_commutative(
+                m in super::$Generator::<$ScalarType>(), 
+                row1 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize) {
+                
+                let mut m1 = m;
+                let mut m2 = m;
+                m1.swap_rows(row1, row2);
+                m2.swap_rows(row2, row1);
+
+                prop_assert_eq!(m1, m2);
+            }
+
+            /// Swapping the same row in both arguments is the identity map.
+            ///
+            /// Given a matrix `m`, and a row `row`
+            /// ```
+            /// m.swap_rows(row, row) = m
+            /// ```
+            #[test]
+            fn prop_swap_identical_rows_identity(
+                m in super::$Generator::<$ScalarType>(), row in 0..$UpperBound as usize) {
+
+                let mut m1 = m;
+                m1.swap_rows(row, row);
+
+                prop_assert_eq!(m1, m);
+            }
+
+            /// Swapping the same two rows twice in succession yields the original matrix.
+            ///
+            /// Given a matrix `m`, and rows `row1` and `row2`
+            /// ```
+            /// m.swap_rows(row1, row2).swap_rows(row1, row2) = m
+            /// ```
+            #[test]
+            fn prop_swap_rows_twice_is_identity(
+                m in super::$Generator::<$ScalarType>(), 
+                row1 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize) {
+                
+                let mut m1 = m;
+                m1.swap_rows(row1, row2);
+                m1.swap_rows(row1, row2);
+
+                prop_assert_eq!(m1, m);
+            }
+
+            /// Swapping columns is commutative in the column arguments.
+            ///
+            /// Given a matrix `m`, and columns `col1` and `col2`
+            /// ```
+            /// m.swap_columns(col1, col2) = m.swap_columns(col2, col1)
+            /// ```
+            #[test]
+            fn prop_swap_columns_commutative(
+                m in super::$Generator::<$ScalarType>(), 
+                col1 in 0..$UpperBound as usize, col2 in 0..$UpperBound as usize) {
+                
+                let mut m1 = m;
+                let mut m2 = m;
+                m1.swap_columns(col1, col2);
+                m2.swap_columns(col2, col1);
+
+                prop_assert_eq!(m1, m2);
+            }
+
+            /// Swapping the same column in both arguments is the identity map.
+            ///
+            /// Given a matrix `m`, and a column `col`
+            /// ```
+            /// m.swap_columns(col, col) = m
+            /// ```
+            #[test]
+            fn prop_swap_identical_columns_is_identity(
+                m in super::$Generator::<$ScalarType>(), col in 0..$UpperBound as usize) {
+
+                let mut m1 = m;
+                m1.swap_columns(col, col);
+
+                prop_assert_eq!(m1, m);
+            }
+
+            /// Swapping the same two columns twice in succession yields the original matrix.
+            ///
+            /// Given a matrix `m`, and columns `col1` and `col2`
+            /// ```
+            /// m.swap_columns(col1, col2).swap_columns(col1, col2) = m
+            /// ```
+            #[test]
+            fn prop_swap_columns_twice_is_identity(
+                m in super::$Generator::<$ScalarType>(), 
+                col1 in 0..$UpperBound as usize, col2 in 0..$UpperBound as usize) {
+                
+                let mut m1 = m;
+                m1.swap_columns(col1, col2);
+                m1.swap_columns(col1, col2);
+
+                prop_assert_eq!(m1, m);
+            }
+
+            /// Swapping elements is commutative in the arguments.
+            ///
+            /// Given a matrix `m`, and elements `(col1, row1)` and `(col2, row2)`
+            /// ```
+            /// m.swap_elements((col1, row1), (col2, row2)) = m.swap_elements((col2, row2), (col1, row1))
+            /// ```
+            #[test]
+            fn prop_swap_elements_commutative(
+                m in super::$Generator::<$ScalarType>(), 
+                col1 in 0..$UpperBound as usize, row1 in 0..$UpperBound as usize,
+                col2 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize) {
+                
+                let mut m1 = m;
+                let mut m2 = m;
+                m1.swap_elements((col1, row1), (col2, row2));
+                m2.swap_elements((col2, row2), (col1, row1));
+
+                prop_assert_eq!(m1, m2);
+            }
+
+            /// Swapping the same element in both arguments is the identity map.
+            ///
+            /// Given a matrix `m`, and an element index `(col, row)`
+            /// ```
+            /// m.swap_elements((col, row), (col, row)) = m
+            /// ```
+            #[test]
+            fn prop_swap_identical_elements_is_identity(
+                m in super::$Generator::<$ScalarType>(), 
+                col in 0..$UpperBound as usize, row in 0..$UpperBound as usize) {
+
+                let mut m1 = m;
+                m1.swap_elements((col, row), (col, row));
+
+                prop_assert_eq!(m1, m);
+            }
+
+            /// Swapping the same two elements twice in succession yields the original matrix.
+            ///
+            /// Given a matrix `m`, and elements `(col1, row1)` and `(col2, row2)`
+            /// ```
+            /// m.swap_elements((col1, row1), (col2, row2)).swap_elements((col1, row1), (col2, row2)) = m
+            /// ```
+            #[test]
+            fn prop_swap_elements_twice_is_identity(
+                m in super::$Generator::<$ScalarType>(), 
+                col1 in 0..$UpperBound as usize, row1 in 0..$UpperBound as usize, 
+                col2 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize) {
+                
+                let mut m1 = m;
+                m1.swap_elements((col1, row1), (col2, row2));
+                m1.swap_elements((col1, row1), (col2, row2));
+
+                prop_assert_eq!(m1, m);
+            }
+        }
+    }
+    }
+}
+
+swap_props!(matrix2_swap_props, Matrix2, isize, any_matrix2, 2);
+swap_props!(matrix3_swap_props, Matrix3, isize, any_matrix3, 3);
+swap_props!(matrix4_swap_props, Matrix4, isize, any_matrix4, 4);
 
