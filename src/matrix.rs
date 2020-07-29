@@ -55,9 +55,8 @@ impl<S> Matrix2<S> where S: ScalarFloat {
     /// Compute the inverse of a 2x2 matrix.
     pub fn inverse(&self) -> Option<Matrix2<S>> {
         let det = self.determinant();
-        // A matrix with zero determinant has no inverse.
-        // TODO: Make a more careful check for when the deterimant is very close to zero.
         if det == S::zero() {
+            // A matrix with zero determinant has no inverse.
             None
         } else {
             let inv_det = S::one() / det;
@@ -709,11 +708,11 @@ impl<S> Matrix3<S> where S: ScalarFloat {
         self.determinant() != S::zero()
     }
 
-    /// Calculate the inverser of a 3x3 matrix, if it exists.
-    /// A matrix with zero determinant has no inverse.
+    /// Calculate the inverse of a 3x3 matrix, if it exists.
     pub fn inverse(&self) -> Option<Matrix3<S>> {
         let det = self.determinant();
         if det == S::zero() {
+            // A matrix with zero determinant has no inverse.
             None
         } else {
             let inv_det = S::one() / det;
@@ -1674,8 +1673,8 @@ impl<S> Matrix4<S> where S: Scalar {
     /// Compute the inverse of a 4x4 matrix.
     pub fn inverse(&self) -> Option<Matrix4<S>> {
         let det = self.determinant();
-        // A matrix with zero determinant has no inverse.
         if det == S::zero() {
+            // A matrix with zero determinant has no inverse.
             None
         } else {
             let det_inv = S::one() / det;
