@@ -361,6 +361,33 @@ mod matrix2_tests {
         assert_eq!(matrix.c1r0, matrix[1][0]);
         assert_eq!(matrix.c1r1, matrix[1][1]);
     }
+
+    #[test]
+    fn test_matrix_swap_columns() {
+        let mut result = Matrix2::new(1, 2, 3, 4);
+        result.swap_columns(0, 1);
+        let expected = Matrix2::new(3, 4, 1, 2);
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_swap_rows() {
+        let mut result = Matrix2::new(1, 2, 3, 4);
+        result.swap_rows(0, 1);
+        let expected = Matrix2::new(2, 1, 4, 3);
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_swap_elements() {
+        let mut result = Matrix2::new(1, 2, 3, 4);
+        result.swap_elements((0, 0), (1, 1));
+        let expected = Matrix2::new(4, 2, 3, 1);
+
+        assert_eq!(result, expected);
+    }
 }
 
 
@@ -788,6 +815,33 @@ mod matrix3_tests {
         assert_eq!(matrix.c2r0, matrix[2][0]);
         assert_eq!(matrix.c2r1, matrix[2][1]);
         assert_eq!(matrix.c2r2, matrix[2][2]);
+    }
+
+    #[test]
+    fn test_matrix_swap_columns() {
+        let mut result = Matrix3::new(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        result.swap_columns(0, 1);
+        let expected = Matrix3::new(4, 5, 6, 1, 2, 3, 7, 8, 9);
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_swap_rows() {
+        let mut result = Matrix3::new(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        result.swap_rows(0, 1);
+        let expected = Matrix3::new(2, 1, 4, 3, 6, 5, 7, 8, 9);
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_swap_elements() {
+        let mut result = Matrix3::new(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        result.swap_elements((0, 0), (2, 1));
+        let expected = Matrix3::new(8, 2, 3, 4, 5, 6, 7, 1, 9);
+
+        assert_eq!(result, expected);
     }
 }
 
@@ -1322,5 +1376,62 @@ mod matrix4_tests {
         assert_eq!(matrix.c3r1, matrix[3][1]);
         assert_eq!(matrix.c3r2, matrix[3][2]);
         assert_eq!(matrix.c3r3, matrix[3][3]);
+    }
+
+    #[test]
+    fn test_matrix_swap_columns() {
+        let mut result = Matrix4::new(
+            1,  2,  3,   4, 
+            5,  6,  7,   8, 
+            9,  10, 11,  12,
+            13, 14, 15,  16
+        );
+        result.swap_columns(3, 1);
+        let expected = Matrix4::new(
+            1,  2,  3,  4,
+            13, 14, 15, 16,
+            9,  10, 11, 12,
+            5,  6,  7,  8 
+        );
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_swap_rows() {
+        let mut result = Matrix4::new(
+            1,  2,  3,  4, 
+            5,  6,  7,  8, 
+            9,  10, 11, 12, 
+            13, 14, 15, 16
+        );
+        result.swap_rows(3, 1);
+        let expected = Matrix4::new(
+            1,  4,  3,  2,
+            5,  8,  7,  6,
+            9,  12, 11, 10,
+            13, 16, 15, 14
+        );
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_swap_elements() {
+        let mut result = Matrix4::new(
+            1,  2,  3,  4, 
+            5,  6,  7,  8, 
+            9,  10, 11, 12,
+            13, 14, 15, 16
+        );
+        result.swap_elements((2, 0), (1, 3));
+        let expected = Matrix4::new(
+            1,  2,  3,  4,
+            5,  6,  7,  9,
+            8,  10, 11, 12,
+            13, 14, 15, 16
+        );
+
+        assert_eq!(result, expected);
     }
 }

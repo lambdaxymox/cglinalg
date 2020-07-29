@@ -23,9 +23,9 @@ use vector::*;
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
 pub struct Matrix2<S> {
-    /// Column 1 of the matrix.
+    /// Column 0 of the matrix.
     pub c0r0: S, pub c0r1: S,
-    /// Column 2 of the matrix.
+    /// Column 1 of the matrix.
     pub c1r0: S, pub c1r1: S,
 }
 
@@ -661,11 +661,11 @@ impl<S> approx::UlpsEq for Matrix2<S> where S: ScalarFloat {
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
 pub struct Matrix3<S> {
-    /// Column 1 of the matrix.
+    /// Column 0 of the matrix.
     pub c0r0: S, pub c0r1: S, pub c0r2: S,
-    /// Column 2 of the matrix.
+    /// Column 1 of the matrix.
     pub c1r0: S, pub c1r1: S, pub c1r2: S,
-    /// Column 3 of the matrix.
+    /// Column 2 of the matrix.
     pub c2r0: S, pub c2r1: S, pub c2r2: S,
 }
 
@@ -676,11 +676,11 @@ impl<S> Matrix3<S> {
         c2r0: S, c2r1: S, c2r2: S) -> Matrix3<S> {
 
         Matrix3 {
-            // Column 1 of the matrix.
+            // Column 0 of the matrix.
             c0r0: c0r0, c0r1: c0r1, c0r2: c0r2,
-            // Column 2 of the matrix.
+            // Column 1 of the matrix.
             c1r0: c1r0, c1r1: c1r1, c1r2: c1r2,
-            // Column 3 of the matrix.
+            // Column 2 of the matrix.
             c2r0: c2r0, c2r1: c2r1, c2r2: c2r2,
         }
     }
@@ -1569,13 +1569,13 @@ impl<S> approx::UlpsEq for Matrix3<S> where S: ScalarFloat {
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
 pub struct Matrix4<S> {
-    /// Column 1 of the matrix.
+    /// Column 0 of the matrix.
     pub c0r0: S, pub c0r1: S, pub c0r2: S, pub c0r3: S,
-    /// Column 2 of the matrix.
+    /// Column 1 of the matrix.
     pub c1r0: S, pub c1r1: S, pub c1r2: S, pub c1r3: S,
-    /// Column 3 of the matrix.
+    /// Column 2 of the matrix.
     pub c2r0: S, pub c2r1: S, pub c2r2: S, pub c2r3: S,
-    /// Column 4 of the matrix.
+    /// Column 3 of the matrix.
     pub c3r0: S, pub c3r1: S, pub c3r2: S, pub c3r3: S,
 }
 
