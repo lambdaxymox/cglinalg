@@ -48,28 +48,36 @@ impl<S> Quaternion<S> where S: Scalar {
         Self::from_sv(s, Vector3::new(x, y, z))
     }
 
-    /// Compute a quaternion from it's scalar and vector parts.
+    /// Compute a quaternion from its scalar and vector parts.
     #[inline]
     pub fn from_sv(s: S, v: Vector3<S>) -> Quaternion<S> {
         Quaternion { s: s, v: v }
     }
 
-    /// The unit real (zero vector part) quaternion.
+    /// Returns the unit real quaternion. 
+    ///
+    /// A real vector quaternion is a quaternion with zero vector part.
     pub fn unit_s() -> Quaternion<S> {
         Quaternion::from_sv(S::one(), Vector3::zero())
     }
 
-    /// The unit pure quaternion representing the x axis.
+    /// The unit pure quaternion representing the x-axis.
+    ///
+    /// A pure quaternion is a quaternion with zero scalar part.
     pub fn unit_x() -> Quaternion<S> {
         Quaternion::from_sv(S::zero(), Vector3::new(S::one(), S::zero(), S::zero()))
     }
 
-    /// The unit pure quaternion representing the x axis.
+    /// The unit pure quaternion representing the y-axis.
+    ///
+    /// A pure quaternion is a quaternion with zero scalar part.
     pub fn unit_y() -> Quaternion<S> {
         Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::one(), S::zero()))
     }
 
-    /// The unit pure quaternion representing the x axis.
+    /// The unit pure quaternion representing the z-axis.
+    ///
+    /// A pure quaternion is a quaternion with zero scalar part.
     pub fn unit_z() -> Quaternion<S> {
         Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
     }

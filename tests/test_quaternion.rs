@@ -85,9 +85,9 @@ mod arithmetic_tests {
 
     #[test]
     fn test_unit_axis_quaternions() {
-        let i = Quaternion::from_sv(0_f64, Vector3::unit_x());
-        let j = Quaternion::from_sv(0_f64, Vector3::unit_y());
-        let k = Quaternion::from_sv(0_f64, Vector3::unit_z());
+        let i = Quaternion::unit_x();
+        let j = Quaternion::unit_y();
+        let k = Quaternion::unit_z();
 
         let result_i = 4_f64 * i;
         let expected_i = Quaternion::from_sv(0_f64, Vector3::new(4_f64, 0_f64, 0_f64));
@@ -123,9 +123,9 @@ mod arithmetic_tests {
 
     #[test]
     fn test_quaternion_unit_squares() {
-        let i = Quaternion::from_sv(0_f64, Vector3::unit_x());
-        let j = Quaternion::from_sv(0_f64, Vector3::unit_y());
-        let k = Quaternion::from_sv(0_f64, Vector3::unit_z());
+        let i = Quaternion::<f64>::unit_x();
+        let j = Quaternion::<f64>::unit_y();
+        let k = Quaternion::<f64>::unit_z();
         let minus_one = -Quaternion::one();
 
         assert_eq!(i * i, minus_one);
@@ -135,9 +135,9 @@ mod arithmetic_tests {
 
     #[test]
     fn test_quaternion_product_of_all_unit_axis_quaternions() {
-        let i = Quaternion::from_sv(0_f64, Vector3::unit_x());
-        let j = Quaternion::from_sv(0_f64, Vector3::unit_y());
-        let k = Quaternion::from_sv(0_f64, Vector3::unit_z());
+        let i = Quaternion::<f64>::unit_x();
+        let j = Quaternion::<f64>::unit_y();
+        let k = Quaternion::<f64>::unit_z();
         let minus_one = -Quaternion::one();
 
         assert_eq!(i * j * k, minus_one);
@@ -145,9 +145,9 @@ mod arithmetic_tests {
 
     #[test]
     fn test_quaternion_unit_products() {
-        let i = Quaternion::from_sv(0_f64, Vector3::unit_x());
-        let j = Quaternion::from_sv(0_f64, Vector3::unit_y());
-        let k = Quaternion::from_sv(0_f64, Vector3::unit_z());
+        let i = Quaternion::<f64>::unit_x();
+        let j = Quaternion::<f64>::unit_y();
+        let k = Quaternion::<f64>::unit_z();
 
         assert_eq!(i * j, k);
         assert_eq!(j * i, -k);
@@ -169,10 +169,10 @@ mod magnitude_tests {
 
 
     #[test]
-    fn unit_axis_quaternions_should_have_unit_norms() {
-        let i = Quaternion::from_sv(0_f64, Vector3::unit_x());
-        let j = Quaternion::from_sv(0_f64, Vector3::unit_y());
-        let k = Quaternion::from_sv(0_f64, Vector3::unit_z());
+    fn test_unit_axis_quaternions_should_have_unit_norms() {
+        let i = Quaternion::<f64>::unit_x();
+        let j = Quaternion::<f64>::unit_y();
+        let k = Quaternion::<f64>::unit_z();
     
         assert_eq!(i.magnitude(), 1_f64);
         assert_eq!(j.magnitude(), 1_f64);
@@ -318,8 +318,6 @@ mod slerp_tests {
 #[cfg(test)]
 mod arg_tests {
     use gdmath::Quaternion;
-
-    use gdmath::approx::relative_eq;
     
     #[test]
     fn test_quaternion_arg() {
