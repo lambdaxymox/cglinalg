@@ -315,3 +315,33 @@ mod slerp_tests {
     }
 }
 
+#[cfg(test)]
+mod exp_tests {
+    use gdmath::{
+        Quaternion,
+        One,
+        Zero,
+    };
+
+    use gdmath::approx::relative_eq;
+
+
+    #[test]
+    fn test_exp_zero_quaternion() {
+        let zero_quat: Quaternion<f64> = Quaternion::zero();
+        let one_quat: Quaternion<f64> = Quaternion::one();
+        let result = zero_quat.exp();
+
+        assert_eq!(result, one_quat);
+    }
+
+    #[test]
+    fn test_exp_power_times_pi() {
+        let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let arg = q * std::f64::consts::PI;
+        let expected = -Quaternion::one();
+        let result = arg.exp();
+
+        assert_eq!(result, expected);
+    }
+}
