@@ -360,4 +360,22 @@ mod exp_tests {
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
+
+    #[test]
+    fn test_quaternion_exp_inverse() {
+        let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let expected = Quaternion::one();
+        let result = (-q).exp() * q.exp();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_quaternion_conjugate_commutes_with_exp() {
+        let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let result = q.exp().conjugate();
+        let expected = q.conjugate().exp();
+
+        assert_eq!(result, expected);
+    }
 }
