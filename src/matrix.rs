@@ -116,7 +116,7 @@ impl<S> Matrix for Matrix2<S> where S: Scalar {
         let c0ra = self[0][row_a];
         let c1ra = self[1][row_a];
         self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[0][row_b];
+        self[1][row_a] = self[1][row_b];
         self[0][row_b] = c0ra;
         self[1][row_b] = c1ra;
     }
@@ -783,8 +783,8 @@ impl<S> Matrix for Matrix3<S> where S: Scalar {
         let c1ra = self[1][row_a];
         let c2ra = self[2][row_a];
         self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[0][row_b];
-        self[2][row_a] = self[0][row_b];
+        self[1][row_a] = self[1][row_b];
+        self[2][row_a] = self[2][row_b];
         self[0][row_b] = c0ra;
         self[1][row_b] = c1ra;
         self[2][row_b] = c2ra;
@@ -1838,9 +1838,9 @@ impl<S> Matrix for Matrix4<S> where S: Scalar {
         let c2ra = self[2][row_a];
         let c3ra = self[3][row_a];
         self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[0][row_b];
-        self[2][row_a] = self[0][row_b];
-        self[3][row_a] = self[0][row_b];
+        self[1][row_a] = self[1][row_b];
+        self[2][row_a] = self[2][row_b];
+        self[3][row_a] = self[3][row_b];
         self[0][row_b] = c0ra;
         self[1][row_b] = c1ra;
         self[2][row_b] = c2ra;

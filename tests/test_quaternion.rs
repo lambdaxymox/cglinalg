@@ -318,6 +318,7 @@ mod slerp_tests {
 #[cfg(test)]
 mod exp_tests {
     use gdmath::{
+        Magnitude,
         Quaternion,
         One,
         Zero,
@@ -327,7 +328,7 @@ mod exp_tests {
 
 
     #[test]
-    fn test_exp_zero_quaternion() {
+    fn test_quaternion_exp_zero() {
         let zero_quat: Quaternion<f64> = Quaternion::zero();
         let one_quat: Quaternion<f64> = Quaternion::one();
         let result = zero_quat.exp();
@@ -336,12 +337,13 @@ mod exp_tests {
     }
 
     #[test]
-    fn test_exp_power_times_pi() {
+    fn test_quaternion_exp_power_times_pi() {
         let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
-        let arg = q * std::f64::consts::PI;
+        let sgn_qv = Quaternion::from_sv(0_f64, q.v / q.v.magnitude());
+        let pi = std::f64::consts::PI;
         let expected = -Quaternion::one();
-        let result = arg.exp();
+        let result = (sgn_qv * pi).exp();
 
-        assert_eq!(result, expected);
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
 }

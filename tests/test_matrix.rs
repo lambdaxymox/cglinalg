@@ -830,7 +830,7 @@ mod matrix3_tests {
     fn test_matrix_swap_rows() {
         let mut result = Matrix3::new(1, 2, 3, 4, 5, 6, 7, 8, 9);
         result.swap_rows(0, 1);
-        let expected = Matrix3::new(2, 1, 4, 3, 6, 5, 7, 8, 9);
+        let expected = Matrix3::new(2, 1, 3, 5, 4, 6, 8, 7, 9);
         
         assert_eq!(result, expected);
     }
