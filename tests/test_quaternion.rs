@@ -316,6 +316,22 @@ mod slerp_tests {
 }
 
 #[cfg(test)]
+mod arg_tests {
+    use gdmath::Quaternion;
+
+    use gdmath::approx::relative_eq;
+    
+    #[test]
+    fn test_quaternion_arg() {
+        let q = Quaternion::new(0_f64, 1_f64, 1_f64, 1_f64);
+        let expected = std::f64::consts::FRAC_PI_2;
+        let result = q.arg();
+
+        assert_eq!(result, expected);
+    }
+}
+
+#[cfg(test)]
 mod exp_tests {
     use gdmath::{
         Magnitude,

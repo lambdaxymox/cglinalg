@@ -54,6 +54,26 @@ impl<S> Quaternion<S> where S: Scalar {
         Quaternion { s: s, v: v }
     }
 
+    /// The unit real (zero vector part) quaternion.
+    pub fn unit_s() -> Quaternion<S> {
+        Quaternion::from_sv(S::one(), Vector3::zero())
+    }
+
+    /// The unit pure quaternion representing the x axis.
+    pub fn unit_x() -> Quaternion<S> {
+        Quaternion::from_sv(S::zero(), Vector3::new(S::one(), S::zero(), S::zero()))
+    }
+
+    /// The unit pure quaternion representing the x axis.
+    pub fn unit_y() -> Quaternion<S> {
+        Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::one(), S::zero()))
+    }
+
+    /// The unit pure quaternion representing the x axis.
+    pub fn unit_z() -> Quaternion<S> {
+        Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
+    }
+
     /// Convert a quaternion to its equivalent matrix form writing the terms into preallocated storage.
     pub fn to_mut_mat4(&self, m: &mut Matrix4<S>) {
         let s = self.s;
@@ -182,6 +202,16 @@ impl<S> Quaternion<S> where S: ScalarFloat {
             let q_vector = self.v * (magnitude_q_pow * S::sin(power * angle) / magnitude_v);
 
             Quaternion::from_sv(q_scalar, q_vector)
+        }
+    }
+
+    /// Compute the principal argument of a quaternion. The principal argument 
+    /// of a quaternion `self` is the smallest 
+    pub fn arg(&self) -> S {
+        if self.s == S::zero() {
+            num_traits::cast(std::f64::consts::FRAC_PI_2).unwrap()
+        } else {
+            S::atan(self.v.magnitude() / self.s)
         }
     }
 }
