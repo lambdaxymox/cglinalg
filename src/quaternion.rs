@@ -123,6 +123,67 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     pub fn is_invertible(&self) -> bool {
         self.magnitude_squared() > S::zero()
     }
+
+    /// Calculate the exponential of a quaternion.
+    pub fn exp(&self) -> Quaternion<S> {
+        let magnitude_v = self.v.magnitude();
+        if magnitude_v == S::zero() {
+            Quaternion::from_sv(self.s.exp(), Vector3::zero())
+        } else {
+            let exp_s = self.s.exp();
+            let q_scalar = exp_s * S::cos(magnitude_v);
+            let q_vector = self.v * (exp_s * S::sin(magnitude_v) / magnitude_v);
+            
+            Quaternion::from_sv(q_scalar, q_vector)
+        }
+    }
+
+    /// Calculate the natural logarithm of a quaternion.
+    pub fn ln(&self) -> Quaternion<S> {
+        let magnitude_v = self.v.magnitude();
+        if magnitude_v == S::zero() {
+            Quaternion::from_sv(self.s.ln(), Vector3::zero())
+        } else {
+            let magnitude_q = self.magnitude();
+            let arccos_s_over_mag_q = S::acos(self.s / magnitude_q);
+            let q_scalar = S::ln(magnitude_q);
+            let q_vector = self.v * (arccos_s_over_mag_q / magnitude_v);
+
+            Quaternion::from_sv(q_scalar, q_vector)
+        }
+    }
+
+    /// Calculate the (real) power of a quaternion.
+    pub fn pow(&self, power: S) -> Quaternion<S> {
+        let magnitude_v = self.v.magnitude();
+        if (self.s == S::zero()) && (magnitude_v == S::zero()) {
+            Quaternion::zero()
+        } else if (self.s == S::zero()) && (magnitude_v != S::zero()) {
+            let magnitude_q = self.magnitude();
+            let magnitude_q_pow = magnitude_q.powf(power);
+            let angle: S = num_traits::cast(std::f64::consts::FRAC_PI_2).unwrap();
+            let q_scalar = magnitude_q_pow * S::cos(power * angle);
+            let q_vector = self.v * (magnitude_q_pow * S::sin(power * angle) / magnitude_v);
+
+            Quaternion::from_sv(q_scalar, q_vector)
+        } else if (self.s != S::zero()) && (magnitude_v == S::zero()) {
+            let magnitude_q = self.magnitude();
+            let magnitude_q_pow = magnitude_q.powf(power);
+            let angle = S::zero();
+            let q_scalar = magnitude_q_pow * S::cos(power * angle);
+            let q_vector = self.v * (magnitude_q_pow * S::sin(power * angle) / magnitude_v);
+
+            Quaternion::from_sv(q_scalar, q_vector)
+        } else {
+            let magnitude_q = self.magnitude();
+            let magnitude_q_pow = magnitude_q.powf(power);
+            let angle = S::atan(magnitude_v / self.s);
+            let q_scalar = magnitude_q_pow * S::cos(power * angle);
+            let q_vector = self.v * (magnitude_q_pow * S::sin(power * angle) / magnitude_v);
+
+            Quaternion::from_sv(q_scalar, q_vector)
+        }
+    }
 }
 
 impl<S> Zero for Quaternion<S> where S: Scalar {
