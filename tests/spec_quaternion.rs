@@ -1461,3 +1461,38 @@ macro_rules! slerp_props {
 
 slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, 1e-7);
 
+
+
+/// Generate the properties for quaternion exponentiation and natural logarithms.
+///
+/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
+///  from each other for each field type to prevent namespace collisions.
+/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
+/// `$Generator` is the name of a function or closure for generating examples.
+/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
+///  that still defines a correct computation. We cannot guarantee floating point computations
+///  will be exact since the underlying floating point arithmetic is not exact.
+macro_rules! exp_log_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+
+        proptest! {
+            /// Quaternion exponentiation commutes with quaternion conjugation.
+            ///
+            /// Given a quaternion `q`
+            /// ```
+            /// conjugate(exp(q)) = exp(conjugate(q))
+            /// ```
+            #[test]
+            fn prop_quaternion_conjugation_exp_commutes(q in super::$Generator::<$ScalarType>()) {
+                assert_eq!(q.exp().conjugate(), q.conjugate().exp());
+            }
+        }
+    }
+    }
+}
+
+exp_log_props!(quaternion_f64_exp_props, f64, any_quaternion, 1e-7);
+
+
