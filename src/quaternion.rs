@@ -249,7 +249,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Compute the principal value of a quaternion raised to the power of another quaternion.
     pub fn powq(&self, exponent: Quaternion<S>) -> Quaternion<S> {
-        Self::exp(&(Self::ln(&self) * exponent))
+        Self::exp(&(self.ln() * exponent))
     }
 }
 
