@@ -347,7 +347,6 @@ mod exp_tests {
         One,
         Zero,
     };
-
     use gdmath::approx::relative_eq;
 
 
@@ -392,8 +391,81 @@ mod exp_tests {
 
 #[cfg(test)]
 mod logarithm_tests {
-    use gdmath::Quaternion;
+    use gdmath::{
+        Vector3,
+        Quaternion,
+        Zero,
+        One,
+    };
+    use gdmath::approx::relative_eq;
 
 
+    #[test]
+    fn test_quaternion_logarithm_log_one_should_be_zero() {
+        let q = Quaternion::<f64>::one();
+        let expected = Quaternion::<f64>::zero();
+        let result = q.ln();
 
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaternion_logarithm() {
+        let i = Quaternion::<f64>::unit_x();
+        let j = Quaternion::<f64>::unit_y();
+        let k = Quaternion::<f64>::unit_z();
+        let exp_i = i.exp();
+        let exp_j = j.exp();
+        let exp_k = k.exp();
+
+        assert!(relative_eq!(exp_i.ln(), i, epsilon = 1e-7));
+        assert!(relative_eq!(exp_j.ln(), j, epsilon = 1e-7));
+        assert!(relative_eq!(exp_k.ln(), k, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_quaternion_logarithm1() {
+        let i = Quaternion::<f64>::unit_x();
+        let j = Quaternion::<f64>::unit_y();
+        let k = Quaternion::<f64>::unit_z();
+        let pi_over_2 = std::f64::consts::FRAC_PI_2;
+
+        assert_eq!(i.ln(), i * pi_over_2);
+        assert_eq!(j.ln(), j * pi_over_2);
+        assert_eq!(k.ln(), k * pi_over_2);
+    }
+
+    #[test]
+    fn test_quaternion_logarithm2() {
+        let q = 2_f64 * Quaternion::unit_y() - 5_f64 * Quaternion::unit_z();
+        let sqrt_29 = f64::sqrt(29_f64);
+        let pi_over_2 = std::f64::consts::FRAC_PI_2;
+        let expected_s = sqrt_29.ln();
+        let expected_v = (2_f64 * Vector3::unit_y() - 5_f64 * Vector3::unit_z()) * pi_over_2 / sqrt_29;
+        let expected = Quaternion::from_sv(expected_s, expected_v);
+        let result = q.ln();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_log_negative_one() {
+        let q = -Quaternion::<f64>::one();
+        let expected = Quaternion::<f64>::zero();
+        let result = q.ln();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaternion_negative_logarithm() {
+        let i = Quaternion::<f64>::unit_x();
+        let j = Quaternion::<f64>::unit_y();
+        let k = Quaternion::<f64>::unit_z();
+        let pi_over_2 = std::f64::consts::FRAC_PI_2;
+
+        assert_eq!((-i).ln(), -i * pi_over_2);
+        assert_eq!((-j).ln(), -j * pi_over_2);
+        assert_eq!((-k).ln(), -k * pi_over_2);
+    }
 }
