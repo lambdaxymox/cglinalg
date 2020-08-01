@@ -318,11 +318,21 @@ mod slerp_tests {
 #[cfg(test)]
 mod arg_tests {
     use gdmath::Quaternion;
+
     
     #[test]
     fn test_quaternion_arg() {
         let q = Quaternion::new(0_f64, 1_f64, 1_f64, 1_f64);
         let expected = std::f64::consts::FRAC_PI_2;
+        let result = q.arg();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaternion_arg1() {
+        let q = Quaternion::new(1_f64, 2_f64, -1_f64, 0_f64);
+        let expected = f64::acos(f64::sqrt(6_f64) / 6_f64);
         let result = q.arg();
 
         assert_eq!(result, expected);
@@ -378,4 +388,12 @@ mod exp_tests {
 
         assert_eq!(result, expected);
     }
+}
+
+#[cfg(test)]
+mod logarithm_tests {
+    use gdmath::Quaternion;
+
+
+
 }

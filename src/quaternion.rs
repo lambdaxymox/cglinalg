@@ -166,7 +166,17 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         }
     }
 
-    /// Calculate the natural logarithm of a quaternion.
+    /// Calculate the principal value of the natural logarithm of a quaternion.
+    ///
+    /// Just like the complex numbers, the natural logarithm of a quaternion has multiple possible
+    /// values, so we return the principal value of the quaternion logarithm, defined by
+    /// ```text
+    /// Ln(q) = log(||q||, e) + sgn(Vec(q)) * Arg(q)
+    /// ```
+    /// where `Arg(q)` is the principal argument of `q`, `||q||` is the magnitude of `q`, 
+    /// `Vec(q)` is the vector part of `q`, `sgn(.)` is the signum function, and `log(., e)`
+    /// denotes the natural logarithm of a scalar. Returning the principal value allows us to
+    /// define a unique natural logarithm for each quaternion `q`.
     pub fn ln(&self) -> Quaternion<S> {
         let magnitude_v = self.v.magnitude();
         if magnitude_v == S::zero() {
@@ -213,8 +223,22 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         }
     }
 
-    /// Compute the principal argument of a quaternion. The principal argument 
-    /// of a quaternion `self` is the smallest 
+    /// Compute the principal argument of a quaternion.
+    ///
+    /// Every quaternion can be written in polar form. Let `q` be a quaternion and let 
+    /// `q = qs + qv` where `qs` is the scalar part of `q` and `qv` is the vector part of `q`.
+    /// The polar form of q can be written as
+    /// ```text
+    /// q = |q| * (cos(theta) + (qv / |qv|) * sin(theta))
+    /// ```
+    /// The argument of `q` is the set of angles `theta` that satisfy the relation above which 
+    /// we denote `arg(q)`. The principal argument of `q` is the angle `theta` satisfying the 
+    /// polar decomposition of `q` above such that `theta` lies in the closed interval `[0, pi]`. 
+    /// For each elemenet of `theta` of `arg(q)`, there is an integer `n` such that
+    /// ```text
+    /// theta = Arg(q) + 2 * pi * n
+    /// ```
+    /// In the case of `theta = Arg(q)`, we have `n = 0`.
     pub fn arg(&self) -> S {
         if self.s == S::zero() {
             num_traits::cast(std::f64::consts::FRAC_PI_2).unwrap()
