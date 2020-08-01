@@ -152,6 +152,30 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         self.magnitude_squared() > S::zero()
     }
 
+    /// Compute the principal argument of a quaternion.
+    ///
+    /// Every quaternion can be written in polar form. Let `q` be a quaternion and let 
+    /// `q = qs + qv` where `qs` is the scalar part of `q` and `qv` is the vector part of `q`.
+    /// The polar form of q can be written as
+    /// ```text
+    /// q = |q| * (cos(theta) + (qv / |qv|) * sin(theta))
+    /// ```
+    /// The argument of `q` is the set of angles `theta` that satisfy the relation above which 
+    /// we denote `arg(q)`. The principal argument of `q` is the angle `theta` satisfying the 
+    /// polar decomposition of `q` above such that `theta` lies in the closed interval `[0, pi]`. 
+    /// For each elemenet of `theta` of `arg(q)`, there is an integer `n` such that
+    /// ```text
+    /// theta = Arg(q) + 2 * pi * n
+    /// ```
+    /// In the case of `theta = Arg(q)`, we have `n = 0`.
+    pub fn arg(&self) -> S {
+        if self.s == S::zero() {
+            num_traits::cast(std::f64::consts::FRAC_PI_2).unwrap()
+        } else {
+            S::atan(self.v.magnitude() / self.s)
+        }
+    }
+
     /// Calculate the exponential of a quaternion.
     pub fn exp(&self) -> Quaternion<S> {
         let magnitude_v = self.v.magnitude();
@@ -191,60 +215,41 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         }
     }
 
-    /// Calculate the (real) power of a quaternion.
-    pub fn pow(&self, power: S) -> Quaternion<S> {
+    /// Calculate the power of a quaternion where the exponent is a real number.
+    pub fn powf(&self, exponent: S) -> Quaternion<S> {
         let magnitude_v = self.v.magnitude();
         if (self.s == S::zero()) && (magnitude_v == S::zero()) {
             Quaternion::zero()
         } else if (self.s == S::zero()) && (magnitude_v != S::zero()) {
             let magnitude_q = self.magnitude();
-            let magnitude_q_pow = magnitude_q.powf(power);
+            let magnitude_q_pow = magnitude_q.powf(exponent);
             let angle: S = num_traits::cast(std::f64::consts::FRAC_PI_2).unwrap();
-            let q_scalar = magnitude_q_pow * S::cos(power * angle);
-            let q_vector = self.v * (magnitude_q_pow * S::sin(power * angle) / magnitude_v);
+            let q_scalar = magnitude_q_pow * S::cos(exponent * angle);
+            let q_vector = self.v * (magnitude_q_pow * S::sin(exponent * angle) / magnitude_v);
 
             Quaternion::from_sv(q_scalar, q_vector)
         } else if (self.s != S::zero()) && (magnitude_v == S::zero()) {
             let magnitude_q = self.magnitude();
-            let magnitude_q_pow = magnitude_q.powf(power);
+            let magnitude_q_pow = magnitude_q.powf(exponent);
             let angle = S::zero();
-            let q_scalar = magnitude_q_pow * S::cos(power * angle);
-            let q_vector = self.v * (magnitude_q_pow * S::sin(power * angle) / magnitude_v);
+            let q_scalar = magnitude_q_pow * S::cos(exponent * angle);
+            let q_vector = self.v * (magnitude_q_pow * S::sin(exponent * angle) / magnitude_v);
 
             Quaternion::from_sv(q_scalar, q_vector)
         } else {
             let magnitude_q = self.magnitude();
-            let magnitude_q_pow = magnitude_q.powf(power);
+            let magnitude_q_pow = magnitude_q.powf(exponent);
             let angle = S::atan(magnitude_v / self.s);
-            let q_scalar = magnitude_q_pow * S::cos(power * angle);
-            let q_vector = self.v * (magnitude_q_pow * S::sin(power * angle) / magnitude_v);
+            let q_scalar = magnitude_q_pow * S::cos(exponent * angle);
+            let q_vector = self.v * (magnitude_q_pow * S::sin(exponent * angle) / magnitude_v);
 
             Quaternion::from_sv(q_scalar, q_vector)
         }
     }
 
-    /// Compute the principal argument of a quaternion.
-    ///
-    /// Every quaternion can be written in polar form. Let `q` be a quaternion and let 
-    /// `q = qs + qv` where `qs` is the scalar part of `q` and `qv` is the vector part of `q`.
-    /// The polar form of q can be written as
-    /// ```text
-    /// q = |q| * (cos(theta) + (qv / |qv|) * sin(theta))
-    /// ```
-    /// The argument of `q` is the set of angles `theta` that satisfy the relation above which 
-    /// we denote `arg(q)`. The principal argument of `q` is the angle `theta` satisfying the 
-    /// polar decomposition of `q` above such that `theta` lies in the closed interval `[0, pi]`. 
-    /// For each elemenet of `theta` of `arg(q)`, there is an integer `n` such that
-    /// ```text
-    /// theta = Arg(q) + 2 * pi * n
-    /// ```
-    /// In the case of `theta = Arg(q)`, we have `n = 0`.
-    pub fn arg(&self) -> S {
-        if self.s == S::zero() {
-            num_traits::cast(std::f64::consts::FRAC_PI_2).unwrap()
-        } else {
-            S::atan(self.v.magnitude() / self.s)
-        }
+    /// Compute the principal value of a quaternion raised to the power of another quaternion.
+    pub fn powq(&self, exponent: Quaternion<S>) -> Quaternion<S> {
+        Self::exp(&(Self::ln(&self) * exponent))
     }
 }
 
