@@ -1476,6 +1476,11 @@ macro_rules! exp_log_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
+        use gdmath::{
+            Quaternion,
+            Zero,
+            One
+        };
 
         proptest! {
             /// Quaternion exponentiation commutes with quaternion conjugation.
@@ -1487,6 +1492,41 @@ macro_rules! exp_log_props {
             #[test]
             fn prop_quaternion_conjugation_exp_commutes(q in super::$Generator::<$ScalarType>()) {
                 assert_eq!(q.exp().conjugate(), q.conjugate().exp());
+            }
+
+            /// The exponential of a quaternion is never zero.
+            ///
+            /// Given a quaternion `q` and the zero quaternion `0`
+            /// ```
+            /// exp(q) != 0
+            /// ```
+            #[test]
+            fn prop_quaternion_exp_nonzero(q in super::$Generator::<$ScalarType>()) {
+                assert!(q.exp() != Quaternion::zero());
+            }
+
+            /// Every quaternion exponential has a multiplicative inverse.
+            ///
+            /// Given a quaternion `q` and the unit quaternion `1`
+            /// ```
+            /// exp(-q) * exp(q) = exp(q) * exp(-q) = 1
+            /// ```
+            #[test]
+            fn prop_quaternion_exp_inverse(q in super::$Generator::<$ScalarType>()) {
+                assert_eq!((-q).exp() * q.exp(), Quaternion::one());
+                assert_eq!(q.exp() * (-q).exp(), Quaternion::one());
+            }
+
+            /// The quaternion logarithm is the inverse of the quaternion exponential.
+            ///
+            /// Given a quaternion `q`
+            /// ```
+            /// exp(ln(q)) = ln(exp(q)) = q
+            /// ```
+            #[test]
+            fn prop_quaternion_exp_log_inverses(q in super::$Generator::<$ScalarType>()) {
+                assert_eq!(q.ln().exp(), q);
+                assert_eq!(q.exp().ln(), q);
             }
         }
     }
