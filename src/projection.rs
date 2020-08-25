@@ -1,5 +1,8 @@
 use crate::base::ScalarFloat;
-use crate::angle::Radians;
+use crate::angle::{
+    Degrees, 
+    Radians
+};
 use crate::matrix::Matrix4;
 use crate::structure::Angle;
 
@@ -208,6 +211,37 @@ impl<S> Into<PerspectiveFov<S>> for &(Radians<S>, S, S, S) where S: Copy {
     }
 }
 
+impl<S> Into<PerspectiveFov<S>> for (Degrees<S>, S, S, S) where S: ScalarFloat {
+    #[inline]
+    fn into(self) -> PerspectiveFov<S> {
+        match self {
+            (fovy, aspect, near, far) => {
+                PerspectiveFov {
+                    fovy: fovy.into(),
+                    aspect: aspect,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
+
+impl<S> Into<PerspectiveFov<S>> for &(Degrees<S>, S, S, S) where S: ScalarFloat {
+    #[inline]
+    fn into(self) -> PerspectiveFov<S> {
+        match *self {
+            (fovy, aspect, near, far) => {
+                PerspectiveFov {
+                    fovy: fovy.into(),
+                    aspect: aspect,
+                    near: near,
+                    far: far,
+                }
+            }
+        }
+    }
+}
 
 impl<S> From<PerspectiveFov<S>> for Matrix4<S> where S: ScalarFloat {
     fn from(persp: PerspectiveFov<S>) -> Matrix4<S> {
