@@ -1777,7 +1777,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
         let zero = S::zero();
         
         Matrix4::new(
-             sin_angle, cos_angle, zero, zero,
+             cos_angle, sin_angle, zero, zero,
             -sin_angle, cos_angle, zero, zero,
              zero,      zero,      one,  zero,
              zero,      zero,      zero, one
