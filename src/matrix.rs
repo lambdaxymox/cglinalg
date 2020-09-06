@@ -1339,6 +1339,54 @@ impl<S> ops::Mul<S> for &Matrix3<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Mul<Vector3<S>> for Matrix3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    fn mul(self, other: Vector3<S>) -> Self::Output {
+        let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
+        let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
+        let z = self.c0r2 * other.x + self.c1r2 * other.y + self.c2r2 * other.z;
+
+        Vector3::new(x, y, z)
+    }
+}
+
+impl<S> ops::Mul<&Vector3<S>> for Matrix3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    fn mul(self, other: &Vector3<S>) -> Self::Output {
+        let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
+        let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
+        let z = self.c0r2 * other.x + self.c1r2 * other.y + self.c2r2 * other.z;
+
+        Vector3::new(x, y, z)
+    }
+}
+
+impl<S> ops::Mul<Vector3<S>> for &Matrix3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    fn mul(self, other: Vector3<S>) -> Self::Output {
+        let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
+        let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
+        let z = self.c0r2 * other.x + self.c1r2 * other.y + self.c2r2 * other.z;
+
+        Vector3::new(x, y, z)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Matrix3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    fn mul(self, other: &'a Vector3<S>) -> Self::Output {
+        let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
+        let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
+        let z = self.c0r2 * other.x + self.c1r2 * other.y + self.c2r2 * other.z;
+
+        Vector3::new(x, y, z)
+    }
+}
+
 impl<S> ops::Div<S> for Matrix3<S> where S: Scalar {
     type Output = Matrix3<S>;
 
@@ -2435,6 +2483,75 @@ impl<S> ops::Mul<Vector4<S>> for Matrix4<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Mul<&Vector4<S>> for Matrix4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    fn mul(self, other: &Vector4<S>) -> Self::Output {
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
+        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2] + self.c3r2 * other[3];
+        let w = self.c0r3 * other[0] + self.c1r3 * other[1] + self.c2r3 * other[2] + self.c3r3 * other[3];
+        
+        Vector4::new(x, y, z, w)
+    }
+}
+
+impl<S> ops::Mul<Vector4<S>> for &Matrix4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    fn mul(self, other: Vector4<S>) -> Self::Output {
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
+        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2] + self.c3r2 * other[3];
+        let w = self.c0r3 * other[0] + self.c1r3 * other[1] + self.c2r3 * other[2] + self.c3r3 * other[3];
+        
+        Vector4::new(x, y, z, w)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Vector4<S>> for &'b Matrix4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    fn mul(self, other: &'a Vector4<S>) -> Self::Output {
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
+        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2] + self.c3r2 * other[3];
+        let w = self.c0r3 * other[0] + self.c1r3 * other[1] + self.c2r3 * other[2] + self.c3r3 * other[3];
+        
+        Vector4::new(x, y, z, w)
+    }
+}
+
+impl<S> ops::Mul<Matrix4<S>> for Matrix4<S> where S: Scalar {
+    type Output = Matrix4<S>;
+
+    fn mul(self, other: Matrix4<S>) -> Self::Output {
+        let mut m = Matrix4::zero();
+
+        m.c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
+        m.c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
+        m.c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2 + self.c3r2 * other.c0r3;
+        m.c0r3 = self.c0r3 * other.c0r0 + self.c1r3 * other.c0r1 + self.c2r3 * other.c0r2 + self.c3r3 * other.c0r3;
+
+        m.c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2 + self.c3r0 * other.c1r3;
+        m.c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2 + self.c3r1 * other.c1r3;
+        m.c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2 + self.c3r2 * other.c1r3;
+        m.c1r3 = self.c0r3 * other.c1r0 + self.c1r3 * other.c1r1 + self.c2r3 * other.c1r2 + self.c3r3 * other.c1r3;
+
+        m.c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2 + self.c3r0 * other.c2r3;
+        m.c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2 + self.c3r1 * other.c2r3;
+        m.c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2 + self.c3r2 * other.c2r3;
+        m.c2r3 = self.c0r3 * other.c2r0 + self.c1r3 * other.c2r1 + self.c2r3 * other.c2r2 + self.c3r3 * other.c2r3;
+
+        m.c3r0 = self.c0r0 * other.c3r0 + self.c1r0 * other.c3r1 + self.c2r0 * other.c3r2 + self.c3r0 * other.c3r3;
+        m.c3r1 = self.c0r1 * other.c3r0 + self.c1r1 * other.c3r1 + self.c2r1 * other.c3r2 + self.c3r1 * other.c3r3;
+        m.c3r2 = self.c0r2 * other.c3r0 + self.c1r2 * other.c3r1 + self.c2r2 * other.c3r2 + self.c3r2 * other.c3r3;
+        m.c3r3 = self.c0r3 * other.c3r0 + self.c1r3 * other.c3r1 + self.c2r3 * other.c3r2 + self.c3r3 * other.c3r3;
+
+        m
+    }
+}
+
 impl<S> ops::Mul<&Matrix4<S>> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
@@ -2465,10 +2582,10 @@ impl<S> ops::Mul<&Matrix4<S>> for Matrix4<S> where S: Scalar {
     }
 }
 
-impl<'a, 'b,S> ops::Mul<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
+impl<S> ops::Mul<Matrix4<S>> for &Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
-    fn mul(self, other: &'a Matrix4<S>) -> Self::Output {
+    fn mul(self, other: Matrix4<S>) -> Self::Output {
         let mut m = Matrix4::zero();
 
         m.c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
@@ -2495,10 +2612,10 @@ impl<'a, 'b,S> ops::Mul<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Mul<Matrix4<S>> for Matrix4<S> where S: Scalar {
+impl<'a, 'b, S> ops::Mul<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
-    fn mul(self, other: Matrix4<S>) -> Self::Output {
+    fn mul(self, other: &'a Matrix4<S>) -> Self::Output {
         let mut m = Matrix4::zero();
 
         m.c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
