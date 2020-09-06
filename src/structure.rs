@@ -333,7 +333,70 @@ pub trait SquareMatrix where
     Self: ops::Mul<<Self as SquareMatrix>::ColumnRow, Output = <Self as SquareMatrix>::ColumnRow>,
     Self: ops::Mul<Self, Output = Self>,
 {
+    /// The type of the columns are rows of the square matrix.
     type ColumnRow: Storage<Element = Self::Element>;
 
+    /// Construct a new diagonal matrix from a given value where
+    /// each element along the diagonal is equal to `value`.
     fn from_value(value: Self::Element) -> Self;
+
+    /// Construct a new diagonal matrix from a vector of values
+    /// representing the elements along the diagonal.
+    fn from_diagonal(diagonal: Self::ColumnRow) -> Self;
+
+    /// Get the diagonal part of a square matrix.
+    fn diagonal(&self) -> Self::ColumnRow;
+
+    /// Mutably transpose a square matrix in place.
+    fn transpose_in_place(&mut self);
+
+    /// Compute the trace of a square matrix.
+    fn trace(&self) -> Self::Element;
+
+    /// Determine whether a square matrix is a diagonal matrix. A square matrix is a diagonal matrix
+    /// if every off-diagonal element is zero.
+    fn is_diagonal(&self) -> bool;
+
+    /// Determine whether a matrix is symmetric. A matrix is symmmetric when 
+    /// element `(i, j)` is equal to element `(j, i)` for each row `i` and column `j`.
+    /// Otherwise, it is not a symmeric matrix. Note that every diagonal matrix is trivially
+    /// a symmetry matrix.
+    fn is_symmetric(&self) -> bool;
+
+    /// Determine whether a matrix is skew-symmetric. A matrix is skew-symmmetric when 
+    /// element `(i, j)` is equal to the negation of the element `(j, i)` 
+    /// for each row `i` and column `j`. Otherwise, it is not a skew-symmeric matrix. Note 
+    /// that every diagonal matrix is trivially a skew-symmetry matrix.
+    fn is_skew_symmetric(&self) -> bool;
+
+    /// Determine whether a square matrix is the identity matrix.
+    fn is_identity(&self) -> bool;
+
+    /// Construct an identity matrix. This function gives the same result as the function
+    /// `one`. we define it here as a synonym for `one` because it is much more common to 
+    /// name such a matrix the identity matrix.
+    #[inline]
+    fn identity() -> Self {
+        Self::one()
+    }
 }
+
+pub trait InvertibleMatrix where
+    Self: SquareMatrix,
+    <Self as Matrix>::Element: ScalarFloat
+{
+    /// Compute the determinant of a square matrix.
+    fn determinant(&self) -> Self::Element;
+
+    /// Compute the inverse of a square matrix. That is, given a square matrix `self`
+    /// Compute the matrix `m` if it exists such that
+    /// ```text
+    /// m * self = self * m = 1.
+    /// ```
+    /// Not every square matrix has an inverse.
+    fn invert(&self) -> Option<Self>;
+
+    /// Determine whether a square matrix has an inverse matrix.
+    fn is_invertible(&self) -> bool;
+}
+
