@@ -3247,6 +3247,87 @@ impl<S> approx::UlpsEq for Matrix4<S> where S: ScalarFloat {
     }
 }
 
+impl<S> SquareMatrix for Matrix4<S> where S: ScalarFloat {
+    type ColumnRow = Vector4<S>;
+
+    #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Matrix4::new(
+            value,     S::zero(), S::zero(), S::zero(),
+            S::zero(), value,     S::zero(), S::zero(),
+            S::zero(), S::zero(), value,     S::zero(),
+            S::zero(), S::zero(), S::zero(), value
+        )
+    }
+    
+    #[inline]
+    fn from_diagonal(value: Self::ColumnRow) -> Self {
+        Matrix4::new(
+            value.x,   S::zero(), S::zero(), S::zero(),
+            S::zero(), value.y,   S::zero(), S::zero(),
+            S::zero(), S::zero(), value.z,   S::zero(),
+            S::zero(), S::zero(), S::zero(), value.w,
+        )
+    }
+    
+    #[inline]
+    fn diagonal(&self) -> Self::ColumnRow {
+        Vector4::new(self.c0r0, self.c1r1, self.c2r2, self.c3r3)
+    }
+    
+    #[inline]
+    fn transpose_in_place(&mut self) {
+        self.swap_elements((0, 1), (1, 0));
+        self.swap_elements((0, 2), (2, 0));
+        self.swap_elements((1, 2), (2, 1));
+        self.swap_elements((0, 3), (3, 0));
+        self.swap_elements((1, 3), (3, 1));
+        self.swap_elements((2, 3), (3, 2));
+    }
+    
+    #[inline]
+    fn trace(&self) -> Self::Element {
+        self.c0r0 + self.c1r1 + self.c2r2 + self.c3r3
+    }
+    
+    #[inline]
+    fn is_diagonal(&self) -> bool {
+        ulps_eq!(self.c0r1, S::zero()) &&
+        ulps_eq!(self.c0r2, S::zero()) && 
+        ulps_eq!(self.c1r0, S::zero()) &&
+        ulps_eq!(self.c1r2, S::zero()) &&
+        ulps_eq!(self.c2r0, S::zero()) &&
+        ulps_eq!(self.c2r1, S::zero())
+    }
+    
+    #[inline]
+    fn is_symmetric(&self) -> bool {
+        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1) &&
+        ulps_eq!(self.c0r2, self.c2r0) && ulps_eq!(self.c2r0, self.c0r2) &&
+        ulps_eq!(self.c1r2, self.c2r1) && ulps_eq!(self.c2r1, self.c1r2) &&
+        ulps_eq!(self.c0r3, self.c3r0) && ulps_eq!(self.c3r0, self.c0r3) &&
+        ulps_eq!(self.c1r3, self.c3r1) && ulps_eq!(self.c3r1, self.c1r3) &&
+        ulps_eq!(self.c2r3, self.c3r2) && ulps_eq!(self.c3r2, self.c2r3)
+    }
+    
+    #[inline]
+    fn is_skew_symmetric(&self) -> bool {
+        ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1) &&
+        ulps_eq!(self.c0r2, -self.c2r0) && ulps_eq!(self.c2r0, -self.c0r2) &&
+        ulps_eq!(self.c1r2, -self.c2r1) && ulps_eq!(self.c2r1, -self.c1r2) &&
+        ulps_eq!(self.c0r3, -self.c3r0) && ulps_eq!(self.c3r0, -self.c0r3) &&
+        ulps_eq!(self.c1r3, -self.c3r1) && ulps_eq!(self.c3r1, -self.c1r3) &&
+        ulps_eq!(self.c2r3, -self.c3r2) && ulps_eq!(self.c3r2, -self.c2r3)
+    }
+
+    #[inline]
+    fn is_identity(&self) -> bool {
+        ulps_eq!(self, &Self::one())
+    }
+}
+
+
+
 macro_rules! impl_mul_operator {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
