@@ -2,7 +2,10 @@ use base::{
     Scalar,
     ScalarFloat,   
 };
-use num_traits::Float;
+use num_traits::{
+    Float,
+};
+use approx::ulps_ne;
 use std::ops;
 
 
@@ -381,7 +384,7 @@ pub trait SquareMatrix where
     }
 }
 
-pub trait InvertibleMatrix where
+pub trait InvertibleSquareMatrix where
     Self: SquareMatrix,
     <Self as Matrix>::Element: ScalarFloat
 {
@@ -397,6 +400,9 @@ pub trait InvertibleMatrix where
     fn invert(&self) -> Option<Self>;
 
     /// Determine whether a square matrix has an inverse matrix.
-    fn is_invertible(&self) -> bool;
+    fn is_invertible(&self) -> bool {
+        use num_traits::Zero;
+        ulps_ne!(self.determinant(), &Self::Element::zero())
+    }
 }
 
