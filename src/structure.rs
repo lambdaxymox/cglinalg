@@ -153,7 +153,8 @@ pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
 /// operations such as swapping rows, swapping columns, getting a row of 
 /// the the matrix, or swapping elements.
 pub trait Matrix {
-    type Element: Copy;
+    /// The type of the underlying scalars of the matrix.
+    type Element: Scalar;
 
     /// The row vector of a matrix.
     type Row: Storage<Element = Self::Element>;
@@ -320,4 +321,19 @@ pub trait Angle where
     fn sec(self) -> Self::Scalar {
         Self::cos(self).recip()
     }
+}
+
+pub trait SquareMatrix where
+    Self: One,
+    Self: Matrix<
+        Column = <Self as SquareMatrix>::ColumnRow,
+        Row = <Self as SquareMatrix>::ColumnRow,
+        Transpose = Self,
+    >,
+    Self: ops::Mul<<Self as SquareMatrix>::ColumnRow, Output = <Self as SquareMatrix>::ColumnRow>,
+    Self: ops::Mul<Self, Output = Self>,
+{
+    type ColumnRow: Storage<Element = Self::Element>;
+
+    fn from_value(value: Self::Element) -> Self;
 }
