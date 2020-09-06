@@ -855,7 +855,11 @@ impl<S> Storage for Matrix3<S> where S: Scalar {
 
     #[inline]
     fn from_value(value: Self::Element) -> Self {
-        Matrix3::new(value, value, value, value, value, value, value, value, value)
+        Matrix3::new(
+            value, value, value, 
+            value, value, value, 
+            value, value, value
+        )
     }
 
     #[inline]
@@ -2024,8 +2028,10 @@ impl<S> Storage for Matrix4<S> where S: Scalar {
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Matrix4::new(
-            value, value, value, value, value, value, value, value, 
-            value, value, value, value, value, value, value, value
+            value, value, value, value, 
+            value, value, value, value, 
+            value, value, value, value, 
+            value, value, value, value
         )
     }
 
@@ -2124,10 +2130,10 @@ impl<S> From<[S; 16]> for Matrix4<S> where S: Scalar {
     #[inline]
     fn from(m: [S; 16]) -> Matrix4<S> {
         Matrix4::new(
-            m[0], m[1], m[2], m[3], 
-            m[4], m[5], m[6], m[7],
-            m[8], m[9], m[10], m[11], 
-            m[12],m[13], m[14], m[15]
+            m[0],  m[1],  m[2],  m[3], 
+            m[4],  m[5],  m[6],  m[7],
+            m[8],  m[9],  m[10], m[11], 
+            m[12], m[13], m[14], m[15]
         )
     }
 }
@@ -2145,10 +2151,10 @@ impl<S> From<Matrix2<S>> for Matrix4<S> where S: Scalar {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1, zero, zero,
-            m.c1r0, m.c1r1, zero, zero,
-                zero, zero,  one, zero,
-                zero, zero, zero, one
+            m.c0r0, m.c0r1,   zero, zero,
+            m.c1r0, m.c1r1,   zero, zero,
+      zero, zero, one,  zero,
+      zero, zero, zero, one
         )
     }
 }
@@ -2159,10 +2165,10 @@ impl<S> From<&Matrix2<S>> for Matrix4<S> where S: Scalar {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1, zero, zero,
-            m.c1r0, m.c1r1, zero, zero,
-        zero,zero,  one, zero,
-        zero, zero, zero, one
+            m.c0r0, m.c0r1,   zero, zero,
+            m.c1r0, m.c1r1,   zero, zero,
+      zero, zero, one,  zero,
+      zero, zero, zero, one
         )
     }
 }
@@ -2176,7 +2182,7 @@ impl<S> From<Matrix3<S>> for Matrix4<S> where S: Scalar {
             m.c0r0, m.c0r1, m.c0r2, zero,
             m.c1r0, m.c1r1, m.c1r2, zero,
             m.c2r0, m.c2r1, m.c2r2, zero,
-               zero,    zero,    zero, one
+      zero, zero, zero, one
         )
     }
 }
