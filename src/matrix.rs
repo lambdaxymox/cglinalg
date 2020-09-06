@@ -2,6 +2,10 @@ use std::fmt;
 use std::mem;
 use std::ops;
 
+
+use approx::{
+    ulps_eq,
+};
 use base::{
     Scalar,
     ScalarSigned,
@@ -14,7 +18,9 @@ use structure::{
     One, 
     Zero, 
     Matrix, 
-    Lerp
+    Lerp,
+    SquareMatrix,
+    InvertibleSquareMatrix,
 };
 use vector::*;
 
@@ -419,6 +425,50 @@ impl<S> ops::Mul<S> for Matrix2<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Mul<Vector2<S>> for Matrix2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn mul(self, other: Vector2<S>) -> Self::Output {
+        let x = self.c0r0 * other.x + self.c1r0 * other.y;
+        let y = self.c1r0 * other.x + self.c1r1 * other.y;
+
+        Vector2::new(x, y)
+    }
+}
+
+impl<S> ops::Mul<&Vector2<S>> for Matrix2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn mul(self, other: &Vector2<S>) -> Self::Output {
+        let x = self.c0r0 * other.x + self.c1r0 * other.y;
+        let y = self.c1r0 * other.x + self.c1r1 * other.y;
+
+        Vector2::new(x, y)
+    }
+}
+
+impl<S> ops::Mul<Vector2<S>> for &Matrix2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn mul(self, other: Vector2<S>) -> Self::Output {
+        let x = self.c0r0 * other.x + self.c1r0 * other.y;
+        let y = self.c1r0 * other.x + self.c1r1 * other.y;
+
+        Vector2::new(x, y)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Vector2<S>> for &'b Matrix2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn mul(self, other: &'a Vector2<S>) -> Self::Output {
+        let x = self.c0r0 * other.x + self.c1r0 * other.y;
+        let y = self.c1r0 * other.x + self.c1r1 * other.y;
+
+        Vector2::new(x, y)
+    }
+}
+
 impl<S> ops::Mul<S> for &Matrix2<S> where S: Scalar {
     type Output = Matrix2<S>;
 
@@ -653,6 +703,61 @@ impl<S> approx::UlpsEq for Matrix2<S> where S: ScalarFloat {
         S::ulps_eq(&self.c0r1, &other.c0r1, epsilon, max_ulps) &&
         S::ulps_eq(&self.c1r0, &other.c1r0, epsilon, max_ulps) &&
         S::ulps_eq(&self.c1r1, &other.c1r1, epsilon, max_ulps)
+    }
+}
+
+impl<S> SquareMatrix for Matrix2<S> where S: ScalarFloat {
+    type ColumnRow = Vector2<S>;
+
+    #[inline]
+    fn from_value(value: Self::Element) -> Self {
+        Matrix2::new(
+            value,     S::zero(),
+            S::zero(), value
+        )
+    }
+    
+    #[inline]
+    fn from_diagonal(diagonal: Self::ColumnRow) -> Self {
+        Matrix2::new(
+            diagonal.x, S::zero(),
+            S::zero(),  diagonal.y
+        )
+    }
+    
+    #[inline]
+    fn diagonal(&self) -> Self::ColumnRow {
+        Vector2::new(self.c0r0, self.c1r1)
+    }
+    
+    #[inline]
+    fn transpose_in_place(&mut self) {
+        self.swap_elements((0, 1), (1, 0));
+    }
+    
+    #[inline]
+    fn trace(&self) -> Self::Element {
+        self.c0r0 + self.c1r1
+    }
+    
+    #[inline]
+    fn is_diagonal(&self) -> bool {
+        ulps_eq!(self.c0r1, S::zero()) && ulps_eq!(self.c1r0, S::zero())
+    }
+    
+    #[inline]
+    fn is_symmetric(&self) -> bool {
+        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1)
+    }
+    
+    #[inline]
+    fn is_skew_symmetric(&self) -> bool {
+        ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1)
+    }
+    
+    #[inline]
+    fn is_identity(&self) -> bool {
+        ulps_eq!(self, &Self::one())
     }
 }
 
