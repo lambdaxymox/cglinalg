@@ -16,7 +16,7 @@ use angle::{
     Radians,
     Degrees,
 };
-use base::{
+use scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,

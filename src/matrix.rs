@@ -6,7 +6,7 @@ use std::ops;
 use approx::{
     ulps_eq,
 };
-use base::{
+use scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,

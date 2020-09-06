@@ -1,4 +1,4 @@
-use base::ScalarFloat;
+use scalar::ScalarFloat;
 use structure::{
     Angle,
     Zero,

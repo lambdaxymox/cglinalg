@@ -1,4 +1,4 @@
-use base::{
+use scalar::{
     Scalar,
     ScalarFloat,   
 };

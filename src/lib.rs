@@ -1,7 +1,7 @@
 pub extern crate approx;
 pub extern crate num_traits;
 
-mod base;
+mod scalar;
 mod angle;
 mod prelude;
 mod matrix;
@@ -17,7 +17,7 @@ pub use matrix::*;
 pub use projection::*;
 pub use quaternion::*;
 
-pub use base::*;
+pub use scalar::*;
 pub use vector::*;
 pub use structure::*;
 

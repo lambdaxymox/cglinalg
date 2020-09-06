@@ -1,4 +1,4 @@
-use crate::base::ScalarFloat;
+use crate::scalar::ScalarFloat;
 use crate::angle::{
     Degrees, 
     Radians
