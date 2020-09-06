@@ -345,7 +345,7 @@ pub trait SquareMatrix where
 
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
-    fn from_diagonal(diagonal: Self::ColumnRow) -> Self;
+    fn from_diagonal(value: Self::ColumnRow) -> Self;
 
     /// Get the diagonal part of a square matrix.
     fn diagonal(&self) -> Self::ColumnRow;
