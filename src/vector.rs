@@ -13,6 +13,9 @@ use structure::{
     Metric,
     Finite,
 };
+use num_traits::{
+    NumCast,
+};
 use std::fmt;
 use std::mem;
 use std::ops;
@@ -26,7 +29,7 @@ pub struct Vector1<S> {
 }
 
 impl<S> Vector1<S> {
-    /// Create a new vector.
+    /// Construct a new vector.
     pub const fn new(x: S) -> Vector1<S> {
         Vector1 { x: x }
     }
@@ -35,6 +38,17 @@ impl<S> Vector1<S> {
     /// new underlying type.
     pub fn map<T, F>(self, mut op: F) -> Vector1<T> where F: FnMut(S) -> T {
         Vector1 { x: op(self.x) }
+    }
+}
+
+impl<S> Vector1<S> where S: NumCast + Copy {
+    pub fn cast<T: NumCast>(&self) -> Option<Vector1<T>> {
+        let x = match NumCast::from(self.x) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Vector1::new(x))
     }
 }
 
@@ -735,7 +749,7 @@ pub struct Vector2<S> {
 }
 
 impl<S> Vector2<S> {
-    /// Create a new vector.
+    /// Construct a new vector.
     pub const fn new(x: S, y: S) -> Vector2<S> {
         Vector2 { x: x, y: y }
     }
@@ -747,6 +761,21 @@ impl<S> Vector2<S> {
             x: op(self.x),
             y: op(self.y),
         }
+    }
+}
+
+impl<S> Vector2<S> where S: NumCast + Copy {
+    pub fn cast<T: NumCast>(&self) -> Option<Vector2<T>> {
+        let x = match NumCast::from(self.x) {
+            Some(value) => value,
+            None => return None,
+        };
+        let y = match NumCast::from(self.y) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Vector2::new(x, y))
     }
 }
 
@@ -1447,7 +1476,7 @@ pub struct Vector3<S> {
 }
 
 impl<S> Vector3<S> {
-    /// Create a new vector.
+    /// Construct a new vector.
     pub const fn new(x: S, y: S, z: S) -> Vector3<S> {
         Vector3 { x: x, y: y, z: z }
     }
@@ -1463,9 +1492,26 @@ impl<S> Vector3<S> {
     }
 }
 
+impl<S> Vector3<S> where S: NumCast + Copy {
+    pub fn cast<T: NumCast>(&self) -> Option<Vector3<T>> {
+        let x = match NumCast::from(self.x) {
+            Some(value) => value,
+            None => return None,
+        };
+        let y = match NumCast::from(self.y) {
+            Some(value) => value,
+            None => return None,
+        };
+        let z = match NumCast::from(self.z) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Vector3::new(x, y, z))
+    }
+}
+
 impl<S> Vector3<S> where S: Scalar {
-
-
     #[inline]
     pub fn unit_x() -> Vector3<S> {
         Vector3 { x: S::one(), y: S::zero(), z: S::zero() }
@@ -2241,6 +2287,7 @@ pub struct Vector4<S> {
 }
 
 impl<S> Vector4<S> {
+    /// Construct a new vector.
     pub const fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
         Vector4 { x: x, y: y, z: z, w: w }
     }
@@ -2254,6 +2301,29 @@ impl<S> Vector4<S> {
             z: op(self.z),
             w: op(self.w),
         }
+    }
+}
+
+impl<S> Vector4<S> where S: NumCast + Copy {
+    pub fn cast<T: NumCast>(&self) -> Option<Vector4<T>> {
+        let x = match NumCast::from(self.x) {
+            Some(value) => value,
+            None => return None,
+        };
+        let y = match NumCast::from(self.y) {
+            Some(value) => value,
+            None => return None,
+        };
+        let z = match NumCast::from(self.z) {
+            Some(value) => value,
+            None => return None,
+        };
+        let w = match NumCast::from(self.w) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Vector4::new(x, y, z, w))
     }
 }
 
