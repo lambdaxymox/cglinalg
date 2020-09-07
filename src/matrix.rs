@@ -20,6 +20,7 @@ use structure::{
     Matrix, 
     Lerp,
     SquareMatrix,
+    SkewSymmetricMatrix,
     InvertibleSquareMatrix,
 };
 use vector::*;
@@ -706,6 +707,7 @@ impl<S> approx::UlpsEq for Matrix2<S> where S: ScalarFloat {
     }
 }
 
+
 impl<S> SquareMatrix for Matrix2<S> where S: ScalarFloat {
     type ColumnRow = Vector2<S>;
 
@@ -718,15 +720,15 @@ impl<S> SquareMatrix for Matrix2<S> where S: ScalarFloat {
     }
     
     #[inline]
-    fn from_diagonal(value: Self::ColumnRow) -> Self {
+    fn from_diagonal(value: Vector2<S>) -> Self {
         Matrix2::new(
-            value.x, S::zero(),
-            S::zero(),  value.y
+            value.x,   S::zero(),
+            S::zero(), value.y
         )
     }
     
     #[inline]
-    fn diagonal(&self) -> Self::ColumnRow {
+    fn diagonal(&self) -> Vector2<S> {
         Vector2::new(self.c0r0, self.c1r1)
     }
     
@@ -736,7 +738,7 @@ impl<S> SquareMatrix for Matrix2<S> where S: ScalarFloat {
     }
     
     #[inline]
-    fn trace(&self) -> Self::Element {
+    fn trace(&self) -> S {
         self.c0r0 + self.c1r1
     }
     
@@ -749,15 +751,16 @@ impl<S> SquareMatrix for Matrix2<S> where S: ScalarFloat {
     fn is_symmetric(&self) -> bool {
         ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1)
     }
-    
-    #[inline]
-    fn is_skew_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1)
-    }
-    
+
     #[inline]
     fn is_identity(&self) -> bool {
         ulps_eq!(self, &Self::one())
+    }
+}
+
+impl<S> SkewSymmetricMatrix for Matrix2<S> where S: ScalarFloat {
+    fn is_skew_symmetric(&self) -> bool {
+        ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1)
     }
 }
 
@@ -1776,13 +1779,6 @@ impl<S> SquareMatrix for Matrix3<S> where S: ScalarFloat {
         ulps_eq!(self.c0r2, self.c2r0) && ulps_eq!(self.c2r0, self.c0r2) &&
         ulps_eq!(self.c1r2, self.c2r1) && ulps_eq!(self.c2r1, self.c1r2)
     }
-    
-    #[inline]
-    fn is_skew_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1) &&
-        ulps_eq!(self.c0r2, -self.c2r0) && ulps_eq!(self.c2r0, -self.c0r2) &&
-        ulps_eq!(self.c1r2, -self.c2r1) && ulps_eq!(self.c2r1, -self.c1r2)
-    }
 
     #[inline]
     fn is_identity(&self) -> bool {
@@ -1790,6 +1786,13 @@ impl<S> SquareMatrix for Matrix3<S> where S: ScalarFloat {
     }
 }
 
+impl<S> SkewSymmetricMatrix for Matrix3<S> where S: ScalarFloat {
+    fn is_skew_symmetric(&self) -> bool {
+        ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1) &&
+        ulps_eq!(self.c0r2, -self.c2r0) && ulps_eq!(self.c2r0, -self.c0r2) &&
+        ulps_eq!(self.c1r2, -self.c2r1) && ulps_eq!(self.c2r1, -self.c1r2)
+    }
+}
 
 
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
@@ -3315,8 +3318,14 @@ impl<S> SquareMatrix for Matrix4<S> where S: ScalarFloat {
         ulps_eq!(self.c1r3, self.c3r1) && ulps_eq!(self.c3r1, self.c1r3) &&
         ulps_eq!(self.c2r3, self.c3r2) && ulps_eq!(self.c3r2, self.c2r3)
     }
-    
+
     #[inline]
+    fn is_identity(&self) -> bool {
+        ulps_eq!(self, &Self::one())
+    }
+}
+
+impl<S> SkewSymmetricMatrix for Matrix4<S> where S: ScalarFloat {
     fn is_skew_symmetric(&self) -> bool {
         ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1) &&
         ulps_eq!(self.c0r2, -self.c2r0) && ulps_eq!(self.c2r0, -self.c0r2) &&
@@ -3324,11 +3333,6 @@ impl<S> SquareMatrix for Matrix4<S> where S: ScalarFloat {
         ulps_eq!(self.c0r3, -self.c3r0) && ulps_eq!(self.c3r0, -self.c0r3) &&
         ulps_eq!(self.c1r3, -self.c3r1) && ulps_eq!(self.c3r1, -self.c1r3) &&
         ulps_eq!(self.c2r3, -self.c3r2) && ulps_eq!(self.c3r2, -self.c2r3)
-    }
-
-    #[inline]
-    fn is_identity(&self) -> bool {
-        ulps_eq!(self, &Self::one())
     }
 }
 

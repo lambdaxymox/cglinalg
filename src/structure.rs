@@ -1,5 +1,6 @@
 use scalar::{
     Scalar,
+    ScalarSigned,
     ScalarFloat,   
 };
 use num_traits::{
@@ -366,12 +367,6 @@ pub trait SquareMatrix where
     /// a symmetry matrix.
     fn is_symmetric(&self) -> bool;
 
-    /// Determine whether a matrix is skew-symmetric. A matrix is skew-symmmetric when 
-    /// element `(i, j)` is equal to the negation of the element `(j, i)` 
-    /// for each row `i` and column `j`. Otherwise, it is not a skew-symmeric matrix. Note 
-    /// that every diagonal matrix is trivially a skew-symmetry matrix.
-    fn is_skew_symmetric(&self) -> bool;
-
     /// Determine whether a square matrix is the identity matrix.
     fn is_identity(&self) -> bool;
 
@@ -382,6 +377,17 @@ pub trait SquareMatrix where
     fn identity() -> Self {
         Self::one()
     }
+}
+
+pub trait SkewSymmetricMatrix where
+    Self: SquareMatrix,
+    <Self as Matrix>::Element: ScalarSigned
+{
+    /// Determine whether a matrix is skew-symmetric. A matrix is skew-symmmetric when 
+    /// element `(i, j)` is equal to the negation of the element `(j, i)` 
+    /// for each row `i` and column `j`. Otherwise, it is not a skew-symmeric matrix. Note 
+    /// that every diagonal matrix is trivially a skew-symmetry matrix. In particular,
+    fn is_skew_symmetric(&self) -> bool;
 }
 
 pub trait InvertibleSquareMatrix where
