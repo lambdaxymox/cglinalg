@@ -46,6 +46,15 @@ impl<S> Matrix2<S> {
     pub fn from_cols(c0: Vector2<S>, c1: Vector2<S>) -> Matrix2<S> {
         Matrix2 { c0r0: c0.x, c0r1: c0.y, c1r0: c1.x, c1r1: c1.y }
     }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose elements
+    /// are elements of the new underlying type.
+    pub fn map<T, F>(self, mut op: F) -> Matrix2<T> where F: FnMut(S) -> T {
+        Matrix2 {
+            c0r0: op(self.c0r0), c1r0: op(self.c1r0),
+            c0r1: op(self.c0r1), c1r1: op(self.c1r1),
+        }
+    }
 }
 
 impl<S> Matrix2<S> where S: ScalarFloat {
@@ -818,6 +827,16 @@ impl<S> Matrix3<S> {
             c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, 
             c1r0: c1.x, c1r1: c1.y, c1r2: c1.z,
             c2r0: c2.x, c2r1: c2.y, c2r2: c2.z,
+        }
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose elements
+    /// are elements of the new underlying type.
+    pub fn map<T, F>(self, mut op: F) -> Matrix3<T> where F: FnMut(S) -> T {
+        Matrix3 {
+            c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0),
+            c0r1: op(self.c0r1), c1r1: op(self.c1r1), c2r1: op(self.c2r1),
+            c0r2: op(self.c0r2), c1r2: op(self.c1r2), c2r2: op(self.c2r2),
         }
     }
 }
@@ -1885,6 +1904,17 @@ impl<S> Matrix4<S> {
             c1r0: c1.x, c1r1: c1.y, c1r2: c1.z, c1r3: c1.w,
             c2r0: c2.x, c2r1: c2.y, c2r2: c2.z, c2r3: c2.w,
             c3r0: c3.x, c3r1: c3.y, c3r2: c3.z, c3r3: c3.w,
+        }
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose elements
+    /// are elements of the new underlying type.
+    pub fn map<T, F>(self, mut op: F) -> Matrix4<T> where F: FnMut(S) -> T {
+        Matrix4 {
+            c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0), c3r0: op(self.c3r0),
+            c0r1: op(self.c0r1), c1r1: op(self.c1r1), c2r1: op(self.c2r1), c3r1: op(self.c3r1),
+            c0r2: op(self.c0r2), c1r2: op(self.c1r2), c2r2: op(self.c2r2), c3r2: op(self.c3r2),
+            c0r3: op(self.c0r3), c1r3: op(self.c1r3), c2r3: op(self.c2r3), c3r3: op(self.c3r3),
         }
     }
 }
