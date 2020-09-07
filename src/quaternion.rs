@@ -26,7 +26,9 @@ use matrix::{
     Matrix4
 };
 use vector::Vector3;
-
+use num_traits::{
+    NumCast,
+};
 use std::fmt;
 use std::mem;
 use std::ops;
@@ -41,7 +43,7 @@ pub struct Quaternion<S> {
     pub v: Vector3<S>,
 }
 
-impl<S> Quaternion<S> where S: Scalar {
+impl<S> Quaternion<S> {
     /// Construct a new quaternion.
     #[inline]
     pub fn new(s: S, x: S, y: S, z: S) -> Quaternion<S> {
@@ -53,7 +55,24 @@ impl<S> Quaternion<S> where S: Scalar {
     pub fn from_sv(s: S, v: Vector3<S>) -> Quaternion<S> {
         Quaternion { s: s, v: v }
     }
+}
 
+impl<S> Quaternion<S> where S: NumCast + Copy {
+    pub fn cast<T: NumCast>(&self) -> Option<Quaternion<T>> {
+        let s = match NumCast::from(self.s) {
+            Some(value) => value,
+            None => return None,
+        };
+        let v = match self.v.cast() {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Quaternion::from_sv(s, v))
+    }
+}
+
+impl<S> Quaternion<S> where S: Scalar {
     /// Returns the unit real quaternion. 
     ///
     /// A real vector quaternion is a quaternion with zero vector part.
