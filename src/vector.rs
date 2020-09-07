@@ -17,6 +17,7 @@ use num_traits::{
     NumCast,
 };
 use std::fmt;
+use std::iter;
 use std::mem;
 use std::ops;
 
@@ -660,6 +661,19 @@ impl<S> approx::UlpsEq for Vector1<S> where S: ScalarFloat {
     }
 }
 
+impl<S: Scalar> iter::Sum<Vector1<S>> for Vector1<S> {
+    #[inline]
+    fn sum<I: Iterator<Item=Vector1<S>>>(iter: I) -> Vector1<S> {
+        iter.fold(Vector1::zero(), ops::Add::add)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector1<S>> for Vector1<S> {
+    #[inline]
+    fn sum<I: Iterator<Item=&'a Vector1<S>>>(iter: I) -> Vector1<S> {
+        iter.fold(Vector1::zero(), ops::Add::add)
+    }
+}
 
 macro_rules! impl_mul_operator {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
@@ -1416,6 +1430,20 @@ impl<S> approx::UlpsEq for Vector2<S> where S: ScalarFloat {
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
         S::ulps_eq(&self.y, &other.y, epsilon, max_ulps)
+    }
+}
+
+impl<S: Scalar> iter::Sum<Vector2<S>> for Vector2<S> {
+    #[inline]
+    fn sum<I: Iterator<Item=Vector2<S>>>(iter: I) -> Vector2<S> {
+        iter.fold(Vector2::zero(), ops::Add::add)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector2<S>> for Vector2<S> {
+    #[inline]
+    fn sum<I: Iterator<Item=&'a Vector2<S>>>(iter: I) -> Vector2<S> {
+        iter.fold(Vector2::zero(), ops::Add::add)
     }
 }
 
@@ -2309,6 +2337,20 @@ impl<'a, 'b, S> ProjectOn<&'a Vector3<S>> for &'b Vector3<S> where S: ScalarFloa
     }
 }
 
+impl<S: Scalar> iter::Sum<Vector3<S>> for Vector3<S> {
+    #[inline]
+    fn sum<I: Iterator<Item=Vector3<S>>>(iter: I) -> Vector3<S> {
+        iter.fold(Vector3::zero(), ops::Add::add)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector3<S>> for Vector3<S> {
+    #[inline]
+    fn sum<I: Iterator<Item=&'a Vector3<S>>>(iter: I) -> Vector3<S> {
+        iter.fold(Vector3::zero(), ops::Add::add)
+    }
+}
+
 
 /// A representation of four-dimensional vectors with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -3160,6 +3202,20 @@ impl<'a, 'b, S> ProjectOn<&'a Vector4<S>> for &'b Vector4<S> where S: ScalarFloa
 
     fn project_on(self, onto: &'a Vector4<S>) -> Vector4<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S: Scalar> iter::Sum<Vector4<S>> for Vector4<S> {
+    #[inline]
+    fn sum<I: Iterator<Item=Vector4<S>>>(iter: I) -> Vector4<S> {
+        iter.fold(Vector4::zero(), ops::Add::add)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector4<S>> for Vector4<S> {
+    #[inline]
+    fn sum<I: Iterator<Item=&'a Vector4<S>>>(iter: I) -> Vector4<S> {
+        iter.fold(Vector4::zero(), ops::Add::add)
     }
 }
 
