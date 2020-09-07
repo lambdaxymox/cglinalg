@@ -1,3 +1,4 @@
+use scalar;
 use scalar::{
     Scalar,
     ScalarSigned,
@@ -416,5 +417,41 @@ pub trait InvertibleSquareMatrix where
         use num_traits::Zero;
         ulps_ne!(self.determinant(), &Self::Element::zero())
     }
+}
+
+pub trait EuclideanSpace where
+    Self: Copy + Clone,
+    Self: Storage<Element = <Self as EuclideanSpace>::Scalar>,
+    Self: ops::Add<<Self as EuclideanSpace>::Difference, Output = Self>,
+    Self: ops::Sub<<Self as EuclideanSpace>::Difference, Output = Self>,
+    Self: ops::Sub<Self, Output = <Self as EuclideanSpace>::Difference>,
+    Self: ops::Mul<<Self as EuclideanSpace>::Scalar, Output = Self>,
+    Self: ops::Div<<Self as EuclideanSpace>::Scalar, Output = Self>,
+    Self: ops::Rem<<Self as EuclideanSpace>::Scalar, Output = Self>
+{
+    type Scalar: scalar::Scalar;
+    type Difference;
+
+    fn origin() -> Self;
+
+    fn from_vec(v: Self::Difference) -> Self;
+
+    fn to_vec(self) -> Self::Difference;
+
+    fn dot(self, v: Self::Difference) -> Self::Scalar;
+
+    fn midpoint(self, other: Self) -> Self;
+
+    //#[inline]
+    fn centroid(points: &[Self]) -> Self; 
+    /*
+    {
+        let total_displacement = points
+            .iter()
+            .fold(Self::Difference::zero(), |acc, p| acc + p.to_vec());
+
+        Self::from_vec(total_displacement / num_traits::cast(points.len()).unwrap())
+    }
+    */
 }
 
