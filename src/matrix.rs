@@ -6,6 +6,9 @@ use std::ops;
 use approx::{
     ulps_eq,
 };
+use num_traits::{
+    NumCast,
+};
 use scalar::{
     Scalar,
     ScalarSigned,
@@ -1916,6 +1919,82 @@ impl<S> Matrix4<S> {
             c0r2: op(self.c0r2), c1r2: op(self.c1r2), c2r2: op(self.c2r2), c3r2: op(self.c3r2),
             c0r3: op(self.c0r3), c1r3: op(self.c1r3), c2r3: op(self.c2r3), c3r3: op(self.c3r3),
         }
+    }
+}
+
+impl<S> Matrix4<S> where S: NumCast + Copy {
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix4<T>> {
+        let c0r0 = match NumCast::from(self.c0r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match NumCast::from(self.c0r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match NumCast::from(self.c0r2) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r3 = match NumCast::from(self.c0r3) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match NumCast::from(self.c1r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match NumCast::from(self.c1r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match NumCast::from(self.c1r2) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r3 = match NumCast::from(self.c1r3) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match NumCast::from(self.c2r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match NumCast::from(self.c2r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r2 = match NumCast::from(self.c2r2) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r3 = match NumCast::from(self.c2r3) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r0 = match NumCast::from(self.c3r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r1 = match NumCast::from(self.c3r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r2 = match NumCast::from(self.c3r2) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r3 = match NumCast::from(self.c3r3) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        ))
     }
 }
 
