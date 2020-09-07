@@ -29,7 +29,7 @@ pub trait Scalar where
     Self: MulAssign,
     Self: DivAssign,
     Self: RemAssign,
-{ 
+{
 }
 
 impl<T> Scalar for T where 

@@ -42,6 +42,7 @@ impl<S> Vector1<S> {
 }
 
 impl<S> Vector1<S> where S: NumCast + Copy {
+    /// Cast a vector from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Vector1<T>> {
         let x = match NumCast::from(self.x) {
             Some(value) => value,
@@ -765,6 +766,7 @@ impl<S> Vector2<S> {
 }
 
 impl<S> Vector2<S> where S: NumCast + Copy {
+    /// Cast a vector from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Vector2<T>> {
         let x = match NumCast::from(self.x) {
             Some(value) => value,
@@ -1493,6 +1495,7 @@ impl<S> Vector3<S> {
 }
 
 impl<S> Vector3<S> where S: NumCast + Copy {
+    /// Cast a vector from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Vector3<T>> {
         let x = match NumCast::from(self.x) {
             Some(value) => value,
@@ -2305,6 +2308,7 @@ impl<S> Vector4<S> {
 }
 
 impl<S> Vector4<S> where S: NumCast + Copy {
+    /// Cast a vector from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Vector4<T>> {
         let x = match NumCast::from(self.x) {
             Some(value) => value,
