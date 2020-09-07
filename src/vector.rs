@@ -54,6 +54,7 @@ impl<S> Vector1<S> where S: NumCast + Copy {
 }
 
 impl<S> Vector1<S> where S: Scalar {
+    /// The unit vector representing the x-direction.
     #[inline]
     pub fn unit_x() -> Vector1<S> {
         Vector1 { x: S::one() }
@@ -120,6 +121,16 @@ impl<S> Storage for Vector1<S> where S: Scalar {
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Vector1::new(value)
+    }
+
+    #[inline]
+    fn sum(&self) -> Self::Element {
+        self.x
+    }
+
+    #[inline]
+    fn product(&self) -> Self::Element {
+        self.x
     }
 
     #[inline]
@@ -809,6 +820,16 @@ impl<S> Storage for Vector2<S> where S: Scalar {
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Vector2::new(value, value)
+    }
+
+    #[inline]
+    fn sum(&self) -> Self::Element {
+        self.x + self.y
+    }
+
+    #[inline]
+    fn product(&self) -> Self::Element {
+        self.x * self.y
     }
 
     #[inline]
@@ -1561,6 +1582,16 @@ impl<S> Storage for Vector3<S> where S: Scalar {
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Vector3::new(value, value, value)
+    }
+
+    #[inline]
+    fn sum(&self) -> Self::Element {
+        self.x + self.y + self.z
+    }
+
+    #[inline]
+    fn product(&self) -> Self::Element {
+        self.x * self.y * self.z
     }
 
     #[inline]
@@ -2369,6 +2400,16 @@ impl<S> Storage for Vector4<S> where S: Scalar {
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Vector4::new(value, value, value, value)
+    }
+
+    #[inline]
+    fn sum(&self) -> Self::Element {
+        self.x + self.y + self.z + self.w
+    }
+
+    #[inline]
+    fn product(&self) -> Self::Element {
+        self.x * self.y * self.z * self.w
     }
 
     #[inline]

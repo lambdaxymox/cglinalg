@@ -336,6 +336,16 @@ impl<S> Storage for Quaternion<S> where S: Scalar {
     }
 
     #[inline]
+    fn sum(&self) -> Self::Element {
+        self.s + self.v.x + self.v.y + self.v.z
+    }
+
+    #[inline]
+    fn product(&self) -> Self::Element {
+        self.s * self.v.x * self.v.y * self.v.z
+    }
+
+    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.s
     }

@@ -14,7 +14,7 @@ use std::ops;
 /// of its elements in its underlying storage. In this way we can manipulate
 /// underlying storage directly for operations such as passing geometric data 
 /// across an API boundary to the GPU, or other external hardware.
-pub trait Storage {
+pub trait Storage { 
     /// The elements of an array.
     type Element: Copy;
 
@@ -26,6 +26,12 @@ pub trait Storage {
 
     /// Construct an array whose entries are all an input value.
     fn from_value(value: Self::Element) -> Self;
+
+    /// Compute the sum of the elements in the array.
+    fn sum(&self) -> Self::Element where Self::Element: ops::Add<Output = Self::Element>;
+    
+    /// Compute the product of the elements in the array.
+    fn product(&self) -> Self::Element where Self::Element: ops::Mul<Output = Self::Element>;
 
     /// Generate a pointer to the underlying array for passing a
     /// matrix or vector to the graphics hardware.

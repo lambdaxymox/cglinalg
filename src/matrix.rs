@@ -128,6 +128,16 @@ impl<S> Storage for Matrix2<S> where S: Scalar {
     }
 
     #[inline]
+    fn sum(&self) -> Self::Element {
+        self.c0r0 + self.c1r0 + self.c0r1 + self.c1r1
+    }
+
+    #[inline]
+    fn product(&self) -> Self::Element {
+        self.c0r0 * self.c1r0 * self.c0r1 * self.c1r1
+    }
+
+    #[inline]
     fn as_ptr(&self) -> *const S {
         &self.c0r0
     }
@@ -977,6 +987,20 @@ impl<S> Storage for Matrix3<S> where S: Scalar {
             value, value, value, 
             value, value, value
         )
+    }
+
+    #[inline]
+    fn sum(&self) -> Self::Element {
+        self.c0r0 + self.c1r0 + self.c2r0 +
+        self.c0r1 + self.c1r1 + self.c2r1 +
+        self.c0r2 + self.c1r2 + self.c2r2
+    }
+
+    #[inline]
+    fn product(&self) -> Self::Element {
+        self.c0r0 * self.c1r0 * self.c2r0 *
+        self.c0r1 * self.c1r1 * self.c2r1 *
+        self.c0r2 * self.c1r2 * self.c2r2
     }
 
     #[inline]
@@ -2273,6 +2297,22 @@ impl<S> Storage for Matrix4<S> where S: Scalar {
             value, value, value, value, 
             value, value, value, value
         )
+    }
+
+    #[inline]
+    fn sum(&self) -> Self::Element {
+        self.c0r0 + self.c1r0 + self.c2r0 + self.c3r0 +
+        self.c0r1 + self.c1r1 + self.c2r1 + self.c3r1 +
+        self.c0r2 + self.c1r2 + self.c2r2 + self.c3r2 +
+        self.c0r3 + self.c1r3 + self.c2r3 + self.c3r3
+    }
+
+    #[inline]
+    fn product(&self) -> Self::Element {
+        self.c0r0 * self.c1r0 * self.c2r0 * self.c3r0 *
+        self.c0r1 * self.c1r1 * self.c2r1 * self.c3r1 *
+        self.c0r2 * self.c1r2 * self.c2r2 * self.c3r2 *
+        self.c0r3 * self.c1r3 * self.c2r3 * self.c3r3
     }
 
     #[inline]
