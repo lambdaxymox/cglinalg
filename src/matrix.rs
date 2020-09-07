@@ -60,6 +60,29 @@ impl<S> Matrix2<S> {
     }
 }
 
+impl<S> Matrix2<S> where S: NumCast + Copy {
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix2<T>> {
+        let c0r0 = match NumCast::from(self.c0r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match NumCast::from(self.c0r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match NumCast::from(self.c1r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match NumCast::from(self.c1r1) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix2::new(c0r0, c0r1, c1r0, c1r1))
+    }
+}
+
 impl<S> Matrix2<S> where S: ScalarFloat {
     /*
     /// Determine whether a 2x2 matrix is invertible.
@@ -841,6 +864,53 @@ impl<S> Matrix3<S> {
             c0r1: op(self.c0r1), c1r1: op(self.c1r1), c2r1: op(self.c2r1),
             c0r2: op(self.c0r2), c1r2: op(self.c1r2), c2r2: op(self.c2r2),
         }
+    }
+}
+
+impl<S> Matrix3<S> where S: NumCast + Copy {
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix3<T>> {
+        let c0r0 = match NumCast::from(self.c0r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match NumCast::from(self.c0r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match NumCast::from(self.c0r2) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match NumCast::from(self.c1r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match NumCast::from(self.c1r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match NumCast::from(self.c1r2) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match NumCast::from(self.c2r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match NumCast::from(self.c2r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r2 = match NumCast::from(self.c2r2) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix3::new(
+            c0r0, c0r1, c0r2,
+            c1r0, c1r1, c1r2, 
+            c2r0, c2r1, c2r2,
+        ))
     }
 }
 
