@@ -739,6 +739,10 @@ impl<S> SquareMatrix for Matrix2<S> where S: ScalarFloat {
     fn trace(&self) -> S {
         self.c0r0 + self.c1r1
     }
+
+    fn determinant(&self) -> Self::Element {
+        self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
+    }
     
     #[inline]
     fn is_diagonal(&self) -> bool {
@@ -763,10 +767,6 @@ impl<S> SkewSymmetricMatrix for Matrix2<S> where S: ScalarFloat {
 }
 
 impl<S> InvertibleSquareMatrix for Matrix2<S> where S: ScalarFloat {
-    fn determinant(&self) -> Self::Element {
-        self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
-    }
-
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det == S::zero() {
@@ -1782,6 +1782,13 @@ impl<S> SquareMatrix for Matrix3<S> where S: ScalarFloat {
     fn trace(&self) -> Self::Element {
         self.c0r0 + self.c1r1 + self.c2r2
     }
+
+    #[inline]
+    fn determinant(&self) -> Self::Element {
+        self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
+        self.c1r0 * self.c0r1 * self.c2r2 + self.c1r0 * self.c0r2 * self.c2r1 +
+        self.c2r0 * self.c0r1 * self.c1r2 - self.c2r0 * self.c0r2 * self.c1r1
+    }
     
     #[inline]
     fn is_diagonal(&self) -> bool {
@@ -1815,12 +1822,6 @@ impl<S> SkewSymmetricMatrix for Matrix3<S> where S: ScalarFloat {
 }
 
 impl<S> InvertibleSquareMatrix for Matrix3<S> where S: ScalarFloat {
-    fn determinant(&self) -> Self::Element {
-        self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
-        self.c1r0 * self.c0r1 * self.c2r2 + self.c1r0 * self.c0r2 * self.c2r1 +
-        self.c2r0 * self.c0r1 * self.c1r2 - self.c2r0 * self.c0r2 * self.c1r1
-    }
-
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det == S::zero() {
@@ -3347,6 +3348,34 @@ impl<S> SquareMatrix for Matrix4<S> where S: ScalarFloat {
         self.swap_elements((1, 3), (3, 1));
         self.swap_elements((2, 3), (3, 2));
     }
+
+    #[inline]
+    fn determinant(&self) -> Self::Element {
+        self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
+        self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
+        self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
+        self.c0r0 * self.c2r1 * self.c1r3 * self.c3r2 +
+        self.c0r0 * self.c3r1 * self.c1r2 * self.c2r3 -
+        self.c0r0 * self.c3r1 * self.c1r3 * self.c2r2 -
+        self.c1r0 * self.c0r1 * self.c2r2 * self.c3r3 +
+        self.c1r0 * self.c0r1 * self.c2r3 * self.c3r2 +
+        self.c1r0 * self.c2r1 * self.c0r2 * self.c3r3 -
+        self.c1r0 * self.c2r1 * self.c0r3 * self.c3r2 -
+        self.c1r0 * self.c3r1 * self.c0r2 * self.c2r3 +
+        self.c1r0 * self.c3r1 * self.c0r3 * self.c2r2 +
+        self.c2r0 * self.c0r1 * self.c1r2 * self.c3r3 -
+        self.c2r0 * self.c0r1 * self.c1r3 * self.c3r2 -
+        self.c2r0 * self.c1r1 * self.c0r2 * self.c3r3 +
+        self.c2r0 * self.c1r1 * self.c0r3 * self.c3r2 +
+        self.c2r0 * self.c3r1 * self.c0r2 * self.c1r3 -
+        self.c2r0 * self.c3r1 * self.c0r3 * self.c1r2 -
+        self.c3r0 * self.c0r1 * self.c1r2 * self.c2r3 +
+        self.c3r0 * self.c0r1 * self.c1r3 * self.c2r2 +
+        self.c3r0 * self.c1r1 * self.c0r2 * self.c2r3 -
+        self.c3r0 * self.c1r1 * self.c0r3 * self.c2r2 -
+        self.c3r0 * self.c2r1 * self.c0r2 * self.c1r3 +
+        self.c3r0 * self.c2r1 * self.c0r3 * self.c1r2
+    }
     
     #[inline]
     fn trace(&self) -> Self::Element {
@@ -3391,33 +3420,6 @@ impl<S> SkewSymmetricMatrix for Matrix4<S> where S: ScalarFloat {
 }
 
 impl<S> InvertibleSquareMatrix for Matrix4<S> where S: ScalarFloat {
-    fn determinant(&self) -> Self::Element {
-        self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
-        self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
-        self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
-        self.c0r0 * self.c2r1 * self.c1r3 * self.c3r2 +
-        self.c0r0 * self.c3r1 * self.c1r2 * self.c2r3 -
-        self.c0r0 * self.c3r1 * self.c1r3 * self.c2r2 -
-        self.c1r0 * self.c0r1 * self.c2r2 * self.c3r3 +
-        self.c1r0 * self.c0r1 * self.c2r3 * self.c3r2 +
-        self.c1r0 * self.c2r1 * self.c0r2 * self.c3r3 -
-        self.c1r0 * self.c2r1 * self.c0r3 * self.c3r2 -
-        self.c1r0 * self.c3r1 * self.c0r2 * self.c2r3 +
-        self.c1r0 * self.c3r1 * self.c0r3 * self.c2r2 +
-        self.c2r0 * self.c0r1 * self.c1r2 * self.c3r3 -
-        self.c2r0 * self.c0r1 * self.c1r3 * self.c3r2 -
-        self.c2r0 * self.c1r1 * self.c0r2 * self.c3r3 +
-        self.c2r0 * self.c1r1 * self.c0r3 * self.c3r2 +
-        self.c2r0 * self.c3r1 * self.c0r2 * self.c1r3 -
-        self.c2r0 * self.c3r1 * self.c0r3 * self.c1r2 -
-        self.c3r0 * self.c0r1 * self.c1r2 * self.c2r3 +
-        self.c3r0 * self.c0r1 * self.c1r3 * self.c2r2 +
-        self.c3r0 * self.c1r1 * self.c0r2 * self.c2r3 -
-        self.c3r0 * self.c1r1 * self.c0r3 * self.c2r2 -
-        self.c3r0 * self.c2r1 * self.c0r2 * self.c1r3 +
-        self.c3r0 * self.c2r1 * self.c0r3 * self.c1r2
-    }
-
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det == S::zero() {

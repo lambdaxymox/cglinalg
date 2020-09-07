@@ -354,6 +354,9 @@ pub trait SquareMatrix where
     /// Mutably transpose a square matrix in place.
     fn transpose_in_place(&mut self);
 
+    /// Compute the determinant of a square matrix.
+    fn determinant(&self) -> Self::Element;
+
     /// Compute the trace of a square matrix.
     fn trace(&self) -> Self::Element;
 
@@ -394,9 +397,6 @@ pub trait InvertibleSquareMatrix where
     Self: SquareMatrix,
     <Self as Matrix>::Element: ScalarFloat
 {
-    /// Compute the determinant of a square matrix.
-    fn determinant(&self) -> Self::Element;
-
     /// Compute the inverse of a square matrix. That is, given a square matrix `self`
     /// Compute the matrix `m` if it exists such that
     /// ```text
