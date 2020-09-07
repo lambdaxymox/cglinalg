@@ -30,6 +30,7 @@ use num_traits::{
     NumCast,
 };
 use std::fmt;
+use std::iter;
 use std::mem;
 use std::ops;
 
@@ -1341,6 +1342,34 @@ impl<'a, 'b, S> ProjectOn<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scal
 
     fn project_on(self, onto: &'a Quaternion<S>) -> Quaternion<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
+    }
+}
+
+impl<S: Scalar> iter::Sum<Quaternion<S>> for Quaternion<S> {
+    #[inline]
+    fn sum<I: Iterator<Item = Quaternion<S>>>(iter: I) -> Quaternion<S> {
+        iter.fold(Quaternion::<S>::zero(), ops::Add::add)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Sum<&'a Quaternion<S>> for Quaternion<S> {
+    #[inline]
+    fn sum<I: Iterator<Item = &'a Quaternion<S>>>(iter: I) -> Quaternion<S> {
+        iter.fold(Quaternion::<S>::zero(), ops::Add::add)
+    }
+}
+
+impl<S: Scalar> iter::Product<Quaternion<S>> for Quaternion<S> {
+    #[inline]
+    fn product<I: Iterator<Item = Quaternion<S>>>(iter: I) -> Quaternion<S> {
+        iter.fold(Quaternion::<S>::one(), ops::Mul::mul)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Product<&'a Quaternion<S>> for Quaternion<S> {
+    #[inline]
+    fn product<I: Iterator<Item = &'a Quaternion<S>>>(iter: I) -> Quaternion<S> {
+        iter.fold(Quaternion::<S>::one(), ops::Mul::mul)
     }
 }
 
