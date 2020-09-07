@@ -61,6 +61,7 @@ impl<S> Matrix2<S> {
 }
 
 impl<S> Matrix2<S> where S: NumCast + Copy {
+    /// Cast a matrix from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Matrix2<T>> {
         let c0r0 = match NumCast::from(self.c0r0) {
             Some(value) => value,
@@ -868,6 +869,7 @@ impl<S> Matrix3<S> {
 }
 
 impl<S> Matrix3<S> where S: NumCast + Copy {
+    /// Cast a matrix from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Matrix3<T>> {
         let c0r0 = match NumCast::from(self.c0r0) {
             Some(value) => value,
@@ -1993,6 +1995,7 @@ impl<S> Matrix4<S> {
 }
 
 impl<S> Matrix4<S> where S: NumCast + Copy {
+    /// Cast a matrix from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Matrix4<T>> {
         let c0r0 = match NumCast::from(self.c0r0) {
             Some(value) => value,

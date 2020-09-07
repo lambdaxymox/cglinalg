@@ -58,6 +58,7 @@ impl<S> Quaternion<S> {
 }
 
 impl<S> Quaternion<S> where S: NumCast + Copy {
+    /// Cast a quaternion from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Quaternion<T>> {
         let s = match NumCast::from(self.s) {
             Some(value) => value,
