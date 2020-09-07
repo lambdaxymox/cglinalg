@@ -30,6 +30,12 @@ impl<S> Vector1<S> {
     pub const fn new(x: S) -> Vector1<S> {
         Vector1 { x: x }
     }
+
+    /// Map an operation on the elements of a vector, returning a vector of the 
+    /// new underlying type.
+    pub fn map<T, F>(self, mut op: F) -> Vector1<T> where F: FnMut(S) -> T {
+        Vector1 { x: op(self.x) }
+    }
 }
 
 impl<S> Vector1<S> where S: Scalar {
@@ -728,12 +734,23 @@ pub struct Vector2<S> {
    pub y: S,
 }
 
-impl<S> Vector2<S> where S: Scalar {
+impl<S> Vector2<S> {
     /// Create a new vector.
     pub fn new(x: S, y: S) -> Vector2<S> {
         Vector2 { x: x, y: y }
     }
 
+    /// Map an operation on the elements of a vector, returning a vector of the 
+    /// new underlying type.
+    pub fn map<T, F>(self, mut op: F) -> Vector2<T> where F: FnMut(S) -> T {
+        Vector2 {
+            x: op(self.x),
+            y: op(self.y),
+        }
+    }
+}
+
+impl<S> Vector2<S> where S: Scalar {
     #[inline]
     pub fn unit_x() -> Vector2<S> {
         Vector2 { x: S::one(), y: S::zero() }
@@ -1429,11 +1446,25 @@ pub struct Vector3<S> {
     pub z: S,
 }
 
-impl<S> Vector3<S> where S: Scalar {
+impl<S> Vector3<S> {
     /// Create a new vector.
     pub fn new(x: S, y: S, z: S) -> Vector3<S> {
         Vector3 { x: x, y: y, z: z }
     }
+
+    /// Map an operation on the elements of a vector, returning a vector of the 
+    /// new underlying type.
+    pub fn map<T, F>(self, mut op: F) -> Vector3<T> where F: FnMut(S) -> T {
+        Vector3 {
+            x: op(self.x),
+            y: op(self.y),
+            z: op(self.z),
+        }
+    }
+}
+
+impl<S> Vector3<S> where S: Scalar {
+
 
     #[inline]
     pub fn unit_x() -> Vector3<S> {
@@ -2209,10 +2240,25 @@ pub struct Vector4<S> {
     pub w: S,
 }
 
-impl<S> Vector4<S> where S: Scalar {
+impl<S> Vector4<S> {
     pub fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
         Vector4 { x: x, y: y, z: z, w: w }
     }
+
+    /// Map an operation on the elements of a vector, returning a vector of the 
+    /// new underlying type.
+    pub fn map<T, F>(self, mut op: F) -> Vector4<T> where F: FnMut(S) -> T {
+        Vector4 {
+            x: op(self.x),
+            y: op(self.y),
+            z: op(self.z),
+            w: op(self.w),
+        }
+    }
+}
+
+impl<S> Vector4<S> where S: Scalar {
+
 
     #[inline]
     pub fn unit_x() -> Vector4<S> {
