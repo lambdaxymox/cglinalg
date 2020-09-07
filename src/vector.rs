@@ -712,7 +712,6 @@ impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
 impl_mul_operator!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
 impl_mul_operator!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
-
 impl<S> Finite for Vector1<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.x.is_finite()
@@ -1173,6 +1172,21 @@ impl<S> ops::Mul<S> for &Vector2<S> where S: Scalar {
     }
 }
 
+impl_mul_operator!(u8,    Vector2<u8>,    Vector2<u8>,    { x, y });
+impl_mul_operator!(u16,   Vector2<u16>,   Vector2<u16>,   { x, y });
+impl_mul_operator!(u32,   Vector2<u32>,   Vector2<u32>,   { x, y });
+impl_mul_operator!(u64,   Vector2<u64>,   Vector2<u64>,   { x, y });
+impl_mul_operator!(u128,  Vector2<u128>,  Vector2<u128>,  { x, y });
+impl_mul_operator!(usize, Vector2<usize>, Vector2<usize>, { x, y });
+impl_mul_operator!(i8,    Vector2<i8>,    Vector2<i8>,    { x, y });
+impl_mul_operator!(i16,   Vector2<i16>,   Vector2<i16>,   { x, y });
+impl_mul_operator!(i32,   Vector2<i32>,   Vector2<i32>,   { x, y });
+impl_mul_operator!(i64,   Vector2<i64>,   Vector2<i64>,   { x, y });
+impl_mul_operator!(i128,  Vector2<i128>,  Vector2<i128>,  { x, y });
+impl_mul_operator!(isize, Vector2<isize>, Vector2<isize>, { x, y });
+impl_mul_operator!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
+impl_mul_operator!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
+
 impl<S> ops::MulAssign<S> for Vector2<S> where S: Scalar {
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
@@ -1446,22 +1460,6 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector2<S>> for Vector2<S> {
         iter.fold(Vector2::zero(), ops::Add::add)
     }
 }
-
-
-impl_mul_operator!(u8,    Vector2<u8>,    Vector2<u8>,    { x, y });
-impl_mul_operator!(u16,   Vector2<u16>,   Vector2<u16>,   { x, y });
-impl_mul_operator!(u32,   Vector2<u32>,   Vector2<u32>,   { x, y });
-impl_mul_operator!(u64,   Vector2<u64>,   Vector2<u64>,   { x, y });
-impl_mul_operator!(u128,  Vector2<u128>,  Vector2<u128>,  { x, y });
-impl_mul_operator!(usize, Vector2<usize>, Vector2<usize>, { x, y });
-impl_mul_operator!(i8,    Vector2<i8>,    Vector2<i8>,    { x, y });
-impl_mul_operator!(i16,   Vector2<i16>,   Vector2<i16>,   { x, y });
-impl_mul_operator!(i32,   Vector2<i32>,   Vector2<i32>,   { x, y });
-impl_mul_operator!(i64,   Vector2<i64>,   Vector2<i64>,   { x, y });
-impl_mul_operator!(i128,  Vector2<i128>,  Vector2<i128>,  { x, y });
-impl_mul_operator!(isize, Vector2<isize>, Vector2<isize>, { x, y });
-impl_mul_operator!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
-impl_mul_operator!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
 
 
 impl<S> Finite for Vector2<S> where S: ScalarFloat {
@@ -1993,6 +1991,21 @@ impl<S> ops::Mul<S> for &Vector3<S> where S: Scalar {
     }
 }
 
+impl_mul_operator!(u8,    Vector3<u8>,    Vector3<u8>,    { x, y, z });
+impl_mul_operator!(u16,   Vector3<u16>,   Vector3<u16>,   { x, y, z });
+impl_mul_operator!(u32,   Vector3<u32>,   Vector3<u32>,   { x, y, z });
+impl_mul_operator!(u64,   Vector3<u64>,   Vector3<u64>,   { x, y, z });
+impl_mul_operator!(u128,  Vector3<u128>,  Vector3<u128>,  { x, y, z });
+impl_mul_operator!(usize, Vector3<usize>, Vector3<usize>, { x, y, z });
+impl_mul_operator!(i8,    Vector3<i8>,    Vector3<i8>,    { x, y, z });
+impl_mul_operator!(i16,   Vector3<i16>,   Vector3<i16>,   { x, y, z });
+impl_mul_operator!(i32,   Vector3<i32>,   Vector3<i32>,   { x, y, z });
+impl_mul_operator!(i64,   Vector3<i64>,   Vector3<i64>,   { x, y, z });
+impl_mul_operator!(i128,  Vector3<i128>,  Vector3<i128>,  { x, y, z });
+impl_mul_operator!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
+impl_mul_operator!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
+impl_mul_operator!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
+
 impl<S> ops::MulAssign<S> for Vector3<S> where S: Scalar {
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
@@ -2267,22 +2280,6 @@ impl<S> approx::UlpsEq for Vector3<S> where S: ScalarFloat {
         S::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
     }
 }
-
-
-impl_mul_operator!(u8,    Vector3<u8>,    Vector3<u8>,    { x, y, z });
-impl_mul_operator!(u16,   Vector3<u16>,   Vector3<u16>,   { x, y, z });
-impl_mul_operator!(u32,   Vector3<u32>,   Vector3<u32>,   { x, y, z });
-impl_mul_operator!(u64,   Vector3<u64>,   Vector3<u64>,   { x, y, z });
-impl_mul_operator!(u128,  Vector3<u128>,  Vector3<u128>,  { x, y, z });
-impl_mul_operator!(usize, Vector3<usize>, Vector3<usize>, { x, y, z });
-impl_mul_operator!(i8,    Vector3<i8>,    Vector3<i8>,    { x, y, z });
-impl_mul_operator!(i16,   Vector3<i16>,   Vector3<i16>,   { x, y, z });
-impl_mul_operator!(i32,   Vector3<i32>,   Vector3<i32>,   { x, y, z });
-impl_mul_operator!(i64,   Vector3<i64>,   Vector3<i64>,   { x, y, z });
-impl_mul_operator!(i128,  Vector3<i128>,  Vector3<i128>,  { x, y, z });
-impl_mul_operator!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
-impl_mul_operator!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
-impl_mul_operator!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
 
 
 impl<S> Finite for Vector3<S> where S: ScalarFloat {
@@ -2851,6 +2848,21 @@ impl<S> ops::Mul<S> for &Vector4<S> where S: Scalar {
     }
 }
 
+impl_mul_operator!(u8,    Vector4<u8>,    Vector4<u8>,    { x, y, z, w });
+impl_mul_operator!(u16,   Vector4<u16>,   Vector4<u16>,   { x, y, z, w });
+impl_mul_operator!(u32,   Vector4<u32>,   Vector4<u32>,   { x, y, z, w });
+impl_mul_operator!(u64,   Vector4<u64>,   Vector4<u64>,   { x, y, z, w });
+impl_mul_operator!(u128,  Vector4<u128>,  Vector4<u128>,  { x, y, z, w });
+impl_mul_operator!(usize, Vector4<usize>, Vector4<usize>, { x, y, z, w });
+impl_mul_operator!(i8,    Vector4<i8>,    Vector4<i8>,    { x, y, z, w });
+impl_mul_operator!(i16,   Vector4<i16>,   Vector4<i16>,   { x, y, z, w });
+impl_mul_operator!(i32,   Vector4<i32>,   Vector4<i32>,   { x, y, z, w });
+impl_mul_operator!(i64,   Vector4<i64>,   Vector4<i64>,   { x, y, z, w });
+impl_mul_operator!(i128,  Vector4<i128>,  Vector4<i128>,  { x, y, z, w });
+impl_mul_operator!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
+impl_mul_operator!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
+impl_mul_operator!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
+
 impl<S> ops::MulAssign<S> for Vector4<S> where S: Scalar {
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
@@ -3135,22 +3147,6 @@ impl<S> approx::UlpsEq for Vector4<S> where S: ScalarFloat {
         S::ulps_eq(&self.w, &other.w, epsilon, max_ulps)
     }
 }
-
-
-impl_mul_operator!(u8,    Vector4<u8>,    Vector4<u8>,    { x, y, z, w });
-impl_mul_operator!(u16,   Vector4<u16>,   Vector4<u16>,   { x, y, z, w });
-impl_mul_operator!(u32,   Vector4<u32>,   Vector4<u32>,   { x, y, z, w });
-impl_mul_operator!(u64,   Vector4<u64>,   Vector4<u64>,   { x, y, z, w });
-impl_mul_operator!(u128,  Vector4<u128>,  Vector4<u128>,  { x, y, z, w });
-impl_mul_operator!(usize, Vector4<usize>, Vector4<usize>, { x, y, z, w });
-impl_mul_operator!(i8,    Vector4<i8>,    Vector4<i8>,    { x, y, z, w });
-impl_mul_operator!(i16,   Vector4<i16>,   Vector4<i16>,   { x, y, z, w });
-impl_mul_operator!(i32,   Vector4<i32>,   Vector4<i32>,   { x, y, z, w });
-impl_mul_operator!(i64,   Vector4<i64>,   Vector4<i64>,   { x, y, z, w });
-impl_mul_operator!(i128,  Vector4<i128>,  Vector4<i128>,  { x, y, z, w });
-impl_mul_operator!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
-impl_mul_operator!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
-impl_mul_operator!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
 
 
 impl<S> Finite for Vector4<S> where S: ScalarFloat {

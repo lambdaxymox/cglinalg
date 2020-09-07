@@ -1,6 +1,7 @@
 use std::fmt;
 use std::mem;
 use std::ops;
+use std::iter;
 
 
 use approx::{
@@ -825,6 +826,34 @@ impl<S> InvertibleSquareMatrix for Matrix2<S> where S: ScalarFloat {
                 inv_det * -self.c1r0, inv_det *  self.c0r0
             ))
         }
+    }
+}
+
+impl<S: Scalar> iter::Sum<Matrix2<S>> for Matrix2<S> {
+    #[inline]
+    fn sum<I: Iterator<Item = Matrix2<S>>>(iter: I) -> Matrix2<S> {
+        iter.fold(Matrix2::<S>::zero(), ops::Add::add)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Sum<&'a Matrix2<S>> for Matrix2<S> {
+    #[inline]
+    fn sum<I: Iterator<Item = &'a Matrix2<S>>>(iter: I) -> Matrix2<S> {
+        iter.fold(Matrix2::<S>::zero(), ops::Add::add)
+    }
+}
+
+impl<S: Scalar> iter::Product<Matrix2<S>> for Matrix2<S> {
+    #[inline]
+    fn product<I: Iterator<Item = Matrix2<S>>>(iter: I) -> Matrix2<S> {
+        iter.fold(Matrix2::<S>::one(), ops::Mul::mul)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix2<S>> for Matrix2<S> {
+    #[inline]
+    fn product<I: Iterator<Item = &'a Matrix2<S>>>(iter: I) -> Matrix2<S> {
+        iter.fold(Matrix2::<S>::one(), ops::Mul::mul)
     }
 }
 
@@ -1962,6 +1991,34 @@ impl<S> InvertibleSquareMatrix for Matrix3<S> where S: ScalarFloat {
                 inv_det * (self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0)
             ))
         }
+    }
+}
+
+impl<S: Scalar> iter::Sum<Matrix3<S>> for Matrix3<S> {
+    #[inline]
+    fn sum<I: Iterator<Item = Matrix3<S>>>(iter: I) -> Matrix3<S> {
+        iter.fold(Matrix3::<S>::zero(), ops::Add::add)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Sum<&'a Matrix3<S>> for Matrix3<S> {
+    #[inline]
+    fn sum<I: Iterator<Item = &'a Matrix3<S>>>(iter: I) -> Matrix3<S> {
+        iter.fold(Matrix3::<S>::zero(), ops::Add::add)
+    }
+}
+
+impl<S: Scalar> iter::Product<Matrix3<S>> for Matrix3<S> {
+    #[inline]
+    fn product<I: Iterator<Item = Matrix3<S>>>(iter: I) -> Matrix3<S> {
+        iter.fold(Matrix3::<S>::one(), ops::Mul::mul)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix3<S>> for Matrix3<S> {
+    #[inline]
+    fn product<I: Iterator<Item = &'a Matrix3<S>>>(iter: I) -> Matrix3<S> {
+        iter.fold(Matrix3::<S>::one(), ops::Mul::mul)
     }
 }
 
@@ -3709,6 +3766,34 @@ impl<S> InvertibleSquareMatrix for Matrix4<S> where S: ScalarFloat {
                 c3r0, c3r1, c3r2, c3r3
             ))
         }
+    }
+}
+
+impl<S: Scalar> iter::Sum<Matrix4<S>> for Matrix4<S> {
+    #[inline]
+    fn sum<I: Iterator<Item = Matrix4<S>>>(iter: I) -> Matrix4<S> {
+        iter.fold(Matrix4::<S>::zero(), ops::Add::add)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Sum<&'a Matrix4<S>> for Matrix4<S> {
+    #[inline]
+    fn sum<I: Iterator<Item = &'a Matrix4<S>>>(iter: I) -> Matrix4<S> {
+        iter.fold(Matrix4::<S>::zero(), ops::Add::add)
+    }
+}
+
+impl<S: Scalar> iter::Product<Matrix4<S>> for Matrix4<S> {
+    #[inline]
+    fn product<I: Iterator<Item = Matrix4<S>>>(iter: I) -> Matrix4<S> {
+        iter.fold(Matrix4::<S>::one(), ops::Mul::mul)
+    }
+}
+
+impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix4<S>> for Matrix4<S> {
+    #[inline]
+    fn product<I: Iterator<Item = &'a Matrix4<S>>>(iter: I) -> Matrix4<S> {
+        iter.fold(Matrix4::<S>::one(), ops::Mul::mul)
     }
 }
 
