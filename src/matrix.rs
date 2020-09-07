@@ -36,9 +36,9 @@ pub struct Matrix2<S> {
     pub c1r0: S, pub c1r1: S,
 }
 
-impl<S> Matrix2<S> where S: Scalar {
+impl<S> Matrix2<S> {
     /// Construct a new 2x2 matrix from its field elements.
-    pub fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Matrix2<S> {
+    pub const fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Matrix2<S> {
         Matrix2 { c0r0: c0r0, c0r1: c0r1, c1r0: c1r0, c1r1: c1r1 }
     }
 
@@ -797,7 +797,7 @@ pub struct Matrix3<S> {
 }
 
 impl<S> Matrix3<S> {
-    pub fn new(
+    pub const fn new(
         c0r0: S, c0r1: S, c0r2: S,
         c1r0: S, c1r1: S, c1r2: S,
         c2r0: S, c2r1: S, c2r2: S) -> Matrix3<S> {
@@ -1864,7 +1864,7 @@ pub struct Matrix4<S> {
 }
 
 impl<S> Matrix4<S> {
-    pub fn new(
+    pub const fn new(
         c0r0: S, c0r1: S, c0r2: S, c0r3: S,
         c1r0: S, c1r1: S, c1r2: S, c1r3: S,
         c2r0: S, c2r1: S, c2r2: S, c2r3: S,

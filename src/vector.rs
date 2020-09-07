@@ -736,7 +736,7 @@ pub struct Vector2<S> {
 
 impl<S> Vector2<S> {
     /// Create a new vector.
-    pub fn new(x: S, y: S) -> Vector2<S> {
+    pub const fn new(x: S, y: S) -> Vector2<S> {
         Vector2 { x: x, y: y }
     }
 
@@ -1448,7 +1448,7 @@ pub struct Vector3<S> {
 
 impl<S> Vector3<S> {
     /// Create a new vector.
-    pub fn new(x: S, y: S, z: S) -> Vector3<S> {
+    pub const fn new(x: S, y: S, z: S) -> Vector3<S> {
         Vector3 { x: x, y: y, z: z }
     }
 
@@ -2241,7 +2241,7 @@ pub struct Vector4<S> {
 }
 
 impl<S> Vector4<S> {
-    pub fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
+    pub const fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
         Vector4 { x: x, y: y, z: z, w: w }
     }
 
@@ -2258,8 +2258,6 @@ impl<S> Vector4<S> {
 }
 
 impl<S> Vector4<S> where S: Scalar {
-
-
     #[inline]
     pub fn unit_x() -> Vector4<S> {
         Vector4 { x: S::one(), y: S::zero(), z: S::zero(), w: S::zero() }
