@@ -49,16 +49,13 @@ impl<S> Matrix2<S> where S: Scalar {
 }
 
 impl<S> Matrix2<S> where S: ScalarFloat {
-    /// Compute the determinant of a 2x2 matrix.
-    pub fn determinant(&self) -> S {
-        self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
-    }
-
+    /*
     /// Determine whether a 2x2 matrix is invertible.
     pub fn is_invertible(&self) -> bool {
         self.determinant() != S::zero()
     }
-
+    */
+    /*
     /// Compute the inverse of a 2x2 matrix.
     pub fn inverse(&self) -> Option<Matrix2<S>> {
         let det = self.determinant();
@@ -73,6 +70,7 @@ impl<S> Matrix2<S> where S: ScalarFloat {
             ))
         }
     }
+    */
 }
 
 impl<S> Storage for Matrix2<S> where S: Scalar {
@@ -764,6 +762,26 @@ impl<S> SkewSymmetricMatrix for Matrix2<S> where S: ScalarFloat {
     }
 }
 
+impl<S> InvertibleSquareMatrix for Matrix2<S> where S: ScalarFloat {
+    fn determinant(&self) -> Self::Element {
+        self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
+    }
+
+    fn inverse(&self) -> Option<Self> {
+        let det = self.determinant();
+        if det == S::zero() {
+            // A matrix with zero determinant has no inverse.
+            None
+        } else {
+            let inv_det = S::one() / det;
+            Some(Matrix2::new(
+                inv_det *  self.c1r1, inv_det * -self.c0r1,
+                inv_det * -self.c1r0, inv_det *  self.c0r0
+            ))
+        }
+    }
+}
+
 
 
 /// The `Matrix3` type represents 3x3 matrices in column-major order.
@@ -805,6 +823,7 @@ impl<S> Matrix3<S> {
 }
 
 impl<S> Matrix3<S> where S: ScalarFloat {
+    /*
     /// Calculate the determinant of a 3x3 matrix.
     pub fn determinant(&self) -> S {
         self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
@@ -841,6 +860,7 @@ impl<S> Matrix3<S> where S: ScalarFloat {
             ))
         }
     }
+    */
 }
 
 impl<S> Storage for Matrix3<S> where S: Scalar {
@@ -1794,6 +1814,39 @@ impl<S> SkewSymmetricMatrix for Matrix3<S> where S: ScalarFloat {
     }
 }
 
+impl<S> InvertibleSquareMatrix for Matrix3<S> where S: ScalarFloat {
+    fn determinant(&self) -> Self::Element {
+        self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
+        self.c1r0 * self.c0r1 * self.c2r2 + self.c1r0 * self.c0r2 * self.c2r1 +
+        self.c2r0 * self.c0r1 * self.c1r2 - self.c2r0 * self.c0r2 * self.c1r1
+    }
+
+    fn inverse(&self) -> Option<Self> {
+        let det = self.determinant();
+        if det == S::zero() {
+            // A matrix with zero determinant has no inverse.
+            None
+        } else {
+            let inv_det = S::one() / det;
+
+            Some(Matrix3::new(
+                inv_det * (self.c1r1 * self.c2r2 - self.c1r2 * self.c2r1), 
+                inv_det * (self.c0r2 * self.c2r1 - self.c0r1 * self.c2r2), 
+                inv_det * (self.c0r1 * self.c1r2 - self.c0r2 * self.c1r1),
+    
+                inv_det * (self.c1r2 * self.c2r0 - self.c1r0 * self.c2r2),
+                inv_det * (self.c0r0 * self.c2r2 - self.c0r2 * self.c2r0),
+                inv_det * (self.c0r2 * self.c1r0 - self.c0r0 * self.c1r2),
+
+                inv_det * (self.c1r0 * self.c2r1 - self.c1r1 * self.c2r0), 
+                inv_det * (self.c0r1 * self.c2r0 - self.c0r0 * self.c2r1), 
+                inv_det * (self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0)
+            ))
+        }
+    }
+}
+
+
 
 /// The `Matrix4` type represents 4x4 matrices in column-major order.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -1867,7 +1920,7 @@ impl<S> Matrix4<S> where S: Scalar {
             zero, zero, zero, one
         )
     }
-
+    /*
     /// Computes the determinant of a 4x4 matrix.
     pub fn determinant(&self) -> S {
         self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
@@ -1969,6 +2022,7 @@ impl<S> Matrix4<S> where S: Scalar {
             ))
         }
     }
+    */
 }
 
 impl<S> Matrix4<S> where S: ScalarFloat {
@@ -3333,6 +3387,104 @@ impl<S> SkewSymmetricMatrix for Matrix4<S> where S: ScalarFloat {
         ulps_eq!(self.c0r3, -self.c3r0) && ulps_eq!(self.c3r0, -self.c0r3) &&
         ulps_eq!(self.c1r3, -self.c3r1) && ulps_eq!(self.c3r1, -self.c1r3) &&
         ulps_eq!(self.c2r3, -self.c3r2) && ulps_eq!(self.c3r2, -self.c2r3)
+    }
+}
+
+impl<S> InvertibleSquareMatrix for Matrix4<S> where S: ScalarFloat {
+    fn determinant(&self) -> Self::Element {
+        self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
+        self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
+        self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
+        self.c0r0 * self.c2r1 * self.c1r3 * self.c3r2 +
+        self.c0r0 * self.c3r1 * self.c1r2 * self.c2r3 -
+        self.c0r0 * self.c3r1 * self.c1r3 * self.c2r2 -
+        self.c1r0 * self.c0r1 * self.c2r2 * self.c3r3 +
+        self.c1r0 * self.c0r1 * self.c2r3 * self.c3r2 +
+        self.c1r0 * self.c2r1 * self.c0r2 * self.c3r3 -
+        self.c1r0 * self.c2r1 * self.c0r3 * self.c3r2 -
+        self.c1r0 * self.c3r1 * self.c0r2 * self.c2r3 +
+        self.c1r0 * self.c3r1 * self.c0r3 * self.c2r2 +
+        self.c2r0 * self.c0r1 * self.c1r2 * self.c3r3 -
+        self.c2r0 * self.c0r1 * self.c1r3 * self.c3r2 -
+        self.c2r0 * self.c1r1 * self.c0r2 * self.c3r3 +
+        self.c2r0 * self.c1r1 * self.c0r3 * self.c3r2 +
+        self.c2r0 * self.c3r1 * self.c0r2 * self.c1r3 -
+        self.c2r0 * self.c3r1 * self.c0r3 * self.c1r2 -
+        self.c3r0 * self.c0r1 * self.c1r2 * self.c2r3 +
+        self.c3r0 * self.c0r1 * self.c1r3 * self.c2r2 +
+        self.c3r0 * self.c1r1 * self.c0r2 * self.c2r3 -
+        self.c3r0 * self.c1r1 * self.c0r3 * self.c2r2 -
+        self.c3r0 * self.c2r1 * self.c0r2 * self.c1r3 +
+        self.c3r0 * self.c2r1 * self.c0r3 * self.c1r2
+    }
+
+    fn inverse(&self) -> Option<Self> {
+        let det = self.determinant();
+        if det == S::zero() {
+            // A matrix with zero determinant has no inverse.
+            None
+        } else {
+            let det_inv = S::one() / det;
+            let _c0r0 = self.c1r1 * self.c2r2 * self.c3r3 + self.c2r1 * self.c3r2 * self.c1r3 + self.c3r1 * self.c1r2 * self.c2r3
+                      - self.c3r1 * self.c2r2 * self.c1r3 - self.c2r1 * self.c1r2 * self.c3r3 - self.c1r1 * self.c3r2 * self.c2r3;
+            let _c1r0 = self.c3r0 * self.c2r2 * self.c1r3 + self.c2r0 * self.c1r2 * self.c3r3 + self.c1r0 * self.c3r2 * self.c2r3
+                      - self.c1r0 * self.c2r2 * self.c3r3 - self.c2r0 * self.c3r2 * self.c1r3 - self.c3r0 * self.c1r2 * self.c2r3;
+            let _c2r0 = self.c1r0 * self.c2r1 * self.c3r3 + self.c2r0 * self.c3r1 * self.c1r3 + self.c3r0 * self.c1r1 * self.c2r3
+                      - self.c3r0 * self.c2r1 * self.c1r3 - self.c2r0 * self.c1r1 * self.c3r3 - self.c1r0 * self.c3r1 * self.c2r3;
+            let _c3r0 = self.c3r0 * self.c2r1 * self.c1r2 + self.c2r0 * self.c1r1 * self.c3r2 + self.c1r0 * self.c3r1 * self.c2r2
+                      - self.c1r0 * self.c2r1 * self.c3r2 - self.c2r0 * self.c3r1 * self.c1r2 - self.c3r0 * self.c1r1 * self.c2r2;
+            let _c0r1 = self.c3r1 * self.c2r2 * self.c0r3 + self.c2r1 * self.c0r2 * self.c3r3 + self.c0r1 * self.c3r2 * self.c2r3
+                      - self.c0r1 * self.c2r2 * self.c3r3 - self.c2r1 * self.c3r2 * self.c0r3 - self.c3r1 * self.c0r2 * self.c2r3;
+            let _c1r1 = self.c0r0 * self.c2r2 * self.c3r3 + self.c2r0 * self.c3r2 * self.c0r3 + self.c3r0 * self.c0r2 * self.c2r3
+                      - self.c3r0 * self.c2r2 * self.c0r3 - self.c2r0 * self.c0r2 * self.c3r3 - self.c0r0 * self.c3r2 * self.c2r3;
+            let _c2r1 = self.c3r0 * self.c2r1 * self.c0r3 + self.c2r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c3r1 * self.c2r3
+                      - self.c0r0 * self.c2r1 * self.c3r3 - self.c2r0 * self.c3r1 * self.c0r3 - self.c3r0 * self.c0r1 * self.c2r3;
+            let _c3r1 = self.c0r0 * self.c2r1 * self.c3r2 + self.c2r0 * self.c3r1 * self.c0r2 + self.c3r0 * self.c0r1 * self.c2r2
+                      - self.c3r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c0r1 * self.c3r2 - self.c0r0 * self.c3r1 * self.c2r2;
+            let _c0r2 = self.c0r1 * self.c1r2 * self.c3r3 + self.c1r1 * self.c3r2 * self.c0r3 + self.c3r1 * self.c0r2 * self.c1r3 
+                      - self.c3r1 * self.c1r2 * self.c0r3 - self.c1r1 * self.c0r2 * self.c3r3 - self.c0r1 * self.c3r2 * self.c1r3;
+            let _c1r2 = self.c3r0 * self.c1r2 * self.c0r3 + self.c1r0 * self.c0r2 * self.c3r3 + self.c0r0 * self.c3r2 * self.c1r3
+                      - self.c0r0 * self.c1r2 * self.c3r3 - self.c1r0 * self.c3r2 * self.c0r3 - self.c3r0 * self.c0r2 * self.c1r3;
+            let _c2r2 = self.c0r0 * self.c1r1 * self.c3r3 + self.c1r0 * self.c3r1 * self.c0r3 + self.c3r0 * self.c0r1 * self.c1r3
+                      - self.c3r0 * self.c1r1 * self.c0r3 - self.c1r0 * self.c0r1 * self.c3r3 - self.c0r0 * self.c3r1 * self.c1r3;
+            let _c3r2 = self.c3r0 * self.c1r1 * self.c0r2 + self.c1r0 * self.c0r1 * self.c3r2 + self.c0r0 * self.c3r1 * self.c1r2
+                      - self.c0r0 * self.c1r1 * self.c3r2 - self.c1r0 * self.c3r1 * self.c0r2 - self.c3r0 * self.c0r1 * self.c1r2;
+            let _c0r3 = self.c2r1 * self.c1r2 * self.c0r3 + self.c1r1 * self.c0r2 * self.c2r3 + self.c0r1 * self.c2r2 * self.c1r3
+                      - self.c0r1 * self.c1r2 * self.c2r3 - self.c1r1 * self.c2r2 * self.c0r3 - self.c2r1 * self.c0r2 * self.c1r3;  
+            let _c1r3 = self.c0r0 * self.c1r2 * self.c2r3 + self.c1r0 * self.c2r2 * self.c0r3 + self.c2r0 * self.c0r2 * self.c1r3
+                      - self.c2r0 * self.c1r2 * self.c0r3 - self.c1r0 * self.c0r2 * self.c2r3 - self.c0r0 * self.c2r2 * self.c1r3;
+            let _c2r3 = self.c2r0 * self.c1r1 * self.c0r3 + self.c1r0 * self.c0r1 * self.c2r3 + self.c0r0 * self.c2r1 * self.c1r3
+                      - self.c0r0 * self.c1r1 * self.c2r3 - self.c1r0 * self.c2r1 * self.c0r3 - self.c2r0 * self.c0r1 * self.c1r3;
+            let _c3r3 = self.c0r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c2r1 * self.c0r2 + self.c2r0 * self.c0r1 * self.c1r2
+                      - self.c2r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c2r1 * self.c1r2; 
+            
+            let c0r0 = det_inv * _c0r0; 
+            let c0r1 = det_inv * _c0r1; 
+            let c0r2 = det_inv * _c0r2; 
+            let c0r3 = det_inv * _c0r3;
+
+            let c1r0 = det_inv * _c1r0; 
+            let c1r1 = det_inv * _c1r1; 
+            let c1r2 = det_inv * _c1r2; 
+            let c1r3 = det_inv * _c1r3;
+
+            let c2r0 = det_inv * _c2r0; 
+            let c2r1 = det_inv * _c2r1; 
+            let c2r2 = det_inv * _c2r2; 
+            let c2r3 = det_inv * _c2r3;
+
+            let c3r0 = det_inv * _c3r0; 
+            let c3r1 = det_inv * _c3r1; 
+            let c3r2 = det_inv * _c3r2; 
+            let c3r3 = det_inv * _c3r3;
+
+            Some(Matrix4::new(
+                c0r0, c0r1, c0r2, c0r3,
+                c1r0, c1r1, c1r2, c1r3,
+                c2r0, c2r1, c2r2, c2r3,
+                c3r0, c3r1, c3r2, c3r3
+            ))
+        }
     }
 }
 

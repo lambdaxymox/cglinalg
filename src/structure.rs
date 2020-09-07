@@ -403,7 +403,7 @@ pub trait InvertibleSquareMatrix where
     /// m * self = self * m = 1.
     /// ```
     /// Not every square matrix has an inverse.
-    fn invert(&self) -> Option<Self>;
+    fn inverse(&self) -> Option<Self>;
 
     /// Determine whether a square matrix has an inverse matrix.
     fn is_invertible(&self) -> bool {
