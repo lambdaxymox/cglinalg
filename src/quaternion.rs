@@ -132,7 +132,7 @@ impl<S> Quaternion<S> where S: Scalar {
 
 impl<S> Quaternion<S> where S: ScalarFloat {
     /// Compute a quaternion corresponding to rotating about an axis in radians.
-    pub fn from_angle_axis<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
         let radians = angle.into();
         let radians_over_two = radians / (S::one() + S::one());
         Quaternion::new(
