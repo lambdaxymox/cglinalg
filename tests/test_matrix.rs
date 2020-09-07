@@ -11,6 +11,8 @@ mod matrix2_tests {
         One, 
         Zero, 
         Matrix,
+        SquareMatrix,
+        InvertibleSquareMatrix,
     };
     use gdmath::approx::relative_eq;
     use std::slice::Iter;
@@ -399,6 +401,8 @@ mod matrix3_tests {
         One, 
         Zero, 
         Matrix,
+        SquareMatrix,
+        InvertibleSquareMatrix,
     };
     use gdmath::approx::relative_eq;
     use std::slice::Iter;
@@ -628,9 +632,9 @@ mod matrix3_tests {
     #[test]
     fn test_matrix_with_zero_determinant() {
         let matrix = Matrix3::new(
-            1f32, 2f32, 3f32, 
-            4f32, 5f32, 6f32, 
-            4f32, 5f32, 6f32
+            1_f32, 2_f32, 3_f32, 
+            4_f32, 5_f32, 6_f32, 
+            4_f32, 5_f32, 6_f32
         );
         
         assert_eq!(matrix.determinant(), 0.0);
@@ -854,6 +858,8 @@ mod matrix4_tests {
         One, 
         Zero, 
         Matrix,
+        SquareMatrix,
+        InvertibleSquareMatrix,
     };
     use gdmath::approx::relative_eq;
     use std::slice::Iter;
