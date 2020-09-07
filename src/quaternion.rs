@@ -14,7 +14,6 @@ use structure::{
 };
 use angle::{
     Radians,
-    Degrees,
 };
 use scalar::{
     Scalar,
@@ -133,19 +132,15 @@ impl<S> Quaternion<S> where S: Scalar {
 
 impl<S> Quaternion<S> where S: ScalarFloat {
     /// Compute a quaternion corresponding to rotating about an axis in radians.
-    pub fn from_axis_rad(radians: Radians<S>, axis: Vector3<S>) -> Quaternion<S> {
-        let two = S::one() + S::one();
+    pub fn from_angle_axis<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
+        let radians = angle.into();
+        let radians_over_two = radians / (S::one() + S::one());
         Quaternion::new(
-            Radians::cos(radians / two),
-            Radians::sin(radians / two) * axis.x,
-            Radians::sin(radians / two) * axis.y,
-            Radians::sin(radians / two) * axis.z,
+            Radians::cos(radians_over_two),
+            Radians::sin(radians_over_two) * axis.x,
+            Radians::sin(radians_over_two) * axis.y,
+            Radians::sin(radians_over_two) * axis.z,
         )
-    }
-
-    /// Compute a quaternion corresponding to rotating about an axis in degrees.
-    pub fn from_axis_deg(degrees: Degrees<S>, axis: Vector3<S>) -> Quaternion<S> {
-        Self::from_axis_rad(degrees.into(), axis)
     }
 
     /// Compute the conjugate of a quaternion.
