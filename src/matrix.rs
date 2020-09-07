@@ -86,28 +86,14 @@ impl<S> Matrix2<S> where S: NumCast + Copy {
 }
 
 impl<S> Matrix2<S> where S: ScalarFloat {
-    /*
-    /// Determine whether a 2x2 matrix is invertible.
-    pub fn is_invertible(&self) -> bool {
-        self.determinant() != S::zero()
+    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Matrix2<S> {
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
+
+        Matrix2::new(
+             cos_angle, sin_angle, 
+            -sin_angle, cos_angle
+        )
     }
-    */
-    /*
-    /// Compute the inverse of a 2x2 matrix.
-    pub fn inverse(&self) -> Option<Matrix2<S>> {
-        let det = self.determinant();
-        if det == S::zero() {
-            // A matrix with zero determinant has no inverse.
-            None
-        } else {
-            let inv_det = S::one() / det;
-            Some(Matrix2::new(
-                inv_det *  self.c1r1, inv_det * -self.c0r1,
-                inv_det * -self.c1r0, inv_det *  self.c0r0
-            ))
-        }
-    }
-    */
 }
 
 impl<S> Storage for Matrix2<S> where S: Scalar {
@@ -956,44 +942,57 @@ impl<S> Matrix3<S> where S: NumCast + Copy {
 }
 
 impl<S> Matrix3<S> where S: ScalarFloat {
-    /*
-    /// Calculate the determinant of a 3x3 matrix.
-    pub fn determinant(&self) -> S {
-        self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
-        self.c1r0 * self.c0r1 * self.c2r2 + self.c1r0 * self.c0r2 * self.c2r1 +
-        self.c2r0 * self.c0r1 * self.c1r2 - self.c2r0 * self.c0r2 * self.c1r1
+    /// Compute a rotation matrix about the x-axis by an angle `angle`.
+    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
+
+        Matrix3::new(
+            S::one(),   S::zero(), S::zero(),
+            S::zero(),  cos_angle, sin_angle,
+            S::zero(), -sin_angle, cos_angle,
+        )
     }
 
-    /// Determine whether a 3x3 matrix is invertible.
-    pub fn is_invertible(&self) -> bool {
-        self.determinant() != S::zero()
+    /// Compute a rotation matrix about the y-axis by an angle `angle`.
+    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
+
+        Matrix3::new(
+            cos_angle, S::zero(), -sin_angle,
+            S::zero(), S::one(),   S::zero(),
+            sin_angle, S::zero(),  cos_angle,
+        )
     }
 
-    /// Calculate the inverse of a 3x3 matrix, if it exists.
-    pub fn inverse(&self) -> Option<Matrix3<S>> {
-        let det = self.determinant();
-        if det == S::zero() {
-            // A matrix with zero determinant has no inverse.
-            None
-        } else {
-            let inv_det = S::one() / det;
+    /// Compute a rotation matrix about the z-axis by an angle `angle`.
+    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
-            Some(Matrix3::new(
-                inv_det * (self.c1r1 * self.c2r2 - self.c1r2 * self.c2r1), 
-                inv_det * (self.c0r2 * self.c2r1 - self.c0r1 * self.c2r2), 
-                inv_det * (self.c0r1 * self.c1r2 - self.c0r2 * self.c1r1),
-    
-                inv_det * (self.c1r2 * self.c2r0 - self.c1r0 * self.c2r2),
-                inv_det * (self.c0r0 * self.c2r2 - self.c0r2 * self.c2r0),
-                inv_det * (self.c0r2 * self.c1r0 - self.c0r0 * self.c1r2),
-
-                inv_det * (self.c1r0 * self.c2r1 - self.c1r1 * self.c2r0), 
-                inv_det * (self.c0r1 * self.c2r0 - self.c0r0 * self.c2r1), 
-                inv_det * (self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0)
-            ))
-        }
+        Matrix3::new(
+             cos_angle, sin_angle, S::zero(),
+            -sin_angle, cos_angle, S::zero(),
+             S::zero(), S::zero(), S::one(),
+        )
     }
-    */
+
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix3<S> {
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
+        let one_minus_cos_angle = S::one() - cos_angle;
+
+        Matrix3::new(
+            one_minus_cos_angle * axis.x * axis.x + cos_angle,
+            one_minus_cos_angle * axis.x * axis.y + sin_angle * axis.z,
+            one_minus_cos_angle * axis.x * axis.z - sin_angle * axis.y,
+
+            one_minus_cos_angle * axis.x * axis.y - sin_angle * axis.z,
+            one_minus_cos_angle * axis.y * axis.y + cos_angle,
+            one_minus_cos_angle * axis.y * axis.z + sin_angle * axis.x,
+
+            one_minus_cos_angle * axis.x * axis.z + sin_angle * axis.y,
+            one_minus_cos_angle * axis.y * axis.z - sin_angle * axis.x,
+            one_minus_cos_angle * axis.z * axis.z + cos_angle,
+        )
+    }
 }
 
 impl<S> Storage for Matrix3<S> where S: Scalar {
@@ -2184,114 +2183,11 @@ impl<S> Matrix4<S> where S: Scalar {
             zero, zero, zero, one
         )
     }
-    /*
-    /// Computes the determinant of a 4x4 matrix.
-    pub fn determinant(&self) -> S {
-        self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
-        self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
-        self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
-        self.c0r0 * self.c2r1 * self.c1r3 * self.c3r2 +
-        self.c0r0 * self.c3r1 * self.c1r2 * self.c2r3 -
-        self.c0r0 * self.c3r1 * self.c1r3 * self.c2r2 -
-        self.c1r0 * self.c0r1 * self.c2r2 * self.c3r3 +
-        self.c1r0 * self.c0r1 * self.c2r3 * self.c3r2 +
-        self.c1r0 * self.c2r1 * self.c0r2 * self.c3r3 -
-        self.c1r0 * self.c2r1 * self.c0r3 * self.c3r2 -
-        self.c1r0 * self.c3r1 * self.c0r2 * self.c2r3 +
-        self.c1r0 * self.c3r1 * self.c0r3 * self.c2r2 +
-        self.c2r0 * self.c0r1 * self.c1r2 * self.c3r3 -
-        self.c2r0 * self.c0r1 * self.c1r3 * self.c3r2 -
-        self.c2r0 * self.c1r1 * self.c0r2 * self.c3r3 +
-        self.c2r0 * self.c1r1 * self.c0r3 * self.c3r2 +
-        self.c2r0 * self.c3r1 * self.c0r2 * self.c1r3 -
-        self.c2r0 * self.c3r1 * self.c0r3 * self.c1r2 -
-        self.c3r0 * self.c0r1 * self.c1r2 * self.c2r3 +
-        self.c3r0 * self.c0r1 * self.c1r3 * self.c2r2 +
-        self.c3r0 * self.c1r1 * self.c0r2 * self.c2r3 -
-        self.c3r0 * self.c1r1 * self.c0r3 * self.c2r2 -
-        self.c3r0 * self.c2r1 * self.c0r2 * self.c1r3 +
-        self.c3r0 * self.c2r1 * self.c0r3 * self.c1r2
-    }
-
-    pub fn is_invertible(&self) -> bool {
-        !self.determinant().is_zero()
-    }
-
-    /// Compute the inverse of a 4x4 matrix.
-    pub fn inverse(&self) -> Option<Matrix4<S>> {
-        let det = self.determinant();
-        if det == S::zero() {
-            // A matrix with zero determinant has no inverse.
-            None
-        } else {
-            let det_inv = S::one() / det;
-            let _c0r0 = self.c1r1 * self.c2r2 * self.c3r3 + self.c2r1 * self.c3r2 * self.c1r3 + self.c3r1 * self.c1r2 * self.c2r3
-                      - self.c3r1 * self.c2r2 * self.c1r3 - self.c2r1 * self.c1r2 * self.c3r3 - self.c1r1 * self.c3r2 * self.c2r3;
-            let _c1r0 = self.c3r0 * self.c2r2 * self.c1r3 + self.c2r0 * self.c1r2 * self.c3r3 + self.c1r0 * self.c3r2 * self.c2r3
-                      - self.c1r0 * self.c2r2 * self.c3r3 - self.c2r0 * self.c3r2 * self.c1r3 - self.c3r0 * self.c1r2 * self.c2r3;
-            let _c2r0 = self.c1r0 * self.c2r1 * self.c3r3 + self.c2r0 * self.c3r1 * self.c1r3 + self.c3r0 * self.c1r1 * self.c2r3
-                      - self.c3r0 * self.c2r1 * self.c1r3 - self.c2r0 * self.c1r1 * self.c3r3 - self.c1r0 * self.c3r1 * self.c2r3;
-            let _c3r0 = self.c3r0 * self.c2r1 * self.c1r2 + self.c2r0 * self.c1r1 * self.c3r2 + self.c1r0 * self.c3r1 * self.c2r2
-                      - self.c1r0 * self.c2r1 * self.c3r2 - self.c2r0 * self.c3r1 * self.c1r2 - self.c3r0 * self.c1r1 * self.c2r2;
-            let _c0r1 = self.c3r1 * self.c2r2 * self.c0r3 + self.c2r1 * self.c0r2 * self.c3r3 + self.c0r1 * self.c3r2 * self.c2r3
-                      - self.c0r1 * self.c2r2 * self.c3r3 - self.c2r1 * self.c3r2 * self.c0r3 - self.c3r1 * self.c0r2 * self.c2r3;
-            let _c1r1 = self.c0r0 * self.c2r2 * self.c3r3 + self.c2r0 * self.c3r2 * self.c0r3 + self.c3r0 * self.c0r2 * self.c2r3
-                      - self.c3r0 * self.c2r2 * self.c0r3 - self.c2r0 * self.c0r2 * self.c3r3 - self.c0r0 * self.c3r2 * self.c2r3;
-            let _c2r1 = self.c3r0 * self.c2r1 * self.c0r3 + self.c2r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c3r1 * self.c2r3
-                      - self.c0r0 * self.c2r1 * self.c3r3 - self.c2r0 * self.c3r1 * self.c0r3 - self.c3r0 * self.c0r1 * self.c2r3;
-            let _c3r1 = self.c0r0 * self.c2r1 * self.c3r2 + self.c2r0 * self.c3r1 * self.c0r2 + self.c3r0 * self.c0r1 * self.c2r2
-                      - self.c3r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c0r1 * self.c3r2 - self.c0r0 * self.c3r1 * self.c2r2;
-            let _c0r2 = self.c0r1 * self.c1r2 * self.c3r3 + self.c1r1 * self.c3r2 * self.c0r3 + self.c3r1 * self.c0r2 * self.c1r3 
-                      - self.c3r1 * self.c1r2 * self.c0r3 - self.c1r1 * self.c0r2 * self.c3r3 - self.c0r1 * self.c3r2 * self.c1r3;
-            let _c1r2 = self.c3r0 * self.c1r2 * self.c0r3 + self.c1r0 * self.c0r2 * self.c3r3 + self.c0r0 * self.c3r2 * self.c1r3
-                      - self.c0r0 * self.c1r2 * self.c3r3 - self.c1r0 * self.c3r2 * self.c0r3 - self.c3r0 * self.c0r2 * self.c1r3;
-            let _c2r2 = self.c0r0 * self.c1r1 * self.c3r3 + self.c1r0 * self.c3r1 * self.c0r3 + self.c3r0 * self.c0r1 * self.c1r3
-                      - self.c3r0 * self.c1r1 * self.c0r3 - self.c1r0 * self.c0r1 * self.c3r3 - self.c0r0 * self.c3r1 * self.c1r3;
-            let _c3r2 = self.c3r0 * self.c1r1 * self.c0r2 + self.c1r0 * self.c0r1 * self.c3r2 + self.c0r0 * self.c3r1 * self.c1r2
-                      - self.c0r0 * self.c1r1 * self.c3r2 - self.c1r0 * self.c3r1 * self.c0r2 - self.c3r0 * self.c0r1 * self.c1r2;
-            let _c0r3 = self.c2r1 * self.c1r2 * self.c0r3 + self.c1r1 * self.c0r2 * self.c2r3 + self.c0r1 * self.c2r2 * self.c1r3
-                      - self.c0r1 * self.c1r2 * self.c2r3 - self.c1r1 * self.c2r2 * self.c0r3 - self.c2r1 * self.c0r2 * self.c1r3;  
-            let _c1r3 = self.c0r0 * self.c1r2 * self.c2r3 + self.c1r0 * self.c2r2 * self.c0r3 + self.c2r0 * self.c0r2 * self.c1r3
-                      - self.c2r0 * self.c1r2 * self.c0r3 - self.c1r0 * self.c0r2 * self.c2r3 - self.c0r0 * self.c2r2 * self.c1r3;
-            let _c2r3 = self.c2r0 * self.c1r1 * self.c0r3 + self.c1r0 * self.c0r1 * self.c2r3 + self.c0r0 * self.c2r1 * self.c1r3
-                      - self.c0r0 * self.c1r1 * self.c2r3 - self.c1r0 * self.c2r1 * self.c0r3 - self.c2r0 * self.c0r1 * self.c1r3;
-            let _c3r3 = self.c0r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c2r1 * self.c0r2 + self.c2r0 * self.c0r1 * self.c1r2
-                      - self.c2r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c2r1 * self.c1r2; 
-            
-            let c0r0 = det_inv * _c0r0; 
-            let c0r1 = det_inv * _c0r1; 
-            let c0r2 = det_inv * _c0r2; 
-            let c0r3 = det_inv * _c0r3;
-
-            let c1r0 = det_inv * _c1r0; 
-            let c1r1 = det_inv * _c1r1; 
-            let c1r2 = det_inv * _c1r2; 
-            let c1r3 = det_inv * _c1r3;
-
-            let c2r0 = det_inv * _c2r0; 
-            let c2r1 = det_inv * _c2r1; 
-            let c2r2 = det_inv * _c2r2; 
-            let c2r3 = det_inv * _c2r3;
-
-            let c3r0 = det_inv * _c3r0; 
-            let c3r1 = det_inv * _c3r1; 
-            let c3r2 = det_inv * _c3r2; 
-            let c3r3 = det_inv * _c3r3;
-
-            Some(Matrix4::new(
-                c0r0, c0r1, c0r2, c0r3,
-                c1r0, c1r1, c1r2, c1r3,
-                c2r0, c2r1, c2r2, c2r3,
-                c3r0, c3r1, c3r2, c3r3
-            ))
-        }
-    }
-    */
 }
 
 impl<S> Matrix4<S> where S: ScalarFloat {
     /// Create a rotation matrix around the x axis by an angle in `angle` radians/degrees.
-    pub fn from_rotation_x<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
+    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
@@ -2305,7 +2201,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
     }
         
     /// Create a rotation matrix around the y axis by an angle in `angle` radians/degrees.
-    pub fn from_rotation_y<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
+    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
@@ -2319,7 +2215,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
     }
     
     /// Create a rotation matrix around the z axis by an angle in `angle` radians/degrees.
-    pub fn from_rotation_z<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
+    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
@@ -2329,6 +2225,30 @@ impl<S> Matrix4<S> where S: ScalarFloat {
             -sin_angle, cos_angle, zero, zero,
              zero,      zero,      one,  zero,
              zero,      zero,      zero, one
+        )
+    }
+
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix4<S> {
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
+        let one_minus_cos_angle = S::one() - cos_angle;
+
+        Matrix4::new(
+            one_minus_cos_angle * axis.x * axis.x + cos_angle,
+            one_minus_cos_angle * axis.x * axis.y + sin_angle * axis.z,
+            one_minus_cos_angle * axis.x * axis.z - sin_angle * axis.y,
+            S::zero(),
+
+            one_minus_cos_angle * axis.x * axis.y - sin_angle * axis.z,
+            one_minus_cos_angle * axis.y * axis.y + cos_angle,
+            one_minus_cos_angle * axis.y * axis.z + sin_angle * axis.x,
+            S::zero(),
+
+            one_minus_cos_angle * axis.x * axis.z + sin_angle * axis.y,
+            one_minus_cos_angle * axis.y * axis.z - sin_angle * axis.x,
+            one_minus_cos_angle * axis.z * axis.z + cos_angle,
+            S::zero(),
+
+            S::zero(), S::zero(), S::zero(), S::one(),
         )
     }
 }
