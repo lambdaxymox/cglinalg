@@ -298,6 +298,46 @@ impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Sub<Point1<S>> for &Point1<S> where S: Scalar {
+    type Output = Vector1<S>;
+
+    fn sub(self, other: Point1<S>) -> Self::Output {
+        Vector1 {
+            x: self.x - other.x,
+        }
+    }
+}
+
+impl<S> ops::Sub<Point1<S>> for Point1<S> where S: Scalar {
+    type Output = Vector1<S>;
+
+    fn sub(self, other: Point1<S>) -> Self::Output {
+        Vector1 {
+            x: self.x - other.x,
+        }
+    }
+}
+
+impl<S> ops::Sub<&Point1<S>> for Point1<S> where S: Scalar {
+    type Output = Vector1<S>;
+
+    fn sub(self, other: &Point1<S>) -> Self::Output {
+        Vector1 {
+            x: self.x - other.x,          
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Sub<&'b Point1<S>> for &'a Point1<S> where S: Scalar {
+    type Output = Vector1<S>;
+
+    fn sub(self, other: &'b Point1<S>) -> Self::Output {
+        Vector1 {
+            x: self.x - other.x,
+        }
+    }
+}
+
 
 /// A representation of two-dimensional points with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -581,6 +621,51 @@ impl<'a, 'b, S> ops::Add<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
         }
     }
 }
+
+impl<S> ops::Sub<Point2<S>> for &Point2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn sub(self, other: Point2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<S> ops::Sub<Point2<S>> for Point2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn sub(self, other: Point2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<S> ops::Sub<&Point2<S>> for Point2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn sub(self, other: &Point2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,             
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Sub<&'b Point2<S>> for &'a Point2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    fn sub(self, other: &'b Point2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
 
 
 /// A representation of three-dimensional points in a Euclidean space.
@@ -887,6 +972,54 @@ impl<'a, 'b, S> ops::Add<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
             x: self.x + other.x,
             y: self.y + other.y,
             z: self.z + other.z,
+        }
+    }
+}
+
+impl<S> ops::Sub<Point3<S>> for &Point3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    fn sub(self, other: Point3<S>) -> Self::Output {
+        Vector3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+        }
+    }
+}
+
+impl<S> ops::Sub<Point3<S>> for Point3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    fn sub(self, other: Point3<S>) -> Self::Output {
+        Vector3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+        }
+    }
+}
+
+impl<S> ops::Sub<&Point3<S>> for Point3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    fn sub(self, other: &Point3<S>) -> Self::Output {
+        Vector3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,               
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Sub<&'b Point3<S>> for &'a Point3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    fn sub(self, other: &'b Point3<S>) -> Self::Output {
+        Vector3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
         }
     }
 }
