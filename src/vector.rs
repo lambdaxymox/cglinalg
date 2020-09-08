@@ -65,9 +65,9 @@ impl<S> Metric<Vector1<S>> for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector1<S>) -> S {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
 
-        dx_2
+        dx_squared
     }
 }
 
@@ -76,9 +76,9 @@ impl<S> Metric<&Vector1<S>> for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &Vector1<S>) -> S {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
 
-        dx_2
+        dx_squared
     }
 }
 
@@ -87,9 +87,9 @@ impl<S> Metric<Vector1<S>> for &Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector1<S>) -> S {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
 
-        dx_2
+        dx_squared
     }
 }
 
@@ -98,9 +98,9 @@ impl<'a, 'b, S> Metric<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &'a Vector1<S>) -> S {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
 
-        dx_2
+        dx_squared
     }
 }
 
@@ -1265,10 +1265,10 @@ impl<S> Metric<Vector2<S>> for Vector2<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector2<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
     
-        dx_2 + dy_2
+        dx_squared + dy_squared
     }
 }
 
@@ -1277,10 +1277,10 @@ impl<S> Metric<&Vector2<S>> for Vector2<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &Vector2<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
     
-        dx_2 + dy_2
+        dx_squared + dy_squared
     }
 }
 
@@ -1289,10 +1289,10 @@ impl<S> Metric<Vector2<S>> for &Vector2<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector2<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
     
-        dx_2 + dy_2
+        dx_squared + dy_squared
     }
 }
 
@@ -1301,10 +1301,10 @@ impl<'a, 'b, S> Metric<&'a Vector2<S>> for &'b Vector2<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &'a Vector2<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
     
-        dx_2 + dy_2
+        dx_squared + dy_squared
     }
 }
 
@@ -2092,11 +2092,11 @@ impl<S> Metric<Vector3<S>> for Vector3<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector3<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
+        let dz_squared = (to.z - self.z) * (to.z - self.z);
     
-        dx_2 + dy_2 + dz_2
+        dx_squared + dy_squared + dz_squared
     }
 }
 
@@ -2105,11 +2105,11 @@ impl<S> Metric<&Vector3<S>> for Vector3<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &Vector3<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
+        let dz_squared = (to.z - self.z) * (to.z - self.z);
     
-        dx_2 + dy_2 + dz_2
+        dx_squared + dy_squared + dz_squared
     }
 }
 
@@ -2118,11 +2118,11 @@ impl<S> Metric<Vector3<S>> for &Vector3<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector3<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
+        let dz_squared = (to.z - self.z) * (to.z - self.z);
     
-        dx_2 + dy_2 + dz_2
+        dx_squared + dy_squared + dz_squared
     }
 }
 
@@ -2131,11 +2131,11 @@ impl<'a, 'b, S> Metric<&'a Vector3<S>> for &'b Vector3<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &Vector3<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
+        let dz_squared = (to.z - self.z) * (to.z - self.z);
     
-        dx_2 + dy_2 + dz_2
+        dx_squared + dy_squared + dz_squared
     }
 }
 
@@ -2956,12 +2956,12 @@ impl<S> Metric<Vector4<S>> for Vector4<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector4<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-        let dw_2 = (to.w - self.w) * (to.w - self.w);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
+        let dz_squared = (to.z - self.z) * (to.z - self.z);
+        let dw_squared = (to.w - self.w) * (to.w - self.w);
     
-        dx_2 + dy_2 + dz_2 + dw_2
+        dx_squared + dy_squared + dz_squared + dw_squared
     }
 }
 
@@ -2970,12 +2970,12 @@ impl<S> Metric<&Vector4<S>> for Vector4<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &Vector4<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-        let dw_2 = (to.w - self.w) * (to.w - self.w);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
+        let dz_squared = (to.z - self.z) * (to.z - self.z);
+        let dw_squared = (to.w - self.w) * (to.w - self.w);
     
-        dx_2 + dy_2 + dz_2 + dw_2
+        dx_squared + dy_squared + dz_squared + dw_squared
     }
 }
 
@@ -2984,12 +2984,12 @@ impl<S> Metric<Vector4<S>> for &Vector4<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector4<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-        let dw_2 = (to.w - self.w) * (to.w - self.w);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
+        let dz_squared = (to.z - self.z) * (to.z - self.z);
+        let dw_squared = (to.w - self.w) * (to.w - self.w);
     
-        dx_2 + dy_2 + dz_2 + dw_2
+        dx_squared + dy_squared + dz_squared + dw_squared
     }
 }
 
@@ -2998,12 +2998,12 @@ impl<'a, 'b, S> Metric<&'a Vector4<S>> for &'b Vector4<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &Vector4<S>) -> Self::Output {
-        let dx_2 = (to.x - self.x) * (to.x - self.x);
-        let dy_2 = (to.y - self.y) * (to.y - self.y);
-        let dz_2 = (to.z - self.z) * (to.z - self.z);
-        let dw_2 = (to.w - self.w) * (to.w - self.w);
+        let dx_squared = (to.x - self.x) * (to.x - self.x);
+        let dy_squared = (to.y - self.y) * (to.y - self.y);
+        let dz_squared = (to.z - self.z) * (to.z - self.z);
+        let dw_squared = (to.w - self.w) * (to.w - self.w);
 
-        dx_2 + dy_2 + dz_2 + dw_2
+        dx_squared + dy_squared + dz_squared + dw_squared
     }
 }
 
