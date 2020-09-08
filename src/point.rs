@@ -5,6 +5,11 @@ use scalar::{
 use structure::{
     Storage,
 };
+use vector::{
+    Vector1,
+    Vector2,
+    Vector3,
+};
 
 use std::fmt;
 use std::mem;
@@ -253,6 +258,46 @@ impl<'a, S> From<&'a [S; 1]> for &'a Point1<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Add<Vector1<S>> for Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn add(self, other: Vector1<S>) -> Self::Output {
+        Point1 {
+            x: self.x + other.x,
+        }
+    }
+}
+
+impl<S> ops::Add<Vector1<S>> for &Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn add(self, other: Vector1<S>) -> Self::Output {
+        Point1 {
+            x: self.x + other.x,
+        }
+    }
+}
+
+impl<S> ops::Add<&Vector1<S>> for Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn add(self, other: &Vector1<S>) -> Self::Output {
+        Point1 {
+            x: self.x + other.x,
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn add(self, other: &'b Vector1<S>) -> Self::Output {
+        Point1 {
+            x: self.x + other.x,
+        }
+    }
+}
+
 
 /// A representation of two-dimensional points with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -490,6 +535,50 @@ impl<'a, S> From<&'a [S; 2]> for &'a Point2<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 2]) -> &'a Point2<S> {
         unsafe { mem::transmute(v) }
+    }
+}
+
+impl<S> ops::Add<Vector2<S>> for Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn add(self, other: Vector2<S>) -> Self::Output {
+        Point2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<S> ops::Add<Vector2<S>> for &Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn add(self, other: Vector2<S>) -> Self::Output {
+        Point2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<S> ops::Add<&Vector2<S>> for Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn add(self, other: &Vector2<S>) -> Self::Output {
+        Point2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Add<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn add(self, other: &'b Vector2<S>) -> Self::Output {
+        Point2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
     }
 }
 
@@ -751,6 +840,54 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> where S: Scalar {
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Point3<S> {
         unsafe { mem::transmute(v) }
+    }
+}
+
+impl<S> ops::Add<Vector3<S>> for Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn add(self, other: Vector3<S>) -> Self::Output {
+        Point3 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
+        }
+    }
+}
+
+impl<S> ops::Add<Vector3<S>> for &Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn add(self, other: Vector3<S>) -> Self::Output {
+        Point3 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
+        }
+    }
+}
+
+impl<S> ops::Add<&Vector3<S>> for Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn add(self, other: &Vector3<S>) -> Self::Output {
+        Point3 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,               
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Add<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn add(self, other: &'b Vector3<S>) -> Self::Output {
+        Point3 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
+        }
     }
 }
 
