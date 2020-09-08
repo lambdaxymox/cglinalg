@@ -284,7 +284,7 @@ impl<S> fmt::Debug for Vector1<S> where S: fmt::Debug {
 
 impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Vector2 [{:.2}]", self.x)
+        write!(f, "Vector1 [{:.2}]", self.x)
     }
 }
 

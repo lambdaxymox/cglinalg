@@ -6,6 +6,7 @@ use structure::{
     Storage,
 };
 use std::mem;
+use std::ops;
 
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -119,6 +120,95 @@ impl<S> AsMut<(S,)> for Point1<S> {
     }
 }
 
+impl<S> ops::Index<usize> for Point1<S> {
+    type Output = S;
+
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        let v: &[S; 1] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::Range<usize>> for Point1<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::Range<usize>) -> &Self::Output {
+        let v: &[S; 1] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeTo<usize>> for Point1<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
+        let v: &[S; 1] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeFrom<usize>> for Point1<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
+        let v: &[S; 1] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeFull> for Point1<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFull) -> &Self::Output {
+        let v: &[S; 1] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::IndexMut<usize> for Point1<S> {
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut S {
+        let v: &mut [S; 1] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::Range<usize>> for Point1<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
+        let v: &mut [S; 1] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeTo<usize>> for Point1<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
+        let v: &mut [S; 1] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Point1<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
+        let v: &mut [S; 1] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeFull> for Point1<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
+        let v: &mut [S; 1] = self.as_mut();
+        &mut v[index]
+    }
+}
 
 
 /// A representation of two-dimensional points with a Euclidean metric.
@@ -226,6 +316,96 @@ impl<S> AsMut<[S; 2]> for Point2<S> {
 impl<S> AsMut<(S, S)> for Point2<S> {
     fn as_mut(&mut self) -> &mut (S, S) {
         unsafe { mem::transmute(self) }
+    }
+}
+
+impl<S> ops::Index<usize> for Point2<S> {
+    type Output = S;
+
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        let v: &[S; 2] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::Range<usize>> for Point2<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::Range<usize>) -> &Self::Output {
+        let v: &[S; 2] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeTo<usize>> for Point2<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
+        let v: &[S; 2] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeFrom<usize>> for Point2<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
+        let v: &[S; 2] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeFull> for Point2<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFull) -> &Self::Output {
+        let v: &[S; 2] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::IndexMut<usize> for Point2<S> {
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut S {
+        let v: &mut [S; 2] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::Range<usize>> for Point2<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
+        let v: &mut [S; 2] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeTo<usize>> for Point2<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
+        let v: &mut [S; 2] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Point2<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
+        let v: &mut [S; 2] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeFull> for Point2<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
+        let v: &mut [S; 2] = self.as_mut();
+        &mut v[index]
     }
 }
 
@@ -342,6 +522,96 @@ impl<S> AsMut<[S; 3]> for Point3<S> {
 impl<S> AsMut<(S, S, S)> for Point3<S> {
     fn as_mut(&mut self) -> &mut (S, S, S) {
         unsafe { mem::transmute(self) }
+    }
+}
+
+impl<S> ops::Index<usize> for Point3<S> {
+    type Output = S;
+
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        let v: &[S; 3] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::Range<usize>> for Point3<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::Range<usize>) -> &Self::Output {
+        let v: &[S; 3] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeTo<usize>> for Point3<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
+        let v: &[S; 3] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeFrom<usize>> for Point3<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
+        let v: &[S; 3] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeFull> for Point3<S> {
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFull) -> &Self::Output {
+        let v: &[S; 3] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::IndexMut<usize> for Point3<S> {
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut S {
+        let v: &mut [S; 3] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::Range<usize>> for Point3<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
+        let v: &mut [S; 3] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeTo<usize>> for Point3<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
+        let v: &mut [S; 3] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Point3<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
+        let v: &mut [S; 3] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeFull> for Point3<S> {
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
+        let v: &mut [S; 3] = self.as_mut();
+        &mut v[index]
     }
 }
 
