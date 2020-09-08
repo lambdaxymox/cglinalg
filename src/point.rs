@@ -47,6 +47,7 @@ pub struct Point1<S> {
 
 impl<S> Point1<S> {
     /// Construct a new point.
+    #[inline]
     pub const fn new(x: S) -> Point1<S> {
         Point1 { x: x }
     }
@@ -413,6 +414,26 @@ impl<S> ops::Div<S> for &Point1<S> where S: Scalar {
         Point1 {
             x: self.x / other,
         }
+    }
+}
+
+impl<S> ops::Rem<S> for Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        
+        Point1::new(x)
+    }
+}
+
+impl<S> ops::Rem<S> for &Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        
+        Point1::new(x)
     }
 }
 
@@ -800,6 +821,28 @@ impl<S> ops::Div<S> for &Point2<S> where S: Scalar {
             x: self.x / other,
             y: self.y / other,
         }
+    }
+}
+
+impl<S> ops::Rem<S> for Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        
+        Point2::new(x, y)
+    }
+}
+
+impl<S> ops::Rem<S> for &Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        
+        Point2::new(x, y)
     }
 }
 
@@ -1220,6 +1263,30 @@ impl<S> ops::Div<S> for &Point3<S> where S: Scalar {
             y: self.y / other,
             z: self.z / other,
         }
+    }
+}
+
+impl<S> ops::Rem<S> for Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        
+        Point3::new(x, y, z)
+    }
+}
+
+impl<S> ops::Rem<S> for &Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        
+        Point3::new(x, y, z)
     }
 }
 
