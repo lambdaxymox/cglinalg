@@ -338,6 +338,26 @@ impl<'a, 'b, S> ops::Sub<&'b Point1<S>> for &'a Point1<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Mul<S> for Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn mul(self, other: S) -> Self::Output {
+        Point1 {
+            x: self.x * other,
+        }
+    }
+}
+
+impl<S> ops::Mul<S> for &Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn mul(self, other: S) -> Self::Output {
+        Point1 {
+            x: self.x * other,
+        }
+    }
+}
+
 
 /// A representation of two-dimensional points with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -662,6 +682,28 @@ impl<'a, 'b, S> ops::Sub<&'b Point2<S>> for &'a Point2<S> where S: Scalar {
         Vector2 {
             x: self.x - other.x,
             y: self.y - other.y,
+        }
+    }
+}
+
+impl<S> ops::Mul<S> for Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn mul(self, other: S) -> Self::Output {
+        Point2 {
+            x: self.x * other,
+            y: self.y * other,
+        }
+    }
+}
+
+impl<S> ops::Mul<S> for &Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn mul(self, other: S) -> Self::Output {
+        Point2 {
+            x: self.x * other,
+            y: self.y * other,
         }
     }
 }
@@ -1020,6 +1062,30 @@ impl<'a, 'b, S> ops::Sub<&'b Point3<S>> for &'a Point3<S> where S: Scalar {
             x: self.x - other.x,
             y: self.y - other.y,
             z: self.z - other.z,
+        }
+    }
+}
+
+impl<S> ops::Mul<S> for Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn mul(self, other: S) -> Self::Output {
+        Point3 {
+            x: self.x * other,
+            y: self.y * other,
+            z: self.z * other,
+        }
+    }
+}
+
+impl<S> ops::Mul<S> for &Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn mul(self, other: S) -> Self::Output {
+        Point3 {
+            x: self.x * other,
+            y: self.y * other,
+            z: self.z * other,
         }
     }
 }
