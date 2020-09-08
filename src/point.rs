@@ -5,6 +5,8 @@ use scalar::{
 use structure::{
     Storage,
 };
+
+use std::fmt;
 use std::mem;
 use std::ops;
 
@@ -210,6 +212,47 @@ impl<S> ops::IndexMut<ops::RangeFull> for Point1<S> {
     }
 }
 
+impl<S> fmt::Debug for Point1<S> where S: fmt::Debug {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Point1 ")?;
+        <[S; 1] as fmt::Debug>::fmt(self.as_ref(), f)
+    }
+}
+
+impl<S> fmt::Display for Point1<S> where S: fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Point1 [{:.2}]", self.x)
+    }
+}
+
+impl<S> From<S> for Point1<S> where S: Scalar {
+    #[inline]
+    fn from(v: S) -> Point1<S> {
+        Point1 { x: v }
+    }
+}
+
+impl<S> From<[S; 1]> for Point1<S> where S: Scalar {
+    #[inline]
+    fn from(v: [S; 1]) -> Point1<S> {
+        Point1 { x: v[0] }
+    }
+}
+
+impl<S> From<&[S; 1]> for Point1<S> where S: Scalar {
+    #[inline]
+    fn from(v: &[S; 1]) -> Point1<S> {
+        Point1 { x: v[0] }
+    }
+}
+
+impl<'a, S> From<&'a [S; 1]> for &'a Point1<S> where S: Scalar {
+    #[inline]
+    fn from(v: &'a [S; 1]) -> &'a Point1<S> {
+        unsafe { mem::transmute(v) }
+    }
+}
+
 
 /// A representation of two-dimensional points with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -406,6 +449,47 @@ impl<S> ops::IndexMut<ops::RangeFull> for Point2<S> {
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
         let v: &mut [S; 2] = self.as_mut();
         &mut v[index]
+    }
+}
+
+impl<S> fmt::Debug for Point2<S> where S: fmt::Debug {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Point2 ")?;
+        <[S; 2] as fmt::Debug>::fmt(self.as_ref(), f)
+    }
+}
+
+impl<S> fmt::Display for Point2<S> where S: fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Point2 [{:.2}, {:.2}]", self.x, self.y)
+    }
+}
+
+impl<S> From<(S, S)> for Point2<S> where S: Scalar {
+    #[inline]
+    fn from((x, y): (S, S)) -> Point2<S> {
+        Point2 { x: x, y: y }
+    }
+}
+
+impl<S> From<[S; 2]> for Point2<S> where S: Scalar {
+    #[inline]
+    fn from(v: [S; 2]) -> Point2<S> {
+        Point2 { x: v[0], y: v[1] }
+    }
+}
+
+impl<S> From<&[S; 2]> for Point2<S> where S: Scalar {
+    #[inline]
+    fn from(v: &[S; 2]) -> Point2<S> {
+        Point2 { x: v[0], y: v[1] }
+    }
+}
+
+impl<'a, S> From<&'a [S; 2]> for &'a Point2<S> where S: Scalar {
+    #[inline]
+    fn from(v: &'a [S; 2]) -> &'a Point2<S> {
+        unsafe { mem::transmute(v) }
     }
 }
 
@@ -612,6 +696,61 @@ impl<S> ops::IndexMut<ops::RangeFull> for Point3<S> {
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
         let v: &mut [S; 3] = self.as_mut();
         &mut v[index]
+    }
+}
+
+impl<S> fmt::Debug for Point3<S> where S: fmt::Debug {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Point3 ")?;
+        <[S; 3] as fmt::Debug>::fmt(self.as_ref(), f)
+    }
+}
+
+impl<S> fmt::Display for Point3<S> where S: fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Point3 [{:.2}, {:.2}, {:.2}]", self.x, self.y, self.z)
+    }
+}
+
+impl<S> From<(S, S, S)> for Point3<S> where S: Scalar {
+    #[inline]
+    fn from((x, y, z): (S, S, S)) -> Point3<S> {
+        Point3::new(x, y, z)
+    }
+}
+
+impl<S> From<(Point2<S>, S)> for Point3<S> where S: Scalar {
+    #[inline]
+    fn from((v, z): (Point2<S>, S)) -> Point3<S> {
+        Point3::new(v.x, v.y, z)
+    }
+}
+
+impl<S> From<(&Point2<S>, S)> for Point3<S> where S: Scalar {
+    #[inline]
+    fn from((v, z): (&Point2<S>, S)) -> Point3<S> {
+        Point3::new(v.x, v.y, z)
+    }
+}
+
+impl<S> From<[S; 3]> for Point3<S> where S: Scalar {
+    #[inline]
+    fn from(v: [S; 3]) -> Point3<S> {
+        Point3::new(v[0], v[1], v[2])
+    }
+}
+
+impl<'a, S> From<&'a [S; 3]> for &'a Point3<S> where S: Scalar {
+    #[inline]
+    fn from(v: &'a [S; 3]) -> &'a Point3<S> {
+        unsafe { mem::transmute(v) }
+    }
+}
+
+impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> where S: Scalar {
+    #[inline]
+    fn from(v: &'a (S, S, S)) -> &'a Point3<S> {
+        unsafe { mem::transmute(v) }
     }
 }
 
