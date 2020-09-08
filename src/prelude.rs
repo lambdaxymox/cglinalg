@@ -6,6 +6,7 @@ use crate::vector::*;
 use crate::matrix::*;
 use crate::quaternion::*;
 use crate::projection::*;
+use crate::point::*;
 
 
 /// Compute the orthographic projection matrix for converting from camera space to
