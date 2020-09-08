@@ -22,7 +22,7 @@ impl<S> Point1<S> {
 impl<S> Point1<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Point1<T>> {
-        let x = match NumCast::from(self.x) {
+        let x = match num_traits::cast(self.x) {
             Some(value) => value,
             None => return None,
         };
