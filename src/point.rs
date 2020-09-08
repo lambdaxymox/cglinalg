@@ -437,6 +437,47 @@ impl<S> ops::Rem<S> for &Point1<S> where S: Scalar {
     }
 }
 
+impl<S> ops::AddAssign<Vector1<S>> for Point1<S> where S: Scalar {
+    fn add_assign(&mut self, other: Vector1<S>) {
+        self.x = self.x + other.x;
+    }
+}
+
+impl<S> ops::AddAssign<&Vector1<S>> for Point1<S> where S: Scalar {
+    fn add_assign(&mut self, other: &Vector1<S>) {
+        self.x = self.x + other.x;
+    }
+}
+
+impl<S> ops::SubAssign<Vector1<S>> for Point1<S> where S: Scalar {
+    fn sub_assign(&mut self, other: Vector1<S>) {
+        self.x = self.x - other.x;
+    }
+}
+
+impl<S> ops::SubAssign<&Vector1<S>> for Point1<S> where S: Scalar {
+    fn sub_assign(&mut self, other: &Vector1<S>) {
+        self.x = self.x - other.x;
+    }
+}
+
+impl<S> ops::MulAssign<S> for Point1<S> where S: Scalar {
+    fn mul_assign(&mut self, other: S) {
+        self.x *= other;
+    }
+}
+
+impl<S> ops::DivAssign<S> for Point1<S> where S: Scalar {
+    fn div_assign(&mut self, other: S) {
+        self.x = self.x / other;
+    }
+}
+
+impl<S> ops::RemAssign<S> for Point1<S> where S: Scalar {
+    fn rem_assign(&mut self, other: S) {
+        self.x %= other;
+    }
+}
 
 /// A representation of two-dimensional points with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -843,6 +884,55 @@ impl<S> ops::Rem<S> for &Point2<S> where S: Scalar {
         let y = self.y % other;
         
         Point2::new(x, y)
+    }
+}
+
+impl<S> ops::AddAssign<Vector2<S>> for Point2<S> where S: Scalar {
+    fn add_assign(&mut self, other: Vector2<S>) {
+        self.x = self.x + other.x;
+        self.y = self.y + other.y;
+    }
+}
+
+impl<S> ops::AddAssign<&Vector2<S>> for Point2<S> where S: Scalar {
+    fn add_assign(&mut self, other: &Vector2<S>) {
+        self.x = self.x + other.x;
+        self.y = self.y + other.y;
+    }
+}
+
+impl<S> ops::SubAssign<Vector2<S>> for Point2<S> where S: Scalar {
+    fn sub_assign(&mut self, other: Vector2<S>) {
+        self.x = self.x - other.x;
+        self.y = self.y - other.y;
+    }
+}
+
+impl<S> ops::SubAssign<&Vector2<S>> for Point2<S> where S: Scalar {
+    fn sub_assign(&mut self, other: &Vector2<S>) {
+        self.x = self.x - other.x;
+        self.y = self.y - other.y;
+    }
+}
+
+impl<S> ops::MulAssign<S> for Point2<S> where S: Scalar {
+    fn mul_assign(&mut self, other: S) {
+        self.x *= other;
+        self.y *= other;
+    }
+}
+
+impl<S> ops::DivAssign<S> for Point2<S> where S: Scalar {
+    fn div_assign(&mut self, other: S) {
+        self.x = self.x / other;
+        self.y = self.y / other;
+    }
+}
+
+impl<S> ops::RemAssign<S> for Point2<S> where S: Scalar {
+    fn rem_assign(&mut self, other: S) {
+        self.x %= other;
+        self.y %= other;
     }
 }
 
@@ -1287,6 +1377,62 @@ impl<S> ops::Rem<S> for &Point3<S> where S: Scalar {
         let z = self.z % other;
         
         Point3::new(x, y, z)
+    }
+}
+
+impl<S> ops::AddAssign<Vector3<S>> for Point3<S> where S: Scalar {
+    fn add_assign(&mut self, other: Vector3<S>) {
+        self.x += other.x;
+        self.y += other.y;
+        self.z += other.z;
+    }
+}
+
+impl<S> ops::AddAssign<&Vector3<S>> for Point3<S> where S: Scalar {
+    fn add_assign(&mut self, other: &Vector3<S>) {
+        self.x += other.x;
+        self.y += other.y;
+        self.z += other.z;
+    }
+}
+
+impl<S> ops::SubAssign<Vector3<S>> for Point3<S> where S: Scalar {
+    fn sub_assign(&mut self, other: Vector3<S>) {
+        self.x -= other.x;
+        self.y -= other.y;
+        self.z -= other.z;
+    }
+}
+
+impl<S> ops::SubAssign<&Vector3<S>> for Point3<S> where S: Scalar {
+    fn sub_assign(&mut self, other: &Vector3<S>) {
+        self.x -= other.x;
+        self.y -= other.y;
+        self.z -= other.z;
+    }
+}
+
+impl<S> ops::MulAssign<S> for Point3<S> where S: Scalar {
+    fn mul_assign(&mut self, other: S) {
+        self.x *= other;
+        self.y *= other;
+        self.z *= other;
+    }
+}
+
+impl<S> ops::DivAssign<S> for Point3<S> where S: Scalar {
+    fn div_assign(&mut self, other: S) {
+        self.x /= other;
+        self.y /= other;
+        self.z /= other;
+    }
+}
+
+impl<S> ops::RemAssign<S> for Point3<S> where S: Scalar {
+    fn rem_assign(&mut self, other: S) {
+        self.x %= other;
+        self.y %= other;
+        self.z %= other;
     }
 }
 
