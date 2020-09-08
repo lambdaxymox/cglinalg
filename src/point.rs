@@ -396,6 +396,26 @@ impl_mul_operator!(isize, Point1<isize>, Point1<isize>, { x });
 impl_mul_operator!(f32,   Point1<f32>,   Point1<f32>,   { x });
 impl_mul_operator!(f64,   Point1<f64>,   Point1<f64>,   { x });
 
+impl<S> ops::Div<S> for Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn div(self, other: S) -> Self::Output {
+        Point1 {
+            x: self.x / other,
+        }
+    }
+}
+
+impl<S> ops::Div<S> for &Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn div(self, other: S) -> Self::Output {
+        Point1 {
+            x: self.x / other,
+        }
+    }
+}
+
 
 /// A representation of two-dimensional points with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -761,6 +781,27 @@ impl_mul_operator!(isize, Point2<isize>, Point2<isize>, { x, y });
 impl_mul_operator!(f32,   Point2<f32>,   Point2<f32>,   { x, y });
 impl_mul_operator!(f64,   Point2<f64>,   Point2<f64>,   { x, y });
 
+impl<S> ops::Div<S> for Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn div(self, other: S) -> Self::Output {
+        Point2 {
+            x: self.x / other,
+            y: self.y / other,
+        }
+    }
+}
+
+impl<S> ops::Div<S> for &Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn div(self, other: S) -> Self::Output {
+        Point2 {
+            x: self.x / other,
+            y: self.y / other,
+        }
+    }
+}
 
 
 /// A representation of three-dimensional points in a Euclidean space.
@@ -1157,4 +1198,28 @@ impl_mul_operator!(i128,  Point3<i128>,  Point3<i128>,  { x, y, z });
 impl_mul_operator!(isize, Point3<isize>, Point3<isize>, { x, y, z });
 impl_mul_operator!(f32,   Point3<f32>,   Point3<f32>,   { x, y, z });
 impl_mul_operator!(f64,   Point3<f64>,   Point3<f64>,   { x, y, z });
+
+impl<S> ops::Div<S> for Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn div(self, other: S) -> Self::Output {
+        Point3 {
+            x: self.x / other,
+            y: self.y / other,
+            z: self.z / other,
+        }
+    }
+}
+
+impl<S> ops::Div<S> for &Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn div(self, other: S) -> Self::Output {
+        Point3 {
+            x: self.x / other,
+            y: self.y / other,
+            z: self.z / other,
+        }
+    }
+}
 
