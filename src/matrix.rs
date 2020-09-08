@@ -64,19 +64,19 @@ impl<S> Matrix2<S> {
 impl<S> Matrix2<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Matrix2<T>> {
-        let c0r0 = match NumCast::from(self.c0r0) {
+        let c0r0 = match num_traits::cast(self.c0r0) {
             Some(value) => value,
             None => return None,
         };
-        let c0r1 = match NumCast::from(self.c0r1) {
+        let c0r1 = match num_traits::cast(self.c0r1) {
             Some(value) => value,
             None => return None,
         };
-        let c1r0 = match NumCast::from(self.c1r0) {
+        let c1r0 = match num_traits::cast(self.c1r0) {
             Some(value) => value,
             None => return None,
         };
-        let c1r1 = match NumCast::from(self.c1r1) {
+        let c1r1 = match num_traits::cast(self.c1r1) {
             Some(value) => value,
             None => return None,
         };
@@ -896,39 +896,39 @@ impl<S> Matrix3<S> {
 impl<S> Matrix3<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Matrix3<T>> {
-        let c0r0 = match NumCast::from(self.c0r0) {
+        let c0r0 = match num_traits::cast(self.c0r0) {
             Some(value) => value,
             None => return None,
         };
-        let c0r1 = match NumCast::from(self.c0r1) {
+        let c0r1 = match num_traits::cast(self.c0r1) {
             Some(value) => value,
             None => return None,
         };
-        let c0r2 = match NumCast::from(self.c0r2) {
+        let c0r2 = match num_traits::cast(self.c0r2) {
             Some(value) => value,
             None => return None,
         };
-        let c1r0 = match NumCast::from(self.c1r0) {
+        let c1r0 = match num_traits::cast(self.c1r0) {
             Some(value) => value,
             None => return None,
         };
-        let c1r1 = match NumCast::from(self.c1r1) {
+        let c1r1 = match num_traits::cast(self.c1r1) {
             Some(value) => value,
             None => return None,
         };
-        let c1r2 = match NumCast::from(self.c1r2) {
+        let c1r2 = match num_traits::cast(self.c1r2) {
             Some(value) => value,
             None => return None,
         };
-        let c2r0 = match NumCast::from(self.c2r0) {
+        let c2r0 = match num_traits::cast(self.c2r0) {
             Some(value) => value,
             None => return None,
         };
-        let c2r1 = match NumCast::from(self.c2r1) {
+        let c2r1 = match num_traits::cast(self.c2r1) {
             Some(value) => value,
             None => return None,
         };
-        let c2r2 = match NumCast::from(self.c2r2) {
+        let c2r2 = match num_traits::cast(self.c2r2) {
             Some(value) => value,
             None => return None,
         };
@@ -2077,67 +2077,67 @@ impl<S> Matrix4<S> {
 impl<S> Matrix4<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Matrix4<T>> {
-        let c0r0 = match NumCast::from(self.c0r0) {
+        let c0r0 = match num_traits::cast(self.c0r0) {
             Some(value) => value,
             None => return None,
         };
-        let c0r1 = match NumCast::from(self.c0r1) {
+        let c0r1 = match num_traits::cast(self.c0r1) {
             Some(value) => value,
             None => return None,
         };
-        let c0r2 = match NumCast::from(self.c0r2) {
+        let c0r2 = match num_traits::cast(self.c0r2) {
             Some(value) => value,
             None => return None,
         };
-        let c0r3 = match NumCast::from(self.c0r3) {
+        let c0r3 = match num_traits::cast(self.c0r3) {
             Some(value) => value,
             None => return None,
         };
-        let c1r0 = match NumCast::from(self.c1r0) {
+        let c1r0 = match num_traits::cast(self.c1r0) {
             Some(value) => value,
             None => return None,
         };
-        let c1r1 = match NumCast::from(self.c1r1) {
+        let c1r1 = match num_traits::cast(self.c1r1) {
             Some(value) => value,
             None => return None,
         };
-        let c1r2 = match NumCast::from(self.c1r2) {
+        let c1r2 = match num_traits::cast(self.c1r2) {
             Some(value) => value,
             None => return None,
         };
-        let c1r3 = match NumCast::from(self.c1r3) {
+        let c1r3 = match num_traits::cast(self.c1r3) {
             Some(value) => value,
             None => return None,
         };
-        let c2r0 = match NumCast::from(self.c2r0) {
+        let c2r0 = match num_traits::cast(self.c2r0) {
             Some(value) => value,
             None => return None,
         };
-        let c2r1 = match NumCast::from(self.c2r1) {
+        let c2r1 = match num_traits::cast(self.c2r1) {
             Some(value) => value,
             None => return None,
         };
-        let c2r2 = match NumCast::from(self.c2r2) {
+        let c2r2 = match num_traits::cast(self.c2r2) {
             Some(value) => value,
             None => return None,
         };
-        let c2r3 = match NumCast::from(self.c2r3) {
+        let c2r3 = match num_traits::cast(self.c2r3) {
             Some(value) => value,
             None => return None,
         };
-        let c3r0 = match NumCast::from(self.c3r0) {
+        let c3r0 = match num_traits::cast(self.c3r0) {
             Some(value) => value,
             None => return None,
         };
-        let c3r1 = match NumCast::from(self.c3r1) {
+        let c3r1 = match num_traits::cast(self.c3r1) {
             Some(value) => value,
             None => return None,
         };
-        let c3r2 = match NumCast::from(self.c3r2) {
+        let c3r2 = match num_traits::cast(self.c3r2) {
             Some(value) => value,
             None => return None,
         };
-        let c3r3 = match NumCast::from(self.c3r3) {
+        let c3r3 = match num_traits::cast(self.c3r3) {
             Some(value) => value,
             None => return None,
         };

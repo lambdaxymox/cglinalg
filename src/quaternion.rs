@@ -25,9 +25,7 @@ use matrix::{
     Matrix4
 };
 use vector::Vector3;
-use num_traits::{
-    NumCast,
-};
+use num_traits::NumCast;
 use std::fmt;
 use std::iter;
 use std::mem;
@@ -60,7 +58,7 @@ impl<S> Quaternion<S> {
 impl<S> Quaternion<S> where S: NumCast + Copy {
     /// Cast a quaternion from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Quaternion<T>> {
-        let s = match NumCast::from(self.s) {
+        let s = match num_traits::cast(self.s) {
             Some(value) => value,
             None => return None,
         };

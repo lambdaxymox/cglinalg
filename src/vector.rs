@@ -13,9 +13,7 @@ use structure::{
     Metric,
     Finite,
 };
-use num_traits::{
-    NumCast,
-};
+use num_traits::NumCast;
 use std::fmt;
 use std::iter;
 use std::mem;
@@ -45,7 +43,7 @@ impl<S> Vector1<S> {
 impl<S> Vector1<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Vector1<T>> {
-        let x = match NumCast::from(self.x) {
+        let x = match num_traits::cast(self.x) {
             Some(value) => value,
             None => return None,
         };
@@ -792,11 +790,11 @@ impl<S> Vector2<S> {
 impl<S> Vector2<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Vector2<T>> {
-        let x = match NumCast::from(self.x) {
+        let x = match num_traits::cast(self.x) {
             Some(value) => value,
             None => return None,
         };
-        let y = match NumCast::from(self.y) {
+        let y = match num_traits::cast(self.y) {
             Some(value) => value,
             None => return None,
         };
@@ -1544,15 +1542,15 @@ impl<S> Vector3<S> {
 impl<S> Vector3<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Vector3<T>> {
-        let x = match NumCast::from(self.x) {
+        let x = match num_traits::cast(self.x) {
             Some(value) => value,
             None => return None,
         };
-        let y = match NumCast::from(self.y) {
+        let y = match num_traits::cast(self.y) {
             Some(value) => value,
             None => return None,
         };
-        let z = match NumCast::from(self.z) {
+        let z = match num_traits::cast(self.z) {
             Some(value) => value,
             None => return None,
         };
@@ -2380,19 +2378,19 @@ impl<S> Vector4<S> {
 impl<S> Vector4<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Vector4<T>> {
-        let x = match NumCast::from(self.x) {
+        let x = match num_traits::cast(self.x) {
             Some(value) => value,
             None => return None,
         };
-        let y = match NumCast::from(self.y) {
+        let y = match num_traits::cast(self.y) {
             Some(value) => value,
             None => return None,
         };
-        let z = match NumCast::from(self.z) {
+        let z = match num_traits::cast(self.z) {
             Some(value) => value,
             None => return None,
         };
-        let w = match NumCast::from(self.w) {
+        let w = match num_traits::cast(self.w) {
             Some(value) => value,
             None => return None,
         };
