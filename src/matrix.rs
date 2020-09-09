@@ -28,6 +28,7 @@ use structure::{
     SquareMatrix,
     SkewSymmetricMatrix,
     InvertibleSquareMatrix,
+    Magnitude,
 };
 use vector::*;
 
@@ -83,6 +84,12 @@ impl<S> Matrix2<S> {
             c0r0: op(self.c0r0), c1r0: op(self.c1r0),
             c0r1: op(self.c0r1), c1r1: op(self.c1r1),
         }
+    }
+}
+
+impl<S> Matrix2<S> where S: Scalar {
+    pub fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Matrix2<S> {
+        Matrix2::from_columns(up, direction).transpose()
     }
 }
 
@@ -1021,6 +1028,14 @@ impl<S> Matrix3<S> where S: ScalarFloat {
             one_minus_cos_angle * axis.y * axis.z - sin_angle * axis.x,
             one_minus_cos_angle * axis.z * axis.z + cos_angle,
         )
+    }
+
+    pub fn look_at(direction: Vector3<S>, up: Vector3<S>) -> Matrix3<S> {
+        let dir = direction.normalize();
+        let side = up.cross(&direction).normalize();
+        let up = dir.cross(&side).normalize();
+
+        Matrix3::from_columns(side, up, dir).transpose()
     }
 }
 

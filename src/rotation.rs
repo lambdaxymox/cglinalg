@@ -1,15 +1,30 @@
+use angle::{
+    Radians,
+};
 use scalar::{
     Scalar,
     ScalarFloat,
 };
 use structure::{
+    Angle,
+    DotProduct,
     Euclidean,
     One,
+    InvertibleSquareMatrix,
 };
 use matrix::{
     Matrix2,
     Matrix3,
 };
+use point::{
+    Point2,
+    Point3,
+};
+use vector::{
+    Vector2,
+    Vector3,
+};
+use quaternion::Quaternion;
 use std::fmt;
 use std::iter;
 use std::ops;
@@ -27,7 +42,40 @@ pub trait Rotation<P> where
 
     fn inverse(&self) -> Self;
 
-    fn rotate_point(&self, point: P) -> P;
+    fn rotate_point(&self, point: P) -> P { 
+        P::from_vector(self.rotate_vector(point.to_vector()))
+    }
+}
+
+pub trait Rotation2<S> where 
+    S: ScalarFloat,
+    Self: Rotation<Point2<S>> + Into<Matrix2<S>> + Into<RotationMatrix2<S>>,
+{
+    fn from_angle<A: Into<Radians<S>>>(theta: A) -> Self;
+}
+
+pub trait Rotation3<S> where 
+    S: ScalarFloat,
+    Self: Rotation<Point3<S>>,
+    Self: Into<Matrix3<S>> + Into<RotationMatrix3<S>> + Into<Quaternion<S>>,
+{
+    fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Self;
+
+    #[inline]
+    fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
+        Self::from_axis_angle(Vector3::unit_x(), angle)
+    }
+
+    #[inline]
+    fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
+        Self::from_axis_angle(Vector3::unit_y(), angle)
+    }
+
+    #[inline]
+    fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
+        Self::from_axis_angle(Vector3::unit_z(), angle)
+    }
+
 }
 
 #[derive(Copy, Clone, PartialEq)]
@@ -155,6 +203,40 @@ impl<S> approx::UlpsEq for RotationMatrix2<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix2::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
+impl<S> Rotation2<S> for RotationMatrix2<S> where S: ScalarFloat {
+    fn from_angle<A: Into<Radians<S>>>(angle: A) -> RotationMatrix2<S> {
+        RotationMatrix2 {
+            matrix: Matrix2::from_angle(angle),
+        }
+    }
+}
+
+impl<S> Rotation<Point2<S>> for RotationMatrix2<S> where S: ScalarFloat { 
+    #[inline]
+    fn look_at(dir: Vector2<S>, up: Vector2<S>) -> RotationMatrix2<S> {
+        RotationMatrix2 {
+            matrix: Matrix2::look_at(dir, up),
+        }
+    }
+
+    #[inline]
+    fn between_vectors(a: Vector2<S>, b: Vector2<S>) -> RotationMatrix2<S> {
+        Rotation2::from_angle(Radians::acos(DotProduct::dot(a, b)))
+    }
+
+    #[inline]
+    fn rotate_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+        self.matrix * vector
+    }
+
+    #[inline]
+    fn inverse(&self) -> RotationMatrix2<S> {
+        RotationMatrix2 {
+            matrix: self.matrix.inverse().unwrap(),
+        }
     }
 }
 
