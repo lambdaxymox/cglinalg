@@ -1,6 +1,7 @@
 use num_traits::NumCast;
 use scalar::{
     Scalar,
+    ScalarFloat,
 };
 use structure::{
     Storage,
@@ -479,6 +480,45 @@ impl<S> ops::RemAssign<S> for Point1<S> where S: Scalar {
     }
 }
 
+impl<S> approx::AbsDiffEq for Point1<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.x, &other.x, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Point1<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.x, &other.x, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Point1<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
+    }
+}
+
+
 /// A representation of two-dimensional points with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
@@ -933,6 +973,47 @@ impl<S> ops::RemAssign<S> for Point2<S> where S: Scalar {
     fn rem_assign(&mut self, other: S) {
         self.x %= other;
         self.y %= other;
+    }
+}
+
+impl<S> approx::AbsDiffEq for Point2<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.x, &other.x, epsilon) && 
+        S::abs_diff_eq(&self.y, &other.y, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Point2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.x, &other.x, epsilon, max_relative) &&
+        S::relative_eq(&self.y, &other.y, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Point2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
+        S::ulps_eq(&self.y, &other.y, epsilon, max_ulps)
     }
 }
 
@@ -1433,6 +1514,50 @@ impl<S> ops::RemAssign<S> for Point3<S> where S: Scalar {
         self.x %= other;
         self.y %= other;
         self.z %= other;
+    }
+}
+
+impl<S> approx::AbsDiffEq for Point3<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.x, &other.x, epsilon) && 
+        S::abs_diff_eq(&self.y, &other.y, epsilon) &&
+        S::abs_diff_eq(&self.z, &other.z, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Point3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.x, &other.x, epsilon, max_relative) &&
+        S::relative_eq(&self.y, &other.y, epsilon, max_relative) &&
+        S::relative_eq(&self.z, &other.z, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Point3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
+        S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) &&
+        S::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
     }
 }
 
