@@ -95,6 +95,7 @@ impl<S> Point1<S> where S: NumCast + Copy {
 }
 
 impl<S> Point1<S> where S: Scalar {
+    #[inline]
     pub fn origin() -> Point1<S> {
         Point1::new(S::zero())
     }
