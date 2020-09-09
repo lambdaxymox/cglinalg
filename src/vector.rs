@@ -29,6 +29,7 @@ pub struct Vector1<S> {
 
 impl<S> Vector1<S> {
     /// Construct a new vector.
+    #[inline]
     pub const fn new(x: S) -> Vector1<S> {
         Vector1 { x: x }
     }
@@ -298,21 +299,27 @@ impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
 impl<S> From<S> for Vector1<S> where S: Scalar {
     #[inline]
     fn from(v: S) -> Vector1<S> {
-        Vector1 { x: v }
+        Vector1 { 
+            x: v,
+        }
     }
 }
 
 impl<S> From<[S; 1]> for Vector1<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 1]) -> Vector1<S> {
-        Vector1 { x: v[0] }
+        Vector1 { 
+            x: v[0],
+        }
     }
 }
 
 impl<S> From<&[S; 1]> for Vector1<S> where S: Scalar {
     #[inline]
     fn from(v: &[S; 1]) -> Vector1<S> {
-        Vector1 { x: v[0] }
+        Vector1 { 
+            x: v[0],
+        }
     }
 }
 
@@ -328,7 +335,9 @@ impl<S> ops::Neg for Vector1<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Vector1 { x: -self.x }
+        Vector1 { 
+            x: -self.x,
+        }
     }
 }
 
@@ -337,7 +346,9 @@ impl<S> ops::Neg for &Vector1<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Vector1 { x: -self.x }
+        Vector1 { 
+            x: -self.x,
+        }
     }
 }
 
@@ -526,7 +537,9 @@ impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
 
 impl<S> Zero for Vector1<S> where S: Scalar {
     fn zero() -> Vector1<S> {
-        Vector1 { x: S::zero() }
+        Vector1 { 
+            x: S::zero(),
+        }
     }
 
     fn is_zero(&self) -> bool {
@@ -781,7 +794,10 @@ pub struct Vector2<S> {
 impl<S> Vector2<S> {
     /// Construct a new vector.
     pub const fn new(x: S, y: S) -> Vector2<S> {
-        Vector2 { x: x, y: y }
+        Vector2 { 
+            x: x, 
+            y: y 
+        }
     }
 
     /// Map an operation on the elements of a vector, returning a vector of the 
@@ -820,12 +836,18 @@ impl<S> Vector2<S> where S: Copy {
 impl<S> Vector2<S> where S: Scalar {
     #[inline]
     pub fn unit_x() -> Vector2<S> {
-        Vector2 { x: S::one(), y: S::zero() }
+        Vector2 { 
+            x: S::one(), 
+            y: S::zero(),
+        }
     }
 
     #[inline]
     pub fn unit_y() -> Vector2<S> {
-        Vector2 { x: S::zero(), y: S::one() }
+        Vector2 { 
+            x: S::zero(), 
+            y: S::one(),
+        }
     }
 }
 
@@ -1003,21 +1025,30 @@ impl<S> fmt::Display for Vector2<S> where S: fmt::Display {
 impl<S> From<(S, S)> for Vector2<S> where S: Scalar {
     #[inline]
     fn from((x, y): (S, S)) -> Vector2<S> {
-        Vector2 { x: x, y: y }
+        Vector2 { 
+            x: x, 
+            y: y,
+        }
     }
 }
 
 impl<S> From<[S; 2]> for Vector2<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 2]) -> Vector2<S> {
-        Vector2 { x: v[0], y: v[1] }
+        Vector2 { 
+            x: v[0], 
+            y: v[1],
+        }
     }
 }
 
 impl<S> From<&[S; 2]> for Vector2<S> where S: Scalar {
     #[inline]
     fn from(v: &[S; 2]) -> Vector2<S> {
-        Vector2 { x: v[0], y: v[1] }
+        Vector2 {
+            x: v[0], 
+            y: v[1],
+        }
     }
 }
 
@@ -1033,7 +1064,10 @@ impl<S> ops::Neg for Vector2<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Vector2 { x: -self.x, y: -self.y }
+        Vector2 { 
+            x: -self.x, 
+            y: -self.y,
+        }
     }
 }
 
@@ -1042,7 +1076,10 @@ impl<S> ops::Neg for &Vector2<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Vector2 { x: -self.x, y: -self.y }
+        Vector2 { 
+            x: -self.x, 
+            y: -self.y,
+        }
     }
 }
 
@@ -1266,7 +1303,10 @@ impl<S> ops::RemAssign<S> for Vector2<S> where S: Scalar {
 
 impl<S> Zero for Vector2<S> where S: Scalar {
     fn zero() -> Vector2<S> {
-        Vector2 { x: S::zero(), y: S::zero() }
+        Vector2 { 
+            x: S::zero(), 
+            y: S::zero(), 
+        }
     }
 
     fn is_zero(&self) -> bool {
@@ -1583,17 +1623,29 @@ impl<S> Vector3<S> where S: Copy {
 impl<S> Vector3<S> where S: Scalar {
     #[inline]
     pub fn unit_x() -> Vector3<S> {
-        Vector3 { x: S::one(), y: S::zero(), z: S::zero() }
+        Vector3 { 
+            x: S::one(), 
+            y: S::zero(), 
+            z: S::zero(),
+        }
     }
 
     #[inline]
     pub fn unit_y() -> Vector3<S> {
-        Vector3 { x: S::zero(), y: S::one(), z: S::zero() }
+        Vector3 { 
+            x: S::zero(), 
+            y: S::one(), 
+            z: S::zero(),
+        }
     }
     
     #[inline]
     pub fn unit_z() -> Vector3<S> {
-        Vector3 { x: S::zero(), y: S::zero(), z: S::one() }
+        Vector3 { 
+            x: S::zero(),
+            y: S::zero(), 
+            z: S::one(),
+        }
     }
 
     /// Compute the cross product of two three-dimensional vectors. Note that
@@ -1844,7 +1896,11 @@ impl<S> ops::Neg for Vector3<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Vector3 { x: -self.x, y: -self.y, z: -self.z }
+        Vector3 { 
+            x: -self.x,
+            y: -self.y, 
+            z: -self.z,
+        }
     }
 }
 
@@ -1853,7 +1909,11 @@ impl<S> ops::Neg for &Vector3<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Vector3 { x: -self.x, y: -self.y, z: -self.z }
+        Vector3 { 
+            x: -self.x, 
+            y: -self.y, 
+            z: -self.z,
+        }
     }
 }
 
@@ -2100,7 +2160,11 @@ impl<S> ops::RemAssign<S> for Vector3<S> where S: Scalar {
 impl<S> Zero for Vector3<S> where S: Scalar {
     #[inline]
     fn zero() -> Vector3<S> {
-        Vector3 { x: S::zero(), y: S::zero(), z: S::zero() }
+        Vector3 { 
+            x: S::zero(), 
+            y: S::zero(), 
+            z: S::zero(),
+        }
     }
 
     fn is_zero(&self) -> bool {
@@ -2381,7 +2445,12 @@ pub struct Vector4<S> {
 impl<S> Vector4<S> {
     /// Construct a new vector.
     pub const fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
-        Vector4 { x: x, y: y, z: z, w: w }
+        Vector4 { 
+            x: x, 
+            y: y, 
+            z: z, 
+            w: w,
+        }
     }
 
     /// Map an operation on the elements of a vector, returning a vector of the 
@@ -2423,22 +2492,42 @@ impl<S> Vector4<S> where S: NumCast + Copy {
 impl<S> Vector4<S> where S: Scalar {
     #[inline]
     pub fn unit_x() -> Vector4<S> {
-        Vector4 { x: S::one(), y: S::zero(), z: S::zero(), w: S::zero() }
+        Vector4 { 
+            x: S::one(), 
+            y: S::zero(), 
+            z: S::zero(), 
+            w: S::zero(),
+        }
     }
 
     #[inline]
     pub fn unit_y() -> Vector4<S> {
-        Vector4 { x: S::zero(), y: S::one(), z: S::zero(), w: S::zero() }
+        Vector4 { 
+            x: S::zero(), 
+            y: S::one(), 
+            z: S::zero(), 
+            w: S::zero(),
+        }
     }
     
     #[inline]
     pub fn unit_z() -> Vector4<S> {
-        Vector4 { x: S::zero(), y: S::zero(), z: S::one(), w: S::zero() }
+        Vector4 { 
+            x: S::zero(), 
+            y: S::zero(), 
+            z: S::one(), 
+            w: S::zero(),
+        }
     }
 
     #[inline]
     pub fn unit_w() -> Vector4<S> {
-        Vector4 { x: S::zero(), y: S::zero(), z: S::zero(), w: S::one() }
+        Vector4 { 
+            x: S::zero(), 
+            y: S::zero(), 
+            z: S::zero(), 
+            w: S::one(),
+        }
     }
 }
 
@@ -2688,7 +2777,12 @@ impl<S> ops::Neg for Vector4<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
+        Vector4 { 
+            x: -self.x,
+            y: -self.y,
+            z: -self.z, 
+            w: -self.w,
+        }
     }
 }
 
@@ -2697,7 +2791,12 @@ impl<S> ops::Neg for &Vector4<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
+        Vector4 { 
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
+            w: -self.w,
+        }
     }
 }
 
@@ -2964,7 +3063,12 @@ impl<S> ops::RemAssign<S> for Vector4<S> where S: Scalar {
 impl<S> Zero for Vector4<S> where S: Scalar {
     #[inline]
     fn zero() -> Vector4<S> {
-        Vector4 { x: S::zero(), y: S::zero(), z: S::zero(), w: S::zero() }
+        Vector4 { 
+            x: S::zero(), 
+            y: S::zero(), 
+            z: S::zero(), 
+            w: S::zero(),
+        }
     }
 
     fn is_zero(&self) -> bool {
