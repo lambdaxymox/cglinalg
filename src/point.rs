@@ -5,6 +5,9 @@ use scalar::{
 };
 use structure::{
     Storage,
+    Metric,
+    DotProduct,
+    Magnitude,
 };
 use vector::{
     Vector1,
@@ -518,6 +521,102 @@ impl<S> approx::UlpsEq for Point1<S> where S: ScalarFloat {
     }
 }
 
+impl<S> DotProduct<Point1<S>> for Point1<S> where S: Scalar {
+    type Output = S;
+
+    #[inline]
+    fn dot(self, other: Point1<S>) -> Self::Output {
+        self.x * other.x
+    }
+}
+
+impl<S> DotProduct<&Point1<S>> for Point1<S> where S: Scalar {
+    type Output = S;
+
+    #[inline]
+    fn dot(self, other: &Point1<S>) -> Self::Output {
+        self.x * other.x
+    }
+}
+
+impl<S> DotProduct<Point1<S>> for &Point1<S> where S: Scalar {
+    type Output = S;
+
+    #[inline]
+    fn dot(self, other: Point1<S>) -> Self::Output {
+        self.x * other.x
+    }
+}
+
+impl<'a, 'b, S> DotProduct<&'a Point1<S>> for &'b Point1<S> where S: Scalar {
+    type Output = S;
+    
+    #[inline]
+    fn dot(self, other: &'a Point1<S>) -> Self::Output {
+        self.x * other.x
+    }
+}
+
+impl<S> Magnitude for Point1<S> where S: ScalarFloat {
+    type Output = S;
+
+    /// Compute the norm (length) of a vector.
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
+    }
+
+    /// Compute the squared length of a vector.
+    fn magnitude_squared(&self) -> Self::Output {
+        DotProduct::dot(self, self)
+    }
+
+    /// Convert a vector into a unit vector.
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+
+    /// Normalize a vector with a specified magnitude.
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+}
+
+impl<S> Metric<Point1<S>> for Point1<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: Point1<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
+impl<S> Metric<&Point1<S>> for Point1<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: &Point1<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
+impl<S> Metric<Point1<S>> for &Point1<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: Point1<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
+impl<'a, 'b, S> Metric<&'a Point1<S>> for &'b Point1<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: &Point1<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
 
 /// A representation of two-dimensional points with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -1016,6 +1115,103 @@ impl<S> approx::UlpsEq for Point2<S> where S: ScalarFloat {
         S::ulps_eq(&self.y, &other.y, epsilon, max_ulps)
     }
 }
+
+impl<S> DotProduct<Point2<S>> for Point2<S> where S: Scalar {
+    type Output = S;
+
+    #[inline]
+    fn dot(self, other: Point2<S>) -> Self::Output {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl<S> DotProduct<&Point2<S>> for Point2<S> where S: Scalar {
+    type Output = S;
+
+    #[inline]
+    fn dot(self, other: &Point2<S>) -> Self::Output {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl<S> DotProduct<Point2<S>> for &Point2<S> where S: Scalar {
+    type Output = S;
+
+    #[inline]
+    fn dot(self, other: Point2<S>) -> Self::Output {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl<'a, 'b, S> DotProduct<&'a Point2<S>> for &'b Point2<S> where S: Scalar {
+    type Output = S;
+    
+    #[inline]
+    fn dot(self, other: &'a Point2<S>) -> Self::Output {
+        self.x * other.x + self.y * other.y
+    }
+}
+
+impl<S> Magnitude for Point2<S> where S: ScalarFloat {
+    type Output = S;
+
+    /// Compute the norm (length) of a vector.
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
+    }
+
+    /// Compute the squared length of a vector.
+    fn magnitude_squared(&self) -> Self::Output {
+        DotProduct::dot(self, self)
+    }
+
+    /// Convert a vector into a unit vector.
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+
+    /// Normalize a vector with a specified magnitude.
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+}
+
+impl<S> Metric<Point2<S>> for Point2<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: Point2<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
+impl<S> Metric<&Point2<S>> for Point2<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: &Point2<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
+impl<S> Metric<Point2<S>> for &Point2<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: Point2<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
+impl<'a, 'b, S> Metric<&'a Point2<S>> for &'b Point2<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: &Point2<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
 
 
 /// A representation of three-dimensional points in a Euclidean space.
@@ -1558,6 +1754,102 @@ impl<S> approx::UlpsEq for Point3<S> where S: ScalarFloat {
         S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
         S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) &&
         S::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
+    }
+}
+
+impl<S> DotProduct<Point3<S>> for Point3<S> where S: Scalar {
+    type Output = S;
+
+    #[inline]
+    fn dot(self, other: Point3<S>) -> Self::Output {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl<S> DotProduct<&Point3<S>> for Point3<S> where S: Scalar {
+    type Output = S;
+
+    #[inline]
+    fn dot(self, other: &Point3<S>) -> Self::Output {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl<S> DotProduct<Point3<S>> for &Point3<S> where S: Scalar {
+    type Output = S;
+
+    #[inline]
+    fn dot(self, other: Point3<S>) -> Self::Output {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl<'a, 'b, S> DotProduct<&'a Point3<S>> for &'b Point3<S> where S: Scalar {
+    type Output = S;
+    
+    #[inline]
+    fn dot(self, other: &'a Point3<S>) -> Self::Output {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+}
+
+impl<S> Magnitude for Point3<S> where S: ScalarFloat {
+    type Output = S;
+
+    /// Compute the norm (length) of a vector.
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
+    }
+
+    /// Compute the squared length of a vector.
+    fn magnitude_squared(&self) -> Self::Output {
+        DotProduct::dot(self, self)
+    }
+
+    /// Convert a vector into a unit vector.
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+
+    /// Normalize a vector with a specified magnitude.
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+}
+
+impl<S> Metric<Point3<S>> for Point3<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: Point3<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
+impl<S> Metric<&Point3<S>> for Point3<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: &Point3<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
+impl<S> Metric<Point3<S>> for &Point3<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: Point3<S>) -> Self::Output {
+        (self - to).magnitude_squared()
+    }
+}
+
+impl<'a, 'b, S> Metric<&'a Point3<S>> for &'b Point3<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn distance_squared(self, to: &Point3<S>) -> Self::Output {
+        (self - to).magnitude_squared()
     }
 }
 
