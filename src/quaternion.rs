@@ -11,6 +11,8 @@ use structure::{
     Metric,
     Finite,
     Slerp,
+    Sum,
+    Product,
 };
 use angle::{
     Radians,
@@ -330,16 +332,6 @@ impl<S> Array for Quaternion<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.s + self.v.x + self.v.y + self.v.z
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.s * self.v.x * self.v.y * self.v.z
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.s
     }
@@ -352,6 +344,20 @@ impl<S> Array for Quaternion<S> where S: Scalar {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
+    }
+}
+
+impl<S> Sum for Quaternion<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.s + self.v.x + self.v.y + self.v.z
+    }
+}
+
+impl<S> Product for Quaternion<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.s * self.v.x * self.v.y * self.v.z
     }
 }
 

@@ -27,12 +27,6 @@ pub trait Array {
     /// Construct an array whose entries are all an input value.
     fn from_value(value: Self::Element) -> Self;
 
-    /// Compute the sum of the elements in the array.
-    fn sum(&self) -> Self::Element where Self::Element: ops::Add<Output = Self::Element>;
-    
-    /// Compute the product of the elements in the array.
-    fn product(&self) -> Self::Element where Self::Element: ops::Mul<Output = Self::Element>;
-
     /// Generate a pointer to the underlying array for passing a
     /// matrix or vector to the graphics hardware.
     fn as_ptr(&self) -> *const Self::Element; 
@@ -43,6 +37,16 @@ pub trait Array {
 
     /// Get a slice of the underlying elements of the data type.
     fn as_slice(&self) -> &[Self::Element];
+}
+
+pub trait Sum where Self: Array {
+    /// Compute the sum of the elements in the array.
+    fn sum(&self) -> Self::Element where Self::Element: ops::Add<Output = Self::Element>;
+}
+
+pub trait Product where Self: Array {
+    /// Compute the product of the elements in the array.
+    fn product(&self) -> Self::Element where Self::Element: ops::Mul<Output = Self::Element>;
 }
 
 /// This trait indicates that a type has an arithmetical zero element.

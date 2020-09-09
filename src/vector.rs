@@ -12,6 +12,8 @@ use structure::{
     Lerp,
     Metric,
     Finite,
+    Sum,
+    Product,
 };
 use num_traits::NumCast;
 use std::fmt;
@@ -131,16 +133,6 @@ impl<S> Array for Vector1<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.x
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.x
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -156,6 +148,19 @@ impl<S> Array for Vector1<S> where S: Scalar {
     }
 }
 
+impl<S> Sum for Vector1<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.x
+    }
+}
+
+impl<S> Product for Vector1<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.x
+    }
+}
 
 impl<S> AsRef<[S; 1]> for Vector1<S> {
     fn as_ref(&self) -> &[S; 1] {
@@ -872,16 +877,6 @@ impl<S> Array for Vector2<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.x + self.y
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.x * self.y
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -894,6 +889,20 @@ impl<S> Array for Vector2<S> where S: Scalar {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 2]>>::as_ref(self)
+    }
+}
+
+impl<S> Sum for Vector2<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.x + self.y
+    }
+}
+
+impl<S> Product for Vector2<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.x * self.y
     }
 }
 
@@ -1687,16 +1696,6 @@ impl<S> Array for Vector3<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.x + self.y + self.z
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.x * self.y * self.z
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -1709,6 +1708,20 @@ impl<S> Array for Vector3<S> where S: Scalar {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 3]>>::as_ref(self)
+    }
+}
+
+impl<S> Sum for Vector3<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.x + self.y + self.z
+    }
+}
+
+impl<S> Product for Vector3<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.x * self.y * self.z
     }
 }
 
@@ -2559,16 +2572,6 @@ impl<S> Array for Vector4<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.x + self.y + self.z + self.w
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.x * self.y * self.z * self.w
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -2581,6 +2584,20 @@ impl<S> Array for Vector4<S> where S: Scalar {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
+    }
+}
+
+impl<S> Sum for Vector4<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.x + self.y + self.z + self.w
+    }
+}
+
+impl<S> Product for Vector4<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.x * self.y * self.z * self.w
     }
 }
 

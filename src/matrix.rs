@@ -23,6 +23,8 @@ use structure::{
     Zero, 
     Matrix, 
     Lerp,
+    Sum,
+    Product,
     SquareMatrix,
     SkewSymmetricMatrix,
     InvertibleSquareMatrix,
@@ -47,7 +49,7 @@ impl<S> Matrix2<S> {
     }
 
     /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
-    pub fn from_cols(c0: Vector2<S>, c1: Vector2<S>) -> Matrix2<S> {
+    pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>) -> Matrix2<S> {
         Matrix2 { c0r0: c0.x, c0r1: c0.y, c1r0: c1.x, c1r1: c1.y }
     }
 
@@ -115,16 +117,6 @@ impl<S> Array for Matrix2<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.c0r0 + self.c1r0 + self.c0r1 + self.c1r1
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.c0r0 * self.c1r0 * self.c0r1 * self.c1r1
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const S {
         &self.c0r0
     }
@@ -137,6 +129,20 @@ impl<S> Array for Matrix2<S> where S: Scalar {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
+    }
+}
+
+impl<S> Sum for Matrix2<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.c0r0 + self.c1r0 + self.c0r1 + self.c1r1
+    }
+}
+
+impl<S> Product for Matrix2<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.c0r0 * self.c1r0 * self.c0r1 * self.c1r1
     }
 }
 
@@ -874,7 +880,7 @@ impl<S> Matrix3<S> {
     }
 
     /// Create a 3x3 matrix from a triple of three-dimensional column vectors.
-    pub fn from_cols(c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3<S> {
+    pub fn from_columns(c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3<S> {
         Matrix3 {
             c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, 
             c1r0: c1.x, c1r1: c1.y, c1r2: c1.z,
@@ -1018,20 +1024,6 @@ impl<S> Array for Matrix3<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.c0r0 + self.c1r0 + self.c2r0 +
-        self.c0r1 + self.c1r1 + self.c2r1 +
-        self.c0r2 + self.c1r2 + self.c2r2
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.c0r0 * self.c1r0 * self.c2r0 *
-        self.c0r1 * self.c1r1 * self.c2r1 *
-        self.c0r2 * self.c1r2 * self.c2r2
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const S {
         &self.c0r0
     }
@@ -1044,6 +1036,24 @@ impl<S> Array for Matrix3<S> where S: Scalar {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 9]>>::as_ref(self)
+    }
+}
+
+impl<S> Sum for Matrix3<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.c0r0 + self.c1r0 + self.c2r0 +
+        self.c0r1 + self.c1r1 + self.c2r1 +
+        self.c0r2 + self.c1r2 + self.c2r2
+    }
+}
+
+impl<S> Product for Matrix3<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.c0r0 * self.c1r0 * self.c2r0 *
+        self.c0r1 * self.c1r1 * self.c2r1 *
+        self.c0r2 * self.c1r2 * self.c2r2
     }
 }
 
@@ -2053,7 +2063,7 @@ impl<S> Matrix4<S> {
     }
 
     /// Construct a 4x4 matrix from column vectors.
-    pub fn from_cols(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4<S> {
+    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4<S> {
         Matrix4 {
             c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, c0r3: c0.w,
             c1r0: c1.x, c1r1: c1.y, c1r2: c1.z, c1r3: c1.w,
@@ -2277,22 +2287,6 @@ impl<S> Array for Matrix4<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.c0r0 + self.c1r0 + self.c2r0 + self.c3r0 +
-        self.c0r1 + self.c1r1 + self.c2r1 + self.c3r1 +
-        self.c0r2 + self.c1r2 + self.c2r2 + self.c3r2 +
-        self.c0r3 + self.c1r3 + self.c2r3 + self.c3r3
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.c0r0 * self.c1r0 * self.c2r0 * self.c3r0 *
-        self.c0r1 * self.c1r1 * self.c2r1 * self.c3r1 *
-        self.c0r2 * self.c1r2 * self.c2r2 * self.c3r2 *
-        self.c0r3 * self.c1r3 * self.c2r3 * self.c3r3
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const S {
         &self.c0r0
     }
@@ -2305,6 +2299,26 @@ impl<S> Array for Matrix4<S> where S: Scalar {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 16]>>::as_ref(self)
+    }
+}
+
+impl<S> Sum for Matrix4<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.c0r0 + self.c1r0 + self.c2r0 + self.c3r0 +
+        self.c0r1 + self.c1r1 + self.c2r1 + self.c3r1 +
+        self.c0r2 + self.c1r2 + self.c2r2 + self.c3r2 +
+        self.c0r3 + self.c1r3 + self.c2r3 + self.c3r3
+    }
+}
+
+impl<S> Product for Matrix4<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.c0r0 * self.c1r0 * self.c2r0 * self.c3r0 *
+        self.c0r1 * self.c1r1 * self.c2r1 * self.c3r1 *
+        self.c0r2 * self.c1r2 * self.c2r2 * self.c3r2 *
+        self.c0r3 * self.c1r3 * self.c2r3 * self.c3r3
     }
 }
 

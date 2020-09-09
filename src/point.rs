@@ -8,6 +8,8 @@ use structure::{
     Metric,
     DotProduct,
     Magnitude,
+    Sum,
+    Product,
 };
 use vector::{
     Vector1,
@@ -135,16 +137,6 @@ impl<S> Array for Point1<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.x
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.x
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -157,6 +149,20 @@ impl<S> Array for Point1<S> where S: Scalar {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 1]>>::as_ref(self)
+    }
+}
+
+impl<S> Sum for Point1<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.x
+    }
+}
+
+impl<S> Product for Point1<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.x
     }
 }
 
@@ -762,16 +768,6 @@ impl<S> Array for Point2<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.x + self.y
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.x * self.y
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -784,6 +780,20 @@ impl<S> Array for Point2<S> where S: Scalar {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 2]>>::as_ref(self)
+    }
+}
+
+impl<S> Sum for Point2<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.x + self.y
+    }
+}
+
+impl<S> Product for Point2<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.x * self.y
     }
 }
 
@@ -1404,16 +1414,6 @@ impl<S> Array for Point3<S> where S: Scalar {
     }
 
     #[inline]
-    fn sum(&self) -> Self::Element {
-        self.x + self.y + self.z
-    }
-
-    #[inline]
-    fn product(&self) -> Self::Element {
-        self.x * self.y * self.z
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -1429,6 +1429,19 @@ impl<S> Array for Point3<S> where S: Scalar {
     }
 }
 
+impl<S> Sum for Point3<S> where S: Scalar {
+    #[inline]
+    fn sum(&self) -> S {
+        self.x + self.y + self.z
+    }
+}
+
+impl<S> Product for Point3<S> where S: Scalar {
+    #[inline]
+    fn product(&self) -> S {
+        self.x * self.y * self.z
+    }
+}
 
 impl<S> AsRef<[S; 3]> for Point3<S> {
     fn as_ref(&self) -> &[S; 3] {
