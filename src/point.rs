@@ -5,6 +5,7 @@ use scalar::{
 };
 use structure::{
     Array,
+    Euclidean,
     Metric,
     DotProduct,
     Magnitude,
@@ -70,16 +71,6 @@ impl<S> Point1<S> where S: Copy {
     pub fn extend(self, y: S) -> Point2<S> {
         Point2::new(self.x, y)
     }
-
-    #[inline]
-    pub fn from_vector(v: Vector1<S>) -> Point1<S> {
-        Point1::new(v.x)
-    }
-
-    #[inline]
-    pub fn to_vector(self) -> Vector1<S> {
-        Vector1::new(self.x)
-    }
 }
 
 impl<S> Point1<S> where S: NumCast + Copy {
@@ -91,31 +82,6 @@ impl<S> Point1<S> where S: NumCast + Copy {
         };
 
         Some(Point1::new(x))
-    }
-}
-
-impl<S> Point1<S> where S: Scalar {
-    #[inline]
-    pub fn origin() -> Point1<S> {
-        Point1::new(S::zero())
-    }
-}
-
-impl<S> Point1<S> where S: ScalarFloat {
-    #[inline]
-    pub fn midpoint(self, other: Point1<S>) -> Point1<S> {
-        let x = self.x + other.x;
-        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
-
-        Point1::new(one_half * x)
-    }
-
-    pub fn centroid(points: &[Point1<S>]) -> Point1<S> {
-        let total_displacement = points
-            .iter()
-            .fold(Point1::origin(), |acc, p| acc + p.to_vector());
-
-        total_displacement / num_traits::cast(points.len()).unwrap()
     }
 }
 
@@ -665,6 +631,42 @@ impl<'a, 'b, S> Metric<&'a Point1<S>> for &'b Point1<S> where S: ScalarFloat {
     }
 }
 
+impl<S> Euclidean for Point1<S> where S: Scalar {
+    type Scalar = S;
+    type Difference = Vector1<S>;
+
+    #[inline]
+    fn origin() -> Point1<S> {
+        Point1::new(S::zero())
+    }
+
+    #[inline]
+    fn from_vector(v: Vector1<S>) -> Point1<S> {
+        Point1::new(v.x)
+    }
+
+    #[inline]
+    fn to_vector(self) -> Vector1<S> {
+        Vector1::new(self.x)
+    }
+
+    #[inline]
+    fn midpoint(self, other: Point1<S>) -> Point1<S> {
+        let x = self.x + other.x;
+        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
+
+        Point1::new(one_half * x)
+    }
+
+    fn centroid(points: &[Point1<S>]) -> Point1<S> {
+        let total_displacement = points
+            .iter()
+            .fold(Point1::origin(), |acc, p| acc + p.to_vector());
+
+        total_displacement / num_traits::cast(points.len()).unwrap()
+    }
+} 
+
 
 /// A representation of two-dimensional points with a Euclidean metric.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -696,16 +698,6 @@ impl<S> Point2<S> where S: Copy {
     pub fn extend(self, z: S) -> Point3<S> {
         Point3::new(self.x, self.y, z)
     }
-
-    #[inline]
-    pub fn from_vector(v: Vector2<S>) -> Point2<S> {
-        Point2::new(v.x, v.y)
-    }
-
-    #[inline]
-    pub fn to_vector(self) -> Vector2<S> {
-        Vector2::new(self.x, self.y)
-    }
 }
 
 impl<S> Point2<S> where S: NumCast + Copy {
@@ -721,32 +713,6 @@ impl<S> Point2<S> where S: NumCast + Copy {
         };
 
         Some(Point2::new(x, y))
-    }
-}
-
-impl<S> Point2<S> where S: Scalar {
-    #[inline]
-    pub fn origin() -> Point2<S> {
-        Point2::new(S::zero(), S::zero())
-    }
-}
-
-impl<S> Point2<S> where S: ScalarFloat {
-    #[inline]
-    pub fn midpoint(self, other: Point2<S>) -> Point2<S> {
-        let x = self.x + other.x;
-        let y = self.y + other.y;
-        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
-
-        Point2::new(one_half * x, one_half * y)
-    }
-
-    pub fn centroid(points: &[Point2<S>]) -> Point2<S> {
-        let total_displacement = points
-            .iter()
-            .fold(Point2::origin(), |acc, p| acc + p.to_vector());
-
-        total_displacement / num_traits::cast(points.len()).unwrap()
     }
 }
 
@@ -1308,6 +1274,43 @@ impl<'a, 'b, S> Metric<&'a Point2<S>> for &'b Point2<S> where S: ScalarFloat {
     }
 }
 
+impl<S> Euclidean for Point2<S> where S: Scalar {
+    type Scalar = S;
+    type Difference = Vector2<S>;
+
+    #[inline]
+    fn origin() -> Point2<S> {
+        Point2::new(S::zero(), S::zero())
+    }
+
+    #[inline]
+    fn from_vector(v: Vector2<S>) -> Point2<S> {
+        Point2::new(v.x, v.y)
+    }
+
+    #[inline]
+    fn to_vector(self) -> Vector2<S> {
+        Vector2::new(self.x, self.y)
+    }
+
+    #[inline]
+    fn midpoint(self, other: Point2<S>) -> Point2<S> {
+        let x = self.x + other.x;
+        let y = self.y + other.y;
+        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
+
+        Point2::new(one_half * x, one_half * y)
+    }
+
+    fn centroid(points: &[Point2<S>]) -> Point2<S> {
+        let total_displacement = points
+            .iter()
+            .fold(Self::origin(), |acc, p| acc + p.to_vector());
+
+        total_displacement / num_traits::cast(points.len()).unwrap()
+    }
+} 
+
 
 
 /// A representation of three-dimensional points in a Euclidean space.
@@ -1337,18 +1340,6 @@ impl<S> Point3<S> {
     }
 }
 
-impl<S> Point3<S> where S: Copy {
-    #[inline]
-    pub fn from_vector(v: Vector3<S>) -> Point3<S> {
-        Point3::new(v.x, v.y, v.z)
-    }
-
-    #[inline]
-    pub fn to_vector(self) -> Vector3<S> {
-        Vector3::new(self.x, self.y, self.z)
-    }
-}
-
 impl<S> Point3<S> where S: NumCast + Copy {
     /// Cast a point from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Point3<T>> {
@@ -1366,33 +1357,6 @@ impl<S> Point3<S> where S: NumCast + Copy {
         };
 
         Some(Point3::new(x, y, z))
-    }
-}
-
-impl<S> Point3<S> where S: Scalar {
-    #[inline]
-    pub fn origin() -> Point3<S> {
-        Point3::new(S::zero(), S::zero(), S::zero())
-    }
-}
-
-impl<S> Point3<S> where S: ScalarFloat {
-    #[inline]
-    pub fn midpoint(self, other: Point3<S>) -> Point3<S> {
-        let x = self.x + other.x;
-        let y = self.y + other.y;
-        let z = self.z + other.z;
-        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
-
-        Point3::new(one_half * x, one_half * y, one_half * z)
-    }
-
-    pub fn centroid(points: &[Point3<S>]) -> Point3<S> {
-        let total_displacement = points
-            .iter()
-            .fold(Point3::origin(), |acc, p| acc + p.to_vector());
-
-        total_displacement / num_traits::cast(points.len()).unwrap()
     }
 }
 
@@ -1991,4 +1955,42 @@ impl<'a, 'b, S> Metric<&'a Point3<S>> for &'b Point3<S> where S: ScalarFloat {
         (self - to).magnitude_squared()
     }
 }
+
+impl<S> Euclidean for Point3<S> where S: Scalar {
+    type Scalar = S;
+    type Difference = Vector3<S>;
+
+    #[inline]
+    fn origin() -> Point3<S> {
+        Point3::new(S::zero(), S::zero(), S::zero())
+    }
+
+    #[inline]
+    fn from_vector(v: Vector3<S>) -> Point3<S> {
+        Point3::new(v.x, v.y, v.z)
+    }
+
+    #[inline]
+    fn to_vector(self) -> Vector3<S> {
+        Vector3::new(self.x, self.y, self.z)
+    }
+
+    #[inline]
+    fn midpoint(self, other: Point3<S>) -> Point3<S> {
+        let x = self.x + other.x;
+        let y = self.y + other.y;
+        let z = self.z + other.z;
+        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
+
+        Point3::new(one_half * x, one_half * y, one_half * z)
+    }
+
+    fn centroid(points: &[Point3<S>]) -> Point3<S> {
+        let total_displacement = points
+            .iter()
+            .fold(Point3::origin(), |acc, p| acc + p.to_vector());
+
+        total_displacement / num_traits::cast(points.len()).unwrap()
+    }
+} 
 

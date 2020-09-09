@@ -422,3 +422,33 @@ pub trait InvertibleSquareMatrix where
         ulps_ne!(self.determinant(), &Self::Element::zero())
     }
 }
+
+pub trait Euclidean: Copy + Clone {
+    type Scalar: Scalar;
+    type Difference;
+
+    fn origin() -> Self;
+
+    fn from_vector(v: Self::Difference) -> Self;
+
+    fn to_vector(self) -> Self::Difference;
+
+    fn midpoint(self, other: Self) -> Self;
+
+    fn centroid(points: &[Self]) -> Self;
+}
+
+pub trait Rotation<P> where 
+    P: Euclidean,
+    Self: Sized + Copy + One,
+{
+    fn look_at(direction: P::Difference, up: P::Difference) -> Self;
+
+    fn between_vectors(v1: P::Difference, v2: P::Difference) -> Self;
+
+    fn rotate_vector(&self, vector: P::Difference) -> P::Difference;
+
+    fn inverse(&self) -> Self;
+
+    fn rotate_point(&self, point: P) -> P;
+}
