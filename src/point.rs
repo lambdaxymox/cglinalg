@@ -63,6 +63,23 @@ impl<S> Point1<S> {
     }
 }
 
+impl<S> Point1<S> where S: Copy {
+    #[inline]
+    pub fn extend(self, y: S) -> Point2<S> {
+        Point2::new(self.x, y)
+    }
+
+    #[inline]
+    pub fn from_vector(v: Vector1<S>) -> Point1<S> {
+        Point1::new(v.x)
+    }
+
+    #[inline]
+    pub fn to_vector(self) -> Vector1<S> {
+        Vector1::new(self.x)
+    }
+}
+
 impl<S> Point1<S> where S: NumCast + Copy {
     /// Cast a point of one type of scalars to a point of another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Point1<T>> {
@@ -72,6 +89,12 @@ impl<S> Point1<S> where S: NumCast + Copy {
         };
 
         Some(Point1::new(x))
+    }
+}
+
+impl<S> Point1<S> where S: Scalar {
+    pub fn origin() -> Point1<S> {
+        Point1::new(S::zero())
     }
 }
 
@@ -628,6 +651,7 @@ pub struct Point2<S> {
 
 impl<S> Point2<S> {
     /// Construct a new point.
+    #[inline]
     pub const fn new(x: S, y: S) -> Point2<S> {
         Point2 { x: x, y: y }
     }
@@ -639,6 +663,23 @@ impl<S> Point2<S> {
             x: op(self.x),
             y: op(self.y),
         }
+    }
+}
+
+impl<S> Point2<S> where S: Copy {
+    #[inline]
+    pub fn extend(self, z: S) -> Point3<S> {
+        Point3::new(self.x, self.y, z)
+    }
+
+    #[inline]
+    pub fn from_vector(v: Vector2<S>) -> Point2<S> {
+        Point2::new(v.x, v.y)
+    }
+
+    #[inline]
+    pub fn to_vector(self) -> Vector2<S> {
+        Vector2::new(self.x, self.y)
     }
 }
 
@@ -655,6 +696,12 @@ impl<S> Point2<S> where S: NumCast + Copy {
         };
 
         Some(Point2::new(x, y))
+    }
+}
+
+impl<S> Point2<S> where S: Scalar {
+    pub fn origin() -> Point2<S> {
+        Point2::new(S::zero(), S::zero())
     }
 }
 
@@ -1225,6 +1272,7 @@ pub struct Point3<S> {
 
 impl<S> Point3<S> {
     /// Construct a new point.
+    #[inline]
     pub const fn new(x: S, y: S, z: S) -> Point3<S> {
         Point3 { x: x, y: y, z: z }
     }
@@ -1237,6 +1285,18 @@ impl<S> Point3<S> {
             y: op(self.y),
             z: op(self.z),
         }
+    }
+}
+
+impl<S> Point3<S> where S: Copy {
+    #[inline]
+    pub fn from_vector(v: Vector3<S>) -> Point3<S> {
+        Point3::new(v.x, v.y, v.z)
+    }
+
+    #[inline]
+    pub fn to_vector(self) -> Vector3<S> {
+        Vector3::new(self.x, self.y, self.z)
     }
 }
 
@@ -1257,6 +1317,12 @@ impl<S> Point3<S> where S: NumCast + Copy {
         };
 
         Some(Point3::new(x, y, z))
+    }
+}
+
+impl<S> Point3<S> where S: Scalar {
+    pub fn origin() -> Point3<S> {
+        Point3::new(S::zero(), S::zero(), S::zero())
     }
 }
 
