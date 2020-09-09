@@ -18,7 +18,7 @@ use scalar::{
 use angle::Radians;
 use structure::{
     Angle,
-    Storage, 
+    Array, 
     One, 
     Zero, 
     Matrix, 
@@ -96,7 +96,7 @@ impl<S> Matrix2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Storage for Matrix2<S> where S: Scalar {
+impl<S> Array for Matrix2<S> where S: Scalar {
     type Element = S;
 
     #[inline]
@@ -995,7 +995,7 @@ impl<S> Matrix3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Storage for Matrix3<S> where S: Scalar {
+impl<S> Array for Matrix3<S> where S: Scalar {
     type Element = S;
 
     #[inline]
@@ -2253,7 +2253,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Storage for Matrix4<S> where S: Scalar {
+impl<S> Array for Matrix4<S> where S: Scalar {
     type Element = S;
 
     #[inline]

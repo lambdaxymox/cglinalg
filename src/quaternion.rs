@@ -1,6 +1,6 @@
 use structure::{
     Angle,
-    Storage,
+    Array,
     Zero,
     One,
     ProjectOn,
@@ -311,7 +311,7 @@ impl<S> AsMut<(S, S, S, S)> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> Storage for Quaternion<S> where S: Scalar {
+impl<S> Array for Quaternion<S> where S: Scalar {
     type Element = S;
 
     #[inline]

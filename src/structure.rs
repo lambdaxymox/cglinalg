@@ -14,7 +14,7 @@ use std::ops;
 /// of its elements in its underlying storage. In this way we can manipulate
 /// underlying storage directly for operations such as passing geometric data 
 /// across an API boundary to the GPU, or other external hardware.
-pub trait Storage { 
+pub trait Array { 
     /// The elements of an array.
     type Element: Copy;
 
@@ -158,6 +158,7 @@ pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
     fn project_on(self, onto: V) -> <Self as ProjectOn<V>>::Output;
 }
 
+
 /// A data type implementing the `Matrix` trait has the structure of a matrix 
 /// in column major order. If a type represents a matrix, we can perform 
 /// operations such as swapping rows, swapping columns, getting a row of 
@@ -167,10 +168,10 @@ pub trait Matrix {
     type Element: Scalar;
 
     /// The row vector of a matrix.
-    type Row: Storage<Element = Self::Element>;
+    type Row: Array<Element = Self::Element>;
 
     /// The column vector of a matrix.
-    type Column: Storage<Element = Self::Element>;
+    type Column: Array<Element = Self::Element>;
 
     /// The type signature of the tranpose of the matrix.
     type Transpose: Matrix<Element = Self::Element, Row = Self::Column, Column = Self::Row>;
@@ -344,7 +345,7 @@ pub trait SquareMatrix where
     Self: ops::Mul<Self, Output = Self>,
 {
     /// The type of the columns are rows of the square matrix.
-    type ColumnRow: Storage<Element = Self::Element>;
+    type ColumnRow: Array<Element = Self::Element>;
 
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.

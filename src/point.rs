@@ -4,7 +4,7 @@ use scalar::{
     ScalarFloat,
 };
 use structure::{
-    Storage,
+    Array,
     Metric,
     DotProduct,
     Magnitude,
@@ -116,7 +116,7 @@ impl<S> Point1<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Storage for Point1<S> where S: Scalar {
+impl<S> Array for Point1<S> where S: Scalar {
     type Element = S;
 
     #[inline]
@@ -743,7 +743,7 @@ impl<S> Point2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Storage for Point2<S> where S: Scalar {
+impl<S> Array for Point2<S> where S: Scalar {
     type Element = S;
 
     #[inline]
@@ -1385,7 +1385,7 @@ impl<S> Point3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Storage for Point3<S> where S: Scalar {
+impl<S> Array for Point3<S> where S: Scalar {
     type Element = S;
 
     #[inline]
