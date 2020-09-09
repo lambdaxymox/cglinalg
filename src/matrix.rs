@@ -98,7 +98,7 @@ impl<S> Matrix2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Matrix2<S> where S: Scalar {
+impl<S> Array for Matrix2<S> where S: Copy {
     type Element = S;
 
     #[inline]
@@ -1001,7 +1001,7 @@ impl<S> Matrix3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Matrix3<S> where S: Scalar {
+impl<S> Array for Matrix3<S> where S: Copy {
     type Element = S;
 
     #[inline]
@@ -2263,7 +2263,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Matrix4<S> where S: Scalar {
+impl<S> Array for Matrix4<S> where S: Copy {
     type Element = S;
 
     #[inline]

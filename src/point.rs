@@ -118,7 +118,7 @@ impl<S> Point1<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Point1<S> where S: Scalar {
+impl<S> Array for Point1<S> where S: Copy {
     type Element = S;
 
     #[inline]
@@ -749,7 +749,7 @@ impl<S> Point2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Point2<S> where S: Scalar {
+impl<S> Array for Point2<S> where S: Copy {
     type Element = S;
 
     #[inline]
@@ -1395,7 +1395,7 @@ impl<S> Point3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Point3<S> where S: Scalar {
+impl<S> Array for Point3<S> where S: Copy {
     type Element = S;
 
     #[inline]

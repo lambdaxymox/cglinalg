@@ -858,7 +858,7 @@ impl<S> Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> Array for Vector2<S> where S: Scalar {
+impl<S> Array for Vector2<S> where S: Copy {
     type Element = S;
 
     #[inline]
@@ -1677,7 +1677,7 @@ impl<S> Vector3<S> where S: Scalar {
     }
 }
 
-impl<S> Array for Vector3<S> where S: Scalar {
+impl<S> Array for Vector3<S> where S: Copy {
     type Element = S;
 
     #[inline]
@@ -2553,7 +2553,7 @@ impl<S> Vector4<S> where S: Scalar {
     }
 }
 
-impl<S> Array for Vector4<S> where S: Scalar {
+impl<S> Array for Vector4<S> where S: Copy {
     type Element = S;
 
     #[inline]
@@ -2598,7 +2598,7 @@ impl<S> Product for Vector4<S> where S: Scalar {
     #[inline]
     fn product(&self) -> S {
         self.x * self.y * self.z * self.w
-    }
+    } 
 }
 
 impl<S> AsRef<[S; 4]> for Vector4<S> {

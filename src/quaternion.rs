@@ -179,7 +179,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// The argument of `q` is the set of angles `theta` that satisfy the relation above which 
     /// we denote `arg(q)`. The principal argument of `q` is the angle `theta` satisfying the 
     /// polar decomposition of `q` above such that `theta` lies in the closed interval `[0, pi]`. 
-    /// For each elemenet of `theta` of `arg(q)`, there is an integer `n` such that
+    /// For each element `theta` in `arg(q)`, there is an integer `n` such that
     /// ```text
     /// theta = Arg(q) + 2 * pi * n
     /// ```
@@ -289,31 +289,31 @@ impl<S> One for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> AsRef<[S; 4]> for Quaternion<S> where S: Scalar {
+impl<S> AsRef<[S; 4]> for Quaternion<S> {
     fn as_ref(&self) -> &[S; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> AsRef<(S, S, S, S)> for Quaternion<S> where S: Scalar {
+impl<S> AsRef<(S, S, S, S)> for Quaternion<S> {
     fn as_ref(&self) -> &(S, S, S, S) {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> AsMut<[S; 4]> for Quaternion<S> where S: Scalar {
+impl<S> AsMut<[S; 4]> for Quaternion<S> {
     fn as_mut(&mut self) -> &mut [S; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> AsMut<(S, S, S, S)> for Quaternion<S> where S: Scalar {
+impl<S> AsMut<(S, S, S, S)> for Quaternion<S> {
     fn as_mut(&mut self) -> &mut (S, S, S, S) {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> Array for Quaternion<S> where S: Scalar {
+impl<S> Array for Quaternion<S> where S: Copy + num_traits::Zero {
     type Element = S;
 
     #[inline]
