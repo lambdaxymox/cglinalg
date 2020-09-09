@@ -22,6 +22,29 @@ use std::mem;
 use std::ops;
 
 
+macro_rules! impl_mul_operator {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field),*)
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field),*)
+            }
+        }
+    }
+}
+
+
 /// A representation of one-dimensional vectors.
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(C)]
@@ -695,28 +718,6 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector1<S>> for Vector1<S> {
     #[inline]
     fn sum<I: Iterator<Item=&'a Vector1<S>>>(iter: I) -> Vector1<S> {
         iter.fold(Vector1::zero(), ops::Add::add)
-    }
-}
-
-macro_rules! impl_mul_operator {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
-            }
-        }
-
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
-            }
-        }
     }
 }
 

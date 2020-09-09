@@ -32,6 +32,29 @@ use structure::{
 use vector::*;
 
 
+macro_rules! impl_mul_operator {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field),*)
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.$field),*)
+            }
+        }
+    }
+}
+
+
 /// The `Matrix2` type represents 2x2 matrices in column-major order.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
@@ -3777,29 +3800,6 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix4<S>> for Matrix4<S> {
     }
 }
 
-
-
-macro_rules! impl_mul_operator {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
-            }
-        }
-
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
-            }
-        }
-    }
-}
 
 impl_mul_operator!(u8,    Matrix2<u8>,    Matrix2<u8>,    { c0r0, c0r1, c1r0, c1r1 });
 impl_mul_operator!(u16,   Matrix2<u16>,   Matrix2<u16>,   { c0r0, c0r1, c1r0, c1r1 });

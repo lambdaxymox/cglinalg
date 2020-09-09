@@ -34,6 +34,29 @@ use std::mem;
 use std::ops;
 
 
+macro_rules! impl_mul_operator {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $scalar:ident, { $($field:ident),* } }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            }
+        }
+    }
+}
+
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Quaternion<S> {
@@ -688,28 +711,6 @@ impl<'a, 'b, S> ops::Mul<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
             other.s * self.v.y + other.v.x * self.v.z + other.v.y * self.s   - other.v.z * self.v.x,
             other.s * self.v.z - other.v.x * self.v.y + other.v.y * self.v.x + other.v.z * self.s,
         )
-    }
-}
-
-macro_rules! impl_mul_operator {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $scalar:ident, { $($field:ident),* } }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
-            }
-        }
-
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
-            }
-        }
     }
 }
 
