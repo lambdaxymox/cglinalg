@@ -834,6 +834,7 @@ impl<S> Vector2<S> where S: Copy {
 }
 
 impl<S> Vector2<S> where S: Scalar {
+    /// Returns the unit x axis vector.
     #[inline]
     pub fn unit_x() -> Vector2<S> {
         Vector2 { 
@@ -842,6 +843,7 @@ impl<S> Vector2<S> where S: Scalar {
         }
     }
 
+    /// Returns the unit y axis vector.
     #[inline]
     pub fn unit_y() -> Vector2<S> {
         Vector2 { 
@@ -1621,6 +1623,7 @@ impl<S> Vector3<S> where S: Copy {
 }
 
 impl<S> Vector3<S> where S: Scalar {
+    /// Returns the unit x axis vector.
     #[inline]
     pub fn unit_x() -> Vector3<S> {
         Vector3 { 
@@ -1630,6 +1633,7 @@ impl<S> Vector3<S> where S: Scalar {
         }
     }
 
+    /// Returns the unit y axis vector.
     #[inline]
     pub fn unit_y() -> Vector3<S> {
         Vector3 { 
@@ -1639,6 +1643,7 @@ impl<S> Vector3<S> where S: Scalar {
         }
     }
     
+    /// Returns the unit z axis vector.
     #[inline]
     pub fn unit_z() -> Vector3<S> {
         Vector3 { 
@@ -2490,6 +2495,7 @@ impl<S> Vector4<S> where S: NumCast + Copy {
 }
 
 impl<S> Vector4<S> where S: Scalar {
+    /// Returns the unit x axis vector.
     #[inline]
     pub fn unit_x() -> Vector4<S> {
         Vector4 { 
@@ -2500,6 +2506,7 @@ impl<S> Vector4<S> where S: Scalar {
         }
     }
 
+    /// Returns the unit y axis vector.
     #[inline]
     pub fn unit_y() -> Vector4<S> {
         Vector4 { 
@@ -2510,6 +2517,7 @@ impl<S> Vector4<S> where S: Scalar {
         }
     }
     
+    /// Returns the unit z axis vector.
     #[inline]
     pub fn unit_z() -> Vector4<S> {
         Vector4 { 
@@ -2520,6 +2528,7 @@ impl<S> Vector4<S> where S: Scalar {
         }
     }
 
+    /// Returns the unit w axis vector.
     #[inline]
     pub fn unit_w() -> Vector4<S> {
         Vector4 { 
