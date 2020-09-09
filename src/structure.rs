@@ -149,7 +149,7 @@ pub trait Slerp<V: Copy + Clone> {
 
     /// Spherically linearly interpolate between two unit elements.
     fn slerp(self, other: V, amount: Self::Scalar) -> Self::Output;
-} 
+}
 
 pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
     type Output;

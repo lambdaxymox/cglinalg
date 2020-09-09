@@ -98,6 +98,24 @@ impl<S> Point1<S> where S: Scalar {
     }
 }
 
+impl<S> Point1<S> where S: ScalarFloat {
+    #[inline]
+    pub fn midpoint(self, other: Point1<S>) -> Point1<S> {
+        let x = self.x + other.x;
+        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
+
+        Point1::new(one_half * x)
+    }
+
+    pub fn centroid(points: &[Point1<S>]) -> Point1<S> {
+        let total_displacement = points
+            .iter()
+            .fold(Point1::origin(), |acc, p| acc + p.to_vector());
+
+        total_displacement / num_traits::cast(points.len()).unwrap()
+    }
+}
+
 impl<S> Storage for Point1<S> where S: Scalar {
     type Element = S;
 
@@ -700,8 +718,28 @@ impl<S> Point2<S> where S: NumCast + Copy {
 }
 
 impl<S> Point2<S> where S: Scalar {
+    #[inline]
     pub fn origin() -> Point2<S> {
         Point2::new(S::zero(), S::zero())
+    }
+}
+
+impl<S> Point2<S> where S: ScalarFloat {
+    #[inline]
+    pub fn midpoint(self, other: Point2<S>) -> Point2<S> {
+        let x = self.x + other.x;
+        let y = self.y + other.y;
+        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
+
+        Point2::new(one_half * x, one_half * y)
+    }
+
+    pub fn centroid(points: &[Point2<S>]) -> Point2<S> {
+        let total_displacement = points
+            .iter()
+            .fold(Point2::origin(), |acc, p| acc + p.to_vector());
+
+        total_displacement / num_traits::cast(points.len()).unwrap()
     }
 }
 
@@ -1321,8 +1359,29 @@ impl<S> Point3<S> where S: NumCast + Copy {
 }
 
 impl<S> Point3<S> where S: Scalar {
+    #[inline]
     pub fn origin() -> Point3<S> {
         Point3::new(S::zero(), S::zero(), S::zero())
+    }
+}
+
+impl<S> Point3<S> where S: ScalarFloat {
+    #[inline]
+    pub fn midpoint(self, other: Point3<S>) -> Point3<S> {
+        let x = self.x + other.x;
+        let y = self.y + other.y;
+        let z = self.z + other.z;
+        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
+
+        Point3::new(one_half * x, one_half * y, one_half * z)
+    }
+
+    pub fn centroid(points: &[Point3<S>]) -> Point3<S> {
+        let total_displacement = points
+            .iter()
+            .fold(Point3::origin(), |acc, p| acc + p.to_vector());
+
+        total_displacement / num_traits::cast(points.len()).unwrap()
     }
 }
 

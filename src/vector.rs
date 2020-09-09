@@ -52,6 +52,13 @@ impl<S> Vector1<S> where S: NumCast + Copy {
     }
 }
 
+impl<S> Vector1<S> where S: Copy {
+    #[inline]
+    pub fn extend(self, y: S) -> Vector2<S> {
+        Vector2::new(self.x, y)
+    }
+}
+
 impl<S> Vector1<S> where S: Scalar {
     /// The unit vector representing the x-direction.
     #[inline]
@@ -800,6 +807,13 @@ impl<S> Vector2<S> where S: NumCast + Copy {
         };
 
         Some(Vector2::new(x, y))
+    }
+}
+
+impl<S> Vector2<S> where S: Copy {
+    #[inline]
+    pub fn extend(self, z: S) -> Vector3<S> {
+        Vector3::new(self.x, self.y, z)
     }
 }
 
@@ -1556,6 +1570,13 @@ impl<S> Vector3<S> where S: NumCast + Copy {
         };
 
         Some(Vector3::new(x, y, z))
+    }
+}
+
+impl<S> Vector3<S> where S: Copy {
+    #[inline]
+    pub fn extend(self, w: S) -> Vector4<S> {
+        Vector4::new(self.x, self.y, self.z, w)
     }
 }
 
