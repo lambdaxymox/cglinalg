@@ -2484,43 +2484,43 @@ impl<S> fmt::Display for Matrix4<S> where S: fmt::Display {
     }
 }
 
-impl<S> AsRef<[S; 16]> for Matrix4<S> where S: Scalar {
+impl<S> AsRef<[S; 16]> for Matrix4<S>  {
     fn as_ref(&self) -> &[S; 16] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> AsRef<[[S; 4]; 4]> for Matrix4<S> where S: Scalar {
+impl<S> AsRef<[[S; 4]; 4]> for Matrix4<S> {
     fn as_ref(&self) -> &[[S; 4]; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> AsRef<[Vector4<S>; 4]> for Matrix4<S> where S: Scalar {
+impl<S> AsRef<[Vector4<S>; 4]> for Matrix4<S> {
     fn as_ref(&self) -> &[Vector4<S>; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> AsMut<[S; 16]> for Matrix4<S> where S: Scalar {
+impl<S> AsMut<[S; 16]> for Matrix4<S> {
     fn as_mut(&mut self) -> &mut [S; 16] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> AsMut<[[S; 4]; 4]> for Matrix4<S> where S: Scalar {
+impl<S> AsMut<[[S; 4]; 4]> for Matrix4<S> {
     fn as_mut(&mut self) -> &mut [[S; 4]; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> AsMut<[Vector4<S>; 4]> for Matrix4<S> where S: Scalar {
+impl<S> AsMut<[Vector4<S>; 4]> for Matrix4<S> {
     fn as_mut(&mut self) -> &mut [Vector4<S>; 4] {
         unsafe { mem::transmute(self) }
     }
 }
 
-impl<S> ops::Index<usize> for Matrix4<S> where S: Scalar {
+impl<S> ops::Index<usize> for Matrix4<S> {
     type Output = Vector4<S>;
 
     #[inline]
@@ -2530,7 +2530,7 @@ impl<S> ops::Index<usize> for Matrix4<S> where S: Scalar {
     }
 }
 
-impl<S> ops::IndexMut<usize> for Matrix4<S> where S: Scalar {
+impl<S> ops::IndexMut<usize> for Matrix4<S> {
     #[inline]
     fn index_mut(&mut self, index: usize) -> &mut Vector4<S> {
         let v: &mut [Vector4<S>; 4] = self.as_mut();

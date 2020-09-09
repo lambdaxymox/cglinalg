@@ -114,7 +114,7 @@ impl<'a, 'b, S> Metric<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Vector1<S> where S: Scalar {
+impl<S> Array for Vector1<S> where S: Copy {
     type Element = S;
 
     #[inline]
