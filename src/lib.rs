@@ -7,6 +7,7 @@ mod prelude;
 mod matrix;
 mod projection;
 mod point;
+mod rotation;
 mod quaternion;
 
 mod vector;
@@ -17,9 +18,9 @@ pub use angle::*;
 pub use matrix::*;
 pub use projection::*;
 pub use quaternion::*;
-
 pub use scalar::*;
 pub use vector::*;
 pub use structure::*;
 pub use point::*;
+pub use rotation::*;
 

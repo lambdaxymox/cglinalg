@@ -438,17 +438,3 @@ pub trait Euclidean: Copy + Clone {
     fn centroid(points: &[Self]) -> Self;
 }
 
-pub trait Rotation<P> where 
-    P: Euclidean,
-    Self: Sized + Copy + One,
-{
-    fn look_at(direction: P::Difference, up: P::Difference) -> Self;
-
-    fn between_vectors(v1: P::Difference, v2: P::Difference) -> Self;
-
-    fn rotate_vector(&self, vector: P::Difference) -> P::Difference;
-
-    fn inverse(&self) -> Self;
-
-    fn rotate_point(&self, point: P) -> P;
-}
