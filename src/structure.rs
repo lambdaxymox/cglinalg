@@ -162,15 +162,26 @@ pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
     fn project_on(self, onto: V) -> <Self as ProjectOn<V>>::Output;
 }
 
+/// A type implementing the `CrossProduct` trait implments a form of vector 
+/// multiplications that computes a vector normal to the plane swept out by 
+/// the two vectors. In the context of low-dimensional spaces, the cross 
+/// product only exists in dimension three. This trait allows us to treat 
+/// three-dimensional vectors as well as pointers to three-dimensional vectors 
+/// interchangeably. 
 pub trait CrossProduct<V> {
     type Output;
 
-    /// Compute the cross product of two three-dimensional vectors. Note that
-    /// with the vectors used in computer graphics (two, three, and four dimensions),
+    /// Compute the cross product of two three-dimensional vectors. 
+    ///
+    /// Note that with the vectors used in computer graphics (two, three, and four dimensions),
     /// the cross product is defined only in three dimensions. Also note that the 
     /// cross product is the hodge dual of the corresponding 2-vector representing 
     /// the surface element that the crossed vector is normal to. That is, 
-    /// given vectors `u` and `v`, `u x v == *(u /\ v)`, where `*(.)` denotes the hodge dual.
+    /// given vectors `u` and `v`, 
+    /// ```text
+    /// u x v == *(u /\ v)
+    /// ```
+    /// where `*(.)` denotes the hodge dual.
     fn cross(self, other: V) -> Self::Output;
 }
 
@@ -416,12 +427,14 @@ pub trait SkewSymmetricMatrix where
     fn is_skew_symmetric(&self) -> bool;
 }
 
+/// A trait expressing how to compute the inverse of a square matrix, if it exists.
 pub trait InvertibleSquareMatrix where
     Self: SquareMatrix,
     <Self as Matrix>::Element: ScalarFloat
 {
-    /// Compute the inverse of a square matrix. That is, given a square matrix `self`
-    /// Compute the matrix `m` if it exists such that
+    /// Compute the inverse of a square matrix, if the inverse exists. 
+    /// Given a square matrix `self` Compute the matrix `m` if it exists 
+    /// such that
     /// ```text
     /// m * self = self * m = 1.
     /// ```
@@ -439,14 +452,25 @@ pub trait Euclidean: Copy + Clone {
     type Scalar: Scalar;
     type Difference;
 
+    /// Compute the origin of the Euclidean vector space.
     fn origin() -> Self;
 
+    /// Convert from vectors to points. 
+    /// 
+    /// Points are locations in Euclidean space, whereas vectors
+    /// are displacements relative to the origin in Euclidean space.
     fn from_vector(v: Self::Difference) -> Self;
 
+    /// Convert from points to vectors.
+    /// 
+    /// Points are locations in Euclidean space, whereas vectors
+    /// are displacements relative to the origin in Euclidean space.
     fn to_vector(self) -> Self::Difference;
 
+    /// Calculate the midpoint along a line segment between two points.
     fn midpoint(self, other: Self) -> Self;
 
+    /// Compute the center of a collection of points in Euclidean space.
     fn centroid(points: &[Self]) -> Self;
 }
 
