@@ -26,21 +26,21 @@ pub struct Scale2<S> {
 
 impl<S> Scale2<S> where S: Scalar {
     #[inline]
-    fn from_vector(scale: Vector2<S>) -> Scale2<S> {
+    pub fn from_vector(scale: Vector2<S>) -> Scale2<S> {
         Scale2 {
             matrix: Matrix3::from_nonuniform_scale(scale.x, scale.y),
         }
     }
 
     #[inline]
-    fn from_nonuniform_scale(sx: S, sy: S) -> Scale2<S> {
+    pub fn from_nonuniform_scale(sx: S, sy: S) -> Scale2<S> {
         Scale2 {
             matrix: Matrix3::from_nonuniform_scale(sx, sy),
         }
     }
 
     #[inline]
-    fn from_scale(scale: S) -> Scale2<S> {
+    pub fn from_scale(scale: S) -> Scale2<S> {
         Scale2 {
             matrix: Matrix3::from_scale(scale),
         }
@@ -52,21 +52,21 @@ pub struct Scale3<S> {
 }
 
 impl<S> Scale3<S> where S: Scalar {
-    fn from_vector(scale: Vector3<S>) -> Scale3<S> {
+    pub fn from_vector(scale: Vector3<S>) -> Scale3<S> {
         Scale3 {
             matrix: Matrix4::from_nonuniform_scale(scale.x, scale.y, scale.z),
         }
     }
 
     #[inline]
-    fn from_nonuniform_scale(sx: S, sy: S, sz: S) -> Scale3<S> {
+    pub fn from_nonuniform_scale(sx: S, sy: S, sz: S) -> Scale3<S> {
         Scale3 {
             matrix: Matrix4::from_nonuniform_scale(sx, sy, sz),
         }
     }
 
     #[inline]
-    fn from_scale(scale: S) -> Scale3<S> {
+    pub fn from_scale(scale: S) -> Scale3<S> {
         Scale3 {
             matrix: Matrix4::from_scale(scale),
         }
