@@ -401,6 +401,23 @@ impl<S> From<Quaternion<S>> for Matrix3<S> where S: Scalar {
     }
 }
 
+impl<S> From<&Quaternion<S>> for Matrix3<S> where S: Scalar {
+    fn from(quat: &Quaternion<S>) -> Matrix3<S> {
+        let s = quat.s;
+        let x = quat.v.x;
+        let y = quat.v.y;
+        let z = quat.v.z;
+        let one = S::one();
+        let two = one + one;
+    
+        Matrix3::new(
+            one - two * y * y - two * z * z, two * x * y + two * s * z,       two * x * z - two * s * y,
+            two * x * y - two * s * z,       one - two * x * x - two * z * z, two * y * z + two * s * x,
+            two * x * z + two * s * y,       two * y * z - two * s * x,       one - two * x * x - two * y * y,
+        )
+    }
+}
+
 impl<S> From<Quaternion<S>> for Matrix4<S> where S: Scalar {
     fn from(quat: Quaternion<S>) -> Matrix4<S> {
         let s = quat.s;
@@ -445,6 +462,18 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> where S: Scalar {
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Quaternion<S> {
         unsafe { mem::transmute(v) }
+    }
+}
+
+impl<S> From<Matrix3<S>> for Quaternion<S> where S: ScalarFloat {
+    fn from(matrix: Matrix3<S>) -> Quaternion<S> {
+        Quaternion::one()
+    }
+}
+
+impl<S> From<&Matrix3<S>> for Quaternion<S> where S: ScalarFloat {
+    fn from(matrix: &Matrix3<S>) -> Quaternion<S> {
+        Quaternion::one()
     }
 }
 

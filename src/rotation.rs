@@ -1,3 +1,6 @@
+use crate::approx::{
+    ulps_eq,
+};
 use angle::{
     Radians,
 };
@@ -11,6 +14,7 @@ use structure::{
     Euclidean,
     One,
     InvertibleSquareMatrix,
+    Magnitude,
 };
 use matrix::{
     Matrix2,
@@ -245,6 +249,15 @@ pub struct RotationMatrix3<S> {
     matrix: Matrix3<S>,
 }
 
+impl<S> RotationMatrix3<S> where S: ScalarFloat {
+    #[inline]
+    pub fn from_quaternion(quaternion: &Quaternion<S>) -> RotationMatrix3<S> {
+        RotationMatrix3 {
+            matrix: Matrix3::from(quaternion),
+        }
+    }
+}
+
 impl<S> fmt::Debug for RotationMatrix3<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "RotationMatrix3 ")?;
@@ -263,6 +276,20 @@ impl<S> From<RotationMatrix3<S>> for Matrix3<S> where S: Copy {
     #[inline]
     fn from(rotation: RotationMatrix3<S>) -> Matrix3<S> {
         rotation.matrix
+    }
+}
+
+impl<S> From<Quaternion<S>> for RotationMatrix3<S> where S: ScalarFloat {
+    #[inline]
+    fn from(quaternion: Quaternion<S>) -> RotationMatrix3<S> {
+        RotationMatrix3::from_quaternion(&quaternion)
+    }
+}
+
+impl<S> From<RotationMatrix3<S>> for Quaternion<S> where S: ScalarFloat {
+    #[inline]
+    fn from(rotation: RotationMatrix3<S>) -> Quaternion<S> {
+        Quaternion::from(&rotation.matrix)
     }
 }
 
@@ -365,6 +392,91 @@ impl<S> approx::UlpsEq for RotationMatrix3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
+impl<S> Rotation<Point3<S>> for Quaternion<S> where S: ScalarFloat {
+    #[inline]
+    fn look_at(dir: Vector3<S>, up: Vector3<S>) -> Quaternion<S> {
+        Matrix3::look_at(dir, up).into()
+    }
+
+    #[inline]
+    fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> Quaternion<S> {
+        let k_cos_theta = v1.dot(v2);
+
+        // The vectors point in the same direction.
+        if ulps_eq!(k_cos_theta, S::one()) {
+            return Quaternion::<S>::one();
+        }
+
+        let k = (v1.magnitude_squared() * v2.magnitude_squared()).sqrt();
+
+        // The vectors point in opposite directions.
+        if ulps_eq!(k_cos_theta / k, -S::one()) {
+            let mut orthogonal = v1.cross(&Vector3::unit_x());
+            if ulps_eq!(orthogonal.magnitude_squared(), S::zero()) {
+                orthogonal = v1.cross(&Vector3::unit_y());
+            }
+            return Quaternion::from_sv(S::zero(), orthogonal.normalize());
+        }
+
+        // The vectors point in any other direction.
+        Quaternion::from_sv(k + k_cos_theta, v1.cross(&v2)).normalize()
+    }
+
+    #[inline]
+    fn rotate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+        let rotation_matrix = Matrix3::from(self);
+        rotation_matrix * vector
+    }
+
+    #[inline]
+    fn inverse(&self) -> Quaternion<S> {
+        self.conjugate() / self.magnitude_squared()
+    }
+}
+
+impl<S> Rotation3<S> for RotationMatrix3<S> where S: ScalarFloat {
+    fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> RotationMatrix3<S> {
+        RotationMatrix3 {
+            matrix: Matrix3::from_axis_angle(axis, angle),
+        }
+    }
+}
+
+impl<S> Rotation3<S> for Quaternion<S> where S: ScalarFloat {
+    #[inline]
+    fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * num_traits::cast(0.5_f64).unwrap());
+        Quaternion::from_sv(cos_angle, axis * sin_angle)
+    }
+}
+
+impl<S> Rotation<Point3<S>> for RotationMatrix3<S> where S: ScalarFloat { 
+    #[inline]
+    fn look_at(dir: Vector3<S>, up: Vector3<S>) -> RotationMatrix3<S> {
+        RotationMatrix3 {
+            matrix: Matrix3::look_at(dir, up),
+        }
+    }
+
+    #[inline]
+    fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> RotationMatrix3<S> {
+        let q: Quaternion<S> = Rotation::between_vectors(v1, v2);
+        q.into()
+    }
+
+    #[inline]
+    fn rotate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+        self.matrix * vector
+    }
+
+    #[inline]
+    fn inverse(&self) -> RotationMatrix3<S> {
+        RotationMatrix3 {
+            matrix: self.matrix.inverse().unwrap(),
+        }
     }
 }
 
