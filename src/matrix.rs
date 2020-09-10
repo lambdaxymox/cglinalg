@@ -930,6 +930,38 @@ impl<S> Matrix3<S> {
     }
 }
 
+impl<S> Matrix3<S> where S: Scalar {
+    /// Create a affine translation matrix.
+    #[inline]
+    pub fn from_translation(distance: Vector2<S>) -> Matrix3<S> {
+        let one = S::one();
+        let zero = S::zero();
+        Matrix3::new(
+            one,        zero,       zero,
+            zero,       one,        zero,
+            distance.x, distance.y, one
+        )
+    }
+    
+    /// Scale a matrix uniformly.
+    #[inline]
+    pub fn from_scale(value: S) -> Matrix3<S> {
+        Matrix3::from_nonuniform_scale(value, value)
+    }
+    
+    /// Scale a matrix in a nonuniform fashion.
+    #[inline]
+    pub fn from_nonuniform_scale(sx: S, sy: S) -> Matrix3<S> {
+        let one = S::one();
+        let zero = S::zero();
+        Matrix3::new(
+            sx,   zero, zero,
+            zero, sy,   zero,
+            zero, zero, one,
+        )
+    }
+}
+
 impl<S> Matrix3<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Matrix3<T>> {
@@ -1148,7 +1180,11 @@ impl<S> Matrix for Matrix3<S> where S: Scalar {
 impl<S> From<[[S; 3]; 3]> for Matrix3<S> where S: Scalar {
     #[inline]
     fn from(m: [[S; 3]; 3]) -> Matrix3<S> {
-        Matrix3::new(m[0][0], m[0][1], m[0][2], m[1][0], m[1][1], m[1][2], m[2][0], m[2][1], m[2][2])
+        Matrix3::new(
+            m[0][0], m[0][1], m[0][2], 
+            m[1][0], m[1][1], m[1][2], 
+            m[2][0], m[2][1], m[2][2],
+        )
     }
 }
 
