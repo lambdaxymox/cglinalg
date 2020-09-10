@@ -1293,7 +1293,10 @@ macro_rules! approx_cross_product_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::approx::relative_eq;
-        use gdmath::DotProduct;
+        use gdmath::{
+            DotProduct,
+            CrossProduct,
+        };
     
         proptest! {
             /// The three-dimensional cross product should commute with multiplication by a
@@ -1386,7 +1389,10 @@ macro_rules! exact_cross_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::DotProduct;
+        use gdmath::{
+            DotProduct,
+            CrossProduct,
+        };
     
         proptest! {
             /// The three-dimensional cross product should commute with multiplication by a

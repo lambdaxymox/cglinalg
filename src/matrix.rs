@@ -18,7 +18,8 @@ use scalar::{
 use angle::Radians;
 use structure::{
     Angle,
-    Array, 
+    Array,
+    CrossProduct,
     One, 
     Zero, 
     Matrix, 
@@ -1032,8 +1033,8 @@ impl<S> Matrix3<S> where S: ScalarFloat {
 
     pub fn look_at(direction: Vector3<S>, up: Vector3<S>) -> Matrix3<S> {
         let dir = direction.normalize();
-        let side = up.cross(&direction).normalize();
-        let up = dir.cross(&side).normalize();
+        let side = up.cross(direction).normalize();
+        let up = dir.cross(side).normalize();
 
         Matrix3::from_columns(side, up, dir).transpose()
     }

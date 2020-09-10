@@ -162,6 +162,18 @@ pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
     fn project_on(self, onto: V) -> <Self as ProjectOn<V>>::Output;
 }
 
+pub trait CrossProduct<V> {
+    type Output;
+
+    /// Compute the cross product of two three-dimensional vectors. Note that
+    /// with the vectors used in computer graphics (two, three, and four dimensions),
+    /// the cross product is defined only in three dimensions. Also note that the 
+    /// cross product is the hodge dual of the corresponding 2-vector representing 
+    /// the surface element that the crossed vector is normal to. That is, 
+    /// given vectors `u` and `v`, `u x v == *(u /\ v)`, where `*(.)` denotes the hodge dual.
+    fn cross(self, other: V) -> Self::Output;
+}
+
 
 /// A data type implementing the `Matrix` trait has the structure of a matrix 
 /// in column major order. If a type represents a matrix, we can perform 

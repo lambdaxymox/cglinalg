@@ -11,6 +11,7 @@ use scalar::{
 use structure::{
     Angle,
     DotProduct,
+    CrossProduct,
     Euclidean,
     One,
     InvertibleSquareMatrix,
@@ -414,15 +415,15 @@ impl<S> Rotation<Point3<S>> for Quaternion<S> where S: ScalarFloat {
 
         // The vectors point in opposite directions.
         if ulps_eq!(k_cos_theta / k, -S::one()) {
-            let mut orthogonal = v1.cross(&Vector3::unit_x());
+            let mut orthogonal = v1.cross(Vector3::unit_x());
             if ulps_eq!(orthogonal.magnitude_squared(), S::zero()) {
-                orthogonal = v1.cross(&Vector3::unit_y());
+                orthogonal = v1.cross(Vector3::unit_y());
             }
             return Quaternion::from_sv(S::zero(), orthogonal.normalize());
         }
 
         // The vectors point in any other direction.
-        Quaternion::from_sv(k + k_cos_theta, v1.cross(&v2)).normalize()
+        Quaternion::from_sv(k + k_cos_theta, v1.cross(v2)).normalize()
     }
 
     #[inline]
