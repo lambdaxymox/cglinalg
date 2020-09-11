@@ -104,7 +104,7 @@ impl<S> Translate2<S> where S: Scalar {
 }
 
 pub struct Translate3<S> {
-    matrix: Matrix4<S>
+    matrix: Matrix4<S>,
 }
 
 impl<S> Translate3<S> where S: Scalar {
@@ -128,7 +128,52 @@ pub struct Shear2<S> {
     matrix: Matrix3<S>,
 }
 
+impl<S> Shear2<S> where S: Scalar {
+    #[inline]
+    pub fn from_vector(shear: Vector2<S>) -> Shear2<S> {
+        Shear2 {
+            matrix: Matrix3::new(
+                S::one(),  shear.y,   S::zero(),
+                shear.x,   S::one(),  S::zero(),
+                S::zero(), S::zero(), S::one()
+            ),
+        }
+    }
+
+    #[inline]
+    pub fn from_shear_x(shear_y: S) -> Shear2<S> {
+        Shear2 {
+            matrix: Matrix3::from_shear_x(shear_y, S::zero()),
+        }
+    }
+
+    #[inline]
+    pub fn from_shear_y(shear_x: S) -> Shear2<S> {
+        Shear2 {
+            matrix: Matrix3::from_shear_y(shear_x, S::zero()),
+        }
+    }
+}
+/*
 pub struct Shear3<S> {
     matrix: Matrix4<S>,
 }
 
+impl<S> Shear3<S> where S: Scalar {
+    #[inline]
+    pub fn from_shear_x(shear_x: S) -> Shear3<S> {
+
+    }
+
+    #[inline]
+    pub fn from_shear_y(shear_y: S) -> Shear3<S> {
+        
+    }
+
+    #[inline]
+    pub fn from_shear_z(shear_z) -> Shear3<S> {
+
+    }
+}
+
+*/

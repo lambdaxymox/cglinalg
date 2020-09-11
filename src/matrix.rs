@@ -945,19 +945,52 @@ impl<S> Matrix3<S> where S: Scalar {
     
     /// Scale a matrix uniformly.
     #[inline]
-    pub fn from_scale(value: S) -> Matrix3<S> {
-        Matrix3::from_nonuniform_scale(value, value)
+    pub fn from_scale(scale: S) -> Matrix3<S> {
+        Matrix3::from_nonuniform_scale(scale, scale)
     }
     
     /// Scale a matrix in a nonuniform fashion.
     #[inline]
-    pub fn from_nonuniform_scale(sx: S, sy: S) -> Matrix3<S> {
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix3<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix3::new(
-            sx,   zero, zero,
-            zero, sy,   zero,
-            zero, zero, one,
+            scale_x,   zero,      zero,
+            zero,      scale_y,   zero,
+            zero,      zero,      one,
+        )
+    }
+
+    #[inline]
+    pub fn from_shear_x(shear_y: S, shear_z: S) -> Matrix3<S> {
+        let one = S::one();
+        let zero = S::zero();
+        Matrix3::new(
+            one,     zero, zero,
+            shear_y, one,  zero, 
+            shear_z, zero, one
+        )
+    }
+
+    #[inline]
+    pub fn from_shear_y(shear_x: S, shear_z: S) -> Matrix3<S> {
+        let one = S::one();
+        let zero = S::zero();
+        Matrix3::new(
+            one,  shear_x, zero,
+            zero, one,     zero,
+            zero, shear_z, one
+        )
+    }
+
+    #[inline]
+    pub fn from_shear_z(shear_x: S, shear_y: S) -> Matrix3<S> {
+        let one = S::one();
+        let zero = S::zero();
+        Matrix3::new(
+            one,  zero, shear_x,
+            zero, one,  shear_y,
+            zero, zero, one   
         )
     }
 }
@@ -2266,6 +2299,42 @@ impl<S> Matrix4<S> where S: Scalar {
             zero, sy,   zero, zero,
             zero, zero, sz,   zero,
             zero, zero, zero, one
+        )
+    }
+
+    #[inline]
+    pub fn from_shear_x(shear_y: S, shear_z: S) -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
+        Matrix4::new(
+            one,     zero, zero, zero,
+            shear_y, one,  zero, zero,
+            shear_z, zero, one,  zero,
+            zero,    zero, zero, one
+        )
+    }
+
+    #[inline]
+    pub fn from_shear_y(shear_x: S, shear_z: S) -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
+        Matrix4::new(
+            one,  shear_x, zero, zero,
+            zero, one,     zero, zero,
+            zero, shear_z, one,  zero,
+            zero, zero,    zero, one
+        )
+    }
+
+    #[inline]
+    pub fn from_shear_z(shear_x: S, shear_y: S) -> Matrix4<S> {
+        let one = S::one();
+        let zero = S::zero();
+        Matrix4::new(
+            one,  zero, shear_x, zero,
+            zero, one,  shear_y, zero,
+            zero, zero, one,     zero,
+            zero, zero, zero,    one
         )
     }
 }
