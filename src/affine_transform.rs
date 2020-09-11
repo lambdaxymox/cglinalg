@@ -1,5 +1,6 @@
 use scalar::{
     Scalar,
+    ScalarFloat,
 };
 use matrix::{
     Matrix3,
@@ -73,52 +74,84 @@ impl<S> Scale3<S> where S: Scalar {
     }
 }
 
-pub struct Reflect2<S> {
+pub struct Reflection2<S> {
     matrix: Matrix3<S>,
 }
 
-pub struct Reflect3<S> {
+impl<S> Reflection2<S> where S: ScalarFloat {
+    fn from_normal(normal: Vector2<S>) -> Reflection2<S> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        Reflection2 {
+            matrix: Matrix3::new(
+                 one - two * normal.x * normal.x, -two * normal.x * normal.y,       zero,
+                -two * normal.x * normal.y,        one - two * normal.y * normal.y, zero, 
+                 zero,                             zero,                            one
+            )
+        }
+    }
+}
+
+
+pub struct Reflection3<S> {
     matrix: Matrix4<S>,
 }
 
-pub struct Translate2<S> {
+impl<S> Reflection3<S> where S: ScalarFloat {
+    fn from_normal(normal: Vector3<S>) -> Reflection3<S> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        Reflection3 {
+            matrix: Matrix4::new(
+                 one - two * normal.x * normal.x, -two * normal.x * normal.y,       -two * normal.x * normal.z,       zero, 
+                -two * normal.x * normal.y,        one - two * normal.y * normal.y, -two * normal.y * normal.z,       zero,
+                -two * normal.x * normal.z,       -two * normal.y * normal.z,        one - two * normal.z * normal.z, zero,
+                 zero,                             zero,                             zero,                            one
+            )
+        }
+    }
+}
+
+pub struct Translation2<S> {
     matrix: Matrix3<S>,
 }
 
-impl<S> Translate2<S> where S: Scalar {
+impl<S> Translation2<S> where S: Scalar {
     /// Construct a translation operator from a vector of displacements.
     #[inline]
-    pub fn from_vector(distance: Vector2<S>) -> Translate2<S> {
-        Translate2 {
+    pub fn from_vector(distance: Vector2<S>) -> Translation2<S> {
+        Translation2 {
             matrix: Matrix3::from_translation(distance),
         }
     }
 
     /// This function is a synonym for `from_vector`.
     #[inline]
-    pub fn from_translation(distance: Vector2<S>) -> Translate2<S> {
-        Translate2 {
+    pub fn from_translation(distance: Vector2<S>) -> Translation2<S> {
+        Translation2 {
             matrix: Matrix3::from_translation(distance),
         }
     }
 }
 
-pub struct Translate3<S> {
+pub struct Translation3<S> {
     matrix: Matrix4<S>,
 }
 
-impl<S> Translate3<S> where S: Scalar {
+impl<S> Translation3<S> where S: Scalar {
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_vector(distance: Vector3<S>) -> Translate3<S> {
-        Translate3 {
+    pub fn from_vector(distance: Vector3<S>) -> Translation3<S> {
+        Translation3 {
             matrix: Matrix4::from_translation(distance),
         }
     }
 
     /// This function is a synonym for `from_vector`.
     #[inline]
-    pub fn from_translation(distance: Vector3<S>) -> Translate3<S> {
-        Translate3 {
+    pub fn from_translation(distance: Vector3<S>) -> Translation3<S> {
+        Translation3 {
             matrix: Matrix4::from_translation(distance),
         }
     }
