@@ -154,26 +154,31 @@ impl<S> Shear2<S> where S: Scalar {
         }
     }
 }
-/*
+
 pub struct Shear3<S> {
     matrix: Matrix4<S>,
 }
 
 impl<S> Shear3<S> where S: Scalar {
     #[inline]
-    pub fn from_shear_x(shear_x: S) -> Shear3<S> {
-
+    pub fn from_shear_x(shear_y: S, shear_z: S) -> Shear3<S> {
+        Shear3 {
+            matrix: Matrix4::from_shear_x(shear_y, shear_z),
+        }
     }
 
     #[inline]
-    pub fn from_shear_y(shear_y: S) -> Shear3<S> {
-        
+    pub fn from_shear_y(shear_x: S, shear_z: S) -> Shear3<S> {
+        Shear3 {
+            matrix: Matrix4::from_shear_y(shear_x, shear_z),
+        }
     }
 
     #[inline]
-    pub fn from_shear_z(shear_z) -> Shear3<S> {
-
+    pub fn from_shear_z(shear_x: S, shear_y: S) -> Shear3<S> {
+        Shear3 {
+            matrix: Matrix4::from_shear_z(shear_x, shear_y),
+        }
     }
 }
 
-*/
