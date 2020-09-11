@@ -9,7 +9,7 @@ mod projection;
 mod point;
 mod rotation;
 mod quaternion;
-mod affine_transform;
+mod affine_transformation;
 mod vector;
 mod structure;
 
@@ -23,4 +23,4 @@ pub use vector::*;
 pub use structure::*;
 pub use point::*;
 pub use rotation::*;
-pub use affine_transform::*;
+pub use affine_transformation::*;

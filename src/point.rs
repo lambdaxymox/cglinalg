@@ -16,6 +16,7 @@ use vector::{
     Vector1,
     Vector2,
     Vector3,
+    Vector4,
 };
 
 use std::fmt;
@@ -716,6 +717,21 @@ impl<S> Point2<S> where S: NumCast + Copy {
     }
 }
 
+impl<S> Point2<S> where S: Scalar {
+    /// Convert a homogeneous vector into a point.
+    #[inline]
+    pub fn from_homogeneous(vector: Vector3<S>) -> Point2<S> {
+        let e = vector.truncate() * (S::one() / vector.z);
+        Point2::new(e.x, e.y)
+    }
+
+    /// Convert a point to a vector in homogeneous coordinates.
+    #[inline]
+    pub fn to_homogeneous(self) -> Vector3<S> {
+        Vector3::new(self.x, self.y, S::one())
+    }
+}
+
 impl<S> Array for Point2<S> where S: Copy {
     type Element = S;
 
@@ -1357,6 +1373,13 @@ impl<S> Point3<S> where S: NumCast + Copy {
         };
 
         Some(Point3::new(x, y, z))
+    }
+}
+
+impl<S> Point3<S> where S: Scalar {
+    /// Convert a point to a vector in homogeneous coordinates.
+    pub fn to_homogeneous(self) -> Vector4<S> {
+        Vector4::new(self.x, self.y, self.z, S::one())
     }
 }
 

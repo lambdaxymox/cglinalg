@@ -838,6 +838,11 @@ impl<S> Vector2<S> where S: Copy {
     pub fn extend(self, z: S) -> Vector3<S> {
         Vector3::new(self.x, self.y, z)
     }
+
+    #[inline]
+    pub fn truncate(self) -> Vector1<S> {
+        Vector1::new(self.x)
+    }
 }
 
 impl<S> Vector2<S> where S: Scalar {
@@ -1630,6 +1635,11 @@ impl<S> Vector3<S> where S: Copy {
     #[inline]
     pub fn extend(self, w: S) -> Vector4<S> {
         Vector4::new(self.x, self.y, self.z, w)
+    }
+
+    #[inline]
+    pub fn truncate(self) -> Vector2<S> {
+        Vector2::new(self.x, self.y)
     }
 }
 
@@ -2516,6 +2526,13 @@ impl<S> Vector4<S> {
             z: op(self.z),
             w: op(self.w),
         }
+    }
+}
+
+impl<S> Vector4<S> where S: Copy {
+    #[inline]
+    pub fn truncate(self) -> Vector3<S> {
+        Vector3::new(self.x, self.y, self.z)
     }
 }
 

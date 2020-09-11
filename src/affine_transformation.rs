@@ -10,29 +10,50 @@ use vector::{
     Vector2,
     Vector3,
 };
+use point::{
+    Point2,
+    Point3,
+};
 use structure::{
     One,
+    InvertibleSquareMatrix,
 };
 use std::fmt;
 
-/*
-pub trait AffineTransformation<M> {
+
+pub trait AffineTransformation2D<V> where Self: Sized {
+    type Applied;
+
     fn identity() -> Self;
-    fn inverse() -> Option<M>;
-    fn concatenate() -> Self;
-    fn apply() -> Self;
-    fn apply_inverse() -> Option<>;
+
+    fn inverse(&self) -> Option<Self>;
+
+    fn apply(&self, point: V) -> Self::Applied;
+
+    fn apply_inverse(&self, point: V) -> Option<Self::Applied>;
 }
-*/
+
+pub trait AffineTransformation3D<V> where Self: Sized {
+    type Applied;
+
+    fn identity() -> Self;
+    
+    fn inverse(&self) -> Option<Self>;
+    
+    fn apply(&self, point: V) -> Self::Applied;
+    
+    fn apply_inverse(&self, point: V) -> Option<Self::Applied>;
+}
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Identity2D<S> {
     matrix: Matrix3<S>,
 }
 
 impl<S> Identity2D<S> where S: Scalar {
     #[inline]
-    fn identity() -> Identity2D<S> {
+    pub fn identity() -> Identity2D<S> {
         Identity2D {
             matrix: Matrix3::one(),
         }
@@ -52,7 +73,105 @@ impl<S> fmt::Display for Identity2D<S> where S: Scalar {
     }
 }
 
+impl<S> AffineTransformation2D<Point2<S>> for Identity2D<S> where S: Scalar {
+    type Applied = Point2<S>;
+
+    #[inline]
+    fn identity() -> Identity2D<S> {
+        Identity2D::identity()
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Identity2D<S>> {
+        Some(Identity2D::identity())
+    }
+
+    #[inline]
+    fn apply(&self, point: Point2<S>) -> Point2<S> {
+        point
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Point2<S>) -> Option<Point2<S>> {
+        Some(point)
+    }
+}
+
+impl<S> AffineTransformation2D<&Point2<S>> for Identity2D<S> where S: Scalar {
+    type Applied = Point2<S>;
+
+    #[inline]
+    fn identity() -> Identity2D<S> {
+        Identity2D::identity()
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Identity2D<S>> {
+        Some(Identity2D::identity())
+    }
+
+    #[inline]
+    fn apply(&self, point: &Point2<S>) -> Point2<S> {
+        *point
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Point2<S>) -> Option<Point2<S>> {
+        Some(*point)
+    }
+}
+
+impl<S> AffineTransformation3D<Vector2<S>> for Identity2D<S> where S: Scalar {
+    type Applied = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Identity2D<S> {
+        Identity2D::identity()
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Identity2D<S>> {
+        Some(Identity2D::identity())
+    }
+
+    #[inline]
+    fn apply(&self, point: Vector2<S>) -> Vector2<S> {
+        point
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Vector2<S>) -> Option<Vector2<S>> {
+        Some(point)
+    }
+}
+
+impl<S> AffineTransformation3D<&Vector2<S>> for Identity2D<S> where S: Scalar {
+    type Applied = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Identity2D<S> {
+        Identity2D::identity()
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Identity2D<S>> {
+        Some(Identity2D::identity())
+    }
+
+    #[inline]
+    fn apply(&self, point: &Vector2<S>) -> Vector2<S> {
+        *point
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Vector2<S>) -> Option<Vector2<S>> {
+        Some(*point)
+    }
+}
+
+
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Identity3D<S> {
     matrix: Matrix4<S>,
 }
@@ -79,7 +198,105 @@ impl<S> fmt::Display for Identity3D<S> where S: Scalar {
     }
 }
 
+impl<S> AffineTransformation3D<Point3<S>> for Identity3D<S> where S: Scalar {
+    type Applied = Point3<S>;
+
+    #[inline]
+    fn identity() -> Identity3D<S> {
+        Identity3D::identity()
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Identity3D<S>> {
+        Some(Identity3D::identity())
+    }
+
+    #[inline]
+    fn apply(&self, point: Point3<S>) -> Point3<S> {
+        point
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Point3<S>) -> Option<Point3<S>> {
+        Some(point)
+    }
+}
+
+impl<S> AffineTransformation3D<&Point3<S>> for Identity3D<S> where S: Scalar {
+    type Applied = Point3<S>;
+
+    #[inline]
+    fn identity() -> Identity3D<S> {
+        Identity3D::identity()
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Identity3D<S>> {
+        Some(Identity3D::identity())
+    }
+
+    #[inline]
+    fn apply(&self, point: &Point3<S>) -> Point3<S> {
+        *point
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Point3<S>) -> Option<Point3<S>> {
+        Some(*point)
+    }
+}
+
+impl<S> AffineTransformation3D<Vector3<S>> for Identity3D<S> where S: Scalar {
+    type Applied = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Identity3D<S> {
+        Identity3D::identity()
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Identity3D<S>> {
+        Some(Identity3D::identity())
+    }
+
+    #[inline]
+    fn apply(&self, point: Vector3<S>) -> Vector3<S> {
+        point
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Vector3<S>) -> Option<Vector3<S>> {
+        Some(point)
+    }
+}
+
+impl<S> AffineTransformation3D<&Vector3<S>> for Identity3D<S> where S: Scalar {
+    type Applied = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Identity3D<S> {
+        Identity3D::identity()
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Identity3D<S>> {
+        Some(Identity3D::identity())
+    }
+
+    #[inline]
+    fn apply(&self, point: &Vector3<S>) -> Vector3<S> {
+        *point
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Vector3<S>) -> Option<Vector3<S>> {
+        Some(*point)
+    }
+}
+
+
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Scale2D<S> {
     matrix: Matrix3<S>,
 }
@@ -93,9 +310,9 @@ impl<S> Scale2D<S> where S: Scalar {
     }
 
     #[inline]
-    pub fn from_nonuniform_scale(sx: S, sy: S) -> Scale2D<S> {
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2D<S> {
         Scale2D {
-            matrix: Matrix3::from_nonuniform_scale(sx, sy),
+            matrix: Matrix3::from_nonuniform_scale(scale_x, scale_y),
         }
     }
 
@@ -120,7 +337,109 @@ impl<S> fmt::Display for Scale2D<S> where S: Scalar {
     }
 }
 
+impl<S> AffineTransformation2D<Point2<S>> for Scale2D<S> where S: Scalar {
+    type Applied = Point2<S>;
+
+    #[inline]
+    fn identity() -> Scale2D<S> {
+        Scale2D::from_scale(S::one())
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Scale2D<S>> {
+        Some(Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1))
+    }
+
+    #[inline]
+    fn apply(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Point2<S>) -> Option<Point2<S>> {
+        let matrix = Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1).matrix;
+        Some(Point2::from_homogeneous( matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation2D<&Point2<S>> for Scale2D<S> where S: Scalar {
+    type Applied = Point2<S>;
+
+    #[inline]
+    fn identity() -> Scale2D<S> {
+        Scale2D::from_scale(S::one())
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Scale2D<S>> {
+        Some(Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1))
+    }
+
+    #[inline]
+    fn apply(&self, point: &Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Point2<S>) -> Option<Point2<S>> {
+        let matrix = Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1).matrix;
+        Some(Point2::from_homogeneous( matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation2D<Vector2<S>> for Scale2D<S> where S: Scalar {
+    type Applied = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Scale2D<S> {
+        Scale2D::from_scale(S::one())
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Scale2D<S>> {
+        Some(Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1))
+    }
+
+    #[inline]
+    fn apply(&self, vector: Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: Vector2<S>) -> Option<Vector2<S>> {
+        let matrix = Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1).matrix;
+        Some((matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
+impl<S> AffineTransformation2D<&Vector2<S>> for Scale2D<S> where S: Scalar {
+    type Applied = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Scale2D<S> {
+        Scale2D::from_scale(S::one())
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Scale2D<S>> {
+        Some(Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1))
+    }
+
+    #[inline]
+    fn apply(&self, vector: &Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
+        let matrix = Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1).matrix;
+        Some((matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
+
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Scale3D<S> {
     matrix: Matrix4<S>,
 }
@@ -161,12 +480,13 @@ impl<S> fmt::Display for Scale3D<S> where S: Scalar {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Reflection2D<S> {
     matrix: Matrix3<S>,
 }
 
 impl<S> Reflection2D<S> where S: ScalarFloat {
-    fn from_normal(normal: Vector2<S>) -> Reflection2D<S> {
+    pub fn from_normal(normal: Vector2<S>) -> Reflection2D<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -194,12 +514,13 @@ impl<S> fmt::Display for Reflection2D<S> where S: Scalar {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Reflection3D<S> {
     matrix: Matrix4<S>,
 }
 
 impl<S> Reflection3D<S> where S: ScalarFloat {
-    fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
+    pub fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -228,6 +549,7 @@ impl<S> fmt::Display for Reflection3D<S> where S: Scalar {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Translation2D<S> {
     matrix: Matrix3<S>,
 }
@@ -264,6 +586,7 @@ impl<S> fmt::Display for Translation2D<S> where S: Scalar {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Translation3D<S> {
     matrix: Matrix4<S>,
 }
@@ -299,6 +622,7 @@ impl<S> fmt::Display for Translation3D<S> where S: Scalar {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Shear2D<S> {
     matrix: Matrix3<S>,
 }
@@ -344,6 +668,7 @@ impl<S> fmt::Display for Shear2D<S> where S: Scalar {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(C)]
 pub struct Shear3D<S> {
     matrix: Matrix4<S>,
 }
