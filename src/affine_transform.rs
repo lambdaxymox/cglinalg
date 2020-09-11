@@ -13,6 +13,7 @@ use vector::{
 use structure::{
     One,
 };
+use std::fmt;
 
 /*
 pub trait AffineTransformation<M> {
@@ -45,6 +46,12 @@ impl<S> AsRef<Matrix3<S>> for Identity2<S> {
     }
 }
 
+impl<S> fmt::Display for Identity2<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Identity3<S> {
     matrix: Matrix4<S>,
@@ -63,6 +70,12 @@ impl<S> AsRef<Matrix4<S>> for Identity3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4<S> {
         &self.matrix
+    }
+}
+
+impl<S> fmt::Display for Identity3<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
@@ -101,6 +114,12 @@ impl<S> AsRef<Matrix3<S>> for Scale2<S> {
     }
 }
 
+impl<S> fmt::Display for Scale2<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Scale3<S> {
     matrix: Matrix4<S>,
@@ -135,6 +154,12 @@ impl<S> AsRef<Matrix4<S>> for Scale3<S> {
     }
 }
 
+impl<S> fmt::Display for Scale3<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Reflection2<S> {
     matrix: Matrix3<S>,
@@ -159,6 +184,12 @@ impl<S> AsRef<Matrix3<S>> for Reflection2<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix3<S> {
         &self.matrix
+    }
+}
+
+impl<S> fmt::Display for Reflection2<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
@@ -187,6 +218,12 @@ impl<S> AsRef<Matrix4<S>> for Reflection3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4<S> {
         &self.matrix
+    }
+}
+
+impl<S> fmt::Display for Reflection3<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
@@ -220,6 +257,12 @@ impl<S> AsRef<Matrix3<S>> for Translation2<S> {
     }
 }
 
+impl<S> fmt::Display for Translation2<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation3<S> {
     matrix: Matrix4<S>,
@@ -246,6 +289,12 @@ impl<S> AsRef<Matrix4<S>> for Translation3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4<S> {
         &self.matrix
+    }
+}
+
+impl<S> fmt::Display for Translation3<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
@@ -288,6 +337,12 @@ impl<S> AsRef<Matrix3<S>> for Shear2<S> {
     }
 }
 
+impl<S> fmt::Display for Shear2<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear3<S> {
     matrix: Matrix4<S>,
@@ -320,6 +375,12 @@ impl<S> AsRef<Matrix4<S>> for Shear3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4<S> {
         &self.matrix
+    }
+}
+
+impl<S> fmt::Display for Shear3<S> where S: Scalar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
