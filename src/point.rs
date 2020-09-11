@@ -1377,6 +1377,13 @@ impl<S> Point3<S> where S: NumCast + Copy {
 }
 
 impl<S> Point3<S> where S: Scalar {
+    /// Convert a homogeneous vector into a point.
+    #[inline]
+    pub fn from_homogeneous(vector: Vector4<S>) -> Point3<S> {
+        let e = vector.truncate() * (S::one() / vector.z);
+        Point3::new(e.x, e.y, e.z)
+    }
+
     /// Convert a point to a vector in homogeneous coordinates.
     pub fn to_homogeneous(self) -> Vector4<S> {
         Vector4::new(self.x, self.y, self.z, S::one())
