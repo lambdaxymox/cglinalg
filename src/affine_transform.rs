@@ -10,6 +10,9 @@ use vector::{
     Vector2,
     Vector3,
 };
+use structure::{
+    One,
+};
 
 /*
 pub trait AffineTransformation<M> {
@@ -20,6 +23,32 @@ pub trait AffineTransformation<M> {
     fn apply_inverse() -> Option<>;
 }
 */
+
+pub struct Identity2<S> {
+    matrix: Matrix3<S>,
+}
+
+impl<S> Identity2<S> where S: Scalar {
+    #[inline]
+    fn identity() -> Identity2<S> {
+        Identity2 {
+            matrix: Matrix3::one(),
+        }
+    }
+}
+
+pub struct Identity3<S> {
+    matrix: Matrix4<S>,
+}
+
+impl<S> Identity3<S> where S: Scalar {
+    #[inline]
+    fn identity() -> Identity3<S> {
+        Identity3 {
+            matrix: Matrix4::one(),
+        }
+    }
+}
 
 pub struct Scale2<S> {
     matrix: Matrix3<S>,
