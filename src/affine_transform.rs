@@ -37,16 +37,30 @@ impl<S> Identity2<S> where S: Scalar {
     }
 }
 
+impl<S> AsRef<Matrix3<S>> for Identity2<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix3<S> {
+        &self.matrix
+    }
+}
+
 pub struct Identity3<S> {
     matrix: Matrix4<S>,
 }
 
 impl<S> Identity3<S> where S: Scalar {
     #[inline]
-    fn identity() -> Identity3<S> {
+    pub fn identity() -> Identity3<S> {
         Identity3 {
             matrix: Matrix4::one(),
         }
+    }
+}
+
+impl<S> AsRef<Matrix4<S>> for Identity3<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix4<S> {
+        &self.matrix
     }
 }
 
@@ -77,6 +91,13 @@ impl<S> Scale2<S> where S: Scalar {
     }
 }
 
+impl<S> AsRef<Matrix3<S>> for Scale2<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix3<S> {
+        &self.matrix
+    }
+}
+
 pub struct Scale3<S> {
     matrix: Matrix4<S>,
 }
@@ -103,6 +124,13 @@ impl<S> Scale3<S> where S: Scalar {
     }
 }
 
+impl<S> AsRef<Matrix4<S>> for Scale3<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix4<S> {
+        &self.matrix
+    }
+}
+
 pub struct Reflection2<S> {
     matrix: Matrix3<S>,
 }
@@ -122,6 +150,12 @@ impl<S> Reflection2<S> where S: ScalarFloat {
     }
 }
 
+impl<S> AsRef<Matrix3<S>> for Reflection2<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix3<S> {
+        &self.matrix
+    }
+}
 
 pub struct Reflection3<S> {
     matrix: Matrix4<S>,
@@ -140,6 +174,13 @@ impl<S> Reflection3<S> where S: ScalarFloat {
                  zero,                             zero,                             zero,                            one
             )
         }
+    }
+}
+
+impl<S> AsRef<Matrix4<S>> for Reflection3<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix4<S> {
+        &self.matrix
     }
 }
 
@@ -165,6 +206,13 @@ impl<S> Translation2<S> where S: Scalar {
     }
 }
 
+impl<S> AsRef<Matrix3<S>> for Translation2<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix3<S> {
+        &self.matrix
+    }
+}
+
 pub struct Translation3<S> {
     matrix: Matrix4<S>,
 }
@@ -183,6 +231,13 @@ impl<S> Translation3<S> where S: Scalar {
         Translation3 {
             matrix: Matrix4::from_translation(distance),
         }
+    }
+}
+
+impl<S> AsRef<Matrix4<S>> for Translation3<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix4<S> {
+        &self.matrix
     }
 }
 
@@ -217,6 +272,13 @@ impl<S> Shear2<S> where S: Scalar {
     }
 }
 
+impl<S> AsRef<Matrix3<S>> for Shear2<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix3<S> {
+        &self.matrix
+    }
+}
+
 pub struct Shear3<S> {
     matrix: Matrix4<S>,
 }
@@ -241,6 +303,13 @@ impl<S> Shear3<S> where S: Scalar {
         Shear3 {
             matrix: Matrix4::from_shear_z(shear_x, shear_y),
         }
+    }
+}
+
+impl<S> AsRef<Matrix4<S>> for Shear3<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix4<S> {
+        &self.matrix
     }
 }
 
