@@ -1408,7 +1408,6 @@ impl<S> fmt::Display for Shear2D<S> where S: Scalar {
     }
 }
 
-
 impl<S> AffineTransformation2D<Point2<S>> for Shear2D<S> where S: ScalarSigned {
     type Applied = Point2<S>;
 
@@ -1605,6 +1604,182 @@ impl<S> AsRef<Matrix4<S>> for Shear3D<S> {
 impl<S> fmt::Display for Shear3D<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> AffineTransformation3D<Point3<S>> for Shear3D<S> where S: ScalarSigned {
+    type Applied = Point3<S>;
+
+    #[inline]
+    fn identity() -> Shear3D<S> {
+        Shear3D { 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Shear3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let shear_x_with_y = -self.matrix.c1r0;
+        let shear_x_with_z = -self.matrix.c2r0;
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_y_with_z = -self.matrix.c2r1;
+        let shear_z_with_x = -self.matrix.c0r2;
+        let shear_z_with_y = -self.matrix.c1r2;
+        let matrix = Matrix4::new(
+            one,            shear_y_with_x, shear_z_with_x, zero, 
+            shear_x_with_y, one,            shear_z_with_y, zero,
+            shear_x_with_z, shear_y_with_z, one,            zero,
+            zero,           zero,           zero,           one
+        );
+        
+        Some(Shear3D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Point3<S>) -> Option<Point3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point3::from_homogeneous(inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation3D<&Point3<S>> for Shear3D<S> where S: ScalarFloat {
+    type Applied = Point3<S>;
+
+    #[inline]
+    fn identity() -> Shear3D<S> {
+        Shear3D { 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Shear3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let shear_x_with_y = -self.matrix.c1r0;
+        let shear_x_with_z = -self.matrix.c2r0;
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_y_with_z = -self.matrix.c2r1;
+        let shear_z_with_x = -self.matrix.c0r2;
+        let shear_z_with_y = -self.matrix.c1r2;
+        let matrix = Matrix4::new(
+            one,            shear_y_with_x, shear_z_with_x, zero, 
+            shear_x_with_y, one,            shear_z_with_y, zero,
+            shear_x_with_z, shear_y_with_z, one,            zero,
+            zero,           zero,           zero,           one
+        );
+        
+        Some(Shear3D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Point3<S>) -> Option<Point3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point3::from_homogeneous( inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation3D<Vector3<S>> for Shear3D<S> where S: ScalarFloat {
+    type Applied = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Shear3D<S> {
+        Shear3D { 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Shear3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let shear_x_with_y = -self.matrix.c1r0;
+        let shear_x_with_z = -self.matrix.c2r0;
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_y_with_z = -self.matrix.c2r1;
+        let shear_z_with_x = -self.matrix.c0r2;
+        let shear_z_with_y = -self.matrix.c1r2;
+        let matrix = Matrix4::new(
+            one,            shear_y_with_x, shear_z_with_x, zero, 
+            shear_x_with_y, one,            shear_z_with_y, zero,
+            shear_x_with_z, shear_y_with_z, one,            zero,
+            zero,           zero,           zero,           one
+        );
+        
+        Some(Shear3D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, vector: Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: Vector3<S>) -> Option<Vector3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
+impl<S> AffineTransformation3D<&Vector3<S>> for Shear3D<S> where S: ScalarFloat {
+    type Applied = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Shear3D<S> {
+        Shear3D { 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Shear3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let shear_x_with_y = -self.matrix.c1r0;
+        let shear_x_with_z = -self.matrix.c2r0;
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_y_with_z = -self.matrix.c2r1;
+        let shear_z_with_x = -self.matrix.c0r2;
+        let shear_z_with_y = -self.matrix.c1r2;
+        let matrix = Matrix4::new(
+            one,            shear_y_with_x, shear_z_with_x, zero, 
+            shear_x_with_y, one,            shear_z_with_y, zero,
+            shear_x_with_z, shear_y_with_z, one,            zero,
+            zero,           zero,           zero,           one
+        );
+        
+        Some(Shear3D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, vector: &Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
     }
 }
 
