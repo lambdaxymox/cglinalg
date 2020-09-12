@@ -658,7 +658,7 @@ impl<S> AffineTransformation2D<Point2<S>> for Reflection2D<S> where S: ScalarFlo
         );
 
         Some(Reflection2D { 
-            normal: self.normal, 
+            normal: normal, 
             matrix: matrix * inverse_det 
         })
     }
@@ -700,7 +700,7 @@ impl<S> AffineTransformation2D<&Point2<S>> for Reflection2D<S> where S: ScalarFl
         );
 
         Some(Reflection2D { 
-            normal: self.normal, 
+            normal: normal, 
             matrix: matrix * inverse_det 
         })
     }
@@ -742,7 +742,7 @@ impl<S> AffineTransformation2D<Vector2<S>> for Reflection2D<S> where S: ScalarFl
         );
 
         Some(Reflection2D { 
-            normal: self.normal, 
+            normal: normal, 
             matrix: matrix * inverse_det 
         })
     }
@@ -805,6 +805,7 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Reflection2D<S> where S: ScalarF
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Reflection3D<S> {
+    normal: Vector3<S>,
     matrix: Matrix4<S>,
 }
 
@@ -814,6 +815,7 @@ impl<S> Reflection3D<S> where S: ScalarFloat {
         let one = S::one();
         let two = one + one;
         Reflection3D {
+            normal: normal,
             matrix: Matrix4::new(
                  one - two * normal.x * normal.x, -two * normal.x * normal.y,       -two * normal.x * normal.z,       zero, 
                 -two * normal.x * normal.y,        one - two * normal.y * normal.y, -two * normal.y * normal.z,       zero,
@@ -836,6 +838,179 @@ impl<S> fmt::Display for Reflection3D<S> where S: Scalar {
         <Self as fmt::Debug>::fmt(&self, f)
     }
 }
+
+impl<S> AffineTransformation3D<Point3<S>> for Reflection3D<S> where S: ScalarFloat {
+    type Applied = Point3<S>;
+
+    #[inline]
+    fn identity() -> Reflection3D<S> {
+        Reflection3D { 
+            normal: Vector3::zero(), 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Reflection3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let normal = self.normal;
+        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
+        let matrix = Matrix4::new(
+            one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
+            two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
+            two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
+            zero,                                                  zero,                                                        zero,                                                        one
+        );
+
+        Some(Reflection3D { 
+            normal: normal, 
+            matrix: matrix * inverse_det,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Point3<S>) -> Option<Point3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point3::from_homogeneous(inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation3D<&Point3<S>> for Reflection3D<S> where S: ScalarFloat {
+    type Applied = Point3<S>;
+
+    #[inline]
+    fn identity() -> Reflection3D<S> {
+        Reflection3D { 
+            normal: Vector3::zero(), 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Reflection3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let normal = self.normal;
+        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
+        let matrix = Matrix4::new(
+            one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
+            two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
+            two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
+            zero,                                                  zero,                                                        zero,                                                        one
+        );
+
+        Some(Reflection3D { 
+            normal: normal, 
+            matrix: matrix * inverse_det,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Point3<S>) -> Option<Point3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point3::from_homogeneous( inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation3D<Vector3<S>> for Reflection3D<S> where S: ScalarFloat {
+    type Applied = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Reflection3D<S> {
+        Reflection3D { 
+            normal: Vector3::zero(), 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Reflection3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let normal = self.normal;
+        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
+        let matrix = Matrix4::new(
+            one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
+            two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
+            two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
+            zero,                                                  zero,                                                        zero,                                                        one
+        );
+
+        Some(Reflection3D { 
+            normal: normal, 
+            matrix: matrix * inverse_det,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, vector: Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: Vector3<S>) -> Option<Vector3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
+impl<S> AffineTransformation3D<&Vector3<S>> for Reflection3D<S> where S: ScalarFloat {
+    type Applied = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Reflection3D<S> {
+        Reflection3D { 
+            normal: Vector3::zero(), 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Reflection3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let normal = self.normal;
+        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
+        let matrix = Matrix4::new(
+            one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
+            two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
+            two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
+            zero,                                                  zero,                                                        zero,                                                        one
+        );
+
+        Some(Reflection3D { 
+            normal: normal, 
+            matrix: matrix * inverse_det,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, vector: &Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
