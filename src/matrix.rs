@@ -92,6 +92,20 @@ impl<S> Matrix2<S> where S: Scalar {
     pub fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Matrix2<S> {
         Matrix2::from_columns(up, direction).transpose()
     }
+
+    pub fn from_shear_x(shear_x_with_y: S) -> Matrix2<S> {
+        Matrix2::new(
+            S::one(),       S::zero(),
+            shear_x_with_y, S::one(),
+        )
+    }
+
+    pub fn from_shear_y(shear_y_with_x: S) -> Matrix2<S> {
+        Matrix2::new(
+            S::one(),  shear_y_with_x,
+            S::zero(), S::one(),
+        )
+    }
 }
 
 impl<S> Matrix2<S> where S: NumCast + Copy {

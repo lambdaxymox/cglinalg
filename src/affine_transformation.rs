@@ -1186,7 +1186,6 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Translation2D<S> where S: Scalar
 }
 
 
-
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Translation3D<S> {
@@ -1408,6 +1407,164 @@ impl<S> fmt::Display for Shear2D<S> where S: Scalar {
         <Self as fmt::Debug>::fmt(&self, f)
     }
 }
+
+
+impl<S> AffineTransformation2D<Point2<S>> for Shear2D<S> where S: ScalarSigned {
+    type Applied = Point2<S>;
+
+    #[inline]
+    fn identity() -> Shear2D<S> {
+        Shear2D { 
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Shear2D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_x_with_y = -self.matrix.c1r0;
+        let matrix = Matrix3::new(
+            one,            shear_y_with_x, zero,
+            shear_x_with_y, one,            zero,
+            zero,           zero,           one
+        );
+        
+        Some(Shear2D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Point2<S>) -> Option<Point2<S>> {
+        let inverse_matrix = <Self as AffineTransformation2D<Point2<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point2::from_homogeneous(inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation2D<&Point2<S>> for Shear2D<S> where S: ScalarFloat {
+    type Applied = Point2<S>;
+
+    #[inline]
+    fn identity() -> Shear2D<S> {
+        Shear2D { 
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Shear2D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_x_with_y = -self.matrix.c1r0;
+        let matrix = Matrix3::new(
+            one,            shear_y_with_x, zero,
+            shear_x_with_y, one,            zero,
+            zero,           zero,           one
+        );
+        
+        Some(Shear2D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, point: &Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Point2<S>) -> Option<Point2<S>> {
+        let inverse_matrix = <Self as AffineTransformation2D<Point2<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point2::from_homogeneous( inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation2D<Vector2<S>> for Shear2D<S> where S: ScalarFloat {
+    type Applied = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Shear2D<S> {
+        Shear2D { 
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Shear2D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_x_with_y = -self.matrix.c1r0;
+        let matrix = Matrix3::new(
+            one,            shear_y_with_x, zero,
+            shear_x_with_y, one,            zero,
+            zero,           zero,           one
+        );
+        
+        Some(Shear2D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, vector: Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: Vector2<S>) -> Option<Vector2<S>> {
+        let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
+impl<S> AffineTransformation2D<&Vector2<S>> for Shear2D<S> where S: ScalarFloat {
+    type Applied = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Shear2D<S> {
+        Shear2D { 
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Shear2D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_x_with_y = -self.matrix.c1r0;
+        let matrix = Matrix3::new(
+            one,            shear_y_with_x, zero,
+            shear_x_with_y, one,            zero,
+            zero,           zero,           one
+        );
+        
+        Some(Shear2D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply(&self, vector: &Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
+        let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
