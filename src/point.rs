@@ -47,27 +47,35 @@ macro_rules! impl_mul_operator {
 }
 
 
+/// A point is a location in a one-dimensional Euclidean space.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
 pub struct Point1<S> {
+    /// The horizontal (x) coordinate.
     pub x: S,
 }
 
 impl<S> Point1<S> {
-    /// Construct a new point.
+    /// Construct a new point in one-dimensional Euclidean space.
     #[inline]
     pub const fn new(x: S) -> Point1<S> {
-        Point1 { x: x }
+        Point1 { 
+            x: x 
+        }
     }
 
-    /// Map an operation on the elements of a point, returning a point of the 
+    /// Map an operation on that acts on the coordinates of a point, returning a point of the 
     /// new underlying type.
     pub fn map<T, F>(self, mut op: F) -> Point1<T> where F: FnMut(S) -> T {
-        Point1 { x: op(self.x) }
+        Point1 { 
+            x: op(self.x) 
+        }
     }
 }
 
 impl<S> Point1<S> where S: Copy {
+    /// Construct a new two-dimensional point from a one-dimensional poit by supplying the 
+    /// y-coordinate.
     #[inline]
     pub fn extend(self, y: S) -> Point2<S> {
         Point2::new(self.x, y)
@@ -575,22 +583,18 @@ impl<'a, 'b, S> DotProduct<&'a Point1<S>> for &'b Point1<S> where S: Scalar {
 impl<S> Magnitude for Point1<S> where S: ScalarFloat {
     type Output = S;
 
-    /// Compute the norm (length) of a vector.
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
-    /// Compute the squared length of a vector.
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
-    /// Convert a vector into a unit vector.
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
-    /// Normalize a vector with a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
@@ -669,24 +673,28 @@ impl<S> Euclidean for Point1<S> where S: Scalar {
 } 
 
 
-/// A representation of two-dimensional points with a Euclidean metric.
+/// A point is a location in a two-dimensional Euclidean space.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
 pub struct Point2<S> {
+   /// The horizontal (x) coordinate.
    pub x: S,
+   /// The vertical (y) coordinate.
    pub y: S,
 }
 
 impl<S> Point2<S> {
-    /// Construct a new point.
+    /// Construct a new two-dimensional point.
     #[inline]
     pub const fn new(x: S, y: S) -> Point2<S> {
         Point2 { x: x, y: y }
     }
 
-    /// Map an operation on the elements of a point, returning a point of the 
-    /// new underlying type.
-    pub fn map<T, F>(self, mut op: F) -> Point2<T> where F: FnMut(S) -> T {
+    /// Map an operation on that acts on the coordinates of a point, returning a point whose
+    /// coordinates are of the new scalar type.
+    pub fn map<T, F>(self, mut op: F) -> Point2<T> 
+        where F: FnMut(S) -> T 
+    {
         Point2 {
             x: op(self.x),
             y: op(self.y),
@@ -1233,22 +1241,18 @@ impl<'a, 'b, S> DotProduct<&'a Point2<S>> for &'b Point2<S> where S: Scalar {
 impl<S> Magnitude for Point2<S> where S: ScalarFloat {
     type Output = S;
 
-    /// Compute the norm (length) of a vector.
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
-    /// Compute the squared length of a vector.
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
-    /// Convert a vector into a unit vector.
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
-    /// Normalize a vector with a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
@@ -1339,14 +1343,14 @@ pub struct Point3<S> {
 }
 
 impl<S> Point3<S> {
-    /// Construct a new point.
+    /// Construct a new point in three-dimensional Euclidean space.
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Point3<S> {
         Point3 { x: x, y: y, z: z }
     }
 
-    /// Map an operation on the elements of a point, returning a point of the 
-    /// new underlying type.
+    /// Map an operation on that acts on the coordinates of a point, returning a point whose
+    /// coordinates are of the new scalar type.
     pub fn map<T, F>(self, mut op: F) -> Point3<T> where F: FnMut(S) -> T {
         Point3 {
             x: op(self.x),
@@ -1377,7 +1381,7 @@ impl<S> Point3<S> where S: NumCast + Copy {
 }
 
 impl<S> Point3<S> where S: Scalar {
-    /// Convert a homogeneous vector into a point.
+    /// Convert a vector in homogeneous coordinates into a point.
     #[inline]
     pub fn from_homogeneous(vector: Vector4<S>) -> Point3<S> {
         let e = vector.truncate() * (S::one() / vector.z);
@@ -1385,6 +1389,7 @@ impl<S> Point3<S> where S: Scalar {
     }
 
     /// Convert a point to a vector in homogeneous coordinates.
+    #[inline]
     pub fn to_homogeneous(self) -> Vector4<S> {
         Vector4::new(self.x, self.y, self.z, S::one())
     }

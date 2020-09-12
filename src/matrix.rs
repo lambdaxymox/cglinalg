@@ -93,6 +93,7 @@ impl<S> Matrix2<S> where S: Scalar {
         Matrix2::from_columns(up, direction).transpose()
     }
 
+    /// Construct a shear matrix for shearing along the x-axis.
     pub fn from_shear_x(shear_x_with_y: S) -> Matrix2<S> {
         Matrix2::new(
             S::one(),       S::zero(),
@@ -100,6 +101,7 @@ impl<S> Matrix2<S> where S: Scalar {
         )
     }
 
+    /// Construct a shear matrix for shearing along the y-axis.
     pub fn from_shear_y(shear_y_with_x: S) -> Matrix2<S> {
         Matrix2::new(
             S::one(),  shear_y_with_x,
@@ -909,6 +911,7 @@ pub struct Matrix3<S> {
 }
 
 impl<S> Matrix3<S> {
+    /// Construct a new 3x3 matrix.
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S,
         c1r0: S, c1r1: S, c1r2: S,
@@ -975,35 +978,38 @@ impl<S> Matrix3<S> where S: Scalar {
         )
     }
 
+    /// Construct a new shearing matrix for shearing along the x-axis.
     #[inline]
-    pub fn from_shear_x(shear_y: S, shear_z: S) -> Matrix3<S> {
+    pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix3<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix3::new(
-            one,     zero, zero,
-            shear_y, one,  zero, 
-            shear_z, zero, one
+            one,            zero, zero,
+            shear_x_with_y, one,  zero, 
+            shear_x_with_z, zero, one
         )
     }
 
+    /// Construct a new shearing matrix for shearing along the y-axis.
     #[inline]
-    pub fn from_shear_y(shear_x: S, shear_z: S) -> Matrix3<S> {
+    pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix3<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix3::new(
-            one,  shear_x, zero,
-            zero, one,     zero,
-            zero, shear_z, one
+            one,  shear_y_with_x, zero,
+            zero, one,            zero,
+            zero, shear_y_with_z, one
         )
     }
 
+    /// Construct a new shearing matrix for shearing along the z-axis.
     #[inline]
-    pub fn from_shear_z(shear_x: S, shear_y: S) -> Matrix3<S> {
+    pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix3<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix3::new(
-            one,  zero, shear_x,
-            zero, one,  shear_y,
+            one,  zero, shear_z_with_x,
+            zero, one,  shear_z_with_y,
             zero, zero, one   
         )
     }
@@ -1091,6 +1097,7 @@ impl<S> Matrix3<S> where S: ScalarFloat {
         )
     }
 
+    /// Construct a rotation matrix about an arbitrary axis by an angle `angle`.
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
@@ -2170,6 +2177,7 @@ pub struct Matrix4<S> {
 }
 
 impl<S> Matrix4<S> {
+    /// Construct a new 4x4 matrix.
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S, c0r3: S,
         c1r0: S, c1r1: S, c1r2: S, c1r3: S,
@@ -2316,39 +2324,42 @@ impl<S> Matrix4<S> where S: Scalar {
         )
     }
 
+    /// Construct a new 4x4 affine matrix for shearing along the x-axis in three dimensions.
     #[inline]
-    pub fn from_shear_x(shear_y: S, shear_z: S) -> Matrix4<S> {
+    pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            one,     zero, zero, zero,
-            shear_y, one,  zero, zero,
-            shear_z, zero, one,  zero,
-            zero,    zero, zero, one
+            one,            zero, zero, zero,
+            shear_x_with_y, one,  zero, zero,
+            shear_x_with_z, zero, one,  zero,
+            zero,           zero, zero, one
         )
     }
 
+    /// Construct a new 4x4 affine matrix for shearing along the y-axis in three dimensions.
     #[inline]
-    pub fn from_shear_y(shear_x: S, shear_z: S) -> Matrix4<S> {
+    pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            one,  shear_x, zero, zero,
-            zero, one,     zero, zero,
-            zero, shear_z, one,  zero,
-            zero, zero,    zero, one
+            one,  shear_y_with_x, zero, zero,
+            zero, one,            zero, zero,
+            zero, shear_y_with_z, one,  zero,
+            zero, zero,           zero, one
         )
     }
 
+    /// Construct a new 4x4 affine matrix for shearing along the z-axis in three dimensions.
     #[inline]
-    pub fn from_shear_z(shear_x: S, shear_y: S) -> Matrix4<S> {
+    pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            one,  zero, shear_x, zero,
-            zero, one,  shear_y, zero,
-            zero, zero, one,     zero,
-            zero, zero, zero,    one
+            one,  zero, shear_z_with_x, zero,
+            zero, one,  shear_z_with_y, zero,
+            zero, zero, one,            zero,
+            zero, zero, zero,           one
         )
     }
 }
@@ -2396,6 +2407,8 @@ impl<S> Matrix4<S> where S: ScalarFloat {
         )
     }
 
+    /// Construct a new 4x4 affine matrix for rotating about an axis `axis` 
+    /// by an angle `angle` in three dimensions.
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;

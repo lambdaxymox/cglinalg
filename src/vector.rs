@@ -80,6 +80,8 @@ impl<S> Vector1<S> where S: NumCast + Copy {
 }
 
 impl<S> Vector1<S> where S: Copy {
+    /// Extend a one-dimensional vector into a two-dimensional vector using 
+    /// the supplied value.
     #[inline]
     pub fn extend(self, y: S) -> Vector2<S> {
         Vector2::new(self.x, y)
@@ -648,23 +650,19 @@ impl<'a, 'b, S> Lerp<&'a Vector1<S>> for &'b Vector1<S> where S: Scalar {
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
     
-    /// Compute the squared length of a vector.
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
-    /// Compute the norm (length) of a vector.
     #[inline]
     fn magnitude(&self) -> Self::Output {
         S::sqrt(DotProduct::dot(self, self))
     }
     
-    /// Convert a vector into a unit vector.
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
     
-    /// Normalize a vector with a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
@@ -790,12 +788,14 @@ impl<'a, 'b, S> ProjectOn<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloa
 }
 
 
-/// A representation of two-dimensional vectors with a Euclidean metric.
+/// A representation of two-dimensional vectors in a Euclidean space.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
 pub struct Vector2<S> {
-   pub x: S,
-   pub y: S,
+    /// The horizontal component.
+    pub x: S,
+    /// The vertical component.
+    pub y: S,
 }
 
 impl<S> Vector2<S> {
@@ -834,11 +834,15 @@ impl<S> Vector2<S> where S: NumCast + Copy {
 }
 
 impl<S> Vector2<S> where S: Copy {
+    /// Extend a two-dimensional vector into a three-dimensional vector using the 
+    /// supplied z value.
     #[inline]
     pub fn extend(self, z: S) -> Vector3<S> {
         Vector3::new(self.x, self.y, z)
     }
 
+    /// Truncate a two-dimensional vector to a one-dimensional vector removing
+    /// the y-component.
     #[inline]
     pub fn truncate(self) -> Vector1<S> {
         Vector1::new(self.x)
@@ -1455,22 +1459,18 @@ impl<'a, 'b, S> Lerp<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
 impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     type Output = S;
 
-    /// Compute the norm (length) of a vector.
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
-    /// Compute the squared length of a vector.
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
-    /// Convert a vector into a unit vector.
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
-    /// Normalize a vector with a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
@@ -1585,7 +1585,7 @@ impl<'a, 'b, S> ProjectOn<&'a Vector2<S>> for &'b Vector2<S> where S: ScalarFloa
 }
 
 
-/// A representation of three-dimensional vectors with a Euclidean metric.
+/// A representation of three-dimensional vectors in a Euclidean space.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
 pub struct Vector3<S> {
@@ -1632,11 +1632,15 @@ impl<S> Vector3<S> where S: NumCast + Copy {
 }
 
 impl<S> Vector3<S> where S: Copy {
+    /// Extend a three-dimensional vector to a four-dimensional vector 
+    /// by supplying w-component.
     #[inline]
     pub fn extend(self, w: S) -> Vector4<S> {
         Vector4::new(self.x, self.y, self.z, w)
     }
 
+    /// Truncate a three-dimensional vector to a two-dimensional vector
+    /// by removing the z-component.
     #[inline]
     pub fn truncate(self) -> Vector2<S> {
         Vector2::new(self.x, self.y)
@@ -2363,22 +2367,18 @@ impl<'a, 'b, S> Lerp<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar {
 impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     type Output = S;
 
-    /// Compute the norm (length) of a vector.
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
-    /// Compute the squared length of a vector.
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
-    /// Convert a vector into a unit vector.
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
-    /// Normalize a vector with a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
@@ -2496,7 +2496,7 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector3<S>> for Vector3<S> {
 }
 
 
-/// A representation of four-dimensional vectors with a Euclidean metric.
+/// A representation of four-dimensional vectors in a Euclidean space.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
 pub struct Vector4<S> {
@@ -2507,7 +2507,7 @@ pub struct Vector4<S> {
 }
 
 impl<S> Vector4<S> {
-    /// Construct a new vector.
+    /// Construct a new four-dimensional vector.
     pub const fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
         Vector4 { 
             x: x, 
@@ -2530,6 +2530,8 @@ impl<S> Vector4<S> {
 }
 
 impl<S> Vector4<S> where S: Copy {
+    /// Truncate a four-dimensional vector to a three-dimensional vector
+    /// by removing the w-component.
     #[inline]
     pub fn truncate(self) -> Vector3<S> {
         Vector3::new(self.x, self.y, self.z)
@@ -3282,22 +3284,18 @@ impl<'a, 'b, S> Lerp<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
 impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     type Output = S;
 
-    /// Compute the norm (length) of a vector.
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
-    /// Compute the squared length of a vector.
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
-    /// Convert a vector into a unit vector.
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
-    /// Normalize a vector with a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }

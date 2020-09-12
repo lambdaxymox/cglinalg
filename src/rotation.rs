@@ -35,56 +35,91 @@ use std::iter;
 use std::ops;
 
 
+/// A type implementing this trait represents a type that acts as a generic 
+/// rotation. A rotation is an operation that creates circular motions and 
+/// preserves at least one point. Rotations preserve the length of vectors and 
+/// therefore act as a class of rigid body transformations.
 pub trait Rotation<P> where 
     P: Euclidean,
     Self: Sized + Copy + One,
 {
     fn look_at(direction: P::Difference, up: P::Difference) -> Self;
 
+    /// Construct a rotation that rotates the shortest angular distance between two unit
+    /// vectors.
     fn between_vectors(v1: P::Difference, v2: P::Difference) -> Self;
 
+    /// Apply the rotation operation to a vector.
     fn rotate_vector(&self, vector: P::Difference) -> P::Difference;
 
+    /// Construct a rotation that rotates a vector in the opposite direction of `self`. In particular,
+    /// given a rotation operator that rotates a vector about an axis by an angle `theta`, construct 
+    /// a rotation that rotates a vector about the same axis by an angle `-theta`.
     fn inverse(&self) -> Self;
 
+    /// Construct a rotation that rotates a point in the opposite direction of `self`. In particular,
+    /// given a rotation operator that rotates an object about an axis by an angle `theta`, construct 
+    /// a rotation that rotates a point about the same axis by an angle `-theta`.
     fn rotate_point(&self, point: P) -> P { 
         P::from_vector(self.rotate_vector(point.to_vector()))
     }
 }
 
+/// A trait that implements rotation operators in two-dimensions. Two-dimensional 
+/// rotations are different than three-dimensional rotations in that mathematically 
+/// we cannot define an axis of rotation in two dimensions. Instead we have to talk 
+/// about rotating the xy-plane by an angle. In low-dimensional settings, the 
+/// notion of rotation axis is really only well-defined in three dimensions, since only in
+/// three-dimensions is every plane guaranteed to have a normal vector. If one wants to 
+/// talk about rotating a vector in the the xy-plane about a normal vector, we are implicitly 
+/// rotating about the z-axis in three-dimensions. Otherwise, avoiding cheating in that 
+/// fashion requires abolishing coordinate axes and only talking about  (hyper)planes, but 
+/// this requires different mathematics than is typically used in computer graphics.
 pub trait Rotation2<S> where 
     S: ScalarFloat,
     Self: Rotation<Point2<S>> + Into<Matrix2<S>> + Into<RotationMatrix2<S>>,
 {
-    fn from_angle<A: Into<Radians<S>>>(theta: A) -> Self;
+    /// Rotate a two-dimensional vector in the xy-plane by an angle `angle`.
+    fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self;
 }
 
+/// A trait that implements rotation operators in three dimensions.
 pub trait Rotation3<S> where 
     S: ScalarFloat,
     Self: Rotation<Point3<S>>,
     Self: Into<Matrix3<S>> + Into<RotationMatrix3<S>> + Into<Quaternion<S>>,
 {
+    /// Construct a new three-dimensional rotation about an axis `axis` by an amount `angle`.
     fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Self;
 
+    /// Construct a new three-dimensional rotation about the x-axis in the yz-plane by an amount 
+    /// `angle`.
     #[inline]
     fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_x(), angle)
     }
 
+    /// Construct a new three-dimensional rotation about the y-axis in the xz-plane by an amount 
+    /// `angle`.
     #[inline]
     fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_y(), angle)
     }
 
+    /// Construct a new three-dimensional rotation about the z-axis in the xy-plane by an amount 
+    /// `angle`.
     #[inline]
     fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_z(), angle)
     }
-
 }
 
+
+/// A rotation operator in two dimensions.
 #[derive(Copy, Clone, PartialEq)]
+#[repr(C)]
 pub struct RotationMatrix2<S> {
+    /// The underlying matrix for the rotation.
     matrix: Matrix2<S>,
 }
 
@@ -245,12 +280,17 @@ impl<S> Rotation<Point2<S>> for RotationMatrix2<S> where S: ScalarFloat {
     }
 }
 
+
+/// A rotation operator in three dimensions.
 #[derive(Copy, Clone, PartialEq)]
+#[repr(C)]
 pub struct RotationMatrix3<S> {
+    /// The underlying matrix representing the rotation.
     matrix: Matrix3<S>,
 }
 
 impl<S> RotationMatrix3<S> where S: ScalarFloat {
+    /// Construct a three-dimensional rotation matrix from a quaternion.
     #[inline]
     pub fn from_quaternion(quaternion: &Quaternion<S>) -> RotationMatrix3<S> {
         RotationMatrix3 {

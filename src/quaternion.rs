@@ -126,7 +126,7 @@ impl<S> Quaternion<S> where S: Scalar {
         Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
     }
 
-    /// Convert a quaternion to its equivalent matrix form writing the terms into preallocated storage.
+    /// Convert a quaternion to its equivalent matrix form using preallocated storage.
     pub fn to_mut_mat4(&self, m: &mut Matrix4<S>) {
         let s = self.s;
         let x = self.v.x;
@@ -155,7 +155,8 @@ impl<S> Quaternion<S> where S: Scalar {
 }
 
 impl<S> Quaternion<S> where S: ScalarFloat {
-    /// Compute a quaternion corresponding to rotating about an axis in radians.
+    /// Construct a quaternion corresponding to rotating about an axis `axis` by an
+    /// amount `angle` radians.
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
         let radians = angle.into();
         let radians_over_two = radians / (S::one() + S::one());
