@@ -1,6 +1,6 @@
 [package]
 name = "gdmath"
-version = "0.7.122"
+version = "0.7.123"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics and real-time physics."
 keywords = ["computer graphics", "game programming", "linear algebra", "quaternions"]
