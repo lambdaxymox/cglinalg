@@ -155,6 +155,8 @@ pub trait Slerp<V: Copy + Clone> {
     fn slerp(self, other: V, amount: Self::Scalar) -> Self::Output;
 }
 
+/// A trait for implementing the ability to project one vector onto the
+/// component another vector.
 pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
     type Output;
 
@@ -361,6 +363,8 @@ pub trait Angle where
     }
 }
 
+/// A trait defining operations on square matrices. A matrix is said to be
+/// square if the number of rows and the number of columns are are the same.
 pub trait SquareMatrix where
     Self: One,
     Self: Matrix<
@@ -448,8 +452,12 @@ pub trait InvertibleSquareMatrix where
     }
 }
 
+/// A type implementing this trait indicates that its elements
+/// constitute a Euclidean vector space.
 pub trait Euclidean: Copy + Clone {
+    /// The underlying scalars of the points in the Euclidean space.
     type Scalar: Scalar;
+    /// The type of displacements between points in a Euclidean space.
     type Difference;
 
     /// Compute the origin of the Euclidean vector space.
