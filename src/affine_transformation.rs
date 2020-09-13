@@ -22,37 +22,55 @@ use structure::{
 use std::fmt;
 
 
+/// A trait for implementing two-dimensional affine transformations.
 pub trait AffineTransformation2D<V> where Self: Sized {
+    /// The result of applying an affine transformation. This allows use to handle vectors, points,
+    /// and pointers to them interchangeably.
     type Applied;
 
+    /// The identity transformation for this type.
     fn identity() -> Self;
 
+    /// Compute the inverse of an affine transformation.
     fn inverse(&self) -> Option<Self>;
 
+    /// Apply the affine transformation to the input.
     fn apply(&self, point: V) -> Self::Applied;
 
+    /// Apply the inverse of the affine transformation to the input.
     fn apply_inverse(&self, point: V) -> Option<Self::Applied>;
 }
 
+/// A trait for implementing three-dimensional affine transformations.
 pub trait AffineTransformation3D<V> where Self: Sized {
+    /// The result of applying an affine transformation. This allows use to handle vectors, points,
+    /// and pointers to them interchangeably.
     type Applied;
 
+    /// The identity transformation for this type.
     fn identity() -> Self;
     
+    /// Compute the inverse of an affine transformation.
     fn inverse(&self) -> Option<Self>;
     
+    /// Apply the affine transformation to the input.
     fn apply(&self, point: V) -> Self::Applied;
     
+    /// Apply the inverse of the affine transformation to the input.
     fn apply_inverse(&self, point: V) -> Option<Self::Applied>;
 }
 
+
+/// The identity affine transformation in two dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Identity2D<S> {
+    /// The matrix representing the affine transformation.
     matrix: Matrix3<S>,
 }
 
 impl<S> Identity2D<S> where S: Scalar {
+    /// Construct a new identity transformation.
     #[inline]
     pub fn identity() -> Identity2D<S> {
         Identity2D {
@@ -183,13 +201,16 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Identity2D<S> where S: Scalar {
 }
 
 
+/// The identity transformation in three dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Identity3D<S> {
+    /// The matrix representing the affine transformation.
     matrix: Matrix4<S>,
 }
 
 impl<S> Identity3D<S> where S: Scalar {
+    /// Construct a new identity transformation.
     #[inline]
     pub fn identity() -> Identity3D<S> {
         Identity3D {
@@ -320,13 +341,16 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Identity3D<S> where S: Scalar {
 }
 
 
+/// The scale transformation in two dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Scale2D<S> {
+    /// The matrix representing the affine transformation.
     matrix: Matrix3<S>,
 }
 
 impl<S> Scale2D<S> where S: Scalar {
+    /// Construct a scale transformation from a vector of scale factors.
     #[inline]
     pub fn from_vector(scale: Vector2<S>) -> Scale2D<S> {
         Scale2D {
@@ -334,6 +358,7 @@ impl<S> Scale2D<S> where S: Scalar {
         }
     }
 
+    /// Construct a scale transformation from a nonuniform scale across coordinates.
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2D<S> {
         Scale2D {
@@ -341,6 +366,7 @@ impl<S> Scale2D<S> where S: Scalar {
         }
     }
 
+    /// Construct a scale transformation from a uniform scale factor.
     #[inline]
     pub fn from_scale(scale: S) -> Scale2D<S> {
         Scale2D {
@@ -475,19 +501,23 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Scale2D<S> where S: Scalar {
 }
 
 
+/// The scale transformation in three dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Scale3D<S> {
+    /// The matrix representing the affine transformation.
     matrix: Matrix4<S>,
 }
 
 impl<S> Scale3D<S> where S: Scalar {
+    /// Construct a scale transformation from a vector of scale factors.
     pub fn from_vector(scale: Vector3<S>) -> Scale3D<S> {
         Scale3D {
             matrix: Matrix4::from_nonuniform_scale(scale.x, scale.y, scale.z),
         }
     }
 
+    /// Construct a scale transformation from a nonuniform scale across coordinates.
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Scale3D<S> {
         Scale3D {
@@ -495,6 +525,7 @@ impl<S> Scale3D<S> where S: Scalar {
         }
     }
 
+    /// Construct a scale transformation from a uniform scale factor.
     #[inline]
     pub fn from_scale(scale: S) -> Scale3D<S> {
         Scale3D {
@@ -645,14 +676,18 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Scale3D<S> where S: Scalar {
 }
 
 
+/// A reflection transformation about a plane in two dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Reflection2D<S> {
+    /// The normal vector to the plane.
     normal: Vector2<S>,
+    /// The matrix representing the affine transformation.
     matrix: Matrix3<S>,
 }
 
 impl<S> Reflection2D<S> where S: ScalarFloat {
+    /// Construct a new reflection transformation from the vector normal to the plane of reflection.
     pub fn from_normal(normal: Vector2<S>) -> Reflection2D<S> {
         let zero = S::zero();
         let one = S::one();
@@ -862,14 +897,18 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Reflection2D<S> where S: ScalarF
 }
 
 
+/// A reflection transformation about a plane in three dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Reflection3D<S> {
+    /// The normal vector to the plane.
     normal: Vector3<S>,
+    /// The matrix representing the affine transformation.
     matrix: Matrix4<S>,
 }
 
 impl<S> Reflection3D<S> where S: ScalarFloat {
+    /// Construct a new reflection transformation from the vector normal to the plane of reflection.
     pub fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
         let zero = S::zero();
         let one = S::one();
@@ -1084,9 +1123,11 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Reflection3D<S> where S: ScalarF
 }
 
 
+/// A translation transformation in two dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Translation2D<S> {
+    /// The matrix representing the affine transformation.
     matrix: Matrix3<S>,
 }
 
@@ -1270,9 +1311,11 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Translation2D<S> where S: Scalar
 }
 
 
+/// A translation transformation in three dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Translation3D<S> {
+    /// The matrix representing the affine transformation.
     matrix: Matrix4<S>,
 }
 
@@ -1458,13 +1501,17 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Translation3D<S> where S: Scalar
     }
 }
 
+
+/// A shearing transformation in two dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Shear2D<S> {
+    /// The matrix representing the affine transformation.
     matrix: Matrix3<S>,
 }
 
 impl<S> Shear2D<S> where S: Scalar {
+    /// Construct a shearing transformation from a vector of shearing factors.
     #[inline]
     pub fn from_vector(shear: Vector2<S>) -> Shear2D<S> {
         Shear2D {
@@ -1476,17 +1523,25 @@ impl<S> Shear2D<S> where S: Scalar {
         }
     }
 
+    /// Construct a shearing transformation along the x-axis.
+    ///
+    /// The parameter `shear_x_with_y` denotes the factor scaling the
+    /// contribution of the y-dimension to shearing along the x-dimension.
     #[inline]
-    pub fn from_shear_x(shear_y: S) -> Shear2D<S> {
+    pub fn from_shear_x(shear_x_with_y: S) -> Shear2D<S> {
         Shear2D {
-            matrix: Matrix3::from_shear_x(shear_y, S::zero()),
+            matrix: Matrix3::from_shear_x(shear_x_with_y, S::zero()),
         }
     }
 
+    /// Construct a shearing transformation along the y-axis.
+    ///
+    /// The parameter `shear_x_with_y` denotes the factor scaling the
+    /// contribution of the x-dimension to shearing along the y-dimension.
     #[inline]
-    pub fn from_shear_y(shear_x: S) -> Shear2D<S> {
+    pub fn from_shear_y(shear_y_with_x: S) -> Shear2D<S> {
         Shear2D {
-            matrix: Matrix3::from_shear_y(shear_x, S::zero()),
+            matrix: Matrix3::from_shear_y(shear_y_with_x, S::zero()),
         }
     }
 }
@@ -1673,31 +1728,48 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Shear2D<S> where S: ScalarFloat 
 }
 
 
+/// A shearing transformation in three dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Shear3D<S> {
+    /// The matrix representing the affine transformation.
     matrix: Matrix4<S>,
 }
 
 impl<S> Shear3D<S> where S: Scalar {
+    /// Construct a shearing transformation along the x-axis.
+    ///
+    /// The parameters `shear_x_with_y` and `shear_x_with_z` denote the multiplicative
+    /// factors for the contributions from the y-axis and the z-axis respectively for the
+    /// shearing along the x-axis.
     #[inline]
-    pub fn from_shear_x(shear_y: S, shear_z: S) -> Shear3D<S> {
+    pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Shear3D<S> {
         Shear3D {
-            matrix: Matrix4::from_shear_x(shear_y, shear_z),
+            matrix: Matrix4::from_shear_x(shear_x_with_y, shear_x_with_z),
         }
     }
 
+    /// Construct a shearing transformation along the y-axis.
+    ///
+    /// The parameters `shear_y_with_x` and `shear_y_with_z` denote the multiplicative
+    /// factors for the contributions from the x-axis and the z-axis respectively for the
+    /// shearing along the y-axis.
     #[inline]
-    pub fn from_shear_y(shear_x: S, shear_z: S) -> Shear3D<S> {
+    pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Shear3D<S> {
         Shear3D {
-            matrix: Matrix4::from_shear_y(shear_x, shear_z),
+            matrix: Matrix4::from_shear_y(shear_y_with_x, shear_y_with_z),
         }
     }
 
+    /// Construct a shearing transformation along the z-axis.
+    ///
+    /// The parameters `shear_z_with_x` and `shear_z_with_y` denote the multiplicative
+    /// factors for the contributions from the x-axis and the y-axis respectively for the
+    /// shearing along the z-axis.
     #[inline]
-    pub fn from_shear_z(shear_x: S, shear_y: S) -> Shear3D<S> {
+    pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Shear3D<S> {
         Shear3D {
-            matrix: Matrix4::from_shear_z(shear_x, shear_y),
+            matrix: Matrix4::from_shear_z(shear_z_with_x, shear_z_with_y),
         }
     }
 }

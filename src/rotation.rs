@@ -1,4 +1,4 @@
-use crate::approx::{
+use approx::{
     ulps_eq,
 };
 use angle::{
