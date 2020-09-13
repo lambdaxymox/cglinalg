@@ -17,6 +17,7 @@ mod identity;
 mod reflection;
 mod rotation;
 mod scale;
+mod translation;
 
 
 pub use prelude::*;
@@ -34,4 +35,5 @@ pub use identity::*;
 pub use reflection::*;
 pub use rotation::*;
 pub use scale::*;
+pub use translation::*;
 
