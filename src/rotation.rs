@@ -30,6 +30,8 @@ use vector::{
     Vector3,
 };
 use quaternion::Quaternion;
+use affine::*;
+
 use std::fmt;
 use std::iter;
 use std::ops;
@@ -43,6 +45,7 @@ pub trait Rotation<P> where
     P: Euclidean,
     Self: Sized + Copy + One,
 {
+    /// Point a vector at the point `direction`.
     fn look_at(direction: P::Difference, up: P::Difference) -> Self;
 
     /// Construct a rotation that rotates the shortest angular distance between two unit
@@ -77,7 +80,7 @@ pub trait Rotation<P> where
 /// this requires different mathematics than is typically used in computer graphics.
 pub trait Rotation2<S> where 
     S: ScalarFloat,
-    Self: Rotation<Point2<S>> + Into<Matrix2<S>> + Into<RotationMatrix2<S>>,
+    Self: Rotation<Point2<S>> + Into<Matrix2<S>> + Into<Rotation2D<S>>,
 {
     /// Rotate a two-dimensional vector in the xy-plane by an angle `angle`.
     fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self;
@@ -87,7 +90,7 @@ pub trait Rotation2<S> where
 pub trait Rotation3<S> where 
     S: ScalarFloat,
     Self: Rotation<Point3<S>>,
-    Self: Into<Matrix3<S>> + Into<RotationMatrix3<S>> + Into<Quaternion<S>>,
+    Self: Into<Matrix3<S>> + Into<Rotation3D<S>> + Into<Quaternion<S>>,
 {
     /// Construct a new three-dimensional rotation about an axis `axis` by an amount `angle`.
     fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Self;
@@ -118,97 +121,114 @@ pub trait Rotation3<S> where
 /// A rotation operator in two dimensions.
 #[derive(Copy, Clone, PartialEq)]
 #[repr(C)]
-pub struct RotationMatrix2<S> {
+pub struct Rotation2D<S> {
+    /// The angle of rotation.
+    angle: Radians<S>,
     /// The underlying matrix for the rotation.
     matrix: Matrix2<S>,
 }
 
-impl<S> fmt::Debug for RotationMatrix2<S> where S: fmt::Debug {
+impl<S> fmt::Debug for Rotation2D<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "RotationMatrix2 ")?;
+        write!(f, "Rotation2D ")?;
         <[S; 4] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
 
-impl<S> fmt::Display for RotationMatrix2<S> where S: fmt::Debug {
+impl<S> fmt::Display for Rotation2D<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "RotationMatrix2 ")?;
+        write!(f, "Rotation2D ")?;
         <[S; 4] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
 
-impl<S> From<RotationMatrix2<S>> for Matrix2<S> where S: Copy {
+impl<S> From<Rotation2D<S>> for Matrix2<S> where S: Copy {
     #[inline]
-    fn from(rotation: RotationMatrix2<S>) -> Matrix2<S> {
+    fn from(rotation: Rotation2D<S>) -> Matrix2<S> {
         rotation.matrix
     }
 }
 
-impl<S> AsRef<Matrix2<S>> for RotationMatrix2<S> {
+impl<S> AsRef<Matrix2<S>> for Rotation2D<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix2<S> {
         &self.matrix
     }
 }
 
-impl<S> ops::Mul<RotationMatrix2<S>> for RotationMatrix2<S> where S: Scalar {
-    type Output = RotationMatrix2<S>;
+impl<S> ops::Mul<Rotation2D<S>> for Rotation2D<S> where S: Scalar {
+    type Output = Rotation2D<S>;
     
     #[inline]
-    fn mul(self, other: RotationMatrix2<S>) -> Self::Output {
-        RotationMatrix2 { matrix: self.matrix * other.matrix }
+    fn mul(self, other: Rotation2D<S>) -> Self::Output {
+        Rotation2D { 
+            angle: self.angle + other.angle,
+            matrix: self.matrix * other.matrix, 
+        }
     }
 }
 
-impl<S> ops::Mul<RotationMatrix2<S>> for &RotationMatrix2<S> where S: Scalar {
-    type Output = RotationMatrix2<S>;
+impl<S> ops::Mul<Rotation2D<S>> for &Rotation2D<S> where S: Scalar {
+    type Output = Rotation2D<S>;
     
     #[inline]
-    fn mul(self, other: RotationMatrix2<S>) -> Self::Output {
-        RotationMatrix2 { matrix: self.matrix * other.matrix }
+    fn mul(self, other: Rotation2D<S>) -> Self::Output {
+        Rotation2D {
+            angle: self.angle + self.angle,
+            matrix: self.matrix * other.matrix,
+        }
     }
 }
 
-impl<S> ops::Mul<&RotationMatrix2<S>> for RotationMatrix2<S> where S: Scalar {
-    type Output = RotationMatrix2<S>;
+impl<S> ops::Mul<&Rotation2D<S>> for Rotation2D<S> where S: Scalar {
+    type Output = Rotation2D<S>;
     
     #[inline]
-    fn mul(self, other: &RotationMatrix2<S>) -> Self::Output {
-        RotationMatrix2 { matrix: self.matrix * other.matrix }
+    fn mul(self, other: &Rotation2D<S>) -> Self::Output {
+        Rotation2D {
+            angle: self.angle + self.angle,
+            matrix: self.matrix * other.matrix,
+        }
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a RotationMatrix2<S>> for &'b RotationMatrix2<S> where S: Scalar {
-    type Output = RotationMatrix2<S>;
+impl<'a, 'b, S> ops::Mul<&'a Rotation2D<S>> for &'b Rotation2D<S> where S: Scalar {
+    type Output = Rotation2D<S>;
     
     #[inline]
-    fn mul(self, other: &'a RotationMatrix2<S>) -> Self::Output {
-        RotationMatrix2 { matrix: self.matrix * other.matrix }
+    fn mul(self, other: &'a Rotation2D<S>) -> Self::Output {
+        Rotation2D {
+            angle: self.angle + self.angle,
+            matrix: self.matrix * other.matrix,
+        }
     }
 }
 
-impl<S> One for RotationMatrix2<S> where S: Scalar {
+impl<S> One for Rotation2D<S> where S: Scalar {
     #[inline]
-    fn one() -> RotationMatrix2<S> {
-        RotationMatrix2 { matrix: Matrix2::one() }
+    fn one() -> Rotation2D<S> {
+        Rotation2D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix2::one(),
+        }
     }
 }
 
-impl<S> iter::Product<RotationMatrix2<S>> for RotationMatrix2<S> where S: Scalar {
+impl<S> iter::Product<Rotation2D<S>> for Rotation2D<S> where S: Scalar {
     #[inline]
-    fn product<I: Iterator<Item = RotationMatrix2<S>>>(iter: I) -> RotationMatrix2<S> {
-        iter.fold(RotationMatrix2::one(), ops::Mul::mul)
+    fn product<I: Iterator<Item = Rotation2D<S>>>(iter: I) -> Rotation2D<S> {
+        iter.fold(Rotation2D::one(), ops::Mul::mul)
     }
 }
 
-impl<'a, S> iter::Product<&'a RotationMatrix2<S>> for RotationMatrix2<S> where S: 'a + Scalar {
+impl<'a, S> iter::Product<&'a Rotation2D<S>> for Rotation2D<S> where S: 'a + Scalar {
     #[inline]
-    fn product<I: Iterator<Item = &'a RotationMatrix2<S>>>(iter: I) -> RotationMatrix2<S> {
-        iter.fold(RotationMatrix2::one(), ops::Mul::mul)
+    fn product<I: Iterator<Item = &'a Rotation2D<S>>>(iter: I) -> Rotation2D<S> {
+        iter.fold(Rotation2D::one(), ops::Mul::mul)
     }
 }
 
-impl<S> approx::AbsDiffEq for RotationMatrix2<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Rotation2D<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -222,7 +242,7 @@ impl<S> approx::AbsDiffEq for RotationMatrix2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for RotationMatrix2<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Rotation2D<S> where S: ScalarFloat {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -234,7 +254,7 @@ impl<S> approx::RelativeEq for RotationMatrix2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for RotationMatrix2<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Rotation2D<S> where S: ScalarFloat {
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -246,24 +266,29 @@ impl<S> approx::UlpsEq for RotationMatrix2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Rotation2<S> for RotationMatrix2<S> where S: ScalarFloat {
-    fn from_angle<A: Into<Radians<S>>>(angle: A) -> RotationMatrix2<S> {
-        RotationMatrix2 {
-            matrix: Matrix2::from_angle(angle),
+impl<S> Rotation2<S> for Rotation2D<S> where S: ScalarFloat {
+    fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2D<S> {
+        let radians = angle.into();
+        Rotation2D {
+            angle: radians,
+            matrix: Matrix2::from_angle(radians),
         }
     }
 }
 
-impl<S> Rotation<Point2<S>> for RotationMatrix2<S> where S: ScalarFloat { 
+impl<S> Rotation<Point2<S>> for Rotation2D<S> where S: ScalarFloat { 
     #[inline]
-    fn look_at(dir: Vector2<S>, up: Vector2<S>) -> RotationMatrix2<S> {
-        RotationMatrix2 {
-            matrix: Matrix2::look_at(dir, up),
+    fn look_at(dir: Vector2<S>, up: Vector2<S>) -> Rotation2D<S> {
+        let matrix = Matrix2::look_at(dir, up);
+        let angle = Radians::acos(matrix.c0r0);
+        Rotation2D {
+            angle: angle,
+            matrix: matrix,
         }
     }
 
     #[inline]
-    fn between_vectors(a: Vector2<S>, b: Vector2<S>) -> RotationMatrix2<S> {
+    fn between_vectors(a: Vector2<S>, b: Vector2<S>) -> Rotation2D<S> {
         Rotation2::from_angle(Radians::acos(DotProduct::dot(a, b)))
     }
 
@@ -273,132 +298,157 @@ impl<S> Rotation<Point2<S>> for RotationMatrix2<S> where S: ScalarFloat {
     }
 
     #[inline]
-    fn inverse(&self) -> RotationMatrix2<S> {
-        RotationMatrix2 {
+    fn inverse(&self) -> Rotation2D<S> {
+        Rotation2D {
+            angle: -self.angle,
             matrix: self.matrix.inverse().unwrap(),
         }
     }
 }
 
 
+
+
 /// A rotation operator in three dimensions.
 #[derive(Copy, Clone, PartialEq)]
 #[repr(C)]
-pub struct RotationMatrix3<S> {
+pub struct Rotation3D<S> {
+    /// The angle of rotation.
+    angle: Radians<S>,
     /// The underlying matrix representing the rotation.
     matrix: Matrix3<S>,
 }
 
-impl<S> RotationMatrix3<S> where S: ScalarFloat {
+impl<S> Rotation3D<S> where S: ScalarFloat {
     /// Construct a three-dimensional rotation matrix from a quaternion.
     #[inline]
-    pub fn from_quaternion(quaternion: &Quaternion<S>) -> RotationMatrix3<S> {
-        RotationMatrix3 {
+    pub fn from_quaternion(quaternion: &Quaternion<S>) -> Rotation3D<S> {
+        let quaternion_normalized = quaternion.normalize();
+        let two = S::one() + S::one();
+        let angle = Radians::acos(quaternion_normalized.s) * two;
+
+        Rotation3D {
+            angle: angle,
             matrix: Matrix3::from(quaternion),
         }
     }
 }
 
-impl<S> fmt::Debug for RotationMatrix3<S> where S: fmt::Debug {
+impl<S> fmt::Debug for Rotation3D<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "RotationMatrix3 ")?;
+        write!(f, "Rotation3D ")?;
         <[S; 9] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
 
-impl<S> fmt::Display for RotationMatrix3<S> where S: fmt::Debug {
+impl<S> fmt::Display for Rotation3D<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "RotationMatrix3 ")?;
+        write!(f, "Rotation3D ")?;
         <[S; 9] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
 
-impl<S> From<RotationMatrix3<S>> for Matrix3<S> where S: Copy {
+impl<S> From<Rotation3D<S>> for Matrix3<S> where S: Copy {
     #[inline]
-    fn from(rotation: RotationMatrix3<S>) -> Matrix3<S> {
+    fn from(rotation: Rotation3D<S>) -> Matrix3<S> {
         rotation.matrix
     }
 }
 
-impl<S> From<Quaternion<S>> for RotationMatrix3<S> where S: ScalarFloat {
+impl<S> From<Quaternion<S>> for Rotation3D<S> where S: ScalarFloat {
     #[inline]
-    fn from(quaternion: Quaternion<S>) -> RotationMatrix3<S> {
-        RotationMatrix3::from_quaternion(&quaternion)
+    fn from(quaternion: Quaternion<S>) -> Rotation3D<S> {
+        Rotation3D::from_quaternion(&quaternion)
     }
 }
 
-impl<S> From<RotationMatrix3<S>> for Quaternion<S> where S: ScalarFloat {
+impl<S> From<Rotation3D<S>> for Quaternion<S> where S: ScalarFloat {
     #[inline]
-    fn from(rotation: RotationMatrix3<S>) -> Quaternion<S> {
+    fn from(rotation: Rotation3D<S>) -> Quaternion<S> {
         Quaternion::from(&rotation.matrix)
     }
 }
 
-impl<S> AsRef<Matrix3<S>> for RotationMatrix3<S> {
+impl<S> AsRef<Matrix3<S>> for Rotation3D<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix3<S> {
         &self.matrix
     }
 }
 
-impl<S> ops::Mul<RotationMatrix3<S>> for RotationMatrix3<S> where S: Scalar {
-    type Output = RotationMatrix3<S>;
+impl<S> ops::Mul<Rotation3D<S>> for Rotation3D<S> where S: Scalar {
+    type Output = Rotation3D<S>;
     
     #[inline]
-    fn mul(self, other: RotationMatrix3<S>) -> Self::Output {
-        RotationMatrix3 { matrix: self.matrix * other.matrix }
+    fn mul(self, other: Rotation3D<S>) -> Self::Output {
+        Rotation3D {
+            angle: self.angle + other.angle,
+            matrix: self.matrix * other.matrix,
+        }
     }
 }
 
-impl<S> ops::Mul<RotationMatrix3<S>> for &RotationMatrix3<S> where S: Scalar {
-    type Output = RotationMatrix3<S>;
+impl<S> ops::Mul<Rotation3D<S>> for &Rotation3D<S> where S: Scalar {
+    type Output = Rotation3D<S>;
     
     #[inline]
-    fn mul(self, other: RotationMatrix3<S>) -> Self::Output {
-        RotationMatrix3 { matrix: self.matrix * other.matrix }
+    fn mul(self, other: Rotation3D<S>) -> Self::Output {
+        Rotation3D { 
+            angle: self.angle + other.angle,
+            matrix: self.matrix * other.matrix,
+        }
     }
 }
 
-impl<S> ops::Mul<&RotationMatrix3<S>> for RotationMatrix3<S> where S: Scalar {
-    type Output = RotationMatrix3<S>;
+impl<S> ops::Mul<&Rotation3D<S>> for Rotation3D<S> where S: Scalar {
+    type Output = Rotation3D<S>;
     
     #[inline]
-    fn mul(self, other: &RotationMatrix3<S>) -> Self::Output {
-        RotationMatrix3 { matrix: self.matrix * other.matrix }
+    fn mul(self, other: &Rotation3D<S>) -> Self::Output {
+        Rotation3D {
+            angle: self.angle + other.angle, 
+            matrix: self.matrix * other.matrix,
+        }
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a RotationMatrix3<S>> for &'b RotationMatrix3<S> where S: Scalar {
-    type Output = RotationMatrix3<S>;
+impl<'a, 'b, S> ops::Mul<&'a Rotation3D<S>> for &'b Rotation3D<S> where S: Scalar {
+    type Output = Rotation3D<S>;
     
     #[inline]
-    fn mul(self, other: &'a RotationMatrix3<S>) -> Self::Output {
-        RotationMatrix3 { matrix: self.matrix * other.matrix }
+    fn mul(self, other: &'a Rotation3D<S>) -> Self::Output {
+        Rotation3D {
+            angle: self.angle + other.angle, 
+            matrix: self.matrix * other.matrix, 
+        }
     }
 }
 
-impl<S> One for RotationMatrix3<S> where S: Scalar {
+impl<S> One for Rotation3D<S> where S: Scalar {
     #[inline]
-    fn one() -> RotationMatrix3<S> {
-        RotationMatrix3 { matrix: Matrix3::one() }
+    fn one() -> Rotation3D<S> {
+        Rotation3D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix3::one(),
+        }
     }
 }
 
-impl<S> iter::Product<RotationMatrix3<S>> for RotationMatrix3<S> where S: Scalar {
+impl<S> iter::Product<Rotation3D<S>> for Rotation3D<S> where S: Scalar {
     #[inline]
-    fn product<I: Iterator<Item = RotationMatrix3<S>>>(iter: I) -> RotationMatrix3<S> {
-        iter.fold(RotationMatrix3::one(), ops::Mul::mul)
+    fn product<I: Iterator<Item = Rotation3D<S>>>(iter: I) -> Rotation3D<S> {
+        iter.fold(Rotation3D::one(), ops::Mul::mul)
     }
 }
 
-impl<'a, S> iter::Product<&'a RotationMatrix3<S>> for RotationMatrix3<S> where S: 'a + Scalar {
+impl<'a, S> iter::Product<&'a Rotation3D<S>> for Rotation3D<S> where S: 'a + Scalar {
     #[inline]
-    fn product<I: Iterator<Item = &'a RotationMatrix3<S>>>(iter: I) -> RotationMatrix3<S> {
-        iter.fold(RotationMatrix3::one(), ops::Mul::mul)
+    fn product<I: Iterator<Item = &'a Rotation3D<S>>>(iter: I) -> Rotation3D<S> {
+        iter.fold(Rotation3D::one(), ops::Mul::mul)
     }
 }
 
-impl<S> approx::AbsDiffEq for RotationMatrix3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Rotation3D<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -412,7 +462,7 @@ impl<S> approx::AbsDiffEq for RotationMatrix3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for RotationMatrix3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Rotation3D<S> where S: ScalarFloat {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -424,7 +474,7 @@ impl<S> approx::RelativeEq for RotationMatrix3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for RotationMatrix3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Rotation3D<S> where S: ScalarFloat {
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -478,10 +528,13 @@ impl<S> Rotation<Point3<S>> for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Rotation3<S> for RotationMatrix3<S> where S: ScalarFloat {
-    fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> RotationMatrix3<S> {
-        RotationMatrix3 {
-            matrix: Matrix3::from_axis_angle(axis, angle),
+impl<S> Rotation3<S> for Rotation3D<S> where S: ScalarFloat {
+    fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Rotation3D<S> {
+        let radians = angle.into();
+        
+        Rotation3D {
+            angle: radians,
+            matrix: Matrix3::from_axis_angle(axis, radians),
         }
     }
 }
@@ -494,16 +547,22 @@ impl<S> Rotation3<S> for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Rotation<Point3<S>> for RotationMatrix3<S> where S: ScalarFloat { 
+impl<S> Rotation<Point3<S>> for Rotation3D<S> where S: ScalarFloat { 
     #[inline]
-    fn look_at(dir: Vector3<S>, up: Vector3<S>) -> RotationMatrix3<S> {
-        RotationMatrix3 {
-            matrix: Matrix3::look_at(dir, up),
+    fn look_at(dir: Vector3<S>, up: Vector3<S>) -> Rotation3D<S> {
+        let matrix = Matrix3::look_at(dir, up);
+        let quaternion = Quaternion::from(&matrix);
+        let two = S::one() + S::one();
+        let angle = Radians::acos(quaternion.s) * two;
+    
+        Rotation3D {
+            angle: angle,
+            matrix: matrix,
         }
     }
 
     #[inline]
-    fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> RotationMatrix3<S> {
+    fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> Rotation3D<S> {
         let q: Quaternion<S> = Rotation::between_vectors(v1, v2);
         q.into()
     }
@@ -514,8 +573,9 @@ impl<S> Rotation<Point3<S>> for RotationMatrix3<S> where S: ScalarFloat {
     }
 
     #[inline]
-    fn inverse(&self) -> RotationMatrix3<S> {
-        RotationMatrix3 {
+    fn inverse(&self) -> Rotation3D<S> {
+        Rotation3D {
+            angle: -self.angle,
             matrix: self.matrix.inverse().unwrap(),
         }
     }
