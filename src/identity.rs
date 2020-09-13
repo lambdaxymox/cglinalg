@@ -17,6 +17,7 @@ use structure::{
     One,
 };
 use affine::*;
+
 use std::fmt;
 
 

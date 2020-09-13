@@ -19,6 +19,7 @@ use structure::{
     One,
     Zero,
 };
+
 use std::fmt;
 
 

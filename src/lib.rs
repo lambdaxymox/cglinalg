@@ -14,6 +14,7 @@ mod structure;
 
 mod affine;
 mod identity;
+mod reflection;
 mod rotation;
 mod scale;
 
@@ -30,6 +31,7 @@ pub use point::*;
 
 pub use affine::*;
 pub use identity::*;
+pub use reflection::*;
 pub use rotation::*;
 pub use scale::*;
 

@@ -14,6 +14,7 @@ use point::{
     Point3,
 };
 use affine::*;
+
 use std::fmt;
 
 
