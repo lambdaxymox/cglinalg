@@ -58,6 +58,11 @@ macro_rules! impl_mul_operator {
 }
 
 
+/// A quaternion is a generalization of vectors in three dimensions that 
+/// enables one to perform rotations without gimble lock. They are a
+/// three-dimensional analogue of complex numbers. In geometric algebra terms,
+/// a complex number is a scalar + bivector form whereas a quaternion is like
+/// a scalar + vector form.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Quaternion<S> {
@@ -68,13 +73,14 @@ pub struct Quaternion<S> {
 }
 
 impl<S> Quaternion<S> {
-    /// Construct a new quaternion.
+    /// Construct a new quaternion from its scalar component and its three
+    /// vector components.
     #[inline]
-    pub fn new(s: S, x: S, y: S, z: S) -> Quaternion<S> {
-        Self::from_sv(s, Vector3::new(x, y, z))
+    pub fn new(s: S, xi: S, yj: S, zk: S) -> Quaternion<S> {
+        Self::from_sv(s, Vector3::new(xi, yj, zk))
     }
 
-    /// Compute a quaternion from its scalar and vector parts.
+    /// Construct a quaternion from its scalar and vector parts.
     #[inline]
     pub fn from_sv(s: S, v: Vector3<S>) -> Quaternion<S> {
         Quaternion { s: s, v: v }
@@ -127,7 +133,7 @@ impl<S> Quaternion<S> where S: Scalar {
     }
 
     /// Convert a quaternion to its equivalent matrix form using preallocated storage.
-    pub fn to_mut_mat4(&self, m: &mut Matrix4<S>) {
+    pub fn to_mut_mat4(&self, matrix: &mut Matrix4<S>) {
         let s = self.s;
         let x = self.v.x;
         let y = self.v.y;
@@ -135,33 +141,34 @@ impl<S> Quaternion<S> where S: Scalar {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
-        m.c0r0 = one - two * y * y - two * z * z;
-        m.c0r1 = two * x * y + two * s * z;
-        m.c0r2 = two * x * z - two * s * y;
-        m.c0r3 = zero;
-        m.c1r0 = two * x * y - two * s * z;
-        m.c1r1 = one - two * x * x - two * z * z;
-        m.c1r2 = two * y * z + two * s * x;
-        m.c1r3 = zero;
-        m.c2r0 = two * x * z + two * s * y;
-        m.c2r1 = two * y * z - two * s * x;
-        m.c2r2 = one - two * x * x - two * y * y;
-        m.c2r3 = zero;
-        m.c3r0 = zero;
-        m.c3r1 = zero;
-        m.c3r2 = zero;
-        m.c3r3 = one;
+        matrix.c0r0 = one - two * y * y - two * z * z;
+        matrix.c0r1 = two * x * y + two * s * z;
+        matrix.c0r2 = two * x * z - two * s * y;
+        matrix.c0r3 = zero;
+        matrix.c1r0 = two * x * y - two * s * z;
+        matrix.c1r1 = one - two * x * x - two * z * z;
+        matrix.c1r2 = two * y * z + two * s * x;
+        matrix.c1r3 = zero;
+        matrix.c2r0 = two * x * z + two * s * y;
+        matrix.c2r1 = two * y * z - two * s * x;
+        matrix.c2r2 = one - two * x * x - two * y * y;
+        matrix.c2r3 = zero;
+        matrix.c3r0 = zero;
+        matrix.c3r1 = zero;
+        matrix.c3r2 = zero;
+        matrix.c3r3 = one;
     }
 }
 
 impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion corresponding to rotating about an axis `axis` by an
     /// amount `angle` radians.
+    #[rustfmt::skip]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
         let radians = angle.into();
         let radians_over_two = radians / (S::one() + S::one());
         Quaternion::new(
-            Radians::cos(radians_over_two),
+             Radians::cos(radians_over_two),
             Radians::sin(radians_over_two) * axis.x,
             Radians::sin(radians_over_two) * axis.y,
             Radians::sin(radians_over_two) * axis.z,
@@ -387,6 +394,7 @@ impl<S> Product for Quaternion<S> where S: Scalar {
 }
 
 impl<S> From<Quaternion<S>> for Matrix3<S> where S: Scalar {
+    #[rustfmt::skip]
     fn from(quat: Quaternion<S>) -> Matrix3<S> {
         let s = quat.s;
         let x = quat.v.x;
@@ -404,6 +412,7 @@ impl<S> From<Quaternion<S>> for Matrix3<S> where S: Scalar {
 }
 
 impl<S> From<&Quaternion<S>> for Matrix3<S> where S: Scalar {
+    #[rustfmt::skip]
     fn from(quat: &Quaternion<S>) -> Matrix3<S> {
         let s = quat.s;
         let x = quat.v.x;
@@ -421,6 +430,7 @@ impl<S> From<&Quaternion<S>> for Matrix3<S> where S: Scalar {
 }
 
 impl<S> From<Quaternion<S>> for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
     fn from(quat: Quaternion<S>) -> Matrix4<S> {
         let s = quat.s;
         let x = quat.v.x;
@@ -756,6 +766,7 @@ impl<S> ops::Mul<S> for Quaternion<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: S) -> Quaternion<S> {
         Quaternion::new(
@@ -768,6 +779,7 @@ impl<S> ops::Mul<S> for &Quaternion<S> where S: Scalar {
 impl<'a, S> ops::Mul<Quaternion<S>> for Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Quaternion<S>) -> Self::Output {
         Quaternion::new(
@@ -782,6 +794,7 @@ impl<'a, S> ops::Mul<Quaternion<S>> for Quaternion<S> where S: Scalar {
 impl<'a, S> ops::Mul<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'a Quaternion<S>) -> Self::Output {
         Quaternion::new(
@@ -796,6 +809,7 @@ impl<'a, S> ops::Mul<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
 impl<'a, S> ops::Mul<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Quaternion<S>) -> Self::Output {
         Quaternion::new(
@@ -810,6 +824,7 @@ impl<'a, S> ops::Mul<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
 impl<'a, 'b, S> ops::Mul<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'a Quaternion<S>) -> Self::Output {
         Quaternion::new(
@@ -840,6 +855,7 @@ impl_mul_operator!(f64,   Quaternion<f64>,   Quaternion<f64>,   { s, { x, y, z }
 impl<S> ops::Div<S> for Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn div(self, other: S) -> Quaternion<S> {
         Quaternion::new(
@@ -852,6 +868,7 @@ impl<S> ops::Div<S> for Quaternion<S> where S: Scalar {
 impl<'a, S> ops::Div<S> for &'a Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn div(self, other: S) -> Quaternion<S> {
         Quaternion::new(
@@ -864,6 +881,7 @@ impl<'a, S> ops::Div<S> for &'a Quaternion<S> where S: Scalar {
 impl<S> ops::Rem<S> for Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn rem(self, other: S) -> Self::Output {
         Quaternion::new(
@@ -876,6 +894,7 @@ impl<S> ops::Rem<S> for Quaternion<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Quaternion<S> where S: Scalar {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn rem(self, other: S) -> Self::Output {
         Quaternion::new(

@@ -410,7 +410,10 @@ impl<S> AffineTransformation2D<Point2<S>> for Scale2D<S> where S: Scalar {
 
     #[inline]
     fn inverse(&self) -> Option<Scale2D<S>> {
-        Some(Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1))
+        Some(Scale2D::from_nonuniform_scale(
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1
+        ))
     }
 
     #[inline]
@@ -420,7 +423,10 @@ impl<S> AffineTransformation2D<Point2<S>> for Scale2D<S> where S: Scalar {
 
     #[inline]
     fn apply_inverse(&self, point: Point2<S>) -> Option<Point2<S>> {
-        let matrix = Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1).matrix;
+        let matrix = Scale2D::from_nonuniform_scale(
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1
+        ).matrix;
         Some(Point2::from_homogeneous( matrix * point.to_homogeneous()))
     }
 }
@@ -435,7 +441,10 @@ impl<S> AffineTransformation2D<&Point2<S>> for Scale2D<S> where S: Scalar {
 
     #[inline]
     fn inverse(&self) -> Option<Scale2D<S>> {
-        Some(Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1))
+        Some(Scale2D::from_nonuniform_scale(
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1
+        ))
     }
 
     #[inline]
@@ -445,7 +454,10 @@ impl<S> AffineTransformation2D<&Point2<S>> for Scale2D<S> where S: Scalar {
 
     #[inline]
     fn apply_inverse(&self, point: &Point2<S>) -> Option<Point2<S>> {
-        let matrix = Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1).matrix;
+        let matrix = Scale2D::from_nonuniform_scale(
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1
+        ).matrix;
         Some(Point2::from_homogeneous( matrix * point.to_homogeneous()))
     }
 }
@@ -470,7 +482,10 @@ impl<S> AffineTransformation2D<Vector2<S>> for Scale2D<S> where S: Scalar {
 
     #[inline]
     fn apply_inverse(&self, vector: Vector2<S>) -> Option<Vector2<S>> {
-        let matrix = Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1).matrix;
+        let matrix = Scale2D::from_nonuniform_scale(
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1
+        ).matrix;
         Some((matrix * vector.extend(S::zero())).truncate())
     }
 }
@@ -485,7 +500,10 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Scale2D<S> where S: Scalar {
 
     #[inline]
     fn inverse(&self) -> Option<Scale2D<S>> {
-        Some(Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1))
+        Some(Scale2D::from_nonuniform_scale(
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1
+        ))
     }
 
     #[inline]
@@ -495,7 +513,10 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Scale2D<S> where S: Scalar {
 
     #[inline]
     fn apply_inverse(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
-        let matrix = Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1).matrix;
+        let matrix = Scale2D::from_nonuniform_scale(
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1
+        ).matrix;
         Some((matrix * vector.extend(S::zero())).truncate())
     }
 }
@@ -570,7 +591,9 @@ impl<S> AffineTransformation3D<Point3<S>> for Scale3D<S> where S: Scalar {
     #[inline]
     fn inverse(&self) -> Option<Scale3D<S>> {
         Some(Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1, S::one() / self.matrix.c2r2
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c2r2
         ))
     }
 
@@ -582,7 +605,9 @@ impl<S> AffineTransformation3D<Point3<S>> for Scale3D<S> where S: Scalar {
     #[inline]
     fn apply_inverse(&self, point: Point3<S>) -> Option<Point3<S>> {
         let matrix = Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1, S::one() / self.matrix.c2r2
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c2r2
         ).matrix;
         Some(Point3::from_homogeneous( matrix * point.to_homogeneous()))
     }
@@ -599,7 +624,9 @@ impl<S> AffineTransformation3D<&Point3<S>> for Scale3D<S> where S: Scalar {
     #[inline]
     fn inverse(&self) -> Option<Scale3D<S>> {
         Some(Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1, S::one() / self.matrix.c2r2
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c2r2
         ))
     }
 
@@ -611,7 +638,9 @@ impl<S> AffineTransformation3D<&Point3<S>> for Scale3D<S> where S: Scalar {
     #[inline]
     fn apply_inverse(&self, point: &Point3<S>) -> Option<Point3<S>> {
         let matrix = Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1, S::one() / self.matrix.c2r2
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c2r2
         ).matrix;
         Some(Point3::from_homogeneous( matrix * point.to_homogeneous()))
     }
@@ -628,7 +657,9 @@ impl<S> AffineTransformation3D<Vector3<S>> for Scale3D<S> where S: Scalar {
     #[inline]
     fn inverse(&self) -> Option<Scale3D<S>> {
         Some(Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1, S::one() / self.matrix.c2r2
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c2r2
         ))
     }
 
@@ -640,7 +671,9 @@ impl<S> AffineTransformation3D<Vector3<S>> for Scale3D<S> where S: Scalar {
     #[inline]
     fn apply_inverse(&self, vector: Vector3<S>) -> Option<Vector3<S>> {
         let matrix = Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1, S::one() / self.matrix.c2r2
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c2r2
         ).matrix;
         Some((matrix * vector.extend(S::zero())).truncate())
     }
@@ -657,7 +690,9 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Scale3D<S> where S: Scalar {
     #[inline]
     fn inverse(&self) -> Option<Scale3D<S>> {
         Some(Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1, S::one() / self.matrix.c2r2
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c2r2
         ))
     }
 
@@ -669,7 +704,9 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Scale3D<S> where S: Scalar {
     #[inline]
     fn apply_inverse(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
         let matrix = Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1, S::one() / self.matrix.c2r2
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c2r2
         ).matrix;
         Some((matrix * vector.extend(S::zero())).truncate())
     }
@@ -688,6 +725,7 @@ pub struct Reflection2D<S> {
 
 impl<S> Reflection2D<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
+    #[rustfmt::skip]
     pub fn from_normal(normal: Vector2<S>) -> Reflection2D<S> {
         let zero = S::zero();
         let one = S::one();
@@ -739,6 +777,7 @@ impl<S> AffineTransformation2D<Point2<S>> for Reflection2D<S> where S: ScalarFlo
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
         let zero = S::zero();
@@ -781,6 +820,7 @@ impl<S> AffineTransformation2D<&Point2<S>> for Reflection2D<S> where S: ScalarFl
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
         let zero = S::zero();
@@ -823,6 +863,7 @@ impl<S> AffineTransformation2D<Vector2<S>> for Reflection2D<S> where S: ScalarFl
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
         let zero = S::zero();
@@ -865,6 +906,7 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Reflection2D<S> where S: ScalarF
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
         let zero = S::zero();
@@ -909,6 +951,7 @@ pub struct Reflection3D<S> {
 
 impl<S> Reflection3D<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
+    #[rustfmt::skip]
     pub fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
         let zero = S::zero();
         let one = S::one();
@@ -961,6 +1004,7 @@ impl<S> AffineTransformation3D<Point3<S>> for Reflection3D<S> where S: ScalarFlo
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
         let zero = S::zero();
@@ -1004,6 +1048,7 @@ impl<S> AffineTransformation3D<&Point3<S>> for Reflection3D<S> where S: ScalarFl
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
         let zero = S::zero();
@@ -1047,6 +1092,7 @@ impl<S> AffineTransformation3D<Vector3<S>> for Reflection3D<S> where S: ScalarFl
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
         let zero = S::zero();
@@ -1090,6 +1136,7 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Reflection3D<S> where S: ScalarF
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
         let zero = S::zero();
@@ -1476,6 +1523,7 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Translation3D<S> where S: Scalar
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Translation3D<S>> {
         let distance_x = self.matrix.c3r0;
@@ -1512,6 +1560,7 @@ pub struct Shear2D<S> {
 
 impl<S> Shear2D<S> where S: Scalar {
     /// Construct a shearing transformation from a vector of shearing factors.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_vector(shear: Vector2<S>) -> Shear2D<S> {
         Shear2D {
@@ -1581,6 +1630,7 @@ impl<S> AffineTransformation2D<Point2<S>> for Shear2D<S> where S: ScalarSigned {
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
         let zero = S::zero();
@@ -1620,6 +1670,7 @@ impl<S> AffineTransformation2D<&Point2<S>> for Shear2D<S> where S: ScalarFloat {
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
         let zero = S::zero();
@@ -1659,6 +1710,7 @@ impl<S> AffineTransformation2D<Vector2<S>> for Shear2D<S> where S: ScalarFloat {
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
         let zero = S::zero();
@@ -1698,6 +1750,7 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Shear2D<S> where S: ScalarFloat 
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
         let zero = S::zero();
@@ -1809,6 +1862,7 @@ impl<S> AffineTransformation3D<Point3<S>> for Shear3D<S> where S: ScalarSigned {
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
         let zero = S::zero();
@@ -1853,6 +1907,7 @@ impl<S> AffineTransformation3D<&Point3<S>> for Shear3D<S> where S: ScalarFloat {
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
         let zero = S::zero();
@@ -1897,6 +1952,7 @@ impl<S> AffineTransformation3D<Vector3<S>> for Shear3D<S> where S: ScalarFloat {
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
         let zero = S::zero();
@@ -1941,6 +1997,7 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Shear3D<S> where S: ScalarFloat 
         }
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
         let zero = S::zero();

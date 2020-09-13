@@ -101,6 +101,7 @@ impl<S> Matrix2<S> where S: Scalar {
     }
 
     /// Construct a shear matrix for shearing along the x-axis.
+    #[rustfmt::skip]
     pub fn from_shear_x(shear_x_with_y: S) -> Matrix2<S> {
         Matrix2::new(
             S::one(),       S::zero(),
@@ -109,6 +110,7 @@ impl<S> Matrix2<S> where S: Scalar {
     }
 
     /// Construct a shear matrix for shearing along the y-axis.
+    #[rustfmt::skip]
     pub fn from_shear_y(shear_y_with_x: S) -> Matrix2<S> {
         Matrix2::new(
             S::one(),  shear_y_with_x,
@@ -142,6 +144,9 @@ impl<S> Matrix2<S> where S: NumCast + Copy {
 }
 
 impl<S> Matrix2<S> where S: ScalarFloat {
+    /// Construct a rotation matrix in two dimensions from an angle.
+    #[rustfmt::skip]
+    #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Matrix2<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
@@ -241,29 +246,29 @@ impl<S> Matrix for Matrix2<S> where S: Scalar {
 
 impl<S> From<[[S; 2]; 2]> for Matrix2<S> where S: Scalar {
     #[inline]
-    fn from(m: [[S; 2]; 2]) -> Matrix2<S> {
-        Matrix2::new(m[0][0], m[0][1], m[1][0], m[1][1])
+    fn from(array: [[S; 2]; 2]) -> Matrix2<S> {
+        Matrix2::new(array[0][0], array[0][1], array[1][0], array[1][1])
     }
 }
 
 impl<'a, S> From<&'a [[S; 2]; 2]> for &'a Matrix2<S> where S: Scalar {
     #[inline]
-    fn from(m: &'a [[S; 2]; 2]) -> &'a Matrix2<S> {
-        unsafe { mem::transmute(m) }
+    fn from(array: &'a [[S; 2]; 2]) -> &'a Matrix2<S> {
+        unsafe { mem::transmute(array) }
     }    
 }
 
 impl<S> From<[S; 4]> for Matrix2<S> where S: Scalar {
     #[inline]
-    fn from(m: [S; 4]) -> Matrix2<S> {
-        Matrix2::new(m[0], m[1], m[2], m[3])
+    fn from(array: [S; 4]) -> Matrix2<S> {
+        Matrix2::new(array[0], array[1], array[2], array[3])
     }
 }
 
 impl<'a, S> From<&'a [S; 4]> for &'a Matrix2<S> where S: Scalar {
     #[inline]
-    fn from(m: &'a [S; 4]) -> &'a Matrix2<S> {
-        unsafe { mem::transmute(m) }
+    fn from(array: &'a [S; 4]) -> &'a Matrix2<S> {
+        unsafe { mem::transmute(array) }
     }
 }
 
@@ -332,10 +337,12 @@ impl<S> ops::IndexMut<usize> for Matrix2<S> {
 }
 
 impl<S> Zero for Matrix2<S> where S: Scalar {
+    #[inline]
     fn zero() -> Matrix2<S> {
         Matrix2::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         self.c0r0 == S::zero() && self.c0r1 == S::zero() &&
         self.c1r0 == S::zero() && self.c1r1 == S::zero()
@@ -343,6 +350,7 @@ impl<S> Zero for Matrix2<S> where S: Scalar {
 }
 
 impl<S> One for Matrix2<S> where S: Scalar {
+    #[inline]
     fn one() -> Matrix2<S> {
         Matrix2::new(S::one(), S::zero(), S::zero(), S::one())
     }
@@ -802,6 +810,7 @@ impl<S> approx::UlpsEq for Matrix2<S> where S: ScalarFloat {
 impl<S> SquareMatrix for Matrix2<S> where S: ScalarFloat {
     type ColumnRow = Vector2<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Matrix2::new(
@@ -810,6 +819,7 @@ impl<S> SquareMatrix for Matrix2<S> where S: ScalarFloat {
         )
     }
     
+    #[rustfmt::skip]
     #[inline]
     fn from_diagonal(value: Vector2<S>) -> Self {
         Matrix2::new(
@@ -860,6 +870,7 @@ impl<S> SkewSymmetricMatrix for Matrix2<S> where S: ScalarFloat {
 }
 
 impl<S> InvertibleSquareMatrix for Matrix2<S> where S: ScalarFloat {
+    #[rustfmt::skip]
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det == S::zero() {
@@ -919,6 +930,8 @@ pub struct Matrix3<S> {
 
 impl<S> Matrix3<S> {
     /// Construct a new 3x3 matrix.
+    #[rustfmt::skip]
+    #[inline]
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S,
         c1r0: S, c1r1: S, c1r2: S,
@@ -935,6 +948,8 @@ impl<S> Matrix3<S> {
     }
 
     /// Create a 3x3 matrix from a triple of three-dimensional column vectors.
+    #[rustfmt::skip]
+    #[inline]
     pub fn from_columns(c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3<S> {
         Matrix3 {
             c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, 
@@ -945,6 +960,7 @@ impl<S> Matrix3<S> {
 
     /// Map an operation on the elements of a matrix, returning a matrix whose elements
     /// are elements of the new underlying type.
+    #[rustfmt::skip]
     pub fn map<T, F>(self, mut op: F) -> Matrix3<T> where F: FnMut(S) -> T {
         Matrix3 {
             c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0),
@@ -956,6 +972,7 @@ impl<S> Matrix3<S> {
 
 impl<S> Matrix3<S> where S: Scalar {
     /// Create a affine translation matrix.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_translation(distance: Vector2<S>) -> Matrix3<S> {
         let one = S::one();
@@ -974,6 +991,7 @@ impl<S> Matrix3<S> where S: Scalar {
     }
     
     /// Scale a matrix in a nonuniform fashion.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix3<S> {
         let one = S::one();
@@ -986,6 +1004,7 @@ impl<S> Matrix3<S> where S: Scalar {
     }
 
     /// Construct a new shearing matrix for shearing along the x-axis.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix3<S> {
         let one = S::one();
@@ -998,6 +1017,7 @@ impl<S> Matrix3<S> where S: Scalar {
     }
 
     /// Construct a new shearing matrix for shearing along the y-axis.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix3<S> {
         let one = S::one();
@@ -1010,6 +1030,7 @@ impl<S> Matrix3<S> where S: Scalar {
     }
 
     /// Construct a new shearing matrix for shearing along the z-axis.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix3<S> {
         let one = S::one();
@@ -1024,6 +1045,7 @@ impl<S> Matrix3<S> where S: Scalar {
 
 impl<S> Matrix3<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
+    #[rustfmt::skip]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix3<T>> {
         let c0r0 = match num_traits::cast(self.c0r0) {
             Some(value) => value,
@@ -1072,6 +1094,7 @@ impl<S> Matrix3<S> where S: NumCast + Copy {
 
 impl<S> Matrix3<S> where S: ScalarFloat {
     /// Compute a rotation matrix about the x-axis by an angle `angle`.
+    #[rustfmt::skip]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
@@ -1083,6 +1106,7 @@ impl<S> Matrix3<S> where S: ScalarFloat {
     }
 
     /// Compute a rotation matrix about the y-axis by an angle `angle`.
+    #[rustfmt::skip]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
@@ -1094,6 +1118,7 @@ impl<S> Matrix3<S> where S: ScalarFloat {
     }
 
     /// Compute a rotation matrix about the z-axis by an angle `angle`.
+    #[rustfmt::skip]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
@@ -1105,6 +1130,7 @@ impl<S> Matrix3<S> where S: ScalarFloat {
     }
 
     /// Construct a rotation matrix about an arbitrary axis by an angle `angle`.
+    #[rustfmt::skip]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
@@ -1148,6 +1174,7 @@ impl<S> Array for Matrix3<S> where S: Copy {
         (3, 3)
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Matrix3::new(
@@ -1231,6 +1258,7 @@ impl<S> Matrix for Matrix3<S> where S: Scalar {
         self[b.0][b.1] = element_a;
     }
     
+    #[rustfmt::skip]
     fn transpose(&self) -> Self::Transpose {
         Matrix3::new(
             self.c0r0, self.c1r0, self.c2r0,
@@ -1241,54 +1269,62 @@ impl<S> Matrix for Matrix3<S> where S: Scalar {
 }
 
 impl<S> From<[[S; 3]; 3]> for Matrix3<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: [[S; 3]; 3]) -> Matrix3<S> {
+    fn from(array: [[S; 3]; 3]) -> Matrix3<S> {
         Matrix3::new(
-            m[0][0], m[0][1], m[0][2], 
-            m[1][0], m[1][1], m[1][2], 
-            m[2][0], m[2][1], m[2][2],
+            array[0][0], array[0][1], array[0][2], 
+            array[1][0], array[1][1], array[1][2], 
+            array[2][0], array[2][1], array[2][2],
         )
     }
 }
 
 impl<'a, S> From<&'a [[S; 3]; 3]> for &'a Matrix3<S> where S: Scalar {
     #[inline]
-    fn from(m: &'a [[S; 3]; 3]) -> &'a Matrix3<S> {
-        unsafe { mem::transmute(m) }
+    fn from(array: &'a [[S; 3]; 3]) -> &'a Matrix3<S> {
+        unsafe { mem::transmute(array) }
     }    
 }
 
 impl<S> From<[S; 9]> for Matrix3<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: [S; 9]) -> Matrix3<S> {
-        Matrix3::new(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8])
+    fn from(array: [S; 9]) -> Matrix3<S> {
+        Matrix3::new(
+            array[0], array[1], array[2], 
+            array[3], array[4], array[5], 
+            array[6], array[7], array[8]
+        )
     }
 }
 
 impl<'a, S> From<&'a [S; 9]> for &'a Matrix3<S> where S: Scalar {
     #[inline]
-    fn from(m: &'a [S; 9]) -> &'a Matrix3<S> {
-        unsafe { mem::transmute(m) }
+    fn from(array: &'a [S; 9]) -> &'a Matrix3<S> {
+        unsafe { mem::transmute(array) }
     }
 }
 
 impl<S> From<Matrix2<S>> for Matrix3<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: Matrix2<S>) -> Matrix3<S> {
+    fn from(matrix: Matrix2<S>) -> Matrix3<S> {
         Matrix3::new(
-            m.c0r0,    m.c0r1,    S::zero(),
-            m.c1r0,    m.c1r1,    S::zero(),
+            matrix.c0r0,     matrix.c0r1,     S::zero(),
+            matrix.c1r0,     matrix.c1r1,     S::zero(),
             S::zero(), S::zero(), S::one()
         )
     }
 }
 
 impl<S> From<&Matrix2<S>> for Matrix3<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: &Matrix2<S>) -> Matrix3<S> {
+    fn from(matrix: &Matrix2<S>) -> Matrix3<S> {
         Matrix3::new(
-            m.c0r0,    m.c0r1,    S::zero(),
-            m.c1r0,    m.c1r1,    S::zero(),
+            matrix.c0r0,     matrix.c0r1,     S::zero(),
+            matrix.c1r0,     matrix.c1r1,     S::zero(),
             S::zero(), S::zero(), S::one()
         )
     }
@@ -1360,9 +1396,15 @@ impl<S> ops::IndexMut<usize> for Matrix3<S> {
 }
 
 impl<S> Zero for Matrix3<S> where S: Scalar {
+    #[rustfmt::skip]
+    #[inline]
     fn zero() -> Matrix3<S> {
         let zero = S::zero();
-        Matrix3::new(zero, zero, zero, zero, zero, zero, zero, zero, zero)
+        Matrix3::new(
+            zero, zero, zero, 
+            zero, zero, zero, 
+            zero, zero, zero
+        )
     }
 
     fn is_zero(&self) -> bool {
@@ -1374,10 +1416,16 @@ impl<S> Zero for Matrix3<S> where S: Scalar {
 }
 
 impl<S> One for Matrix3<S> where S: Scalar {
+    #[rustfmt::skip]
+    #[inline]
     fn one() -> Matrix3<S> {
         let zero = S::zero();
         let one = S::one();
-        Matrix3::new(one, zero, zero, zero, one, zero, zero, zero, one)
+        Matrix3::new(
+            one,  zero, zero, 
+            zero, one,  zero, 
+            zero, zero, one
+        )
     }
 }
 
@@ -2042,6 +2090,7 @@ impl<S> approx::UlpsEq for Matrix3<S> where S: ScalarFloat {
 impl<S> SquareMatrix for Matrix3<S> where S: ScalarFloat {
     type ColumnRow = Vector3<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Matrix3::new(
@@ -2051,6 +2100,7 @@ impl<S> SquareMatrix for Matrix3<S> where S: ScalarFloat {
         )
     }
     
+    #[rustfmt::skip]
     #[inline]
     fn from_diagonal(value: Self::ColumnRow) -> Self {
         Matrix3::new(
@@ -2077,6 +2127,7 @@ impl<S> SquareMatrix for Matrix3<S> where S: ScalarFloat {
         self.c0r0 + self.c1r1 + self.c2r2
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn determinant(&self) -> Self::Element {
         self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
@@ -2116,6 +2167,7 @@ impl<S> SkewSymmetricMatrix for Matrix3<S> where S: ScalarFloat {
 }
 
 impl<S> InvertibleSquareMatrix for Matrix3<S> where S: ScalarFloat {
+    #[rustfmt::skip]
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det == S::zero() {
@@ -2187,6 +2239,8 @@ pub struct Matrix4<S> {
 
 impl<S> Matrix4<S> {
     /// Construct a new 4x4 matrix.
+    #[rustfmt::skip]
+    #[inline]
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S, c0r3: S,
         c1r0: S, c1r1: S, c1r2: S, c1r3: S,
@@ -2202,6 +2256,8 @@ impl<S> Matrix4<S> {
     }
 
     /// Construct a 4x4 matrix from column vectors.
+    #[rustfmt::skip]
+    #[inline]
     pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4<S> {
         Matrix4 {
             c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, c0r3: c0.w,
@@ -2213,6 +2269,7 @@ impl<S> Matrix4<S> {
 
     /// Map an operation on the elements of a matrix, returning a matrix whose elements
     /// are elements of the new underlying type.
+    #[rustfmt::skip]
     pub fn map<T, F>(self, mut op: F) -> Matrix4<T> where F: FnMut(S) -> T {
         Matrix4 {
             c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0), c3r0: op(self.c3r0),
@@ -2225,6 +2282,7 @@ impl<S> Matrix4<S> {
 
 impl<S> Matrix4<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
+    #[rustfmt::skip]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix4<T>> {
         let c0r0 = match num_traits::cast(self.c0r0) {
             Some(value) => value,
@@ -2302,6 +2360,7 @@ impl<S> Matrix4<S> where S: NumCast + Copy {
 
 impl<S> Matrix4<S> where S: Scalar {
     /// Create a affine translation matrix.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_translation(distance: Vector3<S>) -> Matrix4<S> {
         let one = S::one();
@@ -2321,6 +2380,7 @@ impl<S> Matrix4<S> where S: Scalar {
     }
 
     /// Scale a matrix in a nonuniform fashion.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_nonuniform_scale(sx: S, sy: S, sz: S) -> Matrix4<S> {
         let one = S::one();
@@ -2334,6 +2394,7 @@ impl<S> Matrix4<S> where S: Scalar {
     }
 
     /// Construct a new 4x4 affine matrix for shearing along the x-axis in three dimensions.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix4<S> {
         let one = S::one();
@@ -2347,6 +2408,7 @@ impl<S> Matrix4<S> where S: Scalar {
     }
 
     /// Construct a new 4x4 affine matrix for shearing along the y-axis in three dimensions.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix4<S> {
         let one = S::one();
@@ -2360,6 +2422,7 @@ impl<S> Matrix4<S> where S: Scalar {
     }
 
     /// Construct a new 4x4 affine matrix for shearing along the z-axis in three dimensions.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4<S> {
         let one = S::one();
@@ -2375,6 +2438,7 @@ impl<S> Matrix4<S> where S: Scalar {
 
 impl<S> Matrix4<S> where S: ScalarFloat {
     /// Create a rotation matrix around the x axis by an angle in `angle` radians/degrees.
+    #[rustfmt::skip]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
@@ -2389,6 +2453,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
     }
         
     /// Create a rotation matrix around the y axis by an angle in `angle` radians/degrees.
+    #[rustfmt::skip]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
@@ -2403,6 +2468,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
     }
     
     /// Create a rotation matrix around the z axis by an angle in `angle` radians/degrees.
+    #[rustfmt::skip]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
@@ -2418,6 +2484,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
 
     /// Construct a new 4x4 affine matrix for rotating about an axis `axis` 
     /// by an angle `angle` in three dimensions.
+    #[rustfmt::skip]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
@@ -2447,6 +2514,7 @@ impl<S> Matrix4<S> where S: ScalarFloat {
 
     /// Construct a homogeneous matrix that will point a vector towards the dierection
     /// `direction`, using `up` for orientation.
+    #[rustfmt::skip]
     pub fn look_at_dir(eye: Point3<S>, direction: Vector3<S>, up: Vector3<S>) -> Matrix4<S> {
         let forward = direction.normalize();
         let side = forward.cross(up).normalize();
@@ -2483,6 +2551,7 @@ impl<S> Array for Matrix4<S> where S: Copy {
         (4, 4)
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Matrix4::new(
@@ -2510,6 +2579,7 @@ impl<S> Array for Matrix4<S> where S: Copy {
 }
 
 impl<S> Sum for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
     fn sum(&self) -> S {
         self.c0r0 + self.c1r0 + self.c2r0 + self.c3r0 +
@@ -2520,6 +2590,7 @@ impl<S> Sum for Matrix4<S> where S: Scalar {
 }
 
 impl<S> Product for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
     fn product(&self) -> S {
         self.c0r0 * self.c1r0 * self.c2r0 * self.c3r0 *
@@ -2575,6 +2646,7 @@ impl<S> Matrix for Matrix4<S> where S: Scalar {
         self[b.0][b.1] = element_a;
     }
     
+    #[rustfmt::skip]
     fn transpose(&self) -> Self::Transpose {
         Matrix4::new(
             self.c0r0, self.c1r0, self.c2r0, self.c3r0,
@@ -2586,95 +2658,101 @@ impl<S> Matrix for Matrix4<S> where S: Scalar {
 }
 
 impl<S> From<[[S; 4]; 4]> for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: [[S; 4]; 4]) -> Matrix4<S> {
+    fn from(array: [[S; 4]; 4]) -> Matrix4<S> {
         Matrix4::new(
-            m[0][0], m[0][1], m[0][2], m[0][3], 
-            m[1][0], m[1][1], m[1][2], m[1][3],
-            m[2][0], m[2][1], m[2][2], m[2][3], 
-            m[3][0], m[3][1], m[3][2], m[3][3]
+            array[0][0], array[0][1], array[0][2], array[0][3], 
+            array[1][0], array[1][1], array[1][2], array[1][3],
+            array[2][0], array[2][1], array[2][2], array[2][3], 
+            array[3][0], array[3][1], array[3][2], array[3][3]
         )
     }
 }
 
 impl<'a, S> From<&'a [[S; 4]; 4]> for &'a Matrix4<S> where S: Scalar {
     #[inline]
-    fn from(m: &'a [[S; 4]; 4]) -> &'a Matrix4<S> {
-        unsafe { mem::transmute(m) }
+    fn from(array: &'a [[S; 4]; 4]) -> &'a Matrix4<S> {
+        unsafe { mem::transmute(array) }
     }    
 }
 
 impl<S> From<[S; 16]> for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: [S; 16]) -> Matrix4<S> {
+    fn from(array: [S; 16]) -> Matrix4<S> {
         Matrix4::new(
-            m[0],  m[1],  m[2],  m[3], 
-            m[4],  m[5],  m[6],  m[7],
-            m[8],  m[9],  m[10], m[11], 
-            m[12], m[13], m[14], m[15]
+            array[0],  array[1],  array[2],  array[3], 
+            array[4],  array[5],  array[6],  array[7],
+            array[8],  array[9],  array[10], array[11], 
+            array[12], array[13], array[14], array[15]
         )
     }
 }
 
 impl<'a, S> From<&'a [S; 16]> for &'a Matrix4<S> where S: Scalar {
     #[inline]
-    fn from(m: &'a [S; 16]) -> &'a Matrix4<S> {
-        unsafe { mem::transmute(m) }
+    fn from(array: &'a [S; 16]) -> &'a Matrix4<S> {
+        unsafe { mem::transmute(array) }
     }
 }
 
 impl<S> From<Matrix2<S>> for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: Matrix2<S>) -> Matrix4<S> {
+    fn from(matrix: Matrix2<S>) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1,   zero, zero,
-            m.c1r0, m.c1r1,   zero, zero,
-      zero, zero, one,  zero,
-      zero, zero, zero, one
+            matrix.c0r0, matrix.c0r1,   zero, zero,
+            matrix.c1r0, matrix.c1r1,   zero, zero,
+      zero,  zero,          one,  zero,
+      zero,  zero,          zero, one
         )
     }
 }
 
 impl<S> From<&Matrix2<S>> for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: &Matrix2<S>) -> Matrix4<S> {
+    fn from(matrix: &Matrix2<S>) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1,   zero, zero,
-            m.c1r0, m.c1r1,   zero, zero,
-      zero, zero, one,  zero,
-      zero, zero, zero, one
+            matrix.c0r0, matrix.c0r1,   zero, zero,
+            matrix.c1r0, matrix.c1r1,   zero, zero,
+      zero,  zero,          one,  zero,
+      zero,  zero,          zero, one
         )
     }
 }
 
 impl<S> From<Matrix3<S>> for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: Matrix3<S>) -> Matrix4<S> {
+    fn from(matrix: Matrix3<S>) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1, m.c0r2, zero,
-            m.c1r0, m.c1r1, m.c1r2, zero,
-            m.c2r0, m.c2r1, m.c2r2, zero,
-      zero, zero, zero, one
+            matrix.c0r0, matrix.c0r1, matrix.c0r2, zero,
+            matrix.c1r0, matrix.c1r1, matrix.c1r2, zero,
+            matrix.c2r0, matrix.c2r1, matrix.c2r2, zero,
+            zero,  zero,  zero,  one
         )
     }
 }
 
 impl<S> From<&Matrix3<S>> for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
     #[inline]
-    fn from(m: &Matrix3<S>) -> Matrix4<S> {
+    fn from(matrix: &Matrix3<S>) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            m.c0r0, m.c0r1, m.c0r2, zero,
-            m.c1r0, m.c1r1, m.c1r2, zero,
-            m.c2r0, m.c2r1, m.c2r2, zero,
-          zero, zero,    zero, one
+            matrix.c0r0, matrix.c0r1, matrix.c0r2, zero,
+            matrix.c1r0, matrix.c1r1, matrix.c1r2, zero,
+            matrix.c2r0, matrix.c2r1, matrix.c2r2, zero,
+            zero, zero,    zero, one
         )
     }
 }
@@ -2746,6 +2824,8 @@ impl<S> ops::IndexMut<usize> for Matrix4<S> {
 }
 
 impl<S> Zero for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
+    #[inline]
     fn zero() -> Matrix4<S> {
         let zero = S::zero();
         Matrix4::new(
@@ -2766,14 +2846,16 @@ impl<S> Zero for Matrix4<S> where S: Scalar {
 }
 
 impl<S> One for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
+    #[inline]
     fn one() -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-             one, zero, zero, zero, 
-            zero,  one, zero, zero, 
-            zero, zero,  one, zero, 
-            zero, zero, zero,  one
+            one,  zero, zero, zero, 
+            zero, one,  zero, zero, 
+            zero, zero, one,  zero, 
+            zero, zero, zero, one
         )
     }
 }
@@ -2781,6 +2863,7 @@ impl<S> One for Matrix4<S> where S: Scalar {
 impl<S> ops::Add<Matrix4<S>> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn add(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -2814,6 +2897,7 @@ impl<S> ops::Add<Matrix4<S>> for Matrix4<S> where S: Scalar {
 impl<S> ops::Add<&Matrix4<S>> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn add(self, other: &Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -2847,6 +2931,7 @@ impl<S> ops::Add<&Matrix4<S>> for Matrix4<S> where S: Scalar {
 impl<S> ops::Add<Matrix4<S>> for &Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn add(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -2880,6 +2965,7 @@ impl<S> ops::Add<Matrix4<S>> for &Matrix4<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn add(self, other: &'a Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -2913,6 +2999,7 @@ impl<'a, 'b, S> ops::Add<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
 impl<S> ops::Sub<Matrix4<S>> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn sub(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -2946,6 +3033,7 @@ impl<S> ops::Sub<Matrix4<S>> for Matrix4<S> where S: Scalar {
 impl<S> ops::Sub<&Matrix4<S>> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn sub(self, other: &Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -2979,6 +3067,7 @@ impl<S> ops::Sub<&Matrix4<S>> for Matrix4<S> where S: Scalar {
 impl<S> ops::Sub<Matrix4<S>> for &Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn sub(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -3012,6 +3101,7 @@ impl<S> ops::Sub<Matrix4<S>> for &Matrix4<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn sub(self, other: &'a Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -3045,6 +3135,7 @@ impl<'a, 'b, S> ops::Sub<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
 impl<S> ops::Mul<Vector4<S>> for Matrix4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: Vector4<S>) -> Self::Output {
         let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
         let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
@@ -3058,6 +3149,7 @@ impl<S> ops::Mul<Vector4<S>> for Matrix4<S> where S: Scalar {
 impl<S> ops::Mul<&Vector4<S>> for Matrix4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: &Vector4<S>) -> Self::Output {
         let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
         let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
@@ -3071,6 +3163,7 @@ impl<S> ops::Mul<&Vector4<S>> for Matrix4<S> where S: Scalar {
 impl<S> ops::Mul<Vector4<S>> for &Matrix4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: Vector4<S>) -> Self::Output {
         let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
         let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
@@ -3084,6 +3177,7 @@ impl<S> ops::Mul<Vector4<S>> for &Matrix4<S> where S: Scalar {
 impl<'a, 'b, S> ops::Mul<&'a Vector4<S>> for &'b Matrix4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: &'a Vector4<S>) -> Self::Output {
         let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
         let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
@@ -3097,6 +3191,7 @@ impl<'a, 'b, S> ops::Mul<&'a Vector4<S>> for &'b Matrix4<S> where S: Scalar {
 impl<S> ops::Mul<Matrix4<S>> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
@@ -3130,6 +3225,7 @@ impl<S> ops::Mul<Matrix4<S>> for Matrix4<S> where S: Scalar {
 impl<S> ops::Mul<&Matrix4<S>> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: &Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
@@ -3163,6 +3259,7 @@ impl<S> ops::Mul<&Matrix4<S>> for Matrix4<S> where S: Scalar {
 impl<S> ops::Mul<Matrix4<S>> for &Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
@@ -3196,6 +3293,7 @@ impl<S> ops::Mul<Matrix4<S>> for &Matrix4<S> where S: Scalar {
 impl<'a, 'b, S> ops::Mul<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: &'a Matrix4<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
@@ -3229,6 +3327,7 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix4<S>> for &'b Matrix4<S> where S: Scalar {
 impl<S> ops::Mul<S> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
@@ -3262,6 +3361,7 @@ impl<S> ops::Mul<S> for Matrix4<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
@@ -3295,6 +3395,7 @@ impl<S> ops::Mul<S> for &Matrix4<S> where S: Scalar {
 impl<S> ops::Div<S> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
@@ -3328,6 +3429,7 @@ impl<S> ops::Div<S> for Matrix4<S> where S: Scalar {
 impl<S> ops::Div<S> for &Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
@@ -3361,6 +3463,7 @@ impl<S> ops::Div<S> for &Matrix4<S> where S: Scalar {
 impl<S> ops::Neg for Matrix4<S> where S: ScalarSigned {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
         let c0r1 = -self.c0r1;
@@ -3394,6 +3497,7 @@ impl<S> ops::Neg for Matrix4<S> where S: ScalarSigned {
 impl<S> ops::Neg for &Matrix4<S> where S: ScalarSigned {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
         let c0r1 = -self.c0r1;
@@ -3427,6 +3531,7 @@ impl<S> ops::Neg for &Matrix4<S> where S: ScalarSigned {
 impl<S> ops::Rem<S> for Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
@@ -3460,6 +3565,7 @@ impl<S> ops::Rem<S> for Matrix4<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Matrix4<S> where S: Scalar {
     type Output = Matrix4<S>;
 
+    #[rustfmt::skip]
     fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
@@ -3780,6 +3886,7 @@ impl<S> approx::UlpsEq for Matrix4<S> where S: ScalarFloat {
 impl<S> SquareMatrix for Matrix4<S> where S: ScalarFloat {
     type ColumnRow = Vector4<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn from_value(value: Self::Element) -> Self {
         Matrix4::new(
@@ -3790,6 +3897,7 @@ impl<S> SquareMatrix for Matrix4<S> where S: ScalarFloat {
         )
     }
     
+    #[rustfmt::skip]
     #[inline]
     fn from_diagonal(value: Self::ColumnRow) -> Self {
         Matrix4::new(
@@ -3815,6 +3923,7 @@ impl<S> SquareMatrix for Matrix4<S> where S: ScalarFloat {
         self.swap_elements((2, 3), (3, 2));
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn determinant(&self) -> Self::Element {
         self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
@@ -3886,6 +3995,7 @@ impl<S> SkewSymmetricMatrix for Matrix4<S> where S: ScalarFloat {
 }
 
 impl<S> InvertibleSquareMatrix for Matrix4<S> where S: ScalarFloat {
+    #[rustfmt::skip]
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det == S::zero() {
