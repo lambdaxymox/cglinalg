@@ -1,6 +1,7 @@
 pub extern crate approx;
 pub extern crate num_traits;
 
+
 mod scalar;
 mod angle;
 mod prelude;
@@ -14,6 +15,7 @@ mod structure;
 mod affine;
 mod identity;
 mod rotation;
+mod scale;
 
 
 pub use prelude::*;
@@ -29,4 +31,5 @@ pub use point::*;
 pub use affine::*;
 pub use identity::*;
 pub use rotation::*;
+pub use scale::*;
 
