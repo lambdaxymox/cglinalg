@@ -10,6 +10,7 @@ use gdmath::{
     Scalar,
 };
 
+
 fn any_matrix2<S>() -> impl Strategy<Value = Matrix2<S>> where S: Scalar + Arbitrary {
     any::<(S, S, S, S)>().prop_map(
     |(c0r0, c0r1, c1r0, c1r1)| Matrix2::new(c0r0, c0r1, c1r0, c1r1)

@@ -80,7 +80,7 @@ pub trait Rotation<P> where
 /// this requires different mathematics than is typically used in computer graphics.
 pub trait Rotation2<S> where 
     S: ScalarFloat,
-    Self: Rotation<Point2<S>> + Into<Matrix2<S>> + Into<Rotation2D<S>>,
+    Self: Rotation<Point2<S>> + Into<Matrix3<S>> + Into<Rotation2D<S>>,
 {
     /// Rotate a two-dimensional vector in the xy-plane by an angle `angle`.
     fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self;
@@ -125,33 +125,33 @@ pub struct Rotation2D<S> {
     /// The angle of rotation.
     angle: Radians<S>,
     /// The underlying matrix for the rotation.
-    matrix: Matrix2<S>,
+    matrix: Matrix3<S>,
 }
 
 impl<S> fmt::Debug for Rotation2D<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Rotation2D ")?;
-        <[S; 4] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
+        <[S; 9] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
 
 impl<S> fmt::Display for Rotation2D<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Rotation2D ")?;
-        <[S; 4] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
+        <[S; 9] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
 
-impl<S> From<Rotation2D<S>> for Matrix2<S> where S: Copy {
+impl<S> From<Rotation2D<S>> for Matrix3<S> where S: Copy {
     #[inline]
-    fn from(rotation: Rotation2D<S>) -> Matrix2<S> {
+    fn from(rotation: Rotation2D<S>) -> Matrix3<S> {
         rotation.matrix
     }
 }
 
-impl<S> AsRef<Matrix2<S>> for Rotation2D<S> {
+impl<S> AsRef<Matrix3<S>> for Rotation2D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix2<S> {
+    fn as_ref(&self) -> &Matrix3<S> {
         &self.matrix
     }
 }
@@ -209,7 +209,7 @@ impl<S> One for Rotation2D<S> where S: Scalar {
     fn one() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix2::one(),
+            matrix: Matrix3::one(),
         }
     }
 }
@@ -238,7 +238,7 @@ impl<S> approx::AbsDiffEq for Rotation2D<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix2::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+        Matrix3::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
     }
 }
 
@@ -250,7 +250,7 @@ impl<S> approx::RelativeEq for Rotation2D<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Matrix2::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+        Matrix3::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
     }
 }
 
@@ -262,25 +262,28 @@ impl<S> approx::UlpsEq for Rotation2D<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Matrix2::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+        Matrix3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
 
 impl<S> Rotation2<S> for Rotation2D<S> where S: ScalarFloat {
     fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2D<S> {
         let radians = angle.into();
+        let matrix = Matrix3::from(Matrix2::from_angle(radians));
+        
         Rotation2D {
             angle: radians,
-            matrix: Matrix2::from_angle(radians),
+            matrix: matrix,
         }
     }
 }
 
 impl<S> Rotation<Point2<S>> for Rotation2D<S> where S: ScalarFloat { 
     #[inline]
-    fn look_at(dir: Vector2<S>, up: Vector2<S>) -> Rotation2D<S> {
-        let matrix = Matrix2::look_at(dir, up);
+    fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Rotation2D<S> {
+        let matrix = Matrix3::from(Matrix2::look_at(direction, up));
         let angle = Radians::acos(matrix.c0r0);
+        
         Rotation2D {
             angle: angle,
             matrix: matrix,
@@ -294,7 +297,7 @@ impl<S> Rotation<Point2<S>> for Rotation2D<S> where S: ScalarFloat {
 
     #[inline]
     fn rotate_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        self.matrix * vector
+        (self.matrix * vector.extend(S::zero())).truncate()
     }
 
     #[inline]
@@ -306,7 +309,120 @@ impl<S> Rotation<Point2<S>> for Rotation2D<S> where S: ScalarFloat {
     }
 }
 
+impl<S> AffineTransformation2D<Point2<S>> for Rotation2D<S> where S: ScalarFloat {
+    type Applied = Point2<S>;
 
+    #[inline]
+    fn identity() -> Rotation2D<S> {
+        Rotation2D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Rotation2D<S>> {
+        Some(<Self as Rotation<Point2<S>>>::inverse(&self))
+    }
+
+    #[inline]
+    fn apply(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Point2<S>) -> Option<Point2<S>> {
+        let inverse_matrix = <Self as AffineTransformation2D<Point2<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point2::from_homogeneous( inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation2D<&Point2<S>> for Rotation2D<S> where S: ScalarFloat {
+    type Applied = Point2<S>;
+
+    #[inline]
+    fn identity() -> Rotation2D<S> {
+        Rotation2D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[rustfmt::skip]
+    #[inline]
+    fn inverse(&self) -> Option<Rotation2D<S>> {
+        Some(<Self as Rotation<Point2<S>>>::inverse(&self))
+    }
+
+    #[inline]
+    fn apply(&self, point: &Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Point2<S>) -> Option<Point2<S>> {
+        let inverse_matrix = <Self as AffineTransformation2D<Point2<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point2::from_homogeneous( inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation2D<Vector2<S>> for Rotation2D<S> where S: ScalarFloat {
+    type Applied = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Rotation2D<S> {
+        Rotation2D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[rustfmt::skip]
+    #[inline]
+    fn inverse(&self) -> Option<Rotation2D<S>> {
+        Some(<Self as Rotation<Point2<S>>>::inverse(&self))
+    }
+
+    #[inline]
+    fn apply(&self, vector: Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: Vector2<S>) -> Option<Vector2<S>> {
+        let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
+impl<S> AffineTransformation2D<&Vector2<S>> for Rotation2D<S> where S: ScalarFloat {
+    type Applied = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Rotation2D<S> {
+        Rotation2D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[rustfmt::skip]
+    #[inline]
+    fn inverse(&self) -> Option<Rotation2D<S>> {
+        Some(<Self as Rotation<Point2<S>>>::inverse(&self))
+    }
+
+    #[inline]
+    fn apply(&self, vector: &Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
+        let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+    }
+}
 
 
 /// A rotation operator in three dimensions.
