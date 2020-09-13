@@ -17,6 +17,7 @@ mod identity;
 mod reflection;
 mod rotation;
 mod scale;
+mod shear;
 mod translation;
 
 
@@ -35,5 +36,6 @@ pub use identity::*;
 pub use reflection::*;
 pub use rotation::*;
 pub use scale::*;
+pub use shear::*;
 pub use translation::*;
 
