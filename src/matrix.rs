@@ -10,6 +10,9 @@ use approx::{
 use num_traits::{
     NumCast,
 };
+use point::{
+    Point3,
+};
 use scalar::{
     Scalar,
     ScalarSigned,
@@ -20,6 +23,8 @@ use structure::{
     Angle,
     Array,
     CrossProduct,
+    DotProduct,
+    Euclidean,
     One, 
     Zero, 
     Matrix, 
@@ -89,6 +94,8 @@ impl<S> Matrix2<S> {
 }
 
 impl<S> Matrix2<S> where S: Scalar {
+    /// Construct a matrix that will cause a vector to point 
+    /// at the vector `direction` using up for orientation.
     pub fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Matrix2<S> {
         Matrix2::from_columns(up, direction).transpose()
     }
@@ -1117,6 +1124,8 @@ impl<S> Matrix3<S> where S: ScalarFloat {
         )
     }
 
+    /// Construct a matrix that will cause a vector to point 
+    /// at the vector `direction` using up for orientation.
     pub fn look_at(direction: Vector3<S>, up: Vector3<S>) -> Matrix3<S> {
         let dir = direction.normalize();
         let side = up.cross(direction).normalize();
@@ -2429,8 +2438,35 @@ impl<S> Matrix4<S> where S: ScalarFloat {
             one_minus_cos_angle * axis.z * axis.z + cos_angle,
             S::zero(),
 
-            S::zero(), S::zero(), S::zero(), S::one(),
+            S::zero(), 
+            S::zero(), 
+            S::zero(), 
+            S::one(),
         )
+    }
+
+    /// Construct a homogeneous matrix that will point a vector towards the dierection
+    /// `direction`, using `up` for orientation.
+    pub fn look_at_dir(eye: Point3<S>, direction: Vector3<S>, up: Vector3<S>) -> Matrix4<S> {
+        let forward = direction.normalize();
+        let side = forward.cross(up).normalize();
+        let s_cross_f = side.cross(forward);
+        let eye_vec = eye - Point3::origin();
+        let zero = S::zero();
+        let one = S::one();
+
+        Matrix4::new(
+             side.x,             s_cross_f.x,           -forward.x,            zero,
+             side.y,             s_cross_f.y,           -forward.y,            zero,
+             side.z,             s_cross_f.z,           -forward.z,            zero,
+            -eye_vec.dot(side), -eye_vec.dot(s_cross_f), eye_vec.dot(forward), one,
+        )
+    }
+
+    /// Construct a homogeneous matrix that will point a vector at the point
+    /// `center`, using `up` for orientation.
+    pub fn look_at(eye: Point3<S>, center: Point3<S>, up: Vector3<S>) -> Matrix4<S> {
+        Matrix4::look_at_dir(eye, center - eye, up)
     }
 }
 
