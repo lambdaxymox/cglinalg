@@ -74,6 +74,18 @@ impl<S> fmt::Display for Identity2D<S> where S: Scalar {
     }
 }
 
+impl<S> From<Identity2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: Identity2D<S>) -> Matrix3<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Identity2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: &Identity2D<S>) -> Matrix3<S> {
+        transformation.matrix
+    }
+}
+
 impl<S> AffineTransformation2D<Point2<S>> for Identity2D<S> where S: Scalar {
     type Applied = Point2<S>;
 
@@ -196,6 +208,18 @@ impl<S> AsRef<Matrix4<S>> for Identity3D<S> {
 impl<S> fmt::Display for Identity3D<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> From<Identity3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: Identity3D<S>) -> Matrix4<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Identity3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: &Identity3D<S>) -> Matrix4<S> {
+        transformation.matrix
     }
 }
 
@@ -338,6 +362,18 @@ impl<S> fmt::Display for Scale2D<S> where S: Scalar {
     }
 }
 
+impl<S> From<Scale2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: Scale2D<S>) -> Matrix3<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Scale2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: &Scale2D<S>) -> Matrix3<S> {
+        transformation.matrix
+    }
+}
+
 impl<S> AffineTransformation2D<Point2<S>> for Scale2D<S> where S: Scalar {
     type Applied = Point2<S>;
 
@@ -477,6 +513,18 @@ impl<S> AsRef<Matrix4<S>> for Scale3D<S> {
 impl<S> fmt::Display for Scale3D<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> From<Scale3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: Scale3D<S>) -> Matrix4<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Scale3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: &Scale3D<S>) -> Matrix4<S> {
+        transformation.matrix
     }
 }
 
@@ -630,6 +678,18 @@ impl<S> AsRef<Matrix3<S>> for Reflection2D<S> {
 impl<S> fmt::Display for Reflection2D<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> From<Reflection2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: Reflection2D<S>) -> Matrix3<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Reflection2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: &Reflection2D<S>) -> Matrix3<S> {
+        transformation.matrix
     }
 }
 
@@ -836,6 +896,18 @@ impl<S> AsRef<Matrix4<S>> for Reflection3D<S> {
 impl<S> fmt::Display for Reflection3D<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> From<Reflection3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: Reflection3D<S>) -> Matrix4<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Reflection3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: &Reflection3D<S>) -> Matrix4<S> {
+        transformation.matrix
     }
 }
 
@@ -1049,6 +1121,18 @@ impl<S> fmt::Display for Translation2D<S> where S: Scalar {
     }
 }
 
+impl<S> From<Translation2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: Translation2D<S>) -> Matrix3<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Translation2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: &Translation2D<S>) -> Matrix3<S> {
+        transformation.matrix
+    }
+}
+
 impl<S> AffineTransformation2D<Point2<S>> for Translation2D<S> where S: ScalarSigned {
     type Applied = Point2<S>;
 
@@ -1219,6 +1303,18 @@ impl<S> AsRef<Matrix4<S>> for Translation3D<S> {
 impl<S> fmt::Display for Translation3D<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> From<Translation3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: Translation3D<S>) -> Matrix4<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Translation3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: &Translation3D<S>) -> Matrix4<S> {
+        transformation.matrix
     }
 }
 
@@ -1405,6 +1501,18 @@ impl<S> AsRef<Matrix3<S>> for Shear2D<S> {
 impl<S> fmt::Display for Shear2D<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> From<Shear2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: Shear2D<S>) -> Matrix3<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Shear2D<S>> for Matrix3<S> where S: Copy {
+    fn from(transformation: &Shear2D<S>) -> Matrix3<S> {
+        transformation.matrix
     }
 }
 
@@ -1604,6 +1712,18 @@ impl<S> AsRef<Matrix4<S>> for Shear3D<S> {
 impl<S> fmt::Display for Shear3D<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> From<Shear3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: Shear3D<S>) -> Matrix4<S> {
+        transformation.matrix
+    }
+}
+
+impl<S> From<&Shear3D<S>> for Matrix4<S> where S: Copy {
+    fn from(transformation: &Shear3D<S>) -> Matrix4<S> {
+        transformation.matrix
     }
 }
 

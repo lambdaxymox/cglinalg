@@ -171,6 +171,9 @@ pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
 /// three-dimensional vectors as well as pointers to three-dimensional vectors 
 /// interchangeably. 
 pub trait CrossProduct<V> {
+    /// The output of the cross product. This associated type allows us to handle
+    /// pointers to three-dimensional vectors interchangeably with three-dimensional 
+    /// vectors in the inputs.
     type Output;
 
     /// Compute the cross product of two three-dimensional vectors. 
@@ -181,9 +184,9 @@ pub trait CrossProduct<V> {
     /// the surface element that the crossed vector is normal to. That is, 
     /// given vectors `u` and `v`, 
     /// ```text
-    /// u x v == *(u /\ v)
+    /// u x v := *(u /\ v)
     /// ```
-    /// where `*(.)` denotes the hodge dual.
+    /// where `*(.)` denotes the hodge dual, and `:=` denotes definitional equality.
     fn cross(self, other: V) -> Self::Output;
 }
 
