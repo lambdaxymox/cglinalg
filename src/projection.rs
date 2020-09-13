@@ -15,15 +15,18 @@ use structure::{
 
 /// Compute the orthographic projection matrix for converting from camera space to
 /// normalized device coordinates.
+///
+/// This function is equivalent to the now deprecated [glOrtho]
+/// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml) function.
 #[inline]
-pub fn ortho<S, Spec: Into<Orthographic<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
+pub fn orthographic<S, Spec: Into<Orthographic<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
     Matrix4::from(spec.into())
 }
 
 /// Compute a perspective matrix from a view frustum.
 ///
 /// This is the equivalent of the now deprecated [glFrustum]
-/// (http://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml) function.
+/// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml) function.
 #[inline]
 pub fn frustum<S, Spec: Into<Perspective<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
     Matrix4::from(spec.into())
@@ -32,8 +35,8 @@ pub fn frustum<S, Spec: Into<Perspective<S>>>(spec: Spec) -> Matrix4<S> where S:
 /// Compute the perspective matrix for converting from camera space to 
 /// normalized device coordinates. 
 ///
-/// This is the equivalent to the
-/// [gluPerspective] (http://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
+/// This is the equivalent to the [gluPerspective] 
+/// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml)
 /// function.
 #[inline]
 pub fn perspective<S, Spec: Into<PerspectiveFov<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
