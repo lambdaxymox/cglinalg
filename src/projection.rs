@@ -1,12 +1,49 @@
-use crate::scalar::ScalarFloat;
-use crate::angle::{
-    Degrees, 
-    Radians
+use scalar::{
+    ScalarFloat,
 };
-use crate::matrix::Matrix4;
-use crate::structure::Angle;
+use angle::{
+    Degrees, 
+    Radians,
+};
+use matrix::{
+    Matrix4,
+};
+use structure::{
+    Angle,
+};
 
 
+/// Compute the orthographic projection matrix for converting from camera space to
+/// normalized device coordinates.
+#[inline]
+pub fn ortho<S, Spec: Into<Orthographic<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
+    Matrix4::from(spec.into())
+}
+
+/// Compute a perspective matrix from a view frustum.
+///
+/// This is the equivalent of the now deprecated [glFrustum]
+/// (http://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml) function.
+#[inline]
+pub fn frustum<S, Spec: Into<Perspective<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
+    Matrix4::from(spec.into())
+}
+
+/// Compute the perspective matrix for converting from camera space to 
+/// normalized device coordinates. 
+///
+/// This is the equivalent to the
+/// [gluPerspective] (http://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
+/// function.
+#[inline]
+pub fn perspective<S, Spec: Into<PerspectiveFov<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
+    Matrix4::from(spec.into())
+}
+
+
+
+/// An orthographic projection with arbitrary left, right, top, bottom,
+/// near, and far planes.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Orthographic<S> {
     left: S,
@@ -89,6 +126,8 @@ impl<S> Into<Orthographic<S>> for &[S; 6] where S: Copy {
     }
 }
 
+/// A perspective projection based on arbitarary left, right, bottom,
+/// top, near, and far planes.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Perspective<S> {
     left: S,
@@ -171,6 +210,8 @@ impl<S> Into<Perspective<S>> for &[S; 6] where S: Copy {
     }
 }
 
+/// A perspective projection based on the near and farplanes and the vertical
+/// field-of-view angle and the horizontal/vertical aspect ratio.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFov<S> {
     fovy: Radians<S>,

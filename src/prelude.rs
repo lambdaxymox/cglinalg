@@ -1,38 +1,9 @@
-use crate::scalar::{
-    ScalarFloat
-};
-use crate::structure::*;
-use crate::vector::*;
-use crate::matrix::*;
-use crate::quaternion::*;
-use crate::projection::*;
-use crate::point::*;
 
+use structure::*;
+use vector::*;
+use matrix::*;
+use quaternion::*;
 
-/// Compute the orthographic projection matrix for converting from camera space to
-/// normalized device coordinates.
-#[inline]
-pub fn ortho<S, Spec: Into<Orthographic<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
-    Matrix4::from(spec.into())
-}
-
-/// Compute a perspective matrix from a view frustum.
-///
-/// This is the equivalent of the now deprecated [glFrustum]
-/// (http://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml) function.
-#[inline]
-pub fn frustum<S, Spec: Into<Perspective<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
-    Matrix4::from(spec.into())
-}
-
-/// Compute the perspective matrix for converting from camera space to 
-/// normalized device coordinates. This is the equivalent to the
-/// [gluPerspective] (http://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
-/// function.
-#[inline]
-pub fn perspective<S, Spec: Into<PerspectiveFov<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
-    Matrix4::from(spec.into())
-}
 
 /// Construct a new one-dimensional vector. This follows the style of
 /// other GLSL vector constructors even though GLSL itself lacks a
