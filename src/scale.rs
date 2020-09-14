@@ -2,7 +2,6 @@ use scalar::{
     Scalar,
 };
 use matrix::{
-    Matrix2,
     Matrix3,
     Matrix4,
 };
@@ -31,7 +30,7 @@ impl<S> Scale2D<S> where S: Scalar {
     /// Construct a scale transformation from a vector of scale factors.
     #[inline]
     pub fn from_vector(scale: Vector2<S>) -> Scale2D<S> {
-        let matrix = Matrix3::from(Matrix2::from_nonuniform_scale(scale.x, scale.y));
+        let matrix = Matrix3::from_affine_nonuniform_scale(scale.x, scale.y);
 
         Scale2D {
             matrix: matrix,
@@ -41,7 +40,7 @@ impl<S> Scale2D<S> where S: Scalar {
     /// Construct a scale transformation from a nonuniform scale across coordinates.
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2D<S> {
-        let matrix = Matrix3::from(Matrix2::from_nonuniform_scale(scale_x, scale_y));
+        let matrix = Matrix3::from_affine_nonuniform_scale(scale_x, scale_y);
 
         Scale2D {
             matrix: matrix,

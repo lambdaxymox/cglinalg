@@ -1060,6 +1060,35 @@ impl<S> Matrix3<S> where S: Scalar {
         )
     }
 
+    /// Construct a two-dimensional uniform affine scaling matrix.
+    ///
+    /// The matrix applies the same scale factor to all dimensions, so each
+    /// component of a vector will be scaled by the same factor. In particular,
+    /// calling `from_scale(scale)` is equivalent to calling 
+    /// `from_affine_nonuniform_scale(scale, scale)`. The z-component is unaffected
+    /// since this is an affine matrix.
+    #[inline]
+    pub fn from_affine_scale(scale: S) -> Matrix3<S> {
+        Matrix3::from_affine_nonuniform_scale(scale, scale)
+    }
+    
+    /// Construct a two-dimensional affine scaling matrix.
+    ///
+    /// This is the most general case for scaling matrices: the scale factor
+    /// in each dimension need not be identical. The z-component is unaffected because
+    /// this is an affine matrix.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix3<S> {
+        let zero = S::zero();
+        let one = S::one();
+        Matrix3::new(
+            scale_x,   zero,      zero,
+            zero,      scale_y,   zero,
+            zero,      zero,      one,
+        )
+    }
+
     /// Construct a new shearing matrix for shearing along the x-axis.
     #[rustfmt::skip]
     #[inline]
