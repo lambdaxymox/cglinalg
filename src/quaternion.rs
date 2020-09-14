@@ -395,11 +395,11 @@ impl<S> Product for Quaternion<S> where S: Scalar {
 
 impl<S> From<Quaternion<S>> for Matrix3<S> where S: Scalar {
     #[rustfmt::skip]
-    fn from(quat: Quaternion<S>) -> Matrix3<S> {
-        let s = quat.s;
-        let x = quat.v.x;
-        let y = quat.v.y;
-        let z = quat.v.z;
+    fn from(quaternion: Quaternion<S>) -> Matrix3<S> {
+        let s = quaternion.s;
+        let x = quaternion.v.x;
+        let y = quaternion.v.y;
+        let z = quaternion.v.z;
         let one = S::one();
         let two = one + one;
     
@@ -413,11 +413,11 @@ impl<S> From<Quaternion<S>> for Matrix3<S> where S: Scalar {
 
 impl<S> From<&Quaternion<S>> for Matrix3<S> where S: Scalar {
     #[rustfmt::skip]
-    fn from(quat: &Quaternion<S>) -> Matrix3<S> {
-        let s = quat.s;
-        let x = quat.v.x;
-        let y = quat.v.y;
-        let z = quat.v.z;
+    fn from(quaternion: &Quaternion<S>) -> Matrix3<S> {
+        let s = quaternion.s;
+        let x = quaternion.v.x;
+        let y = quaternion.v.y;
+        let z = quaternion.v.z;
         let one = S::one();
         let two = one + one;
     
@@ -431,11 +431,31 @@ impl<S> From<&Quaternion<S>> for Matrix3<S> where S: Scalar {
 
 impl<S> From<Quaternion<S>> for Matrix4<S> where S: Scalar {
     #[rustfmt::skip]
-    fn from(quat: Quaternion<S>) -> Matrix4<S> {
-        let s = quat.s;
-        let x = quat.v.x;
-        let y = quat.v.y;
-        let z = quat.v.z;
+    fn from(quaternion: Quaternion<S>) -> Matrix4<S> {
+        let s = quaternion.s;
+        let x = quaternion.v.x;
+        let y = quaternion.v.y;
+        let z = quaternion.v.z;
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+    
+        Matrix4::new(
+            one - two * y * y - two * z * z, two * x * y + two * s * z,       two * x * z - two * s * y,       zero, 
+            two * x * y - two * s * z,       one - two * x * x - two * z * z, two * y * z + two * s * x,       zero, 
+            two * x * z + two * s * y,       two * y * z - two * s * x,       one - two * x * x - two * y * y, zero, 
+            zero,                            zero,                            zero,                            one
+        )
+    }
+}
+
+impl<S> From<&Quaternion<S>> for Matrix4<S> where S: Scalar {
+    #[rustfmt::skip]
+    fn from(quaternion: &Quaternion<S>) -> Matrix4<S> {
+        let s = quaternion.s;
+        let x = quaternion.v.x;
+        let y = quaternion.v.y;
+        let z = quaternion.v.z;
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
