@@ -37,11 +37,7 @@ impl<S> Shear2D<S> where S: Scalar {
     #[inline]
     pub fn from_vector(shear: Vector2<S>) -> Shear2D<S> {
         Shear2D {
-            matrix: Matrix3::new(
-                S::one(),  shear.y,   S::zero(),
-                shear.x,   S::one(),  S::zero(),
-                S::zero(), S::zero(), S::one()
-            ),
+            matrix: Matrix3::from_affine_shear(shear.x, shear.y),
         }
     }
 
@@ -52,7 +48,7 @@ impl<S> Shear2D<S> where S: Scalar {
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S) -> Shear2D<S> {
         Shear2D {
-            matrix: Matrix3::from_shear_x(shear_x_with_y, S::zero()),
+            matrix: Matrix3::from_affine_shear_x(shear_x_with_y),
         }
     }
 
@@ -63,7 +59,7 @@ impl<S> Shear2D<S> where S: Scalar {
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S) -> Shear2D<S> {
         Shear2D {
-            matrix: Matrix3::from_shear_y(shear_y_with_x, S::zero()),
+            matrix: Matrix3::from_affine_shear_y(shear_y_with_x),
         }
     }
 }
@@ -106,15 +102,9 @@ impl<S> AffineTransformation2D<Point2<S>> for Shear2D<S> where S: ScalarSigned {
     #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        let zero = S::zero();
-        let one = S::one();
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_x_with_y = -self.matrix.c1r0;
-        let matrix = Matrix3::new(
-            one,            shear_y_with_x, zero,
-            shear_x_with_y, one,            zero,
-            zero,           zero,           one
-        );
+        let matrix = Matrix3::from_affine_shear(shear_x_with_y, shear_y_with_x);
         
         Some(Shear2D {
             matrix: matrix,
@@ -146,15 +136,9 @@ impl<S> AffineTransformation2D<&Point2<S>> for Shear2D<S> where S: ScalarFloat {
     #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        let zero = S::zero();
-        let one = S::one();
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_x_with_y = -self.matrix.c1r0;
-        let matrix = Matrix3::new(
-            one,            shear_y_with_x, zero,
-            shear_x_with_y, one,            zero,
-            zero,           zero,           one
-        );
+        let matrix = Matrix3::from_affine_shear(shear_x_with_y, shear_y_with_x);
         
         Some(Shear2D {
             matrix: matrix,
@@ -186,15 +170,9 @@ impl<S> AffineTransformation2D<Vector2<S>> for Shear2D<S> where S: ScalarFloat {
     #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        let zero = S::zero();
-        let one = S::one();
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_x_with_y = -self.matrix.c1r0;
-        let matrix = Matrix3::new(
-            one,            shear_y_with_x, zero,
-            shear_x_with_y, one,            zero,
-            zero,           zero,           one
-        );
+        let matrix = Matrix3::from_affine_shear(shear_x_with_y, shear_y_with_x);
         
         Some(Shear2D {
             matrix: matrix,
@@ -226,15 +204,9 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Shear2D<S> where S: ScalarFloat 
     #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        let zero = S::zero();
-        let one = S::one();
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_x_with_y = -self.matrix.c1r0;
-        let matrix = Matrix3::new(
-            one,            shear_y_with_x, zero,
-            shear_x_with_y, one,            zero,
-            zero,           zero,           one
-        );
+        let matrix = Matrix3::from_affine_shear(shear_x_with_y, shear_y_with_x);
         
         Some(Shear2D {
             matrix: matrix,

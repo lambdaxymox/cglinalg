@@ -133,9 +133,11 @@ impl<S> Matrix2<S> where S: Scalar {
     /// of the y-dimension to the shearing along the x-dimension. 
     #[rustfmt::skip]
     pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix2<S> {
+        let one = S::one();
+
         Matrix2::new(
-            S::one(),       shear_y_with_x,
-            shear_x_with_y, S::one()
+            one,            shear_y_with_x,
+            shear_x_with_y, one
         )
     }
 
@@ -1053,6 +1055,7 @@ impl<S> Matrix3<S> where S: Scalar {
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Matrix3<S> {
         let zero = S::zero();
+
         Matrix3::new(
             scale_x,   zero,      zero,
             zero,      scale_y,   zero,
@@ -1082,6 +1085,7 @@ impl<S> Matrix3<S> where S: Scalar {
     pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix3<S> {
         let zero = S::zero();
         let one = S::one();
+
         Matrix3::new(
             scale_x,   zero,      zero,
             zero,      scale_y,   zero,
@@ -1089,12 +1093,18 @@ impl<S> Matrix3<S> where S: Scalar {
         )
     }
 
-    /// Construct a new shearing matrix for shearing along the x-axis.
+    /// Construct a three-dimensional shearing matrix for shearing along the x-axis, holding
+    /// the y-axis constant and the z-axis constant.
+    ///
+    /// The parameters `shear_x_with_y` and `shear_x_with_z` are the multiplicative
+    /// factors for the contributions of the y-axis, and the z-axis, respectively to 
+    /// shearing along the x-axis. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix3<S> {
         let one = S::one();
         let zero = S::zero();
+
         Matrix3::new(
             one,            zero, zero,
             shear_x_with_y, one,  zero, 
@@ -1102,12 +1112,18 @@ impl<S> Matrix3<S> where S: Scalar {
         )
     }
 
-    /// Construct a new shearing matrix for shearing along the y-axis.
+    /// Construct a three-dimensional shearing matrix for shearing along the y-axis, holding
+    /// the x-axis constant and the z-axis constant.
+    ///
+    /// The parameters `shear_y_with_x` and `shear_y_with_z` are the multiplicative
+    /// factors for the contributions of the x-axis, and the z-axis, respectively to 
+    /// shearing along the y-axis. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix3<S> {
         let one = S::one();
         let zero = S::zero();
+
         Matrix3::new(
             one,  shear_y_with_x, zero,
             zero, one,            zero,
@@ -1115,16 +1131,109 @@ impl<S> Matrix3<S> where S: Scalar {
         )
     }
 
-    /// Construct a new shearing matrix for shearing along the z-axis.
+    /// Construct a three-dimensional shearing matrix for shearing along the z-axis, holding
+    /// the x-axis constant and the y-axis constant.
+    ///
+    /// The parameters `shear_z_with_x` and `shear_z_with_y` are the multiplicative
+    /// factors for the contributions of the x-axis, and the y-axis, respectively to 
+    /// shearing along the z-axis. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix3<S> {
         let one = S::one();
         let zero = S::zero();
+
         Matrix3::new(
             one,  zero, shear_z_with_x,
             zero, one,  shear_z_with_y,
             zero, zero, one   
+        )
+    }
+
+    /// Construct a general shearing matrix in three dimensions. There are six
+    /// parameters describing a shearing transformation in three dimensions.
+    /// 
+    /// The parameter `shear_x_with_y` denotes the factor scaling the
+    /// contribution of the y-dimension to shearing along the x-dimension.
+    /// The parameter `shear_x_with_z` denotes the factor scaling the contribution 
+    /// of the z-dimension to the shearing along the x-dimension. 
+    /// The parameter `shear_y_with_x` denotes the factor scaling the
+    /// contribution of the x-dimension to shearing along the y-dimension.
+    /// The parameter `shear_y_with_z` denotes the factor scaling the contribution 
+    /// of the z-dimension to the shearing along the y-dimension. 
+    /// The parameter `shear_z_with_x` denotes the factor scaling the
+    /// contribution of the x-dimension to shearing along the z-dimension.
+    /// The parameter `shear_z_with_y` denotes the factor scaling the contribution 
+    /// of the y-dimension to the shearing along the z-dimension. 
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_shear(
+        shear_x_with_y: S, shear_x_with_z: S, 
+        shear_y_with_x: S, shear_y_with_z: S, 
+        shear_z_with_x: S, shear_z_with_y: S) -> Matrix3<S> 
+    {
+        let one = S::one();
+
+        Matrix3::new(
+            one,            shear_y_with_x, shear_z_with_x,
+            shear_x_with_y, one,            shear_z_with_y,
+            shear_x_with_z, shear_y_with_z, one
+        )
+    }
+
+    /// Construct a two-dimensional affine shearing matrix along the 
+    /// x-axis, holding the y-axis constant.
+    ///
+    /// The parameter `shear_x_with_y` denotes the factor scaling the
+    /// contribution of the y-dimension to shearing along the x-dimension.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_shear_x(shear_x_with_y: S) -> Matrix3<S> {
+        let zero = S::zero();
+        let one = S::one();
+
+        Matrix3::new(
+            one,            zero, zero,
+            shear_x_with_y, one,  zero,
+            zero,           zero, one
+        )
+    }
+
+    /// Construct a two-dimensional affine shearing matrix along the 
+    /// y-axis, holding the x-axis constant.
+    ///
+    /// The parameter `shear_y_with_x` denotes the factor scaling the
+    /// contribution of the y-dimension to shearing along the x-dimension.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_shear_y(shear_y_with_x: S) -> Matrix3<S> {
+        let zero = S::zero();
+        let one = S::one();
+
+        Matrix3::new(
+            one,  shear_y_with_x, zero,
+            zero, one,            zero,
+            zero, zero,           one
+        )
+    }
+
+    /// Construct a general affine shearing matrix in two dimensions. There are 
+    /// two possible parameters describing a shearing transformation in two dimensions.
+    ///
+    /// The parameter `shear_y_with_x` denotes the factor scaling the
+    /// contribution of the x-dimension to shearing along the y-dimension.
+    /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
+    /// of the y-dimension to the shearing along the x-dimension. 
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix3<S> {
+        let zero = S::zero();
+        let one = S::one();
+
+        Matrix3::new(
+            one,            shear_y_with_x, zero,
+            shear_x_with_y, one,            zero,
+            zero,           zero,           one
         )
     }
 }
