@@ -706,3 +706,116 @@ impl<S> Rotation<Point3<S>> for Rotation3D<S> where S: ScalarFloat {
     }
 }
 
+impl<S> AffineTransformation3D<Point3<S>> for Rotation3D<S> where S: ScalarFloat {
+    type Applied = Point3<S>;
+
+    #[inline]
+    fn identity() -> Rotation3D<S> {
+        Rotation3D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Rotation3D<S>> {
+        Some(<Self as Rotation<Point3<S>>>::inverse(&self))
+    }
+
+    #[inline]
+    fn apply(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: Point3<S>) -> Option<Point3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point3::from_homogeneous( inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation3D<&Point3<S>> for Rotation3D<S> where S: ScalarFloat {
+    type Applied = Point3<S>;
+
+    #[inline]
+    fn identity() -> Rotation3D<S> {
+        Rotation3D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[rustfmt::skip]
+    #[inline]
+    fn inverse(&self) -> Option<Rotation3D<S>> {
+        Some(<Self as Rotation<Point3<S>>>::inverse(&self))
+    }
+
+    #[inline]
+    fn apply(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    #[inline]
+    fn apply_inverse(&self, point: &Point3<S>) -> Option<Point3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
+        Some(Point3::from_homogeneous( inverse_matrix * point.to_homogeneous()))
+    }
+}
+
+impl<S> AffineTransformation3D<Vector3<S>> for Rotation3D<S> where S: ScalarFloat {
+    type Applied = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Rotation3D<S> {
+        Rotation3D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Rotation3D<S>> {
+        Some(<Self as Rotation<Point3<S>>>::inverse(&self))
+    }
+
+    #[inline]
+    fn apply(&self, vector: Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: Vector3<S>) -> Option<Vector3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
+impl<S> AffineTransformation3D<&Vector3<S>> for Rotation3D<S> where S: ScalarFloat {
+    type Applied = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Rotation3D<S> {
+        Rotation3D { 
+            angle: Radians(S::zero()),
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Rotation3D<S>> {
+        Some(<Self as Rotation<Point3<S>>>::inverse(&self))
+    }
+
+    #[inline]
+    fn apply(&self, vector: &Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).truncate()
+    }
+
+    #[inline]
+    fn apply_inverse(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
+        let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
+        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+    }
+}
+
