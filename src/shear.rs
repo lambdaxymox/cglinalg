@@ -1,7 +1,6 @@
 use scalar::{
     Scalar,
     ScalarSigned,
-    ScalarFloat,
 };
 use matrix::{
     Matrix3,
