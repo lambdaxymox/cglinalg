@@ -35,6 +35,15 @@ use std::mem;
 use std::ops;
 
 
+/// Create a new quaternion in the style of a GLSL type
+/// constructor. This is not a built-in function in GLSL, but it exists
+/// for convenience.
+#[inline]
+pub fn quat<S, T: Into<Quaternion<S>>>(quaternion: T) -> Quaternion<S> {
+    quaternion.into()
+}
+
+
 macro_rules! impl_mul_operator {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $scalar:ident, { $($field:ident),* } }) => {
         impl ops::Mul<$Rhs> for $Lhs {

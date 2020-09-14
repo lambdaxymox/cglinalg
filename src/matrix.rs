@@ -41,6 +41,26 @@ use structure::{
 use vector::*;
 
 
+/// Create a new 2x2 matrix in the style of a GLSL type
+/// constructor.
+#[inline]
+pub fn mat2<S, T: Into<Matrix2<S>>>(matrix: T) -> Matrix2<S> {
+    matrix.into()
+}
+
+/// Create a new 3x3 matrix in the style of a GLSL type constructor.
+#[inline]
+pub fn mat3<S, T: Into<Matrix3<S>>>(matrix: T) -> Matrix3<S> {
+    matrix.into()
+}
+
+/// Create a new 4x4 matrix in the style of a GLSL type constructor.
+#[inline]
+pub fn mat4<S, T: Into<Matrix4<S>>>(matrix: T) -> Matrix4<S> {
+    matrix.into()
+}
+
+
 macro_rules! impl_mul_operator {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {

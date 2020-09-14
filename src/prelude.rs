@@ -5,69 +5,6 @@ use matrix::*;
 use quaternion::*;
 
 
-/// Construct a new one-dimensional vector. This follows the style of
-/// other GLSL vector constructors even though GLSL itself lacks a
-/// `vec1()` function.
-#[inline]
-pub fn vec1<S, T: Into<Vector1<S>>>(v: T) -> Vector1<S> {
-    v.into()
-}
-
-/// Construct a new two-dimensional vector in the style of
-/// a GLSL `vec2` constructor.
-#[inline]
-pub fn vec2<S, T: Into<Vector2<S>>>(v: T) -> Vector2<S> {
-    v.into()
-}
-
-/// Construct a new three-dimensional vector in the style of
-/// a GLSL `vec3` constructor.
-#[inline]
-pub fn vec3<S, T: Into<Vector3<S>>>(v: T) -> Vector3<S> {
-    v.into()
-}
-
-/// Construct a new four-dimensional vector in the style of
-/// a GLSL `vec4` constructor.
-#[inline]
-pub fn vec4<S, T: Into<Vector4<S>>>(v: T) -> Vector4<S> {
-    v.into()
-}
-
-/// Create a new quaternion in the style of a GLSL type
-/// constructor. This is not a built-in function in GLSL, but it exists
-/// for convenience.
-#[inline]
-pub fn quat<S, T: Into<Quaternion<S>>>(q: T) -> Quaternion<S> {
-    q.into()
-}
-
-/// Create a new 2x2 matrix in the style of a GLSL type
-/// constructor.
-#[inline]
-pub fn mat2<S, T: Into<Matrix2<S>>>(m: T) -> Matrix2<S> {
-    m.into()
-}
-
-/// Create a new 3x3 matrix in the style of a GLSL type constructor.
-#[inline]
-pub fn mat3<S, T: Into<Matrix3<S>>>(m: T) -> Matrix3<S> {
-    m.into()
-}
-
-/// Create a new 4x4 matrix in the style of a GLSL type constructor.
-#[inline]
-pub fn mat4<S, T: Into<Matrix4<S>>>(m: T) -> Matrix4<S> {
-    m.into()
-}
-
-/// Compute the dot product between two vectors.
-#[inline]
-pub fn dot<W: Copy + Clone, V: DotProduct<W>>(a: V, b: W) -> <V as DotProduct<W>>::Output {
-    V::dot(a, b)
-}
-
-
 #[cfg(test)]
 mod tests {
     use matrix::{Matrix2, Matrix3, Matrix4};
