@@ -243,7 +243,7 @@ impl<S> Shear3D<S> where S: Scalar {
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Shear3D<S> {
         Shear3D {
-            matrix: Matrix4::from_shear_x(shear_x_with_y, shear_x_with_z),
+            matrix: Matrix4::from_affine_shear_x(shear_x_with_y, shear_x_with_z),
         }
     }
 
@@ -255,7 +255,7 @@ impl<S> Shear3D<S> where S: Scalar {
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Shear3D<S> {
         Shear3D {
-            matrix: Matrix4::from_shear_y(shear_y_with_x, shear_y_with_z),
+            matrix: Matrix4::from_affine_shear_y(shear_y_with_x, shear_y_with_z),
         }
     }
 
@@ -267,7 +267,35 @@ impl<S> Shear3D<S> where S: Scalar {
     #[inline]
     pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Shear3D<S> {
         Shear3D {
-            matrix: Matrix4::from_shear_z(shear_z_with_x, shear_z_with_y),
+            matrix: Matrix4::from_affine_shear_z(shear_z_with_x, shear_z_with_y),
+        }
+    }
+
+    /// Construct a general shearing transformation.
+    ///
+    /// The parameters `shear_x_with_y` and `shear_x_with_z` denote the multiplicative
+    /// factors for the contributions from the y-axis and the z-axis respectively for the
+    /// shearing along the x-axis.
+    /// 
+    /// The parameters `shear_y_with_x` and `shear_y_with_z` denote the multiplicative
+    /// factors for the contributions from the x-axis and the z-axis respectively for the
+    /// shearing along the y-axis.
+    ///
+    /// The parameters `shear_z_with_x` and `shear_z_with_y` denote the multiplicative
+    /// factors for the contributions from the x-axis and the y-axis respectively for the
+    /// shearing along the z-axis.
+    #[inline]
+    pub fn from_shear(
+        shear_x_with_y: S, shear_x_with_z: S, 
+        shear_y_with_x: S, shear_y_with_z: S, 
+        shear_z_with_x: S, shear_z_with_y: S) -> Shear3D<S>
+    {
+        Shear3D {
+            matrix: Matrix4::from_affine_shear(
+                shear_x_with_y, shear_x_with_z, 
+                shear_y_with_x, shear_y_with_z, 
+                shear_z_with_x, shear_z_with_y
+            )
         }
     }
 }
@@ -310,19 +338,16 @@ impl<S> AffineTransformation3D<Point3<S>> for Shear3D<S> where S: ScalarSigned {
     #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        let zero = S::zero();
-        let one = S::one();
         let shear_x_with_y = -self.matrix.c1r0;
         let shear_x_with_z = -self.matrix.c2r0;
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_y_with_z = -self.matrix.c2r1;
         let shear_z_with_x = -self.matrix.c0r2;
         let shear_z_with_y = -self.matrix.c1r2;
-        let matrix = Matrix4::new(
-            one,            shear_y_with_x, shear_z_with_x, zero, 
-            shear_x_with_y, one,            shear_z_with_y, zero,
-            shear_x_with_z, shear_y_with_z, one,            zero,
-            zero,           zero,           zero,           one
+        let matrix = Matrix4::from_affine_shear(
+            shear_x_with_y, shear_x_with_z, 
+            shear_y_with_x, shear_y_with_z, 
+            shear_z_with_x, shear_z_with_y
         );
         
         Some(Shear3D {
@@ -355,19 +380,16 @@ impl<S> AffineTransformation3D<&Point3<S>> for Shear3D<S> where S: ScalarFloat {
     #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        let zero = S::zero();
-        let one = S::one();
         let shear_x_with_y = -self.matrix.c1r0;
         let shear_x_with_z = -self.matrix.c2r0;
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_y_with_z = -self.matrix.c2r1;
         let shear_z_with_x = -self.matrix.c0r2;
         let shear_z_with_y = -self.matrix.c1r2;
-        let matrix = Matrix4::new(
-            one,            shear_y_with_x, shear_z_with_x, zero, 
-            shear_x_with_y, one,            shear_z_with_y, zero,
-            shear_x_with_z, shear_y_with_z, one,            zero,
-            zero,           zero,           zero,           one
+        let matrix = Matrix4::from_affine_shear(
+            shear_x_with_y, shear_x_with_z, 
+            shear_y_with_x, shear_y_with_z, 
+            shear_z_with_x, shear_z_with_y
         );
         
         Some(Shear3D {
@@ -400,19 +422,16 @@ impl<S> AffineTransformation3D<Vector3<S>> for Shear3D<S> where S: ScalarFloat {
     #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        let zero = S::zero();
-        let one = S::one();
         let shear_x_with_y = -self.matrix.c1r0;
         let shear_x_with_z = -self.matrix.c2r0;
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_y_with_z = -self.matrix.c2r1;
         let shear_z_with_x = -self.matrix.c0r2;
         let shear_z_with_y = -self.matrix.c1r2;
-        let matrix = Matrix4::new(
-            one,            shear_y_with_x, shear_z_with_x, zero, 
-            shear_x_with_y, one,            shear_z_with_y, zero,
-            shear_x_with_z, shear_y_with_z, one,            zero,
-            zero,           zero,           zero,           one
+        let matrix = Matrix4::from_affine_shear(
+            shear_x_with_y, shear_x_with_z, 
+            shear_y_with_x, shear_y_with_z, 
+            shear_z_with_x, shear_z_with_y
         );
         
         Some(Shear3D {
@@ -445,19 +464,16 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Shear3D<S> where S: ScalarFloat 
     #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        let zero = S::zero();
-        let one = S::one();
         let shear_x_with_y = -self.matrix.c1r0;
         let shear_x_with_z = -self.matrix.c2r0;
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_y_with_z = -self.matrix.c2r1;
         let shear_z_with_x = -self.matrix.c0r2;
         let shear_z_with_y = -self.matrix.c1r2;
-        let matrix = Matrix4::new(
-            one,            shear_y_with_x, shear_z_with_x, zero, 
-            shear_x_with_y, one,            shear_z_with_y, zero,
-            shear_x_with_z, shear_y_with_z, one,            zero,
-            zero,           zero,           zero,           one
+        let matrix = Matrix4::from_affine_shear(
+            shear_x_with_y, shear_x_with_z, 
+            shear_y_with_x, shear_y_with_z, 
+            shear_z_with_x, shear_z_with_y
         );
         
         Some(Shear3D {

@@ -2598,10 +2598,16 @@ impl<S> Matrix4<S> where S: Scalar {
         )
     }
 
-    /// Construct a new 4x4 affine matrix for shearing along the x-axis in three dimensions.
+    /// Construct a three-dimensional affine shearing matrix for shearing along the x-axis, holding
+    /// the y-axis constant and the z-axis constant.
+    ///
+    /// The parameters `shear_x_with_y` and `shear_x_with_z` are the multiplicative
+    /// factors for the contributions of the y-axis, and the z-axis, respectively to 
+    /// shearing along the x-axis. Since this is an affine transformation the `w` component
+    /// of four-dimensional vectors is unaffected.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix4<S> {
+    pub fn from_affine_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
@@ -2612,10 +2618,16 @@ impl<S> Matrix4<S> where S: Scalar {
         )
     }
 
-    /// Construct a new 4x4 affine matrix for shearing along the y-axis in three dimensions.
+    /// Construct a three-dimensional affine shearing matrix for shearing along the y-axis, holding
+    /// the x-axis constant and the z-axis constant.
+    ///
+    /// The parameters `shear_y_with_x` and `shear_y_with_z` are the multiplicative
+    /// factors for the contributions of the x-axis, and the z-axis, respectively to 
+    /// shearing along the y-axis. Since this is an affine transformation the `w` component
+    /// of four-dimensional vectors is unaffected.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix4<S> {
+    pub fn from_affine_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
@@ -2626,10 +2638,16 @@ impl<S> Matrix4<S> where S: Scalar {
         )
     }
 
-    /// Construct a new 4x4 affine matrix for shearing along the z-axis in three dimensions.
+    /// Construct a three-dimensional affine shearing matrix for shearing along the z-axis, holding
+    /// the x-axis constant and the y-axis constant.
+    ///
+    /// The parameters `shear_z_with_x` and `shear_z_with_y` are the multiplicative
+    /// factors for the contributions of the x-axis, and the y-axis, respectively to 
+    /// shearing along the z-axis. Since this is an affine transformation the `w` component
+    /// of four-dimensional vectors is unaffected.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4<S> {
+    pub fn from_affine_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
@@ -2637,6 +2655,47 @@ impl<S> Matrix4<S> where S: Scalar {
             zero, one,  shear_z_with_y, zero,
             zero, zero, one,            zero,
             zero, zero, zero,           one
+        )
+    }
+
+    /// Construct a general shearing affine matrix in three dimensions. There are six
+    /// parameters describing a shearing transformation in three dimensions.
+    /// 
+    /// The parameter `shear_x_with_y` denotes the factor scaling the
+    /// contribution of the y-dimension to shearing along the x-dimension.
+    ///
+    /// The parameter `shear_x_with_z` denotes the factor scaling the contribution 
+    /// of the z-dimension to the shearing along the x-dimension. 
+    ///
+    /// The parameter `shear_y_with_x` denotes the factor scaling the
+    /// contribution of the x-dimension to shearing along the y-dimension.
+    ///
+    /// The parameter `shear_y_with_z` denotes the factor scaling the contribution 
+    /// of the z-dimension to the shearing along the y-dimension. 
+    ///
+    /// The parameter `shear_z_with_x` denotes the factor scaling the
+    /// contribution of the x-dimension to shearing along the z-dimension.
+    ///
+    /// The parameter `shear_z_with_y` denotes the factor scaling the contribution 
+    /// of the y-dimension to the shearing along the z-dimension. 
+    ///
+    /// Since this is an affine transformation the `w` component
+    /// of four-dimensional vectors is unaffected.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_shear(
+        shear_x_with_y: S, shear_x_with_z: S, 
+        shear_y_with_x: S, shear_y_with_z: S, 
+        shear_z_with_x: S, shear_z_with_y: S) -> Matrix4<S> 
+    {
+        let zero = S::zero();
+        let one = S::one();
+
+        Matrix4::new(
+            one,            shear_y_with_x, shear_z_with_x, zero,
+            shear_x_with_y, one,            shear_z_with_y, zero,
+            shear_x_with_z, shear_y_with_z, one,            zero,
+            zero,           zero,           zero,           one
         )
     }
 }
