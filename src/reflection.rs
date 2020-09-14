@@ -37,16 +37,9 @@ impl<S> Reflection2D<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
     #[rustfmt::skip]
     pub fn from_normal(normal: Vector2<S>) -> Reflection2D<S> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
         Reflection2D {
             normal: normal,
-            matrix: Matrix3::new(
-                 one - two * normal.x * normal.x, -two * normal.x * normal.y,       zero,
-                -two * normal.x * normal.y,        one - two * normal.y * normal.y, zero, 
-                 zero,                             zero,                            one
-            )
+            matrix: Matrix3::from_affine_reflection(normal),
         }
     }
 }
@@ -263,17 +256,9 @@ impl<S> Reflection3D<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
     #[rustfmt::skip]
     pub fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
         Reflection3D {
             normal: normal,
-            matrix: Matrix4::new(
-                 one - two * normal.x * normal.x, -two * normal.x * normal.y,       -two * normal.x * normal.z,       zero, 
-                -two * normal.x * normal.y,        one - two * normal.y * normal.y, -two * normal.y * normal.z,       zero,
-                -two * normal.x * normal.z,       -two * normal.y * normal.z,        one - two * normal.z * normal.z, zero,
-                 zero,                             zero,                             zero,                            one
-            )
+            matrix: Matrix4::from_affine_reflection(normal),
         }
     }
 }

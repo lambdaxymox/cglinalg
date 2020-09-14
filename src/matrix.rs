@@ -95,6 +95,30 @@ impl<S> Matrix2<S> {
     }
 }
 
+impl<S> Matrix2<S> where S: NumCast + Copy {
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix2<T>> {
+        let c0r0 = match num_traits::cast(self.c0r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.c0r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.c1r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.c1r1) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix2::new(c0r0, c0r1, c1r0, c1r1))
+    }
+}
+
 impl<S> Matrix2<S> where S: Scalar {
     /// Construct a matrix that will cause a vector to point 
     /// at the vector `direction` using up for orientation.
@@ -169,27 +193,18 @@ impl<S> Matrix2<S> where S: Scalar {
     }
 }
 
-impl<S> Matrix2<S> where S: NumCast + Copy {
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix2<T>> {
-        let c0r0 = match num_traits::cast(self.c0r0) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.c0r1) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.c1r0) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.c1r1) {
-            Some(value) => value,
-            None => return None,
-        };
+impl<S> Matrix2<S> where S: ScalarSigned {
+    /// Construct a two-dimensional reflection matrix in the xy-plane.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_reflection(normal: Vector2<S>) -> Matrix2<S> {
+        let one = S::one();
+        let two = one + one;
 
-        Some(Matrix2::new(c0r0, c0r1, c1r0, c1r1))
+        Matrix2::new(
+             one - two * normal.x * normal.x, -two * normal.x * normal.y,
+            -two * normal.x * normal.y,        one - two * normal.y * normal.y,
+        )
     }
 }
 
@@ -1021,6 +1036,55 @@ impl<S> Matrix3<S> {
     }
 }
 
+impl<S> Matrix3<S> where S: NumCast + Copy {
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    #[rustfmt::skip]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix3<T>> {
+        let c0r0 = match num_traits::cast(self.c0r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.c0r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match num_traits::cast(self.c0r2) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.c1r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.c1r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match num_traits::cast(self.c1r2) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match num_traits::cast(self.c2r0) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match num_traits::cast(self.c2r1) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r2 = match num_traits::cast(self.c2r2) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix3::new(
+            c0r0, c0r1, c0r2,
+            c1r0, c1r1, c1r2, 
+            c2r0, c2r1, c2r2,
+        ))
+    }
+}
+
 impl<S> Matrix3<S> where S: Scalar {
     /// Construct a two-dimensional affine translation matrix.
     ///
@@ -1245,52 +1309,34 @@ impl<S> Matrix3<S> where S: Scalar {
     }
 }
 
-impl<S> Matrix3<S> where S: NumCast + Copy {
-    /// Cast a matrix from one type of scalars to another type of scalars.
+impl<S> Matrix3<S> where S: ScalarSigned {
+    /// Construct a two-dimensional affine reflection matrix in the xy-plane.
     #[rustfmt::skip]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix3<T>> {
-        let c0r0 = match num_traits::cast(self.c0r0) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.c0r1) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r2 = match num_traits::cast(self.c0r2) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.c1r0) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.c1r1) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r2 = match num_traits::cast(self.c1r2) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r0 = match num_traits::cast(self.c2r0) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r1 = match num_traits::cast(self.c2r1) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r2 = match num_traits::cast(self.c2r2) {
-            Some(value) => value,
-            None => return None,
-        };
+    #[inline]
+    pub fn from_affine_reflection(normal: Vector2<S>) -> Matrix3<S> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
 
-        Some(Matrix3::new(
-            c0r0, c0r1, c0r2,
-            c1r0, c1r1, c1r2, 
-            c2r0, c2r1, c2r2,
-        ))
+        Matrix3::new(
+             one - two * normal.x * normal.x, -two * normal.x * normal.y,       zero,
+            -two * normal.x * normal.y,        one - two * normal.y * normal.y, zero,
+             zero,                       zero,                                  one
+        )
+    }
+
+    /// Construct a three-dimensional reflection matrix.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_reflection(normal: Vector3<S>) -> Matrix3<S> {
+        let one = S::one();
+        let two = one + one;
+    
+        Matrix3::new(
+            one - two * normal.x * normal.x, -two * normal.x * normal.y,       -two * normal.x * normal.z,
+           -two * normal.x * normal.y,        one - two * normal.y * normal.y, -two * normal.y * normal.z,
+           -two * normal.x * normal.z,       -two * normal.y * normal.z,        one - two * normal.z * normal.z,
+       )
     }
 }
 
@@ -2721,6 +2767,24 @@ impl<S> Matrix4<S> where S: Scalar {
             shear_x_with_z, shear_y_with_z, one,            zero,
             zero,           zero,           zero,           one
         )
+    }
+}
+
+impl<S> Matrix4<S> where S: ScalarSigned {
+    /// Construct a three-dimensional affine reflection matrix.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_reflection(normal: Vector3<S>) -> Matrix4<S> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+
+        Matrix4::new(
+            one - two * normal.x * normal.x, -two * normal.x * normal.y,       -two * normal.x * normal.z,       zero, 
+           -two * normal.x * normal.y,        one - two * normal.y * normal.y, -two * normal.y * normal.z,       zero,
+           -two * normal.x * normal.z,       -two * normal.y * normal.z,        one - two * normal.z * normal.z, zero,
+            zero,                             zero,                             zero,                            one
+       )
     }
 }
 
