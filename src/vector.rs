@@ -841,10 +841,10 @@ impl<S> Vector2<S> where S: Copy {
         Vector3::new(self.x, self.y, z)
     }
 
-    /// Truncate a two-dimensional vector to a one-dimensional vector removing
+    /// Contract a two-dimensional vector to a one-dimensional vector removing
     /// the y-component.
     #[inline]
-    pub fn truncate(self) -> Vector1<S> {
+    pub fn contract(self) -> Vector1<S> {
         Vector1::new(self.x)
     }
 }
@@ -1639,10 +1639,10 @@ impl<S> Vector3<S> where S: Copy {
         Vector4::new(self.x, self.y, self.z, w)
     }
 
-    /// Truncate a three-dimensional vector to a two-dimensional vector
+    /// Contract a three-dimensional vector to a two-dimensional vector
     /// by removing the z-component.
     #[inline]
-    pub fn truncate(self) -> Vector2<S> {
+    pub fn contract(self) -> Vector2<S> {
         Vector2::new(self.x, self.y)
     }
 }
@@ -2530,10 +2530,10 @@ impl<S> Vector4<S> {
 }
 
 impl<S> Vector4<S> where S: Copy {
-    /// Truncate a four-dimensional vector to a three-dimensional vector
+    /// Contract a four-dimensional vector to a three-dimensional vector
     /// by removing the w-component.
     #[inline]
-    pub fn truncate(self) -> Vector3<S> {
+    pub fn contract(self) -> Vector3<S> {
         Vector3::new(self.x, self.y, self.z)
     }
 }

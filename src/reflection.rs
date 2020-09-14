@@ -195,13 +195,13 @@ impl<S> AffineTransformation2D<Vector2<S>> for Reflection2D<S> where S: ScalarFl
 
     #[inline]
     fn apply(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).truncate()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
     fn apply_inverse(&self, vector: Vector2<S>) -> Option<Vector2<S>> {
         let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+        Some((inverse_matrix * vector.extend(S::zero())).contract())
     }
 }
 
@@ -238,13 +238,13 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Reflection2D<S> where S: ScalarF
 
     #[inline]
     fn apply(&self, vector: &Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).truncate()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
     fn apply_inverse(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
         let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+        Some((inverse_matrix * vector.extend(S::zero())).contract())
     }
 }
 
@@ -425,13 +425,13 @@ impl<S> AffineTransformation3D<Vector3<S>> for Reflection3D<S> where S: ScalarFl
 
     #[inline]
     fn apply(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).truncate()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
     fn apply_inverse(&self, vector: Vector3<S>) -> Option<Vector3<S>> {
         let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+        Some((inverse_matrix * vector.extend(S::zero())).contract())
     }
 }
 
@@ -469,12 +469,12 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Reflection3D<S> where S: ScalarF
 
     #[inline]
     fn apply(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).truncate()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
     fn apply_inverse(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
         let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).truncate())
+        Some((inverse_matrix * vector.extend(S::zero())).contract())
     }
 }

@@ -154,7 +154,7 @@ impl<S> AffineTransformation2D<Vector2<S>> for Scale2D<S> where S: Scalar {
 
     #[inline]
     fn apply(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).truncate()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
@@ -163,7 +163,7 @@ impl<S> AffineTransformation2D<Vector2<S>> for Scale2D<S> where S: Scalar {
             S::one() / self.matrix.c0r0, 
             S::one() / self.matrix.c1r1
         ).matrix;
-        Some((matrix * vector.extend(S::zero())).truncate())
+        Some((matrix * vector.extend(S::zero())).contract())
     }
 }
 
@@ -185,7 +185,7 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Scale2D<S> where S: Scalar {
 
     #[inline]
     fn apply(&self, vector: &Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).truncate()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
@@ -194,7 +194,7 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Scale2D<S> where S: Scalar {
             S::one() / self.matrix.c0r0, 
             S::one() / self.matrix.c1r1
         ).matrix;
-        Some((matrix * vector.extend(S::zero())).truncate())
+        Some((matrix * vector.extend(S::zero())).contract())
     }
 }
 
@@ -342,7 +342,7 @@ impl<S> AffineTransformation3D<Vector3<S>> for Scale3D<S> where S: Scalar {
 
     #[inline]
     fn apply(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).truncate()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
@@ -352,7 +352,7 @@ impl<S> AffineTransformation3D<Vector3<S>> for Scale3D<S> where S: Scalar {
             S::one() / self.matrix.c1r1, 
             S::one() / self.matrix.c2r2
         ).matrix;
-        Some((matrix * vector.extend(S::zero())).truncate())
+        Some((matrix * vector.extend(S::zero())).contract())
     }
 }
 
@@ -375,7 +375,7 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Scale3D<S> where S: Scalar {
 
     #[inline]
     fn apply(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).truncate()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
@@ -385,6 +385,6 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Scale3D<S> where S: Scalar {
             S::one() / self.matrix.c1r1, 
             S::one() / self.matrix.c2r2
         ).matrix;
-        Some((matrix * vector.extend(S::zero())).truncate())
+        Some((matrix * vector.extend(S::zero())).contract())
     }
 }

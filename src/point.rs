@@ -729,7 +729,7 @@ impl<S> Point2<S> where S: Scalar {
     /// Convert a homogeneous vector into a point.
     #[inline]
     pub fn from_homogeneous(vector: Vector3<S>) -> Point2<S> {
-        let e = vector.truncate() * (S::one() / vector.z);
+        let e = vector.contract() * (S::one() / vector.z);
         Point2::new(e.x, e.y)
     }
 
@@ -1384,7 +1384,7 @@ impl<S> Point3<S> where S: Scalar {
     /// Convert a vector in homogeneous coordinates into a point.
     #[inline]
     pub fn from_homogeneous(vector: Vector4<S>) -> Point3<S> {
-        let e = vector.truncate() * (S::one() / vector.z);
+        let e = vector.contract() * (S::one() / vector.z);
         Point3::new(e.x, e.y, e.z)
     }
 
