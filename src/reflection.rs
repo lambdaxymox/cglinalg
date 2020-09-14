@@ -69,8 +69,9 @@ impl<S> From<&Reflection2D<S>> for Matrix3<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>> for Reflection2D<S> where S: ScalarFloat {
-    type Applied = Point2<S>;
+impl<S> AffineTransformation2D<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFloat {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
 
     #[inline]
     fn identity() -> Reflection2D<S> {
@@ -101,105 +102,19 @@ impl<S> AffineTransformation2D<Point2<S>> for Reflection2D<S> where S: ScalarFlo
     }
 
     #[inline]
-    fn apply(&self, point: Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: Point2<S>) -> Option<Point2<S>> {
-        let inverse_matrix = <Self as AffineTransformation2D<Point2<S>>>::inverse(&self).unwrap().matrix;
-        Some(Point2::from_homogeneous( inverse_matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation2D<&Point2<S>> for Reflection2D<S> where S: ScalarFloat {
-    type Applied = Point2<S>;
-
-    #[inline]
-    fn identity() -> Reflection2D<S> {
-        Reflection2D { 
-            normal: Vector2::zero(), 
-            matrix: Matrix3::one(),
-        }
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn inverse(&self) -> Option<Reflection2D<S>> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-        let normal = self.normal;
-        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y);
-        let matrix = Matrix3::new(
-            one - two * normal.y * normal.y, two * normal.x * normal.y,                                   zero,
-            two * normal.x * normal.y,       one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
-            zero,                            zero,                                                        one
-        );
-
-        Some(Reflection2D { 
-            normal: normal, 
-            matrix: matrix * inverse_det 
-        })
-    }
-
-    #[inline]
-    fn apply(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: &Point2<S>) -> Option<Point2<S>> {
-        let inverse_matrix = <Self as AffineTransformation2D<Point2<S>>>::inverse(&self).unwrap().matrix;
-        Some(Point2::from_homogeneous( inverse_matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation2D<Vector2<S>> for Reflection2D<S> where S: ScalarFloat {
-    type Applied = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Reflection2D<S> {
-        Reflection2D { 
-            normal: Vector2::zero(), 
-            matrix: Matrix3::one(),
-        }
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn inverse(&self) -> Option<Reflection2D<S>> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-        let normal = self.normal;
-        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y);
-        let matrix = Matrix3::new(
-            one - two * normal.y * normal.y, two * normal.x * normal.y,                                   zero,
-            two * normal.x * normal.y,       one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
-            zero,                            zero,                                                        one
-        );
-
-        Some(Reflection2D { 
-            normal: normal, 
-            matrix: matrix * inverse_det 
-        })
-    }
-
-    #[inline]
-    fn apply(&self, vector: Vector2<S>) -> Vector2<S> {
+    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: Vector2<S>) -> Option<Vector2<S>> {
-        let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
-impl<S> AffineTransformation2D<&Vector2<S>> for Reflection2D<S> where S: ScalarFloat {
-    type Applied = Vector2<S>;
+impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>> for Reflection2D<S> where S: ScalarFloat {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
 
     #[inline]
     fn identity() -> Reflection2D<S> {
@@ -224,20 +139,105 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Reflection2D<S> where S: ScalarF
         );
 
         Some(Reflection2D { 
-            normal: self.normal, 
+            normal: normal, 
             matrix: matrix * inverse_det 
         })
     }
 
     #[inline]
-    fn apply(&self, vector: &Vector2<S>) -> Vector2<S> {
+    fn apply_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
-        let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFloat {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Reflection2D<S> {
+        Reflection2D { 
+            normal: Vector2::zero(), 
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[rustfmt::skip]
+    #[inline]
+    fn inverse(&self) -> Option<Reflection2D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let normal = self.normal;
+        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y);
+        let matrix = Matrix3::new(
+            one - two * normal.y * normal.y, two * normal.x * normal.y,                                   zero,
+            two * normal.x * normal.y,       one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
+            zero,                            zero,                                                        one
+        );
+
+        Some(Reflection2D { 
+            normal: normal, 
+            matrix: matrix * inverse_det 
+        })
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>> for Reflection2D<S> where S: ScalarFloat {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Reflection2D<S> {
+        Reflection2D { 
+            normal: Vector2::zero(), 
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[rustfmt::skip]
+    #[inline]
+    fn inverse(&self) -> Option<Reflection2D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let normal = self.normal;
+        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y);
+        let matrix = Matrix3::new(
+            one - two * normal.y * normal.y, two * normal.x * normal.y,                                   zero,
+            two * normal.x * normal.y,       one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
+            zero,                            zero,                                                        one
+        );
+
+        Some(Reflection2D { 
+            normal: normal, 
+            matrix: matrix * inverse_det 
+        })
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &'a Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
@@ -288,8 +288,9 @@ impl<S> From<&Reflection3D<S>> for Matrix4<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>> for Reflection3D<S> where S: ScalarFloat {
-    type Applied = Point3<S>;
+impl<S> AffineTransformation3D<Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFloat {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
 
     #[inline]
     fn identity() -> Reflection3D<S> {
@@ -321,107 +322,19 @@ impl<S> AffineTransformation3D<Point3<S>> for Reflection3D<S> where S: ScalarFlo
     }
 
     #[inline]
-    fn apply(&self, point: Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: Point3<S>) -> Option<Point3<S>> {
-        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
-        Some(Point3::from_homogeneous(inverse_matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation3D<&Point3<S>> for Reflection3D<S> where S: ScalarFloat {
-    type Applied = Point3<S>;
-
-    #[inline]
-    fn identity() -> Reflection3D<S> {
-        Reflection3D { 
-            normal: Vector3::zero(), 
-            matrix: Matrix4::one(),
-        }
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn inverse(&self) -> Option<Reflection3D<S>> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-        let normal = self.normal;
-        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
-        let matrix = Matrix4::new(
-            one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
-            two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
-            two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
-            zero,                                                  zero,                                                        zero,                                                        one
-        );
-
-        Some(Reflection3D { 
-            normal: normal, 
-            matrix: matrix * inverse_det,
-        })
-    }
-
-    #[inline]
-    fn apply(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: &Point3<S>) -> Option<Point3<S>> {
-        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
-        Some(Point3::from_homogeneous( inverse_matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation3D<Vector3<S>> for Reflection3D<S> where S: ScalarFloat {
-    type Applied = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Reflection3D<S> {
-        Reflection3D { 
-            normal: Vector3::zero(), 
-            matrix: Matrix4::one(),
-        }
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn inverse(&self) -> Option<Reflection3D<S>> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-        let normal = self.normal;
-        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
-        let matrix = Matrix4::new(
-            one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
-            two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
-            two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
-            zero,                                                  zero,                                                        zero,                                                        one
-        );
-
-        Some(Reflection3D { 
-            normal: normal, 
-            matrix: matrix * inverse_det,
-        })
-    }
-
-    #[inline]
-    fn apply(&self, vector: Vector3<S>) -> Vector3<S> {
+    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: Vector3<S>) -> Option<Vector3<S>> {
-        let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
-impl<S> AffineTransformation3D<&Vector3<S>> for Reflection3D<S> where S: ScalarFloat {
-    type Applied = Vector3<S>;
+impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>> for Reflection3D<S> where S: ScalarFloat {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
 
     #[inline]
     fn identity() -> Reflection3D<S> {
@@ -453,13 +366,100 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Reflection3D<S> where S: ScalarF
     }
 
     #[inline]
-    fn apply(&self, vector: &Vector3<S>) -> Vector3<S> {
+    fn apply_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
-        let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFloat {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Reflection3D<S> {
+        Reflection3D { 
+            normal: Vector3::zero(), 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[rustfmt::skip]
+    #[inline]
+    fn inverse(&self) -> Option<Reflection3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let normal = self.normal;
+        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
+        let matrix = Matrix4::new(
+            one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
+            two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
+            two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
+            zero,                                                  zero,                                                        zero,                                                        one
+        );
+
+        Some(Reflection3D { 
+            normal: normal, 
+            matrix: matrix * inverse_det,
+        })
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>> for Reflection3D<S> where S: ScalarFloat {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Reflection3D<S> {
+        Reflection3D { 
+            normal: Vector3::zero(), 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[rustfmt::skip]
+    #[inline]
+    fn inverse(&self) -> Option<Reflection3D<S>> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let normal = self.normal;
+        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
+        let matrix = Matrix4::new(
+            one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
+            two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
+            two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
+            zero,                                                  zero,                                                        zero,                                                        one
+        );
+
+        Some(Reflection3D { 
+            normal: normal, 
+            matrix: matrix * inverse_det,
+        })
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &'a Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }

@@ -81,8 +81,9 @@ impl<S> From<&Scale2D<S>> for Matrix3<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>> for Scale2D<S> where S: Scalar {
-    type Applied = Point2<S>;
+impl<S> AffineTransformation2D<Point2<S>, Vector2<S>> for Scale2D<S> where S: Scalar {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
 
     #[inline]
     fn identity() -> Scale2D<S> {
@@ -98,81 +99,19 @@ impl<S> AffineTransformation2D<Point2<S>> for Scale2D<S> where S: Scalar {
     }
 
     #[inline]
-    fn apply(&self, point: Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: Point2<S>) -> Option<Point2<S>> {
-        let matrix = Scale2D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1
-        ).matrix;
-        Some(Point2::from_homogeneous( matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation2D<&Point2<S>> for Scale2D<S> where S: Scalar {
-    type Applied = Point2<S>;
-
-    #[inline]
-    fn identity() -> Scale2D<S> {
-        Scale2D::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale2D<S>> {
-        Some(Scale2D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1
-        ))
-    }
-
-    #[inline]
-    fn apply(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: &Point2<S>) -> Option<Point2<S>> {
-        let matrix = Scale2D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1
-        ).matrix;
-        Some(Point2::from_homogeneous( matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation2D<Vector2<S>> for Scale2D<S> where S: Scalar {
-    type Applied = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Scale2D<S> {
-        Scale2D::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale2D<S>> {
-        Some(Scale2D::from_nonuniform_scale(S::one() / self.matrix.c0r0, S::one() / self.matrix.c1r1))
-    }
-
-    #[inline]
-    fn apply(&self, vector: Vector2<S>) -> Vector2<S> {
+    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: Vector2<S>) -> Option<Vector2<S>> {
-        let matrix = Scale2D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1
-        ).matrix;
-        Some((matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
-impl<S> AffineTransformation2D<&Vector2<S>> for Scale2D<S> where S: Scalar {
-    type Applied = Vector2<S>;
+impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>> for Scale2D<S> where S: Scalar {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
 
     #[inline]
     fn identity() -> Scale2D<S> {
@@ -188,17 +127,69 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Scale2D<S> where S: Scalar {
     }
 
     #[inline]
-    fn apply(&self, vector: &Vector2<S>) -> Vector2<S> {
+    fn apply_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
-        let matrix = Scale2D::from_nonuniform_scale(
+    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>> for Scale2D<S> where S: Scalar {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Scale2D<S> {
+        Scale2D::from_scale(S::one())
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Scale2D<S>> {
+        Some(Scale2D::from_nonuniform_scale(
             S::one() / self.matrix.c0r0, 
             S::one() / self.matrix.c1r1
-        ).matrix;
-        Some((matrix * vector.extend(S::zero())).contract())
+        ))
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>> for Scale2D<S> where S: Scalar {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Scale2D<S> {
+        Scale2D::from_scale(S::one())
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Scale2D<S>> {
+        Some(Scale2D::from_nonuniform_scale(
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1
+        ))
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &'a Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
@@ -261,8 +252,9 @@ impl<S> From<&Scale3D<S>> for Matrix4<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>> for Scale3D<S> where S: Scalar {
-    type Applied = Point3<S>;
+impl<S> AffineTransformation3D<Point3<S>, Vector3<S>> for Scale3D<S> where S: Scalar {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
 
     #[inline]
     fn identity() -> Scale3D<S> {
@@ -273,95 +265,25 @@ impl<S> AffineTransformation3D<Point3<S>> for Scale3D<S> where S: Scalar {
     fn inverse(&self) -> Option<Scale3D<S>> {
         Some(Scale3D::from_nonuniform_scale(
             S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c1r1,
             S::one() / self.matrix.c2r2
         ))
     }
 
     #[inline]
-    fn apply(&self, point: Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: Point3<S>) -> Option<Point3<S>> {
-        let matrix = Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1, 
-            S::one() / self.matrix.c2r2
-        ).matrix;
-        Some(Point3::from_homogeneous( matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation3D<&Point3<S>> for Scale3D<S> where S: Scalar {
-    type Applied = Point3<S>;
-
-    #[inline]
-    fn identity() -> Scale3D<S> {
-        Scale3D::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale3D<S>> {
-        Some(Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1, 
-            S::one() / self.matrix.c2r2
-        ))
-    }
-
-    #[inline]
-    fn apply(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: &Point3<S>) -> Option<Point3<S>> {
-        let matrix = Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1, 
-            S::one() / self.matrix.c2r2
-        ).matrix;
-        Some(Point3::from_homogeneous( matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation3D<Vector3<S>> for Scale3D<S> where S: Scalar {
-    type Applied = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Scale3D<S> {
-        Scale3D::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale3D<S>> {
-        Some(Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1, 
-            S::one() / self.matrix.c2r2
-        ))
-    }
-
-    #[inline]
-    fn apply(&self, vector: Vector3<S>) -> Vector3<S> {
+    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: Vector3<S>) -> Option<Vector3<S>> {
-        let matrix = Scale3D::from_nonuniform_scale(
-            S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1, 
-            S::one() / self.matrix.c2r2
-        ).matrix;
-        Some((matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
-impl<S> AffineTransformation3D<&Vector3<S>> for Scale3D<S> where S: Scalar {
-    type Applied = Vector3<S>;
+impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>> for Scale3D<S> where S: Scalar {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
 
     #[inline]
     fn identity() -> Scale3D<S> {
@@ -372,23 +294,76 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Scale3D<S> where S: Scalar {
     fn inverse(&self) -> Option<Scale3D<S>> {
         Some(Scale3D::from_nonuniform_scale(
             S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c1r1,
             S::one() / self.matrix.c2r2
         ))
     }
 
     #[inline]
-    fn apply(&self, vector: &Vector3<S>) -> Vector3<S> {
+    fn apply_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
-        let matrix = Scale3D::from_nonuniform_scale(
+    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>> for Scale3D<S> where S: Scalar {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Scale3D<S> {
+        Scale3D::from_scale(S::one())
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Scale3D<S>> {
+        Some(Scale3D::from_nonuniform_scale(
             S::one() / self.matrix.c0r0, 
-            S::one() / self.matrix.c1r1, 
+            S::one() / self.matrix.c1r1,
             S::one() / self.matrix.c2r2
-        ).matrix;
-        Some((matrix * vector.extend(S::zero())).contract())
+        ))
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>> for Scale3D<S> where S: Scalar {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Scale3D<S> {
+        Scale3D::from_scale(S::one())
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Scale3D<S>> {
+        Some(Scale3D::from_nonuniform_scale(
+            S::one() / self.matrix.c0r0, 
+            S::one() / self.matrix.c1r1,
+            S::one() / self.matrix.c2r2
+        ))
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &'a Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }

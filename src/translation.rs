@@ -73,8 +73,9 @@ impl<S> From<&Translation2D<S>> for Matrix3<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>> for Translation2D<S> where S: ScalarSigned {
-    type Applied = Point2<S>;
+impl<S> AffineTransformation2D<Point2<S>, Vector2<S>> for Translation2D<S> where S: ScalarSigned {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
 
     #[inline]
     fn identity() -> Translation2D<S> {
@@ -96,87 +97,19 @@ impl<S> AffineTransformation2D<Point2<S>> for Translation2D<S> where S: ScalarSi
     }
 
     #[inline]
-    fn apply(&self, point: Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: Point2<S>) -> Option<Point2<S>> {
-        let inverse_matrix = <Self as AffineTransformation2D<Point2<S>>>::inverse(&self).unwrap().matrix;
-        Some(Point2::from_homogeneous(inverse_matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation2D<&Point2<S>> for Translation2D<S> where S: ScalarSigned {
-    type Applied = Point2<S>;
-
-    #[inline]
-    fn identity() -> Translation2D<S> {
-        Translation2D { 
-            matrix: Matrix3::one(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Translation2D<S>> {
-        let distance_x = self.matrix.c2r0;
-        let distance_y = self.matrix.c2r1;
-        let distance = Vector2::new(-distance_x, -distance_y);
-        let matrix = Matrix3::from_affine_translation(distance);
-        
-        Some(Translation2D {
-            matrix: matrix,
-        })
-    }
-
-    #[inline]
-    fn apply(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: &Point2<S>) -> Option<Point2<S>> {
-        let inverse_matrix = <Self as AffineTransformation2D<Point2<S>>>::inverse(&self).unwrap().matrix;
-        Some(Point2::from_homogeneous( inverse_matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation2D<Vector2<S>> for Translation2D<S> where S: ScalarSigned {
-    type Applied = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Translation2D<S> {
-        Translation2D { 
-            matrix: Matrix3::one(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Translation2D<S>> {
-        let distance_x = self.matrix.c2r0;
-        let distance_y = self.matrix.c2r1;
-        let distance = Vector2::new(-distance_x, -distance_y);
-        let matrix = Matrix3::from_affine_translation(distance);
-        
-        Some(Translation2D {
-            matrix: matrix,
-        })
-    }
-
-    #[inline]
-    fn apply(&self, vector: Vector2<S>) -> Vector2<S> {
+    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: Vector2<S>) -> Option<Vector2<S>> {
-        let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
-impl<S> AffineTransformation2D<&Vector2<S>> for Translation2D<S> where S: ScalarSigned {
-    type Applied = Vector2<S>;
+impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>> for Translation2D<S> where S: ScalarSigned {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
 
     #[inline]
     fn identity() -> Translation2D<S> {
@@ -198,14 +131,81 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Translation2D<S> where S: Scalar
     }
 
     #[inline]
-    fn apply(&self, vector: &Vector2<S>) -> Vector2<S> {
+    fn apply_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
-        let inverse_matrix = <Self as AffineTransformation2D<Vector2<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>> for Translation2D<S> where S: ScalarSigned {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Translation2D<S> {
+        Translation2D { 
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Translation2D<S>> {
+        let distance_x = self.matrix.c2r0;
+        let distance_y = self.matrix.c2r1;
+        let distance = Vector2::new(-distance_x, -distance_y);
+        let matrix = Matrix3::from_affine_translation(distance);
+        
+        Some(Translation2D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>> for Translation2D<S> where S: ScalarSigned {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
+    #[inline]
+    fn identity() -> Translation2D<S> {
+        Translation2D { 
+            matrix: Matrix3::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Translation2D<S>> {
+        let distance_x = self.matrix.c2r0;
+        let distance_y = self.matrix.c2r1;
+        let distance = Vector2::new(-distance_x, -distance_y);
+        let matrix = Matrix3::from_affine_translation(distance);
+        
+        Some(Translation2D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &'a Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
@@ -260,8 +260,9 @@ impl<S> From<&Translation3D<S>> for Matrix4<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>> for Translation3D<S> where S: ScalarSigned {
-    type Applied = Point3<S>;
+impl<S> AffineTransformation3D<Point3<S>, Vector3<S>> for Translation3D<S> where S: ScalarSigned {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
 
     #[inline]
     fn identity() -> Translation3D<S> {
@@ -284,89 +285,19 @@ impl<S> AffineTransformation3D<Point3<S>> for Translation3D<S> where S: ScalarSi
     }
 
     #[inline]
-    fn apply(&self, point: Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: Point3<S>) -> Option<Point3<S>> {
-        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
-        Some(Point3::from_homogeneous(inverse_matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation3D<&Point3<S>> for Translation3D<S> where S: ScalarSigned {
-    type Applied = Point3<S>;
-
-    #[inline]
-    fn identity() -> Translation3D<S> {
-        Translation3D { 
-            matrix: Matrix4::one(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Translation3D<S>> {
-        let distance_x = self.matrix.c3r0;
-        let distance_y = self.matrix.c3r1;
-        let distance_z = self.matrix.c3r2;
-        let distance = Vector3::new(-distance_x, -distance_y, -distance_z);
-        let matrix = Matrix4::from_affine_translation(distance);
-        
-        Some(Translation3D {
-            matrix: matrix,
-        })
-    }
-
-    #[inline]
-    fn apply(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn apply_inverse(&self, point: &Point3<S>) -> Option<Point3<S>> {
-        let inverse_matrix = <Self as AffineTransformation3D<Point3<S>>>::inverse(&self).unwrap().matrix;
-        Some(Point3::from_homogeneous( inverse_matrix * point.to_homogeneous()))
-    }
-}
-
-impl<S> AffineTransformation3D<Vector3<S>> for Translation3D<S> where S: ScalarSigned {
-    type Applied = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Translation3D<S> {
-        Translation3D { 
-            matrix: Matrix4::one(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Translation3D<S>> {
-        let distance_x = self.matrix.c3r0;
-        let distance_y = self.matrix.c3r1;
-        let distance_z = self.matrix.c3r2;
-        let distance = Vector3::new(-distance_x, -distance_y, -distance_z);
-        let matrix = Matrix4::from_affine_translation(distance);
-        
-        Some(Translation3D {
-            matrix: matrix,
-        })
-    }
-
-    #[inline]
-    fn apply(&self, vector: Vector3<S>) -> Vector3<S> {
+    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: Vector3<S>) -> Option<Vector3<S>> {
-        let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
-impl<S> AffineTransformation3D<&Vector3<S>> for Translation3D<S> where S: ScalarSigned {
-    type Applied = Vector3<S>;
+impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>> for Translation3D<S> where S: ScalarSigned {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
 
     #[inline]
     fn identity() -> Translation3D<S> {
@@ -375,7 +306,6 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Translation3D<S> where S: Scalar
         }
     }
 
-    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Translation3D<S>> {
         let distance_x = self.matrix.c3r0;
@@ -390,14 +320,83 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Translation3D<S> where S: Scalar
     }
 
     #[inline]
-    fn apply(&self, vector: &Vector3<S>) -> Vector3<S> {
+    fn apply_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_inverse(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
-        let inverse_matrix = <Self as AffineTransformation3D<Vector3<S>>>::inverse(&self).unwrap().matrix;
-        Some((inverse_matrix * vector.extend(S::zero())).contract())
+    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>> for Translation3D<S> where S: ScalarSigned {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Translation3D<S> {
+        Translation3D { 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Translation3D<S>> {
+        let distance_x = self.matrix.c3r0;
+        let distance_y = self.matrix.c3r1;
+        let distance_z = self.matrix.c3r2;
+        let distance = Vector3::new(-distance_x, -distance_y, -distance_z);
+        let matrix = Matrix4::from_affine_translation(distance);
+        
+        Some(Translation3D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+}
+
+impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>> for Translation3D<S> where S: ScalarSigned {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
+    #[inline]
+    fn identity() -> Translation3D<S> {
+        Translation3D { 
+            matrix: Matrix4::one(),
+        }
+    }
+
+    #[inline]
+    fn inverse(&self) -> Option<Translation3D<S>> {
+        let distance_x = self.matrix.c3r0;
+        let distance_y = self.matrix.c3r1;
+        let distance_z = self.matrix.c3r2;
+        let distance = Vector3::new(-distance_x, -distance_y, -distance_z);
+        let matrix = Matrix4::from_affine_translation(distance);
+        
+        Some(Translation3D {
+            matrix: matrix,
+        })
+    }
+
+    #[inline]
+    fn apply_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.extend(S::zero())).contract()
+    }
+
+    #[inline]
+    fn apply_point(&self, point: &'a Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
