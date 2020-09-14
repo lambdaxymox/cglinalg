@@ -100,7 +100,10 @@ impl<S> Matrix2<S> where S: Scalar {
         Matrix2::from_columns(up, direction).transpose()
     }
 
-    /// Construct a shear matrix for shearing along the x-axis.
+    /// Construct a shearing matrix along the x-axis, holding the y-axis constant.
+    ///
+    /// The parameter `shear_x_with_y` denotes the factor scaling the
+    /// contribution of the y-dimension to shearing along the x-dimension.
     #[rustfmt::skip]
     pub fn from_shear_x(shear_x_with_y: S) -> Matrix2<S> {
         Matrix2::new(
@@ -109,12 +112,55 @@ impl<S> Matrix2<S> where S: Scalar {
         )
     }
 
-    /// Construct a shear matrix for shearing along the y-axis.
+    /// Construct a shearing matrix along the y-axis, holding the x-axis constant.
+    ///
+    /// The parameter `shear_y_with_x` denotes the factor scaling the
+    /// contribution of the x-dimension to shearing along the y-dimension.
     #[rustfmt::skip]
     pub fn from_shear_y(shear_y_with_x: S) -> Matrix2<S> {
         Matrix2::new(
             S::one(),  shear_y_with_x,
             S::zero(), S::one(),
+        )
+    }
+    
+    /// Construct a general shearing matrix in two dimensions. There are two possible
+    /// parameters describing a shearing transformation in two dimensions.
+    ///
+    /// The parameter `shear_y_with_x` denotes the factor scaling the
+    /// contribution of the x-dimension to shearing along the y-dimension.
+    /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
+    /// of the y-dimension to the shearing along the x-dimension. 
+    #[rustfmt::skip]
+    pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix2<S> {
+        Matrix2::new(
+            S::one(),       shear_y_with_x,
+            shear_x_with_y, S::one()
+        )
+    }
+
+    /// Construct a two-dimensional uniform scaling matrix.
+    ///
+    /// The matrix applies the same scale factor to all dimensions, so each
+    /// component of a vector will be scaled by the same factor. In particular,
+    /// calling `from_scale(scale)` is equivalent to calling 
+    /// `from_nonuniform_scale(scale, scale)`.
+    #[inline]
+    pub fn from_scale(scale: S) -> Matrix2<S> {
+        Matrix2::from_nonuniform_scale(scale, scale)
+    }
+        
+    /// Construct two-dimensional general scaling matrix.
+    ///
+    /// This is the most general case for scaling matrices: the scale factor
+    /// in each dimension need not be identical.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix2<S> {
+        let zero = S::zero();
+        Matrix2::new(
+            scale_x,   zero,
+            zero,      scale_y,
         )
     }
 }
@@ -144,7 +190,8 @@ impl<S> Matrix2<S> where S: NumCast + Copy {
 }
 
 impl<S> Matrix2<S> where S: ScalarFloat {
-    /// Construct a rotation matrix in two dimensions from an angle.
+    /// Construct a rotation matrix in two-dimensions that rotates a vector
+    /// in the xy-plane by an angle `angle`.
     #[rustfmt::skip]
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Matrix2<S> {
@@ -971,7 +1018,10 @@ impl<S> Matrix3<S> {
 }
 
 impl<S> Matrix3<S> where S: Scalar {
-    /// Create a affine translation matrix.
+    /// Construct a two-dimensional affine translation matrix.
+    ///
+    /// This represents a translation in the xy-plane as an affine transformation
+    /// that displaces a vector along the length of the vector `distance`.
     #[rustfmt::skip]
     #[inline]
     pub fn from_translation(distance: Vector2<S>) -> Matrix3<S> {
@@ -984,22 +1034,29 @@ impl<S> Matrix3<S> where S: Scalar {
         )
     }
     
-    /// Scale a matrix uniformly.
+    /// Construct a three-dimensional uniform scaling matrix.
+    ///
+    /// The matrix applies the same scale factor to all dimensions, so each
+    /// component of a vector will be scaled by the same factor. In particular,
+    /// calling `from_scale(scale)` is equivalent to calling 
+    /// `from_nonuniform_scale(scale, scale, scale)`.
     #[inline]
     pub fn from_scale(scale: S) -> Matrix3<S> {
-        Matrix3::from_nonuniform_scale(scale, scale)
+        Matrix3::from_nonuniform_scale(scale, scale, scale)
     }
     
-    /// Scale a matrix in a nonuniform fashion.
+    /// Construct a three-dimensional general scaling matrix.
+    ///
+    /// This is the most general case for scaling matrices: the scale factor
+    /// in each dimension need not be identical.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix3<S> {
-        let one = S::one();
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Matrix3<S> {
         let zero = S::zero();
         Matrix3::new(
             scale_x,   zero,      zero,
             zero,      scale_y,   zero,
-            zero,      zero,      one,
+            zero,      zero,      scale_z,
         )
     }
 
@@ -2373,23 +2430,33 @@ impl<S> Matrix4<S> where S: Scalar {
         )
     }
 
-    /// Scale a matrix uniformly.
+    /// Construct a three-dimensional uniform affine scaling matrix.
+    ///
+    /// The matrix applies the same scale factor to all dimensions, so each
+    /// component of a vector will be scaled by the same factor. In particular,
+    /// calling `from_scale(scale)` is equivalent to calling 
+    /// `from_nonuniform_scale(scale, scale, scale)`. Since this is an affine matrix
+    /// the `w` component is unaffected.
     #[inline]
-    pub fn from_scale(value: S) -> Matrix4<S> {
-        Matrix4::from_nonuniform_scale(value, value, value)
+    pub fn from_affine_scale(scale: S) -> Matrix4<S> {
+        Matrix4::from_affine_nonuniform_scale(scale, scale, scale)
     }
 
-    /// Scale a matrix in a nonuniform fashion.
+    /// Construct a three-dimensional affine scaling matrix.
+    ///
+    /// This is the most general case for affine scaling matrices: the scale factor
+    /// in each dimension need not be identical. Since this is an affine matrix,
+    /// the `w` component is unaffected.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_nonuniform_scale(sx: S, sy: S, sz: S) -> Matrix4<S> {
+    pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(
-            sx,   zero, zero, zero,
-            zero, sy,   zero, zero,
-            zero, zero, sz,   zero,
-            zero, zero, zero, one
+            scale_x, zero,    zero,    zero,
+            zero,    scale_y, zero,    zero,
+            zero,    zero,    scale_z, zero,
+            zero,    zero,    zero,    one
         )
     }
 

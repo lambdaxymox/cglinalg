@@ -2,6 +2,7 @@ use scalar::{
     Scalar,
 };
 use matrix::{
+    Matrix2,
     Matrix3,
     Matrix4,
 };
@@ -30,16 +31,20 @@ impl<S> Scale2D<S> where S: Scalar {
     /// Construct a scale transformation from a vector of scale factors.
     #[inline]
     pub fn from_vector(scale: Vector2<S>) -> Scale2D<S> {
+        let matrix = Matrix3::from(Matrix2::from_nonuniform_scale(scale.x, scale.y));
+
         Scale2D {
-            matrix: Matrix3::from_nonuniform_scale(scale.x, scale.y),
+            matrix: matrix,
         }
     }
 
     /// Construct a scale transformation from a nonuniform scale across coordinates.
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2D<S> {
+        let matrix = Matrix3::from(Matrix2::from_nonuniform_scale(scale_x, scale_y));
+
         Scale2D {
-            matrix: Matrix3::from_nonuniform_scale(scale_x, scale_y),
+            matrix: matrix,
         }
     }
 
@@ -211,7 +216,7 @@ impl<S> Scale3D<S> where S: Scalar {
     /// Construct a scale transformation from a vector of scale factors.
     pub fn from_vector(scale: Vector3<S>) -> Scale3D<S> {
         Scale3D {
-            matrix: Matrix4::from_nonuniform_scale(scale.x, scale.y, scale.z),
+            matrix: Matrix4::from_affine_nonuniform_scale(scale.x, scale.y, scale.z),
         }
     }
 
@@ -219,7 +224,7 @@ impl<S> Scale3D<S> where S: Scalar {
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Scale3D<S> {
         Scale3D {
-            matrix: Matrix4::from_nonuniform_scale(scale_x, scale_y, scale_z),
+            matrix: Matrix4::from_affine_nonuniform_scale(scale_x, scale_y, scale_z),
         }
     }
 
@@ -227,7 +232,7 @@ impl<S> Scale3D<S> where S: Scalar {
     #[inline]
     pub fn from_scale(scale: S) -> Scale3D<S> {
         Scale3D {
-            matrix: Matrix4::from_scale(scale),
+            matrix: Matrix4::from_affine_scale(scale),
         }
     }
 }

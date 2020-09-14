@@ -45,7 +45,7 @@ impl<S> Shear2D<S> where S: Scalar {
         }
     }
 
-    /// Construct a shearing transformation along the x-axis.
+    /// Construct a shearing transformation along the x-axis, holding the y-axis constant.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the y-dimension to shearing along the x-dimension.
@@ -56,9 +56,9 @@ impl<S> Shear2D<S> where S: Scalar {
         }
     }
 
-    /// Construct a shearing transformation along the y-axis.
+    /// Construct a shearing transformation along the y-axis, holding the x-axis constant.
     ///
-    /// The parameter `shear_x_with_y` denotes the factor scaling the
+    /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the x-dimension to shearing along the y-dimension.
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S) -> Shear2D<S> {
