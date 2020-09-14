@@ -18,7 +18,9 @@ use scalar::{
     ScalarSigned,
     ScalarFloat,
 };
-use angle::Radians;
+use angle::{
+    Radians,
+};
 use structure::{
     Angle,
     Array,
@@ -1293,7 +1295,25 @@ impl<S> Matrix3<S> where S: NumCast + Copy {
 }
 
 impl<S> Matrix3<S> where S: ScalarFloat {
-    /// Compute a rotation matrix about the x-axis by an angle `angle`.
+    /// Construct an affine rotation matrix in two dimensions that rotates a vector
+    /// in the xy-plane by an angle `angle`.
+    ///
+    /// This is the affine matrix counterpart to the 2x2 matrix function `from_angle`.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_angle<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
+        let zero = S::zero();
+        let one =  S::one();
+
+        Matrix3::new(
+             cos_angle, sin_angle, zero,
+            -sin_angle, cos_angle, zero,
+             zero,      zero,      one
+        )
+    }
+
+    /// Construct a rotation matrix about the x-axis by an angle `angle`.
     #[rustfmt::skip]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
@@ -1305,7 +1325,7 @@ impl<S> Matrix3<S> where S: ScalarFloat {
         )
     }
 
-    /// Compute a rotation matrix about the y-axis by an angle `angle`.
+    /// Construct a rotation matrix about the y-axis by an angle `angle`.
     #[rustfmt::skip]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
@@ -1317,7 +1337,7 @@ impl<S> Matrix3<S> where S: ScalarFloat {
         )
     }
 
-    /// Compute a rotation matrix about the z-axis by an angle `angle`.
+    /// Construct a rotation matrix about the z-axis by an angle `angle`.
     #[rustfmt::skip]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
@@ -2687,7 +2707,6 @@ impl<S> Matrix4<S> where S: Scalar {
     /// Since this is an affine transformation the `w` component
     /// of four-dimensional vectors is unaffected.
     #[rustfmt::skip]
-    #[inline]
     pub fn from_affine_shear(
         shear_x_with_y: S, shear_x_with_z: S, 
         shear_y_with_x: S, shear_y_with_z: S, 
@@ -2706,9 +2725,10 @@ impl<S> Matrix4<S> where S: Scalar {
 }
 
 impl<S> Matrix4<S> where S: ScalarFloat {
-    /// Create a rotation matrix around the x axis by an angle in `angle` radians/degrees.
+    /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
+    /// x-axis by an angle `angle` radians/degrees.
     #[rustfmt::skip]
-    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
+    pub fn from_affine_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
@@ -2721,9 +2741,10 @@ impl<S> Matrix4<S> where S: ScalarFloat {
         )
     }
         
-    /// Create a rotation matrix around the y axis by an angle in `angle` radians/degrees.
+    /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
+    /// y-axis by an angle `angle` radians/degrees.
     #[rustfmt::skip]
-    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
+    pub fn from_affine_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
@@ -2736,9 +2757,10 @@ impl<S> Matrix4<S> where S: ScalarFloat {
         )
     }
     
-    /// Create a rotation matrix around the z axis by an angle in `angle` radians/degrees.
+    /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
+    /// z-axis by an angle `angle` radians/degrees.
     #[rustfmt::skip]
-    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
+    pub fn from_affine_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
@@ -2751,10 +2773,10 @@ impl<S> Matrix4<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a new 4x4 affine matrix for rotating about an axis `axis` 
-    /// by an angle `angle` in three dimensions.
+    /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
+    /// axis `axis` by an angle `angle` radians/degrees.
     #[rustfmt::skip]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix4<S> {
+    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix4<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
 

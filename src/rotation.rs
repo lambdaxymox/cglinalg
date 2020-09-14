@@ -658,7 +658,7 @@ impl<S> Rotation3<S> for Rotation3D<S> where S: ScalarFloat {
         
         Rotation3D {
             angle: radians,
-            matrix: Matrix4::from_axis_angle(axis, radians),
+            matrix: Matrix4::from_affine_axis_angle(axis, radians),
         }
     }
 }
