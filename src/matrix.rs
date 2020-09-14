@@ -1026,7 +1026,7 @@ impl<S> Matrix3<S> where S: Scalar {
     /// that displaces a vector along the length of the vector `distance`.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_translation(distance: Vector2<S>) -> Matrix3<S> {
+    pub fn from_affine_translation(distance: Vector2<S>) -> Matrix3<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix3::new(
@@ -1155,14 +1155,19 @@ impl<S> Matrix3<S> where S: Scalar {
     /// 
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the y-dimension to shearing along the x-dimension.
+    ///
     /// The parameter `shear_x_with_z` denotes the factor scaling the contribution 
-    /// of the z-dimension to the shearing along the x-dimension. 
+    /// of the z-dimension to the shearing along the x-dimension.
+    ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the x-dimension to shearing along the y-dimension.
+    ///
     /// The parameter `shear_y_with_z` denotes the factor scaling the contribution 
     /// of the z-dimension to the shearing along the y-dimension. 
+    ///
     /// The parameter `shear_z_with_x` denotes the factor scaling the
     /// contribution of the x-dimension to shearing along the z-dimension.
+    ///
     /// The parameter `shear_z_with_y` denotes the factor scaling the contribution 
     /// of the y-dimension to the shearing along the z-dimension. 
     #[rustfmt::skip]
@@ -2557,7 +2562,7 @@ impl<S> Matrix4<S> where S: Scalar {
     /// Create a affine translation matrix.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_translation(distance: Vector3<S>) -> Matrix4<S> {
+    pub fn from_affine_translation(distance: Vector3<S>) -> Matrix4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4::new(

@@ -1048,7 +1048,7 @@ mod matrix4_tests {
     #[test]
     fn test_identity_mat4_translates_vector_along_vector() {
         let v = Vector3::from((2.0, 2.0, 2.0));
-        let trans_mat = Matrix4::from_translation(v);
+        let trans_mat = Matrix4::from_affine_translation(v);
         let zero_vec4 = Vector4::from((0.0, 0.0, 0.0, 1.0));
         let zero_vec3 = Vector3::from((0.0, 0.0, 0.0));
 

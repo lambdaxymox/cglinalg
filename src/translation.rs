@@ -35,7 +35,7 @@ impl<S> Translation2D<S> where S: Scalar {
     #[inline]
     pub fn from_vector(distance: Vector2<S>) -> Translation2D<S> {
         Translation2D {
-            matrix: Matrix3::from_translation(distance),
+            matrix: Matrix3::from_affine_translation(distance),
         }
     }
 
@@ -43,7 +43,7 @@ impl<S> Translation2D<S> where S: Scalar {
     #[inline]
     pub fn from_translation(distance: Vector2<S>) -> Translation2D<S> {
         Translation2D {
-            matrix: Matrix3::from_translation(distance),
+            matrix: Matrix3::from_affine_translation(distance),
         }
     }
 }
@@ -88,7 +88,7 @@ impl<S> AffineTransformation2D<Point2<S>> for Translation2D<S> where S: ScalarSi
         let distance_x = self.matrix.c2r0;
         let distance_y = self.matrix.c2r1;
         let distance = Vector2::new(-distance_x, -distance_y);
-        let matrix = Matrix3::from_translation(distance);
+        let matrix = Matrix3::from_affine_translation(distance);
         
         Some(Translation2D {
             matrix: matrix,
@@ -122,7 +122,7 @@ impl<S> AffineTransformation2D<&Point2<S>> for Translation2D<S> where S: ScalarS
         let distance_x = self.matrix.c2r0;
         let distance_y = self.matrix.c2r1;
         let distance = Vector2::new(-distance_x, -distance_y);
-        let matrix = Matrix3::from_translation(distance);
+        let matrix = Matrix3::from_affine_translation(distance);
         
         Some(Translation2D {
             matrix: matrix,
@@ -156,7 +156,7 @@ impl<S> AffineTransformation2D<Vector2<S>> for Translation2D<S> where S: ScalarS
         let distance_x = self.matrix.c2r0;
         let distance_y = self.matrix.c2r1;
         let distance = Vector2::new(-distance_x, -distance_y);
-        let matrix = Matrix3::from_translation(distance);
+        let matrix = Matrix3::from_affine_translation(distance);
         
         Some(Translation2D {
             matrix: matrix,
@@ -190,7 +190,7 @@ impl<S> AffineTransformation2D<&Vector2<S>> for Translation2D<S> where S: Scalar
         let distance_x = self.matrix.c2r0;
         let distance_y = self.matrix.c2r1;
         let distance = Vector2::new(-distance_x, -distance_y);
-        let matrix = Matrix3::from_translation(distance);
+        let matrix = Matrix3::from_affine_translation(distance);
         
         Some(Translation2D {
             matrix: matrix,
@@ -222,7 +222,7 @@ impl<S> Translation3D<S> where S: Scalar {
     /// Construct a translation operator from a vector of displacements.
     pub fn from_vector(distance: Vector3<S>) -> Translation3D<S> {
         Translation3D {
-            matrix: Matrix4::from_translation(distance),
+            matrix: Matrix4::from_affine_translation(distance),
         }
     }
 
@@ -230,7 +230,7 @@ impl<S> Translation3D<S> where S: Scalar {
     #[inline]
     pub fn from_translation(distance: Vector3<S>) -> Translation3D<S> {
         Translation3D {
-            matrix: Matrix4::from_translation(distance),
+            matrix: Matrix4::from_affine_translation(distance),
         }
     }
 }
@@ -276,7 +276,7 @@ impl<S> AffineTransformation3D<Point3<S>> for Translation3D<S> where S: ScalarSi
         let distance_y = self.matrix.c3r1;
         let distance_z = self.matrix.c3r2;
         let distance = Vector3::new(-distance_x, -distance_y, -distance_z);
-        let matrix = Matrix4::from_translation(distance);
+        let matrix = Matrix4::from_affine_translation(distance);
         
         Some(Translation3D {
             matrix: matrix,
@@ -311,7 +311,7 @@ impl<S> AffineTransformation3D<&Point3<S>> for Translation3D<S> where S: ScalarS
         let distance_y = self.matrix.c3r1;
         let distance_z = self.matrix.c3r2;
         let distance = Vector3::new(-distance_x, -distance_y, -distance_z);
-        let matrix = Matrix4::from_translation(distance);
+        let matrix = Matrix4::from_affine_translation(distance);
         
         Some(Translation3D {
             matrix: matrix,
@@ -346,7 +346,7 @@ impl<S> AffineTransformation3D<Vector3<S>> for Translation3D<S> where S: ScalarS
         let distance_y = self.matrix.c3r1;
         let distance_z = self.matrix.c3r2;
         let distance = Vector3::new(-distance_x, -distance_y, -distance_z);
-        let matrix = Matrix4::from_translation(distance);
+        let matrix = Matrix4::from_affine_translation(distance);
         
         Some(Translation3D {
             matrix: matrix,
@@ -382,7 +382,7 @@ impl<S> AffineTransformation3D<&Vector3<S>> for Translation3D<S> where S: Scalar
         let distance_y = self.matrix.c3r1;
         let distance_z = self.matrix.c3r2;
         let distance = Vector3::new(-distance_x, -distance_y, -distance_z);
-        let matrix = Matrix4::from_translation(distance);
+        let matrix = Matrix4::from_affine_translation(distance);
         
         Some(Translation3D {
             matrix: matrix,
