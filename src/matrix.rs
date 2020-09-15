@@ -1313,6 +1313,7 @@ impl<S> Matrix3<S> where S: Scalar {
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the x-dimension to shearing along the y-dimension.
+    ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
     /// of the y-dimension to the shearing along the x-dimension. 
     #[rustfmt::skip]

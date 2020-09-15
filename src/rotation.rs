@@ -93,25 +93,26 @@ pub trait Rotation3<S> where
     Self: Rotation<Point3<S>>,
     Self: Into<Matrix4<S>> + Into<Rotation3D<S>> + Into<Quaternion<S>>,
 {
-    /// Construct a new three-dimensional rotation about an axis `axis` by an amount `angle`.
+    /// Construct a new three-dimensional rotation about an axis `axis` by 
+    /// an amount `angle`.
     fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Self;
 
-    /// Construct a new three-dimensional rotation about the x-axis in the yz-plane by an amount 
-    /// `angle`.
+    /// Construct a new three-dimensional rotation about the x-axis in the yz-plane 
+    /// by an amount `angle`.
     #[inline]
     fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_x(), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the y-axis in the xz-plane by an amount 
-    /// `angle`.
+    /// Construct a new three-dimensional rotation about the y-axis in the xz-plane 
+    /// by an amount `angle`.
     #[inline]
     fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_y(), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the z-axis in the xy-plane by an amount 
-    /// `angle`.
+    /// Construct a new three-dimensional rotation about the z-axis in the xy-plane 
+    /// by an amount `angle`.
     #[inline]
     fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_z(), angle)
