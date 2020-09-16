@@ -1,6 +1,6 @@
 [package]
 name = "gdmath"
-version = "0.7.164"
+version = "0.7.165"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
 keywords = ["computer graphics", "game programming", "linear algebra", "quaternions", "real-time rendering"]
@@ -13,7 +13,7 @@ num-traits = "0.2.12"
 approx = "0.3.2"
 
 [dev-dependencies]
-proptest = "0.10.0"
+proptest = "0.10.1"
 
 [profile.test]
 # Disable overflow checks during testing since overflowing in integer operations
