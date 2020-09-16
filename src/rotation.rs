@@ -5,7 +5,6 @@ use angle::{
     Radians,
 };
 use scalar::{
-    Scalar,
     ScalarFloat,
 };
 use structure::{
@@ -35,8 +34,6 @@ use quaternion::{
 use transform::*;
 
 use std::fmt;
-use std::iter;
-use std::ops;
 
 
 /// A type implementing this trait represents a type that acts as a generic 
@@ -157,78 +154,6 @@ impl<S> AsRef<Matrix3x3<S>> for Rotation2D<S> {
     }
 }
 
-impl<S> ops::Mul<Rotation2D<S>> for Rotation2D<S> where S: Scalar {
-    type Output = Rotation2D<S>;
-    
-    #[inline]
-    fn mul(self, other: Rotation2D<S>) -> Self::Output {
-        Rotation2D { 
-            angle: self.angle + other.angle,
-            matrix: self.matrix * other.matrix, 
-        }
-    }
-}
-
-impl<S> ops::Mul<Rotation2D<S>> for &Rotation2D<S> where S: Scalar {
-    type Output = Rotation2D<S>;
-    
-    #[inline]
-    fn mul(self, other: Rotation2D<S>) -> Self::Output {
-        Rotation2D {
-            angle: self.angle + self.angle,
-            matrix: self.matrix * other.matrix,
-        }
-    }
-}
-
-impl<S> ops::Mul<&Rotation2D<S>> for Rotation2D<S> where S: Scalar {
-    type Output = Rotation2D<S>;
-    
-    #[inline]
-    fn mul(self, other: &Rotation2D<S>) -> Self::Output {
-        Rotation2D {
-            angle: self.angle + self.angle,
-            matrix: self.matrix * other.matrix,
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Rotation2D<S>> for &'b Rotation2D<S> where S: Scalar {
-    type Output = Rotation2D<S>;
-    
-    #[inline]
-    fn mul(self, other: &'a Rotation2D<S>) -> Self::Output {
-        Rotation2D {
-            angle: self.angle + self.angle,
-            matrix: self.matrix * other.matrix,
-        }
-    }
-}
-
-impl<S> Identity for Rotation2D<S> where S: Scalar {
-    #[inline]
-    fn one() -> Rotation2D<S> {
-        Rotation2D { 
-            angle: Radians(S::zero()),
-            matrix: Matrix3x3::one(),
-        }
-    }
-}
-
-impl<S> iter::Product<Rotation2D<S>> for Rotation2D<S> where S: Scalar {
-    #[inline]
-    fn product<I: Iterator<Item = Rotation2D<S>>>(iter: I) -> Rotation2D<S> {
-        iter.fold(Rotation2D::one(), ops::Mul::mul)
-    }
-}
-
-impl<'a, S> iter::Product<&'a Rotation2D<S>> for Rotation2D<S> where S: 'a + Scalar {
-    #[inline]
-    fn product<I: Iterator<Item = &'a Rotation2D<S>>>(iter: I) -> Rotation2D<S> {
-        iter.fold(Rotation2D::one(), ops::Mul::mul)
-    }
-}
-
 impl<S> approx::AbsDiffEq for Rotation2D<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -326,7 +251,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S> where
     fn identity() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -359,7 +284,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S> wher
     fn identity() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -392,7 +317,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S> wher
     fn identity() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -425,7 +350,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Rot
     fn identity() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -523,78 +448,6 @@ impl<S> AsRef<Matrix4x4<S>> for Rotation3D<S> {
     }
 }
 
-impl<S> ops::Mul<Rotation3D<S>> for Rotation3D<S> where S: Scalar {
-    type Output = Rotation3D<S>;
-    
-    #[inline]
-    fn mul(self, other: Rotation3D<S>) -> Self::Output {
-        Rotation3D {
-            angle: self.angle + other.angle,
-            matrix: self.matrix * other.matrix,
-        }
-    }
-}
-
-impl<S> ops::Mul<Rotation3D<S>> for &Rotation3D<S> where S: Scalar {
-    type Output = Rotation3D<S>;
-    
-    #[inline]
-    fn mul(self, other: Rotation3D<S>) -> Self::Output {
-        Rotation3D { 
-            angle: self.angle + other.angle,
-            matrix: self.matrix * other.matrix,
-        }
-    }
-}
-
-impl<S> ops::Mul<&Rotation3D<S>> for Rotation3D<S> where S: Scalar {
-    type Output = Rotation3D<S>;
-    
-    #[inline]
-    fn mul(self, other: &Rotation3D<S>) -> Self::Output {
-        Rotation3D {
-            angle: self.angle + other.angle, 
-            matrix: self.matrix * other.matrix,
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Rotation3D<S>> for &'b Rotation3D<S> where S: Scalar {
-    type Output = Rotation3D<S>;
-    
-    #[inline]
-    fn mul(self, other: &'a Rotation3D<S>) -> Self::Output {
-        Rotation3D {
-            angle: self.angle + other.angle, 
-            matrix: self.matrix * other.matrix, 
-        }
-    }
-}
-
-impl<S> Identity for Rotation3D<S> where S: Scalar {
-    #[inline]
-    fn one() -> Rotation3D<S> {
-        Rotation3D { 
-            angle: Radians(S::zero()),
-            matrix: Matrix4x4::one(),
-        }
-    }
-}
-
-impl<S> iter::Product<Rotation3D<S>> for Rotation3D<S> where S: Scalar {
-    #[inline]
-    fn product<I: Iterator<Item = Rotation3D<S>>>(iter: I) -> Rotation3D<S> {
-        iter.fold(Rotation3D::one(), ops::Mul::mul)
-    }
-}
-
-impl<'a, S> iter::Product<&'a Rotation3D<S>> for Rotation3D<S> where S: 'a + Scalar {
-    #[inline]
-    fn product<I: Iterator<Item = &'a Rotation3D<S>>>(iter: I) -> Rotation3D<S> {
-        iter.fold(Rotation3D::one(), ops::Mul::mul)
-    }
-}
-
 impl<S> approx::AbsDiffEq for Rotation3D<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -648,7 +501,7 @@ impl<S> Rotation<Point3<S>, Vector3<S>> for Quaternion<S> where S: ScalarFloat {
 
         // The vectors point in the same direction.
         if ulps_eq!(k_cos_theta, S::one()) {
-            return Quaternion::<S>::one();
+            return Quaternion::<S>::identity();
         }
 
         let k = (v1.magnitude_squared() * v2.magnitude_squared()).sqrt();
@@ -753,7 +606,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> where
     fn identity() -> Rotation3D<S> {
         Rotation3D { 
             angle: Radians(S::zero()),
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -786,7 +639,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S> wher
     fn identity() -> Rotation3D<S> {
         Rotation3D { 
             angle: Radians(S::zero()),
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -819,7 +672,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S> wher
     fn identity() -> Rotation3D<S> {
         Rotation3D { 
             angle: Radians(S::zero()),
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -852,7 +705,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Rot
     fn identity() -> Rotation3D<S> {
         Rotation3D { 
             angle: Radians(S::zero()),
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 

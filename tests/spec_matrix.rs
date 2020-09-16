@@ -502,7 +502,7 @@ macro_rules! approx_multiplication_props {
             /// ```
             #[test]
             fn prop_matrix_multiplication_identity(m in super::$Generator::<$ScalarType>()) {
-                let identity = $MatrixN::one();
+                let identity = $MatrixN::identity();
                 prop_assert_eq!(m * identity, m);
                 prop_assert_eq!(identity * m, m);
             }
@@ -595,7 +595,7 @@ macro_rules! exact_multiplication_props {
             /// ```
             #[test]
             fn prop_matrix_multiplication_identity(m in super::$Generator::<$ScalarType>()) {
-                let identity = $MatrixN::one();
+                let identity = $MatrixN::identity();
                 prop_assert_eq!(m * identity, m);
                 prop_assert_eq!(identity * m, m);
             }

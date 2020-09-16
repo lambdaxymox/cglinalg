@@ -622,7 +622,7 @@ macro_rules! approx_mul_props {
             /// ```
             #[test]
             fn prop_quaternion_multiplicative_unit(q in super::$Generator::<$ScalarType>()) {
-                let one = Quaternion::one();
+                let one = Quaternion::identity();
                 prop_assert_eq!(q * one, q);
                 prop_assert_eq!(one * q, q);
                 prop_assert_eq!(q * one, one * q);
@@ -642,7 +642,7 @@ macro_rules! approx_mul_props {
                 prop_assume!(q.is_finite());
                 prop_assume!(q.is_invertible());
 
-                let one = Quaternion::one();
+                let one = Quaternion::identity();
                 let q_inv = q.inverse().unwrap();
                 prop_assert!(relative_eq!(q * q_inv, one, epsilon = $tolerance));
                 prop_assert!(relative_eq!(q_inv * q, one, epsilon = $tolerance));
@@ -762,7 +762,7 @@ macro_rules! exact_mul_props {
             /// ```
             #[test]
             fn prop_quaternion_multiplicative_unit(q in super::$Generator::<$ScalarType>()) {
-                let one = Quaternion::one();
+                let one = Quaternion::identity();
                 prop_assert_eq!(q * one, q);
                 prop_assert_eq!(one * q, q);
                 prop_assert_eq!(q * one, one * q);
@@ -1520,8 +1520,8 @@ macro_rules! exp_log_props {
             /// ```
             #[test]
             fn prop_quaternion_exp_inverse(q in super::$Generator::<$ScalarType>()) {
-                assert_eq!((-q).exp() * q.exp(), Quaternion::one());
-                assert_eq!(q.exp() * (-q).exp(), Quaternion::one());
+                assert_eq!((-q).exp() * q.exp(), Quaternion::identity());
+                assert_eq!(q.exp() * (-q).exp(), Quaternion::identity());
             }
 
             /// The quaternion logarithm is the inverse of the quaternion exponential.

@@ -442,7 +442,7 @@ impl<S> Zero for Matrix2x2<S> where S: Scalar {
 
 impl<S> Identity for Matrix2x2<S> where S: Scalar {
     #[inline]
-    fn one() -> Matrix2x2<S> {
+    fn identity() -> Matrix2x2<S> {
         Matrix2x2::new(S::one(), S::zero(), S::zero(), S::one())
     }
 }
@@ -950,7 +950,7 @@ impl<S> SquareMatrix for Matrix2x2<S> where S: ScalarFloat {
 
     #[inline]
     fn is_identity(&self) -> bool {
-        ulps_eq!(self, &Self::one())
+        ulps_eq!(self, &<Self as Identity>::identity())
     }
 }
 
@@ -988,14 +988,14 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Matrix2x2<S>> for Matrix2x2<S> {
 impl<S: Scalar> iter::Product<Matrix2x2<S>> for Matrix2x2<S> {
     #[inline]
     fn product<I: Iterator<Item = Matrix2x2<S>>>(iter: I) -> Matrix2x2<S> {
-        iter.fold(Matrix2x2::<S>::one(), ops::Mul::mul)
+        iter.fold(Matrix2x2::<S>::identity(), ops::Mul::mul)
     }
 }
 
 impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix2x2<S>> for Matrix2x2<S> {
     #[inline]
     fn product<I: Iterator<Item = &'a Matrix2x2<S>>>(iter: I) -> Matrix2x2<S> {
-        iter.fold(Matrix2x2::<S>::one(), ops::Mul::mul)
+        iter.fold(Matrix2x2::<S>::identity(), ops::Mul::mul)
     }
 }
 
@@ -1694,7 +1694,7 @@ impl<S> Zero for Matrix3x3<S> where S: Scalar {
 impl<S> Identity for Matrix3x3<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
-    fn one() -> Matrix3x3<S> {
+    fn identity() -> Matrix3x3<S> {
         let zero = S::zero();
         let one = S::one();
         Matrix3x3::new(
@@ -2430,7 +2430,7 @@ impl<S> SquareMatrix for Matrix3x3<S> where S: ScalarFloat {
 
     #[inline]
     fn is_identity(&self) -> bool {
-        ulps_eq!(self, &Self::one())
+        ulps_eq!(self, &<Self as Identity>::identity())
     }
 }
 
@@ -2478,14 +2478,14 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Matrix3x3<S>> for Matrix3x3<S> {
 impl<S: Scalar> iter::Product<Matrix3x3<S>> for Matrix3x3<S> {
     #[inline]
     fn product<I: Iterator<Item = Matrix3x3<S>>>(iter: I) -> Matrix3x3<S> {
-        iter.fold(Matrix3x3::<S>::one(), ops::Mul::mul)
+        iter.fold(Matrix3x3::<S>::identity(), ops::Mul::mul)
     }
 }
 
 impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix3x3<S>> for Matrix3x3<S> {
     #[inline]
     fn product<I: Iterator<Item = &'a Matrix3x3<S>>>(iter: I) -> Matrix3x3<S> {
-        iter.fold(Matrix3x3::<S>::one(), ops::Mul::mul)
+        iter.fold(Matrix3x3::<S>::identity(), ops::Mul::mul)
     }
 }
 
@@ -3194,7 +3194,7 @@ impl<S> Zero for Matrix4x4<S> where S: Scalar {
 impl<S> Identity for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
-    fn one() -> Matrix4x4<S> {
+    fn identity() -> Matrix4x4<S> {
         let one = S::one();
         let zero = S::zero();
         Matrix4x4::new(
@@ -4325,7 +4325,7 @@ impl<S> SquareMatrix for Matrix4x4<S> where S: ScalarFloat {
 
     #[inline]
     fn is_identity(&self) -> bool {
-        ulps_eq!(self, &Self::one())
+        ulps_eq!(self, &<Self as Identity>::identity())
     }
 }
 
@@ -4418,14 +4418,14 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Matrix4x4<S>> for Matrix4x4<S> {
 impl<S: Scalar> iter::Product<Matrix4x4<S>> for Matrix4x4<S> {
     #[inline]
     fn product<I: Iterator<Item = Matrix4x4<S>>>(iter: I) -> Matrix4x4<S> {
-        iter.fold(Matrix4x4::<S>::one(), ops::Mul::mul)
+        iter.fold(Matrix4x4::<S>::identity(), ops::Mul::mul)
     }
 }
 
 impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix4x4<S>> for Matrix4x4<S> {
     #[inline]
     fn product<I: Iterator<Item = &'a Matrix4x4<S>>>(iter: I) -> Matrix4x4<S> {
-        iter.fold(Matrix4x4::<S>::one(), ops::Mul::mul)
+        iter.fold(Matrix4x4::<S>::identity(), ops::Mul::mul)
     }
 }
 

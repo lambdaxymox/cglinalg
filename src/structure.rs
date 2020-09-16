@@ -57,12 +57,12 @@ pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
 /// This trait indicates that a type has a multiplicative unit element.
 pub trait Identity where Self: Sized + ops::Mul<Self, Output = Self> {
     /// Create a multiplicative unit element.
-    fn one() -> Self;
+    fn identity() -> Self;
 
     /// Determine whether an element is equal to the multiplicative unit element.
     #[inline]
-    fn is_one(&self) -> bool where Self: PartialEq<Self> {
-        *self == Self::one()
+    fn is_identity(&self) -> bool where Self: PartialEq<Self> {
+        *self == Self::identity()
     }
 }
 
@@ -415,21 +415,9 @@ pub trait SquareMatrix where
     /// name such a matrix the identity matrix.
     #[inline]
     fn identity() -> Self {
-        Self::one()
+        <Self as Identity>::identity()
     }
 }
-/*
-pub trait SkewSymmetricMatrix where
-    Self: SquareMatrix,
-    <Self as Matrix>::Element: ScalarSigned
-{
-    /// Determine whether a matrix is skew-symmetric. A matrix is skew-symmmetric when 
-    /// element `(i, j)` is equal to the negation of the element `(j, i)` 
-    /// for each row `i` and column `j`. Otherwise, it is not a skew-symmeric matrix. Note 
-    /// that every diagonal matrix is trivially a skew-symmetry matrix. In particular,
-    fn is_skew_symmetric(&self) -> bool;
-}
-*/
 
 /// A trait expressing how to compute the inverse of a square matrix, if it exists.
 pub trait InvertibleSquareMatrix where

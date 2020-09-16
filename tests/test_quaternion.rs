@@ -126,7 +126,7 @@ mod arithmetic_tests {
         let i = Quaternion::<f64>::unit_x();
         let j = Quaternion::<f64>::unit_y();
         let k = Quaternion::<f64>::unit_z();
-        let minus_one = -Quaternion::one();
+        let minus_one = -Quaternion::identity();
 
         assert_eq!(i * i, minus_one);
         assert_eq!(j * j, minus_one);
@@ -138,7 +138,7 @@ mod arithmetic_tests {
         let i = Quaternion::<f64>::unit_x();
         let j = Quaternion::<f64>::unit_y();
         let k = Quaternion::<f64>::unit_z();
-        let minus_one = -Quaternion::one();
+        let minus_one = -Quaternion::identity();
 
         assert_eq!(i * j * k, minus_one);
     }
@@ -353,7 +353,7 @@ mod exp_tests {
     #[test]
     fn test_quaternion_exp_zero() {
         let zero_quat: Quaternion<f64> = Quaternion::zero();
-        let one_quat: Quaternion<f64> = Quaternion::one();
+        let one_quat: Quaternion<f64> = Quaternion::identity();
         let result = zero_quat.exp();
 
         assert_eq!(result, one_quat);
@@ -364,7 +364,7 @@ mod exp_tests {
         let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let sgn_qv = Quaternion::from_sv(0_f64, q.v / q.v.magnitude());
         let pi = std::f64::consts::PI;
-        let expected = -Quaternion::one();
+        let expected = -Quaternion::identity();
         let result = (sgn_qv * pi).exp();
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
@@ -373,7 +373,7 @@ mod exp_tests {
     #[test]
     fn test_quaternion_exp_inverse() {
         let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
-        let expected = Quaternion::one();
+        let expected = Quaternion::identity();
         let result = (-q).exp() * q.exp();
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
@@ -402,7 +402,7 @@ mod logarithm_tests {
 
     #[test]
     fn test_quaternion_logarithm_log_one_should_be_zero() {
-        let q = Quaternion::<f64>::one();
+        let q = Quaternion::<f64>::identity();
         let expected = Quaternion::<f64>::zero();
         let result = q.ln();
 
@@ -450,7 +450,7 @@ mod logarithm_tests {
 
     #[test]
     fn test_log_negative_one() {
-        let q = -Quaternion::<f64>::one();
+        let q = -Quaternion::<f64>::identity();
         let expected = Quaternion::<f64>::zero();
         let result = q.ln();
 
@@ -483,7 +483,7 @@ mod power_tests {
     fn test_quaternion_with_zero_exponent_is_one() {
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let exponent = 0_f64;
-        let expected = Quaternion::<f64>::one();
+        let expected = Quaternion::<f64>::identity();
         let result = q.powf(exponent);
 
         assert_eq!(result, expected);

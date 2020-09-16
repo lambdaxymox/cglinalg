@@ -95,7 +95,7 @@ impl<S> IdentityTransformation<Point2<S>, Vector2<S>> for Identity2D<S> where S:
     #[inline]
     fn identity() -> Identity2D<S> {
         Identity2D {
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -278,7 +278,7 @@ impl<S> IdentityTransformation<Point3<S>, Vector3<S>> for Identity3D<S> where S:
     #[inline]
     fn identity() -> Identity3D<S> {
         Identity3D {
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 

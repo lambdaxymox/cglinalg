@@ -323,7 +323,7 @@ impl<S> Zero for Quaternion<S> where S: Scalar {
 }
 
 impl<S> Identity for Quaternion<S> where S: Scalar {
-    fn one() -> Quaternion<S> {
+    fn identity() -> Quaternion<S> {
         let one = S::one();
         let zero = S::zero();
         Quaternion::new(one, zero, zero, zero)
@@ -1512,14 +1512,14 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Quaternion<S>> for Quaternion<S> {
 impl<S: Scalar> iter::Product<Quaternion<S>> for Quaternion<S> {
     #[inline]
     fn product<I: Iterator<Item = Quaternion<S>>>(iter: I) -> Quaternion<S> {
-        iter.fold(Quaternion::<S>::one(), ops::Mul::mul)
+        iter.fold(Quaternion::<S>::identity(), ops::Mul::mul)
     }
 }
 
 impl<'a, S: 'a + Scalar> iter::Product<&'a Quaternion<S>> for Quaternion<S> {
     #[inline]
     fn product<I: Iterator<Item = &'a Quaternion<S>>>(iter: I) -> Quaternion<S> {
-        iter.fold(Quaternion::<S>::one(), ops::Mul::mul)
+        iter.fold(Quaternion::<S>::identity(), ops::Mul::mul)
     }
 }
 

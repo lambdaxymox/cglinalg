@@ -68,7 +68,6 @@ mod matrix2_tests {
     use gdmath::{
         Vector2,
         Matrix2x2,
-        Identity, 
         Zero, 
         Matrix,
         SquareMatrix,
@@ -117,9 +116,9 @@ mod matrix2_tests {
                     expected: Matrix2x2::new(185091.72, 10939.63, 26935.295, 1623.9266),
                 },
                 TestCase {
-                    a_mat: Matrix2x2::one(),
-                    b_mat: Matrix2x2::one(),
-                    expected: Matrix2x2::one(),
+                    a_mat: Matrix2x2::identity(),
+                    b_mat: Matrix2x2::identity(),
+                    expected: Matrix2x2::identity(),
                 },
                 TestCase {
                     a_mat: Matrix2x2::zero(),
@@ -138,8 +137,8 @@ mod matrix2_tests {
     #[test]
     fn test_mat_times_identity_equals_mat() {
         test_cases().iter().for_each(|test| {
-            let a_mat_times_identity = test.a_mat * Matrix2x2::one();
-            let b_mat_times_identity = test.b_mat * Matrix2x2::one();
+            let a_mat_times_identity = test.a_mat * Matrix2x2::identity();
+            let b_mat_times_identity = test.b_mat * Matrix2x2::identity();
 
             assert_eq!(a_mat_times_identity, test.a_mat);
             assert_eq!(b_mat_times_identity, test.b_mat);
@@ -171,10 +170,10 @@ mod matrix2_tests {
     #[test]
     fn test_mat_times_identity_equals_identity_times_mat() {
         test_cases().iter().for_each(|test| {
-            let a_mat_times_identity = test.a_mat * Matrix2x2::one();
-            let identity_times_a_mat = Matrix2x2::one() * test.a_mat;
-            let b_mat_times_identity = test.b_mat * Matrix2x2::one();
-            let identity_times_b_mat = Matrix2x2::one() * test.b_mat;
+            let a_mat_times_identity = test.a_mat * Matrix2x2::identity();
+            let identity_times_a_mat = Matrix2x2::identity() * test.a_mat;
+            let b_mat_times_identity = test.b_mat * Matrix2x2::identity();
+            let identity_times_b_mat = Matrix2x2::identity() * test.b_mat;
 
             assert_eq!(a_mat_times_identity, identity_times_a_mat);
             assert_eq!(b_mat_times_identity, identity_times_b_mat);
@@ -194,7 +193,7 @@ mod matrix2_tests {
 
     #[test]
     fn test_identity_transpose_equals_identity() {
-        let identity = Matrix2x2::<f32>::one();
+        let identity = Matrix2x2::<f32>::identity();
         let identity_tr = identity.transpose();
             
         assert_eq!(identity, identity_tr);
@@ -226,7 +225,7 @@ mod matrix2_tests {
     #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169;
-        let id = Matrix2x2::one();
+        let id = Matrix2x2::identity();
         let expected = Matrix2x2::new(
             c, 0.0, 
             0.0, c
@@ -238,7 +237,7 @@ mod matrix2_tests {
     #[test]
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169;
-        let id = Matrix2x2::one();
+        let id = Matrix2x2::identity();
         let expected = Matrix2x2::new(
             1.0 / c, 0.0, 
             0.0,     1.0 / c
@@ -317,21 +316,21 @@ mod matrix2_tests {
 
     #[test]
     fn test_identity_is_invertible() {
-        assert!(Matrix2x2::<f64>::one().is_invertible());
+        assert!(Matrix2x2::<f64>::identity().is_invertible());
     }
 
     #[test]
     fn test_identity_inverse_is_identity() {
-        let result: Matrix2x2<f64> = Matrix2x2::one().inverse().unwrap();
-        let expected: Matrix2x2<f64> = Matrix2x2::one();
+        let result: Matrix2x2<f64> = Matrix2x2::identity().inverse().unwrap();
+        let expected: Matrix2x2<f64> = Matrix2x2::identity();
 
         assert_eq!(result, expected);
     }
 
     #[test]
     fn test_inverse_diagonal_matrix() {
-        let matrix: Matrix2x2<f64> = 4_f64 * Matrix2x2::one();
-        let expected: Matrix2x2<f64> = (1_f64 / 4_f64) * Matrix2x2::one();
+        let matrix: Matrix2x2<f64> = 4_f64 * Matrix2x2::identity();
+        let expected: Matrix2x2<f64> = (1_f64 / 4_f64) * Matrix2x2::identity();
         let result = matrix.inverse().unwrap();
 
         assert_eq!(result, expected);
@@ -363,7 +362,7 @@ mod matrix2_tests {
     fn test_matrix_times_inverse_is_identity() {
         let matrix = Matrix2x2::new(36.84, 427.46, 7.47, 61.89);
         let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix2x2::one();
+        let one = Matrix2x2::identity();
 
         assert!(relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7));
     }
@@ -372,7 +371,7 @@ mod matrix2_tests {
     fn test_inverse_times_matrix_is_identity() {
         let matrix = Matrix2x2::new(36.84, 427.46, 7.47, 61.89);
         let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix2x2::one();
+        let one = Matrix2x2::identity();
 
         assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));        
     }
@@ -458,7 +457,6 @@ mod matrix3_tests {
     use gdmath::{
         Vector3,
         Matrix3x3,
-        Identity, 
         Zero, 
         Matrix,
         SquareMatrix,
@@ -519,9 +517,9 @@ mod matrix3_tests {
                     ),
                 },
                 TestCase {
-                    a_mat: Matrix3x3::one(),
-                    b_mat: Matrix3x3::one(),
-                    expected: Matrix3x3::one(),
+                    a_mat: Matrix3x3::identity(),
+                    b_mat: Matrix3x3::identity(),
+                    expected: Matrix3x3::identity(),
                 },
                 TestCase {
                     a_mat: Matrix3x3::zero(),
@@ -552,8 +550,8 @@ mod matrix3_tests {
     #[test]
     fn test_mat_times_identity_equals_mat() {
         test_cases().iter().for_each(|test| {
-            let a_mat_times_identity = test.a_mat * Matrix3x3::one();
-            let b_mat_times_identity = test.b_mat * Matrix3x3::one();
+            let a_mat_times_identity = test.a_mat * Matrix3x3::identity();
+            let b_mat_times_identity = test.b_mat * Matrix3x3::identity();
 
             assert_eq!(a_mat_times_identity, test.a_mat);
             assert_eq!(b_mat_times_identity, test.b_mat);
@@ -585,10 +583,10 @@ mod matrix3_tests {
     #[test]
     fn test_mat_times_identity_equals_identity_times_mat() {
         test_cases().iter().for_each(|test| {
-            let a_mat_times_identity = test.a_mat * Matrix3x3::one();
-            let identity_times_a_mat = Matrix3x3::one() * test.a_mat;
-            let b_mat_times_identity = test.b_mat * Matrix3x3::one();
-            let identity_times_b_mat = Matrix3x3::one() * test.b_mat;
+            let a_mat_times_identity = test.a_mat * Matrix3x3::identity();
+            let identity_times_a_mat = Matrix3x3::identity() * test.a_mat;
+            let b_mat_times_identity = test.b_mat * Matrix3x3::identity();
+            let identity_times_b_mat = Matrix3x3::identity() * test.b_mat;
 
             assert_eq!(a_mat_times_identity, identity_times_a_mat);
             assert_eq!(b_mat_times_identity, identity_times_b_mat);
@@ -608,7 +606,7 @@ mod matrix3_tests {
 
     #[test]
     fn test_identity_transpose_equals_identity() {
-        let identity = Matrix3x3::<f32>::one();
+        let identity = Matrix3x3::<f32>::identity();
         let identity_tr = identity.transpose();
             
         assert_eq!(identity, identity_tr);
@@ -642,7 +640,7 @@ mod matrix3_tests {
     #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169;
-        let id = Matrix3x3::one();
+        let id = Matrix3x3::identity();
         let expected = Matrix3x3::new(
             c,   0.0, 0.0, 
             0.0, c,   0.0, 
@@ -655,7 +653,7 @@ mod matrix3_tests {
     #[test]
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169;
-        let id = Matrix3x3::one();
+        let id = Matrix3x3::identity();
         let expected = Matrix3x3::new(
             1.0/c, 0.0,   0.0, 
             0.0,   1.0/c, 0.0, 
@@ -742,21 +740,21 @@ mod matrix3_tests {
 
     #[test]
     fn test_identity_is_invertible() {
-        assert!(Matrix3x3::<f64>::one().is_invertible());
+        assert!(Matrix3x3::<f64>::identity().is_invertible());
     }
 
     #[test]
     fn test_identity_inverse_is_identity() {
-        let result: Matrix3x3<f64> = Matrix3x3::one().inverse().unwrap();
-        let expected: Matrix3x3<f64> = Matrix3x3::one();
+        let result: Matrix3x3<f64> = Matrix3x3::identity().inverse().unwrap();
+        let expected: Matrix3x3<f64> = Matrix3x3::identity();
 
         assert_eq!(result, expected);
     }
 
     #[test]
     fn test_inverse_diagonal_matrix() {
-        let matrix: Matrix3x3<f64> = 4_f64 * Matrix3x3::one();
-        let expected: Matrix3x3<f64> = (1_f64 / 4_f64) * Matrix3x3::one();
+        let matrix: Matrix3x3<f64> = 4_f64 * Matrix3x3::identity();
+        let expected: Matrix3x3<f64> = (1_f64 / 4_f64) * Matrix3x3::identity();
         let result = matrix.inverse().unwrap();
 
         assert_eq!(result, expected);
@@ -803,7 +801,7 @@ mod matrix3_tests {
             81.439, 12.19,   43.36
         );
         let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix3x3::one();
+        let one = Matrix3x3::identity();
 
         assert!(relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7));
     }
@@ -843,7 +841,7 @@ mod matrix3_tests {
             81.439, 12.19,   43.36
         );
         let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix3x3::one();
+        let one = Matrix3x3::identity();
 
         assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));
     }
@@ -915,7 +913,6 @@ mod matrix4_tests {
         Vector3,
         Vector4,
         Matrix4x4,
-        Identity, 
         Zero, 
         Matrix,
         SquareMatrix,
@@ -979,9 +976,9 @@ mod matrix4_tests {
                     ),
                 },
                 TestCase {
-                    a_mat: Matrix4x4::one(),
-                    b_mat: Matrix4x4::one(),
-                    expected: Matrix4x4::one(),
+                    a_mat: Matrix4x4::identity(),
+                    b_mat: Matrix4x4::identity(),
+                    expected: Matrix4x4::identity(),
                 },
                 TestCase {
                     a_mat: Matrix4x4::zero(),
@@ -1015,8 +1012,8 @@ mod matrix4_tests {
     #[test]
     fn test_mat_times_identity_equals_mat() {
         test_cases().iter().for_each(|test| {
-            let a_mat_times_identity = test.a_mat * Matrix4x4::one();
-            let b_mat_times_identity = test.b_mat * Matrix4x4::one();
+            let a_mat_times_identity = test.a_mat * Matrix4x4::identity();
+            let b_mat_times_identity = test.b_mat * Matrix4x4::identity();
 
             assert_eq!(a_mat_times_identity, test.a_mat);
             assert_eq!(b_mat_times_identity, test.b_mat);
@@ -1048,10 +1045,10 @@ mod matrix4_tests {
     #[test]
     fn test_mat_times_identity_equals_identity_times_mat() {
         test_cases().iter().for_each(|test| {
-            let a_mat_times_identity = test.a_mat * Matrix4x4::one();
-            let identity_times_a_mat = Matrix4x4::one() * test.a_mat;
-            let b_mat_times_identity = test.b_mat * Matrix4x4::one();
-            let identity_times_b_mat = Matrix4x4::one() * test.b_mat;
+            let a_mat_times_identity = test.a_mat * Matrix4x4::identity();
+            let identity_times_a_mat = Matrix4x4::identity() * test.a_mat;
+            let b_mat_times_identity = test.b_mat * Matrix4x4::identity();
+            let identity_times_b_mat = Matrix4x4::identity() * test.b_mat;
 
             assert_eq!(a_mat_times_identity, identity_times_a_mat);
             assert_eq!(b_mat_times_identity, identity_times_b_mat);
@@ -1071,7 +1068,7 @@ mod matrix4_tests {
 
     #[test]
     fn test_identity_transpose_equals_identity() {
-        let identity = Matrix4x4::<f32>::one();
+        let identity = Matrix4x4::<f32>::identity();
         let identity_tr = identity.transpose();
             
         assert_eq!(identity, identity_tr);
@@ -1119,7 +1116,7 @@ mod matrix4_tests {
     #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169;
-        let id = Matrix4x4::one();
+        let id = Matrix4x4::identity();
         let expected = Matrix4x4::new(
             c,   0.0, 0.0, 0.0, 
             0.0, c,   0.0, 0.0, 
@@ -1133,7 +1130,7 @@ mod matrix4_tests {
     #[test]
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169;
-        let id = Matrix4x4::one();
+        let id = Matrix4x4::identity();
         let expected = Matrix4x4::new(
             1.0 / c, 0.0,     0.0,     0.0, 
             0.0,     1.0 / c, 0.0,     0.0, 
@@ -1251,21 +1248,21 @@ mod matrix4_tests {
 
     #[test]
     fn test_identity_is_invertible() {
-        assert!(Matrix4x4::<f64>::one().is_invertible());
+        assert!(Matrix4x4::<f64>::identity().is_invertible());
     }
 
     #[test]
     fn test_identity_inverse_is_identity() {
-        let result: Matrix4x4<f64> = Matrix4x4::one().inverse().unwrap();
-        let expected: Matrix4x4<f64> = Matrix4x4::one();
+        let result: Matrix4x4<f64> = Matrix4x4::identity().inverse().unwrap();
+        let expected: Matrix4x4<f64> = Matrix4x4::identity();
 
         assert_eq!(result, expected);
     }
 
     #[test]
     fn test_inverse_diagonal_matrix() {
-        let matrix: Matrix4x4<f64> = 4_f64 * Matrix4x4::one();
-        let expected: Matrix4x4<f64> = (1_f64 / 4_f64) * Matrix4x4::one();
+        let matrix: Matrix4x4<f64> = 4_f64 * Matrix4x4::identity();
+        let expected: Matrix4x4<f64> = (1_f64 / 4_f64) * Matrix4x4::identity();
         let result = matrix.inverse().unwrap();
 
         assert_eq!(result, expected);
@@ -1337,7 +1334,7 @@ mod matrix4_tests {
             37.698, 311.8,   60.81,   73.839
         );
         let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix4x4::one();
+        let one = Matrix4x4::identity();
         let epsilon = 1e-7;
 
         assert!(relative_eq!(matrix * matrix_inv, one, epsilon = epsilon),
@@ -1394,7 +1391,7 @@ mod matrix4_tests {
             37.698,  311.8,   60.81,    73.839
         );
         let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix4x4::one();
+        let one = Matrix4x4::identity();
         let epsilon = 1e-7;
         
         assert!(relative_eq!(matrix_inv * matrix, one, epsilon = epsilon),

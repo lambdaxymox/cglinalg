@@ -138,7 +138,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Transform2D<S> wher
     #[inline]
     fn identity() -> Transform2D<S> {
         Transform2D { 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -176,7 +176,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Transform2D<S> whe
     #[inline]
     fn identity() -> Transform2D<S> {
         Transform2D { 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -214,7 +214,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Transform2D<S> whe
     #[inline]
     fn identity() -> Transform2D<S> {
         Transform2D { 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -252,7 +252,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Tra
     #[inline]
     fn identity() -> Transform2D<S> {
         Transform2D { 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -336,7 +336,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Transform3D<S> wher
     #[inline]
     fn identity() -> Transform3D<S> {
         Transform3D { 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -374,7 +374,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Transform3D<S> whe
     #[inline]
     fn identity() -> Transform3D<S> {
         Transform3D { 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -412,7 +412,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Transform3D<S> whe
     #[inline]
     fn identity() -> Transform3D<S> {
         Transform3D { 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -450,7 +450,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Tra
     #[inline]
     fn identity() -> Transform3D<S> {
         Transform3D { 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 

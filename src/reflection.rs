@@ -150,7 +150,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Reflection2D<S> whe
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
             normal: Vector2::zero(), 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -183,7 +183,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Reflection2D<S> wh
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
             normal: Vector2::zero(), 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -216,7 +216,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Reflection2D<S> wh
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
             normal: Vector2::zero(), 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -249,7 +249,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Ref
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
             normal: Vector2::zero(), 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -375,7 +375,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Reflection3D<S> whe
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
             normal: Vector3::zero(), 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -408,7 +408,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Reflection3D<S> wh
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
             normal: Vector3::zero(), 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -441,7 +441,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Reflection3D<S> wh
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
             normal: Vector3::zero(), 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -474,7 +474,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Ref
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
             normal: Vector3::zero(), 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 

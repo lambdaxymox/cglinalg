@@ -209,7 +209,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Shear2D<S> where S:
     #[inline]
     fn identity() -> Shear2D<S> {
         Shear2D { 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -241,7 +241,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Shear2D<S> where S
     #[inline]
     fn identity() -> Shear2D<S> {
         Shear2D { 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -273,7 +273,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Shear2D<S> where S
     #[inline]
     fn identity() -> Shear2D<S> {
         Shear2D { 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -305,7 +305,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for She
     #[inline]
     fn identity() -> Shear2D<S> {
         Shear2D { 
-            matrix: Matrix3x3::one(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -440,7 +440,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Shear3D<S> where S:
     #[inline]
     fn identity() -> Shear3D<S> {
         Shear3D { 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -472,7 +472,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Shear3D<S> where S
     #[inline]
     fn identity() -> Shear3D<S> {
         Shear3D { 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -504,7 +504,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Shear3D<S> where S
     #[inline]
     fn identity() -> Shear3D<S> {
         Shear3D { 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
@@ -536,7 +536,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for She
     #[inline]
     fn identity() -> Shear3D<S> {
         Shear3D { 
-            matrix: Matrix4x4::one(),
+            matrix: Matrix4x4::identity(),
         }
     }
 
