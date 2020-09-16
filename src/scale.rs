@@ -23,21 +23,27 @@ use std::fmt;
 
 
 /// A trait for implementing scaling transformations.
-pub trait Scale<P> where 
-    P: Euclidean,
-    Self: Sized + Copy,
-{
+pub trait Scale<P, V> where Self: Sized + Copy {
+    /// The type of the output points (locations in space).
+    type OutPoint;
+    /// The type of the output vectors (displacements in space).
+    type OutVector;
+
+    /// Construct a scale transformation that scales each coordinate by the reciprocal 
+    /// of the scaling factors of the scale operator `self`.
     fn inverse(&self) -> Option<Self>;
 
-    fn scale_vector(&self, vector: P::Difference) -> P::Difference;
+    /// Apply a scale operation to a vector.
+    fn scale_vector(&self, vector: V) -> Self::OutVector;
 
-    fn scale_point(&self, point: P) -> P;
+    /// Apply a scale operation to a point.
+    fn scale_point(&self, point: P) -> Self::OutPoint;
 }
 
 /// A trait defining scaling transformations in two dimensions.
 pub trait Scale2<S> where 
     S: ScalarFloat,
-    Self: Scale<Point2<S>> + Into<Matrix3<S>> + Into<Scale2D<S>>,
+    Self: Scale<Point2<S>, Vector2<S>> + Into<Matrix3<S>> + Into<Scale2D<S>>,
 {
     /// Construct a two-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
@@ -50,7 +56,7 @@ pub trait Scale2<S> where
 /// A trait defining scaling transformations in three dimensions.
 pub trait Scale3<S> where 
     S: ScalarFloat,
-    Self: Scale<Point3<S>> + Into<Matrix4<S>> + Into<Scale3D<S>>,
+    Self: Scale<Point3<S>, Vector3<S>> + Into<Matrix4<S>> + Into<Scale3D<S>>,
 {
     /// Construct a three-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
@@ -104,7 +110,10 @@ impl<S> From<&Scale2D<S>> for Matrix3<S> where S: Copy {
     }
 }
 
-impl<S> Scale<Point2<S>> for Scale2D<S> where S: ScalarFloat {
+impl<S> Scale<Point2<S>, Vector2<S>> for Scale2D<S> where S: ScalarFloat {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
     #[inline]
     fn inverse(&self) -> Option<Scale2D<S>> {
         Some(Scale2D::from_nonuniform_scale(
@@ -151,7 +160,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Scale2D<S> where S:
 
     #[inline]
     fn inverse(&self) -> Option<Scale2D<S>> {
-        <Self as Scale<Point2<S>>>::inverse(&self)
+        <Self as Scale<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -181,7 +190,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Scale2D<S> where S
 
     #[inline]
     fn inverse(&self) -> Option<Scale2D<S>> {
-        <Self as Scale<Point2<S>>>::inverse(&self)
+        <Self as Scale<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -211,7 +220,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Scale2D<S> where S
 
     #[inline]
     fn inverse(&self) -> Option<Scale2D<S>> {
-        <Self as Scale<Point2<S>>>::inverse(&self)
+        <Self as Scale<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -241,7 +250,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Sca
 
     #[inline]
     fn inverse(&self) -> Option<Scale2D<S>> {
-        <Self as Scale<Point2<S>>>::inverse(&self)
+        <Self as Scale<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -303,7 +312,10 @@ impl<S> From<&Scale3D<S>> for Matrix4<S> where S: Copy {
     }
 }
 
-impl<S> Scale<Point3<S>> for Scale3D<S> where S: ScalarFloat {
+impl<S> Scale<Point3<S>, Vector3<S>> for Scale3D<S> where S: ScalarFloat {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
     #[inline]
     fn inverse(&self) -> Option<Scale3D<S>> {
         Some(Scale3D::from_nonuniform_scale(
@@ -351,7 +363,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Scale3D<S> where S:
 
     #[inline]
     fn inverse(&self) -> Option<Scale3D<S>> {
-        <Self as Scale<Point3<S>>>::inverse(&self)
+        <Self as Scale<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -381,7 +393,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Scale3D<S> where S
 
     #[inline]
     fn inverse(&self) -> Option<Scale3D<S>> {
-        <Self as Scale<Point3<S>>>::inverse(&self)
+        <Self as Scale<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -411,7 +423,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Scale3D<S> where S
 
     #[inline]
     fn inverse(&self) -> Option<Scale3D<S>> {
-        <Self as Scale<Point3<S>>>::inverse(&self)
+        <Self as Scale<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -441,7 +453,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Sca
 
     #[inline]
     fn inverse(&self) -> Option<Scale3D<S>> {
-        <Self as Scale<Point3<S>>>::inverse(&self)
+        <Self as Scale<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]

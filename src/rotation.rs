@@ -44,16 +44,18 @@ use std::ops;
 /// rotation. A rotation is an operation that creates circular motions and 
 /// preserves at least one point. Rotations preserve the length of vectors and 
 /// therefore act as a class of rigid body transformations.
-pub trait Rotation<P> where 
-    P: Euclidean,
-    Self: Sized + Copy + One,
-{
+pub trait Rotation<P, V> where Self: Sized + Copy {
+    /// The type of the output points (locations in space).
+    type OutPoint;
+    /// The type of the output vectors (displacements in space).
+    type OutVector;
+
     /// Point a vector at the point `direction`.
-    fn look_at(direction: P::Difference, up: P::Difference) -> Self;
+    fn look_at(direction: V, up: V) -> Self;
 
     /// Construct a rotation that rotates the shortest angular distance between two unit
     /// vectors.
-    fn between_vectors(v1: P::Difference, v2: P::Difference) -> Self;
+    fn between_vectors(v1: V, v2: V) -> Self;
 
     /// Construct a rotation that rotates a vector in the opposite direction of `self`. In particular,
     /// given a rotation operator that rotates a vector about an axis by an angle `theta`, construct 
@@ -61,12 +63,10 @@ pub trait Rotation<P> where
     fn inverse(&self) -> Self;
 
     /// Apply the rotation operation to a vector.
-    fn rotate_vector(&self, vector: P::Difference) -> P::Difference;
+    fn rotate_vector(&self, vector: V) -> Self::OutVector;
 
     /// Apply the rotation operation to a point.
-    fn rotate_point(&self, point: P) -> P { 
-        P::from_vector(self.rotate_vector(point.to_vector()))
-    }
+    fn rotate_point(&self, point: P) -> Self::OutPoint;
 }
 
 /// A trait that implements rotation operators in two-dimensions. Two-dimensional 
@@ -81,7 +81,7 @@ pub trait Rotation<P> where
 /// this requires different mathematics than is typically used in computer graphics.
 pub trait Rotation2<S> where 
     S: ScalarFloat,
-    Self: Rotation<Point2<S>> + Into<Matrix3<S>> + Into<Rotation2D<S>>,
+    Self: Rotation<Point2<S>, Vector2<S>> + Into<Matrix3<S>> + Into<Rotation2D<S>>,
 {
     /// Rotate a two-dimensional vector in the xy-plane by an angle `angle`.
     fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self;
@@ -90,7 +90,7 @@ pub trait Rotation2<S> where
 /// A trait that implements rotation operators in three dimensions.
 pub trait Rotation3<S> where 
     S: ScalarFloat,
-    Self: Rotation<Point3<S>>,
+    Self: Rotation<Point3<S>, Vector3<S>>,
     Self: Into<Matrix4<S>> + Into<Rotation3D<S>> + Into<Quaternion<S>>,
 {
     /// Construct a new three-dimensional rotation about an axis `axis` by 
@@ -280,7 +280,10 @@ impl<S> Rotation2<S> for Rotation2D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Rotation<Point2<S>> for Rotation2D<S> where S: ScalarFloat { 
+impl<S> Rotation<Point2<S>, Vector2<S>> for Rotation2D<S> where S: ScalarFloat { 
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
     #[inline]
     fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Rotation2D<S> {
         let matrix = Matrix3::from(Matrix2::look_at(direction, up));
@@ -309,6 +312,11 @@ impl<S> Rotation<Point2<S>> for Rotation2D<S> where S: ScalarFloat {
             matrix: self.matrix.inverse().unwrap(),
         }
     }
+
+    #[inline]
+    fn rotate_point(&self, point: Point2<S>) -> Point2<S> { 
+        Point2::from_vector(self.rotate_vector(point.to_vector()))
+    }
 }
 
 impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S> where S: ScalarFloat {
@@ -325,7 +333,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S> where
 
     #[inline]
     fn inverse(&self) -> Option<Rotation2D<S>> {
-        Some(<Self as Rotation<Point2<S>>>::inverse(&self))
+        Some(<Self as Rotation<Point2<S>, Vector2<S>>>::inverse(&self))
     }
 
     #[inline]
@@ -358,7 +366,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S> wher
 
     #[inline]
     fn inverse(&self) -> Option<Rotation2D<S>> {
-        Some(<Self as Rotation<Point2<S>>>::inverse(&self))
+        Some(<Self as Rotation<Point2<S>, Vector2<S>>>::inverse(&self))
     }
 
     #[inline]
@@ -391,7 +399,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S> wher
 
     #[inline]
     fn inverse(&self) -> Option<Rotation2D<S>> {
-        Some(<Self as Rotation<Point2<S>>>::inverse(&self))
+        Some(<Self as Rotation<Point2<S>, Vector2<S>>>::inverse(&self))
     }
 
     #[inline]
@@ -424,7 +432,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Rot
 
     #[inline]
     fn inverse(&self) -> Option<Rotation2D<S>> {
-        Some(<Self as Rotation<Point2<S>>>::inverse(&self))
+        Some(<Self as Rotation<Point2<S>, Vector2<S>>>::inverse(&self))
     }
 
     #[inline]
@@ -626,7 +634,10 @@ impl<S> approx::UlpsEq for Rotation3D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Rotation<Point3<S>> for Quaternion<S> where S: ScalarFloat {
+impl<S> Rotation<Point3<S>, Vector3<S>> for Quaternion<S> where S: ScalarFloat {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+    
     #[inline]
     fn look_at(dir: Vector3<S>, up: Vector3<S>) -> Quaternion<S> {
         Matrix3::look_at(dir, up).into()
@@ -666,6 +677,11 @@ impl<S> Rotation<Point3<S>> for Quaternion<S> where S: ScalarFloat {
     fn inverse(&self) -> Quaternion<S> {
         self.conjugate() / self.magnitude_squared()
     }
+
+    #[inline]
+    fn rotate_point(&self, point: Point3<S>) -> Point3<S> { 
+        Point3::from_vector(self.rotate_vector(point.to_vector()))
+    }
 }
 
 impl<S> Rotation3<S> for Rotation3D<S> where S: ScalarFloat {
@@ -687,7 +703,10 @@ impl<S> Rotation3<S> for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Rotation<Point3<S>> for Rotation3D<S> where S: ScalarFloat { 
+impl<S> Rotation<Point3<S>, Vector3<S>> for Rotation3D<S> where S: ScalarFloat {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
     #[inline]
     fn look_at(dir: Vector3<S>, up: Vector3<S>) -> Rotation3D<S> {
         let matrix3 = Matrix3::look_at(dir, up);
@@ -720,6 +739,11 @@ impl<S> Rotation<Point3<S>> for Rotation3D<S> where S: ScalarFloat {
             matrix: self.matrix.inverse().unwrap(),
         }
     }
+
+    #[inline]
+    fn rotate_point(&self, point: Point3<S>) -> Point3<S> { 
+        Point3::from_vector(self.rotate_vector(point.to_vector()))
+    }
 }
 
 impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> where S: ScalarFloat {
@@ -736,7 +760,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> where
 
     #[inline]
     fn inverse(&self) -> Option<Rotation3D<S>> {
-        Some(<Self as Rotation<Point3<S>>>::inverse(&self))
+        Some(<Self as Rotation<Point3<S>, Vector3<S>>>::inverse(&self))
     }
 
     #[inline]
@@ -769,7 +793,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S> wher
 
     #[inline]
     fn inverse(&self) -> Option<Rotation3D<S>> {
-        Some(<Self as Rotation<Point3<S>>>::inverse(&self))
+        Some(<Self as Rotation<Point3<S>, Vector3<S>>>::inverse(&self))
     }
 
     #[inline]
@@ -802,7 +826,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S> wher
 
     #[inline]
     fn inverse(&self) -> Option<Rotation3D<S>> {
-        Some(<Self as Rotation<Point3<S>>>::inverse(&self))
+        Some(<Self as Rotation<Point3<S>, Vector3<S>>>::inverse(&self))
     }
 
     #[inline]
@@ -835,7 +859,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Rot
 
     #[inline]
     fn inverse(&self) -> Option<Rotation3D<S>> {
-        Some(<Self as Rotation<Point3<S>>>::inverse(&self))
+        Some(<Self as Rotation<Point3<S>, Vector3<S>>>::inverse(&self))
     }
 
     #[inline]

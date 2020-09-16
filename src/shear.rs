@@ -24,24 +24,26 @@ use std::fmt;
 
 
 /// A trait defining the operations on a shearing transformation.
-pub trait Shear<P> where 
-    P: Euclidean,
-    Self: Sized + Copy,
-{
+pub trait Shear<P, V> where Self: Sized + Copy {
+    /// The type of the output points (locations in space).
+    type OutPoint;
+    /// The type of the output vectors (displacements in space).
+    type OutVector;
+
     /// Compute the inverse shearing operation.
     fn inverse(&self) -> Option<Self>;
 
     /// Apply a shearing transformation to a vector.
-    fn shear_vector(&self, vector: P::Difference) -> P::Difference;
+    fn shear_vector(&self, vector: V) -> Self::OutVector;
 
     /// Apply a shearing transformation to a point.
-    fn shear_point(&self, point: P) -> P;
+    fn shear_point(&self, point: P) -> Self::OutPoint;
 }
 
 /// A trait implementing shearing transformations in two dimensions.
 pub trait Shear2<S> where 
     S: ScalarSigned,
-    Self: Shear<Point2<S>> + Into<Matrix3<S>> + Into<Shear2D<S>>,
+    Self: Shear<Point2<S>, Vector2<S>> + Into<Matrix3<S>> + Into<Shear2D<S>>,
 {
     /// Construct a general shearing transformations in two dimensions. There are 
     /// two possible parameters describing a shearing transformation in two dimensions.
@@ -69,7 +71,7 @@ pub trait Shear2<S> where
 /// A trait for types implementing translation operators in three dimensions.
 pub trait Shear3<S> where 
     S: ScalarSigned,
-    Self: Shear<Point3<S>> + Into<Matrix4<S>> + Into<Shear3D<S>>,
+    Self: Shear<Point3<S>, Vector3<S>> + Into<Matrix4<S>> + Into<Shear3D<S>>,
 {
     /// Construct a general shearing transformation.
     ///
@@ -155,7 +157,10 @@ impl<S> From<&Shear2D<S>> for Matrix3<S> where S: Copy {
     }
 }
 
-impl<S> Shear<Point2<S>> for Shear2D<S> where S: ScalarSigned {
+impl<S> Shear<Point2<S>, Vector2<S>> for Shear2D<S> where S: ScalarSigned {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
     fn inverse(&self) -> Option<Shear2D<S>> {
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_x_with_y = -self.matrix.c1r0;
@@ -211,7 +216,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Shear2D<S> where S:
 
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        <Self as Shear<Point2<S>>>::inverse(&self)
+        <Self as Shear<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -243,7 +248,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Shear2D<S> where S
 
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        <Self as Shear<Point2<S>>>::inverse(&self)
+        <Self as Shear<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -275,7 +280,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Shear2D<S> where S
 
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        <Self as Shear<Point2<S>>>::inverse(&self)
+        <Self as Shear<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -307,7 +312,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for She
 
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        <Self as Shear<Point2<S>>>::inverse(&self)
+        <Self as Shear<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -335,7 +340,10 @@ pub struct Shear3D<S> {
     matrix: Matrix4<S>,
 }
 
-impl<S> Shear<Point3<S>> for Shear3D<S> where S: ScalarSigned {
+impl<S> Shear<Point3<S>, Vector3<S>> for Shear3D<S> where S: ScalarSigned {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
     fn inverse(&self) -> Option<Shear3D<S>> {
         let shear_x_with_y = -self.matrix.c1r0;
         let shear_x_with_z = -self.matrix.c2r0;
@@ -439,7 +447,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Shear3D<S> where S:
 
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        <Self as Shear<Point3<S>>>::inverse(&self)
+        <Self as Shear<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -471,7 +479,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Shear3D<S> where S
 
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        <Self as Shear<Point3<S>>>::inverse(&self)
+        <Self as Shear<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -503,7 +511,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Shear3D<S> where S
 
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        <Self as Shear<Point3<S>>>::inverse(&self)
+        <Self as Shear<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -535,7 +543,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for She
 
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        <Self as Shear<Point3<S>>>::inverse(&self)
+        <Self as Shear<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]

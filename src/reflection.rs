@@ -25,37 +25,39 @@ use std::fmt;
 
 
 /// A trait defining reflections about a plane.
-pub trait Reflection<P> where 
-    P: Euclidean,
-    Self: Sized + Copy,
-{
+pub trait Reflection<P, V> where Self: Sized + Copy {
+    /// The type of the output points (locations in space).
+    type OutPoint;
+    /// The type of the output vectors (displacements in space).
+    type OutVector;
+
     /// Return the normal vector to the reflection plane.
-    fn normal(&self) -> P::Difference;
+    fn normal(&self) -> Self::OutVector;
 
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
-    fn from_normal(normal: P::Difference) -> Self;
+    fn from_normal(normal: V) -> Self;
 
     /// Calculate the inverse reflection transformation.
     fn inverse(&self) -> Option<Self>;
 
     /// Reflect a vector across a plane.
-    fn reflect_vector(&self, vector: P::Difference) -> P::Difference;
+    fn reflect_vector(&self, vector: V) -> Self::OutVector;
 
     /// Reflect a point across a plane.
-    fn reflect_point(&self, point: P) -> P;
+    fn reflect_point(&self, point: P) -> Self::OutPoint;
 }
 
 /// A trait defining reflections about a plane (line) in two dimensions.
 pub trait Reflection2<S> where 
     S: ScalarFloat,
-    Self: Reflection<Point2<S>> + Into<Matrix3<S>> + Into<Reflection2D<S>>,
+    Self: Reflection<Point2<S>, Vector2<S>> + Into<Matrix3<S>> + Into<Reflection2D<S>>,
 {
 }
 
 /// A trait defining reflections about a plane in three dimensions.
 pub trait Reflection3<S> where 
     S: ScalarFloat,
-    Self: Reflection<Point3<S>> + Into<Matrix4<S>> + Into<Reflection3D<S>>,
+    Self: Reflection<Point3<S>, Vector3<S>> + Into<Matrix4<S>> + Into<Reflection3D<S>>,
 {
 }
 
@@ -95,7 +97,10 @@ impl<S> From<&Reflection2D<S>> for Matrix3<S> where S: Copy {
     }
 }
 
-impl<S> Reflection<Point2<S>> for Reflection2D<S> where S: ScalarFloat {
+impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFloat {
+    type OutPoint = Point2<S>;
+    type OutVector = Vector2<S>;
+
     fn normal(&self) -> Vector2<S> {
         self.normal
     }
@@ -152,7 +157,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Reflection2D<S> whe
 
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
-        <Self as Reflection<Point2<S>>>::inverse(&self)
+        <Self as Reflection<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -185,7 +190,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Reflection2D<S> wh
 
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
-        <Self as Reflection<Point2<S>>>::inverse(&self)
+        <Self as Reflection<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -218,7 +223,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Reflection2D<S> wh
 
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
-        <Self as Reflection<Point2<S>>>::inverse(&self)
+        <Self as Reflection<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -251,7 +256,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Ref
 
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
-        <Self as Reflection<Point2<S>>>::inverse(&self)
+        <Self as Reflection<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -316,7 +321,10 @@ impl<S> From<&Reflection3D<S>> for Matrix4<S> where S: Copy {
     }
 }
 
-impl<S> Reflection<Point3<S>> for Reflection3D<S> where S: ScalarFloat {
+impl<S> Reflection<Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFloat {
+    type OutPoint = Point3<S>;
+    type OutVector = Vector3<S>;
+
     fn normal(&self) -> Vector3<S> {
         self.normal
     }
@@ -374,7 +382,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Reflection3D<S> whe
 
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
-        <Self as Reflection<Point3<S>>>::inverse(&self)
+        <Self as Reflection<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -407,7 +415,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Reflection3D<S> wh
 
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
-        <Self as Reflection<Point3<S>>>::inverse(&self)
+        <Self as Reflection<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -440,7 +448,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Reflection3D<S> wh
 
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
-        <Self as Reflection<Point3<S>>>::inverse(&self)
+        <Self as Reflection<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -473,7 +481,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Ref
 
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
-        <Self as Reflection<Point3<S>>>::inverse(&self)
+        <Self as Reflection<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
