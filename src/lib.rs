@@ -19,6 +19,7 @@ mod rotation;
 mod scale;
 mod shear;
 mod translation;
+mod transform;
 
 
 pub use prelude::*;
@@ -38,4 +39,5 @@ pub use rotation::*;
 pub use scale::*;
 pub use shear::*;
 pub use translation::*;
+pub use transform::*;
 

@@ -57,10 +57,6 @@ pub struct Identity2D<S> {
     matrix: Matrix3<S>,
 }
 
-impl<S> Identity2D<S> where S: Scalar {
-
-}
-
 impl<S> AsRef<Matrix3<S>> for Identity2D<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix3<S> {
