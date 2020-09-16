@@ -24,8 +24,8 @@ use scalar::{
     ScalarFloat,
 };
 use matrix::{
-    Matrix3, 
-    Matrix4
+    Matrix3x3, 
+    Matrix4x4
 };
 use vector::Vector3;
 use num_traits::NumCast;
@@ -142,7 +142,7 @@ impl<S> Quaternion<S> where S: Scalar {
     }
 
     /// Convert a quaternion to its equivalent matrix form using preallocated storage.
-    pub fn to_mut_mat4(&self, matrix: &mut Matrix4<S>) {
+    pub fn to_mut_mat4(&self, matrix: &mut Matrix4x4<S>) {
         let s = self.s;
         let x = self.v.x;
         let y = self.v.y;
@@ -397,9 +397,9 @@ impl<S> Product for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> From<Quaternion<S>> for Matrix3<S> where S: Scalar {
+impl<S> From<Quaternion<S>> for Matrix3x3<S> where S: Scalar {
     #[rustfmt::skip]
-    fn from(quaternion: Quaternion<S>) -> Matrix3<S> {
+    fn from(quaternion: Quaternion<S>) -> Matrix3x3<S> {
         let s = quaternion.s;
         let x = quaternion.v.x;
         let y = quaternion.v.y;
@@ -407,7 +407,7 @@ impl<S> From<Quaternion<S>> for Matrix3<S> where S: Scalar {
         let one = S::one();
         let two = one + one;
     
-        Matrix3::new(
+        Matrix3x3::new(
             one - two * y * y - two * z * z, two * x * y + two * s * z,       two * x * z - two * s * y,
             two * x * y - two * s * z,       one - two * x * x - two * z * z, two * y * z + two * s * x,
             two * x * z + two * s * y,       two * y * z - two * s * x,       one - two * x * x - two * y * y,
@@ -415,9 +415,9 @@ impl<S> From<Quaternion<S>> for Matrix3<S> where S: Scalar {
     }
 }
 
-impl<S> From<&Quaternion<S>> for Matrix3<S> where S: Scalar {
+impl<S> From<&Quaternion<S>> for Matrix3x3<S> where S: Scalar {
     #[rustfmt::skip]
-    fn from(quaternion: &Quaternion<S>) -> Matrix3<S> {
+    fn from(quaternion: &Quaternion<S>) -> Matrix3x3<S> {
         let s = quaternion.s;
         let x = quaternion.v.x;
         let y = quaternion.v.y;
@@ -425,7 +425,7 @@ impl<S> From<&Quaternion<S>> for Matrix3<S> where S: Scalar {
         let one = S::one();
         let two = one + one;
     
-        Matrix3::new(
+        Matrix3x3::new(
             one - two * y * y - two * z * z, two * x * y + two * s * z,       two * x * z - two * s * y,
             two * x * y - two * s * z,       one - two * x * x - two * z * z, two * y * z + two * s * x,
             two * x * z + two * s * y,       two * y * z - two * s * x,       one - two * x * x - two * y * y,
@@ -433,9 +433,9 @@ impl<S> From<&Quaternion<S>> for Matrix3<S> where S: Scalar {
     }
 }
 
-impl<S> From<Quaternion<S>> for Matrix4<S> where S: Scalar {
+impl<S> From<Quaternion<S>> for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
-    fn from(quaternion: Quaternion<S>) -> Matrix4<S> {
+    fn from(quaternion: Quaternion<S>) -> Matrix4x4<S> {
         let s = quaternion.s;
         let x = quaternion.v.x;
         let y = quaternion.v.y;
@@ -444,7 +444,7 @@ impl<S> From<Quaternion<S>> for Matrix4<S> where S: Scalar {
         let one = S::one();
         let two = one + one;
     
-        Matrix4::new(
+        Matrix4x4::new(
             one - two * y * y - two * z * z, two * x * y + two * s * z,       two * x * z - two * s * y,       zero, 
             two * x * y - two * s * z,       one - two * x * x - two * z * z, two * y * z + two * s * x,       zero, 
             two * x * z + two * s * y,       two * y * z - two * s * x,       one - two * x * x - two * y * y, zero, 
@@ -453,9 +453,9 @@ impl<S> From<Quaternion<S>> for Matrix4<S> where S: Scalar {
     }
 }
 
-impl<S> From<&Quaternion<S>> for Matrix4<S> where S: Scalar {
+impl<S> From<&Quaternion<S>> for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
-    fn from(quaternion: &Quaternion<S>) -> Matrix4<S> {
+    fn from(quaternion: &Quaternion<S>) -> Matrix4x4<S> {
         let s = quaternion.s;
         let x = quaternion.v.x;
         let y = quaternion.v.y;
@@ -464,7 +464,7 @@ impl<S> From<&Quaternion<S>> for Matrix4<S> where S: Scalar {
         let one = S::one();
         let two = one + one;
     
-        Matrix4::new(
+        Matrix4x4::new(
             one - two * y * y - two * z * z, two * x * y + two * s * z,       two * x * z - two * s * y,       zero, 
             two * x * y - two * s * z,       one - two * x * x - two * z * z, two * y * z + two * s * x,       zero, 
             two * x * z + two * s * y,       two * y * z - two * s * x,       one - two * x * x - two * y * y, zero, 
@@ -501,8 +501,8 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> From<Matrix3<S>> for Quaternion<S> where S: ScalarFloat {
-    fn from(matrix: Matrix3<S>) -> Quaternion<S> {
+impl<S> From<Matrix3x3<S>> for Quaternion<S> where S: ScalarFloat {
+    fn from(matrix: Matrix3x3<S>) -> Quaternion<S> {
         let trace = matrix.trace();
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
         if trace >= S::zero() {
@@ -545,8 +545,8 @@ impl<S> From<Matrix3<S>> for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> From<&Matrix3<S>> for Quaternion<S> where S: ScalarFloat {
-    fn from(matrix: &Matrix3<S>) -> Quaternion<S> {
+impl<S> From<&Matrix3x3<S>> for Quaternion<S> where S: ScalarFloat {
+    fn from(matrix: &Matrix3x3<S>) -> Quaternion<S> {
         let trace = matrix.trace();
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
         if trace >= S::zero() {

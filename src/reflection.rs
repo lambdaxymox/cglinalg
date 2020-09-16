@@ -3,8 +3,8 @@ use scalar::{
     ScalarFloat,
 };
 use matrix::{
-    Matrix3,
-    Matrix4,
+    Matrix3x3,
+    Matrix4x4,
 };
 use vector::{
     Vector2,
@@ -49,14 +49,14 @@ pub trait Reflection<P, V> where Self: Sized + Copy {
 /// A trait defining reflections about a plane (line) in two dimensions.
 pub trait Reflection2<S> where 
     S: ScalarFloat,
-    Self: Reflection<Point2<S>, Vector2<S>> + Into<Matrix3<S>> + Into<Reflection2D<S>>,
+    Self: Reflection<Point2<S>, Vector2<S>> + Into<Matrix3x3<S>> + Into<Reflection2D<S>>,
 {
 }
 
 /// A trait defining reflections about a plane in three dimensions.
 pub trait Reflection3<S> where 
     S: ScalarFloat,
-    Self: Reflection<Point3<S>, Vector3<S>> + Into<Matrix4<S>> + Into<Reflection3D<S>>,
+    Self: Reflection<Point3<S>, Vector3<S>> + Into<Matrix4x4<S>> + Into<Reflection3D<S>>,
 {
 }
 
@@ -68,12 +68,12 @@ pub struct Reflection2D<S> {
     /// The normal vector to the plane.
     normal: Vector2<S>,
     /// The matrix representing the affine transformation.
-    matrix: Matrix3<S>,
+    matrix: Matrix3x3<S>,
 }
 
-impl<S> AsRef<Matrix3<S>> for Reflection2D<S> {
+impl<S> AsRef<Matrix3x3<S>> for Reflection2D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix3<S> {
+    fn as_ref(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 }
@@ -84,14 +84,14 @@ impl<S> fmt::Display for Reflection2D<S> where S: Scalar {
     }
 }
 
-impl<S> From<Reflection2D<S>> for Matrix3<S> where S: Copy {
-    fn from(transformation: Reflection2D<S>) -> Matrix3<S> {
+impl<S> From<Reflection2D<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: Reflection2D<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Reflection2D<S>> for Matrix3<S> where S: Copy {
-    fn from(transformation: &Reflection2D<S>) -> Matrix3<S> {
+impl<S> From<&Reflection2D<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: &Reflection2D<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
@@ -107,7 +107,7 @@ impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFlo
     fn from_normal(normal: Vector2<S>) -> Reflection2D<S> {
         Reflection2D {
             normal: normal,
-            matrix: Matrix3::from_affine_reflection(normal),
+            matrix: Matrix3x3::from_affine_reflection(normal),
         }
     }
 
@@ -117,7 +117,7 @@ impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFlo
         let two = one + one;
         let normal = self.normal;
         let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y);
-        let matrix = Matrix3::new(
+        let matrix = Matrix3x3::new(
             one - two * normal.y * normal.y, two * normal.x * normal.y,                                   zero,
             two * normal.x * normal.y,       one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
             zero,                            zero,                                                        one
@@ -150,7 +150,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Reflection2D<S> whe
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
             normal: Vector2::zero(), 
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -183,7 +183,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Reflection2D<S> wh
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
             normal: Vector2::zero(), 
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -216,7 +216,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Reflection2D<S> wh
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
             normal: Vector2::zero(), 
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -249,7 +249,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Ref
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
             normal: Vector2::zero(), 
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -282,7 +282,7 @@ pub struct Reflection3D<S> {
     /// The normal vector to the plane.
     normal: Vector3<S>,
     /// The matrix representing the affine transformation.
-    matrix: Matrix4<S>,
+    matrix: Matrix4x4<S>,
 }
 
 impl<S> Reflection3D<S> where S: ScalarFloat {
@@ -290,14 +290,14 @@ impl<S> Reflection3D<S> where S: ScalarFloat {
     pub fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
         Reflection3D {
             normal: normal,
-            matrix: Matrix4::from_affine_reflection(normal),
+            matrix: Matrix4x4::from_affine_reflection(normal),
         }
     }
 }
 
-impl<S> AsRef<Matrix4<S>> for Reflection3D<S> {
+impl<S> AsRef<Matrix4x4<S>> for Reflection3D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix4<S> {
+    fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
@@ -308,14 +308,14 @@ impl<S> fmt::Display for Reflection3D<S> where S: Scalar {
     }
 }
 
-impl<S> From<Reflection3D<S>> for Matrix4<S> where S: Copy {
-    fn from(transformation: Reflection3D<S>) -> Matrix4<S> {
+impl<S> From<Reflection3D<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: Reflection3D<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Reflection3D<S>> for Matrix4<S> where S: Copy {
-    fn from(transformation: &Reflection3D<S>) -> Matrix4<S> {
+impl<S> From<&Reflection3D<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: &Reflection3D<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
@@ -331,7 +331,7 @@ impl<S> Reflection<Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFlo
     fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
         Reflection3D {
             normal: normal,
-            matrix: Matrix4::from_affine_reflection(normal),
+            matrix: Matrix4x4::from_affine_reflection(normal),
         }
     }
 
@@ -341,7 +341,7 @@ impl<S> Reflection<Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFlo
         let two = one + one;
         let normal = self.normal;
         let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
-        let matrix = Matrix4::new(
+        let matrix = Matrix4x4::new(
             one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
             two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
             two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
@@ -375,7 +375,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Reflection3D<S> whe
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
             normal: Vector3::zero(), 
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 
@@ -408,7 +408,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Reflection3D<S> wh
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
             normal: Vector3::zero(), 
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 
@@ -441,7 +441,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Reflection3D<S> wh
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
             normal: Vector3::zero(), 
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 
@@ -474,7 +474,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Ref
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
             normal: Vector3::zero(), 
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 

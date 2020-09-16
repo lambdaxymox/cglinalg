@@ -6,7 +6,7 @@ use angle::{
     Radians,
 };
 use matrix::{
-    Matrix4,
+    Matrix4x4,
 };
 use structure::{
     Angle,
@@ -19,8 +19,8 @@ use structure::{
 /// This function is equivalent to the now deprecated [glOrtho]
 /// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml) function.
 #[inline]
-pub fn orthographic<S, Spec: Into<Orthographic<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
-    Matrix4::from(spec.into())
+pub fn orthographic<S, Spec: Into<Orthographic<S>>>(spec: Spec) -> Matrix4x4<S> where S: ScalarFloat {
+    Matrix4x4::from(spec.into())
 }
 
 /// Compute a perspective matrix from a view frustum.
@@ -28,8 +28,8 @@ pub fn orthographic<S, Spec: Into<Orthographic<S>>>(spec: Spec) -> Matrix4<S> wh
 /// This is the equivalent of the now deprecated [glFrustum]
 /// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml) function.
 #[inline]
-pub fn frustum<S, Spec: Into<Perspective<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
-    Matrix4::from(spec.into())
+pub fn frustum<S, Spec: Into<Perspective<S>>>(spec: Spec) -> Matrix4x4<S> where S: ScalarFloat {
+    Matrix4x4::from(spec.into())
 }
 
 /// Compute the perspective matrix for converting from camera space to 
@@ -39,8 +39,8 @@ pub fn frustum<S, Spec: Into<Perspective<S>>>(spec: Spec) -> Matrix4<S> where S:
 /// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml)
 /// function.
 #[inline]
-pub fn perspective<S, Spec: Into<PerspectiveFov<S>>>(spec: Spec) -> Matrix4<S> where S: ScalarFloat {
-    Matrix4::from(spec.into())
+pub fn perspective<S, Spec: Into<PerspectiveFov<S>>>(spec: Spec) -> Matrix4x4<S> where S: ScalarFloat {
+    Matrix4x4::from(spec.into())
 }
 
 
@@ -287,8 +287,8 @@ impl<S> Into<PerspectiveFov<S>> for &(Degrees<S>, S, S, S) where S: ScalarFloat 
     }
 }
 
-impl<S> From<PerspectiveFov<S>> for Matrix4<S> where S: ScalarFloat {
-    fn from(persp: PerspectiveFov<S>) -> Matrix4<S> {
+impl<S> From<PerspectiveFov<S>> for Matrix4x4<S> where S: ScalarFloat {
+    fn from(persp: PerspectiveFov<S>) -> Matrix4x4<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -299,7 +299,7 @@ impl<S> From<PerspectiveFov<S>> for Matrix4<S> where S: ScalarFloat {
         let sz = (persp.far + persp.near) / (persp.near - persp.far);
         let pz = (two * persp.far * persp.near) / (persp.near - persp.far);
         
-        Matrix4::new(
+        Matrix4x4::new(
             sx,    zero,  zero,  zero,
             zero,  sy,    zero,  zero,
             zero,  zero,  sz,   -one,
@@ -308,8 +308,8 @@ impl<S> From<PerspectiveFov<S>> for Matrix4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> From<Perspective<S>> for Matrix4<S> where S: ScalarFloat {
-    fn from(persp: Perspective<S>) -> Matrix4<S> {
+impl<S> From<Perspective<S>> for Matrix4x4<S> where S: ScalarFloat {
+    fn from(persp: Perspective<S>) -> Matrix4x4<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -334,7 +334,7 @@ impl<S> From<Perspective<S>> for Matrix4<S> where S: ScalarFloat {
         let c3r2 = -(two * persp.far * persp.near) / (persp.far - persp.near);
         let c3r3 = zero;
 
-        Matrix4::new(
+        Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
@@ -343,8 +343,8 @@ impl<S> From<Perspective<S>> for Matrix4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> From<Orthographic<S>> for Matrix4<S> where S: ScalarFloat {
-    fn from(ortho: Orthographic<S>) -> Matrix4<S> {
+impl<S> From<Orthographic<S>> for Matrix4x4<S> where S: ScalarFloat {
+    fn from(ortho: Orthographic<S>) -> Matrix4x4<S> {
         let zero = S::zero();
         let one  = S::one();
         let two = one + one;
@@ -355,7 +355,7 @@ impl<S> From<Orthographic<S>> for Matrix4<S> where S: ScalarFloat {
         let ty = (ortho.top + ortho.bottom) / (ortho.top - ortho.bottom);
         let tz = (ortho.far + ortho.near) / (ortho.far - ortho.near);
 
-        Matrix4::new(
+        Matrix4x4::new(
              sx,    zero,  zero, zero,
              zero,  sy,    zero, zero,
              zero,  zero,  sz,   zero,

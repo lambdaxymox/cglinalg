@@ -3,8 +3,8 @@ use scalar::{
     ScalarFloat,
 };
 use matrix::{
-    Matrix3,
-    Matrix4,
+    Matrix3x3,
+    Matrix4x4,
 };
 use vector::{
     Vector2,
@@ -89,7 +89,7 @@ pub trait AffineTransformation3D<P, V, S> where Self: Sized {
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Transform2D<S> {
-    matrix: Matrix3<S>,
+    matrix: Matrix3x3<S>,
 }
 
 impl<S> Transform2D<S> where S: Scalar {
@@ -97,7 +97,7 @@ impl<S> Transform2D<S> where S: Scalar {
     /// is primarily for internal use in implementing type conversions for affine 
     /// transformations.
     #[inline]
-    pub(crate) fn matrix_to_transform2d(matrix: Matrix3<S>) -> Transform2D<S> {
+    pub(crate) fn matrix_to_transform2d(matrix: Matrix3x3<S>) -> Transform2D<S> {
         // TODO: Make this function const when const fn stabilizes for traits other than
         // Sized. See issue #57563: <https://github.com/rust-lang/rust/issues/57563>
         Transform2D {
@@ -106,9 +106,9 @@ impl<S> Transform2D<S> where S: Scalar {
     }
 }
 
-impl<S> AsRef<Matrix3<S>> for Transform2D<S> {
+impl<S> AsRef<Matrix3x3<S>> for Transform2D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix3<S> {
+    fn as_ref(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 }
@@ -119,14 +119,14 @@ impl<S> fmt::Display for Transform2D<S> where S: Scalar {
     }
 }
 
-impl<S> From<Transform2D<S>> for Matrix3<S> where S: Copy {
-    fn from(transformation: Transform2D<S>) -> Matrix3<S> {
+impl<S> From<Transform2D<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: Transform2D<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Transform2D<S>> for Matrix3<S> where S: Copy {
-    fn from(transformation: &Transform2D<S>) -> Matrix3<S> {
+impl<S> From<&Transform2D<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: &Transform2D<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
@@ -138,7 +138,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Transform2D<S> wher
     #[inline]
     fn identity() -> Transform2D<S> {
         Transform2D { 
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -176,7 +176,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Transform2D<S> whe
     #[inline]
     fn identity() -> Transform2D<S> {
         Transform2D { 
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -214,7 +214,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Transform2D<S> whe
     #[inline]
     fn identity() -> Transform2D<S> {
         Transform2D { 
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -252,7 +252,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Tra
     #[inline]
     fn identity() -> Transform2D<S> {
         Transform2D { 
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -287,7 +287,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Tra
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Transform3D<S> {
-    matrix: Matrix4<S>,
+    matrix: Matrix4x4<S>,
 }
 
 impl<S> Transform3D<S> where S: Scalar {
@@ -295,7 +295,7 @@ impl<S> Transform3D<S> where S: Scalar {
     /// is primarily for internal use in implementing type conversions for affine 
     /// transformations.
     #[inline]
-    pub(crate) fn matrix_to_transform3d(matrix: Matrix4<S>) -> Transform3D<S> {
+    pub(crate) fn matrix_to_transform3d(matrix: Matrix4x4<S>) -> Transform3D<S> {
         // TODO: Make this function const when const fn stabilizes for traits other than
         // Sized. See issue #57563: <https://github.com/rust-lang/rust/issues/57563>.
         Transform3D {
@@ -304,9 +304,9 @@ impl<S> Transform3D<S> where S: Scalar {
     }
 }
 
-impl<S> AsRef<Matrix4<S>> for Transform3D<S> {
+impl<S> AsRef<Matrix4x4<S>> for Transform3D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix4<S> {
+    fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
@@ -317,14 +317,14 @@ impl<S> fmt::Display for Transform3D<S> where S: Scalar {
     }
 }
 
-impl<S> From<Transform3D<S>> for Matrix4<S> where S: Copy {
-    fn from(transformation: Transform3D<S>) -> Matrix4<S> {
+impl<S> From<Transform3D<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: Transform3D<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Transform3D<S>> for Matrix4<S> where S: Copy {
-    fn from(transformation: &Transform3D<S>) -> Matrix4<S> {
+impl<S> From<&Transform3D<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: &Transform3D<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
@@ -336,7 +336,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Transform3D<S> wher
     #[inline]
     fn identity() -> Transform3D<S> {
         Transform3D { 
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 
@@ -374,7 +374,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Transform3D<S> whe
     #[inline]
     fn identity() -> Transform3D<S> {
         Transform3D { 
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 
@@ -412,7 +412,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Transform3D<S> whe
     #[inline]
     fn identity() -> Transform3D<S> {
         Transform3D { 
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 
@@ -450,7 +450,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Tra
     #[inline]
     fn identity() -> Transform3D<S> {
         Transform3D { 
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 

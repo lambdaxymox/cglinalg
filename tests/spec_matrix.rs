@@ -4,31 +4,31 @@ extern crate proptest;
 
 use proptest::prelude::*;
 use gdmath::{
-    Matrix2,
-    Matrix3,
-    Matrix4,
+    Matrix2x2,
+    Matrix3x3,
+    Matrix4x4,
     Scalar,
 };
 
 
-fn any_matrix2<S>() -> impl Strategy<Value = Matrix2<S>> where S: Scalar + Arbitrary {
+fn any_matrix2<S>() -> impl Strategy<Value = Matrix2x2<S>> where S: Scalar + Arbitrary {
     any::<(S, S, S, S)>().prop_map(
-    |(c0r0, c0r1, c1r0, c1r1)| Matrix2::new(c0r0, c0r1, c1r0, c1r1)
+    |(c0r0, c0r1, c1r0, c1r1)| Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
     )
 }
 
-fn any_matrix3<S>() -> impl Strategy<Value = Matrix3<S>> where S: Scalar + Arbitrary {
+fn any_matrix3<S>() -> impl Strategy<Value = Matrix3x3<S>> where S: Scalar + Arbitrary {
     any::<((S, S, S), (S, S, S), (S, S, S))>().prop_map(
         |((c0r0, c0r1, c0r2), (c1r0, c1r1, c1r2), (c2r0, c2r1, c2r2))| {
-            Matrix3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+            Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
         }
     )
 }
 
-fn any_matrix4<S>() -> impl Strategy<Value = Matrix4<S>> where S: Scalar + Arbitrary {
+fn any_matrix4<S>() -> impl Strategy<Value = Matrix4x4<S>> where S: Scalar + Arbitrary {
     any::<((S, S, S, S), (S, S, S, S), (S, S, S, S), (S, S, S, S))>().prop_map(
         |((c0r0, c0r1, c0r2, c0r3), (c1r0, c1r1, c1r2, c1r3), (c2r0, c2r1, c2r2, c2r3), (c3r0, c3r1, c3r2, c3r3))| {
-            Matrix4::new(c0r0,c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2,  c2r3, c3r0, c3r1, c3r2, c3r3)
+            Matrix4x4::new(c0r0,c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2,  c2r3, c3r0, c3r1, c3r2, c3r3)
         }
     )
 }
@@ -119,9 +119,9 @@ macro_rules! approx_addition_props {
     }
 }
 
-approx_addition_props!(matrix2_f64_addition_props, Matrix2, f64, any_matrix2, 1e-7);
-approx_addition_props!(matrix3_f64_addition_props, Matrix3, f64, any_matrix3, 1e-7);
-approx_addition_props!(matrix4_f64_addition_props, Matrix4, f64, any_matrix4, 1e-7);
+approx_addition_props!(matrix2_f64_addition_props, Matrix2x2, f64, any_matrix2, 1e-7);
+approx_addition_props!(matrix3_f64_addition_props, Matrix3x3, f64, any_matrix3, 1e-7);
+approx_addition_props!(matrix4_f64_addition_props, Matrix4x4, f64, any_matrix4, 1e-7);
 
 
 /// Generate the properties for matrix addition over exact scalars. We define an exact
@@ -194,12 +194,12 @@ macro_rules! exact_addition_props {
     }
 }
 
-exact_addition_props!(matrix2_u32_addition_props, Matrix2, u32, any_matrix2);
-exact_addition_props!(matrix2_i32_addition_props, Matrix2, i32, any_matrix2);
-exact_addition_props!(matrix3_u32_addition_props, Matrix3, u32, any_matrix3);
-exact_addition_props!(matrix3_i32_addition_props, Matrix3, i32, any_matrix3);
-exact_addition_props!(matrix4_u32_addition_props, Matrix4, u32, any_matrix4);
-exact_addition_props!(matrix4_i32_addition_props, Matrix4, i32, any_matrix4);
+exact_addition_props!(matrix2_u32_addition_props, Matrix2x2, u32, any_matrix2);
+exact_addition_props!(matrix2_i32_addition_props, Matrix2x2, i32, any_matrix2);
+exact_addition_props!(matrix3_u32_addition_props, Matrix3x3, u32, any_matrix3);
+exact_addition_props!(matrix3_i32_addition_props, Matrix3x3, i32, any_matrix3);
+exact_addition_props!(matrix4_u32_addition_props, Matrix4x4, u32, any_matrix4);
+exact_addition_props!(matrix4_i32_addition_props, Matrix4x4, i32, any_matrix4);
 
 
 /// Generate the properties for the multiplication of matrices of floating point scalars 
@@ -314,9 +314,9 @@ macro_rules! approx_scalar_multiplication_props {
     }
 }
 
-approx_scalar_multiplication_props!(matrix2_f64_scalar_multiplication_props, Matrix2, f64, any_matrix2, 1e-7);
-approx_scalar_multiplication_props!(matrix3_f64_scalar_multiplication_props, Matrix3, f64, any_matrix3, 1e-7);
-approx_scalar_multiplication_props!(matrix4_f64_scalar_multiplication_props, Matrix4, f64, any_matrix4, 1e-7);
+approx_scalar_multiplication_props!(matrix2_f64_scalar_multiplication_props, Matrix2x2, f64, any_matrix2, 1e-7);
+approx_scalar_multiplication_props!(matrix3_f64_scalar_multiplication_props, Matrix3x3, f64, any_matrix3, 1e-7);
+approx_scalar_multiplication_props!(matrix4_f64_scalar_multiplication_props, Matrix4x4, f64, any_matrix4, 1e-7);
 
 
 /// Generate the properties for the multiplication of matrices of integer scalars 
@@ -414,12 +414,12 @@ macro_rules! exact_scalar_multiplication_props {
     }
 }
 
-exact_scalar_multiplication_props!(matrix2_u32_scalar_multiplication_props, Matrix2, u32, any_matrix2);
-exact_scalar_multiplication_props!(matrix2_i32_scalar_multiplication_props, Matrix2, i32, any_matrix2);
-exact_scalar_multiplication_props!(matrix3_u32_scalar_multiplication_props, Matrix3, u32, any_matrix3);
-exact_scalar_multiplication_props!(matrix3_i32_scalar_multiplication_props, Matrix3, i32, any_matrix3);
-exact_scalar_multiplication_props!(matrix4_u32_scalar_multiplication_props, Matrix4, u32, any_matrix4);
-exact_scalar_multiplication_props!(matrix4_i32_scalar_multiplication_props, Matrix4, i32, any_matrix4);
+exact_scalar_multiplication_props!(matrix2_u32_scalar_multiplication_props, Matrix2x2, u32, any_matrix2);
+exact_scalar_multiplication_props!(matrix2_i32_scalar_multiplication_props, Matrix2x2, i32, any_matrix2);
+exact_scalar_multiplication_props!(matrix3_u32_scalar_multiplication_props, Matrix3x3, u32, any_matrix3);
+exact_scalar_multiplication_props!(matrix3_i32_scalar_multiplication_props, Matrix3x3, i32, any_matrix3);
+exact_scalar_multiplication_props!(matrix4_u32_scalar_multiplication_props, Matrix4x4, u32, any_matrix4);
+exact_scalar_multiplication_props!(matrix4_i32_scalar_multiplication_props, Matrix4x4, i32, any_matrix4);
 
 
 /// Generate the properties for the multiplication of matrices of floating point scalars.
@@ -511,9 +511,9 @@ macro_rules! approx_multiplication_props {
     }
 }
 
-approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2, f64, any_matrix2, 1e-7);
-approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3, f64, any_matrix3, 1e-7);
-approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4, f64, any_matrix4, 1e-7);
+approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2x2, f64, any_matrix2, 1e-7);
+approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3x3, f64, any_matrix3, 1e-7);
+approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4x4, f64, any_matrix4, 1e-7);
 
 
 /// Generate the properties for the multiplication of matrices of floating point scalars.
@@ -604,12 +604,12 @@ macro_rules! exact_multiplication_props {
     }
 }
 
-exact_multiplication_props!(matrix2_u32_matrix_multiplication_props, Matrix2, u32, any_matrix2);
-exact_multiplication_props!(matrix2_i32_matrix_multiplication_props, Matrix2, i32, any_matrix2);
-exact_multiplication_props!(matrix3_u32_matrix_multiplication_props, Matrix3, u32, any_matrix3);
-exact_multiplication_props!(matrix3_i32_matrix_multiplication_props, Matrix3, i32, any_matrix3);
-exact_multiplication_props!(matrix4_u32_matrix_multiplication_props, Matrix4, u32, any_matrix4);
-exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4, i32, any_matrix4);
+exact_multiplication_props!(matrix2_u32_matrix_multiplication_props, Matrix2x2, u32, any_matrix2);
+exact_multiplication_props!(matrix2_i32_matrix_multiplication_props, Matrix2x2, i32, any_matrix2);
+exact_multiplication_props!(matrix3_u32_matrix_multiplication_props, Matrix3x3, u32, any_matrix3);
+exact_multiplication_props!(matrix3_i32_matrix_multiplication_props, Matrix3x3, i32, any_matrix3);
+exact_multiplication_props!(matrix4_u32_matrix_multiplication_props, Matrix4x4, u32, any_matrix4);
+exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4x4, i32, any_matrix4);
 
 
 /// Generate the properties for the transposition of matrices over floating point scalars.

@@ -2,8 +2,8 @@ use scalar::{
     Scalar,
 };
 use matrix::{
-    Matrix3,
-    Matrix4,
+    Matrix3x3,
+    Matrix4x4,
 };
 use vector::{
     Vector2,
@@ -43,14 +43,14 @@ pub trait Identity<P, V> where Self: Sized + Copy {
 /// A trait defining the identity transformation in two dimensions.
 pub trait Identity2<S> where 
     S: Scalar,
-    Self: Identity<Point2<S>, Vector2<S>> + Into<Matrix3<S>> + Into<Identity2D<S>>,
+    Self: Identity<Point2<S>, Vector2<S>> + Into<Matrix3x3<S>> + Into<Identity2D<S>>,
 {
 }
 
 /// A trait defining the identity transformation in three dimensions.
 pub trait Identity3<S> where 
     S: Scalar,
-    Self: Identity<Point3<S>, Vector3<S>> + Into<Matrix4<S>> + Into<Identity3D<S>>,
+    Self: Identity<Point3<S>, Vector3<S>> + Into<Matrix4x4<S>> + Into<Identity3D<S>>,
 {
 }
 
@@ -60,12 +60,12 @@ pub trait Identity3<S> where
 #[repr(C)]
 pub struct Identity2D<S> {
     /// The matrix representing the affine transformation.
-    matrix: Matrix3<S>,
+    matrix: Matrix3x3<S>,
 }
 
-impl<S> AsRef<Matrix3<S>> for Identity2D<S> {
+impl<S> AsRef<Matrix3x3<S>> for Identity2D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix3<S> {
+    fn as_ref(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 }
@@ -76,14 +76,14 @@ impl<S> fmt::Display for Identity2D<S> where S: Scalar {
     }
 }
 
-impl<S> From<Identity2D<S>> for Matrix3<S> where S: Copy {
-    fn from(transformation: Identity2D<S>) -> Matrix3<S> {
+impl<S> From<Identity2D<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: Identity2D<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Identity2D<S>> for Matrix3<S> where S: Copy {
-    fn from(transformation: &Identity2D<S>) -> Matrix3<S> {
+impl<S> From<&Identity2D<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: &Identity2D<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
@@ -95,7 +95,7 @@ impl<S> Identity<Point2<S>, Vector2<S>> for Identity2D<S> where S: Scalar {
     #[inline]
     fn identity() -> Identity2D<S> {
         Identity2D {
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -243,12 +243,12 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Ide
 #[repr(C)]
 pub struct Identity3D<S> {
     /// The matrix representing the affine transformation.
-    matrix: Matrix4<S>,
+    matrix: Matrix4x4<S>,
 }
 
-impl<S> AsRef<Matrix4<S>> for Identity3D<S> {
+impl<S> AsRef<Matrix4x4<S>> for Identity3D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix4<S> {
+    fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
@@ -259,14 +259,14 @@ impl<S> fmt::Display for Identity3D<S> where S: Scalar {
     }
 }
 
-impl<S> From<Identity3D<S>> for Matrix4<S> where S: Copy {
-    fn from(transformation: Identity3D<S>) -> Matrix4<S> {
+impl<S> From<Identity3D<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: Identity3D<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Identity3D<S>> for Matrix4<S> where S: Copy {
-    fn from(transformation: &Identity3D<S>) -> Matrix4<S> {
+impl<S> From<&Identity3D<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: &Identity3D<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
@@ -278,7 +278,7 @@ impl<S> Identity<Point3<S>, Vector3<S>> for Identity3D<S> where S: Scalar {
     #[inline]
     fn identity() -> Identity3D<S> {
         Identity3D {
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 

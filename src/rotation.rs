@@ -17,9 +17,9 @@ use structure::{
     Magnitude,
 };
 use matrix::{
-    Matrix2,
-    Matrix3,
-    Matrix4,
+    Matrix2x2,
+    Matrix3x3,
+    Matrix4x4,
 };
 use point::{
     Point2,
@@ -80,7 +80,7 @@ pub trait Rotation<P, V> where Self: Sized + Copy {
 /// this requires different mathematics than is typically used in computer graphics.
 pub trait Rotation2<S> where 
     S: ScalarFloat,
-    Self: Rotation<Point2<S>, Vector2<S>> + Into<Matrix3<S>> + Into<Rotation2D<S>>,
+    Self: Rotation<Point2<S>, Vector2<S>> + Into<Matrix3x3<S>> + Into<Rotation2D<S>>,
 {
     /// Rotate a two-dimensional vector in the xy-plane by an angle `angle`.
     fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self;
@@ -90,7 +90,7 @@ pub trait Rotation2<S> where
 pub trait Rotation3<S> where 
     S: ScalarFloat,
     Self: Rotation<Point3<S>, Vector3<S>>,
-    Self: Into<Matrix4<S>> + Into<Rotation3D<S>> + Into<Quaternion<S>>,
+    Self: Into<Matrix4x4<S>> + Into<Rotation3D<S>> + Into<Quaternion<S>>,
 {
     /// Construct a new three-dimensional rotation about an axis `axis` by 
     /// an amount `angle`.
@@ -126,7 +126,7 @@ pub struct Rotation2D<S> {
     /// The angle of rotation.
     angle: Radians<S>,
     /// The underlying matrix for the rotation.
-    matrix: Matrix3<S>,
+    matrix: Matrix3x3<S>,
 }
 
 impl<S> fmt::Debug for Rotation2D<S> where S: fmt::Debug {
@@ -143,16 +143,16 @@ impl<S> fmt::Display for Rotation2D<S> where S: fmt::Debug {
     }
 }
 
-impl<S> From<Rotation2D<S>> for Matrix3<S> where S: Copy {
+impl<S> From<Rotation2D<S>> for Matrix3x3<S> where S: Copy {
     #[inline]
-    fn from(rotation: Rotation2D<S>) -> Matrix3<S> {
+    fn from(rotation: Rotation2D<S>) -> Matrix3x3<S> {
         rotation.matrix
     }
 }
 
-impl<S> AsRef<Matrix3<S>> for Rotation2D<S> {
+impl<S> AsRef<Matrix3x3<S>> for Rotation2D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix3<S> {
+    fn as_ref(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 }
@@ -210,7 +210,7 @@ impl<S> One for Rotation2D<S> where S: Scalar {
     fn one() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 }
@@ -239,7 +239,7 @@ impl<S> approx::AbsDiffEq for Rotation2D<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix3::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+        Matrix3x3::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
     }
 }
 
@@ -251,7 +251,7 @@ impl<S> approx::RelativeEq for Rotation2D<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Matrix3::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+        Matrix3x3::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
     }
 }
 
@@ -263,14 +263,14 @@ impl<S> approx::UlpsEq for Rotation2D<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Matrix3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+        Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
 
 impl<S> Rotation2<S> for Rotation2D<S> where S: ScalarFloat {
     fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2D<S> {
         let radians = angle.into();
-        let matrix = Matrix3::from(Matrix2::from_angle(radians));
+        let matrix = Matrix3x3::from(Matrix2x2::from_angle(radians));
         
         Rotation2D {
             angle: radians,
@@ -285,7 +285,7 @@ impl<S> Rotation<Point2<S>, Vector2<S>> for Rotation2D<S> where S: ScalarFloat {
 
     #[inline]
     fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Rotation2D<S> {
-        let matrix = Matrix3::from(Matrix2::look_at(direction, up));
+        let matrix = Matrix3x3::from(Matrix2x2::look_at(direction, up));
         let angle = Radians::acos(matrix.c0r0);
         
         Rotation2D {
@@ -326,7 +326,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S> where
     fn identity() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -359,7 +359,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S> wher
     fn identity() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -392,7 +392,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S> wher
     fn identity() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -425,7 +425,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Rot
     fn identity() -> Rotation2D<S> {
         Rotation2D { 
             angle: Radians(S::zero()),
-            matrix: Matrix3::one(),
+            matrix: Matrix3x3::one(),
         }
     }
 
@@ -458,7 +458,7 @@ pub struct Rotation3D<S> {
     /// The angle of rotation.
     angle: Radians<S>,
     /// The underlying matrix representing the rotation.
-    matrix: Matrix4<S>,
+    matrix: Matrix4x4<S>,
 }
 
 impl<S> Rotation3D<S> where S: ScalarFloat {
@@ -471,7 +471,7 @@ impl<S> Rotation3D<S> where S: ScalarFloat {
 
         Rotation3D {
             angle: angle,
-            matrix: Matrix4::from(quaternion),
+            matrix: Matrix4x4::from(quaternion),
         }
     }
 }
@@ -490,9 +490,9 @@ impl<S> fmt::Display for Rotation3D<S> where S: fmt::Debug {
     }
 }
 
-impl<S> From<Rotation3D<S>> for Matrix4<S> where S: Copy {
+impl<S> From<Rotation3D<S>> for Matrix4x4<S> where S: Copy {
     #[inline]
-    fn from(rotation: Rotation3D<S>) -> Matrix4<S> {
+    fn from(rotation: Rotation3D<S>) -> Matrix4x4<S> {
         rotation.matrix
     }
 }
@@ -507,7 +507,7 @@ impl<S> From<Quaternion<S>> for Rotation3D<S> where S: ScalarFloat {
 impl<S> From<Rotation3D<S>> for Quaternion<S> where S: ScalarFloat {
     #[inline]
     fn from(rotation: Rotation3D<S>) -> Quaternion<S> {
-        let matrix = Matrix3::new(
+        let matrix = Matrix3x3::new(
             rotation.matrix.c0r0, rotation.matrix.c0r1, rotation.matrix.c0r2,
             rotation.matrix.c1r0, rotation.matrix.c1r1, rotation.matrix.c1r2,
             rotation.matrix.c2r0, rotation.matrix.c2r1, rotation.matrix.c2r2
@@ -516,9 +516,9 @@ impl<S> From<Rotation3D<S>> for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AsRef<Matrix4<S>> for Rotation3D<S> {
+impl<S> AsRef<Matrix4x4<S>> for Rotation3D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix4<S> {
+    fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
@@ -576,7 +576,7 @@ impl<S> One for Rotation3D<S> where S: Scalar {
     fn one() -> Rotation3D<S> {
         Rotation3D { 
             angle: Radians(S::zero()),
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 }
@@ -605,7 +605,7 @@ impl<S> approx::AbsDiffEq for Rotation3D<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+        Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
     }
 }
 
@@ -617,7 +617,7 @@ impl<S> approx::RelativeEq for Rotation3D<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Matrix4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+        Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
     }
 }
 
@@ -629,7 +629,7 @@ impl<S> approx::UlpsEq for Rotation3D<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Matrix4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+        Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
 
@@ -639,7 +639,7 @@ impl<S> Rotation<Point3<S>, Vector3<S>> for Quaternion<S> where S: ScalarFloat {
     
     #[inline]
     fn look_at(dir: Vector3<S>, up: Vector3<S>) -> Quaternion<S> {
-        Matrix3::look_at(dir, up).into()
+        Matrix3x3::look_at(dir, up).into()
     }
 
     #[inline]
@@ -668,7 +668,7 @@ impl<S> Rotation<Point3<S>, Vector3<S>> for Quaternion<S> where S: ScalarFloat {
 
     #[inline]
     fn rotate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        let rotation_matrix = Matrix3::from(self);
+        let rotation_matrix = Matrix3x3::from(self);
         rotation_matrix * vector
     }
 
@@ -689,7 +689,7 @@ impl<S> Rotation3<S> for Rotation3D<S> where S: ScalarFloat {
         
         Rotation3D {
             angle: radians,
-            matrix: Matrix4::from_affine_axis_angle(axis, radians),
+            matrix: Matrix4x4::from_affine_axis_angle(axis, radians),
         }
     }
 }
@@ -708,7 +708,7 @@ impl<S> Rotation<Point3<S>, Vector3<S>> for Rotation3D<S> where S: ScalarFloat {
 
     #[inline]
     fn look_at(dir: Vector3<S>, up: Vector3<S>) -> Rotation3D<S> {
-        let matrix3 = Matrix3::look_at(dir, up);
+        let matrix3 = Matrix3x3::look_at(dir, up);
         let quaternion = Quaternion::from(&matrix3);
         let two = S::one() + S::one();
         let angle = Radians::acos(quaternion.s) * two;
@@ -753,7 +753,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> where
     fn identity() -> Rotation3D<S> {
         Rotation3D { 
             angle: Radians(S::zero()),
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 
@@ -786,7 +786,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S> wher
     fn identity() -> Rotation3D<S> {
         Rotation3D { 
             angle: Radians(S::zero()),
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 
@@ -819,7 +819,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S> wher
     fn identity() -> Rotation3D<S> {
         Rotation3D { 
             angle: Radians(S::zero()),
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 
@@ -852,7 +852,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Rot
     fn identity() -> Rotation3D<S> {
         Rotation3D { 
             angle: Radians(S::zero()),
-            matrix: Matrix4::one(),
+            matrix: Matrix4x4::one(),
         }
     }
 

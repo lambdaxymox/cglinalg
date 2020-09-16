@@ -3,8 +3,8 @@ use scalar::{
     ScalarFloat,
 };
 use matrix::{
-    Matrix3,
-    Matrix4,
+    Matrix3x3,
+    Matrix4x4,
 };
 use vector::{
     Vector2,
@@ -40,7 +40,7 @@ pub trait Scale<P, V> where Self: Sized + Copy {
 /// A trait defining scaling transformations in two dimensions.
 pub trait Scale2<S> where 
     S: ScalarFloat,
-    Self: Scale<Point2<S>, Vector2<S>> + Into<Matrix3<S>> + Into<Scale2D<S>>,
+    Self: Scale<Point2<S>, Vector2<S>> + Into<Matrix3x3<S>> + Into<Scale2D<S>>,
 {
     /// Construct a two-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
@@ -53,7 +53,7 @@ pub trait Scale2<S> where
 /// A trait defining scaling transformations in three dimensions.
 pub trait Scale3<S> where 
     S: ScalarFloat,
-    Self: Scale<Point3<S>, Vector3<S>> + Into<Matrix4<S>> + Into<Scale3D<S>>,
+    Self: Scale<Point3<S>, Vector3<S>> + Into<Matrix4x4<S>> + Into<Scale3D<S>>,
 {
     /// Construct a three-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
@@ -69,7 +69,7 @@ pub trait Scale3<S> where
 #[repr(C)]
 pub struct Scale2D<S> {
     /// The matrix representing the affine transformation.
-    matrix: Matrix3<S>,
+    matrix: Matrix3x3<S>,
 }
 
 impl<S> Scale2D<S> where S: Scalar {
@@ -77,14 +77,14 @@ impl<S> Scale2D<S> where S: Scalar {
     #[inline]
     pub fn from_vector(scale: Vector2<S>) -> Scale2D<S> {
         Scale2D {
-            matrix: Matrix3::from_affine_nonuniform_scale(scale.x, scale.y),
+            matrix: Matrix3x3::from_affine_nonuniform_scale(scale.x, scale.y),
         }
     }
 }
 
-impl<S> AsRef<Matrix3<S>> for Scale2D<S> {
+impl<S> AsRef<Matrix3x3<S>> for Scale2D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix3<S> {
+    fn as_ref(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 }
@@ -95,14 +95,14 @@ impl<S> fmt::Display for Scale2D<S> where S: Scalar {
     }
 }
 
-impl<S> From<Scale2D<S>> for Matrix3<S> where S: Copy {
-    fn from(transformation: Scale2D<S>) -> Matrix3<S> {
+impl<S> From<Scale2D<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: Scale2D<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Scale2D<S>> for Matrix3<S> where S: Copy {
-    fn from(transformation: &Scale2D<S>) -> Matrix3<S> {
+impl<S> From<&Scale2D<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: &Scale2D<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
@@ -134,14 +134,14 @@ impl<S> Scale2<S> for Scale2D<S> where S: ScalarFloat {
     #[inline]
     fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2D<S> {
         Scale2D {
-            matrix: Matrix3::from_affine_nonuniform_scale(scale_x, scale_y),
+            matrix: Matrix3x3::from_affine_nonuniform_scale(scale_x, scale_y),
         }
     }
 
     #[inline]
     fn from_scale(scale: S) -> Scale2D<S> {
         Scale2D {
-            matrix: Matrix3::from_scale(scale),
+            matrix: Matrix3x3::from_scale(scale),
         }
     }
 }
@@ -272,21 +272,21 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Sca
 #[repr(C)]
 pub struct Scale3D<S> {
     /// The matrix representing the affine transformation.
-    matrix: Matrix4<S>,
+    matrix: Matrix4x4<S>,
 }
 
 impl<S> Scale3D<S> where S: Scalar {
     /// Construct a scale transformation from a vector of scale factors.
     pub fn from_vector(scale: Vector3<S>) -> Scale3D<S> {
         Scale3D {
-            matrix: Matrix4::from_affine_nonuniform_scale(scale.x, scale.y, scale.z),
+            matrix: Matrix4x4::from_affine_nonuniform_scale(scale.x, scale.y, scale.z),
         }
     }
 }
 
-impl<S> AsRef<Matrix4<S>> for Scale3D<S> {
+impl<S> AsRef<Matrix4x4<S>> for Scale3D<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix4<S> {
+    fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
@@ -297,14 +297,14 @@ impl<S> fmt::Display for Scale3D<S> where S: Scalar {
     }
 }
 
-impl<S> From<Scale3D<S>> for Matrix4<S> where S: Copy {
-    fn from(transformation: Scale3D<S>) -> Matrix4<S> {
+impl<S> From<Scale3D<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: Scale3D<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Scale3D<S>> for Matrix4<S> where S: Copy {
-    fn from(transformation: &Scale3D<S>) -> Matrix4<S> {
+impl<S> From<&Scale3D<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: &Scale3D<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
@@ -337,14 +337,14 @@ impl<S> Scale3<S> for Scale3D<S> where S: ScalarFloat {
     #[inline]
     fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Scale3D<S> {
         Scale3D {
-            matrix: Matrix4::from_affine_nonuniform_scale(scale_x, scale_y, scale_z),
+            matrix: Matrix4x4::from_affine_nonuniform_scale(scale_x, scale_y, scale_z),
         }
     }
 
     #[inline]
     fn from_scale(scale: S) -> Scale3D<S> {
         Scale3D {
-            matrix: Matrix4::from_affine_scale(scale),
+            matrix: Matrix4x4::from_affine_scale(scale),
         }
     }
 }
