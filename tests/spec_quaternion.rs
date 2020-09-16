@@ -550,7 +550,11 @@ macro_rules! approx_mul_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::approx::relative_eq;
-        use gdmath::{Quaternion, One, Finite};
+        use gdmath::{
+            Quaternion,
+            Identity,
+            Finite
+        };
 
         proptest! {
             /// Multiplication of a scalar and a quaternion should be approximately commutative.
@@ -701,7 +705,10 @@ macro_rules! exact_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{Quaternion, One};
+        use gdmath::{
+            Quaternion, 
+            Identity,
+        };
 
         proptest! {
             /// Multiplication of an integer scalar and a quaternion over integer scalars should be commutative.
@@ -1479,7 +1486,7 @@ macro_rules! exp_log_props {
         use gdmath::{
             Quaternion,
             Zero,
-            One
+            Identity
         };
 
         proptest! {

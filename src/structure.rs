@@ -20,7 +20,7 @@ pub trait Array {
     /// The length of the the underlying array.
     fn len() -> usize;
     
-    /// The shape of the underlying storage.
+    /// The shape of the underlying array.
     fn shape() -> (usize, usize);
 
     /// Generate a pointer to the underlying array for passing a
@@ -55,7 +55,7 @@ pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
 }
 
 /// This trait indicates that a type has a multiplicative unit element.
-pub trait One where Self: Sized + ops::Mul<Self, Output = Self> {
+pub trait Identity where Self: Sized + ops::Mul<Self, Output = Self> {
     /// Create a multiplicative unit element.
     fn one() -> Self;
 
@@ -365,7 +365,7 @@ pub trait Angle where
 /// A trait defining operations on square matrices. A matrix is said to be
 /// square if the number of rows and the number of columns are are the same.
 pub trait SquareMatrix where
-    Self: One,
+    Self: Identity,
     Self: Matrix<
         Column = <Self as SquareMatrix>::ColumnRow,
         Row = <Self as SquareMatrix>::ColumnRow,

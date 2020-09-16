@@ -12,7 +12,7 @@ use structure::{
     Angle,
     DotProduct,
     CrossProduct,
-    One,
+    Identity,
     InvertibleSquareMatrix,
     Magnitude,
 };
@@ -205,7 +205,7 @@ impl<'a, 'b, S> ops::Mul<&'a Rotation2D<S>> for &'b Rotation2D<S> where S: Scala
     }
 }
 
-impl<S> One for Rotation2D<S> where S: Scalar {
+impl<S> Identity for Rotation2D<S> where S: Scalar {
     #[inline]
     fn one() -> Rotation2D<S> {
         Rotation2D { 
@@ -571,7 +571,7 @@ impl<'a, 'b, S> ops::Mul<&'a Rotation3D<S>> for &'b Rotation3D<S> where S: Scala
     }
 }
 
-impl<S> One for Rotation3D<S> where S: Scalar {
+impl<S> Identity for Rotation3D<S> where S: Scalar {
     #[inline]
     fn one() -> Rotation3D<S> {
         Rotation3D { 

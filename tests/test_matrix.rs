@@ -68,7 +68,7 @@ mod matrix2_tests {
     use gdmath::{
         Vector2,
         Matrix2x2,
-        One, 
+        Identity, 
         Zero, 
         Matrix,
         SquareMatrix,
@@ -458,7 +458,7 @@ mod matrix3_tests {
     use gdmath::{
         Vector3,
         Matrix3x3,
-        One, 
+        Identity, 
         Zero, 
         Matrix,
         SquareMatrix,
@@ -915,7 +915,7 @@ mod matrix4_tests {
         Vector3,
         Vector4,
         Matrix4x4,
-        One, 
+        Identity, 
         Zero, 
         Matrix,
         SquareMatrix,

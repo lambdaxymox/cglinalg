@@ -79,7 +79,7 @@ mod arithmetic_tests {
     use gdmath::{
         Quaternion,
         Vector3,
-        One
+        Identity
     };
 
 
@@ -344,7 +344,7 @@ mod exp_tests {
     use gdmath::{
         Magnitude,
         Quaternion,
-        One,
+        Identity,
         Zero,
     };
     use gdmath::approx::relative_eq;
@@ -395,7 +395,7 @@ mod logarithm_tests {
         Vector3,
         Quaternion,
         Zero,
-        One,
+        Identity,
     };
     use gdmath::approx::relative_eq;
 
@@ -474,7 +474,7 @@ mod logarithm_tests {
 mod power_tests {
     use gdmath::{
         Quaternion,
-        One,
+        Identity,
     };
     use gdmath::approx::relative_eq;
 

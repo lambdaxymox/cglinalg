@@ -15,7 +15,7 @@ use point::{
     Point3,
 };
 use structure::{
-    One,
+    Identity,
 };
 use transform::*;
 

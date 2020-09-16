@@ -2,7 +2,7 @@ use structure::{
     Angle,
     Array,
     Zero,
-    One,
+    Identity,
     ProjectOn,
     DotProduct,
     Magnitude,
@@ -322,7 +322,7 @@ impl<S> Zero for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> One for Quaternion<S> where S: Scalar {
+impl<S> Identity for Quaternion<S> where S: Scalar {
     fn one() -> Quaternion<S> {
         let one = S::one();
         let zero = S::zero();

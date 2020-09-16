@@ -26,7 +26,7 @@ use structure::{
     Array,
     CrossProduct,
     DotProduct,
-    One, 
+    Identity, 
     Zero, 
     Matrix, 
     Lerp,
@@ -440,7 +440,7 @@ impl<S> Zero for Matrix2x2<S> where S: Scalar {
     }
 }
 
-impl<S> One for Matrix2x2<S> where S: Scalar {
+impl<S> Identity for Matrix2x2<S> where S: Scalar {
     #[inline]
     fn one() -> Matrix2x2<S> {
         Matrix2x2::new(S::one(), S::zero(), S::zero(), S::one())
@@ -1691,7 +1691,7 @@ impl<S> Zero for Matrix3x3<S> where S: Scalar {
     }
 }
 
-impl<S> One for Matrix3x3<S> where S: Scalar {
+impl<S> Identity for Matrix3x3<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn one() -> Matrix3x3<S> {
@@ -3191,7 +3191,7 @@ impl<S> Zero for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<S> One for Matrix4x4<S> where S: Scalar {
+impl<S> Identity for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn one() -> Matrix4x4<S> {

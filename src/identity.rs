@@ -14,7 +14,7 @@ use point::{
     Point3,
 };
 use structure::{
-    One,
+    Identity,
 };
 use transform::*;
 
@@ -22,7 +22,7 @@ use std::fmt;
 
 
 /// A trait defining the identity transformation.
-pub trait Identity<P, V> where Self: Sized + Copy {
+pub trait IdentityTransformation<P, V> where Self: Sized + Copy {
     type OutPoint;
     type OutVector;
 
@@ -43,14 +43,14 @@ pub trait Identity<P, V> where Self: Sized + Copy {
 /// A trait defining the identity transformation in two dimensions.
 pub trait Identity2<S> where 
     S: Scalar,
-    Self: Identity<Point2<S>, Vector2<S>> + Into<Matrix3x3<S>> + Into<Identity2D<S>>,
+    Self: IdentityTransformation<Point2<S>, Vector2<S>> + Into<Matrix3x3<S>> + Into<Identity2D<S>>,
 {
 }
 
 /// A trait defining the identity transformation in three dimensions.
 pub trait Identity3<S> where 
     S: Scalar,
-    Self: Identity<Point3<S>, Vector3<S>> + Into<Matrix4x4<S>> + Into<Identity3D<S>>,
+    Self: IdentityTransformation<Point3<S>, Vector3<S>> + Into<Matrix4x4<S>> + Into<Identity3D<S>>,
 {
 }
 
@@ -88,7 +88,7 @@ impl<S> From<&Identity2D<S>> for Matrix3x3<S> where S: Copy {
     }
 }
 
-impl<S> Identity<Point2<S>, Vector2<S>> for Identity2D<S> where S: Scalar {
+impl<S> IdentityTransformation<Point2<S>, Vector2<S>> for Identity2D<S> where S: Scalar {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -123,12 +123,12 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Identity2D<S> where
 
     #[inline]
     fn identity() -> Identity2D<S> {
-        <Self as Identity<Point2<S>, Vector2<S>>>::identity()
+        <Self as IdentityTransformation<Point2<S>, Vector2<S>>>::identity()
     }
 
     #[inline]
     fn inverse(&self) -> Option<Identity2D<S>> {
-        <Self as Identity<Point2<S>, Vector2<S>>>::inverse(&self)
+        <Self as IdentityTransformation<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -153,12 +153,12 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Identity2D<S> wher
 
     #[inline]
     fn identity() -> Identity2D<S> {
-        <Self as Identity<Point2<S>, Vector2<S>>>::identity()
+        <Self as IdentityTransformation<Point2<S>, Vector2<S>>>::identity()
     }
 
     #[inline]
     fn inverse(&self) -> Option<Identity2D<S>> {
-        <Self as Identity<Point2<S>, Vector2<S>>>::inverse(&self)
+        <Self as IdentityTransformation<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -183,12 +183,12 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Identity2D<S> wher
 
     #[inline]
     fn identity() -> Identity2D<S> {
-        <Self as Identity<Point2<S>, Vector2<S>>>::identity()
+        <Self as IdentityTransformation<Point2<S>, Vector2<S>>>::identity()
     }
 
     #[inline]
     fn inverse(&self) -> Option<Identity2D<S>> {
-        <Self as Identity<Point2<S>, Vector2<S>>>::inverse(&self)
+        <Self as IdentityTransformation<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -213,12 +213,12 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Ide
 
     #[inline]
     fn identity() -> Identity2D<S> {
-        <Self as Identity<Point2<S>, Vector2<S>>>::identity()
+        <Self as IdentityTransformation<Point2<S>, Vector2<S>>>::identity()
     }
 
     #[inline]
     fn inverse(&self) -> Option<Identity2D<S>> {
-        <Self as Identity<Point2<S>, Vector2<S>>>::inverse(&self)
+        <Self as IdentityTransformation<Point2<S>, Vector2<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -271,7 +271,7 @@ impl<S> From<&Identity3D<S>> for Matrix4x4<S> where S: Copy {
     }
 }
 
-impl<S> Identity<Point3<S>, Vector3<S>> for Identity3D<S> where S: Scalar {
+impl<S> IdentityTransformation<Point3<S>, Vector3<S>> for Identity3D<S> where S: Scalar {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
     
@@ -306,12 +306,12 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Identity3D<S> where
 
     #[inline]
     fn identity() -> Identity3D<S> {
-        <Self as Identity<Point3<S>, Vector3<S>>>::identity()
+        <Self as IdentityTransformation<Point3<S>, Vector3<S>>>::identity()
     }
 
     #[inline]
     fn inverse(&self) -> Option<Identity3D<S>> {
-        <Self as Identity<Point3<S>, Vector3<S>>>::inverse(&self)
+        <Self as IdentityTransformation<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -336,12 +336,12 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Identity3D<S> wher
 
     #[inline]
     fn identity() -> Identity3D<S> {
-        <Self as Identity<Point3<S>, Vector3<S>>>::identity()
+        <Self as IdentityTransformation<Point3<S>, Vector3<S>>>::identity()
     }
 
     #[inline]
     fn inverse(&self) -> Option<Identity3D<S>> {
-        <Self as Identity<Point3<S>, Vector3<S>>>::inverse(&self)
+        <Self as IdentityTransformation<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -366,12 +366,12 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Identity3D<S> wher
 
     #[inline]
     fn identity() -> Identity3D<S> {
-        <Self as Identity<Point3<S>, Vector3<S>>>::identity()
+        <Self as IdentityTransformation<Point3<S>, Vector3<S>>>::identity()
     }
 
     #[inline]
     fn inverse(&self) -> Option<Identity3D<S>> {
-        <Self as Identity<Point3<S>, Vector3<S>>>::inverse(&self)
+        <Self as IdentityTransformation<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]
@@ -396,12 +396,12 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Ide
 
     #[inline]
     fn identity() -> Identity3D<S> {
-        <Self as Identity<Point3<S>, Vector3<S>>>::identity()
+        <Self as IdentityTransformation<Point3<S>, Vector3<S>>>::identity()
     }
 
     #[inline]
     fn inverse(&self) -> Option<Identity3D<S>> {
-        <Self as Identity<Point3<S>, Vector3<S>>>::inverse(&self)
+        <Self as IdentityTransformation<Point3<S>, Vector3<S>>>::inverse(&self)
     }
 
     #[inline]

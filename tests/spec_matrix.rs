@@ -435,7 +435,7 @@ macro_rules! approx_multiplication_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use gdmath::approx::relative_eq;
-        use gdmath::{$MatrixN, One};
+        use gdmath::{$MatrixN, Identity};
 
         proptest! {
             /// Matrix multiplication is associative.
@@ -528,7 +528,7 @@ macro_rules! exact_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$MatrixN, One};
+        use gdmath::{$MatrixN, Identity};
 
         proptest! {
             /// Matrix multiplication is associative.
