@@ -103,7 +103,7 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_zero_times_vector_equals_zero(v in super::$Generator()) {
-                let zero: $ScalarType = num_traits::Zero::zero();
+                let zero: $ScalarType = num_traits::zero();
                 let zero_vec = $VectorN::zero();
                 prop_assert_eq!(zero * v, zero_vec);
             }
@@ -118,7 +118,7 @@ macro_rules! exact_arithmetic_props {
             /// allow the ability to multiply scalars from the right of a vector.
             #[test]
             fn prop_vector_times_zero_equals_zero(v in super::$Generator()) {
-                let zero: $ScalarType = num_traits::Zero::zero();
+                let zero: $ScalarType = num_traits::zero();
                 let zero_vec = $VectorN::zero();
                 prop_assert_eq!(v * zero, zero_vec);
             }
@@ -616,7 +616,7 @@ macro_rules! magnitude_props {
             /// ```
             #[test]
             fn prop_magnitude_nonnegative(v in super::$Generator::<$ScalarType>()) {
-                let zero = <$ScalarType as num_traits::Zero>::zero();
+                let zero: $ScalarType = num_traits::zero();
                 prop_assert!(v.magnitude() >= zero);
             }
 
@@ -654,7 +654,7 @@ macro_rules! magnitude_props {
             fn prop_magnitude_approx_point_separating(
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
                 
-                let zero = <$ScalarType as num_traits::Zero>::zero();
+                let zero: $ScalarType = num_traits::zero();
 
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
                 prop_assert!(relative_ne!((v - w).magnitude(), zero, epsilon = $tolerance),

@@ -92,7 +92,7 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_zero_times_quaternion_equals_zero(q in super::$Generator()) {
-                let zero: $ScalarType = num_traits::Zero::zero();
+                let zero: $ScalarType = num_traits::zero();
                 let zero_quat = Quaternion::zero();
                 prop_assert_eq!(zero * q, zero_quat);
             }
@@ -105,7 +105,7 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_quaternion_times_zero_equals_zero(q in super::$Generator()) {
-                let zero: $ScalarType = num_traits::Zero::zero();
+                let zero: $ScalarType = num_traits::zero();
                 let zero_quat = Quaternion::zero();
                 prop_assert_eq!(q * zero, zero_quat);
             }
@@ -1361,7 +1361,7 @@ macro_rules! magnitude_props {
             /// ```
             #[test]
             fn prop_magnitude_nonnegative(q in super::$Generator::<$ScalarType>()) {
-                let zero = <$ScalarType as num_traits::Zero>::zero();
+                let zero: $ScalarType = num_traits::zero();
                 prop_assert!(q.magnitude() >= zero);
             }
 
@@ -1401,7 +1401,7 @@ macro_rules! magnitude_props {
                 
                 prop_assume!(relative_ne!(q1, q2, epsilon = $tolerance));
                 
-                let zero = <$ScalarType as num_traits::Zero>::zero();
+                let zero: $ScalarType = num_traits::zero();
                 prop_assert!(relative_ne!((q1 - q2).magnitude(), zero, epsilon = $tolerance),
                     "\n|q1 - q2| = {}\n", (q1 - q2).magnitude()
                 );

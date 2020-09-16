@@ -118,7 +118,7 @@ macro_rules! approx_arithmetic_props {
             /// ```
             #[test]
             fn prop_angle_multiplication_unitless_unit_element(angle in super::$Generator::<$ScalarType>()) {
-                let one = <$ScalarType as num_traits::One>::one();
+                let one: $ScalarType = num_traits::one();
                 prop_assert_eq!(angle * one, angle);
             }
         }
@@ -212,7 +212,7 @@ macro_rules! approx_trigonometry_props {
             /// ```
             #[test]
             fn prop_pythagorean_identity(angle in super::$Generator::<$ScalarType>()) {
-                let one = <$ScalarType as num_traits::One>::one();
+                let one: $ScalarType = num_traits::one();
                 prop_assert!(relative_eq!(
                     angle.cos() * angle.cos() + angle.sin() * angle.sin(), one, epsilon = $tolerance
                 ));

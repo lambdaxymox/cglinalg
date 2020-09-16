@@ -257,7 +257,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator::<$ScalarType>()) {
-                let zero: $ScalarType = num_traits::Zero::zero();
+                let zero: $ScalarType = num_traits::zero();
                 let zero_mat = $MatrixN::zero();
                 prop_assert_eq!(zero * m, zero_mat);
                 prop_assert_eq!(m * zero, zero_mat);
@@ -373,7 +373,7 @@ macro_rules! exact_scalar_multiplication_props {
             /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator::<$ScalarType>()) {
-                let zero: $ScalarType = num_traits::Zero::zero();
+                let zero: $ScalarType = num_traits::zero();
                 let zero_mat = $MatrixN::zero();
                 prop_assert_eq!(zero * m, zero_mat);
                 prop_assert_eq!(m * zero, zero_mat);
