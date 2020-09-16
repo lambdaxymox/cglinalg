@@ -21,7 +21,7 @@ use scalar::{
 use angle::{
     Radians,
 };
-use structure::{
+use traits::{
     Angle,
     Array,
     CrossProduct,

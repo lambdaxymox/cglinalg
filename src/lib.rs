@@ -10,7 +10,7 @@ mod projection;
 mod point;
 mod quaternion;
 mod vector;
-mod structure;
+mod traits;
 
 pub use prelude::*;
 pub use angle::*;
@@ -19,7 +19,7 @@ pub use projection::*;
 pub use quaternion::*;
 pub use scalar::*;
 pub use vector::*;
-pub use structure::*;
+pub use traits::*;
 pub use point::*;
 
 

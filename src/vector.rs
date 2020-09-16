@@ -3,7 +3,7 @@ use scalar::{
     ScalarSigned,
     ScalarFloat,   
 };
-use structure::{
+use traits::{
     Array,
     CrossProduct,
     Zero,

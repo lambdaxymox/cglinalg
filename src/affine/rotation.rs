@@ -7,7 +7,7 @@ use angle::{
 use scalar::{
     ScalarFloat,
 };
-use structure::{
+use traits::{
     Angle,
     DotProduct,
     CrossProduct,

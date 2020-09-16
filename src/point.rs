@@ -3,7 +3,7 @@ use scalar::{
     Scalar,
     ScalarFloat,
 };
-use structure::{
+use traits::{
     Array,
     Metric,
     DotProduct,

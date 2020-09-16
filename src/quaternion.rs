@@ -1,4 +1,4 @@
-use structure::{
+use traits::{
     Angle,
     Array,
     Zero,

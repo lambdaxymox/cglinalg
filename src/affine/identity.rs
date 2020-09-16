@@ -13,7 +13,7 @@ use point::{
     Point2,
     Point3,
 };
-use structure::{
+use traits::{
     Identity,
 };
 use transform::*;

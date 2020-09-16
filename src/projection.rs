@@ -8,7 +8,7 @@ use angle::{
 use matrix::{
     Matrix4x4,
 };
-use structure::{
+use traits::{
     Angle,
 };
 

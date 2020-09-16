@@ -7,7 +7,7 @@
 //! common traits to make it more convenient to work with each type. This way
 //! you do not have to import each trait individually. 
 
-pub use structure::*;
+pub use traits::*;
 
 pub use reflection::Reflection;
 pub use reflection::Reflection2;
