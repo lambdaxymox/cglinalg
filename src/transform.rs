@@ -155,7 +155,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Transform2D<S> wher
 
     #[inline]
     fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -193,7 +193,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Transform2D<S> whe
 
     #[inline]
     fn apply_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -231,7 +231,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Transform2D<S> whe
 
     #[inline]
     fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -269,7 +269,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Tra
 
     #[inline]
     fn apply_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]

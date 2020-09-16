@@ -873,7 +873,7 @@ impl<S> Vector2<S> where S: Copy {
     /// Extend a two-dimensional vector into a three-dimensional vector using the 
     /// supplied z value.
     #[inline]
-    pub fn extend(self, z: S) -> Vector3<S> {
+    pub fn expand(self, z: S) -> Vector3<S> {
         Vector3::new(self.x, self.y, z)
     }
 

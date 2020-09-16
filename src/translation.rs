@@ -148,7 +148,7 @@ impl<S> Translation<Point2<S>, Vector2<S>> for Translation2D<S> where S: ScalarS
 
     #[inline]
     fn translate_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 }
 

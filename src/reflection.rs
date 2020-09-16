@@ -131,7 +131,7 @@ impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFlo
     }
 
     fn reflect_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     fn reflect_point(&self, point: Point2<S>) -> Point2<S> {

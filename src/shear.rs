@@ -172,7 +172,7 @@ impl<S> Shear<Point2<S>, Vector2<S>> for Shear2D<S> where S: ScalarSigned {
     }
 
     fn shear_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     fn shear_point(&self, point: Point2<S>) -> Point2<S> {
