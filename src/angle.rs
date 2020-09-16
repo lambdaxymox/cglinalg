@@ -337,14 +337,14 @@ impl<S> Finite for Degrees<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.0.is_finite()
     }
-
-    #[inline]
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
-    }
 }
 
-
+impl<S> Finite for &Degrees<S> where S: ScalarFloat {
+    #[inline]
+    fn is_finite(self) -> bool {
+        self.0.is_finite()
+    }
+}
 
 impl<S> ops::Add<Radians<S>> for Radians<S> where S: Scalar {
     type Output = Radians<S>;
@@ -634,13 +634,14 @@ impl<S> Finite for Radians<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.0.is_finite()
     }
-
-    #[inline]
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
-    }
 }
 
+impl<S> Finite for &Radians<S> where S: ScalarFloat {
+    #[inline]
+    fn is_finite(self) -> bool {
+        self.0.is_finite()
+    }
+}
 
 impl<S> Angle for Radians<S> where S: ScalarFloat {
     type Scalar = S;

@@ -77,10 +77,6 @@ pub trait Finite {
     /// For example, when the vector elements are `f64`, the vector is finite when the elements are
     /// neither `NaN` nor infinite.
     fn is_finite(self) -> bool;
-
-    /// Returns `true` if any of the elements of this vector are not finite. 
-    /// Otherwise, it returns `false`.
-    fn is_not_finite(self) -> bool;
 }
 
 /// A type with this trait has a notion of comparing the distance (metric) between

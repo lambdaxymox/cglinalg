@@ -770,19 +770,11 @@ impl<S> Finite for Vector1<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.x.is_finite()
     }
-
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
-    }
 }
 
 impl<S> Finite for &Vector1<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.x.is_finite()
-    }
-
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
     }
 }
 
@@ -1562,19 +1554,11 @@ impl<S> Finite for Vector2<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite()
     }
-
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
-    }
 }
 
 impl<S> Finite for &Vector2<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite()
-    }
-
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
     }
 }
 
@@ -2454,19 +2438,11 @@ impl<S> Finite for Vector3<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
     }
-
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
-    }
 }
 
 impl<S> Finite for &Vector3<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
-    }
-
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
     }
 }
 
@@ -3369,19 +3345,11 @@ impl<S> Finite for Vector4<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
     }
-
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
-    }
 }
 
 impl<S> Finite for &Vector4<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
-    }
-
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
     }
 }
 

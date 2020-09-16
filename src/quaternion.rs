@@ -1456,10 +1456,12 @@ impl<S> Finite for Quaternion<S> where S: ScalarFloat {
     fn is_finite(self) -> bool {
         self.s.is_finite() && self.v.is_finite()
     }
+}
 
+impl<S> Finite for &Quaternion<S> where S: ScalarFloat {
     #[inline]
-    fn is_not_finite(self) -> bool {
-        !self.is_finite()
+    fn is_finite(self) -> bool {
+        self.s.is_finite() && self.v.is_finite()
     }
 }
 
