@@ -455,33 +455,3 @@ pub trait InvertibleSquareMatrix where
     }
 }
 
-/// A type implementing this trait indicates that its elements
-/// constitute a Euclidean vector space.
-pub trait Euclidean: Copy + Clone {
-    /// The underlying scalars of the points in the Euclidean space.
-    type Scalar: Scalar;
-    /// The type of displacements between points in a Euclidean space.
-    type Difference;
-
-    /// Compute the origin of the Euclidean vector space.
-    fn origin() -> Self;
-
-    /// Convert from vectors to points. 
-    /// 
-    /// Points are locations in Euclidean space, whereas vectors
-    /// are displacements relative to the origin in Euclidean space.
-    fn from_vector(v: Self::Difference) -> Self;
-
-    /// Convert from points to vectors.
-    /// 
-    /// Points are locations in Euclidean space, whereas vectors
-    /// are displacements relative to the origin in Euclidean space.
-    fn to_vector(self) -> Self::Difference;
-
-    /// Calculate the midpoint along a line segment between two points.
-    fn midpoint(self, other: Self) -> Self;
-
-    /// Compute the center of a collection of points in Euclidean space.
-    fn centroid(points: &[Self]) -> Self;
-}
-

@@ -12,7 +12,6 @@ use structure::{
     Angle,
     DotProduct,
     CrossProduct,
-    Euclidean,
     One,
     InvertibleSquareMatrix,
     Magnitude,

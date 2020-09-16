@@ -2,9 +2,6 @@ use scalar::{
     Scalar,
     ScalarFloat,
 };
-use structure::{
-    Euclidean,
-};
 use matrix::{
     Matrix3,
     Matrix4,

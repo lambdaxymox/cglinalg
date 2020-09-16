@@ -46,7 +46,7 @@ pub trait AffineTransformation2D<P, V, S> where Self: Sized {
     /// Apply the inverse of the affine transformation to a vector.
     fn apply_inverse_vector(&self, vector: V) -> Option<Self::OutVector> {
         self.inverse()
-            .and_then(|inverse| Some(inverse.apply_vector(vector)))
+            .and_then(|matrix_inverse| Some(matrix_inverse.apply_vector(vector)))
     }
 
     /// Convert a specific two-dimensional affine transformation into a generic 
@@ -78,7 +78,7 @@ pub trait AffineTransformation3D<P, V, S> where Self: Sized {
     /// Apply the inverse of the affine transformation to a vector.
     fn apply_inverse_vector(&self, vector: V) -> Option<Self::OutVector> {
         self.inverse()
-            .and_then(|inverse| Some(inverse.apply_vector(vector)))
+            .and_then(|matrix_inverse| Some(matrix_inverse.apply_vector(vector)))
     }
 
     /// Convert a specific three-dimensional affine transformation into a generic 

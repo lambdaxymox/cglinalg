@@ -15,7 +15,6 @@ use point::{
 };
 use structure::{
     One,
-    Euclidean,
 };
 use transform::*;
 

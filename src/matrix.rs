@@ -26,7 +26,6 @@ use structure::{
     Array,
     CrossProduct,
     DotProduct,
-    Euclidean,
     One, 
     Zero, 
     Matrix, 
