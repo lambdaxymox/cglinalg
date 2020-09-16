@@ -155,7 +155,7 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_one_times_vector_equal_vector(v in super::$Generator()) {
-                let one: $ScalarType = num_traits::One::one();
+                let one: $ScalarType = num_traits::one();
                 prop_assert_eq!(one * v, v);
             }
 
@@ -169,7 +169,7 @@ macro_rules! exact_arithmetic_props {
             /// allow the ability to multiply scalars to the right of a vector.
             #[test]
             fn prop_vector_times_one_equals_vector(v in super::$Generator()) {
-                let one: $ScalarType = num_traits::One::one();
+                let one: $ScalarType = num_traits::one();
                 prop_assert_eq!(one * v, v);
             }
         }
@@ -740,7 +740,7 @@ macro_rules! approx_mul_props {
             /// ```
             #[test]
             fn prop_one_times_vector_equals_vector(v in super::$Generator::<$ScalarType>()) {
-                let one = num_traits::One::one();
+                let one = num_traits::one();
                 prop_assert_eq!(one * v, v);
                 prop_assert_eq!(v * one, v);
             }
@@ -807,7 +807,7 @@ macro_rules! exact_mul_props {
             /// ```
             #[test]
             fn prop_one_times_vector_equals_vector(v in super::$Generator::<$ScalarType>()) {
-                let one = num_traits::One::one();
+                let one = num_traits::one();
                 prop_assert_eq!(one * v, v);
                 prop_assert_eq!(v * one, v);
             }

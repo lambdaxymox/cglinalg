@@ -273,7 +273,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
             #[test]
             fn prop_one_times_matrix_equals_matrix(m in super::$Generator::<$ScalarType>()) {
-                let one: $ScalarType = num_traits::One::one();
+                let one: $ScalarType = num_traits::one();
                 prop_assert_eq!(one * m, m);
                 prop_assert_eq!(m * one, m);
             }
@@ -289,7 +289,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
             #[test]
             fn prop_negative_one_times_matrix_equals_negative_matrix(m in super::$Generator::<$ScalarType>()) {
-                let one: $ScalarType = num_traits::One::one();
+                let one: $ScalarType = num_traits::one();
                 let minus_one = -one;
                 prop_assert_eq!(minus_one * m, -m);
             }
@@ -389,7 +389,7 @@ macro_rules! exact_scalar_multiplication_props {
             /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
             #[test]
             fn prop_one_times_matrix_equals_matrix(m in super::$Generator::<$ScalarType>()) {
-                let one: $ScalarType = num_traits::One::one();
+                let one: $ScalarType = num_traits::one();
                 prop_assert_eq!(one * m, m);
                 prop_assert_eq!(m * one, m);
             }

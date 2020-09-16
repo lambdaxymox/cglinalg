@@ -142,7 +142,7 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_one_times_quaternion_equal_quaternion(q in super::$Generator()) {
-                let one: $ScalarType = num_traits::One::one();
+                let one: $ScalarType = num_traits::one();
                 prop_assert_eq!(one * q, q);
             }
 
@@ -154,7 +154,7 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_quaternion_times_one_equals_quaternion(v in super::$Generator()) {
-                let one: $ScalarType = num_traits::One::one();
+                let one: $ScalarType = num_traits::one();
                 prop_assert_eq!(one * v, v);
             }
         }

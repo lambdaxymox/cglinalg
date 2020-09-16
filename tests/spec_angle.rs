@@ -212,8 +212,7 @@ macro_rules! approx_trigonometry_props {
             /// ```
             #[test]
             fn prop_pythagorean_identity(angle in super::$Generator::<$ScalarType>()) {
-                use num_traits::One;
-                let one = <$ScalarType as One>::one();
+                let one = <$ScalarType as num_traits::One>::one();
                 prop_assert!(relative_eq!(
                     angle.cos() * angle.cos() + angle.sin() * angle.sin(), one, epsilon = $tolerance
                 ));
