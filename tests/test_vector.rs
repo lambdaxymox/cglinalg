@@ -1,11 +1,11 @@
-extern crate gdmath;
+extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
 
 #[cfg(test)]
 mod vector1_tests {
-    use gdmath::{
+    use cglinalg::{
         Vector1,
         Magnitude,
         Zero,
@@ -158,7 +158,7 @@ mod vector1_tests {
 
 #[cfg(test)]
 mod vector2_tests {
-    use gdmath::{
+    use cglinalg::{
         Vector2,
         Magnitude,   
         Zero,
@@ -314,7 +314,7 @@ mod vector2_tests {
 
 #[cfg(test)]
 mod vector3_tests {
-    use gdmath::{
+    use cglinalg::{
         Vector3,
         Magnitude,   
         Zero,
@@ -488,7 +488,7 @@ mod vector3_tests {
 
 #[cfg(test)]
 mod vector4_tests {
-    use gdmath::{
+    use cglinalg::{
         Vector4,
         Magnitude,   
         Zero,

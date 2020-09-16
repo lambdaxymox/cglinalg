@@ -1,12 +1,12 @@
-extern crate gdmath;
+extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
 
 #[cfg(test)]
 mod matrix_constructor_tests {
-    use gdmath;
-    use gdmath::{
+    use cglinalg;
+    use cglinalg::{
         Matrix2x2, 
         Matrix3x3, 
         Matrix4x4
@@ -19,7 +19,7 @@ mod matrix_constructor_tests {
             1_f32, 2_f32, 
             3_f32, 4_f32
         );
-        let result = gdmath::mat2([
+        let result = cglinalg::mat2([
             1_f32, 2_f32, 3_f32, 4_f32
         ]);
 
@@ -34,7 +34,7 @@ mod matrix_constructor_tests {
             4_f32, 5_f32, 6_f32, 
             7_f32, 8_f32, 9_f32
         );
-        let result = gdmath::mat3([
+        let result = cglinalg::mat3([
             1_f32, 2_f32, 3_f32, 
             4_f32, 5_f32, 6_f32, 
             7_f32, 8_f32, 9_f32
@@ -52,7 +52,7 @@ mod matrix_constructor_tests {
             9_f32,  10_f32, 11_f32, 12_f32, 
             13_f32, 14_f32, 15_f32, 15_f32
         );
-        let result = gdmath::mat4([
+        let result = cglinalg::mat4([
             1_f32,  2_f32,  3_f32,  4_f32,  
             5_f32,  6_f32,  7_f32,  8_f32, 
             9_f32,  10_f32, 11_f32, 12_f32, 
@@ -65,7 +65,7 @@ mod matrix_constructor_tests {
 
 #[cfg(test)]
 mod matrix2_tests {
-    use gdmath::{
+    use cglinalg::{
         Vector2,
         Matrix2x2,
         Zero, 
@@ -73,7 +73,7 @@ mod matrix2_tests {
         SquareMatrix,
         InvertibleSquareMatrix,
     };
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
     use std::slice::Iter;
 
 
@@ -454,7 +454,7 @@ mod matrix2_tests {
 
 #[cfg(test)]
 mod matrix3_tests {
-    use gdmath::{
+    use cglinalg::{
         Vector3,
         Matrix3x3,
         Zero, 
@@ -462,7 +462,7 @@ mod matrix3_tests {
         SquareMatrix,
         InvertibleSquareMatrix,
     };
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
     use std::slice::Iter;
 
 
@@ -909,7 +909,7 @@ mod matrix3_tests {
 
 #[cfg(test)]
 mod matrix4_tests {
-    use gdmath::{
+    use cglinalg::{
         Vector3,
         Vector4,
         Matrix4x4,
@@ -918,7 +918,7 @@ mod matrix4_tests {
         SquareMatrix,
         InvertibleSquareMatrix,
     };
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
     use std::slice::Iter;
 
 

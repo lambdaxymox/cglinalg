@@ -1,11 +1,11 @@
-extern crate gdmath;
+extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
 
 #[cfg(test)]
 mod conversion_tests {
-    use gdmath::{
+    use cglinalg::{
         Radians,
         Degrees,
     };
@@ -74,7 +74,7 @@ mod conversion_tests {
 
 #[cfg(test)]
 mod degrees_arithmetic_tests {
-    use gdmath::Degrees;
+    use cglinalg::Degrees;
 
 
     #[test]
@@ -212,8 +212,8 @@ mod degrees_arithmetic_tests {
 
 #[cfg(test)]
 mod radians_arithmetic_tests {
-    use gdmath::Radians;
-    use gdmath::approx::relative_eq;
+    use cglinalg::Radians;
+    use cglinalg::approx::relative_eq;
     use std::f64;
 
     const PI: Radians<f64> = Radians(f64::consts::PI);
@@ -355,11 +355,11 @@ mod radians_arithmetic_tests {
 
 #[cfg(test)]
 mod radian_angle_tests {
-    use gdmath::{
+    use cglinalg::{
         Radians,
         Angle
     };
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
     use std::f64;
 
 
@@ -541,11 +541,11 @@ mod radian_angle_tests {
 
 #[cfg(test)]
 mod degree_angle_tests {
-    use gdmath::{
+    use cglinalg::{
         Degrees,
         Angle,
     };
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
     use std::f64;
 
 

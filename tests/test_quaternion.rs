@@ -1,11 +1,11 @@
-extern crate gdmath;
+extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
 
 #[cfg(test)]
 mod storage_tests {
-    use gdmath::Quaternion;
+    use cglinalg::Quaternion;
 
     #[test]
     fn test_as_ref() {
@@ -27,7 +27,7 @@ mod storage_tests {
 
 #[cfg(test)]
 mod lerp_tests {
-    use gdmath::{
+    use cglinalg::{
         Quaternion,
         Lerp, 
         Nlerp,
@@ -76,7 +76,7 @@ mod lerp_tests {
 
 #[cfg(test)]
 mod arithmetic_tests {
-    use gdmath::{
+    use cglinalg::{
         Quaternion,
         Vector3,
         Identity
@@ -160,12 +160,12 @@ mod arithmetic_tests {
 
 #[cfg(test)]
 mod magnitude_tests {
-    use gdmath::{
+    use cglinalg::{
         Quaternion,
         Magnitude,
         Vector3,
     };
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
 
 
     #[test]
@@ -211,7 +211,7 @@ mod magnitude_tests {
 
 #[cfg(test)]
 mod slerp_tests {
-    use gdmath::{
+    use cglinalg::{
         Quaternion,
         Angle,
         Slerp,
@@ -219,7 +219,7 @@ mod slerp_tests {
         Vector3,
     };
 
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
 
 
     #[test]
@@ -317,7 +317,7 @@ mod slerp_tests {
 
 #[cfg(test)]
 mod arg_tests {
-    use gdmath::Quaternion;
+    use cglinalg::Quaternion;
 
     
     #[test]
@@ -341,13 +341,13 @@ mod arg_tests {
 
 #[cfg(test)]
 mod exp_tests {
-    use gdmath::{
+    use cglinalg::{
         Magnitude,
         Quaternion,
         Identity,
         Zero,
     };
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
 
 
     #[test]
@@ -391,13 +391,13 @@ mod exp_tests {
 
 #[cfg(test)]
 mod logarithm_tests {
-    use gdmath::{
+    use cglinalg::{
         Vector3,
         Quaternion,
         Zero,
         Identity,
     };
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
 
 
     #[test]
@@ -472,11 +472,11 @@ mod logarithm_tests {
 
 #[cfg(test)]
 mod power_tests {
-    use gdmath::{
+    use cglinalg::{
         Quaternion,
         Identity,
     };
-    use gdmath::approx::relative_eq;
+    use cglinalg::approx::relative_eq;
 
 
     #[test]

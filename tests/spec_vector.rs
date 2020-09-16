@@ -1,9 +1,9 @@
-extern crate gdmath;
+extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
 use proptest::prelude::*;
-use gdmath::{
+use cglinalg::{
     Vector1, 
     Vector2, 
     Vector3, 
@@ -92,7 +92,7 @@ macro_rules! exact_arithmetic_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$VectorN, Zero};
+        use cglinalg::{$VectorN, Zero};
 
         proptest! {
             /// A scalar zero times a vector should be a zero vector. 
@@ -208,7 +208,7 @@ macro_rules! approx_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$VectorN, Zero};
+        use cglinalg::{$VectorN, Zero};
 
         proptest! {
             /// A vector plus a zero vector equals the same vector.
@@ -316,7 +316,7 @@ macro_rules! exact_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$VectorN, Zero};
+        use cglinalg::{$VectorN, Zero};
 
         proptest! {
             /// A vector plus a zero vector equals the same vector.
@@ -427,7 +427,7 @@ macro_rules! approx_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$VectorN, Zero};
+        use cglinalg::{$VectorN, Zero};
 
         proptest! {
             /// The zero vector over vectors of floating point scalars should act as an additive unit. 
@@ -502,7 +502,7 @@ macro_rules! exact_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$VectorN, Zero};
+        use cglinalg::{$VectorN, Zero};
 
         proptest! {
             /// The zero vector should act as an additive unit.
@@ -584,8 +584,8 @@ macro_rules! magnitude_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Magnitude;
-        use gdmath::approx::{relative_eq, relative_ne};
+        use cglinalg::Magnitude;
+        use cglinalg::approx::{relative_eq, relative_ne};
 
         proptest! {
             #[test]
@@ -690,8 +690,8 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Finite;
-        use gdmath::approx::relative_eq;
+        use cglinalg::Finite;
+        use cglinalg::approx::relative_eq;
 
         proptest! {
             /// Multiplication of a scalar and a vector should be approximately commutative.
@@ -842,7 +842,7 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Finite;
+        use cglinalg::Finite;
     
         proptest! {
             /// Scalar multiplication should approximately distribute over vector addition.
@@ -1034,8 +1034,8 @@ macro_rules! approx_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::DotProduct;
-        use gdmath::approx::relative_eq;
+        use cglinalg::DotProduct;
+        use cglinalg::approx::relative_eq;
     
         proptest! {
             /// The dot product of vectors over floating point scalars is 
@@ -1171,7 +1171,7 @@ macro_rules! exact_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::DotProduct;
+        use cglinalg::DotProduct;
     
         proptest! {
             /// The dot product of vectors over integer scalars is commutative.
@@ -1292,8 +1292,8 @@ macro_rules! approx_cross_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::approx::relative_eq;
-        use gdmath::{
+        use cglinalg::approx::relative_eq;
+        use cglinalg::{
             DotProduct,
             CrossProduct,
         };
@@ -1389,7 +1389,7 @@ macro_rules! exact_cross_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{
+        use cglinalg::{
             DotProduct,
             CrossProduct,
         };

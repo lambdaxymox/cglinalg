@@ -1,9 +1,9 @@
-extern crate gdmath;
+extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
 use proptest::prelude::*;
-use gdmath::{
+use cglinalg::{
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
@@ -46,8 +46,8 @@ macro_rules! approx_addition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::approx::relative_eq;
-        use gdmath::{$MatrixN, Zero};
+        use cglinalg::approx::relative_eq;
+        use cglinalg::{$MatrixN, Zero};
 
         proptest! {
             /// A zero matrix should act as the additive unit element for matrices over 
@@ -137,7 +137,7 @@ macro_rules! exact_addition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$MatrixN, Zero};
+        use cglinalg::{$MatrixN, Zero};
 
         proptest! {
             /// A zero matrix should act as the additive unit element for matrices over 
@@ -215,8 +215,8 @@ macro_rules! approx_scalar_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::approx::relative_eq;
-        use gdmath::{$MatrixN, Zero};
+        use cglinalg::approx::relative_eq;
+        use cglinalg::{$MatrixN, Zero};
 
         proptest! {
             /// Multiplication of matrices by scalars is compatible with matrix addition.
@@ -332,7 +332,7 @@ macro_rules! exact_scalar_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$MatrixN, Zero};
+        use cglinalg::{$MatrixN, Zero};
 
         proptest! {
             /// Multiplication of matrices by scalars is compatible with matrix addition.
@@ -434,8 +434,8 @@ macro_rules! approx_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::approx::relative_eq;
-        use gdmath::{$MatrixN, Identity};
+        use cglinalg::approx::relative_eq;
+        use cglinalg::{$MatrixN, Identity};
 
         proptest! {
             /// Matrix multiplication is associative.
@@ -528,7 +528,7 @@ macro_rules! exact_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{$MatrixN, Identity};
+        use cglinalg::{$MatrixN, Identity};
 
         proptest! {
             /// Matrix multiplication is associative.
@@ -624,7 +624,7 @@ macro_rules! approx_transposition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Matrix;
+        use cglinalg::Matrix;
 
         proptest! {
             /// The double transpose of a matrix is the original matrix.
@@ -699,7 +699,7 @@ macro_rules! exact_transposition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Matrix;
+        use cglinalg::Matrix;
 
         proptest! {
             /// The double transpose of a matrix is the original matrix.
@@ -777,7 +777,7 @@ macro_rules! swap_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Matrix;
+        use cglinalg::Matrix;
 
         proptest! {
             /// Swapping rows is commutative in the row arguments.

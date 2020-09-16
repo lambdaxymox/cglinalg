@@ -1,9 +1,9 @@
-extern crate gdmath;
+extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
 use proptest::prelude::*;
-use gdmath::{
+use cglinalg::{
     Degrees,
     Radians,
     Scalar,
@@ -36,8 +36,8 @@ macro_rules! approx_arithmetic_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::approx::relative_eq;
-        use gdmath::{$AngleType, Zero};
+        use cglinalg::approx::relative_eq;
+        use cglinalg::{$AngleType, Zero};
     
         proptest! {
             /// Angle addition should be approximately commutative.
@@ -147,8 +147,8 @@ macro_rules! approx_trigonometry_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::approx::relative_eq;
-        use gdmath::{$AngleType, Angle};
+        use cglinalg::approx::relative_eq;
+        use cglinalg::{$AngleType, Angle};
     
         proptest! {
             /// The sine and arcsine functions should be inverses to each other.

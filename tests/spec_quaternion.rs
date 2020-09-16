@@ -1,9 +1,9 @@
-extern crate gdmath;
+extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
 use proptest::prelude::*;
-use gdmath::{
+use cglinalg::{
     Quaternion, 
     Scalar,
     ScalarFloat,
@@ -15,7 +15,7 @@ fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> where S: Scalar +
 }
 
 fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> where S: ScalarFloat + Arbitrary {
-    use gdmath::Magnitude;
+    use cglinalg::Magnitude;
     any::<(S, S, S, S)>()
         .prop_map(|(x, y, z, w)| Quaternion::new(x, y, z, w))
         .prop_filter("Zero length quaternions are not invertible.", |q| !q.magnitude().is_zero())
@@ -81,7 +81,7 @@ macro_rules! exact_arithmetic_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{Quaternion, Zero};
+        use cglinalg::{Quaternion, Zero};
 
         proptest! {
             /// A scalar `0` times a quaternion should be a zero quaternion.
@@ -184,8 +184,8 @@ macro_rules! approx_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{Quaternion, Zero};
-        use gdmath::approx::relative_eq;
+        use cglinalg::{Quaternion, Zero};
+        use cglinalg::approx::relative_eq;
 
         proptest! {
             /// A quaternion plus a zero quaternion equals the same quaternion. 
@@ -289,7 +289,7 @@ macro_rules! exact_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{Quaternion, Zero};
+        use cglinalg::{Quaternion, Zero};
 
         proptest! {
             /// A quaternion plus a zero quaternion equals the same quaternion. 
@@ -396,7 +396,7 @@ macro_rules! approx_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{Quaternion, Zero};
+        use cglinalg::{Quaternion, Zero};
 
         proptest! {
             /// The zero quaternion over floating point scalars should act as an additive unit.
@@ -470,7 +470,7 @@ macro_rules! exact_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{Quaternion, Zero};
+        use cglinalg::{Quaternion, Zero};
 
         proptest! {
             /// The zero quaternion should act as an additive unit. 
@@ -549,8 +549,8 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::approx::relative_eq;
-        use gdmath::{
+        use cglinalg::approx::relative_eq;
+        use cglinalg::{
             Quaternion,
             Identity,
             Finite
@@ -705,7 +705,7 @@ macro_rules! exact_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{
+        use cglinalg::{
             Quaternion, 
             Identity,
         };
@@ -794,8 +794,8 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Finite;
-        use gdmath::approx::relative_eq;
+        use cglinalg::Finite;
+        use cglinalg::approx::relative_eq;
     
         proptest! {
             /// Scalar multiplication should approximately distribute over quaternion addition.
@@ -1029,8 +1029,8 @@ macro_rules! approx_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::DotProduct;
-        use gdmath::approx::relative_eq;
+        use cglinalg::DotProduct;
+        use cglinalg::approx::relative_eq;
     
         proptest! {
             /// The dot product of quaternions over floating point scalars is 
@@ -1162,7 +1162,7 @@ macro_rules! exact_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::DotProduct;
+        use cglinalg::DotProduct;
     
         proptest! {
             /// The dot product of quaternions over integer scalars is commutative.
@@ -1329,8 +1329,8 @@ macro_rules! magnitude_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Magnitude;
-        use gdmath::approx::{relative_eq, relative_ne};
+        use cglinalg::Magnitude;
+        use cglinalg::approx::{relative_eq, relative_ne};
 
         proptest! {
             #[test]
@@ -1427,7 +1427,7 @@ macro_rules! slerp_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::Slerp;
+        use cglinalg::Slerp;
 
         proptest! {
             /// Quaternion spherical linear interpolation should act like a quaternion rotor
@@ -1483,7 +1483,7 @@ macro_rules! exp_log_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use gdmath::{
+        use cglinalg::{
             Quaternion,
             Zero,
             Identity
