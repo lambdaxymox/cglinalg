@@ -12,7 +12,6 @@ mod quaternion;
 mod vector;
 mod structure;
 
-mod affine;
 mod identity;
 mod reflection;
 mod rotation;
@@ -32,7 +31,6 @@ pub use vector::*;
 pub use structure::*;
 pub use point::*;
 
-pub use affine::*;
 pub use identity::*;
 pub use reflection::*;
 pub use rotation::*;

@@ -17,7 +17,7 @@ use structure::{
     One,
     Euclidean,
 };
-use affine::*;
+use transform::*;
 
 use std::fmt;
 
@@ -108,7 +108,7 @@ impl<S> Identity<Point2<S>> for Identity2D<S> where S: Scalar {
 
 impl<S> Identity2<S> for Identity2D<S> where S: Scalar {}
 
-impl<S> AffineTransformation2D<Point2<S>, Vector2<S>> for Identity2D<S> where S: Scalar {
+impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Identity2D<S> where S: Scalar {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -131,9 +131,14 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>> for Identity2D<S> where S:
     fn apply_point(&self, point: Point2<S>) -> Point2<S> {
         self.identify_point(point)
     }
+
+    #[inline]
+    fn to_transform2d(&self) -> Transform2D<S> {
+        Transform2D::matrix_to_transform2d(self.matrix)
+    }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>> for Identity2D<S> where S: Scalar {
+impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Identity2D<S> where S: Scalar {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -156,9 +161,14 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>> for Identity2D<S> where S
     fn apply_point(&self, point: Point2<S>) -> Point2<S> {
         point
     }
+
+    #[inline]
+    fn to_transform2d(&self) -> Transform2D<S> {
+        Transform2D::matrix_to_transform2d(self.matrix)
+    }
 }
 
-impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>> for Identity2D<S> where S: Scalar {
+impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Identity2D<S> where S: Scalar {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -181,9 +191,14 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>> for Identity2D<S> where S
     fn apply_point(&self, point: &Point2<S>) -> Point2<S> {
         *point
     }
+
+    #[inline]
+    fn to_transform2d(&self) -> Transform2D<S> {
+        Transform2D::matrix_to_transform2d(self.matrix)
+    }
 }
 
-impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>> for Identity2D<S> where S: Scalar {
+impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Identity2D<S> where S: Scalar {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -205,6 +220,11 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>> for Identi
     #[inline]
     fn apply_point(&self, point: &'a Point2<S>) -> Point2<S> {
         *point
+    }
+
+    #[inline]
+    fn to_transform2d(&self) -> Transform2D<S> {
+        Transform2D::matrix_to_transform2d(self.matrix)
     }
 }
 
@@ -268,7 +288,7 @@ impl<S> Identity<Point3<S>> for Identity3D<S> where S: Scalar {
 
 impl<S> Identity3<S> for Identity3D<S> where S: Scalar {}
 
-impl<S> AffineTransformation3D<Point3<S>, Vector3<S>> for Identity3D<S> where S: Scalar {
+impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Identity3D<S> where S: Scalar {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -291,9 +311,14 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>> for Identity3D<S> where S:
     fn apply_point(&self, point: Point3<S>) -> Point3<S> {
         self.identify_point(point)
     }
+
+    #[inline]
+    fn to_transform3d(&self) -> Transform3D<S> {
+        Transform3D::matrix_to_transform3d(self.matrix)
+    }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>> for Identity3D<S> where S: Scalar {
+impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Identity3D<S> where S: Scalar {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -316,9 +341,14 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>> for Identity3D<S> where S
     fn apply_point(&self, point: Point3<S>) -> Point3<S> {
         self.identify_point(point)
     }
+
+    #[inline]
+    fn to_transform3d(&self) -> Transform3D<S> {
+        Transform3D::matrix_to_transform3d(self.matrix)
+    }
 }
 
-impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>> for Identity3D<S> where S: Scalar {
+impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Identity3D<S> where S: Scalar {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -341,9 +371,14 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>> for Identity3D<S> where S
     fn apply_point(&self, point: &Point3<S>) -> Point3<S> {
         self.identify_point(*point)
     }
+
+    #[inline]
+    fn to_transform3d(&self) -> Transform3D<S> {
+        Transform3D::matrix_to_transform3d(self.matrix)
+    }
 }
 
-impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>> for Identity3D<S> where S: Scalar {
+impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Identity3D<S> where S: Scalar {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -365,6 +400,11 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>> for Identi
     #[inline]
     fn apply_point(&self, point: &'a Point3<S>) -> Point3<S> {
         self.identify_point(*point)
+    }
+
+    #[inline]
+    fn to_transform3d(&self) -> Transform3D<S> {
+        Transform3D::matrix_to_transform3d(self.matrix)
     }
 }
 

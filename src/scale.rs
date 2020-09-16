@@ -17,7 +17,7 @@ use point::{
     Point2,
     Point3,
 };
-use affine::*;
+use transform::*;
 
 use std::fmt;
 
@@ -137,7 +137,7 @@ impl<S> Scale2<S> for Scale2D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, Vector2<S>> for Scale2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Scale2D<S> where S: ScalarFloat {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -160,9 +160,14 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>> for Scale2D<S> where S: Sc
     fn apply_point(&self, point: Point2<S>) -> Point2<S> {
         self.scale_point(point)
     }
+
+    #[inline]
+    fn to_transform2d(&self) -> Transform2D<S> {
+        Transform2D::matrix_to_transform2d(self.matrix)
+    }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>> for Scale2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Scale2D<S> where S: ScalarFloat {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -185,9 +190,14 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>> for Scale2D<S> where S: S
     fn apply_point(&self, point: Point2<S>) -> Point2<S> {
         self.scale_point(point)
     }
+
+    #[inline]
+    fn to_transform2d(&self) -> Transform2D<S> {
+        Transform2D::matrix_to_transform2d(self.matrix)
+    }
 }
 
-impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>> for Scale2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Scale2D<S> where S: ScalarFloat {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -210,9 +220,14 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>> for Scale2D<S> where S: S
     fn apply_point(&self, point: &Point2<S>) -> Point2<S> {
         self.scale_point(*point)
     }
+
+    #[inline]
+    fn to_transform2d(&self) -> Transform2D<S> {
+        Transform2D::matrix_to_transform2d(self.matrix)
+    }
 }
 
-impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>> for Scale2D<S> where S: ScalarFloat {
+impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Scale2D<S> where S: ScalarFloat {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -234,6 +249,11 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>> for Scale2
     #[inline]
     fn apply_point(&self, point: &'a Point2<S>) -> Point2<S> {
         self.scale_point(*point)
+    }
+
+    #[inline]
+    fn to_transform2d(&self) -> Transform2D<S> {
+        Transform2D::matrix_to_transform2d(self.matrix)
     }
 }
 
@@ -317,7 +337,7 @@ impl<S> Scale3<S> for Scale3D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, Vector3<S>> for Scale3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Scale3D<S> where S: ScalarFloat {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -340,9 +360,14 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>> for Scale3D<S> where S: Sc
     fn apply_point(&self, point: Point3<S>) -> Point3<S> {
         self.scale_point(point)
     }
+
+    #[inline]
+    fn to_transform3d(&self) -> Transform3D<S> {
+        Transform3D::matrix_to_transform3d(self.matrix)
+    }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>> for Scale3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Scale3D<S> where S: ScalarFloat {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -365,9 +390,14 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>> for Scale3D<S> where S: S
     fn apply_point(&self, point: Point3<S>) -> Point3<S> {
         self.scale_point(point)
     }
+
+    #[inline]
+    fn to_transform3d(&self) -> Transform3D<S> {
+        Transform3D::matrix_to_transform3d(self.matrix)
+    }
 }
 
-impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>> for Scale3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Scale3D<S> where S: ScalarFloat {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -390,9 +420,14 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>> for Scale3D<S> where S: S
     fn apply_point(&self, point: &Point3<S>) -> Point3<S> {
         self.scale_point(*point)
     }
+
+    #[inline]
+    fn to_transform3d(&self) -> Transform3D<S> {
+        Transform3D::matrix_to_transform3d(self.matrix)
+    }
 }
 
-impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>> for Scale3D<S> where S: ScalarFloat {
+impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Scale3D<S> where S: ScalarFloat {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -414,5 +449,10 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>> for Scale3
     #[inline]
     fn apply_point(&self, point: &'a Point3<S>) -> Point3<S> {
         self.scale_point(*point)
+    }
+
+    #[inline]
+    fn to_transform3d(&self) -> Transform3D<S> {
+        Transform3D::matrix_to_transform3d(self.matrix)
     }
 }
