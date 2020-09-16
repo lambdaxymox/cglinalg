@@ -24,28 +24,35 @@ use transform::*;
 use std::fmt;
 
 
+/// A trait defining reflections about a plane.
 pub trait Reflection<P> where 
     P: Euclidean,
     Self: Sized + Copy,
 {
+    /// Return the normal vector to the reflection plane.
     fn normal(&self) -> P::Difference;
 
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
     fn from_normal(normal: P::Difference) -> Self;
 
+    /// Calculate the inverse reflection transformation.
     fn inverse(&self) -> Option<Self>;
 
+    /// Reflect a vector across a plane.
     fn reflect_vector(&self, vector: P::Difference) -> P::Difference;
 
+    /// Reflect a point across a plane.
     fn reflect_point(&self, point: P) -> P;
 }
 
+/// A trait defining reflections about a plane (line) in two dimensions.
 pub trait Reflection2<S> where 
     S: ScalarFloat,
     Self: Reflection<Point2<S>> + Into<Matrix3<S>> + Into<Reflection2D<S>>,
 {
 }
 
+/// A trait defining reflections about a plane in three dimensions.
 pub trait Reflection3<S> where 
     S: ScalarFloat,
     Self: Reflection<Point3<S>> + Into<Matrix4<S>> + Into<Reflection3D<S>>,
@@ -53,7 +60,7 @@ pub trait Reflection3<S> where
 }
 
 
-/// A reflection transformation about a plane in two dimensions.
+/// A reflection transformation about a plane (line) in two dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Reflection2D<S> {
@@ -143,7 +150,6 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Reflection2D<S> whe
         }
     }
 
-    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
         <Self as Reflection<Point2<S>>>::inverse(&self)
@@ -177,7 +183,6 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Reflection2D<S> wh
         }
     }
 
-    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
         <Self as Reflection<Point2<S>>>::inverse(&self)
@@ -211,7 +216,6 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Reflection2D<S> wh
         }
     }
 
-    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
         <Self as Reflection<Point2<S>>>::inverse(&self)
@@ -245,7 +249,6 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Ref
         }
     }
 
-    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection2D<S>> {
         <Self as Reflection<Point2<S>>>::inverse(&self)
@@ -280,7 +283,6 @@ pub struct Reflection3D<S> {
 
 impl<S> Reflection3D<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
-    #[rustfmt::skip]
     pub fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
         Reflection3D {
             normal: normal,
@@ -370,7 +372,6 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Reflection3D<S> whe
         }
     }
 
-    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
         <Self as Reflection<Point3<S>>>::inverse(&self)
@@ -404,7 +405,6 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Reflection3D<S> wh
         }
     }
 
-    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
         <Self as Reflection<Point3<S>>>::inverse(&self)
@@ -438,7 +438,6 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Reflection3D<S> wh
         }
     }
 
-    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
         <Self as Reflection<Point3<S>>>::inverse(&self)
@@ -472,7 +471,6 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Ref
         }
     }
 
-    #[rustfmt::skip]
     #[inline]
     fn inverse(&self) -> Option<Reflection3D<S>> {
         <Self as Reflection<Point3<S>>>::inverse(&self)

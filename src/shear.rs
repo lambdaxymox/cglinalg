@@ -23,18 +23,22 @@ use transform::*;
 use std::fmt;
 
 
+/// A trait defining the operations on a shearing transformation.
 pub trait Shear<P> where 
     P: Euclidean,
     Self: Sized + Copy,
 {
+    /// Compute the inverse shearing operation.
     fn inverse(&self) -> Option<Self>;
 
+    /// Apply a shearing transformation to a vector.
     fn shear_vector(&self, vector: P::Difference) -> P::Difference;
 
+    /// Apply a shearing transformation to a point.
     fn shear_point(&self, point: P) -> P;
 }
 
-
+/// A trait implementing shearing transformations in two dimensions.
 pub trait Shear2<S> where 
     S: ScalarSigned,
     Self: Shear<Point2<S>> + Into<Matrix3<S>> + Into<Shear2D<S>>,

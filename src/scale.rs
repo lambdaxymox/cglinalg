@@ -22,6 +22,7 @@ use transform::*;
 use std::fmt;
 
 
+/// A trait for implementing scaling transformations.
 pub trait Scale<P> where 
     P: Euclidean,
     Self: Sized + Copy,
@@ -33,6 +34,7 @@ pub trait Scale<P> where
     fn scale_point(&self, point: P) -> P;
 }
 
+/// A trait defining scaling transformations in two dimensions.
 pub trait Scale2<S> where 
     S: ScalarFloat,
     Self: Scale<Point2<S>> + Into<Matrix3<S>> + Into<Scale2D<S>>,
@@ -45,6 +47,7 @@ pub trait Scale2<S> where
     fn from_scale(scale: S) -> Self;
 }
 
+/// A trait defining scaling transformations in three dimensions.
 pub trait Scale3<S> where 
     S: ScalarFloat,
     Self: Scale<Point3<S>> + Into<Matrix4<S>> + Into<Scale3D<S>>,

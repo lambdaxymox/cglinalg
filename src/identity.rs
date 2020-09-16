@@ -22,6 +22,7 @@ use transform::*;
 use std::fmt;
 
 
+/// A trait defining the identity transformation.
 pub trait Identity<P> where 
     P: Euclidean,
     Self: Sized + Copy,
@@ -29,19 +30,25 @@ pub trait Identity<P> where
     /// Construct a new identity transformation.
     fn identity() -> Self;
 
+    /// Compute the inverse of an identity map. This is 
+    /// also just the identity map.
     fn inverse(&self) -> Option<Self>;
 
+    /// Apply the identity transformation to a vector.
     fn identify_vector(&self, vector: P::Difference) -> P::Difference;
 
+    /// Apply the identity transformation to a point.
     fn identify_point(&self, point: P) -> P;
 }
 
+/// A trait defining the identity transformation in two dimensions.
 pub trait Identity2<S> where 
     S: Scalar,
     Self: Identity<Point2<S>> + Into<Matrix3<S>> + Into<Identity2D<S>>,
 {
 }
 
+/// A trait defining the identity transformation in three dimensions.
 pub trait Identity3<S> where 
     S: Scalar,
     Self: Identity<Point3<S>> + Into<Matrix4<S>> + Into<Identity3D<S>>,
