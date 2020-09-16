@@ -133,11 +133,6 @@ impl<S> Array for Point1<S> where S: Copy {
     }
 
     #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Point1::new(value)
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -764,11 +759,6 @@ impl<S> Array for Point2<S> where S: Copy {
     #[inline]
     fn shape() -> (usize, usize) {
         (2, 1)
-    }
-
-    #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Point2::new(value, value)
     }
 
     #[inline]
@@ -1405,11 +1395,6 @@ impl<S> Array for Point3<S> where S: Copy {
     #[inline]
     fn shape() -> (usize, usize) {
         (3, 1)
-    }
-
-    #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Point3::new(value, value, value)
     }
 
     #[inline]

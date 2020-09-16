@@ -190,11 +190,6 @@ impl<S> Array for Vector1<S> where S: Copy {
     }
 
     #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Vector1::new(value)
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.x
     }
@@ -916,11 +911,6 @@ impl<S> Array for Vector2<S> where S: Copy {
     #[inline]
     fn shape() -> (usize, usize) {
         (2, 1)
-    }
-
-    #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Vector2::new(value, value)
     }
 
     #[inline]
@@ -1726,11 +1716,6 @@ impl<S> Array for Vector3<S> where S: Copy {
     #[inline]
     fn shape() -> (usize, usize) {
         (3, 1)
-    }
-
-    #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Vector3::new(value, value, value)
     }
 
     #[inline]
@@ -2655,11 +2640,6 @@ impl<S> Array for Vector4<S> where S: Copy {
     #[inline]
     fn shape() -> (usize, usize) {
         (4, 1)
-    }
-
-    #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Vector4::new(value, value, value, value)
     }
 
     #[inline]

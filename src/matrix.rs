@@ -33,7 +33,6 @@ use structure::{
     Sum,
     Product,
     SquareMatrix,
-    SkewSymmetricMatrix,
     InvertibleSquareMatrix,
     Magnitude,
 };
@@ -253,11 +252,6 @@ impl<S> Array for Matrix2<S> where S: Copy {
     #[inline]
     fn shape() -> (usize, usize) {
         (2, 2)
-    }
-
-    #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Matrix2::new(value, value, value, value)
     }
 
     #[inline]
@@ -948,12 +942,6 @@ impl<S> SquareMatrix for Matrix2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> SkewSymmetricMatrix for Matrix2<S> where S: ScalarFloat {
-    fn is_skew_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1)
-    }
-}
-
 impl<S> InvertibleSquareMatrix for Matrix2<S> where S: ScalarFloat {
     #[rustfmt::skip]
     fn inverse(&self) -> Option<Self> {
@@ -1458,16 +1446,6 @@ impl<S> Array for Matrix3<S> where S: Copy {
     #[inline]
     fn shape() -> (usize, usize) {
         (3, 3)
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Matrix3::new(
-            value, value, value, 
-            value, value, value, 
-            value, value, value
-        )
     }
 
     #[inline]
@@ -2444,14 +2422,6 @@ impl<S> SquareMatrix for Matrix3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> SkewSymmetricMatrix for Matrix3<S> where S: ScalarFloat {
-    fn is_skew_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1) &&
-        ulps_eq!(self.c0r2, -self.c2r0) && ulps_eq!(self.c2r0, -self.c0r2) &&
-        ulps_eq!(self.c1r2, -self.c2r1) && ulps_eq!(self.c2r1, -self.c1r2)
-    }
-}
-
 impl<S> InvertibleSquareMatrix for Matrix3<S> where S: ScalarFloat {
     #[rustfmt::skip]
     fn inverse(&self) -> Option<Self> {
@@ -2924,17 +2894,6 @@ impl<S> Array for Matrix4<S> where S: Copy {
     #[inline]
     fn shape() -> (usize, usize) {
         (4, 4)
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Matrix4::new(
-            value, value, value, value, 
-            value, value, value, value, 
-            value, value, value, value, 
-            value, value, value, value
-        )
     }
 
     #[inline]
@@ -4355,17 +4314,6 @@ impl<S> SquareMatrix for Matrix4<S> where S: ScalarFloat {
     #[inline]
     fn is_identity(&self) -> bool {
         ulps_eq!(self, &Self::one())
-    }
-}
-
-impl<S> SkewSymmetricMatrix for Matrix4<S> where S: ScalarFloat {
-    fn is_skew_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, -self.c1r0) && ulps_eq!(self.c1r0, -self.c0r1) &&
-        ulps_eq!(self.c0r2, -self.c2r0) && ulps_eq!(self.c2r0, -self.c0r2) &&
-        ulps_eq!(self.c1r2, -self.c2r1) && ulps_eq!(self.c2r1, -self.c1r2) &&
-        ulps_eq!(self.c0r3, -self.c3r0) && ulps_eq!(self.c3r0, -self.c0r3) &&
-        ulps_eq!(self.c1r3, -self.c3r1) && ulps_eq!(self.c3r1, -self.c1r3) &&
-        ulps_eq!(self.c2r3, -self.c3r2) && ulps_eq!(self.c3r2, -self.c2r3)
     }
 }
 

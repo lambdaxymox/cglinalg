@@ -1,6 +1,5 @@
 use scalar::{
     Scalar,
-    ScalarSigned,
     ScalarFloat,   
 };
 use num_traits::{
@@ -23,9 +22,6 @@ pub trait Array {
     
     /// The shape of the underlying storage.
     fn shape() -> (usize, usize);
-
-    /// Construct an array whose entries are all an input value.
-    fn from_value(value: Self::Element) -> Self;
 
     /// Generate a pointer to the underlying array for passing a
     /// matrix or vector to the graphics hardware.
@@ -422,7 +418,7 @@ pub trait SquareMatrix where
         Self::one()
     }
 }
-
+/*
 pub trait SkewSymmetricMatrix where
     Self: SquareMatrix,
     <Self as Matrix>::Element: ScalarSigned
@@ -433,6 +429,7 @@ pub trait SkewSymmetricMatrix where
     /// that every diagonal matrix is trivially a skew-symmetry matrix. In particular,
     fn is_skew_symmetric(&self) -> bool;
 }
+*/
 
 /// A trait expressing how to compute the inverse of a square matrix, if it exists.
 pub trait InvertibleSquareMatrix where

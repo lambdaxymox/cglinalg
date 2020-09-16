@@ -368,11 +368,6 @@ impl<S> Array for Quaternion<S> where S: Copy + num_traits::Zero {
     }
 
     #[inline]
-    fn from_value(value: Self::Element) -> Self {
-        Quaternion::new(S::zero(), value, value, value)
-    }
-
-    #[inline]
     fn as_ptr(&self) -> *const Self::Element {
         &self.s
     }
