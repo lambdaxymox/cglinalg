@@ -12,15 +12,6 @@ mod quaternion;
 mod vector;
 mod structure;
 
-mod identity;
-mod reflection;
-mod rotation;
-mod scale;
-mod shear;
-mod translation;
-mod transform;
-
-
 pub use prelude::*;
 pub use angle::*;
 pub use matrix::*;
@@ -31,11 +22,8 @@ pub use vector::*;
 pub use structure::*;
 pub use point::*;
 
-pub use identity::*;
-pub use reflection::*;
-pub use rotation::*;
-pub use scale::*;
-pub use shear::*;
-pub use translation::*;
-pub use transform::*;
+
+mod affine;
+
+pub use affine::*;
 

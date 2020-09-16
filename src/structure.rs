@@ -5,7 +5,9 @@ use scalar::{
 use num_traits::{
     Float,
 };
-use approx::ulps_ne;
+use approx::{
+    ulps_ne,
+};
 use std::ops;
 
 
@@ -50,7 +52,7 @@ pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
     /// Create a zero element.
     fn zero() -> Self;
 
-    /// Test whether an element is equal to the zero element.
+    /// Determine whether an element is equal to the zero element.
     fn is_zero(&self) -> bool;
 }
 
