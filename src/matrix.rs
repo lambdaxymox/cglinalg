@@ -1317,12 +1317,58 @@ impl<S> Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> Matrix3x3<S> where S: ScalarSigned {
-    /// Construct a two-dimensional affine reflection matrix in the xy-plane for a line.
+    /// Construct a two-dimensional affine reflection matrix in the xy-plane for a line with normal
+    /// vector `normal` and bias vector `bias`. The bias vector is the point of interception on the
+    /// x-axis and y-axis, respectively.
     /// 
     /// The affine version of reflection generalizes the two-dimensional `from_reflection` function
     /// in that `from_reflection` only works for lines that cross the origin. If the line does not
-    /// cross the origin, in order to calculate the reflection we need to compute a translation,
-    /// which can only be done using an affine matrix.
+    /// cross the origin, in order to calculate the reflection we need to compute a translation. 
+    /// Since translation operations are affine and not linear, constructing a general two-dimensional
+    /// reflection requires a an affine transformation instead of a linear one.
+    ///
+    /// In particular, consider a line of the form
+    /// ```text
+    /// L = { (x, y) | a * (x - x0) + b * (y - y0) == 0 }.
+    /// ```
+    /// A bare reflection matrix assumes that the the x-axis intercept `x0` and the y-axis intercept
+    /// `y0` are both zero, in which case the translation terms are zero. This yields the familiar
+    /// matrix formula in (row-major form)
+    /// ```text
+    /// |  1 - 2*nx*nx -2*nx*ny      0 |
+    /// | -2*nx*ny      1 - 2*ny*ny  0 |
+    /// |  0            0            1 |
+    /// ```
+    /// In the case where the the line `L` does not cross the origin, we must first do a 
+    /// coordinate transformation to coordinates where the line passes through the 
+    /// origin: this is just a shift by the bias `(x0, y0)` from (x, y) to (x - x0, y - y0). 
+    /// We achieve this transformation in homogeneous coordinates by the matrix
+    /// ```text
+    /// | 1  0  -x0 |
+    /// | 0  1  -y0 |
+    /// | 0  0   1  |
+    /// ```
+    /// This puts us in the shifted coordinate system where the line now passes through the origin.
+    /// In this coordinate system, we can now apply the rotation matrix, which gives a homogeneous 
+    /// matrix equation 
+    /// ```text
+    /// | 1 0 -x0 |   |xr|    |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0 -x0 |   |x|
+    /// | 0 1 -y0 | * |yr| == | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1 -y0 | * |y|
+    /// | 0 0  1  |   |1 |    |  0              0            1 |   | 0 0  1  |   |1|
+    /// ```
+    /// Then to solve for the reflect components, we invert the translation matrix on the left hand side
+    /// to get an equation of the form
+    /// ```text
+    /// |xr|    | 1 0 x0 |   |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0 -x0 |   |x|
+    /// |yr| == | 0 1 y0 | * | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1 -y0 | * |y|
+    /// |1 |    | 0 0 1  |   |  0              0            1 |   | 0 0  1  |   |1|
+    ///
+    ///         | 1 - 2*nx*nx   -2*nx*ny       2*nx*(nx*n0 + ny*y0) |   |x|
+    ///      == |-2*nx*ny        1 - 2*ny*ny   2*ny*(nx*x0 + ny*y0) | * |y|
+    ///         | 0              0             1                    |   |1|
+    /// ```
+    /// Here the terms `xr` and `yr` are the coordinates of the reflected point across the line
+    /// `L` defined above.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_reflection(normal: Vector2<S>, bias: Vector2<S>) -> Matrix3x3<S> {
@@ -1339,7 +1385,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
         Matrix3x3::new(
              one - two * normal.x * normal.x,                          -two * normal.x * normal.y,                                zero,
             -two * normal.x * normal.y,                                 one - two * normal.y * normal.y,                          zero,
-            -two * normal.x * (normal.x * bias.x + normal.y * bias.y), -two * normal.x * (normal.x * bias.x + normal.y * bias.y), one
+             two * normal.x * (normal.x * bias.x + normal.y * bias.y),  two * normal.x * (normal.x * bias.x + normal.y * bias.y), one
         )
     }
 
