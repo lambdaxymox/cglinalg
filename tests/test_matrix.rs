@@ -389,6 +389,28 @@ mod matrix2_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_from_scale() {
+        let matrix = Matrix2x2::from_scale(3);
+        let unit_x = Vector2::unit_x();
+        let unit_y = Vector2::unit_y();
+        let expected = unit_x * 3 + unit_y * 3;
+        let result = matrix * Vector2::new(1, 1);
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_nonuniform_scale() {
+        let matrix = Matrix2x2::from_nonuniform_scale(3, 7);
+        let unit_x = Vector2::unit_x();
+        let unit_y = Vector2::unit_y();
+        let expected = unit_x * 3 + unit_y * 7;
+        let result = matrix * Vector2::new(1, 1);
+
+        assert_eq!(result, expected);
+    }
 }
 
 
@@ -842,6 +864,30 @@ mod matrix3_tests {
         let mut result = Matrix3x3::new(1, 2, 3, 4, 5, 6, 7, 8, 9);
         result.swap_elements((0, 0), (2, 1));
         let expected = Matrix3x3::new(8, 2, 3, 4, 5, 6, 7, 1, 9);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_scale() {
+        let matrix = Matrix3x3::from_scale(3);
+        let unit_x = Vector3::unit_x();
+        let unit_y = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let expected = unit_x * 3 + unit_y * 3 + unit_z * 3;
+        let result = matrix * Vector3::new(1, 1, 1);
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_nonuniform_scale() {
+        let matrix = Matrix3x3::from_nonuniform_scale(3, 5, 7);
+        let unit_x = Vector3::unit_x();
+        let unit_y = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let expected = unit_x * 3 + unit_y * 5 + unit_z * 7;
+        let result = matrix * Vector3::new(1, 1, 1);
 
         assert_eq!(result, expected);
     }

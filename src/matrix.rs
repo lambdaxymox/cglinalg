@@ -2910,7 +2910,6 @@ impl<S> Array for Matrix4x4<S> where S: Copy {
 }
 
 impl<S> Sum for Matrix4x4<S> where S: Scalar {
-    #[rustfmt::skip]
     #[inline]
     fn sum(&self) -> S {
         self.c0r0 + self.c1r0 + self.c2r0 + self.c3r0 +
@@ -2921,7 +2920,6 @@ impl<S> Sum for Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> Product for Matrix4x4<S> where S: Scalar {
-    #[rustfmt::skip]
     #[inline]
     fn product(&self) -> S {
         self.c0r0 * self.c1r0 * self.c2r0 * self.c3r0 *
