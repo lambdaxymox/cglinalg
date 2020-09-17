@@ -411,6 +411,37 @@ mod matrix2_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_from_shear_x() {
+        let shear_x_with_y = 5;
+        let matrix = Matrix2x2::from_shear_x(shear_x_with_y);
+        let expected = Vector2::new(1 + shear_x_with_y, 1);
+        let result = matrix * Vector2::new(1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_y() {
+        let shear_y_with_x = 5;
+        let matrix = Matrix2x2::from_shear_y(shear_y_with_x);
+        let expected = Vector2::new(1, 1 + shear_y_with_x);
+        let result = matrix * Vector2::new(1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear() {
+        let shear_x_with_y = 5;
+        let shear_y_with_x = 7;
+        let matrix = Matrix2x2::from_shear(shear_x_with_y, shear_y_with_x);
+        let expected = Vector2::new(1 + shear_x_with_y, 1 + shear_y_with_x);
+        let result = matrix * Vector2::new(1, 1);
+
+        assert_eq!(result, expected);
+    }
 }
 
 
@@ -893,25 +924,65 @@ mod matrix3_tests {
     }
 
     #[test]
-    fn test_from_affine_scale() {
-        let matrix = Matrix3x3::from_scale(5);
+    fn test_from_affine_scale_does_not_change_last_coordinate() {
+        let matrix = Matrix3x3::from_affine_scale(5);
         let unit_z = Vector3::unit_z();
-        let expected = Vector3::new(5, 5, 1);
-        let result = matrix * Vector3::new(1, 1, 1);
+        let expected = unit_z;
+        let result = matrix * unit_z;
 
         assert_eq!(result, expected);
-        assert_eq!(matrix * unit_z, unit_z);
     }
 
     #[test]
     fn test_from_affine_nonuniform_scale() {
         let matrix = Matrix3x3::from_affine_nonuniform_scale(7, 11);
-        let unit_z = Vector3::unit_z();
         let expected = Vector3::new(7, 11, 1);
         let result = matrix * Vector3::new(1, 1, 1);
 
         assert_eq!(result, expected);
-        assert_eq!(matrix * unit_z, unit_z);
+    }
+
+    #[test]
+    fn test_from_affine_nonuniform_scale_does_not_change_last_coordinate() {
+        let matrix = Matrix3x3::from_affine_nonuniform_scale(7, 11);
+        let unit_z = Vector3::unit_z();
+        let expected = unit_z;
+        let result = matrix * unit_z;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_x() {
+        let shear_x_with_y = 5;
+        let shear_x_with_z = 3;
+        let matrix = Matrix3x3::from_shear_x(shear_x_with_y, shear_x_with_z);
+        let expected = Vector3::new(1 + shear_x_with_y + shear_x_with_z, 1, 1);
+        let result = matrix * Vector3::new(1, 1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_y() {
+        let shear_y_with_x = 5;
+        let shear_y_with_z = 3;
+        let matrix = Matrix3x3::from_shear_y(shear_y_with_x, shear_y_with_z);
+        let expected = Vector3::new(1, 1 + shear_y_with_x + shear_y_with_z, 1);
+        let result = matrix * Vector3::new(1, 1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_z() {
+        let shear_z_with_x = 5;
+        let shear_z_with_y = 3;
+        let matrix = Matrix3x3::from_shear_z(shear_z_with_x, shear_z_with_y);
+        let expected = Vector3::new(1, 1, 1 + shear_z_with_x + shear_z_with_y);
+        let result = matrix * Vector3::new(1, 1, 1);
+
+        assert_eq!(result, expected);
     }
 }
 

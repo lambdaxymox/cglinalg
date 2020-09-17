@@ -606,7 +606,7 @@ impl<S> ops::Mul<Vector2<S>> for Matrix2x2<S> where S: Scalar {
 
     fn mul(self, other: Vector2<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y;
-        let y = self.c1r0 * other.x + self.c1r1 * other.y;
+        let y = self.c0r1 * other.x + self.c1r1 * other.y;
 
         Vector2::new(x, y)
     }
@@ -617,7 +617,7 @@ impl<S> ops::Mul<&Vector2<S>> for Matrix2x2<S> where S: Scalar {
 
     fn mul(self, other: &Vector2<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y;
-        let y = self.c1r0 * other.x + self.c1r1 * other.y;
+        let y = self.c0r1 * other.x + self.c1r1 * other.y;
 
         Vector2::new(x, y)
     }
@@ -628,7 +628,7 @@ impl<S> ops::Mul<Vector2<S>> for &Matrix2x2<S> where S: Scalar {
 
     fn mul(self, other: Vector2<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y;
-        let y = self.c1r0 * other.x + self.c1r1 * other.y;
+        let y = self.c0r1 * other.x + self.c1r1 * other.y;
 
         Vector2::new(x, y)
     }
@@ -639,7 +639,7 @@ impl<'a, 'b, S> ops::Mul<&'a Vector2<S>> for &'b Matrix2x2<S> where S: Scalar {
 
     fn mul(self, other: &'a Vector2<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y;
-        let y = self.c1r0 * other.x + self.c1r1 * other.y;
+        let y = self.c0r1 * other.x + self.c1r1 * other.y;
 
         Vector2::new(x, y)
     }
