@@ -1640,4 +1640,113 @@ mod matrix4_tests {
         assert_eq!(result, expected);
         assert_eq!(matrix * unit_w, unit_w);
     }
+
+    #[test]
+    fn test_from_affine_shear_x() {
+        let shear_x_with_y = 5;
+        let shear_x_with_z = 11;
+        let matrix = Matrix4x4::from_affine_shear_x(shear_x_with_y, shear_x_with_z);
+        let expected = Vector4::new(1 + shear_x_with_y + shear_x_with_z, 1, 1, 1);
+        let result = matrix * Vector4::new(1, 1, 1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_x_does_not_change_last_coordinate() {
+        let shear_x_with_y = 5;
+        let shear_x_with_z = 11;
+        let matrix = Matrix4x4::from_affine_shear_x(shear_x_with_y, shear_x_with_z);
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_y() {
+        let shear_y_with_x = 3;
+        let shear_y_with_z = 11;
+        let matrix = Matrix4x4::from_affine_shear_y(shear_y_with_x, shear_y_with_z);
+        let expected = Vector4::new(1, 1 + shear_y_with_x + shear_y_with_z, 1, 1);
+        let result = matrix * Vector4::new(1, 1, 1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_y_does_not_change_last_coordinate() {
+        let shear_y_with_x = 3;
+        let shear_y_with_z = 11;
+        let matrix = Matrix4x4::from_affine_shear_y(shear_y_with_x, shear_y_with_z);
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_z() {
+        let shear_z_with_x = 3;
+        let shear_z_with_y = 11;
+        let matrix = Matrix4x4::from_affine_shear_z(shear_z_with_x, shear_z_with_y);
+        let expected = Vector4::new(1, 1, 1 + shear_z_with_x + shear_z_with_y, 1);
+        let result = matrix * Vector4::new(1, 1, 1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_z_does_not_change_last_coordinate() {
+        let shear_z_with_x = 3;
+        let shear_z_with_y = 11;
+        let matrix = Matrix4x4::from_affine_shear_z(shear_z_with_x, shear_z_with_y);
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear() {
+        let shear_x_with_y = 2;
+        let shear_x_with_z = 4;
+        let shear_y_with_x = 8;
+        let shear_y_with_z = 7;
+        let shear_z_with_x = 3;
+        let shear_z_with_y = 11;
+        let matrix = Matrix4x4::from_affine_shear(
+            shear_x_with_y, shear_x_with_z, shear_y_with_x, shear_y_with_z, shear_z_with_x, shear_z_with_y
+        );
+        let expected = Vector4::new(
+            1 + shear_x_with_y + shear_x_with_z, 
+            1 + shear_y_with_x + shear_y_with_z, 
+            1 + shear_z_with_x + shear_z_with_y, 
+            1
+        );
+        let result = matrix * Vector4::new(1, 1, 1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_does_not_change_last_coordinate() {
+        let shear_x_with_y = 2;
+        let shear_x_with_z = 4;
+        let shear_y_with_x = 8;
+        let shear_y_with_z = 7;
+        let shear_z_with_x = 3;
+        let shear_z_with_y = 11;
+        let matrix = Matrix4x4::from_affine_shear(
+            shear_x_with_y, shear_x_with_z, shear_y_with_x, shear_y_with_z, shear_z_with_x, shear_z_with_y
+        );
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
 }
