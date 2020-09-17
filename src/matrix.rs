@@ -1099,6 +1099,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     pub fn from_affine_translation(distance: Vector2<S>) -> Matrix3x3<S> {
         let one = S::one();
         let zero = S::zero();
+        
         Matrix3x3::new(
             one,        zero,       zero,
             zero,       one,        zero,

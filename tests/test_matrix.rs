@@ -984,6 +984,48 @@ mod matrix3_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_from_affine_shear_x() {
+        let shear_x_with_y = 5;
+        let matrix = Matrix3x3::from_affine_shear_x(shear_x_with_y);
+        let expected = Vector3::new(1 + shear_x_with_y, 1, 1);
+        let result = matrix * Vector3::new(1, 1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_x_does_not_change_last_coordinate() {
+        let shear_x_with_y = 5;
+        let matrix = Matrix3x3::from_affine_shear_x(shear_x_with_y);
+        let unit_z = Vector3::unit_z();
+        let expected = unit_z;
+        let result = matrix * unit_z;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_y() {
+        let shear_y_with_x = 3;
+        let matrix = Matrix3x3::from_affine_shear_y(shear_y_with_x);
+        let expected = Vector3::new(1, 1 + shear_y_with_x, 1);
+        let result = matrix * Vector3::new(1, 1, 1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_y_does_not_change_last_coordinate() {
+        let shear_y_with_x = 3;
+        let matrix = Matrix3x3::from_affine_shear_y(shear_y_with_x);
+        let unit_z = Vector3::unit_z();
+        let expected = unit_z;
+        let result = matrix * unit_z;
+
+        assert_eq!(result, expected);
+    }
 }
 
 #[cfg(test)]
