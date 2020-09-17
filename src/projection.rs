@@ -43,14 +43,7 @@ impl<S> Into<Orthographic<S>> for (S, S, S, S, S, S) {
     fn into(self) -> Orthographic<S> {
         match self {
             (left, right, bottom, top, near, far) => {
-                Orthographic {
-                    left: left,
-                    right: right,
-                    bottom: bottom,
-                    top: top,
-                    near: near,
-                    far: far,
-                }
+                Orthographic::new(left, right, bottom, top, near, far)
             }
         }
     }
@@ -61,14 +54,7 @@ impl<S> Into<Orthographic<S>> for &(S, S, S, S, S, S) where S: Copy {
     fn into(self) -> Orthographic<S> {
         match *self {
             (left, right, bottom, top, near, far) => {
-                Orthographic {
-                    left: left,
-                    right: right,
-                    bottom: bottom,
-                    top: top,
-                    near: near,
-                    far: far,
-                }
+                Orthographic::new(left, right, bottom, top, near, far)
             }
         }
     }
@@ -79,14 +65,7 @@ impl<S> Into<Orthographic<S>> for [S; 6] {
     fn into(self) -> Orthographic<S> {
         match self {
             [left, right, bottom, top, near, far] => {
-                Orthographic {
-                    left: left,
-                    right: right,
-                    bottom: bottom,
-                    top: top,
-                    near: near,
-                    far: far,
-                }
+                Orthographic::new(left, right, bottom, top, near, far)
             }
         }
     }
@@ -97,14 +76,7 @@ impl<S> Into<Orthographic<S>> for &[S; 6] where S: Copy {
     fn into(self) -> Orthographic<S> {
         match *self {
             [left, right, bottom, top, near, far] => {
-                Orthographic {
-                    left: left,
-                    right: right,
-                    bottom: bottom,
-                    top: top,
-                    near: near,
-                    far: far,
-                }
+                Orthographic::new(left, right, bottom, top, near, far)
             }
         }
     }
@@ -140,14 +112,7 @@ impl<S> Into<Perspective<S>> for (S, S, S, S, S, S) {
     fn into(self) -> Perspective<S> {
         match self {
             (left, right, bottom, top, near, far) => {
-                Perspective {
-                    left: left,
-                    right: right,
-                    bottom: bottom,
-                    top: top,
-                    near: near,
-                    far: far,
-                }
+                Perspective::new(left, right, bottom, top, near, far)
             }
         }
     }
@@ -158,14 +123,7 @@ impl<S> Into<Perspective<S>> for &(S, S, S, S, S, S) where S: Copy {
     fn into(self) -> Perspective<S> {
         match *self {
             (left, right, bottom, top, near, far) => {
-                Perspective {
-                    left: left,
-                    right: right,
-                    bottom: bottom,
-                    top: top,
-                    near: near,
-                    far: far,
-                }
+                Perspective::new(left, right, bottom, top, near, far)
             }
         }
     }
@@ -176,14 +134,7 @@ impl<S> Into<Perspective<S>> for [S; 6] {
     fn into(self) -> Perspective<S> {
         match self {
             [left, right, bottom, top, near, far] => {
-                Perspective {
-                    left: left,
-                    right: right,
-                    bottom: bottom,
-                    top: top,
-                    near: near,
-                    far: far,
-                }
+                Perspective::new(left, right, bottom, top, near, far)
             }
         }
     }
@@ -194,14 +145,7 @@ impl<S> Into<Perspective<S>> for &[S; 6] where S: Copy {
     fn into(self) -> Perspective<S> {
         match *self {
             [left, right, bottom, top, near, far] => {
-                Perspective {
-                    left: left,
-                    right: right,
-                    bottom: bottom,
-                    top: top,
-                    near: near,
-                    far: far,
-                }
+                Perspective::new(left, right, bottom, top, near, far)
             }
         }
     }
@@ -233,12 +177,7 @@ impl<S> Into<PerspectiveFov<S>> for (Radians<S>, S, S, S) {
     fn into(self) -> PerspectiveFov<S> {
         match self {
             (fovy, aspect, near, far) => {
-                PerspectiveFov {
-                    fovy: fovy,
-                    aspect: aspect,
-                    near: near,
-                    far: far,
-                }
+                PerspectiveFov::new(fovy, aspect, near, far)
             }
         }
     }
@@ -249,12 +188,7 @@ impl<S> Into<PerspectiveFov<S>> for &(Radians<S>, S, S, S) where S: Copy {
     fn into(self) -> PerspectiveFov<S> {
         match *self {
             (fovy, aspect, near, far) => {
-                PerspectiveFov {
-                    fovy: fovy,
-                    aspect: aspect,
-                    near: near,
-                    far: far,
-                }
+                PerspectiveFov::new(fovy, aspect, near, far)
             }
         }
     }
@@ -265,12 +199,7 @@ impl<S> Into<PerspectiveFov<S>> for (Degrees<S>, S, S, S) where S: ScalarFloat {
     fn into(self) -> PerspectiveFov<S> {
         match self {
             (fovy, aspect, near, far) => {
-                PerspectiveFov {
-                    fovy: fovy.into(),
-                    aspect: aspect,
-                    near: near,
-                    far: far,
-                }
+                PerspectiveFov::new(fovy, aspect, near, far)
             }
         }
     }
@@ -281,12 +210,7 @@ impl<S> Into<PerspectiveFov<S>> for &(Degrees<S>, S, S, S) where S: ScalarFloat 
     fn into(self) -> PerspectiveFov<S> {
         match *self {
             (fovy, aspect, near, far) => {
-                PerspectiveFov {
-                    fovy: fovy.into(),
-                    aspect: aspect,
-                    near: near,
-                    far: far,
-                }
+                PerspectiveFov::new(fovy, aspect, near, far)
             }
         }
     }
