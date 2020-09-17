@@ -1,13 +1,13 @@
 use approx::{
     ulps_eq,
 };
-use angle::{
+use crate::angle::{
     Radians,
 };
-use scalar::{
+use crate::scalar::{
     ScalarFloat,
 };
-use traits::{
+use crate::traits::{
     Angle,
     DotProduct,
     CrossProduct,
@@ -15,23 +15,23 @@ use traits::{
     InvertibleSquareMatrix,
     Magnitude,
 };
-use matrix::{
+use crate::matrix::{
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
 };
-use point::{
+use crate::point::{
     Point2,
     Point3,
 };
-use vector::{
+use crate::vector::{
     Vector2,
     Vector3,
 };
-use quaternion::{
+use crate::quaternion::{
     Quaternion,
 };
-use transform::*;
+use crate::transform::*;
 
 use std::fmt;
 

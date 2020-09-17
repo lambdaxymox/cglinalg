@@ -1,48 +1,16 @@
-use scalar::{
+use crate::scalar::{
     ScalarFloat,
 };
-use angle::{
+use crate::angle::{
     Degrees, 
     Radians,
 };
-use matrix::{
+use crate::matrix::{
     Matrix4x4,
 };
-use traits::{
+use crate::traits::{
     Angle,
 };
-
-
-/// Compute the orthographic projection matrix for converting from camera space to
-/// normalized device coordinates.
-///
-/// This function is equivalent to the now deprecated [glOrtho]
-/// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml) function.
-#[inline]
-pub fn orthographic<S, Spec: Into<Orthographic<S>>>(spec: Spec) -> Matrix4x4<S> where S: ScalarFloat {
-    Matrix4x4::from(spec.into())
-}
-
-/// Compute a perspective matrix from a view frustum.
-///
-/// This is the equivalent of the now deprecated [glFrustum]
-/// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml) function.
-#[inline]
-pub fn frustum<S, Spec: Into<Perspective<S>>>(spec: Spec) -> Matrix4x4<S> where S: ScalarFloat {
-    Matrix4x4::from(spec.into())
-}
-
-/// Compute the perspective matrix for converting from camera space to 
-/// normalized device coordinates. 
-///
-/// This is the equivalent to the [gluPerspective] 
-/// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml)
-/// function.
-#[inline]
-pub fn perspective<S, Spec: Into<PerspectiveFov<S>>>(spec: Spec) -> Matrix4x4<S> where S: ScalarFloat {
-    Matrix4x4::from(spec.into())
-}
-
 
 
 /// An orthographic projection with arbitrary left, right, top, bottom,

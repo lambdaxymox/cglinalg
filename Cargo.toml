@@ -1,12 +1,16 @@
 [package]
 name = "cglinalg"
-version = "0.7.181"
+version = "0.7.182"
+edition = "2018"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
 keywords = ["computer graphics", "game programming", "linear algebra", "quaternions", "real-time rendering"]
+readme = "README.md"
+repository = "https://github.com/lambdaxymox/cglinalg"
 
 [lib]
 name = "cglinalg"
+path = "src/lib.rs"
 
 [dependencies]
 num-traits = "0.2.12"

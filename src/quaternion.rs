@@ -1,4 +1,4 @@
-use traits::{
+use crate::traits::{
     Angle,
     Array,
     Zero,
@@ -15,33 +15,24 @@ use traits::{
     Product,
     SquareMatrix,
 };
-use angle::{
+use crate::angle::{
     Radians,
 };
-use scalar::{
+use crate::scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,
 };
-use matrix::{
+use crate::matrix::{
     Matrix3x3, 
     Matrix4x4
 };
-use vector::Vector3;
+use crate::vector::Vector3;
 use num_traits::NumCast;
 use std::fmt;
 use std::iter;
 use std::mem;
 use std::ops;
-
-
-/// Create a new quaternion in the style of a GLSL type
-/// constructor. This is not a built-in function in GLSL, but it exists
-/// for convenience.
-#[inline]
-pub fn quat<S, T: Into<Quaternion<S>>>(quaternion: T) -> Quaternion<S> {
-    quaternion.into()
-}
 
 
 macro_rules! impl_mul_operator {

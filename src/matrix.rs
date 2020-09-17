@@ -10,18 +10,18 @@ use approx::{
 use num_traits::{
     NumCast,
 };
-use point::{
+use crate::point::{
     Point3,
 };
-use scalar::{
+use crate::scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,
 };
-use angle::{
+use crate::angle::{
     Radians,
 };
-use traits::{
+use crate::traits::{
     Angle,
     Array,
     CrossProduct,
@@ -36,27 +36,7 @@ use traits::{
     InvertibleSquareMatrix,
     Magnitude,
 };
-use vector::*;
-
-
-/// Create a new 2x2 matrix in the style of a GLSL type
-/// constructor.
-#[inline]
-pub fn mat2<S, T: Into<Matrix2x2<S>>>(matrix: T) -> Matrix2x2<S> {
-    matrix.into()
-}
-
-/// Create a new 3x3 matrix in the style of a GLSL type constructor.
-#[inline]
-pub fn mat3<S, T: Into<Matrix3x3<S>>>(matrix: T) -> Matrix3x3<S> {
-    matrix.into()
-}
-
-/// Create a new 4x4 matrix in the style of a GLSL type constructor.
-#[inline]
-pub fn mat4<S, T: Into<Matrix4x4<S>>>(matrix: T) -> Matrix4x4<S> {
-    matrix.into()
-}
+use crate::vector::*;
 
 
 macro_rules! impl_mul_operator {

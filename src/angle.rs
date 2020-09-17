@@ -1,9 +1,9 @@
-use scalar::{
+use crate::scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,
 };
-use traits::{
+use crate::traits::{
     Angle,
     Zero,
     Finite,

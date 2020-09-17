@@ -27,3 +27,7 @@ mod affine;
 
 pub use affine::*;
 
+// Make the glm module a public module imported separately to emphasize that 
+// it is optional.
+pub mod glm;
+

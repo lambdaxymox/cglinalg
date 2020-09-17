@@ -1,9 +1,9 @@
 use num_traits::NumCast;
-use scalar::{
+use crate::scalar::{
     Scalar,
     ScalarFloat,
 };
-use traits::{
+use crate::traits::{
     Array,
     Metric,
     DotProduct,
@@ -11,7 +11,7 @@ use traits::{
     Sum,
     Product,
 };
-use vector::{
+use crate::vector::{
     Vector1,
     Vector2,
     Vector3,

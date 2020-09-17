@@ -1,9 +1,9 @@
-use scalar::{
+use crate::scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,   
 };
-use traits::{
+use crate::traits::{
     Array,
     CrossProduct,
     Zero,
@@ -21,42 +21,6 @@ use std::fmt;
 use std::iter;
 use std::mem;
 use std::ops;
-
-
-/// Construct a new one-dimensional vector. This follows the style of
-/// other GLSL vector constructors even though GLSL itself lacks a
-/// `vec1()` function.
-#[inline]
-pub fn vec1<S, T: Into<Vector1<S>>>(vector: T) -> Vector1<S> {
-    vector.into()
-}
-
-/// Construct a new two-dimensional vector in the style of
-/// a GLSL `vec2` constructor.
-#[inline]
-pub fn vec2<S, T: Into<Vector2<S>>>(vector: T) -> Vector2<S> {
-    vector.into()
-}
-
-/// Construct a new three-dimensional vector in the style of
-/// a GLSL `vec3` constructor.
-#[inline]
-pub fn vec3<S, T: Into<Vector3<S>>>(vector: T) -> Vector3<S> {
-    vector.into()
-}
-
-/// Construct a new four-dimensional vector in the style of
-/// a GLSL `vec4` constructor.
-#[inline]
-pub fn vec4<S, T: Into<Vector4<S>>>(vector: T) -> Vector4<S> {
-    vector.into()
-}
-
-/// Compute the dot product between two vectors.
-#[inline]
-pub fn dot<W: Copy + Clone, V: DotProduct<W>>(v1: V, v2: W) -> <V as DotProduct<W>>::Output {
-    V::dot(v1, v2)
-}
 
 
 macro_rules! impl_mul_operator {

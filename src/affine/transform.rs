@@ -1,20 +1,20 @@
-use scalar::{
+use crate::scalar::{
     Scalar,
     ScalarFloat,
 };
-use matrix::{
+use crate::matrix::{
     Matrix3x3,
     Matrix4x4,
 };
-use vector::{
+use crate::vector::{
     Vector2,
     Vector3,
 };
-use point::{
+use crate::point::{
     Point2,
     Point3,
 };
-use traits::{
+use crate::traits::{
     Identity,
     InvertibleSquareMatrix,
 };
