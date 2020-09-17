@@ -62,6 +62,11 @@ macro_rules! impl_mul_operator {
 }
 
 
+pub type Matrix2<S> = Matrix2x2<S>;
+pub type Matrix3<S> = Matrix3x3<S>;
+pub type Matrix4<S> = Matrix4x4<S>;
+
+
 /// The `Matrix2x2` type represents 2x2 matrices in column-major order.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
