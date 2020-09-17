@@ -377,7 +377,7 @@ pub trait SquareMatrix where
 
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
-    fn from_value(value: Self::Element) -> Self;
+    fn from_diagonal_value(value: Self::Element) -> Self;
 
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.

@@ -883,7 +883,7 @@ impl<S> SquareMatrix for Matrix2x2<S> where S: ScalarFloat {
 
     #[rustfmt::skip]
     #[inline]
-    fn from_value(value: Self::Element) -> Self {
+    fn from_diagonal_value(value: Self::Element) -> Self {
         Matrix2x2::new(
             value,     S::zero(),
             S::zero(), value
@@ -2348,7 +2348,7 @@ impl<S> SquareMatrix for Matrix3x3<S> where S: ScalarFloat {
 
     #[rustfmt::skip]
     #[inline]
-    fn from_value(value: Self::Element) -> Self {
+    fn from_diagonal_value(value: Self::Element) -> Self {
         Matrix3x3::new(
             value,     S::zero(), S::zero(),
             S::zero(), value,     S::zero(),
@@ -4214,7 +4214,7 @@ impl<S> SquareMatrix for Matrix4x4<S> where S: ScalarFloat {
 
     #[rustfmt::skip]
     #[inline]
-    fn from_value(value: Self::Element) -> Self {
+    fn from_diagonal_value(value: Self::Element) -> Self {
         Matrix4x4::new(
             value,     S::zero(), S::zero(), S::zero(),
             S::zero(), value,     S::zero(), S::zero(),
