@@ -891,6 +891,28 @@ mod matrix3_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_from_affine_scale() {
+        let matrix = Matrix3x3::from_scale(5);
+        let unit_z = Vector3::unit_z();
+        let expected = Vector3::new(5, 5, 1);
+        let result = matrix * Vector3::new(1, 1, 1);
+
+        assert_eq!(result, expected);
+        assert_eq!(matrix * unit_z, unit_z);
+    }
+
+    #[test]
+    fn test_from_affine_nonuniform_scale() {
+        let matrix = Matrix3x3::from_affine_nonuniform_scale(7, 11);
+        let unit_z = Vector3::unit_z();
+        let expected = Vector3::new(7, 11, 1);
+        let result = matrix * Vector3::new(1, 1, 1);
+
+        assert_eq!(result, expected);
+        assert_eq!(matrix * unit_z, unit_z);
+    }
 }
 
 #[cfg(test)]
@@ -1482,5 +1504,27 @@ mod matrix4_tests {
         );
 
         assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_scale() {
+        let matrix = Matrix4x4::from_affine_scale(5);
+        let unit_w = Vector4::unit_w();
+        let expected = Vector4::new(5, 5, 5, 1);
+        let result = matrix * Vector4::new(1, 1, 1, 1);
+
+        assert_eq!(result, expected);
+        assert_eq!(matrix * unit_w, unit_w);
+    }
+
+    #[test]
+    fn test_from_affine_nonuniform_scale() {
+        let matrix = Matrix4x4::from_affine_nonuniform_scale(5, 7, 11);
+        let unit_w = Vector4::unit_w();
+        let expected = Vector4::new(5, 7, 11, 1);
+        let result = matrix * Vector4::new(1, 1, 1, 1);
+
+        assert_eq!(result, expected);
+        assert_eq!(matrix * unit_w, unit_w);
     }
 }
