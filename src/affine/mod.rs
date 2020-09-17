@@ -1,4 +1,3 @@
-pub mod identity;
 pub mod reflection;
 pub mod rotation;
 pub mod scale;
