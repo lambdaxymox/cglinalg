@@ -2,6 +2,50 @@ extern crate cglinalg;
 
 
 #[cfg(test)]
+mod vector_constructor_tests {
+    use cglinalg::glm;
+    use cglinalg::{
+        Vector1,
+        Vector2,
+        Vector3,
+        Vector4,
+    };
+
+
+    #[test]
+    fn test_vec1() {
+        let expected = Vector1::new(1);
+        let result = glm::vec1(1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_vec2() {
+        let expected = Vector2::new(1, 2);
+        let result = glm::vec2((1, 2));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_vec3() {
+        let expected = Vector3::new(1, 2, 3);
+        let result = glm::vec3((1, 2, 3));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_vec4() {
+        let expected = Vector4::new(1, 2, 3, 4);
+        let result = glm::vec4((1, 2, 3, 4));
+
+        assert_eq!(result, expected);
+    }
+}
+
+#[cfg(test)]
 mod matrix_constructor_tests {
     use cglinalg::glm;
     use cglinalg::{
@@ -9,6 +53,7 @@ mod matrix_constructor_tests {
         Matrix3x3, 
         Matrix4x4
     };
+
 
     #[rustfmt::skip]
     #[test]
@@ -60,3 +105,113 @@ mod matrix_constructor_tests {
         assert_eq!(result, expected);
     }
 }
+
+#[cfg(test)]
+mod quaternion_constructor_tests {
+    use cglinalg::glm;
+    use cglinalg::{
+        Quaternion,
+    };
+
+
+    #[test]
+    fn test_quat() {
+        let expected = Quaternion::new(1, 2, 3 , 4);
+        let result = glm::quat((1, 2, 3, 4));
+
+        assert_eq!(result, expected);
+    }
+}
+
+#[cfg(test)]
+mod vector_product_tests {
+    use cglinalg::glm;
+    use cglinalg::{
+        CrossProduct,
+        DotProduct,
+        Vector3,
+    };
+    
+
+    #[test]
+    fn test_dot() {
+        let v = Vector3::new(1, 2, 3);
+        let w = Vector3::new(4, 5, 6);
+        let expected = v.dot(w);
+        let result = glm::dot(v, w);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_cross() {
+        let v = Vector3::new(1, 2, 3);
+        let w = Vector3::new(4, 5, 6);
+        let expected = v.cross(w);
+        let result = glm::cross(v, w);
+
+        assert_eq!(result, expected);
+    }
+}
+
+#[cfg(test)]
+mod projection_tests {
+    use cglinalg::glm;
+    use cglinalg::{
+        Degrees,
+        Matrix4x4,
+        Orthographic,
+        PerspectiveFov,
+        Perspective,
+    };
+
+
+    #[test]
+    fn test_orthogrpahic() {
+        let near = 0.1;
+        let far = 100.0;
+        let left = -1.0;
+        let right = 1.0;
+        let top = 1.0;
+        let bottom = -1.0;
+        let spec = Orthographic::new(left, right, bottom, top, near, far);
+
+        let expected = Matrix4x4::from(spec);
+        let result = glm::ortho(spec);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_perspective_fov() {
+        let near = 0.1;
+        let far = 100.0;
+        let fovy = Degrees(67.0);
+        let aspect = 1280 as f32 / 720 as f32;
+        let spec = PerspectiveFov::new(fovy, aspect, near, far);
+
+        let expected = Matrix4x4::from(spec);
+        let result = glm::perspective(spec);
+
+        assert_eq!(result, expected);
+    }
+
+    /*
+    #[test]
+    fn test_perspective() {
+        let near = 0.1;
+        let far = 100.0;
+        let left = -1.0;
+        let right = 1.0;
+        let top = 1.0;
+        let bottom = -1.0;
+        let spec = Perspective::new(left, right, bottom, top, near, far);
+
+        let expected = Matrix4x4::from(spec);
+        let result = glm::perspective(spec);
+
+        assert_eq!(result, expected);
+    }
+    */
+}
+

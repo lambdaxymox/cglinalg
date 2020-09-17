@@ -10,7 +10,6 @@ use crate::matrix::{
     Matrix4x4,
 };
 use crate::scalar::{
-    Scalar,
     ScalarFloat,
 };
 use crate::traits::{
@@ -139,9 +138,9 @@ pub fn dot<W, V>(v1: V, v2: W) -> <V as DotProduct<W>>::Output
 }
 
 /// Compute the cross product of two three-dimensional vectors.
-pub fn cross<V, W, S>(v1: V, v2: W) -> <V as CrossProduct<W>>::Output
+pub fn cross<V, W>(v1: V, v2: W) -> <V as CrossProduct<W>>::Output
     where 
-        S: Scalar,
+        W: Copy + Clone,
         V: CrossProduct<W>,
 {
     v1.cross(v2)

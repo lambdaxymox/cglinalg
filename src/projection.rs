@@ -25,6 +25,19 @@ pub struct Orthographic<S> {
     far: S,
 }
 
+impl<S> Orthographic<S> {
+    pub const fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Orthographic<S> {
+        Orthographic {
+            left: left,
+            right: right,
+            bottom: bottom,
+            top: top,
+            near: near,
+            far: far,
+        }
+    }
+}
+
 impl<S> Into<Orthographic<S>> for (S, S, S, S, S, S) {
     #[inline]
     fn into(self) -> Orthographic<S> {
@@ -109,6 +122,19 @@ pub struct Perspective<S> {
     far: S,
 }
 
+impl<S> Perspective<S> {
+    pub const fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Perspective<S> {
+        Perspective {
+            left: left,
+            right: right,
+            bottom: bottom,
+            top: top,
+            near: near,
+            far: far,
+        }
+    }
+}
+
 impl<S> Into<Perspective<S>> for (S, S, S, S, S, S) {
     #[inline]
     fn into(self) -> Perspective<S> {
@@ -189,6 +215,17 @@ pub struct PerspectiveFov<S> {
     aspect: S,
     near: S,
     far: S,
+}
+
+impl<S> PerspectiveFov<S> {
+    pub fn new<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> PerspectiveFov<S> {
+        PerspectiveFov {
+            fovy: fovy.into(),
+            aspect: aspect,
+            near: near,
+            far: far,
+        }
+    }
 }
 
 impl<S> Into<PerspectiveFov<S>> for (Radians<S>, S, S, S) {
