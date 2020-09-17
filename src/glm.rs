@@ -10,6 +10,7 @@ use crate::matrix::{
     Matrix4x4,
 };
 use crate::scalar::{
+    Scalar,
     ScalarFloat,
 };
 use crate::traits::{
@@ -29,64 +30,64 @@ use crate::projection::{
 /// Construct a new one-dimensional vector. This follows the style of
 /// other GLSL vector constructors even though GLSL itself lacks a
 /// `vec1()` function.
-pub fn vec1<S, T>(vector: T) -> Vector1<S> 
-    where T: Into<Vector1<S>>
-{
-    vector.into()
+pub fn vec1<S: Scalar>(x: S) -> Vector1<S> {
+    Vector1::new(x)
 }
 
 /// Construct a new two-dimensional vector in the style of
 /// a GLSL `vec2` constructor.
-pub fn vec2<S, T>(vector: T) -> Vector2<S>
-    where T: Into<Vector2<S>>
-{
-    vector.into()
+pub fn vec2<S: Scalar>(x: S, y: S) -> Vector2<S> {
+    Vector2::new(x, y)
 }
 
 /// Construct a new three-dimensional vector in the style of
 /// a GLSL `vec3` short constructor.
-pub fn vec3<S, T>(vector: T) -> Vector3<S> 
-    where T: Into<Vector3<S>>
-{
-    vector.into()
+pub fn vec3<S: Scalar>(x: S, y: S, z: S) -> Vector3<S> {
+    Vector3::new(x, y, z)
 }
 
 /// Construct a new four-dimensional vector in the style of
 /// a GLSL `vec4` short constructor.
-pub fn vec4<S, T>(vector: T) -> Vector4<S> 
-    where T: Into<Vector4<S>>
-{
-    vector.into()
+pub fn vec4<S: Scalar>(x: S, y: S, z: S, w: S) -> Vector4<S> {
+    Vector4::new(x, y, z, w)
 }
 
 /// Create a new quaternion in the style of a GLSL type
 /// constructor. This is not a built-in function in GLSL, but it exists
 /// for convenience.
-pub fn quat<S, T>(quaternion: T) -> Quaternion<S> 
-    where T: Into<Quaternion<S>>
-{
-    quaternion.into()
+pub fn quat<S: Scalar>(s: S, x: S, y: S, z: S) -> Quaternion<S> {
+    Quaternion::new(s, x, y, z)
 }
 
 /// Create a new 2x2 matrix in the style of a GLSL `mat2` type constructor.
-pub fn mat2<S, T>(matrix: T) -> Matrix2x2<S> 
-    where T: Into<Matrix2x2<S>>
-{
-    matrix.into()
+pub fn mat2<S: Scalar>(m00: S, m01: S, m10: S, m11: S) -> Matrix2x2<S> {
+    Matrix2x2::new(m00, m01, m10, m11)
 }
 
 /// Create a new 3x3 matrix in the style of a GLSL `mat3` type constructor.
-pub fn mat3<S, T>(matrix: T) -> Matrix3x3<S> 
-    where T: Into<Matrix3x3<S>>
-{
-    matrix.into()
+pub fn mat3<S: Scalar>(
+    m00: S, m01: S, m02: S, m10: S, m11: S, m12: S, m20: S, m21: S, m22: S) -> Matrix3x3<S> {
+    
+    Matrix3x3::new(
+        m00, m01, m02, 
+        m10, m11, m12, 
+        m20, m21, m22
+    )
 }
 
-/// Create a new 4x4 matrix in the style of a GLSL type constructor.
-pub fn mat4<S, T>(matrix: T) -> Matrix4x4<S> 
-    where T: Into<Matrix4x4<S>>
-{
-    matrix.into()
+/// Create a new 4x4 matrix in the style of a GLSL `mat4` type constructor.
+pub fn mat4<S: Scalar>(
+    m00: S, m01: S, m02: S, m03: S, 
+    m10: S, m11: S, m12: S, m13: S,
+    m20: S, m21: S, m22: S, m23: S,
+    m30: S, m31: S, m32: S, m33: S) -> Matrix4x4<S> {
+    
+    Matrix4x4::new(
+        m00, m01, m02, m03,
+        m10, m11, m12, m13,
+        m20, m21, m22, m23,
+        m30, m31, m32, m33
+    )
 }
 
 /// Compute the orthographic projection matrix for converting from camera space to
@@ -138,10 +139,6 @@ pub fn dot<W, V>(v1: V, v2: W) -> <V as DotProduct<W>>::Output
 }
 
 /// Compute the cross product of two three-dimensional vectors.
-pub fn cross<V, W>(v1: V, v2: W) -> <V as CrossProduct<W>>::Output
-    where 
-        W: Copy + Clone,
-        V: CrossProduct<W>,
-{
+pub fn cross<S: Scalar>(v1: &Vector3<S>, v2: &Vector3<S>) -> Vector3<S> {
     v1.cross(v2)
 }

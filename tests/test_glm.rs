@@ -23,7 +23,7 @@ mod vector_constructor_tests {
     #[test]
     fn test_vec2() {
         let expected = Vector2::new(1, 2);
-        let result = glm::vec2((1, 2));
+        let result = glm::vec2(1, 2);
 
         assert_eq!(result, expected);
     }
@@ -31,7 +31,7 @@ mod vector_constructor_tests {
     #[test]
     fn test_vec3() {
         let expected = Vector3::new(1, 2, 3);
-        let result = glm::vec3((1, 2, 3));
+        let result = glm::vec3(1, 2, 3);
 
         assert_eq!(result, expected);
     }
@@ -39,7 +39,7 @@ mod vector_constructor_tests {
     #[test]
     fn test_vec4() {
         let expected = Vector4::new(1, 2, 3, 4);
-        let result = glm::vec4((1, 2, 3, 4));
+        let result = glm::vec4(1, 2, 3, 4);
 
         assert_eq!(result, expected);
     }
@@ -62,9 +62,7 @@ mod matrix_constructor_tests {
             1_f32, 2_f32, 
             3_f32, 4_f32
         );
-        let result = glm::mat2([
-            1_f32, 2_f32, 3_f32, 4_f32
-        ]);
+        let result = glm::mat2(1_f32, 2_f32, 3_f32, 4_f32);
 
         assert_eq!(result, expected);
     }
@@ -77,11 +75,11 @@ mod matrix_constructor_tests {
             4_f32, 5_f32, 6_f32, 
             7_f32, 8_f32, 9_f32
         );
-        let result = glm::mat3([
+        let result = glm::mat3(
             1_f32, 2_f32, 3_f32, 
             4_f32, 5_f32, 6_f32, 
             7_f32, 8_f32, 9_f32
-        ]);
+        );
 
         assert_eq!(result, expected);
     }
@@ -95,12 +93,12 @@ mod matrix_constructor_tests {
             9_f32,  10_f32, 11_f32, 12_f32, 
             13_f32, 14_f32, 15_f32, 15_f32
         );
-        let result = glm::mat4([
+        let result = glm::mat4(
             1_f32,  2_f32,  3_f32,  4_f32,  
             5_f32,  6_f32,  7_f32,  8_f32, 
             9_f32,  10_f32, 11_f32, 12_f32, 
             13_f32, 14_f32, 15_f32, 15_f32
-        ]);
+        );
 
         assert_eq!(result, expected);
     }
@@ -117,7 +115,7 @@ mod quaternion_constructor_tests {
     #[test]
     fn test_quat() {
         let expected = Quaternion::new(1, 2, 3 , 4);
-        let result = glm::quat((1, 2, 3, 4));
+        let result = glm::quat(1, 2, 3, 4);
 
         assert_eq!(result, expected);
     }
@@ -145,10 +143,10 @@ mod vector_product_tests {
 
     #[test]
     fn test_cross() {
-        let v = Vector3::new(1, 2, 3);
-        let w = Vector3::new(4, 5, 6);
-        let expected = v.cross(w);
-        let result = glm::cross(v, w);
+        let v1 = Vector3::new(1, 2, 3);
+        let v2 = Vector3::new(4, 5, 6);
+        let expected = v1.cross(v2);
+        let result = glm::cross(&v1, &v1);
 
         assert_eq!(result, expected);
     }

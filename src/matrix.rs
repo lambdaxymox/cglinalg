@@ -2471,7 +2471,7 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix3x3<S>> for Matrix3x3<S> {
 
 
 
-/// The `Matrix4` type represents 4x4 matrices in column-major order.
+/// The `Matrix4x4` type represents 4x4 matrices in column-major order.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
 pub struct Matrix4x4<S> {
