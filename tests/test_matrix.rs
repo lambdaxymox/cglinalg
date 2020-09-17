@@ -442,12 +442,89 @@ mod matrix2_tests {
 
         assert_eq!(result, expected);
     }
+
+    /// Construct a reflection matrix test case for reflection about the x-axis.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_reflection_x_axis1() {
+        // The y-axis is the normal vector to the plane of the x-axis.
+        let normal = Vector2::unit_y();
+        let expected = Matrix2x2::new(1.0, 0.0, 0.0, -1.0);
+        let result = Matrix2x2::from_reflection(normal);
+
+        assert_eq!(result, expected);
+    }
+
+    /// Construct a reflection matrix test case for reflection about the x-axis.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_reflection_x_axis2() {
+        // The y-axis is the normal vector to the plane of the x-axis.
+        let normal = -Vector2::unit_y();
+        let expected = Matrix2x2::new(1.0, 0.0, 0.0, -1.0);
+        let result = Matrix2x2::from_reflection(normal);
+
+        assert_eq!(result, expected);
+    }
+
+    /// Construct a reflection matrix test case for reflection about the x-axis.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_reflection_y_axis1() {
+        // The y-axis is the normal vector to the plane of the y-axis.
+        let normal = Vector2::unit_x();
+        let expected = Matrix2x2::new(-1.0, 0.0, 0.0, 1.0);
+        let result = Matrix2x2::from_reflection(normal);
+    
+        assert_eq!(result, expected);
+    }
+
+    /// Construct a reflection matrix test case for reflection about the x-axis.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_reflection_y_axis2() {
+        // The y-axis is the normal vector to the plane of the y-axis.
+        let normal = -Vector2::unit_x();
+        let expected = Matrix2x2::new(-1.0, 0.0, 0.0, 1.0);
+        let result = Matrix2x2::from_reflection(normal);
+    
+        assert_eq!(result, expected);
+    }
+
+    /// Construct a reflection matrix test case for reflection about the plane `y - x = 0`.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_reflection_from_plane1() {
+        let normal = Vector2::new(f64::sqrt(2_f64)/ 2_f64, -f64::sqrt(2_f64) / 2_f64);
+        let expected = Matrix2x2::new(0.0, 1.0, 1.0, 0.0);
+        let result = Matrix2x2::from_reflection(normal);
+        
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// Construct a reflection matrix test case for reflection about the plane `y - x = 0`.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_reflection_from_plane2() {
+        let normal = Vector2::new(-f64::sqrt(2_f64)/ 2_f64, f64::sqrt(2_f64) / 2_f64);
+        let expected = Matrix2x2::new(0.0, 1.0, 1.0, 0.0);
+        let result = Matrix2x2::from_reflection(normal);
+            
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
 }
 
 
 #[cfg(test)]
 mod matrix3_tests {
     use cglinalg::{
+        Vector2,
         Vector3,
         Matrix3x3,
         Zero, 
@@ -1023,6 +1100,151 @@ mod matrix3_tests {
         let unit_z = Vector3::unit_z();
         let expected = unit_z;
         let result = matrix * unit_z;
+
+        assert_eq!(result, expected);
+    }
+
+    /// Construct a reflection matrix test case for reflection about the x-axis.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_affine_reflection_x_axis1() {
+        // The y-axis is the normal vector to the plane of the x-axis.
+        let bias = Vector2::zero();
+        let normal = Vector2::unit_y();
+        let expected = Matrix3x3::new(
+            1.0,  0.0, 0.0, 
+            0.0, -1.0, 0.0, 
+            0.0,  0.0, 1.0
+        );
+        let result = Matrix3x3::from_affine_reflection(normal, bias);
+
+        assert_eq!(result, expected);
+    }
+
+    /// Construct a reflection matrix test case for reflection about the x-axis.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_affine_reflection_x_axis2() {
+        // The y-axis is the normal vector to the plane of the x-axis.
+        let bias = Vector2::zero();
+        let normal = -Vector2::unit_y();
+        let expected = Matrix3x3::new(
+            1.0,  0.0, 0.0, 
+            0.0, -1.0, 0.0, 
+            0.0,  0.0, 1.0
+        );
+        let result = Matrix3x3::from_affine_reflection(normal, bias);
+
+        assert_eq!(result, expected);
+    }
+
+    /// Construct a reflection matrix test case for reflection about the x-axis.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_affine_reflection_y_axis1() {
+        // The y-axis is the normal vector to the plane of the y-axis.
+        let bias = Vector2::zero();
+        let normal = Vector2::unit_x();
+        let expected = Matrix3x3::new(
+            -1.0, 0.0, 0.0, 
+             0.0, 1.0, 0.0, 
+             0.0, 0.0, 1.0
+        );
+        let result = Matrix3x3::from_affine_reflection(normal, bias);
+    
+        assert_eq!(result, expected);
+    }
+
+    /// Construct a reflection matrix test case for reflection about the x-axis.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_affine_reflection_y_axis2() {
+        // The y-axis is the normal vector to the plane of the y-axis.
+        let bias = Vector2::zero();
+        let normal = -Vector2::unit_x();
+        let expected = Matrix3x3::new(
+            -1.0, 0.0, 0.0, 
+             0.0, 1.0, 0.0, 
+             0.0, 0.0, 1.0
+        );
+        let result = Matrix3x3::from_affine_reflection(normal, bias);
+    
+        assert_eq!(result, expected);
+    }
+
+    /// Construct a reflection matrix test case for reflection about the plane `y - x = 0`.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_affine_reflection_from_plane1() {
+        let bias = Vector2::zero();
+        let normal = Vector2::new(f64::sqrt(2_f64)/ 2_f64, -f64::sqrt(2_f64) / 2_f64);
+        let expected = Matrix3x3::new(
+            0.0, 1.0, 0.0, 
+            1.0, 0.0, 0.0, 
+            0.0, 0.0, 1.0
+        );
+        let result = Matrix3x3::from_affine_reflection(normal, bias);
+        
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// Construct a reflection matrix test case for reflection about the plane `y - x = 0`.
+    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
+    /// There are two possible normal vectors for the line.
+    #[test]
+    fn test_from_affine_reflection_from_plane2() {
+        let bias = Vector2::zero();
+        let normal = Vector2::new(-f64::sqrt(2_f64)/ 2_f64, f64::sqrt(2_f64) / 2_f64);
+        let expected = Matrix3x3::new(
+            0.0, 1.0, 0.0, 
+            1.0, 0.0, 0.0, 
+            0.0, 0.0, 1.0
+        );
+        let result = Matrix3x3::from_affine_reflection(normal, bias);
+            
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_reflection_xy_plane() {
+        let normal = Vector3::unit_z();
+        let expected = Matrix3x3::new(
+            1.0, 0.0,  0.0, 
+            0.0, 1.0,  0.0,  
+            0.0, 0.0, -1.0
+        );
+        let result = Matrix3x3::from_reflection(normal);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_reflection_xz_plane() {
+        let normal = -Vector3::unit_y();
+        let expected = Matrix3x3::new(
+            1.0,  0.0, 0.0, 
+            0.0, -1.0, 0.0,  
+            0.0,  0.0, 1.0
+        );
+        let result = Matrix3x3::from_reflection(normal);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_reflection_yz_plane() {
+        let normal = Vector3::unit_x();
+        let expected = Matrix3x3::new(
+            -1.0,  0.0, 0.0, 
+             0.0, 1.0,  0.0,  
+             0.0,  0.0, 1.0
+        );
+        let result = Matrix3x3::from_reflection(normal);
 
         assert_eq!(result, expected);
     }
@@ -1746,6 +1968,48 @@ mod matrix4_tests {
         let unit_w = Vector4::unit_w();
         let expected = unit_w;
         let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_reflection_xy_plane() {
+        let normal = Vector3::unit_z();
+        let expected = Matrix4x4::new(
+            1.0, 0.0,  0.0, 0.0,
+            0.0, 1.0,  0.0, 0.0,
+            0.0, 0.0, -1.0, 0.0,
+            0.0, 0.0,  0.0, 1.0
+        );
+        let result = Matrix4x4::from_affine_reflection(normal);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_reflection_xz_plane() {
+        let normal = -Vector3::unit_y();
+        let expected = Matrix4x4::new(
+            1.0,  0.0, 0.0, 0.0,
+            0.0, -1.0, 0.0, 0.0,
+            0.0,  0.0, 1.0, 0.0,
+            0.0,  0.0, 0.0, 1.0
+        );
+        let result = Matrix4x4::from_affine_reflection(normal);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_reflection_yz_plane() {
+        let normal = Vector3::unit_x();
+        let expected = Matrix4x4::new(
+            -1.0,  0.0, 0.0,  0.0,
+             0.0,  1.0, 0.0,  0.0,
+             0.0,  0.0, 1.0,  0.0,
+             0.0,  0.0, 0.0,  1.0
+        );
+        let result = Matrix4x4::from_affine_reflection(normal);
 
         assert_eq!(result, expected);
     }

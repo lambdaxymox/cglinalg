@@ -209,7 +209,8 @@ impl<S> Matrix2x2<S> where S: Scalar {
 }
 
 impl<S> Matrix2x2<S> where S: ScalarSigned {
-    /// Construct a two-dimensional reflection matrix in the xy-plane.
+    /// Construct a two-dimensional reflection matrix for reflecting through a line through 
+    /// the origin in the xy-plane.
     #[rustfmt::skip]
     #[inline]
     pub fn from_reflection(normal: Vector2<S>) -> Matrix2x2<S> {
@@ -1316,22 +1317,33 @@ impl<S> Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> Matrix3x3<S> where S: ScalarSigned {
-    /// Construct a two-dimensional affine reflection matrix in the xy-plane.
+    /// Construct a two-dimensional affine reflection matrix in the xy-plane for a line.
+    /// 
+    /// The affine version of reflection generalizes the two-dimensional `from_reflection` function
+    /// in that `from_reflection` only works for lines that cross the origin. If the line does not
+    /// cross the origin, in order to calculate the reflection we need to compute a translation,
+    /// which can only be done using an affine matrix.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: Vector2<S>) -> Matrix3x3<S> {
+    pub fn from_affine_reflection(normal: Vector2<S>, bias: Vector2<S>) -> Matrix3x3<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
-
+        /*
         Matrix3x3::new(
              one - two * normal.x * normal.x, -two * normal.x * normal.y,       zero,
             -two * normal.x * normal.y,        one - two * normal.y * normal.y, zero,
-             zero,                       zero,                                  one
+             zero,                             zero,                            one
+        )
+        */
+        Matrix3x3::new(
+             one - two * normal.x * normal.x,                          -two * normal.x * normal.y,                                zero,
+            -two * normal.x * normal.y,                                 one - two * normal.y * normal.y,                          zero,
+            -two * normal.x * (normal.x * bias.x + normal.y * bias.y), -two * normal.x * (normal.x * bias.x + normal.y * bias.y), one
         )
     }
 
-    /// Construct a three-dimensional reflection matrix.
+    /// Construct a three-dimensional reflection matrix for a plane that crosses the origin.
     #[rustfmt::skip]
     #[inline]
     pub fn from_reflection(normal: Vector3<S>) -> Matrix3x3<S> {
@@ -2759,7 +2771,13 @@ impl<S> Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> Matrix4x4<S> where S: ScalarSigned {
-    /// Construct a three-dimensional affine reflection matrix.
+    /// Construct a three-dimensional affine reflection matrix for reflecting about a
+    /// plane.
+    ///
+    /// The affine version of reflection generalizes the three-dimensional 
+    /// `from_reflection` function in that `from_reflection` only works for 
+    /// planes that cross the origin. If the plane does not cross the origin, we need to 
+    /// compute a translation, which can only be expressed using an affine matrix.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_reflection(normal: Vector3<S>) -> Matrix4x4<S> {

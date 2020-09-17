@@ -34,7 +34,7 @@ pub trait Reflection<P, V> where Self: Sized + Copy {
     fn normal(&self) -> Self::OutVector;
 
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
-    fn from_normal(normal: V) -> Self;
+    fn from_normal_bias(normal: V, bias: V) -> Self;
 
     /// Calculate the inverse reflection transformation.
     fn inverse(&self) -> Option<Self>;
@@ -104,10 +104,10 @@ impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFlo
         self.normal
     }
 
-    fn from_normal(normal: Vector2<S>) -> Reflection2D<S> {
+    fn from_normal_bias(normal: Vector2<S>, bias: Vector2<S>) -> Reflection2D<S> {
         Reflection2D {
             normal: normal,
-            matrix: Matrix3x3::from_affine_reflection(normal),
+            matrix: Matrix3x3::from_affine_reflection(normal, bias),
         }
     }
 
@@ -287,7 +287,7 @@ pub struct Reflection3D<S> {
 
 impl<S> Reflection3D<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
-    pub fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
+    pub fn from_normal_bias(normal: Vector3<S>) -> Reflection3D<S> {
         Reflection3D {
             normal: normal,
             matrix: Matrix4x4::from_affine_reflection(normal),
@@ -328,7 +328,7 @@ impl<S> Reflection<Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFlo
         self.normal
     }
 
-    fn from_normal(normal: Vector3<S>) -> Reflection3D<S> {
+    fn from_normal_bias(normal: Vector3<S>, bias: Vector3<S>) -> Reflection3D<S> {
         Reflection3D {
             normal: normal,
             matrix: Matrix4x4::from_affine_reflection(normal),
