@@ -261,12 +261,12 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S> where
     }
 
     #[inline]
-    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
@@ -294,12 +294,12 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S> wher
     }
 
     #[inline]
-    fn apply_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+    fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
@@ -327,12 +327,12 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S> wher
     }
 
     #[inline]
-    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_point(&self, point: &Point2<S>) -> Point2<S> {
+    fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
@@ -360,12 +360,12 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Rot
     }
 
     #[inline]
-    fn apply_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
+    fn transform_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_point(&self, point: &'a Point2<S>) -> Point2<S> {
+    fn transform_point(&self, point: &'a Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
@@ -616,12 +616,12 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> where
     }
 
     #[inline]
-    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
@@ -649,12 +649,12 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S> wher
     }
 
     #[inline]
-    fn apply_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+    fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
@@ -682,12 +682,12 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S> wher
     }
 
     #[inline]
-    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_point(&self, point: &Point3<S>) -> Point3<S> {
+    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
@@ -715,12 +715,12 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Rot
     }
 
     #[inline]
-    fn apply_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
+    fn transform_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
     #[inline]
-    fn apply_point(&self, point: &'a Point3<S>) -> Point3<S> {
+    fn transform_point(&self, point: &'a Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 

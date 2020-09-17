@@ -176,12 +176,12 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Translation2D<S> wh
     }
 
     #[inline]
-    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         self.translate_vector(vector)
     }
 
     #[inline]
-    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
         self.translate_point(point)
     }
 
@@ -208,12 +208,12 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Translation2D<S> w
     }
 
     #[inline]
-    fn apply_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+    fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         self.translate_vector(*vector)
     }
 
     #[inline]
-    fn apply_point(&self, point: Point2<S>) -> Point2<S> {
+    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
         self.translate_point(point)
     }
 
@@ -240,12 +240,12 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Translation2D<S> w
     }
 
     #[inline]
-    fn apply_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         self.translate_vector(vector)
     }
 
     #[inline]
-    fn apply_point(&self, point: &Point2<S>) -> Point2<S> {
+    fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
         self.translate_point(*point)
     }
 
@@ -272,12 +272,12 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Tra
     }
 
     #[inline]
-    fn apply_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
+    fn transform_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
         self.translate_vector(*vector)
     }
 
     #[inline]
-    fn apply_point(&self, point: &'a Point2<S>) -> Point2<S> {
+    fn transform_point(&self, point: &'a Point2<S>) -> Point2<S> {
         self.translate_point(*point)
     }
 
@@ -391,12 +391,12 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Translation3D<S> wh
     }
 
     #[inline]
-    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         self.translate_vector(vector)
     }
 
     #[inline]
-    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
         self.translate_point(point)
     }
 
@@ -423,12 +423,12 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Translation3D<S> w
     }
 
     #[inline]
-    fn apply_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+    fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         self.translate_vector(*vector)
     }
 
     #[inline]
-    fn apply_point(&self, point: Point3<S>) -> Point3<S> {
+    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
         self.translate_point(point)
     }
 
@@ -455,12 +455,12 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Translation3D<S> w
     }
 
     #[inline]
-    fn apply_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         self.translate_vector(vector)
     }
 
     #[inline]
-    fn apply_point(&self, point: &Point3<S>) -> Point3<S> {
+    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
         self.translate_point(*point)
     }
 
@@ -487,12 +487,12 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Tra
     }
 
     #[inline]
-    fn apply_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
+    fn transform_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
         self.translate_vector(*vector)
     }
 
     #[inline]
-    fn apply_point(&self, point: &'a Point3<S>) -> Point3<S> {
+    fn transform_point(&self, point: &'a Point3<S>) -> Point3<S> {
         self.translate_point(*point)
     }
 
