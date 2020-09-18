@@ -1362,6 +1362,34 @@ mod matrix3_tests {
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
+
+    /// An affine translation should only dispace points and not vectors. We distinguish 
+    /// define points by using a `1` in the last coordinate, and vectors by using a `0` in
+    /// the last coordinate.
+    #[test]
+    fn test_from_affine_translation_point() {
+        let distance = Vector2::new(3, 7);
+        let matrix = Matrix3x3::from_affine_translation(distance);
+        let point = Vector3::new(0, 0, 1);
+        let expected = Vector3::new(3, 7, 1);
+        let result = matrix * point;
+
+        assert_eq!(result, expected);
+    }
+
+    /// An affine translation should only dispace points and not vectors. We distinguish 
+    /// define points by using a `1` in the last coordinate, and vectors by using a `0` in
+    /// the last coordinate.
+    #[test]
+    fn test_from_affine_translation_vector() {
+        let distance = Vector2::new(3, 7);
+        let matrix = Matrix3x3::from_affine_translation(distance);
+        let vector = Vector3::zero();
+        let expected = vector;
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
+    }
 }
 
 #[cfg(test)]
@@ -2254,5 +2282,33 @@ mod matrix4_tests {
         let result = matrix * vector;
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// An affine translation should only dispace points and not vectors. We distinguish 
+    /// define points by using a `1` in the last coordinate, and vectors by using a `0` in
+    /// the last coordinate.
+    #[test]
+    fn test_from_affine_translation_point() {
+        let distance = Vector3::new(3, 7, 11);
+        let matrix = Matrix4x4::from_affine_translation(distance);
+        let point = Vector4::new(0, 0, 0, 1);
+        let expected = Vector4::new(3, 7, 11, 0);
+        let result = matrix * point;
+
+        assert_eq!(result, expected);
+    }
+
+    /// An affine translation should only dispace points and not vectors. We distinguish 
+    /// define points by using a `1` in the last coordinate, and vectors by using a `0` in
+    /// the last coordinate.
+    #[test]
+    fn test_from_affine_translation_vector() {
+        let distance = Vector3::new(3, 7, 11);
+        let matrix = Matrix4x4::from_affine_translation(distance);
+        let vector = Vector4::new(0, 0, 0, 0);
+        let expected = vector;
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
     }
 }
