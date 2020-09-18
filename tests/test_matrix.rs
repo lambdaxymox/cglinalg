@@ -1350,6 +1350,22 @@ mod matrix3_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_from_affine_angle() {
+        let matrix: Matrix3x3<f64> = Matrix3x3::from_affine_angle(Radians::full_turn_div_4());
+        let unit_x = Vector2::unit_x();
+        let unit_y = Vector2::unit_y();
+        let expected = unit_y.expand(0.0);
+        let result = matrix * unit_x.expand(0.0);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+
+        let expected = -unit_x.expand(0.0);
+        let result = matrix * unit_y.expand(0.0);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
 }
 
 #[cfg(test)]
@@ -2198,6 +2214,59 @@ mod matrix4_tests {
 
     #[test]
     fn test_from_axis_angle() {
+        let angle: Radians<f64> = Radians::full_turn_div_6();
+        let axis = (1.0 / f64::sqrt(3.0)) * Vector3::new(1.0, 1.0, 1.0);
+        let vector = Vector4::new(1.0, 1.0, 0.0, 0.0);
+        let matrix = Matrix4x4::from_affine_axis_angle(axis, angle);
+        let expected = Vector4::new(
+            2.0 / 3.0, 
+            2.0 / 3.0 + 1.0 / f64::sqrt(3.0), 
+            2.0 / 3.0 - 1.0 / f64::sqrt(3.0),
+            0.0
+        );
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_angle_x() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_y = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let matrix = Matrix4x4::from_affine_angle_x(angle);
+        let expected = unit_z.expand(0.0);
+        let result = matrix * unit_y.expand(0.0);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_affine_angle_y() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_z = Vector3::unit_z();
+        let unit_x = Vector3::unit_x();
+        let matrix = Matrix4x4::from_affine_angle_y(angle);
+        let expected = unit_x.expand(0.0);
+        let result = matrix * unit_z.expand(0.0);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_affine_angle_z() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_x = Vector3::unit_x();
+        let unit_y = Vector3::unit_y();
+        let matrix = Matrix4x4::from_affine_angle_z(angle);
+        let expected = unit_y.expand(0.0);
+        let result = matrix * unit_x.expand(0.0);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_affine_axis_angle() {
         let angle: Radians<f64> = Radians::full_turn_div_6();
         let axis = (1.0 / f64::sqrt(3.0)) * Vector3::new(1.0, 1.0, 1.0);
         let vector = Vector4::new(1.0, 1.0, 0.0, 0.0);
