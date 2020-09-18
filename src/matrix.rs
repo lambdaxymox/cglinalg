@@ -3192,10 +3192,10 @@ impl<S> From<Matrix2x2<S>> for Matrix4x4<S> where S: Scalar {
         let one = S::one();
         let zero = S::zero();
         Matrix4x4::new(
-            matrix.c0r0, matrix.c0r1,   zero, zero,
-            matrix.c1r0, matrix.c1r1,   zero, zero,
-      zero,  zero,          one,  zero,
-      zero,  zero,          zero, one
+            matrix.c0r0, matrix.c0r1, zero, zero,
+            matrix.c1r0, matrix.c1r1, zero, zero,
+            zero,  zero,  one,  zero,
+            zero,  zero,  zero, one
         )
     }
 }
@@ -3207,10 +3207,10 @@ impl<S> From<&Matrix2x2<S>> for Matrix4x4<S> where S: Scalar {
         let one = S::one();
         let zero = S::zero();
         Matrix4x4::new(
-            matrix.c0r0, matrix.c0r1,   zero, zero,
-            matrix.c1r0, matrix.c1r1,   zero, zero,
-      zero,  zero,          one,  zero,
-      zero,  zero,          zero, one
+            matrix.c0r0, matrix.c0r1, zero, zero,
+            matrix.c1r0, matrix.c1r1, zero, zero,
+            zero,  zero,  one,  zero,
+            zero,  zero,  zero, one
         )
     }
 }
