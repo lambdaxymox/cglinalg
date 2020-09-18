@@ -1344,24 +1344,24 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// origin: this is just a shift by the bias `(x0, y0)` from (x, y) to (x - x0, y - y0). 
     /// We achieve this transformation in homogeneous coordinates by the matrix
     /// ```text
-    /// | 1  0  x0 |
-    /// | 0  1  y0 |
-    /// | 0  0  1  |
+    /// | 1  0  -x0 |
+    /// | 0  1  -y0 |
+    /// | 0  0   1  |
     /// ```
     /// This puts us in the shifted coordinate system where the line now passes through the origin.
     /// In this coordinate system, we can now apply the rotation matrix, which gives a homogeneous 
     /// matrix equation 
     /// ```text
-    /// | 1 0 -x0 |   |xr|    |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  x0 |   |x|
-    /// | 0 1 -y0 | * |yr| == | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1  y0 | * |y|
-    /// | 0 0  1  |   |1 |    |  0              0            1 |   | 0 0  1  |   |1|
+    /// | 1 0  -x0 |   |xr|    |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  -x0 |   |x|
+    /// | 0 1  -y0 | * |yr| == | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1  -y0 | * |y|
+    /// | 0 0   1  |   |1 |    |  0              0            1 |   | 0 0   1  |   |1|
     /// ```
     /// Then to solve for the reflect components, we invert the translation matrix on the left hand side
     /// to get an equation of the form
     /// ```text
-    /// |xr|    | 1 0 -x0 |   |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  x0 |   |x|
-    /// |yr| == | 0 1 -y0 | * | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1  y0 | * |y|
-    /// |1 |    | 0 0  1  |   |  0              0            1 |   | 0 0  1  |   |1|
+    /// |xr|    | 1 0  x0 |   |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  -x0 |   |x|
+    /// |yr| == | 0 1  y0 | * | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1  -y0 | * |y|
+    /// |1 |    | 0 0  1  |   |  0              0            1 |   | 0 0   1  |   |1|
     ///
     ///         |  1 - 2*nx*nx   -2*nx*ny       2*nx*(nx*n0 + ny*y0) |   |x|
     ///      == | -2*nx*ny        1 - 2*ny*ny   2*ny*(nx*x0 + ny*y0) | * |y|
