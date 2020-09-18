@@ -2004,6 +2004,7 @@ mod matrix4_tests {
 
     #[test]
     fn test_from_reflection_xy_plane() {
+        let bias = Vector3::zero();
         let normal = Vector3::unit_z();
         let expected = Matrix4x4::new(
             1.0, 0.0,  0.0, 0.0,
@@ -2011,13 +2012,14 @@ mod matrix4_tests {
             0.0, 0.0, -1.0, 0.0,
             0.0, 0.0,  0.0, 1.0
         );
-        let result = Matrix4x4::from_affine_reflection(normal);
+        let result = Matrix4x4::from_affine_reflection(normal, bias);
 
         assert_eq!(result, expected);
     }
 
     #[test]
     fn test_from_reflection_xz_plane() {
+        let bias = Vector3::zero();
         let normal = -Vector3::unit_y();
         let expected = Matrix4x4::new(
             1.0,  0.0, 0.0, 0.0,
@@ -2025,13 +2027,14 @@ mod matrix4_tests {
             0.0,  0.0, 1.0, 0.0,
             0.0,  0.0, 0.0, 1.0
         );
-        let result = Matrix4x4::from_affine_reflection(normal);
+        let result = Matrix4x4::from_affine_reflection(normal, bias);
 
         assert_eq!(result, expected);
     }
 
     #[test]
     fn test_from_reflection_yz_plane() {
+        let bias = Vector3::zero();
         let normal = Vector3::unit_x();
         let expected = Matrix4x4::new(
             -1.0,  0.0, 0.0,  0.0,
@@ -2039,7 +2042,7 @@ mod matrix4_tests {
              0.0,  0.0, 1.0,  0.0,
              0.0,  0.0, 0.0,  1.0
         );
-        let result = Matrix4x4::from_affine_reflection(normal);
+        let result = Matrix4x4::from_affine_reflection(normal, bias);
 
         assert_eq!(result, expected);
     }

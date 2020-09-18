@@ -1323,17 +1323,17 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// 
     /// The affine version of reflection generalizes the two-dimensional `from_reflection` function
     /// in that `from_reflection` only works for lines that cross the origin. If the line does not
-    /// cross the origin, in order to calculate the reflection we need to compute a translation. 
+    /// cross the origin, we need to compute a translation in order to calculate the reflection matrix. 
     /// Since translation operations are affine and not linear, constructing a general two-dimensional
-    /// reflection requires a an affine transformation instead of a linear one.
+    /// reflection requires an affine transformation instead of a linear one.
     ///
     /// In particular, consider a line of the form
     /// ```text
     /// L = { (x, y) | a * (x - x0) + b * (y - y0) == 0 }, where (x0, x0) is a known point in L.
     /// ```
-    /// A bare reflection matrix assumes that the the x-axis intercept `x0` and the y-axis intercept
-    /// `y0` are both zero, in which case the translation terms are zero. This yields the familiar
-    /// matrix formula in (row-major form)
+    /// A bare reflection matrix assumes that we can use the origin (x0 = 0, y0 = 0) 
+    /// as a known point, in which case the translation terms are zero. This yields the familiar
+    /// matrix formula
     /// ```text
     /// |  1 - 2*nx*nx  -2*nx*ny       0 |
     /// | -2*nx*ny       1 - 2*ny*ny   0 |
@@ -1349,14 +1349,14 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// | 0  0   1  |
     /// ```
     /// This puts us in the shifted coordinate system where the line now passes through the origin.
-    /// In this coordinate system, we can now apply the rotation matrix, which gives a homogeneous 
+    /// In this coordinate system, we can now apply the reflection matrix, which gives a homogeneous 
     /// matrix equation 
     /// ```text
     /// | 1 0  -x0 |   |xr|    |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  -x0 |   |x|
     /// | 0 1  -y0 | * |yr| == | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1  -y0 | * |y|
     /// | 0 0   1  |   |1 |    |  0              0            1 |   | 0 0   1  |   |1|
     /// ```
-    /// Then to solve for the reflect components, we invert the translation matrix on the left hand side
+    /// Then to solve for the reflection components, we invert the translation matrix on the left hand side
     /// to get an equation of the form
     /// ```text
     /// |xr|    | 1 0  x0 |   |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  -x0 |   |x|
@@ -2689,12 +2689,13 @@ impl<S> Matrix4x4<S> where S: NumCast + Copy {
 }
 
 impl<S> Matrix4x4<S> where S: Scalar {
-    /// Create a affine translation matrix.
+    /// Construct an affine translation matrix in three-dimensions.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_translation(distance: Vector3<S>) -> Matrix4x4<S> {
         let one = S::one();
         let zero = S::zero();
+
         Matrix4x4::new(
             one,        zero,       zero,       zero,
             zero,       one,        zero,       zero,
@@ -2725,6 +2726,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Matrix4x4<S> {
         let one = S::one();
         let zero = S::zero();
+
         Matrix4x4::new(
             scale_x, zero,    zero,    zero,
             zero,    scale_y, zero,    zero,
@@ -2745,6 +2747,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     pub fn from_affine_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix4x4<S> {
         let one = S::one();
         let zero = S::zero();
+        
         Matrix4x4::new(
             one,            zero, zero, zero,
             shear_x_with_y, one,  zero, zero,
@@ -2765,6 +2768,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     pub fn from_affine_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix4x4<S> {
         let one = S::one();
         let zero = S::zero();
+
         Matrix4x4::new(
             one,  shear_y_with_x, zero, zero,
             zero, one,            zero, zero,
@@ -2785,6 +2789,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     pub fn from_affine_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4x4<S> {
         let one = S::one();
         let zero = S::zero();
+
         Matrix4x4::new(
             one,  zero, shear_z_with_x, zero,
             zero, one,  shear_z_with_y, zero,
@@ -2835,25 +2840,96 @@ impl<S> Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> Matrix4x4<S> where S: ScalarSigned {
-    /// Construct a three-dimensional affine reflection matrix for reflecting about a
-    /// plane.
+    /// Construct a three-dimensional affine reflection matrix for a plane with normal
+    /// vector `normal` and bias vector `bias`. The bias vector can be any known 
+    /// point on the plane of reflection.
+    /// 
+    /// The affine version of reflection generalizes the three-dimensional `from_reflection` function
+    /// in that `from_reflection` only works for planes that cross the origin. If the plane does not
+    /// cross the origin, we need to compute a translate to calculate the reflection matrix. 
+    /// Since translation operations are affine and not linear, constructing a general three-dimensional
+    /// reflection requires an affine transformation instead of a linear one.
     ///
-    /// The affine version of reflection generalizes the three-dimensional 
-    /// `from_reflection` function in that `from_reflection` only works for 
-    /// planes that cross the origin. If the plane does not cross the origin, we need to 
-    /// compute a translation, which can only be expressed using an affine matrix.
+    /// In particular, consider a plane of the form
+    /// ```text
+    /// P = { (x, y, z) | a * (x - x0) + b * (y - y0) + c * (z - z0) == 0 }
+    /// where (x0, y0, z0) is a known point in P.
+    /// ```
+    /// A bare reflection matrix assumes that the the x-axis intercept `x0` and the y-axis intercept
+    /// `y0` are both zero, in which case the translation terms are zero. This yields the familiar
+    /// matrix formula in (row-major form)
+    /// ```text
+    /// |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |
+    /// | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       0 |
+    /// | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   0 |
+    /// |  0              0             0              1 |
+    /// ```
+    /// In the case where the the plane `P` does not cross the origin, we must first do a 
+    /// coordinate transformation to coordinates where the line passes through the 
+    /// origin: this is just a shift by the bias `(x0, y0)` from (x, y) to (x - x0, y - y0). 
+    /// We achieve this transformation in homogeneous coordinates by the matrix
+    /// ```text
+    /// | 1  0  0  -x0 |
+    /// | 0  1  0  -y0 |
+    /// | 0  0  1  -z0 |
+    /// | 0  0  0   1  |
+    /// ```
+    /// This puts us in the shifted coordinate system where the line now passes through the origin.
+    /// In this coordinate system, we can now apply the reflection matrix, which gives a homogeneous 
+    /// matrix equation 
+    /// ```text
+    /// | 1  0  0  -x0 |   |xr|    |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |   | 1  0  0  -x0 |   |x|
+    /// | 0  1  0  -y0 | * |yr| == | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       0 | * | 0  1  0  -y0 | * |y|
+    /// | 0  0  1  -z0 |   |zr|    | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   0 |   | 0  0  1  -z0 |   |z|
+    /// | 0  0  0   1  |   |1 |    |  0              0             0              1 |   | 0  0  0   1  |   |1| 
+    /// ```
+    /// Then to solve for the reflection components, we invert the translation matrix on the 
+    /// left hand side to get an equation of the form
+    /// ```text
+    /// |xr|    | 1  0  0  x0 |   |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |   | 1  0  0  -x0 |   |x|
+    /// |yr| == | 0  1  0  y0 | * | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       0 | * | 0  1  0  -y0 | * |y|
+    /// |zr|    | 0  0  1  z0 |   | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   0 |   | 0  0  1  -z0 |   |z|
+    /// |1 |    | 0  0  0  1  |   |  0              0             0              1 |   | 0  0  0   1  |   |1| 
+    ///
+    ///         |  1 - 2*nx*nx   -2*nx*ny       -2*nx*xz       2*nx*(nx*n0 + ny*y0 + nz*z0) |   |x|
+    ///      == | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       2*ny*(nx*x0 + ny*y0 + nz*z0) | * |y|
+    ///         | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   2*nz*(nx*x0 + ny*y0 + nz*z0) |   |z|
+    ///         |  0              0              0             1                            |   |1|
+    /// ```
+    /// Here the terms `xr`, `yr`, and `zr` are the coordinates of the reflected point across the plane
+    /// `P` defined above.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: Vector3<S>) -> Matrix4x4<S> {
+    pub fn from_affine_reflection(normal: Vector3<S>, bias: Vector3<S>) -> Matrix4x4<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
 
+        let c0r0 =  one - two * normal.x * normal.x;
+        let c0r1 = -two * normal.x * normal.y;
+        let c0r2 = -two * normal.x * normal.z;
+        let c0r3 = zero;
+
+        let c1r0 = -two * normal.x * normal.y;
+        let c1r1 =  one - two * normal.y * normal.y;
+        let c1r2 = -two * normal.y * normal.z;
+        let c1r3 =  zero;
+
+        let c2r0 = -two * normal.x * normal.z;
+        let c2r1 = -two * normal.y * normal.z;
+        let c2r2 =  one - two * normal.z * normal.z;
+        let c2r3 =  zero;
+
+        let c3r0 = two * normal.x * (normal.x * bias.x + normal.y * bias.y + normal.z * bias.z);
+        let c3r1 = two * normal.y * (normal.x * bias.x + normal.y * bias.y + normal.z * bias.z);
+        let c3r2 = two * normal.z * (normal.x * bias.x + normal.y * bias.y + normal.z * bias.z);
+        let c3r3 = one;
+
         Matrix4x4::new(
-            one - two * normal.x * normal.x, -two * normal.x * normal.y,       -two * normal.x * normal.z,       zero, 
-           -two * normal.x * normal.y,        one - two * normal.y * normal.y, -two * normal.y * normal.z,       zero,
-           -two * normal.x * normal.z,       -two * normal.y * normal.z,        one - two * normal.z * normal.z, zero,
-            zero,                             zero,                             zero,                            one
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
        )
     }
 }

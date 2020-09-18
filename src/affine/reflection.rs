@@ -308,7 +308,7 @@ impl<S> Reflection3D<S> where S: ScalarFloat {
         Reflection3D {
             bias: bias,
             normal: normal,
-            matrix: Matrix4x4::from_affine_reflection(normal),
+            matrix: Matrix4x4::from_affine_reflection(normal, bias),
         }
     }
 }
@@ -354,7 +354,7 @@ impl<S> Reflection<Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFlo
         Reflection3D {
             bias: bias,
             normal: normal,
-            matrix: Matrix4x4::from_affine_reflection(normal),
+            matrix: Matrix4x4::from_affine_reflection(normal, bias),
         }
     }
 
