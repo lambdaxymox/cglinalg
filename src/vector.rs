@@ -83,7 +83,7 @@ impl<S> Vector1<S> where S: Copy {
     /// Extend a one-dimensional vector into a two-dimensional vector using 
     /// the supplied value.
     #[inline]
-    pub fn extend(self, y: S) -> Vector2<S> {
+    pub fn expand(self, y: S) -> Vector2<S> {
         Vector2::new(self.x, y)
     }
 }
@@ -1609,7 +1609,7 @@ impl<S> Vector3<S> where S: Copy {
     /// Extend a three-dimensional vector to a four-dimensional vector 
     /// by supplying w-component.
     #[inline]
-    pub fn extend(self, w: S) -> Vector4<S> {
+    pub fn expand(self, w: S) -> Vector4<S> {
         Vector4::new(self.x, self.y, self.z, w)
     }
 

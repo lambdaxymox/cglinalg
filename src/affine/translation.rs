@@ -362,7 +362,7 @@ impl<S> Translation<Point3<S>, Vector3<S>> for Translation3D<S> where S: ScalarS
 
     #[inline]
     fn translate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 }
 

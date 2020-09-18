@@ -324,7 +324,7 @@ impl<S> Scale<Point3<S>, Vector3<S>> for Scale3D<S> where S: ScalarFloat {
 
     #[inline]
     fn scale_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]

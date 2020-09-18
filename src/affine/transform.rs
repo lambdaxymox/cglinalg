@@ -353,7 +353,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Transform3D<S> wher
 
     #[inline]
     fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -391,7 +391,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Transform3D<S> whe
 
     #[inline]
     fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -429,7 +429,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Transform3D<S> whe
 
     #[inline]
     fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -467,7 +467,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Tra
 
     #[inline]
     fn transform_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]

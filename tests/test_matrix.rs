@@ -12,6 +12,8 @@ mod matrix2_tests {
         Matrix,
         SquareMatrix,
         InvertibleSquareMatrix,
+        Radians,
+        Angle,
     };
     use cglinalg::approx::relative_eq;
     use std::slice::Iter;
@@ -518,6 +520,22 @@ mod matrix2_tests {
             
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
+
+    #[test]
+    fn test_from_angle() {
+        let matrix: Matrix2x2<f64> = Matrix2x2::from_angle(Radians::full_turn_div_4());
+        let unit_x = Vector2::unit_x();
+        let unit_y = Vector2::unit_y();
+        let expected = unit_y;
+        let result = matrix * unit_x;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+
+        let expected = -unit_x;
+        let result = matrix * unit_y;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
 }
 
 
@@ -531,6 +549,8 @@ mod matrix3_tests {
         Matrix,
         SquareMatrix,
         InvertibleSquareMatrix,
+        Angle,
+        Radians,
     };
     use cglinalg::approx::relative_eq;
     use std::slice::Iter;
@@ -1278,6 +1298,58 @@ mod matrix3_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_from_angle_x() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_y = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let matrix = Matrix3x3::from_angle_x(angle);
+        let expected = unit_z;
+        let result = matrix * unit_y;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_angle_y() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_z = Vector3::unit_z();
+        let unit_x = Vector3::unit_x();
+        let matrix = Matrix3x3::from_angle_y(angle);
+        let expected = unit_x;
+        let result = matrix * unit_z;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_angle_z() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_x = Vector3::unit_x();
+        let unit_y = Vector3::unit_y();
+        let matrix = Matrix3x3::from_angle_z(angle);
+        let expected = unit_y;
+        let result = matrix * unit_x;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_axis_angle() {
+        let angle: Radians<f64> = Radians::full_turn_div_6();
+        let axis = (1.0 / f64::sqrt(3.0)) * Vector3::new(1.0, 1.0, 1.0);
+        let vector = Vector3::new(1.0, 1.0, 0.0);
+        let matrix = Matrix3x3::from_axis_angle(axis, angle);
+        let expected = Vector3::new(
+            2.0 / 3.0, 
+            2.0 / 3.0 + 1.0 / f64::sqrt(3.0), 
+            2.0 / 3.0 - 1.0 / f64::sqrt(3.0)
+        );
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
+    }
 }
 
 #[cfg(test)]
@@ -1290,6 +1362,8 @@ mod matrix4_tests {
         Matrix,
         SquareMatrix,
         InvertibleSquareMatrix,
+        Radians,
+        Angle,
     };
     use cglinalg::approx::relative_eq;
     use std::slice::Iter;
@@ -2081,6 +2155,59 @@ mod matrix4_tests {
         let matrix = Matrix4x4::from_affine_reflection(normal, bias);
         let vector = Vector4::new(0.0, 0.0, 0.0, 1.0);
         let expected = Vector4::new(0.0,2.0,0.0, 1.0);
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_angle_x() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_y = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let matrix = Matrix4x4::from_affine_angle_x(angle);
+        let expected = unit_z.expand(0.0);
+        let result = matrix * unit_y.expand(0.0);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_angle_y() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_z = Vector3::unit_z();
+        let unit_x = Vector3::unit_x();
+        let matrix = Matrix4x4::from_affine_angle_y(angle);
+        let expected = unit_x.expand(0.0);
+        let result = matrix * unit_z.expand(0.0);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_angle_z() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_x = Vector3::unit_x();
+        let unit_y = Vector3::unit_y();
+        let matrix = Matrix4x4::from_affine_angle_z(angle);
+        let expected = unit_y.expand(0.0);
+        let result = matrix * unit_x.expand(0.0);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_axis_angle() {
+        let angle: Radians<f64> = Radians::full_turn_div_6();
+        let axis = (1.0 / f64::sqrt(3.0)) * Vector3::new(1.0, 1.0, 1.0);
+        let vector = Vector4::new(1.0, 1.0, 0.0, 0.0);
+        let matrix = Matrix4x4::from_affine_axis_angle(axis, angle);
+        let expected = Vector4::new(
+            2.0 / 3.0, 
+            2.0 / 3.0 + 1.0 / f64::sqrt(3.0), 
+            2.0 / 3.0 - 1.0 / f64::sqrt(3.0),
+            0.0
+        );
         let result = matrix * vector;
 
         assert_eq!(result, expected);

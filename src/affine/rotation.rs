@@ -581,7 +581,7 @@ impl<S> Rotation<Point3<S>, Vector3<S>> for Rotation3D<S> where S: ScalarFloat {
 
     #[inline]
     fn rotate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -617,7 +617,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> where
 
     #[inline]
     fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -650,7 +650,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S> wher
 
     #[inline]
     fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -683,7 +683,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S> wher
 
     #[inline]
     fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
@@ -716,7 +716,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Rot
 
     #[inline]
     fn transform_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.extend(S::zero())).contract()
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 
     #[inline]
