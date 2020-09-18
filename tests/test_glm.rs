@@ -146,7 +146,7 @@ mod vector_product_tests {
         let v1 = Vector3::new(1, 2, 3);
         let v2 = Vector3::new(4, 5, 6);
         let expected = v1.cross(v2);
-        let result = glm::cross(&v1, &v1);
+        let result = glm::cross(&v1, &v2);
 
         assert_eq!(result, expected);
     }
@@ -160,7 +160,6 @@ mod projection_tests {
         Matrix4x4,
         OrthographicSpec,
         PerspectiveFovSpec,
-        PerspectiveSpec,
     };
 
 
@@ -187,29 +186,10 @@ mod projection_tests {
         let fovy = Degrees(67.0);
         let aspect = 1280 as f32 / 720 as f32;
         let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
-
         let expected = Matrix4x4::from(spec);
-        let result = glm::perspective(spec);
+        let result = glm::perspective(fovy, aspect, near, far);
 
         assert_eq!(result, expected);
     }
-
-    /*
-    #[test]
-    fn test_perspective() {
-        let near = 0.1;
-        let far = 100.0;
-        let left = -1.0;
-        let right = 1.0;
-        let top = 1.0;
-        let bottom = -1.0;
-        let spec = Perspective::new(left, right, bottom, top, near, far);
-
-        let expected = Matrix4x4::from(spec);
-        let result = glm::perspective(spec);
-
-        assert_eq!(result, expected);
-    }
-    */
 }
 

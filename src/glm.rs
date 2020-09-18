@@ -13,6 +13,9 @@ use crate::scalar::{
     Scalar,
     ScalarFloat,
 };
+use crate::angle::{
+    Radians,
+};
 use crate::traits::{
     DotProduct,
     CrossProduct,
@@ -121,12 +124,13 @@ pub fn frustum<S, Spec>(spec: Spec) -> Matrix4x4<S>
 /// This is the equivalent to the [gluPerspective] 
 /// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml)
 /// function.
-pub fn perspective<S, Spec>(spec: Spec) -> Matrix4x4<S> 
-    where 
-        S: ScalarFloat,
-        Spec: Into<PerspectiveFovSpec<S>>
-{
-    Matrix4x4::from(spec.into())
+pub fn perspective<S, A: Into<Radians<S>>>(
+    fovy: A, aspect: S, near: S, far: S) -> Matrix4x4<S> 
+    where S: ScalarFloat
+{    
+    let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
+    
+    Matrix4x4::from(spec)
 }
 
 /// Compute the dot product between two vectors.
@@ -139,6 +143,6 @@ pub fn dot<W, V>(v1: V, v2: W) -> <V as DotProduct<W>>::Output
 }
 
 /// Compute the cross product of two three-dimensional vectors.
-pub fn cross<S: Scalar>(v1: &Vector3<S>, v2: &Vector3<S>) -> Vector3<S> {
+pub fn cross<'a, 'b, S: Scalar>(v1: &'a Vector3<S>, v2: &'b Vector3<S>) -> Vector3<S> {
     v1.cross(v2)
 }

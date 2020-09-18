@@ -158,29 +158,25 @@ pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
     fn project_on(self, onto: V) -> <Self as ProjectOn<V>>::Output;
 }
 
-/// A type implementing the `CrossProduct` trait implments a form of vector 
+/// A type implementing the `CrossProduct` trait implements a form of vector 
 /// multiplications that computes a vector normal to the plane swept out by 
-/// the two vectors. In the context of low-dimensional spaces, the cross 
+/// the two vectors. 
+/// 
+/// In the context of low-dimensional spaces, the cross 
 /// product only exists in dimension three. This trait allows us to treat 
 /// three-dimensional vectors as well as pointers to three-dimensional vectors 
 /// interchangeably. 
 pub trait CrossProduct<V> {
-    /// The output of the cross product. This associated type allows us to handle
-    /// pointers to three-dimensional vectors interchangeably with three-dimensional 
-    /// vectors in the inputs.
+    /// The output of the cross product. 
+    ///
+    /// This associated type allows us to handle pointers to three-dimensional 
+    /// vectors interchangeably with three-dimensional vectors in the inputs.
     type Output;
 
     /// Compute the cross product of two three-dimensional vectors. 
     ///
     /// Note that with the vectors used in computer graphics (two, three, and four dimensions),
-    /// the cross product is defined only in three dimensions. Also note that the 
-    /// cross product is the hodge dual of the corresponding 2-vector representing 
-    /// the surface element that the crossed vector is normal to. That is, 
-    /// given vectors `u` and `v`, 
-    /// ```text
-    /// u x v := *(u /\ v)
-    /// ```
-    /// where `*(.)` denotes the hodge dual, and `:=` denotes definitional equality.
+    /// the cross product is defined only in three dimensions.
     fn cross(self, other: V) -> Self::Output;
 }
 
@@ -218,7 +214,7 @@ pub trait Matrix {
     fn transpose(&self) -> Self::Transpose;
 }
 
-/// Implement trigonometry for typed angles. This enables a rigorous distinction between 
+/// Implement trigonometry for typed angles. This enables a careful distinction between 
 /// different units of angles to prevent trigonometric errors that arise from using incorrect 
 /// angular units. For example, adding radians to degrees, or passing an angle in degrees to 
 /// a trigonometric function when one meant to pass an angle in units of radians.
