@@ -1337,18 +1337,14 @@ mod matrix3_tests {
 
     #[test]
     fn test_from_axis_angle() {
-        let angle: Radians<f64> = Radians::full_turn_div_6();
-        let axis = (1.0 / f64::sqrt(3.0)) * Vector3::new(1.0, 1.0, 1.0);
-        let vector = Vector3::new(1.0, 1.0, 0.0);
+        let angle: Radians<f64> = Radians::full_turn_div_2();
+        let axis = (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0);
+        let vector = Vector3::new(1.0, 1.0, -1.0);
         let matrix = Matrix3x3::from_axis_angle(axis, angle);
-        let expected = Vector3::new(
-            2.0 / 3.0, 
-            2.0 / 3.0 + 1.0 / f64::sqrt(3.0), 
-            2.0 / 3.0 - 1.0 / f64::sqrt(3.0)
-        );
+        let expected = Vector3::new(1.0, 1.0, 1.0);
         let result = matrix * vector;
 
-        assert_eq!(result, expected);
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
     #[test]
@@ -2213,23 +2209,6 @@ mod matrix4_tests {
     }
 
     #[test]
-    fn test_from_axis_angle() {
-        let angle: Radians<f64> = Radians::full_turn_div_6();
-        let axis = (1.0 / f64::sqrt(3.0)) * Vector3::new(1.0, 1.0, 1.0);
-        let vector = Vector4::new(1.0, 1.0, 0.0, 0.0);
-        let matrix = Matrix4x4::from_affine_axis_angle(axis, angle);
-        let expected = Vector4::new(
-            2.0 / 3.0, 
-            2.0 / 3.0 + 1.0 / f64::sqrt(3.0), 
-            2.0 / 3.0 - 1.0 / f64::sqrt(3.0),
-            0.0
-        );
-        let result = matrix * vector;
-
-        assert_eq!(result, expected);
-    }
-
-    #[test]
     fn test_from_affine_angle_x() {
         let angle: Radians<f64> = Radians::full_turn_div_4();
         let unit_y = Vector3::unit_y();
@@ -2267,18 +2246,13 @@ mod matrix4_tests {
 
     #[test]
     fn test_from_affine_axis_angle() {
-        let angle: Radians<f64> = Radians::full_turn_div_6();
-        let axis = (1.0 / f64::sqrt(3.0)) * Vector3::new(1.0, 1.0, 1.0);
-        let vector = Vector4::new(1.0, 1.0, 0.0, 0.0);
+        let angle: Radians<f64> = Radians::full_turn_div_2();
+        let axis = (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0);
+        let vector = Vector4::new(1.0, 1.0, -1.0, 0.0);
         let matrix = Matrix4x4::from_affine_axis_angle(axis, angle);
-        let expected = Vector4::new(
-            2.0 / 3.0, 
-            2.0 / 3.0 + 1.0 / f64::sqrt(3.0), 
-            2.0 / 3.0 - 1.0 / f64::sqrt(3.0),
-            0.0
-        );
+        let expected = Vector4::new(1.0, 1.0, 1.0,0.0);
         let result = matrix * vector;
 
-        assert_eq!(result, expected);
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 }
