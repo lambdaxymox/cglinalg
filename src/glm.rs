@@ -21,9 +21,9 @@ use crate::quaternion::{
     Quaternion,
 };
 use crate::projection::{
-    Orthographic,
-    Perspective,
-    PerspectiveFov,
+    OrthographicSpec,
+    PerspectiveSpec,
+    PerspectiveFovSpec,
 };
 
 
@@ -98,7 +98,7 @@ pub fn mat4<S: Scalar>(
 pub fn ortho<S, Spec>(spec: Spec) -> Matrix4x4<S> 
     where 
         S: ScalarFloat,
-        Spec: Into<Orthographic<S>>,
+        Spec: Into<OrthographicSpec<S>>,
 {
     Matrix4x4::from(spec.into())
 }
@@ -110,7 +110,7 @@ pub fn ortho<S, Spec>(spec: Spec) -> Matrix4x4<S>
 pub fn frustum<S, Spec>(spec: Spec) -> Matrix4x4<S> 
     where 
         S: ScalarFloat,
-        Spec: Into<Perspective<S>>        
+        Spec: Into<PerspectiveSpec<S>>        
 {
     Matrix4x4::from(spec.into())
 }
@@ -124,7 +124,7 @@ pub fn frustum<S, Spec>(spec: Spec) -> Matrix4x4<S>
 pub fn perspective<S, Spec>(spec: Spec) -> Matrix4x4<S> 
     where 
         S: ScalarFloat,
-        Spec: Into<PerspectiveFov<S>>
+        Spec: Into<PerspectiveFovSpec<S>>
 {
     Matrix4x4::from(spec.into())
 }

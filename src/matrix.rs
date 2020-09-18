@@ -62,6 +62,7 @@ macro_rules! impl_mul_operator {
 }
 
 
+// Type synonyms for common programming matrix naming conventions.
 pub type Matrix2<S> = Matrix2x2<S>;
 pub type Matrix3<S> = Matrix3x3<S>;
 pub type Matrix4<S> = Matrix4x4<S>;

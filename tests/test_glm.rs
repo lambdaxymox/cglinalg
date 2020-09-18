@@ -158,9 +158,9 @@ mod projection_tests {
     use cglinalg::{
         Degrees,
         Matrix4x4,
-        Orthographic,
-        PerspectiveFov,
-        Perspective,
+        OrthographicSpec,
+        PerspectiveFovSpec,
+        PerspectiveSpec,
     };
 
 
@@ -172,7 +172,7 @@ mod projection_tests {
         let right = 1.0;
         let top = 1.0;
         let bottom = -1.0;
-        let spec = Orthographic::new(left, right, bottom, top, near, far);
+        let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
 
         let expected = Matrix4x4::from(spec);
         let result = glm::ortho(spec);
@@ -186,7 +186,7 @@ mod projection_tests {
         let far = 100.0;
         let fovy = Degrees(67.0);
         let aspect = 1280 as f32 / 720 as f32;
-        let spec = PerspectiveFov::new(fovy, aspect, near, far);
+        let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
 
         let expected = Matrix4x4::from(spec);
         let result = glm::perspective(spec);
