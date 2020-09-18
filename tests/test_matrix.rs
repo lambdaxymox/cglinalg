@@ -1210,6 +1210,36 @@ mod matrix3_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
+    /// Construct an affine reflection matrix about the line `y = (1/2)x + 2`.
+    /// This line does not cross the origin.
+    #[test]
+    fn test_from_affine_reflection_from_line_that_does_not_cross_origin1() {
+        // We can always choose the y-intercept as the known point.
+        let bias = Vector2::new(0.0, 2.0);
+        let normal = Vector2::new(-1.0 / f64::sqrt(5.0), 2.0 / f64::sqrt(5.0));
+        let matrix = Matrix3x3::from_affine_reflection(normal, bias);
+        let vector = Vector3::new(1.0, 0.0, 1.0);
+        let expected = Vector3::new(-1.0, 4.0, 1.0);
+        let result = matrix * vector;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// Construct an affine reflection matrix about the line `y = (1/2)x + 2`.
+    /// This line does not cross the origin.
+    #[test]
+    fn test_from_affine_reflection_from_line_that_does_not_cross_origin2() {
+        // We can always choose the y-intercept as the known point.
+        let bias = Vector2::new(0.0, 2.0);
+        let normal = Vector2::new(1.0 / f64::sqrt(5.0), -2.0 / f64::sqrt(5.0));
+        let matrix = Matrix3x3::from_affine_reflection(normal, bias);
+        let vector = Vector3::new(1.0, 0.0, 1.0);
+        let expected = Vector3::new(-1.0, 4.0, 1.0);
+        let result = matrix * vector;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));        
+    }
+
     #[test]
     fn test_from_reflection_xy_plane() {
         let normal = Vector3::unit_z();
