@@ -8,6 +8,12 @@ use crate::angle::{
 use crate::matrix::{
     Matrix4x4,
 };
+use crate::point::{
+    Point3,
+};
+use crate::vector::{
+    Vector3,
+};
 use crate::traits::{
     Angle,
 };
@@ -317,6 +323,14 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
     pub fn to_matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
+
+    pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.expand(S::zero())).contract()
+    }
 }
 
 impl<S, Spec> AsRef<Matrix4x4<S>> for PerspectiveProjection3D<S, Spec> {
@@ -393,6 +407,14 @@ impl<S> OrthographicProjection3D<S> where S: ScalarFloat {
 
     pub fn to_matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
+    }
+
+    pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.expand(S::zero())).contract()
     }
 }
 
