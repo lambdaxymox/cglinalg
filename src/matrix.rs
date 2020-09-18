@@ -1332,7 +1332,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// L = { (x, y) | a * (x - x0) + b * (y - y0) == 0 }, where (x0, x0) is a known point in L.
     /// ```
     /// A bare reflection matrix assumes that we can use the origin (x0 = 0, y0 = 0) 
-    /// as a known point, in which case the translation terms are zero. This yields the familiar
+    /// as a known point, in which case the translation terms are zero. This yields the
     /// matrix formula
     /// ```text
     /// |  1 - 2*nx*nx  -2*nx*ny       0 |
@@ -1341,7 +1341,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// ```
     /// In the case where the the line `L` does not cross the origin, we must first do a 
     /// coordinate transformation to coordinates where the line passes through the 
-    /// origin: this is just a shift by the bias `(x0, y0)` from (x, y) to (x - x0, y - y0). 
+    /// origin: this is just a shift by the bias `(x0, y0)` from `(x, y)` to `(x - x0, y - y0)`. 
     /// We achieve this transformation in homogeneous coordinates by the matrix
     /// ```text
     /// | 1  0  -x0 |
@@ -2856,7 +2856,7 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     /// where (x0, y0, z0) is a known point in P.
     /// ```
     /// A bare reflection matrix assumes that the the x-axis intercept `x0` and the y-axis intercept
-    /// `y0` are both zero, in which case the translation terms are zero. This yields the familiar
+    /// `y0` are both zero, in which case the translation terms are zero. This yields the
     /// matrix formula in (row-major form)
     /// ```text
     /// |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |
@@ -2866,7 +2866,7 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     /// ```
     /// In the case where the the plane `P` does not cross the origin, we must first do a 
     /// coordinate transformation to coordinates where the line passes through the 
-    /// origin: this is just a shift by the bias `(x0, y0)` from (x, y) to (x - x0, y - y0). 
+    /// origin: this is just a shift by the bias `(x0, y0)` from `(x, y)` to `(x - x0, y - y0)`. 
     /// We achieve this transformation in homogeneous coordinates by the matrix
     /// ```text
     /// | 1  0  0  -x0 |
