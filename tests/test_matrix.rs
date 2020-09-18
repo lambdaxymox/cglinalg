@@ -2003,7 +2003,7 @@ mod matrix4_tests {
     }
 
     #[test]
-    fn test_from_reflection_xy_plane() {
+    fn test_from_affine_reflection_xy_plane() {
         let bias = Vector3::zero();
         let normal = Vector3::unit_z();
         let expected = Matrix4x4::new(
@@ -2018,7 +2018,7 @@ mod matrix4_tests {
     }
 
     #[test]
-    fn test_from_reflection_xz_plane() {
+    fn test_from_affine_reflection_xz_plane() {
         let bias = Vector3::zero();
         let normal = -Vector3::unit_y();
         let expected = Matrix4x4::new(
@@ -2033,7 +2033,7 @@ mod matrix4_tests {
     }
 
     #[test]
-    fn test_from_reflection_yz_plane() {
+    fn test_from_affine_reflection_yz_plane() {
         let bias = Vector3::zero();
         let normal = Vector3::unit_x();
         let expected = Matrix4x4::new(
@@ -2043,6 +2043,45 @@ mod matrix4_tests {
              0.0,  0.0, 0.0,  1.0
         );
         let result = Matrix4x4::from_affine_reflection(normal, bias);
+
+        assert_eq!(result, expected);
+    }
+
+    /// A test case for the plane `z = 1`.
+    #[test]
+    fn test_from_affine_reflection_plane1() {
+        let bias = Vector3::new(0.0, 0.0, 1.0);
+        let normal = Vector3::new(0.0, 0.0, 1.0);
+        let matrix = Matrix4x4::from_affine_reflection(normal, bias);
+        let vector = Vector4::new(1.0, 1.0, 0.5, 1.0);
+        let expected = Vector4::new(1.0,1.0,1.5, 1.0);
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
+    }
+
+    /// A test case for the plane `x = -1`.
+    #[test]
+    fn test_from_affine_reflection_plane2() {
+        let bias = Vector3::new(-1.0, 0.0, 0.0);
+        let normal = Vector3::new(1.0, 0.0, 0.0);
+        let matrix = Matrix4x4::from_affine_reflection(normal, bias);
+        let vector = Vector4::new(-2.0, 1.0, 1.0, 1.0);
+        let expected = Vector4::new(0.0,1.0,1.0, 1.0);
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
+    }
+
+    /// A test case for the plane `y = 1`.
+    #[test]
+    fn test_from_affine_reflection_plane3() {
+        let bias = Vector3::new(0.0, 1.0, 0.0);
+        let normal = Vector3::new(0.0, 1.0, 0.0);
+        let matrix = Matrix4x4::from_affine_reflection(normal, bias);
+        let vector = Vector4::new(0.0, 0.0, 0.0, 1.0);
+        let expected = Vector4::new(0.0,2.0,0.0, 1.0);
+        let result = matrix * vector;
 
         assert_eq!(result, expected);
     }
