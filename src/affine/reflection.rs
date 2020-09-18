@@ -30,6 +30,9 @@ pub trait Reflection<P, V> where Self: Sized + Copy {
     /// The type of the output vectors (displacements in space).
     type OutVector;
 
+    /// Return the bias for calculating the reflections.
+    fn bias(&self) -> Self::OutVector;
+
     /// Return the normal vector to the reflection plane.
     fn normal(&self) -> Self::OutVector;
 
@@ -65,6 +68,8 @@ pub trait Reflection3<S> where
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Reflection2D<S> {
+    /// A known point on the line of reflection.
+    bias: Vector2<S>,
     /// The normal vector to the plane.
     normal: Vector2<S>,
     /// The matrix representing the affine transformation.
@@ -100,12 +105,17 @@ impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFlo
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
+    fn bias(&self) -> Vector2<S> {
+        self.bias
+    }
+
     fn normal(&self) -> Vector2<S> {
         self.normal
     }
 
     fn from_normal_bias(normal: Vector2<S>, bias: Vector2<S>) -> Reflection2D<S> {
         Reflection2D {
+            bias: bias,
             normal: normal,
             matrix: Matrix3x3::from_affine_reflection(normal, bias),
         }
@@ -123,7 +133,8 @@ impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFlo
             zero,                            zero,                                                        one
         );
 
-        Some(Reflection2D { 
+        Some(Reflection2D {
+            bias: self.bias,
             normal: normal, 
             matrix: matrix * inverse_det 
         })
@@ -149,6 +160,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Reflection2D<S> whe
     #[inline]
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
+            bias: Vector2::zero(),
             normal: Vector2::zero(), 
             matrix: Matrix3x3::identity(),
         }
@@ -182,6 +194,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Reflection2D<S> wh
     #[inline]
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
+            bias: Vector2::zero(),
             normal: Vector2::zero(), 
             matrix: Matrix3x3::identity(),
         }
@@ -215,6 +228,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Reflection2D<S> wh
     #[inline]
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
+            bias: Vector2::zero(),
             normal: Vector2::zero(), 
             matrix: Matrix3x3::identity(),
         }
@@ -248,6 +262,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Ref
     #[inline]
     fn identity() -> Reflection2D<S> {
         Reflection2D { 
+            bias: Vector2::zero(),
             normal: Vector2::zero(), 
             matrix: Matrix3x3::identity(),
         }
@@ -279,6 +294,8 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Ref
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Reflection3D<S> {
+    /// a known point on the plane of reflection.
+    bias: Vector3<S>,
     /// The normal vector to the plane.
     normal: Vector3<S>,
     /// The matrix representing the affine transformation.
@@ -287,8 +304,9 @@ pub struct Reflection3D<S> {
 
 impl<S> Reflection3D<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the plane of reflection.
-    pub fn from_normal_bias(normal: Vector3<S>) -> Reflection3D<S> {
+    pub fn from_normal_bias(normal: Vector3<S>, bias: Vector3<S>) -> Reflection3D<S> {
         Reflection3D {
+            bias: bias,
             normal: normal,
             matrix: Matrix4x4::from_affine_reflection(normal),
         }
@@ -324,12 +342,17 @@ impl<S> Reflection<Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFlo
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
+    fn bias(&self) -> Vector3<S> {
+        self.bias
+    }
+
     fn normal(&self) -> Vector3<S> {
         self.normal
     }
 
     fn from_normal_bias(normal: Vector3<S>, bias: Vector3<S>) -> Reflection3D<S> {
         Reflection3D {
+            bias: bias,
             normal: normal,
             matrix: Matrix4x4::from_affine_reflection(normal),
         }
@@ -349,6 +372,7 @@ impl<S> Reflection<Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFlo
         );
 
         Some(Reflection3D { 
+            bias: self.bias,
             normal: normal, 
             matrix: matrix * inverse_det,
         })
@@ -374,6 +398,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Reflection3D<S> whe
     #[inline]
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
+            bias: Vector3::zero(),
             normal: Vector3::zero(), 
             matrix: Matrix4x4::identity(),
         }
@@ -407,6 +432,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Reflection3D<S> wh
     #[inline]
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
+            bias: Vector3::zero(),
             normal: Vector3::zero(), 
             matrix: Matrix4x4::identity(),
         }
@@ -440,6 +466,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Reflection3D<S> wh
     #[inline]
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
+            bias: Vector3::zero(),
             normal: Vector3::zero(), 
             matrix: Matrix4x4::identity(),
         }
@@ -473,6 +500,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Ref
     #[inline]
     fn identity() -> Reflection3D<S> {
         Reflection3D { 
+            bias: Vector3::zero(),
             normal: Vector3::zero(), 
             matrix: Matrix4x4::identity(),
         }
