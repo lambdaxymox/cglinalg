@@ -20,6 +20,8 @@ use approx::{
 };
 use num_traits;
 
+use std::fmt;
+
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[repr(C)]
@@ -113,6 +115,12 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
 
             EulerAngles::new(roll_yz, yaw_zx, pitch_xy)
         }
+    }
+}
+
+impl<A> fmt::Display for EulerAngles<A> where A: fmt::Display + fmt::Debug {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
