@@ -23,31 +23,85 @@ use std::fmt;
 use std::ops;
 
 
+/// A data type storing a set of Euler angles for representing a rotation about
+/// an arbitrary axis in three dimensions.
+///
+/// The rotations are defined in a ZYX rotation order. That is, the Euler rotation applies
+/// a rotation to the _z-axis_, followed by the _y-axis_, and lastly the _x-axis_.
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[repr(C)]
 pub struct EulerAngles<A> {
-    pub roll_yz: A,
-    pub yaw_zx: A,
-    pub pitch_xy: A,
+    /// The rotation angle about the _x-axis_ in the _yz-plane_. This is also 
+    /// known as the _roll_ angle.
+    pub x: A,
+    /// The rotation angle about the _y-axis_ in the _zx-plane_. This is also 
+    /// known as the _yaw_ angle.
+    pub y: A,
+    /// The rotation angle about the _z-axis_ in the _xy-plane_. This is also
+    /// called the _pitch_ angle.
+    pub z: A,
 }
 
 impl<A> EulerAngles<A> {
-    pub const fn new(roll_yz: A, yaw_zx: A, pitch_xy: A) -> EulerAngles<A> {
+    /// Construct a new set of Euler angles.
+    pub const fn new(x: A, y: A, z: A) -> EulerAngles<A> {
         EulerAngles { 
-            roll_yz: roll_yz,
-            yaw_zx: yaw_zx, 
-            pitch_xy: pitch_xy,
+            x: x,
+            y: y, 
+            z: z,
         }
     }
 }
 
 impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
-    /// Construct an rotation matrix about an axis and an angle from
-    /// a set of Euler angles.
+    /// Construct an rotation matrix about an axis and an angle from a set 
+    /// of Euler angles.
+    ///
+    /// A set of Euler angles describes an arbitrary rotation as a sequence
+    /// of three axial rotations: one for each axis in thee dimensions (x, y, z).
+    /// The rotation matrix described by Euler angles can be decomposed into a 
+    /// product of rotation matrices about each axis: let `R_x(roll)`, `R_y(yaw)`, 
+    /// and `R_z(pitch)` denote the rotations about the 
+    /// `x`-axis, `y`-axis, and `z`-axis, respectively. The Euler rotation
+    /// is decomposed as follows
+    /// ```text
+    /// R(roll, yaw, pitch) == R_x(roll) * R_y(yaw) * R_z(pitch)
+    /// ```
+    /// The corresponding rotation matrices are
+    /// ```text
+    ///               | 1   0            0         |
+    /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
+    ///               | 0   sin(rol)     cos(roll) |
+    /// 
+    ///               |  cos(yaw)   0   sin(yaw) |
+    /// R_y(yaw)   := |  0          1   0        |
+    ///               | -sin(yaw)   0   cos(yaw) |
+    ///
+    ///               | cos(pitch)   -sin(pitch)   0 |
+    /// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
+    ///               | 0             0            1 |
+    /// ```
+    /// Multiplying out the axial rotations yields the following rotation matrix.
+    /// ```text
+    ///                        | m[0, 0]   m[1, 0]   m[2, 0] |
+    /// R(roll, yaw, pitch) == | m[0, 1]   m[1, 1]   m[2, 1] |
+    ///                        | m[0, 2]   m[1, 2]   m[2, 2] |
+    /// where (indexing from zero in column-major order `m[column, row]`)
+    /// m[0, 0] :=  cos(yaw) * cos(pitch)
+    /// m[0, 1] :=  cos(roll) * sin(pitch) + cos(pitch) * sin(yaw) * sin(roll)
+    /// m[0, 2] :=  sin(pitch) * sin(roll) - cos(pitch) * cos(roll) * sin(yaw)
+    /// m[1, 0] := -cos(yaw) * cos(pitch)
+    /// m[1, 1] :=  cos(pitch) * cos(roll) - sin(yaw) * sin(pitch) * sin(roll)
+    /// m[1, 2] :=  cos(pitch) * sin(roll) + cos(roll) * sin(yaw) * sin(pitch)
+    /// m[2, 0] :=  sin(yaw)
+    /// m[2, 1] := -cos(yaw) * sin(roll)
+    /// m[2, 2] :=  cos(yaw) * cos(roll)
+    /// ```
+    /// This yields the entries in the rotation matrix.
     pub fn to_matrix(&self) -> Matrix3x3<S> {
-        let (sin_roll, cos_roll) = Radians::sin_cos(self.roll_yz);
-        let (sin_yaw, cos_yaw) = Radians::sin_cos(self.yaw_zx);
-        let (sin_pitch, cos_pitch) = Radians::sin_cos(self.pitch_xy);
+        let (sin_roll, cos_roll) = Radians::sin_cos(self.x);
+        let (sin_yaw, cos_yaw) = Radians::sin_cos(self.y);
+        let (sin_pitch, cos_pitch) = Radians::sin_cos(self.z);
         
         let c0r0 =  cos_yaw * cos_pitch;
         let c0r1 =  cos_roll * sin_pitch + cos_pitch * sin_yaw * sin_roll;
@@ -68,29 +122,79 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
         )
     }
 
-    /// Construct an affine rotation matrix about an axis and an angle
-    /// from a set of Euler angles.
+    /// Construct an affine rotation matrix about an axis and an angle from a set 
+    /// of Euler angles.
+    ///
+    /// A set of Euler angles describes an arbitrary rotation as a sequence
+    /// of three axial rotations: one for each axis in thee dimensions (x, y, z).
+    /// The rotation matrix described by Euler angles can be decomposed into a 
+    /// product of rotation matrices about each axis: let `R_x(roll)`, `R_y(yaw)`, 
+    /// and `R_z(pitch)` denote the rotations about the 
+    /// `x`-axis, `y`-axis, and `z`-axis, respectively. The Euler rotation
+    /// is decomposed as follows
+    /// ```text
+    /// R(roll, yaw, pitch) == R_x(roll) * R_y(yaw) * R_z(pitch)
+    /// ```
+    /// The corresponding rotation matrices are
+    /// ```text
+    ///               | 1   0            0         |
+    /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
+    ///               | 0   sin(rol)     cos(roll) |
+    /// 
+    ///               |  cos(yaw)   0   sin(yaw) |
+    /// R_y(yaw)   := |  0          1   0        |
+    ///               | -sin(yaw)   0   cos(yaw) |
+    ///
+    ///               | cos(pitch)   -sin(pitch)   0 |
+    /// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
+    ///               | 0             0            1 |
+    /// ```
+    /// Multiplying out the axial rotations yields the following rotation matrix.
+    /// ```text
+    ///                        | m[0, 0]   m[1, 0]   m[2, 0] |
+    /// R(roll, yaw, pitch) == | m[0, 1]   m[1, 1]   m[2, 1] |
+    ///                        | m[0, 2]   m[1, 2]   m[2, 2] |
+    /// where (indexing from zero in column-major order `m[column, row]`)
+    /// m[0, 0] :=  cos(yaw) * cos(pitch)
+    /// m[0, 1] :=  cos(roll) * sin(pitch) + cos(pitch) * sin(yaw) * sin(roll)
+    /// m[0, 2] :=  sin(pitch) * sin(roll) - cos(pitch) * cos(roll) * sin(yaw)
+    /// m[1, 0] := -cos(yaw) * cos(pitch)
+    /// m[1, 1] :=  cos(pitch) * cos(roll) - sin(yaw) * sin(pitch) * sin(roll)
+    /// m[1, 2] :=  cos(pitch) * sin(roll) + cos(roll) * sin(yaw) * sin(pitch)
+    /// m[2, 0] :=  sin(yaw)
+    /// m[2, 1] := -cos(yaw) * sin(roll)
+    /// m[2, 2] :=  cos(yaw) * cos(roll)
+    /// ```
+    /// This yields the entries in the rotation matrix. Since an affine rotation matrix
+    /// has no translation terms in it, the final matrix has the form
+    /// ```text
+    ///                        | m[0, 0]   m[1, 0]   m[2, 0]   0 |
+    /// R(roll, yaw, pitch) == | m[0, 1]   m[1, 1]   m[2, 1]   0 |
+    ///                        | m[0, 2]   m[1, 2]   m[2, 2]   0 |
+    ///                        | 0         0         0         1 |
+    /// ```
+    /// as desired.
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
-        let (sin_roll, cos_roll) = Radians::sin_cos(self.roll_yz);
-        let (sin_yaw, cos_yaw) = Radians::sin_cos(self.yaw_zx);
-        let (sin_pitch, cos_pitch) = Radians::sin_cos(self.pitch_xy);
+        let (sin_roll, cos_roll) = Radians::sin_cos(self.x);
+        let (sin_yaw, cos_yaw) = Radians::sin_cos(self.y);
+        let (sin_pitch, cos_pitch) = Radians::sin_cos(self.z);
         let zero = S::zero();
         let one = S::one();
 
-        let c0r0 =  cos_yaw * cos_pitch;
-        let c0r1 =  cos_roll * sin_pitch + cos_pitch * sin_yaw * sin_roll;
-        let c0r2 =  sin_pitch * sin_roll - cos_pitch * cos_roll * sin_yaw;
+        let c0r0 = cos_yaw * cos_pitch;
+        let c0r1 = cos_roll * sin_pitch + cos_pitch * sin_yaw * sin_roll;
+        let c0r2 = sin_pitch * sin_roll - cos_pitch * cos_roll * sin_yaw;
         let c0r3 = zero;
 
         let c1r0 = -cos_yaw * sin_pitch;
         let c1r1 =  cos_pitch * cos_roll - sin_yaw * sin_pitch * sin_roll;
         let c1r2 =  cos_pitch * sin_roll + cos_roll * sin_yaw * sin_pitch;
-        let c1r3 = zero;
+        let c1r3 =  zero;
 
         let c2r0 =  sin_yaw;
         let c2r1 = -cos_yaw * sin_roll;
         let c2r2 =  cos_yaw * cos_roll;
-        let c2r3 = zero;
+        let c2r3 =  zero;
 
         let c3r0 = zero;
         let c3r1 = zero;
@@ -223,7 +327,7 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     /// c1 * m[1, 1] == c1 * c1 * cos(pitch) - c1 * s1 * m[2, 0] * sin(pitch) 
     /// s1 * m[1, 2] == s1 * s1 * cos(pitch) + c1 * s1 * m[2, 0] * sin(pitch)
     /// ```
-    /// and adding the first two equations together, and the last two equations together,
+    /// Adding the first two equations together and the last two equations together,
     /// respectively, reduces to the following relations
     /// ```text
     /// sin(pitch) == s1 * m[0, 2] + c1 * m[0, 1]
@@ -276,9 +380,9 @@ impl<A, S> From<EulerAngles<A>> for Matrix3x3<S> where
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix3x3<S> {
         let euler_radians: EulerAngles<Radians<S>> = EulerAngles {
-            roll_yz: euler.roll_yz.into(),
-            yaw_zx: euler.yaw_zx.into(),
-            pitch_xy: euler.pitch_xy.into(),
+            x: euler.x.into(),
+            y: euler.y.into(),
+            z: euler.z.into(),
         };
         euler_radians.to_matrix()
     }
@@ -291,9 +395,9 @@ impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> where
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix4x4<S> {
         let euler_radians: EulerAngles<Radians<S>> = EulerAngles {
-            roll_yz: euler.roll_yz.into(),
-            yaw_zx: euler.yaw_zx.into(),
-            pitch_xy: euler.pitch_xy.into(),
+            x: euler.x.into(),
+            y: euler.y.into(),
+            z: euler.z.into(),
         };
         euler_radians.to_affine_matrix()
     }
@@ -306,9 +410,9 @@ impl<A> ops::Add<EulerAngles<A>> for EulerAngles<A> where
 
     fn add(self, other: EulerAngles<A>) -> EulerAngles<A> {
         EulerAngles {
-            roll_yz: self.roll_yz + other.roll_yz,
-            yaw_zx: self.yaw_zx + other.yaw_zx,
-            pitch_xy: self.pitch_xy + other.pitch_xy,
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
         }
     }
 }
@@ -320,9 +424,9 @@ impl<A> ops::Add<&EulerAngles<A>> for EulerAngles<A> where
 
     fn add(self, other: &EulerAngles<A>) -> EulerAngles<A> {
         EulerAngles {
-            roll_yz: self.roll_yz + other.roll_yz,
-            yaw_zx: self.yaw_zx + other.yaw_zx,
-            pitch_xy: self.pitch_xy + other.pitch_xy,
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
         }
     }
 }
@@ -334,9 +438,9 @@ impl<A> ops::Add<EulerAngles<A>> for &EulerAngles<A> where
 
     fn add(self, other: EulerAngles<A>) -> EulerAngles<A> {
         EulerAngles {
-            roll_yz: self.roll_yz + other.roll_yz,
-            yaw_zx: self.yaw_zx + other.yaw_zx,
-            pitch_xy: self.pitch_xy + other.pitch_xy,
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
         }
     }
 }
@@ -348,9 +452,9 @@ impl<'a, 'b, A> ops::Add<&'a EulerAngles<A>> for &'b EulerAngles<A> where
 
     fn add(self, other: &'a EulerAngles<A>) -> EulerAngles<A> {
         EulerAngles {
-            roll_yz: self.roll_yz + other.roll_yz,
-            yaw_zx: self.yaw_zx + other.yaw_zx,
-            pitch_xy: self.pitch_xy + other.pitch_xy,
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
         }
     }
 }
@@ -376,9 +480,9 @@ impl<A: Angle> approx::AbsDiffEq for EulerAngles<A> {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: A::Epsilon) -> bool {
-        A::abs_diff_eq(&self.roll_yz,  &other.roll_yz,  epsilon) && 
-        A::abs_diff_eq(&self.yaw_zx,   &other.yaw_zx,   epsilon) && 
-        A::abs_diff_eq(&self.pitch_xy, &other.pitch_xy, epsilon)
+        A::abs_diff_eq(&self.x, &other.x, epsilon) && 
+        A::abs_diff_eq(&self.y, &other.y, epsilon) && 
+        A::abs_diff_eq(&self.z, &other.z, epsilon)
     }
 }
 
@@ -390,9 +494,9 @@ impl<A: Angle> approx::RelativeEq for EulerAngles<A> {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: A::Epsilon, max_relative: A::Epsilon) -> bool {
-        A::relative_eq(&self.roll_yz,  &other.roll_yz,  epsilon, max_relative) && 
-        A::relative_eq(&self.yaw_zx,   &other.yaw_zx,   epsilon, max_relative) &&
-        A::relative_eq(&self.pitch_xy, &other.pitch_xy, epsilon, max_relative)
+        A::relative_eq(&self.x, &other.x, epsilon, max_relative) && 
+        A::relative_eq(&self.y, &other.y, epsilon, max_relative) &&
+        A::relative_eq(&self.z, &other.z, epsilon, max_relative)
     }
 }
 
@@ -404,8 +508,8 @@ impl<A: Angle> approx::UlpsEq for EulerAngles<A> {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: A::Epsilon, max_ulps: u32) -> bool {
-        A::ulps_eq(&self.roll_yz,  &other.roll_yz,  epsilon, max_ulps) && 
-        A::ulps_eq(&self.yaw_zx,   &other.yaw_zx,   epsilon, max_ulps) && 
-        A::ulps_eq(&self.pitch_xy, &other.pitch_xy, epsilon, max_ulps)
+        A::ulps_eq(&self.x, &other.x, epsilon, max_ulps) && 
+        A::ulps_eq(&self.y, &other.y, epsilon, max_ulps) && 
+        A::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
     }
 }
