@@ -1,6 +1,10 @@
 use crate::angle::{
     Radians,
 };
+use crate::matrix::{
+    Matrix3x3,
+    Matrix4x4,
+};
 use crate::quaternion::{
     Quaternion,
 };
@@ -11,7 +15,9 @@ use crate::traits::{
     Angle,
     Zero,
 };
-
+use approx::{
+    ulps_eq,
+};
 use num_traits;
 
 
@@ -29,6 +35,83 @@ impl<A> EulerAngles<A> {
             roll_yz: roll_yz,
             yaw_zx: yaw_zx, 
             pitch_xy: pitch_xy,
+        }
+    }
+}
+
+impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
+    pub fn to_matrix(&self) -> Matrix3x3<S> {
+        let (sin_roll, cos_roll) = Radians::sin_cos(self.roll_yz);
+        let (sin_yaw, cos_yaw) = Radians::sin_cos(self.yaw_zx);
+        let (sin_pitch, cos_pitch) = Radians::sin_cos(self.pitch_xy);
+        
+        let c0r0 =  cos_yaw * cos_pitch;
+        let c0r1 =  cos_roll * sin_pitch + cos_pitch * sin_yaw * sin_roll;
+        let c0r2 =  sin_pitch * sin_roll - cos_pitch * cos_roll * sin_yaw;
+
+        let c1r0 = -cos_yaw * sin_pitch;
+        let c1r1 =  cos_pitch * cos_roll - sin_yaw * sin_pitch * sin_roll;
+        let c1r2 =  cos_pitch * sin_roll + cos_roll * sin_yaw * sin_pitch;
+
+        let c2r0 =  sin_yaw;
+        let c2r1 = -cos_yaw * sin_roll;
+        let c2r2 =  cos_yaw * cos_roll;
+
+        Matrix3x3::new(
+            c0r0, c0r1, c0r2,
+            c1r0, c1r1, c1r2,
+            c2r0, c2r1, c2r2
+        )
+    }
+
+    pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
+        let (sin_roll, cos_roll) = Radians::sin_cos(self.roll_yz);
+        let (sin_yaw, cos_yaw) = Radians::sin_cos(self.yaw_zx);
+        let (sin_pitch, cos_pitch) = Radians::sin_cos(self.pitch_xy);
+        let zero = S::zero();
+        let one = S::one();
+
+        let c0r0 =  cos_yaw * cos_pitch;
+        let c0r1 =  cos_roll * sin_pitch + cos_pitch * sin_yaw * sin_roll;
+        let c0r2 =  sin_pitch * sin_roll - cos_pitch * cos_roll * sin_yaw;
+        let c0r3 = zero;
+
+        let c1r0 = -cos_yaw * sin_pitch;
+        let c1r1 =  cos_pitch * cos_roll - sin_yaw * sin_pitch * sin_roll;
+        let c1r2 =  cos_pitch * sin_roll + cos_roll * sin_yaw * sin_pitch;
+        let c1r3 = zero;
+
+        let c2r0 =  sin_yaw;
+        let c2r1 = -cos_yaw * sin_roll;
+        let c2r2 =  cos_yaw * cos_roll;
+        let c2r3 = zero;
+
+        let c3r0 = zero;
+        let c3r1 = zero;
+        let c3r2 = zero;
+        let c3r3 = one;
+
+        Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        )
+    }
+
+    pub fn from_matrix(matrix: &Matrix3x3<S>) -> EulerAngles<Radians<S>> {
+        let yaw_zx = Radians::asin(matrix.c2r0);
+        let cos_yaw = yaw_zx.cos();
+        if ulps_eq!(S::abs(cos_yaw), S::zero()) {
+            let roll_yz = Radians::atan2(matrix.c1r2, matrix.c1r1);
+            let pitch_xy = Radians(S::zero());
+
+            EulerAngles::new(roll_yz, yaw_zx, pitch_xy)
+        } else {
+            let roll_yz = Radians::atan2(-matrix.c2r1, matrix.c2r2);
+            let pitch_xy = Radians::atan2(-matrix.c1r0, matrix.c0r0);
+
+            EulerAngles::new(roll_yz, yaw_zx, pitch_xy)
         }
     }
 }
