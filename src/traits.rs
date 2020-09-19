@@ -247,18 +247,27 @@ pub trait Angle where
     /// Compute the tangent of a typed angle.
     fn tan(self) -> Self::Scalar;
 
-    /// Compute the arcsin of a scalar value, returning a corresponding typed angle.
+    /// Compute the arcsin of a scalar value, returning a typed angle.
     fn asin(ratio: Self::Scalar) -> Self;
 
-    /// Compute the arc cosine of a scalar value, returning a corresponding typed angle.
+    /// Compute the arc cosine of a scalar value, returning a typed angle.
     fn acos(ratio: Self::Scalar) -> Self;
 
-    /// Compute the arc tangent of a scalar value, returning a corresponding typed angle.
+    /// Compute the arc tangent of a scalar value, returning a typed angle.
     fn atan(ratio: Self::Scalar) -> Self;
 
-    /// Compute the four quadrant arc tangent of two angles, returning a typed angle. The 
-    /// return value is the quotient of the two input values.
+    /// Compute the four quadrant arc tangent of two angles, returning a typed angle.
     /// 
+    /// The return value is the arctangent of the quotient of the two input values. 
+    /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent satisfies
+    /// ```text
+    /// tan2(theta) := y / x
+    /// ```
+    /// The `atan2` function is defined as
+    /// ```text
+    /// atan2(y, x) := atan(y / x) == theta
+    /// ```
+    ///
     /// The return values fall into the following value ranges.
     /// ```text
     /// x = 0 and y = 0 -> 0
@@ -266,10 +275,10 @@ pub trait Angle where
     /// y >= 0          -> (arctan(y / x) + pi) in (pi / 2, pi]
     /// y < 0           -> (arctan(y / x) - pi) in (-pi, -pi / 2)
     /// ```
-    fn atan2(a: Self::Scalar, b: Self::Scalar) -> Self;
+    fn atan2(y: Self::Scalar, x: Self::Scalar) -> Self;
 
     /// Simultaneously compute the sin and cosine of an angle. In applications
-    /// there are frequently computed together.
+    /// these are frequently computed together.
     #[inline]
     fn sin_cos(self) -> (Self::Scalar, Self::Scalar) {
         (Self::sin(self), Self::cos(self))
