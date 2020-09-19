@@ -256,7 +256,9 @@ pub trait Angle where
     /// Compute the arc tangent of a scalar value, returning a corresponding typed angle.
     fn atan(ratio: Self::Scalar) -> Self;
 
-    /// Compute the four quadrant arc tangent of two angles, returning a typed angle.
+    /// Compute the four quadrant arc tangent of two angles, returning a typed angle. The 
+    /// return value is the quotient of the two input values.
+    /// 
     /// The return values fall into the following value ranges.
     /// ```text
     /// x = 0 and y = 0 -> 0
