@@ -156,3 +156,39 @@ fn test_euler_rotation_pitch_xy() {
     assert_eq!(result, expected);
 }
 
+#[test]
+fn test_euler_angles_from_matrix_roll_yz() {
+    let roll_yz: Radians<f64> = Radians::full_turn_div_6();
+    let yaw_zx: Radians<f64> = Radians::zero();
+    let pitch_xy: Radians<f64> = Radians::zero();
+    let matrix = Matrix3x3::from_angle_x(roll_yz);
+    let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+    let result = EulerAngles::from_matrix(&matrix);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_euler_angles_from_matrix_yaw_zx() {
+    let roll_yz: Radians<f64> = Radians::zero();
+    let yaw_zx: Radians<f64> = Radians::full_turn_div_6();
+    let pitch_xy: Radians<f64> = Radians::zero();
+    let matrix = Matrix3x3::from_angle_y(yaw_zx);
+    let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+    let result = EulerAngles::from_matrix(&matrix);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_euler_angles_from_matrix_pitch_xy() {
+    let roll_yz: Radians<f64> = Radians::zero();
+    let yaw_zx: Radians<f64> = Radians::zero();
+    let pitch_xy: Radians<f64> = Radians::full_turn_div_6();
+    let matrix = Matrix3x3::from_angle_z(pitch_xy);
+    let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+    let result = EulerAngles::from_matrix(&matrix);
+
+    assert_eq!(result, expected);
+}
+
