@@ -26,7 +26,7 @@ use crate::traits::{
 /// ```text
 /// left   < right
 /// bottom < top
-/// near   < far   (along the negative z-axis).
+/// near   < far   (along the negative z-axis) (near > far along the positive z-axis).
 /// ```
 /// Each parameter in the specification is a description of the position along an axis
 /// of a plane that the axis is perpendicular to.
@@ -118,7 +118,7 @@ impl<S> Into<OrthographicSpec<S>> for &[S; 6] where S: Copy {
 /// ```text
 /// left   < right
 /// bottom < top
-/// near   < far   (along the negative z-axis).
+/// near   < far   (along the negative z-axis)(near > far along the positive z-axis).
 /// ```
 /// Each parameter in the specification is a description of the position along an axis
 /// of a plane that the axis is perpendicular to.
@@ -211,7 +211,7 @@ impl<S> Into<PerspectiveSpec<S>> for &[S; 6] where S: Copy {
 /// ```text
 /// 0 radians < fovy < pi radians
 /// aspect > 0
-/// near < far (along the negative z-axis)
+/// near < far (along the negative z-axis) (near > far along the positive z-axis)
 /// ```
 /// This perspective projection model imposes some constraints on the more general 
 /// perspective specification based on the arbitrary planes. The `fovy` parameter 
@@ -301,6 +301,7 @@ impl<S> From<PerspectiveFovSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
         let sz = (spec.far + spec.near) / (spec.near - spec.far);
         let pz = (two * spec.far * spec.near) / (spec.near - spec.far);
         
+        // We are using the same perspective projection matrix that OpenGL uses.
         Matrix4x4::new(
             sx,    zero,  zero,  zero,
             zero,  sy,    zero,  zero,
@@ -336,6 +337,7 @@ impl<S> From<PerspectiveSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
         let c3r2 = -(two * spec.far * spec.near) / (spec.far - spec.near);
         let c3r3 = zero;
 
+        // We are using the same perspective projection matrix that OpenGL uses.
         Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
@@ -350,18 +352,19 @@ impl<S> From<OrthographicSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
         let zero = S::zero();
         let one  = S::one();
         let two = one + one;
-        let sx = two / (spec.right - spec.left);
-        let sy = two / (spec.top - spec.bottom);
-        let sz = two / (spec.far - spec.near);
-        let tx = (spec.right + spec.left) / (spec.right - spec.left);
-        let ty = (spec.top + spec.bottom) / (spec.top - spec.bottom);
-        let tz = (spec.far + spec.near) / (spec.far - spec.near);
+        let sx =  two / (spec.right - spec.left);
+        let sy =  two / (spec.top - spec.bottom);
+        let sz = -two / (spec.far - spec.near);
+        let tx = -(spec.right + spec.left) / (spec.right - spec.left);
+        let ty = -(spec.top + spec.bottom) / (spec.top - spec.bottom);
+        let tz = -(spec.far + spec.near) / (spec.far - spec.near);
 
+        // We are using the same orthographic projection matrix that OpenGL uses.
         Matrix4x4::new(
-             sx,    zero,  zero, zero,
-             zero,  sy,    zero, zero,
-             zero,  zero,  sz,   zero,
-            -tx,   -ty,   -tz,   one
+            sx,   zero, zero, zero,
+            zero, sy,   zero, zero,
+            zero, zero, sz,   zero,
+            tx,   ty,   tz,   one
         )
     }
 }
