@@ -192,3 +192,18 @@ fn test_euler_angles_from_matrix_pitch_xy() {
     assert_eq!(result, expected);
 }
 
+#[test]
+fn test_euler_angles_from_matrix_rotation_matrix() {
+    let roll_yz: Radians<f64> = Radians::full_turn_div_2();
+    let yaw_zx: Radians<f64> = Radians::full_turn_div_8();
+    let pitch_xy: Radians<f64> = Radians::full_turn_div_6();
+    let matrix_yz = Matrix3x3::from_angle_x(roll_yz);
+    let matrix_zx = Matrix3x3::from_angle_y(yaw_zx);
+    let matrix_xy = Matrix3x3::from_angle_z(pitch_xy);
+    let matrix = matrix_yz * matrix_zx * matrix_xy;
+    let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+    let result = EulerAngles::from_matrix(&matrix);
+
+    assert!(relative_eq!(result, expected, epsilon = 1e-8));
+}
+
