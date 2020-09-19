@@ -18,9 +18,9 @@ use crate::traits::{
 use approx::{
     ulps_eq,
 };
-use num_traits;
 
 use std::fmt;
+use std::ops;
 
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -121,6 +121,73 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
 impl<A> fmt::Display for EulerAngles<A> where A: fmt::Display + fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<A> ops::Add<EulerAngles<A>> for EulerAngles<A> where
+    A: Copy + Zero + ops::Add<A> 
+{
+    type Output = EulerAngles<A>;
+
+    fn add(self, other: EulerAngles<A>) -> EulerAngles<A> {
+        EulerAngles {
+            roll_yz: self.roll_yz + other.roll_yz,
+            yaw_zx: self.yaw_zx + other.yaw_zx,
+            pitch_xy: self.pitch_xy + other.pitch_xy,
+        }
+    }
+}
+
+impl<A> ops::Add<&EulerAngles<A>> for EulerAngles<A> where 
+    A: Copy + Zero + ops::Add<A> 
+{
+    type Output = EulerAngles<A>;
+
+    fn add(self, other: &EulerAngles<A>) -> EulerAngles<A> {
+        EulerAngles {
+            roll_yz: self.roll_yz + other.roll_yz,
+            yaw_zx: self.yaw_zx + other.yaw_zx,
+            pitch_xy: self.pitch_xy + other.pitch_xy,
+        }
+    }
+}
+
+impl<A> ops::Add<EulerAngles<A>> for &EulerAngles<A> where 
+    A: Copy + Zero + ops::Add<A>
+{
+    type Output = EulerAngles<A>;
+
+    fn add(self, other: EulerAngles<A>) -> EulerAngles<A> {
+        EulerAngles {
+            roll_yz: self.roll_yz + other.roll_yz,
+            yaw_zx: self.yaw_zx + other.yaw_zx,
+            pitch_xy: self.pitch_xy + other.pitch_xy,
+        }
+    }
+}
+
+impl<'a, 'b, A> ops::Add<&'a EulerAngles<A>> for &'b EulerAngles<A> where 
+    A: Copy + Zero + ops::Add<A>
+{
+    type Output = EulerAngles<A>;
+
+    fn add(self, other: &'a EulerAngles<A>) -> EulerAngles<A> {
+        EulerAngles {
+            roll_yz: self.roll_yz + other.roll_yz,
+            yaw_zx: self.yaw_zx + other.yaw_zx,
+            pitch_xy: self.pitch_xy + other.pitch_xy,
+        }
+    }
+}
+
+impl<A> Zero for EulerAngles<A> where A: Angle {
+    #[inline]
+    fn zero() -> EulerAngles<A> {
+        EulerAngles::new(A::zero(), A::zero(), A::zero())
+    }
+
+    fn is_zero(&self) -> bool {
+        ulps_eq!(self, &Self::zero())
     }
 }
 
