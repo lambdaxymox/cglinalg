@@ -102,6 +102,11 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     }
 
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> EulerAngles<Radians<S>> {
+        // Implementation based on the original method by Shoemake 
+        // in _Graphics Gems Vol. 4, pp. 222-229_.
+        /*
+        // This alternative implementation that's prone to giving wrong results in gimbal lock,
+        // but uses fewer inverse trigonometric functions.
         let yaw_zx = Radians::asin(matrix.c2r0);
         let cos_yaw = yaw_zx.cos();
         if ulps_eq!(S::abs(cos_yaw), S::zero()) {
@@ -115,6 +120,17 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
 
             EulerAngles::new(roll_yz, yaw_zx, pitch_xy)
         }
+        */
+        let roll_yz = Radians::atan2(-matrix.c2r1, matrix.c2r2);
+        let cos_yaw_zx = S::sqrt(matrix.c0r0 * matrix.c0r0 + matrix.c1r0 * matrix.c1r0);
+        let yaw_zx = Radians::atan2(matrix.c2r0, cos_yaw_zx);
+        let sin_roll_yz = Radians::sin(roll_yz);
+        let cos_roll_zx = Radians::cos(roll_yz);
+        let a = sin_roll_yz * matrix.c0r2 + cos_roll_zx * matrix.c0r1;
+        let b = cos_roll_zx * matrix.c1r1 + sin_roll_yz * matrix.c1r2;
+        let pitch_xy = Radians::atan2(a, b);
+
+        EulerAngles::new(roll_yz, yaw_zx, pitch_xy)
     }
 }
 
