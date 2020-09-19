@@ -124,6 +124,36 @@ impl<A> fmt::Display for EulerAngles<A> where A: fmt::Display + fmt::Debug {
     }
 }
 
+impl<A, S> From<EulerAngles<A>> for Matrix3x3<S> where 
+    A: Angle + Into<Radians<S>>,
+    S: ScalarFloat,
+{
+    #[inline]
+    fn from(euler: EulerAngles<A>) -> Matrix3x3<S> {
+        let euler_radians: EulerAngles<Radians<S>> = EulerAngles {
+            roll_yz: euler.roll_yz.into(),
+            yaw_zx: euler.yaw_zx.into(),
+            pitch_xy: euler.pitch_xy.into(),
+        };
+        euler_radians.to_matrix()
+    }
+}
+
+impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> where 
+    A: Angle + Into<Radians<S>>,
+    S: ScalarFloat,
+{
+    #[inline]
+    fn from(euler: EulerAngles<A>) -> Matrix4x4<S> {
+        let euler_radians: EulerAngles<Radians<S>> = EulerAngles {
+            roll_yz: euler.roll_yz.into(),
+            yaw_zx: euler.yaw_zx.into(),
+            pitch_xy: euler.pitch_xy.into(),
+        };
+        euler_radians.to_affine_matrix()
+    }
+}
+
 impl<A> ops::Add<EulerAngles<A>> for EulerAngles<A> where
     A: Copy + Zero + ops::Add<A> 
 {
