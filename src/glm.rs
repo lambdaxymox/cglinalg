@@ -39,26 +39,24 @@ pub fn vec1<S: Scalar>(x: S) -> Vector1<S> {
 }
 
 /// Construct a new two-dimensional vector in the style of
-/// a GLSL `vec2` constructor.
+/// a GLSL `vec2` function.
 pub fn vec2<S: Scalar>(x: S, y: S) -> Vector2<S> {
     Vector2::new(x, y)
 }
 
 /// Construct a new three-dimensional vector in the style of
-/// a GLSL `vec3` short constructor.
+/// a GLSL `vec3` function.
 pub fn vec3<S: Scalar>(x: S, y: S, z: S) -> Vector3<S> {
     Vector3::new(x, y, z)
 }
 
 /// Construct a new four-dimensional vector in the style of
-/// a GLSL `vec4` short constructor.
+/// a GLSL `vec4` function.
 pub fn vec4<S: Scalar>(x: S, y: S, z: S, w: S) -> Vector4<S> {
     Vector4::new(x, y, z, w)
 }
 
-/// Create a new quaternion in the style of a GLSL type
-/// constructor. This is not a built-in function in GLSL, but it exists
-/// for convenience.
+/// Create a new quaternion in the style of the glm `quat` function.
 pub fn quat<S: Scalar>(s: S, x: S, y: S, z: S) -> Quaternion<S> {
     Quaternion::new(s, x, y, z)
 }
@@ -96,9 +94,6 @@ pub fn mat4<S: Scalar>(
 
 /// Compute the orthographic projection matrix for converting from camera space to
 /// normalized device coordinates.
-///
-/// This function is equivalent to the now deprecated [glOrtho]
-/// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml) function.
 pub fn ortho<S, Spec>(spec: Spec) -> Matrix4x4<S> 
     where 
         S: ScalarFloat,
@@ -108,9 +103,6 @@ pub fn ortho<S, Spec>(spec: Spec) -> Matrix4x4<S>
 }
 
 /// Compute a perspective matrix from a view frustum.
-///
-/// This is the equivalent of the now deprecated [glFrustum]
-/// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml) function.
 pub fn frustum<S, Spec>(spec: Spec) -> Matrix4x4<S> 
     where 
         S: ScalarFloat,
@@ -121,10 +113,6 @@ pub fn frustum<S, Spec>(spec: Spec) -> Matrix4x4<S>
 
 /// Compute the perspective matrix for converting from camera space to 
 /// normalized device coordinates. 
-///
-/// This is the equivalent to the [gluPerspective] 
-/// (https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml)
-/// function.
 pub fn perspective<S, A: Into<Radians<S>>>(
     fovy: A, aspect: S, near: S, far: S) -> Matrix4x4<S> 
     where S: ScalarFloat
@@ -149,7 +137,7 @@ pub fn cross<'a, 'b, S: Scalar>(v1: &'a Vector3<S>, v2: &'b Vector3<S>) -> Vecto
 }
 
 /// Compute the cross product of a pair of two-dimensional vectors
-/// promoted to three-dimensional vectors with the zero components set to zero.
+/// extended to three-dimensional vectors with the _z-axis_ components set to zero.
 pub fn cross2d<'a, 'b, S: Scalar>(v1: &'a Vector2<S>, v2: &'b Vector2<S>) -> Vector3<S> {
     let v1_3d = v1.expand(S::zero());
     let v2_3d = v2.expand(S::zero());
