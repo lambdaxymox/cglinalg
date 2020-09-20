@@ -61,7 +61,7 @@ macro_rules! impl_mul_operator {
 /// A quaternion is a generalization of vectors in three dimensions that 
 /// enables one to perform rotations about an arbitrary axis. They are a
 /// three-dimensional analogue of complex numbers. In geometric algebra terms,
-/// a complex number is a _scalar + bivector_ form whereas a quaternion is like
+/// a complex number is a _scalar + bivector_ form whereas a quaternion is
 /// a _scalar + vector_ form. 
 ///
 /// Analogous to the complex numbers, quaternions can be written in polar form.
