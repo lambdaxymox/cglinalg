@@ -1,24 +1,33 @@
 [package]
 name = "cglinalg"
-version = "0.7.230"
+version = "0.7.231"
 edition = "2018"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
+categories = ["simulation"]
 keywords = [
     "computer graphics", 
     "game programming", 
     "linear algebra", 
-    "quaternions", 
-    "real-time rendering",
-    "real-time collision detection",
-    "low-dimensional"
+    "quaternion", 
+    "real-time",
+    "collision detection",
+    "low-dimensional",
+    "matrix",
+    "vector"
 ]
+license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/lambdaxymox/cglinalg"
 
 [lib]
 name = "cglinalg"
 path = "src/lib.rs"
+
+[feature]
+default = ["std"]
+std = []
+
 
 [dependencies]
 num-traits = "0.2.12"
