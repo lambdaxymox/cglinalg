@@ -1,13 +1,20 @@
 [package]
 name = "cglinalg"
-version = "0.7.236"
+version = "0.7.237"
 edition = "2018"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
-categories = ["simulation"]
+categories = [
+    "graphics",
+    "mathematics",
+    "game-development",
+    "game-engines"
+]
 keywords = [
-    "computer graphics", 
-    "game programming", 
+    "computer graphics",
+    "graphics",
+    "game programming",
+    "game engines", 
     "linear algebra", 
     "quaternion", 
     "real-time",
@@ -16,7 +23,7 @@ keywords = [
     "matrix",
     "vector"
 ]
-license = "Apache-2.0"
+license = "Apache-2.0 OR MIT"
 readme = "README.md"
 repository = "https://github.com/lambdaxymox/cglinalg"
 
