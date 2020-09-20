@@ -45,7 +45,7 @@ can simplify the type importing process by glob-importing the prelude:
 ```rust
 use cglinalg::prelude::*;
 ```
-This save some extra typing for importing library features.
+This saves some extra typing when importing from the library.
 
 ## Features
 `cglinalg` is a low-dimensional linear-algebra library aimed at specific 
@@ -97,14 +97,15 @@ The biggest one is than it does not presently leverage SIMD instructions to opti
 operations yet.
 
 ## Other Libraries
-The Rust ecosystem has a number of computer graphics libraries now. Some 
+The Rust ecosystem has a number of graphics math libraries. Some 
 highlights include
-* (cgmath)[https://crates.io/crates/cgmath] -- One of the original Rust real-time 
-  game mathematics libraries, and one of the most commonly used ones.
+* (cgmath)[https://crates.io/crates/cgmath] -- One of the original Rust graphics 
+  mathematics libraries, and one of the most commonly used ones.
 * (nalgebra)[https://nalgebra.org] -- The most powerful linear algebra library in 
-  the Rust ecosystem. It provides a strongly typed system for most linear algebra used 
-  modeling and simulation in arbitrarily many dimensions, including computer graphics. 
-  This system is comparable to BLAS and LAPACK.
+  the Rust ecosystem. It provides a strongly typed system for most linear algebra 
+  in arbitrarily many dimensions. It is useful in many domains that do heavy numerical
+  computation, including computer graphics. The system has features comparable to BLAS 
+  , LAPACK, and numpy.
 * (euclid)[https://crates.io/crates/euclid] -- A collection of strongly typed math tools 
   for computer graphics with an inclination towards 2d graphics and layout. This one 
   is used in the `Servo` browser engine.
