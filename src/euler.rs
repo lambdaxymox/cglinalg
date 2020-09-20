@@ -26,8 +26,134 @@ use std::ops;
 /// A data type storing a set of Euler angles for representing a rotation about
 /// an arbitrary axis in three dimensions.
 ///
-/// The rotations are defined in a ZYX rotation order. That is, the Euler rotation applies
-/// a rotation to the _z-axis_, followed by the _y-axis_, and lastly the _x-axis_.
+/// The rotations are defined in a ZYX rotation order. That is, the Euler 
+/// rotation applies a rotation to the _z-axis_, followed by the _y-axis_, and 
+/// lastly the _x-axis_. The ranges of each axis are 
+/// ```text
+/// x in [-pi, pi]
+/// y in [-pi/2, pi/2]
+/// z in [-pi, pi]
+/// ```
+/// where each interval includes its endpoints.
+/// Euler angles are prone to gimbal lock. Gimbal lock is the loss of one 
+/// degree of freedom when rotations about two axes come into parallel alignment. 
+/// In particular, when an object rotates on one axis and enters into parallel 
+/// alignment with another rotation axis, the gimbal can no longer distinguish 
+/// two of the rotation axes: when one tries to Euler rotate along on gimbal, the 
+/// other one rotates by the same amount; one degree of freedom is lost.
+/// Let's give a couple examples of Euler angles.
+///
+/// ## Example (No Gimbal Lock)
+/// 
+/// The following example is a rotation without gimbal lock.
+/// ```
+/// use cglinalg::{
+///     Degrees,
+///     EulerAngles,
+///     Matrix3x3,
+/// };
+///
+/// let roll = Degrees(45.0);
+/// let yaw = Degrees(30.0);
+/// let pitch = Degrees(15.0);
+/// let euler = EulerAngles::new(roll, yaw, pitch);
+/// # let c0r0 =  (1.0 / 4.0) * f64::sqrt(3.0 / 2.0) * (1.0 + f64::sqrt(3.0));
+/// # let c0r1 =  (1.0 / 8.0) * (3.0 + 2.0 * f64::sqrt(2.0) - f64::sqrt(3.0));
+/// # let c0r2 =  (1.0 / 8.0) * (f64::sqrt(3.0) + 2.0 * f64::sqrt(2.0) - 3.0);
+/// # let c1r0 = -(1.0 + f64::sqrt(3.0)) / (4.0 * f64::sqrt(2.0));
+/// # let c1r1 =  (1.0 / 8.0) * (2.0 * f64::sqrt(6.0) - f64::sqrt(3.0) + 1.0);
+/// # let c1r2 =  (1.0 / 8.0) * (2.0 * f64::sqrt(6.0) + f64::sqrt(3.0) - 1.0);
+/// # let c2r0 =  (f64::sqrt(3.0) - 1.0) / (2.0 * f64::sqrt(2.0));
+/// # let c2r1 = -(1.0 / 4.0) * (f64::sqrt(3.0) + 1.0);
+/// # let c2r2 =  (1.0 / 4.0) * (f64::sqrt(3.0) + 1.0);
+/// # let expected = Matrix3x3::new(
+/// #     c0r0, c0r1, c0r2,
+/// #     c1r0, c1r1, c1r2,
+/// #     c2r0, c2r1, c2r2
+/// # );
+/// let result = Matrix3x3::from(euler); 
+///
+/// # assert_eq!(result, expected);
+/// ```
+/// 
+/// ## Example (Gimbal Lock)
+/// 
+/// An Euler rotation can be represented as a product three rotations. 
+/// ```text
+/// R(roll, yaw, pitch) == R_x(roll) * R_y(yaw) * R_z(pitch)
+/// ```
+/// The corresponding rotation matrices are
+/// ```text
+///               | 1   0            0         |
+/// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
+///               | 0   sin(rol)     cos(roll) |
+/// 
+///               |  cos(yaw)   0   sin(yaw) |
+/// R_y(yaw)   := |  0          1   0        |
+///               | -sin(yaw)   0   cos(yaw) |
+///
+///               | cos(pitch)   -sin(pitch)   0 |
+/// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
+///               | 0             0            1 |
+/// ```
+/// Let's examine what happens when the yaw angle is `pi / 2`. The cosine of and sine 
+/// of this angle are `cos(pi / 2) == 0` and `sin(pi / 2) == 1`. Plugging this into the
+/// rotation equations gives the rotation matrix
+/// ```text
+///      | 1   0            0         |   |  0   0   1 |   | cos(pitch)   -sin(pitch)   0 |
+/// R == | 0   cos(roll)   -sin(roll) | * |  0   1   0 | * | sin(pitch)    cos(pitch)   0 |
+///      | 0   sin(roll)    cos(roll) |   | -1   0   0 |   | 0             0            1 |
+///
+///      | 1    0            0         |   | cos(pitch)   -sin(pitch)   0 |
+///   == | 0    sin(roll)    cos(roll) | * | sin(pitch)    cos(pitch)   0 |
+///      | 0   -cos(roll)    sin(roll) |   | 0             0            1 |
+///
+///      |  0                                              0                                           1 |
+///   == |  sin(roll)*cos(pitch) + cos(roll)*sin(pitch)   -sin(roll)*sin(pitch) + cos(roll)*cos(pitch) 0 |
+///      | -cos(roll)*cos(pitch) + sin(roll)*sin(pitch)    cos(roll)*sin(pitch) + sin(roll)*cos(pitch) 0 |
+///
+///      |  0                   0                 1 |
+///   == |  sin(roll + pitch)   cos(roll + pitch) 0 |
+///      | -cos(roll + pitch)   sin(roll + pitch) 0 |
+/// ```
+/// Changing either the values of the `pitch` or the `roll` has the same effect: it rotates an object
+/// about the _z-axis_. In other words, we have lost the ability to roll about the x-axis.
+/// Let's illustrate this effect with some code.
+/// ```
+/// use cglinalg::{
+///     Degrees,
+///     EulerAngles,
+///     Matrix3x3,
+/// };
+/// use cglinalg::approx::{
+///     ulps_eq,
+/// };
+///
+/// // Gimbal lock the x-axis.
+/// let roll = Degrees(45.0);
+/// let yaw = Degrees(90.0);
+/// let pitch = Degrees(15.0);
+/// let euler = EulerAngles::new(roll, yaw, pitch);
+/// let matrix_z_locked = Matrix3x3::from(euler);
+/// 
+/// assert!(ulps_eq!(matrix_z_locked.c0r0, 0.0));
+/// assert!(ulps_eq!(matrix_z_locked.c1r0, 0.0));
+/// assert!(ulps_eq!(matrix_z_locked.c2r0, 1.0));
+/// assert!(ulps_eq!(matrix_z_locked.c2r1, 0.0));
+/// assert!(ulps_eq!(matrix_z_locked.c2r2, 0.0));
+/// 
+/// // Attempt to roll in the gimbal locked state.
+/// let euler_roll = EulerAngles::new(Degrees(15.0), Degrees(0.0), Degrees(0.0));
+/// let matrix_roll = Matrix3x3::from(euler_roll);
+/// let matrix = matrix_roll * matrix_z_locked;
+///
+/// // But the matrix is still gimbal locked.
+/// assert!(ulps_eq!(matrix.c0r0, 0.0));
+/// assert!(ulps_eq!(matrix.c1r0, 0.0));
+/// assert!(ulps_eq!(matrix.c2r0, 1.0));
+/// assert!(ulps_eq!(matrix.c2r1, 0.0));
+/// assert!(ulps_eq!(matrix.c2r2, 0.0));
+/// ```
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[repr(C)]
 pub struct EulerAngles<A> {
