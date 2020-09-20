@@ -1,6 +1,6 @@
 [package]
 name = "cglinalg"
-version = "0.7.231"
+version = "0.7.232"
 edition = "2018"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
@@ -27,6 +27,7 @@ path = "src/lib.rs"
 [feature]
 default = ["std"]
 std = []
+glm = []
 
 
 [dependencies]
@@ -35,6 +36,9 @@ approx = "0.3.2"
 
 [dev-dependencies]
 proptest = "0.10.1"
+
+[profile.release]
+opt-level = 3
 
 [profile.test]
 # Disable overflow checks during testing since overflowing in integer operations

@@ -2292,7 +2292,7 @@ mod matrix4_tests {
         let distance = Vector3::new(3, 7, 11);
         let matrix = Matrix4x4::from_affine_translation(distance);
         let point = Vector4::new(0, 0, 0, 1);
-        let expected = Vector4::new(3, 7, 11, 0);
+        let expected = Vector4::new(3, 7, 11, 1);
         let result = matrix * point;
 
         assert_eq!(result, expected);

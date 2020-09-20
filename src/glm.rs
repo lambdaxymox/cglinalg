@@ -1,3 +1,4 @@
+#![cfg(feature = "glm")]
 use crate::vector::{
     Vector1,
     Vector2,

@@ -1,3 +1,4 @@
+#![cfg(feature = "glm")]
 extern crate cglinalg;
 
 
