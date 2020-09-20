@@ -2,7 +2,6 @@ use crate::scalar::{
     ScalarFloat,
 };
 use crate::angle::{
-    Degrees, 
     Radians,
 };
 use crate::matrix::{
@@ -75,50 +74,6 @@ impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Debug + fmt::Display 
     }
 }
 
-impl<S> Into<OrthographicSpec<S>> for (S, S, S, S, S, S) {
-    #[inline]
-    fn into(self) -> OrthographicSpec<S> {
-        match self {
-            (left, right, bottom, top, near, far) => {
-                OrthographicSpec::new(left, right, bottom, top, near, far)
-            }
-        }
-    }
-}
-
-impl<S> Into<OrthographicSpec<S>> for &(S, S, S, S, S, S) where S: Copy {
-    #[inline]
-    fn into(self) -> OrthographicSpec<S> {
-        match *self {
-            (left, right, bottom, top, near, far) => {
-                OrthographicSpec::new(left, right, bottom, top, near, far)
-            }
-        }
-    }
-}
-
-impl<S> Into<OrthographicSpec<S>> for [S; 6] {
-    #[inline]
-    fn into(self) -> OrthographicSpec<S> {
-        match self {
-            [left, right, bottom, top, near, far] => {
-                OrthographicSpec::new(left, right, bottom, top, near, far)
-            }
-        }
-    }
-}
-
-impl<S> Into<OrthographicSpec<S>> for &[S; 6] where S: Copy {
-    #[inline]
-    fn into(self) -> OrthographicSpec<S> {
-        match *self {
-            [left, right, bottom, top, near, far] => {
-                OrthographicSpec::new(left, right, bottom, top, near, far)
-            }
-        }
-    }
-}
-
 /// A perspective projection based on arbitarary `left`, `right`, `bottom`,
 /// `top`, `near`, and `far` planes.
 ///
@@ -173,50 +128,6 @@ impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Debug + fmt::Display {
     }
 }
 
-impl<S> Into<PerspectiveSpec<S>> for (S, S, S, S, S, S) {
-    #[inline]
-    fn into(self) -> PerspectiveSpec<S> {
-        match self {
-            (left, right, bottom, top, near, far) => {
-                PerspectiveSpec::new(left, right, bottom, top, near, far)
-            }
-        }
-    }
-}
-
-impl<S> Into<PerspectiveSpec<S>> for &(S, S, S, S, S, S) where S: Copy {
-    #[inline]
-    fn into(self) -> PerspectiveSpec<S> {
-        match *self {
-            (left, right, bottom, top, near, far) => {
-                PerspectiveSpec::new(left, right, bottom, top, near, far)
-            }
-        }
-    }
-}
-
-impl<S> Into<PerspectiveSpec<S>> for [S; 6] {
-    #[inline]
-    fn into(self) -> PerspectiveSpec<S> {
-        match self {
-            [left, right, bottom, top, near, far] => {
-                PerspectiveSpec::new(left, right, bottom, top, near, far)
-            }
-        }
-    }
-}
-
-impl<S> Into<PerspectiveSpec<S>> for &[S; 6] where S: Copy {
-    #[inline]
-    fn into(self) -> PerspectiveSpec<S> {
-        match *self {
-            [left, right, bottom, top, near, far] => {
-                PerspectiveSpec::new(left, right, bottom, top, near, far)
-            }
-        }
-    }
-}
-
 /// A perspective projection based on the `near` plane, the `far` plane and the vertical
 /// field of view angle `fovy` and the horizontal/vertical aspect ratio `aspect`.
 ///
@@ -265,50 +176,6 @@ impl<S> fmt::Display for PerspectiveFovSpec<S> where S: fmt::Debug + fmt::Displa
     }
 }
 
-impl<S> Into<PerspectiveFovSpec<S>> for (Radians<S>, S, S, S) {
-    #[inline]
-    fn into(self) -> PerspectiveFovSpec<S> {
-        match self {
-            (fovy, aspect, near, far) => {
-                PerspectiveFovSpec::new(fovy, aspect, near, far)
-            }
-        }
-    }
-}
-
-impl<S> Into<PerspectiveFovSpec<S>> for &(Radians<S>, S, S, S) where S: Copy {
-    #[inline]
-    fn into(self) -> PerspectiveFovSpec<S> {
-        match *self {
-            (fovy, aspect, near, far) => {
-                PerspectiveFovSpec::new(fovy, aspect, near, far)
-            }
-        }
-    }
-}
-
-impl<S> Into<PerspectiveFovSpec<S>> for (Degrees<S>, S, S, S) where S: ScalarFloat {
-    #[inline]
-    fn into(self) -> PerspectiveFovSpec<S> {
-        match self {
-            (fovy, aspect, near, far) => {
-                PerspectiveFovSpec::new(fovy, aspect, near, far)
-            }
-        }
-    }
-}
-
-impl<S> Into<PerspectiveFovSpec<S>> for &(Degrees<S>, S, S, S) where S: ScalarFloat {
-    #[inline]
-    fn into(self) -> PerspectiveFovSpec<S> {
-        match *self {
-            (fovy, aspect, near, far) => {
-                PerspectiveFovSpec::new(fovy, aspect, near, far)
-            }
-        }
-    }
-}
-
 impl<S> From<PerspectiveFovSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
     fn from(spec: PerspectiveFovSpec<S>) -> Matrix4x4<S> {
         let zero = S::zero();
@@ -321,7 +188,7 @@ impl<S> From<PerspectiveFovSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
         let sz = (spec.far + spec.near) / (spec.near - spec.far);
         let pz = (two * spec.far * spec.near) / (spec.near - spec.far);
         
-        // We are using the same perspective projection matrix that OpenGL uses.
+        // We use the same perspective projection matrix that OpenGL uses.
         Matrix4x4::new(
             sx,    zero,  zero,  zero,
             zero,  sy,    zero,  zero,
@@ -357,7 +224,7 @@ impl<S> From<PerspectiveSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
         let c3r2 = -(two * spec.far * spec.near) / (spec.far - spec.near);
         let c3r3 = zero;
 
-        // We are using the same perspective projection matrix that OpenGL uses.
+        // We use the same perspective projection matrix that OpenGL uses.
         Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
@@ -379,7 +246,7 @@ impl<S> From<OrthographicSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
         let ty = -(spec.top + spec.bottom) / (spec.top - spec.bottom);
         let tz = -(spec.far + spec.near) / (spec.far - spec.near);
 
-        // We are using the same orthographic projection matrix that OpenGL uses.
+        // We use the same orthographic projection matrix that OpenGL uses.
         Matrix4x4::new(
             sx,   zero, zero, zero,
             zero, sy,   zero, zero,
@@ -410,6 +277,7 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
     S: ScalarFloat,
     Spec: Copy + Clone + PartialEq + Into<Matrix4x4<S>>,
 {
+    /// Construct a new perspective projection transformation.
     pub fn new(spec: Spec) -> PerspectiveProjection3D<S, Spec> {
         PerspectiveProjection3D {
             spec: spec,
@@ -417,18 +285,22 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
         }
     }
 
+    /// Get the specification describing the perspective projection.
     pub fn to_spec(&self) -> Spec {
         self.spec
     }
 
+    /// Get the matrix that implements the perspective projection transformation.
     pub fn to_matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
+    /// Apply the transformation to a point.
     pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
+    /// Apply the transformation to a vector.
     pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
