@@ -480,16 +480,16 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     /// [1] _Paul S. Heckbert (Ed.). 1994. Graphics Gems IV. The Graphics Gems Series, Vol. 4. Academic Press. 
     ///     DOI:10.5555/180895. pp. 222-229_
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> EulerAngles<Radians<S>> {
-        let roll_yz = Radians::atan2(-matrix.c2r1, matrix.c2r2);
-        let cos_yaw_zx = S::sqrt(matrix.c0r0 * matrix.c0r0 + matrix.c1r0 * matrix.c1r0);
-        let yaw_zx = Radians::atan2(matrix.c2r0, cos_yaw_zx);
-        let sin_roll_yz = Radians::sin(roll_yz);
-        let cos_roll_zx = Radians::cos(roll_yz);
-        let a = sin_roll_yz * matrix.c0r2 + cos_roll_zx * matrix.c0r1;
-        let b = cos_roll_zx * matrix.c1r1 + sin_roll_yz * matrix.c1r2;
-        let pitch_xy = Radians::atan2(a, b);
+        let x = Radians::atan2(-matrix.c2r1, matrix.c2r2);
+        let cos_y = S::sqrt(matrix.c0r0 * matrix.c0r0 + matrix.c1r0 * matrix.c1r0);
+        let y = Radians::atan2(matrix.c2r0, cos_y);
+        let sin_x = Radians::sin(x);
+        let cos_roll_zx = Radians::cos(x);
+        let a = sin_x * matrix.c0r2 + cos_roll_zx * matrix.c0r1;
+        let b = cos_roll_zx * matrix.c1r1 + sin_x * matrix.c1r2;
+        let z = Radians::atan2(a, b);
 
-        EulerAngles::new(roll_yz, yaw_zx, pitch_xy)
+        EulerAngles::new(x, y, z)
     }
 }
 
@@ -526,6 +526,48 @@ impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> where
             z: euler.z.into(),
         };
         euler_radians.to_affine_matrix()
+    }
+}
+
+impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> where S: ScalarFloat {
+    fn from(src: Quaternion<S>) -> EulerAngles<Radians<S>> {
+        let sig: S = num_traits::cast(0.499).unwrap();
+        let two: S = num_traits::cast(2).unwrap();
+        let one: S = num_traits::cast(1).unwrap();
+
+        let (qw, qx, qy, qz) = (src.s, src.v.x, src.v.y, src.v.z);
+        let (sqw, sqx, sqy, sqz) = (qw * qw, qx * qx, qy * qy, qz * qz);
+
+        let unit = sqx + sqz + sqy + sqw;
+        let test = qx * qz + qy * qw;
+
+        // We set x to zero and z to the value, but the other way would work too.
+        if test > sig * unit {
+            // x + z = 2 * atan(x / w)
+            EulerAngles::new(
+                Radians::zero(),
+                Radians::full_turn_div_4(),
+                Radians::atan2(qx, qw) * two,
+            )
+        } else if test < -sig * unit {
+            // x - z = 2 * atan(x / w)
+            EulerAngles::new(
+                 Radians::zero(),
+                -Radians::full_turn_div_4(),
+                -Radians::atan2(qx, qw) * two,
+            )
+        } else {
+            // Using the quat-to-matrix equation from either
+            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
+            // or equation 15 on page 7 of
+            // http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770024290.pdf
+            // to fill in the equations on page A-2 of the NASA document gives the below.
+            EulerAngles::new(
+                Radians::atan2(two * (-qy * qz + qx * qw), one - two * (sqx + sqy)),
+                Radians::asin(two * (qx * qz + qy * qw)),
+                Radians::atan2(two * (-qx * qy + qz * qw), one - two * (sqy + sqz)),
+            )
+        }
     }
 }
 
