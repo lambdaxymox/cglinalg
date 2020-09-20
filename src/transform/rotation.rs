@@ -31,7 +31,7 @@ use crate::vector::{
 use crate::quaternion::{
     Quaternion,
 };
-use crate::transform::*;
+use crate::transformation::*;
 
 use std::fmt;
 

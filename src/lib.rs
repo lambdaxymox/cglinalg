@@ -25,9 +25,9 @@ pub use traits::*;
 pub use point::*;
 
 
-mod affine;
+mod transform;
 
-pub use affine::*;
+pub use transform::*;
 
 // Make the glm module a public module imported separately to emphasize that 
 // it is optional.
