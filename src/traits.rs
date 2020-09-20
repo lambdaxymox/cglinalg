@@ -37,11 +37,15 @@ pub trait Array {
     fn as_slice(&self) -> &[Self::Element];
 }
 
+/// Types implementing this trait can be summed out over a collection
+/// of objects passed through either a data structure or an iterator.
 pub trait Sum where Self: Array {
     /// Compute the sum of the elements in the array.
     fn sum(&self) -> Self::Element where Self::Element: ops::Add<Output = Self::Element>;
 }
 
+/// Types implementing this trait can be multiplied out over a collection
+/// of objects passed through either a data structure or an iterator.
 pub trait Product where Self: Array {
     /// Compute the product of the elements in the array.
     fn product(&self) -> Self::Element where Self::Element: ops::Mul<Output = Self::Element>;

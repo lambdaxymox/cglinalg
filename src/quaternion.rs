@@ -59,16 +59,25 @@ macro_rules! impl_mul_operator {
 
 
 /// A quaternion is a generalization of vectors in three dimensions that 
-/// enables one to perform rotations without gimble lock. They are a
+/// enables one to perform rotations about an arbitrary axis. They are a
 /// three-dimensional analogue of complex numbers. In geometric algebra terms,
-/// a complex number is a scalar + bivector form whereas a quaternion is like
-/// a scalar + vector form.
+/// a complex number is a _scalar + bivector_ form whereas a quaternion is like
+/// a _scalar + vector_ form. 
+///
+/// Analogous to the complex numbers, quaternions can be written in polar form.
+/// polar form reveals the fact that it encodes rotations. A quaternion `q` can
+/// be written in polar form as
+/// ```text
+/// q = s + v := |q| * exp(-theta * v) := |q| * (cos(theta) + v * sin(theta))
+/// ```
+/// where `v` is a unit vector in the direction of the axis of rotation, `theta`
+/// is the angle of rotation, and `|q|` denotes the length of the quaternion.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Quaternion<S> {
-    /// The scalar component.
+    /// The scalar component of a quaternion.
     pub s: S,
-    /// The vector component.
+    /// The vector component of a quaternion.
     pub v: Vector3<S>,
 }
 
@@ -163,12 +172,15 @@ impl<S> Quaternion<S> where S: Scalar {
 impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion corresponding to rotating about an axis `axis` by an
     /// amount `angle` radians.
+    ///
+    /// The quaterion representation of rotations is advantageous over using Euler angles 
+    /// about an arbitrary axis because they do not Gimbal lock.
     #[rustfmt::skip]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
         let radians = angle.into();
         let radians_over_two = radians / (S::one() + S::one());
         Quaternion::new(
-             Radians::cos(radians_over_two),
+            Radians::cos(radians_over_two),
             Radians::sin(radians_over_two) * axis.x,
             Radians::sin(radians_over_two) * axis.y,
             Radians::sin(radians_over_two) * axis.z,
@@ -182,7 +194,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Compute the inverse of a quaternion.
     ///
-    /// If `self` has zero magnitude, no inverse exists for it. In this 
+    /// If the quaternion `self` has zero magnitude, it does not have an inverse. In this 
     /// case the function return `None`. Otherwise it returns the inverse of `self`.
     pub fn inverse(&self) -> Option<Quaternion<S>> {
         let magnitude_squared = self.magnitude_squared();
@@ -196,6 +208,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Determine whether a quaternion is invertible.
     ///
     /// Returns `true` is there exists a quaternion `r` such that `q * r = 1`.
+    /// Otherwise, it returns `false`.
     pub fn is_invertible(&self) -> bool {
         self.magnitude_squared() > S::zero()
     }
@@ -240,8 +253,9 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Calculate the principal value of the natural logarithm of a quaternion.
     ///
-    /// Just like the complex numbers, the natural logarithm of a quaternion has multiple possible
-    /// values, so we return the principal value of the quaternion logarithm, defined by
+    /// Like with the natural logarithm of a complex number, the natural logarithm 
+    /// of a quaternion has multiple possible values. We define the principal value 
+    /// of the quaternion logarithm
     /// ```text
     /// Ln(q) = log(||q||, e) + sgn(Vec(q)) * Arg(q)
     /// ```
