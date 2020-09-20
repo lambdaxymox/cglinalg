@@ -323,6 +323,11 @@ impl<S> Matrix for Matrix2x2<S> where S: Scalar {
     fn transpose(&self) -> Self::Transpose {
         Matrix2x2::new(self.c0r0, self.c1r0, self.c0r1, self.c1r1)
     }
+
+    #[inline]
+    fn from_fill(value: S) -> Matrix2x2<S> {
+        Matrix2x2::new(value, value, value, value)
+    }
 }
 
 impl<S> From<[[S; 2]; 2]> for Matrix2x2<S> where S: Scalar {
@@ -1606,6 +1611,15 @@ impl<S> Matrix for Matrix3x3<S> where S: Scalar {
             self.c0r0, self.c1r0, self.c2r0,
             self.c0r1, self.c1r1, self.c2r1,
             self.c0r2, self.c1r2, self.c2r2
+        )
+    }
+
+    #[inline]
+    fn from_fill(value: S) -> Matrix3x3<S> {
+        Matrix3x3::new(
+            value, value, value,
+            value, value, value,
+            value, value, value
         )
     }
 }
@@ -3145,6 +3159,16 @@ impl<S> Matrix for Matrix4x4<S> where S: Scalar {
             self.c0r1, self.c1r1, self.c2r1, self.c3r1, 
             self.c0r2, self.c1r2, self.c2r2, self.c3r2, 
             self.c0r3, self.c1r3, self.c2r3, self.c3r3
+        )
+    }
+
+    #[inline]
+    fn from_fill(value: S) -> Matrix4x4<S> {
+        Matrix4x4::new(
+            value, value, value, value,
+            value, value, value, value,
+            value, value, value, value,
+            value, value, value, value
         )
     }
 }

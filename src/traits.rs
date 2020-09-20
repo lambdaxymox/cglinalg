@@ -216,6 +216,9 @@ pub trait Matrix {
     
     /// Transpose a matrix.
     fn transpose(&self) -> Self::Transpose;
+
+    /// Construct a matrix from a fill value.
+    fn from_fill(value: Self::Element) -> Self;
 }
 
 /// Implement trigonometry for typed angles. This enables a careful distinction between 
