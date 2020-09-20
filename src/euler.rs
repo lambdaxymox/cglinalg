@@ -26,7 +26,7 @@ use std::ops;
 /// A data type storing a set of Euler angles for representing a rotation about
 /// an arbitrary axis in three dimensions.
 ///
-/// The rotations are defined in a ZYX rotation order. That is, the Euler 
+/// The rotations are defined in the ZYX rotation order. That is, the Euler 
 /// rotation applies a rotation to the _z-axis_, followed by the _y-axis_, and 
 /// lastly the _x-axis_. The ranges of each axis are 
 /// ```text

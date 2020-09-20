@@ -127,6 +127,7 @@ mod vector_product_tests {
     use cglinalg::{
         CrossProduct,
         DotProduct,
+        Vector2,
         Vector3,
     };
     
@@ -147,6 +148,16 @@ mod vector_product_tests {
         let v2 = Vector3::new(4, 5, 6);
         let expected = v1.cross(v2);
         let result = glm::cross(&v1, &v2);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_cross_2d() {
+        let v1 = Vector2::new(1, 2);
+        let v2 = Vector2::new(3, 4);
+        let expected = Vector3::new(0, 0, -2);
+        let result = glm::cross2d(&v1, &v2);
 
         assert_eq!(result, expected);
     }

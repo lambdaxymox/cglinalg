@@ -146,3 +146,13 @@ pub fn dot<W, V>(v1: V, v2: W) -> <V as DotProduct<W>>::Output
 pub fn cross<'a, 'b, S: Scalar>(v1: &'a Vector3<S>, v2: &'b Vector3<S>) -> Vector3<S> {
     v1.cross(v2)
 }
+
+/// Compute the cross product of a pair of two-dimensional vectors
+/// promoted to three-dimensional vectors with the zero components set to zero.
+pub fn cross2d<'a, 'b, S: Scalar>(v1: &'a Vector2<S>, v2: &'b Vector2<S>) -> Vector3<S> {
+    let v1_3d = v1.expand(S::zero());
+    let v2_3d = v2.expand(S::zero());
+    
+    v1_3d.cross(v2_3d)
+}
+
