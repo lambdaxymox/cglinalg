@@ -18,6 +18,8 @@ use crate::traits::{
     Angle,
 };
 
+use core::fmt;
+
 
 /// A description of an orthographic projection with arbitrary `left`, `right`, 
 /// `top`, `bottom`, `near`, and `far` planes.
@@ -64,6 +66,12 @@ impl<S> OrthographicSpec<S> {
             near: near,
             far: far,
         }
+    }
+}
+
+impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Debug + fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
@@ -159,6 +167,12 @@ impl<S> PerspectiveSpec<S> {
     }
 }
 
+impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Debug + fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
 impl<S> Into<PerspectiveSpec<S>> for (S, S, S, S, S, S) {
     #[inline]
     fn into(self) -> PerspectiveSpec<S> {
@@ -242,6 +256,12 @@ impl<S> PerspectiveFovSpec<S> {
             near: near,
             far: far,
         }
+    }
+}
+
+impl<S> fmt::Display for PerspectiveFovSpec<S> where S: fmt::Debug + fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
