@@ -8,9 +8,9 @@ use crate::traits::{
     Zero,
     Finite,
 };
-use std::f64;
-use std::fmt;
-use std::ops;
+use core::f64;
+use core::fmt;
+use core::ops;
 
 
 /// The angle (arc length) along the unit circle in units of radians.

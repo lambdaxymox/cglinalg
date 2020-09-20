@@ -4,10 +4,10 @@ use num_traits::{
     Float
 };
 use approx;
-use std::fmt::{
+use core::fmt::{
     Debug,
 };
-use std::ops::{
+use core::ops::{
     AddAssign,
     SubAssign,
     MulAssign,

@@ -16,7 +16,7 @@ mod matrix2_tests {
         Angle,
     };
     use cglinalg::approx::relative_eq;
-    use std::slice::Iter;
+    use core::slice::Iter;
 
 
     struct TestCase {
@@ -553,7 +553,7 @@ mod matrix3_tests {
         Radians,
     };
     use cglinalg::approx::relative_eq;
-    use std::slice::Iter;
+    use core::slice::Iter;
 
 
     struct TestCase {
@@ -1406,7 +1406,7 @@ mod matrix4_tests {
         Angle,
     };
     use cglinalg::approx::relative_eq;
-    use std::slice::Iter;
+    use core::slice::Iter;
 
 
     struct TestCase {

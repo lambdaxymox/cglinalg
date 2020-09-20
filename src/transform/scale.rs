@@ -16,7 +16,7 @@ use crate::point::{
 };
 use crate::transformation::*;
 
-use std::fmt;
+use core::fmt;
 
 
 /// A trait for implementing scaling transformations.

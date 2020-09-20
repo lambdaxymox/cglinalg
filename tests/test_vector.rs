@@ -10,7 +10,7 @@ mod vector1_tests {
         Magnitude,
         Zero,
     };
-    use std::slice::Iter;
+    use core::slice::Iter;
 
 
     struct TestCase {
@@ -163,7 +163,7 @@ mod vector2_tests {
         Magnitude,   
         Zero,
     };
-    use std::slice::Iter;
+    use core::slice::Iter;
 
 
     struct TestCase {
@@ -319,7 +319,7 @@ mod vector3_tests {
         Magnitude,   
         Zero,
     };
-    use std::slice::Iter;
+    use core::slice::Iter;
 
 
     struct TestCase {
@@ -493,7 +493,7 @@ mod vector4_tests {
         Magnitude,   
         Zero,
     };
-    use std::slice::Iter;
+    use core::slice::Iter;
 
     
     struct TestCase {

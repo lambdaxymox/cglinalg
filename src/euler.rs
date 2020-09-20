@@ -19,8 +19,8 @@ use approx::{
     ulps_eq,
 };
 
-use std::fmt;
-use std::ops;
+use core::fmt;
+use core::ops;
 
 
 /// A data type storing a set of Euler angles for representing a rotation about

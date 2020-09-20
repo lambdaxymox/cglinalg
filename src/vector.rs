@@ -17,10 +17,10 @@ use crate::traits::{
     Product,
 };
 use num_traits::NumCast;
-use std::fmt;
-use std::iter;
-use std::mem;
-use std::ops;
+use core::fmt;
+use core::iter;
+use core::mem;
+use core::ops;
 
 
 macro_rules! impl_mul_operator {

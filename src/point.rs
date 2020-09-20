@@ -18,9 +18,9 @@ use crate::vector::{
     Vector4,
 };
 
-use std::fmt;
-use std::mem;
-use std::ops;
+use core::fmt;
+use core::mem;
+use core::ops;
 
 
 macro_rules! impl_mul_operator {

@@ -1,9 +1,3 @@
-use std::fmt;
-use std::mem;
-use std::ops;
-use std::iter;
-
-
 use approx::{
     ulps_eq,
 };
@@ -36,7 +30,16 @@ use crate::traits::{
     InvertibleSquareMatrix,
     Magnitude,
 };
-use crate::vector::*;
+use crate::vector::{
+    Vector2,
+    Vector3,
+    Vector4,
+};
+
+use core::fmt;
+use core::mem;
+use core::ops;
+use core::iter;
 
 
 macro_rules! impl_mul_operator {

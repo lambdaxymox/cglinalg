@@ -19,7 +19,7 @@ use crate::traits::{
 };
 use crate::transformation::*;
 
-use std::fmt;
+use core::fmt;
 
 
 /// A trait defining the operations on a shearing transformation.

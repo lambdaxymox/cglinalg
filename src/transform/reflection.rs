@@ -20,7 +20,7 @@ use crate::traits::{
 };
 use crate::transformation::*;
 
-use std::fmt;
+use core::fmt;
 
 
 /// A trait defining reflections about a plane.

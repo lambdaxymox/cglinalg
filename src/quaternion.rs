@@ -29,10 +29,10 @@ use crate::matrix::{
 };
 use crate::vector::Vector3;
 use num_traits::NumCast;
-use std::fmt;
-use std::iter;
-use std::mem;
-use std::ops;
+use core::fmt;
+use core::iter;
+use core::mem;
+use core::ops;
 
 
 macro_rules! impl_mul_operator {
@@ -231,7 +231,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// In the case of `theta = Arg(q)`, we have `n = 0`.
     pub fn arg(&self) -> S {
         if self.s == S::zero() {
-            num_traits::cast(std::f64::consts::FRAC_PI_2).unwrap()
+            num_traits::cast(core::f64::consts::FRAC_PI_2).unwrap()
         } else {
             S::atan(self.v.magnitude() / self.s)
         }
@@ -285,7 +285,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         } else if (self.s == S::zero()) && (magnitude_v != S::zero()) {
             let magnitude_q = self.magnitude();
             let magnitude_q_pow = magnitude_q.powf(exponent);
-            let angle: S = num_traits::cast(std::f64::consts::FRAC_PI_2).unwrap();
+            let angle: S = num_traits::cast(core::f64::consts::FRAC_PI_2).unwrap();
             let q_scalar = magnitude_q_pow * S::cos(exponent * angle);
             let q_vector = self.v * (magnitude_q_pow * S::sin(exponent * angle) / magnitude_v);
 

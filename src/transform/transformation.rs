@@ -19,7 +19,7 @@ use crate::traits::{
     InvertibleSquareMatrix,
 };
 
-use std::fmt;
+use core::fmt;
 
 
 /// A trait for implementing two-dimensional affine transformations.

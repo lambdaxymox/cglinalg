@@ -8,7 +8,7 @@ use num_traits::{
 use approx::{
     ulps_ne,
 };
-use std::ops;
+use core::ops;
 
 
 /// A type implementing this trait has the structure of an array

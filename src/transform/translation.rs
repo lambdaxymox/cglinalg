@@ -19,7 +19,7 @@ use crate::traits::{
 };
 use crate::transformation::*;
 
-use std::fmt;
+use core::fmt;
 
 
 /// A type implementing this trait represents a type that acts as a generic 

@@ -9,7 +9,7 @@ mod conversion_tests {
         Radians,
         Degrees,
     };
-    use std::f64;
+    use core::f64;
 
 
     struct Test<A, B> {
@@ -214,7 +214,7 @@ mod degrees_arithmetic_tests {
 mod radians_arithmetic_tests {
     use cglinalg::Radians;
     use cglinalg::approx::relative_eq;
-    use std::f64;
+    use core::f64;
 
     const PI: Radians<f64> = Radians(f64::consts::PI);
 
@@ -360,7 +360,7 @@ mod radian_angle_tests {
         Angle
     };
     use cglinalg::approx::relative_eq;
-    use std::f64;
+    use core::f64;
 
 
     #[test]
@@ -546,7 +546,7 @@ mod degree_angle_tests {
         Angle,
     };
     use cglinalg::approx::relative_eq;
-    use std::f64;
+    use core::f64;
 
 
     #[test]

@@ -323,7 +323,7 @@ mod arg_tests {
     #[test]
     fn test_quaternion_arg() {
         let q = Quaternion::new(0_f64, 1_f64, 1_f64, 1_f64);
-        let expected = std::f64::consts::FRAC_PI_2;
+        let expected = core::f64::consts::FRAC_PI_2;
         let result = q.arg();
 
         assert_eq!(result, expected);
@@ -363,7 +363,7 @@ mod exp_tests {
     fn test_quaternion_exp_power_times_pi() {
         let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let sgn_qv = Quaternion::from_sv(0_f64, q.v / q.v.magnitude());
-        let pi = std::f64::consts::PI;
+        let pi = core::f64::consts::PI;
         let expected = -Quaternion::identity();
         let result = (sgn_qv * pi).exp();
 
@@ -428,7 +428,7 @@ mod logarithm_tests {
         let i = Quaternion::<f64>::unit_x();
         let j = Quaternion::<f64>::unit_y();
         let k = Quaternion::<f64>::unit_z();
-        let pi_over_2 = std::f64::consts::FRAC_PI_2;
+        let pi_over_2 = core::f64::consts::FRAC_PI_2;
 
         assert_eq!(i.ln(), i * pi_over_2);
         assert_eq!(j.ln(), j * pi_over_2);
@@ -439,7 +439,7 @@ mod logarithm_tests {
     fn test_quaternion_logarithm2() {
         let q = 2_f64 * Quaternion::unit_y() - 5_f64 * Quaternion::unit_z();
         let sqrt_29 = f64::sqrt(29_f64);
-        let pi_over_2 = std::f64::consts::FRAC_PI_2;
+        let pi_over_2 = core::f64::consts::FRAC_PI_2;
         let expected_s = sqrt_29.ln();
         let expected_v = (2_f64 * Vector3::unit_y() - 5_f64 * Vector3::unit_z()) * pi_over_2 / sqrt_29;
         let expected = Quaternion::from_sv(expected_s, expected_v);
@@ -462,7 +462,7 @@ mod logarithm_tests {
         let i = Quaternion::<f64>::unit_x();
         let j = Quaternion::<f64>::unit_y();
         let k = Quaternion::<f64>::unit_z();
-        let pi_over_2 = std::f64::consts::FRAC_PI_2;
+        let pi_over_2 = core::f64::consts::FRAC_PI_2;
 
         assert_eq!((-i).ln(), -i * pi_over_2);
         assert_eq!((-j).ln(), -j * pi_over_2);
@@ -502,7 +502,7 @@ mod power_tests {
     #[test]
     fn test_quaternion_power() {
         let i = Quaternion::<f64>::unit_x();
-        let pi_over_2 = std::f64::consts::FRAC_PI_2;
+        let pi_over_2 = core::f64::consts::FRAC_PI_2;
         let expected = f64::exp(-pi_over_2) * Quaternion::unit_s();
         let result = i.powq(i);
 
@@ -536,7 +536,7 @@ mod power_tests {
         let i = Quaternion::<f64>::unit_x();
         let j = Quaternion::<f64>::unit_y();
         let k = Quaternion::<f64>::unit_z();
-        let pi = std::f64::consts::PI;
+        let pi = core::f64::consts::PI;
         let exponent = -pi * f64::sqrt(3_f64) / 2_f64;
         let expected = f64::exp(exponent) * Quaternion::unit_s();
         let result = (i + j + k).powq(i + j + k);
