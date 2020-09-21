@@ -537,13 +537,13 @@ impl<S> OrthographicProjection3D<S> where S: ScalarFloat {
 
         let c2r0 =  zero;
         let c2r1 =  zero;
-        let c2r2 =  zero;
-        let c2r3 = -one_half * (self.spec.far - self.spec.near);
+        let c2r2 = -one_half * (self.spec.far - self.spec.near);
+        let c2r3 =  zero;
         
         let c3r0 =  one_half * (self.spec.left + self.spec.right);
         let c3r1 =  one_half * (self.spec.bottom + self.spec.top);
         let c3r2 = -one_half * (self.spec.far + self.spec.near);
-        let c3r3 = one;
+        let c3r3 =  one;
         
         let matrix_inverse = Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3,
@@ -574,13 +574,13 @@ impl<S> OrthographicProjection3D<S> where S: ScalarFloat {
 
         let c2r0 =  zero;
         let c2r1 =  zero;
-        let c2r2 =  zero;
-        let c2r3 = -one_half * (self.spec.far - self.spec.near);
+        let c2r2 = -one_half * (self.spec.far - self.spec.near);
+        let c2r3 =  zero;
         
         let c3r0 =  one_half * (self.spec.left + self.spec.right);
         let c3r1 =  one_half * (self.spec.bottom + self.spec.top);
         let c3r2 = -one_half * (self.spec.far + self.spec.near);
-        let c3r3 = one;
+        let c3r3 =  one;
         
         let matrix_inverse = Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3,

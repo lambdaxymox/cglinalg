@@ -9,6 +9,8 @@ use cglinalg::{
     PerspectiveProjection3D,
     Matrix4x4,
     Degrees,
+    Point3,
+    Vector3,
 };
 
 
@@ -127,3 +129,38 @@ fn test_orthographic_projection_transformation() {
 
     assert_eq!(result.to_matrix(), &expected);
 }
+
+#[test]
+fn test_orthographic_projection_unproject_point() {
+    let left = -4.0;
+    let right = 4.0;
+    let bottom = -2.0;
+    let top = 2.0;
+    let near = 1.0;
+    let far = 100.0;
+    let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
+    let projection = OrthographicProjection3D::new(spec);
+    let expected = Point3::new(1.0, 1.0, 50.0);
+    let projected_point = projection.project_point(&expected);
+    let result = projection.unproject_point(&projected_point);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_orthographic_projection_unproject_vector() {
+    let left = -4.0;
+    let right = 4.0;
+    let bottom = -2.0;
+    let top = 2.0;
+    let near = 1.0;
+    let far = 100.0;
+    let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
+    let projection = OrthographicProjection3D::new(spec);
+    let expected = Vector3::new(1.0, 1.0, 50.0);
+    let projected_vector = projection.project_vector(&expected);
+    let result = projection.unproject_vector(&projected_vector);
+
+    assert_eq!(result, expected);
+}
+
