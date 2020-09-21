@@ -91,6 +91,74 @@ fn test_perspective_projection_fov_transformation() {
 }
 
 #[test]
+fn test_perspective_projection_unproject_point1() {
+    let fovy = Degrees(72.0);
+    let aspect = 800 as f32 / 600 as f32;
+    let near = 0.1;
+    let far = 100.0;
+    let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
+    let point = Point3::new(-2.0, 2.0, -50.0);
+    let projection = PerspectiveProjection3D::new(spec);
+    let expected = point;
+    let projected_point = projection.project_point(&expected);
+    let result = projection.unproject_point(&projected_point);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_perspective_projection_unproject_vector1() {
+    let fovy = Degrees(72.0);
+    let aspect = 800 as f32 / 600 as f32;
+    let near = 0.1;
+    let far = 100.0;
+    let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
+    let vector = Vector3::new(-2.0, 2.0, -50.0);
+    let projection = PerspectiveProjection3D::new(spec);
+    let expected = vector;
+    let projected_vector = projection.project_vector(&expected);
+    let result = projection.unproject_vector(&projected_vector);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_perspective_projection_unproject_point2() {
+    let left = -4.0;
+    let right = 4.0;
+    let bottom = -2.0;
+    let top = 2.0;
+    let near = 1.0;
+    let far = 100.0;
+    let spec = PerspectiveSpec::new(left, right, bottom, top, near, far);
+    let point = Point3::new(-2.0, 2.0, -50.0);
+    let projection = PerspectiveProjection3D::new(spec);
+    let expected = point;
+    let projected_point = projection.project_point(&expected);
+    let result = projection.unproject_point(&projected_point);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_perspective_projection_unproject_vector2() {
+    let left = -4.0;
+    let right = 4.0;
+    let bottom = -2.0;
+    let top = 2.0;
+    let near = 1.0;
+    let far = 100.0;
+    let spec = PerspectiveSpec::new(left, right, bottom, top, near, far);
+    let vector = Vector3::new(-2.0, 2.0, -50.0);
+    let projection = PerspectiveProjection3D::new(spec);
+    let expected = vector;
+    let projected_vector = projection.project_vector(&expected);
+    let result = projection.unproject_vector(&projected_vector);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
 fn test_orthographic_projection_matrix() {
     let left = -4.0;
     let right = 4.0;
