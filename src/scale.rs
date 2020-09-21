@@ -14,7 +14,7 @@ use crate::point::{
     Point2,
     Point3,
 };
-use crate::transformation::*;
+use crate::affine::*;
 
 use core::fmt;
 

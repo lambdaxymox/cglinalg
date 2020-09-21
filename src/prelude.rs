@@ -24,8 +24,8 @@ pub use crate::shear::Shear;
 pub use crate::shear::Shear2;
 pub use crate::shear::Shear3;
 
-pub use crate::transformation::AffineTransformation2D;
-pub use crate::transformation::AffineTransformation3D;
+pub use crate::affine::AffineTransformation2D;
+pub use crate::affine::AffineTransformation3D;
 
 pub use crate::translation::Translation;
 pub use crate::translation::Translation2;

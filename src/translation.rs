@@ -17,7 +17,7 @@ use crate::point::{
 use crate::traits::{
     Identity,
 };
-use crate::transformation::*;
+use crate::affine::*;
 
 use core::fmt;
 
