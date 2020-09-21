@@ -36,7 +36,8 @@ pub trait Reflection<P, V> where Self: Sized + Copy {
     /// Return the normal vector to the reflection plane.
     fn normal(&self) -> Self::OutVector;
 
-    /// Construct a new reflection transformation from the vector normal to the plane of reflection.
+    /// Construct a new reflection transformation from the vector normal to the 
+    /// plane of reflection.
     fn from_normal_bias(normal: V, bias: V) -> Self;
 
     /// Calculate the inverse reflection transformation.
@@ -101,7 +102,10 @@ impl<S> From<&Reflection2D<S>> for Matrix3x3<S> where S: Copy {
     }
 }
 
-impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFloat {
+impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -127,10 +131,23 @@ impl<S> Reflection<Point2<S>, Vector2<S>> for Reflection2D<S> where S: ScalarFlo
         let two = one + one;
         let normal = self.normal;
         let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y);
+
+        let c0r0 = one - two * normal.y * normal.y;
+        let c0r1 = two * normal.x * normal.y;
+        let c0r2 = zero;
+        
+        let c1r0 = two * normal.x * normal.y;
+        let c1r1 = one - two * normal.x * normal.x - two * normal.y * normal.y;
+        let c1r2 = zero;
+        
+        let c2r0 = zero;
+        let c2r1 = zero;
+        let c2r2 = one;
+
         let matrix = Matrix3x3::new(
-            one - two * normal.y * normal.y, two * normal.x * normal.y,                                   zero,
-            two * normal.x * normal.y,       one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
-            zero,                            zero,                                                        one
+            c0r0, c0r1, c0r2,                                   
+            c1r0, c1r1, c1r2, 
+            c2r0, c2r1, c2r2
         );
 
         Some(Reflection2D {
@@ -153,7 +170,10 @@ impl<S> Reflection2<S> for Reflection2D<S> where S: ScalarFloat
 {
 }
 
-impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Reflection2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Reflection2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -187,7 +207,10 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Reflection2D<S> whe
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Reflection2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Reflection2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -221,7 +244,10 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Reflection2D<S> wh
     }
 }
 
-impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Reflection2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Reflection2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -255,7 +281,10 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Reflection2D<S> wh
     }
 }
 
-impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Reflection2D<S> where S: ScalarFloat {
+impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Reflection2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -364,11 +393,33 @@ impl<S> Reflection<Point3<S>, Vector3<S>> for Reflection3D<S> where S: ScalarFlo
         let two = one + one;
         let normal = self.normal;
         let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
+
+        let c0r0 = one - two * normal.y * normal.y - normal.z * normal.z;
+        let c0r1 = two * normal.x * normal.y;
+        let c0r2 = two * normal.x * normal.z;
+        let c0r3 = zero;
+
+        let c1r0 = two * normal.x * normal.y;
+        let c1r1 = one - two * normal.x * normal.x - two * normal.z * normal.z;
+        let c1r2 = two * normal.y * normal.z;
+        let c1r3 = zero;
+
+        let c2r0 = two * normal.x * normal.z;
+        let c2r1 = two * normal.y * normal.z;
+        let c2r2 = one - two * normal.x * normal.x - two * normal.y * normal.y;
+        let c2r3 = zero;
+
+        let c3r0 = zero;
+        let c3r1 = zero;
+        let c3r2 = zero;
+        let c3r3 = one;
+
+
         let matrix = Matrix4x4::new(
-            one - two * normal.y * normal.y - normal.z * normal.z, two * normal.x * normal.y,                                   two * normal.x * normal.z,                                   zero,
-            two * normal.x * normal.y,                             one - two * normal.x * normal.x - two * normal.z * normal.z, two * normal.y * normal.z,                                   zero,
-            two * normal.x * normal.z,                             two * normal.y * normal.z,                                   one - two * normal.x * normal.x - two * normal.y * normal.y, zero,
-            zero,                                                  zero,                                                        zero,                                                        one
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
         );
 
         Some(Reflection3D { 
@@ -425,7 +476,10 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Reflection3D<S> whe
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Reflection3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Reflection3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -459,7 +513,10 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Reflection3D<S> wh
     }
 }
 
-impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Reflection3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Reflection3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -493,7 +550,10 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Reflection3D<S> wh
     }
 }
 
-impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Reflection3D<S> where S: ScalarFloat {
+impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Reflection3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 

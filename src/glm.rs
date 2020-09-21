@@ -92,8 +92,8 @@ pub fn mat4<S: Scalar>(
     )
 }
 
-/// Compute the orthographic projection matrix for converting from camera space to
-/// normalized device coordinates.
+/// Compute the orthographic projection matrix for converting from camera 
+/// space to normalized device coordinates.
 pub fn ortho<S, Spec>(spec: Spec) -> Matrix4x4<S> 
     where 
         S: ScalarFloat,
@@ -137,7 +137,8 @@ pub fn cross<'a, 'b, S: Scalar>(v1: &'a Vector3<S>, v2: &'b Vector3<S>) -> Vecto
 }
 
 /// Compute the cross product of a pair of two-dimensional vectors
-/// extended to three-dimensional vectors with the _z-axis_ components set to zero.
+/// extended to three-dimensional vectors with the _z-axis_ components set to 
+/// zero.
 pub fn cross2d<'a, 'b, S: Scalar>(v1: &'a Vector2<S>, v2: &'b Vector2<S>) -> Vector3<S> {
     let v1_3d = v1.expand(S::zero());
     let v2_3d = v2.expand(S::zero());

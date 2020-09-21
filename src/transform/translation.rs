@@ -23,9 +23,11 @@ use core::fmt;
 
 
 /// A type implementing this trait represents a type that acts as a generic 
-/// translation. A translation is an operation that creates displacement motions. In 
-/// a Euclidean setting, translates preserve differences between two points and thus
-/// acts as the identity on vectors.
+/// translation. 
+///
+/// A translation is an operation that creates displacement motions. 
+/// In a Euclidean setting, translations preserve differences between two points 
+/// and acts as the identity on vectors.
 pub trait Translation<P, V> where Self: Sized + Copy {
     /// The type of the output points (locations in space).
     type OutPoint;
@@ -38,18 +40,21 @@ pub trait Translation<P, V> where Self: Sized + Copy {
     /// Construct a translation between two points.
     fn between_points(point1: P, point2: P) -> Self;
 
-    /// Construct a rotation that rotates a vector in the opposite direction of `self`. In particular,
-    /// given a rotation operator that rotates a vector about an axis by an angle `theta`, construct 
-    /// a rotation that rotates a vector about the same axis by an angle `-theta`.
+    /// Construct a rotation that rotates a vector in the opposite direction 
+    /// of `self`.
+    /// 
+    /// Given a rotation operator that rotates a vector about an axis by an 
+    /// angle `theta`, construct a rotation that rotates a vector about the 
+    /// same axis by an angle `-theta`.
     fn inverse(&self) -> Self;
 
     /// Apply the rotation operation to a point.
     fn translate_point(&self, point: P) -> Self::OutPoint;
 
     /// Apply the translation operation to a vector. This should act as the
-    /// identity since vectors represent displacements. That is, let `p1` and `p2`
-    /// be points and let `v = p2 - p1` be their difference. If we translate each point
-    /// by a vector `a`, then `(p2 + a) - (p1 + a) = p2 - p1 = v`.
+    /// identity since vectors represent displacements. That is, let `p1` and 
+    /// `p2` be points and let `v = p2 - p1` be their difference. If we translate 
+    /// each point by a vector `a`, then `(p2 + a) - (p1 + a) = p2 - p1 = v`.
     fn translate_vector(&self, vector: V) -> Self::OutVector;
 }
 
@@ -115,7 +120,10 @@ impl<S> From<&Translation2D<S>> for Matrix3x3<S> where S: Copy {
     }
 }
 
-impl<S> Translation<Point2<S>, Vector2<S>> for Translation2D<S> where S: ScalarSigned {
+impl<S> Translation<Point2<S>, Vector2<S>> for Translation2D<S> 
+    where 
+        S: ScalarSigned 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -151,7 +159,10 @@ impl<S> Translation<Point2<S>, Vector2<S>> for Translation2D<S> where S: ScalarS
     }
 }
 
-impl<S> Translation2<S> for Translation2D<S> where S: ScalarSigned {
+impl<S> Translation2<S> for Translation2D<S> 
+    where 
+        S: ScalarSigned 
+{    
     fn from_translation(distance: Vector2<S>) -> Translation2D<S> {
         Translation2D {
             matrix: Matrix3x3::from_affine_translation(distance),
@@ -159,7 +170,10 @@ impl<S> Translation2<S> for Translation2D<S> where S: ScalarSigned {
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Translation2D<S> where S: ScalarSigned {
+impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Translation2D<S> 
+    where 
+        S: ScalarSigned 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -191,7 +205,10 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Translation2D<S> wh
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Translation2D<S> where S: ScalarSigned {
+impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Translation2D<S> 
+    where 
+        S: ScalarSigned
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -223,7 +240,10 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Translation2D<S> w
     }
 }
 
-impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Translation2D<S> where S: ScalarSigned {
+impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Translation2D<S> 
+    where 
+        S: ScalarSigned 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -255,7 +275,10 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Translation2D<S> w
     }
 }
 
-impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Translation2D<S> where S: ScalarSigned {
+impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Translation2D<S>
+    where 
+        S: ScalarSigned 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -330,7 +353,10 @@ impl<S> From<&Translation3D<S>> for Matrix4x4<S> where S: Copy {
     }
 }
 
-impl<S> Translation<Point3<S>, Vector3<S>> for Translation3D<S> where S: ScalarSigned {
+impl<S> Translation<Point3<S>, Vector3<S>> for Translation3D<S> 
+    where 
+        S: ScalarSigned 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -350,7 +376,11 @@ impl<S> Translation<Point3<S>, Vector3<S>> for Translation3D<S> where S: ScalarS
 
     #[inline]
     fn inverse(&self) -> Self {
-        let distance = Vector3::new(-self.matrix.c3r0, -self.matrix.c3r1, -self.matrix.c3r2);
+        let distance = Vector3::new(
+            -self.matrix.c3r0, 
+            -self.matrix.c3r1, 
+            -self.matrix.c3r2
+        );
 
         Translation3D::from_vector(distance)
     }
@@ -366,7 +396,10 @@ impl<S> Translation<Point3<S>, Vector3<S>> for Translation3D<S> where S: ScalarS
     }
 }
 
-impl<S> Translation3<S> for Translation3D<S> where S: ScalarSigned {
+impl<S> Translation3<S> for Translation3D<S> 
+    where 
+        S: ScalarSigned 
+{
     fn from_translation(distance: Vector3<S>) -> Translation3D<S> {
         Translation3D {
             matrix: Matrix4x4::from_affine_translation(distance),
@@ -374,7 +407,10 @@ impl<S> Translation3<S> for Translation3D<S> where S: ScalarSigned {
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Translation3D<S> where S: ScalarSigned {
+impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Translation3D<S> 
+    where 
+        S: ScalarSigned 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -406,7 +442,10 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Translation3D<S> wh
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Translation3D<S> where S: ScalarSigned {
+impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Translation3D<S> 
+    where 
+        S: ScalarSigned 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -438,7 +477,9 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Translation3D<S> w
     }
 }
 
-impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Translation3D<S> where S: ScalarSigned {
+impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Translation3D<S> 
+    where S: ScalarSigned 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -470,7 +511,10 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Translation3D<S> w
     }
 }
 
-impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Translation3D<S> where S: ScalarSigned {
+impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Translation3D<S> 
+    where 
+        S: ScalarSigned 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 

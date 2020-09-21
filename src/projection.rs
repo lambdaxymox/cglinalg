@@ -23,14 +23,15 @@ use core::fmt;
 /// A description of an orthographic projection with arbitrary `left`, `right`, 
 /// `top`, `bottom`, `near`, and `far` planes.
 ///
-/// We assume the following constraints to construct a useful orthographic projection
+/// We assume the following constraints to construct a useful orthographic 
+/// projection
 /// ```text
 /// left   < right
 /// bottom < top
-/// near   < far   (along the negative z-axis) (near > far along the positive z-axis).
+/// near   < far   (along the negative z-axis).
 /// ```
-/// Each parameter in the specification is a description of the position along an axis
-/// of a plane that the axis is perpendicular to.
+/// Each parameter in the specification is a description of the position along 
+/// an axis of a plane that the axis is perpendicular to.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct OrthographicSpec<S> {
     /// The horizontal position of the left-hand plane in camera space.
@@ -77,14 +78,15 @@ impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Debug + fmt::Display 
 /// A perspective projection based on arbitarary `left`, `right`, `bottom`,
 /// `top`, `near`, and `far` planes.
 ///
-/// We assume the following constraints to construct a useful perspective projection
+/// We assume the following constraints to construct a useful perspective 
+/// projection
 /// ```text
 /// left   < right
 /// bottom < top
-/// near   < far   (along the negative z-axis)(near > far along the positive z-axis).
+/// near   < far   (along the negative z-axis)
 /// ```
-/// Each parameter in the specification is a description of the position along an axis
-/// of a plane that the axis is perpendicular to.
+/// Each parameter in the specification is a description of the position along
+/// an axis of a plane that the axis is perpendicular to.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveSpec<S> {
     /// The horizontal position of the left-hand plane in camera space.
@@ -128,25 +130,27 @@ impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Debug + fmt::Display {
     }
 }
 
-/// A perspective projection based on the `near` plane, the `far` plane and the vertical
-/// field of view angle `fovy` and the horizontal/vertical aspect ratio `aspect`.
+/// A perspective projection based on the `near` plane, the `far` plane and 
+/// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
+/// ratio `aspect`.
 ///
 /// We assume the following constraints to make a useful perspective projection 
 /// transformation.
 /// ```text
 /// 0 radians < fovy < pi radians
 /// aspect > 0
-/// near < far (along the negative z-axis) (near > far along the positive z-axis)
+/// near < far (along the negative z-axis)
 /// ```
-/// This perspective projection model imposes some constraints on the more general 
-/// perspective specification based on the arbitrary planes. The `fovy` parameter 
-/// combined with the aspect ratio `aspect` ensures that the top and bottom planes 
-/// are the same distance from the eye position along the vertical axis on opposite side. 
-/// They ensure that the `left` and `right` planes are equidistant from the eye on 
-/// opposite sides along the horizontal axis. 
+/// This perspective projection model imposes some constraints on the more 
+/// general perspective specification based on the arbitrary planes. The `fovy` 
+/// parameter combined with the aspect ratio `aspect` ensures that the top and 
+/// bottom planes are the same distance from the eye position along the vertical 
+/// axis on opposite side. They ensure that the `left` and `right` planes are 
+/// equidistant from the eye on opposite sides along the horizontal axis. 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFovSpec<S> {
-    /// The vertical field of view angle of the perspective transformation viewport.
+    /// The vertical field of view angle of the perspective transformation
+    /// viewport.
     fovy: Radians<S>,
     /// The ratio of the horizontal width to the vertical height.
     aspect: S,
@@ -259,12 +263,13 @@ impl<S> From<OrthographicSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
 /// A perspective projection tranformation for converting from camera space to
 /// normalized device coordinates.
 ///
-/// Orthographic projections differ from perspective projections in that orthographic
-/// projections keeps parallel lines parallel, whereas perspective projections 
-/// preserve the perception of distance. That is, perspective projections preserve 
-/// the spatial ordering in the distance that points lie from the viewing plane. This
-/// property of perspective projection transformations is important for operations
-/// such as z-buffering and occlusion detection.
+/// Orthographic projections differ from perspective projections in that 
+/// orthographic projections keeps parallel lines parallel, whereas perspective 
+/// projections preserve the perception of distance. That is, perspective 
+/// projections preserve the spatial ordering of points in the distance they 
+/// are located from the viewing plane. This property of perspective projection 
+/// transformations is important for operations such as z-buffering and 
+/// occlusion detection.
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct PerspectiveProjection3D<S, Spec> {
     /// The parameters of the perspective projection.
@@ -363,10 +368,11 @@ impl<S, Spec> approx::UlpsEq for PerspectiveProjection3D<S, Spec> where
 /// An orthographic projection transformation for converting from camera space to
 /// normalized device coordinates. 
 ///
-/// Orthographic projections differ from perspective projections in that orthographic
-/// projections keeps parallel lines parallel, whereas perspective projections 
-/// preserve the perception of distance. That is, perspective projections preserve 
-/// the spatial ordering in the distance that points lie from the viewing plane.
+/// Orthographic projections differ from perspective projections in that 
+/// orthographic projections keeps parallel lines parallel, whereas perspective 
+/// projections preserve the perception of distance. That is, perspective 
+/// projections preserve the spatial ordering in the distance that points are 
+/// located from the viewing plane.
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct OrthographicProjection3D<S> {
     /// The parameters for the orthographic projection.

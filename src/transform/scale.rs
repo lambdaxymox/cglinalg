@@ -26,8 +26,8 @@ pub trait Scale<P, V> where Self: Sized + Copy {
     /// The type of the output vectors (displacements in space).
     type OutVector;
 
-    /// Construct a scale transformation that scales each coordinate by the reciprocal 
-    /// of the scaling factors of the scale operator `self`.
+    /// Construct a scale transformation that scales each coordinate by the 
+    /// reciprocal of the scaling factors of the scale operator `self`.
     fn inverse(&self) -> Option<Self>;
 
     /// Apply a scale operation to a vector.
@@ -46,7 +46,8 @@ pub trait Scale2<S> where
     /// across coordinates.
     fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Self;
   
-    /// Construct a two-dimensional scale transformation from a uniform scale factor.
+    /// Construct a two-dimensional scale transformation from a uniform scale 
+    /// factor.
     fn from_scale(scale: S) -> Self;
 }
 
@@ -59,7 +60,8 @@ pub trait Scale3<S> where
     /// across coordinates.
     fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Self;
 
-    /// Construct a three-dimensional scale transformation from a uniform scale factor.
+    /// Construct a three-dimensional scale transformation from a uniform scale 
+    /// factor.
     fn from_scale(scale: S) -> Self;
 }
 
@@ -146,7 +148,10 @@ impl<S> Scale2<S> for Scale2D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Scale2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Scale2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -176,7 +181,10 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Scale2D<S> where S:
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Scale2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Scale2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -206,7 +214,10 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Scale2D<S> where S
     }
 }
 
-impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Scale2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Scale2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -236,7 +247,10 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Scale2D<S> where S
     }
 }
 
-impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Scale2D<S> where S: ScalarFloat {
+impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Scale2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -279,7 +293,11 @@ impl<S> Scale3D<S> where S: Scalar {
     /// Construct a scale transformation from a vector of scale factors.
     pub fn from_vector(scale: Vector3<S>) -> Scale3D<S> {
         Scale3D {
-            matrix: Matrix4x4::from_affine_nonuniform_scale(scale.x, scale.y, scale.z),
+            matrix: Matrix4x4::from_affine_nonuniform_scale(
+                scale.x, 
+                scale.y, 
+                scale.z
+            ),
         }
     }
 }
@@ -309,7 +327,10 @@ impl<S> From<&Scale3D<S>> for Matrix4x4<S> where S: Copy {
     }
 }
 
-impl<S> Scale<Point3<S>, Vector3<S>> for Scale3D<S> where S: ScalarFloat {
+impl<S> Scale<Point3<S>, Vector3<S>> for Scale3D<S> 
+    where 
+        S: ScalarFloat
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -333,11 +354,18 @@ impl<S> Scale<Point3<S>, Vector3<S>> for Scale3D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Scale3<S> for Scale3D<S> where S: ScalarFloat {
+impl<S> Scale3<S> for Scale3D<S> 
+    where 
+        S: ScalarFloat 
+{
     #[inline]
     fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Scale3D<S> {
         Scale3D {
-            matrix: Matrix4x4::from_affine_nonuniform_scale(scale_x, scale_y, scale_z),
+            matrix: Matrix4x4::from_affine_nonuniform_scale(
+                scale_x, 
+                scale_y, 
+                scale_z
+            ),
         }
     }
 
@@ -349,7 +377,10 @@ impl<S> Scale3<S> for Scale3D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Scale3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Scale3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -379,7 +410,10 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Scale3D<S> where S:
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Scale3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Scale3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -409,7 +443,10 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Scale3D<S> where S
     }
 }
 
-impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Scale3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Scale3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -439,7 +476,10 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Scale3D<S> where S
     }
 }
 
-impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Scale3D<S> where S: ScalarFloat {
+impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Scale3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 

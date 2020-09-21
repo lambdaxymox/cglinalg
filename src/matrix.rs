@@ -102,8 +102,8 @@ impl<S> Matrix2x2<S> {
         }
     }
 
-    /// Map an operation on the elements of a matrix, returning a matrix whose elements
-    /// are elements of the new underlying type.
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
     pub fn map<T, F>(self, mut op: F) -> Matrix2x2<T> where F: FnMut(S) -> T {
         Matrix2x2 {
             c0r0: op(self.c0r0), 
@@ -156,7 +156,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// Construct a shearing matrix along the x-axis, holding the y-axis constant.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the y-dimension to shearing along the x-dimension.
+    /// contribution of the _y-axis_ to shearing along the _x-axis_.
     #[rustfmt::skip]
     pub fn from_shear_x(shear_x_with_y: S) -> Matrix2x2<S> {
         Matrix2x2::new(
@@ -168,7 +168,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// Construct a shearing matrix along the y-axis, holding the x-axis constant.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the x-dimension to shearing along the y-dimension.
+    /// contribution of the _x-axis_ to shearing along the _y-axis_.
     #[rustfmt::skip]
     pub fn from_shear_y(shear_y_with_x: S) -> Matrix2x2<S> {
         Matrix2x2::new(
@@ -177,13 +177,14 @@ impl<S> Matrix2x2<S> where S: Scalar {
         )
     }
     
-    /// Construct a general shearing matrix in two dimensions. There are two possible
-    /// parameters describing a shearing transformation in two dimensions.
+    /// Construct a general shearing matrix in two dimensions. There are two 
+    /// possible parameters describing a shearing transformation in two 
+    /// dimensions.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the x-dimension to shearing along the y-dimension.
-    /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
-    /// of the y-dimension to the shearing along the x-dimension. 
+    /// contribution of the _x-axis_ to shearing along the _y-axis_.
+    /// The parameter `shear_x_with_y` denotes the factor scaling the 
+    /// contribution of the y-component to the shearing of the x-component. 
     #[rustfmt::skip]
     pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix2x2<S> {
         let one = S::one();
@@ -221,8 +222,8 @@ impl<S> Matrix2x2<S> where S: Scalar {
 }
 
 impl<S> Matrix2x2<S> where S: ScalarSigned {
-    /// Construct a two-dimensional reflection matrix for reflecting through a line through 
-    /// the origin in the xy-plane.
+    /// Construct a two-dimensional reflection matrix for reflecting through a 
+    /// line through the origin in the xy-plane.
     #[rustfmt::skip]
     #[inline]
     pub fn from_reflection(normal: Vector2<S>) -> Matrix2x2<S> {
@@ -1041,8 +1042,8 @@ impl<S> Matrix3x3<S> {
         }
     }
 
-    /// Map an operation on the elements of a matrix, returning a matrix whose elements
-    /// are elements of the new underlying type.
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
     #[rustfmt::skip]
     pub fn map<T, F>(self, mut op: F) -> Matrix3x3<T> where F: FnMut(S) -> T {
         Matrix3x3 {
@@ -1116,8 +1117,9 @@ impl<S> Matrix3x3<S> where S: NumCast + Copy {
 impl<S> Matrix3x3<S> where S: Scalar {
     /// Construct a two-dimensional affine translation matrix.
     ///
-    /// This represents a translation in the xy-plane as an affine transformation
-    /// that displaces a vector along the length of the vector `distance`.
+    /// This represents a translation in the xy-plane as an affine 
+    /// transformation that displaces a vector along the length of the vector
+    /// `distance`.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_translation(distance: Vector2<S>) -> Matrix3x3<S> {
@@ -1163,8 +1165,8 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
     /// calling `from_scale(scale)` is equivalent to calling 
-    /// `from_affine_nonuniform_scale(scale, scale)`. The z-component is unaffected
-    /// since this is an affine matrix.
+    /// `from_affine_nonuniform_scale(scale, scale)`. The z-component is 
+    /// unaffected since this is an affine matrix.
     #[inline]
     pub fn from_affine_scale(scale: S) -> Matrix3x3<S> {
         Matrix3x3::from_affine_nonuniform_scale(scale, scale)
@@ -1188,12 +1190,12 @@ impl<S> Matrix3x3<S> where S: Scalar {
         )
     }
 
-    /// Construct a three-dimensional shearing matrix for shearing along the x-axis, holding
-    /// the y-axis constant and the z-axis constant.
+    /// Construct a three-dimensional shearing matrix for shearing along the 
+    /// x-axis, holding the y-axis constant and the z-axis constant.
     ///
-    /// The parameters `shear_x_with_y` and `shear_x_with_z` are the multiplicative
-    /// factors for the contributions of the y-axis, and the z-axis, respectively to 
-    /// shearing along the x-axis. 
+    /// The parameters `shear_x_with_y` and `shear_x_with_z` are the 
+    /// multiplicative factors for the contributions of the y-axis and the 
+    /// z-axis, respectively to shearing along the x-axis. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix3x3<S> {
@@ -1207,12 +1209,12 @@ impl<S> Matrix3x3<S> where S: Scalar {
         )
     }
 
-    /// Construct a three-dimensional shearing matrix for shearing along the y-axis, holding
-    /// the x-axis constant and the z-axis constant.
+    /// Construct a three-dimensional shearing matrix for shearing along the 
+    /// y-axis, holding the x-axis constant and the z-axis constant.
     ///
-    /// The parameters `shear_y_with_x` and `shear_y_with_z` are the multiplicative
-    /// factors for the contributions of the x-axis, and the z-axis, respectively to 
-    /// shearing along the y-axis. 
+    /// The parameters `shear_y_with_x` and `shear_y_with_z` are the
+    /// multiplicative factors for the contributions of the x-axis, and the 
+    /// z-axis, respectively to shearing along the y-axis. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix3x3<S> {
@@ -1226,8 +1228,8 @@ impl<S> Matrix3x3<S> where S: Scalar {
         )
     }
 
-    /// Construct a three-dimensional shearing matrix for shearing along the z-axis, holding
-    /// the x-axis constant and the y-axis constant.
+    /// Construct a three-dimensional shearing matrix for shearing along the 
+    /// z-axis, holding the x-axis constant and the y-axis constant.
     ///
     /// The parameters `shear_z_with_x` and `shear_z_with_y` are the multiplicative
     /// factors for the contributions of the x-axis, and the y-axis, respectively to 
@@ -1249,22 +1251,22 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// parameters describing a shearing transformation in three dimensions.
     /// 
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the y-dimension to shearing along the x-dimension.
+    /// contribution of the y-component to shearing of the x-component.
     ///
-    /// The parameter `shear_x_with_z` denotes the factor scaling the contribution 
-    /// of the z-dimension to the shearing along the x-dimension.
+    /// The parameter `shear_x_with_z` denotes the factor scaling the 
+    /// contribution  of the z-component to the shearing of the x-component.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the x-dimension to shearing along the y-dimension.
+    /// contribution of the x-component to shearing of the y-component.
     ///
-    /// The parameter `shear_y_with_z` denotes the factor scaling the contribution 
-    /// of the z-dimension to the shearing along the y-dimension. 
+    /// The parameter `shear_y_with_z` denotes the factor scaling the 
+    /// contribution of the _z-axis_ to the shearing of the y-component. 
     ///
     /// The parameter `shear_z_with_x` denotes the factor scaling the
-    /// contribution of the x-dimension to shearing along the z-dimension.
+    /// contribution of the _x-axis_ to shearing of the _z-axis_.
     ///
-    /// The parameter `shear_z_with_y` denotes the factor scaling the contribution 
-    /// of the y-dimension to the shearing along the z-dimension. 
+    /// The parameter `shear_z_with_y` denotes the factor scaling the 
+    /// contribution of the y-component to the shearing of the z-component. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear(
@@ -1285,7 +1287,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// x-axis, holding the y-axis constant.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the y-dimension to shearing along the x-dimension.
+    /// contribution of the _y-axis_ to shearing along the _x-axis_.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_x(shear_x_with_y: S) -> Matrix3x3<S> {
@@ -1303,7 +1305,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// y-axis, holding the x-axis constant.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the y-dimension to shearing along the x-dimension.
+    /// contribution of the _y-axis_ to shearing along the _x-axis_.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_y(shear_y_with_x: S) -> Matrix3x3<S> {
@@ -1318,13 +1320,14 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a general affine shearing matrix in two dimensions. There are 
-    /// two possible parameters describing a shearing transformation in two dimensions.
+    /// two possible parameters describing a shearing transformation in two 
+    /// dimensions.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the x-dimension to shearing along the y-dimension.
+    /// contribution of the _x-axis_ to shearing along the _y-axis_.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
-    /// of the y-dimension to the shearing along the x-dimension. 
+    /// of the _y-axis_ to the shearing along the _x-axis_. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix3x3<S> {
@@ -1340,47 +1343,51 @@ impl<S> Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> Matrix3x3<S> where S: ScalarSigned {
-    /// Construct a two-dimensional affine reflection matrix in the xy-plane for a line with normal
-    /// vector `normal` and bias vector `bias`. The bias vector can be any known point on the line
-    /// of reflection.
+    /// Construct a two-dimensional affine reflection matrix in the xy-plane 
+    /// for a line with normal vector `normal` and bias vector `bias`. The bias 
+    /// vector can be any known point on the line of reflection.
     /// 
-    /// The affine version of reflection generalizes the two-dimensional `from_reflection` function
-    /// in that `from_reflection` only works for lines that cross the origin. If the line does not
-    /// cross the origin, we need to compute a translation in order to calculate the reflection matrix. 
-    /// Since translation operations are affine and not linear, constructing a general two-dimensional
-    /// reflection requires an affine transformation instead of a linear one.
+    /// The affine version of reflection generalizes the two-dimensional 
+    /// `from_reflection` function in that `from_reflection` only works for 
+    /// lines that cross the origin. If the line does not cross the origin, we 
+    /// need to compute a translation in order to calculate the reflection 
+    /// matrix. Since translation operations are affine and not linear, 
+    /// constructing a general two-dimensional reflection requires an affine 
+    /// transformation instead of a linear one.
     ///
     /// In particular, consider a line of the form
     /// ```text
-    /// L = { (x, y) | a * (x - x0) + b * (y - y0) == 0 }, where (x0, x0) is a known point in L.
+    /// L = { (x, y) | a * (x - x0) + b * (y - y0) == 0 } 
+    /// where (x0, x0) is a known point in L.
     /// ```
-    /// A bare reflection matrix assumes that we can use the origin (x0 = 0, y0 = 0) 
-    /// as a known point, in which case the translation terms are zero. This yields the
-    /// matrix formula
+    /// A bare reflection matrix assumes that we can use the origin 
+    /// (x0 = 0, y0 = 0) as a known point, which makes the translation terms 
+    /// zero. This yields the matrix formula
     /// ```text
     /// |  1 - 2*nx*nx  -2*nx*ny       0 |
     /// | -2*nx*ny       1 - 2*ny*ny   0 |
     /// |  0             0             1 |
     /// ```
-    /// In the case where the the line `L` does not cross the origin, we must first do a 
-    /// coordinate transformation to coordinates where the line passes through the 
-    /// origin: this is just a shift by the bias `(x0, y0)` from `(x, y)` to `(x - x0, y - y0)`. 
-    /// We achieve this transformation in homogeneous coordinates by the matrix
+    /// In the case where the the line `L` does not cross the origin, we must 
+    /// first do a coordinate transformation to coordinates where the line passes 
+    /// through the origin: this is just a shift by the bias `(x0, y0)` from 
+    /// `(x, y)` to `(x - x0, y - y0)`. We achieve this transformation in 
+    /// homogeneous coordinates by the matrix
     /// ```text
     /// | 1  0  -x0 |
     /// | 0  1  -y0 |
     /// | 0  0   1  |
     /// ```
-    /// This puts us in the shifted coordinate system where the line now passes through the origin.
-    /// In this coordinate system, we can now apply the reflection matrix, which gives a homogeneous 
-    /// matrix equation 
+    /// This puts us in the shifted coordinate system where the line now passes 
+    /// through the origin. In this coordinate system, we can now apply the 
+    /// reflection matrix, which gives a homogeneous matrix equation 
     /// ```text
     /// | 1 0  -x0 |   |xr|    |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  -x0 |   |x|
     /// | 0 1  -y0 | * |yr| == | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1  -y0 | * |y|
     /// | 0 0   1  |   |1 |    |  0              0            1 |   | 0 0   1  |   |1|
     /// ```
-    /// Then to solve for the reflection components, we invert the translation matrix on the left hand side
-    /// to get an equation of the form
+    /// Then to solve for the reflection components, we invert the translation 
+    /// matrix on the left hand side to get an equation of the form
     /// ```text
     /// |xr|    | 1 0  x0 |   |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  -x0 |   |x|
     /// |yr| == | 0 1  y0 | * | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1  -y0 | * |y|
@@ -1390,8 +1397,8 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     ///      == | -2*nx*ny        1 - 2*ny*ny   2*ny*(nx*x0 + ny*y0) | * |y|
     ///         |  0              0             1                    |   |1|
     /// ```
-    /// Here the terms `xr` and `yr` are the coordinates of the reflected point across the line
-    /// `L` defined above.
+    /// Here the terms `xr` and `yr` are the coordinates of the reflected point 
+    /// across the line `L`.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_reflection(normal: Vector2<S>, bias: Vector2<S>) -> Matrix3x3<S> {
@@ -1418,7 +1425,8 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
         )
     }
 
-    /// Construct a three-dimensional reflection matrix for a plane that crosses the origin.
+    /// Construct a three-dimensional reflection matrix for a plane that
+    /// crosses the origin.
     #[rustfmt::skip]
     #[inline]
     pub fn from_reflection(normal: Vector3<S>) -> Matrix3x3<S> {
@@ -1446,10 +1454,11 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
 }
 
 impl<S> Matrix3x3<S> where S: ScalarFloat {
-    /// Construct an affine rotation matrix in two dimensions that rotates a vector
-    /// in the xy-plane by an angle `angle`.
+    /// Construct an affine rotation matrix in two dimensions that rotates a 
+    /// vector in the xy-plane by an angle `angle`.
     ///
-    /// This is the affine matrix counterpart to the 2x2 matrix function `from_angle`.
+    /// This is the affine matrix counterpart to the 2x2 matrix function 
+    /// `from_angle`.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_angle<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
@@ -1464,7 +1473,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a rotation matrix about the x-axis by an angle `angle`.
+    /// Construct a rotation matrix about the _x-axis_ by an angle `angle`.
     #[rustfmt::skip]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
@@ -1476,7 +1485,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a rotation matrix about the y-axis by an angle `angle`.
+    /// Construct a rotation matrix about the _y-axis_ by an angle `angle`.
     #[rustfmt::skip]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
@@ -1488,7 +1497,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a rotation matrix about the z-axis by an angle `angle`.
+    /// Construct a rotation matrix about the _z-axis_ by an angle `angle`.
     #[rustfmt::skip]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
@@ -1500,7 +1509,8 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a rotation matrix about an arbitrary axis by an angle `angle`.
+    /// Construct a rotation matrix about an arbitrary axis by an angle 
+    /// `angle`.
     #[rustfmt::skip]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
@@ -2745,8 +2755,8 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
     /// calling `from_scale(scale)` is equivalent to calling 
-    /// `from_nonuniform_scale(scale, scale, scale)`. Since this is an affine matrix
-    /// the `w` component is unaffected.
+    /// `from_nonuniform_scale(scale, scale, scale)`. Since this is an affine 
+    /// matrix the `w` component is unaffected.
     #[inline]
     pub fn from_affine_scale(scale: S) -> Matrix4x4<S> {
         Matrix4x4::from_affine_nonuniform_scale(scale, scale, scale)
@@ -2754,9 +2764,9 @@ impl<S> Matrix4x4<S> where S: Scalar {
 
     /// Construct a three-dimensional affine scaling matrix.
     ///
-    /// This is the most general case for affine scaling matrices: the scale factor
-    /// in each dimension need not be identical. Since this is an affine matrix,
-    /// the `w` component is unaffected.
+    /// This is the most general case for affine scaling matrices: the scale 
+    /// factor in each dimension need not be identical. Since this is an 
+    /// affine matrix, the `w` component is unaffected.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Matrix4x4<S> {
@@ -2771,13 +2781,15 @@ impl<S> Matrix4x4<S> where S: Scalar {
         )
     }
 
-    /// Construct a three-dimensional affine shearing matrix for shearing along the x-axis, holding
-    /// the y-axis constant and the z-axis constant.
+    /// Construct a three-dimensional affine shearing matrix for shearing 
+    /// along the _x-axis_, holding the _y-axis_ constant and the _z-axis_ 
+    /// constant.
     ///
-    /// The parameters `shear_x_with_y` and `shear_x_with_z` are the multiplicative
-    /// factors for the contributions of the y-axis, and the z-axis, respectively to 
-    /// shearing along the x-axis. Since this is an affine transformation the `w` component
-    /// of four-dimensional vectors is unaffected.
+    /// The parameters `shear_x_with_y` and `shear_x_with_z` are the 
+    /// multiplicative factors for the contributions of the _y-axis_, and the
+    /// _z-axis_, respectively to shearing along the x-axis. Since this is an 
+    /// affine transformation the `w` component of four-dimensional vectors is 
+    /// unaffected.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix4x4<S> {
@@ -2792,13 +2804,14 @@ impl<S> Matrix4x4<S> where S: Scalar {
         )
     }
 
-    /// Construct a three-dimensional affine shearing matrix for shearing along the y-axis, holding
-    /// the x-axis constant and the z-axis constant.
+    /// Construct a three-dimensional affine shearing matrix for shearing along 
+    /// the _y-axis_, holding the _x-axis_ constant and the _z-axis_ constant.
     ///
-    /// The parameters `shear_y_with_x` and `shear_y_with_z` are the multiplicative
-    /// factors for the contributions of the x-axis, and the z-axis, respectively to 
-    /// shearing along the y-axis. Since this is an affine transformation the `w` component
-    /// of four-dimensional vectors is unaffected.
+    /// The parameters `shear_y_with_x` and `shear_y_with_z` are the 
+    /// multiplicative factors for the contributions of the _x-axis+, and the 
+    /// _z-axis_, respectively to shearing along the _y-axis_. Since this is 
+    /// an affine transformation the `w` component of four-dimensional vectors 
+    /// is unaffected.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix4x4<S> {
@@ -2813,13 +2826,14 @@ impl<S> Matrix4x4<S> where S: Scalar {
         )
     }
 
-    /// Construct a three-dimensional affine shearing matrix for shearing along the z-axis, holding
-    /// the x-axis constant and the y-axis constant.
+    /// Construct a three-dimensional affine shearing matrix for shearing along 
+    /// the _z-axis_, holding the _x-axis_ constant and the _y-axis_ constant.
     ///
-    /// The parameters `shear_z_with_x` and `shear_z_with_y` are the multiplicative
-    /// factors for the contributions of the x-axis, and the y-axis, respectively to 
-    /// shearing along the z-axis. Since this is an affine transformation the `w` component
-    /// of four-dimensional vectors is unaffected.
+    /// The parameters `shear_z_with_x` and `shear_z_with_y` are the 
+    /// multiplicative factors for the contributions of the _x-axis_, and the 
+    /// _y-axis_, respectively to shearing along the _z-axis_. Since this is an 
+    /// affine transformation the `w` component of four-dimensional vectors is 
+    /// unaffected.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4x4<S> {
@@ -2834,26 +2848,28 @@ impl<S> Matrix4x4<S> where S: Scalar {
         )
     }
 
-    /// Construct a general shearing affine matrix in three dimensions. There are six
-    /// parameters describing a shearing transformation in three dimensions.
+    /// Construct a general shearing affine matrix in three dimensions. 
+    ///
+    /// There are six parameters describing a shearing transformation in three 
+    /// dimensions.
     /// 
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the y-dimension to shearing along the x-dimension.
+    /// contribution of the y-axis to shearing along the _x-axis_.
     ///
-    /// The parameter `shear_x_with_z` denotes the factor scaling the contribution 
-    /// of the z-dimension to the shearing along the x-dimension. 
+    /// The parameter `shear_x_with_z` denotes the factor scaling the 
+    /// contribution of the _z-axis_ to the shearing along the _x-axis_. 
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the x-dimension to shearing along the y-dimension.
+    /// contribution of the _x-axis_ to shearing along the y-axis.
     ///
-    /// The parameter `shear_y_with_z` denotes the factor scaling the contribution 
-    /// of the z-dimension to the shearing along the y-dimension. 
+    /// The parameter `shear_y_with_z` denotes the factor scaling the 
+    /// contribution of the _z-axis_ to the shearing along the y-axis. 
     ///
     /// The parameter `shear_z_with_x` denotes the factor scaling the
-    /// contribution of the x-dimension to shearing along the z-dimension.
+    /// contribution of the _x-axis_ to shearing along the _z-axis_.
     ///
-    /// The parameter `shear_z_with_y` denotes the factor scaling the contribution 
-    /// of the y-dimension to the shearing along the z-dimension. 
+    /// The parameter `shear_z_with_y` denotes the factor scaling the 
+    /// contribution of the y-axis to the shearing along the _z-axis_. 
     ///
     /// Since this is an affine transformation the `w` component
     /// of four-dimensional vectors is unaffected.
@@ -2876,51 +2892,54 @@ impl<S> Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> Matrix4x4<S> where S: ScalarSigned {
-    /// Construct a three-dimensional affine reflection matrix for a plane with normal
-    /// vector `normal` and bias vector `bias`. The bias vector can be any known 
-    /// point on the plane of reflection.
+    /// Construct a three-dimensional affine reflection matrix for a plane with
+    /// normal vector `normal` and bias vector `bias`. The bias vector can be 
+    /// any known point on the plane of reflection.
     /// 
-    /// The affine version of reflection generalizes the three-dimensional `from_reflection` function
-    /// in that `from_reflection` only works for planes that cross the origin. If the plane does not
-    /// cross the origin, we need to compute a translate to calculate the reflection matrix. 
-    /// Since translation operations are affine and not linear, constructing a general three-dimensional
-    /// reflection requires an affine transformation instead of a linear one.
+    /// The affine version of reflection generalizes the three-dimensional 
+    /// `from_reflection` function in that `from_reflection` only works for 
+    /// planes that cross the origin. If the plane does not cross the 
+    /// origin, we need to compute a translation for the reflection matrix. 
+    /// Since translation operations are affine and not linear, constructing a 
+    /// general three-dimensional reflection transformation requires an affine 
+    /// transformation instead of a linear one.
     ///
     /// In particular, consider a plane of the form
     /// ```text
     /// P = { (x, y, z) | a * (x - x0) + b * (y - y0) + c * (z - z0) == 0 }
     /// where (x0, y0, z0) is a known point in P.
     /// ```
-    /// A bare reflection matrix assumes that the the x-axis intercept `x0` and the y-axis intercept
-    /// `y0` are both zero, in which case the translation terms are zero. This yields the
-    /// matrix formula in (row-major form)
+    /// A bare reflection matrix assumes that the the x-axis intercept `x0` 
+    /// and the y-axis intercept `y0` are both zero, in which case the 
+    /// translation terms are zero. This yields the matrix formula
     /// ```text
     /// |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |
     /// | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       0 |
     /// | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   0 |
     /// |  0              0             0              1 |
     /// ```
-    /// In the case where the the plane `P` does not cross the origin, we must first do a 
-    /// coordinate transformation to coordinates where the line passes through the 
-    /// origin: this is just a shift by the bias `(x0, y0)` from `(x, y)` to `(x - x0, y - y0)`. 
-    /// We achieve this transformation in homogeneous coordinates by the matrix
+    /// In the case where the the plane `P` does not cross the origin, we must 
+    /// first do a coordinate transformation to coordinates where the line 
+    /// passes through the origin; just shift by the bias `(x0, y0)` from 
+    /// `(x, y)` to `(x - x0, y - y0)`. We achieve this transformation in 
+    /// homogeneous coordinates by the matrix
     /// ```text
     /// | 1  0  0  -x0 |
     /// | 0  1  0  -y0 |
     /// | 0  0  1  -z0 |
     /// | 0  0  0   1  |
     /// ```
-    /// This puts us in the shifted coordinate system where the line now passes through the origin.
-    /// In this coordinate system, we can now apply the reflection matrix, which gives a homogeneous 
-    /// matrix equation 
+    /// This puts us in the shifted coordinate system where the line now passes 
+    /// through the origin. In this coordinate system, we can now apply the 
+    /// reflection matrix, which gives a homogeneous matrix equation 
     /// ```text
     /// | 1  0  0  -x0 |   |xr|    |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |   | 1  0  0  -x0 |   |x|
     /// | 0  1  0  -y0 | * |yr| == | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       0 | * | 0  1  0  -y0 | * |y|
     /// | 0  0  1  -z0 |   |zr|    | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   0 |   | 0  0  1  -z0 |   |z|
     /// | 0  0  0   1  |   |1 |    |  0              0             0              1 |   | 0  0  0   1  |   |1| 
     /// ```
-    /// Then to solve for the reflection components, we invert the translation matrix on the 
-    /// left hand side to get an equation of the form
+    /// Then to solve for the reflection components, we invert the translation 
+    /// matrix on the left hand side to get an equation of the form
     /// ```text
     /// |xr|    | 1  0  0  x0 |   |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |   | 1  0  0  -x0 |   |x|
     /// |yr| == | 0  1  0  y0 | * | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       0 | * | 0  1  0  -y0 | * |y|
@@ -2932,8 +2951,8 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     ///         | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   2*nz*(nx*x0 + ny*y0 + nz*z0) |   |z|
     ///         |  0              0              0             1                            |   |1|
     /// ```
-    /// Here the terms `xr`, `yr`, and `zr` are the coordinates of the reflected point across the plane
-    /// `P` defined above.
+    /// Here the terms `xr`, `yr`, and `zr` are the coordinates of the 
+    /// reflected point across the plane `P`.
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_reflection(normal: Vector3<S>, bias: Vector3<S>) -> Matrix4x4<S> {
@@ -2966,7 +2985,7 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
             c3r0, c3r1, c3r2, c3r3
-       )
+        )
     }
 }
 
@@ -2987,8 +3006,8 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         )
     }
         
-    /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
-    /// y-axis by an angle `angle` radians/degrees.
+    /// Construct a three-dimensional affine rotation matrix rotating a vector 
+    /// around the y-axis by an angle `angle` radians/degrees.
     #[rustfmt::skip]
     pub fn from_affine_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
@@ -3003,8 +3022,8 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         )
     }
     
-    /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
-    /// z-axis by an angle `angle` radians/degrees.
+    /// Construct a three-dimensional affine rotation matrix rotating a vector 
+    /// around the z-axis by an angle `angle` radians/degrees.
     #[rustfmt::skip]
     pub fn from_affine_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
@@ -3019,8 +3038,8 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
-    /// axis `axis` by an angle `angle` radians/degrees.
+    /// Construct a three-dimensional affine rotation matrix rotating a vector 
+    /// around the axis `axis` by an angle `angle` radians/degrees.
     #[rustfmt::skip]
     pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix4x4<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
@@ -3049,8 +3068,8 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a homogeneous matrix that will point a vector towards the dierection
-    /// `direction`, using `up` for orientation.
+    /// Construct a homogeneous matrix that will point a vector towards the 
+    /// direction `direction`, using `up` for orientation.
     #[rustfmt::skip]
     pub fn look_at_dir(eye: Point3<S>, direction: Vector3<S>, up: Vector3<S>) -> Matrix4x4<S> {
         let forward = direction.normalize();
@@ -3362,10 +3381,14 @@ impl<S> Zero for Matrix4x4<S> where S: Scalar {
 
     fn is_zero(&self) -> bool {
         let zero = S::zero();
-        self.c0r0 == zero && self.c0r1 == zero && self.c0r2 == zero && self.c0r3 == zero &&
-        self.c1r0 == zero && self.c1r1 == zero && self.c1r2 == zero && self.c1r3 == zero &&
-        self.c2r0 == zero && self.c2r1 == zero && self.c2r2 == zero && self.c2r3 == zero &&
-        self.c3r0 == zero && self.c3r1 == zero && self.c3r2 == zero && self.c3r3 == zero
+        self.c0r0 == zero && self.c0r1 == zero && 
+        self.c0r2 == zero && self.c0r3 == zero &&
+        self.c1r0 == zero && self.c1r1 == zero && 
+        self.c1r2 == zero && self.c1r3 == zero &&
+        self.c2r0 == zero && self.c2r1 == zero && 
+        self.c2r2 == zero && self.c2r3 == zero &&
+        self.c3r0 == zero && self.c3r1 == zero && 
+        self.c3r2 == zero && self.c3r3 == zero
     }
 }
 

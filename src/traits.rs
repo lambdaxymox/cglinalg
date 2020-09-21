@@ -12,9 +12,11 @@ use core::ops;
 
 
 /// A type implementing this trait has the structure of an array
-/// of its elements in its underlying storage. In this way we can manipulate
-/// underlying storage directly for operations such as passing geometric data 
-/// across an API boundary to the GPU, or other external hardware.
+/// of its elements in its underlying storage. 
+/// 
+/// We can manipulate underlying storage directly for operations such as 
+/// passing geometric data across an API boundary to the GPU, or other 
+/// external hardware.
 pub trait Array { 
     /// The elements of an array.
     type Element: Copy;
@@ -72,20 +74,23 @@ pub trait Identity where Self: Sized + ops::Mul<Self, Output = Self> {
     }
 }
 
-/// A trait that defines features for specifying when a vector is finite. A vector is finite when
-/// all of its elements are finite. This is useful for vector and matrix types working with fixed 
-/// precision floating point values.
+/// A trait that defines features for specifying when a vector is finite. 
+///
+/// A vector is finite when all of its elements are finite. This is useful 
+/// for vector and matrix types working with fixed precision floating point 
+/// values.
 pub trait Finite {
-    /// Returns `true` if the elements of this vector are all finite. Otherwise, it returns `false`. 
+    /// Returns `true` if the elements of this vector are all finite. 
+    /// Otherwise, it returns `false`. 
     ///
-    /// For example, when the vector elements are `f64`, the vector is finite when the elements are
-    /// neither `NaN` nor infinite.
+    /// For example, when the vector elements are `f64`, the vector is finite 
+    /// when the elements are neither `NaN` nor infinite.
     fn is_finite(self) -> bool;
 }
 
-/// A type with this trait has a notion of comparing the distance (metric) between
-/// two elements of that type. For example, one can use this trait to compute the 
-/// Euclidean distance between two vectors. 
+/// A type with this trait has a notion of comparing the distance (metric) 
+/// between two elements of that type. For example, one can use this trait 
+/// to compute the Euclidean distance between two vectors. 
 pub trait Metric<V: Sized>: Sized {
     type Output: ScalarFloat;
 
@@ -98,7 +103,8 @@ pub trait Metric<V: Sized>: Sized {
     }
 }
 
-/// This trait enables one to define the dot product of two elements of a vector space.
+/// This trait enables one to define the dot product of two elements of a 
+/// vector space.
 pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
     type Output: Scalar;
 
@@ -123,8 +129,8 @@ pub trait Magnitude {
     fn normalize_to(&self, magnitude: Self::Output) -> Self;
 }
 
-/// A vector type with the `Lerp` trait has the ability to linearly interpolate between two elements
-/// of that type. 
+/// A vector type with the `Lerp` trait has the ability to linearly interpolate 
+/// between two elements of that type. 
 pub trait Lerp<V: Copy + Clone> {
     type Scalar: Scalar;
     type Output;
@@ -133,8 +139,8 @@ pub trait Lerp<V: Copy + Clone> {
     fn lerp(self, other: V, amount: Self::Scalar) -> Self::Output;
 }
 
-/// A vector type with this trait can perform normalized linear interpolations between two elements
-/// of that type.
+/// A vector type with this trait can perform normalized linear interpolations 
+/// between two elements of that type.
 pub trait Nlerp<V: Copy + Clone> {
     type Scalar: Scalar;
     type Output;
@@ -143,8 +149,8 @@ pub trait Nlerp<V: Copy + Clone> {
     fn nlerp(self, other: V, amount: Self::Scalar) -> Self::Output;
 }
 
-/// A vector or quaternion with this trait can perform spherical linear interpolation
-/// between two elements of that type on the unit sphere.
+/// A vector or quaternion with this trait can perform spherical linear 
+/// interpolation between two elements of that type on the unit sphere.
 pub trait Slerp<V: Copy + Clone> {
     type Scalar: Scalar;
     type Output;
@@ -179,8 +185,9 @@ pub trait CrossProduct<V> {
 
     /// Compute the cross product of two three-dimensional vectors. 
     ///
-    /// Note that with the vectors used in computer graphics (two, three, and four dimensions),
-    /// the cross product is defined only in three dimensions.
+    /// Note that for the vectors used in computer graphics 
+    /// (up to four dimensions), the cross product is well-defined only in 
+    /// three dimensions.
     fn cross(self, other: V) -> Self::Output;
 }
 
@@ -218,10 +225,13 @@ pub trait Matrix {
     fn transpose(&self) -> Self::Transpose;
 }
 
-/// Implement trigonometry for typed angles. This enables a careful distinction between 
-/// different units of angles to prevent trigonometric errors that arise from using incorrect 
-/// angular units. For example, adding radians to degrees, or passing an angle in degrees to 
-/// a trigonometric function when one meant to pass an angle in units of radians.
+/// Implement trigonometry for typed angles. 
+///
+/// Making the units of the angles strongly typed enables us to make a careful 
+/// distinction between different units of angles to prevent trigonometric 
+/// errors that arise from using incorrect angular units. For example, adding
+/// radians to degrees, or passing an angle in degrees to a trigonometric 
+/// function when one meant to pass an angle in units of radians.
 pub trait Angle where 
     Self: Copy + Clone,
     Self: PartialEq + PartialOrd,
@@ -260,10 +270,12 @@ pub trait Angle where
     /// Compute the arc tangent of a scalar value, returning a typed angle.
     fn atan(ratio: Self::Scalar) -> Self;
 
-    /// Compute the four quadrant arc tangent of two angles, returning a typed angle.
+    /// Compute the four quadrant arc tangent of two angles, returning a 
+    /// typed angle.
     /// 
     /// The return value is the arctangent of the quotient of the two input values. 
-    /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent satisfies
+    /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent 
+    /// satisfies
     /// ```text
     /// tan2(theta) := y / x
     /// ```
@@ -327,7 +339,8 @@ pub trait Angle where
         }
     }
 
-    /// Map an angle to its smallest congruent angle in the range `[-full_turn / 2, full_turn / 2)`.
+    /// Map an angle to its smallest congruent angle in the 
+    /// range `[-full_turn / 2, full_turn / 2)`.
     #[inline]
     fn normalize_signed(self) -> Self {
         let remainder = self.normalize();
@@ -406,22 +419,26 @@ pub trait SquareMatrix where
     /// Compute the trace of a square matrix.
     fn trace(&self) -> Self::Element;
 
-    /// Determine whether a square matrix is a diagonal matrix. A square matrix is a diagonal matrix
-    /// if every off-diagonal element is zero.
+    /// Determine whether a square matrix is a diagonal matrix. 
+    ///
+    /// A square matrix is a diagonal matrix if every off-diagonal 
+    /// element is zero.
     fn is_diagonal(&self) -> bool;
 
-    /// Determine whether a matrix is symmetric. A matrix is symmmetric when 
-    /// element `(i, j)` is equal to element `(j, i)` for each row `i` and column `j`.
-    /// Otherwise, it is not a symmeric matrix. Note that every diagonal matrix is trivially
-    /// a symmetry matrix.
+    /// Determine whether a matrix is symmetric. 
+    ///
+    /// A matrix is symmmetric when element `(i, j)` is equal to element `(j, i)` 
+    /// for each row `i` and column `j`. Otherwise, it is not a symmeric matrix. 
+    /// Note that every diagonal matrix is a symmetric matrix.
     fn is_symmetric(&self) -> bool;
 
     /// Determine whether a square matrix is the identity matrix.
     fn is_identity(&self) -> bool;
 
-    /// Construct an identity matrix. This function gives the same result as the function
-    /// `one`. we define it here as a synonym for `one` because it is much more common to 
-    /// name such a matrix the identity matrix.
+    /// Construct an identity matrix. 
+    /// 
+    /// This function gives the same result as the function as the `identity` 
+    /// function from the `Identity` trait.
     #[inline]
     fn identity() -> Self {
         <Self as Identity>::identity()

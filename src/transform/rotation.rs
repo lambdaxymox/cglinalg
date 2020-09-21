@@ -49,13 +49,14 @@ pub trait Rotation<P, V> where Self: Sized + Copy {
     /// Point a vector at the point `direction`.
     fn look_at(direction: V, up: V) -> Self;
 
-    /// Construct a rotation that rotates the shortest angular distance between two unit
-    /// vectors.
+    /// Construct a rotation that rotates the shortest angular distance 
+    /// between two unit vectors.
     fn between_vectors(v1: V, v2: V) -> Self;
 
-    /// Construct a rotation that rotates a vector in the opposite direction of `self`. In particular,
-    /// given a rotation operator that rotates a vector about an axis by an angle `theta`, construct 
-    /// a rotation that rotates a vector about the same axis by an angle `-theta`.
+    /// Construct a rotation that rotates a vector in the opposite direction 
+    /// of `self`. In particular, given a rotation operator that rotates a vector 
+    /// about an axis by an angle `theta`, construct a rotation that rotates a 
+    /// vector about the same axis by an angle `-theta`.
     fn inverse(&self) -> Self;
 
     /// Apply the rotation operation to a vector.
@@ -65,16 +66,20 @@ pub trait Rotation<P, V> where Self: Sized + Copy {
     fn rotate_point(&self, point: P) -> Self::OutPoint;
 }
 
-/// A trait that implements rotation operators in two-dimensions. Two-dimensional 
-/// rotations are different than three-dimensional rotations in that mathematically 
-/// we cannot define an axis of rotation in two dimensions. Instead we have to talk 
-/// about rotating the xy-plane by an angle. In low-dimensional settings, the 
-/// notion of rotation axis is really only well-defined in three dimensions, since only in
-/// three-dimensions is every plane guaranteed to have a normal vector. If one wants to 
-/// talk about rotating a vector in the the xy-plane about a normal vector, we are implicitly 
-/// rotating about the z-axis in three-dimensions. Otherwise, avoiding cheating in that 
-/// fashion requires abolishing coordinate axes and only talking about  (hyper)planes, but 
-/// this requires different mathematics than is typically used in computer graphics.
+/// A trait that implements rotation operators in two-dimensions. 
+/// 
+/// Two-dimensional rotations are different than three-dimensional rotations in 
+/// that mathematically we cannot define an axis of rotation in two dimensions. 
+/// Instead we have to talk about rotating in the xy-plane by an angle. In 
+/// low-dimensional settings, the notion of rotation axis is only well-defined 
+/// in three dimensions because dimension three is the only dimension where 
+/// every plane is guaranteed to have a normal vector. 
+/// 
+/// If one wants to talk about rotating a vector in the the xy-plane about a 
+/// normal vector, we are implicitly rotating about the z-axis in 
+/// three dimensions. Otherwise, to avoid cheating in that fashion we must 
+/// abolish coordinate axes and only talk about (hyper)planes, but this 
+/// requires the language of geometric algebra to express precisely.
 pub trait Rotation2<S> where 
     S: ScalarFloat,
     Self: Rotation<Point2<S>, Vector2<S>> + Into<Matrix3x3<S>> + Into<Rotation2D<S>>,
@@ -93,22 +98,22 @@ pub trait Rotation3<S> where
     /// an amount `angle`.
     fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Self;
 
-    /// Construct a new three-dimensional rotation about the x-axis in the yz-plane 
-    /// by an amount `angle`.
+    /// Construct a new three-dimensional rotation about the x-axis in the 
+    /// yz-plane by an angle `angle`.
     #[inline]
     fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_x(), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the y-axis in the xz-plane 
-    /// by an amount `angle`.
+    /// Construct a new three-dimensional rotation about the y-axis in the 
+    /// xz-plane by an angle `angle`.
     #[inline]
     fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_y(), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the z-axis in the xy-plane 
-    /// by an amount `angle`.
+    /// Construct a new three-dimensional rotation about the z-axis in the 
+    /// xy-plane by an angle `angle`.
     #[inline]
     fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_z(), angle)
@@ -204,7 +209,10 @@ impl<S> Rotation2<S> for Rotation2D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Rotation<Point2<S>, Vector2<S>> for Rotation2D<S> where S: ScalarFloat { 
+impl<S> Rotation<Point2<S>, Vector2<S>> for Rotation2D<S> 
+    where 
+        S: ScalarFloat 
+{ 
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -243,7 +251,10 @@ impl<S> Rotation<Point2<S>, Vector2<S>> for Rotation2D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -276,7 +287,10 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S> where
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -309,7 +323,10 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S> wher
     }
 }
 
-impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S> where S: ScalarFloat {
+impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S> 
+    where 
+        S: ScalarFloat
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -342,7 +359,10 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S> wher
     }
 }
 
-impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Rotation2D<S> where S: ScalarFloat {
+impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Rotation2D<S> 
+    where 
+        S: ScalarFloat
+{
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
@@ -550,7 +570,8 @@ impl<S> Rotation3<S> for Rotation3D<S> where S: ScalarFloat {
 impl<S> Rotation3<S> for Quaternion<S> where S: ScalarFloat {
     #[inline]
     fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
-        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * num_traits::cast(0.5_f64).unwrap());
+        let one_half = num_traits::cast(0.5_f64).unwrap();
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
         Quaternion::from_sv(cos_angle, axis * sin_angle)
     }
 }
@@ -598,7 +619,10 @@ impl<S> Rotation<Point3<S>, Vector3<S>> for Rotation3D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -631,7 +655,10 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> where
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S>
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -664,7 +691,10 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S> wher
     }
 }
 
-impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S> where S: ScalarFloat {
+impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
@@ -697,7 +727,10 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S> wher
     }
 }
 
-impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Rotation3D<S> where S: ScalarFloat {
+impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Rotation3D<S> 
+    where 
+        S: ScalarFloat 
+{
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 

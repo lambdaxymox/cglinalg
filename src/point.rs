@@ -73,8 +73,8 @@ impl<S> Point1<S> {
 }
 
 impl<S> Point1<S> where S: Copy {
-    /// Construct a new two-dimensional point from a one-dimensional poit by supplying the 
-    /// y-coordinate.
+    /// Construct a new two-dimensional point from a one-dimensional poit by
+    /// supplying the y-coordinate.
     #[inline]
     pub fn expand(self, y: S) -> Point2<S> {
         Point2::new(self.x, y)
@@ -680,8 +680,8 @@ impl<S> Point2<S> {
         Point2 { x: x, y: y }
     }
 
-    /// Map an operation on that acts on the coordinates of a point, returning a point whose
-    /// coordinates are of the new scalar type.
+    /// Map an operation on that acts on the coordinates of a point, returning 
+    /// a point whose coordinates are of the new scalar type.
     pub fn map<T, F>(self, mut op: F) -> Point2<T> 
         where F: FnMut(S) -> T 
     {

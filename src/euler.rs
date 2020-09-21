@@ -96,9 +96,9 @@ use core::ops;
 /// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
 ///               | 0             0            1 |
 /// ```
-/// Let's examine what happens when the yaw angle is `pi / 2`. The cosine of and sine 
-/// of this angle are `cos(pi / 2) == 0` and `sin(pi / 2) == 1`. Plugging this into the
-/// rotation equations gives the rotation matrix
+/// Let's examine what happens when the yaw angle is `pi / 2`. The cosine of 
+/// and sine of this angle are `cos(pi / 2) == 0` and `sin(pi / 2) == 1`. 
+/// Plugging this into the rotation equations gives the rotation matrix
 /// ```text
 ///      | 1   0            0         |   |  0   0   1 |   | cos(pitch)   -sin(pitch)   0 |
 /// R == | 0   cos(roll)   -sin(roll) | * |  0   1   0 | * | sin(pitch)    cos(pitch)   0 |
@@ -116,9 +116,9 @@ use core::ops;
 ///   == |  sin(roll + pitch)   cos(roll + pitch) 0 |
 ///      | -cos(roll + pitch)   sin(roll + pitch) 0 |
 /// ```
-/// Changing either the values of the `pitch` or the `roll` has the same effect: it rotates an object
-/// about the _z-axis_. In other words, we have lost the ability to roll about the x-axis.
-/// Let's illustrate this effect with some code.
+/// Changing either the values of the `pitch` or the `roll` has the same 
+/// effect: it rotates an object about the _z-axis_. We have lost the ability 
+/// to roll about the x-axis. Let's illustrate this effect with some code.
 /// ```
 /// use cglinalg::{
 ///     Degrees,
@@ -291,8 +291,8 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     /// m[2, 1] := -cos(yaw) * sin(roll)
     /// m[2, 2] :=  cos(yaw) * cos(roll)
     /// ```
-    /// This yields the entries in the rotation matrix. Since an affine rotation matrix
-    /// has no translation terms in it, the final matrix has the form
+    /// This yields the entries in the rotation matrix. Since an affine rotation 
+    /// matrix has no translation terms in it, the final matrix has the form
     /// ```text
     ///                        | m[0, 0]   m[1, 0]   m[2, 0]   0 |
     /// R(roll, yaw, pitch) == | m[0, 1]   m[1, 1]   m[2, 1]   0 |
@@ -337,16 +337,16 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
 
     /// Extract Euler angles from a rotation matrix, in units of radians.
     ///
-    /// We explain the method because the formulas are not exactly obvious. The method
-    /// is based on the method derived by Ken Shoemake in [1]
+    /// We explain the method because the formulas are not exactly obvious. 
+    /// The method is based on the method derived by Ken Shoemake in [1]
     ///
     /// ## The Setup For Extracting Euler Angles
     ///
     /// A set of Euler angles describes an arbitrary rotation as a sequence
     /// of three axial rotations: one for each axis in thee dimensions (x, y, z).
     /// The rotation matrix described by Euler angles can be decomposed into a 
-    /// product of rotation matrices about each axis: let `R_x(roll)`, `R_y(yaw)`, 
-    /// and `R_z(pitch)` denote the rotations about the 
+    /// product of rotation matrices about each axis: let `R_x(roll)`, 
+    /// `R_y(yaw)`, and `R_z(pitch)` denote the rotations about the 
     /// `x`-axis, `y`-axis, and `z`-axis, respectively. The Euler rotation
     /// is decomposed as follows
     /// ```text
@@ -477,8 +477,9 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     /// The method here is just one method of extracting Euler angles. More than one 
     /// set of Euler angles can generate the same axis and rotation.
     /// 
-    /// [1] _Paul S. Heckbert (Ed.). 1994. Graphics Gems IV. The Graphics Gems Series, Vol. 4. Academic Press. 
-    ///     DOI:10.5555/180895. pp. 222-229_
+    /// [1] _Paul S. Heckbert (Ed.). 1994. Graphics Gems IV. 
+    ///     The Graphics Gems Series, Vol. 4. Academic Press. DOI:10.5555/180895. 
+    ///     pp. 222-229_
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> EulerAngles<Radians<S>> {
         let x = Radians::atan2(-matrix.c2r1, matrix.c2r2);
         let cos_y = S::sqrt(matrix.c0r0 * matrix.c0r0 + matrix.c1r0 * matrix.c1r0);
