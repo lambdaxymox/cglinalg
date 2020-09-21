@@ -12,25 +12,25 @@ The design of the library has the following goals in mind:
 * **Few Dependencies** -- To support portability and maintainability, 
   `cglinalg` is designed to use few external dependencies. This makes it simpler 
   to integrate into applications. the biggest dependency is `proptest` which is 
-  not necessary to use the library in software applications, only for running 
-  tests.
+  development dependency only.
 * **Type Safety** -- Leverage Rust's type system and zero-cost abstractions 
   to ensure code correctness, abstraction, and intelligibility do not come 
   at the cost of performance.
 * **Flexibility** -- The data types in `cglinalg` are parametric over their 
   scalars so they can operate on multiple scalar types. 
 * **Simplicity** -- The system should be easy to understand and use.
-* **Speed And Efficiency** -- Since the main use-case for the library is real-time 
-  applications, operations should be fast and efficient.
+* **Speed And Efficiency** -- Operations should be fast and efficient to support
+  the primary use case of real-time graphics applications.
 * **Ergonomics** -- The types and the language of the documentations are designed 
   to be understandable to working graphics programmers. The main prerequisite 
   for understanding the language of the library documentation is elementary 
   linear algebra. Other concepts such as quaternions are explained where possible.
-* **Composability** -- The library should serve as a cornerstone for other 
-  computer graphics applications.
+* **Composability** -- The library should serve as a type-agnostic cornerstone 
+  for other computer graphics applications.
 
 ## Getting Started
-To use `cglinalg` in your project, add as a dependency in your `Cargo.toml` file:
+To use library in your project, add `cglinalg` as a dependency in your 
+`Cargo.toml` file:
 ```
 [dependencies]
 cglinalg = "0.8"
