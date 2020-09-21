@@ -96,7 +96,7 @@ fn test_perspective_projection_fov_transformation() {
 #[test]
 fn test_perspective_projection_unproject_point1() {
     let fovy = Degrees(72.0);
-    let aspect = 800 as f32 / 600 as f32;
+    let aspect = 800 as f64 / 600 as f64;
     let near = 0.1;
     let far = 100.0;
     let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
@@ -106,13 +106,13 @@ fn test_perspective_projection_unproject_point1() {
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
-    assert_eq!(result, expected);
+    assert!(relative_eq!(result, expected, epsilon = 1e-8));
 }
 
 #[test]
 fn test_perspective_projection_unproject_vector1() {
     let fovy = Degrees(72.0);
-    let aspect = 800 as f32 / 600 as f32;
+    let aspect = 800 as f64 / 600 as f64;
     let near = 0.1;
     let far = 100.0;
     let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
@@ -122,7 +122,7 @@ fn test_perspective_projection_unproject_vector1() {
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
-    assert_eq!(result, expected);
+    assert!(relative_eq!(result, expected, epsilon = 1e-8));
 }
 
 #[test]

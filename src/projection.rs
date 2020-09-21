@@ -264,11 +264,11 @@ impl<S> From<PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat 
     #[inline]
     fn from(spec: PerspectiveFovSpec<S>) -> PerspectiveSpec<S> {
         let two = S::one() + S::one();
-        let tan_fovy_div_2 = spec.far * Radians::tan(spec.fovy / two); 
-        let right = spec.aspect * spec.far * tan_fovy_div_2;
-        let left = -right;
-        let top = spec.far * tan_fovy_div_2;
+        let tan_fovy_div_2 = Radians::tan(spec.fovy / two); 
+        let top = spec.near * tan_fovy_div_2;
         let bottom = -top;
+        let right = spec.aspect * top;
+        let left = -right;
         let near = spec.near;
         let far = spec.far;
 
@@ -280,11 +280,11 @@ impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat
     #[inline]
     fn from(spec: &PerspectiveFovSpec<S>) -> PerspectiveSpec<S> {
         let two = S::one() + S::one();
-        let tan_fovy_div_2 = spec.far * Radians::tan(spec.fovy / two); 
-        let right = spec.aspect * spec.far * tan_fovy_div_2;
-        let left = -right;
-        let top = spec.far * tan_fovy_div_2;
+        let tan_fovy_div_2 = Radians::tan(spec.fovy / two); 
+        let top = spec.near * tan_fovy_div_2;
         let bottom = -top;
+        let right = spec.aspect * top;
+        let left = -right;
         let near = spec.near;
         let far = spec.far;
 
