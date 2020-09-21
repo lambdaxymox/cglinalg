@@ -96,6 +96,14 @@ impl<S> Quaternion<S> {
     }
 }
 
+impl<S> Quaternion<S> where S: Copy {
+    /// Construct a new quaternion from a fill value.
+    #[inline]
+    pub fn from_fill(value: S) -> Quaternion<S> {
+        Quaternion::new(value, value, value, value)
+    }
+}
+
 impl<S> Quaternion<S> where S: NumCast + Copy {
     /// Cast a quaternion from one type of scalars to another type of scalars.
     pub fn cast<T: NumCast>(&self) -> Option<Quaternion<T>> {

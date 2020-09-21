@@ -76,8 +76,14 @@ impl<S> Point1<S> where S: Copy {
     /// Construct a new two-dimensional point from a one-dimensional poit by supplying the 
     /// y-coordinate.
     #[inline]
-    pub fn extend(self, y: S) -> Point2<S> {
+    pub fn expand(self, y: S) -> Point2<S> {
         Point2::new(self.x, y)
+    }
+
+    /// Construct a new point from a fill value.
+    #[inline]
+    pub fn from_fill(value: S) -> Point1<S> {
+        Point1::new(value)
     }
 }
 
@@ -687,9 +693,24 @@ impl<S> Point2<S> {
 }
 
 impl<S> Point2<S> where S: Copy {
+    /// Expand a two-dimensional point to a three-dimensional point using
+    /// the supplied z-value.
     #[inline]
-    pub fn extend(self, z: S) -> Point3<S> {
+    pub fn expand(self, z: S) -> Point3<S> {
         Point3::new(self.x, self.y, z)
+    }
+
+    /// Contract a two-dimensional point to a one-dimensional point by
+    /// removing its y-component.
+    #[inline]
+    pub fn contract(self) -> Point1<S> {
+        Point1::new(self.x)
+    }
+
+    /// Construct a new point from a fill value.
+    #[inline]
+    pub fn from_fill(value: S) -> Point2<S> {
+        Point2::new(value, value)
     }
 }
 
@@ -1322,6 +1343,20 @@ impl<S> Point3<S> {
             y: op(self.y),
             z: op(self.z),
         }
+    }
+}
+
+impl<S> Point3<S> where S: Copy {
+    /// Construct a new point from a fill value.
+    #[inline]
+    pub fn from_fill(value: S) -> Point3<S> {
+        Point3::new(value, value, value)
+    }
+
+    /// Contract a three-dimensional point, removing its z-component.
+    #[inline]
+    pub fn contract(self) -> Point2<S> {
+        Point2::new(self.x, self.y)
     }
 }
 

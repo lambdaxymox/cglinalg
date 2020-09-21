@@ -86,6 +86,12 @@ impl<S> Vector1<S> where S: Copy {
     pub fn expand(self, y: S) -> Vector2<S> {
         Vector2::new(self.x, y)
     }
+
+    /// Construct a vector from a fill value.
+    #[inline]
+    pub fn from_fill(value: S) -> Vector1<S> {
+        Vector1::new(value)
+    }
 }
 
 impl<S> Vector1<S> where S: Scalar {
@@ -833,6 +839,12 @@ impl<S> Vector2<S> where S: Copy {
     #[inline]
     pub fn contract(self) -> Vector1<S> {
         Vector1::new(self.x)
+    }
+
+    /// Construct a vector from a few value.
+    #[inline]
+    pub fn from_fill(value: S) -> Vector2<S> {
+        Vector2::new(value, value)
     }
 }
 
@@ -1618,6 +1630,12 @@ impl<S> Vector3<S> where S: Copy {
     #[inline]
     pub fn contract(self) -> Vector2<S> {
         Vector2::new(self.x, self.y)
+    }
+
+    /// Construct a vector from a fill value.
+    #[inline]
+    pub fn from_fill(value: S) -> Vector3<S> {
+        Vector3::new(value, value, value)
     }
 }
 
@@ -2496,6 +2514,12 @@ impl<S> Vector4<S> where S: Copy {
     #[inline]
     pub fn contract(self) -> Vector3<S> {
         Vector3::new(self.x, self.y, self.z)
+    }
+
+    /// Construct a vector from a fill value.
+    #[inline]
+    pub fn from_fill(value: S) -> Vector4<S> {
+        Vector4::new(value, value, value, value)
     }
 }
 
