@@ -16,17 +16,15 @@ The design of the library has the following goals in mind:
 * **Type Safety** -- Leverage Rust's type system and zero-cost abstractions 
   to ensure code correctness, abstraction, and intelligibility do not come 
   at the cost of performance.
-* **Flexibility** -- The data types in `cglinalg` are parametric over their 
-  scalars so they can operate on multiple scalar types. 
+* **Flexibility** -- The library should serve as a type-agnostic cornerstone 
+  for other computer graphics applications. The data types in `cglinalg` are
+  parametric over their scalars so they can operate on multiple scalar types. 
 * **Simplicity** -- The system should be easy to understand and use.
 * **Speed And Efficiency** -- Operations should be fast and efficient to support
   the primary use case of real-time graphics applications.
 * **Ergonomics** -- The types and the language of the documentations are designed 
   to be understandable to working graphics programmers. The main prerequisite 
   for understanding the language of the library documentation is elementary 
-  linear algebra. Other concepts such as quaternions are explained where possible.
-* **Composability** -- The library should serve as a type-agnostic cornerstone 
-  for other computer graphics applications.
 
 ## Getting Started
 To use library in your project, add `cglinalg` as a dependency in your 

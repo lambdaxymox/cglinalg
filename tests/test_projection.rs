@@ -12,6 +12,9 @@ use cglinalg::{
     Point3,
     Vector3,
 };
+use cglinalg::approx::{
+    relative_eq,
+};
 
 
 #[test]
@@ -131,13 +134,12 @@ fn test_perspective_projection_unproject_point2() {
     let near = 1.0;
     let far = 100.0;
     let spec = PerspectiveSpec::new(left, right, bottom, top, near, far);
-    let point = Point3::new(-2.0, 2.0, -50.0);
     let projection = PerspectiveProjection3D::new(spec);
-    let expected = point;
+    let expected = Point3::new(-2.0, 2.0, -50.0);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
-    assert_eq!(result, expected);
+    assert!(relative_eq!(result, expected, epsilon = 1e-8));
 }
 
 #[test]
@@ -149,13 +151,12 @@ fn test_perspective_projection_unproject_vector2() {
     let near = 1.0;
     let far = 100.0;
     let spec = PerspectiveSpec::new(left, right, bottom, top, near, far);
-    let vector = Vector3::new(-2.0, 2.0, -50.0);
     let projection = PerspectiveProjection3D::new(spec);
-    let expected = vector;
+    let expected = Vector3::new(-2.0, 2.0, -50.0);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
-    assert_eq!(result, expected);
+    assert!(relative_eq!(result, expected, epsilon = 1e-8));
 }
 
 #[test]
