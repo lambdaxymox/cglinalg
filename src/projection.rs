@@ -260,6 +260,38 @@ impl<S> From<OrthographicSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
     }
 }
 
+impl<S> From<PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat {
+    #[inline]
+    fn from(spec: PerspectiveFovSpec<S>) -> PerspectiveSpec<S> {
+        let two = S::one() + S::one();
+        let tan_fovy_div_2 = spec.far * Radians::tan(spec.fovy / two); 
+        let right = spec.aspect * spec.far * tan_fovy_div_2;
+        let left = -right;
+        let top = spec.far * tan_fovy_div_2;
+        let bottom = -top;
+        let near = spec.near;
+        let far = spec.far;
+
+        PerspectiveSpec::new(left, right, bottom, top, near, far)
+    }
+}
+
+impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat {
+    #[inline]
+    fn from(spec: &PerspectiveFovSpec<S>) -> PerspectiveSpec<S> {
+        let two = S::one() + S::one();
+        let tan_fovy_div_2 = spec.far * Radians::tan(spec.fovy / two); 
+        let right = spec.aspect * spec.far * tan_fovy_div_2;
+        let left = -right;
+        let top = spec.far * tan_fovy_div_2;
+        let bottom = -top;
+        let near = spec.near;
+        let far = spec.far;
+
+        PerspectiveSpec::new(left, right, bottom, top, near, far)
+    }
+}
+
 /// A perspective projection tranformation for converting from camera space to
 /// normalized device coordinates.
 ///
@@ -280,7 +312,7 @@ pub struct PerspectiveProjection3D<S, Spec> {
 
 impl<S, Spec> PerspectiveProjection3D<S, Spec> where 
     S: ScalarFloat,
-    Spec: Copy + Clone + PartialEq + Into<Matrix4x4<S>>,
+    Spec: Copy + Clone + PartialEq + Into<Matrix4x4<S>> + Into<PerspectiveSpec<S>>,
 {
     /// Construct a new perspective projection transformation.
     pub fn new(spec: Spec) -> PerspectiveProjection3D<S, Spec> {
@@ -301,13 +333,89 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
     }
 
     /// Apply the transformation to a point.
-    pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
+    pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
+    /// Unproject a point from normalized devices coordinates back to camera
+    /// view space. This is the inverse operation of `project_point`.
+    pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
+        let spec: PerspectiveSpec<S> = self.spec.into();
+        let zero = S::zero();
+        let one  = S::one();
+        let two = one + one;
+        
+        let c0r0 = (spec.right - spec.left) / (two * spec.near);
+        let c0r1 = zero;
+        let c0r2 = zero;
+        let c0r3 = zero;
+
+        let c1r0 = zero;
+        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
+        let c1r2 = zero;
+        let c1r3 = zero;
+
+        let c2r0 = zero;
+        let c2r1 = zero;
+        let c2r2 = zero;
+        let c2r3 = -(spec.far - spec.near) / (two * spec.far * spec.near);
+        
+        let c3r0 = (spec.left + spec.right) / (two * spec.near);
+        let c3r1 = (spec.bottom + spec.top) / (two * spec.near);
+        let c3r2 = -one;
+        let c3r3 = -(spec.far - spec.near) / (two * spec.far * spec.near);
+        
+        let matrix_inverse = Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        );
+
+        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous())
+    }
+
     /// Apply the transformation to a vector.
-    pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+    pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
+    }
+
+    /// Unproject a vector from normalized device coordinates back to
+    /// camera view space. This is the inverse operation of `project_vector`.
+    pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        let spec: PerspectiveSpec<S> = self.spec.into();
+        let zero = S::zero();
+        let one  = S::one();
+        let two = one + one;
+        
+        let c0r0 = (spec.right - spec.left) / (two * spec.near);
+        let c0r1 = zero;
+        let c0r2 = zero;
+        let c0r3 = zero;
+
+        let c1r0 = zero;
+        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
+        let c1r2 = zero;
+        let c1r3 = zero;
+
+        let c2r0 = zero;
+        let c2r1 = zero;
+        let c2r2 = zero;
+        let c2r3 = -(spec.far - spec.near) / (two * spec.far * spec.near);
+        
+        let c3r0 = (spec.left + spec.right) / (two * spec.near);
+        let c3r1 = (spec.bottom + spec.top) / (two * spec.near);
+        let c3r2 = -one;
+        let c3r3 = -(spec.far - spec.near) / (two * spec.far * spec.near);
+        
+        let matrix_inverse = Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        );
+
+        (matrix_inverse * vector.expand(S::zero())).contract()
     }
 }
 
@@ -401,12 +509,12 @@ impl<S> OrthographicProjection3D<S> where S: ScalarFloat {
     }
 
     /// Apply the tranformation to a point.
-    pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
+    pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
     /// Apply the transformation to a vector.
-    pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+    pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 }
