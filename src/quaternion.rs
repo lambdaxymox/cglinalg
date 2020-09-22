@@ -31,7 +31,6 @@ use crate::vector::Vector3;
 use num_traits::NumCast;
 use core::fmt;
 use core::iter;
-use core::mem;
 use core::ops;
 
 
@@ -349,25 +348,33 @@ impl<S> Identity for Quaternion<S> where S: Scalar {
 
 impl<S> AsRef<[S; 4]> for Quaternion<S> {
     fn as_ref(&self) -> &[S; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Quaternion<S> as *const [S; 4])
+        }
     }
 }
 
 impl<S> AsRef<(S, S, S, S)> for Quaternion<S> {
     fn as_ref(&self) -> &(S, S, S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Quaternion<S> as *const (S, S, S, S))
+        }
     }
 }
 
 impl<S> AsMut<[S; 4]> for Quaternion<S> {
     fn as_mut(&mut self) -> &mut [S; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Quaternion<S> as *mut [S; 4])
+        }
     }
 }
 
 impl<S> AsMut<(S, S, S, S)> for Quaternion<S> {
     fn as_mut(&mut self) -> &mut (S, S, S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Quaternion<S> as *mut (S, S, S, S))
+        }
     }
 }
 
@@ -564,7 +571,9 @@ impl<S> From<[S; 4]> for Quaternion<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 4]> for &'a Quaternion<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 4]) -> &'a Quaternion<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const [S; 4] as *const Quaternion<S>)
+        }
     }
 }
 
@@ -578,7 +587,9 @@ impl<S> From<(S, S, S, S)> for Quaternion<S> where S: Scalar {
 impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> where S: Scalar {
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Quaternion<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const (S, S, S, S) as *const Quaternion<S>)
+        }
     }
 }
 

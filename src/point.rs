@@ -1,4 +1,3 @@
-use num_traits::NumCast;
 use crate::scalar::{
     Scalar,
     ScalarFloat,
@@ -17,9 +16,11 @@ use crate::vector::{
     Vector3,
     Vector4,
 };
+use crate::num_traits::{
+    NumCast,
+};
 
 use core::fmt;
-use core::mem;
 use core::ops;
 
 
@@ -170,37 +171,49 @@ impl<S> Product for Point1<S> where S: Scalar {
 
 impl<S> AsRef<[S; 1]> for Point1<S> {
     fn as_ref(&self) -> &[S; 1] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Point1<S> as *const [S; 1])
+        }
     }
 }
 
 impl<S> AsRef<S> for Point1<S> {
     fn as_ref(&self) -> &S {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Point1<S> as *const S)
+        }
     }
 }
 
 impl<S> AsRef<(S,)> for Point1<S> {
     fn as_ref(&self) -> &(S,) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Point1<S> as *const (S,))
+        }
     }
 }
 
 impl<S> AsMut<[S; 1]> for Point1<S> {
     fn as_mut(&mut self) -> &mut [S; 1] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Point1<S> as *mut [S; 1])
+        }
     }
 }
 
 impl<S> AsMut<S> for Point1<S> {
     fn as_mut(&mut self) -> &mut S {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Point1<S> as *mut S)
+        }
     }
 }
 
 impl<S> AsMut<(S,)> for Point1<S> {
     fn as_mut(&mut self) -> &mut (S,) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Point1<S> as *mut (S,))
+        }
     }
 }
 
@@ -331,7 +344,9 @@ impl<S> From<&[S; 1]> for Point1<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 1]> for &'a Point1<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 1]) -> &'a Point1<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const [S; 1] as *const Point1<S>)
+        }
     }
 }
 
@@ -814,25 +829,33 @@ impl<S> Product for Point2<S> where S: Scalar {
 
 impl<S> AsRef<[S; 2]> for Point2<S> {
     fn as_ref(&self) -> &[S; 2] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Point2<S> as *const [S; 2])
+        }
     }
 }
 
 impl<S> AsRef<(S, S)> for Point2<S> {
     fn as_ref(&self) -> &(S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Point2<S> as *const (S, S))
+        }
     }
 }
 
 impl<S> AsMut<[S; 2]> for Point2<S> {
     fn as_mut(&mut self) -> &mut [S; 2] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Point2<S> as *mut [S; 2])
+        }
     }
 }
 
 impl<S> AsMut<(S, S)> for Point2<S> {
     fn as_mut(&mut self) -> &mut (S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Point2<S> as *mut (S, S))
+        }
     }
 }
 
@@ -963,7 +986,9 @@ impl<S> From<&[S; 2]> for Point2<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 2]> for &'a Point2<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 2]) -> &'a Point2<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const [S; 2] as *const Point2<S>)
+        }
     }
 }
 
@@ -1464,25 +1489,33 @@ impl<S> Product for Point3<S> where S: Scalar {
 
 impl<S> AsRef<[S; 3]> for Point3<S> {
     fn as_ref(&self) -> &[S; 3] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Point3<S> as *const [S; 3])
+        }
     }
 }
 
 impl<S> AsRef<(S, S, S)> for Point3<S> {
     fn as_ref(&self) -> &(S, S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Point3<S> as *const (S, S, S))
+        }
     }
 }
 
 impl<S> AsMut<[S; 3]> for Point3<S> {
     fn as_mut(&mut self) -> &mut [S; 3] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Point3<S> as *mut [S; 3])
+        }
     }
 }
 
 impl<S> AsMut<(S, S, S)> for Point3<S> {
     fn as_mut(&mut self) -> &mut (S, S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Point3<S> as *mut (S, S, S))
+        }
     }
 }
 
@@ -1620,14 +1653,18 @@ impl<S> From<[S; 3]> for Point3<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 3]> for &'a Point3<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 3]) -> &'a Point3<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const [S; 3] as *const Point3<S>)
+        }
     }
 }
 
 impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> where S: Scalar {
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Point3<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const (S, S, S) as *const Point3<S>)
+        }
     }
 }
 

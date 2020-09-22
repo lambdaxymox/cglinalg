@@ -19,7 +19,6 @@ use crate::traits::{
 use num_traits::NumCast;
 use core::fmt;
 use core::iter;
-use core::mem;
 use core::ops;
 
 
@@ -57,13 +56,17 @@ impl<S> Vector1<S> {
     /// Construct a new vector.
     #[inline]
     pub const fn new(x: S) -> Vector1<S> {
-        Vector1 { x: x }
+        Vector1 { 
+            x: x 
+        }
     }
 
     /// Map an operation on the elements of a vector, returning a vector of the 
     /// new underlying type.
     pub fn map<T, F>(self, mut op: F) -> Vector1<T> where F: FnMut(S) -> T {
-        Vector1 { x: op(self.x) }
+        Vector1 { 
+            x: op(self.x) 
+        }
     }
 }
 
@@ -98,7 +101,9 @@ impl<S> Vector1<S> where S: Scalar {
     /// The unit vector representing the x-direction.
     #[inline]
     pub fn unit_x() -> Vector1<S> {
-        Vector1 { x: S::one() }
+        Vector1 { 
+            x: S::one() 
+        }
     }
 }
 
@@ -107,9 +112,7 @@ impl<S> Metric<Vector1<S>> for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector1<S>) -> S {
-        let dx_squared = (to.x - self.x) * (to.x - self.x);
-
-        dx_squared
+        (to.x - self.x) * (to.x - self.x)
     }
 }
 
@@ -118,9 +121,7 @@ impl<S> Metric<&Vector1<S>> for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &Vector1<S>) -> S {
-        let dx_squared = (to.x - self.x) * (to.x - self.x);
-
-        dx_squared
+        (to.x - self.x) * (to.x - self.x)
     }
 }
 
@@ -129,9 +130,7 @@ impl<S> Metric<Vector1<S>> for &Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: Vector1<S>) -> S {
-        let dx_squared = (to.x - self.x) * (to.x - self.x);
-
-        dx_squared
+        (to.x - self.x) * (to.x - self.x)
     }
 }
 
@@ -140,9 +139,7 @@ impl<'a, 'b, S> Metric<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(self, to: &'a Vector1<S>) -> S {
-        let dx_squared = (to.x - self.x) * (to.x - self.x);
-
-        dx_squared
+        (to.x - self.x) * (to.x - self.x)
     }
 }
 
@@ -191,37 +188,49 @@ impl<S> Product for Vector1<S> where S: Scalar {
 
 impl<S> AsRef<[S; 1]> for Vector1<S> {
     fn as_ref(&self) -> &[S; 1] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Vector1<S> as *const [S; 1])
+        }
     }
 }
 
 impl<S> AsRef<S> for Vector1<S> {
     fn as_ref(&self) -> &S {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Vector1<S> as *const S)
+        }
     }
 }
 
 impl<S> AsRef<(S,)> for Vector1<S> {
     fn as_ref(&self) -> &(S,) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Vector1<S> as *const (S,))
+        }
     }
 }
 
 impl<S> AsMut<[S; 1]> for Vector1<S> {
     fn as_mut(&mut self) -> &mut [S; 1] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Vector1<S> as *mut [S; 1])
+        }
     }
 }
 
 impl<S> AsMut<S> for Vector1<S> {
     fn as_mut(&mut self) -> &mut S {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Vector1<S> as *mut S)
+        }
     }
 }
 
 impl<S> AsMut<(S,)> for Vector1<S> {
     fn as_mut(&mut self) -> &mut (S,) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Vector1<S> as *mut (S,))
+        }
     }
 }
 
@@ -358,7 +367,9 @@ impl<S> From<&[S; 1]> for Vector1<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 1]) -> &'a Vector1<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const [S; 1] as *const Vector1<S>)
+        }
     }
 }
 
@@ -841,7 +852,7 @@ impl<S> Vector2<S> where S: Copy {
         Vector1::new(self.x)
     }
 
-    /// Construct a vector from a few value.
+    /// Construct a vector from a fill value.
     #[inline]
     pub fn from_fill(value: S) -> Vector2<S> {
         Vector2::new(value, value)
@@ -849,7 +860,7 @@ impl<S> Vector2<S> where S: Copy {
 }
 
 impl<S> Vector2<S> where S: Scalar {
-    /// Returns the unit x axis vector.
+    /// Returns the unit _x-axis_ vector.
     #[inline]
     pub fn unit_x() -> Vector2<S> {
         Vector2 { 
@@ -858,7 +869,7 @@ impl<S> Vector2<S> where S: Scalar {
         }
     }
 
-    /// Returns the unit y axis vector.
+    /// Returns the unit _y-axis_ vector.
     #[inline]
     pub fn unit_y() -> Vector2<S> {
         Vector2 { 
@@ -913,25 +924,33 @@ impl<S> Product for Vector2<S> where S: Scalar {
 
 impl<S> AsRef<[S; 2]> for Vector2<S> {
     fn as_ref(&self) -> &[S; 2] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Vector2<S> as *const [S; 2])
+        }
     }
 }
 
 impl<S> AsRef<(S, S)> for Vector2<S> {
     fn as_ref(&self) -> &(S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Vector2<S> as *const (S, S))
+        }
     }
 }
 
 impl<S> AsMut<[S; 2]> for Vector2<S> {
     fn as_mut(&mut self) -> &mut [S; 2] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Vector2<S> as *mut [S; 2])
+        }
     }
 }
 
 impl<S> AsMut<(S, S)> for Vector2<S> {
     fn as_mut(&mut self) -> &mut (S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Vector2<S> as *mut (S, S))
+        }
     }
 }
 
@@ -1071,7 +1090,9 @@ impl<S> From<&[S; 2]> for Vector2<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 2]) -> &'a Vector2<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const [S; 2] as *const Vector2<S>)
+        }
     }
 }
 
@@ -1717,25 +1738,33 @@ impl<S> Product for Vector3<S> where S: Scalar {
 
 impl<S> AsRef<[S; 3]> for Vector3<S> {
     fn as_ref(&self) -> &[S; 3] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Vector3<S> as *const [S; 3])
+        }
     }
 }
 
 impl<S> AsRef<(S, S, S)> for Vector3<S> {
     fn as_ref(&self) -> &(S, S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Vector3<S> as *const (S, S, S))
+        }
     }
 }
 
 impl<S> AsMut<[S; 3]> for Vector3<S> {
     fn as_mut(&mut self) -> &mut [S; 3] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Vector3<S> as *mut [S; 3])
+        }
     }
 }
 
 impl<S> AsMut<(S, S, S)> for Vector3<S> {
     fn as_mut(&mut self) -> &mut (S, S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Vector3<S> as *mut (S, S, S))
+        }
     }
 }
 
@@ -1887,14 +1916,18 @@ impl<S> From<&Vector4<S>> for Vector3<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const [S; 3] as *const Vector3<S>)
+        }
     }
 }
 
 impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const (S, S, S) as *const Vector3<S>)
+        }
     }
 }
 
@@ -2638,25 +2671,33 @@ impl<S> Product for Vector4<S> where S: Scalar {
 
 impl<S> AsRef<[S; 4]> for Vector4<S> {
     fn as_ref(&self) -> &[S; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Vector4<S> as *const [S; 4])
+        }
     }
 }
 
 impl<S> AsRef<(S, S, S, S)> for Vector4<S> {
     fn as_ref(&self) -> &(S, S, S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Vector4<S> as *const (S, S, S, S))
+        }
     }
 }
 
 impl<S> AsMut<[S; 4]> for Vector4<S> {
     fn as_mut(&mut self) -> &mut [S; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Vector4<S> as *mut [S; 4])
+        }
     }
 }
 
 impl<S> AsMut<(S, S, S, S)> for Vector4<S> {
     fn as_mut(&mut self) -> &mut (S, S, S, S) {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Vector4<S> as *mut (S, S, S, S)) 
+        }
     }
 }
 
@@ -2809,14 +2850,18 @@ impl<S> From<&(S, S, S, S)> for Vector4<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> where S: Scalar {
     #[inline]
     fn from(v: &'a [S; 4]) -> &'a Vector4<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const [S; 4] as *const Vector4<S>)    
+        }
     }
 }
 
 impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
-        unsafe { mem::transmute(v) }
+        unsafe { 
+            &*(v as *const (S, S, S, S) as *const Vector4<S>)
+        }
     }
 }
 
