@@ -185,8 +185,7 @@ impl<S> From<PerspectiveFovSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
-        let fovy_rad = Radians::from(spec.fovy);
-        let range = Angle::tan(fovy_rad / two) * spec.near;
+        let range = Angle::tan(spec.fovy / two) * spec.near;
         let sx = (two * spec.near) / (range * spec.aspect + range * spec.aspect);
         let sy = spec.near / range;
         let sz = (spec.far + spec.near) / (spec.near - spec.far);
