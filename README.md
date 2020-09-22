@@ -6,25 +6,26 @@ real-time collision detection. This library provides a strongly typed system
 for developing computer graphics applications.
 
 The design of the library has the following goals in mind:
+* **Ergonomics** -- The system should be easy to understand and use. The types 
+  and the language of the documentation are designed to be understandable to 
+  working graphics programmers. The main prerequisite for understanding the 
+  library documentation is elementary linear algebra. 
 * **Cross Platform** -- It should be portable to other ecosystems like 
   other C/C++ and Rust libraries. Every data type can be treated like a 
   fixed-sized array so they can be sent to across FFI boundaries.
-* **Few Dependencies** -- To support portability and maintainability, 
-  `cglinalg` is designed to use few external dependencies. This makes it simpler 
-  to integrate into applications. the biggest dependency is `proptest` which is 
-  development dependency only.
+* **Few Dependencies** -- The library should be relatively self-contained. To 
+  support portability and maintainability, `cglinalg` is designed with few 
+  external dependencies. The biggest dependency---`proptest`---is a development 
+  dependency only.
 * **Type Safety** -- Leverage Rust's type system and zero-cost abstractions 
   to ensure code correctness, abstraction, and intelligibility do not come 
   at the cost of performance.
 * **Flexibility** -- The library should serve as a type-agnostic cornerstone 
-  for other computer graphics applications. The data types in `cglinalg` are
-  parametric over their scalars so they can operate on multiple scalar types. 
-* **Simplicity** -- The system should be easy to understand and use.
-* **Speed And Efficiency** -- Operations should be fast and efficient to support
-  the primary use case of real-time graphics applications.
-* **Ergonomics** -- The types and the language of the documentations are designed 
-  to be understandable to working graphics programmers. The main prerequisite 
-  for understanding the language of the library documentation is elementary 
+  for computer graphics applications. The data types in `cglinalg` are
+  generic over their scalars so they can operate on multiple scalar types.
+* **Speed And Efficiency** -- Operations should be fast and efficient. SIMD 
+  instructions and architecture specific optimizations should be used where 
+  possible.
 
 ## Getting Started
 To use library in your project, add `cglinalg` as a dependency in your 
@@ -49,11 +50,11 @@ This saves some extra typing when importing from the library.
 `cglinalg` is a low-dimensional linear-algebra library aimed at specific 
 application domains that make heavy use of computer graphics. It includes the 
 most common linear algebra operations for implementing rendering algorithms, 
-real-time collision detection, etc. All data types are designed to be exportable to 
-external interfaces such as foreign function interfaces or external hardware. This 
-serves the `cglinalg` goal to be a platform agnostic foundation for computer graphics 
-applications in other languages and ecosystems as well. Specific features of the 
-library include:
+real-time collision detection, etc. All data types are designed to be exportable 
+to external interfaces such as foreign function interfaces or external hardware. 
+This serves the `cglinalg` goal to be a platform agnostic foundation for 
+computer graphics applications in other languages and ecosystems as well. 
+Specific features of the library include:
 * Basic linear algebra with matrices and vectors up to dimension four.
 * Quaternions, euler angles, and rotation matrices for doing rotations.
 * All data types are parametrized to work over a large range of numerical types.
@@ -68,8 +69,8 @@ library include:
   to across API boundaries.
 * Typed angles and typed angle trigonometry that statically guarantee that 
   trigonometry is done in the right units.
-* The library makes heavy use of property testing via the `proptest` library 
-  in addition to Rust's type systems to ensure code correctness.
+* The library makes heavy use of property testing via the `proptest` crate
+  in addition to Rust's type system to ensure code correctness.
 
 ## Limitations On The Design
 The library has design limitations for a number of reasons. 
@@ -79,10 +80,8 @@ The library has design limitations for a number of reasons.
   for `numpy`, BLAS, or LAPACK. It is a counterpart to `DirectXMath` or `glm`.
 * The library is designed specifically with graphics applications in mind, which 
   tend to be mathematically simpler than other modeling and simulation applications. 
-  As a consequence this library does not support all of the operations commonly used 
-  in modeling and simulation tasks. If one needs operations such as finding eigenvalues 
-  and eigenvectors or computing factorizations of matrices, this library does not 
-  provide that. 
+  As a consequence this library does not support most of the operations commonly used 
+  in modeling and simulation tasks.
 * In keeping with simplicity as one of the project goals, the underlying storage of 
   all data types in this library are statically allocated arrays. This is advantagous 
   in the low-dimensional case when the data types have small sizes, but this is a 
@@ -94,27 +93,27 @@ The limitations on the implementation are addressed in the project roadmap.
 The biggest one is than it does not presently leverage SIMD instructions to optimize 
 operations yet.
 
-## Other Libraries
-The Rust ecosystem has a number of graphics math libraries. Some 
-highlights include
+## Acknowledgements
+`cglinalg` would not have been possible without the work of others. Some C/C++ 
+libraries that inspired `cglinalg` include `cgal`, `glm`, and `DirectXMath. 
+The Rust ecosystem has a number of graphics libraries. 
+Some highlights include:
 * (cgmath)[https://crates.io/crates/cgmath] -- One of the original Rust graphics 
   mathematics libraries, and one of the most commonly used ones.
-* (nalgebra)[https://nalgebra.org] -- The most powerful linear algebra library in 
-  the Rust ecosystem. It provides a strongly typed system for most linear algebra 
-  in arbitrarily many dimensions. It is useful in many domains that do heavy numerical
-  computation, including computer graphics. The system has features comparable to BLAS 
-  , LAPACK, and numpy.
-* (euclid)[https://crates.io/crates/euclid] -- A collection of strongly typed math tools 
-  for computer graphics with an inclination towards 2d graphics and layout. This one 
-  is used in the `Servo` browser engine.
-* (vecmath)[https://crates.io/crates/vecmath] -- A simple and type agnostic Rust library 
-  for vector math designed for reexporting.
+* (nalgebra)[https://nalgebra.org] -- The most powerful linear algebra library 
+  in the Rust ecosystem. It provides a strongly typed system for most linear 
+  algebra in arbitrarily many dimensions. It is useful in many domains that do 
+  heavy numerical computation, including computer graphics. The system has 
+  features comparable to BLAS, LAPACK, and `numpy`.
+* (euclid)[https://crates.io/crates/euclid] -- A collection of strongly typed 
+  math tools for computer graphics with an inclination towards 2d graphics and 
+  layout. This one is used in the `Servo` browser engine.
+* (vecmath)[https://crates.io/crates/vecmath] -- A simple and type agnostic 
+  Rust library for vector math designed for reexporting.
 
 ## Project Roadmap
 Major outstanding project goals include:
-* Complete the ontology of low-dimensional matrix types by implementing nonsquare 
-  matrices.
-* Make the basic types object order agnostic by adding support for row-major 
-  order matrices.
+* Implement nonsquare nonsquare matrix types up to dimension four.
+* Add support for row-major order matrices and vectors.
 * Improve performance with SIMD optimizations.
 * Implement swizzle operations.
