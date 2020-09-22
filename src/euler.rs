@@ -486,9 +486,10 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
         let y = Radians::atan2(matrix.c2r0, cos_y);
         let sin_x = Radians::sin(x);
         let cos_roll_zx = Radians::cos(x);
-        let a = sin_x * matrix.c0r2 + cos_roll_zx * matrix.c0r1;
-        let b = cos_roll_zx * matrix.c1r1 + sin_x * matrix.c1r2;
-        let z = Radians::atan2(a, b);
+
+        let numerator = sin_x * matrix.c0r2 + cos_roll_zx * matrix.c0r1;
+        let denominator = cos_roll_zx * matrix.c1r1 + sin_x * matrix.c1r2;
+        let z = Radians::atan2(numerator, denominator);
 
         EulerAngles::new(x, y, z)
     }

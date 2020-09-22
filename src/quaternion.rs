@@ -91,7 +91,10 @@ impl<S> Quaternion<S> {
     /// Construct a quaternion from its scalar and vector parts.
     #[inline]
     pub fn from_sv(s: S, v: Vector3<S>) -> Quaternion<S> {
-        Quaternion { s: s, v: v }
+        Quaternion { 
+            s: s, 
+            v: v 
+        }
     }
 }
 
@@ -599,40 +602,40 @@ impl<S> From<Matrix3x3<S>> for Quaternion<S> where S: ScalarFloat {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
         if trace >= S::zero() {
             let s = (S::one() + trace).sqrt();
-            let w = one_half * s;
+            let qs = one_half * s;
             let s = one_half / s;
-            let x = (matrix[1][2] - matrix[2][1]) * s;
-            let y = (matrix[2][0] - matrix[0][2]) * s;
-            let z = (matrix[0][1] - matrix[1][0]) * s;
+            let qx = (matrix[1][2] - matrix[2][1]) * s;
+            let qy = (matrix[2][0] - matrix[0][2]) * s;
+            let qz = (matrix[0][1] - matrix[1][0]) * s;
             
-            Quaternion::new(w, x, y, z)
+            Quaternion::new(qs, qx, qy, qz)
         } else if (matrix[0][0] > matrix[1][1]) && (matrix[0][0] > matrix[2][2]) {
             let s = ((matrix[0][0] - matrix[1][1] - matrix[2][2]) + S::one()).sqrt();
-            let x = one_half * s;
+            let qx = one_half * s;
             let s = one_half / s;
-            let y = (matrix[1][0] + matrix[0][1]) * s;
-            let z = (matrix[0][2] + matrix[2][0]) * s;
-            let w = (matrix[1][2] - matrix[2][1]) * s;
+            let qy = (matrix[1][0] + matrix[0][1]) * s;
+            let qz = (matrix[0][2] + matrix[2][0]) * s;
+            let qs = (matrix[1][2] - matrix[2][1]) * s;
             
-            Quaternion::new(w, x, y, z)
+            Quaternion::new(qs, qx, qy, qz)
         } else if matrix[1][1] > matrix[2][2] {
             let s = ((matrix[1][1] - matrix[0][0] - matrix[2][2]) + S::one()).sqrt();
-            let y = one_half * s;
+            let qy = one_half * s;
             let s = one_half / s;
-            let z = (matrix[2][1] + matrix[1][2]) * s;
-            let x = (matrix[1][0] + matrix[0][1]) * s;
-            let w = (matrix[2][0] - matrix[0][2]) * s;
+            let qz = (matrix[2][1] + matrix[1][2]) * s;
+            let qx = (matrix[1][0] + matrix[0][1]) * s;
+            let qs = (matrix[2][0] - matrix[0][2]) * s;
             
-            Quaternion::new(w, x, y, z)
+            Quaternion::new(qs, qx, qy, qz)
         } else {
             let s = ((matrix[2][2] - matrix[0][0] - matrix[1][1]) + S::one()).sqrt();
-            let z = one_half * s;
+            let qz = one_half * s;
             let s = one_half / s;
-            let x = (matrix[0][2] + matrix[2][0]) * s;
-            let y = (matrix[2][1] + matrix[1][2]) * s;
-            let w = (matrix[0][1] - matrix[1][0]) * s;
+            let qx = (matrix[0][2] + matrix[2][0]) * s;
+            let qy = (matrix[2][1] + matrix[1][2]) * s;
+            let qs = (matrix[0][1] - matrix[1][0]) * s;
             
-            Quaternion::new(w, x, y, z)
+            Quaternion::new(qs, qx, qy, qz)
         }
     }
 }
@@ -643,40 +646,40 @@ impl<S> From<&Matrix3x3<S>> for Quaternion<S> where S: ScalarFloat {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
         if trace >= S::zero() {
             let s = (S::one() + trace).sqrt();
-            let w = one_half * s;
+            let qs = one_half * s;
             let s = one_half / s;
-            let x = (matrix[1][2] - matrix[2][1]) * s;
-            let y = (matrix[2][0] - matrix[0][2]) * s;
-            let z = (matrix[0][1] - matrix[1][0]) * s;
+            let qx = (matrix[1][2] - matrix[2][1]) * s;
+            let qy = (matrix[2][0] - matrix[0][2]) * s;
+            let qz = (matrix[0][1] - matrix[1][0]) * s;
             
-            Quaternion::new(w, x, y, z)
+            Quaternion::new(qs, qx, qy, qz)
         } else if (matrix[0][0] > matrix[1][1]) && (matrix[0][0] > matrix[2][2]) {
             let s = ((matrix[0][0] - matrix[1][1] - matrix[2][2]) + S::one()).sqrt();
-            let x = one_half * s;
+            let qx = one_half * s;
             let s = one_half / s;
-            let y = (matrix[1][0] + matrix[0][1]) * s;
-            let z = (matrix[0][2] + matrix[2][0]) * s;
-            let w = (matrix[1][2] - matrix[2][1]) * s;
+            let qy = (matrix[1][0] + matrix[0][1]) * s;
+            let qz = (matrix[0][2] + matrix[2][0]) * s;
+            let qs = (matrix[1][2] - matrix[2][1]) * s;
             
-            Quaternion::new(w, x, y, z)
+            Quaternion::new(qs, qx, qy, qz)
         } else if matrix[1][1] > matrix[2][2] {
             let s = ((matrix[1][1] - matrix[0][0] - matrix[2][2]) + S::one()).sqrt();
-            let y = one_half * s;
+            let qy = one_half * s;
             let s = one_half / s;
-            let z = (matrix[2][1] + matrix[1][2]) * s;
-            let x = (matrix[1][0] + matrix[0][1]) * s;
-            let w = (matrix[2][0] - matrix[0][2]) * s;
+            let qz = (matrix[2][1] + matrix[1][2]) * s;
+            let qx = (matrix[1][0] + matrix[0][1]) * s;
+            let qs = (matrix[2][0] - matrix[0][2]) * s;
             
-            Quaternion::new(w, x, y, z)
+            Quaternion::new(qs, qx, qy, qz)
         } else {
             let s = ((matrix[2][2] - matrix[0][0] - matrix[1][1]) + S::one()).sqrt();
-            let z = one_half * s;
+            let qz = one_half * s;
             let s = one_half / s;
-            let x = (matrix[0][2] + matrix[2][0]) * s;
-            let y = (matrix[2][1] + matrix[1][2]) * s;
-            let w = (matrix[0][1] - matrix[1][0]) * s;
+            let qx = (matrix[0][2] + matrix[2][0]) * s;
+            let qy = (matrix[2][1] + matrix[1][2]) * s;
+            let qs = (matrix[0][1] - matrix[1][0]) * s;
             
-            Quaternion::new(w, x, y, z)
+            Quaternion::new(qs, qx, qy, qz)
         }
     }
 }

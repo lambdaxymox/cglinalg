@@ -1,3 +1,4 @@
+#![allow(clippy::redundant_field_names)]
 pub extern crate approx;
 pub extern crate num_traits;
 
@@ -40,7 +41,6 @@ pub use translation::*;
 pub use affine::*;
 
 
-// Make the glm module a public module imported separately to emphasize that 
-// it is optional.
+// Make the glm module a public module imported separately.
 pub mod glm;
 

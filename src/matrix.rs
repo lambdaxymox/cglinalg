@@ -37,7 +37,6 @@ use crate::vector::{
 };
 
 use core::fmt;
-use core::mem;
 use core::ops;
 use core::iter;
 
@@ -344,7 +343,9 @@ impl<S> From<[[S; 2]; 2]> for Matrix2x2<S> where S: Scalar {
 impl<'a, S> From<&'a [[S; 2]; 2]> for &'a Matrix2x2<S> where S: Scalar {
     #[inline]
     fn from(array: &'a [[S; 2]; 2]) -> &'a Matrix2x2<S> {
-        unsafe { mem::transmute(array) }
+        unsafe { 
+            &*(array as *const [[S; 2]; 2] as *const Matrix2x2<S>)
+        }
     }    
 }
 
@@ -358,7 +359,9 @@ impl<S> From<[S; 4]> for Matrix2x2<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 4]> for &'a Matrix2x2<S> where S: Scalar {
     #[inline]
     fn from(array: &'a [S; 4]) -> &'a Matrix2x2<S> {
-        unsafe { mem::transmute(array) }
+        unsafe { 
+            &*(array as *const [S; 4] as *const Matrix2x2<S>)
+        }
     }
 }
 
@@ -374,37 +377,49 @@ impl<S> fmt::Display for Matrix2x2<S> where S: fmt::Display {
 
 impl<S> AsRef<[S; 4]> for Matrix2x2<S> {
     fn as_ref(&self) -> &[S; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Matrix2x2<S> as *const [S; 4])
+        }
     }
 }
 
 impl<S> AsRef<[[S; 2]; 2]> for Matrix2x2<S> {
     fn as_ref(&self) -> &[[S; 2]; 2] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Matrix2x2<S> as *const [[S; 2]; 2])
+        }
     }
 }
 
 impl<S> AsRef<[Vector2<S>; 2]> for Matrix2x2<S> {
     fn as_ref(&self) -> &[Vector2<S>; 2] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Matrix2x2<S> as *const [Vector2<S>; 2])
+        }
     }
 }
 
 impl<S> AsMut<[S; 4]> for Matrix2x2<S> {
     fn as_mut(&mut self) -> &mut [S; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Matrix2x2<S> as *mut [S; 4])
+        }
     }
 }
 
 impl<S> AsMut<[[S; 2]; 2]> for Matrix2x2<S> {
     fn as_mut(&mut self) -> &mut [[S; 2]; 2] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Matrix2x2<S> as *mut [[S; 2]; 2])
+        }
     }
 }
 
 impl<S> AsMut<[Vector2<S>; 2]> for Matrix2x2<S> {
     fn as_mut(&mut self) -> &mut [Vector2<S>; 2] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Matrix2x2<S> as *mut [Vector2<S>; 2])
+        }
     }
 }
 
@@ -1654,7 +1669,9 @@ impl<S> From<[[S; 3]; 3]> for Matrix3x3<S> where S: Scalar {
 impl<'a, S> From<&'a [[S; 3]; 3]> for &'a Matrix3x3<S> where S: Scalar {
     #[inline]
     fn from(array: &'a [[S; 3]; 3]) -> &'a Matrix3x3<S> {
-        unsafe { mem::transmute(array) }
+        unsafe { 
+            &*(array as *const [[S; 3]; 3] as *const Matrix3x3<S>)
+        }
     }    
 }
 
@@ -1673,7 +1690,9 @@ impl<S> From<[S; 9]> for Matrix3x3<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 9]> for &'a Matrix3x3<S> where S: Scalar {
     #[inline]
     fn from(array: &'a [S; 9]) -> &'a Matrix3x3<S> {
-        unsafe { mem::transmute(array) }
+        unsafe { 
+            &*(array as *const [S; 9] as *const Matrix3x3<S>)
+        }
     }
 }
 
@@ -1714,37 +1733,49 @@ impl<S> fmt::Display for Matrix3x3<S> where S: fmt::Display {
 
 impl<S> AsRef<[S; 9]> for Matrix3x3<S> {
     fn as_ref(&self) -> &[S; 9] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Matrix3x3<S> as *const [S; 9])
+        }
     }
 }
 
 impl<S> AsRef<[[S; 3]; 3]> for Matrix3x3<S> {
     fn as_ref(&self) -> &[[S; 3]; 3] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Matrix3x3<S> as *const [[S; 3]; 3])
+        }
     }
 }
 
 impl<S> AsRef<[Vector3<S>; 3]> for Matrix3x3<S> {
     fn as_ref(&self) -> &[Vector3<S>; 3] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Matrix3x3<S> as *const [Vector3<S>; 3])
+        }
     }
 }
 
 impl<S> AsMut<[S; 9]> for Matrix3x3<S> {
     fn as_mut(&mut self) -> &mut [S; 9] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Matrix3x3<S> as *mut [S; 9])
+        }
     }
 }
 
 impl<S> AsMut<[[S; 3]; 3]> for Matrix3x3<S> {
     fn as_mut(&mut self) -> &mut [[S; 3];3 ] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Matrix3x3<S> as *mut [[S; 3]; 3])
+        }
     }
 }
 
 impl<S> AsMut<[Vector3<S>; 3]> for Matrix3x3<S> {
     fn as_mut(&mut self) -> &mut [Vector3<S>; 3] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Matrix3x3<S> as *mut [Vector3<S>; 3])
+        }
     }
 }
 
@@ -3216,7 +3247,9 @@ impl<S> From<[[S; 4]; 4]> for Matrix4x4<S> where S: Scalar {
 impl<'a, S> From<&'a [[S; 4]; 4]> for &'a Matrix4x4<S> where S: Scalar {
     #[inline]
     fn from(array: &'a [[S; 4]; 4]) -> &'a Matrix4x4<S> {
-        unsafe { mem::transmute(array) }
+        unsafe { 
+            &*(array as *const [[S; 4]; 4] as *const Matrix4x4<S>)
+        }
     }    
 }
 
@@ -3236,7 +3269,9 @@ impl<S> From<[S; 16]> for Matrix4x4<S> where S: Scalar {
 impl<'a, S> From<&'a [S; 16]> for &'a Matrix4x4<S> where S: Scalar {
     #[inline]
     fn from(array: &'a [S; 16]) -> &'a Matrix4x4<S> {
-        unsafe { mem::transmute(array) }
+        unsafe { 
+            &*(array as *const [S; 16] as *const Matrix4x4<S>)
+        }
     }
 }
 
@@ -3314,37 +3349,49 @@ impl<S> fmt::Display for Matrix4x4<S> where S: fmt::Display {
 
 impl<S> AsRef<[S; 16]> for Matrix4x4<S>  {
     fn as_ref(&self) -> &[S; 16] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Matrix4x4<S> as *const [S; 16])
+        }
     }
 }
 
 impl<S> AsRef<[[S; 4]; 4]> for Matrix4x4<S> {
     fn as_ref(&self) -> &[[S; 4]; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Matrix4x4<S> as *const [[S; 4]; 4])
+        }
     }
 }
 
 impl<S> AsRef<[Vector4<S>; 4]> for Matrix4x4<S> {
     fn as_ref(&self) -> &[Vector4<S>; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &*(self as *const Matrix4x4<S> as *const [Vector4<S>; 4])
+        }
     }
 }
 
 impl<S> AsMut<[S; 16]> for Matrix4x4<S> {
     fn as_mut(&mut self) -> &mut [S; 16] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Matrix4x4<S> as *mut [S; 16])
+        }
     }
 }
 
 impl<S> AsMut<[[S; 4]; 4]> for Matrix4x4<S> {
     fn as_mut(&mut self) -> &mut [[S; 4]; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Matrix4x4<S> as *mut [[S; 4]; 4])
+        }
     }
 }
 
 impl<S> AsMut<[Vector4<S>; 4]> for Matrix4x4<S> {
     fn as_mut(&mut self) -> &mut [Vector4<S>; 4] {
-        unsafe { mem::transmute(self) }
+        unsafe { 
+            &mut *(self as *mut Matrix4x4<S> as *mut [Vector4<S>; 4])
+        }
     }
 }
 

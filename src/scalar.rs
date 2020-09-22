@@ -3,7 +3,6 @@ use num_traits::{
     NumCast, 
     Float
 };
-use approx;
 use core::fmt::{
     Debug,
 };
