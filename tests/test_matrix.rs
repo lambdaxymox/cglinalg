@@ -445,9 +445,9 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the x-axis.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// In two dimensions there is an ambiguity in the orientation of the line 
+    /// segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_reflection_x_axis1() {
         // The y-axis is the normal vector to the plane of the x-axis.
@@ -458,9 +458,9 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the x-axis.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// In two dimensions there is an ambiguity in the orientation of the line 
+    /// segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_reflection_x_axis2() {
         // The y-axis is the normal vector to the plane of the x-axis.
@@ -471,9 +471,9 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the x-axis.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// In two dimensions there is an ambiguity in the orientation of the line 
+    /// segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_reflection_y_axis1() {
         // The y-axis is the normal vector to the plane of the y-axis.
@@ -484,9 +484,9 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the x-axis.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// In two dimensions there is an ambiguity in the orientation of the line 
+    /// segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_reflection_y_axis2() {
         // The y-axis is the normal vector to the plane of the y-axis.
@@ -497,9 +497,9 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the plane `y - x = 0`.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the 
+    /// line `y - x = 0`. In two dimensions there is an ambiguity in the orientation 
+    /// of the line segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_reflection_from_plane1() {
         let normal = Vector2::new(f64::sqrt(2_f64)/ 2_f64, -f64::sqrt(2_f64) / 2_f64);
@@ -509,9 +509,9 @@ mod matrix2_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
-    /// Construct a reflection matrix test case for reflection about the plane `y - x = 0`.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the 
+    /// line `y - x = 0`. In two dimensions there is an ambiguity in the orientation 
+    /// of the line segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_reflection_from_plane2() {
         let normal = Vector2::new(-f64::sqrt(2_f64)/ 2_f64, f64::sqrt(2_f64) / 2_f64);
@@ -1124,9 +1124,9 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the x-axis.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// In two dimensions there is an ambiguity in the orientation of the line 
+    /// segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_affine_reflection_x_axis1() {
         // The y-axis is the normal vector to the plane of the x-axis.
@@ -1142,9 +1142,9 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the x-axis.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// In two dimensions there is an ambiguity in the orientation of the line 
+    /// segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_affine_reflection_x_axis2() {
         // The y-axis is the normal vector to the plane of the x-axis.
@@ -1160,9 +1160,9 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the x-axis.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// In two dimensions there is an ambiguity in the orientation of the line 
+    /// segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_affine_reflection_y_axis1() {
         // The y-axis is the normal vector to the plane of the y-axis.
@@ -1178,9 +1178,9 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the x-axis.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// In two dimensions there is an ambiguity in the orientation of the line 
+    /// segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_affine_reflection_y_axis2() {
         // The y-axis is the normal vector to the plane of the y-axis.
@@ -1196,9 +1196,10 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the plane `y - x = 0`.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the 
+    /// line `y - x = 0`. In two dimensions there is an ambiguity in the 
+    /// orientation of the line segment; there are two possible normal vectors 
+    /// for the line.
     #[test]
     fn test_from_affine_reflection_from_plane1() {
         let bias = Vector2::zero();
@@ -1213,9 +1214,10 @@ mod matrix3_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
-    /// Construct a reflection matrix test case for reflection about the plane `y - x = 0`.
-    /// In two dimensions there is an ambiguity in the orientation of the line segment, and as a result
-    /// There are two possible normal vectors for the line.
+    /// Construct a reflection matrix test case for reflection about the 
+    /// line `y - x = 0`. In two dimensions there is an ambiguity in the 
+    /// orientation of the line segment; there are two possible normal vectors 
+    /// for the line.
     #[test]
     fn test_from_affine_reflection_from_plane2() {
         let bias = Vector2::zero();
@@ -1363,9 +1365,9 @@ mod matrix3_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
-    /// An affine translation should only dispace points and not vectors. We distinguish 
-    /// define points by using a `1` in the last coordinate, and vectors by using a `0` in
-    /// the last coordinate.
+    /// An affine translation should only dispace points and not vectors. We 
+    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// by using a `0` in the last coordinate.
     #[test]
     fn test_from_affine_translation_point() {
         let distance = Vector2::new(3, 7);
@@ -1377,9 +1379,9 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// An affine translation should only dispace points and not vectors. We distinguish 
-    /// define points by using a `1` in the last coordinate, and vectors by using a `0` in
-    /// the last coordinate.
+    /// An affine translation should only dispace points and not vectors. We 
+    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// by using a `0` in the last coordinate.
     #[test]
     fn test_from_affine_translation_vector() {
         let distance = Vector2::new(3, 7);
@@ -2284,9 +2286,9 @@ mod matrix4_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
-    /// An affine translation should only dispace points and not vectors. We distinguish 
-    /// define points by using a `1` in the last coordinate, and vectors by using a `0` in
-    /// the last coordinate.
+    /// An affine translation should only dispace points and not vectors. We 
+    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// by using a `0` in the last coordinate.
     #[test]
     fn test_from_affine_translation_point() {
         let distance = Vector3::new(3, 7, 11);
@@ -2298,9 +2300,9 @@ mod matrix4_tests {
         assert_eq!(result, expected);
     }
 
-    /// An affine translation should only dispace points and not vectors. We distinguish 
-    /// define points by using a `1` in the last coordinate, and vectors by using a `0` in
-    /// the last coordinate.
+    /// An affine translation should only dispace points and not vectors. We 
+    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// by using a `0` in the last coordinate.
     #[test]
     fn test_from_affine_translation_vector() {
         let distance = Vector3::new(3, 7, 11);

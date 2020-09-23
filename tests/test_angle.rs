@@ -304,8 +304,8 @@ mod radians_arithmetic_tests {
     /// The remainder of an angle by a modulus smaller than the modulus should be
     /// the same as the original angle.
     ///
-    /// That is, given an angle `angle` smaller than modulus `modulus`, `angle` is congruent to itself
-    /// modulo `modulus`
+    /// That is, given an angle `angle` smaller than modulus `modulus`, `angle` 
+    /// is congruent to itself modulo `modulus`
     /// ```
     /// angle = angle (mod modulus).
     /// ``` 
