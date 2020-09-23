@@ -10,11 +10,15 @@ use cglinalg::{
 };
 
 
-fn any_radians<S>() -> impl Strategy<Value = Radians<S>> where S: Scalar + Arbitrary {
+fn any_radians<S>() -> impl Strategy<Value = Radians<S>> 
+    where S: Scalar + Arbitrary
+{
     any::<S>().prop_map(|unitless| Radians(unitless))
 }
 
-fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>> where S: Scalar + Arbitrary {
+fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
+    where S: Scalar + Arbitrary
+{
     any::<S>().prop_map(|unitless| Degrees(unitless))
 }
 

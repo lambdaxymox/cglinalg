@@ -14,19 +14,27 @@ use cglinalg::{
 use proptest::prelude::*;
 
 
-fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> where S: Scalar + Arbitrary {
+fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
+    where S: Scalar + Arbitrary 
+{
     any::<S>().prop_map(|x| Vector1::new(x))
 }
 
-fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>> where S: Scalar + Arbitrary {
+fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>> 
+    where S: Scalar + Arbitrary
+{
     any::<(S, S)>().prop_map(|(x, y)| Vector2::new(x, y))
 }
 
-fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>> where S: Scalar + Arbitrary {
+fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
+    where S: Scalar + Arbitrary
+{
     any::<(S, S, S)>().prop_map(|(x, y, z)| Vector3::new(x, y, z))
 }
 
-fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>> where S: Scalar + Arbitrary {
+fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
+    where S: Scalar + Arbitrary
+{
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| Vector4::new(x, y, z, w))
 }
 

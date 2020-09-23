@@ -10,11 +10,15 @@ use cglinalg::{
 };
 
 
-fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> where S: Scalar + Arbitrary {
+fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
+    where S: Scalar + Arbitrary
+{
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| Quaternion::new(x, y, z, w))
 }
 
-fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> where S: ScalarFloat + Arbitrary {
+fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
+    where S: ScalarFloat + Arbitrary
+{
     use cglinalg::Magnitude;
     any::<(S, S, S, S)>()
         .prop_map(|(x, y, z, w)| Quaternion::new(x, y, z, w))
