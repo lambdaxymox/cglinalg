@@ -2,7 +2,7 @@ extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
-use proptest::prelude::*;
+
 use cglinalg::{
     Vector1, 
     Vector2, 
@@ -10,6 +10,8 @@ use cglinalg::{
     Vector4, 
     Scalar,
 };
+
+use proptest::prelude::*;
 
 
 fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> where S: Scalar + Arbitrary {

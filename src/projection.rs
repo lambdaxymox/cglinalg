@@ -431,9 +431,25 @@ impl<S, Spec> AsRef<Matrix4x4<S>> for PerspectiveProjection3D<S, Spec> {
     }
 }
 
-impl<S, Spec> approx::AbsDiffEq for PerspectiveProjection3D<S, Spec> where 
-    S: ScalarFloat,
-    Spec: Copy + Clone + PartialEq,    
+impl<S> fmt::Display for PerspectiveProjection3D<S, PerspectiveFovSpec<S>> 
+    where S: fmt::Debug + fmt::Display 
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> fmt::Display for PerspectiveProjection3D<S, PerspectiveSpec<S>> 
+    where S: fmt::Debug + fmt::Display 
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S, Spec> approx::AbsDiffEq for PerspectiveProjection3D<S, Spec> 
+    where S: ScalarFloat,
+          Spec: Copy + Clone + PartialEq,    
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -602,6 +618,14 @@ impl<S> AsRef<Matrix4x4<S>> for OrthographicProjection3D<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
+    }
+}
+
+impl<S> fmt::Display for OrthographicProjection3D<S> 
+    where S: fmt::Debug + fmt::Display 
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 

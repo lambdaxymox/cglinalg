@@ -3,265 +3,327 @@ extern crate num_traits;
 extern crate proptest;
 
 
-use proptest::prelude::*;
 use cglinalg::{
-    Vector1,
-    Vector2,
     Vector3,
-    Vector4, 
-    Point3, 
-    Scalar,
+    Point3,
+    PerspectiveSpec,
+    PerspectiveProjection3D,
+    OrthographicSpec,
+    OrthographicProjection3D,
     ScalarFloat,
 };
-use proptest::strategy::{
-    NewTree,
-    Strategy,
-    ValueTree,
-};
-use proptest::test_runner::{
-    TestRunner,
-};
-use proptest::arbitrary::{
-    Arbitrary,
-};
-use core::marker::{
-    PhantomData 
-};
-use core::ops;
+
+use proptest::prelude::*;
 
 
-#[derive(Copy, Clone, Debug, PartialEq)]
-struct VectorValue<VecType>(VecType);
-
-impl<VecType> VectorValue<VecType> {
-    fn into_inner(self) -> VecType {
-        self.0
-    }
+fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>> 
+    where S: ScalarFloat + Arbitrary
+{
+    any::<(S, S, S)>()
+        .prop_map(|(x, y, z)| Vector3::new(x, y, z))
 }
 
-#[derive(Copy, Clone, Debug)]
-struct VectorStrategy<Strat, T> {
-    strategy: Strat,
-    _marker: PhantomData<T>,
+fn any_point3<S>() -> impl Strategy<Value = Point3<S>> 
+    where S: ScalarFloat + Arbitrary 
+{
+    any::<(S, S, S)>()
+        .prop_map(|(x, y, z)| Point3::new(x, y, z))
 }
 
-impl<Strat, T> VectorStrategy<Strat, T> {
-    fn new(strategy: Strat) -> VectorStrategy<Strat, T> {
-        VectorStrategy {
-            strategy: strategy,
-            _marker: PhantomData,
-        }
-    }
+fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjection3D<S, PerspectiveSpec<S>>> 
+    where S: ScalarFloat + Arbitrary
+{
+    any::<(S, S, S, S, S, S)>()
+        .prop_filter("", |(left, right, bottom, top, near, far)| {
+            left.is_finite()   &&
+            right.is_finite()  &&
+            bottom.is_finite() &&
+            top.is_finite()    &&
+            near.is_finite()   &&
+            far.is_finite()
+        })
+        .prop_map(|(left, right, bottom, top, near, far)| {
+            (-S::abs(left) - S::one(),
+              S::abs(right) + S::one(),
+             -S::abs(bottom) - S::one(),
+              S::abs(top) + S::one(),
+              S::abs(near),
+              S::abs(far) + S::one(),
+            )
+        })    
+        .prop_map(|(left, right, bottom, top, near, far)| {
+            let (spec_left, spec_right) = if left > right {
+                (right, left)
+            } else {
+                (left, right)
+            };
+            let (spec_bottom, spec_top) = if bottom > top {
+                (top, bottom)
+            } else {
+                (bottom, top)
+            };
+            let (spec_near, spec_far) = if near > far {
+                (far, near)
+            } else {
+                (near, far)
+            };
+            let spec = PerspectiveSpec::new(
+                spec_left, spec_right, spec_bottom, spec_top, spec_near, spec_far
+            );
+
+            PerspectiveProjection3D::new(spec)
+        })
+        .no_shrink()
 }
 
-#[derive(Debug)]
-struct VectorValueTree<TreeT> {
-    tree: TreeT,
-    shrinker: usize,
-    last_shrinker: Option<usize>,
+fn any_orthographic_projection<S>() -> impl Strategy<Value = OrthographicProjection3D<S>>
+    where S: ScalarFloat + Arbitrary
+{
+    any::<(S, S, S, S, S, S)>()
+        .prop_filter("", |(left, right, bottom, top, near, far)| {
+            left.is_finite()   &&
+            right.is_finite()  &&
+            bottom.is_finite() &&
+            top.is_finite()    &&
+            near.is_finite()   &&
+            far.is_finite()
+        })
+        .prop_map(|(left, right, bottom, top, near, far)| {
+            (-S::abs(left) - S::one(),
+              S::abs(right) + S::one(),
+             -S::abs(bottom) - S::one(),
+              S::abs(top) + S::one(),
+              S::abs(near),
+              S::abs(far) + S::one(),
+            )
+        })    
+        .prop_map(|(left, right, bottom, top, near, far)| {
+            let (spec_left, spec_right) = if left > right {
+                (right, left)
+            } else {
+                (left, right)
+            };
+            let (spec_bottom, spec_top) = if bottom > top {
+                (top, bottom)
+            } else {
+                (bottom, top)
+            };
+            let (spec_near, spec_far) = if near > far {
+                (far, near)
+            } else {
+                (near, far)
+            };
+            let spec = OrthographicSpec::new(
+                spec_left, spec_right, spec_bottom, spec_top, spec_near, spec_far
+            );
+
+            OrthographicProjection3D::new(spec)
+        })
+        .no_shrink()
 }
-
-macro_rules! vector_strategy_impl {
-    ($VectorTreeN:ident, $VectorN:ident, $n:expr, { $($field:ident),* }) => {
-        #[derive(Copy, Clone, Debug)]
-        struct $VectorTreeN<S, STree> {
-            $($field: STree,)*
-            _marker: PhantomData<S>,
-        }
-
-        impl<S, STree> AsRef<[STree; $n]> for $VectorTreeN<S, STree> {
-            fn as_ref(&self) -> &[STree; $n] {
-                unsafe {
-                    &*(self as *const $VectorTreeN<S, STree> as *const [STree; $n])
-                }
-            }
-        }
-
-        impl<S, STree> AsMut<[STree; $n]> for $VectorTreeN<S, STree> {
-            fn as_mut(&mut self) -> &mut [STree; $n] {
-                unsafe { 
-                    &mut *(self as *mut $VectorTreeN<S, STree> as *mut [STree; $n])
-                }
-            }
-        }
-
-        impl<S, STree> ops::Index<usize> for $VectorTreeN<S, STree> {
-            type Output = STree;
-
-            #[inline]
-            fn index(&self, index: usize) -> &Self::Output {
-                let v: &[STree; $n] = self.as_ref();
-                &v[index]
-            }
-        }
-
-        impl<S, STree> ops::IndexMut<usize> for $VectorTreeN<S, STree> {
-            #[inline]
-            fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-                let v: &mut [STree; $n] = self.as_mut();
-                &mut v[index]
-            }
-        }
-
-        impl<S, STree> ValueTree for VectorValueTree<$VectorTreeN<S, STree>> 
-            where S: Scalar,
-                  STree: ValueTree<Value = S>,
-        {
-            type Value = VectorValue<$VectorN<S>>;
-
-            fn current(&self) -> Self::Value {
-                VectorValue($VectorN::new(
-                    $(self.tree.$field.current(),)* 
-                ))
-            }
-
-            fn simplify(&mut self) -> bool {
-                while self.shrinker < $n {
-                    if self.tree[self.shrinker].simplify() {
-                        self.last_shrinker = Some(self.shrinker);
-                        return true;
-                    } else {
-                        self.shrinker += 1;
-                    }
-                }
-
-                false
-            }
-
-            fn complicate(&mut self) -> bool {
-                if let Some(shrinker) = self.last_shrinker {
-                    self.shrinker = shrinker;
-                    if self.tree[shrinker].complicate() {
-                        true
-                    } else {
-                        self.last_shrinker = None;
-                        false
-                    }
-                } else {
-                    false
-                }                                                                                                                                                   
-            }
-        }
-
-        impl<Strat> Strategy for VectorStrategy<Strat, $VectorN<Strat::Value>> 
-            where Strat: Strategy,
-                  Strat::Value: Scalar,
-        {
-            type Value = VectorValue<$VectorN<Strat::Value>>;
-            type Tree = VectorValueTree<$VectorTreeN<Strat::Value, Strat::Tree>>;
-
-            fn new_tree(&self, runner: &mut TestRunner) -> NewTree<Self> {
-                Ok(VectorValueTree {
-                    tree: $VectorTreeN {
-                        $($field: self.strategy.new_tree(runner)?,)* 
-                        _marker: PhantomData,
-                    },
-                    shrinker: 0,
-                    last_shrinker: None,
-                })
-            }
-        }
-
-        impl<S> Arbitrary for VectorValue<$VectorN<S>> where S: Scalar + Arbitrary {
-            type Parameters = S::Parameters;
-            type Strategy = VectorStrategy<S::Strategy, $VectorN<S>>;
-        
-            fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
-                let base = any_with::<S>(args);
-                VectorStrategy::new(base)
-            }
-        }
-    }
-}
-
-vector_strategy_impl!(VectorTree1, Vector1, 1, { tree_x });
-vector_strategy_impl!(VectorTree2, Vector2, 2, { tree_x, tree_y });
-vector_strategy_impl!(VectorTree3, Vector3, 3, { tree_x, tree_y, tree_z });
-vector_strategy_impl!(VectorTree4, Vector4, 4, { tree_x, tree_y, tree_z, tree_w });
-
 
 /// Generates the properties tests for perspective projection testing.
 ///
-/// `$TestModuleName` is a name we give to the module we place the tests in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$UpperBound` denotes the upperbound on the range of acceptable indices.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name of the module we place the tests in to 
+///    separate them from each other for each scalar type to prevent namespace
+///    collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers.
+/// * `$ProjGen` denotes the type of the projection transformation.
+/// * `$VecGen` is the name of a function or closure for generating vector 
+///    examples.
+/// * `$PointGen` is the name of a function for generating point examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the 
+///    floating point computations that defines a correct computation. We cannot 
+///    guarantee floating point computations will be exact since the underlying 
+///    floating point arithmetic is not exact.
 macro_rules! perspective_projection_props {
-    ($TestModuleName:ident, $ScalarType:ty) => {
+    ($TestModuleName:ident, $ScalarType:ty, $ProjGen:ident, $VecGen:ident, $PointGen:ident, $tolerance:expr) => {
         #[cfg(test)]
         mod $TestModuleName {
+            use cglinalg::approx::{
+                relative_eq,
+            };
+            use super::{
+                $ProjGen,
+                $VecGen,
+                $PointGen,
+            };
             use proptest::prelude::*;
-            use super::VectorValue;
-            use cglinalg::Vector3;
 
             proptest! {
                 #[test]
-                fn prop_perspective_projection_invertible(vv in any::<VectorValue<Vector3<$ScalarType>>>()) {
-                    prop_assert!(vv == vv);
+                fn prop_perspective_projection_project_vector(
+                    projection in $ProjGen::<$ScalarType>(), vector in $VecGen::<$ScalarType>()) {
+                    
+                    let projected_vector = projection.project_vector(&vector);
+                    let unprojected_vector = projection.unproject_vector(&projected_vector);
+
+                    prop_assert!(
+                        relative_eq!(unprojected_vector, vector, epsilon = $tolerance),
+                        "projection = {}\nvector = {}\nprojected_vector = {}\nunprojected_vector={}",
+                        projection, vector, projected_vector, unprojected_vector
+                    );
+                }
+
+                #[test]
+                fn prop_perspective_projection_project_point(
+                    projection in $ProjGen::<$ScalarType>(), point in $PointGen::<$ScalarType>()) {
+                    
+                    let projected_point = projection.project_point(&point);
+                    let unprojected_point = projection.unproject_point(&projected_point);
+
+                    prop_assert!(
+                        relative_eq!(unprojected_point, point, epsilon = $tolerance),
+                        "projection = {}\npoint = {}\nprojected_point = {}\nunprojected_point={}",
+                        projection, point, projected_point, unprojected_point
+                    );
                 }
             
                 #[test]
-                fn prop_perspective_projection_inverse_inverse_is_identity(vv in any::<VectorValue<Vector3<$ScalarType>>>()) {
-                    prop_assert!(vv == vv);
+                fn prop_perspective_projection_inverse_unproject_vector(
+                    projection in $ProjGen::<$ScalarType>(), 
+                    vector in $VecGen::<$ScalarType>()) {
+                    
+                    let unprojected_vector = projection.unproject_vector(&vector);
+                    let projected_vector = projection.project_vector(&unprojected_vector);
+
+                    prop_assert!(
+                        relative_eq!(projected_vector, vector, epsilon = $tolerance),
+                        "projection = {}\nvector = {}\nunprojected_vector = {}\nprojected_vector={}",
+                        projection, vector, unprojected_vector, projected_vector
+                    );
+
+                }
+
+                #[test]
+                fn prop_perspective_projection_inverse_unproject_point(
+                    projection in $ProjGen::<$ScalarType>(), point in $PointGen::<$ScalarType>()) {
+                    
+                    let unprojected_point = projection.unproject_point(&point);
+                    let projected_point = projection.project_point(&unprojected_point);
+
+                    prop_assert!(
+                        relative_eq!(projected_point, point, epsilon = $tolerance),
+                        "projection = {}\npoint = {}\nunprojected_point = {}\nprojected_point={}",
+                        projection, point, unprojected_point, projected_point
+                    );
                 }
             }
         }
     }
 }
 
-perspective_projection_props!(perspective_f64_props, f64);
+perspective_projection_props!(
+    perspective_f64_props, 
+    f64, 
+    any_perspective_projection, 
+    any_vector3, 
+    any_point3, 
+    1e-7
+);
 
-/*
-extern crate cglinalg;
 
-use cglinalg::{
-    Scalar,
-};
-use core::marker::PhantomData;
+/// Generates the properties tests for orthographic projection testing.
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name of the module we place the tests in to 
+///    separate them from each other for each scalar type to prevent namespace
+///    collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers.
+/// * `$ProjGen` denotes the type of the projection transformation.
+/// * `$VecGen` is the name of a function or closure for generating vector 
+///    examples.
+/// * `$PointGen` is the name of a function for generating point examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the 
+///    floating point computations that defines a correct computation. We cannot 
+///    guarantee floating point computations will be exact since the underlying 
+///    floating point arithmetic is not exact.
+macro_rules! orthographic_projection_props {
+    ($TestModuleName:ident, $ScalarType:ty, $ProjGen:ident, $VecGen:ident, $PointGen:ident, $tolerance:expr) => {
+        #[cfg(test)]
+        mod $TestModuleName {
+            use cglinalg::approx::{
+                relative_eq,
+            };
+            use super::{
+                $ProjGen,
+                $VecGen,
+                $PointGen,
+            };
+            use proptest::prelude::*;
 
+            proptest! {
+                #[test]
+                fn prop_orthographic_projection_project_vector(
+                    projection in $ProjGen::<$ScalarType>(), vector in $VecGen::<$ScalarType>()) {
+                    
+                    let projected_vector = projection.project_vector(&vector);
+                    let unprojected_vector = projection.unproject_vector(&projected_vector);
 
-trait Property {
-    type Args;
+                    prop_assert!(
+                        relative_eq!(unprojected_vector, vector, epsilon = $tolerance),
+                        "projection = {}\nvector = {}\nprojected_vector = {}\nunprojected_vector={}",
+                        projection, vector, projected_vector, unprojected_vector
+                    );
+                }
 
-    fn property(args: Self::Args) -> bool;
-}
+                #[test]
+                fn prop_orthographic_projection_project_point(
+                    projection in $ProjGen::<$ScalarType>(), point in $PointGen::<$ScalarType>()) {
+                    
+                    let projected_point = projection.project_point(&point);
+                    let unprojected_point = projection.unproject_point(&projected_point);
 
-struct PropAdditionCommutative<T> {
-    _marker: PhantomData<T>,
-}
+                    prop_assert!(
+                        relative_eq!(unprojected_point, point, epsilon = $tolerance),
+                        "projection = {}\npoint = {}\nprojected_point = {}\nunprojected_point={}",
+                        projection, point, projected_point, unprojected_point
+                    );
+                }
+            
+                #[test]
+                fn prop_orthographic_projection_inverse_unproject_vector(
+                    projection in $ProjGen::<$ScalarType>(), 
+                    vector in $VecGen::<$ScalarType>()) {
+                    
+                    let unprojected_vector = projection.unproject_vector(&vector);
+                    let projected_vector = projection.project_vector(&unprojected_vector);
 
-impl<S> Property for PropAdditionCommutative<S> where S: Scalar {
-    type Args = (S, S);
+                    prop_assert!(
+                        relative_eq!(projected_vector, vector, epsilon = $tolerance),
+                        "projection = {}\nvector = {}\nunprojected_vector = {}\nprojected_vector={}",
+                        projection, vector, unprojected_vector, projected_vector
+                    );
 
-    fn property(args: (S, S)) -> bool {
-        args.0 + args.1 == args.1 + args.0
-    }
-}
+                }
 
-struct PropAdditionAssociative<T> {
-    _marker: PhantomData<T>,
-}
+                #[test]
+                fn prop_orthographic_projection_inverse_unproject_point(
+                    projection in $ProjGen::<$ScalarType>(), point in $PointGen::<$ScalarType>()) {
+                    
+                    let unprojected_point = projection.unproject_point(&point);
+                    let projected_point = projection.project_point(&unprojected_point);
 
-impl<S> Property for PropAdditionAssociative<S> where S: Scalar {
-    type Args = (S, S, S);
-
-    fn property(args: (S, S, S)) -> bool {
-        (args.0 + args.1) + args.2 == args.0 + (args.1 + args.2)
-    }
-}
-use proptest::prelude::*;
-macro_rules! props {
-    ($PropT:ident, $PropFnName:ident, $ScalarT:ty) => {
-    proptest! {
-        #[test]
-        fn $PropFnName(args in any::<<$PropT<$ScalarT> as Property>::Args>()) {
-            prop_assert!($PropT::property(args));
+                    prop_assert!(
+                        relative_eq!(projected_point, point, epsilon = $tolerance),
+                        "projection = {}\npoint = {}\nunprojected_point = {}\nprojected_point={}",
+                        projection, point, unprojected_point, projected_point
+                    );
+                }
+            }
         }
     }
-    }
 }
 
-props!(PropAdditionCommutative, prop_addition_commutative, u32);
-props!(PropAdditionAssociative, prop_addition_associative, u32);
-*/
+orthographic_projection_props!(
+    orthographic_f64_props, 
+    f64, 
+    any_orthographic_projection, 
+    any_vector3, 
+    any_point3, 
+    1e-7
+);
+
