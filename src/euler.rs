@@ -35,11 +35,17 @@ use core::ops;
 /// z in [-pi, pi]
 /// ```
 /// where each interval includes its endpoints.
+///
+/// ## Note
+/// We recommend quaternions over euler angles for rotations because quaternions 
+/// do not gimbal lock. The library provides Euler angles for feature-completeness, or 
+/// in cases where the end user prefers Euler angles.
+/// 
 /// Euler angles are prone to gimbal lock. Gimbal lock is the loss of one 
 /// degree of freedom when rotations about two axes come into parallel alignment. 
 /// In particular, when an object rotates on one axis and enters into parallel 
 /// alignment with another rotation axis, the gimbal can no longer distinguish 
-/// two of the rotation axes: when one tries to Euler rotate along on gimbal, the 
+/// two of the rotation axes: when one tries to Euler rotate along one gimbal, the 
 /// other one rotates by the same amount; one degree of freedom is lost.
 /// Let's give a couple examples of Euler angles.
 ///
@@ -47,11 +53,11 @@ use core::ops;
 /// 
 /// The following example is a rotation without gimbal lock.
 /// ```
-/// use cglinalg::{
-///     Degrees,
-///     EulerAngles,
-///     Matrix3x3,
-/// };
+/// # use cglinalg::{
+/// #     Degrees,
+/// #     EulerAngles,
+/// #     Matrix3x3,
+/// # };
 ///
 /// let roll = Degrees(45.0);
 /// let yaw = Degrees(30.0);
@@ -78,7 +84,8 @@ use core::ops;
 /// 
 /// ## Example (Gimbal Lock)
 /// 
-/// An Euler rotation can be represented as a product three rotations. 
+/// An Euler rotation can be represented as a product three rotations. We are using the ZYX
+/// rotation application order. 
 /// ```text
 /// R(roll, yaw, pitch) == R_x(roll) * R_y(yaw) * R_z(pitch)
 /// ```
@@ -118,16 +125,16 @@ use core::ops;
 /// ```
 /// Changing either the values of the `pitch` or the `roll` has the same 
 /// effect: it rotates an object about the _z-axis_. We have lost the ability 
-/// to roll about the x-axis. Let's illustrate this effect with some code.
+/// to roll about the _x-axis_. Let's illustrate this effect with some code.
 /// ```
-/// use cglinalg::{
-///     Degrees,
-///     EulerAngles,
-///     Matrix3x3,
-/// };
-/// use cglinalg::approx::{
-///     ulps_eq,
-/// };
+/// # use cglinalg::{
+/// #    Degrees,
+/// #    EulerAngles,
+/// #    Matrix3x3,
+/// # };
+/// # use cglinalg::approx::{
+/// #    ulps_eq,
+/// # };
 ///
 /// // Gimbal lock the x-axis.
 /// let roll = Degrees(45.0);
@@ -184,12 +191,12 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     /// of Euler angles.
     ///
     /// A set of Euler angles describes an arbitrary rotation as a sequence
-    /// of three axial rotations: one for each axis in thee dimensions (x, y, z).
-    /// The rotation matrix described by Euler angles can be decomposed into a 
-    /// product of rotation matrices about each axis: let `R_x(roll)`, `R_y(yaw)`, 
-    /// and `R_z(pitch)` denote the rotations about the 
-    /// `x`-axis, `y`-axis, and `z`-axis, respectively. The Euler rotation
-    /// is decomposed as follows
+    /// of three axial rotations: one for each axis in thee dimensions 
+    /// (`x`, `y`, `z`). The rotation matrix described by Euler angles can be
+    /// decomposed into a product of rotation matrices about each axis: let 
+    /// `R_x(roll)`, `R_y(yaw)`, and `R_z(pitch)` denote the rotations about 
+    /// the _x-axis_, _y-axis_, and _z-axis_, respectively. The Euler rotation
+    /// is decomposed as follows:
     /// ```text
     /// R(roll, yaw, pitch) == R_x(roll) * R_y(yaw) * R_z(pitch)
     /// ```
@@ -471,7 +478,7 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     /// x := cos(roll) * m[1, 1] + sin(roll) * m[1, 2]
     /// pitch == atan2(y, x)
     /// ```
-    /// this gives us the euler angles for the rotation matrix.
+    /// this gives us the Euler angles for the rotation matrix.
     /// 
     /// ### Note
     /// The method here is just one method of extracting Euler angles. More than one 

@@ -1661,7 +1661,7 @@ impl<S> Vector3<S> where S: Copy {
 }
 
 impl<S> Vector3<S> where S: Scalar {
-    /// Returns the unit x axis vector.
+    /// Returns the unit _x-axis_ vector.
     #[inline]
     pub fn unit_x() -> Vector3<S> {
         Vector3 { 
@@ -1671,7 +1671,7 @@ impl<S> Vector3<S> where S: Scalar {
         }
     }
 
-    /// Returns the unit y axis vector.
+    /// Returns the unit _y-axis_ vector.
     #[inline]
     pub fn unit_y() -> Vector3<S> {
         Vector3 { 
@@ -1681,7 +1681,7 @@ impl<S> Vector3<S> where S: Scalar {
         }
     }
     
-    /// Returns the unit z axis vector.
+    /// Returns the unit _z-axis_ vector.
     #[inline]
     pub fn unit_z() -> Vector3<S> {
         Vector3 { 
