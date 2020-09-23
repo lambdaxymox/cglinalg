@@ -27,13 +27,16 @@ fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>>
 }
 
 
-/// Generates the properties tests for quaternion indexing.
+/// Generate property tests for quaternion indexing.
 ///
-/// `$TestModuleName` is a name we give to the module we place the tests in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$UpperBound` denotes the upperbound on the range of acceptable indices.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$UpperBound` denotes the upperbound on the range of acceptable indices.
 macro_rules! index_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
     #[cfg(test)]
@@ -44,8 +47,9 @@ macro_rules! index_props {
             /// When a quaternion is treated like an array, it should accept all indices
             /// below the length of the array.
             ///
-            /// Given a quaternion `q`, it should return the element at position `index` in the 
-            /// underlying storage of the quaternion when the given index is inbounds.
+            /// Given a quaternion `q`, it should return the element at position 
+            /// `index` in the underlying storage of the quaternion when the given 
+            /// index is inbounds.
             #[test]
             fn prop_accepts_all_indices_in_of_bounds(
                 q in super::$Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
@@ -53,11 +57,12 @@ macro_rules! index_props {
                 prop_assert_eq!(q[index], q[index]);
             }
     
-            /// When a quaternion is treated like an array, it should reject any input index outside
-            /// the length of the array.
+            /// When a quaternion is treated like an array, it should reject any 
+            /// input index outside the length of the array.
             ///
-            /// Given a quaternion `q`, when the element index `index` is out of bounds, it should 
-            /// generate a panic just like an array indexed out of bounds.
+            /// Given a quaternion `q`, when the element index `index` is out of 
+            /// bounds, it should generate a panic just like an array indexed 
+            /// out of bounds.
             #[test]
             #[should_panic]
             fn prop_panics_when_index_out_of_bounds(
@@ -73,13 +78,17 @@ macro_rules! index_props {
 index_props!(quaternion_index_props, f64, any_quaternion, 4);
 
 
-/// Generate the properties for quaternion arithmetic over exact scalars. We define an exact
-/// scalar type as a type where scalar arithmetic is exact (e.g. integers).
+/// Generate property tests for quaternion arithmetic over exact scalars. We 
+/// define an exact scalar type as a type where scalar arithmetic is 
+/// exact (e.g. integers).
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_arithmetic_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -114,7 +123,8 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(q * zero, zero_quat);
             }
 
-            /// A zero quaternion should act as the additive unit element of a set of quaternions.
+            /// A zero quaternion should act as the additive unit element of a set 
+            /// of quaternions.
             ///
             /// Given a quaternion `q`
             /// ```
@@ -126,7 +136,8 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(q + zero_quat, q);
             }
 
-            /// A zero quaternion should act as the additive unit element of a set of quaternions.
+            /// A zero quaternion should act as the additive unit element of a set 
+            /// of quaternions.
             ///
             /// Given a quaternion `q`
             /// ```
@@ -138,7 +149,8 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(zero_quat + q, q);
             }
 
-            /// Multiplying a quaternion by a scalar `1` should give the original quaternion.
+            /// Multiplying a quaternion by a scalar `1` should give the original 
+            /// quaternion.
             ///
             /// Given a quaternion `q`
             /// ```
@@ -150,7 +162,8 @@ macro_rules! exact_arithmetic_props {
                 prop_assert_eq!(one * q, q);
             }
 
-            /// Multiplying a quaternion by a scalar `1` should give the original quaternion.
+            /// Multiplying a quaternion by a scalar `1` should give the original 
+            /// quaternion.
             ///
             /// Given a quaternion `q`
             /// ```
@@ -171,18 +184,20 @@ exact_arithmetic_props!(quaternion_i32_arithmetic_props, i32, any_quaternion);
 exact_arithmetic_props!(quaternion_u32_arithmetic_props, u32, any_quaternion);
 
 
-/// Generate the properties for quaternion arithmetic over floating point scalars.
+/// Generate property tests for quaternion arithmetic over floating point scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
-///  that still defines a correct computation. We cannot guarantee floating point computations
-///  will be exact since the underlying floating point arithmetic is not exact.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the 
+///    floating point computations that defines a correct computation.
 ///
-/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
-/// scalar types.
+/// We use approximate comparisons because arithmetic is not exact over finite 
+/// precision floating point scalar types.
 macro_rules! approx_add_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -216,11 +231,12 @@ macro_rules! approx_add_props {
                 prop_assert_eq!(zero_quat + q, q);
             }
 
-            /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
-            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions.
+            /// Given quaternions `q1` and `q2`, we should be able to use `q1` 
+            /// and `q2` interchangeably with their references `&q1` and `&q2` in 
+            /// arithmetic expressions involving quaternions.
             ///
-            /// Given quaternions `q1` and `q2`, and their references `&q1` and `&q2`, they 
-            /// should satisfy
+            /// Given quaternions `q1` and `q2`, and their references `&q1` 
+            /// and `&q2`, they should satisfy
             /// ```
             ///  q1 +  q2 = &q1 +  q2
             ///  q1 +  q2 =  q1 + &q2
@@ -243,14 +259,16 @@ macro_rules! approx_add_props {
                 prop_assert_eq!(q1 + &q2, &q1 + &q2);
             }
 
-            /// Quaternion addition over floating point scalars should  be approximately commutative.
+            /// Quaternion addition over floating point scalars should be 
+            /// approximately commutative.
             /// 
             /// Given quaternions `q1` and `q2`, we have
             /// ```
             /// q1 + q2 ~= q2 + q1
             /// ```
-            /// Note that floating point quaternion addition cannot be exactly commutative because arithmetic
-            /// with floating point numbers is not commutative.
+            /// Note that floating point quaternion addition cannot be exactly 
+            /// commutative because arithmetic with floating point numbers is 
+            /// not commutative.
             #[test]
             fn prop_quaternion_addition_almost_commutative(
                 q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
@@ -259,14 +277,16 @@ macro_rules! approx_add_props {
                 prop_assert_eq!((q1 + q2) - (q2 + q1), zero);
             }
 
-            /// Quaternion addition over floating point scalars should be approximately associative. 
+            /// Quaternion addition over floating point scalars should be 
+            /// approximately associative. 
             ///
             /// Given quaternions `q1`, `q2`, and `q3` we have
             /// ```
             /// (q1 + q2) + q3 ~= q1 + (q2 + q3).
             /// ```
-            /// Note that floating point quaternion addition cannot be exactly associative because arithmetic
-            /// with floating point numbers is not associative.
+            /// Note that floating point quaternion addition cannot be exactly 
+            /// associative because arithmetic with floating point numbers is 
+            /// not associative.
             #[test]
             fn prop_quaternion_addition_almost_associative(
                 q1 in super::$Generator::<$ScalarType>(), 
@@ -282,12 +302,15 @@ macro_rules! approx_add_props {
 approx_add_props!(quaternion_f64_add_props, f64, any_quaternion, 1e-7);
 
 
-/// Generate the properties for quaternion arithmetic over exact scalars.
+/// Generate property tests for quaternion arithmetic over exact scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_add_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -296,7 +319,7 @@ macro_rules! exact_add_props {
         use cglinalg::{Quaternion, Zero};
 
         proptest! {
-            /// A quaternion plus a zero quaternion equals the same quaternion. 
+            /// A quaternion plus a zero quaternion equals the same quaternion.
             ///
             /// Given a quaternion `q`, it should satisfy
             /// ```
@@ -320,8 +343,9 @@ macro_rules! exact_add_props {
                 prop_assert_eq!(zero_quat + q, q);
             }
 
-            /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
-            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions.
+            /// Given quaternions `q1` and `q2`, we should be able to use `q1` 
+            /// and `q2` interchangeably with their references `&q1` and `&q2` in 
+            /// arithmetic expressions involving quaternions.
             ///
             /// Given quaternions `q1` and `q2`, and their references `&q1` and `&q2`, they 
             /// should satisfy
@@ -361,7 +385,8 @@ macro_rules! exact_add_props {
                 prop_assert_eq!((q1 + q2) - (q2 + q1), zero);
             }
 
-            /// Given three quaternions of integer scalars, quaternion addition should be associative.
+            /// Given three quaternions of integer scalars, quaternion addition 
+            /// should be associative.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`, we have
             /// ```
@@ -383,18 +408,20 @@ exact_add_props!(quaternion_i32_add_props, i32, any_quaternion);
 exact_add_props!(quaternion_u32_add_props, u32, any_quaternion);
 
 
-/// Generate the properties for quaternion subtraction over floating point scalars.
+/// Generate property tests for quaternion subtraction over floating point scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternion.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
-///  that still defines a correct computation. We cannot guarantee floating point computations
-///  will be exact since the underlying floating point arithmetic is not exact.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the floating 
+///    point computations that defines a correct computation.
 ///
-/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
-/// scalar types.
+/// We use approximate comparisons because arithmetic is not exact over finite 
+/// precision floating point scalar types.
 macro_rules! approx_sub_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -403,7 +430,8 @@ macro_rules! approx_sub_props {
         use cglinalg::{Quaternion, Zero};
 
         proptest! {
-            /// The zero quaternion over floating point scalars should act as an additive unit.
+            /// The zero quaternion over floating point scalars should act as an 
+            /// additive unit.
             ///
             /// Given a quaternion `q`, we have
             /// ```
@@ -429,11 +457,12 @@ macro_rules! approx_sub_props {
                 prop_assert_eq!(q + (-q), zero_quat);
             }
 
-            /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
-            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions.
+            /// Given quaternions `q1` and `q2`, we should be able to use `q1` and 
+            /// `q2` interchangeably with their references `&q1` and `&q2` in 
+            /// arithmetic expressions involving quaternions.
             ///
-            /// Given quaternions `q1` and `q2`, and their references `&q1` and `&q2`, they 
-            /// should satisfy
+            /// Given quaternions `q1` and `q2`, and their references `&q1` and 
+            /// `&q2`, they should satisfy
             /// ```
             ///  q1 -  q2 = &q1 -  q2
             ///  q1 -  q2 =  q1 - &q2
@@ -463,12 +492,15 @@ macro_rules! approx_sub_props {
 approx_sub_props!(quaternion_f64_sub_props, f64, any_quaternion, 1e-7);
 
 
-/// Generate the properties for quaternion arithmetic over exact scalars.
+/// Generate property tests for quaternion arithmetic over exact scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_sub_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -501,11 +533,12 @@ macro_rules! exact_sub_props {
                 prop_assert_eq!(q - q, zero_quat);
             }
 
-            /// Given quaternions `q1` and `q2`, we should be able to use `q1` and `q2` interchangeably 
-            /// with their references `&q1` and `&q2` in arithmetic expressions involving quaternions.
+            /// Given quaternions `q1` and `q2`, we should be able to use `q1` 
+            /// and `q2` interchangeably with their references `&q1` and `&q2` 
+            /// in arithmetic expressions involving quaternions.
             ///
-            /// Given quaternions `q1` and `q2`, and their references `&q1` and `&q2`, they 
-            /// should satisfy
+            /// Given quaternions `q1` and `q2`, and their references `&q1` 
+            /// and `&q2`, they should satisfy
             /// ```
             ///  q1 -  q2 = &q1 -  q2
             ///  q1 -  q2 =  q1 - &q2
@@ -536,18 +569,21 @@ exact_sub_props!(quaternion_i32_sub_props, i32, any_quaternion);
 exact_sub_props!(quaternion_u32_sub_props, u32, any_quaternion);
 
 
-/// Generate the properties for quaternion multiplication over floating point scalars.
+/// Generate property tests for quaternion multiplication over floating point 
+/// scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
-///  that still defines a correct computation. We cannot guarantee floating point computations
-///  will be exact since the underlying floating point arithmetic is not exact.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the 
+///    floating point computations that defines a correct computation.
 ///
-/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
-/// scalar types.
+/// We use approximate comparisons because arithmetic is not exact over finite 
+/// precision floating point scalar types.
 macro_rules! approx_mul_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -561,14 +597,16 @@ macro_rules! approx_mul_props {
         };
 
         proptest! {
-            /// Multiplication of a scalar and a quaternion should be approximately commutative.
+            /// Multiplication of a scalar and a quaternion should be approximately 
+            /// commutative.
             ///
             /// Given a constant `c` and a quaternion `q`
             /// ```
             /// c * q ~= q * c
             /// ```
-            /// Note that floating point quaternion multiplication cannot be commutative because 
-            /// multiplication in the underlying floating point scalars is not commutative.
+            /// Note that floating point quaternion multiplication cannot be commutative 
+            /// because multiplication in the underlying floating point scalars is not 
+            /// commutative.
             #[test]
             fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
                 c in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
@@ -580,17 +618,18 @@ macro_rules! approx_mul_props {
                 );
             }
 
-            /// Multiplication of two scalars and a quaternion should be compatible with multiplication of 
-            /// all scalars. 
+            /// Multiplication of two scalars and a quaternion should be compatible 
+            /// with multiplication of all scalars. 
             ///
-            /// In other words, scalar multiplication of two scalar with a quaternion should 
-            /// act associatively, just like the multiplication of three scalars. 
+            /// In other words, scalar multiplication of two scalar with a quaternion 
+            /// should act associatively, just like the multiplication of three scalars. 
             /// Given scalars `a` and `b`, and a quaternion `q`, we have
             /// ```
             /// (a * b) * q ~= a * (b * q)
             /// ```
-            /// Note that the compatability of scalars with quaternions can only be approximate and not 
-            /// exact because multiplication of the underlying scalars is not associative. 
+            /// Note that the compatability of scalars with quaternions can only be 
+            /// approximate and not exact because multiplication of the underlying 
+            /// scalars is not associative. 
             #[test]
             fn prop_scalar_multiplication_compatability(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), q in super::$Generator::<$ScalarType>()) {
@@ -600,14 +639,16 @@ macro_rules! approx_mul_props {
                 prop_assert!(relative_eq!(a * (b * q), (a * b) * q, epsilon = $tolerance));
             }
 
-            /// Quaternion multiplication over floating point numbers is approximately associative.
+            /// Quaternion multiplication over floating point numbers is 
+            /// approximately associative.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`, we have
             /// ```
             /// (q1 * q2) * q3 ~= q1 * (q2 * q3)
             /// ```
-            /// Note that the quaternion multiplication can only be approximately associative and not 
-            /// exactly associative because multiplication of the underlying scalars is not associative. 
+            /// Note that the quaternion multiplication can only be approximately 
+            /// associative and not exactly associative because multiplication of 
+            /// the underlying scalars is not associative. 
             #[test]
             fn prop_quaternion_multiplication_associative(
                 q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>(), 
@@ -632,15 +673,17 @@ macro_rules! approx_mul_props {
                 prop_assert_eq!(q * one, one * q);
             }
 
-            /// Every nonzero quaternion over floating point scalars has an approximate multiplicative inverse.
+            /// Every nonzero quaternion over floating point scalars has an 
+            /// approximate multiplicative inverse.
             ///
             /// Given a quaternion `q` and its inverse `q_inv`, we have
             /// ```
             /// q * q_inv ~= q_inv * q ~= 1
             /// ```
-            /// Note that quaternion algebra over floating point scalars is not commutative because
-            /// multiplication of the underlying scalars is not commutative. As a result, we can only
-            /// guarantee an appoximate equality.
+            /// Note that quaternion algebra over floating point scalars is not 
+            /// commutative because multiplication of the underlying scalars is 
+            /// not commutative. As a result, we can only guarantee an appoximate 
+            /// equality.
             #[test]
             fn prop_quaternion_multiplicative_inverse(q in super::$Generator::<$ScalarType>()) {
                 prop_assume!(q.is_finite());
@@ -698,12 +741,15 @@ macro_rules! approx_mul_props {
 approx_mul_props!(quaternion_f64_mul_props, f64, any_quaternion, 1e-7);
 
 
-/// Generate the properties for quaternion multiplication over exact scalars.
+/// Generate property tests for quaternion multiplication over exact scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_mul_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -715,7 +761,8 @@ macro_rules! exact_mul_props {
         };
 
         proptest! {
-            /// Multiplication of an integer scalar and a quaternion over integer scalars should be commutative.
+            /// Multiplication of an integer scalar and a quaternion over integer 
+            /// scalars should be commutative.
             ///
             /// Given a constant `c` and a quaternion `q`
             /// ```
@@ -728,11 +775,13 @@ macro_rules! exact_mul_props {
                 prop_assert_eq!(c * q, q * c);
             }
 
-            /// Exact multiplication of two scalars and a quaternion should be compatible with multiplication of 
-            /// all scalars. 
+            /// Exact multiplication of two scalars and a quaternion should be 
+            /// compatible with multiplication of all scalars. 
             ///
-            /// In other words, scalar multiplication of two scalars with a quaternion should 
-            /// act associatively just like the multiplication of three scalars. 
+            /// In other words, scalar multiplication of two scalars with a 
+            /// quaternion should act associatively just like the multiplication 
+            /// of three scalars. 
+            ///
             /// Given scalars `a` and `b`, and a quaternion `q`, we have
             /// ```
             /// (a * b) * q = a * (b * q)
@@ -780,19 +829,21 @@ exact_mul_props!(quaternion_i32_mul_props, i32, any_quaternion);
 exact_mul_props!(quaternion_u32_mul_props, u32, any_quaternion);
 
 
-/// Generate the properties for quaternion distribution over floating point scalars.
+/// Generate property tests for quaternion distribution over floating point 
+/// scalars.
 ///
-/// Here are what the different macro parameters mean:
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
-///  that still defines a correct computation. We cannot guarantee floating point computations
-///  will be exact since the underlying floating point arithmetic is not exact.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the 
+///    floating point computations that still defines a correct computation. 
 ///
-/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
-/// scalar types.
+/// We use approximate comparisons because arithmetic is not exact over finite 
+/// precision floating point scalar types.
 macro_rules! approx_distributive_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -802,7 +853,8 @@ macro_rules! approx_distributive_props {
         use cglinalg::approx::relative_eq;
     
         proptest! {
-            /// Scalar multiplication should approximately distribute over quaternion addition.
+            /// Scalar multiplication should approximately distribute over 
+            /// quaternion addition.
             ///
             /// Given a scalar `a` and quaternions `q1` and `q2`
             /// ```
@@ -818,7 +870,8 @@ macro_rules! approx_distributive_props {
                 prop_assert!(relative_eq!(a * (q1 + q2), a * q1 + a * q2, epsilon = $tolerance));
             }
     
-            /// Multiplication of a sum of scalars should approximately distribute over a quaternion.
+            /// Multiplication of a sum of scalars should approximately distribute 
+            /// over a quaternion.
             ///
             /// Given scalars `a` and `b` and a quaternion `q`, we have
             /// ```
@@ -834,7 +887,8 @@ macro_rules! approx_distributive_props {
                 prop_assert!(relative_eq!((a + b) * q, a * q + b * q, epsilon = $tolerance));
             }
 
-            /// Multiplication of two quaternions by a scalar on the right should approximately distribute.
+            /// Multiplication of two quaternions by a scalar on the right should 
+            /// approximately distribute.
             ///
             /// Given quaternions `q1` and `q2` and a scalar `a`
             /// ```
@@ -850,8 +904,8 @@ macro_rules! approx_distributive_props {
                 prop_assert!(relative_eq!((q1 + q2) * a,  q1 * a + q2 * a, epsilon = $tolerance));
             }
 
-            /// Multiplication of a quaternion on the right by the sum of two scalars should approximately 
-            /// distribute over the two scalars.
+            /// Multiplication of a quaternion on the right by the sum of two 
+            /// scalars should approximately distribute over the two scalars.
             ///
             /// Given a quaternion `q` and scalars `a` and `b`
             /// ```
@@ -884,8 +938,8 @@ macro_rules! approx_distributive_props {
                 prop_assert!(relative_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3, epsilon = $tolerance));
             }
 
-            /// Quaternion multiplication over floating point numbers should be approximately 
-            /// distributive on the left.
+            /// Quaternion multiplication over floating point numbers should be 
+            /// approximately distributive on the left.
             ///
             /// Given three quaternions `q1`, `q2`, and `q3`
             /// ```
@@ -908,12 +962,15 @@ macro_rules! approx_distributive_props {
 approx_distributive_props!(quaternion_f64_distributive_props, f64, any_quaternion, 1e-7);
 
 
-/// Generate the properties for quaternion distribution over exact scalars.
+/// Generate property tests for quaternion distribution over exact scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_distributive_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -936,7 +993,8 @@ macro_rules! exact_distributive_props {
                 prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
             }
 
-            /// Multiplication of a sum of scalars should distribute over a quaternion.
+            /// Multiplication of a sum of scalars should distribute over a 
+            /// quaternion.
             ///
             /// Given scalars `a` and `b` and a quaternion `q`, we have
             /// ```
@@ -951,9 +1009,10 @@ macro_rules! exact_distributive_props {
                 prop_assert_eq!(q * (a + b), q * a + q * b);
             }
 
-            /// Multiplication of two quaternions by a scalar on the right should distribute.
+            /// Multiplication of two quaternions by a scalar on the right 
+            /// should distribute.
             ///
-            /// Given quaternions `q1` and `q2` and a scalar `a`
+            /// Given quaternions `q1` and `q2`, and a scalar `a`
             /// ```
             /// (q1 + q2) * a = q1 * a + q2 * a
             /// ```
@@ -965,8 +1024,8 @@ macro_rules! exact_distributive_props {
                 prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
             }
 
-            /// Multiplication of a quaternion on the right by the sum of two scalars should
-            /// distribute over the two scalars. 
+            /// Multiplication of a quaternion on the right by the sum of two 
+            /// scalars should distribute over the two scalars. 
             ///
             /// Given a quaternion `q` and scalars `a` and `b`
             /// ```
@@ -1016,18 +1075,21 @@ exact_distributive_props!(quaternion_i32_distributive_props, i32, any_quaternion
 exact_distributive_props!(quaternion_u32_distributive_props, u32, any_quaternion);
 
 
-/// Generate the properties for quaternion dot products over floating point scalars.
+/// Generate property tests for quaternion dot products over floating point 
+/// scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the set of quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
-///  that still defines a correct computation. We cannot guarantee floating point computations
-///  will be exact since the underlying floating point arithmetic is not exact.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the 
+///    floating point computations that defines a correct computation.
 ///
-/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
-/// scalar types.
+/// We use approximate comparisons because arithmetic is not exact over finite 
+/// precision floating point scalar types.
 macro_rules! approx_dot_product_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -1091,8 +1153,8 @@ macro_rules! approx_dot_product_props {
                 );
             }
 
-            /// The dot product of quaternions over floating point scalars is approximately 
-            /// commutative with scalars.
+            /// The dot product of quaternions over floating point scalars is s
+            /// approximately commutative with scalars.
             ///
             /// Given quaternions `q1` and `q2`, and scalars `a` and `b`
             /// ```
@@ -1155,12 +1217,15 @@ macro_rules! approx_dot_product_props {
 approx_dot_product_props!(quaternion_f64_dot_product_props, f64, any_quaternion, 1e-7);
 
 
-/// Generate the properties for quaternion dot products over integer scalars.
+/// Generate property tests for quaternion dot products over integer scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_dot_product_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -1183,7 +1248,8 @@ macro_rules! exact_dot_product_props {
 
             }
 
-            /// The dot product of quaternions over integer scalars is right distributive.
+            /// The dot product of quaternions over integer scalars is right 
+            /// distributive.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`
             /// ```
@@ -1197,7 +1263,8 @@ macro_rules! exact_dot_product_props {
                 prop_assert_eq!(q1.dot(q2 + q3), q1.dot(q2) + q1.dot(q3));
             }
 
-            /// The dot product of quaternions over integer scalars is left distributive.
+            /// The dot product of quaternions over integer scalars is left 
+            /// distributive.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`
             /// ```
@@ -1211,7 +1278,8 @@ macro_rules! exact_dot_product_props {
                 prop_assert_eq!((q1 + q2).dot(q3), q1.dot(q3) + q2.dot(q3));
             }
 
-            /// The dot product of quaternions over integer scalars is commutative with scalars.
+            /// The dot product of quaternions over integer scalars is 
+            /// commutative with scalars.
             ///
             /// Given quaternions `q1` and `q2`, and scalars `a` and `b`
             /// ```
@@ -1225,7 +1293,8 @@ macro_rules! exact_dot_product_props {
                 prop_assert_eq!((a * q1).dot(b * q2), a * b * q1.dot(q2));
             }
 
-            /// The dot product of quaternions over integer scalars is right bilinear.
+            /// The dot product of quaternions over integer scalars is right
+            /// bilinear.
             ///
             /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
             /// ```
@@ -1240,7 +1309,8 @@ macro_rules! exact_dot_product_props {
                 prop_assert_eq!(q1.dot(a * q2 + b * q3), a * q1.dot(q2) + b * q1.dot(q3));
             }
 
-            /// The dot product of quaternions over integer scalars is left bilinear.
+            /// The dot product of quaternions over integer scalars is left
+            /// bilinear.
             ///
             /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
             /// ```
@@ -1263,12 +1333,15 @@ exact_dot_product_props!(quaternion_i32_dot_product_props, i32, any_quaternion);
 exact_dot_product_props!(quaternion_u32_dot_product_props, u32, any_quaternion);
 
 
-/// Generate the properties for quaternion conjugation over floating point scalars.
+/// Generate property tests for quaternion conjugation over floating point scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the set of quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! conjugation_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -1320,15 +1393,17 @@ macro_rules! conjugation_props {
 conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion);
 
 
-/// Generate the properties for quaternion magnitudes.
+/// Generate property tests for quaternion magnitudes.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
-///  that still defines a correct computation. We cannot guarantee floating point computations
-///  will be exact since the underlying floating point arithmetic is not exact.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the 
+///    floating point computations that defines a correct computation.
 macro_rules! magnitude_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
@@ -1340,7 +1415,8 @@ macro_rules! magnitude_props {
             #[test]
             /// The magnitude of a quaternion preserves scales. 
             /// 
-            /// Given a scalar constant `c`, and a quaternion `q` of scalars, the magnitude function satisfies
+            /// Given a scalar constant `c`, and a quaternion `q` of scalars, the 
+            /// magnitude function satisfies
             /// ```
             /// magnitude(c * q) = abs(c) * magnitude(q)
             /// ```
@@ -1387,18 +1463,21 @@ macro_rules! magnitude_props {
                 );
             }
 
-            /// The magnitude function is point separating. In particular, if the distance between two 
-            /// quaternions `q1` and `q2` is zero, then q1 = q2.
+            /// The magnitude function is point separating. In particular, if 
+            /// the distance between two quaternions `q1` and `q2` is 
+            /// zero, then q1 = q2.
             ///
             /// Given quaternions `q1` and `q2`
             /// ```
             /// magnitude(q1 - q2) = 0 => q1 = q2 
             /// ```
-            /// Equivalently, if `q1` is not equal to `q2`, then their distance is nonzero
+            /// Equivalently, if `q1` is not equal to `q2`, then their distance is 
+            /// nonzero
             /// ```
             /// q1 != q2 => magnitude(q1 - q2) != 0
             /// ```
-            /// For the sake of testability, we use the second form to test the magnitude function.
+            /// For the sake of testability, we use the second form to test the 
+            /// magnitude function.
             #[test]
             fn prop_magnitude_approx_point_separating(
                 q1 in super::$Generator::<$ScalarType>(), q2 in super::$Generator::<$ScalarType>()) {
@@ -1418,15 +1497,17 @@ macro_rules! magnitude_props {
 magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, 1e-7);
 
 
-/// Generate the properties for quaternion spherical linear interpolation (slerp).
+/// Generate property tests for quaternion spherical linear interpolation (slerp).
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
-///  that still defines a correct computation. We cannot guarantee floating point computations
-///  will be exact since the underlying floating point arithmetic is not exact.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the 
+///    floating point computations that defines a correct computation.
 macro_rules! slerp_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
@@ -1434,8 +1515,8 @@ macro_rules! slerp_props {
         use cglinalg::Slerp;
 
         proptest! {
-            /// Quaternion spherical linear interpolation should act like a quaternion rotor
-            /// between two quaternions.
+            /// Quaternion spherical linear interpolation should act like a 
+            /// quaternion rotor between two quaternions.
             ///
             /// Given quaternions `q1` and `q2`
             /// ```
@@ -1450,8 +1531,8 @@ macro_rules! slerp_props {
                 prop_assert!(false);
             }
 
-            /// Quaternion spherical linear interpolation should yield the respective
-            /// interpolants at the endpoints.
+            /// Quaternion spherical linear interpolation should yield the 
+            /// respective interpolants at the endpoints.
             ///
             /// Given quaternions `q0` and `q1`
             /// ```
@@ -1474,15 +1555,17 @@ slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, 1e-7);
 
 
 
-/// Generate the properties for quaternion exponentiation and natural logarithms.
+/// Generate property tests for quaternion exponentiation and natural logarithms.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$ScalarType` denotes the underlying system of numbers that compose the quaternions.
-/// `$Generator` is the name of a function or closure for generating examples.
-/// `$tolerance` specifies the highest amount of acceptable error in the floating point computations
-///  that still defines a correct computation. We cannot guarantee floating point computations
-///  will be exact since the underlying floating point arithmetic is not exact.
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the highest amount of acceptable error in the 
+///    floating point computations that still defines a correct computation.
 macro_rules! exp_log_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
