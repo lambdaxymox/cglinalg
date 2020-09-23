@@ -153,6 +153,14 @@ macro_rules! perspective_projection_props {
             use proptest::prelude::*;
 
             proptest! {
+                /// A perspective projection over floating point scalars should
+                /// be approximately invertible.
+                ///
+                /// Given an perspective projection transformation `P` and a vector `v`, there
+                /// there is an inverse transformation `Q` such that
+                /// ```text
+                /// Q * P * v ~= v
+                /// ```
                 #[test]
                 fn prop_perspective_projection_project_vector(
                     projection in $ProjGen::<$ScalarType>(), vector in $VecGen::<$ScalarType>()) {
@@ -167,6 +175,14 @@ macro_rules! perspective_projection_props {
                     );
                 }
 
+                /// A perspective projection over floating point scalars should
+                /// be approximately invertible.
+                ///
+                /// Given a perspective projection transformation `P` and a point `p`, there
+                /// there is an inverse transformation `Q` such that
+                /// ```text
+                /// Q * P * p ~= p
+                /// ```
                 #[test]
                 fn prop_perspective_projection_project_point(
                     projection in $ProjGen::<$ScalarType>(), point in $PointGen::<$ScalarType>()) {
@@ -180,7 +196,15 @@ macro_rules! perspective_projection_props {
                         projection, point, projected_point, unprojected_point
                     );
                 }
-            
+
+                /// The inverse of a perspective projection over floating point scalars should
+                /// be approximately invertible.
+                ///
+                /// Given a perspective projection transformation `P^-1` and a projected vector
+                /// `pv`, there is an inverse of `P^-1` that satisfies
+                /// ```text
+                /// P^-1 * (P^-1)^-1 * pv ~= pv
+                /// ```
                 #[test]
                 fn prop_perspective_projection_inverse_unproject_vector(
                     projection in $ProjGen::<$ScalarType>(), 
@@ -197,6 +221,14 @@ macro_rules! perspective_projection_props {
 
                 }
 
+                /// The inverse of a perspective projection over floating point scalars should
+                /// be approximately invertible.
+                ///
+                /// Given an perspective projection transformation `P^-1` and a projected point
+                /// `pp`, there is an inverse of `P^-1` that satisfies
+                /// ```text
+                /// P^-1 * (P^-1)^-1 * pp ~= pp
+                /// ```
                 #[test]
                 fn prop_perspective_projection_inverse_unproject_point(
                     projection in $ProjGen::<$ScalarType>(), point in $PointGen::<$ScalarType>()) {
@@ -256,6 +288,14 @@ macro_rules! orthographic_projection_props {
             use proptest::prelude::*;
 
             proptest! {
+                /// An orthographic projection over floating point scalars should
+                /// be approximately invertible.
+                ///
+                /// Given an orthographic projection transformation `P` and a vector `v`, there
+                /// there is an inverse transformation `Q` such that
+                /// ```text
+                /// Q * P * v ~= v
+                /// ```
                 #[test]
                 fn prop_orthographic_projection_project_vector(
                     projection in $ProjGen::<$ScalarType>(), vector in $VecGen::<$ScalarType>()) {
@@ -270,6 +310,14 @@ macro_rules! orthographic_projection_props {
                     );
                 }
 
+                /// An orthographic projection over floating point scalars should
+                /// be approximately invertible.
+                ///
+                /// Given an orthographic projection transformation `P` and a point `p`, there
+                /// there is an inverse transformation `Q` such that
+                /// ```text
+                /// Q * P * p ~= p
+                /// ```
                 #[test]
                 fn prop_orthographic_projection_project_point(
                     projection in $ProjGen::<$ScalarType>(), point in $PointGen::<$ScalarType>()) {
@@ -283,7 +331,15 @@ macro_rules! orthographic_projection_props {
                         projection, point, projected_point, unprojected_point
                     );
                 }
-            
+
+                /// An inverse of an orthographic projection over floating point scalars should
+                /// be approximately invertible.
+                ///
+                /// Given an orthographic projection transformation `P^-1` and a projected vector 
+                /// `pv`, there is an inverse inverse of th `P^-1` satisfies
+                /// ```text
+                /// P^-1 * (P^-1)^-1 * pv ~= pv
+                /// ```
                 #[test]
                 fn prop_orthographic_projection_inverse_unproject_vector(
                     projection in $ProjGen::<$ScalarType>(), 
@@ -300,6 +356,14 @@ macro_rules! orthographic_projection_props {
 
                 }
 
+                /// An inverse of an orthographic projection over floating point scalars should
+                /// be approximately invertible.
+                ///
+                /// Given an orthographic projection transformation `P^-1` and a projected point
+                /// `pp`, there is an inverse of `P^-1` that satisfies
+                /// ```text
+                /// P^-1 * (P^-1)^-1 * pp ~= pp
+                /// ```
                 #[test]
                 fn prop_orthographic_projection_inverse_unproject_point(
                     projection in $ProjGen::<$ScalarType>(), point in $PointGen::<$ScalarType>()) {

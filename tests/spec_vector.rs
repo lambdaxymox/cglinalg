@@ -850,7 +850,7 @@ macro_rules! approx_distributive_props {
             /// Scalar multiplication should approximately distribute over vector addition.
             ///
             /// Given a scalar `a` and vectors `v` and `w`
-            /// ```
+            /// ```text
             /// a * (v + w) ~= a * v + a * w
             /// ```
             #[test]
@@ -866,7 +866,7 @@ macro_rules! approx_distributive_props {
             /// Multiplication of a sum of scalars should approximately distribute over a vector.
             ///
             /// Given scalars `a` and `b` and a vector `v`, we have
-            /// ```
+            /// ```text
             /// (a + b) * v ~= a * v + b * v
             /// ```
             #[test]

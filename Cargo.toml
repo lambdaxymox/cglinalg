@@ -1,6 +1,6 @@
 [package]
 name = "cglinalg"
-version = "0.7.257"
+version = "0.7.258"
 edition = "2018"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
@@ -11,16 +11,9 @@ categories = [
     "game-engines"
 ]
 keywords = [
-    "computer graphics",
-    "graphics",
-    "game programming",
-    "game engines", 
-    "linear algebra", 
+    "graphics", 
+    "linear-algebra", 
     "quaternion", 
-    "real-time",
-    "rendering",
-    "collision detection",
-    "low-dimensional",
     "matrix",
     "vector"
 ]
