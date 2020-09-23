@@ -87,7 +87,7 @@ index_props!(vector4_f64_index_props, Vector4, f64, any_vector4, 4);
 /// exact (e.g. integers).
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties 
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -202,7 +202,7 @@ exact_arithmetic_props!(vector4_u32_arithmetic_props, Vector4, u32, any_vector4)
 /// Generate property tests for vector arithmetic over floating point scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties
+/// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -316,7 +316,7 @@ approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4);
 /// Generate property tests for vector arithmetic over exact scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties
+/// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -427,7 +427,7 @@ exact_add_props!(vector4_u32_add_props, Vector4, u32, any_vector4);
 /// Generate property tests for vector subtraction over floating point scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties 
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -445,7 +445,8 @@ macro_rules! approx_sub_props {
         use cglinalg::{$VectorN, Zero};
 
         proptest! {
-            /// The zero vector over vectors of floating point scalars should act as an additive unit. 
+            /// The zero vector over vectors of floating point scalars should act as an 
+            /// additive unit. 
             ///
             /// Given a vector `v`, we have
             /// ```text
@@ -469,10 +470,12 @@ macro_rules! approx_sub_props {
                 prop_assert_eq!(v - v, zero_vec);
             }
 
-            /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
-            /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors. 
+            /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` 
+            /// interchangeably with their references `&v1` and `&v2` in arithmetic 
+            /// expressions involving vectors. 
             ///
-            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, they should satisfy
+            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, 
+            /// they should satisfy
             /// ```text
             ///  v1 -  v2 = &v1 -  v2
             ///  v1 -  v2 =  v1 - &v2
@@ -508,7 +511,7 @@ approx_sub_props!(vector4_f64_sub_props, Vector4, f64, any_vector4);
 /// Generate property tests for vector arithmetic over exact scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties 
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -547,10 +550,12 @@ macro_rules! exact_sub_props {
                 prop_assert_eq!(v - v, zero_vec);
             }
 
-            /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
-            /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors. 
+            /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` 
+            /// interchangeably with their references `&v1` and `&v2` in arithmetic 
+            /// expressions involving vectors. 
             ///
-            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, they should satisfy
+            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, 
+            /// they should satisfy
             /// ```text
             ///  v1 -  v2 = &v1 -  v2
             ///  v1 -  v2 =  v1 - &v2
@@ -591,7 +596,7 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 /// Generate properties for vector magnitudes.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties 
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -601,8 +606,8 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 /// * `$tolerance` specifies the highest amount of acceptable error in the 
 ///    floating point computations that defines a correct computation.
 ///
-/// We use approximate comparisons because arithmetic is not exact over finite precision floating point
-/// scalar types.
+/// We use approximate comparisons because arithmetic is not exact over finite p
+/// recision floating point scalar types.
 macro_rules! magnitude_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
@@ -614,7 +619,8 @@ macro_rules! magnitude_props {
             #[test]
             /// The magnitude of a vector preserves scales. 
             /// 
-            /// Given a scalar constant `c`, and a vector `v` of scalars, the magnitude function satisfies
+            /// Given a scalar constant `c`, and a vector `v` of scalars, the 
+            /// magnitude function satisfies
             /// ```text
             /// magnitude(c * v) = abs(c) * magnitude(v)
             /// ```
@@ -661,8 +667,8 @@ macro_rules! magnitude_props {
                 );
             }
 
-            /// The magnitude function is point separating. In particular, if the distance between two 
-            /// vectors `v` and `w` is zero, then v = w.
+            /// The magnitude function is point separating. In particular, if the distance 
+            /// between two vectors `v` and `w` is zero, then v = w.
             ///
             /// Given vectors `v` and `w`
             /// ```text
@@ -672,7 +678,8 @@ macro_rules! magnitude_props {
             /// ```text
             /// v != w => magnitude(v - w) != 0
             /// ```
-            /// For the sake of testability, we use the second form to test the magnitude function.
+            /// For the sake of testability, we use the second form to test the magnitude 
+            /// function.
             #[test]
             fn prop_magnitude_approx_point_separating(
                 v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
@@ -698,7 +705,7 @@ magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, 1e-7);
 /// Generate property tests for vector multiplication over floating point scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties 
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -726,9 +733,12 @@ macro_rules! approx_mul_props {
             /// c * v ~= v * c
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left of a vector, or from the right of a vector.
-            /// Note that floating point vector multiplication cannot be commutative because 
-            /// multiplication in the underlying floating point scalars is not commutative.
+            /// allow the ability to multiply scalars from the left of a vector, or from 
+            /// the right of a vector.
+            ///
+            /// Note that floating point vector multiplication cannot be commutative 
+            /// because multiplication in the underlying floating point scalars is 
+            /// not commutative.
             #[test]
             fn prop_scalar_times_vector_equals_vector_times_scalar(
                 c in any::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
@@ -740,16 +750,18 @@ macro_rules! approx_mul_props {
                 );
             }
 
-            /// Multiplication of two scalars and a vector should be compatible with multiplication of 
-            /// all scalars. In other words, scalar multiplication of two scalar with a vector should 
-            /// act associatively, just like the multiplication of three scalars.
+            /// Multiplication of two scalars and a vector should be compatible with 
+            /// multiplication of all scalars. In other words, scalar multiplication 
+            /// of two scalar with a vector should act associatively, just like the 
+            /// multiplication of three scalars.
             ///
             /// Given scalars `a` and `b`, and a vector `v`, we have
             /// ```text
             /// (a * b) * v ~= a * (b * v)
             /// ```
-            /// Note that the compatability of scalars with vectors can only be approximate and not 
-            /// exact because multiplication of the underlying scalars is not associative. 
+            /// Note that the compatability of scalars with vectors can only be 
+            /// approximate and not exact because multiplication of the underlying 
+            /// scalars is not associative. 
             #[test]
             fn prop_scalar_multiplication_compatability(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
@@ -783,7 +795,7 @@ approx_mul_props!(vector4_f64_mul_props, Vector4, f64, any_vector4, 1e-7);
 /// Generate property tests for vector multiplication over exact scalars.
 ///
 /// The macro properties are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties
+/// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -860,7 +872,7 @@ exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 /// Generate property tests for vector distribution over floating point scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties 
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -878,7 +890,8 @@ macro_rules! approx_distributive_props {
         use cglinalg::Finite;
     
         proptest! {
-            /// Scalar multiplication should approximately distribute over vector addition.
+            /// Scalar multiplication should approximately distribute over vector 
+            /// addition.
             ///
             /// Given a scalar `a` and vectors `v` and `w`
             /// ```text
@@ -894,7 +907,8 @@ macro_rules! approx_distributive_props {
                 prop_assert_eq!(a * (v + w), a * v + a * w);
             }
     
-            /// Multiplication of a sum of scalars should approximately distribute over a vector.
+            /// Multiplication of a sum of scalars should approximately distribute 
+            /// over a vector.
             ///
             /// Given scalars `a` and `b` and a vector `v`, we have
             /// ```text
@@ -910,14 +924,16 @@ macro_rules! approx_distributive_props {
                 prop_assert_eq!((a + b) * v, a * v + b * v);
             }
 
-            /// Multiplication of two vectors by a scalar on the right should approximately distribute.
+            /// Multiplication of two vectors by a scalar on the right should 
+            /// approximately distribute.
             ///
             /// Given vectors `v` and `w` and a scalar `a`
             /// ```text
             /// (v + w) * a ~= v * a + w * a
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the right of a vector.
+            /// allow the ability to multiply scalars from the left, or from the 
+            /// right of a vector.
             #[test]
             fn prop_scalar_vector_addition_left_distributive(
                 a in any::<$ScalarType>(), 
@@ -928,15 +944,16 @@ macro_rules! approx_distributive_props {
                 prop_assert_eq!((v + w) * a,  v * a + w * a);
             }
 
-            /// Multiplication of a vector on the right by the sum of two scalars should approximately 
-            /// distribute over the two scalars.
+            /// Multiplication of a vector on the right by the sum of two scalars 
+            /// should approximately distribute over the two scalars.
             ///
             /// Given a vector `v` and scalars `a` and `b`
             /// ```text
             /// v * (a + b) ~= v * a + v * b
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the right of a vector.
+            /// allow the ability to multiply scalars from the left, or from the 
+            /// right of a vector.
             #[test]
             fn prop_vector_scalar_addition_right_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
@@ -960,7 +977,7 @@ approx_distributive_props!(vector4_f64_distributive_props, Vector4, f64, any_vec
 /// Generate property tests for vector distribution over exact scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties
+/// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -1004,14 +1021,16 @@ macro_rules! exact_distributive_props {
                 prop_assert_eq!(v * (a + b), v * a + v * b);
             }
 
-            /// Multiplication of two vectors by a scalar on the right should be right distributive.
+            /// Multiplication of two vectors by a scalar on the right should be 
+            /// right distributive.
             ///
             /// Given vectors `v` and `w` and a scalar `a`
             /// ```text
             /// (v + w) * a = v * a + w * a
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the right of a vector.
+            /// allow the ability to multiply scalars from the left, or from the 
+            /// right of a vector.
             #[test]
             fn prop_scalar_vector_addition_left_distributive(
                 a in any::<$ScalarType>(), 
@@ -1028,7 +1047,8 @@ macro_rules! exact_distributive_props {
             /// v * (a + b) = v * a + v * b
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the right of a vector.
+            /// allow the ability to multiply scalars from the left, or from the 
+            /// right of a vector.
             #[test]
             fn prop_vector_scalar_addition_right_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
@@ -1055,7 +1075,7 @@ exact_distributive_props!(vector4_u32_distributive_props, Vector4, u32, any_vect
 /// Generate property tests for vector dot products over floating point scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties 
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -1198,7 +1218,7 @@ approx_dot_product_props!(vector4_f64_dot_product_props, Vector4, f64, any_vecto
 
 /// Generate property tests for vector dot products over integer scalars.
 ///
-/// * `$TestModuleName` is a name we give to the module we place the properties 
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
@@ -1318,7 +1338,7 @@ exact_dot_product_props!(vector4_u32_dot_product_props, Vector4, u32, any_vector
 /// floating point scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties
+/// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the vectors.
@@ -1340,8 +1360,8 @@ macro_rules! approx_cross_product_props {
         };
     
         proptest! {
-            /// The three-dimensional cross product should commute with multiplication by a
-            /// scalar.
+            /// The three-dimensional cross product should commute with 
+            /// multiplication by a scalar.
             ///
             /// Given vectors `u` and `v` and a scalar constant `c`
             /// ```text
@@ -1371,7 +1391,8 @@ macro_rules! approx_cross_product_props {
                 );
             }
 
-            /// The three-dimensional vector cross product satisfies the scalar triple product.
+            /// The three-dimensional vector cross product satisfies the scalar
+            /// triple product.
             ///
             /// Given vectors `u`, `v`, and `w`
             /// ```text
@@ -1398,7 +1419,8 @@ macro_rules! approx_cross_product_props {
                 prop_assert!(relative_eq!(u.cross(&v), -v.cross(&u), epsilon = $tolerance));
             }
 
-            /// The three-dimensions vector cross product satisfies the vector triple product.
+            /// The three-dimensional vector cross product satisfies the vector 
+            /// triple product.
             ///
             /// Given vectors `u`, `v`, and `w`
             /// ```text
@@ -1423,7 +1445,7 @@ approx_cross_product_props!(vector3_f64_cross_product_props, f64, any_vector3, 1
 /// floating point scalars.
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the properties 
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -1443,12 +1465,13 @@ macro_rules! exact_cross_product_props {
         };
     
         proptest! {
-            /// The three-dimensional cross product should commute with multiplication by a
-            /// scalar.
+            /// The three-dimensional cross product should commute with 
+            /// multiplication by a scalar.
             ///
             /// Given vectors `u` and `v` and a scalar constant `c`
             /// ```text
             /// (c * u) x v = c * (u x v) = u x (c * v)
+            /// ```
             #[test]
             fn prop_vector_cross_product_multiplication_by_scalars(
                 c in any::<$ScalarType>(),
@@ -1472,7 +1495,8 @@ macro_rules! exact_cross_product_props {
                 prop_assert_eq!(u.cross(&(v + w)), u.cross(&v) + u.cross(&w));
             }
 
-            /// The three-dimensional vector cross product satisfies the scalar triple product.
+            /// The three-dimensional vector cross product satisfies the scalar 
+            /// triple product.
             ///
             /// Given vectors `u`, `v`, and `w`
             /// ```text
@@ -1499,7 +1523,8 @@ macro_rules! exact_cross_product_props {
                 prop_assert_eq!(u.cross(&v), -v.cross(&u));
             }
 
-            /// The three-dimensions vector cross product satisfies the vector triple product.
+            /// The three-dimensional vector cross product satisfies the vector 
+            /// triple product.
             ///
             /// Given vectors `u`, `v`, and `w`
             /// ```text
