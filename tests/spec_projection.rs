@@ -5,7 +5,10 @@ extern crate proptest;
 
 use proptest::prelude::*;
 use cglinalg::{
-    Vector3, 
+    Vector1,
+    Vector2,
+    Vector3,
+    Vector4, 
     Point3, 
     Scalar,
     ScalarFloat,
@@ -25,6 +28,7 @@ use core::marker::{
     PhantomData 
 };
 use core::ops;
+
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 struct VectorValue<VecType>(VecType);
@@ -50,63 +54,6 @@ impl<Strat, T> VectorStrategy<Strat, T> {
     }
 }
 
-#[derive(Copy, Clone, Debug)]
-struct VectorTree3<S, STree> {
-    tree_x: STree,
-    tree_y: STree,
-    tree_z: STree,
-    _marker: PhantomData<S>,
-}
-
-impl<S, STree> VectorTree3<S, STree> 
-    where
-        S: Scalar,
-        STree: ValueTree<Value = S>,
-{
-    fn new(tree_x: STree, tree_y: STree, tree_z: STree) -> VectorTree3<S, STree> {
-        VectorTree3 {
-            tree_x: tree_x,
-            tree_y: tree_y,
-            tree_z: tree_z,
-            _marker: PhantomData,
-        }
-    }
-}
-
-impl<S, STree> AsRef<[STree; 3]> for VectorTree3<S, STree> {
-    fn as_ref(&self) -> &[STree; 3] {
-        unsafe {
-            &*(self as *const VectorTree3<S, STree> as *const [STree; 3])
-        }
-    }
-}
-
-impl<S, STree> AsMut<[STree; 3]> for VectorTree3<S, STree> {
-    fn as_mut(&mut self) -> &mut [STree; 3] {
-        unsafe { 
-            &mut *(self as *mut VectorTree3<S, STree> as *mut [STree; 3])
-        }
-    }
-}
-
-impl<S, STree> ops::Index<usize> for VectorTree3<S, STree> {
-    type Output = STree;
-
-    #[inline]
-    fn index(&self, index: usize) -> &Self::Output {
-        let v: &[STree; 3] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S, STree> ops::IndexMut<usize> for VectorTree3<S, STree> {
-    #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        let v: &mut [STree; 3] = self.as_mut();
-        &mut v[index]
-    }
-}
-
 #[derive(Debug)]
 struct VectorValueTree<TreeT> {
     tree: TreeT,
@@ -114,79 +61,124 @@ struct VectorValueTree<TreeT> {
     last_shrinker: Option<usize>,
 }
 
-impl<S, STree> ValueTree for VectorValueTree<VectorTree3<S, STree>> 
-    where 
-        S: Scalar,
-        STree: ValueTree<Value = S>,
-{
-    type Value = VectorValue<Vector3<S>>;
+macro_rules! vector_strategy_impl {
+    ($VectorTreeN:ident, $VectorN:ident, $n:expr, { $($field:ident),* }) => {
+        #[derive(Copy, Clone, Debug)]
+        struct $VectorTreeN<S, STree> {
+            $($field: STree,)*
+            _marker: PhantomData<S>,
+        }
 
-    fn current(&self) -> Self::Value {
-        VectorValue(Vector3::new(
-            self.tree.tree_x.current(), 
-            self.tree.tree_y.current(), 
-            self.tree.tree_z.current()
-        ))
-    }
-
-    fn simplify(&mut self) -> bool {
-        while self.shrinker < 3 {
-            if self.tree[self.shrinker].simplify() {
-                self.last_shrinker = Some(self.shrinker);
-                return true;
-            } else {
-                self.shrinker += 1;
+        impl<S, STree> AsRef<[STree; $n]> for $VectorTreeN<S, STree> {
+            fn as_ref(&self) -> &[STree; $n] {
+                unsafe {
+                    &*(self as *const $VectorTreeN<S, STree> as *const [STree; $n])
+                }
             }
         }
 
-        false
-    }
+        impl<S, STree> AsMut<[STree; $n]> for $VectorTreeN<S, STree> {
+            fn as_mut(&mut self) -> &mut [STree; $n] {
+                unsafe { 
+                    &mut *(self as *mut $VectorTreeN<S, STree> as *mut [STree; $n])
+                }
+            }
+        }
 
-    fn complicate(&mut self) -> bool {
-        if let Some(shrinker) = self.last_shrinker {
-            self.shrinker = shrinker;
-            if self.tree[shrinker].complicate() {
-                true
-            } else {
-                self.last_shrinker = None;
+        impl<S, STree> ops::Index<usize> for $VectorTreeN<S, STree> {
+            type Output = STree;
+
+            #[inline]
+            fn index(&self, index: usize) -> &Self::Output {
+                let v: &[STree; $n] = self.as_ref();
+                &v[index]
+            }
+        }
+
+        impl<S, STree> ops::IndexMut<usize> for $VectorTreeN<S, STree> {
+            #[inline]
+            fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+                let v: &mut [STree; $n] = self.as_mut();
+                &mut v[index]
+            }
+        }
+
+        impl<S, STree> ValueTree for VectorValueTree<$VectorTreeN<S, STree>> 
+            where S: Scalar,
+                  STree: ValueTree<Value = S>,
+        {
+            type Value = VectorValue<$VectorN<S>>;
+
+            fn current(&self) -> Self::Value {
+                VectorValue($VectorN::new(
+                    $(self.tree.$field.current(),)* 
+                ))
+            }
+
+            fn simplify(&mut self) -> bool {
+                while self.shrinker < $n {
+                    if self.tree[self.shrinker].simplify() {
+                        self.last_shrinker = Some(self.shrinker);
+                        return true;
+                    } else {
+                        self.shrinker += 1;
+                    }
+                }
+
                 false
             }
-        } else {
-            false
-        }                                                                                                                                                   
+
+            fn complicate(&mut self) -> bool {
+                if let Some(shrinker) = self.last_shrinker {
+                    self.shrinker = shrinker;
+                    if self.tree[shrinker].complicate() {
+                        true
+                    } else {
+                        self.last_shrinker = None;
+                        false
+                    }
+                } else {
+                    false
+                }                                                                                                                                                   
+            }
+        }
+
+        impl<Strat> Strategy for VectorStrategy<Strat, $VectorN<Strat::Value>> 
+            where Strat: Strategy,
+                  Strat::Value: Scalar,
+        {
+            type Value = VectorValue<$VectorN<Strat::Value>>;
+            type Tree = VectorValueTree<$VectorTreeN<Strat::Value, Strat::Tree>>;
+
+            fn new_tree(&self, runner: &mut TestRunner) -> NewTree<Self> {
+                Ok(VectorValueTree {
+                    tree: $VectorTreeN {
+                        $($field: self.strategy.new_tree(runner)?,)* 
+                        _marker: PhantomData,
+                    },
+                    shrinker: 0,
+                    last_shrinker: None,
+                })
+            }
+        }
+
+        impl<S> Arbitrary for VectorValue<$VectorN<S>> where S: Scalar + Arbitrary {
+            type Parameters = S::Parameters;
+            type Strategy = VectorStrategy<S::Strategy, $VectorN<S>>;
+        
+            fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
+                let base = any_with::<S>(args);
+                VectorStrategy::new(base)
+            }
+        }
     }
 }
 
-impl<Strat> Strategy for VectorStrategy<Strat, Vector3<Strat::Value>> 
-    where
-        Strat: Strategy,
-        Strat::Value: Scalar,
-{
-    type Value = VectorValue<Vector3<Strat::Value>>;
-    type Tree = VectorValueTree<VectorTree3<Strat::Value, Strat::Tree>>;
+vector_strategy_impl!(VectorTree1, Vector1, 1, { tree_x });
+vector_strategy_impl!(VectorTree2, Vector2, 2, { tree_x, tree_y });
+vector_strategy_impl!(VectorTree3, Vector3, 3, { tree_x, tree_y, tree_z });
+vector_strategy_impl!(VectorTree4, Vector4, 4, { tree_x, tree_y, tree_z, tree_w });
 
-    fn new_tree(&self, runner: &mut TestRunner) -> NewTree<Self> {
-        Ok(VectorValueTree {
-            tree: VectorTree3::new(
-                self.strategy.new_tree(runner)?, 
-                self.strategy.new_tree(runner)?, 
-                self.strategy.new_tree(runner)?,
-            ),
-            shrinker: 0,
-            last_shrinker: None,
-        })
-    }
-}
-
-impl<S> Arbitrary for VectorValue<Vector3<S>> where S: Scalar + Arbitrary {
-    type Parameters = S::Parameters;
-    type Strategy = VectorStrategy<S::Strategy, Vector3<S>>;
-
-    fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
-        let base = any_with::<S>(args);
-        VectorStrategy::new(base)
-    }
-}
 
 /// Generates the properties tests for perspective projection testing.
 ///
@@ -205,12 +197,12 @@ macro_rules! perspective_projection_props {
 
             proptest! {
                 #[test]
-                fn prop_perspective_projection_invertible(vv in any::<super::VectorValue<Vector3<$ScalarType>>>()) {
+                fn prop_perspective_projection_invertible(vv in any::<VectorValue<Vector3<$ScalarType>>>()) {
                     prop_assert!(vv == vv);
                 }
             
                 #[test]
-                fn prop_perspective_projection_inverse_inverse_is_identity(vv in any::<super::VectorValue<Vector3<$ScalarType>>>()) {
+                fn prop_perspective_projection_inverse_inverse_is_identity(vv in any::<VectorValue<Vector3<$ScalarType>>>()) {
                     prop_assert!(vv == vv);
                 }
             }
