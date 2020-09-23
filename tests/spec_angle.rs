@@ -25,6 +25,8 @@ fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
 /// Generate property tests for typed angle arithmetic over floating point 
 /// scalars.
 ///
+/// ### Macro Parameters
+///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
 ///    tests in to separate them from each other for each field type to prevent 
@@ -138,6 +140,8 @@ approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees
 
 /// Generate property tests for typed angle trigonometry over floating point 
 /// scalars.
+///
+/// ### Macro Parameters
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 

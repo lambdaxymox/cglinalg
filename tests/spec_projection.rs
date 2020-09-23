@@ -124,6 +124,8 @@ fn any_orthographic_projection<S>() -> impl Strategy<Value = OrthographicProject
 
 /// Generate the property tests for perspective projection transformations.
 ///
+/// ### Macro Parameters
+///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name of the module we place the tests in to 
 ///    separate them from each other for each scalar type to prevent namespace
@@ -258,6 +260,8 @@ perspective_projection_props!(
 
 
 /// Generate the property tests for orthographic projection transformation.
+///
+/// ### Macro Parameters
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name of the module we place the tests in to 

@@ -41,6 +41,8 @@ fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
 
 /// Generate property tests for vector indexing.
 ///
+/// ### Macro Parameters
+///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the tests in to separate them
 ///    from each other for each field type to prevent namespace collisions.
@@ -93,6 +95,8 @@ index_props!(vector4_f64_index_props, Vector4, f64, any_vector4, 4);
 /// Generate property tests for vector arithmetic over exact scalars. We 
 /// define an exact scalar type as a type where scalar arithmetic is 
 /// exact (e.g. integers).
+///
+/// ### Macro Parameters
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
@@ -209,6 +213,8 @@ exact_arithmetic_props!(vector4_u32_arithmetic_props, Vector4, u32, any_vector4)
 
 /// Generate property tests for vector arithmetic over floating point scalars.
 ///
+/// ### Macro Parameters
+///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each scalar type to prevent 
@@ -323,6 +329,8 @@ approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4);
 
 /// Generate property tests for vector arithmetic over exact scalars.
 ///
+/// ### Macro Parameters
+///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each field type to prevent 
@@ -434,6 +442,8 @@ exact_add_props!(vector4_u32_add_props, Vector4, u32, any_vector4);
 
 /// Generate property tests for vector subtraction over floating point scalars.
 ///
+/// ### Macro Parameters
+///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
@@ -517,6 +527,8 @@ approx_sub_props!(vector4_f64_sub_props, Vector4, f64, any_vector4);
 
 
 /// Generate property tests for vector arithmetic over exact scalars.
+///
+/// ### Macro Parameters
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
@@ -602,6 +614,8 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 
 
 /// Generate properties for vector magnitudes.
+///
+/// ### Macro Parameters
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
@@ -712,6 +726,8 @@ magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, 1e-7);
 
 /// Generate property tests for vector multiplication over floating point scalars.
 ///
+/// ### Macro Parameters
+///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
@@ -802,6 +818,8 @@ approx_mul_props!(vector4_f64_mul_props, Vector4, f64, any_vector4, 1e-7);
 
 /// Generate property tests for vector multiplication over exact scalars.
 ///
+/// ### Macro Parameters
+///
 /// The macro properties are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each field type to prevent 
@@ -878,6 +896,8 @@ exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 
 
 /// Generate property tests for vector distribution over floating point scalars.
+///
+/// ### Macro Parameters
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
@@ -984,6 +1004,8 @@ approx_distributive_props!(vector4_f64_distributive_props, Vector4, f64, any_vec
 
 /// Generate property tests for vector distribution over exact scalars.
 ///
+/// ### Macro Parameters
+///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each scalar type to prevent 
@@ -1081,6 +1103,8 @@ exact_distributive_props!(vector4_u32_distributive_props, Vector4, u32, any_vect
 
 
 /// Generate property tests for vector dot products over floating point scalars.
+///
+/// ### Macro Parameters
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
@@ -1226,6 +1250,9 @@ approx_dot_product_props!(vector4_f64_dot_product_props, Vector4, f64, any_vecto
 
 /// Generate property tests for vector dot products over integer scalars.
 ///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
@@ -1345,6 +1372,8 @@ exact_dot_product_props!(vector4_u32_dot_product_props, Vector4, u32, any_vector
 /// Generate property tests for three-dimensional vector cross products over 
 /// floating point scalars.
 ///
+/// ### Macro Parameters
+///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each field type to prevent 
@@ -1451,6 +1480,8 @@ approx_cross_product_props!(vector3_f64_cross_product_props, f64, any_vector3, 1
 
 /// Generate property tests for three-dimensional vector cross products over 
 /// floating point scalars.
+///
+/// ### Macro Parameters
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
