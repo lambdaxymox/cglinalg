@@ -35,28 +35,29 @@ use core::fmt;
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct OrthographicSpec<S> {
     /// The horizontal position of the left-hand plane in camera space.
-    /// The left-hand plane is a plane parallel to the yz-plane at
+    /// The left-hand plane is a plane parallel to the _yz-plane_ at
     /// the origin.
     left: S,
     /// The horizontal position of the right-hand plane in camera space.
-    /// The right-hand plane is a plane parallel to the yz-plane at
+    /// The right-hand plane is a plane parallel to the _yz-plane_ at
     /// the origin.
     right: S,
-    /// The vertical position of the bottom plane in camera space.
-    /// The bottom plane is a plane parallel to the xz-plane at the origin.
+    /// The vertical position of the _bottom_ plane in camera space.
+    /// The bottom plane is a plane parallel to the _xz-plane_ at the origin.
     bottom: S,
-    /// The vertical position of the top plane in camera space.
-    /// the top plane is a plane parallel to the xz plane at the origin.
+    /// The vertical position of the _top_ plane in camera space.
+    /// the top plane is a plane parallel to the _xz-plane_ at the origin.
     top: S,
-    /// The distance along the (-z)-direction of the near plane from the eye.
-    /// The near plane is a plane parallel to the xy-plane at the origin.
+    /// The distance along the _(-z)-axis_ of the _near_ plane from the eye.
+    /// The near plane is a plane parallel to the _xy-plane_ at the origin.
     near: S,
-    /// the distance along the (-z)-direction of the far plane from the eye.
-    /// The far plane is a plane parallel to the xy-plane at the origin.
+    /// the distance along the _(-z)-axis_ of the _far_ plane from the eye.
+    /// The far plane is a plane parallel to the _xy-plane_ at the origin.
     far: S,
 }
 
 impl<S> OrthographicSpec<S> {
+    /// Construct a new orthographic specification.
     pub const fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> OrthographicSpec<S> {
         OrthographicSpec {
             left: left,
@@ -90,28 +91,29 @@ impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Debug + fmt::Display 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveSpec<S> {
     /// The horizontal position of the left-hand plane in camera space.
-    /// The left-hand plane is a plane parallel to the yz-plane at
+    /// The left-hand plane is a plane parallel to the _yz-plane_ at
     /// the origin.
     left: S,
     /// The horizontal position of the right-hand plane in camera space.
-    /// The right-hand plane is a plane parallel to the yz-plane at
+    /// The right-hand plane is a plane parallel to the _yz-plane_ at
     /// the origin.
     right: S,
     /// The vertical position of the bottom plane in camera space.
-    /// The bottom plane is a plane parallel to the xz-plane at the origin.
+    /// The bottom plane is a plane parallel to the _xz-plane_ at the origin.
     bottom: S,
     /// The vertical position of the top plane in camera space.
-    /// the top plane is a plane parallel to the xz plane at the origin.
+    /// the top plane is a plane parallel to the _xz-plane_ at the origin.
     top: S,
-    /// The distance along the (-z)-direction of the near plane from the eye.
-    /// The near plane is a plane parallel to the xy-plane at the origin.
+    /// The distance along the _(-z)-axis_ of the near plane from the eye.
+    /// The near plane is a plane parallel to the _xy-plane_ at the origin.
     near: S,
-    /// the distance along the (-z)-direction of the far plane from the eye.
-    /// The far plane is a plane parallel to the xy-plane at the origin.
+    /// the distance along the _(-z)-axis_ of the far plane from the eye.
+    /// The far plane is a plane parallel to the _xy-plane_ at the origin.
     far: S,
 }
 
 impl<S> PerspectiveSpec<S> {
+    /// Construct a new perspective specification.
     pub const fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> PerspectiveSpec<S> {
         PerspectiveSpec {
             left: left,
@@ -154,9 +156,9 @@ pub struct PerspectiveFovSpec<S> {
     fovy: Radians<S>,
     /// The ratio of the horizontal width to the vertical height.
     aspect: S,
-    /// The position of the near plane along the negative z-axis.
+    /// The position of the near plane along the negative _z-axis_.
     near: S,
-    /// The position of the far plane along the negative z-axis.
+    /// The position of the far plane along the negative _z-axis_.
     far: S,
 }
 
@@ -294,9 +296,9 @@ impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat
 /// A perspective projection tranformation for converting from camera space to
 /// normalized device coordinates.
 ///
-/// Orthographic projections differ from perspective projections in that 
+/// Orthographic projections differ from perspective projections because
 /// orthographic projections keeps parallel lines parallel, whereas perspective 
-/// projections preserve the perception of distance. That is, perspective 
+/// projections preserve the perception of distance. Perspective 
 /// projections preserve the spatial ordering of points in the distance they 
 /// are located from the viewing plane. This property of perspective projection 
 /// transformations is important for operations such as z-buffering and 
@@ -345,7 +347,9 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
     }
 
     /// Unproject a point from normalized device coordinates back to camera
-    /// view space. This is the inverse operation of `project_point`.
+    /// view space. 
+    /// 
+    /// This is the inverse operation of `project_point`.
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let spec: PerspectiveSpec<S> = self.spec.into();
         let zero = S::zero();
@@ -383,7 +387,9 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
     }
 
     /// Unproject a vector from normalized device coordinates back to
-    /// camera view space. This is the inverse operation of `project_vector`.
+    /// camera view space. 
+    ///
+    /// This is the inverse operation of `project_vector`.
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let spec: PerspectiveSpec<S> = self.spec.into();
         let zero = S::zero();
@@ -499,7 +505,7 @@ impl<S, Spec> approx::UlpsEq for PerspectiveProjection3D<S, Spec> where
 ///
 /// Orthographic projections differ from perspective projections in that 
 /// orthographic projections keeps parallel lines parallel, whereas perspective 
-/// projections preserve the perception of distance. That is, perspective 
+/// projections preserve the perception of distance. Perspective 
 /// projections preserve the spatial ordering in the distance that points are 
 /// located from the viewing plane.
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -540,7 +546,9 @@ impl<S> OrthographicProjection3D<S> where S: ScalarFloat {
     }
 
     /// Unproject a point from normalized devices coordinates back to camera
-    /// view space. This is the inverse operation of `project_point`.
+    /// view space. 
+    ///
+    /// This is the inverse operation of `project_point`.
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let zero = S::zero();
         let one  = S::one();
@@ -577,7 +585,9 @@ impl<S> OrthographicProjection3D<S> where S: ScalarFloat {
     }
 
     /// Unproject a vector from normalized device coordinates back to
-    /// camera view space. This is the inverse operation of `project_vector`.
+    /// camera view space. 
+    ///
+    /// This is the inverse operation of `project_vector`.
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let zero = S::zero();
         let one  = S::one();

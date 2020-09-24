@@ -31,6 +31,9 @@ pub trait Reflection<P, V> where Self: Sized + Copy {
     type OutVector;
 
     /// Return the bias for calculating the reflections.
+    ///
+    /// The _bias_ is the coorindates of a known point in the plane of 
+    /// reflection.
     fn bias(&self) -> Self::OutVector;
 
     /// Return the normal vector to the reflection plane.
@@ -332,7 +335,8 @@ pub struct Reflection3D<S> {
 }
 
 impl<S> Reflection3D<S> where S: ScalarFloat {
-    /// Construct a new reflection transformation from the vector normal to the plane of reflection.
+    /// Construct a new reflection transformation from the vector normal to the
+    /// plane of reflection.
     pub fn from_normal_bias(normal: Vector3<S>, bias: Vector3<S>) -> Reflection3D<S> {
         Reflection3D {
             bias: bias,

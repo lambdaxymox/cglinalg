@@ -193,9 +193,11 @@ pub trait CrossProduct<V> {
 
 
 /// A data type implementing the `Matrix` trait has the structure of a matrix 
-/// in column major order. If a type represents a matrix, we can perform 
-/// operations such as swapping rows, swapping columns, getting a row of 
-/// the the matrix, or swapping elements.
+/// in column major order. 
+///
+/// If a type represents a matrix, we can perform operations such as swapping 
+/// rows, swapping columns, getting a row of  the the matrix, or swapping 
+/// elements.
 pub trait Matrix {
     /// The type of the underlying scalars of the matrix.
     type Element: Scalar;
@@ -287,14 +289,13 @@ pub trait Angle where
     /// The return values fall into the following value ranges.
     /// ```text
     /// x = 0 and y = 0 -> 0
-    /// x >= 0          -> arctan(y / x) in [-pi / 2, pi / 2]
+    /// x >= 0          ->  arctan(y / x)       in [-pi / 2, pi / 2]
     /// y >= 0          -> (arctan(y / x) + pi) in (pi / 2, pi]
     /// y < 0           -> (arctan(y / x) - pi) in (-pi, -pi / 2)
     /// ```
     fn atan2(y: Self::Scalar, x: Self::Scalar) -> Self;
 
-    /// Simultaneously compute the sin and cosine of an angle. In applications
-    /// these are frequently computed together.
+    /// Simultaneously compute the sine and cosine of an angle.
     #[inline]
     fn sin_cos(self) -> (Self::Scalar, Self::Scalar) {
         (Self::sin(self), Self::cos(self))
@@ -384,8 +385,10 @@ pub trait Angle where
     }
 }
 
-/// A trait defining operations on square matrices. A matrix is said to be
-/// square if the number of rows and the number of columns are are the same.
+/// Define operations on square matrices. 
+///
+/// A matrix is said to be _square_ if the number of rows and 
+/// the number of columns are are the same.
 pub trait SquareMatrix where
     Self: Identity,
     Self: Matrix<
@@ -445,7 +448,7 @@ pub trait SquareMatrix where
     }
 }
 
-/// A trait expressing how to compute the inverse of a square matrix, if it exists.
+/// A trait expressing how to compute the inverse of a square matrix.
 pub trait InvertibleSquareMatrix where
     Self: SquareMatrix,
     <Self as Matrix>::Element: ScalarFloat

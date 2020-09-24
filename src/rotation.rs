@@ -37,7 +37,9 @@ use core::fmt;
 
 
 /// A type implementing this trait represents a type that acts as a generic 
-/// rotation. A rotation is an operation that creates circular motions and 
+/// rotation. 
+///
+/// A rotation is an operation that creates circular motions and 
 /// preserves at least one point. Rotations preserve the length of vectors and 
 /// therefore act as a class of rigid body transformations.
 pub trait Rotation<P, V> where Self: Sized + Copy {
@@ -54,8 +56,10 @@ pub trait Rotation<P, V> where Self: Sized + Copy {
     fn between_vectors(v1: V, v2: V) -> Self;
 
     /// Construct a rotation that rotates a vector in the opposite direction 
-    /// of `self`. In particular, given a rotation operator that rotates a vector 
-    /// about an axis by an angle `theta`, construct a rotation that rotates a 
+    /// of `self`. 
+    ///
+    /// Given a rotation operator that rotates a vector about a normal vector 
+    /// `axis` by an angle `theta`, construct a rotation that rotates a 
     /// vector about the same axis by an angle `-theta`.
     fn inverse(&self) -> Self;
 
@@ -68,52 +72,50 @@ pub trait Rotation<P, V> where Self: Sized + Copy {
 
 /// A trait that implements rotation operators in two-dimensions. 
 /// 
-/// Two-dimensional rotations are different than three-dimensional rotations in 
-/// that mathematically we cannot define an axis of rotation in two dimensions. 
-/// Instead we have to talk about rotating in the xy-plane by an angle. In 
-/// low-dimensional settings, the notion of rotation axis is only well-defined 
-/// in three dimensions because dimension three is the only dimension where 
-/// every plane is guaranteed to have a normal vector. 
+/// Two-dimensional rotations are different than three-dimensional rotations 
+/// because mathematically we cannot define an axis of rotation in two 
+/// dimensions. Instead we have to talk about rotating in the _xy-plane_ by an 
+/// angle. In low-dimensional settings, the notion of rotation axis is 
+/// only well-defined in three dimensions because dimension three is the 
+/// only dimension where every plane is guaranteed to have a normal vector. 
 /// 
-/// If one wants to talk about rotating a vector in the the xy-plane about a 
-/// normal vector, we are implicitly rotating about the z-axis in 
-/// three dimensions. Otherwise, to avoid cheating in that fashion we must 
-/// abolish coordinate axes and only talk about (hyper)planes, but this 
-/// requires the language of geometric algebra to express precisely.
+/// If one wants to talk about rotating a vector in the the _xy-plane_ about a 
+/// normal vector, we are implicitly rotating about the _z-axis_ in 
+/// three dimensions.
 pub trait Rotation2<S> where 
     S: ScalarFloat,
     Self: Rotation<Point2<S>, Vector2<S>> + Into<Matrix3x3<S>> + Into<Rotation2D<S>>,
 {
-    /// Rotate a two-dimensional vector in the xy-plane by an angle `angle`.
+    /// Rotate a two-dimensional vector in the _xy-plane_ by an angle `angle`.
     fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self;
 }
 
-/// A trait that implements rotation operators in three dimensions.
+/// A trait that define rotation operators in three dimensions.
 pub trait Rotation3<S> where 
     S: ScalarFloat,
     Self: Rotation<Point3<S>, Vector3<S>>,
     Self: Into<Matrix4x4<S>> + Into<Rotation3D<S>> + Into<Quaternion<S>>,
 {
     /// Construct a new three-dimensional rotation about an axis `axis` by 
-    /// an amount `angle`.
+    /// an angle `angle`.
     fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Self;
 
-    /// Construct a new three-dimensional rotation about the x-axis in the 
-    /// yz-plane by an angle `angle`.
+    /// Construct a new three-dimensional rotation about the _x-axis_ in the 
+    /// _yz-plane_ by an angle `angle`.
     #[inline]
     fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_x(), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the y-axis in the 
-    /// xz-plane by an angle `angle`.
+    /// Construct a new three-dimensional rotation about the _y-axis_ in the 
+    /// _xz-plane_ by an angle `angle`.
     #[inline]
     fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_y(), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the z-axis in the 
-    /// xy-plane by an angle `angle`.
+    /// Construct a new three-dimensional rotation about the _z-axis_ in the 
+    /// _xy-plane_ by an angle `angle`.
     #[inline]
     fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(Vector3::unit_z(), angle)
@@ -127,7 +129,7 @@ pub trait Rotation3<S> where
 pub struct Rotation2D<S> {
     /// The angle of rotation.
     angle: Radians<S>,
-    /// The underlying matrix for the rotation.
+    /// The underlying rotation matrix.
     matrix: Matrix3x3<S>,
 }
 
