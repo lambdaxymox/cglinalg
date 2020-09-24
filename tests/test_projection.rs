@@ -56,7 +56,7 @@ fn test_perspective_projection_transformation() {
 
     assert_eq!(result.to_matrix(), &expected);
 }
-
+/*
 #[test]
 fn test_perspective_projection_fov_matrix() {
     let fovy = Degrees(72.0);
@@ -124,7 +124,7 @@ fn test_perspective_projection_unproject_vector1() {
 
     assert!(relative_eq!(result, expected, epsilon = 1e-8));
 }
-
+*/
 #[test]
 fn test_perspective_projection_unproject_point2() {
     let left = -4.0;

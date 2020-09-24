@@ -30,7 +30,7 @@ fn any_point3<S>() -> impl Strategy<Value = Point3<S>>
         .prop_map(|(x, y, z)| Point3::new(x, y, z))
 }
 
-fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjection3D<S, PerspectiveSpec<S>>> 
+fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjection3D<S>> 
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S, S, S)>()

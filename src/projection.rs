@@ -20,62 +20,6 @@ use crate::traits::{
 use core::fmt;
 
 
-/// A description of an orthographic projection with arbitrary `left`, `right`, 
-/// `top`, `bottom`, `near`, and `far` planes.
-///
-/// We assume the following constraints to construct a useful orthographic 
-/// projection
-/// ```text
-/// left   < right
-/// bottom < top
-/// near   < far   (along the negative z-axis).
-/// ```
-/// Each parameter in the specification is a description of the position along 
-/// an axis of a plane that the axis is perpendicular to.
-#[derive(Copy, Clone, Debug, PartialEq)]
-pub struct OrthographicSpec<S> {
-    /// The horizontal position of the left-hand plane in camera space.
-    /// The left-hand plane is a plane parallel to the _yz-plane_ at
-    /// the origin.
-    left: S,
-    /// The horizontal position of the right-hand plane in camera space.
-    /// The right-hand plane is a plane parallel to the _yz-plane_ at
-    /// the origin.
-    right: S,
-    /// The vertical position of the _bottom_ plane in camera space.
-    /// The bottom plane is a plane parallel to the _xz-plane_ at the origin.
-    bottom: S,
-    /// The vertical position of the _top_ plane in camera space.
-    /// the top plane is a plane parallel to the _xz-plane_ at the origin.
-    top: S,
-    /// The distance along the _(-z)-axis_ of the _near_ plane from the eye.
-    /// The near plane is a plane parallel to the _xy-plane_ at the origin.
-    near: S,
-    /// the distance along the _(-z)-axis_ of the _far_ plane from the eye.
-    /// The far plane is a plane parallel to the _xy-plane_ at the origin.
-    far: S,
-}
-
-impl<S> OrthographicSpec<S> {
-    /// Construct a new orthographic specification.
-    pub const fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> OrthographicSpec<S> {
-        OrthographicSpec {
-            left: left,
-            right: right,
-            bottom: bottom,
-            top: top,
-            near: near,
-            far: far,
-        }
-    }
-}
-
-impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Debug + fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
-    }
-}
-
 /// A perspective projection based on arbitarary `left`, `right`, `bottom`,
 /// `top`, `near`, and `far` planes.
 ///
@@ -131,6 +75,7 @@ impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Debug + fmt::Display {
         <Self as fmt::Debug>::fmt(&self, f)
     }
 }
+
 
 /// A perspective projection based on the `near` plane, the `far` plane and 
 /// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
@@ -293,6 +238,64 @@ impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat
     }
 }
 
+
+/// A description of an orthographic projection with arbitrary `left`, `right`, 
+/// `top`, `bottom`, `near`, and `far` planes.
+///
+/// We assume the following constraints to construct a useful orthographic 
+/// projection
+/// ```text
+/// left   < right
+/// bottom < top
+/// near   < far   (along the negative z-axis).
+/// ```
+/// Each parameter in the specification is a description of the position along 
+/// an axis of a plane that the axis is perpendicular to.
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct OrthographicSpec<S> {
+    /// The horizontal position of the left-hand plane in camera space.
+    /// The left-hand plane is a plane parallel to the _yz-plane_ at
+    /// the origin.
+    left: S,
+    /// The horizontal position of the right-hand plane in camera space.
+    /// The right-hand plane is a plane parallel to the _yz-plane_ at
+    /// the origin.
+    right: S,
+    /// The vertical position of the _bottom_ plane in camera space.
+    /// The bottom plane is a plane parallel to the _xz-plane_ at the origin.
+    bottom: S,
+    /// The vertical position of the _top_ plane in camera space.
+    /// the top plane is a plane parallel to the _xz-plane_ at the origin.
+    top: S,
+    /// The distance along the _(-z)-axis_ of the _near_ plane from the eye.
+    /// The near plane is a plane parallel to the _xy-plane_ at the origin.
+    near: S,
+    /// the distance along the _(-z)-axis_ of the _far_ plane from the eye.
+    /// The far plane is a plane parallel to the _xy-plane_ at the origin.
+    far: S,
+}
+
+impl<S> OrthographicSpec<S> {
+    /// Construct a new orthographic specification.
+    pub const fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> OrthographicSpec<S> {
+        OrthographicSpec {
+            left: left,
+            right: right,
+            bottom: bottom,
+            top: top,
+            near: near,
+            far: far,
+        }
+    }
+}
+
+impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Debug + fmt::Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+
 /// A perspective projection tranformation for converting from camera space to
 /// normalized device coordinates.
 ///
@@ -304,19 +307,18 @@ impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat
 /// transformations is important for operations such as z-buffering and 
 /// occlusion detection.
 #[derive(Copy, Clone, PartialEq, Debug)]
-pub struct PerspectiveProjection3D<S, Spec> {
+pub struct PerspectiveProjection3D<S> {
     /// The parameters of the perspective projection.
-    spec: Spec,
+    spec: PerspectiveSpec<S>,
     /// The underlying matrix implementing the perspective projection.
     matrix: Matrix4x4<S>,
 }
 
-impl<S, Spec> PerspectiveProjection3D<S, Spec> where 
-    S: ScalarFloat,
-    Spec: Copy + Clone + PartialEq + Into<Matrix4x4<S>> + Into<PerspectiveSpec<S>>,
+impl<S> PerspectiveProjection3D<S> 
+    where S: ScalarFloat
 {
     /// Construct a new perspective projection transformation.
-    pub fn new(spec: Spec) -> PerspectiveProjection3D<S, Spec> {
+    pub fn new(spec: PerspectiveSpec<S>) -> PerspectiveProjection3D<S> {
         PerspectiveProjection3D {
             spec: spec,
             matrix: spec.into(),
@@ -324,7 +326,7 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
     }
 
     /// Get the specification describing the perspective projection.
-    pub fn to_spec(&self) -> Spec {
+    pub fn spec(&self) -> PerspectiveSpec<S> {
         self.spec
     }
 
@@ -351,7 +353,7 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
     /// 
     /// This is the inverse operation of `project_point`.
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
-        let spec: PerspectiveSpec<S> = self.spec.into();
+        let spec = self.spec;
         let zero = S::zero();
         let one  = S::one();
         let two = one + one;
@@ -391,7 +393,7 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
     ///
     /// This is the inverse operation of `project_vector`.
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        let spec: PerspectiveSpec<S> = self.spec.into();
+        let spec = self.spec;
         let zero = S::zero();
         let one  = S::one();
         let two = one + one;
@@ -430,14 +432,14 @@ impl<S, Spec> PerspectiveProjection3D<S, Spec> where
     }
 }
 
-impl<S, Spec> AsRef<Matrix4x4<S>> for PerspectiveProjection3D<S, Spec> {
+impl<S> AsRef<Matrix4x4<S>> for PerspectiveProjection3D<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
 
-impl<S> fmt::Display for PerspectiveProjection3D<S, PerspectiveFovSpec<S>> 
+impl<S> fmt::Display for PerspectiveProjection3D<S> 
     where S: fmt::Debug + fmt::Display 
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -445,17 +447,8 @@ impl<S> fmt::Display for PerspectiveProjection3D<S, PerspectiveFovSpec<S>>
     }
 }
 
-impl<S> fmt::Display for PerspectiveProjection3D<S, PerspectiveSpec<S>> 
-    where S: fmt::Debug + fmt::Display 
-{
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
-    }
-}
-
-impl<S, Spec> approx::AbsDiffEq for PerspectiveProjection3D<S, Spec> 
-    where S: ScalarFloat,
-          Spec: Copy + Clone + PartialEq,    
+impl<S> approx::AbsDiffEq for PerspectiveProjection3D<S> 
+    where S: ScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -470,9 +463,8 @@ impl<S, Spec> approx::AbsDiffEq for PerspectiveProjection3D<S, Spec>
     }
 }
 
-impl<S, Spec> approx::RelativeEq for PerspectiveProjection3D<S, Spec> where 
-    S: ScalarFloat,
-    Spec: Copy + Clone + PartialEq,    
+impl<S> approx::RelativeEq for PerspectiveProjection3D<S> 
+    where S: ScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -485,9 +477,8 @@ impl<S, Spec> approx::RelativeEq for PerspectiveProjection3D<S, Spec> where
     }
 }
 
-impl<S, Spec> approx::UlpsEq for PerspectiveProjection3D<S, Spec> where 
-    S: ScalarFloat,
-    Spec: Copy + Clone + PartialEq,    
+impl<S> approx::UlpsEq for PerspectiveProjection3D<S> 
+    where S: ScalarFloat   
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -499,6 +490,9 @@ impl<S, Spec> approx::UlpsEq for PerspectiveProjection3D<S, Spec> where
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
+
+
+
 
 /// An orthographic projection transformation for converting from camera space to
 /// normalized device coordinates. 
