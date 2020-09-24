@@ -65,8 +65,8 @@ mod vector1_tests {
     #[test]
     fn test_subtraction() {
         test_cases().iter().for_each(|test| {
-            let expected = Vector1::from(test.v1.x + test.v2.x);
-            let result = test.v1 + test.v2;
+            let expected = Vector1::from(test.v1.x - test.v2.x);
+            let result = test.v1 - test.v2;
             assert_eq!(result, expected);
         });
     }

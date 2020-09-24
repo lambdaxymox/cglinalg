@@ -430,6 +430,46 @@ impl<'a, 'b, S> ops::Sub<&'b Point1<S>> for &'a Point1<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Sub<Vector1<S>> for &Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn sub(self, other: Vector1<S>) -> Self::Output {
+        Point1 {
+            x: self.x - other.x,
+        }
+    }
+}
+
+impl<S> ops::Sub<Vector1<S>> for Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn sub(self, other: Vector1<S>) -> Self::Output {
+        Point1 {
+            x: self.x - other.x,
+        }
+    }
+}
+
+impl<S> ops::Sub<&Vector1<S>> for Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn sub(self, other: &Vector1<S>) -> Self::Output {
+        Point1 {
+            x: self.x - other.x,          
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Sub<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
+    type Output = Point1<S>;
+
+    fn sub(self, other: &'b Vector1<S>) -> Self::Output {
+        Point1 {
+            x: self.x - other.x,
+        }
+    }
+}
+
 impl<S> ops::Mul<S> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
@@ -1074,6 +1114,50 @@ impl<'a, 'b, S> ops::Sub<&'b Point2<S>> for &'a Point2<S> where S: Scalar {
 
     fn sub(self, other: &'b Point2<S>) -> Self::Output {
         Vector2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<S> ops::Sub<Vector2<S>> for &Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn sub(self, other: Vector2<S>) -> Self::Output {
+        Point2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<S> ops::Sub<Vector2<S>> for Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn sub(self, other: Vector2<S>) -> Self::Output {
+        Point2 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<S> ops::Sub<&Vector2<S>> for Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn sub(self, other: &Vector2<S>) -> Self::Output {
+        Point2 {
+            x: self.x - other.x,
+            y: self.y - other.y,             
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Sub<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
+    type Output = Point2<S>;
+
+    fn sub(self, other: &'b Vector2<S>) -> Self::Output {
+        Point2 {
             x: self.x - other.x,
             y: self.y - other.y,
         }
@@ -1760,6 +1844,54 @@ impl<'a, 'b, S> ops::Sub<&'b Point3<S>> for &'a Point3<S> where S: Scalar {
 
     fn sub(self, other: &'b Point3<S>) -> Self::Output {
         Vector3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+        }
+    }
+}
+
+impl<S> ops::Sub<Vector3<S>> for &Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn sub(self, other: Vector3<S>) -> Self::Output {
+        Point3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+        }
+    }
+}
+
+impl<S> ops::Sub<Vector3<S>> for Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn sub(self, other: Vector3<S>) -> Self::Output {
+        Point3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+        }
+    }
+}
+
+impl<S> ops::Sub<&Vector3<S>> for Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn sub(self, other: &Vector3<S>) -> Self::Output {
+        Point3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,               
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Sub<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
+    type Output = Point3<S>;
+
+    fn sub(self, other: &'b Vector3<S>) -> Self::Output {
+        Point3 {
             x: self.x - other.x,
             y: self.y - other.y,
             z: self.z - other.z,
