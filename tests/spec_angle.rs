@@ -13,13 +13,25 @@ use cglinalg::{
 fn any_radians<S>() -> impl Strategy<Value = Radians<S>> 
     where S: Scalar + Arbitrary
 {
-    any::<S>().prop_map(|unitless| Radians(unitless))
+    any::<S>()
+        .prop_map(|unitless| {
+            let two_pi: S = num_traits::cast(2_f64 * core::f64::consts::PI).unwrap();
+            let one_million: S = num_traits::cast(1_000).unwrap();
+            Radians(unitless % (one_million * two_pi))
+        })
+        .no_shrink()
 }
 
 fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
     where S: Scalar + Arbitrary
 {
-    any::<S>().prop_map(|unitless| Degrees(unitless))
+    any::<S>()
+        .prop_map(|unitless| {
+            let two_pi: S = num_traits::cast(2_f64 * core::f64::consts::PI).unwrap();
+            let one_million: S = num_traits::cast(1_000).unwrap();
+            Degrees(unitless % (one_million * two_pi)) 
+        })
+        .no_shrink()
 }
 
 /// Generate property tests for typed angle arithmetic over floating point 
@@ -156,7 +168,10 @@ macro_rules! approx_trigonometry_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use cglinalg::approx::relative_eq;
-        use cglinalg::{$AngleType, Angle};
+        use cglinalg::{
+            $AngleType,
+            Angle
+        };
     
         proptest! {
             /// The sine and arcsine functions should be inverses to each other.
@@ -184,15 +199,28 @@ macro_rules! approx_trigonometry_props {
             }
 
             /// The tangent and arctangent functions should be inverses to each other.
+            /// Let `angle` be an angle and `recovered_angle = atan(tan(angle))` be an
+            /// angle recovered from a call to tangent and then arctangent. Then the recovered
+            /// angle `recovered_angle` is congruent to `angle`, `angle + pi` or `angle - pi`
+            /// modulo `2 * pi`. There are the three angles in the interval [0, 2*pi) that 
+            /// have the same tangent.
             ///
             /// Given a typed angle `angle`
             /// ```text
-            /// atan(tan(angle)) = angle
+            /// recovered_angle := atan(tan(angle))
+            /// tan(recovered_angle) == tan(angle)
             /// ```
             #[test]
             fn prop_tangent_and_arctangent_inverses(angle in super::$Generator::<$ScalarType>()) {
-                let recovered_angle = <$AngleType<$ScalarType> as Angle>::atan(angle.tan());
-                prop_assert!(relative_eq!(recovered_angle, angle, epsilon = $tolerance));
+                let tan_angle = angle.tan();
+                let recovered_angle = <$AngleType<$ScalarType> as Angle>::atan(tan_angle);
+                let tan_recovered_angle = recovered_angle.tan();
+
+                prop_assert!(
+                    relative_eq!(tan_recovered_angle, tan_angle, epsilon = $tolerance),
+                    "angle = {}\nrecovered_angle = {}\ntan_angle = {}\ntan_recovered_angle = {}",
+                    angle, recovered_angle, tan_angle, tan_recovered_angle
+                );
             }
 
             /// A typed angle and its congruent typed angles modulo `full_turn` should 
