@@ -225,9 +225,6 @@ exact_arithmetic_props!(vector4_u32_arithmetic_props, Vector4, u32, any_vector4)
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_add_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -260,10 +257,12 @@ macro_rules! approx_add_props {
                 prop_assert_eq!(zero_vec + v, v);
             }
 
-            /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
-            /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors. 
+            /// Given vectors `v1` and `v2`, we should be able to use `v1` and 
+            /// `v2` interchangeably with their references `&v1` and `&v2` in 
+            /// arithmetic expressions involving vectors. 
             ///
-            /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, they should satisfy
+            /// Given vectors `v1` and `v2`, and their references `&v1` and 
+            /// `&v2`, they should satisfy
             /// ```text
             ///  v1 +  v2 = &v1 +  v2
             ///  v1 +  v2 =  v1 + &v2
@@ -286,15 +285,16 @@ macro_rules! approx_add_props {
                 prop_assert_eq!( v1 + &v2, &v1 + &v2);
             }
 
-            /// Given two vectors of floating point scalars, vector addition should  be approximately
-            /// commutative. 
+            /// Given two vectors of floating point scalars, vector addition 
+            /// should be approximately commutative. 
             ///
             /// Given vectors `v1` and `v2`, we have
             /// ```text
             /// v1 + v2 ~= v2 + v1
             /// ```
-            /// Note that floating point vector addition cannot be exactly commutative because arithmetic
-            /// with floating point numbers is not commutative.
+            /// Note that floating point vector addition cannot be exactly 
+            /// commutative because arithmetic with floating point numbers 
+            /// is not commutative.
             #[test]
             fn prop_vector_addition_almost_commutative(
                 v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
@@ -309,8 +309,9 @@ macro_rules! approx_add_props {
             /// ```text
             /// (v1 + v2) + v3 ~= v1 + (v2 + v3)
             /// ```
-            /// Note that floating point vector addition cannot be exactly associative because arithmetic
-            /// with floating point numbers is not associative.
+            /// Note that floating point vector addition cannot be exactly 
+            /// associative because arithmetic with floating point numbers 
+            /// is not associative.
             #[test]
             fn prop_vector_addition_associative(
                 u in super::$Generator::<$ScalarType>(), 
@@ -373,10 +374,12 @@ macro_rules! exact_add_props {
                 prop_assert_eq!(zero_vec + v, v);
             }
 
-            /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` interchangeably 
-            /// with their references `&v1` and `&v2` in arithmetic expressions involving vectors.
+            /// Given vectors `v1` and `v2`, we should be able to use `v1` and 
+            /// `v2` interchangeably with their references `&v1` and `&v2` in 
+            /// arithmetic expressions involving vectors.
             ///
-            /// Given two vectors `v1` and `v2`, and their references `&v1` and `&v2`, we have
+            /// Given two vectors `v1` and `v2`, and their references `&v1` and 
+            /// `&v2`, we have
             /// ```text
             ///  v1 +  v2 = &v1 +  v2
             ///  v1 +  v2 =  v1 + &v2
@@ -454,9 +457,6 @@ exact_add_props!(vector4_u32_add_props, Vector4, u32, any_vector4);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_sub_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -629,9 +629,6 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite
-/// precision floating point scalar types.
 macro_rules! magnitude_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
@@ -691,8 +688,8 @@ macro_rules! magnitude_props {
                 );
             }
 
-            /// The magnitude function is point separating. In particular, if the distance 
-            /// between two vectors `v` and `w` is zero, then v = w.
+            /// The magnitude function is point separating. In particular, if the 
+            /// distance between two vectors `v` and `w` is zero, then v = w.
             ///
             /// Given vectors `v` and `w`
             /// ```text
@@ -740,9 +737,6 @@ magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, 1e-7);
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_mul_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -752,15 +746,16 @@ macro_rules! approx_mul_props {
         use cglinalg::approx::relative_eq;
 
         proptest! {
-            /// Multiplication of a scalar and a vector should be approximately commutative.
+            /// Multiplication of a scalar and a vector should be approximately 
+            /// commutative.
             ///
             /// Given a constant `c` and a vector `v`
             /// ```text
             /// c * v ~= v * c
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left of a vector, or from 
-            /// the right of a vector.
+            /// allow the ability to multiply scalars from the left of a vector, or 
+            /// from the right of a vector.
             ///
             /// Note that floating point vector multiplication cannot be commutative 
             /// because multiplication in the underlying floating point scalars is 
@@ -909,9 +904,6 @@ exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_distributive_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -1118,9 +1110,6 @@ exact_distributive_props!(vector4_u32_distributive_props, Vector4, u32, any_vect
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_dot_product_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -1387,9 +1376,6 @@ exact_dot_product_props!(vector4_u32_dot_product_props, Vector4, u32, any_vector
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_cross_product_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -1408,6 +1394,7 @@ macro_rules! approx_cross_product_props {
             /// Given vectors `u` and `v` and a scalar constant `c`
             /// ```text
             /// (c * u) x v ~= c * (u x v) ~= u x (c * v)
+            /// ```
             #[test]
             fn prop_vector_cross_product_multiplication_by_scalars(
                 c in any::<$ScalarType>(),

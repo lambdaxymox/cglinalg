@@ -37,9 +37,6 @@ fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_arithmetic_props {
     ($TestModuleName:ident, $AngleType:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -153,9 +150,6 @@ approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_trigonometry_props {
     ($TestModuleName:ident, $AngleType:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]

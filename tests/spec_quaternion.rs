@@ -201,9 +201,6 @@ exact_arithmetic_props!(quaternion_u32_arithmetic_props, u32, any_quaternion);
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_add_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -429,9 +426,6 @@ exact_add_props!(quaternion_u32_add_props, u32, any_quaternion);
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_sub_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -595,9 +589,6 @@ exact_sub_props!(quaternion_u32_sub_props, u32, any_quaternion);
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_mul_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -858,9 +849,6 @@ exact_mul_props!(quaternion_u32_mul_props, u32, any_quaternion);
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_distributive_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -1108,9 +1096,6 @@ exact_distributive_props!(quaternion_u32_distributive_props, u32, any_quaternion
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! approx_dot_product_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
