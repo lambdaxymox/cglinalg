@@ -93,18 +93,14 @@ The limitations on the implementation are addressed in the project roadmap.
 The biggest one is than it does not presently leverage SIMD instructions to optimize 
 operations yet.
 
-## Acknowledgements
-`cglinalg` would not have been possible without the work of others. Some C/C++ 
-libraries that inspired `cglinalg` include `cgal`, `glm`, and `DirectXMath. 
-The Rust ecosystem has a number of graphics libraries. 
-Some highlights include:
+## Acknowledgement
+The Rust ecosystem has a number of linear algebras libraries including:
 * (cgmath)[https://crates.io/crates/cgmath] -- One of the original Rust graphics 
   mathematics libraries, and one of the most commonly used ones.
 * (nalgebra)[https://nalgebra.org] -- The most powerful linear algebra library 
   in the Rust ecosystem. It provides a strongly typed system for most linear 
   algebra in arbitrarily many dimensions. It is useful in many domains that do 
-  heavy numerical computation, including computer graphics. The system has 
-  features comparable to BLAS, LAPACK, and `numpy`.
+  heavy numerical computation, including computer graphics.
 * (euclid)[https://crates.io/crates/euclid] -- A collection of strongly typed 
   math tools for computer graphics with an inclination towards 2d graphics and 
   layout. This one is used in the `Servo` browser engine.
