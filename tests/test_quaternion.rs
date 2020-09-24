@@ -11,12 +11,14 @@ mod storage_tests {
     fn test_as_ref() {
         let v: Quaternion<i32> = Quaternion::new(1, 2, 3, 4);
         let v_ref: &[i32; 4] = v.as_ref();
+
         assert_eq!(v_ref, &[1, 2, 3, 4]);
     }
 
     #[test]
     fn test_indices_match_components() {
         let q = Quaternion::new(1, 2, 3, 4);
+
         assert_eq!(q[0], q.s);
         assert_eq!(q[1], q.v.x);
         assert_eq!(q[2], q.v.y);
@@ -53,10 +55,12 @@ mod lerp_tests {
         
         let result = q1.nlerp(q2, 0_f64);
         let expected = q1.normalize();
+
         assert_eq!(result, expected);
 
         let result = q1.nlerp(q2, 1_f64);
         let expected = q2.normalize();
+
         assert_eq!(result, expected);
     }
 
@@ -66,9 +70,11 @@ mod lerp_tests {
         let q2 = Quaternion::new(2_f64, 2_f64, 2_f64, 2_f64);
         
         let result = q1.lerp(q2, 0_f64);
+
         assert_eq!(result, q1);
 
         let result = q1.lerp(q2, 1_f64);
+        
         assert_eq!(result, q2);
     }
 }
