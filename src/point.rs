@@ -51,7 +51,7 @@ macro_rules! impl_mul_operator {
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
 pub struct Point1<S> {
-    /// The horizontal (x) coordinate.
+    /// The horizontal coordinate.
     pub x: S,
 }
 
@@ -74,7 +74,7 @@ impl<S> Point1<S> {
 }
 
 impl<S> Point1<S> where S: Copy {
-    /// Construct a new two-dimensional point from a one-dimensional poit by
+    /// Construct a new two-dimensional point from a one-dimensional point by
     /// supplying the y-coordinate.
     #[inline]
     pub fn expand(self, y: S) -> Point2<S> {
@@ -1348,8 +1348,11 @@ impl<'a, 'b, S> Metric<&'a Point2<S>> for &'b Point2<S> where S: ScalarFloat {
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
 pub struct Point3<S> {
+    /// The horizontal coordinate.
     pub x: S,
+    /// The vertical coordinate.
     pub y: S,
+    /// The depth coordinate.
     pub z: S,
 }
 
@@ -1360,8 +1363,8 @@ impl<S> Point3<S> {
         Point3 { x: x, y: y, z: z }
     }
 
-    /// Map an operation on that acts on the coordinates of a point, returning a point whose
-    /// coordinates are of the new scalar type.
+    /// Map an operation on that acts on the coordinates of a point, returning 
+    /// a point whose coordinates are of the new scalar type.
     pub fn map<T, F>(self, mut op: F) -> Point3<T> where F: FnMut(S) -> T {
         Point3 {
             x: op(self.x),

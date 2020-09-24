@@ -54,7 +54,7 @@ mod vector1_tests {
     }
 
     #[test]
-    fn addition() {
+    fn test_addition() {
         test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.v1.x + test.v2.x);
             let result = test.v1 + test.v2;
@@ -63,7 +63,7 @@ mod vector1_tests {
     }
 
     #[test]
-    fn subtraction() {
+    fn test_subtraction() {
         test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.v1.x + test.v2.x);
             let result = test.v1 + test.v2;
@@ -72,7 +72,7 @@ mod vector1_tests {
     }
 
     #[test]
-    fn scalar_multiplication() {
+    fn test_scalar_multiplication() {
         test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.c * test.v1.x);
             let result = test.v1 * test.c;
@@ -81,7 +81,7 @@ mod vector1_tests {
     }
 
     #[test]
-    fn scalar_division() {
+    fn test_scalar_division() {
         test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.v1.x / test.c);
             let result = test.v1 / test.c;
@@ -91,19 +91,19 @@ mod vector1_tests {
 
     #[test]
     #[should_panic]
-    fn out_of_bounds_array_access() {
+    fn test_out_of_bounds_array_access() {
         let v = Vector1::new(1_f32);
         assert_eq!(v[1], v[1]);
     }
 
     #[test]
-    fn vector_times_zero_equals_zero() {
+    fn test_vector_times_zero_equals_zero() {
         let v = Vector1::new(1_f32);
         assert_eq!(v * 0_f32, Vector1::zero());
     }
 
     #[test]
-    fn zero_times_vector_equals_zero() {
+    fn test_zero_times_vector_equals_zero() {
         let v = Vector1::new(1_f32);
         assert_eq!(0_f32 * v, Vector1::zero());
     }
@@ -245,19 +245,19 @@ mod vector2_tests {
 
     #[test]
     #[should_panic]
-    fn out_of_bounds_array_access() {
+    fn test_out_of_bounds_array_access() {
         let v = Vector2::new(1_f32, 2_f32);
         assert_eq!(v[2], v[2]);
     }
 
     #[test]
-    fn vector_times_zero_equals_zero() {
+    fn test_vector_times_zero_equals_zero() {
         let v = Vector2::new(1_f32, 2_f32);
         assert_eq!(v * 0_f32, Vector2::zero());
     }
 
     #[test]
-    fn zero_times_vector_equals_zero() {
+    fn test_zero_times_vector_equals_zero() {
         let v = Vector2::new(1_f32, 2_f32);
         assert_eq!(0_f32 * v, Vector2::zero());
     }
@@ -417,19 +417,19 @@ mod vector3_tests {
 
     #[test]
     #[should_panic]
-    fn out_of_bounds_array_access() {
+    fn test_out_of_bounds_array_access() {
         let v = Vector3::new(1_f32, 2_f32, 3_f32);
         assert_eq!(v[3], v[3]);
     }
 
     #[test]
-    fn vector_times_zero_equals_zero() {
+    fn test_vector_times_zero_equals_zero() {
         let v = Vector3::new(1_f32, 2_f32, 3_f32);
         assert_eq!(v * 0_f32, Vector3::zero());
     }
 
     #[test]
-    fn zero_times_vector_equals_zero() {
+    fn test_zero_times_vector_equals_zero() {
         let v = Vector3::new(1_f32, 2_f32, 3_f32);
         assert_eq!(0_f32 * v, Vector3::zero());
     }
@@ -601,19 +601,19 @@ mod vector4_tests {
 
     #[test]
     #[should_panic]
-    fn out_of_bounds_array_access() {
+    fn  test_out_of_bounds_array_access() {
         let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
         assert_eq!(v[4], v[4]);
     }
 
     #[test]
-    fn vector_times_zero_equals_zero() {
+    fn test_vector_times_zero_equals_zero() {
         let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
         assert_eq!(v * 0_f32, Vector4::zero());
     }
 
     #[test]
-    fn zero_times_vector_equals_zero() {
+    fn test_zero_times_vector_equals_zero() {
         let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
         assert_eq!(0_f32 * v, Vector4::zero());
     }
