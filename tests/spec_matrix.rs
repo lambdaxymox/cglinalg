@@ -76,7 +76,7 @@ macro_rules! approx_addition_props {
             /// over their underlying scalars. 
             ///
             /// Given a matrix `m` and a zero matrix `0`
-            /// ```
+            /// ```text
             /// 0 + m = m
             /// ```
             #[test]
@@ -89,7 +89,7 @@ macro_rules! approx_addition_props {
             /// over their underlying scalars. 
             ///
             /// Given a matrix `m` and a zero matrix `0`
-            /// ```
+            /// ```text
             /// m + 0 = m
             /// ```
             #[test]
@@ -101,7 +101,7 @@ macro_rules! approx_addition_props {
             /// Matrix addition over exact scalars is commutative.
             ///
             /// Given matrices `m1` and `m2`
-            /// ```
+            /// ```text
             /// m1 + m2 ~= m2 + m1
             /// ```
             #[test]
@@ -112,7 +112,7 @@ macro_rules! approx_addition_props {
             /// Matrix addition over exact scalars is associative.
             ///
             /// Given matrices `m1`, `m2`, and `m3`
-            /// ```
+            /// ```text
             /// (m1 + m2) + m3 ~= m1 + (m2 + m3)
             /// ```
             #[test]
@@ -127,7 +127,7 @@ macro_rules! approx_addition_props {
             /// subtracting the two matrices from each other.
             ///
             /// Given matrices `m1` and `m2`
-            /// ```
+            /// ```text
             /// m1 + (-m2) = m1 - m2
             /// ```
             #[test]
@@ -172,7 +172,7 @@ macro_rules! exact_addition_props {
             /// over their underlying scalars. 
             ///
             /// Given a matrix `m`
-            /// ```
+            /// ```text
             /// 0 + m = m
             /// ```
             #[test]
@@ -185,7 +185,7 @@ macro_rules! exact_addition_props {
             /// over their underlying scalars. 
             ///
             /// Given a matrix `m`
-            /// ```
+            /// ```text
             /// m + 0 = m
             /// ```
             #[test]
@@ -197,7 +197,7 @@ macro_rules! exact_addition_props {
             /// Matrix addition over exact scalars is commutative.
             ///
             /// Given matrices `m1` and `m2`
-            /// ```
+            /// ```text
             /// m1 + m2 = m2 + m1
             /// ```
             #[test]
@@ -208,7 +208,7 @@ macro_rules! exact_addition_props {
             /// Matrix addition over exact scalars is associative.
             ///
             /// Given matrices `m1`, `m2`, and `m3`
-            /// ```
+            /// ```text
             /// (m1 + m2) + m3 = m1 + (m2 + m3)
             /// ```
             #[test]
@@ -258,7 +258,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// addition.
             ///
             /// Given matrices `m1` and `m2`, and a scalar `c`
-            /// ```
+            /// ```text
             /// c * (m1 + m2) ~= c * m1 + c * m2
             /// ```
             #[test]
@@ -273,7 +273,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// subtraction.
             ///
             /// Given matrices `m1` and `m2`, and a scalar `c`
-            /// ```
+            /// ```text
             /// c * (m1 - m2) ~= c * m1 - c * m2
             /// ```
             #[test]
@@ -287,7 +287,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// Multiplication of a matrix by a scalar zero is the zero matrix.
             ///
             /// Given a matrix `m` and a zero scalar `0`
-            /// ```
+            /// ```text
             /// 0 * m = m * 0 = 0
             /// ```
             /// Note that we diverge from traditional formalisms of matrix arithmetic 
@@ -304,7 +304,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// Multiplication of a matrix by a scalar one is the original matrix.
             ///
             /// Given a matrix `m` and a unit scalar `1`
-            /// ```
+            /// ```text
             /// 1 * m = m * 1 = m
             /// ```
             /// Note that we diverge from traditional formalisms of matrix arithmetic 
@@ -321,7 +321,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// inverse of the original matrix.
             ///
             /// Given a matrix `m` and a negative unit scalar `-1`
-            /// ```
+            /// ```text
             /// (-1) * m = = m * (-1) = -m
             /// ```
             /// Note that we diverge from traditional formalisms of matrix arithmetic 
@@ -337,7 +337,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// Multiplication of a matrix by a scalar commutes with scalars.
             ///
             /// Given a matrix `m` and a scalar `c`
-            /// ```
+            /// ```text
             /// c * m ~= m * c
             /// ```
             /// Note that we diverse from traditional formalisms of matrix arithmetic 
@@ -384,7 +384,7 @@ macro_rules! exact_scalar_multiplication_props {
             /// addition.
             ///
             /// Given matrices `m1` and `m2`, and a scalar `c`
-            /// ```
+            /// ```text
             /// c * (m1 + m2) = c * m1 + c * m2
             /// ```
             #[test]
@@ -399,7 +399,7 @@ macro_rules! exact_scalar_multiplication_props {
             /// subtraction.
             ///
             /// Given matrices `m1` and `m2`, and a scalar `c`
-            /// ```
+            /// ```text
             /// c * (m1 - m2) = c * m1 - c * m2
             /// ```
             #[test]
@@ -413,7 +413,7 @@ macro_rules! exact_scalar_multiplication_props {
             /// Multiplication of a matrix by a scalar zero is the zero matrix.
             ///
             /// Given a matrix `m` and a zero scalar `0`
-            /// ```
+            /// ```text
             /// 0 * m = m * 0 = 0
             /// ```
             /// Note that we diverge from tradition formalisms of matrix arithmetic 
@@ -430,7 +430,7 @@ macro_rules! exact_scalar_multiplication_props {
             /// Multiplication of a matrix by a scalar one is the original matrix.
             ///
             /// Given a matrix `m` and a unit scalar `1`
-            /// ```
+            /// ```text
             /// 1 * m = m * 1 = m
             /// ```
             /// Note that we diverge from tradition formalisms of matrix arithmetic 
@@ -446,7 +446,7 @@ macro_rules! exact_scalar_multiplication_props {
             /// Multiplication of a matrix by a scalar commutes with scalars.
             ///
             /// Given a matrix `m` and a scalar `c`
-            /// ```
+            /// ```text
             /// c * m = m * c
             /// ```
             /// Note that we diverse from traditional formalisms of matrix arithmetic 
@@ -498,7 +498,7 @@ macro_rules! approx_multiplication_props {
             /// Matrix multiplication is associative.
             ///
             /// Given matrices `m1`, `m2`, and `m3`
-            /// ```
+            /// ```text
             /// (m1 * m2) * m3 ~= m1 * (m2 * m3)
             /// ```
             #[test]
@@ -512,7 +512,7 @@ macro_rules! approx_multiplication_props {
             /// Matrix multiplication is distributive over matrix addition.
             ///
             /// Given matrices `m1`, `m2`, and `m3`
-            /// ```
+            /// ```text
             /// m1 * (m2 + m3) = m1 * m2 + m1 * m3
             /// ```
             #[test]
@@ -526,7 +526,7 @@ macro_rules! approx_multiplication_props {
             /// Matrix multiplication is compatible with scalar multiplication.
             ///
             /// Given matrices `m1` and `m2` and a scalar `c`
-            /// ```
+            /// ```text
             /// c * (m1 * m2) ~= (c * m1) * m2 = m1 * (c * m2)
             /// ```
             #[test]
@@ -541,7 +541,7 @@ macro_rules! approx_multiplication_props {
             /// Matrix multiplication is compatible with scalar multiplication.
             ///
             /// Given a matrix `m`, scalars `c1` and `c2`
-            /// ```
+            /// ```text
             /// (c1 * c2) * m ~= c1 * (c2 * m)
             /// ```
             #[test]
@@ -555,7 +555,7 @@ macro_rules! approx_multiplication_props {
             /// multiplicative identity.
             /// 
             /// Given a matrix `m` there is a matrix `identity` such that
-            /// ```
+            /// ```text
             /// m * identity = identity * m = m
             /// ```
             #[test]
@@ -598,7 +598,7 @@ macro_rules! exact_multiplication_props {
             /// Matrix multiplication is associative.
             ///
             /// Given matrices `m1`, `m2`, and `m3`
-            /// ```
+            /// ```text
             /// (m1 * m2) * m3 = m1 * (m2 * m3)
             /// ```
             #[test]
@@ -612,7 +612,7 @@ macro_rules! exact_multiplication_props {
             /// Matrix multiplication is distributive over matrix addition.
             ///
             /// Given matrices `m1`, `m2`, and `m3`
-            /// ```
+            /// ```text
             /// m1 * (m2 + m3) = m1 * m2 + m1 * m3
             /// ```
             #[test]
@@ -626,7 +626,7 @@ macro_rules! exact_multiplication_props {
             /// Matrix multiplication is compatible with scalar multiplication.
             ///
             /// Given matrices `m1` and `m2` and a scalar `c`
-            /// ```
+            /// ```text
             /// c * (m1 * m2) = (c * m1) * m2 = m1 * (c * m2)
             /// ```
             #[test]
@@ -641,7 +641,7 @@ macro_rules! exact_multiplication_props {
             /// Matrix multiplication is compatible with scalar multiplication.
             ///
             /// Given a matrix `m`, scalars `c1` and `c2`
-            /// ```
+            /// ```text
             /// (c1 * c2) * m = c1 * (c2 * m)
             /// ```
             #[test]
@@ -655,7 +655,7 @@ macro_rules! exact_multiplication_props {
             /// multiplicative identity.
             /// 
             /// Given a matrix `m` there is a matrix `identity` such that
-            /// ```
+            /// ```text
             /// m * identity = identity * m = m
             /// ```
             #[test]
@@ -703,7 +703,7 @@ macro_rules! approx_transposition_props {
             /// The double transpose of a matrix is the original matrix.
             ///
             /// Given a matrix `m`
-            /// ```
+            /// ```text
             /// transpose(transpose(m)) = m
             /// ```
             #[test]
@@ -714,7 +714,7 @@ macro_rules! approx_transposition_props {
             /// The transposition operation is linear.
             /// 
             /// Given matrices `m1` and `m2`
-            /// ```
+            /// ```text
             /// transpose(m1 + m2) = transpose(m1) + transpose(m2)
             /// ```
             #[test]
@@ -728,7 +728,7 @@ macro_rules! approx_transposition_props {
             /// transposition.
             /// 
             /// Given a matrix `m` and a scalar `c`
-            /// ```
+            /// ```text
             /// transpose(c * m) = c * transpose(m)
             /// ```
             #[test]
@@ -742,7 +742,7 @@ macro_rules! approx_transposition_props {
             /// of the transposes of the two matrices swapped.
             /// 
             /// Given matrices `m1` and `m2`
-            /// ```
+            /// ```text
             /// transpose(m1 * m2) = transpose(m2) * transpose(m1)
             /// ```
             #[test]
@@ -785,7 +785,7 @@ macro_rules! exact_transposition_props {
             /// The double transpose of a matrix is the original matrix.
             ///
             /// Given a matrix `m`
-            /// ```
+            /// ```text
             /// transpose(transpose(m)) = m
             /// ```
             #[test]
@@ -796,7 +796,7 @@ macro_rules! exact_transposition_props {
             /// The transposition operation is linear.
             /// 
             /// Given matrices `m1` and `m2`
-            /// ```
+            /// ```text
             /// transpose(m1 + m2) = transpose(m1) + transpose(m2)
             /// ```
             #[test]
@@ -809,7 +809,7 @@ macro_rules! exact_transposition_props {
             /// Scalar multiplication of a matrix and a scalar commutes with transposition.
             /// 
             /// Given a matrix `m` and a scalar `c`
-            /// ```
+            /// ```text
             /// transpose(c * m) = c * transpose(m)
             /// ```
             #[test]
@@ -823,7 +823,7 @@ macro_rules! exact_transposition_props {
             /// of the two matrices swapped.
             /// 
             /// Given matrices `m1` and `m2`
-            /// ```
+            /// ```text
             /// transpose(m1 * m2) = transpose(m2) * transpose(m1)
             /// ```
             #[test]
@@ -868,7 +868,7 @@ macro_rules! swap_props {
             /// Swapping rows is commutative in the row arguments.
             ///
             /// Given a matrix `m`, and rows `row1` and `row2`
-            /// ```
+            /// ```text
             /// m.swap_rows(row1, row2) = m.swap_rows(row2, row1)
             /// ```
             #[test]
@@ -887,7 +887,7 @@ macro_rules! swap_props {
             /// Swapping the same row in both arguments is the identity map.
             ///
             /// Given a matrix `m`, and a row `row`
-            /// ```
+            /// ```text
             /// m.swap_rows(row, row) = m
             /// ```
             #[test]
@@ -904,7 +904,7 @@ macro_rules! swap_props {
             /// matrix.
             ///
             /// Given a matrix `m`, and rows `row1` and `row2`
-            /// ```
+            /// ```text
             /// m.swap_rows(row1, row2).swap_rows(row1, row2) = m
             /// ```
             #[test]
@@ -922,7 +922,7 @@ macro_rules! swap_props {
             /// Swapping columns is commutative in the column arguments.
             ///
             /// Given a matrix `m`, and columns `col1` and `col2`
-            /// ```
+            /// ```text
             /// m.swap_columns(col1, col2) = m.swap_columns(col2, col1)
             /// ```
             #[test]
@@ -941,7 +941,7 @@ macro_rules! swap_props {
             /// Swapping the same column in both arguments is the identity map.
             ///
             /// Given a matrix `m`, and a column `col`
-            /// ```
+            /// ```text
             /// m.swap_columns(col, col) = m
             /// ```
             #[test]
@@ -958,7 +958,7 @@ macro_rules! swap_props {
             /// original matrix.
             ///
             /// Given a matrix `m`, and columns `col1` and `col2`
-            /// ```
+            /// ```text
             /// m.swap_columns(col1, col2).swap_columns(col1, col2) = m
             /// ```
             #[test]
@@ -976,7 +976,7 @@ macro_rules! swap_props {
             /// Swapping elements is commutative in the arguments.
             ///
             /// Given a matrix `m`, and elements `(col1, row1)` and `(col2, row2)`
-            /// ```
+            /// ```text
             /// m.swap_elements((col1, row1), (col2, row2)) = m.swap_elements((col2, row2), (col1, row1))
             /// ```
             #[test]
@@ -996,7 +996,7 @@ macro_rules! swap_props {
             /// Swapping the same element in both arguments is the identity map.
             ///
             /// Given a matrix `m`, and an element index `(col, row)`
-            /// ```
+            /// ```text
             /// m.swap_elements((col, row), (col, row)) = m
             /// ```
             #[test]
@@ -1014,7 +1014,7 @@ macro_rules! swap_props {
             /// original matrix.
             ///
             /// Given a matrix `m`, and elements `(col1, row1)` and `(col2, row2)`
-            /// ```
+            /// ```text
             /// m.swap_elements((col1, row1), (col2, row2)).swap_elements((col1, row1), (col2, row2)) = m
             /// ```
             #[test]

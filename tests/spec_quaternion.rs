@@ -104,7 +104,7 @@ macro_rules! exact_arithmetic_props {
             /// A scalar `0` times a quaternion should be a zero quaternion.
             ///
             /// Given a quaternion `q`, it satisfies
-            /// ```
+            /// ```text
             /// 0 * q = 0.
             /// ```
             #[test]
@@ -117,7 +117,7 @@ macro_rules! exact_arithmetic_props {
             /// A scalar `0` times a quaternion should be zero.
             ///
             /// Given a quaternion `q`, it satisfies
-            /// ```
+            /// ```text
             /// q * 0 = 0
             /// ```
             #[test]
@@ -131,7 +131,7 @@ macro_rules! exact_arithmetic_props {
             /// of quaternions.
             ///
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// q + 0 = q
             /// ```
             #[test]
@@ -144,7 +144,7 @@ macro_rules! exact_arithmetic_props {
             /// of quaternions.
             ///
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// 0 + q = q
             /// ```
             #[test]
@@ -157,7 +157,7 @@ macro_rules! exact_arithmetic_props {
             /// quaternion.
             ///
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// 1 * q = q
             /// ```
             #[test]
@@ -170,7 +170,7 @@ macro_rules! exact_arithmetic_props {
             /// quaternion.
             ///
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// q * 1 = q.
             /// ```
             #[test]
@@ -216,7 +216,7 @@ macro_rules! approx_add_props {
             /// A quaternion plus a zero quaternion equals the same quaternion. 
             ///
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// q + 0 = q
             /// ```
             #[test]
@@ -228,7 +228,7 @@ macro_rules! approx_add_props {
             /// A quaternion plus a zero quaternion equals the same quaternion.
             /// 
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// 0 + q = q
             /// ```
             #[test]
@@ -243,7 +243,7 @@ macro_rules! approx_add_props {
             ///
             /// Given quaternions `q1` and `q2`, and their references `&q1` 
             /// and `&q2`, they should satisfy
-            /// ```
+            /// ```text
             ///  q1 +  q2 = &q1 +  q2
             ///  q1 +  q2 =  q1 + &q2
             ///  q1 +  q2 = &q1 + &q2
@@ -269,7 +269,7 @@ macro_rules! approx_add_props {
             /// approximately commutative.
             /// 
             /// Given quaternions `q1` and `q2`, we have
-            /// ```
+            /// ```text
             /// q1 + q2 ~= q2 + q1
             /// ```
             /// Note that floating point quaternion addition cannot be exactly 
@@ -287,7 +287,7 @@ macro_rules! approx_add_props {
             /// approximately associative. 
             ///
             /// Given quaternions `q1`, `q2`, and `q3` we have
-            /// ```
+            /// ```text
             /// (q1 + q2) + q3 ~= q1 + (q2 + q3).
             /// ```
             /// Note that floating point quaternion addition cannot be exactly 
@@ -330,7 +330,7 @@ macro_rules! exact_add_props {
             /// A quaternion plus a zero quaternion equals the same quaternion.
             ///
             /// Given a quaternion `q`, it should satisfy
-            /// ```
+            /// ```text
             /// q + 0 = q
             /// ```
             #[test]
@@ -342,7 +342,7 @@ macro_rules! exact_add_props {
             /// A zero quaternion plus a quaternion equals the same quaternion.
             ///
             /// Given a quaternion `q`, it should satisfy
-            /// ```
+            /// ```text
             /// 0 + q = q
             /// ```
             #[test]
@@ -357,7 +357,7 @@ macro_rules! exact_add_props {
             ///
             /// Given quaternions `q1` and `q2`, and their references `&q1` and `&q2`, they 
             /// should satisfy
-            /// ```
+            /// ```text
             ///  q1 +  q2 = &q1 +  q2
             ///  q1 +  q2 =  q1 + &q2
             ///  q1 +  q2 = &q1 + &q2
@@ -382,7 +382,7 @@ macro_rules! exact_add_props {
             /// Quaternion addition over integer scalars should be commutative.
             ///
             /// Given quaternions `q1` and `q2`, we have
-            /// ```
+            /// ```text
             /// q1 + q2 = q2 + q1.
             /// ```
             #[test]
@@ -397,7 +397,7 @@ macro_rules! exact_add_props {
             /// should be associative.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`, we have
-            /// ```
+            /// ```text
             /// (q1 + q2) + q3 = q1 + (q2 + q3)
             /// ```
             #[test]
@@ -444,7 +444,7 @@ macro_rules! approx_sub_props {
             /// additive unit.
             ///
             /// Given a quaternion `q`, we have
-            /// ```
+            /// ```text
             /// q - 0 = q
             /// ```
             #[test]
@@ -456,7 +456,7 @@ macro_rules! approx_sub_props {
             /// Every quaternion should have an additive inverse.
             ///
             /// Given a quaternion `q`, there is a quaternion `-q` such that
-            /// ```
+            /// ```text
             /// q - q = q + (-q) = (-q) + q = 0
             /// ```
             #[test]
@@ -473,7 +473,7 @@ macro_rules! approx_sub_props {
             ///
             /// Given quaternions `q1` and `q2`, and their references `&q1` and 
             /// `&q2`, they should satisfy
-            /// ```
+            /// ```text
             ///  q1 -  q2 = &q1 -  q2
             ///  q1 -  q2 =  q1 - &q2
             ///  q1 -  q2 = &q1 - &q2
@@ -524,7 +524,7 @@ macro_rules! exact_sub_props {
             /// The zero quaternion should act as an additive unit. 
             ///
             /// Given a quaternion `q`, we have
-            /// ```
+            /// ```text
             /// q - 0 = q
             /// ```
             #[test]
@@ -536,7 +536,7 @@ macro_rules! exact_sub_props {
             /// Every quaternion should have an additive inverse. 
             ///
             /// Given a quaternion `q`, there is a quaternion `-q` such that
-            /// ```
+            /// ```text
             /// q - q = q + (-q) = (-q) + q = 0
             /// ```
             #[test]
@@ -551,7 +551,7 @@ macro_rules! exact_sub_props {
             ///
             /// Given quaternions `q1` and `q2`, and their references `&q1` 
             /// and `&q2`, they should satisfy
-            /// ```
+            /// ```text
             ///  q1 -  q2 = &q1 -  q2
             ///  q1 -  q2 =  q1 - &q2
             ///  q1 -  q2 = &q1 - &q2
@@ -615,7 +615,7 @@ macro_rules! approx_mul_props {
             /// commutative.
             ///
             /// Given a constant `c` and a quaternion `q`
-            /// ```
+            /// ```text
             /// c * q ~= q * c
             /// ```
             /// Note that floating point quaternion multiplication cannot be commutative 
@@ -638,7 +638,7 @@ macro_rules! approx_mul_props {
             /// In other words, scalar multiplication of two scalar with a quaternion 
             /// should act associatively, just like the multiplication of three scalars. 
             /// Given scalars `a` and `b`, and a quaternion `q`, we have
-            /// ```
+            /// ```text
             /// (a * b) * q ~= a * (b * q)
             /// ```
             /// Note that the compatability of scalars with quaternions can only be 
@@ -657,7 +657,7 @@ macro_rules! approx_mul_props {
             /// approximately associative.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`, we have
-            /// ```
+            /// ```text
             /// (q1 * q2) * q3 ~= q1 * (q2 * q3)
             /// ```
             /// Note that the quaternion multiplication can only be approximately 
@@ -676,7 +676,7 @@ macro_rules! approx_mul_props {
             /// Quaternions have a multiplicative unit element.
             ///
             /// Given a quaternion `q`, and the unit quaternion `1`, we have
-            /// ```
+            /// ```text
             /// q * 1 = 1 * q = q
             /// ```
             #[test]
@@ -691,7 +691,7 @@ macro_rules! approx_mul_props {
             /// approximate multiplicative inverse.
             ///
             /// Given a quaternion `q` and its inverse `q_inv`, we have
-            /// ```
+            /// ```text
             /// q * q_inv ~= q_inv * q ~= 1
             /// ```
             /// Note that quaternion algebra over floating point scalars is not 
@@ -711,7 +711,7 @@ macro_rules! approx_mul_props {
             /// Quaternion multiplication transposes under inverion.
             ///
             /// Given two invertible quaternions `q1` and `q2`
-            /// ```
+            /// ```text
             /// inverse(q1 * q2) = inverse(q2) * inverse(q1)
             /// ```
             /// Note that quaternion multiplication is noncommutative.
@@ -736,7 +736,7 @@ macro_rules! approx_mul_props {
             /// Quaternion multiplication is anti-commutative.
             ///
             /// Given quaternions `q1` and `q2`, we have
-            /// ```
+            /// ```text
             /// q1 * q2 = -q2 * q1
             /// ```
             #[test]
@@ -780,7 +780,7 @@ macro_rules! exact_mul_props {
             /// scalars should be commutative.
             ///
             /// Given a constant `c` and a quaternion `q`
-            /// ```
+            /// ```text
             /// c * q = q * c
             /// ```
             #[test]
@@ -798,7 +798,7 @@ macro_rules! exact_mul_props {
             /// of three scalars. 
             ///
             /// Given scalars `a` and `b`, and a quaternion `q`, we have
-            /// ```
+            /// ```text
             /// (a * b) * q = a * (b * q)
             /// ```
             #[test]
@@ -811,7 +811,7 @@ macro_rules! exact_mul_props {
             /// Quaternion multiplication over integer scalars is exactly associative.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`, we have
-            /// ```
+            /// ```text
             /// (q1 * q2) * q3 = q1 * (q2 * q3)
             /// ```
             #[test]
@@ -825,7 +825,7 @@ macro_rules! exact_mul_props {
             /// Quaternions have a multiplicative unit element.
             ///
             /// Given a quaternion `q`, and the unit quaternion `1`, we have
-            /// ```
+            /// ```text
             /// q * 1 = 1 * q = q
             /// ```
             #[test]
@@ -874,7 +874,7 @@ macro_rules! approx_distributive_props {
             /// quaternion addition.
             ///
             /// Given a scalar `a` and quaternions `q1` and `q2`
-            /// ```
+            /// ```text
             /// a * (q1 + q2) ~= a * q1 + a * q2
             /// ```
             #[test]
@@ -891,7 +891,7 @@ macro_rules! approx_distributive_props {
             /// over a quaternion.
             ///
             /// Given scalars `a` and `b` and a quaternion `q`, we have
-            /// ```
+            /// ```text
             /// (a + b) * q ~= a * q + b * q
             /// ```
             #[test]
@@ -908,7 +908,7 @@ macro_rules! approx_distributive_props {
             /// approximately distribute.
             ///
             /// Given quaternions `q1` and `q2` and a scalar `a`
-            /// ```
+            /// ```text
             /// (q1 + q2) * a ~= q1 * a + q2 * a
             /// ```
             #[test]
@@ -925,7 +925,7 @@ macro_rules! approx_distributive_props {
             /// scalars should approximately distribute over the two scalars.
             ///
             /// Given a quaternion `q` and scalars `a` and `b`
-            /// ```
+            /// ```text
             /// q * (a + b) ~= q * a + q * b
             /// ```
             #[test]
@@ -942,7 +942,7 @@ macro_rules! approx_distributive_props {
             /// approximately distributive on the right.
             ///
             /// Given three quaternions `q1`, `q2`, and `q3`
-            /// ```
+            /// ```text
             /// (q1 + q2) * q3 ~= q1 * q3 + q2 * q3
             /// ```
             #[test]
@@ -959,7 +959,7 @@ macro_rules! approx_distributive_props {
             /// approximately distributive on the left.
             ///
             /// Given three quaternions `q1`, `q2`, and `q3`
-            /// ```
+            /// ```text
             /// q1 * (q2 + q3) ~= q1 * q2 + q1 * q3
             /// ```
             #[test]
@@ -1000,7 +1000,7 @@ macro_rules! exact_distributive_props {
             /// Scalar multiplication should distribute over quaternion addition.
             ///
             /// Given a scalar `a` and quaternions `q1` and `q2`
-            /// ```
+            /// ```text
             /// a * (q1 + q2) = a * q1 + a * q2
             /// ```
             #[test]
@@ -1016,7 +1016,7 @@ macro_rules! exact_distributive_props {
             /// quaternion.
             ///
             /// Given scalars `a` and `b` and a quaternion `q`, we have
-            /// ```
+            /// ```text
             /// (a + b) * q = a * q + b * q
             /// ```
             #[test]
@@ -1032,7 +1032,7 @@ macro_rules! exact_distributive_props {
             /// should distribute.
             ///
             /// Given quaternions `q1` and `q2`, and a scalar `a`
-            /// ```
+            /// ```text
             /// (q1 + q2) * a = q1 * a + q2 * a
             /// ```
             #[test]
@@ -1047,7 +1047,7 @@ macro_rules! exact_distributive_props {
             /// scalars should distribute over the two scalars. 
             ///
             /// Given a quaternion `q` and scalars `a` and `b`
-            /// ```
+            /// ```text
             /// q * (a + b) = q * a + q * b
             /// ```
             #[test]
@@ -1061,7 +1061,7 @@ macro_rules! exact_distributive_props {
             /// Quaternion multiplication should be distributive on the right.
             ///
             /// Given three quaternions `q1`, `q2`, and `q3`
-            /// ```
+            /// ```text
             /// (q1 + q2) * q3 = q1 * q3 + q2 * q3
             /// ```
             #[test]
@@ -1075,7 +1075,7 @@ macro_rules! exact_distributive_props {
             /// Quaternion multiplication should be distributive on the left.
             ///
             /// Given three quaternions `q1`, `q2`, and `q3`
-            /// ```
+            /// ```text
             /// q1 * (q2 + q3) = q1 * q2 + q1 * q3
             /// ```
             #[test]
@@ -1124,7 +1124,7 @@ macro_rules! approx_dot_product_props {
             /// approximately commutative.
             ///
             /// Given quaternions `q1` and `q2`
-            /// ```
+            /// ```text
             /// dot(q1, q2) ~= dot(q2, q1)
             /// ```
             #[test]
@@ -1140,7 +1140,7 @@ macro_rules! approx_dot_product_props {
             /// approximately right distributive.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`
-            /// ```
+            /// ```text
             /// dot(q1, q2 + q3) ~= dot(q1, q2) + dot(q1, q3)
             /// ```
             #[test]
@@ -1159,7 +1159,7 @@ macro_rules! approx_dot_product_props {
             /// approximately left distributive.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`
-            /// ```
+            /// ```text
             /// dot(q1 + q2,  q3) ~= dot(q1, q3) + dot(q2, q3)
             /// ```
             #[test]
@@ -1178,7 +1178,7 @@ macro_rules! approx_dot_product_props {
             /// approximately commutative with scalars.
             ///
             /// Given quaternions `q1` and `q2`, and scalars `a` and `b`
-            /// ```
+            /// ```text
             /// dot(a * q1, b * q2) ~= a * b * dot(q1, q2)
             /// ```
             #[test]
@@ -1195,7 +1195,7 @@ macro_rules! approx_dot_product_props {
             /// approximately right bilinear.
             ///
             /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
-            /// ```
+            /// ```text
             /// dot(q1, a * q2 + b * q3) ~= a * dot(q1, q2) + b * dot(q1, q3)
             /// ```
             #[test]
@@ -1215,7 +1215,7 @@ macro_rules! approx_dot_product_props {
             /// approximately left bilinear.
             ///
             /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
-            /// ```
+            /// ```text
             /// dot(a * q1 + b * q2, q3) ~= a * dot(q1, q3) + b * dot(q2, q3)
             /// ```
             #[test]
@@ -1260,7 +1260,7 @@ macro_rules! exact_dot_product_props {
             /// The dot product of quaternions over integer scalars is commutative.
             ///
             /// Given quaternions `q1` and `q2`
-            /// ```
+            /// ```text
             /// dot(q1, q2) = dot(q2, q1)
             /// ```
             #[test]
@@ -1275,7 +1275,7 @@ macro_rules! exact_dot_product_props {
             /// distributive.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`
-            /// ```
+            /// ```text
             /// dot(q1, q2 + q3) = dot(q1, q2) + dot(q1, q3)
             /// ```
             #[test]
@@ -1290,7 +1290,7 @@ macro_rules! exact_dot_product_props {
             /// distributive.
             ///
             /// Given quaternions `q1`, `q2`, and `q3`
-            /// ```
+            /// ```text
             /// dot(q1 + q2,  q3) = dot(q1, q3) + dot(q2, q3)
             /// ```
             #[test]
@@ -1305,7 +1305,7 @@ macro_rules! exact_dot_product_props {
             /// commutative with scalars.
             ///
             /// Given quaternions `q1` and `q2`, and scalars `a` and `b`
-            /// ```
+            /// ```text
             /// dot(a * q1, b * q2) = a * b * dot(q1, q2)
             /// ```
             #[test]
@@ -1320,7 +1320,7 @@ macro_rules! exact_dot_product_props {
             /// bilinear.
             ///
             /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
-            /// ```
+            /// ```text
             /// dot(q1, a * q2 + b * q3) = a * dot(q1, q2) + b * dot(q1, q3)
             /// ```
             #[test]
@@ -1336,7 +1336,7 @@ macro_rules! exact_dot_product_props {
             /// bilinear.
             ///
             /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
-            /// ```
+            /// ```text
             /// dot(a * q1 + b * q2, q3) = a * dot(q1, q3) + b * dot(q2, q3)
             /// ```
             #[test]
@@ -1377,7 +1377,7 @@ macro_rules! conjugation_props {
             /// Conjugating a quaternion twice should give the original quaternion.
             ///
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// q** = conjugate(conjugate(q)) = q
             /// ```
             #[test]
@@ -1388,7 +1388,7 @@ macro_rules! conjugation_props {
             /// Quaternion conjugation is linear.
             ///
             /// Given quaternions `q1` and `q2`, quaternion conjugation satisfies
-            /// ```
+            /// ```text
             /// conjugate(q1 + q2) = conjugate(q1) + conjugate(q2)
             /// ```
             #[test]
@@ -1401,7 +1401,7 @@ macro_rules! conjugation_props {
             /// Quaternion multiplication transposes under conjugation.
             ///
             /// Given quaternions `q1` and `q2`
-            /// ```
+            /// ```text
             /// conjugate(q1 * q2) = conjugate(q2) * conjugate(q1)
             /// ```
             #[test]
@@ -1444,7 +1444,7 @@ macro_rules! magnitude_props {
             /// 
             /// Given a scalar constant `c`, and a quaternion `q` of scalars, the 
             /// magnitude function satisfies
-            /// ```
+            /// ```text
             /// magnitude(c * q) = abs(c) * magnitude(q)
             /// ```
             fn prop_magnitude_preserves_scale(
@@ -1463,7 +1463,7 @@ macro_rules! magnitude_props {
             /// The magnitude of a quaternion is nonnegative. 
             ///
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// magnitude(q) >= 0
             /// ```
             #[test]
@@ -1475,7 +1475,7 @@ macro_rules! magnitude_props {
             /// The magnitude of a quaternion satisfies the triangle inequality. 
             ///
             /// Given a quaternions `q1` and `q2`, the magnitude function satisfies
-            /// ```
+            /// ```text
             /// magnitude(q1 + q2) <= magnitude(q1) + magnitude(q2)
             /// ```
             #[test]
@@ -1495,12 +1495,12 @@ macro_rules! magnitude_props {
             /// zero, then q1 = q2.
             ///
             /// Given quaternions `q1` and `q2`
-            /// ```
+            /// ```text
             /// magnitude(q1 - q2) = 0 => q1 = q2 
             /// ```
             /// Equivalently, if `q1` is not equal to `q2`, then their distance is 
             /// nonzero
-            /// ```
+            /// ```text
             /// q1 != q2 => magnitude(q1 - q2) != 0
             /// ```
             /// For the sake of testability, we use the second form to test the 
@@ -1548,7 +1548,7 @@ macro_rules! slerp_props {
             /// quaternion rotor between two quaternions.
             ///
             /// Given quaternions `q1` and `q2`
-            /// ```
+            /// ```text
             /// slerp(q1, q2, t) = q1 * (inverse(q1) * q2) ^ t
             /// ```
             #[test]
@@ -1564,7 +1564,7 @@ macro_rules! slerp_props {
             /// respective interpolants at the endpoints.
             ///
             /// Given quaternions `q0` and `q1`
-            /// ```
+            /// ```text
             /// slerp(q0, q1, 0) = q0
             /// slerp(q0, q1, 1) = q1
             /// ```
@@ -1611,7 +1611,7 @@ macro_rules! exp_log_props {
             /// Quaternion exponentiation commutes with quaternion conjugation.
             ///
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// conjugate(exp(q)) = exp(conjugate(q))
             /// ```
             #[test]
@@ -1622,7 +1622,7 @@ macro_rules! exp_log_props {
             /// The exponential of a quaternion is never zero.
             ///
             /// Given a quaternion `q` and the zero quaternion `0`
-            /// ```
+            /// ```text
             /// exp(q) != 0
             /// ```
             #[test]
@@ -1633,7 +1633,7 @@ macro_rules! exp_log_props {
             /// Every quaternion exponential has a multiplicative inverse.
             ///
             /// Given a quaternion `q` and the unit quaternion `1`
-            /// ```
+            /// ```text
             /// exp(-q) * exp(q) = exp(q) * exp(-q) = 1
             /// ```
             #[test]
@@ -1645,7 +1645,7 @@ macro_rules! exp_log_props {
             /// The quaternion logarithm is the inverse of the quaternion exponential.
             ///
             /// Given a quaternion `q`
-            /// ```
+            /// ```text
             /// exp(ln(q)) = ln(exp(q)) = q
             /// ```
             #[test]

@@ -52,7 +52,7 @@ macro_rules! approx_arithmetic_props {
             /// Angle addition should be approximately commutative.
             ///
             /// Given typed angles `angle1` and `angle2`
-            /// ```
+            /// ```text
             /// angle1 + angle2 ~= angle2 + angle1
             /// ```
             #[test]
@@ -65,7 +65,7 @@ macro_rules! approx_arithmetic_props {
             /// Angle addition is approximately associative.
             /// 
             /// Given typed angles `angle1`, `angle2, and `angle3`
-            /// ```
+            /// ```text
             /// (angle1 + angle2) + angle3 ~= angle1 + (angle2 + angle3)
             /// ```
             #[test]
@@ -81,7 +81,7 @@ macro_rules! approx_arithmetic_props {
             /// Multiplication of typed angles is compatible with unitless constants.
             ///
             /// Given a typed angle `angle`, and unitless constants `a`, and `b`
-            /// ```
+            /// ```text
             /// (a * b) * angle ~= a * (b * angle3)
             /// ```
             #[test]
@@ -96,7 +96,7 @@ macro_rules! approx_arithmetic_props {
             /// Typed angles have an additive unit element.
             ///
             /// Given a typed angle `angle`
-            /// ```
+            /// ```text
             /// angle + 0 = angle
             /// ```
             #[test]
@@ -108,7 +108,7 @@ macro_rules! approx_arithmetic_props {
             /// Typed angles have additive inverses.
             ///
             /// Given a typed angle `angle`, there is a typed angle `-angle` satisfying
-            /// ```
+            /// ```text
             /// angle - angle = angle + (-angle) = (-angle) + angle = 0
             /// ```
             #[test]
@@ -122,7 +122,7 @@ macro_rules! approx_arithmetic_props {
             /// Typed angles are compatible with unitless multiplicative unit element.
             ///
             /// Given a typed angle `angle`, and the unitless constant `1`
-            /// ```
+            /// ```text
             /// angle * 1 = angle
             /// ```
             #[test]
@@ -168,7 +168,7 @@ macro_rules! approx_trigonometry_props {
             /// The sine and arcsine functions should be inverses to each other.
             ///
             /// Given a typed angle `angle`
-            /// ```
+            /// ```text
             /// asin(sin(angle)) = angle
             /// ```
             #[test]
@@ -180,7 +180,7 @@ macro_rules! approx_trigonometry_props {
             /// The cosine and arccosine functions should be inverses to each other.
             ///
             /// Given a typed angle `angle`
-            /// ```
+            /// ```text
             /// acos(cos(angle)) = angle
             /// ```
             #[test]
@@ -192,7 +192,7 @@ macro_rules! approx_trigonometry_props {
             /// The tangent and arctangent functions should be inverses to each other.
             ///
             /// Given a typed angle `angle`
-            /// ```
+            /// ```text
             /// atan(tan(angle)) = angle
             /// ```
             #[test]
@@ -205,7 +205,7 @@ macro_rules! approx_trigonometry_props {
             /// give the same trigonometric outputs.
             ///
             /// Given a typed angle `angle` and an integer `k`
-            /// ```
+            /// ```text
             /// sin(angle) = sin(angle + k * full_turn())
             /// cos(angle) = cos(angle + k * full_turn())
             /// tan(angle) = tan(angle + k * full_turn())
@@ -221,7 +221,7 @@ macro_rules! approx_trigonometry_props {
             /// Typed angle trigonometry satisfies the pythagorean identity.
             ///
             /// Given a typed angle `angle`
-            /// ```
+            /// ```text
             /// sin(angle)^2 + cos(angle)^2 = 1
             /// ```
             #[test]
