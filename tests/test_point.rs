@@ -7,9 +7,7 @@ mod point1_tests {
         Point1,
         Vector1,
         Magnitude,
-        Zero,
     };
-    use core::slice::Iter;
 
 
     #[test]
