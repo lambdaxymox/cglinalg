@@ -14,9 +14,9 @@ use cglinalg::{
 fn any_matrix2<S>() -> impl Strategy<Value = Matrix2x2<S>> 
     where S: Scalar + Arbitrary
 {
-    any::<(S, S, S, S)>().prop_map(
-    |(c0r0, c0r1, c1r0, c1r1)| Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
-    )
+    any::<(S, S, S, S)>().prop_map(|(c0r0, c0r1, c1r0, c1r1)| {
+        Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
+    })
 }
 
 fn any_matrix3<S>() -> impl Strategy<Value = Matrix3x3<S>>
@@ -24,7 +24,11 @@ fn any_matrix3<S>() -> impl Strategy<Value = Matrix3x3<S>>
 {
     any::<((S, S, S), (S, S, S), (S, S, S))>().prop_map(
         |((c0r0, c0r1, c0r2), (c1r0, c1r1, c1r2), (c2r0, c2r1, c2r2))| {
-            Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
+            Matrix3x3::new(
+                c0r0, c0r1, c0r2, 
+                c1r0, c1r1, c1r2, 
+                c2r0, c2r1, c2r2
+            )
         }
     )
 }
@@ -34,19 +38,31 @@ fn any_matrix4<S>() -> impl Strategy<Value = Matrix4x4<S>>
 {
     any::<((S, S, S, S), (S, S, S, S), (S, S, S, S), (S, S, S, S))>().prop_map(
         |((c0r0, c0r1, c0r2, c0r3), (c1r0, c1r1, c1r2, c1r3), (c2r0, c2r1, c2r2, c2r3), (c3r0, c3r1, c3r2, c3r3))| {
-            Matrix4x4::new(c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2,  c2r3, c3r0, c3r1, c3r2, c3r3)
+            Matrix4x4::new(
+                c0r0, c0r1, c0r2, c0r3, 
+                c1r0, c1r1, c1r2, c1r3, 
+                c2r0, c2r1, c2r2,  c2r3, 
+                c3r0, c3r1, c3r2, c3r3
+            )
         }
     )
 }
 
 
-/// Generate the properties for matrix addition over floating point scalars.
+/// Generate property tests for matrix addition over floating point scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$MatrixN` denotes the name of the matrix type.
-/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$MatrixN` denotes the name of the matrix type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of matrices.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! approx_addition_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -56,8 +72,8 @@ macro_rules! approx_addition_props {
         use cglinalg::{$MatrixN, Zero};
 
         proptest! {
-            /// A zero matrix should act as the additive unit element for matrices over 
-            /// their underlying scalars. 
+            /// A zero matrix should act as the additive unit element for matrices
+            /// over their underlying scalars. 
             ///
             /// Given a matrix `m` and a zero matrix `0`
             /// ```
@@ -69,8 +85,8 @@ macro_rules! approx_addition_props {
                 prop_assert_eq!(zero_mat + m, m);
             }
         
-            /// A zero matrix should act as the additive unit element for matrices over 
-            /// their underlying scalars. 
+            /// A zero matrix should act as the additive unit element for matrices 
+            /// over their underlying scalars. 
             ///
             /// Given a matrix `m` and a zero matrix `0`
             /// ```
@@ -107,8 +123,8 @@ macro_rules! approx_addition_props {
                 prop_assert!(relative_eq!((m1 + m2) + m3, m1 + (m2 + m3), epsilon = $tolerance));
             }
 
-            /// The sum of a matrix and it's additive inverse is the same as subtracting the two matrices from
-            /// each other.
+            /// The sum of a matrix and it's additive inverse is the same as 
+            /// subtracting the two matrices from each other.
             ///
             /// Given matrices `m1` and `m2`
             /// ```
@@ -130,14 +146,20 @@ approx_addition_props!(matrix3_f64_addition_props, Matrix3x3, f64, any_matrix3, 
 approx_addition_props!(matrix4_f64_addition_props, Matrix4x4, f64, any_matrix4, 1e-7);
 
 
-/// Generate the properties for matrix addition over exact scalars. We define an exact
-/// scalar type as a type where scalar arithmetic is exact (e.g. integers).
+/// Generate property tests for matrix addition over exact scalars. We define 
+/// an exact scalar type as a type where scalar arithmetic is 
+/// exact (e.g. integers).
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$MatrixN` denotes the name of the matrix type.
-/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$MatrixN` denotes the name of the matrix type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of matrices.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_addition_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -146,8 +168,8 @@ macro_rules! exact_addition_props {
         use cglinalg::{$MatrixN, Zero};
 
         proptest! {
-            /// A zero matrix should act as the additive unit element for matrices over 
-            /// their underlying scalars. 
+            /// A zero matrix should act as the additive unit element for matrices 
+            /// over their underlying scalars. 
             ///
             /// Given a matrix `m`
             /// ```
@@ -159,8 +181,8 @@ macro_rules! exact_addition_props {
                 prop_assert_eq!(zero_mat + m, m);
             }
         
-            /// A zero matrix should act as the additive unit element for matrices over 
-            /// their underlying scalars. 
+            /// A zero matrix should act as the additive unit element for matrices 
+            /// over their underlying scalars. 
             ///
             /// Given a matrix `m`
             /// ```
@@ -208,14 +230,21 @@ exact_addition_props!(matrix4_u32_addition_props, Matrix4x4, u32, any_matrix4);
 exact_addition_props!(matrix4_i32_addition_props, Matrix4x4, i32, any_matrix4);
 
 
-/// Generate the properties for the multiplication of matrices of floating point scalars 
-/// by floating point scalars.
+/// Generate property tests for the multiplication of matrices of floating point 
+/// scalars by floating point scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$MatrixN` denotes the name of the matrix type.
-/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$MatrixN` denotes the name of the matrix type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of matrices.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! approx_scalar_multiplication_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -225,7 +254,8 @@ macro_rules! approx_scalar_multiplication_props {
         use cglinalg::{$MatrixN, Zero};
 
         proptest! {
-            /// Multiplication of matrices by scalars is compatible with matrix addition.
+            /// Multiplication of matrices by scalars is compatible with matrix 
+            /// addition.
             ///
             /// Given matrices `m1` and `m2`, and a scalar `c`
             /// ```
@@ -239,7 +269,8 @@ macro_rules! approx_scalar_multiplication_props {
                 prop_assert!(relative_eq!(c * (m1 + m2), c * m1 + c * m2, epsilon = $tolerance));
             }
 
-            /// Multiplication of matrices by scalars is compatible with matrix subtraction.
+            /// Multiplication of matrices by scalars is compatible with matrix 
+            /// subtraction.
             ///
             /// Given matrices `m1` and `m2`, and a scalar `c`
             /// ```
@@ -259,8 +290,9 @@ macro_rules! approx_scalar_multiplication_props {
             /// ```
             /// 0 * m = m * 0 = 0
             /// ```
-            /// Note that we diverge from traditional formalisms of matrix arithmetic in that we allow
-            /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
+            /// Note that we diverge from traditional formalisms of matrix arithmetic 
+            /// in that we allow multiplication of matrices by scalars on the right-hand 
+            /// side as well as left-hand side. 
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
@@ -275,8 +307,9 @@ macro_rules! approx_scalar_multiplication_props {
             /// ```
             /// 1 * m = m * 1 = m
             /// ```
-            /// Note that we diverge from traditional formalisms of matrix arithmetic in that we allow
-            /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
+            /// Note that we diverge from traditional formalisms of matrix arithmetic 
+            /// in that we allow multiplication of matrices by scalars on the right-hand 
+            /// side as well as left-hand side. 
             #[test]
             fn prop_one_times_matrix_equals_matrix(m in super::$Generator::<$ScalarType>()) {
                 let one: $ScalarType = num_traits::one();
@@ -284,15 +317,16 @@ macro_rules! approx_scalar_multiplication_props {
                 prop_assert_eq!(m * one, m);
             }
 
-            /// Multiplication of a matrix by a scalar negative one is the additive inverse of the 
-            /// original matrix.
+            /// Multiplication of a matrix by a scalar negative one is the additive 
+            /// inverse of the original matrix.
             ///
             /// Given a matrix `m` and a negative unit scalar `-1`
             /// ```
             /// (-1) * m = = m * (-1) = -m
             /// ```
-            /// Note that we diverge from traditional formalisms of matrix arithmetic in that we allow
-            /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
+            /// Note that we diverge from traditional formalisms of matrix arithmetic 
+            /// in that we allow multiplication of matrices by scalars on the right-hand 
+            /// side as well as left-hand side. 
             #[test]
             fn prop_negative_one_times_matrix_equals_negative_matrix(m in super::$Generator::<$ScalarType>()) {
                 let one: $ScalarType = num_traits::one();
@@ -306,9 +340,9 @@ macro_rules! approx_scalar_multiplication_props {
             /// ```
             /// c * m ~= m * c
             /// ```
-            /// Note that we diverse from traditional formalisms of matrix arithmetic in that we allow
-            /// multiplication of matrices by scalars on the left-hand side as well as the 
-            /// right-hand side.
+            /// Note that we diverse from traditional formalisms of matrix arithmetic 
+            /// in that we allow multiplication of matrices by scalars on the left-hand 
+            /// side as well as the right-hand side.
             #[test]
             fn prop_scalar_matrix_multiplication_commutative(
                 c in any::<$ScalarType>(), m in super::$Generator::<$ScalarType>()) {
@@ -325,14 +359,19 @@ approx_scalar_multiplication_props!(matrix3_f64_scalar_multiplication_props, Mat
 approx_scalar_multiplication_props!(matrix4_f64_scalar_multiplication_props, Matrix4x4, f64, any_matrix4, 1e-7);
 
 
-/// Generate the properties for the multiplication of matrices of integer scalars 
+/// Generate property tests for the multiplication of matrices of integer scalars 
 /// by integers.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$MatrixN` denotes the name of the matrix type.
-/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$MatrixN` denotes the name of the matrix type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of matrices.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_scalar_multiplication_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -341,7 +380,8 @@ macro_rules! exact_scalar_multiplication_props {
         use cglinalg::{$MatrixN, Zero};
 
         proptest! {
-            /// Multiplication of matrices by scalars is compatible with matrix addition.
+            /// Multiplication of matrices by scalars is compatible with matrix 
+            /// addition.
             ///
             /// Given matrices `m1` and `m2`, and a scalar `c`
             /// ```
@@ -355,7 +395,8 @@ macro_rules! exact_scalar_multiplication_props {
                 prop_assert_eq!(c * (m1 + m2), c * m1 + c * m2);
             }
 
-            /// Multiplication of matrices by scalars is compatible with matrix subtraction.
+            /// Multiplication of matrices by scalars is compatible with matrix 
+            /// subtraction.
             ///
             /// Given matrices `m1` and `m2`, and a scalar `c`
             /// ```
@@ -375,8 +416,9 @@ macro_rules! exact_scalar_multiplication_props {
             /// ```
             /// 0 * m = m * 0 = 0
             /// ```
-            /// Note that we diverge from tradition formalisms of matrix arithmetic in that we allow
-            /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
+            /// Note that we diverge from tradition formalisms of matrix arithmetic 
+            /// in that we allow multiplication of matrices by scalars on the right-hand 
+            /// side as well as left-hand side. 
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
@@ -391,8 +433,9 @@ macro_rules! exact_scalar_multiplication_props {
             /// ```
             /// 1 * m = m * 1 = m
             /// ```
-            /// Note that we diverge from tradition formalisms of matrix arithmetic in that we allow
-            /// multiplication of matrices by scalars on the right-hand side as well as left-hand side. 
+            /// Note that we diverge from tradition formalisms of matrix arithmetic 
+            /// in that we allow multiplication of matrices by scalars on the right-hand 
+            /// side as well as left-hand side. 
             #[test]
             fn prop_one_times_matrix_equals_matrix(m in super::$Generator::<$ScalarType>()) {
                 let one: $ScalarType = num_traits::one();
@@ -406,9 +449,9 @@ macro_rules! exact_scalar_multiplication_props {
             /// ```
             /// c * m = m * c
             /// ```
-            /// Note that we diverse from traditional formalisms of matrix arithmetic in that we allow
-            /// multiplication of matrices by scalars on the left-hand side as well as the 
-            /// right-hand side.
+            /// Note that we diverse from traditional formalisms of matrix arithmetic 
+            /// in that we allow multiplication of matrices by scalars on the left-hand 
+            /// side as well as the right-hand side.
             #[test]
             fn prop_scalar_matrix_multiplication_commutative(
                 c in any::<$ScalarType>(), m in super::$Generator::<$ScalarType>()) {
@@ -428,13 +471,21 @@ exact_scalar_multiplication_props!(matrix4_u32_scalar_multiplication_props, Matr
 exact_scalar_multiplication_props!(matrix4_i32_scalar_multiplication_props, Matrix4x4, i32, any_matrix4);
 
 
-/// Generate the properties for the multiplication of matrices of floating point scalars.
+/// Generate property tests for the multiplication of matrices of floating 
+/// point scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$MatrixN` denotes the name of the matrix type.
-/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$MatrixN` denotes the name of the matrix type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of matrices.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! approx_multiplication_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -500,7 +551,8 @@ macro_rules! approx_multiplication_props {
                 prop_assert!(relative_eq!((c1 * c2) * m, c1 * (c2 * m), epsilon = $tolerance));
             }
 
-            /// Matrices over a set of floating point scalars have a multiplicative identity.
+            /// Matrices over a set of floating point scalars have a 
+            /// multiplicative identity.
             /// 
             /// Given a matrix `m` there is a matrix `identity` such that
             /// ```
@@ -522,13 +574,19 @@ approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3x3,
 approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4x4, f64, any_matrix4, 1e-7);
 
 
-/// Generate the properties for the multiplication of matrices of floating point scalars.
+/// Generate property tests for the multiplication of matrices of floating 
+/// point scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$MatrixN` denotes the name of the matrix type.
-/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$MatrixN` denotes the name of the matrix type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of matrices.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_multiplication_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -593,7 +651,8 @@ macro_rules! exact_multiplication_props {
                 prop_assert_eq!((c1 * c2) * m, c1 * (c2 * m));
             }
 
-            /// Matrices over a set of floating point scalars have a multiplicative identity.
+            /// Matrices over a set of floating point scalars have a 
+            /// multiplicative identity.
             /// 
             /// Given a matrix `m` there is a matrix `identity` such that
             /// ```
@@ -618,13 +677,21 @@ exact_multiplication_props!(matrix4_u32_matrix_multiplication_props, Matrix4x4, 
 exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4x4, i32, any_matrix4);
 
 
-/// Generate the properties for the transposition of matrices over floating point scalars.
+/// Generate property tests for the transposition of matrices over floating 
+/// point scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$MatrixN` denotes the name of the matrix type.
-/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each field type to prevent 
+///    namespace collisions.
+/// * `$MatrixN` denotes the name of the matrix type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of matrices.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! approx_transposition_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -657,7 +724,8 @@ macro_rules! approx_transposition_props {
                 prop_assert_eq!((m1 + m2).transpose(), m1.transpose() + m2.transpose());
             }
 
-            /// Scalar multiplication of a matrix and a scalar commutes with transposition.
+            /// Scalar multiplication of a matrix and a scalar commutes with 
+            /// transposition.
             /// 
             /// Given a matrix `m` and a scalar `c`
             /// ```
@@ -670,8 +738,8 @@ macro_rules! approx_transposition_props {
                 prop_assert_eq!((c * m).transpose(), c * m.transpose());
             }
 
-            /// The transpose of the product of two matrices equals the product of the transposes
-            /// of the two matrices swapped.
+            /// The transpose of the product of two matrices equals the product 
+            /// of the transposes of the two matrices swapped.
             /// 
             /// Given matrices `m1` and `m2`
             /// ```
@@ -693,13 +761,19 @@ approx_transposition_props!(matrix3_f64_transposition_props, Matrix3, f64, any_m
 approx_transposition_props!(matrix4_f64_transposition_props, Matrix4, f64, any_matrix4, 1e-7);
 
 
-/// Generate the properties for the transposition of matrices over floating point scalars.
+/// Generate property tests for the transposition of matrices over floating 
+/// point scalars.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$MatrixN` denotes the name of the matrix type.
-/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$MatrixN` denotes the name of the matrix type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of matrices.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_transposition_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -771,13 +845,18 @@ exact_transposition_props!(matrix4_u32_transposition_props, Matrix4, u32, any_ma
 exact_transposition_props!(matrix4_i32_transposition_props, Matrix4, i32, any_matrix4);
 
 
-/// Generate the properties for the sqap operations on matrices.
+/// Generate property tests for the swap operations on matrices.
 ///
-/// `$TestModuleName` is a name we give to the module we place the properties in to separate them
-///  from each other for each field type to prevent namespace collisions.
-/// `$MatrixN` denotes the name of the matrix type.
-/// `$ScalarType` denotes the underlying system of numbers that compose the matrices.
-/// `$Generator` is the name of a function or closure for generating examples.
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$MatrixN` denotes the name of the matrix type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of matrices.
+/// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! swap_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
     #[cfg(test)]
@@ -821,7 +900,8 @@ macro_rules! swap_props {
                 prop_assert_eq!(m1, m);
             }
 
-            /// Swapping the same two rows twice in succession yields the original matrix.
+            /// Swapping the same two rows twice in succession yields the original 
+            /// matrix.
             ///
             /// Given a matrix `m`, and rows `row1` and `row2`
             /// ```
@@ -874,7 +954,8 @@ macro_rules! swap_props {
                 prop_assert_eq!(m1, m);
             }
 
-            /// Swapping the same two columns twice in succession yields the original matrix.
+            /// Swapping the same two columns twice in succession yields the 
+            /// original matrix.
             ///
             /// Given a matrix `m`, and columns `col1` and `col2`
             /// ```
@@ -929,7 +1010,8 @@ macro_rules! swap_props {
                 prop_assert_eq!(m1, m);
             }
 
-            /// Swapping the same two elements twice in succession yields the original matrix.
+            /// Swapping the same two elements twice in succession yields the 
+            /// original matrix.
             ///
             /// Given a matrix `m`, and elements `(col1, row1)` and `(col2, row2)`
             /// ```

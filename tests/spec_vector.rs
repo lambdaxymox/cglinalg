@@ -47,7 +47,8 @@ fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
 /// * `$TestModuleName` is a name we give to the module we place the tests in to separate them
 ///    from each other for each field type to prevent namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
-/// * `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$UpperBound` denotes the upperbound on the range of acceptable indices.
 macro_rules! index_props {
@@ -103,7 +104,8 @@ index_props!(vector4_f64_index_props, Vector4, f64, any_vector4, 4);
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
-/// * `$ScalarType` denotes the underlying system of numbers that compose `$VectorN`.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_arithmetic_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
@@ -221,7 +223,7 @@ exact_arithmetic_props!(vector4_u32_arithmetic_props, Vector4, u32, any_vector4)
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
@@ -337,7 +339,7 @@ approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4);
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_add_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
@@ -450,7 +452,7 @@ exact_add_props!(vector4_u32_add_props, Vector4, u32, any_vector4);
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
@@ -536,7 +538,7 @@ approx_sub_props!(vector4_f64_sub_props, Vector4, f64, any_vector4);
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_sub_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
@@ -623,13 +625,13 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 ///
-/// We use approximate comparisons because arithmetic is not exact over finite p
-/// recision floating point scalar types.
+/// We use approximate comparisons because arithmetic is not exact over finite
+/// precision floating point scalar types.
 macro_rules! magnitude_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
@@ -734,10 +736,10 @@ magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, 1e-7);
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that define a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
 /// precision floating point scalar types.
@@ -826,7 +828,7 @@ approx_mul_props!(vector4_f64_mul_props, Vector4, f64, any_vector4, 1e-7);
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_mul_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
@@ -905,7 +907,7 @@ exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
@@ -1012,7 +1014,7 @@ approx_distributive_props!(vector4_f64_distributive_props, Vector4, f64, any_vec
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_distributive_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
@@ -1111,10 +1113,11 @@ exact_distributive_props!(vector4_u32_distributive_props, Vector4, u32, any_vect
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the vectors.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
 /// precision floating point scalar types.
@@ -1258,7 +1261,7 @@ approx_dot_product_props!(vector4_f64_dot_product_props, Vector4, f64, any_vecto
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_dot_product_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
@@ -1310,7 +1313,8 @@ macro_rules! exact_dot_product_props {
                 prop_assert_eq!((u + v).dot(w), u.dot(w) + v.dot(w));
             }
 
-            /// The dot product of vectors over integer scalars is commutative with scalars.
+            /// The dot product of vectors over integer scalars is commutative 
+            /// with scalars.
             ///
             /// Given vectors `v` and `w`, and scalars `a` and `b`
             /// ```text
@@ -1378,10 +1382,11 @@ exact_dot_product_props!(vector4_u32_dot_product_props, Vector4, u32, any_vector
 /// * `$TestModuleName` is a name we give to the module we place the property tests
 ///    in to separate them from each other for each field type to prevent 
 ///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the vectors.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
 /// precision floating point scalar types.
@@ -1488,11 +1493,8 @@ approx_cross_product_props!(vector3_f64_cross_product_props, f64, any_vector3, 1
 ///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    vectors.
+///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-///
-/// We use approximate comparisons because arithmetic is not exact over finite 
-/// precision floating point scalar types.
 macro_rules! exact_cross_product_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]

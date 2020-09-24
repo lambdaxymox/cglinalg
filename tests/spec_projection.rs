@@ -136,10 +136,8 @@ fn any_orthographic_projection<S>() -> impl Strategy<Value = OrthographicProject
 /// * `$VecGen` is the name of a function or closure for generating vector 
 ///    examples.
 /// * `$PointGen` is the name of a function for generating point examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation. We cannot 
-///    guarantee floating point computations will be exact since the underlying 
-///    floating point arithmetic is not exact.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! perspective_projection_props {
     ($TestModuleName:ident, $ScalarType:ty, $ProjGen:ident, $VecGen:ident, $PointGen:ident, $tolerance:expr) => {
         #[cfg(test)]
@@ -273,10 +271,8 @@ perspective_projection_props!(
 /// * `$VecGen` is the name of a function or closure for generating vector 
 ///    examples.
 /// * `$PointGen` is the name of a function for generating point examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation. We cannot 
-///    guarantee floating point computations will be exact since the underlying 
-///    floating point arithmetic is not exact.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! orthographic_projection_props {
     ($TestModuleName:ident, $ScalarType:ty, $ProjGen:ident, $VecGen:ident, $PointGen:ident, $tolerance:expr) => {
         #[cfg(test)]

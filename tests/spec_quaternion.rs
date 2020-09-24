@@ -199,8 +199,8 @@ exact_arithmetic_props!(quaternion_u32_arithmetic_props, u32, any_quaternion);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
 /// precision floating point scalar types.
@@ -427,8 +427,8 @@ exact_add_props!(quaternion_u32_add_props, u32, any_quaternion);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the floating 
-///    point computations that defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
 /// precision floating point scalar types.
@@ -593,8 +593,8 @@ exact_sub_props!(quaternion_u32_sub_props, u32, any_quaternion);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
 /// precision floating point scalar types.
@@ -696,8 +696,7 @@ macro_rules! approx_mul_props {
             /// ```
             /// Note that quaternion algebra over floating point scalars is not 
             /// commutative because multiplication of the underlying scalars is 
-            /// not commutative. As a result, we can only guarantee an appoximate 
-            /// equality.
+            /// not commutative.
             #[test]
             fn prop_quaternion_multiplicative_inverse(q in super::$Generator::<$ScalarType>()) {
                 prop_assume!(q.is_finite());
@@ -857,8 +856,8 @@ exact_mul_props!(quaternion_u32_mul_props, u32, any_quaternion);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that still defines a correct computation. 
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
 /// precision floating point scalar types.
@@ -1107,8 +1106,8 @@ exact_distributive_props!(quaternion_u32_distributive_props, u32, any_quaternion
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 ///
 /// We use approximate comparisons because arithmetic is not exact over finite 
 /// precision floating point scalar types.
@@ -1430,8 +1429,8 @@ conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! magnitude_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
@@ -1536,8 +1535,8 @@ magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, 1e-7);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! slerp_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
@@ -1596,8 +1595,8 @@ slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, 1e-7);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the highest amount of acceptable error in the 
-///    floating point computations that still defines a correct computation.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! exp_log_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
