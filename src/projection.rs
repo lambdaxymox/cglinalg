@@ -492,6 +492,200 @@ impl<S> approx::UlpsEq for PerspectiveProjection3D<S>
 }
 
 
+/// A perspective projection tranformation for converting from camera space to
+/// normalized device coordinates based on the perspective fov model.
+///
+/// Orthographic projections differ from perspective projections because
+/// orthographic projections keeps parallel lines parallel, whereas perspective 
+/// projections preserve the perception of distance. Perspective 
+/// projections preserve the spatial ordering of points in the distance they 
+/// are located from the viewing plane. This property of perspective projection 
+/// transformations is important for operations such as z-buffering and 
+/// occlusion detection.
+#[derive(Copy, Clone, PartialEq, Debug)]
+pub struct PerspectiveFovProjection3D<S> {
+    /// The parameters of the perspective projection.
+    spec: PerspectiveFovSpec<S>,
+    /// The underlying matrix implementing the perspective projection.
+    matrix: Matrix4x4<S>,
+}
+
+impl<S> PerspectiveFovProjection3D<S> 
+    where S: ScalarFloat
+{
+    /// Construct a new perspective projection transformation.
+    pub fn new(spec: PerspectiveFovSpec<S>) -> PerspectiveFovProjection3D<S> {
+        PerspectiveFovProjection3D {
+            spec: spec,
+            matrix: spec.into(),
+        }
+    }
+
+    /// Get the specification describing the perspective projection.
+    pub fn spec(&self) -> PerspectiveFovSpec<S> {
+        self.spec
+    }
+
+    /// Get the matrix that implements the perspective projection transformation.
+    pub fn to_matrix(&self) -> &Matrix4x4<S> {
+        &self.matrix
+    }
+
+    /// Apply the transformation to a point.
+    pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    /// Apply the transformation to a vector.
+    pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        let projected_vector = self.matrix * vector.expand(S::one());
+        let one_div_w = S::one() / projected_vector.w;
+        
+        (projected_vector * one_div_w).contract()
+    }
+
+    /// Unproject a point from normalized device coordinates back to camera
+    /// view space. 
+    /// 
+    /// This is the inverse operation of `project_point`.
+    pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
+        let spec: PerspectiveSpec<S> = self.spec.into();
+        let zero = S::zero();
+        let one  = S::one();
+        let two = one + one;
+        
+        let c0r0 =  (spec.right - spec.left) / (two * spec.near);
+        let c0r1 =  zero;
+        let c0r2 =  zero;
+        let c0r3 =  zero;
+
+        let c1r0 =  zero;
+        let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
+        let c1r2 =  zero;
+        let c1r3 =  zero;
+
+        let c2r0 =  zero;
+        let c2r1 =  zero;
+        let c2r2 =  zero;
+        let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
+        
+        let c3r0 =  (spec.left + spec.right) / (two * spec.near);
+        let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        let c3r2 = -one;
+        let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        
+        let matrix_inverse = Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        );
+
+        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous())
+    }
+
+    /// Unproject a vector from normalized device coordinates back to
+    /// camera view space. 
+    ///
+    /// This is the inverse operation of `project_vector`.
+    pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        let spec: PerspectiveSpec<S> = self.spec.into();
+        let zero = S::zero();
+        let one  = S::one();
+        let two = one + one;
+        
+        let c0r0 =  (spec.right - spec.left) / (two * spec.near);
+        let c0r1 =  zero;
+        let c0r2 =  zero;
+        let c0r3 =  zero;
+
+        let c1r0 =  zero;
+        let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
+        let c1r2 =  zero;
+        let c1r3 =  zero;
+
+        let c2r0 =  zero;
+        let c2r1 =  zero;
+        let c2r2 =  zero;
+        let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
+        
+        let c3r0 =  (spec.left + spec.right) / (two * spec.near);
+        let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        let c3r2 = -one;
+        let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        
+        let matrix_inverse = Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        );
+        
+        let projected_vector = vector.expand(S::one());
+        let unprojected_vector = matrix_inverse * projected_vector;
+        
+        unprojected_vector.contract() * (S::one() / unprojected_vector.w)
+    }
+}
+
+impl<S> AsRef<Matrix4x4<S>> for PerspectiveFovProjection3D<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix4x4<S> {
+        &self.matrix
+    }
+}
+
+impl<S> fmt::Display for PerspectiveFovProjection3D<S> 
+    where S: fmt::Debug + fmt::Display 
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <Self as fmt::Debug>::fmt(&self, f)
+    }
+}
+
+impl<S> approx::AbsDiffEq for PerspectiveFovProjection3D<S> 
+    where S: ScalarFloat
+{
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for PerspectiveFovProjection3D<S> where 
+    S: ScalarFloat  
+{
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for PerspectiveFovProjection3D<S> where 
+    S: ScalarFloat
+{
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
 
 
 /// An orthographic projection transformation for converting from camera space to

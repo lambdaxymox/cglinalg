@@ -7,6 +7,7 @@ use cglinalg::{
     PerspectiveFovSpec,
     PerspectiveSpec,
     PerspectiveProjection3D,
+    PerspectiveFovProjection3D,
     Matrix4x4,
     Degrees,
     Point3,
@@ -56,7 +57,7 @@ fn test_perspective_projection_transformation() {
 
     assert_eq!(result.to_matrix(), &expected);
 }
-/*
+
 #[test]
 fn test_perspective_projection_fov_matrix() {
     let fovy = Degrees(72.0);
@@ -88,7 +89,7 @@ fn test_perspective_projection_fov_transformation() {
         0.0,       0.0,       -1.002002, -1.0, 
         0.0,       0.0,       -0.2002002, 0.0
     );
-    let result = PerspectiveProjection3D::new(spec);
+    let result = PerspectiveFovProjection3D::new(spec);
 
     assert_eq!(result.to_matrix(), &expected);
 }
@@ -101,7 +102,7 @@ fn test_perspective_projection_unproject_point1() {
     let far = 100.0;
     let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
     let point = Point3::new(-2.0, 2.0, -50.0);
-    let projection = PerspectiveProjection3D::new(spec);
+    let projection = PerspectiveFovProjection3D::new(spec);
     let expected = point;
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -117,14 +118,14 @@ fn test_perspective_projection_unproject_vector1() {
     let far = 100.0;
     let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
     let vector = Vector3::new(-2.0, 2.0, -50.0);
-    let projection = PerspectiveProjection3D::new(spec);
+    let projection = PerspectiveFovProjection3D::new(spec);
     let expected = vector;
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
     assert!(relative_eq!(result, expected, epsilon = 1e-8));
 }
-*/
+
 #[test]
 fn test_perspective_projection_unproject_point2() {
     let left = -4.0;
