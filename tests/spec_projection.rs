@@ -4,10 +4,13 @@ extern crate proptest;
 
 
 use cglinalg::{
+    Degrees,
     Vector3,
     Point3,
     PerspectiveSpec,
+    PerspectiveFovSpec,
     PerspectiveProjection3D,
+    PerspectiveFovProjection3D,
     OrthographicSpec,
     OrthographicProjection3D,
     ScalarFloat,
@@ -28,6 +31,34 @@ fn any_point3<S>() -> impl Strategy<Value = Point3<S>>
 {
     any::<(S, S, S)>()
         .prop_map(|(x, y, z)| Point3::new(x, y, z))
+}
+
+fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFovProjection3D<S>> 
+    where S: ScalarFloat + Arbitrary
+{
+    any::<(S, S, S, S)>()
+        .prop_filter("", |(fovy, aspect, near, far)| {
+            fovy.is_finite()   &&
+            aspect.is_finite()  &&
+            near.is_finite()   &&
+            far.is_finite()
+        })
+        .prop_map(|(fovy, aspect, near, far)| {
+            (S::abs(fovy), S::abs(aspect), S::abs(near), S::abs(far))
+        })    
+        .prop_map(|(fovy, aspect, near, far)| {
+            let (spec_near, spec_far) = if near > far {
+                (far, near)
+            } else {
+                (near, far)
+            };
+            let spec = PerspectiveFovSpec::new(
+                Degrees(fovy), aspect, spec_near, spec_far
+            );
+
+            PerspectiveFovProjection3D::new(spec)
+        })
+        .no_shrink()
 }
 
 fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjection3D<S>> 
@@ -251,6 +282,14 @@ perspective_projection_props!(
     perspective_f64_props, 
     f64, 
     any_perspective_projection, 
+    any_vector3, 
+    any_point3, 
+    1e-7
+);
+perspective_projection_props!(
+    perspective_fov_f64_props, 
+    f64, 
+    any_perspective_fov_projection, 
     any_vector3, 
     any_point3, 
     1e-7
