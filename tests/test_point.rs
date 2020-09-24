@@ -69,14 +69,14 @@ mod point1_tests {
     }
 
     #[test]
-    fn test_vector_times_zero_equals_zero() {
+    fn test_point_times_zero_equals_zero() {
         let p = Point1::new(1_f32);
 
         assert_eq!(p * 0_f32, Point1::new(0_f32));
     }
 
     #[test]
-    fn test_zero_times_vector_equals_zero() {
+    fn test_zero_times_point_equals_zero() {
         let p = Point1::new(1_f32);
 
         assert_eq!(0_f32 * p, Point1::new(0_f32));
@@ -107,14 +107,14 @@ mod point1_tests {
     }
 
     #[test]
-    fn test_zero_vector_zero_magnitude() {
+    fn test_zero_point_zero_magnitude() {
         let zero: Point1<f32> = Point1::new(0_f32);
 
         assert_eq!(zero.magnitude(), 0_f32);
     }
 
     #[test]
-    fn test_vector_index_matches_component() {
+    fn test_point_index_matches_component() {
         let p = Point1::new(1);
 
         assert_eq!(p.x, p[0]);

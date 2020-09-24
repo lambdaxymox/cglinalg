@@ -8,8 +8,7 @@ for developing computer graphics applications.
 The design of the library has the following goals in mind:
 * **Ergonomics** -- The system should be easy to understand and use. The types 
   and the language of the documentation are designed to be understandable to 
-  working graphics programmers. The main prerequisite for understanding the 
-  library documentation is elementary linear algebra. 
+  working graphics programmers.
 * **Cross Platform** -- It should be portable to other ecosystems like 
   other C/C++ and Rust libraries. Every data type can be treated like a 
   fixed-sized array so they can be sent to across FFI boundaries.
@@ -77,7 +76,7 @@ The library has design limitations for a number of reasons.
 * `cglinalg` is a low-dimensional library; it can only do linear algebra up to 
   dimensional four. If one needs high-dimensional transformations, there are other 
   libraries fit to the task rather than this one. This library is not a replacement
-  for `numpy`, BLAS, or LAPACK. It is a counterpart to `DirectXMath` or `glm`.
+  for `numpy`, BLAS, or LAPACK. It is a Rust counterpart to `DirectXMath` or `glm`.
 * The library is designed specifically with graphics applications in mind, which 
   tend to be mathematically simpler than other modeling and simulation applications. 
   As a consequence this library does not support most of the operations commonly used 
