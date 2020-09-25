@@ -10,10 +10,25 @@ use cglinalg::{
 };
 
 
+fn any_scalar<S>() -> impl Strategy<Value = S>
+    where S: Scalar + Arbitrary
+{
+    any::<S>().prop_map(|scalar| {
+        let modulus = num_traits::cast(1_000_000).unwrap();
+
+        scalar % modulus
+    })
+}
+
 fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
     where S: Scalar + Arbitrary
 {
-    any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| Quaternion::new(x, y, z, w))
+    any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
+        let modulus = num_traits::cast(1_000_000).unwrap();
+        let quaternion = Quaternion::new(x, y, z, w);
+
+        quaternion % modulus
+    })
 }
 
 fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
@@ -122,6 +137,7 @@ macro_rules! exact_arithmetic_props {
             fn prop_zero_times_quaternion_equals_zero(q in $Generator()) {
                 let zero: $ScalarType = num_traits::zero();
                 let zero_quat = Quaternion::zero();
+
                 prop_assert_eq!(zero * q, zero_quat);
             }
         
@@ -135,6 +151,7 @@ macro_rules! exact_arithmetic_props {
             fn prop_quaternion_times_zero_equals_zero(q in $Generator()) {
                 let zero: $ScalarType = num_traits::zero();
                 let zero_quat = Quaternion::zero();
+
                 prop_assert_eq!(q * zero, zero_quat);
             }
 
@@ -148,6 +165,7 @@ macro_rules! exact_arithmetic_props {
             #[test]
             fn prop_quaternion_plus_zero_equals_quaternion(q in $Generator()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(q + zero_quat, q);
             }
 
@@ -161,6 +179,7 @@ macro_rules! exact_arithmetic_props {
             #[test]
             fn prop_zero_plus_quaternion_equals_quaternion(q in $Generator()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(zero_quat + q, q);
             }
 
@@ -174,6 +193,7 @@ macro_rules! exact_arithmetic_props {
             #[test]
             fn prop_one_times_quaternion_equal_quaternion(q in $Generator()) {
                 let one: $ScalarType = num_traits::one();
+
                 prop_assert_eq!(one * q, q);
             }
 
@@ -187,6 +207,7 @@ macro_rules! exact_arithmetic_props {
             #[test]
             fn prop_quaternion_times_one_equals_quaternion(v in $Generator()) {
                 let one: $ScalarType = num_traits::one();
+
                 prop_assert_eq!(one * v, v);
             }
         }
@@ -239,6 +260,7 @@ macro_rules! approx_add_props {
             #[test]
             fn prop_quaternion_plus_zero_equals_quaternion(q in $Generator()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(q + zero_quat, q);
             }
 
@@ -251,6 +273,7 @@ macro_rules! approx_add_props {
             #[test]
             fn prop_zero_plus_quaternion_equals_quaternion(q in $Generator()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(zero_quat + q, q);
             }
 
@@ -295,9 +318,8 @@ macro_rules! approx_add_props {
             #[test]
             fn prop_quaternion_addition_almost_commutative(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-                
-                let zero: Quaternion<$ScalarType> = Zero::zero();
-                prop_assert_eq!((q1 + q2) - (q2 + q1), zero);
+
+                prop_assert!(relative_eq!(q1 + q2, q2 + q1, epsilon = $tolerance));
             }
 
             /// Quaternion addition over floating point scalars should be 
@@ -360,6 +382,7 @@ macro_rules! exact_add_props {
             #[test]
             fn prop_quaternion_plus_zero_equals_quaternion(q in $Generator()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(q + zero_quat, q);
             }
 
@@ -372,6 +395,7 @@ macro_rules! exact_add_props {
             #[test]
             fn prop_zero_plus_quaternion_equals_quaternion(q in $Generator()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(zero_quat + q, q);
             }
 
@@ -414,6 +438,7 @@ macro_rules! exact_add_props {
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
                 
                 let zero = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!((q1 + q2) - (q2 + q1), zero);
             }
 
@@ -478,6 +503,7 @@ macro_rules! approx_sub_props {
             #[test]
             fn prop_quaternion_minus_zero_equals_quaternion(q in $Generator()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(q - zero_quat, q);
             }
 
@@ -490,6 +516,7 @@ macro_rules! approx_sub_props {
             #[test]
             fn prop_quaternion_minus_quaternion_equals_zero(q in $Generator::<$ScalarType>()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(q - q, zero_quat);
                 prop_assert_eq!((-q) + q, zero_quat);
                 prop_assert_eq!(q + (-q), zero_quat);
@@ -565,6 +592,7 @@ macro_rules! exact_sub_props {
             #[test]
             fn prop_quaternion_minus_zero_equals_quaternion(q in $Generator()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(q - zero_quat, q);
             }
 
@@ -577,6 +605,7 @@ macro_rules! exact_sub_props {
             #[test]
             fn prop_quaternion_minus_quaternion_equals_zero(q in $Generator::<$ScalarType>()) {
                 let zero_quat = Quaternion::<$ScalarType>::zero();
+
                 prop_assert_eq!(q - q, zero_quat);
             }
 
@@ -631,7 +660,7 @@ exact_sub_props!(quaternion_u32_sub_props, u32, any_quaternion);
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_mul_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -643,6 +672,7 @@ macro_rules! approx_mul_props {
         };
         use super::{
             $Generator,
+            $ScalarGen,
         };
 
 
@@ -659,7 +689,7 @@ macro_rules! approx_mul_props {
             /// commutative.
             #[test]
             fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
-                c in any::<$ScalarType>(), q in $Generator::<$ScalarType>()) {
+                c in $ScalarGen::<$ScalarType>(), q in $Generator::<$ScalarType>()) {
                 
                 prop_assume!(c.is_finite());
                 prop_assume!(q.is_finite());
@@ -682,7 +712,7 @@ macro_rules! approx_mul_props {
             /// scalars is not associative. 
             #[test]
             fn prop_scalar_multiplication_compatability(
-                a in any::<$ScalarType>(), b in any::<$ScalarType>(), q in $Generator::<$ScalarType>()) {
+                a in $ScalarGen::<$ScalarType>(), b in any::<$ScalarType>(), q in $Generator::<$ScalarType>()) {
 
                 prop_assume!((a * (b * q)).is_finite());
                 prop_assume!(((a * b) * q).is_finite());
@@ -702,8 +732,8 @@ macro_rules! approx_mul_props {
             #[test]
             fn prop_quaternion_multiplication_associative(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>(), 
-                q3 in $Generator::<$ScalarType>()
-            ) {
+                q3 in $Generator::<$ScalarType>()) {
+
                 prop_assume!((q1 * (q2 * q3)).is_finite());
                 prop_assume!(((q1 * q2) * q3).is_finite());
                 prop_assert!(relative_eq!(q1 * (q2 * q3), (q1 * q2) * q3, epsilon = $tolerance));
@@ -718,6 +748,7 @@ macro_rules! approx_mul_props {
             #[test]
             fn prop_quaternion_multiplicative_unit(q in $Generator::<$ScalarType>()) {
                 let one = Quaternion::identity();
+
                 prop_assert_eq!(q * one, q);
                 prop_assert_eq!(one * q, q);
                 prop_assert_eq!(q * one, one * q);
@@ -740,6 +771,7 @@ macro_rules! approx_mul_props {
 
                 let one = Quaternion::identity();
                 let q_inv = q.inverse().unwrap();
+
                 prop_assert!(relative_eq!(q * q_inv, one, epsilon = $tolerance));
                 prop_assert!(relative_eq!(q_inv * q, one, epsilon = $tolerance));
             }
@@ -787,7 +819,7 @@ macro_rules! approx_mul_props {
     }
 }
 
-approx_mul_props!(quaternion_f64_mul_props, f64, any_quaternion, 1e-7);
+approx_mul_props!(quaternion_f64_mul_props, f64, any_quaternion, any_scalar, 1e-7);
 
 
 /// Generate property tests for quaternion multiplication over exact scalars.
@@ -899,7 +931,7 @@ exact_mul_props!(quaternion_u32_mul_props, u32, any_quaternion);
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_distributive_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -911,6 +943,7 @@ macro_rules! approx_distributive_props {
         };
         use super::{
             $Generator,
+            $ScalarGen,
         };
 
     
@@ -924,7 +957,7 @@ macro_rules! approx_distributive_props {
             /// ```
             #[test]
             fn prop_distribution_over_quaternion_addition(
-                a in any::<$ScalarType>(), 
+                a in $ScalarGen::<$ScalarType>(), 
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
                 
                 prop_assume!((a * (q1 + q2)).is_finite());
@@ -941,7 +974,7 @@ macro_rules! approx_distributive_props {
             /// ```
             #[test]
             fn prop_distribution_over_scalar_addition(
-                a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
+                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), 
                 q in $Generator::<$ScalarType>()) {
     
                 prop_assume!(((a + b) * q).is_finite());
@@ -958,7 +991,7 @@ macro_rules! approx_distributive_props {
             /// ```
             #[test]
             fn prop_distribution_over_quaternion_addition1(
-                a in any::<$ScalarType>(), 
+                a in $ScalarGen::<$ScalarType>(), 
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
                     
                 prop_assume!(((q1 + q2) * a).is_finite());
@@ -975,7 +1008,7 @@ macro_rules! approx_distributive_props {
             /// ```
             #[test]
             fn prop_distribution_over_scalar_addition1(
-                a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
+                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), 
                 q in $Generator::<$ScalarType>()) {
     
                 prop_assume!((q * (a + b)).is_finite());
@@ -1021,7 +1054,7 @@ macro_rules! approx_distributive_props {
     }    
 }
 
-approx_distributive_props!(quaternion_f64_distributive_props, f64, any_quaternion, 1e-7);
+approx_distributive_props!(quaternion_f64_distributive_props, f64, any_quaternion, any_scalar, 1e-7);
 
 
 /// Generate property tests for quaternion distribution over exact scalars.
@@ -1158,7 +1191,7 @@ exact_distributive_props!(quaternion_u32_distributive_props, u32, any_quaternion
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_dot_product_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1170,6 +1203,7 @@ macro_rules! approx_dot_product_props {
         };
         use super::{
             $Generator,
+            $ScalarGen,
         };
 
     
@@ -1237,7 +1271,7 @@ macro_rules! approx_dot_product_props {
             /// ```
             #[test]
             fn prop_quaternion_dot_product_times_scalars_commutative(
-                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(),
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
 
                 prop_assume!((a * q1).dot(b * q2).is_finite());
@@ -1254,7 +1288,7 @@ macro_rules! approx_dot_product_props {
             /// ```
             #[test]
             fn prop_quaternion_dot_product_right_bilinear(
-                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(),
                 q1 in $Generator::<$ScalarType>(),
                 q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
 
@@ -1274,7 +1308,7 @@ macro_rules! approx_dot_product_props {
             /// ```
             #[test]
             fn prop_quaternion_dot_product_left_bilinear(
-                a in any::<$ScalarType>(), b in any::<$ScalarType>(),
+                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(),
                 q1 in $Generator::<$ScalarType>(),
                 q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
 
@@ -1289,7 +1323,7 @@ macro_rules! approx_dot_product_props {
     }
 }
 
-approx_dot_product_props!(quaternion_f64_dot_product_props, f64, any_quaternion, 1e-7);
+approx_dot_product_props!(quaternion_f64_dot_product_props, f64, any_quaternion, any_scalar, 1e-7);
 
 
 /// Generate property tests for quaternion dot products over integer scalars.
@@ -1426,10 +1460,13 @@ exact_dot_product_props!(quaternion_u32_dot_product_props, u32, any_quaternion);
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! conjugation_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
+        use cglinalg::approx::{
+            relative_eq,
+        };
         use super::{
             $Generator,
         };
@@ -1457,7 +1494,9 @@ macro_rules! conjugation_props {
             fn prop_quaternion_conjugation_linear(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!((q1 + q2).conjugate(), q1.conjugate() + q2.conjugate());
+                prop_assert!(
+                    relative_eq!((q1 + q2).conjugate(), q1.conjugate() + q2.conjugate(), epsilon = $tolerance)
+                );
             }
 
             /// Quaternion multiplication transposes under conjugation.
@@ -1470,14 +1509,16 @@ macro_rules! conjugation_props {
             fn prop_quaternion_conjugation_transposes_products(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!((q1 * q2).conjugate(), q2.conjugate() * q1.conjugate());
+                prop_assert!(
+                    relative_eq!((q1 * q2).conjugate(), q2.conjugate() * q1.conjugate(), epsilon = $tolerance)
+                );
             } 
         }
     }
     }
 }
 
-conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion);
+conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion, 1e-7);
 
 
 /// Generate property tests for quaternion magnitudes.
@@ -1494,7 +1535,7 @@ conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion);
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! magnitude_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         use cglinalg::Magnitude;
@@ -1504,6 +1545,7 @@ macro_rules! magnitude_props {
         };
         use super::{
             $Generator,
+            $ScalarGen,
         };
 
 
@@ -1517,7 +1559,7 @@ macro_rules! magnitude_props {
             /// magnitude(c * q) = abs(c) * magnitude(q)
             /// ```
             fn prop_magnitude_preserves_scale(
-                q in $Generator::<$ScalarType>(), c in any::<$ScalarType>()) {
+                q in $Generator::<$ScalarType>(), c in $ScalarGen::<$ScalarType>()) {
                 
                 let abs_c = <$ScalarType as num_traits::Float>::abs(c);   
 
@@ -1591,7 +1633,7 @@ macro_rules! magnitude_props {
     }
 }
 
-magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, 1e-7);
+magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, any_scalar, 1e-7);
 
 
 /// Generate property tests for quaternion spherical linear interpolation (slerp).
@@ -1680,6 +1722,9 @@ macro_rules! exp_log_props {
             Zero,
             Identity
         };
+        use cglinalg::approx::{
+            relative_eq,
+        };
         use super::{
             $Generator,
         };
@@ -1694,7 +1739,7 @@ macro_rules! exp_log_props {
             /// ```
             #[test]
             fn prop_quaternion_conjugation_exp_commutes(q in $Generator::<$ScalarType>()) {
-                assert_eq!(q.exp().conjugate(), q.conjugate().exp());
+                prop_assert_eq!(q.exp().conjugate(), q.conjugate().exp());
             }
 
             /// The exponential of a quaternion is never zero.
@@ -1705,7 +1750,7 @@ macro_rules! exp_log_props {
             /// ```
             #[test]
             fn prop_quaternion_exp_nonzero(q in $Generator::<$ScalarType>()) {
-                assert!(q.exp() != Quaternion::zero());
+                prop_assert!(q.exp() != Quaternion::zero());
             }
 
             /// Every quaternion exponential has a multiplicative inverse.
@@ -1716,8 +1761,12 @@ macro_rules! exp_log_props {
             /// ```
             #[test]
             fn prop_quaternion_exp_inverse(q in $Generator::<$ScalarType>()) {
-                assert_eq!((-q).exp() * q.exp(), Quaternion::identity());
-                assert_eq!(q.exp() * (-q).exp(), Quaternion::identity());
+                prop_assert!(
+                    relative_eq!((-q).exp() * q.exp(), Quaternion::identity(), epsilon = $tolerance)
+                );
+                prop_assert!(
+                    relative_eq!(q.exp() * (-q).exp(), Quaternion::identity(), epsilon = $tolerance)
+                );
             }
 
             /// The quaternion logarithm is the inverse of the quaternion exponential.
@@ -1728,8 +1777,8 @@ macro_rules! exp_log_props {
             /// ```
             #[test]
             fn prop_quaternion_exp_log_inverses(q in $Generator::<$ScalarType>()) {
-                assert_eq!(q.ln().exp(), q);
-                assert_eq!(q.exp().ln(), q);
+                prop_assert!(relative_eq!(q.ln().exp(), q, epsilon = $tolerance));
+                prop_assert!(relative_eq!(q.exp().ln(), q, epsilon = $tolerance));
             }
         }
     }
