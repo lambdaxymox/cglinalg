@@ -20,6 +20,7 @@ use crate::traits::{
     Array,
     CrossProduct,
     DotProduct,
+    Finite,
     Identity, 
     Zero, 
     Matrix, 
@@ -982,6 +983,20 @@ impl<S> InvertibleSquareMatrix for Matrix2x2<S> where S: ScalarFloat {
                 inv_det * -self.c1r0, inv_det *  self.c0r0
             ))
         }
+    }
+}
+
+impl<S> Finite for Matrix2x2<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.c0r0.is_finite() && self.c0r1.is_finite() &&
+        self.c1r0.is_finite() && self.c1r1.is_finite()
+    }
+}
+
+impl<S> Finite for &Matrix2x2<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.c0r0.is_finite() && self.c0r1.is_finite() &&
+        self.c1r0.is_finite() && self.c1r1.is_finite()
     }
 }
 
@@ -2584,6 +2599,22 @@ impl<S> InvertibleSquareMatrix for Matrix3x3<S> where S: ScalarFloat {
                 inv_det * (self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0)
             ))
         }
+    }
+}
+
+impl<S> Finite for Matrix3x3<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.c0r0.is_finite() && self.c0r1.is_finite() && self.c0r2.is_finite() &&
+        self.c1r0.is_finite() && self.c1r1.is_finite() && self.c1r2.is_finite() &&
+        self.c2r0.is_finite() && self.c2r1.is_finite() && self.c2r2.is_finite()
+    }
+}
+
+impl<S> Finite for &Matrix3x3<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.c0r0.is_finite() && self.c0r1.is_finite() && self.c0r2.is_finite() &&
+        self.c1r0.is_finite() && self.c1r1.is_finite() && self.c1r2.is_finite() &&
+        self.c2r0.is_finite() && self.c2r1.is_finite() && self.c2r2.is_finite()
     }
 }
 
@@ -4646,6 +4677,32 @@ impl<S> InvertibleSquareMatrix for Matrix4x4<S> where S: ScalarFloat {
                 c3r0, c3r1, c3r2, c3r3
             ))
         }
+    }
+}
+
+impl<S> Finite for Matrix4x4<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.c0r0.is_finite() && self.c0r1.is_finite() && 
+        self.c0r2.is_finite() && self.c0r3.is_finite() &&
+        self.c1r0.is_finite() && self.c1r1.is_finite() && 
+        self.c1r2.is_finite() && self.c1r3.is_finite() &&
+        self.c2r0.is_finite() && self.c2r1.is_finite() && 
+        self.c2r2.is_finite() && self.c2r3.is_finite() &&
+        self.c3r0.is_finite() && self.c3r1.is_finite() &&
+        self.c3r2.is_finite() && self.c3r3.is_finite()
+    }
+}
+
+impl<S> Finite for &Matrix4x4<S> where S: ScalarFloat {
+    fn is_finite(self) -> bool {
+        self.c0r0.is_finite() && self.c0r1.is_finite() && 
+        self.c0r2.is_finite() && self.c0r3.is_finite() &&
+        self.c1r0.is_finite() && self.c1r1.is_finite() && 
+        self.c1r2.is_finite() && self.c1r3.is_finite() &&
+        self.c2r0.is_finite() && self.c2r1.is_finite() && 
+        self.c2r2.is_finite() && self.c2r3.is_finite() &&
+        self.c3r0.is_finite() && self.c3r1.is_finite() &&
+        self.c3r2.is_finite() && self.c3r3.is_finite()
     }
 }
 
