@@ -657,6 +657,7 @@ exact_sub_props!(quaternion_u32_sub_props, u32, any_quaternion);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_mul_props {
@@ -916,6 +917,7 @@ exact_mul_props!(quaternion_u32_mul_props, u32, any_quaternion);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_distributive_props {
@@ -1176,6 +1178,7 @@ exact_distributive_props!(quaternion_u32_distributive_props, u32, any_quaternion
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_dot_product_props {
@@ -1520,6 +1523,7 @@ conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion, 1e-7);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! magnitude_props {

@@ -689,6 +689,7 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! magnitude_props {
@@ -807,6 +808,7 @@ magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, any_sca
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_mul_props {
@@ -991,6 +993,7 @@ exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 macro_rules! approx_distributive_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     #[cfg(test)]
@@ -1206,6 +1209,7 @@ exact_distributive_props!(vector4_u32_distributive_props, Vector4, u32, any_vect
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_dot_product_props {
@@ -1487,6 +1491,7 @@ exact_dot_product_props!(vector4_u32_dot_product_props, Vector4, u32, any_vector
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_cross_product_props {

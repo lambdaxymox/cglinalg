@@ -282,6 +282,7 @@ exact_addition_props!(matrix4_i32_addition_props, Matrix4x4, i32, any_matrix4);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of matrices.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_scalar_multiplication_props {

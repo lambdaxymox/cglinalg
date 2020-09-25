@@ -105,6 +105,7 @@ fn any_point3<S>() -> impl Strategy<Value = Point3<S>>
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of points.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_mul_props {
