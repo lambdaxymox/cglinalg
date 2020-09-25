@@ -10,6 +10,16 @@ use cglinalg::{
 };
 
 
+fn any_scalar<S>() -> impl Strategy<Value = S>
+    where S: Scalar + Arbitrary
+{
+    any::<S>().prop_map(|scalar| {
+        let modulus = num_traits::cast(1_000_000).unwrap();
+
+        scalar % modulus
+    })
+}
+
 fn any_radians<S>() -> impl Strategy<Value = Radians<S>> 
     where S: Scalar + Arbitrary
 {
@@ -48,10 +58,11 @@ fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of typed angles.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! approx_arithmetic_props {
-    ($TestModuleName:ident, $AngleType:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $AngleType:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -61,7 +72,10 @@ macro_rules! approx_arithmetic_props {
             Finite,
             Zero,
         };
-        use super::$Generator;
+        use super::{
+            $Generator,
+            $ScalarGen,
+        };
 
     
         proptest! {
@@ -104,8 +118,8 @@ macro_rules! approx_arithmetic_props {
             /// ```
             #[test]
             fn prop_angle_multiplication_compatible(
-                a in any::<$ScalarType>(), 
-                b in any::<$ScalarType>(), angle in $Generator::<$ScalarType>()) {
+                a in $ScalarGen::<$ScalarType>(), 
+                b in $ScalarGen::<$ScalarType>(), angle in $Generator::<$ScalarType>()) {
             
                 prop_assume!((angle * (a * b)).is_finite());
                 prop_assume!(((angle * a) * b).is_finite());
@@ -159,8 +173,9 @@ macro_rules! approx_arithmetic_props {
     }
 }
 
-approx_arithmetic_props!(radians_f64_arithmetic_props, Radians, f64, any_radians, 1e-8);
-approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees, 1e-8);
+approx_arithmetic_props!(radians_f64_arithmetic_props, Radians, f64, any_radians, any_scalar, 1e-8);
+approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees, any_scalar, 1e-8);
+
 
 /// Generate property tests for typed angle trigonometry over floating point 
 /// scalars.
