@@ -35,7 +35,6 @@ fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>>
 
         vector % modulus
     })
-    .no_shrink()
 }
 
 fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>> 
@@ -47,7 +46,6 @@ fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>>
     
         vector % modulus
     })
-    .no_shrink()
 }
 
 fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
@@ -59,7 +57,6 @@ fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
 
         vector % modulus
     })
-    .no_shrink()
 }
 
 fn any_point1<S>() -> impl Strategy<Value = Point1<S>> 
@@ -71,7 +68,6 @@ fn any_point1<S>() -> impl Strategy<Value = Point1<S>>
 
         point % modulus
     })
-    .no_shrink()
 }
 
 fn any_point2<S>() -> impl Strategy<Value = Point2<S>> 
@@ -83,7 +79,6 @@ fn any_point2<S>() -> impl Strategy<Value = Point2<S>>
 
         point % modulus
     })
-    .no_shrink()
 }
 
 fn any_point3<S>() -> impl Strategy<Value = Point3<S>>
@@ -95,7 +90,6 @@ fn any_point3<S>() -> impl Strategy<Value = Point3<S>>
 
         point % modulus
     })
-    .no_shrink()
 }
 
 

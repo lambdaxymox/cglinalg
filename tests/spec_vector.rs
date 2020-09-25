@@ -14,6 +14,16 @@ use cglinalg::{
 use proptest::prelude::*;
 
 
+fn any_scalar<S>() -> impl Strategy<Value = S>
+    where S: Scalar + Arbitrary
+{
+    any::<S>().prop_map(|scalar| {
+        let modulus = num_traits::cast(1_000_000).unwrap();
+
+        scalar % modulus
+    })
+}
+
 fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
     where S: Scalar + Arbitrary 
 {
@@ -56,6 +66,10 @@ macro_rules! index_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
 
         proptest! {
             /// When a vector is treated like an array, it should accept all indices
@@ -65,7 +79,7 @@ macro_rules! index_props {
             /// underlying storage of the vector when the given index is inbounds.
             #[test]
             fn prop_accepts_all_indices_in_of_bounds(
-                v in super::$Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
+                v in $Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
 
                 prop_assert_eq!(v[index], v[index]);
             }
@@ -78,7 +92,7 @@ macro_rules! index_props {
             #[test]
             #[should_panic]
             fn prop_panics_when_index_out_of_bounds(
-                v in super::$Generator::<$ScalarType>(), index in $UpperBound..usize::MAX) {
+                v in $Generator::<$ScalarType>(), index in $UpperBound..usize::MAX) {
                 
                 prop_assert_eq!(v[index], v[index]);
             }
@@ -112,7 +126,14 @@ macro_rules! exact_arithmetic_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{$VectorN, Zero};
+        use cglinalg::{
+            $VectorN,
+            Zero
+        };
+        use super::{
+            $Generator,
+        };
+
 
         proptest! {
             /// A scalar zero times a vector should be a zero vector. 
@@ -122,7 +143,7 @@ macro_rules! exact_arithmetic_props {
             /// 0 * v = 0
             /// ```
             #[test]
-            fn prop_zero_times_vector_equals_zero(v in super::$Generator()) {
+            fn prop_zero_times_vector_equals_zero(v in $Generator()) {
                 let zero: $ScalarType = num_traits::zero();
                 let zero_vec = $VectorN::zero();
                 prop_assert_eq!(zero * v, zero_vec);
@@ -137,7 +158,7 @@ macro_rules! exact_arithmetic_props {
             /// Note that we deviate from the usual formalisms of vector algebra in that we 
             /// allow the ability to multiply scalars from the right of a vector.
             #[test]
-            fn prop_vector_times_zero_equals_zero(v in super::$Generator()) {
+            fn prop_vector_times_zero_equals_zero(v in $Generator()) {
                 let zero: $ScalarType = num_traits::zero();
                 let zero_vec = $VectorN::zero();
                 prop_assert_eq!(v * zero, zero_vec);
@@ -150,7 +171,7 @@ macro_rules! exact_arithmetic_props {
             /// v + 0 = v
             /// ```
             #[test]
-            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
+            fn prop_vector_plus_zero_equals_vector(v in $Generator()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(v + zero_vec, v);
             }
@@ -162,7 +183,7 @@ macro_rules! exact_arithmetic_props {
             /// 0 + v = v
             /// ```
             #[test]
-            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
+            fn prop_zero_plus_vector_equals_vector(v in $Generator()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(zero_vec + v, v);
             }
@@ -174,7 +195,7 @@ macro_rules! exact_arithmetic_props {
             /// 1 * v = v
             /// ```
             #[test]
-            fn prop_one_times_vector_equal_vector(v in super::$Generator()) {
+            fn prop_one_times_vector_equal_vector(v in $Generator()) {
                 let one: $ScalarType = num_traits::one();
                 prop_assert_eq!(one * v, v);
             }
@@ -188,7 +209,7 @@ macro_rules! exact_arithmetic_props {
             /// Note that we deviate from the usual formalisms of vector algebra in that we 
             /// allow the ability to multiply scalars to the right of a vector.
             #[test]
-            fn prop_vector_times_one_equals_vector(v in super::$Generator()) {
+            fn prop_vector_times_one_equals_vector(v in $Generator()) {
                 let one: $ScalarType = num_traits::one();
                 prop_assert_eq!(one * v, v);
             }
@@ -230,7 +251,14 @@ macro_rules! approx_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{$VectorN, Zero};
+        use cglinalg::{
+            $VectorN,
+            Zero
+        };
+        use super::{
+            $Generator,
+        };
+    
 
         proptest! {
             /// A vector plus a zero vector equals the same vector.
@@ -240,7 +268,7 @@ macro_rules! approx_add_props {
             /// v + 0 = v
             /// ```
             #[test]
-            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
+            fn prop_vector_plus_zero_equals_vector(v in $Generator()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(v + zero_vec, v);
             }
@@ -252,7 +280,7 @@ macro_rules! approx_add_props {
             /// 0 + v = v
             /// ```
             #[test]
-            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
+            fn prop_zero_plus_vector_equals_vector(v in $Generator()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(zero_vec + v, v);
             }
@@ -274,7 +302,7 @@ macro_rules! approx_add_props {
             /// ```
             #[test]
             fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
-                v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
+                v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
                 prop_assert_eq!( v1 +  v2, &v1 +  v2);
                 prop_assert_eq!( v1 +  v2,  v1 + &v2);
@@ -297,7 +325,7 @@ macro_rules! approx_add_props {
             /// is not commutative.
             #[test]
             fn prop_vector_addition_almost_commutative(
-                v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
+                v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
                 let zero: $VectorN<$ScalarType> = Zero::zero();
                 prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
@@ -314,8 +342,8 @@ macro_rules! approx_add_props {
             /// is not associative.
             #[test]
             fn prop_vector_addition_associative(
-                u in super::$Generator::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), 
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!((u + v) + w, u + (v + w));
             }
@@ -347,7 +375,14 @@ macro_rules! exact_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{$VectorN, Zero};
+        use cglinalg::{
+            $VectorN,
+            Zero
+        };
+        use super::{
+            $Generator,
+        };
+
 
         proptest! {
             /// A vector plus a zero vector equals the same vector.
@@ -357,7 +392,7 @@ macro_rules! exact_add_props {
             /// v + 0 = v
             /// ```
             #[test]
-            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
+            fn prop_vector_plus_zero_equals_vector(v in $Generator()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(v + zero_vec, v);
             }
@@ -369,7 +404,7 @@ macro_rules! exact_add_props {
             /// 0 + v = v
             /// ```
             #[test]
-            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
+            fn prop_zero_plus_vector_equals_vector(v in $Generator()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(zero_vec + v, v);
             }
@@ -391,7 +426,7 @@ macro_rules! exact_add_props {
             /// ```
             #[test]
             fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
-                v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
+                v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
                 prop_assert_eq!( v1 +  v2, &v1 +  v2);
                 prop_assert_eq!( v1 +  v2,  v1 + &v2);
@@ -410,7 +445,7 @@ macro_rules! exact_add_props {
             /// ```
             #[test]
             fn prop_vector_addition_commutative(
-                v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
+                v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
                 let zero: $VectorN<$ScalarType> = Zero::zero();
                 prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
@@ -424,8 +459,8 @@ macro_rules! exact_add_props {
             /// ```
             #[test]
             fn prop_vector_addition_associative(
-                u in super::$Generator::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), 
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!((u + v) + w, u + (v + w));
             }
@@ -462,7 +497,14 @@ macro_rules! approx_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{$VectorN, Zero};
+        use cglinalg::{
+            $VectorN,
+            Zero
+        };
+        use super::{
+            $Generator,
+        };
+
 
         proptest! {
             /// The zero vector over vectors of floating point scalars should act as an 
@@ -473,7 +515,7 @@ macro_rules! approx_sub_props {
             /// v - 0 = v
             /// ```
             #[test]
-            fn prop_vector_minus_zero_equals_vector(v in super::$Generator()) {
+            fn prop_vector_minus_zero_equals_vector(v in $Generator()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(v - zero_vec, v);
             }
@@ -485,7 +527,7 @@ macro_rules! approx_sub_props {
             /// v - v = v + (-v) = (-v) + v = 0
             /// ```
             #[test]
-            fn prop_vector_minus_vector_equals_zero(v in super::$Generator::<$ScalarType>()) {
+            fn prop_vector_minus_vector_equals_zero(v in $Generator::<$ScalarType>()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(v - v, zero_vec);
             }
@@ -507,7 +549,7 @@ macro_rules! approx_sub_props {
             /// ```
             #[test]
             fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
-                v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
+                v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
                 prop_assert_eq!( v1 +  v2, &v1 +  v2);
                 prop_assert_eq!( v1 +  v2,  v1 + &v2);
@@ -545,7 +587,14 @@ macro_rules! exact_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{$VectorN, Zero};
+        use cglinalg::{
+            $VectorN,
+            Zero
+        };
+        use super::{
+            $Generator,
+        };
+
 
         proptest! {
             /// The zero vector should act as an additive unit.
@@ -555,7 +604,7 @@ macro_rules! exact_sub_props {
             /// v - 0 = v
             /// ```
             #[test]
-            fn prop_vector_minus_zero_equals_vector(v in super::$Generator()) {
+            fn prop_vector_minus_zero_equals_vector(v in $Generator()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(v - zero_vec, v);
             }
@@ -567,7 +616,7 @@ macro_rules! exact_sub_props {
             /// v - v = v + (-v) = (-v) + v = 0
             /// ```
             #[test]
-            fn prop_vector_minus_vector_equals_zero(v in super::$Generator::<$ScalarType>()) {
+            fn prop_vector_minus_vector_equals_zero(v in $Generator::<$ScalarType>()) {
                 let zero_vec = $VectorN::<$ScalarType>::zero();
                 prop_assert_eq!(v - v, zero_vec);
             }
@@ -589,7 +638,7 @@ macro_rules! exact_sub_props {
             /// ```
             #[test]
             fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(
-                v1 in super::$Generator::<$ScalarType>(), v2 in super::$Generator::<$ScalarType>()) {
+                v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
                 prop_assert_eq!( v1 +  v2, &v1 +  v2);
                 prop_assert_eq!( v1 +  v2,  v1 + &v2);
@@ -630,11 +679,21 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! magnitude_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::Magnitude;
-        use cglinalg::approx::{relative_eq, relative_ne};
+        use cglinalg::{
+            Magnitude
+        };
+        use cglinalg::approx::{
+            relative_eq,
+            relative_ne
+        };
+        use super::{
+            $Generator,
+            $ScalarGen,
+        };
+
 
         proptest! {
             #[test]
@@ -646,7 +705,7 @@ macro_rules! magnitude_props {
             /// magnitude(c * v) = abs(c) * magnitude(v)
             /// ```
             fn prop_magnitude_preserves_scale(
-                v in super::$Generator::<$ScalarType>(), c in any::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), c in $ScalarGen::<$ScalarType>()) {
                 
                 let abs_c = <$ScalarType as num_traits::Float>::abs(c);                
                 prop_assume!((abs_c * v.magnitude()).is_finite());
@@ -665,7 +724,7 @@ macro_rules! magnitude_props {
             /// magnitude(v) >= 0
             /// ```
             #[test]
-            fn prop_magnitude_nonnegative(v in super::$Generator::<$ScalarType>()) {
+            fn prop_magnitude_nonnegative(v in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
                 prop_assert!(v.magnitude() >= zero);
             }
@@ -678,7 +737,7 @@ macro_rules! magnitude_props {
             /// ```
             #[test]
             fn prop_magnitude_satisfies_triangle_inequality(
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
                 prop_assume!((v + w).magnitude().is_finite());
                 prop_assume!((v.magnitude() + w.magnitude()).is_finite());
@@ -703,7 +762,7 @@ macro_rules! magnitude_props {
             /// function.
             #[test]
             fn prop_magnitude_approx_point_separating(
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
                 
                 let zero: $ScalarType = num_traits::zero();
 
@@ -717,10 +776,10 @@ macro_rules! magnitude_props {
     }
 }
 
-magnitude_props!(vector1_f64_magnitude_props, Vector1, f64, any_vector1, 1e-7);
-magnitude_props!(vector2_f64_magnitude_props, Vector2, f64, any_vector2, 1e-7);
-magnitude_props!(vector3_f64_magnitude_props, Vector3, f64, any_vector3, 1e-7);
-magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, 1e-7);
+magnitude_props!(vector1_f64_magnitude_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
+magnitude_props!(vector2_f64_magnitude_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
+magnitude_props!(vector3_f64_magnitude_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
+magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
 
 
 /// Generate property tests for vector multiplication over floating point scalars.
@@ -742,8 +801,16 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::Finite;
-        use cglinalg::approx::relative_eq;
+        use cglinalg::{
+            Finite
+        };
+        use cglinalg::approx::{
+            relative_eq
+        };
+        use super::{
+            $Generator,
+        };
+
 
         proptest! {
             /// Multiplication of a scalar and a vector should be approximately 
@@ -762,7 +829,7 @@ macro_rules! approx_mul_props {
             /// not commutative.
             #[test]
             fn prop_scalar_times_vector_equals_vector_times_scalar(
-                c in any::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+                c in any::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
                 
                 prop_assume!(c.is_finite());
                 prop_assume!(v.is_finite());
@@ -785,7 +852,7 @@ macro_rules! approx_mul_props {
             /// scalars is not associative. 
             #[test]
             fn prop_scalar_multiplication_compatability(
-                a in any::<$ScalarType>(), b in any::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
 
                 prop_assert!(relative_eq!(a * (b * v), (a * b) * v, epsilon = $tolerance));
             }
@@ -797,7 +864,7 @@ macro_rules! approx_mul_props {
             /// 1 * v = v * 1 = v
             /// ```
             #[test]
-            fn prop_one_times_vector_equals_vector(v in super::$Generator::<$ScalarType>()) {
+            fn prop_one_times_vector_equals_vector(v in $Generator::<$ScalarType>()) {
                 let one = num_traits::one();
                 prop_assert_eq!(one * v, v);
                 prop_assert_eq!(v * one, v);
@@ -830,6 +897,10 @@ macro_rules! exact_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
 
         proptest! {
             /// Exact multiplication of a scalar and a vector should be commutative.
@@ -843,7 +914,7 @@ macro_rules! exact_mul_props {
             /// of a vector.
             #[test]
             fn prop_scalar_times_vector_equals_vector_times_scalar(
-                c in any::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+                c in any::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
                 
                 prop_assert_eq!(c * v, v * c);
             }
@@ -859,7 +930,7 @@ macro_rules! exact_mul_props {
             /// ```
             #[test]
             fn prop_scalar_multiplication_compatability(
-                a in any::<$ScalarType>(), b in any::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(a * (b * v), (a * b) * v);
             }
@@ -871,7 +942,7 @@ macro_rules! exact_mul_props {
             /// 1 * v = v * 1 = v
             /// ```
             #[test]
-            fn prop_one_times_vector_equals_vector(v in super::$Generator::<$ScalarType>()) {
+            fn prop_one_times_vector_equals_vector(v in $Generator::<$ScalarType>()) {
                 let one = num_traits::one();
                 prop_assert_eq!(one * v, v);
                 prop_assert_eq!(v * one, v);
@@ -909,7 +980,13 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::Finite;
+        use cglinalg::{
+            Finite
+        };
+        use super::{
+            $Generator,
+        };
+
     
         proptest! {
             /// Scalar multiplication should approximately distribute over vector 
@@ -922,7 +999,7 @@ macro_rules! approx_distributive_props {
             #[test]
             fn prop_scalar_vector_addition_right_distributive(
                 a in any::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
                 
                 prop_assume!((a * (v + w)).is_finite());
                 prop_assume!((a * v + a * w).is_finite());
@@ -939,7 +1016,7 @@ macro_rules! approx_distributive_props {
             #[test]
             fn prop_vector_scalar_addition_left_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>()) {
     
                 prop_assume!(((a + b) * v).is_finite());
                 prop_assume!((a * v + b * v).is_finite());
@@ -959,7 +1036,7 @@ macro_rules! approx_distributive_props {
             #[test]
             fn prop_scalar_vector_addition_left_distributive(
                 a in any::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
                     
                 prop_assume!(((v + w) * a).is_finite());
                 prop_assume!((v * a + w * a).is_finite());
@@ -979,7 +1056,7 @@ macro_rules! approx_distributive_props {
             #[test]
             fn prop_vector_scalar_addition_right_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>()) {
     
                 prop_assume!((v * (a + b)).is_finite());
                 prop_assume!((v * a + v * b).is_finite());
@@ -1013,6 +1090,10 @@ macro_rules! exact_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
 
         proptest! {
             /// Scalar multiplication should distribute over vector addition.
@@ -1024,7 +1105,7 @@ macro_rules! exact_distributive_props {
             #[test]
             fn prop_scalar_vector_addition_right_distributive(
                 a in any::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
                 
                 prop_assert_eq!(a * (v + w), a * v + a * w);
                 prop_assert_eq!((v + w) * a,  v * a + w * a);
@@ -1039,7 +1120,7 @@ macro_rules! exact_distributive_props {
             #[test]
             fn prop_vector_scalar_addition_left_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>()) {
     
                 prop_assert_eq!((a + b) * v, a * v + b * v);
                 prop_assert_eq!(v * (a + b), v * a + v * b);
@@ -1058,7 +1139,7 @@ macro_rules! exact_distributive_props {
             #[test]
             fn prop_scalar_vector_addition_left_distributive(
                 a in any::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
                     
                 prop_assert_eq!((v + w) * a,  v * a + w * a);
             }
@@ -1076,7 +1157,7 @@ macro_rules! exact_distributive_props {
             #[test]
             fn prop_vector_scalar_addition_right_distributive(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>()) {
     
                 prop_assert_eq!(v * (a + b), v * a + v * b);
             }
@@ -1115,9 +1196,17 @@ macro_rules! approx_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::DotProduct;
-        use cglinalg::approx::relative_eq;
+        use cglinalg::{
+            DotProduct,
+        };
+        use cglinalg::approx::{
+            relative_eq
+        };
+        use super::{
+            $Generator,
+        };
     
+
         proptest! {
             /// The dot product of vectors over floating point scalars is 
             /// approximately commutative.
@@ -1128,7 +1217,7 @@ macro_rules! approx_dot_product_props {
             /// ```
             #[test]
             fn prop_vector_dot_product_commutative(
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assume!(v.dot(w).is_finite());
                 prop_assume!(w.dot(v).is_finite());
@@ -1144,8 +1233,8 @@ macro_rules! approx_dot_product_props {
             /// ```
             #[test]
             fn prop_vector_dot_product_right_distributive(
-                u in super::$Generator::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(),
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
                 prop_assume!(u.dot(v + w).is_finite());
                 prop_assume!((u.dot(v) + u.dot(w)).is_finite());
@@ -1163,8 +1252,8 @@ macro_rules! approx_dot_product_props {
             /// ```
             #[test]
             fn prop_vector_dot_product_left_distributive(
-                u in super::$Generator::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(),
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
                 prop_assume!((u + v).dot(w).is_finite());
                 prop_assume!((u.dot(w) + v.dot(w)).is_finite());
@@ -1183,7 +1272,7 @@ macro_rules! approx_dot_product_props {
             #[test]
             fn prop_vector_dot_product_times_scalars_commutative(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assume!((a * v).dot(b * w).is_finite());
                 prop_assume!((a * b * v.dot(w)).is_finite());
@@ -1200,8 +1289,8 @@ macro_rules! approx_dot_product_props {
             #[test]
             fn prop_vector_dot_product_right_bilinear(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(),
-                u in super::$Generator::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(),
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assume!((u.dot(a * v + b * w)).is_finite());
                 prop_assume!((a * u.dot(v) + b * u.dot(w)).is_finite());
@@ -1220,8 +1309,8 @@ macro_rules! approx_dot_product_props {
             #[test]
             fn prop_vector_dot_product_left_bilinear(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(),
-                u in super::$Generator::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(),
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assume!(((a * u + b * v).dot(w)).is_finite());
                 prop_assume!((a * u.dot(w) + b * v.dot(w)).is_finite());
@@ -1257,7 +1346,13 @@ macro_rules! exact_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::DotProduct;
+        use cglinalg::{
+            DotProduct,
+        };
+        use super::{
+            $Generator,
+        };
+        
     
         proptest! {
             /// The dot product of vectors over integer scalars is commutative.
@@ -1268,7 +1363,7 @@ macro_rules! exact_dot_product_props {
             /// ```
             #[test]
             fn prop_vector_dot_product_commutative(
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(v.dot(w), w.dot(v));
 
@@ -1282,8 +1377,8 @@ macro_rules! exact_dot_product_props {
             /// ```
             #[test]
             fn prop_vector_dot_product_right_distributive(
-                u in super::$Generator::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(),
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
                 prop_assert_eq!(u.dot(v + w), u.dot(v) + u.dot(w));
             }
@@ -1296,8 +1391,8 @@ macro_rules! exact_dot_product_props {
             /// ```
             #[test]
             fn prop_vector_dot_product_left_distributive(
-                u in super::$Generator::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(),
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
                 prop_assert_eq!((u + v).dot(w), u.dot(w) + v.dot(w));
             }
@@ -1312,7 +1407,7 @@ macro_rules! exact_dot_product_props {
             #[test]
             fn prop_vector_dot_product_times_scalars_commutative(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!((a * v).dot(b * w), a * b * v.dot(w));
             }
@@ -1326,8 +1421,8 @@ macro_rules! exact_dot_product_props {
             #[test]
             fn prop_vector_dot_product_right_bilinear(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(),
-                u in super::$Generator::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(),
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(u.dot(a * v + b * w), a * u.dot(v) + b * u.dot(w));
             }
@@ -1341,8 +1436,8 @@ macro_rules! exact_dot_product_props {
             #[test]
             fn prop_vector_dot_product_left_bilinear(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(),
-                u in super::$Generator::<$ScalarType>(),
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(),
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!((a * u + b * v).dot(w), a * u.dot(w) + b * v.dot(w));
             }
@@ -1381,11 +1476,17 @@ macro_rules! approx_cross_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::relative_eq;
+        use cglinalg::approx::{
+            relative_eq
+        };
         use cglinalg::{
             DotProduct,
             CrossProduct,
         };
+        use super::{
+            $Generator,
+        };
+
     
         proptest! {
             /// The three-dimensional cross product should commute with 
@@ -1398,7 +1499,7 @@ macro_rules! approx_cross_product_props {
             #[test]
             fn prop_vector_cross_product_multiplication_by_scalars(
                 c in any::<$ScalarType>(),
-                u in super::$Generator::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
 
                 prop_assert!(relative_eq!((c * u).cross(&v), c * u.cross(&v), epsilon = $tolerance));
                 prop_assert!(relative_eq!(u.cross(&(c * v)), c * u.cross(&v), epsilon = $tolerance));
@@ -1412,8 +1513,8 @@ macro_rules! approx_cross_product_props {
             /// ```
             #[test]
             fn prop_vector_cross_product_distribute(
-                u in super::$Generator::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), 
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert!(
                     relative_eq!(u.cross(&(v + w)), u.cross(&v) + u.cross(&w), epsilon = $tolerance)
@@ -1429,8 +1530,8 @@ macro_rules! approx_cross_product_props {
             /// ```
             #[test]
             fn prop_vector_cross_product_scalar_triple_product(
-                u in super::$Generator::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), 
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert!(relative_eq!(u.dot(v.cross(&w)), u.cross(&v).dot(w), epsilon = $tolerance));
             }
@@ -1443,7 +1544,7 @@ macro_rules! approx_cross_product_props {
             /// ```
             #[test]
             fn prop_vector_cross_product_anticommutative(
-                u in super::$Generator::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
 
                 prop_assert!(relative_eq!(u.cross(&v), -v.cross(&u), epsilon = $tolerance));
             }
@@ -1457,8 +1558,8 @@ macro_rules! approx_cross_product_props {
             /// ```
             #[test]
             fn prop_vector_cross_product_satisfies_vector_triple_product(
-                u in super::$Generator::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), 
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
                 prop_assert!(relative_eq!(u.cross(&v).cross(&w), u.dot(w) * v - u.dot(v) * w, epsilon = $tolerance));
             }
@@ -1491,6 +1592,10 @@ macro_rules! exact_cross_product_props {
             DotProduct,
             CrossProduct,
         };
+        use super::{
+            $Generator,
+        };
+
     
         proptest! {
             /// The three-dimensional cross product should commute with 
@@ -1503,7 +1608,7 @@ macro_rules! exact_cross_product_props {
             #[test]
             fn prop_vector_cross_product_multiplication_by_scalars(
                 c in any::<$ScalarType>(),
-                u in super::$Generator::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!((c * u).cross(&v), c * u.cross(&v));
                 prop_assert_eq!(u.cross(&(c * v)), c * u.cross(&v));
@@ -1517,8 +1622,8 @@ macro_rules! exact_cross_product_props {
             /// ```
             #[test]
             fn prop_vector_cross_product_distribute(
-                u in super::$Generator::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), 
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(u.cross(&(v + w)), u.cross(&v) + u.cross(&w));
             }
@@ -1532,8 +1637,8 @@ macro_rules! exact_cross_product_props {
             /// ```
             #[test]
             fn prop_vector_cross_product_scalar_triple_product(
-                u in super::$Generator::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), 
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(u.dot(v.cross(&w)), u.cross(&v).dot(w));
             }
@@ -1546,7 +1651,7 @@ macro_rules! exact_cross_product_props {
             /// ```
             #[test]
             fn prop_vector_cross_product_anticommutative(
-                u in super::$Generator::<$ScalarType>(), v in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(u.cross(&v), -v.cross(&u));
             }
@@ -1560,8 +1665,8 @@ macro_rules! exact_cross_product_props {
             /// ```
             #[test]
             fn prop_vector_cross_product_satisfies_vector_triple_product(
-                u in super::$Generator::<$ScalarType>(), 
-                v in super::$Generator::<$ScalarType>(), w in super::$Generator::<$ScalarType>()) {
+                u in $Generator::<$ScalarType>(), 
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
                 prop_assert_eq!(u.cross(&v).cross(&w), u.dot(w) * v - u.dot(v) * w);
             }
