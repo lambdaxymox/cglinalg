@@ -294,6 +294,10 @@ macro_rules! approx_scalar_multiplication_props {
             $MatrixN,
             Zero
         };
+        use super::{
+            $Generator,
+            $ScalarGen,
+        };
 
 
         proptest! {
@@ -306,12 +310,13 @@ macro_rules! approx_scalar_multiplication_props {
             /// ```
             #[test]
             fn prop_scalar_matrix_multiplication_compatible_addition(
-                c in super::$ScalarGen::<$ScalarType>(),
-                m1 in super::$Generator::<$ScalarType>(), m2 in super::$Generator::<$ScalarType>()) {
+                c in $ScalarGen::<$ScalarType>(),
+                m1 in $Generator::<$ScalarType>(), m2 in $Generator::<$ScalarType>()) {
 
-                prop_assert!(relative_eq!(
-                    c * (m1 + m2), c * m1 + c * m2, epsilon = $tolerance
-                ), "left = {}\nright = {}", c * (m1 + m2), c * m1 + c * m2
+                prop_assert!(
+                    relative_eq!(c * (m1 + m2), c * m1 + c * m2, epsilon = $tolerance), 
+                    "left = {}\nright = {}", 
+                    c * (m1 + m2), c * m1 + c * m2
                 );
             }
 
@@ -324,12 +329,14 @@ macro_rules! approx_scalar_multiplication_props {
             /// ```
             #[test]
             fn prop_scalar_matrix_multiplication_compatible_subtraction(
-                c in super::$ScalarGen::<$ScalarType>(),
-                m1 in super::$Generator::<$ScalarType>(), m2 in super::$Generator::<$ScalarType>()) {
+                c in $ScalarGen::<$ScalarType>(),
+                m1 in $Generator::<$ScalarType>(), m2 in $Generator::<$ScalarType>()) {
 
-                prop_assert!(relative_eq!(
-                    c * (m1 - m2), c * m1 - c * m2, epsilon = $tolerance
-                ));
+                prop_assert!(
+                    relative_eq!(c * (m1 - m2), c * m1 - c * m2, epsilon = $tolerance),
+                    "left = {}\nright = {}", 
+                    c * (m1 - m2), c * m1 - c * m2
+                );
             }
 
             /// Multiplication of a matrix by a scalar zero is the zero matrix.
@@ -342,7 +349,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// in that we allow multiplication of matrices by scalars on the right-hand 
             /// side as well as left-hand side. 
             #[test]
-            fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator::<$ScalarType>()) {
+            fn prop_zero_times_matrix_equals_zero_matrix(m in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
                 let zero_mat = $MatrixN::zero();
 
@@ -360,7 +367,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// in that we allow multiplication of matrices by scalars on the right-hand 
             /// side as well as left-hand side. 
             #[test]
-            fn prop_one_times_matrix_equals_matrix(m in super::$Generator::<$ScalarType>()) {
+            fn prop_one_times_matrix_equals_matrix(m in $Generator::<$ScalarType>()) {
                 let one: $ScalarType = num_traits::one();
 
                 prop_assert_eq!(one * m, m);
@@ -378,7 +385,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// in that we allow multiplication of matrices by scalars on the right-hand 
             /// side as well as left-hand side. 
             #[test]
-            fn prop_negative_one_times_matrix_equals_negative_matrix(m in super::$Generator::<$ScalarType>()) {
+            fn prop_negative_one_times_matrix_equals_negative_matrix(m in $Generator::<$ScalarType>()) {
                 let one: $ScalarType = num_traits::one();
                 let minus_one = -one;
 
@@ -396,7 +403,7 @@ macro_rules! approx_scalar_multiplication_props {
             /// side as well as the right-hand side.
             #[test]
             fn prop_scalar_matrix_multiplication_commutative(
-                c in super::$ScalarGen::<$ScalarType>(), m in super::$Generator::<$ScalarType>()) {
+                c in $ScalarGen::<$ScalarType>(), m in $Generator::<$ScalarType>()) {
 
                 prop_assert!(relative_eq!(c * m, m * c, epsilon = $tolerance));
             }
