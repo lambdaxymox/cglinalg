@@ -27,7 +27,14 @@ use crate::matrix::{
     Matrix3x3, 
     Matrix4x4
 };
-use crate::vector::Vector3;
+use crate::vector::{
+    Vector3
+};
+use crate::approx::{
+    abs_diff_eq,
+    abs_diff_ne,
+};
+
 use num_traits::NumCast;
 use core::fmt;
 use core::iter;
@@ -209,7 +216,9 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// the inverse of `self`.
     pub fn inverse(&self) -> Option<Quaternion<S>> {
         let magnitude_squared = self.magnitude_squared();
-        if magnitude_squared == S::zero() {
+        let multiple: S = num_traits::cast(16).unwrap();
+        let tolerance = multiple * S::default_epsilon();
+        if abs_diff_eq!(magnitude_squared, S::zero(), epsilon = tolerance) {
             None
         } else {
             Some(self.conjugate() / magnitude_squared)
@@ -221,7 +230,10 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Returns `true` is there exists a quaternion `r` such that `q * r = 1`.
     /// Otherwise, it returns `false`.
     pub fn is_invertible(&self) -> bool {
-        self.magnitude_squared() > S::zero()
+        let multiple: S = num_traits::cast(16).unwrap();
+        let tolerance = multiple * S::default_epsilon();
+
+        abs_diff_ne!(self.magnitude_squared(), S::zero(), epsilon = tolerance)
     }
 
     /// Compute the principal argument of a quaternion.
@@ -1265,7 +1277,7 @@ impl<S> Slerp<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
             // in the opposite direction from the positive case, so we must 
             // negate one of the quaterions to take the short way around 
             // instead of the long way around.
-            let _result = self * -one;
+            let _result = -self;
             (_result, (_result).dot(other))
         } else {
             let _result = self;
@@ -1337,7 +1349,7 @@ impl<'a, S> Slerp<&'a Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
             // in the opposite direction from the positive case, so we must 
             // negate one of the quaterions to take the short way around 
             // instead of the long way around.
-            let _result = self * -one;
+            let _result = -self;
             (_result, (_result).dot(other))
         } else {
             let _result = self;
@@ -1409,7 +1421,7 @@ impl<'a, S> Slerp<Quaternion<S>> for &'a Quaternion<S> where S: ScalarFloat {
             // in the opposite direction from the positive case, so we must 
             // negate one of the quaterions to take the short way around 
             // instead of the long way around.
-            let _result = self * -one;
+            let _result = -self;
             (_result, (_result).dot(other))
         } else {
             let _result = *self;
@@ -1481,7 +1493,7 @@ impl<'a, 'b, S> Slerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFl
             // in the opposite direction from the positive case, so we must 
             // negate one of the quaterions to take the short way around 
             // instead of the long way around.
-            let _result = self * -one;
+            let _result = -self;
             (_result, (_result).dot(other))
         } else {
             let _result = *self;

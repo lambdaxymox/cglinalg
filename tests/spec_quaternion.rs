@@ -711,12 +711,14 @@ macro_rules! approx_mul_props {
             /// approximate and not exact because multiplication of the underlying 
             /// scalars is not associative. 
             #[test]
-            fn prop_scalar_multiplication_compatability(
-                a in $ScalarGen::<$ScalarType>(), b in any::<$ScalarType>(), q in $Generator::<$ScalarType>()) {
+            fn prop_scalar_multiplication_compatibility(
+                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), q in $Generator::<$ScalarType>()) {
 
-                prop_assume!((a * (b * q)).is_finite());
-                prop_assume!(((a * b) * q).is_finite());
-                prop_assert!(relative_eq!(a * (b * q), (a * b) * q, epsilon = $tolerance));
+                prop_assert!(
+                    relative_eq!(a * (b * q), (a * b) * q, epsilon = $tolerance),
+                    "a * (b * q) = {}\n(a * b) * q = {}",
+                    a * (b * q), (a * b) * q
+                );
             }
 
             /// Quaternion multiplication over floating point numbers is 
@@ -800,20 +802,6 @@ macro_rules! approx_mul_props {
 
                 prop_assert!(relative_eq!(q1_times_q2_inv, q2_inv * q1_inv, epsilon = $tolerance));
             }
-
-            /// Quaternion multiplication is anti-commutative.
-            ///
-            /// Given quaternions `q1` and `q2`, we have
-            /// ```text
-            /// q1 * q2 = -q2 * q1
-            /// ```
-            #[test]
-            fn prop_quaternion_multiplication_anti_commutative(
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-
-                prop_assume!((q1 * q2).is_finite());
-                prop_assert!(relative_eq!(q1 * q2, -q2 * q1, epsilon = $tolerance));
-            }
         }
     }
     }
@@ -874,7 +862,7 @@ macro_rules! exact_mul_props {
             /// (a * b) * q = a * (b * q)
             /// ```
             #[test]
-            fn prop_scalar_multiplication_compatability(
+            fn prop_scalar_multiplication_compatibility(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), q in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(a * (b * q), (a * b) * q);
@@ -1563,8 +1551,6 @@ macro_rules! magnitude_props {
                 
                 let abs_c = <$ScalarType as num_traits::Float>::abs(c);   
 
-                prop_assume!((abs_c * q.magnitude()).is_finite());
-                prop_assume!((c * q).magnitude().is_finite());
                 prop_assert!(
                     relative_eq!( (c * q).magnitude(), abs_c * q.magnitude(), epsilon = $tolerance),
                     "\n||c * q|| = {}\n|c| * ||q|| = {}\n", (c * q).magnitude(), abs_c * q.magnitude(),
@@ -1685,10 +1671,24 @@ macro_rules! slerp_props {
             /// slerp(q0, q1, 1) = q1
             /// ```
             #[test]
-            fn prop_quaternion_slerp_endpoints(
+            fn prop_quaternion_slerp_endpoints0(
                 q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(q0.slerp(q1, 0.0), q0);
+            }
+
+            /// Quaternion spherical linear interpolation should yield the 
+            /// respective interpolants at the endpoints.
+            ///
+            /// Given quaternions `q0` and `q1`
+            /// ```text
+            /// slerp(q0, q1, 0) = q0
+            /// slerp(q0, q1, 1) = q1
+            /// ```
+            #[test]
+            fn prop_quaternion_slerp_endpoints1(
+                q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
+
                 prop_assert_eq!(q0.slerp(q1, 1.0), q1);
             }
         }
@@ -1786,5 +1786,4 @@ macro_rules! exp_log_props {
 }
 
 exp_log_props!(quaternion_f64_exp_props, f64, any_quaternion, 1e-7);
-
 
