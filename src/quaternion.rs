@@ -93,8 +93,11 @@ impl<S> Quaternion<S> {
     /// Construct a new quaternion from its scalar component and its three
     /// vector components.
     #[inline]
-    pub fn new(s: S, x: S, y: S, z: S) -> Quaternion<S> {
-        Self::from_sv(s, Vector3::new(x, y, z))
+    pub const fn new(s: S, x: S, y: S, z: S) -> Quaternion<S> {
+        Quaternion { 
+            s: s, 
+            v: Vector3::new(x, y, z)
+        }
     }
 
     /// Construct a quaternion from its scalar and vector parts.
