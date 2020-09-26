@@ -4,6 +4,7 @@ use crate::traits::{
     Zero,
     Identity,
     ProjectOn,
+    CrossProduct,
     DotProduct,
     Magnitude,
     Lerp,
@@ -33,6 +34,7 @@ use crate::vector::{
 use crate::approx::{
     abs_diff_eq,
     abs_diff_ne,
+    ulps_eq,
 };
 
 use num_traits::NumCast;
@@ -194,17 +196,14 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Euler angles about an arbitrary axis because they do not Gimbal lock.
     #[rustfmt::skip]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
-        let radians = angle.into();
-        let radians_over_two = radians / (S::one() + S::one());
-        Quaternion::new(
-            Radians::cos(radians_over_two),
-            Radians::sin(radians_over_two) * axis.x,
-            Radians::sin(radians_over_two) * axis.y,
-            Radians::sin(radians_over_two) * axis.z,
-        )
+        let one_half = num_traits::cast(0.5_f64).unwrap();
+        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
+    
+        Quaternion::from_sv(cos_angle, axis * sin_angle)
     }
 
     /// Compute the conjugate of a quaternion.
+    #[inline]
     pub fn conjugate(&self) -> Quaternion<S> {
         Quaternion::from_sv(self.s, -self.v)
     }
@@ -338,6 +337,32 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// another quaternion.
     pub fn powq(&self, exponent: Quaternion<S>) -> Quaternion<S> {
         Self::exp(&(self.ln() * exponent))
+    }
+
+    /// Construct a quaternion that rotates the shortest angular distance 
+    /// between two unit vectors.
+    #[inline]
+    pub fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> Quaternion<S> {
+        let k_cos_theta = v1.dot(v2);
+
+        // The vectors point in the same direction.
+        if ulps_eq!(k_cos_theta, S::one()) {
+            return Quaternion::<S>::identity();
+        }
+
+        let k = (v1.magnitude_squared() * v2.magnitude_squared()).sqrt();
+
+        // The vectors point in opposite directions.
+        if ulps_eq!(k_cos_theta / k, -S::one()) {
+            let mut orthogonal = v1.cross(Vector3::unit_x());
+            if ulps_eq!(orthogonal.magnitude_squared(), S::zero()) {
+                orthogonal = v1.cross(Vector3::unit_y());
+            }
+            return Quaternion::from_sv(S::zero(), orthogonal.normalize());
+        }
+
+        // The vectors point in any other direction.
+        Quaternion::from_sv(k + k_cos_theta, v1.cross(v2)).normalize()
     }
 }
 
@@ -1259,7 +1284,7 @@ impl<S> Slerp<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
 
     /// Spherically linearly interpolate between two unit quaternions.
     ///
-    /// In the case where the angle between quaternions is `180 degrees`, the
+    /// In the case where the angle between quaternions is 180 degrees, the
     /// slerp function is not well defined because we can rotate about any axis
     /// normal to the plane swept out by the quaternions to get from one to the 
     /// other. The vector normal to the quaternions is not unique in this case.
@@ -1331,7 +1356,7 @@ impl<'a, S> Slerp<&'a Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
 
     /// Spherically linearly interpolate between two unit quaternions.
     ///
-    /// In the case where the angle between quaternions is `180 degrees`, the
+    /// In the case where the angle between quaternions is 180 degrees, the
     /// slerp function is not well defined because we can rotate about any axis
     /// normal to the plane swept out by the quaternions to get from one to the 
     /// other. The vector normal to the quaternions is not unique in this case.
@@ -1403,7 +1428,7 @@ impl<'a, S> Slerp<Quaternion<S>> for &'a Quaternion<S> where S: ScalarFloat {
 
     /// Spherically linearly interpolate between two unit quaternions.
     ///
-    /// In the case where the angle between quaternions is `180 degrees`, the
+    /// In the case where the angle between quaternions is 180 degrees, the
     /// slerp function is not well defined because we can rotate about any axis
     /// normal to the plane swept out by the quaternions to get from one to the 
     /// other. The vector normal to the quaternions is not unique in this case.
@@ -1475,7 +1500,7 @@ impl<'a, 'b, S> Slerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFl
 
     /// Spherically linearly interpolate between two unit quaternions.
     ///
-    /// In the case where the angle between quaternions is `180 degrees`, the
+    /// In the case where the angle between quaternions is 180 degrees, the
     /// slerp function is not well defined because we can rotate about any axis
     /// normal to the plane swept out by the quaternions to get from one to the 
     /// other. The vector normal to the quaternions is not unique in this case.

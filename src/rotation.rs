@@ -1,6 +1,3 @@
-use approx::{
-    ulps_eq,
-};
 use crate::angle::{
     Radians,
 };
@@ -10,7 +7,6 @@ use crate::scalar::{
 use crate::traits::{
     Angle,
     DotProduct,
-    CrossProduct,
     Identity,
     InvertibleSquareMatrix,
     Magnitude,
@@ -36,41 +32,7 @@ use crate::affine::*;
 use core::fmt;
 
 
-/// A type implementing this trait represents a type that acts as a generic 
-/// rotation. 
-///
-/// A rotation is an operation that creates circular motions and 
-/// preserves at least one point. Rotations preserve the length of vectors and 
-/// therefore act as a class of rigid body transformations.
-pub trait Rotation<P, V> where Self: Sized + Copy {
-    /// The type of the output points (locations in space).
-    type OutPoint;
-    /// The type of the output vectors (displacements in space).
-    type OutVector;
-
-    /// Point a vector at the point `direction`.
-    fn look_at(direction: V, up: V) -> Self;
-
-    /// Construct a rotation that rotates the shortest angular distance 
-    /// between two unit vectors.
-    fn between_vectors(v1: V, v2: V) -> Self;
-
-    /// Construct a rotation that rotates a vector in the opposite direction 
-    /// of `self`. 
-    ///
-    /// Given a rotation operator that rotates a vector about a normal vector 
-    /// `axis` by an angle `theta`, construct a rotation that rotates a 
-    /// vector about the same axis by an angle `-theta`.
-    fn inverse(&self) -> Self;
-
-    /// Apply the rotation operation to a vector.
-    fn rotate_vector(&self, vector: V) -> Self::OutVector;
-
-    /// Apply the rotation operation to a point.
-    fn rotate_point(&self, point: P) -> Self::OutPoint;
-}
-
-/// A trait that implements rotation operators in two-dimensions. 
+/// A rotation operator in two dimensions.
 /// 
 /// Two-dimensional rotations are different than three-dimensional rotations 
 /// because mathematically we cannot define an axis of rotation in two 
@@ -82,48 +44,6 @@ pub trait Rotation<P, V> where Self: Sized + Copy {
 /// If one wants to talk about rotating a vector in the the _xy-plane_ about a 
 /// normal vector, we are implicitly rotating about the _z-axis_ in 
 /// three dimensions.
-pub trait Rotation2<S> where 
-    S: ScalarFloat,
-    Self: Rotation<Point2<S>, Vector2<S>> + Into<Matrix3x3<S>> + Into<Rotation2D<S>>,
-{
-    /// Rotate a two-dimensional vector in the _xy-plane_ by an angle `angle`.
-    fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self;
-}
-
-/// A trait that define rotation operators in three dimensions.
-pub trait Rotation3<S> where 
-    S: ScalarFloat,
-    Self: Rotation<Point3<S>, Vector3<S>>,
-    Self: Into<Matrix4x4<S>> + Into<Rotation3D<S>> + Into<Quaternion<S>>,
-{
-    /// Construct a new three-dimensional rotation about an axis `axis` by 
-    /// an angle `angle`.
-    fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Self;
-
-    /// Construct a new three-dimensional rotation about the _x-axis_ in the 
-    /// _yz-plane_ by an angle `angle`.
-    #[inline]
-    fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(Vector3::unit_x(), angle)
-    }
-
-    /// Construct a new three-dimensional rotation about the _y-axis_ in the 
-    /// _xz-plane_ by an angle `angle`.
-    #[inline]
-    fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(Vector3::unit_y(), angle)
-    }
-
-    /// Construct a new three-dimensional rotation about the _z-axis_ in the 
-    /// _xy-plane_ by an angle `angle`.
-    #[inline]
-    fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(Vector3::unit_z(), angle)
-    }
-}
-
-
-/// A rotation operator in two dimensions.
 #[derive(Copy, Clone, PartialEq)]
 #[repr(C)]
 pub struct Rotation2D<S> {
@@ -131,6 +51,64 @@ pub struct Rotation2D<S> {
     angle: Radians<S>,
     /// The underlying rotation matrix.
     matrix: Matrix3x3<S>,
+}
+
+impl<S> Rotation2D<S> where S: ScalarFloat {
+    /// Rotate a two-dimensional vector in the _xy-plane_ by an angle `angle`.
+    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2D<S> {
+        let radians = angle.into();
+        let matrix = Matrix3x3::from(Matrix2x2::from_angle(radians));
+        
+        Rotation2D {
+            angle: radians,
+            matrix: matrix,
+        }
+    }
+
+    /// Point a vector at the point `direction`.
+    #[inline]
+    pub fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Rotation2D<S> {
+        let matrix = Matrix3x3::from(Matrix2x2::look_at(direction, up));
+        let angle = Radians::acos(matrix.c0r0);
+        
+        Rotation2D {
+            angle: angle,
+            matrix: matrix,
+        }
+    }
+
+    /// Construct a rotation that rotates the shortest angular distance 
+    /// between two unit vectors.
+    #[inline]
+    pub fn between_vectors(a: Vector2<S>, b: Vector2<S>) -> Rotation2D<S> {
+        Rotation2D::from_angle(Radians::acos(DotProduct::dot(a, b)))
+    }
+
+    /// Construct a rotation that rotates a vector in the opposite direction 
+    /// of `self`. 
+    ///
+    /// Given a rotation operator that rotates a vector about a normal vector 
+    /// `axis` by an angle `theta`, construct a rotation that rotates a 
+    /// vector about the same axis by an angle `-theta`.
+    #[inline]
+    pub fn inverse(&self) -> Rotation2D<S> {
+        Rotation2D {
+            angle: -self.angle,
+            matrix: self.matrix.inverse().unwrap(),
+        }
+    }
+
+    /// Apply the rotation operation to a vector.
+    #[inline]
+    pub fn rotate_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.expand(S::zero())).contract()
+    }
+
+    /// Apply the rotation operation to a point.
+    #[inline]
+    pub fn rotate_point(&self, point: Point2<S>) -> Point2<S> { 
+        Point2::from_vector(self.rotate_vector(point.to_vector()))
+    }
 }
 
 impl<S> fmt::Debug for Rotation2D<S> where S: fmt::Debug {
@@ -199,63 +177,8 @@ impl<S> approx::UlpsEq for Rotation2D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Rotation2<S> for Rotation2D<S> where S: ScalarFloat {
-    fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2D<S> {
-        let radians = angle.into();
-        let matrix = Matrix3x3::from(Matrix2x2::from_angle(radians));
-        
-        Rotation2D {
-            angle: radians,
-            matrix: matrix,
-        }
-    }
-}
-
-impl<S> Rotation<Point2<S>, Vector2<S>> for Rotation2D<S> 
-    where 
-        S: ScalarFloat 
-{ 
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Rotation2D<S> {
-        let matrix = Matrix3x3::from(Matrix2x2::look_at(direction, up));
-        let angle = Radians::acos(matrix.c0r0);
-        
-        Rotation2D {
-            angle: angle,
-            matrix: matrix,
-        }
-    }
-
-    #[inline]
-    fn between_vectors(a: Vector2<S>, b: Vector2<S>) -> Rotation2D<S> {
-        Rotation2::from_angle(Radians::acos(DotProduct::dot(a, b)))
-    }
-
-    #[inline]
-    fn rotate_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn inverse(&self) -> Rotation2D<S> {
-        Rotation2D {
-            angle: -self.angle,
-            matrix: self.matrix.inverse().unwrap(),
-        }
-    }
-
-    #[inline]
-    fn rotate_point(&self, point: Point2<S>) -> Point2<S> { 
-        Point2::from_vector(self.rotate_vector(point.to_vector()))
-    }
-}
-
 impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S> 
-    where 
-        S: ScalarFloat 
+    where S: ScalarFloat 
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
@@ -270,7 +193,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Rotation2D<S>> {
-        Some(<Self as Rotation<Point2<S>, Vector2<S>>>::inverse(&self))
+        Some(self.inverse())
     }
 
     #[inline]
@@ -290,8 +213,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Rotation2D<S>
 }
 
 impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S> 
-    where 
-        S: ScalarFloat 
+    where S: ScalarFloat 
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
@@ -306,7 +228,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Rotation2D<S>> {
-        Some(<Self as Rotation<Point2<S>, Vector2<S>>>::inverse(&self))
+        Some(self.inverse())
     }
 
     #[inline]
@@ -326,8 +248,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Rotation2D<S>
 }
 
 impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S> 
-    where 
-        S: ScalarFloat
+    where S: ScalarFloat
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
@@ -342,7 +263,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Rotation2D<S>> {
-        Some(<Self as Rotation<Point2<S>, Vector2<S>>>::inverse(&self))
+        Some(self.inverse())
     }
 
     #[inline]
@@ -362,8 +283,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Rotation2D<S>
 }
 
 impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Rotation2D<S> 
-    where 
-        S: ScalarFloat
+    where S: ScalarFloat
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
@@ -378,7 +298,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Rot
 
     #[inline]
     fn inverse(&self) -> Option<Rotation2D<S>> {
-        Some(<Self as Rotation<Point2<S>, Vector2<S>>>::inverse(&self))
+        Some(self.inverse())
     }
 
     #[inline]
@@ -399,6 +319,10 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Rot
 
 
 /// A rotation operator in three dimensions.
+///
+/// A rotation is an operation that creates circular motions and 
+/// preserves at least one point. Rotations preserve the length of vectors and 
+/// therefore act as a class of rigid body transformations.
 #[derive(Copy, Clone, PartialEq)]
 #[repr(C)]
 pub struct Rotation3D<S> {
@@ -420,6 +344,87 @@ impl<S> Rotation3D<S> where S: ScalarFloat {
             angle: angle,
             matrix: Matrix4x4::from(quaternion),
         }
+    }
+
+    /// Construct a new three-dimensional rotation about an axis `axis` by 
+    /// an angle `angle`.
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Rotation3D<S> {
+        let radians = angle.into();
+        
+        Rotation3D {
+            angle: radians,
+            matrix: Matrix4x4::from_affine_axis_angle(axis, radians),
+        }
+    }
+
+    /// Construct a new three-dimensional rotation about the _x-axis_ in the 
+    /// _yz-plane_ by an angle `angle`.
+    #[inline]
+    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
+        Self::from_axis_angle(Vector3::unit_x(), angle)
+    }
+
+    /// Construct a new three-dimensional rotation about the _y-axis_ in the 
+    /// _xz-plane_ by an angle `angle`.
+    #[inline]
+    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
+        Self::from_axis_angle(Vector3::unit_y(), angle)
+    }
+
+    /// Construct a new three-dimensional rotation about the _z-axis_ in the 
+    /// _xy-plane_ by an angle `angle`.
+    #[inline]
+    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
+        Self::from_axis_angle(Vector3::unit_z(), angle)
+    }
+
+    /// Point a vector at the point `direction`.
+    #[inline]
+    pub fn look_at(dir: Vector3<S>, up: Vector3<S>) -> Rotation3D<S> {
+        let matrix3 = Matrix3x3::look_at(dir, up);
+        let quaternion = Quaternion::from(&matrix3);
+        let two = S::one() + S::one();
+        let angle = Radians::acos(quaternion.s) * two;
+        let matrix = quaternion.into();
+    
+        Rotation3D {
+            angle: angle,
+            matrix: matrix,
+        }
+    }
+
+    /// Construct a rotation that rotates the shortest angular distance 
+    /// between two unit vectors.
+    #[inline]
+    pub fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> Rotation3D<S> {
+        let q = Quaternion::between_vectors(v1, v2);
+        q.into()
+    }
+
+    /// Construct a rotation that rotates a vector in the opposite direction 
+    /// of `self`. 
+    ///
+    /// Given a rotation operator that rotates a vector about a normal vector 
+    /// `axis` by an angle `theta`, construct a rotation that rotates a 
+    /// vector about the same axis by an angle `-theta`.
+    #[inline]
+    pub fn inverse(&self) -> Rotation3D<S> {
+        Rotation3D {
+            angle: -self.angle,
+            matrix: self.matrix.inverse().unwrap(),
+        }
+    }
+
+    /// Apply the rotation operation to a vector.
+    #[inline]
+    pub fn rotate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.expand(S::zero())).contract()
+    }
+
+    /// Apply the rotation operation to a point.
+    #[inline]
+    pub fn rotate_point(&self, point: Point3<S>) -> Point3<S> { 
+        Point3::from_vector(self.rotate_vector(point.to_vector()))
     }
 }
 
@@ -508,122 +513,8 @@ impl<S> approx::UlpsEq for Rotation3D<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Rotation<Point3<S>, Vector3<S>> for Quaternion<S> where S: ScalarFloat {
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-    
-    #[inline]
-    fn look_at(dir: Vector3<S>, up: Vector3<S>) -> Quaternion<S> {
-        Matrix3x3::look_at(dir, up).into()
-    }
-
-    #[inline]
-    fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> Quaternion<S> {
-        let k_cos_theta = v1.dot(v2);
-
-        // The vectors point in the same direction.
-        if ulps_eq!(k_cos_theta, S::one()) {
-            return Quaternion::<S>::identity();
-        }
-
-        let k = (v1.magnitude_squared() * v2.magnitude_squared()).sqrt();
-
-        // The vectors point in opposite directions.
-        if ulps_eq!(k_cos_theta / k, -S::one()) {
-            let mut orthogonal = v1.cross(Vector3::unit_x());
-            if ulps_eq!(orthogonal.magnitude_squared(), S::zero()) {
-                orthogonal = v1.cross(Vector3::unit_y());
-            }
-            return Quaternion::from_sv(S::zero(), orthogonal.normalize());
-        }
-
-        // The vectors point in any other direction.
-        Quaternion::from_sv(k + k_cos_theta, v1.cross(v2)).normalize()
-    }
-
-    #[inline]
-    fn rotate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        let rotation_matrix = Matrix3x3::from(self);
-        rotation_matrix * vector
-    }
-
-    #[inline]
-    fn inverse(&self) -> Quaternion<S> {
-        self.conjugate() / self.magnitude_squared()
-    }
-
-    #[inline]
-    fn rotate_point(&self, point: Point3<S>) -> Point3<S> { 
-        Point3::from_vector(self.rotate_vector(point.to_vector()))
-    }
-}
-
-impl<S> Rotation3<S> for Rotation3D<S> where S: ScalarFloat {
-    fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Rotation3D<S> {
-        let radians = angle.into();
-        
-        Rotation3D {
-            angle: radians,
-            matrix: Matrix4x4::from_affine_axis_angle(axis, radians),
-        }
-    }
-}
-
-impl<S> Rotation3<S> for Quaternion<S> where S: ScalarFloat {
-    #[inline]
-    fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
-        let one_half = num_traits::cast(0.5_f64).unwrap();
-        let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
-        Quaternion::from_sv(cos_angle, axis * sin_angle)
-    }
-}
-
-impl<S> Rotation<Point3<S>, Vector3<S>> for Rotation3D<S> where S: ScalarFloat {
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn look_at(dir: Vector3<S>, up: Vector3<S>) -> Rotation3D<S> {
-        let matrix3 = Matrix3x3::look_at(dir, up);
-        let quaternion = Quaternion::from(&matrix3);
-        let two = S::one() + S::one();
-        let angle = Radians::acos(quaternion.s) * two;
-        let matrix = quaternion.into();
-    
-        Rotation3D {
-            angle: angle,
-            matrix: matrix,
-        }
-    }
-
-    #[inline]
-    fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> Rotation3D<S> {
-        let q: Quaternion<S> = Rotation::between_vectors(v1, v2);
-        q.into()
-    }
-
-    #[inline]
-    fn rotate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn inverse(&self) -> Rotation3D<S> {
-        Rotation3D {
-            angle: -self.angle,
-            matrix: self.matrix.inverse().unwrap(),
-        }
-    }
-
-    #[inline]
-    fn rotate_point(&self, point: Point3<S>) -> Point3<S> { 
-        Point3::from_vector(self.rotate_vector(point.to_vector()))
-    }
-}
-
 impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S> 
-    where 
-        S: ScalarFloat 
+    where S: ScalarFloat 
 {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
@@ -638,7 +529,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Rotation3D<S>> {
-        Some(<Self as Rotation<Point3<S>, Vector3<S>>>::inverse(&self))
+        Some(self.inverse())
     }
 
     #[inline]
@@ -658,8 +549,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Rotation3D<S>
 }
 
 impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S>
-    where 
-        S: ScalarFloat 
+    where S: ScalarFloat 
 {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
@@ -674,7 +564,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Rotation3D<S>> {
-        Some(<Self as Rotation<Point3<S>, Vector3<S>>>::inverse(&self))
+        Some(self.inverse())
     }
 
     #[inline]
@@ -694,8 +584,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Rotation3D<S>
 }
 
 impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S> 
-    where 
-        S: ScalarFloat 
+    where S: ScalarFloat 
 {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
@@ -710,7 +599,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Rotation3D<S>> {
-        Some(<Self as Rotation<Point3<S>, Vector3<S>>>::inverse(&self))
+        Some(self.inverse())
     }
 
     #[inline]
@@ -730,8 +619,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Rotation3D<S>
 }
 
 impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Rotation3D<S> 
-    where 
-        S: ScalarFloat 
+    where S: ScalarFloat 
 {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
@@ -746,7 +634,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Rot
 
     #[inline]
     fn inverse(&self) -> Option<Rotation3D<S>> {
-        Some(<Self as Rotation<Point3<S>, Vector3<S>>>::inverse(&self))
+        Some(self.inverse())
     }
 
     #[inline]
