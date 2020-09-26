@@ -27,7 +27,7 @@ The design of the library has the following goals in mind:
   possible.
 
 ## Getting Started
-To use library in your project, add `cglinalg` as a dependency in your 
+To use the library in your project, add `cglinalg` as a dependency in your 
 `Cargo.toml` file:
 ```
 [dependencies]
@@ -89,8 +89,7 @@ The library has design limitations for a number of reasons.
 
 ## Limitations On The Implementation
 The limitations on the implementation are addressed in the project roadmap. 
-The biggest one is than it does not presently leverage SIMD instructions to optimize 
-operations yet.
+The biggest one is that it presently does not leverage SIMD instructions yet.
 
 ## Acknowledgements
 The Rust ecosystem has a number of linear algebra libraries including:
