@@ -55,7 +55,7 @@ fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the tests in to separate them
-///    from each other for each field type to prevent namespace collisions.
+///    from each other for each scalar type to prevent namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the
 ///    set of vectors.
@@ -115,7 +115,7 @@ index_props!(vector4_f64_index_props, Vector4, f64, any_vector4, 4);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the
@@ -373,7 +373,7 @@ approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -497,7 +497,7 @@ exact_add_props!(vector4_u32_add_props, Vector4, u32, any_vector4);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -589,7 +589,7 @@ approx_sub_props!(vector4_f64_sub_props, Vector4, f64, any_vector4);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -683,7 +683,7 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -802,7 +802,7 @@ magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, any_sca
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -904,7 +904,7 @@ approx_mul_props!(vector4_f64_mul_props, Vector4, f64, any_vector4, any_scalar, 
 ///
 /// The macro properties are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -987,7 +987,7 @@ exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -1203,7 +1203,7 @@ exact_distributive_props!(vector4_u32_distributive_props, Vector4, u32, any_vect
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -1357,7 +1357,7 @@ approx_dot_product_props!(vector4_f64_dot_product_props, Vector4, f64, any_vecto
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$VectorN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -1486,7 +1486,7 @@ exact_dot_product_props!(vector4_u32_dot_product_props, Vector4, u32, any_vector
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.

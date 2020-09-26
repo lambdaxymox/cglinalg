@@ -107,7 +107,7 @@ index_props!(quaternion_index_props, f64, any_quaternion, 4);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
@@ -226,7 +226,7 @@ exact_arithmetic_props!(quaternion_u32_arithmetic_props, u32, any_quaternion);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
@@ -353,7 +353,7 @@ approx_add_props!(quaternion_f64_add_props, f64, any_quaternion, 1e-7);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
@@ -563,7 +563,7 @@ approx_sub_props!(quaternion_f64_sub_props, f64, any_quaternion, 1e-7);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
@@ -652,7 +652,7 @@ exact_sub_props!(quaternion_u32_sub_props, u32, any_quaternion);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
@@ -1518,7 +1518,7 @@ conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion, 1e-7);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    quaternions.

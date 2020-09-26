@@ -99,7 +99,7 @@ fn any_point3<S>() -> impl Strategy<Value = Point3<S>>
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each field type to prevent 
+///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$PointN` denotes the name of the point type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -190,7 +190,7 @@ approx_mul_props!(point3_f64_mul_props, Point3, f64, any_point3, any_scalar, 1e-
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the tests in 
-///    to separate them from each other for each field type to prevent 
+///    to separate them from each other for each scalar type to prevent 
 ////   namespace collisions.
 /// * `$PointN` denotes the name of the vector type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the

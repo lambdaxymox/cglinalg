@@ -52,7 +52,7 @@ fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$AngleType` is the name of the angle type, e.g. Radians or Degrees.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -173,8 +173,8 @@ macro_rules! approx_arithmetic_props {
     }
 }
 
-approx_arithmetic_props!(radians_f64_arithmetic_props, Radians, f64, any_radians, any_scalar, 1e-8);
-approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees, any_scalar, 1e-8);
+approx_arithmetic_props!(radians_f64_arithmetic_props, Radians, f64, any_radians, any_scalar, 1e-7);
+approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees, any_scalar, 1e-7);
 
 
 /// Generate property tests for typed angle trigonometry over floating point 
@@ -308,6 +308,6 @@ macro_rules! approx_trigonometry_props {
     }
 }
 
-approx_trigonometry_props!(radians_f64_trigonometry_props, Radians, f64, any_radians, 1e-8);
-approx_trigonometry_props!(degrees_f64_trigonometry_props, Degrees, f64, any_degrees, 1e-8);
+approx_trigonometry_props!(radians_f64_trigonometry_props, Radians, f64, any_radians, 1e-7);
+approx_trigonometry_props!(degrees_f64_trigonometry_props, Degrees, f64, any_degrees, 1e-7);
 

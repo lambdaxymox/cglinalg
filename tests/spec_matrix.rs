@@ -74,7 +74,7 @@ fn any_matrix4<S>() -> impl Strategy<Value = Matrix4x4<S>>
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$MatrixN` denotes the name of the matrix type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -184,7 +184,7 @@ approx_addition_props!(matrix4_f64_addition_props, Matrix4x4, f64, any_matrix4, 
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$MatrixN` denotes the name of the matrix type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -276,7 +276,7 @@ exact_addition_props!(matrix4_i32_addition_props, Matrix4x4, i32, any_matrix4);
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$MatrixN` denotes the name of the matrix type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
@@ -790,7 +790,7 @@ exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4x4, 
 ///
 /// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each field type to prevent 
+///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$MatrixN` denotes the name of the matrix type.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
