@@ -430,14 +430,14 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
 impl<S> fmt::Debug for Rotation3<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Rotation3D ")?;
+        write!(f, "Rotation3 ")?;
         <[S; 16] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
 
 impl<S> fmt::Display for Rotation3<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Rotation3D ")?;
+        write!(f, "Rotation3 ")?;
         <[S; 16] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
