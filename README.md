@@ -93,17 +93,17 @@ The biggest one is than it does not presently leverage SIMD instructions to opti
 operations yet.
 
 ## Acknowledgement
-The Rust ecosystem has a number of linear algebras libraries including:
-* (cgmath)[https://crates.io/crates/cgmath] -- One of the original Rust graphics 
+The Rust ecosystem has a number of linear algebra libraries including:
+* [cgmath](https://crates.io/crates/cgmath) -- One of the original Rust graphics 
   mathematics libraries, and one of the most commonly used ones.
-* (nalgebra)[https://nalgebra.org] -- The most powerful linear algebra library 
+* [nalgebra](https://nalgebra.org) -- The most powerful linear algebra library 
   in the Rust ecosystem. It provides a strongly typed system for most linear 
   algebra in arbitrarily many dimensions. It is useful in many domains that do 
   heavy numerical computation, including computer graphics.
-* (euclid)[https://crates.io/crates/euclid] -- A collection of strongly typed 
+* [euclid](https://crates.io/crates/euclid) -- A collection of strongly typed 
   math tools for computer graphics with an inclination towards 2d graphics and 
   layout. This one is used in the `Servo` browser engine.
-* (vecmath)[https://crates.io/crates/vecmath] -- A simple and type agnostic 
+* [vecmath](https://crates.io/crates/vecmath) -- A simple and type agnostic 
   Rust library for vector math designed for reexporting.
 
 ## Project Roadmap
