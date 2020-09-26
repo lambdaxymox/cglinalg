@@ -43,6 +43,13 @@ impl<S> Translation2D<S> where S: ScalarSigned {
         }
     }
 
+    /// Construct a translation operator from a vector of displacements.
+    pub fn from_translation(distance: Vector2<S>) -> Translation2D<S> {
+        Translation2D {
+            matrix: Matrix3x3::from_affine_translation(distance),
+        }
+    }
+
     /// Construct a translation between two vectors.
     #[inline]
     pub fn between_vectors(vector1: Vector2<S>, vector2: Vector2<S>) -> Self {
@@ -86,13 +93,6 @@ impl<S> Translation2D<S> where S: ScalarSigned {
     #[inline]
     pub fn translate_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    /// Construct a translation operator from a vector of displacements.
-    pub fn from_translation(distance: Vector2<S>) -> Translation2D<S> {
-        Translation2D {
-            matrix: Matrix3x3::from_affine_translation(distance),
-        }
     }
 }
 
@@ -278,6 +278,13 @@ impl<S> Translation3D<S> where S: ScalarSigned {
         }
     }
 
+    /// Construct a translation operator from a vector of displacements.
+    pub fn from_translation(distance: Vector3<S>) -> Translation3D<S> {
+        Translation3D {
+            matrix: Matrix4x4::from_affine_translation(distance),
+        }
+    }
+
     /// Construct a translation between two vectors.
     #[inline]
     pub fn between_vectors(vector1: Vector3<S>, vector2: Vector3<S>) -> Self {
@@ -318,13 +325,6 @@ impl<S> Translation3D<S> where S: ScalarSigned {
     #[inline]
     pub fn translate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    /// Construct a translation operator from a vector of displacements.
-    pub fn from_translation(distance: Vector3<S>) -> Translation3D<S> {
-        Translation3D {
-            matrix: Matrix4x4::from_affine_translation(distance),
-        }
     }
 }
 

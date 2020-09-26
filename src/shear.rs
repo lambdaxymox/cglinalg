@@ -39,27 +39,6 @@ impl<S> Shear2D<S> where S: ScalarSigned {
         }
     }
 
-    /// Compute the inverse shearing operation.
-    pub fn inverse(&self) -> Option<Shear2D<S>> {
-        let shear_y_with_x = -self.matrix.c0r1;
-        let shear_x_with_y = -self.matrix.c1r0;
-        let matrix = Matrix3x3::from_affine_shear(shear_x_with_y, shear_y_with_x);
-        
-        Some(Shear2D {
-            matrix: matrix,
-        })
-    }
-
-    /// Apply a shearing transformation to a vector.
-    pub fn shear_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    /// Apply a shearing transformation to a point.
-    pub fn shear_point(&self, point: Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
     /// Construct a shearing transformation along the _x-axis_, holding the 
     /// _y-axis_ constant.
     ///
@@ -99,6 +78,27 @@ impl<S> Shear2D<S> where S: ScalarSigned {
         Shear2D {
             matrix: Matrix3x3::from_affine_shear(shear_x_with_y, shear_y_with_x),
         }
+    }
+
+    /// Compute the inverse shearing operation.
+    pub fn inverse(&self) -> Shear2D<S> {
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_x_with_y = -self.matrix.c1r0;
+        let matrix = Matrix3x3::from_affine_shear(shear_x_with_y, shear_y_with_x);
+        
+        Shear2D {
+            matrix: matrix,
+        }
+    }
+
+    /// Apply a shearing transformation to a vector.
+    pub fn shear_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.expand(S::zero())).contract()
+    }
+
+    /// Apply a shearing transformation to a point.
+    pub fn shear_point(&self, point: Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
 
@@ -142,7 +142,7 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Shear2D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        self.inverse()
+        Some(self.inverse())
     }
 
     #[inline]
@@ -176,7 +176,7 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Shear2D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        self.inverse()
+        Some(self.inverse())
     }
 
     #[inline]
@@ -210,7 +210,7 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Shear2D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        self.inverse()
+        Some(self.inverse())
     }
 
     #[inline]
@@ -244,7 +244,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for She
 
     #[inline]
     fn inverse(&self) -> Option<Shear2D<S>> {
-        self.inverse()
+        Some(self.inverse())
     }
 
     #[inline]
@@ -273,35 +273,6 @@ pub struct Shear3D<S> {
 }
 
 impl<S> Shear3D<S> where S: ScalarSigned {
-    /// Apply a shearing transformation to a vector.
-    pub fn inverse(&self) -> Option<Shear3D<S>> {
-        let shear_x_with_y = -self.matrix.c1r0;
-        let shear_x_with_z = -self.matrix.c2r0;
-        let shear_y_with_x = -self.matrix.c0r1;
-        let shear_y_with_z = -self.matrix.c2r1;
-        let shear_z_with_x = -self.matrix.c0r2;
-        let shear_z_with_y = -self.matrix.c1r2;
-        let matrix = Matrix4x4::from_affine_shear(
-            shear_x_with_y, shear_x_with_z, 
-            shear_y_with_x, shear_y_with_z, 
-            shear_z_with_x, shear_z_with_y
-        );
-        
-        Some(Shear3D {
-            matrix: matrix,
-        })
-    }
-
-     /// Apply a shearing transformation to a vector.
-    pub fn shear_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    /// Apply a shearing transformation to a point.
-    pub fn shear_point(&self, point: Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
     /// Construct a shearing transformation along the _x-axis_.
     ///
     /// The parameters `shear_x_with_y` and `shear_x_with_z` denote the 
@@ -365,6 +336,35 @@ impl<S> Shear3D<S> where S: ScalarSigned {
             )
         }
     }
+
+    /// Apply a shearing transformation to a vector.
+    pub fn inverse(&self) -> Shear3D<S> {
+        let shear_x_with_y = -self.matrix.c1r0;
+        let shear_x_with_z = -self.matrix.c2r0;
+        let shear_y_with_x = -self.matrix.c0r1;
+        let shear_y_with_z = -self.matrix.c2r1;
+        let shear_z_with_x = -self.matrix.c0r2;
+        let shear_z_with_y = -self.matrix.c1r2;
+        let matrix = Matrix4x4::from_affine_shear(
+            shear_x_with_y, shear_x_with_z, 
+            shear_y_with_x, shear_y_with_z, 
+            shear_z_with_x, shear_z_with_y
+        );
+        
+        Shear3D {
+            matrix: matrix,
+        }
+    }
+
+     /// Apply a shearing transformation to a vector.
+    pub fn shear_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.expand(S::zero())).contract()
+    }
+
+    /// Apply a shearing transformation to a point.
+    pub fn shear_point(&self, point: Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
 }
 
 impl<S> AsRef<Matrix4x4<S>> for Shear3D<S> {
@@ -408,7 +408,7 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Shear3D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        self.inverse()
+        Some(self.inverse())
     }
 
     #[inline]
@@ -443,7 +443,7 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Shear3D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        self.inverse()
+        Some(self.inverse())
     }
 
     #[inline]
@@ -478,7 +478,7 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Shear3D<S>
 
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        self.inverse()
+        Some(self.inverse())
     }
 
     #[inline]
@@ -513,7 +513,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for She
 
     #[inline]
     fn inverse(&self) -> Option<Shear3D<S>> {
-        self.inverse()
+        Some(self.inverse())
     }
 
     #[inline]

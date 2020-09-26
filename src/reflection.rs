@@ -36,6 +36,16 @@ pub struct Reflection2D<S> {
 }
 
 impl<S> Reflection2D<S> where S: ScalarFloat {
+    /// Construct a new reflection transformation from the vector normal to the 
+    /// plane of reflection.
+    pub fn from_normal_bias(normal: Vector2<S>, bias: Vector2<S>) -> Reflection2D<S> {
+        Reflection2D {
+            bias: bias,
+            normal: normal,
+            matrix: Matrix3x3::from_affine_reflection(normal, bias),
+        }
+    }
+
     /// Return the bias for calculating the reflections.
     ///
     /// The _bias_ is the coorindates of a known point in the plane of 
@@ -47,16 +57,6 @@ impl<S> Reflection2D<S> where S: ScalarFloat {
     /// Return the normal vector to the reflection plane.
     pub fn normal(&self) -> Vector2<S> {
         self.normal
-    }
-
-    /// Construct a new reflection transformation from the vector normal to the 
-    /// plane of reflection.
-    pub fn from_normal_bias(normal: Vector2<S>, bias: Vector2<S>) -> Reflection2D<S> {
-        Reflection2D {
-            bias: bias,
-            normal: normal,
-            matrix: Matrix3x3::from_affine_reflection(normal, bias),
-        }
     }
 
     /// Calculate the inverse reflection transformation.
@@ -290,6 +290,16 @@ pub struct Reflection3D<S> {
 }
 
 impl<S> Reflection3D<S> where S: ScalarFloat {
+    /// Construct a new reflection transformation from the vector normal to the 
+    /// plane of reflection.
+    pub fn from_normal_bias(normal: Vector3<S>, bias: Vector3<S>) -> Reflection3D<S> {
+        Reflection3D {
+            bias: bias,
+            normal: normal,
+            matrix: Matrix4x4::from_affine_reflection(normal, bias),
+        }
+    }
+
     /// Return the bias for calculating the reflections.
     ///
     /// The _bias_ is the coorindates of a known point in the plane of 
@@ -301,16 +311,6 @@ impl<S> Reflection3D<S> where S: ScalarFloat {
     /// Return the normal vector to the reflection plane.
     pub fn normal(&self) -> Vector3<S> {
         self.normal
-    }
-
-    /// Construct a new reflection transformation from the vector normal to the 
-    /// plane of reflection.
-    pub fn from_normal_bias(normal: Vector3<S>, bias: Vector3<S>) -> Reflection3D<S> {
-        Reflection3D {
-            bias: bias,
-            normal: normal,
-            matrix: Matrix4x4::from_affine_reflection(normal, bias),
-        }
     }
 
     /// Calculate the inverse reflection transformation.

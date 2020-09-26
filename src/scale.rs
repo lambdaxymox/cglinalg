@@ -36,6 +36,24 @@ impl<S> Scale2D<S> where S: Scalar {
         }
     }
 
+    /// Construct a two-dimensional scale transformation from a nonuniform scale 
+    /// across coordinates.
+    #[inline]
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2D<S> {
+        Scale2D {
+            matrix: Matrix3x3::from_affine_nonuniform_scale(scale_x, scale_y),
+        }
+    }
+
+    /// Construct a two-dimensional scale transformation from a uniform scale 
+    /// factor.
+    #[inline]
+    pub fn from_scale(scale: S) -> Scale2D<S> {
+        Scale2D {
+            matrix: Matrix3x3::from_scale(scale),
+        }
+    }
+
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     #[inline]
@@ -56,24 +74,6 @@ impl<S> Scale2D<S> where S: Scalar {
     #[inline]
     pub fn scale_point(&self, point: Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    /// Construct a two-dimensional scale transformation from a nonuniform scale 
-    /// across coordinates.
-    #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2D<S> {
-        Scale2D {
-            matrix: Matrix3x3::from_affine_nonuniform_scale(scale_x, scale_y),
-        }
-    }
-
-    /// Construct a two-dimensional scale transformation from a uniform scale 
-    /// factor.
-    #[inline]
-    pub fn from_scale(scale: S) -> Scale2D<S> {
-        Scale2D {
-            matrix: Matrix3x3::from_scale(scale),
-        }
     }
 }
 
@@ -251,6 +251,28 @@ impl<S> Scale3D<S> where S: Scalar {
         }
     }
 
+    /// Construct a three-dimensional scale transformation from a nonuniform scale 
+    /// across coordinates.
+    #[inline]
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Scale3D<S> {
+        Scale3D {
+            matrix: Matrix4x4::from_affine_nonuniform_scale(
+                scale_x, 
+                scale_y, 
+                scale_z
+            ),
+        }
+    }
+
+    /// Construct a three-dimensional scale transformation from a uniform scale 
+    /// factor.
+    #[inline]
+    pub fn from_scale(scale: S) -> Scale3D<S> {
+        Scale3D {
+            matrix: Matrix4x4::from_affine_scale(scale),
+        }
+    }
+
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     #[inline]
@@ -272,28 +294,6 @@ impl<S> Scale3D<S> where S: Scalar {
     #[inline]
     pub fn scale_point(&self, point: Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    /// Construct a three-dimensional scale transformation from a nonuniform scale 
-    /// across coordinates.
-    #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Scale3D<S> {
-        Scale3D {
-            matrix: Matrix4x4::from_affine_nonuniform_scale(
-                scale_x, 
-                scale_y, 
-                scale_z
-            ),
-        }
-    }
-
-    /// Construct a three-dimensional scale transformation from a uniform scale 
-    /// factor.
-    #[inline]
-    pub fn from_scale(scale: S) -> Scale3D<S> {
-        Scale3D {
-            matrix: Matrix4x4::from_affine_scale(scale),
-        }
     }
 }
 
