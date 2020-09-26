@@ -92,7 +92,7 @@ The limitations on the implementation are addressed in the project roadmap.
 The biggest one is than it does not presently leverage SIMD instructions to optimize 
 operations yet.
 
-## Acknowledgement
+## Acknowledgements
 The Rust ecosystem has a number of linear algebra libraries including:
 * [cgmath](https://crates.io/crates/cgmath) -- One of the original Rust graphics 
   mathematics libraries, and one of the most commonly used ones.
