@@ -89,6 +89,7 @@ pub trait AffineTransformation3D<P, V, S> where Self: Sized {
 
 /// A generic two dimensional affine transformation.
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(transparent)]
 pub struct Transform2D<S> {
     /// The underlying matrix that implements the transformation.
     matrix: Matrix3x3<S>,
@@ -300,6 +301,7 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Tra
 
 /// A generic three-dimensional affine transformation.
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[repr(transparent)]
 pub struct Transform3D<S> {
     /// The underlying matrix implementing the transformation.
     matrix: Matrix4x4<S>,

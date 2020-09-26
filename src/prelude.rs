@@ -8,26 +8,11 @@
 //! This way you do not have to import each trait individually. 
 pub use crate::traits::*;
 
-pub use crate::reflection::Reflection;
-pub use crate::reflection::Reflection2;
-pub use crate::reflection::Reflection3;
-
 pub use crate::rotation::Rotation;
 pub use crate::rotation::Rotation2;
 pub use crate::rotation::Rotation3;
 
-pub use crate::scale::Scale;
-pub use crate::scale::Scale2;
-pub use crate::scale::Scale3;
-
-pub use crate::shear::Shear;
-pub use crate::shear::Shear2;
-pub use crate::shear::Shear3;
-
 pub use crate::affine::AffineTransformation2D;
 pub use crate::affine::AffineTransformation3D;
 
-pub use crate::translation::Translation;
-pub use crate::translation::Translation2;
-pub use crate::translation::Translation3;
 
