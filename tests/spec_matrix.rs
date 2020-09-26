@@ -2,6 +2,7 @@ extern crate cglinalg;
 extern crate num_traits;
 extern crate proptest;
 
+
 use proptest::prelude::*;
 use cglinalg::{
     Matrix2x2,
