@@ -40,7 +40,3 @@ pub use shear::*;
 pub use translation::*;
 pub use affine::*;
 
-
-// Make the glm module a public module imported separately.
-pub mod glm;
-
