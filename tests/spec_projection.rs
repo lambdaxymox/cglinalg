@@ -9,10 +9,10 @@ use cglinalg::{
     Point3,
     PerspectiveSpec,
     PerspectiveFovSpec,
-    PerspectiveProjection3D,
-    PerspectiveFovProjection3D,
+    PerspectiveProjection3,
+    PerspectiveFovProjection3,
     OrthographicSpec,
-    OrthographicProjection3D,
+    OrthographicProjection3,
     ScalarFloat,
 };
 
@@ -33,7 +33,7 @@ fn any_point3<S>() -> impl Strategy<Value = Point3<S>>
         .prop_map(|(x, y, z)| Point3::new(x, y, z))
 }
 
-fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFovProjection3D<S>> 
+fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFovProjection3<S>> 
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S)>()
@@ -56,12 +56,12 @@ fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFovPr
                 Degrees(fovy), aspect, spec_near, spec_far
             );
 
-            PerspectiveFovProjection3D::new(spec)
+            PerspectiveFovProjection3::new(spec)
         })
         .no_shrink()
 }
 
-fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjection3D<S>> 
+fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjection3<S>> 
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S, S, S)>()
@@ -102,12 +102,12 @@ fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjectio
                 spec_left, spec_right, spec_bottom, spec_top, spec_near, spec_far
             );
 
-            PerspectiveProjection3D::new(spec)
+            PerspectiveProjection3::new(spec)
         })
         .no_shrink()
 }
 
-fn any_orthographic_projection<S>() -> impl Strategy<Value = OrthographicProjection3D<S>>
+fn any_orthographic_projection<S>() -> impl Strategy<Value = OrthographicProjection3<S>>
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S, S, S)>()
@@ -148,7 +148,7 @@ fn any_orthographic_projection<S>() -> impl Strategy<Value = OrthographicProject
                 spec_left, spec_right, spec_bottom, spec_top, spec_near, spec_far
             );
 
-            OrthographicProjection3D::new(spec)
+            OrthographicProjection3::new(spec)
         })
         .no_shrink()
 }

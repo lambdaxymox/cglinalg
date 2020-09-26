@@ -29,23 +29,23 @@ use core::fmt;
 /// and acts as the identity on vectors.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
-pub struct Translation2D<S> {
+pub struct Translation2<S> {
     /// The matrix representing the affine transformation.
     matrix: Matrix3x3<S>,
 }
 
-impl<S> Translation2D<S> where S: ScalarSigned {
+impl<S> Translation2<S> where S: ScalarSigned {
     /// Construct a translation operator from a vector of displacements.
     #[inline]
-    pub fn from_vector(distance: Vector2<S>) -> Translation2D<S> {
-        Translation2D {
+    pub fn from_vector(distance: Vector2<S>) -> Translation2<S> {
+        Translation2 {
             matrix: Matrix3x3::from_affine_translation(distance),
         }
     }
 
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_translation(distance: Vector2<S>) -> Translation2D<S> {
-        Translation2D {
+    pub fn from_translation(distance: Vector2<S>) -> Translation2<S> {
+        Translation2 {
             matrix: Matrix3x3::from_affine_translation(distance),
         }
     }
@@ -55,7 +55,7 @@ impl<S> Translation2D<S> where S: ScalarSigned {
     pub fn between_vectors(vector1: Vector2<S>, vector2: Vector2<S>) -> Self {
         let distance = vector2 - vector1;
 
-        Translation2D::from_vector(distance)
+        Translation2::from_vector(distance)
     }
 
     /// Construct a translation between two points.
@@ -63,7 +63,7 @@ impl<S> Translation2D<S> where S: ScalarSigned {
     pub fn between_points(point1: Point2<S>, point2: Point2<S>) -> Self {
         let distance = point2 - point1;
 
-        Translation2D::from_vector(distance)
+        Translation2::from_vector(distance)
     }
 
     /// Construct a translation that translates a vector or point in the opposite
@@ -75,7 +75,7 @@ impl<S> Translation2D<S> where S: ScalarSigned {
     pub fn inverse(&self) -> Self {
         let distance = Vector2::new(-self.matrix.c2r0, -self.matrix.c2r1);
 
-        Translation2D::from_vector(distance)
+        Translation2::from_vector(distance)
     }
     
     /// Apply the translation operation to a point.
@@ -96,46 +96,46 @@ impl<S> Translation2D<S> where S: ScalarSigned {
     }
 }
 
-impl<S> AsRef<Matrix3x3<S>> for Translation2D<S> {
+impl<S> AsRef<Matrix3x3<S>> for Translation2<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 }
 
-impl<S> fmt::Display for Translation2D<S> where S: Scalar {
+impl<S> fmt::Display for Translation2<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
-impl<S> From<Translation2D<S>> for Matrix3x3<S> where S: Copy {
-    fn from(transformation: Translation2D<S>) -> Matrix3x3<S> {
+impl<S> From<Translation2<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: Translation2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Translation2D<S>> for Matrix3x3<S> where S: Copy {
-    fn from(transformation: &Translation2D<S>) -> Matrix3x3<S> {
+impl<S> From<&Translation2<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: &Translation2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Translation2D<S> 
+impl<S> AffineTransformation2<Point2<S>, Vector2<S>, S> for Translation2<S> 
     where S: ScalarSigned 
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
     #[inline]
-    fn identity() -> Translation2D<S> {
-        Translation2D { 
+    fn identity() -> Translation2<S> {
+        Translation2 { 
             matrix: Matrix3x3::identity(),
         }
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Translation2D<S>> {
+    fn inverse(&self) -> Option<Translation2<S>> {
         Some(self.inverse())
     }
 
@@ -150,26 +150,26 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Translation2D<S>
     }
 
     #[inline]
-    fn to_transform2d(&self) -> Transform2D<S> {
-        Transform2D::matrix_to_transform2d(self.matrix)
+    fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::matrix_to_transform2d(self.matrix)
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Translation2D<S> 
+impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Translation2<S> 
     where S: ScalarSigned
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
     #[inline]
-    fn identity() -> Translation2D<S> {
-        Translation2D { 
+    fn identity() -> Translation2<S> {
+        Translation2 { 
             matrix: Matrix3x3::identity(),
         }
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Translation2D<S>> {
+    fn inverse(&self) -> Option<Translation2<S>> {
         Some(self.inverse())
     }
 
@@ -184,26 +184,26 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Translation2D<S>
     }
 
     #[inline]
-    fn to_transform2d(&self) -> Transform2D<S> {
-        Transform2D::matrix_to_transform2d(self.matrix)
+    fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::matrix_to_transform2d(self.matrix)
     }
 }
 
-impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Translation2D<S> 
+impl<S> AffineTransformation2<&Point2<S>, Vector2<S>, S> for Translation2<S> 
     where S: ScalarSigned 
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
     #[inline]
-    fn identity() -> Translation2D<S> {
-        Translation2D { 
+    fn identity() -> Translation2<S> {
+        Translation2 { 
             matrix: Matrix3x3::identity(),
         }
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Translation2D<S>> {
+    fn inverse(&self) -> Option<Translation2<S>> {
         Some(self.inverse())
     }
 
@@ -218,26 +218,26 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Translation2D<S>
     }
 
     #[inline]
-    fn to_transform2d(&self) -> Transform2D<S> {
-        Transform2D::matrix_to_transform2d(self.matrix)
+    fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::matrix_to_transform2d(self.matrix)
     }
 }
 
-impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Translation2D<S>
+impl<'a, 'b, S> AffineTransformation2<&'a Point2<S>, &'b Vector2<S>, S> for Translation2<S>
     where S: ScalarSigned 
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
     #[inline]
-    fn identity() -> Translation2D<S> {
-        Translation2D { 
+    fn identity() -> Translation2<S> {
+        Translation2 { 
             matrix: Matrix3x3::identity(),
         }
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Translation2D<S>> {
+    fn inverse(&self) -> Option<Translation2<S>> {
         Some(self.inverse())
     }
 
@@ -252,8 +252,8 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Tra
     }
 
     #[inline]
-    fn to_transform2d(&self) -> Transform2D<S> {
-        Transform2D::matrix_to_transform2d(self.matrix)
+    fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::matrix_to_transform2d(self.matrix)
     }
 }
 
@@ -265,22 +265,22 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Tra
 /// and acts as the identity on vectors.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
-pub struct Translation3D<S> {
+pub struct Translation3<S> {
     /// The matrix representing the affine transformation.
     matrix: Matrix4x4<S>,
 }
 
-impl<S> Translation3D<S> where S: ScalarSigned {
+impl<S> Translation3<S> where S: ScalarSigned {
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_vector(distance: Vector3<S>) -> Translation3D<S> {
-        Translation3D {
+    pub fn from_vector(distance: Vector3<S>) -> Translation3<S> {
+        Translation3 {
             matrix: Matrix4x4::from_affine_translation(distance),
         }
     }
 
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_translation(distance: Vector3<S>) -> Translation3D<S> {
-        Translation3D {
+    pub fn from_translation(distance: Vector3<S>) -> Translation3<S> {
+        Translation3 {
             matrix: Matrix4x4::from_affine_translation(distance),
         }
     }
@@ -290,7 +290,7 @@ impl<S> Translation3D<S> where S: ScalarSigned {
     pub fn between_vectors(vector1: Vector3<S>, vector2: Vector3<S>) -> Self {
         let distance = vector2 - vector1;
 
-        Translation3D::from_vector(distance)
+        Translation3::from_vector(distance)
     }
 
     /// Construct a translation between two points.
@@ -298,7 +298,7 @@ impl<S> Translation3D<S> where S: ScalarSigned {
     pub fn between_points(point1: Point3<S>, point2: Point3<S>) -> Self {
         let distance = point2 - point1;
 
-        Translation3D::from_vector(distance)
+        Translation3::from_vector(distance)
     }
 
     /// Construct a translation that translates a vector or point in the opposite
@@ -314,7 +314,7 @@ impl<S> Translation3D<S> where S: ScalarSigned {
             -self.matrix.c3r2
         );
 
-        Translation3D::from_vector(distance)
+        Translation3::from_vector(distance)
     }
     
     #[inline]
@@ -328,32 +328,32 @@ impl<S> Translation3D<S> where S: ScalarSigned {
     }
 }
 
-impl<S> AsRef<Matrix4x4<S>> for Translation3D<S> {
+impl<S> AsRef<Matrix4x4<S>> for Translation3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
 
-impl<S> fmt::Display for Translation3D<S> where S: Scalar {
+impl<S> fmt::Display for Translation3<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
-impl<S> From<Translation3D<S>> for Matrix4x4<S> where S: Copy {
-    fn from(transformation: Translation3D<S>) -> Matrix4x4<S> {
+impl<S> From<Translation3<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: Translation3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Translation3D<S>> for Matrix4x4<S> where S: Copy {
-    fn from(transformation: &Translation3D<S>) -> Matrix4x4<S> {
+impl<S> From<&Translation3<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: &Translation3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Translation3D<S> 
+impl<S> AffineTransformation3<Point3<S>, Vector3<S>, S> for Translation3<S> 
     where 
         S: ScalarSigned 
 {
@@ -361,14 +361,14 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Translation3D<S>
     type OutVector = Vector3<S>;
 
     #[inline]
-    fn identity() -> Translation3D<S> {
-        Translation3D { 
+    fn identity() -> Translation3<S> {
+        Translation3 { 
             matrix: Matrix4x4::identity(),
         }
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Translation3D<S>> {
+    fn inverse(&self) -> Option<Translation3<S>> {
         Some(self.inverse())
     }
 
@@ -383,12 +383,12 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Translation3D<S>
     }
 
     #[inline]
-    fn to_transform3d(&self) -> Transform3D<S> {
-        Transform3D::matrix_to_transform3d(self.matrix)
+    fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::matrix_to_transform3d(self.matrix)
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Translation3D<S> 
+impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Translation3<S> 
     where 
         S: ScalarSigned 
 {
@@ -396,14 +396,14 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Translation3D<S>
     type OutVector = Vector3<S>;
 
     #[inline]
-    fn identity() -> Translation3D<S> {
-        Translation3D { 
+    fn identity() -> Translation3<S> {
+        Translation3 { 
             matrix: Matrix4x4::identity(),
         }
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Translation3D<S>> {
+    fn inverse(&self) -> Option<Translation3<S>> {
         Some(self.inverse())
     }
 
@@ -418,26 +418,26 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Translation3D<S>
     }
 
     #[inline]
-    fn to_transform3d(&self) -> Transform3D<S> {
-        Transform3D::matrix_to_transform3d(self.matrix)
+    fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::matrix_to_transform3d(self.matrix)
     }
 }
 
-impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Translation3D<S> 
+impl<S> AffineTransformation3<&Point3<S>, Vector3<S>, S> for Translation3<S> 
     where S: ScalarSigned 
 {
     type OutPoint = Point3<S>;
     type OutVector = Vector3<S>;
 
     #[inline]
-    fn identity() -> Translation3D<S> {
-        Translation3D { 
+    fn identity() -> Translation3<S> {
+        Translation3 { 
             matrix: Matrix4x4::identity(),
         }
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Translation3D<S>> {
+    fn inverse(&self) -> Option<Translation3<S>> {
         Some(self.inverse())
     }
 
@@ -452,12 +452,12 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Translation3D<S>
     }
 
     #[inline]
-    fn to_transform3d(&self) -> Transform3D<S> {
-        Transform3D::matrix_to_transform3d(self.matrix)
+    fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::matrix_to_transform3d(self.matrix)
     }
 }
 
-impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Translation3D<S> 
+impl<'a, 'b, S> AffineTransformation3<&'a Point3<S>, &'b Vector3<S>, S> for Translation3<S> 
     where 
         S: ScalarSigned 
 {
@@ -465,14 +465,14 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Tra
     type OutVector = Vector3<S>;
 
     #[inline]
-    fn identity() -> Translation3D<S> {
-        Translation3D { 
+    fn identity() -> Translation3<S> {
+        Translation3 { 
             matrix: Matrix4x4::identity(),
         }
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Translation3D<S>> {
+    fn inverse(&self) -> Option<Translation3<S>> {
         Some(self.inverse())
     }
 
@@ -487,8 +487,8 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Tra
     }
 
     #[inline]
-    fn to_transform3d(&self) -> Transform3D<S> {
-        Transform3D::matrix_to_transform3d(self.matrix)
+    fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::matrix_to_transform3d(self.matrix)
     }
 }
 

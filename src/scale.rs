@@ -22,16 +22,16 @@ use core::fmt;
 /// The scale transformation in two dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
-pub struct Scale2D<S> {
+pub struct Scale2<S> {
     /// The matrix representing the affine transformation.
     matrix: Matrix3x3<S>,
 }
 
-impl<S> Scale2D<S> where S: Scalar {
+impl<S> Scale2<S> where S: Scalar {
     /// Construct a scale transformation from a vector of scale factors.
     #[inline]
-    pub fn from_vector(scale: Vector2<S>) -> Scale2D<S> {
-        Scale2D {
+    pub fn from_vector(scale: Vector2<S>) -> Scale2<S> {
+        Scale2 {
             matrix: Matrix3x3::from_affine_nonuniform_scale(scale.x, scale.y),
         }
     }
@@ -39,8 +39,8 @@ impl<S> Scale2D<S> where S: Scalar {
     /// Construct a two-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
     #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2D<S> {
-        Scale2D {
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2<S> {
+        Scale2 {
             matrix: Matrix3x3::from_affine_nonuniform_scale(scale_x, scale_y),
         }
     }
@@ -48,8 +48,8 @@ impl<S> Scale2D<S> where S: Scalar {
     /// Construct a two-dimensional scale transformation from a uniform scale 
     /// factor.
     #[inline]
-    pub fn from_scale(scale: S) -> Scale2D<S> {
-        Scale2D {
+    pub fn from_scale(scale: S) -> Scale2<S> {
+        Scale2 {
             matrix: Matrix3x3::from_scale(scale),
         }
     }
@@ -57,8 +57,8 @@ impl<S> Scale2D<S> where S: Scalar {
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     #[inline]
-    pub fn inverse(&self) -> Option<Scale2D<S>> {
-        Some(Scale2D::from_nonuniform_scale(
+    pub fn inverse(&self) -> Option<Scale2<S>> {
+        Some(Scale2::from_nonuniform_scale(
             S::one() / self.matrix.c0r0, 
             S::one() / self.matrix.c1r1
         ))
@@ -77,44 +77,44 @@ impl<S> Scale2D<S> where S: Scalar {
     }
 }
 
-impl<S> AsRef<Matrix3x3<S>> for Scale2D<S> {
+impl<S> AsRef<Matrix3x3<S>> for Scale2<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 }
 
-impl<S> fmt::Display for Scale2D<S> where S: Scalar {
+impl<S> fmt::Display for Scale2<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
-impl<S> From<Scale2D<S>> for Matrix3x3<S> where S: Copy {
-    fn from(transformation: Scale2D<S>) -> Matrix3x3<S> {
+impl<S> From<Scale2<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: Scale2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Scale2D<S>> for Matrix3x3<S> where S: Copy {
-    fn from(transformation: &Scale2D<S>) -> Matrix3x3<S> {
+impl<S> From<&Scale2<S>> for Matrix3x3<S> where S: Copy {
+    fn from(transformation: &Scale2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Scale2D<S> 
+impl<S> AffineTransformation2<Point2<S>, Vector2<S>, S> for Scale2<S> 
     where S: ScalarFloat 
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
     #[inline]
-    fn identity() -> Scale2D<S> {
-        Scale2D::from_scale(S::one())
+    fn identity() -> Scale2<S> {
+        Scale2::from_scale(S::one())
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Scale2D<S>> {
+    fn inverse(&self) -> Option<Scale2<S>> {
         self.inverse()
     }
 
@@ -129,24 +129,24 @@ impl<S> AffineTransformation2D<Point2<S>, Vector2<S>, S> for Scale2D<S>
     }
 
     #[inline]
-    fn to_transform2d(&self) -> Transform2D<S> {
-        Transform2D::matrix_to_transform2d(self.matrix)
+    fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::matrix_to_transform2d(self.matrix)
     }
 }
 
-impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Scale2D<S> 
+impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Scale2<S> 
     where S: ScalarFloat 
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
     #[inline]
-    fn identity() -> Scale2D<S> {
-        Scale2D::from_scale(S::one())
+    fn identity() -> Scale2<S> {
+        Scale2::from_scale(S::one())
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Scale2D<S>> {
+    fn inverse(&self) -> Option<Scale2<S>> {
         self.inverse()
     }
 
@@ -161,24 +161,24 @@ impl<S> AffineTransformation2D<Point2<S>, &Vector2<S>, S> for Scale2D<S>
     }
 
     #[inline]
-    fn to_transform2d(&self) -> Transform2D<S> {
-        Transform2D::matrix_to_transform2d(self.matrix)
+    fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::matrix_to_transform2d(self.matrix)
     }
 }
 
-impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Scale2D<S> 
+impl<S> AffineTransformation2<&Point2<S>, Vector2<S>, S> for Scale2<S> 
     where S: ScalarFloat 
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
     #[inline]
-    fn identity() -> Scale2D<S> {
-        Scale2D::from_scale(S::one())
+    fn identity() -> Scale2<S> {
+        Scale2::from_scale(S::one())
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Scale2D<S>> {
+    fn inverse(&self) -> Option<Scale2<S>> {
         self.inverse()
     }
 
@@ -193,24 +193,24 @@ impl<S> AffineTransformation2D<&Point2<S>, Vector2<S>, S> for Scale2D<S>
     }
 
     #[inline]
-    fn to_transform2d(&self) -> Transform2D<S> {
-        Transform2D::matrix_to_transform2d(self.matrix)
+    fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::matrix_to_transform2d(self.matrix)
     }
 }
 
-impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Scale2D<S> 
+impl<'a, 'b, S> AffineTransformation2<&'a Point2<S>, &'b Vector2<S>, S> for Scale2<S> 
     where S: ScalarFloat 
 {
     type OutPoint = Point2<S>;
     type OutVector = Vector2<S>;
 
     #[inline]
-    fn identity() -> Scale2D<S> {
-        Scale2D::from_scale(S::one())
+    fn identity() -> Scale2<S> {
+        Scale2::from_scale(S::one())
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Scale2D<S>> {
+    fn inverse(&self) -> Option<Scale2<S>> {
         self.inverse()
     }
 
@@ -225,8 +225,8 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Sca
     }
 
     #[inline]
-    fn to_transform2d(&self) -> Transform2D<S> {
-        Transform2D::matrix_to_transform2d(self.matrix)
+    fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::matrix_to_transform2d(self.matrix)
     }
 }
 
@@ -234,15 +234,15 @@ impl<'a, 'b, S> AffineTransformation2D<&'a Point2<S>, &'b Vector2<S>, S> for Sca
 /// The scale transformation in three dimensions.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
-pub struct Scale3D<S> {
+pub struct Scale3<S> {
     /// The matrix representing the affine transformation.
     matrix: Matrix4x4<S>,
 }
 
-impl<S> Scale3D<S> where S: Scalar {
+impl<S> Scale3<S> where S: Scalar {
     /// Construct a scale transformation from a vector of scale factors.
-    pub fn from_vector(scale: Vector3<S>) -> Scale3D<S> {
-        Scale3D {
+    pub fn from_vector(scale: Vector3<S>) -> Scale3<S> {
+        Scale3 {
             matrix: Matrix4x4::from_affine_nonuniform_scale(
                 scale.x, 
                 scale.y, 
@@ -254,8 +254,8 @@ impl<S> Scale3D<S> where S: Scalar {
     /// Construct a three-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
     #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Scale3D<S> {
-        Scale3D {
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Scale3<S> {
+        Scale3 {
             matrix: Matrix4x4::from_affine_nonuniform_scale(
                 scale_x, 
                 scale_y, 
@@ -267,8 +267,8 @@ impl<S> Scale3D<S> where S: Scalar {
     /// Construct a three-dimensional scale transformation from a uniform scale 
     /// factor.
     #[inline]
-    pub fn from_scale(scale: S) -> Scale3D<S> {
-        Scale3D {
+    pub fn from_scale(scale: S) -> Scale3<S> {
+        Scale3 {
             matrix: Matrix4x4::from_affine_scale(scale),
         }
     }
@@ -276,8 +276,8 @@ impl<S> Scale3D<S> where S: Scalar {
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     #[inline]
-    pub fn inverse(&self) -> Option<Scale3D<S>> {
-        Some(Scale3D::from_nonuniform_scale(
+    pub fn inverse(&self) -> Option<Scale3<S>> {
+        Some(Scale3::from_nonuniform_scale(
             S::one() / self.matrix.c0r0, 
             S::one() / self.matrix.c1r1,
             S::one() / self.matrix.c2r2
@@ -297,32 +297,32 @@ impl<S> Scale3D<S> where S: Scalar {
     }
 }
 
-impl<S> AsRef<Matrix4x4<S>> for Scale3D<S> {
+impl<S> AsRef<Matrix4x4<S>> for Scale3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
 
-impl<S> fmt::Display for Scale3D<S> where S: Scalar {
+impl<S> fmt::Display for Scale3<S> where S: Scalar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         <Self as fmt::Debug>::fmt(&self, f)
     }
 }
 
-impl<S> From<Scale3D<S>> for Matrix4x4<S> where S: Copy {
-    fn from(transformation: Scale3D<S>) -> Matrix4x4<S> {
+impl<S> From<Scale3<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: Scale3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Scale3D<S>> for Matrix4x4<S> where S: Copy {
-    fn from(transformation: &Scale3D<S>) -> Matrix4x4<S> {
+impl<S> From<&Scale3<S>> for Matrix4x4<S> where S: Copy {
+    fn from(transformation: &Scale3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Scale3D<S> 
+impl<S> AffineTransformation3<Point3<S>, Vector3<S>, S> for Scale3<S> 
     where 
         S: ScalarFloat 
 {
@@ -330,12 +330,12 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Scale3D<S>
     type OutVector = Vector3<S>;
 
     #[inline]
-    fn identity() -> Scale3D<S> {
-        Scale3D::from_scale(S::one())
+    fn identity() -> Scale3<S> {
+        Scale3::from_scale(S::one())
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Scale3D<S>> {
+    fn inverse(&self) -> Option<Scale3<S>> {
         self.inverse()
     }
 
@@ -350,12 +350,12 @@ impl<S> AffineTransformation3D<Point3<S>, Vector3<S>, S> for Scale3D<S>
     }
 
     #[inline]
-    fn to_transform3d(&self) -> Transform3D<S> {
-        Transform3D::matrix_to_transform3d(self.matrix)
+    fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::matrix_to_transform3d(self.matrix)
     }
 }
 
-impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Scale3D<S> 
+impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Scale3<S> 
     where 
         S: ScalarFloat 
 {
@@ -363,12 +363,12 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Scale3D<S>
     type OutVector = Vector3<S>;
 
     #[inline]
-    fn identity() -> Scale3D<S> {
-        Scale3D::from_scale(S::one())
+    fn identity() -> Scale3<S> {
+        Scale3::from_scale(S::one())
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Scale3D<S>> {
+    fn inverse(&self) -> Option<Scale3<S>> {
         self.inverse()
     }
 
@@ -383,12 +383,12 @@ impl<S> AffineTransformation3D<Point3<S>, &Vector3<S>, S> for Scale3D<S>
     }
 
     #[inline]
-    fn to_transform3d(&self) -> Transform3D<S> {
-        Transform3D::matrix_to_transform3d(self.matrix)
+    fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::matrix_to_transform3d(self.matrix)
     }
 }
 
-impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Scale3D<S> 
+impl<S> AffineTransformation3<&Point3<S>, Vector3<S>, S> for Scale3<S> 
     where 
         S: ScalarFloat 
 {
@@ -396,12 +396,12 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Scale3D<S>
     type OutVector = Vector3<S>;
 
     #[inline]
-    fn identity() -> Scale3D<S> {
-        Scale3D::from_scale(S::one())
+    fn identity() -> Scale3<S> {
+        Scale3::from_scale(S::one())
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Scale3D<S>> {
+    fn inverse(&self) -> Option<Scale3<S>> {
         self.inverse()
     }
 
@@ -416,12 +416,12 @@ impl<S> AffineTransformation3D<&Point3<S>, Vector3<S>, S> for Scale3D<S>
     }
 
     #[inline]
-    fn to_transform3d(&self) -> Transform3D<S> {
-        Transform3D::matrix_to_transform3d(self.matrix)
+    fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::matrix_to_transform3d(self.matrix)
     }
 }
 
-impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Scale3D<S> 
+impl<'a, 'b, S> AffineTransformation3<&'a Point3<S>, &'b Vector3<S>, S> for Scale3<S> 
     where 
         S: ScalarFloat 
 {
@@ -429,12 +429,12 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Sca
     type OutVector = Vector3<S>;
 
     #[inline]
-    fn identity() -> Scale3D<S> {
-        Scale3D::from_scale(S::one())
+    fn identity() -> Scale3<S> {
+        Scale3::from_scale(S::one())
     }
 
     #[inline]
-    fn inverse(&self) -> Option<Scale3D<S>> {
+    fn inverse(&self) -> Option<Scale3<S>> {
         self.inverse()
     }
 
@@ -449,7 +449,7 @@ impl<'a, 'b, S> AffineTransformation3D<&'a Point3<S>, &'b Vector3<S>, S> for Sca
     }
 
     #[inline]
-    fn to_transform3d(&self) -> Transform3D<S> {
-        Transform3D::matrix_to_transform3d(self.matrix)
+    fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::matrix_to_transform3d(self.matrix)
     }
 }

@@ -8,6 +8,6 @@
 //! This way you do not have to import each trait individually. 
 pub use crate::traits::*;
 
-pub use crate::affine::AffineTransformation2D;
-pub use crate::affine::AffineTransformation3D;
+pub use crate::affine::AffineTransformation2;
+pub use crate::affine::AffineTransformation3;
 
