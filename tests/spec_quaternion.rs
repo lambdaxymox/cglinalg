@@ -740,7 +740,11 @@ macro_rules! approx_mul_props {
 
                 prop_assume!((q1 * (q2 * q3)).is_finite());
                 prop_assume!(((q1 * q2) * q3).is_finite());
-                prop_assert!(relative_eq!(q1 * (q2 * q3), (q1 * q2) * q3, epsilon = $tolerance));
+                prop_assert!(
+                    relative_eq!(q1 * (q2 * q3), (q1 * q2) * q3, epsilon = $tolerance),
+                    "q1 * (q2 * q3) = {}\n(q1 * q2) * q3 = {}",
+                    q1 * (q2 * q3), (q1 * q2) * q3
+                );
             }
 
             /// Quaternions have a multiplicative unit element.
@@ -1191,7 +1195,8 @@ macro_rules! approx_dot_product_props {
             DotProduct
         };
         use cglinalg::approx::{
-            relative_eq
+            relative_eq,
+            ulps_eq
         };
         use super::{
             $Generator,
@@ -1306,9 +1311,11 @@ macro_rules! approx_dot_product_props {
 
                 prop_assume!(((a * q1 + b * q2).dot(q3)).is_finite());
                 prop_assume!((a * q1.dot(q3) + b * q2.dot(q3)).is_finite());
-                prop_assert!(relative_eq!(
-                    (a * q1 + b * q2).dot(q3), a * q1.dot(q3) + b * q2.dot(q3), epsilon = $tolerance
-                ));
+                prop_assert!(ulps_eq!(
+                    (a * q1 + b * q2).dot(q3), a * q1.dot(q3) + b * q2.dot(q3), epsilon = $tolerance), 
+                    "(a * q1 + b * q2).dot(q3) = {}\na * q1.dot(q3) + b * q2.dot(q3) = {}\n",
+                    (a * q1 + b * q2).dot(q3), a * q1.dot(q3) + b * q2.dot(q3)
+                );
             }
         }
     }
@@ -1334,7 +1341,9 @@ macro_rules! exact_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::DotProduct;
+        use cglinalg::{
+            DotProduct
+        };
         use super::{
             $Generator,
         };
