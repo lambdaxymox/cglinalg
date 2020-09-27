@@ -329,34 +329,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Calculate the power of a quaternion where the exponent is a real number.
     pub fn powf(&self, exponent: S) -> Quaternion<S> {
-        let magnitude_v = self.v.magnitude();
-        if (self.s == S::zero()) && (magnitude_v == S::zero()) {
-            Quaternion::zero()
-        } else if (self.s == S::zero()) && (magnitude_v != S::zero()) {
-            let magnitude_q = self.magnitude();
-            let magnitude_q_pow = magnitude_q.powf(exponent);
-            let angle: S = num_traits::cast(core::f64::consts::FRAC_PI_2).unwrap();
-            let q_scalar = magnitude_q_pow * S::cos(exponent * angle);
-            let q_vector = self.v * (magnitude_q_pow * S::sin(exponent * angle) / magnitude_v);
-
-            Quaternion::from_sv(q_scalar, q_vector)
-        } else if (self.s != S::zero()) && (magnitude_v == S::zero()) {
-            let magnitude_q = self.magnitude();
-            let magnitude_q_pow = magnitude_q.powf(exponent);
-            let angle = S::zero();
-            let q_scalar = magnitude_q_pow * S::cos(exponent * angle);
-            let q_vector = self.v * (magnitude_q_pow * S::sin(exponent * angle) / magnitude_v);
-
-            Quaternion::from_sv(q_scalar, q_vector)
-        } else {
-            let magnitude_q = self.magnitude();
-            let magnitude_q_pow = magnitude_q.powf(exponent);
-            let angle = S::atan(magnitude_v / self.s);
-            let q_scalar = magnitude_q_pow * S::cos(exponent * angle);
-            let q_vector = self.v * (magnitude_q_pow * S::sin(exponent * angle) / magnitude_v);
-
-            Quaternion::from_sv(q_scalar, q_vector)
-        }
+        (self.ln() * exponent).exp()
     }
 
     /// Compute the principal value of a quaternion raised to the power of 
