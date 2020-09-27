@@ -17,6 +17,9 @@ use crate::traits::{
     Identity,
     Zero,
 };
+use crate::unit::{
+    Unit,
+};
 use crate::affine::*;
 
 use core::fmt;
@@ -37,10 +40,10 @@ pub struct Reflection2<S> {
 impl<S> Reflection2<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
-    pub fn from_normal_bias(normal: Vector2<S>, bias: Vector2<S>) -> Reflection2<S> {
+    pub fn from_normal_bias(normal: Unit<Vector2<S>>, bias: Vector2<S>) -> Reflection2<S> {
         Reflection2 {
             bias: bias,
-            normal: normal,
+            normal: normal.into_inner(),
             matrix: Matrix3x3::from_affine_reflection(normal, bias),
         }
     }
@@ -295,10 +298,10 @@ pub struct Reflection3<S> {
 impl<S> Reflection3<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
-    pub fn from_normal_bias(normal: Vector3<S>, bias: Vector3<S>) -> Reflection3<S> {
+    pub fn from_normal_bias(normal: Unit<Vector3<S>>, bias: Vector3<S>) -> Reflection3<S> {
         Reflection3 {
             bias: bias,
-            normal: normal,
+            normal: normal.into_inner(),
             matrix: Matrix4x4::from_affine_reflection(normal, bias),
         }
     }

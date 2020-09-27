@@ -232,7 +232,7 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
     /// line through the origin in the xy-plane.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_reflection(normal: Vector2<S>) -> Matrix2x2<S> {
+    pub fn from_reflection(normal: Unit<Vector2<S>>) -> Matrix2x2<S> {
         let one = S::one();
         let two = one + one;
 
@@ -1442,7 +1442,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// across the line `L`.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: Vector2<S>, bias: Vector2<S>) -> Matrix3x3<S> {
+    pub fn from_affine_reflection(normal: Unit<Vector2<S>>, bias: Vector2<S>) -> Matrix3x3<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -1470,7 +1470,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// crosses the origin.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_reflection(normal: Vector3<S>) -> Matrix3x3<S> {
+    pub fn from_reflection(normal: Unit<Vector3<S>>) -> Matrix3x3<S> {
         let one = S::one();
         let two = one + one;
 
@@ -3033,7 +3033,7 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     /// reflected point across the plane `P`.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: Vector3<S>, bias: Vector3<S>) -> Matrix4x4<S> {
+    pub fn from_affine_reflection(normal: Unit<Vector3<S>>, bias: Vector3<S>) -> Matrix4x4<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
