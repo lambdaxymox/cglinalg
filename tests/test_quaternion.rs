@@ -319,6 +319,29 @@ mod slerp_tests {
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
+
+    #[test]
+    fn test_slerp_endpoints() {
+        let angle1 = Degrees(30_f64);
+        let angle2 = Degrees(240_f64);
+        let unit_z = Vector3::unit_z();
+        let q0 = Quaternion::from_sv(
+            Angle::cos(angle1 / 2_f64), 
+            Angle::sin(angle1 / 2_f64) * unit_z
+        );
+        let q1 = Quaternion::from_sv(
+            Angle::cos(angle2 / 2_f64), 
+            Angle::sin(angle2 / 2_f64) * unit_z
+        );
+
+        let expected_0 = q0;
+        let expected_1 = q1;
+        let result_0 = q0.slerp(q1, 0.0);
+        let result_1 = q0.slerp(q1, 1.0);
+
+        assert_eq!(result_0, expected_0);
+        assert_eq!(result_1, expected_1);
+    }
 }
 
 #[cfg(test)]
@@ -546,6 +569,49 @@ mod power_tests {
         let exponent = -pi * f64::sqrt(3_f64) / 2_f64;
         let expected = f64::exp(exponent) * Quaternion::unit_s();
         let result = (i + j + k).powq(i + j + k);
+
+        assert_eq!(result, expected);
+    }
+}
+
+#[cfg(test)]
+mod rotation_between_vectors_tests {
+    use cglinalg::{
+        Angle,
+        Radians,
+        Unit,
+        Vector3,
+        Quaternion,
+    };
+    use cglinalg::approx::{
+        relative_eq,
+    };
+
+    
+    #[test]
+    fn test_rotation_between_vectors() {
+        let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
+        let unit_y: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
+        let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+        let expected = Quaternion::from_axis_angle(
+            unit_z, 
+            Radians::full_turn_div_4()
+        );
+        let result = Quaternion::rotation_between_axis(&unit_x, &unit_y);
+
+        assert!(relative_eq!(result, expected));
+    }
+
+    #[test]
+    fn test_rotation_between_same_vectors() {
+        let unit_v1: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(1.0, 1.0, 0.0));
+        let unit_v2: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(1.0, 1.0, 0.0));
+        let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+        let expected = Quaternion::from_axis_angle(
+            unit_z, 
+            Radians(0_f64)
+        );
+        let result = Quaternion::rotation_between_axis(&unit_v1, &unit_v2);
 
         assert_eq!(result, expected);
     }

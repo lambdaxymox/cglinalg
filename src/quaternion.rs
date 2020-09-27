@@ -341,7 +341,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
-    pub fn rotation_between_vectors(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Quaternion<S> {
+    pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Quaternion<S> {
         let v1 = unit_v1.as_ref();
         let v2 = unit_v2.as_ref();
         let k_cos_theta = v1.dot(v2);
