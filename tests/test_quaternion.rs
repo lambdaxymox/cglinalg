@@ -621,3 +621,47 @@ mod rotation_between_vectors_tests {
     }
 }
 
+#[cfg(test)]
+mod inverse_tests {
+    use cglinalg::{
+        Quaternion,
+        Zero,
+    };
+    use cglinalg::approx::{
+        relative_eq,
+    };
+
+
+    #[test]
+    fn test_inverse() {
+        let quaternion = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+        let magnitude = 30_f64;
+        let expected = Quaternion::new(1.0, -2.0, -3.0, -4.0) / magnitude;
+        let result = quaternion.inverse().unwrap();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_is_invertible() {
+        let quaternion = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+
+        assert!(quaternion.is_invertible());
+    }
+
+    #[test]
+    fn test_univertible_quaternion() {
+        let quaternion: Quaternion<f64> = Quaternion::zero();
+        let expected = None;
+        let result = quaternion.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_univertible_quaternion_is_not_invertible() {
+        let quaternion: Quaternion<f64> = Quaternion::zero();
+
+        assert!(!quaternion.is_invertible());
+    }
+}

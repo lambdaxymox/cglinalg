@@ -37,7 +37,6 @@ use crate::unit::{
 use crate::approx::{
     abs_diff_eq,
     abs_diff_ne,
-    ulps_eq,
 };
 
 use num_traits::NumCast;
@@ -349,22 +348,26 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         if let Some(axis) = Unit::try_from_value(v1_cross_v2, S::default_epsilon()) {
             let cos_theta = v1.dot(v2);
 
-            // The cosinus may be out of [-1, 1] because of inaccuracies.
             if cos_theta <= -S::one() {
+                // The cosines may fall outside the interval [-1, 1] because of floating 
+                // point inaccuracies.
                 return None;
             } else if cos_theta >= S::one() {
+                // The cosines may fall outside the interval [-1, 1] because of floating 
+                // point inaccuracies.
                 return Some(Self::identity());
             } else {
+                // The cosine falls inside the interval [-1, 1].
                 return Some(Self::from_axis_angle(axis, Radians::acos(cos_theta)));
             }
         } else if v1.dot(v2) < S::zero() {
-            // PI
-            //
-            // The rotation axis is undefined but the angle not zero. This is not a
-            // simple rotation.
+            // There are two ways to rotate around the unit circle between two vectors.
+            // If both one vector is the negation of the other one, i.e. they are pi radians
+            // apart, then the arc distance along either direction around the unit circle is
+            // identical, so we have no way of discerning one path from the other.
             return None;
         } else {
-            // Zero
+            // Both vectors point in the same direction.
             Some(Self::identity())
         }
     }
