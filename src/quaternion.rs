@@ -341,29 +341,32 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
-    pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Quaternion<S> {
+    pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Quaternion<S>> {
         let v1 = unit_v1.as_ref();
         let v2 = unit_v2.as_ref();
-        let k_cos_theta = v1.dot(v2);
+        let v1_cross_v2 = v1.cross(v2);
 
-        // The vectors point in the same direction.
-        if ulps_eq!(k_cos_theta, S::one()) {
-            return Quaternion::<S>::identity();
-        }
+        if let Some(axis) = Unit::try_from_value(v1_cross_v2, S::default_epsilon()) {
+            let cos_theta = v1.dot(v2);
 
-        let k = (v1.magnitude_squared() * v2.magnitude_squared()).sqrt();
-
-        // The vectors point in opposite directions.
-        if ulps_eq!(k_cos_theta / k, -S::one()) {
-            let mut orthogonal = v1.cross(Vector3::unit_x());
-            if ulps_eq!(orthogonal.magnitude_squared(), S::zero()) {
-                orthogonal = v1.cross(Vector3::unit_y());
+            // The cosinus may be out of [-1, 1] because of inaccuracies.
+            if cos_theta <= -S::one() {
+                return None;
+            } else if cos_theta >= S::one() {
+                return Some(Self::identity());
+            } else {
+                return Some(Self::from_axis_angle(axis, Radians::acos(cos_theta)));
             }
-            return Quaternion::from_sv(S::zero(), orthogonal.normalize());
+        } else if v1.dot(v2) < S::zero() {
+            // PI
+            //
+            // The rotation axis is undefined but the angle not zero. This is not a
+            // simple rotation.
+            return None;
+        } else {
+            // Zero
+            Some(Self::identity())
         }
-
-        // The vectors point in any other direction.
-        Quaternion::from_sv(k + k_cos_theta, v1.cross(v2)).normalize()
     }
 }
 

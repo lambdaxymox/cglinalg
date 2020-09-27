@@ -597,21 +597,25 @@ mod rotation_between_vectors_tests {
             unit_z, 
             Radians::full_turn_div_4()
         );
-        let result = Quaternion::rotation_between_axis(&unit_x, &unit_y);
+        let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
 
         assert!(relative_eq!(result, expected));
     }
 
     #[test]
     fn test_rotation_between_same_vectors() {
-        let unit_v1: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(1.0, 1.0, 0.0));
-        let unit_v2: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(1.0, 1.0, 0.0));
+        let unit_v1: Unit<Vector3<f64>> = Unit::from_value(
+            Vector3::new(1.0, 1.0, 0.0)
+        );
+        let unit_v2: Unit<Vector3<f64>> = Unit::from_value(
+            Vector3::new(1.0, 1.0, 0.0)
+        );
         let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
         let expected = Quaternion::from_axis_angle(
             unit_z, 
             Radians(0_f64)
         );
-        let result = Quaternion::rotation_between_axis(&unit_v1, &unit_v2);
+        let result = Quaternion::rotation_between_axis(&unit_v1, &unit_v2).unwrap();
 
         assert_eq!(result, expected);
     }
