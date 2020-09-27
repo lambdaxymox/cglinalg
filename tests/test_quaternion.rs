@@ -505,7 +505,10 @@ mod power_tests {
         Quaternion,
         Identity,
     };
-    use cglinalg::approx::relative_eq;
+    use cglinalg::approx::{
+        relative_eq
+    };
+    use core::f64;
 
 
     #[test]
@@ -529,48 +532,33 @@ mod power_tests {
     }
 
     #[test]
-    fn test_quaternion_power() {
-        let i = Quaternion::<f64>::unit_x();
-        let pi_over_2 = core::f64::consts::FRAC_PI_2;
-        let expected = f64::exp(-pi_over_2) * Quaternion::unit_s();
-        let result = i.powq(i);
-
-        assert_eq!(result, expected);
-    }
-
-    #[test]
     fn test_quaternion_power1() {
         let i = Quaternion::<f64>::unit_x();
-        let j = Quaternion::<f64>::unit_y();
-        let k = Quaternion::<f64>::unit_z();
-        let expected = k;
-        let result = i.powq(j);
+        let exponent = 2_f64;
+        let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
+        let result = i.powf(exponent);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
 
     #[test]
     fn test_quaternion_power2() {
-        let i = Quaternion::<f64>::unit_x();
         let j = Quaternion::<f64>::unit_y();
-        let k = Quaternion::<f64>::unit_z();
-        let expected = -j;
-        let result = i.powq(k);
+        let exponent = 2_f64;
+        let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
+        let result = j.powf(exponent);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
 
     #[test]
     fn test_quaternion_power3() {
-        let i = Quaternion::<f64>::unit_x();
-        let j = Quaternion::<f64>::unit_y();
         let k = Quaternion::<f64>::unit_z();
-        let pi = core::f64::consts::PI;
-        let exponent = -pi * f64::sqrt(3_f64) / 2_f64;
-        let expected = f64::exp(exponent) * Quaternion::unit_s();
-        let result = (i + j + k).powq(i + j + k);
+        let exponent = 2_f64;
+        let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
+        let result = k.powf(exponent);
 
-        assert_eq!(result, expected);
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
 }
 
@@ -626,9 +614,6 @@ mod inverse_tests {
     use cglinalg::{
         Quaternion,
         Zero,
-    };
-    use cglinalg::approx::{
-        relative_eq,
     };
 
 

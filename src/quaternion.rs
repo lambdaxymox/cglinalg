@@ -34,10 +34,6 @@ use crate::vector::{
 use crate::unit::{
     Unit,
 };
-use crate::approx::{
-    abs_diff_eq,
-    abs_diff_ne,
-};
 
 use num_traits::NumCast;
 use core::fmt;
@@ -224,11 +220,16 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// If the quaternion `self` has zero magnitude, it does not have an 
     /// inverse. In this case the function return `None`. Otherwise it returns 
     /// the inverse of `self`.
+    #[inline]
     pub fn inverse(&self) -> Option<Quaternion<S>> {
-        let magnitude_squared = self.magnitude_squared();
         let multiple: S = num_traits::cast(16).unwrap();
-        let tolerance = multiple * S::default_epsilon();
-        if abs_diff_eq!(magnitude_squared, S::zero(), epsilon = tolerance) {
+        let epsilon = multiple * S::default_epsilon();
+        self.inverse_eps(epsilon)
+    }
+
+    fn inverse_eps(&self, epsilon: S) -> Option<Quaternion<S>> {
+        let magnitude_squared = self.magnitude_squared();
+        if magnitude_squared <= epsilon * epsilon {
             None
         } else {
             Some(self.conjugate() / magnitude_squared)
@@ -239,11 +240,16 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     ///
     /// Returns `true` is there exists a quaternion `r` such that `q * r = 1`.
     /// Otherwise, it returns `false`.
+    #[inline]
     pub fn is_invertible(&self) -> bool {
         let multiple: S = num_traits::cast(16).unwrap();
-        let tolerance = multiple * S::default_epsilon();
+        let epsilon = multiple * S::default_epsilon();
 
-        abs_diff_ne!(self.magnitude_squared(), S::zero(), epsilon = tolerance)
+        self.is_invertible_eps(epsilon)
+    }
+
+    fn is_invertible_eps(&self, epsilon: S) -> bool {
+        self.magnitude_squared() >= epsilon * epsilon
     }
 
     /// Compute the principal argument of a quaternion.
@@ -327,16 +333,17 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Calculate the power of a quaternion where the exponent is a real number.
+    #[inline]
     pub fn powf(&self, exponent: S) -> Quaternion<S> {
         (self.ln() * exponent).exp()
     }
-
+    /*
     /// Compute the principal value of a quaternion raised to the power of 
     /// another quaternion.
     pub fn powq(&self, exponent: Quaternion<S>) -> Quaternion<S> {
         Self::exp(&(self.ln() * exponent))
     }
-
+    */
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
