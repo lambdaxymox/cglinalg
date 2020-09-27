@@ -113,14 +113,14 @@ impl<S> Rotation2<S> where S: ScalarFloat {
 
 impl<S> fmt::Debug for Rotation2<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Rotation2D ")?;
+        write!(f, "Rotation2 ")?;
         <[S; 9] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
 
 impl<S> fmt::Display for Rotation2<S> where S: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Rotation2D ")?;
+        write!(f, "Rotation2 ")?;
         <[S; 9] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
     }
 }
@@ -396,8 +396,8 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
-    pub fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> Rotation3<S> {
-        let q = Quaternion::between_vectors(v1, v2);
+    pub fn rotation_between_vectors(v1: &Vector3<S>, v2: &Vector3<S>) -> Rotation3<S> {
+        let q = Quaternion::rotation_between_vectors(v1, v2);
         q.into()
     }
 

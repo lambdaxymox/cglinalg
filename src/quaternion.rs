@@ -81,7 +81,8 @@ macro_rules! impl_mul_operator {
 /// where `v` is a unit vector in the direction of the axis of rotation, `theta`
 /// is the angle of rotation, and `|q|` denotes the length of the quaternion.
 ///
-/// Quaternions are stored in (s, x, y, z) storage order.
+/// Quaternions are stored in (s, x, y, z) storage order, whree `s` is the scalar
+/// part and `(x, y, z)` are the vector components.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Quaternion<S> {
@@ -113,7 +114,9 @@ impl<S> Quaternion<S> {
 }
 
 impl<S> Quaternion<S> where S: Copy {
-    /// Construct a new quaternion from a fill value.
+    /// Construct a new quaternion from a fill value. 
+    ///
+    /// Every component of the resulting quaternion will have the same value.
     #[inline]
     pub fn from_fill(value: S) -> Quaternion<S> {
         Quaternion::new(value, value, value, value)
@@ -347,7 +350,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
-    pub(crate) fn between_vectors(v1: Vector3<S>, v2: Vector3<S>) -> Quaternion<S> {
+    pub fn rotation_between_vectors(v1: &Vector3<S>, v2: &Vector3<S>) -> Quaternion<S> {
         let k_cos_theta = v1.dot(v2);
 
         // The vectors point in the same direction.
@@ -372,11 +375,13 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 }
 
 impl<S> Zero for Quaternion<S> where S: Scalar {
+    #[inline]
     fn zero() -> Quaternion<S> {
         let zero = S::zero();
         Quaternion::new(zero, zero, zero, zero)
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         let zero = S::zero();
         self.s == zero && self.v.x == zero && self.v.y == zero && self.v.z == zero
@@ -384,6 +389,7 @@ impl<S> Zero for Quaternion<S> where S: Scalar {
 }
 
 impl<S> Identity for Quaternion<S> where S: Scalar {
+    #[inline]
     fn identity() -> Quaternion<S> {
         let one = S::one();
         let zero = S::zero();
