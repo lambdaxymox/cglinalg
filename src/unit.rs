@@ -10,6 +10,7 @@ use num_traits::{
 };
 
 use core::fmt;
+use core::ops;
 
 
 /// A type that represents unit normalized values. 
@@ -42,6 +43,17 @@ impl<T> AsRef<T> for Unit<T> {
     }
 }
 
+impl<T> ops::Deref for Unit<T> {
+    type Target = T;
+
+    #[inline]
+    fn deref(&self) -> &T {
+        unsafe { 
+            &*(self as *const Unit<T> as *const T) 
+        }
+    }
+}
+
 impl<T: fmt::Display> fmt::Display for Unit<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.value.fmt(f)
@@ -67,7 +79,7 @@ impl<T> Unit<T> where T: Magnitude {
     /// # };
     /// let vector: Vector3<f64> = Vector3::new(0.0, 2.0, 0.0);
     /// let (wrapped, norm) = Unit::new_with_magnitude(vector);
-    /// let unit_vector: &Vector3<f64> = wrapped.as_ref();
+    /// let unit_vector: &Vector3<f64> = &wrapped;
     /// 
     /// assert_eq!(norm, 2.0);
     /// assert_eq!(unit_vector.magnitude_squared(), 1.0, "unit_vector = {}", unit_vector);
