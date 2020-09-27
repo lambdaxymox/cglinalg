@@ -53,7 +53,8 @@ impl<T> Unit<T> where T: Magnitude {
     /// let (unit_vector, norm) = Unit::new_with_magnitude(vector);
     /// 
     /// assert_eq!(norm, 2.0);
-    /// assert_eq!(vector.magnitude_squared(), 1.0);
+    /// assert_eq!(unit_vector.magnitude_squared(), 1.0, "unit_vector = {}", unit_vector);
+    /// assert_eq!(unit_vector.magnitude(), 1.0, "unit_vector = {}", unit_vector);
     /// ```
     #[inline]
     pub fn new_with_magnitude(value: T) -> (Self, T::Output) {

@@ -33,6 +33,7 @@ pub use scalar::*;
 pub use vector::*;
 pub use traits::*;
 pub use point::*;
+pub use unit::*;
 
 pub use reflection::*;
 pub use rotation::*;

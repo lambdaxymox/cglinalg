@@ -167,6 +167,23 @@ mod vector1_tests {
 
         assert_eq!(v.x, v[0]);
     }
+
+    #[test]
+    fn test_magnitude() {
+        let vector = Vector1::new(4.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude_unit_vectors() {
+        let unit_x: Vector1<f64> = Vector1::unit_x();
+
+        assert_eq!(unit_x.magnitude_squared(), 1.0);
+        assert_eq!(unit_x.magnitude(), 1.0);
+    }
 }
 
 
@@ -336,6 +353,35 @@ mod vector2_tests {
 
         assert_eq!(v.x, v[0]);
         assert_eq!(v.y, v[1]);
+    }
+
+    #[test]
+    fn test_magnitude1() {
+        let vector = Vector2::new(4.0, 0.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude2() {
+        let vector = Vector2::new(0.0, 4.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude_unit_vectors() {
+        let unit_x: Vector2<f64> = Vector2::unit_x();
+        let unit_y: Vector2<f64> = Vector2::unit_y();
+
+        assert_eq!(unit_x.magnitude_squared(), 1.0);
+        assert_eq!(unit_x.magnitude(), 1.0);
+        assert_eq!(unit_y.magnitude_squared(), 1.0);
+        assert_eq!(unit_y.magnitude(), 1.0);
     }
 }
 
@@ -524,6 +570,47 @@ mod vector3_tests {
         assert_eq!(v.x, v[0]);
         assert_eq!(v.y, v[1]);
         assert_eq!(v.z, v[2]);
+    }
+
+    #[test]
+    fn test_magnitude1() {
+        let vector = Vector3::new(4.0, 0.0, 0.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude2() {
+        let vector = Vector3::new(0.0, 4.0, 0.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude3() {
+        let vector = Vector3::new(0.0, 0.0, 4.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude_unit_vectors() {
+        let unit_x: Vector3<f64> = Vector3::unit_x();
+        let unit_y: Vector3<f64> = Vector3::unit_y();
+        let unit_z: Vector3<f64> = Vector3::unit_z();
+
+        assert_eq!(unit_x.magnitude_squared(), 1.0);
+        assert_eq!(unit_x.magnitude(), 1.0);
+        assert_eq!(unit_y.magnitude_squared(), 1.0);
+        assert_eq!(unit_y.magnitude(), 1.0);
+        assert_eq!(unit_z.magnitude_squared(), 1.0);
+        assert_eq!(unit_z.magnitude(), 1.0);
     }
 }
 
@@ -714,5 +801,58 @@ mod vector4_tests {
         assert_eq!(v.y, v[1]);
         assert_eq!(v.z, v[2]);
         assert_eq!(v.w, v[3]);
+    }
+
+    #[test]
+    fn test_magnitude1() {
+        let vector = Vector4::new(4.0, 0.0, 0.0, 0.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude2() {
+        let vector = Vector4::new(0.0, 4.0, 0.0, 0.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude3() {
+        let vector = Vector4::new(0.0, 0.0, 4.0, 0.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude4() {
+        let vector = Vector4::new(0.0, 0.0, 0.0, 4.0);
+        let expected = 4.0;
+        let result = vector.magnitude();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_magnitude_unit_vectors() {
+        let unit_x: Vector4<f64> = Vector4::unit_x();
+        let unit_y: Vector4<f64> = Vector4::unit_y();
+        let unit_z: Vector4<f64> = Vector4::unit_z();
+        let unit_w: Vector4<f64> = Vector4::unit_w();
+
+        assert_eq!(unit_x.magnitude_squared(), 1.0);
+        assert_eq!(unit_x.magnitude(), 1.0);
+        assert_eq!(unit_y.magnitude_squared(), 1.0);
+        assert_eq!(unit_y.magnitude(), 1.0);
+        assert_eq!(unit_z.magnitude_squared(), 1.0);
+        assert_eq!(unit_z.magnitude(), 1.0);
+        assert_eq!(unit_w.magnitude_squared(), 1.0);
+        assert_eq!(unit_w.magnitude(), 1.0);
     }
 }
