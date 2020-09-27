@@ -337,13 +337,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     pub fn powf(&self, exponent: S) -> Quaternion<S> {
         (self.ln() * exponent).exp()
     }
-    /*
-    /// Compute the principal value of a quaternion raised to the power of 
-    /// another quaternion.
-    pub fn powq(&self, exponent: Quaternion<S>) -> Quaternion<S> {
-        Self::exp(&(self.ln() * exponent))
-    }
-    */
+
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
