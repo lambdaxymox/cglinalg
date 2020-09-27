@@ -47,7 +47,7 @@ use core::fmt;
 /// If one wants to talk about rotating a vector in the the _xy-plane_ about a 
 /// normal vector, we are implicitly rotating about the _z-axis_ in 
 /// three dimensions.
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Rotation2<S> {
     /// The angle of rotation.
@@ -116,17 +116,9 @@ impl<S> Rotation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Debug for Rotation2<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Rotation2 ")?;
-        <[S; 9] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
-    }
-}
-
-impl<S> fmt::Display for Rotation2<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Rotation2 ")?;
-        <[S; 9] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
+impl<S> fmt::Display for Rotation2<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Rotation2 [{}]", self.matrix)
     }
 }
 
@@ -328,7 +320,7 @@ impl<'a, 'b, S> AffineTransformation2<&'a Point2<S>, &'b Vector2<S>, S> for Rota
 /// A rotation is an operation that creates circular motions and 
 /// preserves at least one point. Rotations preserve the length of vectors and 
 /// therefore act as a class of rigid body transformations.
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Rotation3<S> {
     /// The angle of rotation.
@@ -433,17 +425,9 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Debug for Rotation3<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Rotation3 ")?;
-        <[S; 16] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
-    }
-}
-
-impl<S> fmt::Display for Rotation3<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Rotation3 ")?;
-        <[S; 16] as fmt::Debug>::fmt(self.matrix.as_ref(), f)
+impl<S> fmt::Display for Rotation3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Rotation3 [{}]", self.matrix)
     }
 }
 

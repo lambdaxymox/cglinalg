@@ -1,5 +1,4 @@
 use crate::scalar::{
-    Scalar,
     ScalarSigned,
 };
 use crate::matrix::{
@@ -103,9 +102,9 @@ impl<S> AsRef<Matrix3x3<S>> for Translation2<S> {
     }
 }
 
-impl<S> fmt::Display for Translation2<S> where S: Scalar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for Translation2<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Translation2 [{}]", self.matrix)
     }
 }
 
@@ -335,9 +334,9 @@ impl<S> AsRef<Matrix4x4<S>> for Translation3<S> {
     }
 }
 
-impl<S> fmt::Display for Translation3<S> where S: Scalar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for Translation3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Translation3 [{}]", self.matrix)
     }
 }
 

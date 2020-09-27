@@ -502,9 +502,13 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     }
 }
 
-impl<A> fmt::Display for EulerAngles<A> where A: fmt::Display + fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<A> fmt::Display for EulerAngles<A> where A: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "EulerAngles [{}, {}, {}]",
+            self.x, self.y, self.z
+        )
     }
 }
 

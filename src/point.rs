@@ -315,8 +315,8 @@ impl<S> fmt::Debug for Point1<S> where S: fmt::Debug {
 }
 
 impl<S> fmt::Display for Point1<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Point1 [{:.2}]", self.x)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Point1 [{}]", self.x)
     }
 }
 
@@ -997,8 +997,8 @@ impl<S> fmt::Debug for Point2<S> where S: fmt::Debug {
 }
 
 impl<S> fmt::Display for Point2<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Point2 [{:.2}, {:.2}]", self.x, self.y)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Point2 [{}, {}]", self.x, self.y)
     }
 }
 
@@ -1704,8 +1704,8 @@ impl<S> fmt::Debug for Point3<S> where S: fmt::Debug {
 }
 
 impl<S> fmt::Display for Point3<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Point3 [{:.2}, {:.2}, {:.2}]", self.x, self.y, self.z)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Point3 [{}, {}, {}]", self.x, self.y, self.z)
     }
 }
 

@@ -829,8 +829,12 @@ impl<S> ops::IndexMut<ops::RangeFull> for Quaternion<S> where S: Scalar {
 }
 
 impl<S> fmt::Display for Quaternion<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        writeln!(f, "Quaternion [s: {}, v: [{}, {}, {}]]", self.s, self.v.x, self.v.y, self.v.z)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        writeln!(
+            formatter, 
+            "Quaternion [s: {}, v: [{}, {}, {}]]", 
+            self.s, self.v.x, self.v.y, self.v.z
+        )
     }
 }
 

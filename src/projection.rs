@@ -70,9 +70,13 @@ impl<S> PerspectiveSpec<S> {
     }
 }
 
-impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Debug + fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "PerspectiveSpec [left={}, right={}, bottom={}, top={}, near={}, far={}]",
+            self.left, self.right, self.bottom, self.top, self.near, self.far
+        )
     }
 }
 
@@ -121,9 +125,13 @@ impl<S> PerspectiveFovSpec<S> {
     }
 }
 
-impl<S> fmt::Display for PerspectiveFovSpec<S> where S: fmt::Debug + fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for PerspectiveFovSpec<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+       write!(
+           formatter,
+           "PerspectiveFovSpec [fovy={}, aspect={}, near={}, far={}]",
+           self.fovy, self.aspect, self.near, self.far
+       )
     }
 }
 
@@ -260,9 +268,13 @@ impl<S> OrthographicSpec<S> {
     }
 }
 
-impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Debug + fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "OrthographicSpec [left={}, right={}, bottom={}, top={}, near={}, far={}]",
+            self.left, self.right, self.bottom, self.top, self.near, self.far
+        )
     }
 }
 
@@ -410,11 +422,13 @@ impl<S> AsRef<Matrix4x4<S>> for PerspectiveProjection3<S> {
     }
 }
 
-impl<S> fmt::Display for PerspectiveProjection3<S> 
-    where S: fmt::Debug + fmt::Display 
-{
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for PerspectiveProjection3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "PerspectiveProjection3 [{}]",
+            self.matrix
+        )
     }
 }
 
@@ -606,11 +620,13 @@ impl<S> AsRef<Matrix4x4<S>> for PerspectiveFovProjection3<S> {
     }
 }
 
-impl<S> fmt::Display for PerspectiveFovProjection3<S> 
-    where S: fmt::Debug + fmt::Display 
-{
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for PerspectiveFovProjection3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "PerspectiveFovProjection3 [{}]",
+            self.matrix
+        )
     }
 }
 
@@ -790,11 +806,13 @@ impl<S> AsRef<Matrix4x4<S>> for OrthographicProjection3<S> {
     }
 }
 
-impl<S> fmt::Display for OrthographicProjection3<S> 
-    where S: fmt::Debug + fmt::Display 
-{
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for OrthographicProjection3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "OrthographicProjection3 [{}]",
+            self.matrix
+        )
     }
 }
 

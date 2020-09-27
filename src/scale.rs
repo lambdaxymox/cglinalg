@@ -84,9 +84,9 @@ impl<S> AsRef<Matrix3x3<S>> for Scale2<S> {
     }
 }
 
-impl<S> fmt::Display for Scale2<S> where S: Scalar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for Scale2<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Scale2 [{}]", self.matrix)
     }
 }
 
@@ -304,9 +304,9 @@ impl<S> AsRef<Matrix4x4<S>> for Scale3<S> {
     }
 }
 
-impl<S> fmt::Display for Scale3<S> where S: Scalar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for Scale3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Scale3 [{}]", self.matrix)
     }
 }
 

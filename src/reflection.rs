@@ -1,5 +1,4 @@
 use crate::scalar::{
-    Scalar,
     ScalarFloat,
 };
 use crate::matrix::{
@@ -110,9 +109,13 @@ impl<S> AsRef<Matrix3x3<S>> for Reflection2<S> {
     }
 }
 
-impl<S> fmt::Display for Reflection2<S> where S: Scalar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for Reflection2<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "Reflection2 [{}]",
+            self.matrix
+        )
     }
 }
 
@@ -374,9 +377,13 @@ impl<S> AsRef<Matrix4x4<S>> for Reflection3<S> {
     }
 }
 
-impl<S> fmt::Display for Reflection3<S> where S: Scalar {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(&self, f)
+impl<S> fmt::Display for Reflection3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "Reflection3 [{}]",
+            self.matrix
+        )
     }
 }
 

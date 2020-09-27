@@ -62,7 +62,7 @@ impl<T> ops::Deref for Unit<T> {
     }
 }
 
-impl<T: fmt::Display> fmt::Display for Unit<T> {
+impl<T> fmt::Display for Unit<T> where T: fmt::Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.value.fmt(f)
     }

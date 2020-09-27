@@ -91,6 +91,9 @@ impl<S> Vector1<S> where S: Copy {
     }
 
     /// Construct a vector from a fill value.
+    ///
+    /// Every component of the resulting vector will have the same value
+    /// supplied by the argument.
     #[inline]
     pub fn from_fill(value: S) -> Vector1<S> {
         Vector1::new(value)
@@ -325,15 +328,16 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector1<S> {
 }
 
 impl<S> fmt::Debug for Vector1<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Vector1 ")?;
-        <[S; 1] as fmt::Debug>::fmt(self.as_ref(), f)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.debug_struct("Vector1 ")
+                 .field("x", &self.x)
+                 .finish()
     }
 }
 
 impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Vector1 [{:.2}]", self.x)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Vector1 [{}]", self.x)
     }
 }
 
@@ -853,6 +857,9 @@ impl<S> Vector2<S> where S: Copy {
     }
 
     /// Construct a vector from a fill value.
+    ///
+    /// Every component of the resulting vector will have the same value
+    /// supplied by the argument.
     #[inline]
     pub fn from_fill(value: S) -> Vector2<S> {
         Vector2::new(value, value)
@@ -1045,15 +1052,17 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector2<S> {
 }
 
 impl<S> fmt::Debug for Vector2<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Vector2 ")?;
-        <[S; 2] as fmt::Debug>::fmt(self.as_ref(), f)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.debug_struct("Vector2 ")
+                 .field("x", &self.x)
+                 .field("y", &self.y)
+                 .finish()
     }
 }
 
 impl<S> fmt::Display for Vector2<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Vector2 [{:.2}, {:.2}]", self.x, self.y)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Vector2 [{}, {}]", self.x, self.y)
     }
 }
 
@@ -1654,6 +1663,9 @@ impl<S> Vector3<S> where S: Copy {
     }
 
     /// Construct a vector from a fill value.
+    ///
+    /// Every component of the resulting vector will have the same value
+    /// supplied by the argument.
     #[inline]
     pub fn from_fill(value: S) -> Vector3<S> {
         Vector3::new(value, value, value)
@@ -1859,15 +1871,18 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector3<S> {
 }
 
 impl<S> fmt::Debug for Vector3<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Vector3 ")?;
-        <[S; 3] as fmt::Debug>::fmt(self.as_ref(), f)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.debug_struct("Vector2 ")
+                 .field("x", &self.x)
+                 .field("y", &self.y)
+                 .field("z", &self.z)
+                 .finish()
     }
 }
 
 impl<S> fmt::Display for Vector3<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Vector3 [{:.2}, {:.2}, {:.2}]", self.x, self.y, self.z)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Vector3 [{}, {}, {}]", self.x, self.y, self.z)
     }
 }
 
@@ -2550,6 +2565,9 @@ impl<S> Vector4<S> where S: Copy {
     }
 
     /// Construct a vector from a fill value.
+    ///
+    /// Every component of the resulting vector will have the same value
+    /// supplied by the argument.
     #[inline]
     pub fn from_fill(value: S) -> Vector4<S> {
         Vector4::new(value, value, value, value)
@@ -2866,15 +2884,19 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
 }
 
 impl<S> fmt::Debug for Vector4<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Vector4 ")?;
-        <[S; 4] as fmt::Debug>::fmt(self.as_ref(), f)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.debug_struct("Vector2 ")
+                 .field("x", &self.x)
+                 .field("y", &self.y)
+                 .field("z", &self.z)
+                 .field("w", &self.w)
+                 .finish()
     }
 }
 
 impl<S> fmt::Display for Vector4<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Vector4 [{:.2}, {:.2}, {:.2}, {:.2}]", self.x, self.y, self.z, self.w)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Vector4 [{}, {}, {}, {}]", self.x, self.y, self.z, self.w)
     }
 }
 
