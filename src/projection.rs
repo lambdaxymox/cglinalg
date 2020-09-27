@@ -128,80 +128,51 @@ impl<S> fmt::Display for PerspectiveFovSpec<S> where S: fmt::Debug + fmt::Displa
 }
 
 impl<S> From<PerspectiveFovSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
+    #[inline]
     fn from(spec: PerspectiveFovSpec<S>) -> Matrix4x4<S> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-        let range = Angle::tan(spec.fovy / two) * spec.near;
-        let sx = (two * spec.near) / (range * spec.aspect + range * spec.aspect);
-        let sy = spec.near / range;
-        let sz = (spec.far + spec.near) / (spec.near - spec.far);
-        let pz = (two * spec.far * spec.near) / (spec.near - spec.far);
-        
-        // We use the same perspective projection matrix that OpenGL uses.
-        Matrix4x4::new(
-            sx,    zero,  zero,  zero,
-            zero,  sy,    zero,  zero,
-            zero,  zero,  sz,   -one,
-            zero,  zero,  pz,    zero
-        )
+        Matrix4x4::from_perspective_fov(spec.fovy, spec.aspect, spec.near, spec.far)
+    }
+}
+
+impl<S> From<&PerspectiveFovSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
+    #[inline]
+    fn from(spec: &PerspectiveFovSpec<S>) -> Matrix4x4<S> {
+        Matrix4x4::from_perspective_fov(spec.fovy, spec.aspect, spec.near, spec.far)
     }
 }
 
 impl<S> From<PerspectiveSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
+    #[inline]
     fn from(spec: PerspectiveSpec<S>) -> Matrix4x4<S> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
+        Matrix4x4::from_perspective(
+            spec.left, spec.right, spec.bottom, spec.top, spec.near, spec.far
+        )
+    }
+}
 
-        let c0r0 = (two * spec.near) / (spec.right - spec.left);
-        let c0r1 = zero;
-        let c0r2 = zero;
-        let c0r3 = zero;
-
-        let c1r0 = zero;
-        let c1r1 = (two * spec.near) / (spec.top - spec.bottom);
-        let c1r2 = zero;
-        let c1r3 = zero;
-
-        let c2r0 =  (spec.right + spec.left)   / (spec.right - spec.left);
-        let c2r1 =  (spec.top   + spec.bottom) / (spec.top   - spec.bottom);
-        let c2r2 = -(spec.far   + spec.near)   / (spec.far   - spec.near);
-        let c2r3 = -one;
-
-        let c3r0 = zero;
-        let c3r1 = zero;
-        let c3r2 = -(two * spec.far * spec.near) / (spec.far - spec.near);
-        let c3r3 = zero;
-
-        // We use the same perspective projection matrix that OpenGL uses.
-        Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3,
+impl<S> From<&PerspectiveSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
+    #[inline]
+    fn from(spec: &PerspectiveSpec<S>) -> Matrix4x4<S> {
+        Matrix4x4::from_perspective(
+            spec.left, spec.right, spec.bottom, spec.top, spec.near, spec.far
         )
     }
 }
 
 impl<S> From<OrthographicSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
+    #[inline]
     fn from(spec: OrthographicSpec<S>) -> Matrix4x4<S> {
-        let zero = S::zero();
-        let one  = S::one();
-        let two = one + one;
-        let sx =  two / (spec.right - spec.left);
-        let sy =  two / (spec.top - spec.bottom);
-        let sz = -two / (spec.far - spec.near);
-        let tx = -(spec.right + spec.left) / (spec.right - spec.left);
-        let ty = -(spec.top + spec.bottom) / (spec.top - spec.bottom);
-        let tz = -(spec.far + spec.near) / (spec.far - spec.near);
+        Matrix4x4::from_orthographic(
+            spec.left, spec.right, spec.bottom, spec.top, spec.near, spec.far
+        )
+    }
+}
 
-        // We use the same orthographic projection matrix that OpenGL uses.
-        Matrix4x4::new(
-            sx,   zero, zero, zero,
-            zero, sy,   zero, zero,
-            zero, zero, sz,   zero,
-            tx,   ty,   tz,   one
+impl<S> From<&OrthographicSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
+    #[inline]
+    fn from(spec: &OrthographicSpec<S>) -> Matrix4x4<S> {
+        Matrix4x4::from_orthographic(
+            spec.left, spec.right, spec.bottom, spec.top, spec.near, spec.far
         )
     }
 }

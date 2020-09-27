@@ -3130,6 +3130,88 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         )
     }
 
+    /// Construct a new three-dimensional orthographic projection matrix.
+    #[rustfmt::skip]
+    pub fn from_orthographic(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> {
+        let zero = S::zero();
+        let one  = S::one();
+        let two = one + one;
+        let sx =  two / (right - left);
+        let sy =  two / (top - bottom);
+        let sz = -two / (far - near);
+        let tx = -(right + left) / (right - left);
+        let ty = -(top + bottom) / (top - bottom);
+        let tz = -(far + near) / (far - near);
+
+        // We use the same orthographic projection matrix that OpenGL uses.
+        Matrix4x4::new(
+            sx,   zero, zero, zero,
+            zero, sy,   zero, zero,
+            zero, zero, sz,   zero,
+            tx,   ty,   tz,   one
+        )
+    }
+
+    /// Construct a new three-dimensional perspective projection matrix based
+    /// on arbitrary `left`, `right`, `bottom`, `top`, `near` and `far` planes.
+    #[rustfmt::skip]
+    pub fn from_perspective(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+
+        let c0r0 = (two * near) / (right - left);
+        let c0r1 = zero;
+        let c0r2 = zero;
+        let c0r3 = zero;
+
+        let c1r0 = zero;
+        let c1r1 = (two * near) / (top - bottom);
+        let c1r2 = zero;
+        let c1r3 = zero;
+
+        let c2r0 =  (right + left)   / (right - left);
+        let c2r1 =  (top   + bottom) / (top   - bottom);
+        let c2r2 = -(far   + near)   / (far   - near);
+        let c2r3 = -one;
+
+        let c3r0 = zero;
+        let c3r1 = zero;
+        let c3r2 = -(two * far * near) / (far - near);
+        let c3r3 = zero;
+
+        // We use the same perspective projection matrix that OpenGL uses.
+        Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3,
+        )
+    }
+
+    /// Construct a perspective projection based on the `near` plane, the `far` 
+    /// plane and the vertical field of view angle `fovy` and the 
+    /// horizontal/vertical aspect ratio `aspect`.
+    #[rustfmt::skip]
+    pub fn from_perspective_fov<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let range = Angle::tan(fovy.into() / two) * near;
+        let sx = (two * near) / (range * aspect + range * aspect);
+        let sy = near / range;
+        let sz = (far + near) / (near - far);
+        let pz = (two * far * near) / (near - far);
+        
+        // We use the same perspective projection matrix that OpenGL uses.
+        Matrix4x4::new(
+            sx,    zero,  zero,  zero,
+            zero,  sy,    zero,  zero,
+            zero,  zero,  sz,   -one,
+            zero,  zero,  pz,    zero
+        )
+    }
+
     /// Construct a homogeneous matrix that will point a vector towards the 
     /// direction `direction`, using `up` for orientation.
     #[rustfmt::skip]
