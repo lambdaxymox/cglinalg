@@ -36,6 +36,9 @@ use crate::vector::{
     Vector3,
     Vector4,
 };
+use crate::unit::{
+    Unit,
+};
 
 use core::fmt;
 use core::ops;
@@ -116,6 +119,9 @@ impl<S> Matrix2x2<S> {
 
 impl<S> Matrix2x2<S> where S: Copy {
     /// Construct a new matrix from a fill value.
+    ///
+    /// The resulting matrix is a matrix where each entry is the supplied fill
+    /// value.
     #[inline]
     pub fn from_fill(value: S) -> Matrix2x2<S> {
         Matrix2x2::new(value, value, value, value)
@@ -1085,6 +1091,10 @@ impl<S> Matrix3x3<S> {
 }
 
 impl<S> Matrix3x3<S> where S: Copy {
+    /// Construct a new matrix from a fill value.
+    ///
+    /// The resulting matrix is a matrix where each entry is the supplied fill
+    /// value.
     #[inline]
     pub fn from_fill(value: S) -> Matrix3x3<S> {
         Matrix3x3::new(
@@ -1221,11 +1231,11 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// x-axis, holding the y-axis constant and the z-axis constant.
+    /// _x-axis_, holding the y-axis constant and the _z-axis_ constant.
     ///
     /// The parameters `shear_x_with_y` and `shear_x_with_z` are the 
-    /// multiplicative factors for the contributions of the y-axis and the 
-    /// z-axis, respectively to shearing along the x-axis. 
+    /// multiplicative factors for the contributions of the _y-axis_ and the 
+    /// _z-axis_, respectively to shearing along the _x-axis_. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix3x3<S> {
@@ -1240,11 +1250,11 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// y-axis, holding the x-axis constant and the z-axis constant.
+    /// _y-axis_, holding the x-axis constant and the z-axis constant.
     ///
     /// The parameters `shear_y_with_x` and `shear_y_with_z` are the
-    /// multiplicative factors for the contributions of the x-axis, and the 
-    /// z-axis, respectively to shearing along the y-axis. 
+    /// multiplicative factors for the contributions of the _x-axis_, and the 
+    /// _z-axis_, respectively to shearing along the _y-axis_. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix3x3<S> {
@@ -1259,11 +1269,11 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// z-axis, holding the x-axis constant and the y-axis constant.
+    /// _z-axis_, holding the _x-axis_ constant and the _y-axis_ constant.
     ///
     /// The parameters `shear_z_with_x` and `shear_z_with_y` are the multiplicative
-    /// factors for the contributions of the x-axis, and the y-axis, respectively to 
-    /// shearing along the z-axis. 
+    /// factors for the contributions of the _x-axis_, and the _y-axis_, respectively to 
+    /// shearing along the _z-axis_. 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix3x3<S> {
@@ -1314,7 +1324,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a two-dimensional affine shearing matrix along the 
-    /// x-axis, holding the y-axis constant.
+    /// _x-axis_, holding the _y-axis_ constant.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the _y-axis_ to shearing along the _x-axis_.
@@ -1332,7 +1342,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a two-dimensional affine shearing matrix along the 
-    /// y-axis, holding the x-axis constant.
+    /// _y-axis_, holding the _x-axis_ constant.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the _y-axis_ to shearing along the _x-axis_.
@@ -1542,22 +1552,23 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// Construct a rotation matrix about an arbitrary axis by an angle 
     /// `angle`.
     #[rustfmt::skip]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix3x3<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
+        let _axis = axis.as_ref();
 
         Matrix3x3::new(
-            one_minus_cos_angle * axis.x * axis.x + cos_angle,
-            one_minus_cos_angle * axis.x * axis.y + sin_angle * axis.z,
-            one_minus_cos_angle * axis.x * axis.z - sin_angle * axis.y,
+            one_minus_cos_angle * _axis.x * _axis.x + cos_angle,
+            one_minus_cos_angle * _axis.x * _axis.y + sin_angle * _axis.z,
+            one_minus_cos_angle * _axis.x * _axis.z - sin_angle * _axis.y,
 
-            one_minus_cos_angle * axis.x * axis.y - sin_angle * axis.z,
-            one_minus_cos_angle * axis.y * axis.y + cos_angle,
-            one_minus_cos_angle * axis.y * axis.z + sin_angle * axis.x,
+            one_minus_cos_angle * _axis.x * _axis.y - sin_angle * _axis.z,
+            one_minus_cos_angle * _axis.y * _axis.y + cos_angle,
+            one_minus_cos_angle * _axis.y * _axis.z + sin_angle * _axis.x,
 
-            one_minus_cos_angle * axis.x * axis.z + sin_angle * axis.y,
-            one_minus_cos_angle * axis.y * axis.z - sin_angle * axis.x,
-            one_minus_cos_angle * axis.z * axis.z + cos_angle,
+            one_minus_cos_angle * _axis.x * _axis.z + sin_angle * _axis.y,
+            one_minus_cos_angle * _axis.y * _axis.z - sin_angle * _axis.x,
+            one_minus_cos_angle * _axis.z * _axis.z + cos_angle,
         )
     }
 
@@ -2707,6 +2718,9 @@ impl<S> Matrix4x4<S> {
 
 impl<S> Matrix4x4<S> where S: Copy {
     /// Construct a new matrix from a fill value.
+    ///
+    /// The resulting matrix is a matrix where each entry is the supplied fill
+    /// value.
     #[inline]
     pub fn from_fill(value: S) -> Matrix4x4<S> {
         Matrix4x4::new(
@@ -2849,7 +2863,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     ///
     /// The parameters `shear_x_with_y` and `shear_x_with_z` are the 
     /// multiplicative factors for the contributions of the _y-axis_, and the
-    /// _z-axis_, respectively to shearing along the x-axis. Since this is an 
+    /// _z-axis_, respectively to shearing along the _x-axis_. Since this is an 
     /// affine transformation the `w` component of four-dimensional vectors is 
     /// unaffected.
     #[rustfmt::skip]
@@ -2870,7 +2884,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// the _y-axis_, holding the _x-axis_ constant and the _z-axis_ constant.
     ///
     /// The parameters `shear_y_with_x` and `shear_y_with_z` are the 
-    /// multiplicative factors for the contributions of the _x-axis+, and the 
+    /// multiplicative factors for the contributions of the _x-axis_, and the 
     /// _z-axis_, respectively to shearing along the _y-axis_. Since this is 
     /// an affine transformation the `w` component of four-dimensional vectors 
     /// is unaffected.
@@ -2922,10 +2936,10 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// contribution of the _z-axis_ to the shearing along the _x-axis_. 
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the _x-axis_ to shearing along the y-axis.
+    /// contribution of the _x-axis_ to shearing along the _y-axis_.
     ///
     /// The parameter `shear_y_with_z` denotes the factor scaling the 
-    /// contribution of the _z-axis_ to the shearing along the y-axis. 
+    /// contribution of the _z-axis_ to the shearing along the _y-axis_. 
     ///
     /// The parameter `shear_z_with_x` denotes the factor scaling the
     /// contribution of the _x-axis_ to shearing along the _z-axis_.
@@ -3103,24 +3117,25 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the axis `axis` by an angle `angle` radians/degrees.
     #[rustfmt::skip]
-    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Matrix4x4<S> {
+    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Matrix4x4<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
+        let _axis = axis.as_ref();
 
         Matrix4x4::new(
-            one_minus_cos_angle * axis.x * axis.x + cos_angle,
-            one_minus_cos_angle * axis.x * axis.y + sin_angle * axis.z,
-            one_minus_cos_angle * axis.x * axis.z - sin_angle * axis.y,
+            one_minus_cos_angle * _axis.x * _axis.x + cos_angle,
+            one_minus_cos_angle * _axis.x * _axis.y + sin_angle * _axis.z,
+            one_minus_cos_angle * _axis.x * _axis.z - sin_angle * _axis.y,
             S::zero(),
 
-            one_minus_cos_angle * axis.x * axis.y - sin_angle * axis.z,
-            one_minus_cos_angle * axis.y * axis.y + cos_angle,
-            one_minus_cos_angle * axis.y * axis.z + sin_angle * axis.x,
+            one_minus_cos_angle * _axis.x * _axis.y - sin_angle * _axis.z,
+            one_minus_cos_angle * _axis.y * _axis.y + cos_angle,
+            one_minus_cos_angle * _axis.y * _axis.z + sin_angle * _axis.x,
             S::zero(),
 
-            one_minus_cos_angle * axis.x * axis.z + sin_angle * axis.y,
-            one_minus_cos_angle * axis.y * axis.z - sin_angle * axis.x,
-            one_minus_cos_angle * axis.z * axis.z + cos_angle,
+            one_minus_cos_angle * _axis.x * _axis.z + sin_angle * _axis.y,
+            one_minus_cos_angle * _axis.y * _axis.z - sin_angle * _axis.x,
+            one_minus_cos_angle * _axis.z * _axis.z + cos_angle,
             S::zero(),
 
             S::zero(), 

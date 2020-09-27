@@ -34,6 +34,14 @@ impl<T> Unit<T> {
     pub fn into_inner(self) -> T {
         self.value
     }
+
+    /// Wraps an object into a unit type, assuming that it is normalized without
+    /// checking.
+    pub(crate) fn new_unchecked(value: T) -> Unit<T> {
+        Unit {
+            value: value,
+        }
+    }
 }
 
 impl<T> AsRef<T> for Unit<T> {

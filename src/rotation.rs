@@ -27,6 +27,9 @@ use crate::vector::{
 use crate::quaternion::{
     Quaternion,
 };
+use crate::unit::{
+    Unit,
+};
 use crate::affine::*;
 
 use core::fmt;
@@ -80,8 +83,10 @@ impl<S> Rotation2<S> where S: ScalarFloat {
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
-    pub fn between_vectors(a: Vector2<S>, b: Vector2<S>) -> Rotation2<S> {
-        Rotation2::from_angle(Radians::acos(DotProduct::dot(a, b)))
+    pub fn rotation_between_vectors(a: &Unit<Vector2<S>>, b: &Unit<Vector2<S>>) -> Rotation2<S> {
+        let _a = a.as_ref();
+        let _b = b.as_ref();
+        Rotation2::from_angle(Radians::acos(DotProduct::dot(_a, _b)))
     }
 
     /// Construct a rotation that rotates a vector in the opposite direction 
@@ -348,7 +353,7 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
     /// Construct a new three-dimensional rotation about an axis `axis` by 
     /// an angle `angle`.
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Rotation3<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Rotation3<S> {
         let radians = angle.into();
         
         Rotation3 {
@@ -361,21 +366,21 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// _yz-plane_ by an angle `angle`.
     #[inline]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(Vector3::unit_x(), angle)
+        Self::from_axis_angle(Unit::new_unchecked(Vector3::unit_x()), angle)
     }
 
     /// Construct a new three-dimensional rotation about the _y-axis_ in the 
     /// _xz-plane_ by an angle `angle`.
     #[inline]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(Vector3::unit_y(), angle)
+        Self::from_axis_angle(Unit::new_unchecked(Vector3::unit_y()), angle)
     }
 
     /// Construct a new three-dimensional rotation about the _z-axis_ in the 
     /// _xy-plane_ by an angle `angle`.
     #[inline]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(Vector3::unit_z(), angle)
+        Self::from_axis_angle(Unit::new_unchecked(Vector3::unit_z()), angle)
     }
 
     /// Point a vector at the point `direction`.
@@ -396,7 +401,7 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
-    pub fn rotation_between_vectors(v1: &Vector3<S>, v2: &Vector3<S>) -> Rotation3<S> {
+    pub fn rotation_between_vectors(v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Rotation3<S> {
         let q = Quaternion::rotation_between_vectors(v1, v2);
         q.into()
     }

@@ -31,6 +31,9 @@ use crate::matrix::{
 use crate::vector::{
     Vector3
 };
+use crate::unit::{
+    Unit,
+};
 use crate::approx::{
     abs_diff_eq,
     abs_diff_ne,
@@ -200,11 +203,12 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion corresponding to rotating about an axis `axis` 
     /// by an angle `angle` in radians from its unit polar decomposition.
     #[rustfmt::skip]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Quaternion<S> {
         let one_half = num_traits::cast(0.5_f64).unwrap();
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
+        let _axis = axis.into_inner();
     
-        Quaternion::from_sv(cos_angle, axis * sin_angle)
+        Quaternion::from_sv(cos_angle, _axis * sin_angle)
     }
 
     /// Compute the conjugate of a quaternion.
@@ -350,7 +354,9 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
-    pub fn rotation_between_vectors(v1: &Vector3<S>, v2: &Vector3<S>) -> Quaternion<S> {
+    pub fn rotation_between_vectors(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Quaternion<S> {
+        let v1 = unit_v1.as_ref();
+        let v2 = unit_v2.as_ref();
         let k_cos_theta = v1.dot(v2);
 
         // The vectors point in the same direction.

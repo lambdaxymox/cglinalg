@@ -551,6 +551,7 @@ mod matrix3_tests {
         InvertibleSquareMatrix,
         Angle,
         Radians,
+        Unit,
     };
     use cglinalg::approx::relative_eq;
     use core::slice::Iter;
@@ -1340,7 +1341,9 @@ mod matrix3_tests {
     #[test]
     fn test_from_axis_angle() {
         let angle: Radians<f64> = Radians::full_turn_div_2();
-        let axis = (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0);
+        let axis = Unit::new(
+            (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0)
+        );
         let vector = Vector3::new(1.0, 1.0, -1.0);
         let matrix = Matrix3x3::from_axis_angle(axis, angle);
         let expected = Vector3::new(1.0, 1.0, 1.0);
@@ -1407,6 +1410,7 @@ mod matrix4_tests {
         Radians,
         Degrees,
         Angle,
+        Unit,
     };
     use cglinalg::approx::relative_eq;
     use core::slice::Iter;
@@ -2278,7 +2282,9 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_axis_angle() {
         let angle: Radians<f64> = Radians::full_turn_div_2();
-        let axis = (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0);
+        let axis = Unit::new(
+            (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0)
+        );
         let vector = Vector4::new(1.0, 1.0, -1.0, 0.0);
         let matrix = Matrix4x4::from_affine_axis_angle(axis, angle);
         let expected = Vector4::new(1.0, 1.0, 1.0,0.0);
