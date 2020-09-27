@@ -37,7 +37,7 @@ impl<T> Unit<T> {
 
     /// Wraps an object into a unit type, assuming that it is normalized without
     /// checking.
-    pub(crate) fn new_unchecked(value: T) -> Unit<T> {
+    pub(crate) fn from_value_unchecked(value: T) -> Unit<T> {
         Unit {
             value: value,
         }
@@ -71,8 +71,8 @@ impl<T> fmt::Display for Unit<T> where T: fmt::Display {
 impl<T> Unit<T> where T: Magnitude {
     /// Construct a new unit value, normalizing the input value.
     #[inline]
-    pub fn new(value: T) -> Self {
-        Self::new_with_magnitude(value).0
+    pub fn from_value(value: T) -> Self {
+        Self::from_value_with_magnitude(value).0
     }
 
     /// Construct a new normalized unit value along with its unnormalized magnitude.
@@ -94,7 +94,7 @@ impl<T> Unit<T> where T: Magnitude {
     /// assert_eq!(unit_vector.magnitude(), 1.0, "unit_vector = {}", unit_vector);
     /// ```
     #[inline]
-    pub fn new_with_magnitude(value: T) -> (Self, T::Output) {
+    pub fn from_value_with_magnitude(value: T) -> (Self, T::Output) {
         let magnitude = value.magnitude();
         let normalized_value = value.normalize();
         let unit = Unit {
@@ -127,7 +127,7 @@ impl<T> Unit<T> where T: Magnitude {
     /// assert!(result.is_none());
     /// ```
     #[inline]
-    pub fn try_new_with_magnitude(value: T, threshold: T::Output) -> Option<(Self, T::Output)>
+    pub fn try_from_value_with_magnitude(value: T, threshold: T::Output) -> Option<(Self, T::Output)>
         where T::Output: ScalarFloat, 
     {
         let magnitude_squared = value.magnitude_squared();
@@ -151,10 +151,10 @@ impl<T> Unit<T> where T: Magnitude {
     /// The argument `threshold` argument exists to check for vectors that may be
     /// very close to zero length.
     #[inline]
-    pub fn try_new(value: T, threshold: T::Output) -> Option<Self>
+    pub fn try_from_value(value: T, threshold: T::Output) -> Option<Self>
         where T::Output: ScalarFloat,
     {
-        Self::try_new_with_magnitude(value, threshold).map(|(unit, _)| unit)
+        Self::try_from_value_with_magnitude(value, threshold).map(|(unit, _)| unit)
     }
 }
 

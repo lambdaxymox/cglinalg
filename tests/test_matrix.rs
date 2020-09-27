@@ -454,7 +454,7 @@ mod matrix2_tests {
     #[test]
     fn test_from_reflection_x_axis1() {
         // The y-axis is the normal vector to the plane of the x-axis.
-        let normal = Unit::new(Vector2::unit_y());
+        let normal = Unit::from_value(Vector2::unit_y());
         let expected = Matrix2x2::new(1.0, 0.0, 0.0, -1.0);
         let result = Matrix2x2::from_reflection(normal);
 
@@ -467,7 +467,7 @@ mod matrix2_tests {
     #[test]
     fn test_from_reflection_x_axis2() {
         // The y-axis is the normal vector to the plane of the x-axis.
-        let normal = Unit::new(-Vector2::unit_y());
+        let normal = Unit::from_value(-Vector2::unit_y());
         let expected = Matrix2x2::new(1.0, 0.0, 0.0, -1.0);
         let result = Matrix2x2::from_reflection(normal);
 
@@ -480,7 +480,7 @@ mod matrix2_tests {
     #[test]
     fn test_from_reflection_y_axis1() {
         // The y-axis is the normal vector to the plane of the y-axis.
-        let normal = Unit::new(Vector2::unit_x());
+        let normal = Unit::from_value(Vector2::unit_x());
         let expected = Matrix2x2::new(-1.0, 0.0, 0.0, 1.0);
         let result = Matrix2x2::from_reflection(normal);
     
@@ -493,7 +493,7 @@ mod matrix2_tests {
     #[test]
     fn test_from_reflection_y_axis2() {
         // The y-axis is the normal vector to the plane of the y-axis.
-        let normal = Unit::new(-Vector2::unit_x());
+        let normal = Unit::from_value(-Vector2::unit_x());
         let expected = Matrix2x2::new(-1.0, 0.0, 0.0, 1.0);
         let result = Matrix2x2::from_reflection(normal);
     
@@ -505,7 +505,7 @@ mod matrix2_tests {
     /// of the line segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_reflection_from_plane1() {
-        let normal = Unit::new(
+        let normal = Unit::from_value(
             Vector2::new(f64::sqrt(2_f64)/ 2_f64, -f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix2x2::new(0.0, 1.0, 1.0, 0.0);
@@ -519,7 +519,7 @@ mod matrix2_tests {
     /// of the line segment; there are two possible normal vectors for the line.
     #[test]
     fn test_from_reflection_from_plane2() {
-        let normal = Unit::new(
+        let normal = Unit::from_value(
             Vector2::new(-f64::sqrt(2_f64)/ 2_f64, f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix2x2::new(0.0, 1.0, 1.0, 0.0);
@@ -1139,7 +1139,7 @@ mod matrix3_tests {
     fn test_from_affine_reflection_x_axis1() {
         // The y-axis is the normal vector to the plane of the x-axis.
         let bias = Vector2::zero();
-        let normal = Unit::new(Vector2::unit_y());
+        let normal = Unit::from_value(Vector2::unit_y());
         let expected = Matrix3x3::new(
             1.0,  0.0, 0.0, 
             0.0, -1.0, 0.0, 
@@ -1157,7 +1157,7 @@ mod matrix3_tests {
     fn test_from_affine_reflection_x_axis2() {
         // The y-axis is the normal vector to the plane of the x-axis.
         let bias = Vector2::zero();
-        let normal = Unit::new(-Vector2::unit_y());
+        let normal = Unit::from_value(-Vector2::unit_y());
         let expected = Matrix3x3::new(
             1.0,  0.0, 0.0, 
             0.0, -1.0, 0.0, 
@@ -1175,7 +1175,7 @@ mod matrix3_tests {
     fn test_from_affine_reflection_y_axis1() {
         // The y-axis is the normal vector to the plane of the y-axis.
         let bias = Vector2::zero();
-        let normal = Unit::new(Vector2::unit_x());
+        let normal = Unit::from_value(Vector2::unit_x());
         let expected = Matrix3x3::new(
             -1.0, 0.0, 0.0, 
              0.0, 1.0, 0.0, 
@@ -1193,7 +1193,7 @@ mod matrix3_tests {
     fn test_from_affine_reflection_y_axis2() {
         // The y-axis is the normal vector to the plane of the y-axis.
         let bias = Vector2::zero();
-        let normal = Unit::new(-Vector2::unit_x());
+        let normal = Unit::from_value(-Vector2::unit_x());
         let expected = Matrix3x3::new(
             -1.0, 0.0, 0.0, 
              0.0, 1.0, 0.0, 
@@ -1211,7 +1211,7 @@ mod matrix3_tests {
     #[test]
     fn test_from_affine_reflection_from_plane1() {
         let bias = Vector2::zero();
-        let normal = Unit::new(
+        let normal = Unit::from_value(
             Vector2::new(f64::sqrt(2_f64)/ 2_f64, -f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix3x3::new(
@@ -1231,7 +1231,7 @@ mod matrix3_tests {
     #[test]
     fn test_from_affine_reflection_from_plane2() {
         let bias = Vector2::zero();
-        let normal = Unit::new(
+        let normal = Unit::from_value(
             Vector2::new(-f64::sqrt(2_f64)/ 2_f64, f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix3x3::new(
@@ -1250,7 +1250,7 @@ mod matrix3_tests {
     fn test_from_affine_reflection_from_line_that_does_not_cross_origin1() {
         // We can always choose the y-intercept as the known point.
         let bias = Vector2::new(0.0, 2.0);
-        let normal = Unit::new(
+        let normal = Unit::from_value(
             Vector2::new(-1.0 / f64::sqrt(5.0), 2.0 / f64::sqrt(5.0))
         );
         let matrix = Matrix3x3::from_affine_reflection(normal, bias);
@@ -1267,7 +1267,7 @@ mod matrix3_tests {
     fn test_from_affine_reflection_from_line_that_does_not_cross_origin2() {
         // We can always choose the y-intercept as the known point.
         let bias = Vector2::new(0.0, 2.0);
-        let normal = Unit::new(
+        let normal = Unit::from_value(
             Vector2::new(1.0 / f64::sqrt(5.0), -2.0 / f64::sqrt(5.0))
         );
         let matrix = Matrix3x3::from_affine_reflection(normal, bias);
@@ -1280,7 +1280,7 @@ mod matrix3_tests {
 
     #[test]
     fn test_from_reflection_xy_plane() {
-        let normal = Unit::new(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_z());
         let expected = Matrix3x3::new(
             1.0, 0.0,  0.0, 
             0.0, 1.0,  0.0,  
@@ -1293,7 +1293,7 @@ mod matrix3_tests {
 
     #[test]
     fn test_from_reflection_xz_plane() {
-        let normal = Unit::new(-Vector3::unit_y());
+        let normal = Unit::from_value(-Vector3::unit_y());
         let expected = Matrix3x3::new(
             1.0,  0.0, 0.0, 
             0.0, -1.0, 0.0,  
@@ -1306,7 +1306,7 @@ mod matrix3_tests {
 
     #[test]
     fn test_from_reflection_yz_plane() {
-        let normal = Unit::new(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_x());
         let expected = Matrix3x3::new(
             -1.0,  0.0, 0.0, 
              0.0, 1.0,  0.0,  
@@ -1356,7 +1356,7 @@ mod matrix3_tests {
     #[test]
     fn test_from_axis_angle() {
         let angle: Radians<f64> = Radians::full_turn_div_2();
-        let axis = Unit::new(
+        let axis = Unit::from_value(
             (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0)
         );
         let vector = Vector3::new(1.0, 1.0, -1.0);
@@ -2141,7 +2141,7 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_reflection_xy_plane() {
         let bias = Vector3::zero();
-        let normal = Unit::new(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_z());
         let expected = Matrix4x4::new(
             1.0, 0.0,  0.0, 0.0,
             0.0, 1.0,  0.0, 0.0,
@@ -2156,7 +2156,7 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_reflection_xz_plane() {
         let bias = Vector3::zero();
-        let normal = Unit::new(-Vector3::unit_y());
+        let normal = Unit::from_value(-Vector3::unit_y());
         let expected = Matrix4x4::new(
             1.0,  0.0, 0.0, 0.0,
             0.0, -1.0, 0.0, 0.0,
@@ -2171,7 +2171,7 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_reflection_yz_plane() {
         let bias = Vector3::zero();
-        let normal = Unit::new(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_x());
         let expected = Matrix4x4::new(
             -1.0,  0.0, 0.0,  0.0,
              0.0,  1.0, 0.0,  0.0,
@@ -2187,7 +2187,7 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_reflection_plane1() {
         let bias = Vector3::new(0.0, 0.0, 1.0);
-        let normal = Unit::new(Vector3::new(0.0, 0.0, 1.0));
+        let normal = Unit::from_value(Vector3::new(0.0, 0.0, 1.0));
         let matrix = Matrix4x4::from_affine_reflection(normal, bias);
         let vector = Vector4::new(1.0, 1.0, 0.5, 1.0);
         let expected = Vector4::new(1.0,1.0,1.5, 1.0);
@@ -2200,7 +2200,7 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_reflection_plane2() {
         let bias = Vector3::new(-1.0, 0.0, 0.0);
-        let normal = Unit::new(Vector3::new(1.0, 0.0, 0.0));
+        let normal = Unit::from_value(Vector3::new(1.0, 0.0, 0.0));
         let matrix = Matrix4x4::from_affine_reflection(normal, bias);
         let vector = Vector4::new(-2.0, 1.0, 1.0, 1.0);
         let expected = Vector4::new(0.0,1.0,1.0, 1.0);
@@ -2213,7 +2213,7 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_reflection_plane3() {
         let bias = Vector3::new(0.0, 1.0, 0.0);
-        let normal = Unit::new(Vector3::new(0.0, 1.0, 0.0));
+        let normal = Unit::from_value(Vector3::new(0.0, 1.0, 0.0));
         let matrix = Matrix4x4::from_affine_reflection(normal, bias);
         let vector = Vector4::new(0.0, 0.0, 0.0, 1.0);
         let expected = Vector4::new(0.0,2.0,0.0, 1.0);
@@ -2297,7 +2297,7 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_axis_angle() {
         let angle: Radians<f64> = Radians::full_turn_div_2();
-        let axis = Unit::new(
+        let axis = Unit::from_value(
             (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0)
         );
         let vector = Vector4::new(1.0, 1.0, -1.0, 0.0);
