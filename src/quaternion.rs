@@ -306,16 +306,22 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// signum function, and `log(., e)` denotes the natural logarithm of a 
     /// scalar. Returning the principal value allows us to define a unique 
     /// natural logarithm for each quaternion `q`.
+    #[inline]
     pub fn ln(&self) -> Quaternion<S> {
-        let magnitude_v = self.v.magnitude();
-        if magnitude_v == S::zero() {
+        self.ln_eps(S::default_epsilon())
+    }
+
+    #[inline]
+    fn ln_eps(&self, epsilon: S) -> Quaternion<S> {
+        let magnitude_v_squared = self.v.magnitude_squared();
+        if magnitude_v_squared <= epsilon * epsilon {
             let magnitude = self.s.abs();
             Quaternion::from_sv(magnitude.ln(), Vector3::zero())
         } else {
             let magnitude = self.magnitude();
             let arccos_s_over_mag_q = S::acos(self.s / magnitude);
             let q_scalar = S::ln(magnitude);
-            let q_vector = self.v * (arccos_s_over_mag_q / magnitude_v);
+            let q_vector = self.v * (arccos_s_over_mag_q / magnitude_v_squared.sqrt());
 
             Quaternion::from_sv(q_scalar, q_vector)
         }
