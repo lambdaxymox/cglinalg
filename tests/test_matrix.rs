@@ -1405,6 +1405,7 @@ mod matrix4_tests {
         SquareMatrix,
         InvertibleSquareMatrix,
         Radians,
+        Degrees,
         Angle,
     };
     use cglinalg::approx::relative_eq;
@@ -2311,6 +2312,61 @@ mod matrix4_tests {
         let expected = vector;
         let result = matrix * vector;
 
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_orthographic() {
+        let left = -4.0;
+        let right = 4.0;
+        let bottom = -2.0;
+        let top = 2.0;
+        let near = 1.0;
+        let far = 100.0;
+        let expected = Matrix4x4::new(
+            1.0 / 4.0,  0.0,        0.0,          0.0,
+            0.0,        1.0 / 2.0,  0.0,          0.0,
+            0.0,        0.0,       -2.0 / 99.0,   0.0,
+            0.0,        0.0,       -101.0 / 99.0, 1.0
+        );
+        let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
+    
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_perspective_fov() {
+        let fovy = Degrees(72.0);
+        let aspect = 800 as f32 / 600 as f32;
+        let near = 0.1;
+        let far = 100.0;
+        let expected = Matrix4x4::new(
+            1.0322863, 0.0,        0.0,       0.0, 
+            0.0,       1.3763818,  0.0,       0.0, 
+            0.0,       0.0,       -1.002002, -1.0, 
+            0.0,       0.0,       -0.2002002, 0.0
+        );
+        let result = Matrix4x4::from_perspective_fov(fovy, aspect, near, far);
+    
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_perspective() {
+        let left = -4.0;
+        let right = 4.0;
+        let bottom = -2.0;
+        let top = 3.0;
+        let near = 1.0;
+        let far = 100.0;
+        let expected = Matrix4x4::new(
+            1.0 / 4.0,  0.0,        0.0,           0.0,
+            0.0,        2.0 / 5.0,  0.0,           0.0,
+            0.0,        1.0 / 5.0, -101.0 / 99.0, -1.0,
+            0.0,        0.0,       -200.0 / 99.0,  0.0
+        );
+        let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
+    
         assert_eq!(result, expected);
     }
 }
