@@ -302,11 +302,12 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     pub fn ln(&self) -> Quaternion<S> {
         let magnitude_v = self.v.magnitude();
         if magnitude_v == S::zero() {
-            Quaternion::from_sv(self.s.ln(), Vector3::zero())
+            let magnitude = self.s.abs();
+            Quaternion::from_sv(magnitude.ln(), Vector3::zero())
         } else {
-            let magnitude_q = self.magnitude();
-            let arccos_s_over_mag_q = S::acos(self.s / magnitude_q);
-            let q_scalar = S::ln(magnitude_q);
+            let magnitude = self.magnitude();
+            let arccos_s_over_mag_q = S::acos(self.s / magnitude);
+            let q_scalar = S::ln(magnitude);
             let q_vector = self.v * (arccos_s_over_mag_q / magnitude_v);
 
             Quaternion::from_sv(q_scalar, q_vector)
