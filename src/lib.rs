@@ -13,6 +13,7 @@ mod point;
 mod quaternion;
 mod vector;
 mod traits;
+mod unit;
 
 mod reflection;
 mod rotation;

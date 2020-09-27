@@ -80,6 +80,8 @@ macro_rules! impl_mul_operator {
 /// ```
 /// where `v` is a unit vector in the direction of the axis of rotation, `theta`
 /// is the angle of rotation, and `|q|` denotes the length of the quaternion.
+///
+/// Quaternions are stored in (s, x, y, z) storage order.
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
 pub struct Quaternion<S> {
@@ -193,10 +195,7 @@ impl<S> Quaternion<S> where S: Scalar {
 
 impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion corresponding to rotating about an axis `axis` 
-    /// by an angle `angle` in radians.
-    ///
-    /// The quaterion representation of rotations is advantageous over using 
-    /// Euler angles about an arbitrary axis because they do not Gimbal lock.
+    /// by an angle `angle` in radians from its unit polar decomposition.
     #[rustfmt::skip]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Vector3<S>, angle: A) -> Quaternion<S> {
         let one_half = num_traits::cast(0.5_f64).unwrap();
@@ -206,6 +205,9 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Compute the conjugate of a quaternion.
+    ///
+    /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
+    /// the conjugate of `q` is the quaternion `q* := s - v`.
     #[inline]
     pub fn conjugate(&self) -> Quaternion<S> {
         Quaternion::from_sv(self.s, -self.v)
