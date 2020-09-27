@@ -273,11 +273,18 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Calculate the exponential of a quaternion.
+    #[inline]
     pub fn exp(&self) -> Quaternion<S> {
-        let magnitude_v = self.v.magnitude();
-        if magnitude_v == S::zero() {
+        self.exp_eps(S::default_epsilon())
+    }
+
+    #[inline]
+    fn exp_eps(&self, epsilon: S) -> Quaternion<S> {
+        let magnitude_v_squared = self.v.magnitude_squared();
+        if magnitude_v_squared <= epsilon * epsilon {
             Quaternion::from_sv(self.s.exp(), Vector3::zero())
         } else {
+            let magnitude_v = magnitude_v_squared.sqrt();
             let exp_s = self.s.exp();
             let q_scalar = exp_s * S::cos(magnitude_v);
             let q_vector = self.v * (exp_s * S::sin(magnitude_v) / magnitude_v);
