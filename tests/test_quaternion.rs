@@ -321,7 +321,7 @@ mod slerp_tests {
     }
 
     #[test]
-    fn test_slerp_endpoints() {
+    fn test_slerp_endpoints0() {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(240_f64);
         let unit_z = Vector3::unit_z();
@@ -334,13 +334,33 @@ mod slerp_tests {
             Angle::sin(angle2 / 2_f64) * unit_z
         );
 
-        let expected_0 = q0;
-        let expected_1 = q1;
-        let result_0 = q0.slerp(q1, 0.0);
-        let result_1 = q0.slerp(q1, 1.0);
+        // The slerp function can produce either the starting quaternion
+        // or its negation at 0.0. Both quaternions produce the same rotation.
+        let expected1 = q0;
+        let expected2 = -q0;
+        let result = q0.slerp(q1, 0.0);
 
-        assert_eq!(result_0, expected_0);
-        assert_eq!(result_1, expected_1);
+        assert!(result == expected1 || result == expected2);
+    }
+
+    #[test]
+    fn test_slerp_endpoints1() {
+        let angle1 = Degrees(30_f64);
+        let angle2 = Degrees(240_f64);
+        let unit_z = Vector3::unit_z();
+        let q0 = Quaternion::from_sv(
+            Angle::cos(angle1 / 2_f64), 
+            Angle::sin(angle1 / 2_f64) * unit_z
+        );
+        let q1 = Quaternion::from_sv(
+            Angle::cos(angle2 / 2_f64), 
+            Angle::sin(angle2 / 2_f64) * unit_z
+        );
+
+        let expected = q1;
+        let result = q0.slerp(q1, 1.0);
+
+        assert_eq!(result, expected);
     }
 }
 

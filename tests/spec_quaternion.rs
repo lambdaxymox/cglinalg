@@ -11,6 +11,18 @@ use cglinalg::{
 };
 
 
+fn unit_interval<S>() -> impl Strategy<Value = S>
+    where S: ScalarFloat + Arbitrary
+{
+    any::<S>().prop_map(|value| {
+        let one = S::one();
+        let two = S::one() + S::one();
+    
+        (S::sin(value) + one) / two
+    })
+}
+
+
 fn any_scalar<S>() -> impl Strategy<Value = S>
     where S: Scalar + Arbitrary
 {
@@ -1650,12 +1662,18 @@ magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, any_scalar
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! slerp_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $UnitScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::Slerp;
+        use cglinalg::{
+            Slerp,
+        };
+        use cglinalg::approx::{
+            relative_eq,
+        };
         use super::{
             $Generator,
+            $UnitScalarGen,
         };
 
 
@@ -1663,17 +1681,27 @@ macro_rules! slerp_props {
             /// Quaternion spherical linear interpolation should act like a 
             /// quaternion rotor between two quaternions.
             ///
-            /// Given quaternions `q1` and `q2`
+            /// Given quaternions `q1` and `q2`, and a scalar value `t` in the
+            /// closed unit interval [0, 1]
             /// ```text
             /// slerp(q1, q2, t) = q1 * (inverse(q1) * q2) ^ t
             /// ```
             #[test]
             fn prop_quaternion_slerp_as_quaternion_rotor(
+                t in $UnitScalarGen::<$ScalarType>(),
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
 
                 prop_assume!(q1.is_invertible());
-                prop_assume!(q2.is_invertible());
-                prop_assert!(false);
+
+                let expected = q1.slerp(q2, t);
+                let q1_inv = q1.inverse().unwrap();
+                let result = q1 * (q1_inv * q2).powf(t);
+
+                prop_assert!(
+                    relative_eq!(result, expected, epsilon = $tolerance),
+                    "result = {}\nexpected = {}\nq1 = {}\nq2 = {}\nt = {}",
+                    result, expected, q1, q2, t
+                );
             }
 
             /// Quaternion spherical linear interpolation should yield the 
@@ -1681,14 +1709,24 @@ macro_rules! slerp_props {
             ///
             /// Given quaternions `q0` and `q1`
             /// ```text
-            /// slerp(q0, q1, 0) = q0
+            /// slerp(q0, q1, 0) = q0 OR slerp(q0, q1, 0) = -q0
             /// slerp(q0, q1, 1) = q1
             /// ```
+            /// In our slerp function we allow the slerp function to negate the 
+            /// quaternion `q0` depending on which direction around the sphere
+            /// the shortest path is. Both a quaternion and its negation will produce
+            /// the same rotation.
             #[test]
             fn prop_quaternion_slerp_endpoints0(
                 q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!(q0.slerp(q1, 0.0), q0);
+                let qs = q0.slerp(q1, 0.0);
+                
+                prop_assert!(
+                    relative_eq!(qs, q0, epsilon = $tolerance) || relative_eq!(qs, -q0, epsilon = $tolerance),
+                    "qs = {}\nq0 = {}\nq1 = {}", 
+                    qs, q0, q1
+                );
             }
 
             /// Quaternion spherical linear interpolation should yield the 
@@ -1703,14 +1741,20 @@ macro_rules! slerp_props {
             fn prop_quaternion_slerp_endpoints1(
                 q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!(q0.slerp(q1, 1.0), q1);
+                let qs = q0.slerp(q1, 1.0);
+                
+                prop_assert!(
+                    relative_eq!(qs, q1, epsilon = $tolerance), 
+                    "qs = {}\nq0 = {}\nq1 = {}", 
+                    qs, q0, q1
+                );
             }
         }
     }
     }
 }
 
-slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, 1e-7);
+slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, unit_interval, 1e-7);
 
 
 

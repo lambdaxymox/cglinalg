@@ -222,9 +222,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// the inverse of `self`.
     #[inline]
     pub fn inverse(&self) -> Option<Quaternion<S>> {
-        let multiple: S = num_traits::cast(16).unwrap();
-        let epsilon = multiple * S::default_epsilon();
-        self.inverse_eps(epsilon)
+        self.inverse_eps(S::default_epsilon())
     }
 
     fn inverse_eps(&self, epsilon: S) -> Option<Quaternion<S>> {
@@ -242,10 +240,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Otherwise, it returns `false`.
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        let multiple: S = num_traits::cast(16).unwrap();
-        let epsilon = multiple * S::default_epsilon();
-
-        self.is_invertible_eps(epsilon)
+        self.is_invertible_eps(S::default_epsilon())
     }
 
     fn is_invertible_eps(&self, epsilon: S) -> bool {
