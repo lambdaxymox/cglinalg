@@ -7,8 +7,6 @@ use crate::traits::{
     Metric,
     DotProduct,
     Magnitude,
-    Sum,
-    Product,
 };
 use crate::vector::{
     Vector1,
@@ -152,20 +150,6 @@ impl<S> Array for Point1<S> where S: Copy {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 1]>>::as_ref(self)
-    }
-}
-
-impl<S> Sum for Point1<S> where S: Scalar {
-    #[inline]
-    fn sum(&self) -> S {
-        self.x
-    }
-}
-
-impl<S> Product for Point1<S> where S: Scalar {
-    #[inline]
-    fn product(&self) -> S {
-        self.x
     }
 }
 
@@ -850,20 +834,6 @@ impl<S> Array for Point2<S> where S: Copy {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 2]>>::as_ref(self)
-    }
-}
-
-impl<S> Sum for Point2<S> where S: Scalar {
-    #[inline]
-    fn sum(&self) -> S {
-        self.x + self.y
-    }
-}
-
-impl<S> Product for Point2<S> where S: Scalar {
-    #[inline]
-    fn product(&self) -> S {
-        self.x * self.y
     }
 }
 
@@ -1557,20 +1527,6 @@ impl<S> Array for Point3<S> where S: Copy {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 3]>>::as_ref(self)
-    }
-}
-
-impl<S> Sum for Point3<S> where S: Scalar {
-    #[inline]
-    fn sum(&self) -> S {
-        self.x + self.y + self.z
-    }
-}
-
-impl<S> Product for Point3<S> where S: Scalar {
-    #[inline]
-    fn product(&self) -> S {
-        self.x * self.y * self.z
     }
 }
 

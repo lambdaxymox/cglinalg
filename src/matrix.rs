@@ -24,8 +24,6 @@ use crate::traits::{
     Identity, 
     Zero, 
     Matrix, 
-    Sum,
-    Product,
     SquareMatrix,
     InvertibleSquareMatrix,
     Magnitude,
@@ -289,20 +287,6 @@ impl<S> Array for Matrix2x2<S> where S: Copy {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
-    }
-}
-
-impl<S> Sum for Matrix2x2<S> where S: Scalar {
-    #[inline]
-    fn sum(&self) -> S {
-        self.c0r0 + self.c1r0 + self.c0r1 + self.c1r1
-    }
-}
-
-impl<S> Product for Matrix2x2<S> where S: Scalar {
-    #[inline]
-    fn product(&self) -> S {
-        self.c0r0 * self.c1r0 * self.c0r1 * self.c1r1
     }
 }
 
@@ -1638,24 +1622,6 @@ impl<S> Array for Matrix3x3<S> where S: Copy {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 9]>>::as_ref(self)
-    }
-}
-
-impl<S> Sum for Matrix3x3<S> where S: Scalar {
-    #[inline]
-    fn sum(&self) -> S {
-        self.c0r0 + self.c1r0 + self.c2r0 +
-        self.c0r1 + self.c1r1 + self.c2r1 +
-        self.c0r2 + self.c1r2 + self.c2r2
-    }
-}
-
-impl<S> Product for Matrix3x3<S> where S: Scalar {
-    #[inline]
-    fn product(&self) -> S {
-        self.c0r0 * self.c1r0 * self.c2r0 *
-        self.c0r1 * self.c1r1 * self.c2r1 *
-        self.c0r2 * self.c1r2 * self.c2r2
     }
 }
 
@@ -3357,26 +3323,6 @@ impl<S> Array for Matrix4x4<S> where S: Copy {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 16]>>::as_ref(self)
-    }
-}
-
-impl<S> Sum for Matrix4x4<S> where S: Scalar {
-    #[inline]
-    fn sum(&self) -> S {
-        self.c0r0 + self.c1r0 + self.c2r0 + self.c3r0 +
-        self.c0r1 + self.c1r1 + self.c2r1 + self.c3r1 +
-        self.c0r2 + self.c1r2 + self.c2r2 + self.c3r2 +
-        self.c0r3 + self.c1r3 + self.c2r3 + self.c3r3
-    }
-}
-
-impl<S> Product for Matrix4x4<S> where S: Scalar {
-    #[inline]
-    fn product(&self) -> S {
-        self.c0r0 * self.c1r0 * self.c2r0 * self.c3r0 *
-        self.c0r1 * self.c1r1 * self.c2r1 * self.c3r1 *
-        self.c0r2 * self.c1r2 * self.c2r2 * self.c3r2 *
-        self.c0r3 * self.c1r3 * self.c2r3 * self.c3r3
     }
 }
 
