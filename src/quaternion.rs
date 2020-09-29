@@ -7,7 +7,6 @@ use crate::traits::{
     CrossProduct,
     DotProduct,
     Magnitude,
-    Lerp,
     Nlerp,
     Matrix,
     Metric,
@@ -416,7 +415,13 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         Self::from(&Matrix3x3::face_towards(direction, up).transpose())
     }
 
-        /// Spherically linearly interpolate between two unit quaternions.
+    /// Linearly interpolate between two quaternions.
+    #[inline]
+    pub fn lerp(&self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
+        self + (other - self) * amount
+    }
+
+    /// Spherically linearly interpolate between two unit quaternions.
     ///
     /// In the case where the angle between quaternions is 180 degrees, the
     /// slerp function is not well defined because we can rotate about any axis
@@ -1328,42 +1333,6 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
 
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
-    }
-}
-
-impl<S> Lerp<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
-    type Scalar = S;
-    type Output = Quaternion<S>;
-
-    fn lerp(self, other: Quaternion<S>, amount: Self::Scalar) -> Self::Output {
-        self + (other - self) * amount
-    }
-}
-
-impl<S> Lerp<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
-    type Scalar = S;
-    type Output = Quaternion<S>;
-
-    fn lerp(self, other: &Quaternion<S>, amount: Self::Scalar) -> Self::Output {
-        self + (other - self) * amount
-    }
-}
-
-impl<S> Lerp<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
-    type Scalar = S;
-    type Output = Quaternion<S>;
-
-    fn lerp(self, other: Quaternion<S>, amount: Self::Scalar) -> Self::Output {
-        self + (other - self) * amount
-    }
-}
-
-impl<'a, 'b, S> Lerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
-    type Scalar = S;
-    type Output = Quaternion<S>;
-
-    fn lerp(self, other: &'a Quaternion<S>, amount: Self::Scalar) -> Self::Output {
-        self + (other - self) * amount
     }
 }
 

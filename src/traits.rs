@@ -129,16 +129,6 @@ pub trait Magnitude {
     fn normalize_to(&self, magnitude: Self::Output) -> Self;
 }
 
-/// A vector type with the `Lerp` trait has the ability to linearly interpolate 
-/// between two elements of that type. 
-pub trait Lerp<V: Copy + Clone> {
-    type Scalar: Scalar;
-    type Output;
-
-    /// Linearly interpolate between two vectors.
-    fn lerp(self, other: V, amount: Self::Scalar) -> Self::Output;
-}
-
 /// A vector type with this trait can perform normalized linear interpolations 
 /// between two elements of that type.
 pub trait Nlerp<V: Copy + Clone> {

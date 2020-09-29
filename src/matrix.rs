@@ -24,7 +24,6 @@ use crate::traits::{
     Identity, 
     Zero, 
     Matrix, 
-    Lerp,
     Sum,
     Product,
     SquareMatrix,
@@ -255,6 +254,12 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
              cos_angle, sin_angle, 
             -sin_angle, cos_angle
         )
+    }
+
+    /// Linearly interpolate between two matrices.
+    #[inline]
+    pub fn lerp(&self, other: &Matrix2x2<S>, amount: S) -> Matrix2x2<S> {
+        self + ((other - self) * amount)
     }
 }
 
@@ -834,42 +839,6 @@ impl<S> ops::RemAssign<S> for Matrix2x2<S> where S: Scalar {
         self.c0r1 %= other;
         self.c1r0 %= other;
         self.c1r1 %= other;
-    }
-}
-
-impl<S> Lerp<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix2x2<S>;
-
-    fn lerp(self, other: Matrix2x2<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix2x2<S>;
-
-    fn lerp(self, other: &Matrix2x2<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix2x2<S>;
-
-    fn lerp(self, other: Matrix2x2<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b, S> Lerp<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix2x2<S>;
-
-    fn lerp(self, other: &'a Matrix2x2<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
     }
 }
 
@@ -1634,6 +1603,12 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
         // The inverse of a rotation matrix is its transpose.
         Self::face_towards(direction, up).transpose()
+    }
+
+    /// Linearly interpolate between two matrices.
+    #[inline]
+    pub fn lerp(&self, other: &Matrix3x3<S>, amount: S) -> Matrix3x3<S> {
+        self + ((other - self) * amount)
     }
 }
 
@@ -2470,42 +2445,6 @@ impl<S> ops::RemAssign<S> for Matrix3x3<S> where S: Scalar {
         self.c2r0 %= other;
         self.c2r1 %= other;
         self.c2r2 %= other;
-    }
-}
-
-impl<S> Lerp<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix3x3<S>;
-
-    fn lerp(self, other: Matrix3x3<S>, amount: Self::Scalar) -> Matrix3x3<S> {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix3x3<S>;
-
-    fn lerp(self, other: &Matrix3x3<S>, amount: Self::Scalar) -> Matrix3x3<S> {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<Matrix3x3<S>> for &Matrix3x3<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix3x3<S>;
-
-    fn lerp(self, other: Matrix3x3<S>, amount: Self::Scalar) -> Matrix3x3<S> {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b, S> Lerp<&'a Matrix3x3<S>> for &'b Matrix3x3<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix3x3<S>;
-
-    fn lerp(self, other: &'a Matrix3x3<S>, amount: Self::Scalar) -> Matrix3x3<S> {
-        self + ((other - self) * amount)
     }
 }
 
@@ -3383,6 +3322,12 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
             x_axis.z,  y_axis.z,  z_axis.z,  zero,
             neg_eye_x, neg_eye_y, neg_eye_z, one
         )
+    }
+
+    /// Linearly interpolate between two matrices.
+    #[inline]
+    pub fn lerp(&self, other: &Matrix4x4<S>, amount: S) -> Matrix4x4<S> {
+        self + ((other - self) * amount)
     }
 }
 
@@ -4618,42 +4563,6 @@ impl<S> ops::RemAssign<S> for Matrix4x4<S> where S: Scalar {
         self.c3r1 %= other;
         self.c3r2 %= other;
         self.c3r3 %= other;
-    }
-}
-
-impl<S> Lerp<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix4x4<S>;
-
-    fn lerp(self, other: Matrix4x4<S>, amount: S) -> Matrix4x4<S> {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<&Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix4x4<S>;
-
-    fn lerp(self, other: &Matrix4x4<S>, amount: S) -> Matrix4x4<S> {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<Matrix4x4<S>> for &Matrix4x4<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix4x4<S>;
-
-    fn lerp(self, other: Matrix4x4<S>, amount: S) -> Matrix4x4<S> {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b, S> Lerp<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Matrix4x4<S>;
-
-    fn lerp(self, other: &'a Matrix4x4<S>, amount: S) -> Matrix4x4<S> {
-        self + ((other - self) * amount)
     }
 }
 

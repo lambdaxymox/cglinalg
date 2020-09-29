@@ -10,7 +10,6 @@ use crate::traits::{
     ProjectOn,
     DotProduct,
     Magnitude,
-    Lerp,
     Metric,
     Finite,
     Sum,
@@ -107,6 +106,14 @@ impl<S> Vector1<S> where S: Scalar {
         Vector1 { 
             x: S::one() 
         }
+    }
+}
+
+impl<S> Vector1<S> where S: ScalarFloat {
+    /// Linearly interpolate between two vectors.
+    #[inline]
+    pub fn lerp(&self, other: &Vector1<S>, amount: S) -> Vector1<S> {
+        self + ((other - self) * amount)
     }
 }
 
@@ -626,43 +633,6 @@ impl<S> DotProduct<&Vector1<S>> for &Vector1<S> where S: Scalar {
     }
 }
 
-
-impl<S> Lerp<Vector1<S>> for Vector1<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector1<S>;
-
-    fn lerp(self, other: Vector1<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<&Vector1<S>> for Vector1<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector1<S>;
-
-    fn lerp(self, other: &Vector1<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<Vector1<S>> for &Vector1<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector1<S>;
-
-    fn lerp(self, other: Vector1<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b, S> Lerp<&'a Vector1<S>> for &'b Vector1<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector1<S>;
-
-    fn lerp(self, other: &'a Vector1<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
     
@@ -883,6 +853,14 @@ impl<S> Vector2<S> where S: Scalar {
             x: S::zero(), 
             y: S::one(),
         }
+    }
+}
+
+impl<S> Vector2<S> where S: ScalarFloat {
+    /// Linearly interpolate between two vectors.
+    #[inline]
+    pub fn lerp(&self, other: &Vector2<S>, amount: S) -> Vector2<S> {
+        self + ((other - self) * amount)
     }
 }
 
@@ -1444,42 +1422,6 @@ impl<'a, 'b, S> DotProduct<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> Lerp<Vector2<S>> for Vector2<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector2<S>;
-
-    fn lerp(self, other: Vector2<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<&Vector2<S>> for Vector2<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector2<S>;
-
-    fn lerp(self, other: &Vector2<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<Vector2<S>> for &Vector2<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector2<S>;
-
-    fn lerp(self, other: Vector2<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b, S> Lerp<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector2<S>;
-
-    fn lerp(self, other: &'a Vector2<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
 impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     type Output = S;
 
@@ -1701,6 +1643,14 @@ impl<S> Vector3<S> where S: Scalar {
             y: S::zero(), 
             z: S::one(),
         }
+    }
+}
+
+impl<S> Vector3<S> where S: ScalarFloat {
+    /// Linearly interpolate between two vectors.
+    #[inline]
+    pub fn lerp(&self, other: &Vector3<S>, amount: S) -> Vector3<S> {
+        self + ((other - self) * amount)
     }
 }
 
@@ -2363,42 +2313,6 @@ impl<'a, 'b, S> CrossProduct<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar 
     }
 }
 
-impl<S> Lerp<Vector3<S>> for Vector3<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector3<S>;
-
-    fn lerp(self, other: Vector3<S>, amount: Self::Scalar) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<&Vector3<S>> for Vector3<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector3<S>;
-
-    fn lerp(self, other: &Vector3<S>, amount: Self::Scalar) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<Vector3<S>> for &Vector3<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector3<S>;
-
-    fn lerp(self, other: Vector3<S>, amount: Self::Scalar) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b, S> Lerp<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector3<S>;
-
-    fn lerp(self, other: &'a Vector3<S>, amount: Self::Scalar) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
 impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     type Output = S;
 
@@ -2641,6 +2555,14 @@ impl<S> Vector4<S> where S: Scalar {
             z: S::zero(), 
             w: S::one(),
         }
+    }
+}
+
+impl<S> Vector4<S> where S: ScalarFloat {
+    /// Linearly interpolate between two vectors.
+    #[inline]
+    pub fn lerp(&self, other: &Vector4<S>, amount: S) -> Vector4<S> {
+        self + ((other - self) * amount)
     }
 }
 
@@ -3289,42 +3211,6 @@ impl<'a, 'b, S> DotProduct<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
     
     fn dot(self, other: &'a Vector4<S>) -> Self::Output {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
-    }
-}
-
-impl<S> Lerp<Vector4<S>> for Vector4<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector4<S>;
-
-    fn lerp(self, other: Vector4<S>, amount: Self::Scalar) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<&Vector4<S>> for Vector4<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector4<S>;
-
-    fn lerp(self, other: &Vector4<S>, amount: S) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<S> Lerp<Vector4<S>> for &Vector4<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector4<S>;
-
-    fn lerp(self, other: Vector4<S>, amount: Self::Scalar) -> Self::Output {
-        self + ((other - self) * amount)
-    }
-}
-
-impl<'a, 'b, S> Lerp<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
-    type Scalar = S;
-    type Output = Vector4<S>;
-
-    fn lerp(self, other: &'a Vector4<S>, amount: Self::Scalar) -> Self::Output {
-        self + ((other - self) * amount)
     }
 }
 

@@ -31,7 +31,6 @@ mod storage_tests {
 mod lerp_tests {
     use cglinalg::{
         Quaternion,
-        Lerp, 
         Nlerp,
         Magnitude
     };
@@ -69,11 +68,11 @@ mod lerp_tests {
         let q1 = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
         let q2 = Quaternion::new(2_f64, 2_f64, 2_f64, 2_f64);
         
-        let result = q1.lerp(q2, 0_f64);
+        let result = q1.lerp(&q2, 0_f64);
 
         assert_eq!(result, q1);
 
-        let result = q1.lerp(q2, 1_f64);
+        let result = q1.lerp(&q2, 1_f64);
         
         assert_eq!(result, q2);
     }
