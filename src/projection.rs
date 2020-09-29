@@ -2,6 +2,7 @@ use crate::scalar::{
     ScalarFloat,
 };
 use crate::angle::{
+    Angle,
     Radians,
 };
 use crate::matrix::{
@@ -12,9 +13,6 @@ use crate::point::{
 };
 use crate::vector::{
     Vector3,
-};
-use crate::traits::{
-    Angle,
 };
 
 use core::fmt;

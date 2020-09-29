@@ -1,11 +1,11 @@
 use crate::angle::{
+    Angle,
     Radians,
 };
 use crate::scalar::{
     ScalarFloat,
 };
 use crate::traits::{
-    Angle,
     DotProduct,
     Identity,
     InvertibleSquareMatrix,

@@ -1,5 +1,4 @@
 use crate::traits::{
-    Angle,
     Array,
     AdditiveIdentity,
     Identity,
@@ -12,6 +11,7 @@ use crate::traits::{
     SquareMatrix,
 };
 use crate::angle::{
+    Angle,
     Radians,
 };
 use crate::scalar::{

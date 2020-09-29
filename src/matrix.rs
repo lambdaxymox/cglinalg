@@ -13,10 +13,10 @@ use crate::scalar::{
     ScalarFloat,
 };
 use crate::angle::{
+    Angle,
     Radians,
 };
 use crate::traits::{
-    Angle,
     Array,
     CrossProduct,
     DotProduct,

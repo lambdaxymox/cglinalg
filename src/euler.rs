@@ -1,4 +1,5 @@
 use crate::angle::{
+    Angle,
     Radians,
 };
 use crate::matrix::{
@@ -12,7 +13,6 @@ use crate::scalar::{
     ScalarFloat,
 };
 use crate::traits::{
-    Angle,
     AdditiveIdentity,
 };
 use approx::{
