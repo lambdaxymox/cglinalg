@@ -60,6 +60,7 @@ impl<S> Vector1<S> {
 
     /// Map an operation on the elements of a vector, returning a vector of the 
     /// new underlying type.
+    #[inline]
     pub fn map<T, F>(self, mut op: F) -> Vector1<T> where F: FnMut(S) -> T {
         Vector1 { 
             x: op(self.x) 
@@ -69,6 +70,7 @@ impl<S> Vector1<S> {
 
 impl<S> Vector1<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector1<T>> {
         let x = match num_traits::cast(self.x) {
             Some(value) => value,
