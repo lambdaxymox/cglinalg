@@ -220,12 +220,12 @@ mod slerp_tests {
     use cglinalg::{
         Quaternion,
         Angle,
-        Slerp,
         Degrees,
         Vector3,
     };
-
-    use cglinalg::approx::relative_eq;
+    use cglinalg::approx::{
+        relative_eq,
+    };
 
 
     #[test]
@@ -338,7 +338,7 @@ mod slerp_tests {
         // or its negation at 0.0. Both quaternions produce the same rotation.
         let expected1 = q0;
         let expected2 = -q0;
-        let result = q0.slerp(q1, 0.0);
+        let result = q0.slerp(&q1, 0.0);
 
         assert!(result == expected1 || result == expected2);
     }
@@ -358,7 +358,7 @@ mod slerp_tests {
         );
 
         let expected = q1;
-        let result = q0.slerp(q1, 1.0);
+        let result = q0.slerp(&q1, 1.0);
 
         assert_eq!(result, expected);
     }

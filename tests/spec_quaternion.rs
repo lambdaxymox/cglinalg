@@ -1665,9 +1665,6 @@ macro_rules! slerp_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $UnitScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{
-            Slerp,
-        };
         use cglinalg::approx::{
             relative_eq,
         };
@@ -1693,7 +1690,7 @@ macro_rules! slerp_props {
 
                 prop_assume!(q1.is_invertible());
 
-                let expected = q1.slerp(q2, t);
+                let expected = q1.slerp(&q2, t);
                 let q1_inv = q1.inverse().unwrap();
                 let result = q1 * (q1_inv * q2).powf(t);
 
@@ -1720,7 +1717,7 @@ macro_rules! slerp_props {
             fn prop_quaternion_slerp_endpoints0(
                 q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
 
-                let qs = q0.slerp(q1, 0.0);
+                let qs = q0.slerp(&q1, 0.0);
                 
                 prop_assert!(
                     relative_eq!(qs, q0, epsilon = $tolerance) || relative_eq!(qs, -q0, epsilon = $tolerance),
@@ -1741,7 +1738,7 @@ macro_rules! slerp_props {
             fn prop_quaternion_slerp_endpoints1(
                 q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
 
-                let qs = q0.slerp(q1, 1.0);
+                let qs = q0.slerp(&q1, 1.0);
                 
                 prop_assert!(
                     relative_eq!(qs, q1, epsilon = $tolerance), 
