@@ -600,7 +600,7 @@ mod rotation_tests {
         let unit_y: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
         let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
         let expected = Quaternion::from_axis_angle(
-            unit_z, 
+            &unit_z, 
             Radians::full_turn_div_4()
         );
         let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
@@ -618,7 +618,7 @@ mod rotation_tests {
         );
         let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
         let expected = Quaternion::from_axis_angle(
-            unit_z, 
+            &unit_z, 
             Radians(0_f64)
         );
         let result = Quaternion::rotation_between_axis(&unit_v1, &unit_v2).unwrap();
@@ -632,7 +632,7 @@ mod rotation_tests {
         let unit_y: Vector3<f64> = Vector3::unit_y();
         let unit_z: Vector3<f64> = Vector3::unit_z();
         let expected = Quaternion::from_axis_angle(
-            Unit::from_value(unit_z), 
+            &Unit::from_value(unit_z), 
             Radians::full_turn_div_4()
         );
         let result = Quaternion::rotation_between(&unit_x, &unit_y).unwrap();
@@ -646,7 +646,7 @@ mod rotation_tests {
         let v2 = Vector3::new(1.0, 1.0, 0.0) * 3.0;
         let unit_z = Vector3::unit_z();
         let expected = Quaternion::from_axis_angle(
-            Unit::from_value(unit_z), 
+            &Unit::from_value(unit_z), 
             Radians(0_f64)
         );
         let result = Quaternion::rotation_between(&v1, &v2).unwrap();

@@ -270,7 +270,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion corresponding to rotating about an axis `axis` 
     /// by an angle `angle` in radians from its unit polar decomposition.
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Quaternion<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Quaternion<S> {
         let one_half = num_traits::cast(0.5_f64).unwrap();
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
         let _axis = axis.into_inner();
@@ -487,7 +487,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
                 return Some(Self::identity());
             } else {
                 // The cosine falls inside the interval [-1, 1].
-                return Some(Self::from_axis_angle(axis, Radians::acos(cos_theta)));
+                return Some(Self::from_axis_angle(&axis, Radians::acos(cos_theta)));
             }
         } else if v1.dot(v2) < S::zero() {
             // There are two ways to rotate around the unit circle between two vectors.
@@ -717,82 +717,16 @@ impl<S> From<&Quaternion<S>> for Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> From<Quaternion<S>> for Matrix4x4<S> where S: Scalar {
-    #[rustfmt::skip]
+    #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix4x4<S> {
-        let s = quaternion.s;
-        let x = quaternion.v.x;
-        let y = quaternion.v.y;
-        let z = quaternion.v.z;
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-
-        let c0r0 = one - two * y * y - two * z * z;
-        let c0r1 = two * x * y + two * s * z;
-        let c0r2 = two * x * z - two * s * y;
-        let c0r3 = zero;
-
-        let c1r0 = two * x * y - two * s * z;
-        let c1r1 = one - two * x * x - two * z * z;
-        let c1r2 = two * y * z + two * s * x;
-        let c1r3 = zero;
-
-        let c2r0 = two * x * z + two * s * y;
-        let c2r1 = two * y * z - two * s * x;
-        let c2r2 = one - two * x * x - two * y * y;
-        let c2r3 = zero;
-        
-        let c3r0 = zero;
-        let c3r1 = zero;
-        let c3r2 = zero;
-        let c3r3 = one;
-    
-        Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
-        )
+        quaternion.to_matrix4x4()
     }
 }
 
 impl<S> From<&Quaternion<S>> for Matrix4x4<S> where S: Scalar {
-    #[rustfmt::skip]
+    #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix4x4<S> {
-        let s = quaternion.s;
-        let x = quaternion.v.x;
-        let y = quaternion.v.y;
-        let z = quaternion.v.z;
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-
-        let c0r0 = one - two * y * y - two * z * z;
-        let c0r1 = two * x * y + two * s * z;
-        let c0r2 = two * x * z - two * s * y;
-        let c0r3 = zero;
-
-        let c1r0 = two * x * y - two * s * z;
-        let c1r1 = one - two * x * x - two * z * z;
-        let c1r2 = two * y * z + two * s * x;
-        let c1r3 = zero;
-
-        let c2r0 = two * x * z + two * s * y;
-        let c2r1 = two * y * z - two * s * x;
-        let c2r2 = one - two * x * x - two * y * y;
-        let c2r3 = zero;
-        
-        let c3r0 = zero;
-        let c3r1 = zero;
-        let c3r2 = zero;
-        let c3r3 = one;
-    
-        Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
-        )
+        quaternion.to_matrix4x4()
     }
 }
 
