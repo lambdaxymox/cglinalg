@@ -23,14 +23,7 @@ use core::fmt;
 
 
 /// A trait for implementing two-dimensional affine transformations.
-pub trait AffineTransformation2<P, V, S> where Self: Sized {
-    /// The output associated type for points. This allows us to use both 
-    /// pointers and values on the inputs.
-    type OutPoint;
-    /// The output associated type for vectors. This allows us to use both 
-    /// pointers and values on the inputs.
-    type OutVector;
-
+pub trait AffineTransformation2<S> where Self: Sized {
     /// The identity transformation for this type.
     fn identity() -> Self;
 
@@ -38,15 +31,23 @@ pub trait AffineTransformation2<P, V, S> where Self: Sized {
     fn inverse(&self) -> Option<Self>;
 
     /// Apply the affine transformation to a vector.
-    fn transform_vector(&self, vector: V) -> Self::OutVector;
+    fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S>;
 
     /// Apply the affine transformation to a point.
-    fn transform_point(&self, point: P) -> Self::OutPoint;
+    fn transform_point(&self, point: &Point2<S>) -> Point2<S>;
 
     /// Apply the inverse of the affine transformation to a vector.
-    fn tranform_inverse_vector(&self, vector: V) -> Option<Self::OutVector> {
+    #[inline]
+    fn inverse_transform_vector(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
         self.inverse()
             .map(|matrix_inverse| matrix_inverse.transform_vector(vector))
+    }
+
+    /// Apply the inverse of the affine transformation to a vector.
+    #[inline]
+    fn inverse_transform_point(&self, point: &Point2<S>) -> Option<Point2<S>> {
+        self.inverse()
+            .map(|matrix_inverse| matrix_inverse.transform_point(point))
     }
 
     /// Convert a specific two-dimensional affine transformation into a generic 
@@ -76,6 +77,7 @@ pub trait AffineTransformation3<P, V, S> where Self: Sized {
     fn transform_point(&self, point: P) -> Self::OutPoint;
 
     /// Apply the inverse of the affine transformation to a vector.
+    #[inline]
     fn transform_inverse_vector(&self, vector: V) -> Option<Self::OutVector> {
         self.inverse()
             .map(|matrix_inverse| matrix_inverse.transform_vector(vector))
@@ -127,65 +129,22 @@ impl<S> fmt::Display for Transform2<S> where S: fmt::Display {
 }
 
 impl<S> From<Transform2<S>> for Matrix3x3<S> where S: Copy {
+    #[inline]
     fn from(transformation: Transform2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
 impl<S> From<&Transform2<S>> for Matrix3x3<S> where S: Copy {
+    #[inline]
     fn from(transformation: &Transform2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> AffineTransformation2<Point2<S>, Vector2<S>, S> for Transform2<S> 
-    where 
-        S: ScalarFloat
+impl<S> AffineTransformation2<S> for Transform2<S> 
+    where S: ScalarFloat
 {
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Transform2<S> {
-        Transform2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Transform2<S>> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform2 {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        *self
-    }
-}
-
-impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Transform2<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
     #[inline]
     fn identity() -> Transform2<S> {
         Transform2 { 
@@ -210,89 +169,7 @@ impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Transform2<S>
     }
 
     #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        *self
-    }
-}
-
-impl<S> AffineTransformation2<&Point2<S>, Vector2<S>, S> for Transform2<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Transform2<S> {
-        Transform2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Transform2<S>> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform2 {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
     fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        *self
-    }
-}
-
-impl<'a, 'b, S> AffineTransformation2<&'a Point2<S>, &'b Vector2<S>, S> for Transform2<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Transform2<S> {
-        Transform2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Transform2<S>> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform2 {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 

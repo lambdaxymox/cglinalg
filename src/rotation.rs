@@ -174,47 +174,9 @@ impl<S> approx::UlpsEq for Rotation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation2<Point2<S>, Vector2<S>, S> for Rotation2<S> 
+impl<S> AffineTransformation2<S> for Rotation2<S> 
     where S: ScalarFloat 
 {
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Rotation2<S> {
-        Rotation2 { 
-            angle: Radians(S::zero()),
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Rotation2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Rotation2<S> 
-    where S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
     #[inline]
     fn identity() -> Rotation2<S> {
         Rotation2 { 
@@ -234,77 +196,7 @@ impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Rotation2<S>
     }
 
     #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<&Point2<S>, Vector2<S>, S> for Rotation2<S> 
-    where S: ScalarFloat
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Rotation2<S> {
-        Rotation2 { 
-            angle: Radians(S::zero()),
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Rotation2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
     fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<'a, 'b, S> AffineTransformation2<&'a Point2<S>, &'b Vector2<S>, S> for Rotation2<S> 
-    where S: ScalarFloat
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Rotation2<S> {
-        Rotation2 { 
-            angle: Radians(S::zero()),
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Rotation2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 

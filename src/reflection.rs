@@ -95,12 +95,12 @@ impl<S> Reflection2<S> where S: ScalarFloat {
     }
 
     /// Reflect a vector across a line.
-    pub fn reflect_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+    pub fn reflect_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     /// Reflect a point across a line.
-    pub fn reflect_point(&self, point: Point2<S>) -> Point2<S> {
+    pub fn reflect_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
@@ -134,50 +134,9 @@ impl<S> From<&Reflection2<S>> for Matrix3x3<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation2<Point2<S>, Vector2<S>, S> for Reflection2<S> 
-    where 
-        S: ScalarFloat 
+impl<S> AffineTransformation2<S> for Reflection2<S> 
+    where S: ScalarFloat 
 {
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Reflection2<S> {
-        Reflection2 { 
-            bias: Vector2::zero(),
-            normal: Vector2::zero(), 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Reflection2<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        self.reflect_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        self.reflect_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Reflection2<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
     #[inline]
     fn identity() -> Reflection2<S> {
         Reflection2 { 
@@ -194,86 +153,12 @@ impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Reflection2<S>
 
     #[inline]
     fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        self.reflect_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        self.reflect_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<&Point2<S>, Vector2<S>, S> for Reflection2<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Reflection2<S> {
-        Reflection2 { 
-            bias: Vector2::zero(),
-            normal: Vector2::zero(), 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Reflection2<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         self.reflect_vector(vector)
     }
 
     #[inline]
     fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        self.reflect_point(*point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<'a, 'b, S> AffineTransformation2<&'a Point2<S>, &'b Vector2<S>, S> for Reflection2<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Reflection2<S> {
-        Reflection2 { 
-            bias: Vector2::zero(),
-            normal: Vector2::zero(), 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Reflection2<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
-        self.reflect_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point2<S>) -> Point2<S> {
-        self.reflect_point(*point)
+        self.reflect_point(point)
     }
 
     #[inline]

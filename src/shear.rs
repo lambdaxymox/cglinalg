@@ -91,12 +91,12 @@ impl<S> Shear2<S> where S: ScalarSigned {
     }
 
     /// Apply a shearing transformation to a vector.
-    pub fn shear_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+    pub fn shear_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     /// Apply a shearing transformation to a point.
-    pub fn shear_point(&self, point: Point2<S>) -> Point2<S> {
+    pub fn shear_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
@@ -126,46 +126,9 @@ impl<S> From<&Shear2<S>> for Matrix3x3<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation2<Point2<S>, Vector2<S>, S> for Shear2<S> 
+impl<S> AffineTransformation2<S> for Shear2<S> 
     where S: ScalarSigned 
 {
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Shear2<S> {
-        Shear2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Shear2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        self.shear_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        self.shear_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Shear2<S> 
-    where S: ScalarSigned 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
     #[inline]
     fn identity() -> Shear2<S> {
         Shear2 { 
@@ -180,80 +143,12 @@ impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Shear2<S>
 
     #[inline]
     fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        self.shear_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        self.shear_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<&Point2<S>, Vector2<S>, S> for Shear2<S> 
-    where S: ScalarSigned 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Shear2<S> {
-        Shear2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Shear2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         self.shear_vector(vector)
     }
 
     #[inline]
     fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        self.shear_point(*point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<'a, 'b, S> AffineTransformation2<&'a Point2<S>, &'b Vector2<S>, S> for Shear2<S> 
-    where S: ScalarSigned 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Shear2<S> {
-        Shear2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Shear2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
-        self.shear_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point2<S>) -> Point2<S> {
-        self.shear_point(*point)
+        self.shear_point(point)
     }
 
     #[inline]
@@ -355,7 +250,7 @@ impl<S> Shear3<S> where S: ScalarSigned {
         }
     }
 
-     /// Apply a shearing transformation to a vector.
+    /// Apply a shearing transformation to a vector.
     pub fn shear_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }

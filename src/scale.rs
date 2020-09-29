@@ -66,13 +66,13 @@ impl<S> Scale2<S> where S: Scalar {
 
     /// Apply a scale operation to a vector.
     #[inline]
-    pub fn scale_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+    pub fn scale_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     /// Apply a scale operation to a point.
     #[inline]
-    pub fn scale_point(&self, point: Point2<S>) -> Point2<S> {
+    pub fn scale_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
@@ -102,44 +102,9 @@ impl<S> From<&Scale2<S>> for Matrix3x3<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation2<Point2<S>, Vector2<S>, S> for Scale2<S> 
+impl<S> AffineTransformation2<S> for Scale2<S> 
     where S: ScalarFloat 
 {
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Scale2<S> {
-        Scale2::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale2<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        self.scale_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        self.scale_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Scale2<S> 
-    where S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
     #[inline]
     fn identity() -> Scale2<S> {
         Scale2::from_scale(S::one())
@@ -152,76 +117,12 @@ impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Scale2<S>
 
     #[inline]
     fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        self.scale_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        self.scale_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<&Point2<S>, Vector2<S>, S> for Scale2<S> 
-    where S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Scale2<S> {
-        Scale2::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale2<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         self.scale_vector(vector)
     }
 
     #[inline]
     fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        self.scale_point(*point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<'a, 'b, S> AffineTransformation2<&'a Point2<S>, &'b Vector2<S>, S> for Scale2<S> 
-    where S: ScalarFloat 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Scale2<S> {
-        Scale2::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale2<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
-        self.scale_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point2<S>) -> Point2<S> {
-        self.scale_point(*point)
+        self.scale_point(point)
     }
 
     #[inline]

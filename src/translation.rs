@@ -79,7 +79,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     
     /// Apply the translation operation to a point.
     #[inline]
-    pub fn translate_point(&self, point: Point2<S>) -> Point2<S> {
+    pub fn translate_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
@@ -90,7 +90,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     /// be their difference. If we translate each point by a vector `a`, 
     /// then `(p2 + a) - (p1 + a) = p2 - p1 = v`.
     #[inline]
-    pub fn translate_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+    pub fn translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 }
@@ -120,46 +120,9 @@ impl<S> From<&Translation2<S>> for Matrix3x3<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation2<Point2<S>, Vector2<S>, S> for Translation2<S> 
+impl<S> AffineTransformation2<S> for Translation2<S> 
     where S: ScalarSigned 
 {
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Translation2<S> {
-        Translation2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Translation2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
-        self.translate_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        self.translate_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Translation2<S> 
-    where S: ScalarSigned
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
     #[inline]
     fn identity() -> Translation2<S> {
         Translation2 { 
@@ -174,80 +137,12 @@ impl<S> AffineTransformation2<Point2<S>, &Vector2<S>, S> for Translation2<S>
 
     #[inline]
     fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        self.translate_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point2<S>) -> Point2<S> {
-        self.translate_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation2<&Point2<S>, Vector2<S>, S> for Translation2<S> 
-    where S: ScalarSigned 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Translation2<S> {
-        Translation2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Translation2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector2<S>) -> Vector2<S> {
         self.translate_vector(vector)
     }
 
     #[inline]
     fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        self.translate_point(*point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
-    }
-}
-
-impl<'a, 'b, S> AffineTransformation2<&'a Point2<S>, &'b Vector2<S>, S> for Translation2<S>
-    where S: ScalarSigned 
-{
-    type OutPoint = Point2<S>;
-    type OutVector = Vector2<S>;
-
-    #[inline]
-    fn identity() -> Translation2<S> {
-        Translation2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Translation2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector2<S>) -> Vector2<S> {
-        self.translate_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point2<S>) -> Point2<S> {
-        self.translate_point(*point)
+        self.translate_point(point)
     }
 
     #[inline]
