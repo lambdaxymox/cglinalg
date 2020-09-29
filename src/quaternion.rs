@@ -2,7 +2,6 @@ use crate::traits::{
     Array,
     AdditiveIdentity,
     Identity,
-    ProjectOn,
     CrossProduct,
     DotProduct,
     Magnitude,
@@ -621,6 +620,13 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.s.is_finite() && self.v.is_finite()
+    }
+
+    /// Compute the projection of the quaternion `self` onto the quaternion
+    /// `other`.
+    #[inline]
+    pub fn project_on(&self, onto: &Quaternion<S>) -> Quaternion<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 
@@ -1342,42 +1348,6 @@ impl<S> approx::UlpsEq for Quaternion<S> where S: ScalarFloat {
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.s, &other.s, epsilon, max_ulps) &&
         Vector3::ulps_eq(&self.v, &other.v, epsilon, max_ulps)
-    }
-}
-
-impl<S> ProjectOn<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
-    type Output = Quaternion<S>;
-
-    #[inline]
-    fn project_on(self, onto: Quaternion<S>) -> Quaternion<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
-    type Output = Quaternion<S>;
-
-    #[inline]
-    fn project_on(self, onto: &Quaternion<S>) -> Quaternion<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
-    type Output = Quaternion<S>;
-
-    #[inline]
-    fn project_on(self, onto: Quaternion<S>) -> Quaternion<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<'a, 'b, S> ProjectOn<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
-    type Output = Quaternion<S>;
-
-    #[inline]
-    fn project_on(self, onto: &'a Quaternion<S>) -> Quaternion<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 

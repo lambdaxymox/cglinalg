@@ -105,15 +105,6 @@ pub trait Magnitude where Self: Sized {
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self>;
 }
 
-/// A trait for implementing the ability to project one vector onto the
-/// component another vector.
-pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
-    type Output;
-
-    /// Compute the projection for a vector onto another vector.
-    fn project_on(self, onto: V) -> <Self as ProjectOn<V>>::Output;
-}
-
 /// A type implementing the `CrossProduct` trait implements a form of vector 
 /// multiplications that computes a vector normal to the plane swept out by 
 /// the two vectors. 

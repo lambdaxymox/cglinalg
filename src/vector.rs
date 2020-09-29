@@ -7,7 +7,6 @@ use crate::traits::{
     Array,
     CrossProduct,
     AdditiveIdentity,
-    ProjectOn,
     DotProduct,
     Magnitude,
     Metric,
@@ -126,6 +125,13 @@ impl<S> Vector1<S> where S: ScalarFloat {
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.x.is_finite()
+    }
+
+    /// Compute the projection of the vector `self` onto the vector
+    /// `onto`.
+    #[inline]
+    pub fn project_on(&self, onto: &Vector1<S>) -> Vector1<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 
@@ -767,43 +773,6 @@ impl_mul_operator!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
 impl_mul_operator!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
 
-impl<S> ProjectOn<Vector1<S>> for Vector1<S> where S: ScalarFloat {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn project_on(self, onto: Vector1<S>) -> Vector1<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<&Vector1<S>> for Vector1<S> where S: ScalarFloat {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn project_on(self, onto: &Vector1<S>) -> Vector1<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<Vector1<S>> for &Vector1<S> where S: ScalarFloat {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn project_on(self, onto: Vector1<S>) -> Vector1<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<'a, 'b, S> ProjectOn<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloat {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn project_on(self, onto: &'a Vector1<S>) -> Vector1<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-
 /// A representation of two-dimensional vectors in a Euclidean space.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
@@ -914,6 +883,13 @@ impl<S> Vector2<S> where S: ScalarFloat {
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.x.is_finite() && self.y.is_finite()
+    }
+
+    /// Compute the projection of the vector `self` onto the vector
+    /// `onto`.
+    #[inline]
+    pub fn project_on(&self, onto: &Vector2<S>) -> Vector2<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 
@@ -1578,42 +1554,6 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector2<S>> for Vector2<S> {
     }
 }
 
-impl<S> ProjectOn<Vector2<S>> for Vector2<S> where S: ScalarFloat {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn project_on(self, onto: Vector2<S>) -> Vector2<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<&Vector2<S>> for Vector2<S> where S: ScalarFloat {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn project_on(self, onto: &Vector2<S>) -> Vector2<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<Vector2<S>> for &Vector2<S> where S: ScalarFloat {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn project_on(self, onto: Vector2<S>) -> Vector2<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<'a, 'b, S> ProjectOn<&'a Vector2<S>> for &'b Vector2<S> where S: ScalarFloat {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn project_on(self, onto: &'a Vector2<S>) -> Vector2<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
 
 /// A representation of three-dimensional vectors in a Euclidean space.
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -1738,6 +1678,13 @@ impl<S> Vector3<S> where S: ScalarFloat {
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
+    }
+
+    /// Compute the projection of the vector `self` onto the vector
+    /// `onto`.
+    #[inline]
+    pub fn project_on(&self, onto: &Vector3<S>) -> Vector3<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 
@@ -2494,42 +2441,6 @@ impl<S> approx::UlpsEq for Vector3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ProjectOn<Vector3<S>> for Vector3<S> where S: ScalarFloat {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn project_on(self, onto: Vector3<S>) -> Vector3<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<&Vector3<S>> for Vector3<S> where S: ScalarFloat {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn project_on(self, onto: &Vector3<S>) -> Vector3<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<Vector3<S>> for &Vector3<S> where S: ScalarFloat {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn project_on(self, onto: Vector3<S>) -> Vector3<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<'a, 'b, S> ProjectOn<&'a Vector3<S>> for &'b Vector3<S> where S: ScalarFloat {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn project_on(self, onto: &'a Vector3<S>) -> Vector3<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
 impl<S: Scalar> iter::Sum<Vector3<S>> for Vector3<S> {
     #[inline]
     fn sum<I: Iterator<Item=Vector3<S>>>(iter: I) -> Vector3<S> {
@@ -2686,6 +2597,13 @@ impl<S> Vector4<S> where S: ScalarFloat {
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
+    }
+
+    /// Compute the projection of the vector `self` onto the vector
+    /// `onto`
+    #[inline]
+    pub fn project_on(&self, onto: &Vector4<S>) -> Vector4<S> {
+        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 
@@ -3432,42 +3350,6 @@ impl<S> approx::UlpsEq for Vector4<S> where S: ScalarFloat {
         S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) &&
         S::ulps_eq(&self.z, &other.z, epsilon, max_ulps) &&
         S::ulps_eq(&self.w, &other.w, epsilon, max_ulps)
-    }
-}
-
-impl<S> ProjectOn<Vector4<S>> for Vector4<S> where S: ScalarFloat {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn project_on(self, onto: Vector4<S>) -> Vector4<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<&Vector4<S>> for Vector4<S> where S: ScalarFloat {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn project_on(self, onto: &Vector4<S>) -> Vector4<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<S> ProjectOn<Vector4<S>> for &Vector4<S> where S: ScalarFloat {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn project_on(self, onto: Vector4<S>) -> Vector4<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
-    }
-}
-
-impl<'a, 'b, S> ProjectOn<&'a Vector4<S>> for &'b Vector4<S> where S: ScalarFloat {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn project_on(self, onto: &'a Vector4<S>) -> Vector4<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
     }
 }
 
