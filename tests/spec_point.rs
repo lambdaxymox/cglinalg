@@ -262,7 +262,7 @@ macro_rules! approx_arithmetic_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero
+            AdditiveIdentity,
         };
         use cglinalg::approx::{
             relative_eq,
@@ -440,7 +440,7 @@ macro_rules! exact_arithmetic_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $PointGen,

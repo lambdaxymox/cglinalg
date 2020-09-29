@@ -40,7 +40,7 @@ pub trait Array {
 }
 
 /// This trait indicates that a type has an arithmetical zero element.
-pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
+pub trait AdditiveIdentity where Self: Sized + ops::Add<Self, Output = Self> {
     /// Create a zero element.
     fn zero() -> Self;
 
@@ -193,7 +193,7 @@ pub trait Matrix {
 pub trait Angle where 
     Self: Copy + Clone,
     Self: PartialEq + PartialOrd,
-    Self: Zero,
+    Self: AdditiveIdentity,
     Self: ops::Neg<Output = Self>,
     Self: ops::Add<Self, Output = Self>,
     Self: ops::Sub<Self, Output = Self>,

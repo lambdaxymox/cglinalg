@@ -1,7 +1,7 @@
 use crate::traits::{
     Angle,
     Array,
-    Zero,
+    AdditiveIdentity,
     Identity,
     ProjectOn,
     CrossProduct,
@@ -493,7 +493,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Zero for Quaternion<S> where S: Scalar {
+impl<S> AdditiveIdentity for Quaternion<S> where S: Scalar {
     #[inline]
     fn zero() -> Quaternion<S> {
         let zero = S::zero();

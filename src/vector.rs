@@ -6,7 +6,7 @@ use crate::scalar::{
 use crate::traits::{
     Array,
     CrossProduct,
-    Zero,
+    AdditiveIdentity,
     ProjectOn,
     DotProduct,
     Magnitude,
@@ -573,7 +573,7 @@ impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
     }
 }
 
-impl<S> Zero for Vector1<S> where S: Scalar {
+impl<S> AdditiveIdentity for Vector1<S> where S: Scalar {
     fn zero() -> Vector1<S> {
         Vector1 { 
             x: S::zero(),
@@ -1295,7 +1295,7 @@ impl<S> ops::RemAssign<S> for Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> Zero for Vector2<S> where S: Scalar {
+impl<S> AdditiveIdentity for Vector2<S> where S: Scalar {
     fn zero() -> Vector2<S> {
         Vector2 { 
             x: S::zero(), 
@@ -2117,7 +2117,7 @@ impl<S> ops::RemAssign<S> for Vector3<S> where S: Scalar {
     }
 }
 
-impl<S> Zero for Vector3<S> where S: Scalar {
+impl<S> AdditiveIdentity for Vector3<S> where S: Scalar {
     #[inline]
     fn zero() -> Vector3<S> {
         Vector3 { 
@@ -3051,7 +3051,7 @@ impl<S> ops::RemAssign<S> for Vector4<S> where S: Scalar {
     }
 }
 
-impl<S> Zero for Vector4<S> where S: Scalar {
+impl<S> AdditiveIdentity for Vector4<S> where S: Scalar {
     #[inline]
     fn zero() -> Vector4<S> {
         Vector4 { 

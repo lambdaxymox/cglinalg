@@ -71,7 +71,7 @@ macro_rules! approx_arithmetic_props {
         use cglinalg::{
             $AngleType,
             Finite,
-            Zero,
+            AdditiveIdentity,
         };
         use super::{
             $Generator,

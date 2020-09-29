@@ -15,7 +15,7 @@ use crate::point::{
 };
 use crate::traits::{
     Identity,
-    Zero,
+    AdditiveIdentity,
 };
 use crate::unit::{
     Unit,

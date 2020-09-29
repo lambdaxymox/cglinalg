@@ -128,7 +128,7 @@ macro_rules! exact_arithmetic_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $Generator,
@@ -259,7 +259,7 @@ macro_rules! approx_add_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $Generator,
@@ -335,7 +335,7 @@ macro_rules! approx_add_props {
             fn prop_vector_addition_almost_commutative(
                 v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
-                let zero: $VectorN<$ScalarType> = Zero::zero();
+                let zero: $VectorN<$ScalarType> = $VectorN::zero();
 
                 prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
             }
@@ -386,7 +386,7 @@ macro_rules! exact_add_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $Generator,
@@ -458,7 +458,7 @@ macro_rules! exact_add_props {
             fn prop_vector_addition_commutative(
                 v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
-                let zero: $VectorN<$ScalarType> = Zero::zero();
+                let zero: $VectorN<$ScalarType> = $VectorN::zero();
                 prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
             }
 
@@ -510,7 +510,7 @@ macro_rules! approx_sub_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $Generator,
@@ -602,7 +602,7 @@ macro_rules! exact_sub_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $Generator,

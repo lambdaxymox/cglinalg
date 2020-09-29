@@ -5,7 +5,7 @@ use crate::scalar::{
 };
 use crate::traits::{
     Angle,
-    Zero,
+    AdditiveIdentity,
     Finite,
 };
 use core::f64;
@@ -282,7 +282,7 @@ impl<S> ops::RemAssign<Degrees<S>> for Degrees<S> where S: ScalarFloat {
     } 
 }
 
-impl<S> Zero for Degrees<S> where S: Scalar {
+impl<S> AdditiveIdentity for Degrees<S> where S: Scalar {
     #[inline]
     fn zero() -> Degrees<S> {
         Degrees(S::zero())
@@ -579,7 +579,7 @@ impl<S> ops::RemAssign<Radians<S>> for Radians<S> where S: ScalarFloat {
     } 
 }
 
-impl<S> Zero for Radians<S> where S: Scalar {
+impl<S> AdditiveIdentity for Radians<S> where S: Scalar {
     #[inline]
     fn zero() -> Radians<S> {
         Radians(S::zero())

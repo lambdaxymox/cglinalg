@@ -93,7 +93,7 @@ macro_rules! approx_addition_props {
         };
         use cglinalg::{
             $MatrixN,
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $Generator,
@@ -198,7 +198,7 @@ macro_rules! exact_addition_props {
         use proptest::prelude::*;
         use cglinalg::{
             $MatrixN,
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $Generator,
@@ -294,7 +294,7 @@ macro_rules! approx_scalar_multiplication_props {
         use cglinalg::approx::relative_eq;
         use cglinalg::{
             $MatrixN,
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $Generator,
@@ -458,7 +458,7 @@ macro_rules! exact_scalar_multiplication_props {
         use proptest::prelude::*;
         use cglinalg::{
             $MatrixN, 
-            Zero
+            AdditiveIdentity,
         };
         use super::{
             $Generator,
