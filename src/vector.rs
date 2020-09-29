@@ -181,6 +181,7 @@ impl<S> Array for Vector1<S> where S: Copy {
 }
 
 impl<S> AsRef<[S; 1]> for Vector1<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 1] {
         unsafe { 
             &*(self as *const Vector1<S> as *const [S; 1])
@@ -189,6 +190,7 @@ impl<S> AsRef<[S; 1]> for Vector1<S> {
 }
 
 impl<S> AsRef<S> for Vector1<S> {
+    #[inline]
     fn as_ref(&self) -> &S {
         unsafe { 
             &*(self as *const Vector1<S> as *const S)
@@ -197,6 +199,7 @@ impl<S> AsRef<S> for Vector1<S> {
 }
 
 impl<S> AsRef<(S,)> for Vector1<S> {
+    #[inline]
     fn as_ref(&self) -> &(S,) {
         unsafe { 
             &*(self as *const Vector1<S> as *const (S,))
@@ -205,6 +208,7 @@ impl<S> AsRef<(S,)> for Vector1<S> {
 }
 
 impl<S> AsMut<[S; 1]> for Vector1<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 1] {
         unsafe { 
             &mut *(self as *mut Vector1<S> as *mut [S; 1])
@@ -213,6 +217,7 @@ impl<S> AsMut<[S; 1]> for Vector1<S> {
 }
 
 impl<S> AsMut<S> for Vector1<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut S {
         unsafe { 
             &mut *(self as *mut Vector1<S> as *mut S)
@@ -221,6 +226,7 @@ impl<S> AsMut<S> for Vector1<S> {
 }
 
 impl<S> AsMut<(S,)> for Vector1<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut (S,) {
         unsafe { 
             &mut *(self as *mut Vector1<S> as *mut (S,))
@@ -394,6 +400,7 @@ impl<S> ops::Neg for &Vector1<S> where S: ScalarSigned {
 impl<S> ops::Add<Vector1<S>> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn add(self, other: Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x + other.x,
@@ -404,6 +411,7 @@ impl<S> ops::Add<Vector1<S>> for &Vector1<S> where S: Scalar {
 impl<S> ops::Add<Vector1<S>> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn add(self, other: Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x + other.x,
@@ -414,6 +422,7 @@ impl<S> ops::Add<Vector1<S>> for Vector1<S> where S: Scalar {
 impl<S> ops::Add<&Vector1<S>> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn add(self, other: &Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x + other.x,
@@ -424,6 +433,7 @@ impl<S> ops::Add<&Vector1<S>> for Vector1<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn add(self, other: &'b Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x + other.x,
@@ -434,6 +444,7 @@ impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Vector1<S> where S: Scalar {
 impl<S> ops::Sub<Vector1<S>> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn sub(self, other: Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
@@ -444,6 +455,7 @@ impl<S> ops::Sub<Vector1<S>> for &Vector1<S> where S: Scalar {
 impl<S> ops::Sub<Vector1<S>> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn sub(self, other: Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
@@ -454,6 +466,7 @@ impl<S> ops::Sub<Vector1<S>> for Vector1<S> where S: Scalar {
 impl<S> ops::Sub<&Vector1<S>> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn sub(self, other: &Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
@@ -464,6 +477,7 @@ impl<S> ops::Sub<&Vector1<S>> for Vector1<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Vector1<S>> for &'a Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn sub(self, other: &'b Vector1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
@@ -472,24 +486,28 @@ impl<'a, 'b, S> ops::Sub<&'b Vector1<S>> for &'a Vector1<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Vector1<S>> for Vector1<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Vector1<S>) {
         self.x = self.x + other.x;
     }
 }
 
 impl<S> ops::AddAssign<&Vector1<S>> for Vector1<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Vector1<S>) {
         self.x = self.x + other.x;
     }
 }
 
 impl<S> ops::SubAssign<Vector1<S>> for Vector1<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Vector1<S>) {
         self.x = self.x - other.x;
     }
 }
 
 impl<S> ops::SubAssign<&Vector1<S>> for Vector1<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Vector1<S>) {
         self.x = self.x - other.x;
     }
@@ -498,6 +516,7 @@ impl<S> ops::SubAssign<&Vector1<S>> for Vector1<S> where S: Scalar {
 impl<S> ops::Mul<S> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Vector1 {
             x: self.x * other,
@@ -508,6 +527,7 @@ impl<S> ops::Mul<S> for Vector1<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Vector1 {
             x: self.x * other,
@@ -516,6 +536,7 @@ impl<S> ops::Mul<S> for &Vector1<S> where S: Scalar {
 }
 
 impl<S> ops::MulAssign<S> for Vector1<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
     }
@@ -524,6 +545,7 @@ impl<S> ops::MulAssign<S> for Vector1<S> where S: Scalar {
 impl<S> ops::Div<S> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Vector1 {
             x: self.x / other,
@@ -534,6 +556,7 @@ impl<S> ops::Div<S> for Vector1<S> where S: Scalar {
 impl<S> ops::Div<S> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Vector1 {
             x: self.x / other,
@@ -542,6 +565,7 @@ impl<S> ops::Div<S> for &Vector1<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Vector1<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.x = self.x / other;
     }
@@ -550,6 +574,7 @@ impl<S> ops::DivAssign<S> for Vector1<S> where S: Scalar {
 impl<S> ops::Rem<S> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         
@@ -560,6 +585,7 @@ impl<S> ops::Rem<S> for Vector1<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         
@@ -568,18 +594,21 @@ impl<S> ops::Rem<S> for &Vector1<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.x %= other;
     }
 }
 
 impl<S> AdditiveIdentity for Vector1<S> where S: Scalar {
+    #[inline]
     fn zero() -> Vector1<S> {
         Vector1 { 
             x: S::zero(),
         }
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         self.x == S::zero()
     }
@@ -588,6 +617,7 @@ impl<S> AdditiveIdentity for Vector1<S> where S: Scalar {
 impl<S> DotProduct<Vector1<S>> for Vector1<S> where S: Scalar {
     type Output = S; 
 
+    #[inline]
     fn dot(self, other: Vector1<S>) -> Self::Output {
         self.x * other.x
     }
@@ -596,6 +626,7 @@ impl<S> DotProduct<Vector1<S>> for Vector1<S> where S: Scalar {
 impl<S> DotProduct<&Vector1<S>> for Vector1<S> where S: Scalar {
     type Output = S; 
 
+    #[inline]
     fn dot(self, other: &Vector1<S>) -> Self::Output {
         self.x * other.x
     }
@@ -604,6 +635,7 @@ impl<S> DotProduct<&Vector1<S>> for Vector1<S> where S: Scalar {
 impl<S> DotProduct<Vector1<S>> for &Vector1<S> where S: Scalar {
     type Output = S; 
 
+    #[inline]
     fn dot(self, other: Vector1<S>) -> Self::Output {
         self.x * other.x
     }
@@ -612,6 +644,7 @@ impl<S> DotProduct<Vector1<S>> for &Vector1<S> where S: Scalar {
 impl<S> DotProduct<&Vector1<S>> for &Vector1<S> where S: Scalar {
     type Output = S; 
 
+    #[inline]
     fn dot(self, other: &Vector1<S>) -> Self::Output {
         self.x * other.x
     }
@@ -620,6 +653,7 @@ impl<S> DotProduct<&Vector1<S>> for &Vector1<S> where S: Scalar {
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
     
+    #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
@@ -629,14 +663,17 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
         S::sqrt(DotProduct::dot(self, self))
     }
     
+    #[inline]
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
     
+    #[inline]
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
 
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
 
@@ -716,12 +753,14 @@ impl_mul_operator!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
 impl_mul_operator!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
 impl<S> Finite for Vector1<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.x.is_finite()
     }
 }
 
 impl<S> Finite for &Vector1<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.x.is_finite()
     }
@@ -730,6 +769,7 @@ impl<S> Finite for &Vector1<S> where S: ScalarFloat {
 impl<S> ProjectOn<Vector1<S>> for Vector1<S> where S: ScalarFloat {
     type Output = Vector1<S>;
 
+    #[inline]
     fn project_on(self, onto: Vector1<S>) -> Vector1<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -738,6 +778,7 @@ impl<S> ProjectOn<Vector1<S>> for Vector1<S> where S: ScalarFloat {
 impl<S> ProjectOn<&Vector1<S>> for Vector1<S> where S: ScalarFloat {
     type Output = Vector1<S>;
 
+    #[inline]
     fn project_on(self, onto: &Vector1<S>) -> Vector1<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -746,6 +787,7 @@ impl<S> ProjectOn<&Vector1<S>> for Vector1<S> where S: ScalarFloat {
 impl<S> ProjectOn<Vector1<S>> for &Vector1<S> where S: ScalarFloat {
     type Output = Vector1<S>;
 
+    #[inline]
     fn project_on(self, onto: Vector1<S>) -> Vector1<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -754,6 +796,7 @@ impl<S> ProjectOn<Vector1<S>> for &Vector1<S> where S: ScalarFloat {
 impl<'a, 'b, S> ProjectOn<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloat {
     type Output = Vector1<S>;
 
+    #[inline]
     fn project_on(self, onto: &'a Vector1<S>) -> Vector1<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -772,6 +815,7 @@ pub struct Vector2<S> {
 
 impl<S> Vector2<S> {
     /// Construct a new vector.
+    #[inline]
     pub const fn new(x: S, y: S) -> Vector2<S> {
         Vector2 { 
             x: x, 
@@ -781,6 +825,7 @@ impl<S> Vector2<S> {
 
     /// Map an operation on the elements of a vector, returning a vector of the 
     /// new underlying type.
+    #[inline]
     pub fn map<T, F>(self, mut op: F) -> Vector2<T> where F: FnMut(S) -> T {
         Vector2 {
             x: op(self.x),
@@ -791,6 +836,7 @@ impl<S> Vector2<S> {
 
 impl<S> Vector2<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector2<T>> {
         let x = match num_traits::cast(self.x) {
             Some(value) => value,
@@ -888,6 +934,7 @@ impl<S> Array for Vector2<S> where S: Copy {
 }
 
 impl<S> AsRef<[S; 2]> for Vector2<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 2] {
         unsafe { 
             &*(self as *const Vector2<S> as *const [S; 2])
@@ -896,6 +943,7 @@ impl<S> AsRef<[S; 2]> for Vector2<S> {
 }
 
 impl<S> AsRef<(S, S)> for Vector2<S> {
+    #[inline]
     fn as_ref(&self) -> &(S, S) {
         unsafe { 
             &*(self as *const Vector2<S> as *const (S, S))
@@ -904,6 +952,7 @@ impl<S> AsRef<(S, S)> for Vector2<S> {
 }
 
 impl<S> AsMut<[S; 2]> for Vector2<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 2] {
         unsafe { 
             &mut *(self as *mut Vector2<S> as *mut [S; 2])
@@ -912,6 +961,7 @@ impl<S> AsMut<[S; 2]> for Vector2<S> {
 }
 
 impl<S> AsMut<(S, S)> for Vector2<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut (S, S) {
         unsafe { 
             &mut *(self as *mut Vector2<S> as *mut (S, S))
@@ -1090,6 +1140,7 @@ impl<S> ops::Neg for &Vector2<S> where S: ScalarSigned {
 impl<S> ops::Add<Vector2<S>> for &Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn add(self, other: Vector2<S>) -> Self::Output {
         Vector2 {
             x: self.x + other.x,
@@ -1101,6 +1152,7 @@ impl<S> ops::Add<Vector2<S>> for &Vector2<S> where S: Scalar {
 impl<S> ops::Add<Vector2<S>> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn add(self, other: Vector2<S>) -> Self::Output {
         Vector2 {
             x: self.x + other.x,
@@ -1112,6 +1164,7 @@ impl<S> ops::Add<Vector2<S>> for Vector2<S> where S: Scalar {
 impl<S> ops::Add<&Vector2<S>> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn add(self, other: &Vector2<S>) -> Self::Output {
         Vector2 {
             x: self.x + other.x,
@@ -1123,6 +1176,7 @@ impl<S> ops::Add<&Vector2<S>> for Vector2<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'b Vector2<S>> for &'a Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn add(self, other: &'b Vector2<S>) -> Self::Output {
         Vector2 {
             x: self.x + other.x,
@@ -1134,6 +1188,7 @@ impl<'a, 'b, S> ops::Add<&'b Vector2<S>> for &'a Vector2<S> where S: Scalar {
 impl<S> ops::Sub<Vector2<S>> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn sub(self, other: Vector2<S>) -> Self::Output {
         Vector2 {
             x: self.x - other.x,
@@ -1145,6 +1200,7 @@ impl<S> ops::Sub<Vector2<S>> for Vector2<S> where S: Scalar {
 impl<S> ops::Sub<Vector2<S>> for &Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn sub(self, other: Vector2<S>) -> Self::Output {
         Vector2 {
             x: self.x - other.x,
@@ -1156,6 +1212,7 @@ impl<S> ops::Sub<Vector2<S>> for &Vector2<S> where S: Scalar {
 impl<S> ops::Sub<&Vector2<S>> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn sub(self, other: &Vector2<S>) -> Self::Output {
         Vector2 {
             x: self.x - other.x,
@@ -1167,6 +1224,7 @@ impl<S> ops::Sub<&Vector2<S>> for Vector2<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Vector2<S>> for &'a Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn sub(self, other: &'b Vector2<S>) -> Self::Output {
         Vector2 {
             x: self.x - other.x,
@@ -1176,6 +1234,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector2<S>> for &'a Vector2<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Vector2<S>> for Vector2<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Vector2<S>) {
         self.x = self.x + other.x;
         self.y = self.y + other.y;
@@ -1183,6 +1242,7 @@ impl<S> ops::AddAssign<Vector2<S>> for Vector2<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<&Vector2<S>> for Vector2<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Vector2<S>) {
         self.x = self.x + other.x;
         self.y = self.y + other.y;
@@ -1190,6 +1250,7 @@ impl<S> ops::AddAssign<&Vector2<S>> for Vector2<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<Vector2<S>> for Vector2<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Vector2<S>) {
         self.x = self.x - other.x;
         self.y = self.y - other.y;
@@ -1197,6 +1258,7 @@ impl<S> ops::SubAssign<Vector2<S>> for Vector2<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<&Vector2<S>> for Vector2<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Vector2<S>) {
         self.x = self.x - other.x;
         self.y = self.y - other.y;
@@ -1206,6 +1268,7 @@ impl<S> ops::SubAssign<&Vector2<S>> for Vector2<S> where S: Scalar {
 impl<S> ops::Mul<S> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Vector2 {
             x: self.x * other,
@@ -1217,6 +1280,7 @@ impl<S> ops::Mul<S> for Vector2<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Vector2 {
             x: self.x * other,
@@ -1241,6 +1305,7 @@ impl_mul_operator!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
 impl_mul_operator!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
 
 impl<S> ops::MulAssign<S> for Vector2<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
         self.y *= other;
@@ -1250,6 +1315,7 @@ impl<S> ops::MulAssign<S> for Vector2<S> where S: Scalar {
 impl<S> ops::Div<S> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Vector2 {
             x: self.x / other,
@@ -1261,6 +1327,7 @@ impl<S> ops::Div<S> for Vector2<S> where S: Scalar {
 impl<S> ops::Div<S> for &Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Vector2 {
             x: self.x / other,
@@ -1270,6 +1337,7 @@ impl<S> ops::Div<S> for &Vector2<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Vector2<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.x = self.x / other;
         self.y = self.y / other;
@@ -1279,6 +1347,7 @@ impl<S> ops::DivAssign<S> for Vector2<S> where S: Scalar {
 impl<S> ops::Rem<S> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -1290,6 +1359,7 @@ impl<S> ops::Rem<S> for Vector2<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -1299,6 +1369,7 @@ impl<S> ops::Rem<S> for &Vector2<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Vector2<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.x %= other;
         self.y %= other;
@@ -1306,6 +1377,7 @@ impl<S> ops::RemAssign<S> for Vector2<S> where S: Scalar {
 }
 
 impl<S> AdditiveIdentity for Vector2<S> where S: Scalar {
+    #[inline]
     fn zero() -> Vector2<S> {
         Vector2 { 
             x: S::zero(), 
@@ -1313,6 +1385,7 @@ impl<S> AdditiveIdentity for Vector2<S> where S: Scalar {
         }
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         self.x == S::zero() && self.y == S::zero()
     }
@@ -1405,22 +1478,27 @@ impl<'a, 'b, S> DotProduct<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
 impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
+    #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
+    #[inline]
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
+    #[inline]
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
 
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
 
@@ -1489,12 +1567,14 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector2<S>> for Vector2<S> {
 
 
 impl<S> Finite for Vector2<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite()
     }
 }
 
 impl<S> Finite for &Vector2<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite()
     }
@@ -1503,6 +1583,7 @@ impl<S> Finite for &Vector2<S> where S: ScalarFloat {
 impl<S> ProjectOn<Vector2<S>> for Vector2<S> where S: ScalarFloat {
     type Output = Vector2<S>;
 
+    #[inline]
     fn project_on(self, onto: Vector2<S>) -> Vector2<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -1511,6 +1592,7 @@ impl<S> ProjectOn<Vector2<S>> for Vector2<S> where S: ScalarFloat {
 impl<S> ProjectOn<&Vector2<S>> for Vector2<S> where S: ScalarFloat {
     type Output = Vector2<S>;
 
+    #[inline]
     fn project_on(self, onto: &Vector2<S>) -> Vector2<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -1519,6 +1601,7 @@ impl<S> ProjectOn<&Vector2<S>> for Vector2<S> where S: ScalarFloat {
 impl<S> ProjectOn<Vector2<S>> for &Vector2<S> where S: ScalarFloat {
     type Output = Vector2<S>;
 
+    #[inline]
     fn project_on(self, onto: Vector2<S>) -> Vector2<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -1527,6 +1610,7 @@ impl<S> ProjectOn<Vector2<S>> for &Vector2<S> where S: ScalarFloat {
 impl<'a, 'b, S> ProjectOn<&'a Vector2<S>> for &'b Vector2<S> where S: ScalarFloat {
     type Output = Vector2<S>;
 
+    #[inline]
     fn project_on(self, onto: &'a Vector2<S>) -> Vector2<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -1544,12 +1628,14 @@ pub struct Vector3<S> {
 
 impl<S> Vector3<S> {
     /// Construct a new vector.
+    #[inline]
     pub const fn new(x: S, y: S, z: S) -> Vector3<S> {
         Vector3 { x: x, y: y, z: z }
     }
 
     /// Map an operation on the elements of a vector, returning a vector of the 
     /// new underlying type.
+    #[inline]
     pub fn map<T, F>(self, mut op: F) -> Vector3<T> where F: FnMut(S) -> T {
         Vector3 {
             x: op(self.x),
@@ -1561,6 +1647,7 @@ impl<S> Vector3<S> {
 
 impl<S> Vector3<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector3<T>> {
         let x = match num_traits::cast(self.x) {
             Some(value) => value,
@@ -1674,6 +1761,7 @@ impl<S> Array for Vector3<S> where S: Copy {
 }
 
 impl<S> AsRef<[S; 3]> for Vector3<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 3] {
         unsafe { 
             &*(self as *const Vector3<S> as *const [S; 3])
@@ -1682,6 +1770,7 @@ impl<S> AsRef<[S; 3]> for Vector3<S> {
 }
 
 impl<S> AsRef<(S, S, S)> for Vector3<S> {
+    #[inline]
     fn as_ref(&self) -> &(S, S, S) {
         unsafe { 
             &*(self as *const Vector3<S> as *const (S, S, S))
@@ -1690,6 +1779,7 @@ impl<S> AsRef<(S, S, S)> for Vector3<S> {
 }
 
 impl<S> AsMut<[S; 3]> for Vector3<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 3] {
         unsafe { 
             &mut *(self as *mut Vector3<S> as *mut [S; 3])
@@ -1698,6 +1788,7 @@ impl<S> AsMut<[S; 3]> for Vector3<S> {
 }
 
 impl<S> AsMut<(S, S, S)> for Vector3<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut (S, S, S) {
         unsafe { 
             &mut *(self as *mut Vector3<S> as *mut (S, S, S))
@@ -1900,6 +1991,7 @@ impl<S> ops::Neg for &Vector3<S> where S: ScalarSigned {
 impl<S> ops::Add<Vector3<S>> for &Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn add(self, other: Vector3<S>) -> Self::Output {
         Vector3 {
             x: self.x + other.x,
@@ -1912,6 +2004,7 @@ impl<S> ops::Add<Vector3<S>> for &Vector3<S> where S: Scalar {
 impl<S> ops::Add<Vector3<S>> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn add(self, other: Vector3<S>) -> Self::Output {
         Vector3 {
             x: self.x + other.x,
@@ -1924,6 +2017,7 @@ impl<S> ops::Add<Vector3<S>> for Vector3<S> where S: Scalar {
 impl<S> ops::Add<&Vector3<S>> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn add(self, other: &Vector3<S>) -> Self::Output {
         Vector3 {
             x: self.x + other.x,
@@ -1936,6 +2030,7 @@ impl<S> ops::Add<&Vector3<S>> for Vector3<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'b Vector3<S>> for &'a Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn add(self, other: &'b Vector3<S>) -> Self::Output {
         Vector3 {
             x: self.x + other.x,
@@ -1948,6 +2043,7 @@ impl<'a, 'b, S> ops::Add<&'b Vector3<S>> for &'a Vector3<S> where S: Scalar {
 impl<S> ops::Sub<Vector3<S>> for &Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn sub(self, other: Vector3<S>) -> Self::Output {
         Vector3 {
             x: self.x - other.x,
@@ -1960,6 +2056,7 @@ impl<S> ops::Sub<Vector3<S>> for &Vector3<S> where S: Scalar {
 impl<S> ops::Sub<Vector3<S>> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn sub(self, other: Vector3<S>) -> Self::Output {
         Vector3 {
             x: self.x - other.x,
@@ -1972,6 +2069,7 @@ impl<S> ops::Sub<Vector3<S>> for Vector3<S> where S: Scalar {
 impl<S> ops::Sub<&Vector3<S>> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn sub(self, other: &Vector3<S>) -> Self::Output {
         Vector3 {
             x: self.x - other.x,
@@ -1984,6 +2082,7 @@ impl<S> ops::Sub<&Vector3<S>> for Vector3<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Vector3<S>> for &'a Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn sub(self, other: &'b Vector3<S>) -> Self::Output {
         Vector3 {
             x: self.x - other.x,
@@ -1995,6 +2094,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector3<S>> for &'a Vector3<S> where S: Scalar {
 
 
 impl<S> ops::AddAssign<Vector3<S>> for Vector3<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Vector3<S>) {
         self.x += other.x;
         self.y += other.y;
@@ -2003,6 +2103,7 @@ impl<S> ops::AddAssign<Vector3<S>> for Vector3<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<&Vector3<S>> for Vector3<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Vector3<S>) {
         self.x += other.x;
         self.y += other.y;
@@ -2011,6 +2112,7 @@ impl<S> ops::AddAssign<&Vector3<S>> for Vector3<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<Vector3<S>> for Vector3<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Vector3<S>) {
         self.x -= other.x;
         self.y -= other.y;
@@ -2019,6 +2121,7 @@ impl<S> ops::SubAssign<Vector3<S>> for Vector3<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<&Vector3<S>> for Vector3<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Vector3<S>) {
         self.x -= other.x;
         self.y -= other.y;
@@ -2029,6 +2132,7 @@ impl<S> ops::SubAssign<&Vector3<S>> for Vector3<S> where S: Scalar {
 impl<S> ops::Mul<S> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Vector3 {
             x: self.x * other,
@@ -2041,6 +2145,7 @@ impl<S> ops::Mul<S> for Vector3<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Vector3 {
             x: self.x * other,
@@ -2066,6 +2171,7 @@ impl_mul_operator!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
 impl_mul_operator!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
 
 impl<S> ops::MulAssign<S> for Vector3<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
         self.y *= other;
@@ -2076,6 +2182,7 @@ impl<S> ops::MulAssign<S> for Vector3<S> where S: Scalar {
 impl<S> ops::Div<S> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Vector3 {
             x: self.x / other,
@@ -2088,6 +2195,7 @@ impl<S> ops::Div<S> for Vector3<S> where S: Scalar {
 impl<S> ops::Div<S> for &Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Vector3 {
             x: self.x / other,
@@ -2098,6 +2206,7 @@ impl<S> ops::Div<S> for &Vector3<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Vector3<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.x /= other;
         self.y /= other;
@@ -2108,6 +2217,7 @@ impl<S> ops::DivAssign<S> for Vector3<S> where S: Scalar {
 impl<S> ops::Rem<S> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -2120,6 +2230,7 @@ impl<S> ops::Rem<S> for Vector3<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -2130,6 +2241,7 @@ impl<S> ops::Rem<S> for &Vector3<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Vector3<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.x %= other;
         self.y %= other;
@@ -2147,6 +2259,7 @@ impl<S> AdditiveIdentity for Vector3<S> where S: Scalar {
         }
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         self.x == S::zero() && self.y == S::zero() && self.z == S::zero()
     }
@@ -2243,6 +2356,7 @@ impl<'a, 'b, S> DotProduct<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar {
 impl<S> CrossProduct<Vector3<S>> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn cross(self, other: Vector3<S>) -> Self::Output {
         let x = self.y * other.z - self.z * other.y;
         let y = self.z * other.x - self.x * other.z;
@@ -2255,6 +2369,7 @@ impl<S> CrossProduct<Vector3<S>> for Vector3<S> where S: Scalar {
 impl<S> CrossProduct<&Vector3<S>> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn cross(self, other: &Vector3<S>) -> Self::Output {
         let x = self.y * other.z - self.z * other.y;
         let y = self.z * other.x - self.x * other.z;
@@ -2267,6 +2382,7 @@ impl<S> CrossProduct<&Vector3<S>> for Vector3<S> where S: Scalar {
 impl<S> CrossProduct<Vector3<S>> for &Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn cross(self, other: Vector3<S>) -> Self::Output {
         let x = self.y * other.z - self.z * other.y;
         let y = self.z * other.x - self.x * other.z;
@@ -2279,6 +2395,7 @@ impl<S> CrossProduct<Vector3<S>> for &Vector3<S> where S: Scalar {
 impl<'a, 'b, S> CrossProduct<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn cross(self, other: &'a Vector3<S>) -> Self::Output {
         let x = self.y * other.z - self.z * other.y;
         let y = self.z * other.x - self.x * other.z;
@@ -2291,22 +2408,27 @@ impl<'a, 'b, S> CrossProduct<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar 
 impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
+    #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
+    #[inline]
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
+    #[inline]
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
 
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
 
@@ -2364,12 +2486,14 @@ impl<S> approx::UlpsEq for Vector3<S> where S: ScalarFloat {
 
 
 impl<S> Finite for Vector3<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
     }
 }
 
 impl<S> Finite for &Vector3<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
     }
@@ -2378,6 +2502,7 @@ impl<S> Finite for &Vector3<S> where S: ScalarFloat {
 impl<S> ProjectOn<Vector3<S>> for Vector3<S> where S: ScalarFloat {
     type Output = Vector3<S>;
 
+    #[inline]
     fn project_on(self, onto: Vector3<S>) -> Vector3<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -2386,6 +2511,7 @@ impl<S> ProjectOn<Vector3<S>> for Vector3<S> where S: ScalarFloat {
 impl<S> ProjectOn<&Vector3<S>> for Vector3<S> where S: ScalarFloat {
     type Output = Vector3<S>;
 
+    #[inline]
     fn project_on(self, onto: &Vector3<S>) -> Vector3<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -2394,6 +2520,7 @@ impl<S> ProjectOn<&Vector3<S>> for Vector3<S> where S: ScalarFloat {
 impl<S> ProjectOn<Vector3<S>> for &Vector3<S> where S: ScalarFloat {
     type Output = Vector3<S>;
 
+    #[inline]
     fn project_on(self, onto: Vector3<S>) -> Vector3<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -2402,6 +2529,7 @@ impl<S> ProjectOn<Vector3<S>> for &Vector3<S> where S: ScalarFloat {
 impl<'a, 'b, S> ProjectOn<&'a Vector3<S>> for &'b Vector3<S> where S: ScalarFloat {
     type Output = Vector3<S>;
 
+    #[inline]
     fn project_on(self, onto: &'a Vector3<S>) -> Vector3<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -2434,6 +2562,7 @@ pub struct Vector4<S> {
 
 impl<S> Vector4<S> {
     /// Construct a new four-dimensional vector.
+    #[inline]
     pub const fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
         Vector4 { 
             x: x, 
@@ -2445,6 +2574,7 @@ impl<S> Vector4<S> {
 
     /// Map an operation on the elements of a vector, returning a vector of the 
     /// new underlying type.
+    #[inline]
     pub fn map<T, F>(self, mut op: F) -> Vector4<T> where F: FnMut(S) -> T {
         Vector4 {
             x: op(self.x),
@@ -2475,6 +2605,7 @@ impl<S> Vector4<S> where S: Copy {
 
 impl<S> Vector4<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector4<T>> {
         let x = match num_traits::cast(self.x) {
             Some(value) => value,
@@ -2581,6 +2712,7 @@ impl<S> Array for Vector4<S> where S: Copy {
 }
 
 impl<S> AsRef<[S; 4]> for Vector4<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 4] {
         unsafe { 
             &*(self as *const Vector4<S> as *const [S; 4])
@@ -2589,6 +2721,7 @@ impl<S> AsRef<[S; 4]> for Vector4<S> {
 }
 
 impl<S> AsRef<(S, S, S, S)> for Vector4<S> {
+    #[inline]
     fn as_ref(&self) -> &(S, S, S, S) {
         unsafe { 
             &*(self as *const Vector4<S> as *const (S, S, S, S))
@@ -2597,6 +2730,7 @@ impl<S> AsRef<(S, S, S, S)> for Vector4<S> {
 }
 
 impl<S> AsMut<[S; 4]> for Vector4<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 4] {
         unsafe { 
             &mut *(self as *mut Vector4<S> as *mut [S; 4])
@@ -2605,6 +2739,7 @@ impl<S> AsMut<[S; 4]> for Vector4<S> {
 }
 
 impl<S> AsMut<(S, S, S, S)> for Vector4<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut (S, S, S, S) {
         unsafe { 
             &mut *(self as *mut Vector4<S> as *mut (S, S, S, S)) 
@@ -2824,6 +2959,7 @@ impl<S> ops::Neg for &Vector4<S> where S: ScalarSigned {
 impl<S> ops::Add<Vector4<S>> for &Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn add(self, other: Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
@@ -2837,6 +2973,7 @@ impl<S> ops::Add<Vector4<S>> for &Vector4<S> where S: Scalar {
 impl<S> ops::Add<Vector4<S>> for Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn add(self, other: Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
@@ -2850,6 +2987,7 @@ impl<S> ops::Add<Vector4<S>> for Vector4<S> where S: Scalar {
 impl<S> ops::Add<&Vector4<S>> for Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn add(self, other: &Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
@@ -2863,6 +3001,7 @@ impl<S> ops::Add<&Vector4<S>> for Vector4<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn add(self, other: &'a Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x + other.x,
@@ -2876,6 +3015,7 @@ impl<'a, 'b, S> ops::Add<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
 impl<S> ops::Sub<Vector4<S>> for &Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn sub(self, other: Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x - other.x,
@@ -2889,6 +3029,7 @@ impl<S> ops::Sub<Vector4<S>> for &Vector4<S> where S: Scalar {
 impl<S> ops::Sub<Vector4<S>> for Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn sub(self, other: Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x - other.x,
@@ -2902,6 +3043,7 @@ impl<S> ops::Sub<Vector4<S>> for Vector4<S> where S: Scalar {
 impl<S> ops::Sub<&Vector4<S>> for Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn sub(self, other: &Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x - other.x,
@@ -2915,6 +3057,7 @@ impl<S> ops::Sub<&Vector4<S>> for Vector4<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Vector4<S>> for &'a Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn sub(self, other: &'b Vector4<S>) -> Self::Output {
         Vector4 {
             x: self.x - other.x,
@@ -2926,6 +3069,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector4<S>> for &'a Vector4<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Vector4<S>> for Vector4<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Vector4<S>) {
         self.x += other.x;
         self.y += other.y;
@@ -2935,6 +3079,7 @@ impl<S> ops::AddAssign<Vector4<S>> for Vector4<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<&Vector4<S>> for Vector4<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Vector4<S>) {
         self.x += other.x;
         self.y += other.y;
@@ -2944,6 +3089,7 @@ impl<S> ops::AddAssign<&Vector4<S>> for Vector4<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<Vector4<S>> for Vector4<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Vector4<S>) {
         self.x -= other.x;
         self.y -= other.y;
@@ -2953,6 +3099,7 @@ impl<S> ops::SubAssign<Vector4<S>> for Vector4<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<&Vector4<S>> for Vector4<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Vector4<S>) {
         self.x -= other.x;
         self.y -= other.y;
@@ -2964,6 +3111,7 @@ impl<S> ops::SubAssign<&Vector4<S>> for Vector4<S> where S: Scalar {
 impl<S> ops::Mul<S> for Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Vector4 {
             x: self.x * other,
@@ -2977,6 +3125,7 @@ impl<S> ops::Mul<S> for Vector4<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Vector4 {
             x: self.x * other,
@@ -3003,6 +3152,7 @@ impl_mul_operator!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
 impl_mul_operator!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
 
 impl<S> ops::MulAssign<S> for Vector4<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
         self.y *= other;
@@ -3014,6 +3164,7 @@ impl<S> ops::MulAssign<S> for Vector4<S> where S: Scalar {
 impl<S> ops::Div<S> for Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Vector4 {
             x: self.x / other,
@@ -3027,6 +3178,7 @@ impl<S> ops::Div<S> for Vector4<S> where S: Scalar {
 impl<S> ops::Div<S> for &Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Vector4 {
             x: self.x / other,
@@ -3038,6 +3190,7 @@ impl<S> ops::Div<S> for &Vector4<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Vector4<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.x /= other;
         self.y /= other;
@@ -3049,6 +3202,7 @@ impl<S> ops::DivAssign<S> for Vector4<S> where S: Scalar {
 impl<S> ops::Rem<S> for Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -3062,6 +3216,7 @@ impl<S> ops::Rem<S> for Vector4<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -3073,6 +3228,7 @@ impl<S> ops::Rem<S> for &Vector4<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Vector4<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.x %= other;
         self.y %= other;
@@ -3092,6 +3248,7 @@ impl<S> AdditiveIdentity for Vector4<S> where S: Scalar {
         }
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         self.x == S::zero() && self.y == S::zero() && self.z == S::zero() && self.w == S::zero()
     }
@@ -3156,6 +3313,7 @@ impl<'a, 'b, S> Metric<&'a Vector4<S>> for &'b Vector4<S> where S: ScalarFloat {
 impl<S> DotProduct<Vector4<S>> for Vector4<S> where S: Scalar {
     type Output = S;
     
+    #[inline]
     fn dot(self, other: Vector4<S>) -> Self::Output {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
@@ -3164,6 +3322,7 @@ impl<S> DotProduct<Vector4<S>> for Vector4<S> where S: Scalar {
 impl<S> DotProduct<&Vector4<S>> for Vector4<S> where S: Scalar {
     type Output = S;
 
+    #[inline]
     fn dot(self, other: &Vector4<S>) -> Self::Output {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
@@ -3172,6 +3331,7 @@ impl<S> DotProduct<&Vector4<S>> for Vector4<S> where S: Scalar {
 impl<S> DotProduct<Vector4<S>> for &Vector4<S> where S: Scalar {
     type Output = S;
 
+    #[inline]
     fn dot(self, other: Vector4<S>) -> Self::Output {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
@@ -3180,6 +3340,7 @@ impl<S> DotProduct<Vector4<S>> for &Vector4<S> where S: Scalar {
 impl<'a, 'b, S> DotProduct<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
     type Output = S;
     
+    #[inline]
     fn dot(self, other: &'a Vector4<S>) -> Self::Output {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
@@ -3188,22 +3349,27 @@ impl<'a, 'b, S> DotProduct<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
 impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
+    #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
+    #[inline]
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
+    #[inline]
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
 
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
 
@@ -3264,12 +3430,14 @@ impl<S> approx::UlpsEq for Vector4<S> where S: ScalarFloat {
 
 
 impl<S> Finite for Vector4<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
     }
 }
 
 impl<S> Finite for &Vector4<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
     }
@@ -3278,6 +3446,7 @@ impl<S> Finite for &Vector4<S> where S: ScalarFloat {
 impl<S> ProjectOn<Vector4<S>> for Vector4<S> where S: ScalarFloat {
     type Output = Vector4<S>;
 
+    #[inline]
     fn project_on(self, onto: Vector4<S>) -> Vector4<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -3286,6 +3455,7 @@ impl<S> ProjectOn<Vector4<S>> for Vector4<S> where S: ScalarFloat {
 impl<S> ProjectOn<&Vector4<S>> for Vector4<S> where S: ScalarFloat {
     type Output = Vector4<S>;
 
+    #[inline]
     fn project_on(self, onto: &Vector4<S>) -> Vector4<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -3294,6 +3464,7 @@ impl<S> ProjectOn<&Vector4<S>> for Vector4<S> where S: ScalarFloat {
 impl<S> ProjectOn<Vector4<S>> for &Vector4<S> where S: ScalarFloat {
     type Output = Vector4<S>;
 
+    #[inline]
     fn project_on(self, onto: Vector4<S>) -> Vector4<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -3302,6 +3473,7 @@ impl<S> ProjectOn<Vector4<S>> for &Vector4<S> where S: ScalarFloat {
 impl<'a, 'b, S> ProjectOn<&'a Vector4<S>> for &'b Vector4<S> where S: ScalarFloat {
     type Output = Vector4<S>;
 
+    #[inline]
     fn project_on(self, onto: &'a Vector4<S>) -> Vector4<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }

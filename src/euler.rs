@@ -177,6 +177,7 @@ pub struct EulerAngles<A> {
 
 impl<A> EulerAngles<A> {
     /// Construct a new set of Euler angles.
+    #[inline]
     pub const fn new(x: A, y: A, z: A) -> EulerAngles<A> {
         EulerAngles { 
             x: x,
@@ -231,6 +232,7 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     /// m[2, 2] :=  cos(yaw) * cos(roll)
     /// ```
     /// This yields the entries in the rotation matrix.
+    #[inline]
     pub fn to_matrix(&self) -> Matrix3x3<S> {
         let (sin_roll, cos_roll) = Radians::sin_cos(self.x);
         let (sin_yaw, cos_yaw) = Radians::sin_cos(self.y);
@@ -307,6 +309,7 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     ///                        | 0         0         0         1 |
     /// ```
     /// as desired.
+    #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
         let (sin_roll, cos_roll) = Radians::sin_cos(self.x);
         let (sin_yaw, cos_yaw) = Radians::sin_cos(self.y);
@@ -487,6 +490,7 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     /// [1] _Paul S. Heckbert (Ed.). 1994. Graphics Gems IV. 
     ///     The Graphics Gems Series, Vol. 4. Academic Press. DOI:10.5555/180895. 
     ///     pp. 222-229_
+    #[inline]
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> EulerAngles<Radians<S>> {
         let x = Radians::atan2(-matrix.c2r1, matrix.c2r2);
         let cos_y = S::sqrt(matrix.c0r0 * matrix.c0r0 + matrix.c1r0 * matrix.c1r0);
@@ -543,6 +547,7 @@ impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> where
 }
 
 impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> where S: ScalarFloat {
+    #[inline]
     fn from(src: Quaternion<S>) -> EulerAngles<Radians<S>> {
         let sig: S = num_traits::cast(0.499).unwrap();
         let two: S = num_traits::cast(2).unwrap();
@@ -589,6 +594,7 @@ impl<A> ops::Add<EulerAngles<A>> for EulerAngles<A> where
 {
     type Output = EulerAngles<A>;
 
+    #[inline]
     fn add(self, other: EulerAngles<A>) -> EulerAngles<A> {
         EulerAngles {
             x: self.x + other.x,
@@ -603,6 +609,7 @@ impl<A> ops::Add<&EulerAngles<A>> for EulerAngles<A> where
 {
     type Output = EulerAngles<A>;
 
+    #[inline]
     fn add(self, other: &EulerAngles<A>) -> EulerAngles<A> {
         EulerAngles {
             x: self.x + other.x,
@@ -617,6 +624,7 @@ impl<A> ops::Add<EulerAngles<A>> for &EulerAngles<A> where
 {
     type Output = EulerAngles<A>;
 
+    #[inline]
     fn add(self, other: EulerAngles<A>) -> EulerAngles<A> {
         EulerAngles {
             x: self.x + other.x,
@@ -631,6 +639,7 @@ impl<'a, 'b, A> ops::Add<&'a EulerAngles<A>> for &'b EulerAngles<A> where
 {
     type Output = EulerAngles<A>;
 
+    #[inline]
     fn add(self, other: &'a EulerAngles<A>) -> EulerAngles<A> {
         EulerAngles {
             x: self.x + other.x,
@@ -646,6 +655,7 @@ impl<A> AdditiveIdentity for EulerAngles<A> where A: Angle {
         EulerAngles::new(A::zero(), A::zero(), A::zero())
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         ulps_eq!(self, &Self::zero())
     }

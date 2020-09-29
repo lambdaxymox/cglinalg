@@ -32,6 +32,7 @@ impl<S> From<Degrees<S>> for Radians<S> where S: ScalarFloat {
 }
 
 impl<S> From<Radians<S>> for Degrees<S> where S: ScalarFloat {
+    #[inline]
     fn from(radians: Radians<S>) -> Degrees<S> {
         Degrees(radians.0 * num_traits::cast(180_f64 / f64::consts::PI).unwrap())
     }

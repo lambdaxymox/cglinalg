@@ -83,6 +83,7 @@ pub struct Matrix2x2<S> {
 
 impl<S> Matrix2x2<S> {
     /// Construct a new 2x2 matrix from its field elements.
+    #[inline]
     pub const fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Matrix2x2<S> {
         Matrix2x2 { 
             c0r0: c0r0, 
@@ -93,6 +94,7 @@ impl<S> Matrix2x2<S> {
     }
 
     /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
+    #[inline]
     pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>) -> Matrix2x2<S> {
         Matrix2x2 { 
             c0r0: c0.x, 
@@ -104,6 +106,7 @@ impl<S> Matrix2x2<S> {
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
+    #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix2x2<T> where F: FnMut(S) -> T {
         Matrix2x2 {
             c0r0: op(self.c0r0), 
@@ -127,6 +130,7 @@ impl<S> Matrix2x2<S> where S: Copy {
 
 impl<S> Matrix2x2<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix2x2<T>> {
         let c0r0 = match num_traits::cast(self.c0r0) {
             Some(value) => value,
@@ -152,6 +156,7 @@ impl<S> Matrix2x2<S> where S: NumCast + Copy {
 impl<S> Matrix2x2<S> where S: Scalar {
     /// Construct a matrix that will cause a vector to point 
     /// at the vector `direction` using up for orientation.
+    #[inline]
     pub fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Matrix2x2<S> {
         Matrix2x2::from_columns(up, direction).transpose()
     }
@@ -161,6 +166,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the _y-axis_ to shearing along the _x-axis_.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_shear_x(shear_x_with_y: S) -> Matrix2x2<S> {
         Matrix2x2::new(
             S::one(),       S::zero(),
@@ -173,6 +179,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the _x-axis_ to shearing along the _y-axis_.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_shear_y(shear_y_with_x: S) -> Matrix2x2<S> {
         Matrix2x2::new(
             S::one(),  shear_y_with_x,
@@ -189,6 +196,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// The parameter `shear_x_with_y` denotes the factor scaling the 
     /// contribution of the y-component to the shearing of the x-component. 
     #[rustfmt::skip]
+    #[inline]
     pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix2x2<S> {
         let one = S::one();
 
@@ -320,10 +328,12 @@ impl<S> Matrix for Matrix2x2<S> where S: Scalar {
     type Column = Vector2<S>;
     type Transpose = Matrix2x2<S>;
 
+    #[inline]
     fn row(&self, r: usize) -> Self::Row {
         Vector2::new(self[0][r], self[1][r])
     }
     
+    #[inline]
     fn swap_rows(&mut self, row_a: usize, row_b: usize) {
         let c0ra = self[0][row_a];
         let c1ra = self[1][row_a];
@@ -333,6 +343,7 @@ impl<S> Matrix for Matrix2x2<S> where S: Scalar {
         self[1][row_b] = c1ra;
     }
     
+    #[inline]
     fn swap_columns(&mut self, col_a: usize, col_b: usize) {
         let car0 = self[col_a][0];
         let car1 = self[col_a][1];
@@ -342,12 +353,14 @@ impl<S> Matrix for Matrix2x2<S> where S: Scalar {
         self[col_b][1] = car1;
     }
     
+    #[inline]
     fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
         let element_a = self[a.0][a.1];
         self[a.0][a.1] = self[b.0][b.1];
         self[b.0][b.1] = element_a;
     }
     
+    #[inline]
     fn transpose(&self) -> Self::Transpose {
         Matrix2x2::new(self.c0r0, self.c1r0, self.c0r1, self.c1r1)
     }
@@ -398,6 +411,7 @@ impl<S> fmt::Display for Matrix2x2<S> where S: fmt::Display {
 }
 
 impl<S> AsRef<[S; 4]> for Matrix2x2<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 4] {
         unsafe { 
             &*(self as *const Matrix2x2<S> as *const [S; 4])
@@ -406,6 +420,7 @@ impl<S> AsRef<[S; 4]> for Matrix2x2<S> {
 }
 
 impl<S> AsRef<[[S; 2]; 2]> for Matrix2x2<S> {
+    #[inline]
     fn as_ref(&self) -> &[[S; 2]; 2] {
         unsafe { 
             &*(self as *const Matrix2x2<S> as *const [[S; 2]; 2])
@@ -414,6 +429,7 @@ impl<S> AsRef<[[S; 2]; 2]> for Matrix2x2<S> {
 }
 
 impl<S> AsRef<[Vector2<S>; 2]> for Matrix2x2<S> {
+    #[inline]
     fn as_ref(&self) -> &[Vector2<S>; 2] {
         unsafe { 
             &*(self as *const Matrix2x2<S> as *const [Vector2<S>; 2])
@@ -422,6 +438,7 @@ impl<S> AsRef<[Vector2<S>; 2]> for Matrix2x2<S> {
 }
 
 impl<S> AsMut<[S; 4]> for Matrix2x2<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 4] {
         unsafe { 
             &mut *(self as *mut Matrix2x2<S> as *mut [S; 4])
@@ -430,6 +447,7 @@ impl<S> AsMut<[S; 4]> for Matrix2x2<S> {
 }
 
 impl<S> AsMut<[[S; 2]; 2]> for Matrix2x2<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [[S; 2]; 2] {
         unsafe { 
             &mut *(self as *mut Matrix2x2<S> as *mut [[S; 2]; 2])
@@ -438,6 +456,7 @@ impl<S> AsMut<[[S; 2]; 2]> for Matrix2x2<S> {
 }
 
 impl<S> AsMut<[Vector2<S>; 2]> for Matrix2x2<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [Vector2<S>; 2] {
         unsafe { 
             &mut *(self as *mut Matrix2x2<S> as *mut [Vector2<S>; 2])
@@ -486,6 +505,7 @@ impl<S> Identity for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Add<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn add(self, other: Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -499,6 +519,7 @@ impl<S> ops::Add<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Add<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn add(self, other: &Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -512,6 +533,7 @@ impl<S> ops::Add<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Add<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn add(self, other: Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -525,6 +547,7 @@ impl<S> ops::Add<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn add(self, other: &'a Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -538,6 +561,7 @@ impl<'a, 'b, S> ops::Add<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar 
 impl<S> ops::Sub<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn sub(self, other: Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -551,6 +575,7 @@ impl<S> ops::Sub<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Sub<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn sub(self, other: &Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -564,6 +589,7 @@ impl<S> ops::Sub<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Sub<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn sub(self, other: Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -577,6 +603,7 @@ impl<S> ops::Sub<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn sub(self, other: &'a Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -590,6 +617,7 @@ impl<'a, 'b, S> ops::Sub<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar 
 impl<S> ops::Mul<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn mul(self, other: &Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1;
@@ -603,6 +631,7 @@ impl<S> ops::Mul<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 impl<'a, 'b, S> ops::Mul<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn mul(self, other: &'a Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1;
@@ -616,6 +645,7 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar 
 impl<S> ops::Mul<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn mul(self, other: Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1;
@@ -629,6 +659,7 @@ impl<S> ops::Mul<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Mul<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn mul(self, other: Matrix2x2<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1;
@@ -642,6 +673,7 @@ impl<S> ops::Mul<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
 impl<S> ops::Mul<S> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
@@ -655,6 +687,7 @@ impl<S> ops::Mul<S> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Mul<Vector2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn mul(self, other: Vector2<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y;
         let y = self.c0r1 * other.x + self.c1r1 * other.y;
@@ -666,6 +699,7 @@ impl<S> ops::Mul<Vector2<S>> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Mul<&Vector2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn mul(self, other: &Vector2<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y;
         let y = self.c0r1 * other.x + self.c1r1 * other.y;
@@ -677,6 +711,7 @@ impl<S> ops::Mul<&Vector2<S>> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Mul<Vector2<S>> for &Matrix2x2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn mul(self, other: Vector2<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y;
         let y = self.c0r1 * other.x + self.c1r1 * other.y;
@@ -688,6 +723,7 @@ impl<S> ops::Mul<Vector2<S>> for &Matrix2x2<S> where S: Scalar {
 impl<'a, 'b, S> ops::Mul<&'a Vector2<S>> for &'b Matrix2x2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn mul(self, other: &'a Vector2<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y;
         let y = self.c0r1 * other.x + self.c1r1 * other.y;
@@ -699,6 +735,7 @@ impl<'a, 'b, S> ops::Mul<&'a Vector2<S>> for &'b Matrix2x2<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
@@ -712,6 +749,7 @@ impl<S> ops::Mul<S> for &Matrix2x2<S> where S: Scalar {
 impl<S> ops::Div<S> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
@@ -725,6 +763,7 @@ impl<S> ops::Div<S> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Div<S> for &Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
@@ -738,6 +777,7 @@ impl<S> ops::Div<S> for &Matrix2x2<S> where S: Scalar {
 impl<S> ops::Neg for Matrix2x2<S> where S: ScalarSigned {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
         let c0r1 = -self.c0r1;
@@ -751,6 +791,7 @@ impl<S> ops::Neg for Matrix2x2<S> where S: ScalarSigned {
 impl<S> ops::Neg for &Matrix2x2<S> where S: ScalarSigned {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
         let c0r1 = -self.c0r1;
@@ -764,6 +805,7 @@ impl<S> ops::Neg for &Matrix2x2<S> where S: ScalarSigned {
 impl<S> ops::Rem<S> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
@@ -777,6 +819,7 @@ impl<S> ops::Rem<S> for Matrix2x2<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
@@ -788,6 +831,7 @@ impl<S> ops::Rem<S> for &Matrix2x2<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Matrix2x2<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
@@ -797,6 +841,7 @@ impl<S> ops::AddAssign<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Matrix2x2<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
@@ -806,6 +851,7 @@ impl<S> ops::AddAssign<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Matrix2x2<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
@@ -815,6 +861,7 @@ impl<S> ops::SubAssign<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Matrix2x2<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
@@ -824,6 +871,7 @@ impl<S> ops::SubAssign<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 }
 
 impl<S> ops::MulAssign<S> for Matrix2x2<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.c0r0 *= other;
         self.c0r1 *= other;
@@ -833,6 +881,7 @@ impl<S> ops::MulAssign<S> for Matrix2x2<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Matrix2x2<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.c0r0 /= other;
         self.c0r1 /= other;
@@ -842,6 +891,7 @@ impl<S> ops::DivAssign<S> for Matrix2x2<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Matrix2x2<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.c0r0 %= other;
         self.c0r1 %= other;
@@ -972,6 +1022,7 @@ impl<S> InvertibleSquareMatrix for Matrix2x2<S> where S: ScalarFloat {
 }
 
 impl<S> Finite for Matrix2x2<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.c0r0.is_finite() && self.c0r1.is_finite() &&
         self.c1r0.is_finite() && self.c1r1.is_finite()
@@ -979,6 +1030,7 @@ impl<S> Finite for Matrix2x2<S> where S: ScalarFloat {
 }
 
 impl<S> Finite for &Matrix2x2<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.c0r0.is_finite() && self.c0r1.is_finite() &&
         self.c1r0.is_finite() && self.c1r1.is_finite()
@@ -1060,6 +1112,7 @@ impl<S> Matrix3x3<S> {
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     #[rustfmt::skip]
+    #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix3x3<T> where F: FnMut(S) -> T {
         Matrix3x3 {
             c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0),
@@ -1087,6 +1140,7 @@ impl<S> Matrix3x3<S> where S: Copy {
 impl<S> Matrix3x3<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
     #[rustfmt::skip]
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix3x3<T>> {
         let c0r0 = match num_traits::cast(self.c0r0) {
             Some(value) => value,
@@ -1691,10 +1745,12 @@ impl<S> Matrix for Matrix3x3<S> where S: Scalar {
     type Column = Vector3<S>;
     type Transpose = Matrix3x3<S>;
 
+    #[inline]
     fn row(&self, r: usize) -> Self::Row {
         Vector3::new(self[0][r], self[1][r], self[2][r])
     }
     
+    #[inline]
     fn swap_rows(&mut self, row_a: usize, row_b: usize) {
         let c0ra = self[0][row_a];
         let c1ra = self[1][row_a];
@@ -1707,6 +1763,7 @@ impl<S> Matrix for Matrix3x3<S> where S: Scalar {
         self[2][row_b] = c2ra;
     }
     
+    #[inline]
     fn swap_columns(&mut self, col_a: usize, col_b: usize) {
         let car0 = self[col_a][0];
         let car1 = self[col_a][1];
@@ -1719,6 +1776,7 @@ impl<S> Matrix for Matrix3x3<S> where S: Scalar {
         self[col_b][2] = car2;
     }
     
+    #[inline]
     fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
         let element_a = self[a.0][a.1];
         self[a.0][a.1] = self[b.0][b.1];
@@ -1726,6 +1784,7 @@ impl<S> Matrix for Matrix3x3<S> where S: Scalar {
     }
     
     #[rustfmt::skip]
+    #[inline]
     fn transpose(&self) -> Self::Transpose {
         Matrix3x3::new(
             self.c0r0, self.c1r0, self.c2r0,
@@ -1815,6 +1874,7 @@ impl<S> fmt::Display for Matrix3x3<S> where S: fmt::Display {
 }
 
 impl<S> AsRef<[S; 9]> for Matrix3x3<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 9] {
         unsafe { 
             &*(self as *const Matrix3x3<S> as *const [S; 9])
@@ -1823,6 +1883,7 @@ impl<S> AsRef<[S; 9]> for Matrix3x3<S> {
 }
 
 impl<S> AsRef<[[S; 3]; 3]> for Matrix3x3<S> {
+    #[inline]
     fn as_ref(&self) -> &[[S; 3]; 3] {
         unsafe { 
             &*(self as *const Matrix3x3<S> as *const [[S; 3]; 3])
@@ -1831,6 +1892,7 @@ impl<S> AsRef<[[S; 3]; 3]> for Matrix3x3<S> {
 }
 
 impl<S> AsRef<[Vector3<S>; 3]> for Matrix3x3<S> {
+    #[inline]
     fn as_ref(&self) -> &[Vector3<S>; 3] {
         unsafe { 
             &*(self as *const Matrix3x3<S> as *const [Vector3<S>; 3])
@@ -1839,6 +1901,7 @@ impl<S> AsRef<[Vector3<S>; 3]> for Matrix3x3<S> {
 }
 
 impl<S> AsMut<[S; 9]> for Matrix3x3<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 9] {
         unsafe { 
             &mut *(self as *mut Matrix3x3<S> as *mut [S; 9])
@@ -1847,6 +1910,7 @@ impl<S> AsMut<[S; 9]> for Matrix3x3<S> {
 }
 
 impl<S> AsMut<[[S; 3]; 3]> for Matrix3x3<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [[S; 3];3 ] {
         unsafe { 
             &mut *(self as *mut Matrix3x3<S> as *mut [[S; 3]; 3])
@@ -1855,6 +1919,7 @@ impl<S> AsMut<[[S; 3]; 3]> for Matrix3x3<S> {
 }
 
 impl<S> AsMut<[Vector3<S>; 3]> for Matrix3x3<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [Vector3<S>; 3] {
         unsafe { 
             &mut *(self as *mut Matrix3x3<S> as *mut [Vector3<S>; 3])
@@ -1892,6 +1957,7 @@ impl<S> AdditiveIdentity for Matrix3x3<S> where S: Scalar {
         )
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         let zero = S::zero();
         self.c0r0 == zero && self.c0r1 == zero && self.c0r2 == zero &&
@@ -1917,6 +1983,7 @@ impl<S> Identity for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Add<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn add(self, other: Matrix3x3<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -1937,6 +2004,7 @@ impl<S> ops::Add<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Add<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn add(self, other: &Matrix3x3<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -1957,6 +2025,7 @@ impl<S> ops::Add<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Add<Matrix3x3<S>> for &Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn add(self, other: Matrix3x3<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -1977,6 +2046,7 @@ impl<S> ops::Add<Matrix3x3<S>> for &Matrix3x3<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'a Matrix3x3<S>> for &'b Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn add(self, other: &'a Matrix3x3<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -1997,6 +2067,7 @@ impl<'a, 'b, S> ops::Add<&'a Matrix3x3<S>> for &'b Matrix3x3<S> where S: Scalar 
 impl<S> ops::Sub<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn sub(self, other: Matrix3x3<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -2017,6 +2088,7 @@ impl<S> ops::Sub<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Sub<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn sub(self, other: &Matrix3x3<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -2037,6 +2109,7 @@ impl<S> ops::Sub<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Sub<Matrix3x3<S>> for &Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn sub(self, other: Matrix3x3<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -2057,6 +2130,7 @@ impl<S> ops::Sub<Matrix3x3<S>> for &Matrix3x3<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'a Matrix3x3<S>> for &'b Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn sub(self, other: &'a Matrix3x3<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -2077,6 +2151,7 @@ impl<'a, 'b, S> ops::Sub<&'a Matrix3x3<S>> for &'b Matrix3x3<S> where S: Scalar 
 impl<S> ops::Mul<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn mul(self, other: &Matrix3x3<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
@@ -2097,6 +2172,7 @@ impl<S> ops::Mul<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 impl<'a, 'b, S> ops::Mul<&'a Matrix3x3<S>> for &'b Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn mul(self, other: &'a Matrix3x3<S>) -> Matrix3x3<S> {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
@@ -2117,6 +2193,7 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix3x3<S>> for &'b Matrix3x3<S> where S: Scalar 
 impl<S> ops::Mul<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn mul(self, other: Matrix3x3<S>) -> Matrix3x3<S> {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
@@ -2137,6 +2214,7 @@ impl<S> ops::Mul<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Mul<Matrix3x3<S>> for &Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn mul(self, other: Matrix3x3<S>) -> Matrix3x3<S> {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
@@ -2157,6 +2235,7 @@ impl<S> ops::Mul<Matrix3x3<S>> for &Matrix3x3<S> where S: Scalar {
 impl<S> ops::Mul<S> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
@@ -2177,6 +2256,7 @@ impl<S> ops::Mul<S> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
@@ -2197,6 +2277,7 @@ impl<S> ops::Mul<S> for &Matrix3x3<S> where S: Scalar {
 impl<S> ops::Mul<Vector3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn mul(self, other: Vector3<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
         let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
@@ -2209,6 +2290,7 @@ impl<S> ops::Mul<Vector3<S>> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Mul<&Vector3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn mul(self, other: &Vector3<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
         let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
@@ -2221,6 +2303,7 @@ impl<S> ops::Mul<&Vector3<S>> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Mul<Vector3<S>> for &Matrix3x3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn mul(self, other: Vector3<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
         let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
@@ -2233,6 +2316,7 @@ impl<S> ops::Mul<Vector3<S>> for &Matrix3x3<S> where S: Scalar {
 impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Matrix3x3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn mul(self, other: &'a Vector3<S>) -> Self::Output {
         let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
         let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
@@ -2245,6 +2329,7 @@ impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Matrix3x3<S> where S: Scalar {
 impl<S> ops::Div<S> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
@@ -2265,6 +2350,7 @@ impl<S> ops::Div<S> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Div<S> for &Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
@@ -2285,6 +2371,7 @@ impl<S> ops::Div<S> for &Matrix3x3<S> where S: Scalar {
 impl<S> ops::Neg for Matrix3x3<S> where S: ScalarSigned {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
         let c0r1 = -self.c0r1;
@@ -2305,6 +2392,7 @@ impl<S> ops::Neg for Matrix3x3<S> where S: ScalarSigned {
 impl<S> ops::Neg for &Matrix3x3<S> where S: ScalarSigned {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
         let c0r1 = -self.c0r1;
@@ -2325,6 +2413,7 @@ impl<S> ops::Neg for &Matrix3x3<S> where S: ScalarSigned {
 impl<S> ops::Rem<S> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
@@ -2345,6 +2434,7 @@ impl<S> ops::Rem<S> for Matrix3x3<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
@@ -2363,6 +2453,7 @@ impl<S> ops::Rem<S> for &Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Matrix3x3<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
@@ -2379,6 +2470,7 @@ impl<S> ops::AddAssign<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Matrix3x3<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
@@ -2395,6 +2487,7 @@ impl<S> ops::AddAssign<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Matrix3x3<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
@@ -2411,6 +2504,7 @@ impl<S> ops::SubAssign<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Matrix3x3<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
@@ -2427,6 +2521,7 @@ impl<S> ops::SubAssign<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> ops::MulAssign<S> for Matrix3x3<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.c0r0 *= other;
         self.c0r1 *= other;
@@ -2443,6 +2538,7 @@ impl<S> ops::MulAssign<S> for Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Matrix3x3<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.c0r0 /= other;
         self.c0r1 /= other;
@@ -2459,6 +2555,7 @@ impl<S> ops::DivAssign<S> for Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Matrix3x3<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.c0r0 %= other;
         self.c0r1 %= other;
@@ -2635,6 +2732,7 @@ impl<S> InvertibleSquareMatrix for Matrix3x3<S> where S: ScalarFloat {
 }
 
 impl<S> Finite for Matrix3x3<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.c0r0.is_finite() && self.c0r1.is_finite() && self.c0r2.is_finite() &&
         self.c1r0.is_finite() && self.c1r1.is_finite() && self.c1r2.is_finite() &&
@@ -2643,6 +2741,7 @@ impl<S> Finite for Matrix3x3<S> where S: ScalarFloat {
 }
 
 impl<S> Finite for &Matrix3x3<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.c0r0.is_finite() && self.c0r1.is_finite() && self.c0r2.is_finite() &&
         self.c1r0.is_finite() && self.c1r1.is_finite() && self.c1r2.is_finite() &&
@@ -2727,6 +2826,7 @@ impl<S> Matrix4x4<S> {
     /// Map an operation on the elements of a matrix, returning a matrix whose elements
     /// are elements of the new underlying type.
     #[rustfmt::skip]
+    #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> where F: FnMut(S) -> T {
         Matrix4x4 {
             c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0), c3r0: op(self.c3r0),
@@ -2756,6 +2856,7 @@ impl<S> Matrix4x4<S> where S: Copy {
 impl<S> Matrix4x4<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
     #[rustfmt::skip]
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix4x4<T>> {
         let c0r0 = match num_traits::cast(self.c0r0) {
             Some(value) => value,
@@ -2971,6 +3072,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// Since this is an affine transformation the `w` component
     /// of four-dimensional vectors is unaffected.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_affine_shear(
         shear_x_with_y: S, shear_x_with_z: S, 
         shear_y_with_x: S, shear_y_with_z: S, 
@@ -3090,6 +3192,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
     /// x-axis by an angle `angle` radians/degrees.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_affine_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
@@ -3106,6 +3209,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the y-axis by an angle `angle` radians/degrees.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_affine_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
@@ -3122,6 +3226,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the z-axis by an angle `angle` radians/degrees.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_affine_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
@@ -3138,6 +3243,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the axis `axis` by an angle `angle` radians/degrees.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Matrix4x4<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
@@ -3168,6 +3274,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
 
     /// Construct a new three-dimensional orthographic projection matrix.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_orthographic(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> {
         let zero = S::zero();
         let one  = S::one();
@@ -3191,6 +3298,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a new three-dimensional perspective projection matrix based
     /// on arbitrary `left`, `right`, `bottom`, `top`, `near` and `far` planes.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_perspective(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> {
         let zero = S::zero();
         let one = S::one();
@@ -3229,6 +3337,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// plane and the vertical field of view angle `fovy` and the 
     /// horizontal/vertical aspect ratio `aspect`.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_perspective_fov<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
         let zero = S::zero();
         let one = S::one();
@@ -3286,6 +3395,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// locates the `eye` position to the origin in the new the coordinate system.
     /// This transformation is a _right-handed_ coordinate transformation. It is
     /// conventionally used in computer graphics for camera view transformations.
+    #[rustfmt::skip]
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
         let direction = -(target - eye);
@@ -3317,6 +3427,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// The function maps the direction `direction` to the _positive z-axis_ and 
     /// locates the `eye` position to the origin in the new the coordinate system.
     /// This transformation is a _left-handed_ coordinate transformation.
+    #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
         let direction = target - eye;
@@ -3382,10 +3493,12 @@ impl<S> Matrix for Matrix4x4<S> where S: Scalar {
     type Column = Vector4<S>;
     type Transpose = Matrix4x4<S>;
 
+    #[inline]
     fn row(&self, r: usize) -> Self::Row {
         Vector4::new(self[0][r], self[1][r], self[2][r], self[3][r])
     }
     
+    #[inline]
     fn swap_rows(&mut self, row_a: usize, row_b: usize) {
         let c0ra = self[0][row_a];
         let c1ra = self[1][row_a];
@@ -3401,6 +3514,7 @@ impl<S> Matrix for Matrix4x4<S> where S: Scalar {
         self[3][row_b] = c3ra;
     }
     
+    #[inline]
     fn swap_columns(&mut self, col_a: usize, col_b: usize) {
         let car0 = self[col_a][0];
         let car1 = self[col_a][1];
@@ -3416,6 +3530,7 @@ impl<S> Matrix for Matrix4x4<S> where S: Scalar {
         self[col_b][3] = car3;
     }
     
+    #[inline]
     fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
         let element_a = self[a.0][a.1];
         self[a.0][a.1] = self[b.0][b.1];
@@ -3423,6 +3538,7 @@ impl<S> Matrix for Matrix4x4<S> where S: Scalar {
     }
     
     #[rustfmt::skip]
+    #[inline]
     fn transpose(&self) -> Self::Transpose {
         Matrix4x4::new(
             self.c0r0, self.c1r0, self.c2r0, self.c3r0,
@@ -3552,6 +3668,7 @@ impl<S> fmt::Display for Matrix4x4<S> where S: fmt::Display {
 }
 
 impl<S> AsRef<[S; 16]> for Matrix4x4<S>  {
+    #[inline]
     fn as_ref(&self) -> &[S; 16] {
         unsafe { 
             &*(self as *const Matrix4x4<S> as *const [S; 16])
@@ -3560,6 +3677,7 @@ impl<S> AsRef<[S; 16]> for Matrix4x4<S>  {
 }
 
 impl<S> AsRef<[[S; 4]; 4]> for Matrix4x4<S> {
+    #[inline]
     fn as_ref(&self) -> &[[S; 4]; 4] {
         unsafe { 
             &*(self as *const Matrix4x4<S> as *const [[S; 4]; 4])
@@ -3568,6 +3686,7 @@ impl<S> AsRef<[[S; 4]; 4]> for Matrix4x4<S> {
 }
 
 impl<S> AsRef<[Vector4<S>; 4]> for Matrix4x4<S> {
+    #[inline]
     fn as_ref(&self) -> &[Vector4<S>; 4] {
         unsafe { 
             &*(self as *const Matrix4x4<S> as *const [Vector4<S>; 4])
@@ -3576,6 +3695,7 @@ impl<S> AsRef<[Vector4<S>; 4]> for Matrix4x4<S> {
 }
 
 impl<S> AsMut<[S; 16]> for Matrix4x4<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 16] {
         unsafe { 
             &mut *(self as *mut Matrix4x4<S> as *mut [S; 16])
@@ -3584,6 +3704,7 @@ impl<S> AsMut<[S; 16]> for Matrix4x4<S> {
 }
 
 impl<S> AsMut<[[S; 4]; 4]> for Matrix4x4<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [[S; 4]; 4] {
         unsafe { 
             &mut *(self as *mut Matrix4x4<S> as *mut [[S; 4]; 4])
@@ -3592,6 +3713,7 @@ impl<S> AsMut<[[S; 4]; 4]> for Matrix4x4<S> {
 }
 
 impl<S> AsMut<[Vector4<S>; 4]> for Matrix4x4<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [Vector4<S>; 4] {
         unsafe { 
             &mut *(self as *mut Matrix4x4<S> as *mut [Vector4<S>; 4])
@@ -3630,6 +3752,7 @@ impl<S> AdditiveIdentity for Matrix4x4<S> where S: Scalar {
         )
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         let zero = S::zero();
         self.c0r0 == zero && self.c0r1 == zero && 
@@ -3662,6 +3785,7 @@ impl<S> ops::Add<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn add(self, other: Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -3696,6 +3820,7 @@ impl<S> ops::Add<&Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn add(self, other: &Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -3730,6 +3855,7 @@ impl<S> ops::Add<Matrix4x4<S>> for &Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn add(self, other: Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -3764,6 +3890,7 @@ impl<'a, 'b, S> ops::Add<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar 
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn add(self, other: &'a Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 + other.c0r0;
         let c0r1 = self.c0r1 + other.c0r1;
@@ -3798,6 +3925,7 @@ impl<S> ops::Sub<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn sub(self, other: Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -3832,6 +3960,7 @@ impl<S> ops::Sub<&Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn sub(self, other: &Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -3866,6 +3995,7 @@ impl<S> ops::Sub<Matrix4x4<S>> for &Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn sub(self, other: Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -3900,6 +4030,7 @@ impl<'a, 'b, S> ops::Sub<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar 
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn sub(self, other: &'a Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 - other.c0r0;
         let c0r1 = self.c0r1 - other.c0r1;
@@ -3934,6 +4065,7 @@ impl<S> ops::Mul<Vector4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Vector4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: Vector4<S>) -> Self::Output {
         let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
         let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
@@ -3948,6 +4080,7 @@ impl<S> ops::Mul<&Vector4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Vector4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: &Vector4<S>) -> Self::Output {
         let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
         let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
@@ -3962,6 +4095,7 @@ impl<S> ops::Mul<Vector4<S>> for &Matrix4x4<S> where S: Scalar {
     type Output = Vector4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: Vector4<S>) -> Self::Output {
         let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
         let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
@@ -3976,6 +4110,7 @@ impl<'a, 'b, S> ops::Mul<&'a Vector4<S>> for &'b Matrix4x4<S> where S: Scalar {
     type Output = Vector4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: &'a Vector4<S>) -> Self::Output {
         let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
         let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
@@ -3990,6 +4125,7 @@ impl<S> ops::Mul<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
@@ -4024,6 +4160,7 @@ impl<S> ops::Mul<&Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: &Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
@@ -4058,6 +4195,7 @@ impl<S> ops::Mul<Matrix4x4<S>> for &Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
@@ -4092,6 +4230,7 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar 
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: &'a Matrix4x4<S>) -> Self::Output {
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
@@ -4126,6 +4265,7 @@ impl<S> ops::Mul<S> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
@@ -4160,6 +4300,7 @@ impl<S> ops::Mul<S> for &Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 * other;
         let c0r1 = self.c0r1 * other;
@@ -4194,6 +4335,7 @@ impl<S> ops::Div<S> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
@@ -4228,6 +4370,7 @@ impl<S> ops::Div<S> for &Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 / other;
         let c0r1 = self.c0r1 / other;
@@ -4262,6 +4405,7 @@ impl<S> ops::Neg for Matrix4x4<S> where S: ScalarSigned {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
         let c0r1 = -self.c0r1;
@@ -4296,6 +4440,7 @@ impl<S> ops::Neg for &Matrix4x4<S> where S: ScalarSigned {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn neg(self) -> Self::Output {
         let c0r0 = -self.c0r0;
         let c0r1 = -self.c0r1;
@@ -4330,6 +4475,7 @@ impl<S> ops::Rem<S> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
@@ -4364,6 +4510,7 @@ impl<S> ops::Rem<S> for &Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
     #[rustfmt::skip]
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let c0r0 = self.c0r0 % other;
         let c0r1 = self.c0r1 % other;
@@ -4395,6 +4542,7 @@ impl<S> ops::Rem<S> for &Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Matrix4x4<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
@@ -4419,6 +4567,7 @@ impl<S> ops::AddAssign<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<&Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Matrix4x4<S>) {
         self.c0r0 += other.c0r0;
         self.c0r1 += other.c0r1;
@@ -4443,6 +4592,7 @@ impl<S> ops::AddAssign<&Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Matrix4x4<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
@@ -4467,6 +4617,7 @@ impl<S> ops::SubAssign<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<&Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Matrix4x4<S>) {
         self.c0r0 -= other.c0r0;
         self.c0r1 -= other.c0r1;
@@ -4491,6 +4642,7 @@ impl<S> ops::SubAssign<&Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> ops::MulAssign<S> for Matrix4x4<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.c0r0 *= other;
         self.c0r1 *= other;
@@ -4515,6 +4667,7 @@ impl<S> ops::MulAssign<S> for Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Matrix4x4<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.c0r0 /= other;
         self.c0r1 /= other;
@@ -4539,6 +4692,7 @@ impl<S> ops::DivAssign<S> for Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Matrix4x4<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.c0r0 %= other;
         self.c0r1 %= other;
@@ -4818,6 +4972,7 @@ impl<S> InvertibleSquareMatrix for Matrix4x4<S> where S: ScalarFloat {
 }
 
 impl<S> Finite for Matrix4x4<S> where S: ScalarFloat {
+    #[inline]
     fn is_finite(self) -> bool {
         self.c0r0.is_finite() && self.c0r1.is_finite() && 
         self.c0r2.is_finite() && self.c0r3.is_finite() &&

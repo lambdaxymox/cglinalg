@@ -64,7 +64,10 @@ impl<S> Point1<S> {
 
     /// Map an operation on that acts on the coordinates of a point, returning a point of the 
     /// new underlying type.
-    pub fn map<T, F>(self, mut op: F) -> Point1<T> where F: FnMut(S) -> T {
+    #[inline]
+    pub fn map<T, F>(self, mut op: F) -> Point1<T> 
+        where F: FnMut(S) -> T 
+    {
         Point1 { 
             x: op(self.x) 
         }
@@ -88,6 +91,7 @@ impl<S> Point1<S> where S: Copy {
 
 impl<S> Point1<S> where S: NumCast + Copy {
     /// Cast a point of one type of scalars to a point of another type of scalars.
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Point1<T>> {
         let x = match num_traits::cast(self.x) {
             Some(value) => value,
@@ -154,6 +158,7 @@ impl<S> Array for Point1<S> where S: Copy {
 }
 
 impl<S> AsRef<[S; 1]> for Point1<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 1] {
         unsafe { 
             &*(self as *const Point1<S> as *const [S; 1])
@@ -162,6 +167,7 @@ impl<S> AsRef<[S; 1]> for Point1<S> {
 }
 
 impl<S> AsRef<S> for Point1<S> {
+    #[inline]
     fn as_ref(&self) -> &S {
         unsafe { 
             &*(self as *const Point1<S> as *const S)
@@ -170,6 +176,7 @@ impl<S> AsRef<S> for Point1<S> {
 }
 
 impl<S> AsRef<(S,)> for Point1<S> {
+    #[inline]
     fn as_ref(&self) -> &(S,) {
         unsafe { 
             &*(self as *const Point1<S> as *const (S,))
@@ -178,6 +185,7 @@ impl<S> AsRef<(S,)> for Point1<S> {
 }
 
 impl<S> AsMut<[S; 1]> for Point1<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 1] {
         unsafe { 
             &mut *(self as *mut Point1<S> as *mut [S; 1])
@@ -186,6 +194,7 @@ impl<S> AsMut<[S; 1]> for Point1<S> {
 }
 
 impl<S> AsMut<S> for Point1<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut S {
         unsafe { 
             &mut *(self as *mut Point1<S> as *mut S)
@@ -194,6 +203,7 @@ impl<S> AsMut<S> for Point1<S> {
 }
 
 impl<S> AsMut<(S,)> for Point1<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut (S,) {
         unsafe { 
             &mut *(self as *mut Point1<S> as *mut (S,))
@@ -337,6 +347,7 @@ impl<'a, S> From<&'a [S; 1]> for &'a Point1<S> where S: Scalar {
 impl<S> ops::Add<Vector1<S>> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn add(self, other: Vector1<S>) -> Self::Output {
         Point1 {
             x: self.x + other.x,
@@ -347,6 +358,7 @@ impl<S> ops::Add<Vector1<S>> for Point1<S> where S: Scalar {
 impl<S> ops::Add<Vector1<S>> for &Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn add(self, other: Vector1<S>) -> Self::Output {
         Point1 {
             x: self.x + other.x,
@@ -357,6 +369,7 @@ impl<S> ops::Add<Vector1<S>> for &Point1<S> where S: Scalar {
 impl<S> ops::Add<&Vector1<S>> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn add(self, other: &Vector1<S>) -> Self::Output {
         Point1 {
             x: self.x + other.x,
@@ -367,6 +380,7 @@ impl<S> ops::Add<&Vector1<S>> for Point1<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn add(self, other: &'b Vector1<S>) -> Self::Output {
         Point1 {
             x: self.x + other.x,
@@ -377,6 +391,7 @@ impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
 impl<S> ops::Sub<Point1<S>> for &Point1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn sub(self, other: Point1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
@@ -387,6 +402,7 @@ impl<S> ops::Sub<Point1<S>> for &Point1<S> where S: Scalar {
 impl<S> ops::Sub<Point1<S>> for Point1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn sub(self, other: Point1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
@@ -397,6 +413,7 @@ impl<S> ops::Sub<Point1<S>> for Point1<S> where S: Scalar {
 impl<S> ops::Sub<&Point1<S>> for Point1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn sub(self, other: &Point1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,          
@@ -407,6 +424,7 @@ impl<S> ops::Sub<&Point1<S>> for Point1<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Point1<S>> for &'a Point1<S> where S: Scalar {
     type Output = Vector1<S>;
 
+    #[inline]
     fn sub(self, other: &'b Point1<S>) -> Self::Output {
         Vector1 {
             x: self.x - other.x,
@@ -417,6 +435,7 @@ impl<'a, 'b, S> ops::Sub<&'b Point1<S>> for &'a Point1<S> where S: Scalar {
 impl<S> ops::Sub<Vector1<S>> for &Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn sub(self, other: Vector1<S>) -> Self::Output {
         Point1 {
             x: self.x - other.x,
@@ -427,6 +446,7 @@ impl<S> ops::Sub<Vector1<S>> for &Point1<S> where S: Scalar {
 impl<S> ops::Sub<Vector1<S>> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn sub(self, other: Vector1<S>) -> Self::Output {
         Point1 {
             x: self.x - other.x,
@@ -437,6 +457,7 @@ impl<S> ops::Sub<Vector1<S>> for Point1<S> where S: Scalar {
 impl<S> ops::Sub<&Vector1<S>> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn sub(self, other: &Vector1<S>) -> Self::Output {
         Point1 {
             x: self.x - other.x,          
@@ -447,6 +468,7 @@ impl<S> ops::Sub<&Vector1<S>> for Point1<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn sub(self, other: &'b Vector1<S>) -> Self::Output {
         Point1 {
             x: self.x - other.x,
@@ -457,6 +479,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
 impl<S> ops::Mul<S> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Point1 {
             x: self.x * other,
@@ -467,6 +490,7 @@ impl<S> ops::Mul<S> for Point1<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Point1 {
             x: self.x * other,
@@ -492,6 +516,7 @@ impl_mul_operator!(f64,   Point1<f64>,   Point1<f64>,   { x });
 impl<S> ops::Div<S> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Point1 {
             x: self.x / other,
@@ -502,6 +527,7 @@ impl<S> ops::Div<S> for Point1<S> where S: Scalar {
 impl<S> ops::Div<S> for &Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Point1 {
             x: self.x / other,
@@ -512,6 +538,7 @@ impl<S> ops::Div<S> for &Point1<S> where S: Scalar {
 impl<S> ops::Rem<S> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         
@@ -522,6 +549,7 @@ impl<S> ops::Rem<S> for Point1<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         
@@ -530,42 +558,49 @@ impl<S> ops::Rem<S> for &Point1<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Vector1<S>> for Point1<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Vector1<S>) {
         self.x = self.x + other.x;
     }
 }
 
 impl<S> ops::AddAssign<&Vector1<S>> for Point1<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Vector1<S>) {
         self.x = self.x + other.x;
     }
 }
 
 impl<S> ops::SubAssign<Vector1<S>> for Point1<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Vector1<S>) {
         self.x = self.x - other.x;
     }
 }
 
 impl<S> ops::SubAssign<&Vector1<S>> for Point1<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Vector1<S>) {
         self.x = self.x - other.x;
     }
 }
 
 impl<S> ops::MulAssign<S> for Point1<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
     }
 }
 
 impl<S> ops::DivAssign<S> for Point1<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.x = self.x / other;
     }
 }
 
 impl<S> ops::RemAssign<S> for Point1<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.x %= other;
     }
@@ -648,22 +683,27 @@ impl<'a, 'b, S> DotProduct<&'a Point1<S>> for &'b Point1<S> where S: Scalar {
 impl<S> Magnitude for Point1<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
+    #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
+    #[inline]
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
+    #[inline]
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
 
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
 
@@ -731,6 +771,7 @@ impl<S> Point2<S> {
 
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
+    #[inline]
     pub fn map<T, F>(self, mut op: F) -> Point2<T> 
         where F: FnMut(S) -> T 
     {
@@ -765,6 +806,7 @@ impl<S> Point2<S> where S: Copy {
 
 impl<S> Point2<S> where S: NumCast + Copy {
     /// Cast a point of one type of scalars to a point of another type of scalars.
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Point2<T>> {
         let x = match num_traits::cast(self.x) {
             Some(value) => value,
@@ -848,6 +890,7 @@ impl<S> Array for Point2<S> where S: Copy {
 }
 
 impl<S> AsRef<[S; 2]> for Point2<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 2] {
         unsafe { 
             &*(self as *const Point2<S> as *const [S; 2])
@@ -856,6 +899,7 @@ impl<S> AsRef<[S; 2]> for Point2<S> {
 }
 
 impl<S> AsRef<(S, S)> for Point2<S> {
+    #[inline]
     fn as_ref(&self) -> &(S, S) {
         unsafe { 
             &*(self as *const Point2<S> as *const (S, S))
@@ -864,6 +908,7 @@ impl<S> AsRef<(S, S)> for Point2<S> {
 }
 
 impl<S> AsMut<[S; 2]> for Point2<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 2] {
         unsafe { 
             &mut *(self as *mut Point2<S> as *mut [S; 2])
@@ -872,6 +917,7 @@ impl<S> AsMut<[S; 2]> for Point2<S> {
 }
 
 impl<S> AsMut<(S, S)> for Point2<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut (S, S) {
         unsafe { 
             &mut *(self as *mut Point2<S> as *mut (S, S))
@@ -1015,6 +1061,7 @@ impl<'a, S> From<&'a [S; 2]> for &'a Point2<S> where S: Scalar {
 impl<S> ops::Add<Vector2<S>> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn add(self, other: Vector2<S>) -> Self::Output {
         Point2 {
             x: self.x + other.x,
@@ -1026,6 +1073,7 @@ impl<S> ops::Add<Vector2<S>> for Point2<S> where S: Scalar {
 impl<S> ops::Add<Vector2<S>> for &Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn add(self, other: Vector2<S>) -> Self::Output {
         Point2 {
             x: self.x + other.x,
@@ -1037,6 +1085,7 @@ impl<S> ops::Add<Vector2<S>> for &Point2<S> where S: Scalar {
 impl<S> ops::Add<&Vector2<S>> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn add(self, other: &Vector2<S>) -> Self::Output {
         Point2 {
             x: self.x + other.x,
@@ -1048,6 +1097,7 @@ impl<S> ops::Add<&Vector2<S>> for Point2<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn add(self, other: &'b Vector2<S>) -> Self::Output {
         Point2 {
             x: self.x + other.x,
@@ -1059,6 +1109,7 @@ impl<'a, 'b, S> ops::Add<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
 impl<S> ops::Sub<Point2<S>> for &Point2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn sub(self, other: Point2<S>) -> Self::Output {
         Vector2 {
             x: self.x - other.x,
@@ -1070,6 +1121,7 @@ impl<S> ops::Sub<Point2<S>> for &Point2<S> where S: Scalar {
 impl<S> ops::Sub<Point2<S>> for Point2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn sub(self, other: Point2<S>) -> Self::Output {
         Vector2 {
             x: self.x - other.x,
@@ -1081,6 +1133,7 @@ impl<S> ops::Sub<Point2<S>> for Point2<S> where S: Scalar {
 impl<S> ops::Sub<&Point2<S>> for Point2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn sub(self, other: &Point2<S>) -> Self::Output {
         Vector2 {
             x: self.x - other.x,
@@ -1092,6 +1145,7 @@ impl<S> ops::Sub<&Point2<S>> for Point2<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Point2<S>> for &'a Point2<S> where S: Scalar {
     type Output = Vector2<S>;
 
+    #[inline]
     fn sub(self, other: &'b Point2<S>) -> Self::Output {
         Vector2 {
             x: self.x - other.x,
@@ -1103,6 +1157,7 @@ impl<'a, 'b, S> ops::Sub<&'b Point2<S>> for &'a Point2<S> where S: Scalar {
 impl<S> ops::Sub<Vector2<S>> for &Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn sub(self, other: Vector2<S>) -> Self::Output {
         Point2 {
             x: self.x - other.x,
@@ -1114,6 +1169,7 @@ impl<S> ops::Sub<Vector2<S>> for &Point2<S> where S: Scalar {
 impl<S> ops::Sub<Vector2<S>> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn sub(self, other: Vector2<S>) -> Self::Output {
         Point2 {
             x: self.x - other.x,
@@ -1125,6 +1181,7 @@ impl<S> ops::Sub<Vector2<S>> for Point2<S> where S: Scalar {
 impl<S> ops::Sub<&Vector2<S>> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn sub(self, other: &Vector2<S>) -> Self::Output {
         Point2 {
             x: self.x - other.x,
@@ -1136,6 +1193,7 @@ impl<S> ops::Sub<&Vector2<S>> for Point2<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn sub(self, other: &'b Vector2<S>) -> Self::Output {
         Point2 {
             x: self.x - other.x,
@@ -1147,6 +1205,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
 impl<S> ops::Mul<S> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Point2 {
             x: self.x * other,
@@ -1158,6 +1217,7 @@ impl<S> ops::Mul<S> for Point2<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Point2 {
             x: self.x * other,
@@ -1184,6 +1244,7 @@ impl_mul_operator!(f64,   Point2<f64>,   Point2<f64>,   { x, y });
 impl<S> ops::Div<S> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Point2 {
             x: self.x / other,
@@ -1195,6 +1256,7 @@ impl<S> ops::Div<S> for Point2<S> where S: Scalar {
 impl<S> ops::Div<S> for &Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Point2 {
             x: self.x / other,
@@ -1206,6 +1268,7 @@ impl<S> ops::Div<S> for &Point2<S> where S: Scalar {
 impl<S> ops::Rem<S> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -1217,6 +1280,7 @@ impl<S> ops::Rem<S> for Point2<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -1226,6 +1290,7 @@ impl<S> ops::Rem<S> for &Point2<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Vector2<S>> for Point2<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Vector2<S>) {
         self.x = self.x + other.x;
         self.y = self.y + other.y;
@@ -1233,6 +1298,7 @@ impl<S> ops::AddAssign<Vector2<S>> for Point2<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<&Vector2<S>> for Point2<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Vector2<S>) {
         self.x = self.x + other.x;
         self.y = self.y + other.y;
@@ -1240,6 +1306,7 @@ impl<S> ops::AddAssign<&Vector2<S>> for Point2<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<Vector2<S>> for Point2<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Vector2<S>) {
         self.x = self.x - other.x;
         self.y = self.y - other.y;
@@ -1247,6 +1314,7 @@ impl<S> ops::SubAssign<Vector2<S>> for Point2<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<&Vector2<S>> for Point2<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Vector2<S>) {
         self.x = self.x - other.x;
         self.y = self.y - other.y;
@@ -1254,6 +1322,7 @@ impl<S> ops::SubAssign<&Vector2<S>> for Point2<S> where S: Scalar {
 }
 
 impl<S> ops::MulAssign<S> for Point2<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
         self.y *= other;
@@ -1261,6 +1330,7 @@ impl<S> ops::MulAssign<S> for Point2<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Point2<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.x = self.x / other;
         self.y = self.y / other;
@@ -1268,6 +1338,7 @@ impl<S> ops::DivAssign<S> for Point2<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Point2<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.x %= other;
         self.y %= other;
@@ -1354,22 +1425,27 @@ impl<'a, 'b, S> DotProduct<&'a Point2<S>> for &'b Point2<S> where S: Scalar {
 impl<S> Magnitude for Point2<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
+    #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
+    #[inline]
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
+    #[inline]
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
     
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
 
@@ -1439,6 +1515,7 @@ impl<S> Point3<S> {
 
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
+    #[inline]
     pub fn map<T, F>(self, mut op: F) -> Point3<T> where F: FnMut(S) -> T {
         Point3 {
             x: op(self.x),
@@ -1464,6 +1541,7 @@ impl<S> Point3<S> where S: Copy {
 
 impl<S> Point3<S> where S: NumCast + Copy {
     /// Cast a point from one type of scalars to another type of scalars.
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Point3<T>> {
         let x = match num_traits::cast(self.x) {
             Some(value) => value,
@@ -1551,6 +1629,7 @@ impl<S> Array for Point3<S> where S: Copy {
 }
 
 impl<S> AsRef<[S; 3]> for Point3<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 3] {
         unsafe { 
             &*(self as *const Point3<S> as *const [S; 3])
@@ -1559,6 +1638,7 @@ impl<S> AsRef<[S; 3]> for Point3<S> {
 }
 
 impl<S> AsRef<(S, S, S)> for Point3<S> {
+    #[inline]
     fn as_ref(&self) -> &(S, S, S) {
         unsafe { 
             &*(self as *const Point3<S> as *const (S, S, S))
@@ -1567,6 +1647,7 @@ impl<S> AsRef<(S, S, S)> for Point3<S> {
 }
 
 impl<S> AsMut<[S; 3]> for Point3<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 3] {
         unsafe { 
             &mut *(self as *mut Point3<S> as *mut [S; 3])
@@ -1575,6 +1656,7 @@ impl<S> AsMut<[S; 3]> for Point3<S> {
 }
 
 impl<S> AsMut<(S, S, S)> for Point3<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut (S, S, S) {
         unsafe { 
             &mut *(self as *mut Point3<S> as *mut (S, S, S))
@@ -1734,6 +1816,7 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> where S: Scalar {
 impl<S> ops::Add<Vector3<S>> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn add(self, other: Vector3<S>) -> Self::Output {
         Point3 {
             x: self.x + other.x,
@@ -1746,6 +1829,7 @@ impl<S> ops::Add<Vector3<S>> for Point3<S> where S: Scalar {
 impl<S> ops::Add<Vector3<S>> for &Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn add(self, other: Vector3<S>) -> Self::Output {
         Point3 {
             x: self.x + other.x,
@@ -1758,6 +1842,7 @@ impl<S> ops::Add<Vector3<S>> for &Point3<S> where S: Scalar {
 impl<S> ops::Add<&Vector3<S>> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn add(self, other: &Vector3<S>) -> Self::Output {
         Point3 {
             x: self.x + other.x,
@@ -1770,6 +1855,7 @@ impl<S> ops::Add<&Vector3<S>> for Point3<S> where S: Scalar {
 impl<'a, 'b, S> ops::Add<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn add(self, other: &'b Vector3<S>) -> Self::Output {
         Point3 {
             x: self.x + other.x,
@@ -1782,6 +1868,7 @@ impl<'a, 'b, S> ops::Add<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
 impl<S> ops::Sub<Point3<S>> for &Point3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn sub(self, other: Point3<S>) -> Self::Output {
         Vector3 {
             x: self.x - other.x,
@@ -1794,6 +1881,7 @@ impl<S> ops::Sub<Point3<S>> for &Point3<S> where S: Scalar {
 impl<S> ops::Sub<Point3<S>> for Point3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn sub(self, other: Point3<S>) -> Self::Output {
         Vector3 {
             x: self.x - other.x,
@@ -1806,6 +1894,7 @@ impl<S> ops::Sub<Point3<S>> for Point3<S> where S: Scalar {
 impl<S> ops::Sub<&Point3<S>> for Point3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn sub(self, other: &Point3<S>) -> Self::Output {
         Vector3 {
             x: self.x - other.x,
@@ -1818,6 +1907,7 @@ impl<S> ops::Sub<&Point3<S>> for Point3<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Point3<S>> for &'a Point3<S> where S: Scalar {
     type Output = Vector3<S>;
 
+    #[inline]
     fn sub(self, other: &'b Point3<S>) -> Self::Output {
         Vector3 {
             x: self.x - other.x,
@@ -1830,6 +1920,7 @@ impl<'a, 'b, S> ops::Sub<&'b Point3<S>> for &'a Point3<S> where S: Scalar {
 impl<S> ops::Sub<Vector3<S>> for &Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn sub(self, other: Vector3<S>) -> Self::Output {
         Point3 {
             x: self.x - other.x,
@@ -1842,6 +1933,7 @@ impl<S> ops::Sub<Vector3<S>> for &Point3<S> where S: Scalar {
 impl<S> ops::Sub<Vector3<S>> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn sub(self, other: Vector3<S>) -> Self::Output {
         Point3 {
             x: self.x - other.x,
@@ -1854,6 +1946,7 @@ impl<S> ops::Sub<Vector3<S>> for Point3<S> where S: Scalar {
 impl<S> ops::Sub<&Vector3<S>> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn sub(self, other: &Vector3<S>) -> Self::Output {
         Point3 {
             x: self.x - other.x,
@@ -1866,6 +1959,7 @@ impl<S> ops::Sub<&Vector3<S>> for Point3<S> where S: Scalar {
 impl<'a, 'b, S> ops::Sub<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn sub(self, other: &'b Vector3<S>) -> Self::Output {
         Point3 {
             x: self.x - other.x,
@@ -1878,6 +1972,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
 impl<S> ops::Mul<S> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Point3 {
             x: self.x * other,
@@ -1890,6 +1985,7 @@ impl<S> ops::Mul<S> for Point3<S> where S: Scalar {
 impl<S> ops::Mul<S> for &Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn mul(self, other: S) -> Self::Output {
         Point3 {
             x: self.x * other,
@@ -1917,6 +2013,7 @@ impl_mul_operator!(f64,   Point3<f64>,   Point3<f64>,   { x, y, z });
 impl<S> ops::Div<S> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Point3 {
             x: self.x / other,
@@ -1929,6 +2026,7 @@ impl<S> ops::Div<S> for Point3<S> where S: Scalar {
 impl<S> ops::Div<S> for &Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn div(self, other: S) -> Self::Output {
         Point3 {
             x: self.x / other,
@@ -1941,6 +2039,7 @@ impl<S> ops::Div<S> for &Point3<S> where S: Scalar {
 impl<S> ops::Rem<S> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -1953,6 +2052,7 @@ impl<S> ops::Rem<S> for Point3<S> where S: Scalar {
 impl<S> ops::Rem<S> for &Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
+    #[inline]
     fn rem(self, other: S) -> Self::Output {
         let x = self.x % other;
         let y = self.y % other;
@@ -1963,6 +2063,7 @@ impl<S> ops::Rem<S> for &Point3<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Vector3<S>> for Point3<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Vector3<S>) {
         self.x += other.x;
         self.y += other.y;
@@ -1971,6 +2072,7 @@ impl<S> ops::AddAssign<Vector3<S>> for Point3<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<&Vector3<S>> for Point3<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Vector3<S>) {
         self.x += other.x;
         self.y += other.y;
@@ -1979,6 +2081,7 @@ impl<S> ops::AddAssign<&Vector3<S>> for Point3<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<Vector3<S>> for Point3<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Vector3<S>) {
         self.x -= other.x;
         self.y -= other.y;
@@ -1987,6 +2090,7 @@ impl<S> ops::SubAssign<Vector3<S>> for Point3<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<&Vector3<S>> for Point3<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Vector3<S>) {
         self.x -= other.x;
         self.y -= other.y;
@@ -1995,6 +2099,7 @@ impl<S> ops::SubAssign<&Vector3<S>> for Point3<S> where S: Scalar {
 }
 
 impl<S> ops::MulAssign<S> for Point3<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.x *= other;
         self.y *= other;
@@ -2003,6 +2108,7 @@ impl<S> ops::MulAssign<S> for Point3<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Point3<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.x /= other;
         self.y /= other;
@@ -2011,6 +2117,7 @@ impl<S> ops::DivAssign<S> for Point3<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Point3<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.x %= other;
         self.y %= other;
@@ -2101,22 +2208,27 @@ impl<'a, 'b, S> DotProduct<&'a Point3<S>> for &'b Point3<S> where S: Scalar {
 impl<S> Magnitude for Point3<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
+    #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
+    #[inline]
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
+    #[inline]
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
 
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
 

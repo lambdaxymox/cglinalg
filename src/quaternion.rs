@@ -119,6 +119,7 @@ impl<S> Quaternion<S> where S: Copy {
 
 impl<S> Quaternion<S> where S: NumCast + Copy {
     /// Cast a quaternion from one type of scalars to another type of scalars.
+    #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Quaternion<T>> {
         let s = match num_traits::cast(self.s) {
             Some(value) => value,
@@ -137,6 +138,7 @@ impl<S> Quaternion<S> where S: Scalar {
     /// Returns the unit real quaternion. 
     ///
     /// A real vector quaternion is a quaternion with zero vector part.
+    #[inline]
     pub fn unit_s() -> Quaternion<S> {
         Quaternion::from_sv(S::one(), Vector3::zero())
     }
@@ -144,6 +146,7 @@ impl<S> Quaternion<S> where S: Scalar {
     /// The unit pure quaternion representing the x-axis.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
+    #[inline]
     pub fn unit_x() -> Quaternion<S> {
         Quaternion::from_sv(S::zero(), Vector3::new(S::one(), S::zero(), S::zero()))
     }
@@ -151,6 +154,7 @@ impl<S> Quaternion<S> where S: Scalar {
     /// The unit pure quaternion representing the y-axis.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
+    #[inline]
     pub fn unit_y() -> Quaternion<S> {
         Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::one(), S::zero()))
     }
@@ -158,12 +162,44 @@ impl<S> Quaternion<S> where S: Scalar {
     /// The unit pure quaternion representing the z-axis.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
+    #[inline]
     pub fn unit_z() -> Quaternion<S> {
         Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
     }
 
-    /// Convert a quaternion to its equivalent matrix form using preallocated storage.
-    pub fn to_mut_mat4(&self, matrix: &mut Matrix4x4<S>) {
+    /// Convert a quaternion to its equivalent 3x3 matrix.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn to_matrix3x3(&self) -> Matrix3x3<S> {
+        let s = self.s;
+        let x = self.v.x;
+        let y = self.v.y;
+        let z = self.v.z;
+        let one = S::one();
+        let two = one + one;
+
+        let c0r0 = one - two * y * y - two * z * z;
+        let c0r1 = two * x * y + two * s * z;
+        let c0r2 = two * x * z - two * s * y;
+
+        let c1r0 = two * x * y - two * s * z;
+        let c1r1 = one - two * x * x - two * z * z;
+        let c1r2 = two * y * z + two * s * x;
+
+        let c2r0 = two * x * z + two * s * y;
+        let c2r1 = two * y * z - two * s * x;
+        let c2r2 = one - two * x * x - two * y * y;
+    
+        Matrix3x3::new(
+            c0r0, c0r1, c0r2,
+            c1r0, c1r1, c1r2,
+            c2r0, c2r1, c2r2
+        )
+    }
+
+    #[rustfmt::skip]
+    #[inline]
+    pub fn to_matrix4x4(&self) -> Matrix4x4<S> {
         let s = self.s;
         let x = self.v.x;
         let y = self.v.y;
@@ -171,6 +207,46 @@ impl<S> Quaternion<S> where S: Scalar {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
+
+        let c0r0 = one - two * y * y - two * z * z;
+        let c0r1 = two * x * y + two * s * z;
+        let c0r2 = two * x * z - two * s * y;
+        let c0r3 = zero;
+
+        let c1r0 = two * x * y - two * s * z;
+        let c1r1 = one - two * x * x - two * z * z;
+        let c1r2 = two * y * z + two * s * x;
+        let c1r3 = zero;
+
+        let c2r0 = two * x * z + two * s * y;
+        let c2r1 = two * y * z - two * s * x;
+        let c2r2 = one - two * x * x - two * y * y;
+        let c2r3 = zero;
+        
+        let c3r0 = zero;
+        let c3r1 = zero;
+        let c3r2 = zero;
+        let c3r3 = one;
+    
+        Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        )
+    }
+
+    /// Convert a quaternion to its equivalent matrix form using preallocated storage.
+    #[inline]
+    pub fn to_matrix4x4_mut(&self, matrix: &mut Matrix4x4<S>) {
+        let s = self.s;
+        let x = self.v.x;
+        let y = self.v.y;
+        let z = self.v.z;
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+
         matrix.c0r0 = one - two * y * y - two * z * z;
         matrix.c0r1 = two * x * y + two * s * z;
         matrix.c0r2 = two * x * z - two * s * y;
@@ -202,6 +278,49 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         Quaternion::from_sv(cos_angle, _axis * sin_angle)
     }
 
+    #[inline]
+    pub fn from_matrix(matrix: &Matrix3x3<S>) -> Quaternion<S> {
+        let trace = matrix.trace();
+        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        if trace >= S::zero() {
+            let s = (S::one() + trace).sqrt();
+            let qs = one_half * s;
+            let s = one_half / s;
+            let qx = (matrix[1][2] - matrix[2][1]) * s;
+            let qy = (matrix[2][0] - matrix[0][2]) * s;
+            let qz = (matrix[0][1] - matrix[1][0]) * s;
+            
+            Quaternion::new(qs, qx, qy, qz)
+        } else if (matrix[0][0] > matrix[1][1]) && (matrix[0][0] > matrix[2][2]) {
+            let s = ((matrix[0][0] - matrix[1][1] - matrix[2][2]) + S::one()).sqrt();
+            let qx = one_half * s;
+            let s = one_half / s;
+            let qy = (matrix[1][0] + matrix[0][1]) * s;
+            let qz = (matrix[0][2] + matrix[2][0]) * s;
+            let qs = (matrix[1][2] - matrix[2][1]) * s;
+            
+            Quaternion::new(qs, qx, qy, qz)
+        } else if matrix[1][1] > matrix[2][2] {
+            let s = ((matrix[1][1] - matrix[0][0] - matrix[2][2]) + S::one()).sqrt();
+            let qy = one_half * s;
+            let s = one_half / s;
+            let qz = (matrix[2][1] + matrix[1][2]) * s;
+            let qx = (matrix[1][0] + matrix[0][1]) * s;
+            let qs = (matrix[2][0] - matrix[0][2]) * s;
+            
+            Quaternion::new(qs, qx, qy, qz)
+        } else {
+            let s = ((matrix[2][2] - matrix[0][0] - matrix[1][1]) + S::one()).sqrt();
+            let qz = one_half * s;
+            let s = one_half / s;
+            let qx = (matrix[0][2] + matrix[2][0]) * s;
+            let qy = (matrix[2][1] + matrix[1][2]) * s;
+            let qs = (matrix[0][1] - matrix[1][0]) * s;
+            
+            Quaternion::new(qs, qx, qy, qz)
+        }
+    }
+
     /// Compute the conjugate of a quaternion.
     ///
     /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
@@ -221,6 +340,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         self.inverse_eps(S::default_epsilon())
     }
 
+    #[inline]
     fn inverse_eps(&self, epsilon: S) -> Option<Quaternion<S>> {
         let magnitude_squared = self.magnitude_squared();
         if magnitude_squared <= epsilon * epsilon {
@@ -239,6 +359,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         self.is_invertible_eps(S::default_epsilon())
     }
 
+    #[inline]
     fn is_invertible_eps(&self, epsilon: S) -> bool {
         self.magnitude_squared() >= epsilon * epsilon
     }
@@ -517,6 +638,7 @@ impl<S> Identity for Quaternion<S> where S: Scalar {
 }
 
 impl<S> AsRef<[S; 4]> for Quaternion<S> {
+    #[inline]
     fn as_ref(&self) -> &[S; 4] {
         unsafe { 
             &*(self as *const Quaternion<S> as *const [S; 4])
@@ -525,6 +647,7 @@ impl<S> AsRef<[S; 4]> for Quaternion<S> {
 }
 
 impl<S> AsRef<(S, S, S, S)> for Quaternion<S> {
+    #[inline]
     fn as_ref(&self) -> &(S, S, S, S) {
         unsafe { 
             &*(self as *const Quaternion<S> as *const (S, S, S, S))
@@ -533,6 +656,7 @@ impl<S> AsRef<(S, S, S, S)> for Quaternion<S> {
 }
 
 impl<S> AsMut<[S; 4]> for Quaternion<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut [S; 4] {
         unsafe { 
             &mut *(self as *mut Quaternion<S> as *mut [S; 4])
@@ -541,6 +665,7 @@ impl<S> AsMut<[S; 4]> for Quaternion<S> {
 }
 
 impl<S> AsMut<(S, S, S, S)> for Quaternion<S> {
+    #[inline]
     fn as_mut(&mut self) -> &mut (S, S, S, S) {
         unsafe { 
             &mut *(self as *mut Quaternion<S> as *mut (S, S, S, S))
@@ -578,62 +703,16 @@ impl<S> Array for Quaternion<S> where S: Copy + num_traits::Zero {
 }
 
 impl<S> From<Quaternion<S>> for Matrix3x3<S> where S: Scalar {
-    #[rustfmt::skip]
+    #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix3x3<S> {
-        let s = quaternion.s;
-        let x = quaternion.v.x;
-        let y = quaternion.v.y;
-        let z = quaternion.v.z;
-        let one = S::one();
-        let two = one + one;
-
-        let c0r0 = one - two * y * y - two * z * z;
-        let c0r1 = two * x * y + two * s * z;
-        let c0r2 = two * x * z - two * s * y;
-
-        let c1r0 = two * x * y - two * s * z;
-        let c1r1 = one - two * x * x - two * z * z;
-        let c1r2 = two * y * z + two * s * x;
-
-        let c2r0 = two * x * z + two * s * y;
-        let c2r1 = two * y * z - two * s * x;
-        let c2r2 = one - two * x * x - two * y * y;
-    
-        Matrix3x3::new(
-            c0r0, c0r1, c0r2,
-            c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
-        )
+        quaternion.to_matrix3x3()
     }
 }
 
 impl<S> From<&Quaternion<S>> for Matrix3x3<S> where S: Scalar {
-    #[rustfmt::skip]
+    #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix3x3<S> {
-        let s = quaternion.s;
-        let x = quaternion.v.x;
-        let y = quaternion.v.y;
-        let z = quaternion.v.z;
-        let one = S::one();
-        let two = one + one;
-
-        let c0r0 = one - two * y * y - two * z * z;
-        let c0r1 = two * x * y + two * s * z;
-        let c0r2 = two * x * z - two * s * y;
-
-        let c1r0 = two * x * y - two * s * z;
-        let c1r1 = one - two * x * x - two * z * z;
-        let c1r2 = two * y * z + two * s * x;
-
-        let c2r0 = two * x * z + two * s * y;
-        let c2r1 = two * y * z - two * s * x;
-        let c2r2 = one - two * x * x - two * y * y;
-    
-        Matrix3x3::new(
-            c0r0, c0r1, c0r2,
-            c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
-        )
+        quaternion.to_matrix3x3()
     }
 }
 
@@ -750,90 +829,16 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> where S: Scalar {
 }
 
 impl<S> From<Matrix3x3<S>> for Quaternion<S> where S: ScalarFloat {
+    #[inline]
     fn from(matrix: Matrix3x3<S>) -> Quaternion<S> {
-        let trace = matrix.trace();
-        let one_half: S = num_traits::cast(0.5_f64).unwrap();
-        if trace >= S::zero() {
-            let s = (S::one() + trace).sqrt();
-            let qs = one_half * s;
-            let s = one_half / s;
-            let qx = (matrix[1][2] - matrix[2][1]) * s;
-            let qy = (matrix[2][0] - matrix[0][2]) * s;
-            let qz = (matrix[0][1] - matrix[1][0]) * s;
-            
-            Quaternion::new(qs, qx, qy, qz)
-        } else if (matrix[0][0] > matrix[1][1]) && (matrix[0][0] > matrix[2][2]) {
-            let s = ((matrix[0][0] - matrix[1][1] - matrix[2][2]) + S::one()).sqrt();
-            let qx = one_half * s;
-            let s = one_half / s;
-            let qy = (matrix[1][0] + matrix[0][1]) * s;
-            let qz = (matrix[0][2] + matrix[2][0]) * s;
-            let qs = (matrix[1][2] - matrix[2][1]) * s;
-            
-            Quaternion::new(qs, qx, qy, qz)
-        } else if matrix[1][1] > matrix[2][2] {
-            let s = ((matrix[1][1] - matrix[0][0] - matrix[2][2]) + S::one()).sqrt();
-            let qy = one_half * s;
-            let s = one_half / s;
-            let qz = (matrix[2][1] + matrix[1][2]) * s;
-            let qx = (matrix[1][0] + matrix[0][1]) * s;
-            let qs = (matrix[2][0] - matrix[0][2]) * s;
-            
-            Quaternion::new(qs, qx, qy, qz)
-        } else {
-            let s = ((matrix[2][2] - matrix[0][0] - matrix[1][1]) + S::one()).sqrt();
-            let qz = one_half * s;
-            let s = one_half / s;
-            let qx = (matrix[0][2] + matrix[2][0]) * s;
-            let qy = (matrix[2][1] + matrix[1][2]) * s;
-            let qs = (matrix[0][1] - matrix[1][0]) * s;
-            
-            Quaternion::new(qs, qx, qy, qz)
-        }
+        Self::from_matrix(&matrix)
     }
 }
 
 impl<S> From<&Matrix3x3<S>> for Quaternion<S> where S: ScalarFloat {
+    #[inline]
     fn from(matrix: &Matrix3x3<S>) -> Quaternion<S> {
-        let trace = matrix.trace();
-        let one_half: S = num_traits::cast(0.5_f64).unwrap();
-        if trace >= S::zero() {
-            let s = (S::one() + trace).sqrt();
-            let qs = one_half * s;
-            let s = one_half / s;
-            let qx = (matrix[1][2] - matrix[2][1]) * s;
-            let qy = (matrix[2][0] - matrix[0][2]) * s;
-            let qz = (matrix[0][1] - matrix[1][0]) * s;
-            
-            Quaternion::new(qs, qx, qy, qz)
-        } else if (matrix[0][0] > matrix[1][1]) && (matrix[0][0] > matrix[2][2]) {
-            let s = ((matrix[0][0] - matrix[1][1] - matrix[2][2]) + S::one()).sqrt();
-            let qx = one_half * s;
-            let s = one_half / s;
-            let qy = (matrix[1][0] + matrix[0][1]) * s;
-            let qz = (matrix[0][2] + matrix[2][0]) * s;
-            let qs = (matrix[1][2] - matrix[2][1]) * s;
-            
-            Quaternion::new(qs, qx, qy, qz)
-        } else if matrix[1][1] > matrix[2][2] {
-            let s = ((matrix[1][1] - matrix[0][0] - matrix[2][2]) + S::one()).sqrt();
-            let qy = one_half * s;
-            let s = one_half / s;
-            let qz = (matrix[2][1] + matrix[1][2]) * s;
-            let qx = (matrix[1][0] + matrix[0][1]) * s;
-            let qs = (matrix[2][0] - matrix[0][2]) * s;
-            
-            Quaternion::new(qs, qx, qy, qz)
-        } else {
-            let s = ((matrix[2][2] - matrix[0][0] - matrix[1][1]) + S::one()).sqrt();
-            let qz = one_half * s;
-            let s = one_half / s;
-            let qx = (matrix[0][2] + matrix[2][0]) * s;
-            let qy = (matrix[2][1] + matrix[1][2]) * s;
-            let qs = (matrix[0][1] - matrix[1][0]) * s;
-            
-            Quaternion::new(qs, qx, qy, qz)
-        }
+        Self::from_matrix(matrix)
     }
 }
 
@@ -1181,6 +1186,7 @@ impl<S> ops::Rem<S> for &Quaternion<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<Quaternion<S>> for Quaternion<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: Quaternion<S>) {
         self.s += other.s;
         self.v += other.v;
@@ -1188,6 +1194,7 @@ impl<S> ops::AddAssign<Quaternion<S>> for Quaternion<S> where S: Scalar {
 }
 
 impl<S> ops::AddAssign<&Quaternion<S>> for Quaternion<S> where S: Scalar {
+    #[inline]
     fn add_assign(&mut self, other: &Quaternion<S>) {
         self.s += other.s;
         self.v += other.v;
@@ -1195,6 +1202,7 @@ impl<S> ops::AddAssign<&Quaternion<S>> for Quaternion<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<Quaternion<S>> for Quaternion<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: Quaternion<S>) {
         self.s -= other.s;
         self.v -= other.v;
@@ -1202,6 +1210,7 @@ impl<S> ops::SubAssign<Quaternion<S>> for Quaternion<S> where S: Scalar {
 }
 
 impl<S> ops::SubAssign<&Quaternion<S>> for Quaternion<S> where S: Scalar {
+    #[inline]
     fn sub_assign(&mut self, other: &Quaternion<S>) {
         self.s -= other.s;
         self.v -= other.v;
@@ -1209,6 +1218,7 @@ impl<S> ops::SubAssign<&Quaternion<S>> for Quaternion<S> where S: Scalar {
 }
 
 impl<S> ops::MulAssign<S> for Quaternion<S> where S: Scalar {
+    #[inline]
     fn mul_assign(&mut self, other: S) {
         self.s *= other;
         self.v *= other;
@@ -1216,6 +1226,7 @@ impl<S> ops::MulAssign<S> for Quaternion<S> where S: Scalar {
 }
 
 impl<S> ops::DivAssign<S> for Quaternion<S> where S: Scalar {
+    #[inline]
     fn div_assign(&mut self, other: S) {
         self.s /= other;
         self.v /= other;
@@ -1223,6 +1234,7 @@ impl<S> ops::DivAssign<S> for Quaternion<S> where S: Scalar {
 }
 
 impl<S> ops::RemAssign<S> for Quaternion<S> where S: Scalar {
+    #[inline]
     fn rem_assign(&mut self, other: S) {
         self.s %= other;
         self.v %= other;
@@ -1232,6 +1244,7 @@ impl<S> ops::RemAssign<S> for Quaternion<S> where S: Scalar {
 impl<S> Metric<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn distance_squared(self, other: Quaternion<S>) -> S {
         (self.s - other.s)     * (self.s - other.s)     + 
         (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
@@ -1243,6 +1256,7 @@ impl<S> Metric<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
 impl<S> Metric<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn distance_squared(self, other: &Quaternion<S>) -> S {
         (self.s - other.s)     * (self.s - other.s)     + 
         (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
@@ -1254,6 +1268,7 @@ impl<S> Metric<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
 impl<S> Metric<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn distance_squared(self, other: Quaternion<S>) -> S {
         (self.s - other.s)     * (self.s - other.s)     + 
         (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
@@ -1265,6 +1280,7 @@ impl<S> Metric<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
 impl<'a, 'b, S> Metric<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn distance_squared(self, other: &Quaternion<S>) -> S {
         (self.s - other.s)     * (self.s - other.s)     + 
         (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
@@ -1276,6 +1292,7 @@ impl<'a, 'b, S> Metric<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarF
 impl<S> DotProduct<Quaternion<S>> for Quaternion<S> where S: Scalar {
     type Output = S;
 
+    #[inline]
     fn dot(self, other: Quaternion<S>) -> Self::Output {
         self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
     }
@@ -1284,6 +1301,7 @@ impl<S> DotProduct<Quaternion<S>> for Quaternion<S> where S: Scalar {
 impl<S> DotProduct<&Quaternion<S>> for Quaternion<S> where S: Scalar {
     type Output = S;
 
+    #[inline]
     fn dot(self, other: &Quaternion<S>) -> Self::Output {
         self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
     }
@@ -1292,6 +1310,7 @@ impl<S> DotProduct<&Quaternion<S>> for Quaternion<S> where S: Scalar {
 impl<S> DotProduct<Quaternion<S>> for &Quaternion<S> where S: Scalar {
     type Output = S;
 
+    #[inline]
     fn dot(self, other: Quaternion<S>) -> Self::Output {
         self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
     }
@@ -1300,6 +1319,7 @@ impl<S> DotProduct<Quaternion<S>> for &Quaternion<S> where S: Scalar {
 impl<'a, 'b, S> DotProduct<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scalar {
     type Output = S;
 
+    #[inline]
     fn dot(self, other: &'a Quaternion<S>) -> Self::Output {
         self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
     }
@@ -1308,22 +1328,27 @@ impl<'a, 'b, S> DotProduct<&'a Quaternion<S>> for &'b Quaternion<S> where S: Sca
 impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
     type Output = S;
 
+    #[inline]
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(Self::Output::abs(self.magnitude_squared()))
     }
 
+    #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         <&Self as DotProduct<&Self>>::dot(self, self)
     }
 
+    #[inline]
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
+    #[inline]
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
 
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
 
@@ -1393,6 +1418,7 @@ impl<S> Finite for &Quaternion<S> where S: ScalarFloat {
 impl<S> ProjectOn<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
     type Output = Quaternion<S>;
 
+    #[inline]
     fn project_on(self, onto: Quaternion<S>) -> Quaternion<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -1401,6 +1427,7 @@ impl<S> ProjectOn<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
 impl<S> ProjectOn<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
     type Output = Quaternion<S>;
 
+    #[inline]
     fn project_on(self, onto: &Quaternion<S>) -> Quaternion<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -1409,6 +1436,7 @@ impl<S> ProjectOn<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
 impl<S> ProjectOn<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
     type Output = Quaternion<S>;
 
+    #[inline]
     fn project_on(self, onto: Quaternion<S>) -> Quaternion<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }
@@ -1417,6 +1445,7 @@ impl<S> ProjectOn<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
 impl<'a, 'b, S> ProjectOn<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
     type Output = Quaternion<S>;
 
+    #[inline]
     fn project_on(self, onto: &'a Quaternion<S>) -> Quaternion<S> {
         onto * (self.dot(onto) / onto.magnitude_squared())
     }

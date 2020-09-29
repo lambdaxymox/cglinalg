@@ -58,6 +58,7 @@ pub struct PerspectiveSpec<S> {
 
 impl<S> PerspectiveSpec<S> {
     /// Construct a new perspective specification.
+    #[inline]
     pub const fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> PerspectiveSpec<S> {
         PerspectiveSpec {
             left: left,
@@ -114,7 +115,8 @@ pub struct PerspectiveFovSpec<S> {
 impl<S> PerspectiveFovSpec<S> {
     /// Construct a new perspective projection operation specification
     /// based on the vertical field of view angle `fovy`, the `near` plane, the 
-    /// `far` plane, and aspect ratio `aspect`. 
+    /// `far` plane, and aspect ratio `aspect`.
+    #[inline]
     pub fn new<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> PerspectiveFovSpec<S> {
         PerspectiveFovSpec {
             fovy: fovy.into(),
@@ -256,6 +258,7 @@ pub struct OrthographicSpec<S> {
 
 impl<S> OrthographicSpec<S> {
     /// Construct a new orthographic specification.
+    #[inline]
     pub const fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> OrthographicSpec<S> {
         OrthographicSpec {
             left: left,
@@ -309,21 +312,25 @@ impl<S> PerspectiveProjection3<S>
     }
 
     /// Get the specification describing the perspective projection.
+    #[inline]
     pub fn spec(&self) -> PerspectiveSpec<S> {
         self.spec
     }
 
     /// Get the matrix that implements the perspective projection transformation.
+    #[inline]
     pub fn to_matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
     /// Apply the transformation to a point.
+    #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
     /// Apply the transformation to a vector.
+    #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let projected_vector = self.matrix * vector.expand(S::one());
         let one_div_w = S::one() / projected_vector.w;
@@ -335,6 +342,7 @@ impl<S> PerspectiveProjection3<S>
     /// view space. 
     /// 
     /// This is the inverse operation of `project_point`.
+    #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let spec = self.spec;
         let zero = S::zero();
@@ -375,6 +383,7 @@ impl<S> PerspectiveProjection3<S>
     /// camera view space. 
     ///
     /// This is the inverse operation of `project_vector`.
+    #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let spec = self.spec;
         let zero = S::zero();
@@ -507,11 +516,13 @@ impl<S> PerspectiveFovProjection3<S>
     }
 
     /// Get the specification describing the perspective projection.
+    #[inline]
     pub fn spec(&self) -> PerspectiveFovSpec<S> {
         self.spec
     }
 
     /// Get the matrix that implements the perspective projection transformation.
+    #[inline]
     pub fn to_matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
@@ -522,6 +533,7 @@ impl<S> PerspectiveFovProjection3<S>
     }
 
     /// Apply the transformation to a vector.
+    #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let projected_vector = self.matrix * vector.expand(S::one());
         let one_div_w = S::one() / projected_vector.w;
@@ -533,6 +545,7 @@ impl<S> PerspectiveFovProjection3<S>
     /// view space. 
     /// 
     /// This is the inverse operation of `project_point`.
+    #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let spec: PerspectiveSpec<S> = self.spec.into();
         let zero = S::zero();
@@ -573,6 +586,7 @@ impl<S> PerspectiveFovProjection3<S>
     /// camera view space. 
     ///
     /// This is the inverse operation of `project_vector`.
+    #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let spec: PerspectiveSpec<S> = self.spec.into();
         let zero = S::zero();
@@ -701,21 +715,25 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
     }
 
     /// Get the parameters defining the orthographic specification.
+    #[inline]
     pub fn to_spec(&self) -> OrthographicSpec<S> {
         self.spec
     }
 
     /// Get the underlying matrix implementing the orthographic tranformation.
+    #[inline]
     pub fn to_matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
     /// Apply the tranformation to a point.
+    #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 
     /// Apply the transformation to a vector.
+    #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
@@ -724,6 +742,7 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
     /// view space. 
     ///
     /// This is the inverse operation of `project_point`.
+    #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let zero = S::zero();
         let one  = S::one();
@@ -763,6 +782,7 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
     /// camera view space. 
     ///
     /// This is the inverse operation of `project_vector`.
+    #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let zero = S::zero();
         let one  = S::one();
