@@ -374,6 +374,7 @@ impl<'a, S> From<&'a [S; 4]> for &'a Matrix2x2<S> where S: Scalar {
 
 impl<S> fmt::Display for Matrix2x2<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        // We print the matrix contents in row-major order like mathematical convention.
         writeln!(
             formatter, 
             "Matrix2x2 [[{}, {}], [{}, {}]]", 
@@ -1516,6 +1517,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix about the _x-axis_ by an angle `angle`.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
@@ -1528,6 +1530,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix about the _y-axis_ by an angle `angle`.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
@@ -1540,6 +1543,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix about the _z-axis_ by an angle `angle`.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
@@ -1553,6 +1557,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// Construct a rotation matrix about an arbitrary axis by an angle 
     /// `angle`.
     #[rustfmt::skip]
+    #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
@@ -1573,14 +1578,62 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a matrix that will cause a vector to point 
-    /// at the vector `direction` using up for orientation.
-    pub fn look_at(direction: Vector3<S>, up: Vector3<S>) -> Matrix3x3<S> {
-        let dir = direction.normalize();
-        let side = up.cross(direction).normalize();
-        let up = dir.cross(side).normalize();
+    /// Construct a rotation matrix that transforms the coordinate system of
+    /// an observer located at the origin facing the _positive z-axis_ into a
+    /// coordinate system of an observer located at the origin facing the 
+    /// direction `direction`.
+    ///
+    /// The function maps the _z-axis_ to the direction `direction`.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
+        let z_axis = direction.normalize();
+        let x_axis = up.cross(&z_axis).normalize();
+        let y_axis = z_axis.cross(&x_axis).normalize();
 
-        Matrix3x3::from_columns(side, up, dir).transpose()
+        Matrix3x3::new(
+            x_axis.x, x_axis.y, x_axis.z,
+            y_axis.x, y_axis.y, y_axis.z,
+            z_axis.x, z_axis.y, z_axis.z
+        )
+    }
+
+    /// Construct a coordinate transformation matrix that transforms
+    /// a coordinate system of an observer located at the origin facing 
+    /// the direction `direction` into the coordinate system of an observer located
+    /// at the origin facing the _negative z-axis_.
+    ///
+    /// The function maps the direction `direction` to the _negative z-axis_ in 
+    /// the new the coordinate system. This corresponds to a rotation matrix.
+    /// This transformation is a _right-handed_ coordinate transformation. 
+    /// 
+    /// #### Note
+    ///
+    /// This transformation transforms vectors in the inverse way from the `face_towards`
+    /// function.
+    #[inline]
+    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
+        // The inverse of a rotation matrix is its transpose.
+        Self::face_towards(&(-direction), up).transpose()
+    }
+
+    /// Construct a coordinate transformation matrix that transforms
+    /// a coordinate system of an observer located at the origin facing 
+    /// the direction `direction` into the coordinate system of an observer located
+    /// at the origin facing the _positive z-axis_.
+    ///
+    /// The function maps the direction `direction` to the _positive z-axis_ in 
+    /// the new the coordinate system. This corresponds to a rotation matrix.
+    /// This transformation is a _left-handed_ coordinate transformation. 
+    /// 
+    /// #### Note
+    ///
+    /// This transformation transforms vectors in the inverse way from the `face_towards`
+    /// function.
+    #[inline]
+    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
+        // The inverse of a rotation matrix is its transpose.
+        Self::face_towards(direction, up).transpose()
     }
 }
 
@@ -1749,6 +1802,7 @@ impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
 
 impl<S> fmt::Display for Matrix3x3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        // We print the matrix contents in row-major order like mathematical convention.
         writeln!(
             formatter, 
             "Matrix3x3 [[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]]", 
@@ -3229,29 +3283,106 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a homogeneous matrix that will point a vector towards the 
-    /// direction `direction`, using `up` for orientation.
+    /// Construct an affine coordinate transformation matrix that transforms
+    /// a coordinate system of an observer located at the origin facing the _z-axis_
+    /// into a coordinate system of an observer located at the position `eye` facing
+    /// the direction `direction`.
+    ///
+    /// The function maps the _z-axis_ to the direction `direction`, and locates the 
+    /// origin of the coordinate system to the `eye` position.
     #[rustfmt::skip]
-    pub fn look_at_dir(eye: Point3<S>, direction: Vector3<S>, up: Vector3<S>) -> Matrix4x4<S> {
-        let forward = direction.normalize();
-        let side = forward.cross(up).normalize();
-        let s_cross_f = side.cross(forward);
-        let eye_vec = eye - Point3::origin();
+    #[inline]
+    pub fn face_towards(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
         let zero = S::zero();
         let one = S::one();
+        let z_axis = direction.normalize();
+        let x_axis = up.cross(&z_axis).normalize();
+        let y_axis = z_axis.cross(&x_axis).normalize();
 
+        let eye_vec = eye - Point3::origin();
+        let eye_x = eye_vec.dot(x_axis);
+        let eye_y = eye_vec.dot(y_axis);
+        let eye_z = eye_vec.dot(z_axis);
+        
         Matrix4x4::new(
-             side.x,             s_cross_f.x,           -forward.x,            zero,
-             side.y,             s_cross_f.y,           -forward.y,            zero,
-             side.z,             s_cross_f.z,           -forward.z,            zero,
-            -eye_vec.dot(side), -eye_vec.dot(s_cross_f), eye_vec.dot(forward), one,
+             x_axis.x,  x_axis.y,  x_axis.z, zero,
+             y_axis.x,  y_axis.y,  y_axis.z, zero,
+             z_axis.x,  z_axis.y,  z_axis.z, zero,
+             eye_x,     eye_y,     eye_z,    one
         )
     }
 
-    /// Construct a homogeneous matrix that will point a vector at the point
-    /// `center`, using `up` for orientation.
-    pub fn look_at(eye: Point3<S>, center: Point3<S>, up: Vector3<S>) -> Matrix4x4<S> {
-        Matrix4x4::look_at_dir(eye, center - eye, up)
+    /// Construct an affine coordinate transformation matrix that transforms
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the direction `direction` into the coordinate system of an observer located
+    /// at the origin facing the _negative z-axis_.
+    ///
+    /// The function maps the direction `direction` to the _negative z-axis_ and 
+    /// locates the `eye` position to the origin in the new the coordinate system.
+    /// This transformation is a _right-handed_ coordinate transformation. It is
+    /// conventionally used in computer graphics for camera view transformations.
+    /// 
+    /// #### Note
+    ///
+    /// This transformation transforms vectors in the inverse way from the `face_towards`
+    /// function.
+    #[inline]
+    pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
+        let direction = -(target - eye);
+        
+        let zero = S::zero();
+        let one = S::one();
+        let z_axis = direction.normalize();
+        let x_axis = up.cross(&z_axis).normalize();
+        let y_axis = z_axis.cross(&x_axis).normalize();
+
+        let eye_vec = eye - Point3::origin();
+        let neg_eye_x = -eye_vec.dot(x_axis);
+        let neg_eye_y = -eye_vec.dot(y_axis);
+        let neg_eye_z = -eye_vec.dot(z_axis);
+        
+        Matrix4x4::new(
+            x_axis.x,  y_axis.x,  z_axis.x,  zero,
+            x_axis.y,  y_axis.y,  z_axis.y,  zero,
+            x_axis.z,  y_axis.z,  z_axis.z,  zero,
+            neg_eye_x, neg_eye_y, neg_eye_z, one
+        )
+    }
+
+    /// Construct an affine coordinate transformation matrix that transforms
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the direction `direction` into the coordinate system of an observer located
+    /// at the origin facing the _positive z-axis_.
+    ///
+    /// The function maps the direction `direction` to the _positive z-axis_ and 
+    /// locates the `eye` position to the origin in the new the coordinate system.
+    /// This transformation is a _left-handed_ coordinate transformation.
+    ///
+    /// #### Note
+    ///
+    /// This transformation transforms vectors in the inverse way from the `face_towards`
+    /// function.
+    #[inline]
+    pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
+        let direction = target - eye;
+         
+        let zero = S::zero();
+        let one = S::one();
+        let z_axis = direction.normalize();
+        let x_axis = up.cross(&z_axis).normalize();
+        let y_axis = z_axis.cross(&x_axis).normalize();
+
+        let eye_vec = eye - Point3::origin();
+        let neg_eye_x = -eye_vec.dot(x_axis);
+        let neg_eye_y = -eye_vec.dot(y_axis);
+        let neg_eye_z = -eye_vec.dot(z_axis);
+        
+        Matrix4x4::new(
+            x_axis.x,  y_axis.x,  z_axis.x,  zero,
+            x_axis.y,  y_axis.y,  z_axis.y,  zero,
+            x_axis.z,  y_axis.z,  z_axis.z,  zero,
+            neg_eye_x, neg_eye_y, neg_eye_z, one
+        )
     }
 }
 
@@ -3467,6 +3598,7 @@ impl<S> From<&Matrix3x3<S>> for Matrix4x4<S> where S: Scalar {
 
 impl<S> fmt::Display for Matrix4x4<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        // We print the matrix contents in row-major order like mathematical convention.
         writeln!(
             formatter, 
             "Matrix4x4 [[{}, {}, {}, {}], [{}, {}, {}, {}], [{}, {}, {}, {}], [{}, {}, {}, {}]]",

@@ -9,6 +9,7 @@ use crate::traits::{
     Magnitude,
     Lerp,
     Nlerp,
+    Matrix,
     Metric,
     Finite,
     Slerp,
@@ -197,7 +198,7 @@ impl<S> Quaternion<S> where S: Scalar {
 impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion corresponding to rotating about an axis `axis` 
     /// by an angle `angle` in radians from its unit polar decomposition.
-    #[rustfmt::skip]
+    #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Quaternion<S> {
         let one_half = num_traits::cast(0.5_f64).unwrap();
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
@@ -264,6 +265,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// theta = Arg(q) + 2 * pi * n
     /// ```
     /// In the case of `theta = Arg(q)`, we have `n = 0`.
+    #[inline]
     pub fn arg(&self) -> S {
         if self.s == S::zero() {
             num_traits::cast(core::f64::consts::FRAC_PI_2).unwrap()
@@ -366,6 +368,38 @@ impl<S> Quaternion<S> where S: ScalarFloat {
             // Both vectors point in the same direction.
             Some(Self::identity())
         }
+    }
+
+    /// Construct a quaternion corresponding to a rotation of an observer 
+    /// standing at the origin facing the _positive z-axis_ to an observer 
+    /// standing at the origin facing the direction `direction`. 
+    ///
+    /// This rotation maps the _z-axis_ to the direction `direction`.
+    #[inline]
+    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Quaternion<S> {
+        Self::from(&Matrix3x3::face_towards(direction, up))
+    }
+
+    /// Construct a quaternion corresponding to a right-handed viewing 
+    /// transformation without translation. 
+    ///
+    /// This transformation maps the viewing direction `direction` to the 
+    /// _negative z-axis_. It is conventionally used in computer graphics for
+    /// camera view transformations.
+    #[inline]
+    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Quaternion<S> {
+        Self::from(&Matrix3x3::face_towards(direction, up).transpose())
+    }
+
+    /// Construct a quaternion corresponding to a left-handed viewing 
+    /// transformation without translation. 
+    ///
+    /// This transformation maps the viewing direction `direction` to the 
+    /// _negative z-axis_. It is conventionally used in computer graphics for
+    /// camera view transformations.
+    #[inline]
+    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Quaternion<S> {
+        Self::from(&Matrix3x3::face_towards(direction, up).transpose())
     }
 }
 

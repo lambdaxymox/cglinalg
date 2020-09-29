@@ -551,6 +551,7 @@ mod matrix3_tests {
     use cglinalg::{
         Vector2,
         Vector3,
+        Magnitude,
         Matrix3x3,
         Zero, 
         Matrix,
@@ -1410,6 +1411,42 @@ mod matrix3_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_face_towards() {
+        let direction = Vector3::new(1.0, 1.0, 1.0);
+        let up = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let look_at = Matrix3x3::face_towards(&direction, &up);
+        let expected = direction.normalize();
+        let result = look_at * unit_z;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_look_at_rh() {
+        let direction = Vector3::new(1.0, 1.0, 1.0).normalize();
+        let up = Vector3::unit_y();
+        let minus_unit_z = -Vector3::unit_z();
+        let look_at = Matrix3x3::look_at_rh(&direction, &up);
+        let expected = minus_unit_z;
+        let result = look_at * direction;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_look_at_lh() {
+        let direction = Vector3::new(1.0, 1.0, 1.0).normalize();
+        let up = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let look_at = Matrix3x3::look_at_lh(&direction, &up);
+        let expected = unit_z;
+        let result = look_at * direction;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
 }
 
 #[cfg(test)]
@@ -1417,6 +1454,7 @@ mod matrix4_tests {
     use cglinalg::{
         Vector3,
         Vector4,
+        Magnitude,
         Matrix4x4,
         Zero, 
         Matrix,
@@ -1426,8 +1464,11 @@ mod matrix4_tests {
         Degrees,
         Angle,
         Unit,
+        Point3,
     };
-    use cglinalg::approx::relative_eq;
+    use cglinalg::approx::{
+        relative_eq,
+    };
     use core::slice::Iter;
 
 
@@ -2388,6 +2429,83 @@ mod matrix4_tests {
         );
         let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
     
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_look_at_rh_at_origin() {
+        let eye = Point3::new(0.0, 0.0, 0.0);
+        let target = Point3::new(1.0, 1.0, 1.0);
+        let up = Vector3::unit_y();
+        let minus_unit_z = -Vector3::unit_z();
+        let look_at = Matrix4x4::look_at_rh(&eye, &target, &up);
+        let direction = target - Point3::origin();
+        let expected = Vector4::from((minus_unit_z, 0.0));
+        let result = look_at * Vector4::from((direction.normalize(), 0.0));
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_look_at_lh_at_origin() {
+        let eye = Point3::new(0.0, 0.0, 0.0);
+        let target = Point3::new(1.0, 1.0, 1.0);
+        let up = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let look_at = Matrix4x4::look_at_lh(&eye, &target, &up);
+        let direction = target - Point3::origin();
+        let expected = Vector4::from((unit_z, 0.0));
+        let result = look_at * Vector4::from((direction.normalize(), 0.0));
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_look_at_lh_no_displacement_or_rotation() {
+        let eye = Point3::new(0.0, 0.0, 0.0);
+        let target = Point3::new(0.0, 0.0, 1.0);
+        let up = Vector3::unit_y();
+        let look_at = Matrix4x4::look_at_lh(&eye, &target, &up);
+        let direction = target - Point3::origin();
+        let expected = Vector4::new(0.0, 0.0, 1.0, 0.0);
+        let result = look_at * Vector4::from((direction.normalize(), 0.0));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_look_at_rh_no_displacement_or_rotation() {
+        let eye = Point3::new(0.0, 0.0, 0.0);
+        let target = Point3::new(0.0, 0.0, 1.0);
+        let up = Vector3::unit_y();
+        let look_at = Matrix4x4::look_at_rh(&eye, &target, &up);
+        let expected = Vector4::new(0.0, 0.0, 0.0, 1.0);
+        let result = look_at * eye.to_homogeneous();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_look_at_lh_eye_to_origin() {
+        let eye = Point3::new(-1.0, -1.0, -1.0);
+        let target = Point3::new(1.0, 1.0, 1.0);
+        let up = Vector3::unit_y();
+        let look_at = Matrix4x4::look_at_lh(&eye, &target, &up);
+        let expected = Vector4::unit_w();
+        let result = look_at * eye.to_homogeneous();
+        eprintln!("{}", look_at);
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_look_at_rh_eye_to_origin() {
+        let eye = Point3::new(-1.0, -1.0, -1.0);
+        let target = Point3::new(1.0, 1.0, 1.0);
+        let up = Vector3::unit_y();
+        let look_at = Matrix4x4::look_at_rh(&eye, &target, &up);
+        let expected = Vector4::unit_w();
+        let result = look_at * eye.to_homogeneous();
+        eprintln!("{}", look_at);
         assert_eq!(result, expected);
     }
 }

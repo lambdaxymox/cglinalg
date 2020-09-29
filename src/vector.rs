@@ -1053,7 +1053,7 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector2<S> {
 
 impl<S> fmt::Debug for Vector2<S> where S: fmt::Debug {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.debug_struct("Vector2 ")
+        formatter.debug_struct("Vector2")
                  .field("x", &self.x)
                  .field("y", &self.y)
                  .finish()
@@ -1872,7 +1872,7 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector3<S> {
 
 impl<S> fmt::Debug for Vector3<S> where S: fmt::Debug {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.debug_struct("Vector2 ")
+        formatter.debug_struct("Vector3")
                  .field("x", &self.x)
                  .field("y", &self.y)
                  .field("z", &self.z)
@@ -2885,7 +2885,7 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
 
 impl<S> fmt::Debug for Vector4<S> where S: fmt::Debug {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.debug_struct("Vector2 ")
+        formatter.debug_struct("Vector4")
                  .field("x", &self.x)
                  .field("y", &self.y)
                  .field("z", &self.z)
