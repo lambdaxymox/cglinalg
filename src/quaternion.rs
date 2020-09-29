@@ -7,7 +7,6 @@ use crate::traits::{
     CrossProduct,
     DotProduct,
     Magnitude,
-    Nlerp,
     Matrix,
     Metric,
     Finite,
@@ -28,7 +27,7 @@ use crate::matrix::{
     Matrix4x4
 };
 use crate::vector::{
-    Vector3
+    Vector3,
 };
 use crate::unit::{
     Unit,
@@ -487,6 +486,12 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let v_z = result.v.z * a + other.v.z * b;
 
         Quaternion::new(s, v_x, v_y, v_z)
+    }
+
+    /// Compute the normalized linear interpolation between two quaternions.
+    #[inline]
+    pub fn nlerp(&self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
+        (self * (S::one() - amount) + other * amount).normalize()
     }
 }
 
@@ -1333,42 +1338,6 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
 
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
-    }
-}
-
-impl<S> Nlerp<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
-    type Scalar = S;
-    type Output = Quaternion<S>;
-
-    fn nlerp(self, other: Quaternion<S>, amount: S) -> Quaternion<S> {
-        (self * (S::one() - amount) + other * amount).normalize()
-    }
-}
-
-impl<S> Nlerp<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
-    type Scalar = S;
-    type Output = Quaternion<S>;
-
-    fn nlerp(self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
-        (self * (S::one() - amount) + other * amount).normalize()
-    }
-}
-
-impl<S> Nlerp<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
-    type Scalar = S;
-    type Output = Quaternion<S>;
-
-    fn nlerp(self, other: Quaternion<S>, amount: S) -> Quaternion<S> {
-        (self * (S::one() - amount) + other * amount).normalize()
-    }
-}
-
-impl<'a, 'b, S> Nlerp<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
-    type Scalar = S;
-    type Output = Quaternion<S>;
-
-    fn nlerp(self, other: &'a Quaternion<S>, amount: S) -> Quaternion<S> {
-        (self * (S::one() - amount) + other * amount).normalize()
     }
 }
 

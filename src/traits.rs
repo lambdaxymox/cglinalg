@@ -129,16 +129,6 @@ pub trait Magnitude {
     fn normalize_to(&self, magnitude: Self::Output) -> Self;
 }
 
-/// A vector type with this trait can perform normalized linear interpolations 
-/// between two elements of that type.
-pub trait Nlerp<V: Copy + Clone> {
-    type Scalar: Scalar;
-    type Output;
-
-    /// Compute the normalized linear interpolation between two vectors.
-    fn nlerp(self, other: V, amount: Self::Scalar) -> Self::Output;
-}
-
 /// A trait for implementing the ability to project one vector onto the
 /// component another vector.
 pub trait ProjectOn<V> where Self: DotProduct<V>, V: Copy + Clone {
