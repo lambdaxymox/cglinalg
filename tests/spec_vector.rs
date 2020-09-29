@@ -991,11 +991,16 @@ exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! approx_distributive_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
+        use cglinalg::approx::{
+            relative_eq,
+        };
         use super::{
             $Generator,
             $ScalarGen,
@@ -1017,7 +1022,7 @@ macro_rules! approx_distributive_props {
                 
                 prop_assume!((a * (v + w)).is_finite());
                 prop_assume!((a * v + a * w).is_finite());
-                prop_assert_eq!(a * (v + w), a * v + a * w);
+                prop_assert!(relative_eq!(a * (v + w), a * v + a * w, epsilon = $tolerance));
             }
     
             /// Multiplication of a sum of scalars should approximately distribute 
@@ -1034,7 +1039,7 @@ macro_rules! approx_distributive_props {
     
                 prop_assume!(((a + b) * v).is_finite());
                 prop_assume!((a * v + b * v).is_finite());
-                prop_assert_eq!((a + b) * v, a * v + b * v);
+                prop_assert!(relative_eq!((a + b) * v, a * v + b * v, epsilon = $tolerance));
             }
 
             /// Multiplication of two vectors by a scalar on the right should 
@@ -1054,7 +1059,7 @@ macro_rules! approx_distributive_props {
                     
                 prop_assume!(((v + w) * a).is_finite());
                 prop_assume!((v * a + w * a).is_finite());
-                prop_assert_eq!((v + w) * a,  v * a + w * a);
+                prop_assert!(relative_eq!((v + w) * a,  v * a + w * a, epsilon = $tolerance));
             }
 
             /// Multiplication of a vector on the right by the sum of two scalars 
@@ -1074,17 +1079,17 @@ macro_rules! approx_distributive_props {
     
                 prop_assume!((v * (a + b)).is_finite());
                 prop_assume!((v * a + v * b).is_finite());
-                prop_assert_eq!(v * (a + b), v * a + v * b);
+                prop_assert!(relative_eq!(v * (a + b), v * a + v * b, epsilon = $tolerance));
             }
         }
     }
     }    
 }
 
-approx_distributive_props!(vector1_f64_distributive_props, Vector1, f64, any_vector1, any_scalar);
-approx_distributive_props!(vector2_f64_distributive_props, Vector2, f64, any_vector2, any_scalar);
-approx_distributive_props!(vector3_f64_distributive_props, Vector3, f64, any_vector3, any_scalar);
-approx_distributive_props!(vector4_f64_distributive_props, Vector4, f64, any_vector4, any_scalar);
+approx_distributive_props!(vector1_f64_distributive_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
+approx_distributive_props!(vector2_f64_distributive_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
+approx_distributive_props!(vector3_f64_distributive_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
+approx_distributive_props!(vector4_f64_distributive_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
 
 
 /// Generate property tests for vector distribution over exact scalars.
