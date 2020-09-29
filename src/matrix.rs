@@ -20,7 +20,6 @@ use crate::traits::{
     Array,
     CrossProduct,
     DotProduct,
-    Finite,
     Identity, 
     AdditiveIdentity, 
     Matrix, 
@@ -290,6 +289,19 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     #[inline]
     pub fn lerp(&self, other: &Matrix2x2<S>, amount: S) -> Matrix2x2<S> {
         self + ((other - self) * amount)
+    }
+
+    /// Returns `true` if the elements of a matrix are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A matrix is finite when all of its elements are finite. This is useful 
+    /// for vector and matrix types working with fixed precision floating point 
+    /// values. For example, when the vector elements are `f64`, the vector is 
+    /// finite when the elements are neither `NaN` nor infinite.
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        self.c0r0.is_finite() && self.c0r1.is_finite() &&
+        self.c1r0.is_finite() && self.c1r1.is_finite()
     }
 }
 
@@ -1021,22 +1033,6 @@ impl<S> InvertibleSquareMatrix for Matrix2x2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Finite for Matrix2x2<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.c0r0.is_finite() && self.c0r1.is_finite() &&
-        self.c1r0.is_finite() && self.c1r1.is_finite()
-    }
-}
-
-impl<S> Finite for &Matrix2x2<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.c0r0.is_finite() && self.c0r1.is_finite() &&
-        self.c1r0.is_finite() && self.c1r1.is_finite()
-    }
-}
-
 impl<S: Scalar> iter::Sum<Matrix2x2<S>> for Matrix2x2<S> {
     #[inline]
     fn sum<I: Iterator<Item = Matrix2x2<S>>>(iter: I) -> Matrix2x2<S> {
@@ -1707,6 +1703,20 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     #[inline]
     pub fn lerp(&self, other: &Matrix3x3<S>, amount: S) -> Matrix3x3<S> {
         self + ((other - self) * amount)
+    }
+
+    /// Returns `true` if the elements of a matrix are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A matrix is finite when all of its elements are finite. This is useful 
+    /// for vector and matrix types working with fixed precision floating point 
+    /// values. For example, when the vector elements are `f64`, the vector is 
+    /// finite when the elements are neither `NaN` nor infinite.
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        self.c0r0.is_finite() && self.c0r1.is_finite() && self.c0r2.is_finite() &&
+        self.c1r0.is_finite() && self.c1r1.is_finite() && self.c1r2.is_finite() &&
+        self.c2r0.is_finite() && self.c2r1.is_finite() && self.c2r2.is_finite()
     }
 }
 
@@ -2731,24 +2741,6 @@ impl<S> InvertibleSquareMatrix for Matrix3x3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Finite for Matrix3x3<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.c0r0.is_finite() && self.c0r1.is_finite() && self.c0r2.is_finite() &&
-        self.c1r0.is_finite() && self.c1r1.is_finite() && self.c1r2.is_finite() &&
-        self.c2r0.is_finite() && self.c2r1.is_finite() && self.c2r2.is_finite()
-    }
-}
-
-impl<S> Finite for &Matrix3x3<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.c0r0.is_finite() && self.c0r1.is_finite() && self.c0r2.is_finite() &&
-        self.c1r0.is_finite() && self.c1r1.is_finite() && self.c1r2.is_finite() &&
-        self.c2r0.is_finite() && self.c2r1.is_finite() && self.c2r2.is_finite()
-    }
-}
-
 impl<S: Scalar> iter::Sum<Matrix3x3<S>> for Matrix3x3<S> {
     #[inline]
     fn sum<I: Iterator<Item = Matrix3x3<S>>>(iter: I) -> Matrix3x3<S> {
@@ -3455,6 +3447,25 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     #[inline]
     pub fn lerp(&self, other: &Matrix4x4<S>, amount: S) -> Matrix4x4<S> {
         self + ((other - self) * amount)
+    }
+
+    /// Returns `true` if the elements of a matrix are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A matrix is finite when all of its elements are finite. This is useful 
+    /// for vector and matrix types working with fixed precision floating point 
+    /// values. For example, when the vector elements are `f64`, the vector is 
+    /// finite when the elements are neither `NaN` nor infinite.
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        self.c0r0.is_finite() && self.c0r1.is_finite() && 
+        self.c0r2.is_finite() && self.c0r3.is_finite() &&
+        self.c1r0.is_finite() && self.c1r1.is_finite() && 
+        self.c1r2.is_finite() && self.c1r3.is_finite() &&
+        self.c2r0.is_finite() && self.c2r1.is_finite() && 
+        self.c2r2.is_finite() && self.c2r3.is_finite() &&
+        self.c3r0.is_finite() && self.c3r1.is_finite() &&
+        self.c3r2.is_finite() && self.c3r3.is_finite()
     }
 }
 
@@ -4968,33 +4979,6 @@ impl<S> InvertibleSquareMatrix for Matrix4x4<S> where S: ScalarFloat {
                 c3r0, c3r1, c3r2, c3r3
             ))
         }
-    }
-}
-
-impl<S> Finite for Matrix4x4<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.c0r0.is_finite() && self.c0r1.is_finite() && 
-        self.c0r2.is_finite() && self.c0r3.is_finite() &&
-        self.c1r0.is_finite() && self.c1r1.is_finite() && 
-        self.c1r2.is_finite() && self.c1r3.is_finite() &&
-        self.c2r0.is_finite() && self.c2r1.is_finite() && 
-        self.c2r2.is_finite() && self.c2r3.is_finite() &&
-        self.c3r0.is_finite() && self.c3r1.is_finite() &&
-        self.c3r2.is_finite() && self.c3r3.is_finite()
-    }
-}
-
-impl<S> Finite for &Matrix4x4<S> where S: ScalarFloat {
-    fn is_finite(self) -> bool {
-        self.c0r0.is_finite() && self.c0r1.is_finite() && 
-        self.c0r2.is_finite() && self.c0r3.is_finite() &&
-        self.c1r0.is_finite() && self.c1r1.is_finite() && 
-        self.c1r2.is_finite() && self.c1r3.is_finite() &&
-        self.c2r0.is_finite() && self.c2r1.is_finite() && 
-        self.c2r2.is_finite() && self.c2r3.is_finite() &&
-        self.c3r0.is_finite() && self.c3r1.is_finite() &&
-        self.c3r2.is_finite() && self.c3r3.is_finite()
     }
 }
 

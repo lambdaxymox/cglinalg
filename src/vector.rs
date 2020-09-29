@@ -11,7 +11,6 @@ use crate::traits::{
     DotProduct,
     Magnitude,
     Metric,
-    Finite,
 };
 use num_traits::NumCast;
 use core::fmt;
@@ -114,6 +113,19 @@ impl<S> Vector1<S> where S: ScalarFloat {
     #[inline]
     pub fn lerp(&self, other: &Vector1<S>, amount: S) -> Vector1<S> {
         self + ((other - self) * amount)
+    }
+
+    /// Returns `true` if the elements of this vector are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A vector is finite when all of its elements are finite. This is useful 
+    /// for vector and matrix types working with fixed precision floating point 
+    /// values.
+    /// For example, when the vector elements are `f64`, the vector is finite 
+    /// when the elements are neither `NaN` nor infinite.
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        self.x.is_finite()
     }
 }
 
@@ -754,19 +766,6 @@ impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
 impl_mul_operator!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
 impl_mul_operator!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
-impl<S> Finite for Vector1<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.x.is_finite()
-    }
-}
-
-impl<S> Finite for &Vector1<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.x.is_finite()
-    }
-}
 
 impl<S> ProjectOn<Vector1<S>> for Vector1<S> where S: ScalarFloat {
     type Output = Vector1<S>;
@@ -903,6 +902,18 @@ impl<S> Vector2<S> where S: ScalarFloat {
     #[inline]
     pub fn lerp(&self, other: &Vector2<S>, amount: S) -> Vector2<S> {
         self + ((other - self) * amount)
+    }
+
+    /// Returns `true` if the elements of a vector are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A vector is finite when all of its elements are finite. This is useful 
+    /// for vector and matrix types working with fixed precision floating point 
+    /// values. For example, when the vector elements are `f64`, the vector is 
+    /// finite when the elements are neither `NaN` nor infinite.
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        self.x.is_finite() && self.y.is_finite()
     }
 }
 
@@ -1567,21 +1578,6 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector2<S>> for Vector2<S> {
     }
 }
 
-
-impl<S> Finite for Vector2<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.x.is_finite() && self.y.is_finite()
-    }
-}
-
-impl<S> Finite for &Vector2<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.x.is_finite() && self.y.is_finite()
-    }
-}
-
 impl<S> ProjectOn<Vector2<S>> for Vector2<S> where S: ScalarFloat {
     type Output = Vector2<S>;
 
@@ -1730,6 +1726,18 @@ impl<S> Vector3<S> where S: ScalarFloat {
     #[inline]
     pub fn lerp(&self, other: &Vector3<S>, amount: S) -> Vector3<S> {
         self + ((other - self) * amount)
+    }
+
+    /// Returns `true` if the elements of a vector are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A vector is finite when all of its elements are finite. This is useful 
+    /// for vector and matrix types working with fixed precision floating point 
+    /// values. For example, when the vector elements are `f64`, the vector is 
+    /// finite when the elements are neither `NaN` nor infinite.
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
     }
 }
 
@@ -2486,21 +2494,6 @@ impl<S> approx::UlpsEq for Vector3<S> where S: ScalarFloat {
     }
 }
 
-
-impl<S> Finite for Vector3<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
-    }
-}
-
-impl<S> Finite for &Vector3<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
-    }
-}
-
 impl<S> ProjectOn<Vector3<S>> for Vector3<S> where S: ScalarFloat {
     type Output = Vector3<S>;
 
@@ -2681,6 +2674,18 @@ impl<S> Vector4<S> where S: ScalarFloat {
     #[inline]
     pub fn lerp(&self, other: &Vector4<S>, amount: S) -> Vector4<S> {
         self + ((other - self) * amount)
+    }
+
+    /// Returns `true` if the elements of a vector are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A vector is finite when all of its elements are finite. This is useful 
+    /// for vector and matrix types working with fixed precision floating point 
+    /// values. For example, when the vector elements are `f64`, the vector is 
+    /// finite when the elements are neither `NaN` nor infinite.
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
     }
 }
 
@@ -3427,21 +3432,6 @@ impl<S> approx::UlpsEq for Vector4<S> where S: ScalarFloat {
         S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) &&
         S::ulps_eq(&self.z, &other.z, epsilon, max_ulps) &&
         S::ulps_eq(&self.w, &other.w, epsilon, max_ulps)
-    }
-}
-
-
-impl<S> Finite for Vector4<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
-    }
-}
-
-impl<S> Finite for &Vector4<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
     }
 }
 

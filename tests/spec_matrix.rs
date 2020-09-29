@@ -582,7 +582,6 @@ macro_rules! approx_multiplication_props {
         use cglinalg::approx::relative_eq;
         use cglinalg::{
             $MatrixN,
-            Finite,
             Identity
         };
         use super::{

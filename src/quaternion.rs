@@ -9,7 +9,6 @@ use crate::traits::{
     Magnitude,
     Matrix,
     Metric,
-    Finite,
     SquareMatrix,
 };
 use crate::angle::{
@@ -611,6 +610,17 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     #[inline]
     pub fn nlerp(&self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
         (self * (S::one() - amount) + other * amount).normalize()
+    }
+
+    /// Returns `true` if the elements of this quaternion are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A quaternion is finite when all of its elements are finite. For 
+    /// example, when the vector elements are `f64`, the quaternion is finite 
+    /// when the elements are neither `NaN` nor infinite.
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        self.s.is_finite() && self.v.is_finite()
     }
 }
 
@@ -1332,20 +1342,6 @@ impl<S> approx::UlpsEq for Quaternion<S> where S: ScalarFloat {
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.s, &other.s, epsilon, max_ulps) &&
         Vector3::ulps_eq(&self.v, &other.v, epsilon, max_ulps)
-    }
-}
-
-impl<S> Finite for Quaternion<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.s.is_finite() && self.v.is_finite()
-    }
-}
-
-impl<S> Finite for &Quaternion<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.s.is_finite() && self.v.is_finite()
     }
 }
 

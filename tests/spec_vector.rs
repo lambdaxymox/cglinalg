@@ -816,9 +816,6 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{
-            Finite
-        };
         use cglinalg::approx::{
             relative_eq
         };
@@ -999,9 +996,6 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{
-            Finite
-        };
         use super::{
             $Generator,
             $ScalarGen,

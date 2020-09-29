@@ -6,7 +6,6 @@ use crate::scalar::{
 use crate::traits::{
     Angle,
     AdditiveIdentity,
-    Finite,
 };
 use core::f64;
 use core::fmt;
@@ -18,11 +17,28 @@ use core::ops;
 #[repr(C)]
 pub struct Radians<S>(pub S);
 
+impl<S> Radians<S> where S: ScalarFloat {
+    /// Returns `true` if the underlying floating point number of the typed
+    /// angle is finite.
+    #[inline]
+    pub fn is_finite(self) -> bool {
+        self.0.is_finite()
+    }
+}
+
 /// The angle (arc length) along the unit circle in units of degrees.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd)]
 #[repr(C)]
 pub struct Degrees<S>(pub S);
 
+impl<S> Degrees<S> where S: ScalarFloat {
+    /// Returns `true` if the underlying floating point number of the typed
+    /// angle is finite.
+    #[inline]
+    pub fn is_finite(self) -> bool {
+        self.0.is_finite()
+    }
+}
 
 impl<S> From<Degrees<S>> for Radians<S> where S: ScalarFloat {
     #[inline]
@@ -333,20 +349,6 @@ impl<S> approx::UlpsEq for Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Finite for Degrees<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.0.is_finite()
-    }
-}
-
-impl<S> Finite for &Degrees<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.0.is_finite()
-    }
-}
-
 impl<S> ops::Add<Radians<S>> for Radians<S> where S: Scalar {
     type Output = Radians<S>;
 
@@ -627,20 +629,6 @@ impl<S> approx::UlpsEq for Radians<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.0, &other.0, epsilon, max_ulps)
-    }
-}
-
-impl<S> Finite for Radians<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.0.is_finite()
-    }
-}
-
-impl<S> Finite for &Radians<S> where S: ScalarFloat {
-    #[inline]
-    fn is_finite(self) -> bool {
-        self.0.is_finite()
     }
 }
 
