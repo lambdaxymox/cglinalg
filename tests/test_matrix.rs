@@ -543,6 +543,32 @@ mod matrix2_tests {
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
+
+    #[test]
+    fn test_rotation_between() {
+        let unit_x: Vector2<f64> = Vector2::unit_x();
+        let unit_y: Vector2<f64> = Vector2::unit_y();
+        let expected = Matrix2x2::new(
+             0_f64, 1_f64,
+            -1_f64, 0_f64,
+        );
+        let result = Matrix2x2::rotation_between(&unit_x, &unit_y);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_rotation_between_axis() {
+        let unit_x: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
+        let unit_y: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
+        let expected = Matrix2x2::new(
+             0_f64, 1_f64,
+            -1_f64, 0_f64,
+        );
+        let result = Matrix2x2::rotation_between_axis(&unit_x, &unit_y);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
 }
 
 
@@ -1444,6 +1470,20 @@ mod matrix3_tests {
         let look_at = Matrix3x3::look_at_lh(&direction, &up);
         let expected = unit_z;
         let result = look_at * direction;
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    }
+
+    #[test]
+    fn test_rotation_between() {
+        let unit_x: Vector3<f64> = Vector3::unit_x();
+        let unit_y: Vector3<f64> = Vector3::unit_y();
+        let expected = Matrix3x3::new(
+             0_f64, 1_f64, 0_f64, 
+            -1_f64, 0_f64, 0_f64,
+             0_f64, 0_f64, 1_f64
+        );
+        let result = Matrix3x3::rotation_between(&unit_x, &unit_y).unwrap();
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }

@@ -431,6 +431,15 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     }
 
     /// Construct a rotation that rotates the shortest angular distance 
+    /// between two vectors.
+    #[inline]
+    pub fn rotation_between(
+        v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Rotation3<S>> {
+            
+        Quaternion::rotation_between(v1, v2).map(|q| q.into())
+    }
+
+    /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
     pub fn rotation_between_axis(

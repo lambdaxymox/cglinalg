@@ -102,8 +102,6 @@ The Rust ecosystem has a number of linear algebra libraries including:
 * [euclid](https://crates.io/crates/euclid) -- A collection of strongly typed 
   math tools for computer graphics with an inclination towards 2d graphics and 
   layout. This one is used in the `Servo` browser engine.
-* [vecmath](https://crates.io/crates/vecmath) -- A simple and type agnostic 
-  Rust library for vector math designed for reexporting.
 
 ## Project Roadmap
 Major outstanding project goals include:

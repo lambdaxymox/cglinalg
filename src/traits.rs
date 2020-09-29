@@ -99,7 +99,7 @@ pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
 }
 
 /// This trait enables one to assign lengths to vectors.
-pub trait Magnitude {
+pub trait Magnitude where Self: Sized {
     type Output: Scalar;
 
     /// Compute the norm (length) of a vector.
@@ -113,6 +113,10 @@ pub trait Magnitude {
 
     /// Normalize a vector with a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Output) -> Self;
+
+    /// Attempt to normalize a vector, but give up if the norm
+    /// is too small.
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self>;
 }
 
 /// A trait for implementing the ability to project one vector onto the

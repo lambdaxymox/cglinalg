@@ -22,7 +22,7 @@ use crate::scalar::{
 };
 use crate::matrix::{
     Matrix3x3, 
-    Matrix4x4
+    Matrix4x4,
 };
 use crate::vector::{
     Vector3,
@@ -1322,6 +1322,16 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
 
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
+    }
+
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
     }
 }
 

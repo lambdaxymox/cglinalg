@@ -254,6 +254,30 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
         )
     }
 
+    /// Construct a rotation matrix that rotates the shortest angular distance 
+    /// between two vectors.
+    #[inline]
+    pub fn rotation_between(v1: &Vector2<S>, v2: &Vector2<S>) -> Matrix2x2<S> {
+        if let (Some(unit_v1), Some(unit_v2)) = (
+            Unit::try_from_value(*v1, S::zero()),
+            Unit::try_from_value(*v2, S::zero()),
+        ) {
+            Self::rotation_between_axis(&unit_v1, &unit_v2)
+        } else {
+            <Self as SquareMatrix>::identity()
+        }
+    }
+
+    /// Construct a rotation matrix that rotates the shortest angular distance 
+    /// between two unit vectors.
+    #[inline]
+    pub fn rotation_between_axis(v1: &Unit<Vector2<S>>, v2: &Unit<Vector2<S>>) -> Matrix2x2<S> {
+        let cos_angle = v1.as_ref().dot(v2.as_ref());
+        let sin_angle = S::sqrt(S::one() - cos_angle * cos_angle);
+
+        Self::from_angle(Radians::atan2(sin_angle, cos_angle))
+    }
+
     /// Linearly interpolate between two matrices.
     #[inline]
     pub fn lerp(&self, other: &Matrix2x2<S>, amount: S) -> Matrix2x2<S> {
@@ -1559,11 +1583,6 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// The function maps the direction `direction` to the _negative z-axis_ in 
     /// the new the coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a _right-handed_ coordinate transformation. 
-    /// 
-    /// #### Note
-    ///
-    /// This transformation transforms vectors in the inverse way from the `face_towards`
-    /// function.
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
         // The inverse of a rotation matrix is its transpose.
@@ -1578,15 +1597,56 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// The function maps the direction `direction` to the _positive z-axis_ in 
     /// the new the coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a _left-handed_ coordinate transformation. 
-    /// 
-    /// #### Note
-    ///
-    /// This transformation transforms vectors in the inverse way from the `face_towards`
-    /// function.
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
         // The inverse of a rotation matrix is its transpose.
         Self::face_towards(direction, up).transpose()
+    }
+
+    /// Construct a rotation matrix that rotates the shortest angular distance 
+    /// between two vectors.
+    #[inline]
+    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Matrix3x3<S>> {
+        if let (Some(unit_v1), Some(unit_v2)) = (v1.try_normalize(S::zero()), v2.try_normalize(S::zero())) {
+            let cross = unit_v1.cross(&unit_v2);
+
+            if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
+                return Some(
+                    Matrix3x3::from_axis_angle(axis, Radians::acos(unit_v1.dot(&unit_v2)))
+                );
+            }
+
+            // Zero or PI.
+            if unit_v1.dot(&unit_v2) < S::zero() {
+                // PI
+                //
+                // The rotation axis is undefined but the angle not zero. This is not a
+                // simple rotation.
+                return None;
+            }
+        }
+
+        Some(<Self as SquareMatrix>::identity())
+    }
+
+    /// Construct a rotation matrix that rotates the shortest angular distance 
+    /// between two vectors.
+    #[inline]
+    pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Matrix3x3<S>> {
+        let cross = unit_v1.as_ref().cross(unit_v2.as_ref());
+        let cos_angle = unit_v1.as_ref().dot(unit_v2.as_ref());
+
+        if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
+            return Some(
+                Matrix3x3::from_axis_angle(axis, Radians::acos(cos_angle))
+            );
+        }
+
+        if cos_angle < S::zero() {
+            return None;
+        }
+
+        Some(<Self as SquareMatrix>::identity())
     }
 
     /// Linearly interpolate between two matrices.
@@ -1594,8 +1654,6 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     pub fn lerp(&self, other: &Matrix3x3<S>, amount: S) -> Matrix3x3<S> {
         self + ((other - self) * amount)
     }
-
-
 }
 
 impl<S> Array for Matrix3x3<S> where S: Copy {
@@ -3228,11 +3286,6 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// locates the `eye` position to the origin in the new the coordinate system.
     /// This transformation is a _right-handed_ coordinate transformation. It is
     /// conventionally used in computer graphics for camera view transformations.
-    /// 
-    /// #### Note
-    ///
-    /// This transformation transforms vectors in the inverse way from the `face_towards`
-    /// function.
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
         let direction = -(target - eye);
@@ -3264,11 +3317,6 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// The function maps the direction `direction` to the _positive z-axis_ and 
     /// locates the `eye` position to the origin in the new the coordinate system.
     /// This transformation is a _left-handed_ coordinate transformation.
-    ///
-    /// #### Note
-    ///
-    /// This transformation transforms vectors in the inverse way from the `face_towards`
-    /// function.
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
         let direction = target - eye;

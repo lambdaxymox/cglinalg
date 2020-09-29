@@ -636,6 +636,16 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
+
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
 }
 
 impl<S> approx::AbsDiffEq for Vector1<S> where S: ScalarFloat {
@@ -1409,6 +1419,16 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
 
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
+    }
+
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
     }
 }
 
@@ -2285,6 +2305,16 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
 
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
+    }
+
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
     }
 }
 
@@ -3172,6 +3202,16 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
 
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
+    }
+
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
     }
 }
 

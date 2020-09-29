@@ -663,6 +663,16 @@ impl<S> Magnitude for Point1<S> where S: ScalarFloat {
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
     }
+
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
 }
 
 impl<S> Metric<Point1<S>> for Point1<S> where S: ScalarFloat {
@@ -1358,6 +1368,16 @@ impl<S> Magnitude for Point2<S> where S: ScalarFloat {
 
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
+    }
+    
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
     }
 }
 
@@ -2081,24 +2101,30 @@ impl<'a, 'b, S> DotProduct<&'a Point3<S>> for &'b Point3<S> where S: Scalar {
 impl<S> Magnitude for Point3<S> where S: ScalarFloat {
     type Output = S;
 
-    /// Compute the norm (length) of a vector.
     fn magnitude(&self) -> Self::Output {
         Self::Output::sqrt(self.magnitude_squared())
     }
 
-    /// Compute the squared length of a vector.
     fn magnitude_squared(&self) -> Self::Output {
         DotProduct::dot(self, self)
     }
 
-    /// Convert a vector into a unit vector.
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
 
-    /// Normalize a vector with a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())
+    }
+
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
     }
 }
 
