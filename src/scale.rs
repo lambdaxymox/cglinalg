@@ -187,13 +187,13 @@ impl<S> Scale3<S> where S: Scalar {
 
     /// Apply a scale operation to a vector.
     #[inline]
-    pub fn scale_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+    pub fn scale_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     /// Apply a scale operation to a point.
     #[inline]
-    pub fn scale_point(&self, point: Point3<S>) -> Point3<S> {
+    pub fn scale_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
@@ -223,46 +223,9 @@ impl<S> From<&Scale3<S>> for Matrix4x4<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation3<Point3<S>, Vector3<S>, S> for Scale3<S> 
-    where 
-        S: ScalarFloat 
+impl<S> AffineTransformation3<S> for Scale3<S> 
+    where S: ScalarFloat 
 {
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Scale3<S> {
-        Scale3::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale3<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        self.scale_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
-        self.scale_point(point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Scale3<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
     #[inline]
     fn identity() -> Scale3<S> {
         Scale3::from_scale(S::one())
@@ -275,11 +238,11 @@ impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Scale3<S>
 
     #[inline]
     fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        self.scale_vector(*vector)
+        self.scale_vector(vector)
     }
 
     #[inline]
-    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
+    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
         self.scale_point(point)
     }
 
@@ -289,68 +252,3 @@ impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Scale3<S>
     }
 }
 
-impl<S> AffineTransformation3<&Point3<S>, Vector3<S>, S> for Scale3<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Scale3<S> {
-        Scale3::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale3<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        self.scale_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        self.scale_point(*point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
-    }
-}
-
-impl<'a, 'b, S> AffineTransformation3<&'a Point3<S>, &'b Vector3<S>, S> for Scale3<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Scale3<S> {
-        Scale3::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale3<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
-        self.scale_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point3<S>) -> Point3<S> {
-        self.scale_point(*point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
-    }
-}

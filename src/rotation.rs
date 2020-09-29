@@ -356,14 +356,14 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
     /// Apply the rotation operation to a vector.
     #[inline]
-    pub fn rotate_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+    pub fn rotate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     /// Apply the rotation operation to a point.
     #[inline]
-    pub fn rotate_point(&self, point: Point3<S>) -> Point3<S> { 
-        Point3::from_vector(self.rotate_vector(point.to_vector()))
+    pub fn rotate_point(&self, point: &Point3<S>) -> Point3<S> { 
+        Point3::from_vector(self.rotate_vector(&point.to_vector()))
     }
 }
 
@@ -444,47 +444,9 @@ impl<S> approx::UlpsEq for Rotation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation3<Point3<S>, Vector3<S>, S> for Rotation3<S> 
+impl<S> AffineTransformation3<S> for Rotation3<S> 
     where S: ScalarFloat 
 {
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Rotation3<S> {
-        Rotation3 { 
-            angle: Radians(S::zero()),
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Rotation3<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Rotation3<S>
-    where S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
     #[inline]
     fn identity() -> Rotation3<S> {
         Rotation3 { 
@@ -504,77 +466,7 @@ impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Rotation3<S>
     }
 
     #[inline]
-    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation3<&Point3<S>, Vector3<S>, S> for Rotation3<S> 
-    where S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Rotation3<S> {
-        Rotation3 { 
-            angle: Radians(S::zero()),
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Rotation3<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
     fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
-    }
-}
-
-impl<'a, 'b, S> AffineTransformation3<&'a Point3<S>, &'b Vector3<S>, S> for Rotation3<S> 
-    where S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Rotation3<S> {
-        Rotation3 { 
-            angle: Radians(S::zero()),
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Rotation3<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 

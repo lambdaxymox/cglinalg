@@ -248,12 +248,12 @@ impl<S> Reflection3<S> where S: ScalarFloat {
     }
 
     /// Reflect a vector across a line.
-    pub fn reflect_vector(&self, vector: Vector3<S>) -> Vector3<S> {
+    pub fn reflect_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     /// Reflect a point across a plane.
-    pub fn reflect_point(&self, point: Point3<S>) -> Point3<S> {
+    pub fn reflect_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
 }
@@ -288,10 +288,7 @@ impl<S> From<&Reflection3<S>> for Matrix4x4<S> where S: Copy {
 }
 
 
-impl<S> AffineTransformation3<Point3<S>, Vector3<S>, S> for Reflection3<S> where S: ScalarFloat {
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
+impl<S> AffineTransformation3<S> for Reflection3<S> where S: ScalarFloat {
     #[inline]
     fn identity() -> Reflection3<S> {
         Reflection3 { 
@@ -307,124 +304,13 @@ impl<S> AffineTransformation3<Point3<S>, Vector3<S>, S> for Reflection3<S> where
     }
 
     #[inline]
-    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        self.reflect_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
-        self.reflect_point(point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Reflection3<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Reflection3<S> {
-        Reflection3 { 
-            bias: Vector3::zero(),
-            normal: Vector3::zero(), 
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Reflection3<S>> {
-        self.inverse()
-    }
-
-    #[inline]
     fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        self.reflect_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
-        self.reflect_point(point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
-    }
-}
-
-impl<S> AffineTransformation3<&Point3<S>, Vector3<S>, S> for Reflection3<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Reflection3<S> {
-        Reflection3 { 
-            bias: Vector3::zero(),
-            normal: Vector3::zero(), 
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Reflection3<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
         self.reflect_vector(vector)
     }
 
     #[inline]
     fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        self.reflect_point(*point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
-    }
-}
-
-impl<'a, 'b, S> AffineTransformation3<&'a Point3<S>, &'b Vector3<S>, S> for Reflection3<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Reflection3<S> {
-        Reflection3 { 
-            bias: Vector3::zero(),
-            normal: Vector3::zero(), 
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Reflection3<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
-        self.reflect_vector(*vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point3<S>) -> Point3<S> {
-        self.reflect_point(*point)
+        self.reflect_point(point)
     }
 
     #[inline]

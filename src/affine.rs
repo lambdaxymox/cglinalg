@@ -43,7 +43,7 @@ pub trait AffineTransformation2<S> where Self: Sized {
             .map(|matrix_inverse| matrix_inverse.transform_vector(vector))
     }
 
-    /// Apply the inverse of the affine transformation to a vector.
+    /// Apply the inverse of the affine transformation to a point.
     #[inline]
     fn inverse_transform_point(&self, point: &Point2<S>) -> Option<Point2<S>> {
         self.inverse()
@@ -56,14 +56,7 @@ pub trait AffineTransformation2<S> where Self: Sized {
 }
 
 /// A trait for implementing three-dimensional affine transformations.
-pub trait AffineTransformation3<P, V, S> where Self: Sized {
-    /// The output associated type for points. This allows us to use both 
-    /// pointers and values on the inputs.
-    type OutPoint;
-    /// The output associated type for vectors. This allows us to use both 
-    /// pointers and values on the inputs.
-    type OutVector;
-
+pub trait AffineTransformation3<S> where Self: Sized {
     /// The identity transformation for this type.
     fn identity() -> Self;
 
@@ -71,16 +64,23 @@ pub trait AffineTransformation3<P, V, S> where Self: Sized {
     fn inverse(&self) -> Option<Self>;
 
     /// Apply the affine transformation to a vector.
-    fn transform_vector(&self, vector: V) -> Self::OutVector;
+    fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S>;
 
     /// Apply the affine transformation to a point.
-    fn transform_point(&self, point: P) -> Self::OutPoint;
+    fn transform_point(&self, point: &Point3<S>) -> Point3<S>;
 
     /// Apply the inverse of the affine transformation to a vector.
     #[inline]
-    fn transform_inverse_vector(&self, vector: V) -> Option<Self::OutVector> {
+    fn transform_inverse_vector(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
         self.inverse()
             .map(|matrix_inverse| matrix_inverse.transform_vector(vector))
+    }
+
+    /// Apply the inverse of the affine transformation to a point.
+    #[inline]
+    fn inverse_transform_point(&self, point: &Point3<S>) -> Option<Point3<S>> {
+        self.inverse()
+            .map(|matrix_inverse| matrix_inverse.transform_point(point))
     }
 
     /// Convert a specific three-dimensional affine transformation into a 
@@ -231,54 +231,9 @@ impl<S> From<&Transform3<S>> for Matrix4x4<S> where S: Copy {
     }
 }
 
-impl<S> AffineTransformation3<Point3<S>, Vector3<S>, S> for Transform3<S> 
-    where 
-        S: ScalarFloat 
+impl<S> AffineTransformation3<S> for Transform3<S> 
+    where S: ScalarFloat 
 {
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Transform3<S> {
-        Transform3 { 
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Transform3<S>> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform3 {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        *self
-    }
-}
-
-impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Transform3<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
     #[inline]
     fn identity() -> Transform3<S> {
         Transform3 { 
@@ -303,47 +258,6 @@ impl<S> AffineTransformation3<Point3<S>, &Vector3<S>, S> for Transform3<S>
     }
 
     #[inline]
-    fn transform_point(&self, point: Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        *self
-    }
-}
-
-impl<S> AffineTransformation3<&Point3<S>, Vector3<S>, S> for Transform3<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Transform3<S> {
-        Transform3 { 
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Transform3<S>> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform3 {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
     fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())
     }
@@ -353,46 +267,4 @@ impl<S> AffineTransformation3<&Point3<S>, Vector3<S>, S> for Transform3<S>
         *self
     }
 }
-
-impl<'a, 'b, S> AffineTransformation3<&'a Point3<S>, &'b Vector3<S>, S> for Transform3<S> 
-    where 
-        S: ScalarFloat 
-{
-    type OutPoint = Point3<S>;
-    type OutVector = Vector3<S>;
-
-    #[inline]
-    fn identity() -> Transform3<S> {
-        Transform3 { 
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Transform3<S>> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform3 {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &'b Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &'a Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        *self
-    }
-}
-
 
