@@ -165,7 +165,7 @@ impl<S> Quaternion<S> where S: Scalar {
         Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
     }
 
-    /// Convert a quaternion to its equivalent 3x3 matrix.
+    /// Convert a quaternion to its equivalent 3x3 matrix form.
     #[rustfmt::skip]
     #[inline]
     pub fn to_matrix3x3(&self) -> Matrix3x3<S> {
@@ -195,6 +195,31 @@ impl<S> Quaternion<S> where S: Scalar {
         )
     }
 
+    /// Convert a quaternion to its equivalent 3x3 matrix form using 
+    /// preallocated storage.
+    #[inline]
+    pub fn to_matrix3x3_mut(&self, matrix: &mut Matrix3x3<S>) {
+        let s = self.s;
+        let x = self.v.x;
+        let y = self.v.y;
+        let z = self.v.z;
+        let one = S::one();
+        let two = one + one;
+    
+        matrix.c0r0 = one - two * y * y - two * z * z;
+        matrix.c0r1 = two * x * y + two * s * z;
+        matrix.c0r2 = two * x * z - two * s * y;
+    
+        matrix.c1r0 = two * x * y - two * s * z;
+        matrix.c1r1 = one - two * x * x - two * z * z;
+        matrix.c1r2 = two * y * z + two * s * x;
+    
+        matrix.c2r0 = two * x * z + two * s * y;
+        matrix.c2r1 = two * y * z - two * s * x;
+        matrix.c2r2 = one - two * x * x - two * y * y;
+    }
+
+    /// Convert a quaternion to its equivalent affine 4x4 matrix form.
     #[rustfmt::skip]
     #[inline]
     pub fn to_matrix4x4(&self) -> Matrix4x4<S> {
@@ -234,7 +259,8 @@ impl<S> Quaternion<S> where S: Scalar {
         )
     }
 
-    /// Convert a quaternion to its equivalent matrix form using preallocated storage.
+    /// Convert a quaternion to its equivalent affine 4x4 matrix form using 
+    /// preallocated storage.
     #[inline]
     pub fn to_matrix4x4_mut(&self, matrix: &mut Matrix4x4<S>) {
         let s = self.s;
