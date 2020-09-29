@@ -157,8 +157,8 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// Construct a matrix that will cause a vector to point 
     /// at the vector `direction` using up for orientation.
     #[inline]
-    pub fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Matrix2x2<S> {
-        Matrix2x2::from_columns(up, direction).transpose()
+    pub fn look_at(direction: &Vector2<S>, up: &Vector2<S>) -> Matrix2x2<S> {
+        Matrix2x2::from_columns(*up, *direction).transpose()
     }
 
     /// Construct a shearing matrix along the x-axis, holding the y-axis constant.
@@ -237,7 +237,7 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
     /// line through the origin in the xy-plane.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_reflection(normal: Unit<Vector2<S>>) -> Matrix2x2<S> {
+    pub fn from_reflection(normal: &Unit<Vector2<S>>) -> Matrix2x2<S> {
         let one = S::one();
         let two = one + one;
 
@@ -1474,7 +1474,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// across the line `L`.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: Unit<Vector2<S>>, bias: Vector2<S>) -> Matrix3x3<S> {
+    pub fn from_affine_reflection(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Matrix3x3<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -1502,7 +1502,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// crosses the origin.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_reflection(normal: Unit<Vector3<S>>) -> Matrix3x3<S> {
+    pub fn from_reflection(normal: &Unit<Vector3<S>>) -> Matrix3x3<S> {
         let one = S::one();
         let two = one + one;
 
@@ -1589,7 +1589,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// `angle`.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Matrix3x3<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Matrix3x3<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();
@@ -1666,7 +1666,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
             if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
                 return Some(
-                    Matrix3x3::from_axis_angle(axis, Radians::acos(unit_v1.dot(&unit_v2)))
+                    Matrix3x3::from_axis_angle(&axis, Radians::acos(unit_v1.dot(&unit_v2)))
                 );
             }
 
@@ -1692,7 +1692,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
         if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
             return Some(
-                Matrix3x3::from_axis_angle(axis, Radians::acos(cos_angle))
+                Matrix3x3::from_axis_angle(&axis, Radians::acos(cos_angle))
             );
         }
 
@@ -3154,7 +3154,7 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     /// reflected point across the plane `P`.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: Unit<Vector3<S>>, bias: Vector3<S>) -> Matrix4x4<S> {
+    pub fn from_affine_reflection(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Matrix4x4<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -3244,7 +3244,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// around the axis `axis` by an angle `angle` radians/degrees.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Matrix4x4<S> {
+    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Matrix4x4<S> {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();

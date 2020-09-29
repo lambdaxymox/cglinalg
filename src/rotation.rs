@@ -70,7 +70,7 @@ impl<S> Rotation2<S> where S: ScalarFloat {
 
     /// Point a vector at the point `direction`.
     #[inline]
-    pub fn look_at(direction: Vector2<S>, up: Vector2<S>) -> Rotation2<S> {
+    pub fn look_at(direction: &Vector2<S>, up: &Vector2<S>) -> Rotation2<S> {
         let matrix = Matrix3x3::from(Matrix2x2::look_at(direction, up));
         let angle = Radians::acos(matrix.c0r0);
         
@@ -105,14 +105,14 @@ impl<S> Rotation2<S> where S: ScalarFloat {
 
     /// Apply the rotation operation to a vector.
     #[inline]
-    pub fn rotate_vector(&self, vector: Vector2<S>) -> Vector2<S> {
+    pub fn rotate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     /// Apply the rotation operation to a point.
     #[inline]
-    pub fn rotate_point(&self, point: Point2<S>) -> Point2<S> { 
-        Point2::from_vector(self.rotate_vector(point.to_vector()))
+    pub fn rotate_point(&self, point: &Point2<S>) -> Point2<S> { 
+        Point2::from_vector(self.rotate_vector(&point.to_vector()))
     }
 }
 
@@ -237,7 +237,7 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
     /// Construct a new three-dimensional rotation about an axis `axis` by 
     /// an angle `angle`.
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: Unit<Vector3<S>>, angle: A) -> Rotation3<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Rotation3<S> {
         let radians = angle.into();
         
         Rotation3 {
@@ -250,21 +250,21 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// _yz-plane_ by an angle `angle`.
     #[inline]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(Unit::from_value_unchecked(Vector3::unit_x()), angle)
+        Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_x()), angle)
     }
 
     /// Construct a new three-dimensional rotation about the _y-axis_ in the 
     /// _xz-plane_ by an angle `angle`.
     #[inline]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(Unit::from_value_unchecked(Vector3::unit_y()), angle)
+        Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_y()), angle)
     }
 
     /// Construct a new three-dimensional rotation about the _z-axis_ in the 
     /// _xy-plane_ by an angle `angle`.
     #[inline]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(Unit::from_value_unchecked(Vector3::unit_z()), angle)
+        Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_z()), angle)
     }
 
     /// Construct an affine coordinate transformation that transforms

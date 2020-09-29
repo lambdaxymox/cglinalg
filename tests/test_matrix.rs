@@ -456,7 +456,7 @@ mod matrix2_tests {
         // The y-axis is the normal vector to the plane of the x-axis.
         let normal = Unit::from_value(Vector2::unit_y());
         let expected = Matrix2x2::new(1.0, 0.0, 0.0, -1.0);
-        let result = Matrix2x2::from_reflection(normal);
+        let result = Matrix2x2::from_reflection(&normal);
 
         assert_eq!(result, expected);
     }
@@ -469,7 +469,7 @@ mod matrix2_tests {
         // The y-axis is the normal vector to the plane of the x-axis.
         let normal = Unit::from_value(-Vector2::unit_y());
         let expected = Matrix2x2::new(1.0, 0.0, 0.0, -1.0);
-        let result = Matrix2x2::from_reflection(normal);
+        let result = Matrix2x2::from_reflection(&normal);
 
         assert_eq!(result, expected);
     }
@@ -482,7 +482,7 @@ mod matrix2_tests {
         // The y-axis is the normal vector to the plane of the y-axis.
         let normal = Unit::from_value(Vector2::unit_x());
         let expected = Matrix2x2::new(-1.0, 0.0, 0.0, 1.0);
-        let result = Matrix2x2::from_reflection(normal);
+        let result = Matrix2x2::from_reflection(&normal);
     
         assert_eq!(result, expected);
     }
@@ -495,7 +495,7 @@ mod matrix2_tests {
         // The y-axis is the normal vector to the plane of the y-axis.
         let normal = Unit::from_value(-Vector2::unit_x());
         let expected = Matrix2x2::new(-1.0, 0.0, 0.0, 1.0);
-        let result = Matrix2x2::from_reflection(normal);
+        let result = Matrix2x2::from_reflection(&normal);
     
         assert_eq!(result, expected);
     }
@@ -509,7 +509,7 @@ mod matrix2_tests {
             Vector2::new(f64::sqrt(2_f64)/ 2_f64, -f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix2x2::new(0.0, 1.0, 1.0, 0.0);
-        let result = Matrix2x2::from_reflection(normal);
+        let result = Matrix2x2::from_reflection(&normal);
         
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
@@ -523,7 +523,7 @@ mod matrix2_tests {
             Vector2::new(-f64::sqrt(2_f64)/ 2_f64, f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix2x2::new(0.0, 1.0, 1.0, 0.0);
-        let result = Matrix2x2::from_reflection(normal);
+        let result = Matrix2x2::from_reflection(&normal);
             
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
@@ -1172,7 +1172,7 @@ mod matrix3_tests {
             0.0, -1.0, 0.0, 
             0.0,  0.0, 1.0
         );
-        let result = Matrix3x3::from_affine_reflection(normal, bias);
+        let result = Matrix3x3::from_affine_reflection(&normal, &bias);
 
         assert_eq!(result, expected);
     }
@@ -1190,7 +1190,7 @@ mod matrix3_tests {
             0.0, -1.0, 0.0, 
             0.0,  0.0, 1.0
         );
-        let result = Matrix3x3::from_affine_reflection(normal, bias);
+        let result = Matrix3x3::from_affine_reflection(&normal, &bias);
 
         assert_eq!(result, expected);
     }
@@ -1208,7 +1208,7 @@ mod matrix3_tests {
              0.0, 1.0, 0.0, 
              0.0, 0.0, 1.0
         );
-        let result = Matrix3x3::from_affine_reflection(normal, bias);
+        let result = Matrix3x3::from_affine_reflection(&normal, &bias);
     
         assert_eq!(result, expected);
     }
@@ -1226,7 +1226,7 @@ mod matrix3_tests {
              0.0, 1.0, 0.0, 
              0.0, 0.0, 1.0
         );
-        let result = Matrix3x3::from_affine_reflection(normal, bias);
+        let result = Matrix3x3::from_affine_reflection(&normal, &bias);
     
         assert_eq!(result, expected);
     }
@@ -1246,7 +1246,7 @@ mod matrix3_tests {
             1.0, 0.0, 0.0, 
             0.0, 0.0, 1.0
         );
-        let result = Matrix3x3::from_affine_reflection(normal, bias);
+        let result = Matrix3x3::from_affine_reflection(&normal, &bias);
         
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
@@ -1266,7 +1266,7 @@ mod matrix3_tests {
             1.0, 0.0, 0.0, 
             0.0, 0.0, 1.0
         );
-        let result = Matrix3x3::from_affine_reflection(normal, bias);
+        let result = Matrix3x3::from_affine_reflection(&normal, &bias);
             
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
@@ -1280,7 +1280,7 @@ mod matrix3_tests {
         let normal = Unit::from_value(
             Vector2::new(-1.0 / f64::sqrt(5.0), 2.0 / f64::sqrt(5.0))
         );
-        let matrix = Matrix3x3::from_affine_reflection(normal, bias);
+        let matrix = Matrix3x3::from_affine_reflection(&normal, &bias);
         let vector = Vector3::new(1.0, 0.0, 1.0);
         let expected = Vector3::new(-1.0, 4.0, 1.0);
         let result = matrix * vector;
@@ -1297,7 +1297,7 @@ mod matrix3_tests {
         let normal = Unit::from_value(
             Vector2::new(1.0 / f64::sqrt(5.0), -2.0 / f64::sqrt(5.0))
         );
-        let matrix = Matrix3x3::from_affine_reflection(normal, bias);
+        let matrix = Matrix3x3::from_affine_reflection(&normal, &bias);
         let vector = Vector3::new(1.0, 0.0, 1.0);
         let expected = Vector3::new(-1.0, 4.0, 1.0);
         let result = matrix * vector;
@@ -1313,7 +1313,7 @@ mod matrix3_tests {
             0.0, 1.0,  0.0,  
             0.0, 0.0, -1.0
         );
-        let result = Matrix3x3::from_reflection(normal);
+        let result = Matrix3x3::from_reflection(&normal);
 
         assert_eq!(result, expected);
     }
@@ -1326,7 +1326,7 @@ mod matrix3_tests {
             0.0, -1.0, 0.0,  
             0.0,  0.0, 1.0
         );
-        let result = Matrix3x3::from_reflection(normal);
+        let result = Matrix3x3::from_reflection(&normal);
 
         assert_eq!(result, expected);
     }
@@ -1339,7 +1339,7 @@ mod matrix3_tests {
              0.0, 1.0,  0.0,  
              0.0,  0.0, 1.0
         );
-        let result = Matrix3x3::from_reflection(normal);
+        let result = Matrix3x3::from_reflection(&normal);
 
         assert_eq!(result, expected);
     }
@@ -1387,7 +1387,7 @@ mod matrix3_tests {
             (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0)
         );
         let vector = Vector3::new(1.0, 1.0, -1.0);
-        let matrix = Matrix3x3::from_axis_angle(axis, angle);
+        let matrix = Matrix3x3::from_axis_angle(&axis, angle);
         let expected = Vector3::new(1.0, 1.0, 1.0);
         let result = matrix * vector;
 
@@ -2229,7 +2229,7 @@ mod matrix4_tests {
             0.0, 0.0, -1.0, 0.0,
             0.0, 0.0,  0.0, 1.0
         );
-        let result = Matrix4x4::from_affine_reflection(normal, bias);
+        let result = Matrix4x4::from_affine_reflection(&normal, &bias);
 
         assert_eq!(result, expected);
     }
@@ -2244,7 +2244,7 @@ mod matrix4_tests {
             0.0,  0.0, 1.0, 0.0,
             0.0,  0.0, 0.0, 1.0
         );
-        let result = Matrix4x4::from_affine_reflection(normal, bias);
+        let result = Matrix4x4::from_affine_reflection(&normal, &bias);
 
         assert_eq!(result, expected);
     }
@@ -2259,7 +2259,7 @@ mod matrix4_tests {
              0.0,  0.0, 1.0,  0.0,
              0.0,  0.0, 0.0,  1.0
         );
-        let result = Matrix4x4::from_affine_reflection(normal, bias);
+        let result = Matrix4x4::from_affine_reflection(&normal, &bias);
 
         assert_eq!(result, expected);
     }
@@ -2269,7 +2269,7 @@ mod matrix4_tests {
     fn test_from_affine_reflection_plane1() {
         let bias = Vector3::new(0.0, 0.0, 1.0);
         let normal = Unit::from_value(Vector3::new(0.0, 0.0, 1.0));
-        let matrix = Matrix4x4::from_affine_reflection(normal, bias);
+        let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
         let vector = Vector4::new(1.0, 1.0, 0.5, 1.0);
         let expected = Vector4::new(1.0,1.0,1.5, 1.0);
         let result = matrix * vector;
@@ -2282,7 +2282,7 @@ mod matrix4_tests {
     fn test_from_affine_reflection_plane2() {
         let bias = Vector3::new(-1.0, 0.0, 0.0);
         let normal = Unit::from_value(Vector3::new(1.0, 0.0, 0.0));
-        let matrix = Matrix4x4::from_affine_reflection(normal, bias);
+        let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
         let vector = Vector4::new(-2.0, 1.0, 1.0, 1.0);
         let expected = Vector4::new(0.0,1.0,1.0, 1.0);
         let result = matrix * vector;
@@ -2295,7 +2295,7 @@ mod matrix4_tests {
     fn test_from_affine_reflection_plane3() {
         let bias = Vector3::new(0.0, 1.0, 0.0);
         let normal = Unit::from_value(Vector3::new(0.0, 1.0, 0.0));
-        let matrix = Matrix4x4::from_affine_reflection(normal, bias);
+        let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
         let vector = Vector4::new(0.0, 0.0, 0.0, 1.0);
         let expected = Vector4::new(0.0,2.0,0.0, 1.0);
         let result = matrix * vector;
@@ -2382,7 +2382,7 @@ mod matrix4_tests {
             (1.0 / f64::sqrt(2.0)) * Vector3::new(1.0, 1.0, 0.0)
         );
         let vector = Vector4::new(1.0, 1.0, -1.0, 0.0);
-        let matrix = Matrix4x4::from_affine_axis_angle(axis, angle);
+        let matrix = Matrix4x4::from_affine_axis_angle(&axis, angle);
         let expected = Vector4::new(1.0, 1.0, 1.0,0.0);
         let result = matrix * vector;
 
