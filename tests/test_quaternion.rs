@@ -583,7 +583,7 @@ mod power_tests {
 }
 
 #[cfg(test)]
-mod rotation_between_vectors_tests {
+mod rotation_tests {
     use cglinalg::{
         Angle,
         Radians,
@@ -597,7 +597,7 @@ mod rotation_between_vectors_tests {
 
     
     #[test]
-    fn test_rotation_between_vectors() {
+    fn test_rotation_between_unit_vectors() {
         let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
         let unit_y: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
         let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -611,7 +611,7 @@ mod rotation_between_vectors_tests {
     }
 
     #[test]
-    fn test_rotation_between_same_vectors() {
+    fn test_rotation_between_same_unit_vectors() {
         let unit_v1: Unit<Vector3<f64>> = Unit::from_value(
             Vector3::new(1.0, 1.0, 0.0)
         );
@@ -624,6 +624,34 @@ mod rotation_between_vectors_tests {
             Radians(0_f64)
         );
         let result = Quaternion::rotation_between_axis(&unit_v1, &unit_v2).unwrap();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_rotation_between_vectors() {
+        let unit_x: Vector3<f64> = Vector3::unit_x();
+        let unit_y: Vector3<f64> = Vector3::unit_y();
+        let unit_z: Vector3<f64> = Vector3::unit_z();
+        let expected = Quaternion::from_axis_angle(
+            Unit::from_value(unit_z), 
+            Radians::full_turn_div_4()
+        );
+        let result = Quaternion::rotation_between(&unit_x, &unit_y).unwrap();
+
+        assert!(relative_eq!(result, expected));
+    }
+
+    #[test]
+    fn test_rotation_between_same_vectors() {
+        let v1 = Vector3::new(1.0, 1.0, 0.0) * 3.0;
+        let v2 = Vector3::new(1.0, 1.0, 0.0) * 3.0;
+        let unit_z = Vector3::unit_z();
+        let expected = Quaternion::from_axis_angle(
+            Unit::from_value(unit_z), 
+            Radians(0_f64)
+        );
+        let result = Quaternion::rotation_between(&v1, &v2).unwrap();
 
         assert_eq!(result, expected);
     }

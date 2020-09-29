@@ -336,6 +336,21 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Construct a quaternion that rotates the shortest angular distance 
+    /// between two vectors.
+    #[inline]
+    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Quaternion<S>>
+    {
+        if let (Some(unit_v1), Some(unit_v2)) = (
+            Unit::try_from_value(*v1, S::zero()),
+            Unit::try_from_value(*v2, S::zero()),
+        ) {
+            Self::rotation_between_axis(&unit_v1, &unit_v2)
+        } else {
+            Some(Self::identity())
+        }
+    }
+
+    /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
     pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Quaternion<S>> {
