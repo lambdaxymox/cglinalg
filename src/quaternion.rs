@@ -186,130 +186,6 @@ impl<S> Quaternion<S> where S: Scalar {
     pub fn is_pure(&self) -> bool {
         self.s.is_zero()
     }
-
-    /// Convert a quaternion to its equivalent 3x3 matrix form.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn to_matrix3x3(&self) -> Matrix3x3<S> {
-        let s = self.s;
-        let x = self.v.x;
-        let y = self.v.y;
-        let z = self.v.z;
-        let one = S::one();
-        let two = one + one;
-
-        let c0r0 = one - two * y * y - two * z * z;
-        let c0r1 = two * x * y + two * s * z;
-        let c0r2 = two * x * z - two * s * y;
-
-        let c1r0 = two * x * y - two * s * z;
-        let c1r1 = one - two * x * x - two * z * z;
-        let c1r2 = two * y * z + two * s * x;
-
-        let c2r0 = two * x * z + two * s * y;
-        let c2r1 = two * y * z - two * s * x;
-        let c2r2 = one - two * x * x - two * y * y;
-    
-        Matrix3x3::new(
-            c0r0, c0r1, c0r2,
-            c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
-        )
-    }
-
-    /// Convert a quaternion to its equivalent 3x3 matrix form using 
-    /// preallocated storage.
-    #[inline]
-    pub fn to_matrix3x3_mut(&self, matrix: &mut Matrix3x3<S>) {
-        let s = self.s;
-        let x = self.v.x;
-        let y = self.v.y;
-        let z = self.v.z;
-        let one = S::one();
-        let two = one + one;
-    
-        matrix.c0r0 = one - two * y * y - two * z * z;
-        matrix.c0r1 = two * x * y + two * s * z;
-        matrix.c0r2 = two * x * z - two * s * y;
-    
-        matrix.c1r0 = two * x * y - two * s * z;
-        matrix.c1r1 = one - two * x * x - two * z * z;
-        matrix.c1r2 = two * y * z + two * s * x;
-    
-        matrix.c2r0 = two * x * z + two * s * y;
-        matrix.c2r1 = two * y * z - two * s * x;
-        matrix.c2r2 = one - two * x * x - two * y * y;
-    }
-
-    /// Convert a quaternion to its equivalent affine 4x4 matrix form.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn to_matrix4x4(&self) -> Matrix4x4<S> {
-        let s = self.s;
-        let x = self.v.x;
-        let y = self.v.y;
-        let z = self.v.z;
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-
-        let c0r0 = one - two * y * y - two * z * z;
-        let c0r1 = two * x * y + two * s * z;
-        let c0r2 = two * x * z - two * s * y;
-        let c0r3 = zero;
-
-        let c1r0 = two * x * y - two * s * z;
-        let c1r1 = one - two * x * x - two * z * z;
-        let c1r2 = two * y * z + two * s * x;
-        let c1r3 = zero;
-
-        let c2r0 = two * x * z + two * s * y;
-        let c2r1 = two * y * z - two * s * x;
-        let c2r2 = one - two * x * x - two * y * y;
-        let c2r3 = zero;
-        
-        let c3r0 = zero;
-        let c3r1 = zero;
-        let c3r2 = zero;
-        let c3r3 = one;
-    
-        Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
-        )
-    }
-
-    /// Convert a quaternion to its equivalent affine 4x4 matrix form using 
-    /// preallocated storage.
-    #[inline]
-    pub fn to_matrix4x4_mut(&self, matrix: &mut Matrix4x4<S>) {
-        let s = self.s;
-        let x = self.v.x;
-        let y = self.v.y;
-        let z = self.v.z;
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-
-        matrix.c0r0 = one - two * y * y - two * z * z;
-        matrix.c0r1 = two * x * y + two * s * z;
-        matrix.c0r2 = two * x * z - two * s * y;
-        matrix.c0r3 = zero;
-        matrix.c1r0 = two * x * y - two * s * z;
-        matrix.c1r1 = one - two * x * x - two * z * z;
-        matrix.c1r2 = two * y * z + two * s * x;
-        matrix.c1r3 = zero;
-        matrix.c2r0 = two * x * z + two * s * y;
-        matrix.c2r1 = two * y * z - two * s * x;
-        matrix.c2r2 = one - two * x * x - two * y * y;
-        matrix.c2r3 = zero;
-        matrix.c3r0 = zero;
-        matrix.c3r1 = zero;
-        matrix.c3r2 = zero;
-        matrix.c3r3 = one;
-    }
 }
 
 impl<S> Quaternion<S> where S: ScalarFloat {
@@ -324,6 +200,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         Quaternion::from_sv(cos_angle, _axis * sin_angle)
     }
 
+    /// Construct a quaternion from an equivalent 3x3 matrix.
     #[inline]
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> Quaternion<S> {
         let trace = matrix.trace();
@@ -367,10 +244,409 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         }
     }
 
+    /// Convert a quaternion to its equivalent 3x3 matrix form.
+    ///
+    /// The following example shows the result of converting an arbitrary 
+    /// quaternion to its matrix form using the Euler-Rodrigues formula.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix3x3,  
+    /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let scale = 2_f64 / quaternion.magnitude_squared();
+    /// let expected = Matrix3x3::new(
+    ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,
+    ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,
+    ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64
+    /// );
+    /// let result = quaternion.to_matrix3x3();
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    ///
+    /// The following example shows the result of converting an unit 
+    /// quaternion to its matrix form using the Euler-Rodrigues formula.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix3x3,  
+    /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
+    ///
+    /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
+    /// 
+    /// let scale = 2_f64;
+    /// let expected = Matrix3x3::new(
+    ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,
+    ///     scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),
+    ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64)
+    /// );
+    /// let result = quaternion.to_matrix3x3();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn to_matrix3x3(&self) -> Matrix3x3<S> {
+        let qs = self.s;
+        let qx = self.v.x;
+        let qy = self.v.y;
+        let qz = self.v.z;
+        let one = S::one();
+        let two = one + one;
+        let s = two / self.magnitude_squared();
+
+        let c0r0 = one - s * qy * qy - s * qz * qz;
+        let c0r1 = s * qx * qy + s * qs * qz;
+        let c0r2 = s * qx * qz - s * qs * qy;
+
+        let c1r0 = s * qx * qy - s * qs * qz;
+        let c1r1 = one - s * qx * qx - s * qz * qz;
+        let c1r2 = s * qy * qz + s * qs * qx;
+
+        let c2r0 = s * qx * qz + s * qs * qy;
+        let c2r1 = s * qy * qz - s * qs * qx;
+        let c2r2 = one - s * qx * qx - s * qy * qy;
+    
+        Matrix3x3::new(
+            c0r0, c0r1, c0r2,
+            c1r0, c1r1, c1r2,
+            c2r0, c2r1, c2r2
+        )
+    }
+
+    /// Convert a quaternion to its equivalent 3x3 matrix form using 
+    /// preallocated storage.
+    ///
+    /// The following example shows the result of converting an arbitrary 
+    /// quaternion to its matrix form using the Euler-Rodrigues formula.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix3x3,  
+    /// #     Magnitude,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let scale = 2_f64 / quaternion.magnitude_squared();
+    /// let expected = Matrix3x3::new(
+    ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,
+    ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,
+    ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64
+    /// );
+    /// let mut result = Matrix3x3::zero();
+    ///
+    /// assert!(result.is_zero());
+    ///
+    /// quaternion.to_matrix3x3_mut(&mut result);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    /// The following example shows the result of converting an unit 
+    /// quaternion to its matrix form using the Euler-Rodrigues formula.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix3x3,  
+    /// #     Magnitude,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
+    ///
+    /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
+    /// 
+    /// let scale = 2_f64;
+    /// let expected = Matrix3x3::new(
+    ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,
+    ///     scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),
+    ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64)
+    /// );
+    /// let mut result = Matrix3x3::zero();
+    ///
+    /// assert!(result.is_zero());
+    ///
+    /// quaternion.to_matrix3x3_mut(&mut result);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_matrix3x3_mut(&self, matrix: &mut Matrix3x3<S>) {
+        let qs = self.s;
+        let qx = self.v.x;
+        let qy = self.v.y;
+        let qz = self.v.z;
+        let one = S::one();
+        let two = one + one;
+        let s = two / self.magnitude_squared();
+    
+        matrix.c0r0 = one - s * qy * qy - s * qz * qz;
+        matrix.c0r1 = s * qx * qy + s * qs * qz;
+        matrix.c0r2 = s * qx * qz - s * qs * qy;
+    
+        matrix.c1r0 = s * qx * qy - s * qs * qz;
+        matrix.c1r1 = one - s * qx * qx - s * qz * qz;
+        matrix.c1r2 = s * qy * qz + s * qs * qx;
+    
+        matrix.c2r0 = s * qx * qz + s * qs * qy;
+        matrix.c2r1 = s * qy * qz - s * qs * qx;
+        matrix.c2r2 = one - s * qx * qx - s * qy * qy;
+    }
+
+    /// Convert a quaternion to its equivalent affine 4x4 matrix form.
+    ///
+    /// The following example shows the result of converting an arbitrary 
+    /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix4x4,  
+    /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let scale = 2_f64 / quaternion.magnitude_squared();
+    /// let expected = Matrix4x4::new(
+    ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,          0_f64,
+    ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,         0_f64,
+    ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64, 0_f64,
+    ///     0_f64,                  0_f64,                  0_f64,                  1_f64
+    /// );
+    /// let result = quaternion.to_matrix4x4();
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    ///
+    /// The following example shows the result of converting an unit 
+    /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix4x4,  
+    /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
+    ///
+    /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
+    /// 
+    /// let scale = 2_f64;
+    /// let expected = Matrix4x4::new(
+    ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,                   0_f64,
+    ///     scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         0_f64,
+    ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), 0_f64,
+    ///     0_f64,                           0_f64,                           0_f64,                           1_f64
+    /// );
+    /// let result = quaternion.to_matrix4x4();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn to_matrix4x4(&self) -> Matrix4x4<S> {
+        let qs = self.s;
+        let qx = self.v.x;
+        let qy = self.v.y;
+        let qz = self.v.z;
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let s = two / self.magnitude_squared();
+
+        let c0r0 = one - s * qy * qy - s * qz * qz;
+        let c0r1 = s * qx * qy + s * qs * qz;
+        let c0r2 = s * qx * qz - s * qs * qy;
+        let c0r3 = zero;
+
+        let c1r0 = s * qx * qy - s * qs * qz;
+        let c1r1 = one - s * qx * qx - s * qz * qz;
+        let c1r2 = s * qy * qz + s * qs * qx;
+        let c1r3 = zero;
+
+        let c2r0 = s * qx * qz + s * qs * qy;
+        let c2r1 = s * qy * qz - s * qs * qx;
+        let c2r2 = one - s * qx * qx - s * qy * qy;
+        let c2r3 = zero;
+        
+        let c3r0 = zero;
+        let c3r1 = zero;
+        let c3r2 = zero;
+        let c3r3 = one;
+    
+        Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        )
+    }
+
+    /// Convert a quaternion to its equivalent affine 4x4 matrix form using
+    /// preallocated storage.
+    ///
+    /// The following example shows the result of converting an arbitrary 
+    /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix4x4,  
+    /// #     Magnitude,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let scale = 2_f64 / quaternion.magnitude_squared();
+    /// let expected = Matrix4x4::new(
+    ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,          0_f64,
+    ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,         0_f64,
+    ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64, 0_f64,
+    ///     0_f64,                  0_f64,                  0_f64,                  1_f64
+    /// );
+    /// let mut result = Matrix4x4::zero();
+    ///
+    /// assert!(result.is_zero());
+    ///
+    /// quaternion.to_matrix4x4_mut(&mut result);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    ///
+    /// The following example shows the result of converting an unit 
+    /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix4x4,  
+    /// #     Magnitude,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
+    ///
+    /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
+    /// 
+    /// let scale = 2_f64;
+    /// let expected = Matrix4x4::new(
+    ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,                   0_f64,
+    ///     scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         0_f64,
+    ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), 0_f64,
+    ///     0_f64,                           0_f64,                           0_f64,                           1_f64
+    /// );
+    /// let mut result = Matrix4x4::zero();
+    ///
+    /// assert!(result.is_zero());
+    ///
+    /// quaternion.to_matrix4x4_mut(&mut result);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    #[inline]
+    pub fn to_matrix4x4_mut(&self, matrix: &mut Matrix4x4<S>) {
+        let qs = self.s;
+        let qx = self.v.x;
+        let qy = self.v.y;
+        let qz = self.v.z;
+        let zero = S::zero();
+        let one = S::one();
+        let two = one + one;
+        let s = two / self.magnitude_squared();
+
+        matrix.c0r0 = one - s * qy * qy - s * qz * qz;
+        matrix.c0r1 = s * qx * qy + s * qs * qz;
+        matrix.c0r2 = s * qx * qz - s * qs * qy;
+        matrix.c0r3 = zero;
+
+        matrix.c1r0 = s * qx * qy - s * qs * qz;
+        matrix.c1r1 = one - s * qx * qx - s * qz * qz;
+        matrix.c1r2 = s * qy * qz + s * qs * qx;
+        matrix.c1r3 = zero;
+
+        matrix.c2r0 = s * qx * qz + s * qs * qy;
+        matrix.c2r1 = s * qy * qz - s * qs * qx;
+        matrix.c2r2 = one - s * qx * qx - s * qy * qy;
+        matrix.c2r3 = zero;
+
+        matrix.c3r0 = zero;
+        matrix.c3r1 = zero;
+        matrix.c3r2 = zero;
+        matrix.c3r3 = one;
+    }
+
     /// Compute the conjugate of a quaternion.
     ///
     /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
     /// the conjugate of `q` is the quaternion `q* := s - v`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// 
+    /// let scalar = 1_f64;
+    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let quaternion = Quaternion::from_sv(scalar, vector);
+    /// let expected = Quaternion::from_sv(scalar, -vector);
+    /// let result = quaternion.conjugate();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn conjugate(&self) -> Quaternion<S> {
         Quaternion::from_sv(self.s, -self.v)
@@ -766,28 +1042,28 @@ impl<S> Array for Quaternion<S> where S: Copy + num_traits::Zero {
     }
 }
 
-impl<S> From<Quaternion<S>> for Matrix3x3<S> where S: Scalar {
+impl<S> From<Quaternion<S>> for Matrix3x3<S> where S: ScalarFloat {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix3x3<S> {
         quaternion.to_matrix3x3()
     }
 }
 
-impl<S> From<&Quaternion<S>> for Matrix3x3<S> where S: Scalar {
+impl<S> From<&Quaternion<S>> for Matrix3x3<S> where S: ScalarFloat {
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix3x3<S> {
         quaternion.to_matrix3x3()
     }
 }
 
-impl<S> From<Quaternion<S>> for Matrix4x4<S> where S: Scalar {
+impl<S> From<Quaternion<S>> for Matrix4x4<S> where S: ScalarFloat {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix4x4<S> {
         quaternion.to_matrix4x4()
     }
 }
 
-impl<S> From<&Quaternion<S>> for Matrix4x4<S> where S: Scalar {
+impl<S> From<&Quaternion<S>> for Matrix4x4<S> where S: ScalarFloat {
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix4x4<S> {
         quaternion.to_matrix4x4()
