@@ -73,7 +73,7 @@ macro_rules! impl_mul_operator {
 /// where `v` is a unit vector in the direction of the axis of rotation, `theta`
 /// is the angle of rotation, and `|q|` denotes the length of the quaternion.
 ///
-/// Quaternions are stored in (s, x, y, z) storage order, whree `s` is the scalar
+/// Quaternions are stored in [s, x, y, z] storage order, where `s` is the scalar
 /// part and `(x, y, z)` are the vector components.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -108,7 +108,21 @@ impl<S> Quaternion<S> {
 impl<S> Quaternion<S> where S: Copy {
     /// Construct a new quaternion from a fill value. 
     ///
-    /// Every component of the resulting quaternion will have the same value.
+    /// Every component of the resulting vector will have the same value
+    /// supplied by the `value` argument.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion, 
+    /// # };
+    /// 
+    /// let result = Quaternion::from_fill(1_f64);
+    /// let expected = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Quaternion<S> {
         Quaternion::new(value, value, value, value)
@@ -135,13 +149,13 @@ impl<S> Quaternion<S> where S: NumCast + Copy {
 impl<S> Quaternion<S> where S: Scalar {
     /// Returns the unit real quaternion. 
     ///
-    /// A real vector quaternion is a quaternion with zero vector part.
+    /// A real quaternion is a quaternion with zero vector part.
     #[inline]
     pub fn unit_s() -> Quaternion<S> {
         Quaternion::from_sv(S::one(), Vector3::zero())
     }
 
-    /// The unit pure quaternion representing the x-axis.
+    /// Return the **x-axis** unit pure quaternion.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
     #[inline]
@@ -149,7 +163,7 @@ impl<S> Quaternion<S> where S: Scalar {
         Quaternion::from_sv(S::zero(), Vector3::new(S::one(), S::zero(), S::zero()))
     }
 
-    /// The unit pure quaternion representing the y-axis.
+    /// Returns the **y-axis** unit pure quaternion.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
     #[inline]
@@ -157,12 +171,20 @@ impl<S> Quaternion<S> where S: Scalar {
         Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::one(), S::zero()))
     }
 
-    /// The unit pure quaternion representing the z-axis.
+    /// Returns the **z-axis** unit pure quaternion.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
     #[inline]
     pub fn unit_z() -> Quaternion<S> {
         Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
+    }
+
+    /// Check whether a quaternion is a pure quaternion.
+    ///
+    /// A pure quaternion is a quaternion with zero scalar part.
+    #[inline]
+    pub fn is_pure(&self) -> bool {
+        self.s.is_zero()
     }
 
     /// Convert a quaternion to its equivalent 3x3 matrix form.
