@@ -58,25 +58,30 @@ use core::ops;
 /// #     EulerAngles,
 /// #     Matrix3x3,
 /// # };
+/// # use cglinalg::approx::{
+/// #     relative_eq,
+/// # };
 ///
 /// let roll = Degrees(45.0);
 /// let yaw = Degrees(30.0);
 /// let pitch = Degrees(15.0);
 /// let euler = EulerAngles::new(roll, yaw, pitch);
-/// # let c0r0 =  (1.0 / 4.0) * f64::sqrt(3.0 / 2.0) * (1.0 + f64::sqrt(3.0));
-/// # let c0r1 =  (1.0 / 8.0) * (3.0 + 2.0 * f64::sqrt(2.0) - f64::sqrt(3.0));
-/// # let c0r2 =  (1.0 / 8.0) * (f64::sqrt(3.0) + 2.0 * f64::sqrt(2.0) - 3.0);
-/// # let c1r0 = -(1.0 + f64::sqrt(3.0)) / (4.0 * f64::sqrt(2.0));
-/// # let c1r1 =  (1.0 / 8.0) * (2.0 * f64::sqrt(6.0) - f64::sqrt(3.0) + 1.0);
-/// # let c1r2 =  (1.0 / 8.0) * (2.0 * f64::sqrt(6.0) + f64::sqrt(3.0) - 1.0);
-/// # let c2r0 =  (f64::sqrt(3.0) - 1.0) / (2.0 * f64::sqrt(2.0));
-/// # let c2r1 = -(1.0 / 4.0) * (f64::sqrt(3.0) + 1.0);
-/// # let c2r2 =  (1.0 / 4.0) * (f64::sqrt(3.0) + 1.0);
-/// # let expected = Matrix3x3::new(
-/// #     c0r0, c0r1, c0r2,
-/// #     c1r0, c1r1, c1r2,
-/// #     c2r0, c2r1, c2r2
-/// # );
+///
+/// let c0r0 =  (1.0 / 4.0) * f64::sqrt(3.0 / 2.0) * (1.0 + f64::sqrt(3.0));
+/// let c0r1 =  (1.0 / 8.0) * (3.0 + 2.0 * f64::sqrt(2.0) - f64::sqrt(3.0));
+/// let c0r2 =  (1.0 / 8.0) * (f64::sqrt(3.0) + 2.0 * f64::sqrt(2.0) - 3.0);
+/// let c1r0 = -(1.0 + f64::sqrt(3.0)) / (4.0 * f64::sqrt(2.0));
+/// let c1r1 =  (1.0 / 8.0) * (2.0 * f64::sqrt(6.0) - f64::sqrt(3.0) + 1.0);
+/// let c1r2 =  (1.0 / 8.0) * (2.0 * f64::sqrt(6.0) + f64::sqrt(3.0) - 1.0);
+/// let c2r0 =  (f64::sqrt(3.0) - 1.0) / (2.0 * f64::sqrt(2.0));
+/// let c2r1 = -(1.0 / 4.0) * (f64::sqrt(3.0) + 1.0);
+/// let c2r2 =  (1.0 / 4.0) * (f64::sqrt(3.0) + 1.0);
+/// let expected = Matrix3x3::new(
+///     c0r0, c0r1, c0r2,
+///     c1r0, c1r1, c1r2,
+///     c2r0, c2r1, c2r2
+/// );
+///
 /// let result = Matrix3x3::from(euler); 
 ///
 /// # assert_eq!(result, expected);

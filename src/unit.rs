@@ -86,8 +86,9 @@ impl<T> Unit<T> where T: Magnitude {
     /// #     Unit,
     /// #     Vector3,
     /// # };
+    /// 
     /// let vector: Vector3<f64> = Vector3::new(0.0, 2.0, 0.0);
-    /// let (wrapped, norm) = Unit::new_with_magnitude(vector);
+    /// let (wrapped, norm) = Unit::from_value_with_magnitude(vector);
     /// let unit_vector: &Vector3<f64> = &wrapped;
     /// 
     /// assert_eq!(norm, 2.0);
@@ -121,9 +122,10 @@ impl<T> Unit<T> where T: Magnitude {
     /// #     Unit,
     /// #     Vector3,
     /// # };
+    ///
     /// let vector: Vector3<f64> = Vector3::new(0.0, 1e-20, 0.0);
     /// let threshold = 1e-10;
-    /// let result = Unit::try_new_with_magnitude(vector, threshold);
+    /// let result = Unit::try_from_value_with_magnitude(vector, threshold);
     /// 
     /// assert!(result.is_none());
     /// ```

@@ -182,6 +182,19 @@ pub struct Radians<S>(pub S);
 impl<S> Radians<S> where S: ScalarFloat {
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Angle,
+    /// #     Radians,  
+    /// # };
+    /// use core::f64;
+    /// 
+    /// let angle: Radians<f64> = Radians(f64::consts::PI / 4_f64);
+    /// assert!(angle.is_finite()); 
+    /// ```
     #[inline]
     pub fn is_finite(self) -> bool {
         self.0.is_finite()
@@ -196,6 +209,19 @@ pub struct Degrees<S>(pub S);
 impl<S> Degrees<S> where S: ScalarFloat {
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Angle,
+    /// #     Degrees,  
+    /// # };
+    /// #
+    ///
+    /// let angle: Degrees<f64> = Degrees(45.0);
+    /// assert!(angle.is_finite()); 
+    /// ```
     #[inline]
     pub fn is_finite(self) -> bool {
         self.0.is_finite()
