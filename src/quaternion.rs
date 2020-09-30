@@ -651,8 +651,8 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Compute the projection of the quaternion `self` onto the quaternion
     /// `other`.
     #[inline]
-    pub fn project_on(&self, onto: &Quaternion<S>) -> Quaternion<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
+    pub fn project_onto(&self, other: &Quaternion<S>) -> Quaternion<S> {
+        other * (self.dot(other) / other.magnitude_squared())
     }
 }
 

@@ -128,10 +128,10 @@ impl<S> Vector1<S> where S: ScalarFloat {
     }
 
     /// Compute the projection of the vector `self` onto the vector
-    /// `onto`.
+    /// `other`.
     #[inline]
-    pub fn project_on(&self, onto: &Vector1<S>) -> Vector1<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
+    pub fn project_onto(&self, other: &Vector1<S>) -> Vector1<S> {
+        other * (self.dot(other) / other.magnitude_squared())
     }
 }
 
@@ -878,10 +878,10 @@ impl<S> Vector2<S> where S: ScalarFloat {
     }
 
     /// Compute the projection of the vector `self` onto the vector
-    /// `onto`.
+    /// `other`.
     #[inline]
-    pub fn project_on(&self, onto: &Vector2<S>) -> Vector2<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
+    pub fn project_onto(&self, other: &Vector2<S>) -> Vector2<S> {
+        other * (self.dot(other) / other.magnitude_squared())
     }
 }
 
@@ -1664,10 +1664,10 @@ impl<S> Vector3<S> where S: ScalarFloat {
     }
 
     /// Compute the projection of the vector `self` onto the vector
-    /// `onto`.
+    /// `other`.
     #[inline]
-    pub fn project_on(&self, onto: &Vector3<S>) -> Vector3<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
+    pub fn project_onto(&self, other: &Vector3<S>) -> Vector3<S> {
+        other * (self.dot(other) / other.magnitude_squared())
     }
 }
 
@@ -2573,10 +2573,10 @@ impl<S> Vector4<S> where S: ScalarFloat {
     }
 
     /// Compute the projection of the vector `self` onto the vector
-    /// `onto`
+    /// `other`
     #[inline]
-    pub fn project_on(&self, onto: &Vector4<S>) -> Vector4<S> {
-        onto * (self.dot(onto) / onto.magnitude_squared())
+    pub fn project_onto(&self, other: &Vector4<S>) -> Vector4<S> {
+        other * (self.dot(other) / other.magnitude_squared())
     }
 }
 
