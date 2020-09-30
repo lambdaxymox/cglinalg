@@ -153,6 +153,23 @@ impl<T> Unit<T> where T: Magnitude {
     ///
     /// The argument `threshold` argument exists to check for vectors that may be
     /// very close to zero length.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Magnitude,
+    /// #     Unit,
+    /// #     Quaternion,
+    /// # };
+    /// use core::f64;
+    ///
+    /// let quaternion = Quaternion::new(0_f64, 1_f64, 1_f64, 1_f64);
+    /// let expected = Some(Unit::from_value(quaternion / f64::sqrt(3_f64)));
+    /// let result = Unit::try_from_value(quaternion, 0_f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn try_from_value(value: T, threshold: T::Output) -> Option<Self>
         where T::Output: ScalarFloat,

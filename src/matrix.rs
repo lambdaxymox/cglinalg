@@ -71,8 +71,8 @@ pub type Matrix4<S> = Matrix4x4<S>;
 
 
 /// The `Matrix2x2` type represents 2x2 matrices in column-major order.
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x2<S> {
     /// Column 0 of the matrix.
     pub c0r0: S, pub c0r1: S,
@@ -1064,8 +1064,8 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix2x2<S>> for Matrix2x2<S> {
 
 
 /// The `Matrix3x3` type represents 3x3 matrices in column-major order.
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Matrix3x3<S> {
     /// Column 0 of the matrix.
     pub c0r0: S, pub c0r1: S, pub c0r2: S,
@@ -2772,8 +2772,8 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix3x3<S>> for Matrix3x3<S> {
 
 
 /// The `Matrix4x4` type represents 4x4 matrices in column-major order.
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Matrix4x4<S> {
     /// Column 0 of the matrix.
     pub c0r0: S, pub c0r1: S, pub c0r2: S, pub c0r3: S,
