@@ -1877,7 +1877,7 @@ impl<S> Vector3<S> where S: ScalarFloat {
     ///
     /// ```
     /// # use cglinalg::{
-    /// #   Vector3,
+    /// #     Vector3,
     /// # };
     /// 
     /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -1889,7 +1889,7 @@ impl<S> Vector3<S> where S: ScalarFloat {
     /// 
     /// ```
     /// # use cglinalg::{
-    /// #   Vector3,
+    /// #     Vector3,
     /// # };
     /// 
     /// let w = Vector3::new(1_f64, f64::NAN, f64::NEG_INFINITY);
@@ -2857,7 +2857,7 @@ impl<S> Vector4<S> where S: ScalarFloat {
     ///
     /// ```
     /// # use cglinalg::{
-    /// #   Vector4,
+    /// #     Vector4,
     /// # };
     /// 
     /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -2869,7 +2869,7 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// 
     /// ```
     /// # use cglinalg::{
-    /// #   Vector4,
+    /// #     Vector4,
     /// # };
     /// 
     /// let w = Vector4::new(1_f64, f64::NAN, f64::NEG_INFINITY, 4_f64);
