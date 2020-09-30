@@ -38,12 +38,6 @@ your `main.rs` file
 ```rust
 extern crate cglinalg;
 ```
-After that you can either import the traits and types as you need them, or you 
-can simplify the type importing process by glob-importing the prelude:
-```rust
-use cglinalg::prelude::*;
-```
-This saves some extra typing when importing from the library.
 
 ## Features
 `cglinalg` is a low-dimensional linear-algebra library aimed at specific 

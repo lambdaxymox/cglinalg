@@ -6,7 +6,6 @@ pub extern crate num_traits;
 mod scalar;
 mod angle;
 mod euler;
-mod prelude;
 mod matrix;
 mod projection;
 mod point;
@@ -23,7 +22,6 @@ mod translation;
 mod affine;
 
 
-pub use prelude::*;
 pub use angle::*;
 pub use euler::*;
 pub use matrix::*;
