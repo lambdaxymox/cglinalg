@@ -97,7 +97,7 @@ impl<S> Quaternion<S> {
 
     /// Construct a quaternion from its scalar and vector parts.
     #[inline]
-    pub fn from_sv(s: S, v: Vector3<S>) -> Quaternion<S> {
+    pub fn from_parts(s: S, v: Vector3<S>) -> Quaternion<S> {
         Quaternion { 
             s: s, 
             v: v 
@@ -142,7 +142,7 @@ impl<S> Quaternion<S> where S: NumCast + Copy {
             None => return None,
         };
 
-        Some(Quaternion::from_sv(s, v))
+        Some(Quaternion::from_parts(s, v))
     }
 }
 
@@ -152,7 +152,7 @@ impl<S> Quaternion<S> where S: Scalar {
     /// A real quaternion is a quaternion with zero vector part.
     #[inline]
     pub fn unit_s() -> Quaternion<S> {
-        Quaternion::from_sv(S::one(), Vector3::zero())
+        Quaternion::from_parts(S::one(), Vector3::zero())
     }
 
     /// Return the **x-axis** unit pure quaternion.
@@ -160,7 +160,7 @@ impl<S> Quaternion<S> where S: Scalar {
     /// A pure quaternion is a quaternion with zero scalar part.
     #[inline]
     pub fn unit_x() -> Quaternion<S> {
-        Quaternion::from_sv(S::zero(), Vector3::new(S::one(), S::zero(), S::zero()))
+        Quaternion::from_parts(S::zero(), Vector3::new(S::one(), S::zero(), S::zero()))
     }
 
     /// Returns the **y-axis** unit pure quaternion.
@@ -168,7 +168,7 @@ impl<S> Quaternion<S> where S: Scalar {
     /// A pure quaternion is a quaternion with zero scalar part.
     #[inline]
     pub fn unit_y() -> Quaternion<S> {
-        Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::one(), S::zero()))
+        Quaternion::from_parts(S::zero(), Vector3::new(S::zero(), S::one(), S::zero()))
     }
 
     /// Returns the **z-axis** unit pure quaternion.
@@ -176,7 +176,7 @@ impl<S> Quaternion<S> where S: Scalar {
     /// A pure quaternion is a quaternion with zero scalar part.
     #[inline]
     pub fn unit_z() -> Quaternion<S> {
-        Quaternion::from_sv(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
+        Quaternion::from_parts(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
     }
 
     /// Check whether a quaternion is a pure quaternion.
@@ -197,7 +197,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
         let _axis = axis.into_inner();
     
-        Quaternion::from_sv(cos_angle, _axis * sin_angle)
+        Quaternion::from_parts(cos_angle, _axis * sin_angle)
     }
 
     /// Construct a quaternion from an equivalent 3x3 matrix.
@@ -641,15 +641,15 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// 
     /// let scalar = 1_f64;
     /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
-    /// let quaternion = Quaternion::from_sv(scalar, vector);
-    /// let expected = Quaternion::from_sv(scalar, -vector);
+    /// let quaternion = Quaternion::from_parts(scalar, vector);
+    /// let expected = Quaternion::from_parts(scalar, -vector);
     /// let result = quaternion.conjugate();
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub fn conjugate(&self) -> Quaternion<S> {
-        Quaternion::from_sv(self.s, -self.v)
+        Quaternion::from_parts(self.s, -self.v)
     }
 
     /// Compute the inverse of a quaternion.
@@ -722,14 +722,14 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     fn exp_eps(&self, epsilon: S) -> Quaternion<S> {
         let magnitude_v_squared = self.v.magnitude_squared();
         if magnitude_v_squared <= epsilon * epsilon {
-            Quaternion::from_sv(self.s.exp(), Vector3::zero())
+            Quaternion::from_parts(self.s.exp(), Vector3::zero())
         } else {
             let magnitude_v = magnitude_v_squared.sqrt();
             let exp_s = self.s.exp();
             let q_scalar = exp_s * S::cos(magnitude_v);
             let q_vector = self.v * (exp_s * S::sin(magnitude_v) / magnitude_v);
             
-            Quaternion::from_sv(q_scalar, q_vector)
+            Quaternion::from_parts(q_scalar, q_vector)
         }
     }
 
@@ -756,14 +756,14 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let magnitude_v_squared = self.v.magnitude_squared();
         if magnitude_v_squared <= epsilon * epsilon {
             let magnitude = self.s.abs();
-            Quaternion::from_sv(magnitude.ln(), Vector3::zero())
+            Quaternion::from_parts(magnitude.ln(), Vector3::zero())
         } else {
             let magnitude = self.magnitude();
             let arccos_s_over_mag_q = S::acos(self.s / magnitude);
             let q_scalar = S::ln(magnitude);
             let q_vector = self.v * (arccos_s_over_mag_q / magnitude_v_squared.sqrt());
 
-            Quaternion::from_sv(q_scalar, q_vector)
+            Quaternion::from_parts(q_scalar, q_vector)
         }
     }
 
@@ -1221,7 +1221,7 @@ impl<S> ops::Neg for Quaternion<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Quaternion::from_sv(-self.s, -self.v)
+        Quaternion::from_parts(-self.s, -self.v)
     }
 }
 
@@ -1230,7 +1230,7 @@ impl<'a, S> ops::Neg for &'a Quaternion<S> where S: ScalarSigned {
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Quaternion::from_sv(-self.s, -self.v)
+        Quaternion::from_parts(-self.s, -self.v)
     }
 }
 
@@ -1239,7 +1239,7 @@ impl<S> ops::Add<Quaternion<S>> for Quaternion<S> where S: Scalar {
 
     #[inline]
     fn add(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_sv(self.s + other.s, self.v + other.v)
+        Quaternion::from_parts(self.s + other.s, self.v + other.v)
     }
 }
 
@@ -1248,7 +1248,7 @@ impl<'a, S> ops::Add<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
 
     #[inline]
     fn add(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_sv(self.s + other.s, self.v + other.v)
+        Quaternion::from_parts(self.s + other.s, self.v + other.v)
     }
 }
 
@@ -1257,7 +1257,7 @@ impl<'a, S> ops::Add<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
 
     #[inline]
     fn add(self, other: &'a Quaternion<S>) -> Self::Output {
-        Quaternion::from_sv(self.s + other.s, self.v + other.v)
+        Quaternion::from_parts(self.s + other.s, self.v + other.v)
     }
 }
 
@@ -1266,7 +1266,7 @@ impl<'a, 'b, S> ops::Add<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
 
     #[inline]
     fn add(self, other: &'a Quaternion<S>) -> Self::Output {
-        Quaternion::from_sv(self.s + other.s, self.v + other.v)
+        Quaternion::from_parts(self.s + other.s, self.v + other.v)
     }
 }
 
@@ -1275,7 +1275,7 @@ impl<S> ops::Sub<Quaternion<S>> for Quaternion<S> where S: Scalar {
 
     #[inline]
     fn sub(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_sv(self.s - other.s, self.v - other.v)
+        Quaternion::from_parts(self.s - other.s, self.v - other.v)
     }
 }
 
@@ -1284,7 +1284,7 @@ impl<'a, S> ops::Sub<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
 
     #[inline]
     fn sub(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_sv(self.s - other.s, self.v - other.v)
+        Quaternion::from_parts(self.s - other.s, self.v - other.v)
     }
 }
 
@@ -1293,7 +1293,7 @@ impl<'a, S> ops::Sub<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
 
     #[inline]
     fn sub(self, other: &'a Quaternion<S>) -> Self::Output {
-        Quaternion::from_sv(self.s - other.s, self.v - other.v)
+        Quaternion::from_parts(self.s - other.s, self.v - other.v)
     }
 }
 
@@ -1302,7 +1302,7 @@ impl<'a, 'b, S> ops::Sub<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
 
     #[inline]
     fn sub(self, other: &'a Quaternion<S>) -> Self::Output {
-        Quaternion::from_sv(self.s - other.s, self.v - other.v)
+        Quaternion::from_parts(self.s - other.s, self.v - other.v)
     }
 }
 

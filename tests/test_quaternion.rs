@@ -94,11 +94,11 @@ mod arithmetic_tests {
         let k = Quaternion::unit_z();
 
         let result_i = 4_f64 * i;
-        let expected_i = Quaternion::from_sv(0_f64, Vector3::new(4_f64, 0_f64, 0_f64));
+        let expected_i = Quaternion::from_parts(0_f64, Vector3::new(4_f64, 0_f64, 0_f64));
         let result_j = 4_f64 * j;
-        let expected_j = Quaternion::from_sv(0_f64, Vector3::new(0_f64, 4_f64, 0_f64));
+        let expected_j = Quaternion::from_parts(0_f64, Vector3::new(0_f64, 4_f64, 0_f64));
         let result_k = 4_f64 * k;
-        let expected_k = Quaternion::from_sv(0_f64, Vector3::new(0_f64, 0_f64, 4_f64));
+        let expected_k = Quaternion::from_parts(0_f64, Vector3::new(0_f64, 0_f64, 4_f64));
 
         assert_eq!(result_i, expected_i);
         assert_eq!(result_j, expected_j);
@@ -185,7 +185,7 @@ mod magnitude_tests {
 
     #[test]
     fn test_quaternion_magnitude() {
-        let q = Quaternion::from_sv(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
+        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
         let result = q.magnitude_squared();
         let expected = 6875.23713677;
 
@@ -194,7 +194,7 @@ mod magnitude_tests {
 
     #[test]
     fn test_quaternion_normalized() {
-        let q = Quaternion::from_sv(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
+        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
         let result = q.normalize().magnitude();
         let expected = 1_f64;
 
@@ -203,7 +203,7 @@ mod magnitude_tests {
 
     #[test]
     fn test_quaternion_normalized_to() {
-        let q = Quaternion::from_sv(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
+        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
         let magnitude = 12_f64;
         let result = q.normalize_to(magnitude).magnitude();
         let expected = magnitude;
@@ -231,16 +231,16 @@ mod slerp_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(60_f64);
         let unit_z = Vector3::unit_z();
-        let q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_parts(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
-        let q2 = Quaternion::from_sv(
+        let q2 = Quaternion::from_parts(
             Angle::cos(angle2 / 2_f64), 
             Angle::sin(angle2 / 2_f64) * unit_z
         );
         let angle_expected = Degrees(45_f64);
-        let expected = Quaternion::from_sv(
+        let expected = Quaternion::from_parts(
             Angle::cos(angle_expected / 2_f64), 
             Angle::sin(angle_expected / 2_f64) * unit_z
         );
@@ -254,16 +254,16 @@ mod slerp_tests {
         let angle1 = Degrees(20_f64);
         let angle2 = Degrees(70_f64);
         let unit_z = Vector3::unit_z();
-        let q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_parts(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
-        let q2 = Quaternion::from_sv(
+        let q2 = Quaternion::from_parts(
             Angle::cos(angle2 / 2_f64), 
             Angle::sin(angle2 / 2_f64) * unit_z
         );
         let angle_expected = Degrees(30_f64);
-        let expected = Quaternion::from_sv(
+        let expected = Quaternion::from_parts(
             Angle::cos(angle_expected / 2_f64), 
             Angle::sin(angle_expected / 2_f64) * unit_z
         );
@@ -277,16 +277,16 @@ mod slerp_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(150_f64);
         let unit_z = Vector3::unit_z();
-        let q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_parts(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
-        let q2 = Quaternion::from_sv(
+        let q2 = Quaternion::from_parts(
             Angle::cos(angle2 / 2_f64), 
             Angle::sin(angle2 / 2_f64) * unit_z
         );
         let angle_expected = Degrees(90_f64);
-        let expected = Quaternion::from_sv(
+        let expected = Quaternion::from_parts(
             Angle::cos(angle_expected / 2_f64), 
             Angle::sin(angle_expected / 2_f64) * unit_z
         );
@@ -300,16 +300,16 @@ mod slerp_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(240_f64);
         let unit_z = Vector3::unit_z();
-        let q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_parts(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
-        let q2 = Quaternion::from_sv(
+        let q2 = Quaternion::from_parts(
             Angle::cos(angle2 / 2_f64), 
             Angle::sin(angle2 / 2_f64) * unit_z
         );
         let angle_expected = Degrees(315_f64);
-        let expected = Quaternion::from_sv(
+        let expected = Quaternion::from_parts(
             Angle::cos(angle_expected / 2_f64), 
             Angle::sin(angle_expected / 2_f64) * unit_z
         );
@@ -323,11 +323,11 @@ mod slerp_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(240_f64);
         let unit_z = Vector3::unit_z();
-        let q0 = Quaternion::from_sv(
+        let q0 = Quaternion::from_parts(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
-        let q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_parts(
             Angle::cos(angle2 / 2_f64), 
             Angle::sin(angle2 / 2_f64) * unit_z
         );
@@ -346,11 +346,11 @@ mod slerp_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(240_f64);
         let unit_z = Vector3::unit_z();
-        let q0 = Quaternion::from_sv(
+        let q0 = Quaternion::from_parts(
             Angle::cos(angle1 / 2_f64), 
             Angle::sin(angle1 / 2_f64) * unit_z
         );
-        let q1 = Quaternion::from_sv(
+        let q1 = Quaternion::from_parts(
             Angle::cos(angle2 / 2_f64), 
             Angle::sin(angle2 / 2_f64) * unit_z
         );
@@ -409,7 +409,7 @@ mod exp_tests {
     #[test]
     fn test_quaternion_exp_power_times_pi() {
         let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
-        let sgn_qv = Quaternion::from_sv(0_f64, q.v / q.v.magnitude());
+        let sgn_qv = Quaternion::from_parts(0_f64, q.v / q.v.magnitude());
         let pi = core::f64::consts::PI;
         let expected = -Quaternion::identity();
         let result = (sgn_qv * pi).exp();
@@ -489,7 +489,7 @@ mod logarithm_tests {
         let pi_over_2 = core::f64::consts::FRAC_PI_2;
         let expected_s = sqrt_29.ln();
         let expected_v = (2_f64 * Vector3::unit_y() - 5_f64 * Vector3::unit_z()) * pi_over_2 / sqrt_29;
-        let expected = Quaternion::from_sv(expected_s, expected_v);
+        let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.ln();
 
         assert_eq!(result, expected);
