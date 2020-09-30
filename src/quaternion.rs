@@ -900,6 +900,32 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two vectors.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Radians,
+    /// #     Angle,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,   
+    /// # };
+    /// 
+    /// let v1: Vector3<f64> = Vector3::unit_x() * 2_f64;
+    /// let v2: Vector3<f64> = Vector3::unit_y() * 3_f64;
+    /// let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let expected = Quaternion::from_axis_angle(
+    ///    &unit_z, 
+    ///    Radians::full_turn_div_4()
+    /// );
+    /// let result = Quaternion::rotation_between(&v1, &v2).unwrap();
+    /// 
+    /// assert!(relative_eq!(result, expected));
+    /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Quaternion<S>>
     {
@@ -915,6 +941,32 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Radians,
+    /// #     Angle,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,   
+    /// # };
+    /// 
+    /// let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
+    /// let unit_y: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
+    /// let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let expected = Quaternion::from_axis_angle(
+    ///    &unit_z, 
+    ///    Radians::full_turn_div_4()
+    /// );
+    /// let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
+    /// 
+    /// assert!(relative_eq!(result, expected));
+    /// ```
     #[inline]
     pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Quaternion<S>> {
         let v1 = unit_v1.as_ref();
@@ -1073,7 +1125,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
             return result;
         }
 
-        // If `result` == `-other` then the angle between them is 180 degrees.
+        // If `result` == `minus other` then the angle between them is 180 degrees.
         // In this case the slerp function is not well defined because we can 
         // rotate around any axis normal to the plane swept out by `result` and
         // `other`.
