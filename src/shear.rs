@@ -22,8 +22,8 @@ use core::fmt;
 
 
 /// A shearing transformation in two dimensions.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear2<S> {
     /// The matrix representing the affine transformation.
     matrix: Matrix3x3<S>,
@@ -159,8 +159,8 @@ impl<S> AffineTransformation2<S> for Shear2<S>
 
 
 /// A shearing transformation in three dimensions.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear3<S> {
     /// The matrix representing the affine transformation.
     matrix: Matrix4x4<S>,

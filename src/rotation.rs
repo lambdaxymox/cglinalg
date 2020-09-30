@@ -47,8 +47,8 @@ use core::fmt;
 /// If one wants to talk about rotating a vector in the the _xy-plane_ about a 
 /// normal vector, we are implicitly rotating about the _z-axis_ in 
 /// three dimensions.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Rotation2<S> {
     /// The angle of rotation.
     angle: Radians<S>,
@@ -212,8 +212,8 @@ impl<S> AffineTransformation2<S> for Rotation2<S>
 /// A rotation is an operation that creates circular motions and 
 /// preserves at least one point. Rotations preserve the length of vectors and 
 /// therefore act as a class of rigid body transformations.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Rotation3<S> {
     /// The angle of rotation.
     angle: Radians<S>,

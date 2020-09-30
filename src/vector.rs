@@ -41,8 +41,8 @@ macro_rules! impl_mul_operator {
 
 
 /// A representation of one-dimensional vectors.
-#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector1<S> {
     pub x: S,
 }
@@ -341,14 +341,6 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector1<S> {
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
         let v: &mut [S; 1] = self.as_mut();
         &mut v[index]
-    }
-}
-
-impl<S> fmt::Debug for Vector1<S> where S: fmt::Debug {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.debug_struct("Vector1 ")
-                 .field("x", &self.x)
-                 .finish()
     }
 }
 
@@ -774,8 +766,8 @@ impl_mul_operator!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
 
 /// A representation of two-dimensional vectors in a Euclidean space.
-#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector2<S> {
     /// The horizontal component.
     pub x: S,
@@ -1045,15 +1037,6 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector2<S> {
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
         let v: &mut [S; 2] = self.as_mut();
         &mut v[index]
-    }
-}
-
-impl<S> fmt::Debug for Vector2<S> where S: fmt::Debug {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.debug_struct("Vector2")
-                 .field("x", &self.x)
-                 .field("y", &self.y)
-                 .finish()
     }
 }
 
@@ -1556,8 +1539,8 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector2<S>> for Vector2<S> {
 
 
 /// A representation of three-dimensional vectors in a Euclidean space.
-#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector3<S> {
     pub x: S,
     pub y: S,
@@ -1840,16 +1823,6 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector3<S> {
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
         let v: &mut [S; 3] = self.as_mut();
         &mut v[index]
-    }
-}
-
-impl<S> fmt::Debug for Vector3<S> where S: fmt::Debug {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.debug_struct("Vector3")
-                 .field("x", &self.x)
-                 .field("y", &self.y)
-                 .field("z", &self.z)
-                 .finish()
     }
 }
 
@@ -2457,8 +2430,8 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector3<S>> for Vector3<S> {
 
 
 /// A representation of four-dimensional vectors in a Euclidean space.
-#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector4<S> {
     pub x: S,
     pub y: S,
@@ -2833,17 +2806,6 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
         unsafe { 
             &*(v as *const (S, S, S, S) as *const Vector4<S>)
         }
-    }
-}
-
-impl<S> fmt::Debug for Vector4<S> where S: fmt::Debug {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.debug_struct("Vector4")
-                 .field("x", &self.x)
-                 .field("y", &self.y)
-                 .field("z", &self.z)
-                 .field("w", &self.w)
-                 .finish()
     }
 }
 

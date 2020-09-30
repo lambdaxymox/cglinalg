@@ -175,8 +175,8 @@ pub trait Angle where
 }
 
 /// The angle (arc length) along the unit circle in units of radians.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Hash)]
 pub struct Radians<S>(pub S);
 
 impl<S> Radians<S> where S: ScalarFloat {
@@ -189,8 +189,8 @@ impl<S> Radians<S> where S: ScalarFloat {
 }
 
 /// The angle (arc length) along the unit circle in units of degrees.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Hash)]
 pub struct Degrees<S>(pub S);
 
 impl<S> Degrees<S> where S: ScalarFloat {

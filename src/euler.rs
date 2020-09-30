@@ -161,8 +161,8 @@ use core::ops;
 /// assert!(ulps_eq!(matrix.c2r1, 0.0));
 /// assert!(ulps_eq!(matrix.c2r2, 0.0));
 /// ```
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct EulerAngles<A> {
     /// The rotation angle about the _x-axis_ in the _yz-plane_. This is also 
     /// known as the _roll_ angle.

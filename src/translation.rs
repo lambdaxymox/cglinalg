@@ -26,8 +26,8 @@ use core::fmt;
 /// A translation is an operation that creates displacement motions. 
 /// In a Euclidean setting, translations preserve differences between two points 
 /// and acts as the identity on vectors.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation2<S> {
     /// The matrix representing the affine transformation.
     matrix: Matrix3x3<S>,
@@ -157,8 +157,8 @@ impl<S> AffineTransformation2<S> for Translation2<S>
 /// A translation is an operation that creates displacement motions. 
 /// In a Euclidean setting, translations preserve differences between two points 
 /// and acts as the identity on vectors.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation3<S> {
     /// The matrix representing the affine transformation.
     matrix: Matrix4x4<S>,

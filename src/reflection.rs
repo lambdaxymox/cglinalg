@@ -26,8 +26,8 @@ use core::fmt;
 
 
 /// A reflection transformation about a plane (line) in two dimensions.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Reflection2<S> {
     /// A known point on the line of reflection.
     bias: Vector2<S>,
@@ -169,8 +169,8 @@ impl<S> AffineTransformation2<S> for Reflection2<S>
 
 
 /// A reflection transformation about a plane in three dimensions.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Reflection3<S> {
     /// a known point on the plane of reflection.
     bias: Vector3<S>,

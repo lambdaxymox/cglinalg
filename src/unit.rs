@@ -21,8 +21,8 @@ use core::ops;
 /// requirement that an input argument be normalized. This reduces the chance of
 /// errors from passing an unnormalized vector or a zero vector into a calculation
 /// involving unit vectors.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(transparent)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Unit<T> {
     /// The underlying normalized value.
     value: T,

@@ -75,8 +75,8 @@ macro_rules! impl_mul_operator {
 ///
 /// Quaternions are stored in (s, x, y, z) storage order, whree `s` is the scalar
 /// part and `(x, y, z)` are the vector components.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Quaternion<S> {
     /// The scalar component of a quaternion.
     pub s: S,

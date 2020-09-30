@@ -30,7 +30,7 @@ use core::fmt;
 /// ```
 /// Each parameter in the specification is a description of the position along
 /// an axis of a plane that the axis is perpendicular to.
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct PerspectiveSpec<S> {
     /// The horizontal position of the left-hand plane in camera space.
     /// The left-hand plane is a plane parallel to the _yz-plane_ at
@@ -97,7 +97,7 @@ impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Display {
 /// bottom planes are the same distance from the eye position along the vertical 
 /// axis on opposite side. They ensure that the `left` and `right` planes are 
 /// equidistant from the eye on opposite sides along the horizontal axis. 
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct PerspectiveFovSpec<S> {
     /// The vertical field of view angle of the perspective transformation
     /// viewport.
@@ -230,7 +230,7 @@ impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat
 /// ```
 /// Each parameter in the specification is a description of the position along 
 /// an axis of a plane that the axis is perpendicular to.
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct OrthographicSpec<S> {
     /// The horizontal position of the left-hand plane in camera space.
     /// The left-hand plane is a plane parallel to the _yz-plane_ at
@@ -290,7 +290,7 @@ impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Display {
 /// are located from the viewing plane. This property of perspective projection 
 /// transformations is important for operations such as z-buffering and 
 /// occlusion detection.
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveProjection3<S> {
     /// The parameters of the perspective projection.
     spec: PerspectiveSpec<S>,
@@ -494,7 +494,7 @@ impl<S> approx::UlpsEq for PerspectiveProjection3<S>
 /// are located from the viewing plane. This property of perspective projection 
 /// transformations is important for operations such as z-buffering and 
 /// occlusion detection.
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFovProjection3<S> {
     /// The parameters of the perspective projection.
     spec: PerspectiveFovSpec<S>,
@@ -695,7 +695,7 @@ impl<S> approx::UlpsEq for PerspectiveFovProjection3<S> where
 /// projections preserve the perception of distance. Perspective 
 /// projections preserve the spatial ordering in the distance that points are 
 /// located from the viewing plane.
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct OrthographicProjection3<S> {
     /// The parameters for the orthographic projection.
     spec: OrthographicSpec<S>,

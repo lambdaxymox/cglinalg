@@ -46,8 +46,8 @@ macro_rules! impl_mul_operator {
 
 
 /// A point is a location in a one-dimensional Euclidean space.
-#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Point1<S> {
     /// The horizontal coordinate.
     pub x: S,
@@ -298,13 +298,6 @@ impl<S> ops::IndexMut<ops::RangeFull> for Point1<S> {
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
         let v: &mut [S; 1] = self.as_mut();
         &mut v[index]
-    }
-}
-
-impl<S> fmt::Debug for Point1<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Point1 ")?;
-        <[S; 1] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
 
@@ -753,8 +746,8 @@ impl<'a, 'b, S> Metric<&'a Point1<S>> for &'b Point1<S> where S: ScalarFloat {
 
 
 /// A point is a location in a two-dimensional Euclidean space.
-#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Point2<S> {
    /// The horizontal coordinate.
    pub x: S,
@@ -1012,13 +1005,6 @@ impl<S> ops::IndexMut<ops::RangeFull> for Point2<S> {
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
         let v: &mut [S; 2] = self.as_mut();
         &mut v[index]
-    }
-}
-
-impl<S> fmt::Debug for Point2<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Point2 ")?;
-        <[S; 2] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
 
@@ -1495,8 +1481,8 @@ impl<'a, 'b, S> Metric<&'a Point2<S>> for &'b Point2<S> where S: ScalarFloat {
 
 
 /// A representation of three-dimensional points in a Euclidean space.
-#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Point3<S> {
     /// The horizontal coordinate.
     pub x: S,
@@ -1751,13 +1737,6 @@ impl<S> ops::IndexMut<ops::RangeFull> for Point3<S> {
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
         let v: &mut [S; 3] = self.as_mut();
         &mut v[index]
-    }
-}
-
-impl<S> fmt::Debug for Point3<S> where S: fmt::Debug {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Point3 ")?;
-        <[S; 3] as fmt::Debug>::fmt(self.as_ref(), f)
     }
 }
 

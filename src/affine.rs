@@ -90,8 +90,8 @@ pub trait AffineTransformation3<S> where Self: Sized {
 
 
 /// A generic two dimensional affine transformation.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Transform2<S> {
     /// The underlying matrix that implements the transformation.
     matrix: Matrix3x3<S>,
@@ -181,8 +181,8 @@ impl<S> AffineTransformation2<S> for Transform2<S>
 
 
 /// A generic three-dimensional affine transformation.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Transform3<S> {
     /// The underlying matrix implementing the transformation.
     matrix: Matrix4x4<S>,

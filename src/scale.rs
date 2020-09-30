@@ -20,8 +20,8 @@ use core::fmt;
 
 
 /// The scale transformation in two dimensions.
-#[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(transparent)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Scale2<S> {
     /// The matrix representing the affine transformation.
     matrix: Matrix3x3<S>,
