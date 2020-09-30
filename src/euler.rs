@@ -84,7 +84,7 @@ use core::ops;
 ///
 /// let result = Matrix3x3::from(euler); 
 ///
-/// # assert_eq!(result, expected);
+/// assert_eq!(result, expected);
 /// ```
 /// 
 /// ## Example (Gimbal Lock)

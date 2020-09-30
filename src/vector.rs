@@ -81,7 +81,22 @@ impl<S> Vector1<S> where S: NumCast + Copy {
 
 impl<S> Vector1<S> where S: Copy {
     /// Extend a one-dimensional vector into a two-dimensional vector using 
-    /// the supplied value.
+    /// the supplied value for the `y`-component.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// #     Vector2,   
+    /// # };
+    /// 
+    /// let v = Vector1::new(1_f64);
+    /// let expected = Vector2::new(1_f64, 2_f64);
+    /// let result = v.expand(2_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn expand(self, y: S) -> Vector2<S> {
         Vector2::new(self.x, y)
@@ -90,7 +105,20 @@ impl<S> Vector1<S> where S: Copy {
     /// Construct a vector from a fill value.
     ///
     /// Every component of the resulting vector will have the same value
-    /// supplied by the argument.
+    /// supplied by the `value` argument.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1, 
+    /// # };
+    ///
+    /// let result = Vector1::from_fill(3_f64);
+    /// let expected = Vector1::new(3_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Vector1<S> {
         Vector1::new(value)
@@ -98,7 +126,8 @@ impl<S> Vector1<S> where S: Copy {
 }
 
 impl<S> Vector1<S> where S: Scalar {
-    /// The unit vector representing the x-direction.
+    /// Returns the **x-axis** unit vector, a unit vector with the `x`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector1<S> {
         Vector1 { 
@@ -108,7 +137,23 @@ impl<S> Vector1<S> where S: Scalar {
 }
 
 impl<S> Vector1<S> where S: ScalarFloat {
-    /// Linearly interpolate between two vectors.
+    /// Linearly interpolate between the two vectors `self` and `other`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// # };
+    /// 
+    /// let v0 = Vector1::new(0_f64);
+    /// let v1 = Vector1::new(10_f64);
+    /// let amount = 0.6;
+    /// let result = v0.lerp(&v1, amount);
+    /// let expected = Vector1::new(6_f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn lerp(&self, other: &Vector1<S>, amount: S) -> Vector1<S> {
         self + ((other - self) * amount)
@@ -120,8 +165,30 @@ impl<S> Vector1<S> where S: ScalarFloat {
     /// A vector is finite when all of its elements are finite. This is useful 
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
-    /// For example, when the vector elements are `f64`, the vector is finite 
-    /// when the elements are neither `NaN` nor infinite.
+    ///
+    /// ### Example (Finite Vector)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,  
+    /// # };
+    /// 
+    /// let v: Vector1<f64> = Vector1::new(2_f64);
+    ///
+    /// assert!(v.is_finite()); 
+    /// ```
+    ///
+    /// ### Example (Infinite Vector)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,  
+    /// # };
+    /// 
+    /// let w: Vector1<f64> = Vector1::new(f64::INFINITY);
+    ///
+    /// assert!(!w.is_finite()); 
+    /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.x.is_finite()
@@ -815,14 +882,44 @@ impl<S> Vector2<S> where S: NumCast + Copy {
 
 impl<S> Vector2<S> where S: Copy {
     /// Extend a two-dimensional vector into a three-dimensional vector using the 
-    /// supplied z value.
+    /// supplied `z`-component.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// #     Vector3,   
+    /// # };
+    /// 
+    /// let v = Vector2::new(1_f64, 2_f64);
+    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let result = v.expand(3_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn expand(self, z: S) -> Vector3<S> {
         Vector3::new(self.x, self.y, z)
     }
 
-    /// Contract a two-dimensional vector to a one-dimensional vector removing
-    /// the y-component.
+    /// Contract a two-dimensional vector to a one-dimensional vector by removing
+    /// the `y`-component.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// #     Vector2,   
+    /// # };
+    /// 
+    /// let v = Vector2::new(1_f64, 2_f64);
+    /// let expected = Vector1::new(1_f64);
+    /// let result = v.contract();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn contract(self) -> Vector1<S> {
         Vector1::new(self.x)
@@ -831,7 +928,20 @@ impl<S> Vector2<S> where S: Copy {
     /// Construct a vector from a fill value.
     ///
     /// Every component of the resulting vector will have the same value
-    /// supplied by the argument.
+    /// supplied by the `value` argument.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2, 
+    /// # };
+    ///
+    /// let result = Vector2::from_fill(3_f64);
+    /// let expected = Vector2::new(3_f64, 3_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Vector2<S> {
         Vector2::new(value, value)
@@ -839,7 +949,8 @@ impl<S> Vector2<S> where S: Copy {
 }
 
 impl<S> Vector2<S> where S: Scalar {
-    /// Returns the unit _x-axis_ vector.
+    /// Returns the **x-axis** unit vector, a unit vector with the `x`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector2<S> {
         Vector2 { 
@@ -848,7 +959,8 @@ impl<S> Vector2<S> where S: Scalar {
         }
     }
 
-    /// Returns the unit _y-axis_ vector.
+    /// Returns the **y-axis** unit vector, a unit vector with the `y`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_y() -> Vector2<S> {
         Vector2 { 
@@ -859,7 +971,23 @@ impl<S> Vector2<S> where S: Scalar {
 }
 
 impl<S> Vector2<S> where S: ScalarFloat {
-    /// Linearly interpolate between two vectors.
+    /// Linearly interpolate between the two vectors `self` and `other`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,  
+    /// # };
+    ///
+    /// let v0 = Vector2::new(0_f64, 0_f64);
+    /// let v1 = Vector2::new(10_f64, 20_f64);
+    /// let amount = 0.7;
+    /// let expected = Vector2::new(7_f64, 14_f64);
+    /// let result = v0.lerp(&v1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn lerp(&self, other: &Vector2<S>, amount: S) -> Vector2<S> {
         self + ((other - self) * amount)
@@ -870,8 +998,33 @@ impl<S> Vector2<S> where S: ScalarFloat {
     ///
     /// A vector is finite when all of its elements are finite. This is useful 
     /// for vector and matrix types working with fixed precision floating point 
-    /// values. For example, when the vector elements are `f64`, the vector is 
-    /// finite when the elements are neither `NaN` nor infinite.
+    /// values.
+    ///
+    /// ### Example (Finite Vector)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #    Vector2,
+    /// # };
+    /// 
+    /// let v = Vector2::new(1_f64, 2_f64);
+    ///
+    /// assert!(v.is_finite());
+    /// ```
+    ///
+    /// ### Example (Not A Finite Vector)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// # };
+    /// 
+    /// let w1 = Vector2::new(f64::INFINITY, f64::NAN);
+    /// let w2 = Vector2::new(f64::INFINITY, 2_f64);
+    ///
+    /// assert!(!w1.is_finite());
+    /// assert!(!w2.is_finite());
+    /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.x.is_finite() && self.y.is_finite()
@@ -1588,15 +1741,45 @@ impl<S> Vector3<S> where S: NumCast + Copy {
 }
 
 impl<S> Vector3<S> where S: Copy {
-    /// Extend a three-dimensional vector to a four-dimensional vector 
-    /// by supplying w-component.
+    /// Extend a three-dimensional vector into a four-dimensional vector using the 
+    /// supplied `w`-component.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    ///
+    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let result = v.expand(4_f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn expand(self, w: S) -> Vector4<S> {
         Vector4::new(self.x, self.y, self.z, w)
     }
 
     /// Contract a three-dimensional vector to a two-dimensional vector
-    /// by removing the z-component.
+    /// by removing the `z`-component.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// #     Vector3, 
+    /// # };
+    ///
+    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector2::new(1_f64, 2_f64);
+    /// let result = v.contract();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn contract(self) -> Vector2<S> {
         Vector2::new(self.x, self.y)
@@ -1605,7 +1788,20 @@ impl<S> Vector3<S> where S: Copy {
     /// Construct a vector from a fill value.
     ///
     /// Every component of the resulting vector will have the same value
-    /// supplied by the argument.
+    /// supplied by the `value` argument.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,   
+    /// # };
+    ///
+    /// let result = Vector3::from_fill(3_f64);
+    /// let expected = Vector3::new(3_f64, 3_f64, 3_f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Vector3<S> {
         Vector3::new(value, value, value)
@@ -1613,7 +1809,8 @@ impl<S> Vector3<S> where S: Copy {
 }
 
 impl<S> Vector3<S> where S: Scalar {
-    /// Returns the unit _x-axis_ vector.
+    /// Returns the **x-axis** unit vector, a unit vector with the `x`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector3<S> {
         Vector3 { 
@@ -1623,7 +1820,8 @@ impl<S> Vector3<S> where S: Scalar {
         }
     }
 
-    /// Returns the unit _y-axis_ vector.
+    /// Returns the **y-axis** unit vector, a unit vector with the `y`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_y() -> Vector3<S> {
         Vector3 { 
@@ -1633,7 +1831,8 @@ impl<S> Vector3<S> where S: Scalar {
         }
     }
     
-    /// Returns the unit _z-axis_ vector.
+    /// Returns the **z-axis** unit vector, a unit vector with the `z`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_z() -> Vector3<S> {
         Vector3 { 
@@ -1645,7 +1844,23 @@ impl<S> Vector3<S> where S: Scalar {
 }
 
 impl<S> Vector3<S> where S: ScalarFloat {
-    /// Linearly interpolate between two vectors.
+    /// Linearly interpolate between the two vectors `self` and `other`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,  
+    /// # };
+    ///
+    /// let v0 = Vector3::new(0_f64, 0_f64, 0_f64);
+    /// let v1 = Vector3::new(10_f64, 20_f64, 30_f64);
+    /// let amount = 0.7;
+    /// let expected = Vector3::new(7_f64, 14_f64, 21_f64);
+    /// let result = v0.lerp(&v1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn lerp(&self, other: &Vector3<S>, amount: S) -> Vector3<S> {
         self + ((other - self) * amount)
@@ -1656,8 +1871,31 @@ impl<S> Vector3<S> where S: ScalarFloat {
     ///
     /// A vector is finite when all of its elements are finite. This is useful 
     /// for vector and matrix types working with fixed precision floating point 
-    /// values. For example, when the vector elements are `f64`, the vector is 
-    /// finite when the elements are neither `NaN` nor infinite.
+    /// values.
+    ///
+    /// ### Example (Finite Vector)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #   Vector3,
+    /// # };
+    /// 
+    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
+    ///
+    /// assert!(v.is_finite()); 
+    /// ```
+    ///
+    /// ### Example (Not A Finite Vector)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #   Vector3,
+    /// # };
+    /// 
+    /// let w = Vector3::new(1_f64, f64::NAN, f64::NEG_INFINITY);
+    ///
+    /// assert!(!w.is_finite()); 
+    /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
@@ -2466,7 +2704,22 @@ impl<S> Vector4<S> {
 
 impl<S> Vector4<S> where S: Copy {
     /// Contract a four-dimensional vector to a three-dimensional vector
-    /// by removing the w-component.
+    /// by removing the `w`-component.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    ///
+    /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let result = v.contract();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn contract(self) -> Vector3<S> {
         Vector3::new(self.x, self.y, self.z)
@@ -2475,7 +2728,20 @@ impl<S> Vector4<S> where S: Copy {
     /// Construct a vector from a fill value.
     ///
     /// Every component of the resulting vector will have the same value
-    /// supplied by the argument.
+    /// supplied by the `value` argument.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,   
+    /// # };
+    ///
+    /// let result = Vector4::from_fill(3_f64);
+    /// let expected = Vector4::new(3_f64, 3_f64, 3_f64, 3_f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Vector4<S> {
         Vector4::new(value, value, value, value)
@@ -2508,7 +2774,8 @@ impl<S> Vector4<S> where S: NumCast + Copy {
 }
 
 impl<S> Vector4<S> where S: Scalar {
-    /// Returns the unit x axis vector.
+    /// Returns the **x-axis** unit vector, a unit vector with the `x`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector4<S> {
         Vector4 { 
@@ -2519,7 +2786,8 @@ impl<S> Vector4<S> where S: Scalar {
         }
     }
 
-    /// Returns the unit y axis vector.
+    /// Returns the **y-axis** unit vector, a unit vector with the `y`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_y() -> Vector4<S> {
         Vector4 { 
@@ -2530,7 +2798,8 @@ impl<S> Vector4<S> where S: Scalar {
         }
     }
     
-    /// Returns the unit z axis vector.
+    /// Returns the **z-axis** unit vector, a unit vector with the `z`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_z() -> Vector4<S> {
         Vector4 { 
@@ -2541,7 +2810,8 @@ impl<S> Vector4<S> where S: Scalar {
         }
     }
 
-    /// Returns the unit w axis vector.
+    /// Returns the **w-axis** unit vector, a unit vector with the `w`-component
+    /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_w() -> Vector4<S> {
         Vector4 { 
@@ -2554,7 +2824,23 @@ impl<S> Vector4<S> where S: Scalar {
 }
 
 impl<S> Vector4<S> where S: ScalarFloat {
-    /// Linearly interpolate between two vectors.
+    /// Linearly interpolate between the two vectors `self` and `other`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,  
+    /// # };
+    ///
+    /// let v0 = Vector4::new(0_f64, 0_f64, 0_f64, 0_f64);
+    /// let v1 = Vector4::new(10_f64, 20_f64, 30_f64, 40_f64);
+    /// let amount = 0.7;
+    /// let expected = Vector4::new(7_f64, 14_f64, 21_f64, 28_f64);
+    /// let result = v0.lerp(&v1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn lerp(&self, other: &Vector4<S>, amount: S) -> Vector4<S> {
         self + ((other - self) * amount)
@@ -2565,15 +2851,38 @@ impl<S> Vector4<S> where S: ScalarFloat {
     ///
     /// A vector is finite when all of its elements are finite. This is useful 
     /// for vector and matrix types working with fixed precision floating point 
-    /// values. For example, when the vector elements are `f64`, the vector is 
-    /// finite when the elements are neither `NaN` nor infinite.
+    /// values.
+    ///
+    /// ### Example (Finite Vector)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #   Vector4,
+    /// # };
+    /// 
+    /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
+    ///
+    /// assert!(v.is_finite()); 
+    /// ```
+    ///
+    /// ### Example (Not A Finite Vector)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #   Vector4,
+    /// # };
+    /// 
+    /// let w = Vector4::new(1_f64, f64::NAN, f64::NEG_INFINITY, 4_f64);
+    ///
+    /// assert!(!w.is_finite()); 
+    /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
     }
 
     /// Compute the projection of the vector `self` onto the vector
-    /// `other`
+    /// `other`.
     #[inline]
     pub fn project_onto(&self, other: &Vector4<S>) -> Vector4<S> {
         other * (self.dot(other) / other.magnitude_squared())
