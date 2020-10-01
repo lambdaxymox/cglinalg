@@ -240,16 +240,16 @@ pub struct OrthographicSpec<S> {
     /// The right-hand plane is a plane parallel to the **yz-plane** at
     /// the origin.
     right: S,
-    /// The vertical position of the _bottom_ plane in camera space.
+    /// The vertical position of the **bottom plane** in camera space.
     /// The bottom plane is a plane parallel to the **xz-plane** at the origin.
     bottom: S,
-    /// The vertical position of the _top_ plane in camera space.
+    /// The vertical position of the **top plane** in camera space.
     /// the top plane is a plane parallel to the **xz-plane** at the origin.
     top: S,
-    /// The distance along the **negative z-axis** of the _near_ plane from the eye.
+    /// The distance along the **negative z-axis** of the **near plane** from the eye.
     /// The near plane is a plane parallel to the **xy-plane** at the origin.
     near: S,
-    /// the distance along the **negative z-axis** of the _far_ plane from the eye.
+    /// the distance along the **negative z-axis** of the **far plane** from the eye.
     /// The far plane is a plane parallel to the **xy-plane** at the origin.
     far: S,
 }

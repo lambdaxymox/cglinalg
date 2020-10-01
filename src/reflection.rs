@@ -50,7 +50,7 @@ impl<S> Reflection2<S> where S: ScalarFloat {
 
     /// Return the bias for calculating the reflections.
     ///
-    /// The _bias_ is the coorindates of a known point in the plane of 
+    /// The `bias` is the coordinates of a known point in the plane of 
     /// reflection.
     pub fn bias(&self) -> Vector2<S> {
         self.bias
@@ -193,7 +193,7 @@ impl<S> Reflection3<S> where S: ScalarFloat {
 
     /// Return the bias for calculating the reflections.
     ///
-    /// The _bias_ is the coorindates of a known point in the plane of 
+    /// The `bias` is the coorindates of a known point in the plane of 
     /// reflection.
     pub fn bias(&self) -> Vector3<S> {
         self.bias

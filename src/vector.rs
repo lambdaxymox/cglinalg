@@ -68,6 +68,20 @@ impl<S> Vector1<S> {
 
 impl<S> Vector1<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,   
+    /// # };
+    /// #
+    /// let vector: Vector1<u32> = Vector1::new(1_u32);
+    /// let expected: Option<Vector1<i32>> = Some(Vector1::new(1_i32));
+    /// let result = vector.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector1<T>> {
         let x = match num_traits::cast(self.x) {
@@ -196,6 +210,21 @@ impl<S> Vector1<S> where S: ScalarFloat {
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let vector = Vector1::new(1_f64);
+    /// let unit_x = Vector1::unit_x();
+    /// let projected_x = vector.project_onto(&unit_x);
+    ///
+    /// assert_eq!(projected_x, vector.x * unit_x);
+    /// ```
     #[inline]
     pub fn project_onto(&self, other: &Vector1<S>) -> Vector1<S> {
         other * (self.dot(other) / other.magnitude_squared())
@@ -865,6 +894,20 @@ impl<S> Vector2<S> {
 
 impl<S> Vector2<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,   
+    /// # };
+    /// #
+    /// let vector: Vector2<u32> = Vector2::new(1_u32, 2_u32);
+    /// let expected: Option<Vector2<i32>> = Some(Vector2::new(1_i32, 2_i32));
+    /// let result = vector.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector2<T>> {
         let x = match num_traits::cast(self.x) {
@@ -1739,6 +1782,20 @@ impl<S> Vector3<S> {
 
 impl<S> Vector3<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,   
+    /// # };
+    /// #
+    /// let vector: Vector3<u32> = Vector3::new(1_u32, 2_u32, 3_u32);
+    /// let expected: Option<Vector3<i32>> = Some(Vector3::new(1_i32, 2_i32, 3_i32));
+    /// let result = vector.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector3<T>> {
         let x = match num_traits::cast(self.x) {
@@ -2789,6 +2846,20 @@ impl<S> Vector4<S> where S: Copy {
 
 impl<S> Vector4<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,   
+    /// # };
+    /// #
+    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Option<Vector4<i32>> = Some(Vector4::new(1_i32, 2_i32, 3_i32, 4_i32));
+    /// let result = vector.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector4<T>> {
         let x = match num_traits::cast(self.x) {

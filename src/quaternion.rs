@@ -61,8 +61,8 @@ macro_rules! impl_mul_operator {
 /// A quaternion is a generalization of vectors in three dimensions that 
 /// enables one to perform rotations about an arbitrary axis. They are a
 /// three-dimensional analogue of complex numbers. In geometric algebra terms,
-/// a complex number is a _scalar + bivector_ form whereas a quaternion is
-/// a _scalar + vector_ form. 
+/// a complex number is a **scalar + bivector** form whereas a quaternion is
+/// a **scalar + vector** form. 
 ///
 /// Analogous to the complex numbers, quaternions can be written in polar form.
 /// polar form reveals the fact that it encodes rotations. A quaternion `q` can
@@ -131,6 +131,20 @@ impl<S> Quaternion<S> where S: Copy {
 
 impl<S> Quaternion<S> where S: NumCast + Copy {
     /// Cast a quaternion from one type of scalars to another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,   
+    /// # };
+    /// #
+    /// let quaternion: Quaternion<u32> = Quaternion::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Option<Quaternion<i32>> = Some(Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32));
+    /// let result = quaternion.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Quaternion<T>> {
         let s = match num_traits::cast(self.s) {
@@ -1196,7 +1210,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Construct a quaternion corresponding to a rotation of an observer 
-    /// standing at the origin facing the _positive z-axis_ to an observer 
+    /// standing at the origin facing the **positive z-axis** to an observer 
     /// standing at the origin facing the direction `direction`. 
     ///
     /// This rotation maps the **z-axis** to the direction `direction`.
@@ -1209,7 +1223,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// transformation without translation. 
     ///
     /// This transformation maps the viewing direction `direction` to the 
-    /// _negative z-axis_. It is conventionally used in computer graphics for
+    /// **negative z-axis**. It is conventionally used in computer graphics for
     /// camera view transformations.
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Quaternion<S> {
@@ -1220,7 +1234,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// transformation without translation. 
     ///
     /// This transformation maps the viewing direction `direction` to the 
-    /// _negative z-axis_. It is conventionally used in computer graphics for
+    /// **negative z-axis**. It is conventionally used in computer graphics for
     /// camera view transformations.
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Quaternion<S> {

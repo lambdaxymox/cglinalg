@@ -120,6 +120,20 @@ impl<S> Point1<S> where S: Copy {
 
 impl<S> Point1<S> where S: NumCast + Copy {
     /// Cast a point of one type of scalars to a point of another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1,   
+    /// # };
+    /// #
+    /// let point: Point1<u32> = Point1::new(1_u32);
+    /// let expected: Option<Point1<i32>> = Some(Point1::new(1_i32));
+    /// let result = point.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Point1<T>> {
         let x = match num_traits::cast(self.x) {
@@ -905,6 +919,20 @@ impl<S> Point2<S> where S: Copy {
 
 impl<S> Point2<S> where S: NumCast + Copy {
     /// Cast a point of one type of scalars to a point of another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,   
+    /// # };
+    /// #
+    /// let point: Point2<u32> = Point2::new(1_u32, 2_u32);
+    /// let expected: Option<Point2<i32>> = Some(Point2::new(1_i32, 2_i32));
+    /// let result = point.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Point2<T>> {
         let x = match num_traits::cast(self.x) {
@@ -1726,6 +1754,20 @@ impl<S> Point3<S> where S: Copy {
 
 impl<S> Point3<S> where S: NumCast + Copy {
     /// Cast a point from one type of scalars to another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,   
+    /// # };
+    /// #
+    /// let point: Point3<u32> = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected: Option<Point3<i32>> = Some(Point3::new(1_i32, 2_i32, 3_i32));
+    /// let result = point.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Point3<T>> {
         let x = match num_traits::cast(self.x) {

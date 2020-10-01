@@ -270,17 +270,12 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// Construct an affine coordinate transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the _negative z-axis_.
+    /// at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `direction` to the _negative z-axis_ and 
+    /// The function maps the direction `direction` to the **negative z-axis** and 
     /// locates the `eye` position to the origin in the new the coordinate system.
-    /// This transformation is a _right-handed_ coordinate transformation. It is
+    /// This transformation is a **right-handed** coordinate transformation. It is
     /// conventionally used in computer graphics for camera view transformations.
-    /// 
-    /// #### Note
-    ///
-    /// This transformation transforms vectors in the inverse way from the `face_towards`
-    /// function.
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
         let matrix3 = Matrix3x3::look_at_rh(direction, up);
@@ -298,16 +293,11 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// Construct an affine coordinate transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the _positive z-axis_.
+    /// at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `direction` to the _positive z-axis_ and 
+    /// The function maps the direction `direction` to the **positive z-axis** and 
     /// locates the `eye` position to the origin in the new the coordinate system.
-    /// This transformation is a _left-handed_ coordinate transformation.
-    ///
-    /// #### Note
-    ///
-    /// This transformation transforms vectors in the inverse way from the `face_towards`
-    /// function.
+    /// This transformation is a **left-handed** coordinate transformation.
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
         let matrix3 = Matrix3x3::look_at_lh(direction, up);

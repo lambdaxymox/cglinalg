@@ -169,13 +169,13 @@ use core::ops;
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct EulerAngles<A> {
     /// The rotation angle about the **x-axis** in the **yz-plane**. This is also 
-    /// known as the _roll_ angle.
+    /// known as the **roll** angle.
     pub x: A,
     /// The rotation angle about the **y-axis** in the **zx-plane**. This is also 
-    /// known as the _yaw_ angle.
+    /// known as the **yaw** angle.
     pub y: A,
     /// The rotation angle about the **z-axis** in the **xy-plane**. This is also
-    /// called the _pitch_ angle.
+    /// called the **pitch** angle.
     pub z: A,
 }
 

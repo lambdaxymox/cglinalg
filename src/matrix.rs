@@ -128,7 +128,7 @@ impl<S> Matrix2x2<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Matrix2x2, 
     /// # };
-    /// 
+    /// #
     /// let fill_value: u32 = 3;
     /// let expected = Matrix2x2::new(fill_value, fill_value, fill_value, fill_value);
     /// let result = Matrix2x2::from_fill(fill_value);
@@ -143,6 +143,20 @@ impl<S> Matrix2x2<S> where S: Copy {
 
 impl<S> Matrix2x2<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix2x2<u32> = Matrix2x2::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Option<Matrix2x2<i32>> = Some(Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix2x2<T>> {
         let c0r0 = match num_traits::cast(self.c0r0) {
@@ -1441,6 +1455,28 @@ impl<S> Matrix3x3<S> where S: Copy {
 
 impl<S> Matrix3x3<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix3x3<u32> = Matrix3x3::new(
+    ///     1_u32, 2_u32, 3_u32, 
+    ///     4_u32, 5_u32, 6_u32,
+    ///     7_u32, 8_u32, 9_u32
+    /// );
+    /// let expected: Option<Matrix3x3<i32>> = Some(Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32, 
+    ///     4_i32, 5_i32, 6_i32,
+    ///     7_i32, 8_i32, 9_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix3x3<T>> {
@@ -2359,11 +2395,11 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     }
 
     /// Construct a rotation matrix that transforms the coordinate system of
-    /// an observer located at the origin facing the _positive z-axis_ into a
+    /// an observer located at the origin facing the **positive z-axis** into a
     /// coordinate system of an observer located at the origin facing the 
     /// direction `direction`.
     ///
-    /// The function maps the **z-axis** to the direction `direction`.
+    /// The function maps the **positive z-axis** to the direction `direction`.
     #[rustfmt::skip]
     #[inline]
     pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
@@ -2381,11 +2417,11 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// Construct a coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the origin facing 
     /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the _negative z-axis_.
+    /// at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `direction` to the _negative z-axis_ in 
+    /// The function maps the direction `direction` to the **negative z-axis** in 
     /// the new the coordinate system. This corresponds to a rotation matrix.
-    /// This transformation is a _right-handed_ coordinate transformation. 
+    /// This transformation is a **right-handed** coordinate transformation. 
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
         // The inverse of a rotation matrix is its transpose.
@@ -2395,11 +2431,11 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// Construct a coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the origin facing 
     /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the _positive z-axis_.
+    /// at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `direction` to the _positive z-axis_ in 
+    /// The function maps the direction `direction` to the **positive z-axis** in 
     /// the new the coordinate system. This corresponds to a rotation matrix.
-    /// This transformation is a _left-handed_ coordinate transformation. 
+    /// This transformation is a **left-handed** coordinate transformation. 
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
         // The inverse of a rotation matrix is its transpose.
@@ -3724,6 +3760,30 @@ impl<S> Matrix4x4<S> where S: Copy {
 
 impl<S> Matrix4x4<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix4x4<u32> = Matrix4x4::new(
+    ///     1_u32,  2_u32,  3_u32,  4_u32,
+    ///     5_u32,  6_u32,  7_u32,  8_u32,
+    ///     9_u32,  10_u32, 11_u32, 12_u32,
+    ///     13_u32, 14_u32, 15_u32, 16_u32
+    /// );
+    /// let expected: Option<Matrix4x4<i32>> = Some(Matrix4x4::new(
+    ///     1_i32,  2_i32,  3_i32,  4_i32, 
+    ///     5_i32,  6_i32,  7_i32,  8_i32, 
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix4x4<T>> {
@@ -4605,11 +4665,11 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct an affine coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the _negative z-axis_.
+    /// at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `direction` to the _negative z-axis_ and 
+    /// The function maps the direction `direction` to the **negative z-axis** and 
     /// locates the `eye` position to the origin in the new the coordinate system.
-    /// This transformation is a _right-handed_ coordinate transformation. It is
+    /// This transformation is a **right-handed** coordinate transformation. It is
     /// conventionally used in computer graphics for camera view transformations.
     #[rustfmt::skip]
     #[inline]
@@ -4638,11 +4698,11 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct an affine coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the _positive z-axis_.
+    /// at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `direction` to the _positive z-axis_ and 
+    /// The function maps the direction `direction` to the **positive z-axis** and 
     /// locates the `eye` position to the origin in the new the coordinate system.
-    /// This transformation is a _left-handed_ coordinate transformation.
+    /// This transformation is a **left-handed** coordinate transformation.
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {

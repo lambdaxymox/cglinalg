@@ -166,7 +166,7 @@ pub trait Matrix {
 
 /// Define operations on square matrices. 
 ///
-/// A matrix is said to be _square_ if the number of rows and 
+/// A matrix is said to be square if the number of rows and 
 /// the number of columns are are the same.
 pub trait SquareMatrix where
     Self: Identity,
