@@ -33,24 +33,24 @@ use core::fmt;
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct PerspectiveSpec<S> {
     /// The horizontal position of the left-hand plane in camera space.
-    /// The left-hand plane is a plane parallel to the _yz-plane_ at
+    /// The left-hand plane is a plane parallel to the **yz-plane** at
     /// the origin.
     left: S,
     /// The horizontal position of the right-hand plane in camera space.
-    /// The right-hand plane is a plane parallel to the _yz-plane_ at
+    /// The right-hand plane is a plane parallel to the **yz-plane** at
     /// the origin.
     right: S,
     /// The vertical position of the bottom plane in camera space.
-    /// The bottom plane is a plane parallel to the _xz-plane_ at the origin.
+    /// The bottom plane is a plane parallel to the **xz-plane** at the origin.
     bottom: S,
     /// The vertical position of the top plane in camera space.
-    /// the top plane is a plane parallel to the _xz-plane_ at the origin.
+    /// the top plane is a plane parallel to the **xz-plane** at the origin.
     top: S,
-    /// The distance along the _(-z)-axis_ of the near plane from the eye.
-    /// The near plane is a plane parallel to the _xy-plane_ at the origin.
+    /// The distance along the **negative z-axis** of the near plane from the eye.
+    /// The near plane is a plane parallel to the **xy-plane** at the origin.
     near: S,
-    /// the distance along the _(-z)-axis_ of the far plane from the eye.
-    /// The far plane is a plane parallel to the _xy-plane_ at the origin.
+    /// the distance along the **negative z-axis** of the far plane from the eye.
+    /// The far plane is a plane parallel to the **xy-plane** at the origin.
     far: S,
 }
 
@@ -104,9 +104,9 @@ pub struct PerspectiveFovSpec<S> {
     fovy: Radians<S>,
     /// The ratio of the horizontal width to the vertical height.
     aspect: S,
-    /// The position of the near plane along the negative _z-axis_.
+    /// The position of the near plane along the negative **z-axis**.
     near: S,
-    /// The position of the far plane along the negative _z-axis_.
+    /// The position of the far plane along the negative **z-axis**.
     far: S,
 }
 
@@ -233,24 +233,24 @@ impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct OrthographicSpec<S> {
     /// The horizontal position of the left-hand plane in camera space.
-    /// The left-hand plane is a plane parallel to the _yz-plane_ at
+    /// The left-hand plane is a plane parallel to the **yz-plane** at
     /// the origin.
     left: S,
     /// The horizontal position of the right-hand plane in camera space.
-    /// The right-hand plane is a plane parallel to the _yz-plane_ at
+    /// The right-hand plane is a plane parallel to the **yz-plane** at
     /// the origin.
     right: S,
     /// The vertical position of the _bottom_ plane in camera space.
-    /// The bottom plane is a plane parallel to the _xz-plane_ at the origin.
+    /// The bottom plane is a plane parallel to the **xz-plane** at the origin.
     bottom: S,
     /// The vertical position of the _top_ plane in camera space.
-    /// the top plane is a plane parallel to the _xz-plane_ at the origin.
+    /// the top plane is a plane parallel to the **xz-plane** at the origin.
     top: S,
-    /// The distance along the _(-z)-axis_ of the _near_ plane from the eye.
-    /// The near plane is a plane parallel to the _xy-plane_ at the origin.
+    /// The distance along the **negative z-axis** of the _near_ plane from the eye.
+    /// The near plane is a plane parallel to the **xy-plane** at the origin.
     near: S,
-    /// the distance along the _(-z)-axis_ of the _far_ plane from the eye.
-    /// The far plane is a plane parallel to the _xy-plane_ at the origin.
+    /// the distance along the **negative z-axis** of the _far_ plane from the eye.
+    /// The far plane is a plane parallel to the **xy-plane** at the origin.
     far: S,
 }
 

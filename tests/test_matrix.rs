@@ -448,7 +448,7 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
     #[test]
@@ -461,7 +461,7 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
     #[test]
@@ -474,7 +474,7 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
     #[test]
@@ -487,7 +487,7 @@ mod matrix2_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
     #[test]
@@ -1159,7 +1159,7 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
     #[test]
@@ -1177,7 +1177,7 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
     #[test]
@@ -1195,7 +1195,7 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
     #[test]
@@ -1213,7 +1213,7 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// Construct a reflection matrix test case for reflection about the _x-axis_.
+    /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
     #[test]

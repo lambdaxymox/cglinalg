@@ -27,8 +27,8 @@ use core::ops;
 /// an arbitrary axis in three dimensions.
 ///
 /// The rotations are defined in the ZYX rotation order. That is, the Euler 
-/// rotation applies a rotation to the _z-axis_, followed by the _y-axis_, and 
-/// lastly the _x-axis_. The ranges of each axis are 
+/// rotation applies a rotation to the **z-axis**, followed by the **y-axis**, and 
+/// lastly the **x-axis**. The ranges of each axis are 
 /// ```text
 /// x in [-pi, pi]
 /// y in [-pi/2, pi/2]
@@ -128,8 +128,8 @@ use core::ops;
 ///      | -cos(roll + pitch)   sin(roll + pitch) 0 |
 /// ```
 /// Changing either the values of the `pitch` or the `roll` has the same 
-/// effect: it rotates an object about the _z-axis_. We have lost the ability 
-/// to roll about the _x-axis_. Let's illustrate this effect with some code.
+/// effect: it rotates an object about the **z-axis**. We have lost the ability 
+/// to roll about the **x-axis**. Let's illustrate this effect with some code.
 /// ```
 /// # use cglinalg::{
 /// #    Degrees,
@@ -168,13 +168,13 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct EulerAngles<A> {
-    /// The rotation angle about the _x-axis_ in the _yz-plane_. This is also 
+    /// The rotation angle about the **x-axis** in the **yz-plane**. This is also 
     /// known as the _roll_ angle.
     pub x: A,
-    /// The rotation angle about the _y-axis_ in the _zx-plane_. This is also 
+    /// The rotation angle about the **y-axis** in the **zx-plane**. This is also 
     /// known as the _yaw_ angle.
     pub y: A,
-    /// The rotation angle about the _z-axis_ in the _xy-plane_. This is also
+    /// The rotation angle about the **z-axis** in the **xy-plane**. This is also
     /// called the _pitch_ angle.
     pub z: A,
 }
@@ -200,7 +200,7 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     /// (`x`, `y`, `z`). The rotation matrix described by Euler angles can be
     /// decomposed into a product of rotation matrices about each axis: let 
     /// `R_x(roll)`, `R_y(yaw)`, and `R_z(pitch)` denote the rotations about 
-    /// the _x-axis_, _y-axis_, and _z-axis_, respectively. The Euler rotation
+    /// the **x-axis**, **y-axis**, and **z-axis**, respectively. The Euler rotation
     /// is decomposed as follows:
     /// ```text
     /// R(roll, yaw, pitch) == R_x(roll) * R_y(yaw) * R_z(pitch)

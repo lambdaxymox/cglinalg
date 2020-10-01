@@ -174,10 +174,10 @@ impl<S> Matrix2x2<S> where S: Scalar {
         Matrix2x2::from_columns(*up, *direction).transpose()
     }
 
-    /// Construct a shearing matrix along the x-axis, holding the y-axis constant.
+    /// Construct a shearing matrix along the x-axis, holding the **y-axis** constant.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the _y-axis_ to shearing along the _x-axis_.
+    /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
     /// ### Example 
     /// 
@@ -204,10 +204,10 @@ impl<S> Matrix2x2<S> where S: Scalar {
         )
     }
 
-    /// Construct a shearing matrix along the y-axis, holding the x-axis constant.
+    /// Construct a shearing matrix along the y-axis, holding the **x-axis** constant.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the _x-axis_ to shearing along the _y-axis_.
+    /// contribution of the **x-axis** to shearing along the **y-axis**.
     ///
     /// ### Example 
     /// 
@@ -239,9 +239,9 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// dimensions.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the _x-axis_ to shearing along the _y-axis_.
+    /// contribution of the **x-axis** to shearing along the **y-axis**.
     /// The parameter `shear_x_with_y` denotes the factor scaling the 
-    /// contribution of the y-component to the shearing of the x-component. 
+    /// contribution of the `y`-component to the shearing of the `x`-component. 
     ///
     /// ### Example 
     /// 
@@ -1671,11 +1671,11 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// _x-axis_, holding the **y-axis** constant and the **z-axis** constant.
+    /// **x-axis**, holding the **y-axis** constant and the **z-axis** constant.
     ///
     /// The parameters `shear_x_with_y` and `shear_x_with_z` are the 
-    /// multiplicative factors for the contributions of the _y-axis_ and the 
-    /// _z-axis_, respectively to shearing along the _x-axis_.
+    /// multiplicative factors for the contributions of the **y-axis** and the 
+    /// **z-axis**, respectively to shearing along the **x-axis**.
     ///
     /// ### Example
     ///
@@ -1708,11 +1708,11 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// _y-axis_, holding the **x-axis** constant and the **z-axis** constant.
+    /// **y-axis**, holding the **x-axis** constant and the **z-axis** constant.
     ///
     /// The parameters `shear_y_with_x` and `shear_y_with_z` are the
-    /// multiplicative factors for the contributions of the _x-axis_, and the 
-    /// _z-axis_, respectively to shearing along the _y-axis_.
+    /// multiplicative factors for the contributions of the **x-axis**, and the 
+    /// **z-axis**, respectively to shearing along the **y-axis**.
     ///
     /// ### Example
     ///
@@ -1745,11 +1745,11 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// _z-axis_, holding the _x-axis_ constant and the _y-axis_ constant.
+    /// **z-axis**, holding the **x-axis** constant and the **y-axis** constant.
     ///
     /// The parameters `shear_z_with_x` and `shear_z_with_y` are the multiplicative
-    /// factors for the contributions of the _x-axis_, and the _y-axis_, 
-    /// respectively to shearing along the _z-axis_. 
+    /// factors for the contributions of the **x-axis**, and the **y-axis**, 
+    /// respectively to shearing along the **z-axis**. 
     ///
     /// ### Example
     ///
@@ -1785,22 +1785,22 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// parameters describing a shearing transformation in three dimensions.
     /// 
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the y-component to shearing of the x-component.
+    /// contribution of the `y`-component to shearing of the `x`-component.
     ///
     /// The parameter `shear_x_with_z` denotes the factor scaling the 
-    /// contribution  of the z-component to the shearing of the x-component.
+    /// contribution  of the `z`-component to the shearing of the `x`-component.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the x-component to shearing of the y-component.
+    /// contribution of the `x`-component to shearing of the `y`-component.
     ///
     /// The parameter `shear_y_with_z` denotes the factor scaling the 
-    /// contribution of the _z-axis_ to the shearing of the y-component. 
+    /// contribution of the **z-axis** to the shearing of the `y`-component. 
     ///
     /// The parameter `shear_z_with_x` denotes the factor scaling the
-    /// contribution of the _x-axis_ to shearing of the _z-axis_.
+    /// contribution of the **x-axis** to shearing of the **z-axis**.
     ///
     /// The parameter `shear_z_with_y` denotes the factor scaling the 
-    /// contribution of the y-component to the shearing of the z-component. 
+    /// contribution of the `y`-component to the shearing of the `z`-component. 
     ///
     /// ### Example
     ///
@@ -1851,10 +1851,10 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a two-dimensional affine shearing matrix along the 
-    /// _x-axis_, holding the _y-axis_ constant.
+    /// **x-axis**, holding the **y-axis** constant.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the _y-axis_ to shearing along the _x-axis_.
+    /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
     /// ### Example 
     /// 
@@ -1886,10 +1886,10 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a two-dimensional affine shearing matrix along the 
-    /// _y-axis_, holding the _x-axis_ constant.
+    /// **y-axis**, holding the **x-axis** constant.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the _y-axis_ to shearing along the _x-axis_.
+    /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
     /// ### Example 
     /// 
@@ -1925,10 +1925,10 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// dimensions.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the _x-axis_ to shearing along the _y-axis_.
+    /// contribution of the **x-axis** to shearing along the **y-axis**.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
-    /// of the _y-axis_ to the shearing along the _x-axis_.
+    /// of the **y-axis** to the shearing along the **x-axis**.
     ///
     /// ### Example 
     /// 
@@ -2202,7 +2202,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a rotation matrix about the _x-axis_ by an angle `angle`.
+    /// Construct a rotation matrix about the **x-axis** by an angle `angle`.
     ///
     /// ### Example
     /// 
@@ -2238,7 +2238,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a rotation matrix about the _y-axis_ by an angle `angle`.
+    /// Construct a rotation matrix about the **y-axis** by an angle `angle`.
     ///
     /// ### Example
     /// 
@@ -2274,7 +2274,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a rotation matrix about the _z-axis_ by an angle `angle`.
+    /// Construct a rotation matrix about the **z-axis** by an angle `angle`.
     ///
     /// ### Example
     /// 
@@ -2363,7 +2363,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// coordinate system of an observer located at the origin facing the 
     /// direction `direction`.
     ///
-    /// The function maps the _z-axis_ to the direction `direction`.
+    /// The function maps the **z-axis** to the direction `direction`.
     #[rustfmt::skip]
     #[inline]
     pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
@@ -3929,12 +3929,12 @@ impl<S> Matrix4x4<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional affine shearing matrix for shearing 
-    /// along the _x-axis_, holding the _y-axis_ constant and the _z-axis_ 
+    /// along the **x-axis**, holding the **y-axis** constant and the **z-axis** 
     /// constant.
     ///
     /// The parameters `shear_x_with_y` and `shear_x_with_z` are the 
-    /// multiplicative factors for the contributions of the _y-axis_, and the
-    /// _z-axis_, respectively to shearing along the _x-axis_. Since this is an 
+    /// multiplicative factors for the contributions of the **y-axis**, and the
+    /// **z-axis**, respectively to shearing along the **x-axis**. Since this is an 
     /// affine transformation the `w` component of four-dimensional vectors is 
     /// unaffected.
     ///
@@ -3975,11 +3975,11 @@ impl<S> Matrix4x4<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional affine shearing matrix for shearing along 
-    /// the _y-axis_, holding the _x-axis_ constant and the _z-axis_ constant.
+    /// the **y-axis**, holding the **x-axis** constant and the **z-axis** constant.
     ///
     /// The parameters `shear_y_with_x` and `shear_y_with_z` are the 
-    /// multiplicative factors for the contributions of the _x-axis_, and the 
-    /// _z-axis_, respectively to shearing along the _y-axis_. Since this is 
+    /// multiplicative factors for the contributions of the **x-axis**, and the 
+    /// **z-axis**, respectively to shearing along the **y-axis**. Since this is 
     /// an affine transformation the `w` component of four-dimensional vectors 
     /// is unaffected.
     ///
@@ -4020,11 +4020,11 @@ impl<S> Matrix4x4<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional affine shearing matrix for shearing along 
-    /// the _z-axis_, holding the _x-axis_ constant and the _y-axis_ constant.
+    /// the **z-axis**, holding the **x-axis** constant and the **y-axis** constant.
     ///
     /// The parameters `shear_z_with_x` and `shear_z_with_y` are the 
-    /// multiplicative factors for the contributions of the _x-axis_, and the 
-    /// _y-axis_, respectively to shearing along the _z-axis_. Since this is an 
+    /// multiplicative factors for the contributions of the **x-axis**, and the 
+    /// **y-axis**, respectively to shearing along the **z-axis**. Since this is an 
     /// affine transformation the `w` component of four-dimensional vectors is 
     /// unaffected.
     ///
@@ -4070,22 +4070,22 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// dimensions.
     /// 
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the y-axis to shearing along the _x-axis_.
+    /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
     /// The parameter `shear_x_with_z` denotes the factor scaling the 
-    /// contribution of the _z-axis_ to the shearing along the _x-axis_. 
+    /// contribution of the **z-axis** to the shearing along the **x-axis**. 
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the _x-axis_ to shearing along the _y-axis_.
+    /// contribution of the **x-axis** to shearing along the **y-axis**.
     ///
     /// The parameter `shear_y_with_z` denotes the factor scaling the 
-    /// contribution of the _z-axis_ to the shearing along the _y-axis_. 
+    /// contribution of the **z-axis** to the shearing along the **y-axis**. 
     ///
     /// The parameter `shear_z_with_x` denotes the factor scaling the
-    /// contribution of the _x-axis_ to shearing along the _z-axis_.
+    /// contribution of the **x-axis** to shearing along the **z-axis**.
     ///
     /// The parameter `shear_z_with_y` denotes the factor scaling the 
-    /// contribution of the y-axis to the shearing along the _z-axis_. 
+    /// contribution of the **y-axis** to the shearing along the **z-axis**. 
     ///
     /// Since this is an affine transformation the `w` component
     /// of four-dimensional vectors is unaffected.
@@ -4160,8 +4160,8 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     /// P = { (x, y, z) | a * (x - x0) + b * (y - y0) + c * (z - z0) == 0 }
     /// where (x0, y0, z0) is a known point in P.
     /// ```
-    /// A bare reflection matrix assumes that the the x-axis intercept `x0` 
-    /// and the y-axis intercept `y0` are both zero, in which case the 
+    /// A bare reflection matrix assumes that the the **x-axis** intercept `x0` 
+    /// and the **y-axis** intercept `y0` are both zero, in which case the 
     /// translation terms are zero. This yields the matrix formula
     /// ```text
     /// |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |
@@ -4242,7 +4242,7 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
 
 impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
-    /// x-axis by an angle `angle` radians/degrees.
+    /// **x-axis** by an angle `angle` radians/degrees.
     ///
     /// ### Example
     ///
@@ -4281,7 +4281,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     }
         
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
-    /// around the y-axis by an angle `angle` radians/degrees.
+    /// around the **y-axis** by an angle `angle` radians/degrees.
     ///
     /// ### Example
     /// 
@@ -4321,7 +4321,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     }
     
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
-    /// around the z-axis by an angle `angle` radians/degrees.
+    /// around the **z-axis** by an angle `angle` radians/degrees.
     ///
     /// ### Example
     /// 
@@ -4574,11 +4574,11 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing the _z-axis_
+    /// a coordinate system of an observer located at the origin facing the **z-axis**
     /// into a coordinate system of an observer located at the position `eye` facing
     /// the direction `direction`.
     ///
-    /// The function maps the _z-axis_ to the direction `direction`, and locates the 
+    /// The function maps the **z-axis** to the direction `direction`, and locates the 
     /// origin of the coordinate system to the `eye` position.
     #[rustfmt::skip]
     #[inline]

@@ -39,13 +39,13 @@ use core::fmt;
 /// 
 /// Two-dimensional rotations are different than three-dimensional rotations 
 /// because mathematically we cannot define an axis of rotation in two 
-/// dimensions. Instead we have to talk about rotating in the _xy-plane_ by an 
+/// dimensions. Instead we have to talk about rotating in the **xy-plane** by an 
 /// angle. In low-dimensional settings, the notion of rotation axis is 
 /// only well-defined in three dimensions because dimension three is the 
 /// only dimension where every plane is guaranteed to have a normal vector. 
 /// 
-/// If one wants to talk about rotating a vector in the the _xy-plane_ about a 
-/// normal vector, we are implicitly rotating about the _z-axis_ in 
+/// If one wants to talk about rotating a vector in the the **xy-plane** about a 
+/// normal vector, we are implicitly rotating about the **z-axis** in 
 /// three dimensions.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -57,7 +57,7 @@ pub struct Rotation2<S> {
 }
 
 impl<S> Rotation2<S> where S: ScalarFloat {
-    /// Rotate a two-dimensional vector in the _xy-plane_ by an angle `angle`.
+    /// Rotate a two-dimensional vector in the **xy-plane** by an angle `angle`.
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2<S> {
         let radians = angle.into();
         let matrix = Matrix3x3::from(Matrix2x2::from_angle(radians));
@@ -246,22 +246,22 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         }
     }
 
-    /// Construct a new three-dimensional rotation about the _x-axis_ in the 
-    /// _yz-plane_ by an angle `angle`.
+    /// Construct a new three-dimensional rotation about the **x-axis** in the 
+    /// **yz-plane** by an angle `angle`.
     #[inline]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_x()), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the _y-axis_ in the 
-    /// _xz-plane_ by an angle `angle`.
+    /// Construct a new three-dimensional rotation about the **y-axis** in the 
+    /// **xz-plane** by an angle `angle`.
     #[inline]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_y()), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the _z-axis_ in the 
-    /// _xy-plane_ by an angle `angle`.
+    /// Construct a new three-dimensional rotation about the **z-axis** in the 
+    /// **xy-plane** by an angle `angle`.
     #[inline]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_z()), angle)

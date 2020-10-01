@@ -1199,7 +1199,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// standing at the origin facing the _positive z-axis_ to an observer 
     /// standing at the origin facing the direction `direction`. 
     ///
-    /// This rotation maps the _z-axis_ to the direction `direction`.
+    /// This rotation maps the **z-axis** to the direction `direction`.
     #[inline]
     pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Quaternion<S> {
         Self::from(&Matrix3x3::face_towards(direction, up))

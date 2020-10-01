@@ -38,11 +38,11 @@ impl<S> Shear2<S> where S: ScalarSigned {
         }
     }
 
-    /// Construct a shearing transformation along the _x-axis_, holding the 
-    /// _y-axis_ constant.
+    /// Construct a shearing transformation along the **x-axis**, holding the 
+    /// **y-axis** constant.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the _y-axis_ to shearing along the _x-axis_.
+    /// contribution of the **y-axis** to shearing along the **x-axis**.
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S) -> Shear2<S> {
         Shear2 {
@@ -50,11 +50,11 @@ impl<S> Shear2<S> where S: ScalarSigned {
         }
     }
 
-    /// Construct a shearing transformation along the _y-axis_, holding the 
-    /// _x-axis_ constant.
+    /// Construct a shearing transformation along the **y-axis**, holding the 
+    /// **x-axis** constant.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the _x-axis_ to shearing along the _y-axis_.
+    /// contribution of the **x-axis** to shearing along the **y-axis**.
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S) -> Shear2<S> {
         Shear2 {
@@ -68,10 +68,10 @@ impl<S> Shear2<S> where S: ScalarSigned {
     /// in two dimensions.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the _x-axis_ to shearing along the _y-axis_.
+    /// contribution of the **x-axis** to shearing along the **y-axis**.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the 
-    /// contribution of the _y-axis_ to the shearing along the _x-axis_.
+    /// contribution of the **y-axis** to the shearing along the **x-axis**.
     #[inline]
     pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Shear2<S> {
         Shear2 {
@@ -167,11 +167,11 @@ pub struct Shear3<S> {
 }
 
 impl<S> Shear3<S> where S: ScalarSigned {
-    /// Construct a shearing transformation along the _x-axis_.
+    /// Construct a shearing transformation along the **x-axis**.
     ///
     /// The parameters `shear_x_with_y` and `shear_x_with_z` denote the 
-    /// multiplicative factors for the contributions from the _y-axis_ and the 
-    /// _z-axis_ respectively for the shearing along the _x-axis_.
+    /// multiplicative factors for the contributions from the **y-axis** and the 
+    /// **z-axis** respectively for the shearing along the **x-axis**.
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Shear3<S> {
         Shear3 {
@@ -179,11 +179,11 @@ impl<S> Shear3<S> where S: ScalarSigned {
         }
     }
 
-    /// Construct a shearing transformation along the _y-axis_.
+    /// Construct a shearing transformation along the **y-axis**.
     ///
     /// The parameters `shear_y_with_x` and `shear_y_with_z` denote the 
-    /// multiplicative factors for the contributions from the _x-axis_ and the 
-    /// _z-axis_ respectively for the shearing along the _y-axis_.
+    /// multiplicative factors for the contributions from the **x-axis** and the 
+    /// **z-axis** respectively for the shearing along the **y-axis**.
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Shear3<S> {
         Shear3 {
@@ -191,11 +191,11 @@ impl<S> Shear3<S> where S: ScalarSigned {
         }
     }
 
-    /// Construct a shearing transformation along the _z-axis_.
+    /// Construct a shearing transformation along the **z-axis**.
     ///
     /// The parameters `shear_z_with_x` and `shear_z_with_y` denote the 
-    /// multiplicative factors for the contributions from the _x-axis_ and the 
-    /// _y-axis_ respectively for the shearing along the _z-axis_.
+    /// multiplicative factors for the contributions from the **x-axis** and the 
+    /// **y-axis** respectively for the shearing along the **z-axis**.
     #[inline]
     pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Shear3<S> {
         Shear3 {
@@ -206,16 +206,16 @@ impl<S> Shear3<S> where S: ScalarSigned {
     /// Construct a general shearing transformation.
     ///
     /// The parameters `shear_x_with_y` and `shear_x_with_z` denote the 
-    /// multiplicative factors for the contributions from the _y-axis_ and the 
-    /// _z-axis_ respectively for the shearing along the _x-axis_.
+    /// multiplicative factors for the contributions from the **y-axis** and the 
+    /// **z-axis** respectively for the shearing along the **x-axis**.
     /// 
     /// The parameters `shear_y_with_x` and `shear_y_with_z` denote the 
-    /// multiplicative factors for the contributions from the _x-axis_ and the 
-    /// _z-axis_ respectively for the shearing along the _y-axis_.
+    /// multiplicative factors for the contributions from the **x-axis** and the 
+    /// **z-axis** respectively for the shearing along the **y-axis**.
     ///
     /// The parameters `shear_z_with_x` and `shear_z_with_y` denote the 
-    /// multiplicative factors for the contributions from the _x-axis_ and the 
-    /// _y-axis_ respectively for the shearing along the _z-axis_.
+    /// multiplicative factors for the contributions from the **x-axis** and the 
+    /// **y-axis** respectively for the shearing along the **z-axis**.
     #[inline]
     pub fn from_shear(
         shear_x_with_y: S, shear_x_with_z: S, 
