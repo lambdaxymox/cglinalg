@@ -1513,7 +1513,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// 
     /// assert_eq!(result, expected); 
     /// ```
-    /// A homogeneous vector with a one `z`-component should translate.
+    /// A homogeneous vector with a unit `z`-component should translate.
     /// ```
     /// # use cglinalg::{
     /// #     Matrix3x3,
@@ -3692,6 +3692,25 @@ impl<S> Matrix4x4<S> where S: Copy {
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    ///
+    /// let fill_value = 4_u32;
+    /// let expected = Matrix4x4::new(
+    ///     fill_value, fill_value, fill_value, fill_value,
+    ///     fill_value, fill_value, fill_value, fill_value,
+    ///     fill_value, fill_value, fill_value, fill_value,
+    ///     fill_value, fill_value, fill_value, fill_value
+    /// );
+    /// let result = Matrix4x4::from_fill(fill_value);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Matrix4x4<S> {
         Matrix4x4::new(
@@ -3784,6 +3803,46 @@ impl<S> Matrix4x4<S> where S: NumCast + Copy {
 
 impl<S> Matrix4x4<S> where S: Scalar {
     /// Construct an affine translation matrix in three-dimensions.
+    ///
+    ///
+    /// ### Example
+    /// A homogeneous vector with a zero `w`-component should not translate.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// #     Vector3,
+    /// # };
+    ///
+    /// let distance = Vector3::new(3_u32, 7_u32, 11_u32);
+    /// let matrix = Matrix4x4::from_affine_translation(distance);
+    /// let vector = Vector4::new(1_u32, 1_u32, 1_u32, 0_u32);
+    /// let expected = Vector4::new(1_u32, 1_u32, 1_u32, 0_u32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected); 
+    /// ```
+    /// A homogeneous vector with a unit `w`-component should translate.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// #     Vector3,
+    /// # };
+    ///
+    /// let distance = Vector3::new(3_u32, 7_u32, 11_u32);
+    /// let matrix = Matrix4x4::from_affine_translation(distance);
+    /// let vector = Vector4::new(1_u32, 1_u32, 1_u32, 1_u32);
+    /// let expected = Vector4::new(
+    ///     1_u32 + distance.x, 
+    ///     1_u32 + distance.y, 
+    ///     1_u32 + distance.z, 
+    ///     1_u32
+    /// );
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected); 
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_translation(distance: Vector3<S>) -> Matrix4x4<S> {
@@ -3805,6 +3864,23 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// calling `from_scale(scale)` is equivalent to calling 
     /// `from_nonuniform_scale(scale, scale, scale)`. Since this is an affine 
     /// matrix the `w` component is unaffected.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4, 
+    /// # };
+    /// 
+    /// let scale = 4_usize;
+    /// let matrix = Matrix4x4::from_affine_scale(scale);
+    /// let vector = Vector4::new(1_usize, 1_usize, 1_usize, 1_usize);
+    /// let expected = Vector4::new(4_usize, 4_usize, 4_usize, 1_usize);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_affine_scale(scale: S) -> Matrix4x4<S> {
         Matrix4x4::from_affine_nonuniform_scale(scale, scale, scale)
@@ -3815,6 +3891,29 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// This is the most general case for affine scaling matrices: the scale 
     /// factor in each dimension need not be identical. Since this is an 
     /// affine matrix, the `w` component is unaffected.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4, 
+    /// # };
+    /// 
+    /// let scale_x = 4_usize;
+    /// let scale_y = 6_usize;
+    /// let scale_z = 8_usize;
+    /// let matrix = Matrix4x4::from_affine_nonuniform_scale(
+    ///     scale_x,
+    ///     scale_y,
+    ///     scale_z
+    /// );
+    /// let vector = Vector4::new(1_usize, 1_usize, 1_usize, 1_usize);
+    /// let expected = Vector4::new(4_usize, 6_usize, 8_usize, 1_usize);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Matrix4x4<S> {
@@ -3838,6 +3937,29 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// _z-axis_, respectively to shearing along the _x-axis_. Since this is an 
     /// affine transformation the `w` component of four-dimensional vectors is 
     /// unaffected.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4, 
+    /// # };
+    ///
+    /// let shear_x_with_y = 3_i32;
+    /// let shear_x_with_z = 19_i32;
+    /// let matrix = Matrix4x4::from_affine_shear_x(shear_x_with_y, shear_x_with_z);
+    /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
+    /// let expected = Vector4::new(
+    ///     1_i32 + shear_x_with_y * 1_i32 + shear_x_with_z * 1_i32,
+    ///     1_i32,
+    ///     1_i32,
+    ///     1_i32
+    /// );
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix4x4<S> {
@@ -3860,6 +3982,29 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// _z-axis_, respectively to shearing along the _y-axis_. Since this is 
     /// an affine transformation the `w` component of four-dimensional vectors 
     /// is unaffected.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4, 
+    /// # };
+    ///
+    /// let shear_y_with_x = 3_i32;
+    /// let shear_y_with_z = 19_i32;
+    /// let matrix = Matrix4x4::from_affine_shear_y(shear_y_with_x, shear_y_with_z);
+    /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
+    /// let expected = Vector4::new(
+    ///     1_i32,
+    ///     1_i32 + shear_y_with_x * 1_i32 + shear_y_with_z * 1_i32,
+    ///     1_i32,
+    ///     1_i32
+    /// );
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix4x4<S> {
@@ -3882,6 +4027,29 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// _y-axis_, respectively to shearing along the _z-axis_. Since this is an 
     /// affine transformation the `w` component of four-dimensional vectors is 
     /// unaffected.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4, 
+    /// # };
+    ///
+    /// let shear_z_with_x = 3_i32;
+    /// let shear_z_with_y = 19_i32;
+    /// let matrix = Matrix4x4::from_affine_shear_z(shear_z_with_x, shear_z_with_y);
+    /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
+    /// let expected = Vector4::new(
+    ///     1_i32,
+    ///     1_i32,
+    ///     1_i32 + shear_z_with_x * 1_i32 + shear_z_with_y * 1_i32,
+    ///     1_i32
+    /// );
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4x4<S> {
@@ -3921,6 +4089,40 @@ impl<S> Matrix4x4<S> where S: Scalar {
     ///
     /// Since this is an affine transformation the `w` component
     /// of four-dimensional vectors is unaffected.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4,   
+    /// # };
+    ///
+    /// let shear_x_with_y = 1_usize;
+    /// let shear_x_with_z = 2_usize;
+    /// let shear_y_with_x = 3_usize;
+    /// let shear_y_with_z = 4_usize;
+    /// let shear_z_with_x = 5_usize;
+    /// let shear_z_with_y = 6_usize;
+    /// let matrix = Matrix4x4::from_affine_shear(
+    ///     shear_x_with_y, 
+    ///     shear_x_with_z,
+    ///     shear_y_with_x,
+    ///     shear_y_with_z,
+    ///     shear_z_with_x,
+    ///     shear_z_with_y,
+    /// );
+    /// let vector = Vector4::new(1_usize, 1_usize, 1_usize, 1_usize);
+    /// let expected = Vector4::new(
+    ///     vector.x + shear_x_with_y * vector.y + shear_x_with_z * vector.z,
+    ///     vector.y + shear_y_with_x * vector.x + shear_y_with_z * vector.z,
+    ///     vector.z + shear_z_with_x * vector.x + shear_z_with_y * vector.y,
+    ///     1_usize
+    /// );
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ``` 
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear(
@@ -4041,6 +4243,28 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
 impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
     /// x-axis by an angle `angle` radians/degrees.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4, 
+    /// #     Radians,
+    /// #     Angle, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,   
+    /// # };
+    ///
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let matrix = Matrix4x4::from_affine_angle_x(angle);
+    /// let vector = Vector4::new(0_f64, 1_f64, 1_f64, 1_f64);
+    /// let expected = Vector4::new(0_f64, -1_f64, 1_f64, 1_f64);
+    /// let result = matrix * vector;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
@@ -4058,6 +4282,29 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the y-axis by an angle `angle` radians/degrees.
+    ///
+    /// ### Example
+    /// 
+    /// In this example the rotation is in the **zx-plane**.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Vector4, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// 
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let matrix = Matrix4x4::from_affine_angle_y(angle);
+    /// let vector = Vector4::new(1_f64, 0_f64, 1_f64, 1_f64);
+    /// let expected = Vector4::new(1_f64, 0_f64, -1_f64, 1_f64);
+    /// let result = matrix * vector;
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
@@ -4075,6 +4322,29 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the z-axis by an angle `angle` radians/degrees.
+    ///
+    /// ### Example
+    /// 
+    /// In this example the rotation is in the **xy-plane**.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Vector4, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// 
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let matrix = Matrix4x4::from_affine_angle_z(angle);
+    /// let vector = Vector4::new(1_f64, 1_f64, 0_f64, 1_f64);
+    /// let expected = Vector4::new(-1_f64, 1_f64, 0_f64, 1_f64);
+    /// let result = matrix * vector;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
@@ -4092,6 +4362,31 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
 
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the axis `axis` by an angle `angle` radians/degrees.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Angle, 
+    /// #     Matrix4x4,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Vector4,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///  
+    /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let matrix = Matrix4x4::from_affine_axis_angle(&axis, angle);
+    /// let vector = Vector4::new(1_f64, 0_f64, 0_f64, 1_f64);
+    /// let expected = Vector4::new(0_f64, 1_f64, 0_f64, 1_f64);
+    /// let result = matrix * vector;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Matrix4x4<S> {
@@ -4123,6 +4418,30 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     }
 
     /// Construct a new three-dimensional orthographic projection matrix.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// 
+    /// let left = -4.0;
+    /// let right = 4.0;
+    /// let bottom = -2.0;
+    /// let top = 2.0;
+    /// let near = 1.0;
+    /// let far = 100.0;
+    /// let expected = Matrix4x4::new(
+    ///     1.0 / 4.0,  0.0,        0.0,          0.0,
+    ///     0.0,        1.0 / 2.0,  0.0,          0.0,
+    ///     0.0,        0.0,       -2.0 / 99.0,   0.0,
+    ///     0.0,        0.0,       -101.0 / 99.0, 1.0
+    /// );
+    /// let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_orthographic(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> {
@@ -4147,6 +4466,30 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
 
     /// Construct a new three-dimensional perspective projection matrix based
     /// on arbitrary `left`, `right`, `bottom`, `top`, `near` and `far` planes.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    ///
+    /// let left = -4.0;
+    /// let right = 4.0;
+    /// let bottom = -2.0;
+    /// let top = 3.0;
+    /// let near = 1.0;
+    /// let far = 100.0;
+    /// let expected = Matrix4x4::new(
+    ///     1.0 / 4.0,  0.0,        0.0,           0.0,
+    ///     0.0,        2.0 / 5.0,  0.0,           0.0,
+    ///     0.0,        1.0 / 5.0, -101.0 / 99.0, -1.0,
+    ///     0.0,        0.0,       -200.0 / 99.0,  0.0
+    /// );
+    /// let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_perspective(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> {
@@ -4186,6 +4529,29 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a perspective projection based on the `near` plane, the `far` 
     /// plane and the vertical field of view angle `fovy` and the 
     /// horizontal/vertical aspect ratio `aspect`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Degrees,
+    /// # };
+    ///
+    /// let fovy = Degrees(72.0);
+    /// let aspect = 800 as f32 / 600 as f32;
+    /// let near = 0.1;
+    /// let far = 100.0;
+    /// let expected = Matrix4x4::new(
+    ///     1.0322863, 0.0,        0.0,       0.0, 
+    ///     0.0,       1.3763818,  0.0,       0.0, 
+    ///     0.0,       0.0,       -1.002002, -1.0, 
+    ///     0.0,       0.0,       -0.2002002, 0.0
+    /// );
+    /// let result = Matrix4x4::from_perspective_fov(fovy, aspect, near, far);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_perspective_fov<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
@@ -4302,6 +4668,37 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     }
 
     /// Linearly interpolate between two matrices.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #    Matrix4x4,
+    /// # };
+    /// 
+    /// let matrix0 = Matrix4x4::new(
+    ///     0_f64, 0_f64, 0_f64, 0_f64,
+    ///     1_f64, 1_f64, 1_f64, 1_f64,
+    ///     2_f64, 2_f64, 2_f64, 2_f64,
+    ///     3_f64, 3_f64, 3_f64, 3_f64
+    /// );
+    /// let matrix1 = Matrix4x4::new(
+    ///     4_f64, 4_f64, 4_f64, 4_f64,
+    ///     5_f64, 5_f64, 5_f64, 5_f64,
+    ///     6_f64, 6_f64, 6_f64, 6_f64,
+    ///     7_f64, 7_f64, 7_f64, 7_f64
+    /// );
+    /// let amount = 0.5;
+    /// let expected = Matrix4x4::new(
+    ///     2_f64, 2_f64, 2_f64, 2_f64,
+    ///     3_f64, 3_f64, 3_f64, 3_f64,
+    ///     4_f64, 4_f64, 4_f64, 4_f64,
+    ///     5_f64, 5_f64, 5_f64, 5_f64
+    /// );
+    /// let result = matrix0.lerp(&matrix1, amount);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn lerp(&self, other: &Matrix4x4<S>, amount: S) -> Matrix4x4<S> {
         self + ((other - self) * amount)
@@ -4312,8 +4709,41 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     ///
     /// A matrix is finite when all of its elements are finite. This is useful 
     /// for vector and matrix types working with fixed precision floating point 
-    /// values. For example, when the vector elements are `f64`, the vector is 
-    /// finite when the elements are neither `NaN` nor infinite.
+    /// values.
+    ///
+    /// ### Example (Finite Matrix)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,  
+    /// # };
+    ///
+    /// let matrix = Matrix4x4::new(
+    ///     1_f64,  2_f64,  3_f64,  4_f64,
+    ///     5_f64,  6_f64,  7_f64,  8_f64,
+    ///     9_f64,  10_f64, 11_f64, 12_f64,
+    ///     13_f64, 14_f64, 15_f64, 16_f64
+    /// );
+    /// 
+    /// assert!(matrix.is_finite());
+    /// ```
+    ///
+    /// ### Example (Not A Finite Matrix)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,    
+    /// # };
+    /// 
+    /// let matrix = Matrix4x4::new(
+    ///     1_f64,             2_f64,             3_f64,             4_f64,
+    ///     f64::NAN,          f64::NAN,          f64::NAN,          f64::NAN,
+    ///     f64::INFINITY,     f64::INFINITY,     f64::INFINITY,     f64::INFINITY,
+    ///     f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY
+    /// );
+    ///
+    /// assert!(!matrix.is_finite());
+    /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.c0r0.is_finite() && self.c0r1.is_finite() && 
