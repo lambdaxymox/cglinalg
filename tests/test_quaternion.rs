@@ -169,7 +169,9 @@ mod magnitude_tests {
         Magnitude,
         Vector3,
     };
-    use cglinalg::approx::relative_eq;
+    use cglinalg::approx::{
+        relative_eq,
+    };
 
 
     #[test]
@@ -393,8 +395,13 @@ mod exp_tests {
         Quaternion,
         Identity,
         AdditiveIdentity,
+        Vector3,
     };
-    use cglinalg::approx::relative_eq;
+    use cglinalg::approx::{
+        relative_eq,
+    };
+
+    use core::f64;
 
 
     #[test]
@@ -414,7 +421,80 @@ mod exp_tests {
         let expected = -Quaternion::identity();
         let result = (sgn_qv * pi).exp();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_quaternion_exp_power_unit_x_times_pi_over_2() {
+        let unit_x = Quaternion::unit_x();
+        let pi_over_two = f64::consts::PI / 2_f64;
+        let result = (unit_x * pi_over_two).exp();
+        let expected = unit_x;
+     
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_quaternion_exp_power_unit_y_times_pi_over_2() {
+        let unit_y = Quaternion::unit_y();
+        let pi_over_two = f64::consts::PI / 2_f64;
+        let result = (unit_y * pi_over_two).exp();
+        let expected = unit_y;
+     
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_quaternion_exp_power_unit_z_times_pi_over_2() {
+        let unit_z = Quaternion::unit_z();
+        let pi_over_two = f64::consts::PI / 2_f64;
+        let result = (unit_z * pi_over_two).exp();
+        let expected = unit_z;
+     
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_quaternion_exp_power_times_pi_unit_scalar() {
+        let qs = 3_f64;
+        let q: Quaternion<f64> = Quaternion::new(qs, 0_f64, 0_f64, 0_f64);
+        let expected = Quaternion::from_parts(qs.exp(), Vector3::zero());
+        let result = q.exp();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaternion_exp_power_times_pi_unit_x() {
+        let zero_vec = Vector3::zero();
+        let unit_x = Quaternion::unit_x();
+        let pi = f64::consts::PI;
+        let result = (unit_x * pi).exp();
+        let expected = Quaternion::from_parts(-1_f64, zero_vec);
+     
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_quaternion_exp_power_times_pi_unit_y() {
+        let zero_vec = Vector3::zero();
+        let unit_y = Quaternion::unit_y();
+        let pi = f64::consts::PI;
+        let result = (unit_y * pi).exp();
+        let expected = Quaternion::from_parts(-1_f64, zero_vec);
+     
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_quaternion_exp_power_times_pi_unit_z() {
+        let zero_vec = Vector3::zero();
+        let unit_z = Quaternion::unit_z();
+        let pi = f64::consts::PI;
+        let result = (unit_z * pi).exp();
+        let expected = Quaternion::from_parts(-1_f64, zero_vec);
+     
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 
     #[test]

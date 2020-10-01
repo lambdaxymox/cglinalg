@@ -828,6 +828,33 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// theta = Arg(q) + 2 * pi * n
     /// ```
     /// In the case of `theta = Arg(q)`, we have `n = 0`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     AdditiveIdentity,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// 
+    /// let zero_quat: Quaternion<f64> = Quaternion::zero();
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    ///
+    /// assert!(zero_quat.is_zero());
+    /// assert_eq!(zero_quat.arg(), pi_over_two);
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
+    /// let pi_over_three = f64::consts::FRAC_PI_3;
+    /// let expected = pi_over_three;
+    /// let result = quaternion.arg();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn arg(&self) -> S {
         if self.s == S::zero() {
@@ -838,6 +865,109 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Calculate the exponential of a quaternion.
+    ///
+    /// ### Examples
+    ///
+    /// Compute the exponential of a scalar quaternion.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use core::f64;
+    ///
+    /// let zero_vec = Vector3::zero();
+    /// let s = 3_f64;
+    /// let qs = Quaternion::from_parts(s, zero_vec);
+    /// let result = qs.exp();
+    /// let expected = Quaternion::from_parts(s.exp(), zero_vec);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    ///
+    /// A computation involving the unit **x-axis** pure quaternion. 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    ///
+    /// let zero_vec = Vector3::zero();
+    /// let unit_x = Quaternion::unit_x();
+    /// let pi = f64::consts::PI;
+    /// let result = (unit_x * pi).exp();
+    /// let expected = Quaternion::from_parts(-1_f64, zero_vec);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
+    ///
+    /// A computation involving the unit **y-axis** pure quaternion. 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    ///
+    /// let zero_vec = Vector3::zero();
+    /// let unit_y = Quaternion::unit_y();
+    /// let pi = f64::consts::PI;
+    /// let result = (unit_y * pi).exp();
+    /// let expected = Quaternion::from_parts(-1_f64, zero_vec);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
+    ///
+    /// A computation involving the unit **z-axis** pure quaternion. 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    ///
+    /// let zero_vec = Vector3::zero();
+    /// let unit_z = Quaternion::unit_z();
+    /// let pi = f64::consts::PI;
+    /// let result = (unit_z * pi).exp();
+    /// let expected = Quaternion::from_parts(-1_f64, zero_vec);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
+    ///
+    /// A computation involving the unit **z-axis** pure quaternion again.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    ///
+    /// let unit_z = Quaternion::unit_z();
+    /// let pi_over_two = f64::consts::PI / 2_f64;
+    /// let result = (unit_z * pi_over_two).exp();
+    /// let expected = unit_z;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn exp(&self) -> Quaternion<S> {
         self.exp_eps(S::default_epsilon())
@@ -871,6 +1001,50 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// signum function, and `log(., e)` denotes the natural logarithm of a 
     /// scalar. Returning the principal value allows us to define a unique 
     /// natural logarithm for each quaternion `q`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     AdditiveIdentity,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    ///
+    /// let unit_z: Vector3<f64> = Vector3::unit_z();
+    /// let pi = f64::consts::PI;
+    /// let quaternion = Quaternion::from_parts(1_f64, unit_z);
+    /// let expected = Quaternion::new(f64::ln(f64::sqrt(2_f64)), 0_f64, 0_f64, pi / 4_f64);
+    /// let result = quaternion.ln(); 
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
+    ///
+    /// ### Example
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     AdditiveIdentity,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// 
+    /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
+    /// let pi_over_three = f64::consts::FRAC_PI_3;
+    /// let scalar = f64::ln(2_f64);
+    /// let vector = (1_f64 / f64::sqrt(3_f64)) * pi_over_three * Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = Quaternion::from_parts(scalar, vector);
+    /// let result = quaternion.ln();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn ln(&self) -> Quaternion<S> {
         self.ln_eps(S::default_epsilon())
@@ -893,6 +1067,27 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Calculate the power of a quaternion where the exponent is a real number.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// 
+    /// let scalar = 1_f64;
+    /// let vector = Vector3::unit_z();
+    /// let quaternion = Quaternion::from_parts(scalar, vector);
+    /// let exponent = 2_f64;
+    /// let expected = 2_f64 * Quaternion::unit_z();
+    /// let result = quaternion.powf(exponent);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn powf(&self, exponent: S) -> Quaternion<S> {
         (self.ln() * exponent).exp()
