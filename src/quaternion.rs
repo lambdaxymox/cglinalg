@@ -301,6 +301,33 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Construct a quaternion from an equivalent 3x3 matrix.
+    ///
+    /// A quaternion can be constructed by starting from the Euler-Rodrigues 
+    /// formula and working backwards to extract the components of the quaternion
+    /// from the components of the matrix.
+    ///
+    /// ### Example
+    /// Here we extract a quaternion from a 60-degree rotation about 
+    /// the **z-axis**.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///       1_f64 / 2_f64,             f64::sqrt(3_f64) / 2_f64, 0_f64,
+    ///      -f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64,            0_f64,
+    ///       0_f64,                    0_f64,                    1_f64
+    /// );
+    /// let scalar = f64::sqrt(3_f64) / 2_f64;
+    /// let vector = Vector3::new(0_f64, 0_f64, 1_f64 / 2_f64);
+    /// let expected = Quaternion::from_parts(scalar, vector);
+    /// let result = Quaternion::from_matrix(&matrix);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> Quaternion<S> {
         let trace = matrix.trace();
