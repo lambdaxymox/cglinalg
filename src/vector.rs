@@ -1018,7 +1018,7 @@ impl<S> Vector2<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector2,
     /// # };
-    /// 
+    /// #
     /// let w1 = Vector2::new(f64::INFINITY, f64::NAN);
     /// let w2 = Vector2::new(f64::INFINITY, 2_f64);
     ///
@@ -1032,6 +1032,24 @@ impl<S> Vector2<S> where S: ScalarFloat {
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let vector = 3_f64 * Vector2::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64);
+    /// let unit_x = Vector2::unit_x();
+    /// let unit_y = Vector2::unit_y();
+    /// let projected_x = vector.project_onto(&unit_x);
+    /// let projected_y = vector.project_onto(&unit_y);
+    ///
+    /// assert_eq!(projected_x, vector.x * unit_x);
+    /// assert_eq!(projected_y, vector.y * unit_y);
+    /// ```
     #[inline]
     pub fn project_onto(&self, other: &Vector2<S>) -> Vector2<S> {
         other * (self.dot(other) / other.magnitude_squared())
@@ -1903,6 +1921,27 @@ impl<S> Vector3<S> where S: ScalarFloat {
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let vector = Vector3::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64);
+    /// let unit_x = Vector3::unit_x();
+    /// let unit_y = Vector3::unit_y();
+    /// let unit_z = Vector3::unit_z();
+    /// let projected_x = vector.project_onto(&unit_x);
+    /// let projected_y = vector.project_onto(&unit_y);
+    /// let projected_z = vector.project_onto(&unit_z);
+    ///
+    /// assert_eq!(projected_x, vector.x * unit_x);
+    /// assert_eq!(projected_y, vector.y * unit_y);
+    /// assert_eq!(projected_z, vector.z * unit_z);
+    /// ```
     #[inline]
     pub fn project_onto(&self, other: &Vector3<S>) -> Vector3<S> {
         other * (self.dot(other) / other.magnitude_squared())
@@ -2883,6 +2922,30 @@ impl<S> Vector4<S> where S: ScalarFloat {
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let vector = Vector4::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64, 1_f64);
+    /// let unit_x = Vector4::unit_x();
+    /// let unit_y = Vector4::unit_y();
+    /// let unit_z = Vector4::unit_z();
+    /// let unit_w = Vector4::unit_w();
+    /// let projected_x = vector.project_onto(&unit_x);
+    /// let projected_y = vector.project_onto(&unit_y);
+    /// let projected_z = vector.project_onto(&unit_z);
+    /// let projected_w = vector.project_onto(&unit_w);
+    ///
+    /// assert_eq!(projected_x, vector.x * unit_x);
+    /// assert_eq!(projected_y, vector.y * unit_y);
+    /// assert_eq!(projected_z, vector.z * unit_z);
+    /// assert_eq!(projected_w, vector.w * unit_w);
+    /// ```
     #[inline]
     pub fn project_onto(&self, other: &Vector4<S>) -> Vector4<S> {
         other * (self.dot(other) / other.magnitude_squared())

@@ -1392,6 +1392,30 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Compute the projection of the quaternion `self` onto the quaternion
     /// `other`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let unit_x = Quaternion::unit_x();
+    /// let unit_y = Quaternion::unit_y();
+    /// let unit_z = Quaternion::unit_z();
+    /// let unit_s = Quaternion::unit_s();
+    /// let projected_x = quaternion.project_onto(&unit_x);
+    /// let projected_y = quaternion.project_onto(&unit_y);
+    /// let projected_z = quaternion.project_onto(&unit_z);
+    /// let projected_s = quaternion.project_onto(&unit_s);
+    ///
+    /// assert_eq!(projected_x, quaternion.v.x * unit_x);
+    /// assert_eq!(projected_y, quaternion.v.y * unit_y);
+    /// assert_eq!(projected_z, quaternion.v.z * unit_z);
+    /// assert_eq!(projected_s, quaternion.s * unit_s);
+    /// ```
     #[inline]
     pub fn project_onto(&self, other: &Quaternion<S>) -> Quaternion<S> {
         other * (self.dot(other) / other.magnitude_squared())
