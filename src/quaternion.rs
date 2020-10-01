@@ -871,7 +871,12 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn arg(&self) -> S {
-        if self.s == S::zero() {
+        self.arg_eps(S::default_epsilon())
+    }
+
+    #[inline]
+    fn arg_eps(&self, epsilon: S) -> S {
+        if self.s * self.s <= epsilon * epsilon {
             num_traits::cast(core::f64::consts::FRAC_PI_2).unwrap()
         } else {
             S::atan(self.v.magnitude() / self.s)

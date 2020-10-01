@@ -31,7 +31,7 @@ To use the library in your project, add `cglinalg` as a dependency in your
 `Cargo.toml` file:
 ```
 [dependencies]
-cglinalg = "0.8"
+cglinalg = "0.10.0"
 ```
 After that, place the crate declaration in either your `lib.rs` file or 
 your `main.rs` file
@@ -49,7 +49,7 @@ This serves the `cglinalg` goal to be a platform agnostic foundation for
 computer graphics applications in other languages and ecosystems as well. 
 Specific features of the library include:
 * Basic linear algebra with matrices and vectors up to dimension four.
-* Quaternions, euler angles, and rotation matrices for doing rotations.
+* Quaternions, Euler angles, and rotation matrices for doing rotations.
 * All data types are parametrized to work over a large range of numerical types.
 * An optional transformation system for working with affine and projective 
   transformations on points and vectors. This library distinguishes points from 
@@ -76,10 +76,10 @@ The library has design limitations for a number of reasons.
   As a consequence this library does not support most of the operations commonly used 
   in modeling and simulation tasks.
 * In keeping with simplicity as one of the project goals, the underlying storage of 
-  all data types in this library are statically allocated arrays. This is advantagous 
+  all data types in this library are statically allocated arrays. This is advantageous 
   in the low-dimensional case when the data types have small sizes, but this is a 
   limitation in the higher-dimensional case where dynamic storage allocation of storage 
-  or using the heap may be desireable.
+  or using the heap may be desirable.
 
 ## Limitations On The Implementation
 The limitations on the implementation are addressed in the project roadmap. 
