@@ -25,10 +25,10 @@ fn any_radians<S>() -> impl Strategy<Value = Radians<S>>
     where S: Scalar + Arbitrary
 {
     any::<S>()
-        .prop_map(|unitless| {
+        .prop_map(|dimensionless| {
             let two_pi: S = num_traits::cast(2_f64 * core::f64::consts::PI).unwrap();
             let one_million: S = num_traits::cast(1_000_000).unwrap();
-            Radians(unitless % (one_million * two_pi))
+            Radians(dimensionless % (one_million * two_pi))
         })
         .no_shrink()
 }
@@ -37,10 +37,10 @@ fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
     where S: Scalar + Arbitrary
 {
     any::<S>()
-        .prop_map(|unitless| {
+        .prop_map(|dimensionless| {
             let two_pi: S = num_traits::cast(360_f64).unwrap();
             let one_million: S = num_traits::cast(1_000_000).unwrap();
-            Degrees(unitless % (one_million * two_pi)) 
+            Degrees(dimensionless % (one_million * two_pi)) 
         })
         .no_shrink()
 }
@@ -165,7 +165,7 @@ macro_rules! approx_arithmetic_props {
             /// angle * 1 = angle
             /// ```
             #[test]
-            fn prop_angle_multiplication_unitless_unit_element(angle in $Generator::<$ScalarType>()) {
+            fn prop_angle_multiplication_dimensionless_unit_element(angle in $Generator::<$ScalarType>()) {
                 let one: $ScalarType = num_traits::one();
 
                 prop_assert_eq!(angle * one, angle);
