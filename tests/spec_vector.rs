@@ -27,25 +27,45 @@ fn any_scalar<S>() -> impl Strategy<Value = S>
 fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
     where S: Scalar + Arbitrary 
 {
-    any::<S>().prop_map(|x| Vector1::new(x))
+    any::<S>().prop_map(|x| {
+        let modulus = num_traits::cast(1_000_000).unwrap();
+        let vector = Vector1::new(x);
+
+        vector % modulus
+    })
 }
 
 fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>> 
     where S: Scalar + Arbitrary
 {
-    any::<(S, S)>().prop_map(|(x, y)| Vector2::new(x, y))
+    any::<(S, S)>().prop_map(|(x, y)| {
+        let modulus = num_traits::cast(1_000_000).unwrap();
+        let vector = Vector2::new(x, y);
+
+        vector % modulus
+    })
 }
 
 fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
     where S: Scalar + Arbitrary
 {
-    any::<(S, S, S)>().prop_map(|(x, y, z)| Vector3::new(x, y, z))
+    any::<(S, S, S)>().prop_map(|(x, y, z)| {
+        let modulus = num_traits::cast(1_000_000).unwrap();
+        let vector = Vector3::new(x, y, z);
+
+        vector % modulus
+    })
 }
 
 fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
     where S: Scalar + Arbitrary
 {
-    any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| Vector4::new(x, y, z, w))
+    any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
+        let modulus = num_traits::cast(1_000_000).unwrap();
+        let vector = Vector4::new(x, y, z, w);
+
+        vector % modulus
+    })
 }
 
 
@@ -1234,7 +1254,7 @@ macro_rules! approx_dot_product_props {
             ///
             /// Given vectors `v` and `w`
             /// ```text
-            /// dot(v, w) = dot(w, v)
+            /// dot(v, w) ~= dot(w, v)
             /// ```
             #[test]
             fn prop_vector_dot_product_commutative(
@@ -1250,7 +1270,7 @@ macro_rules! approx_dot_product_props {
             ///
             /// Given vectors `u`, `v`, and `w`
             /// ```text
-            /// dot(u, v + w) = dot(u, v) + dot(u, w)
+            /// dot(u, v + w) ~= dot(u, v) + dot(u, w)
             /// ```
             #[test]
             fn prop_vector_dot_product_right_distributive(
@@ -1259,9 +1279,9 @@ macro_rules! approx_dot_product_props {
             
                 prop_assume!(u.dot(v + w).is_finite());
                 prop_assume!((u.dot(v) + u.dot(w)).is_finite());
-                prop_assert!(
-                    relative_eq!(u.dot(v + w), u.dot(v) + u.dot(w), epsilon = $tolerance)
-                );
+                prop_assert!(relative_eq!(
+                    u.dot(v + w), u.dot(v) + u.dot(w), epsilon = $tolerance
+                ));
             }
 
             /// The dot product of vectors over floating point scalars is 
@@ -1269,7 +1289,7 @@ macro_rules! approx_dot_product_props {
             ///
             /// Given vectors `u`, `v`, and `w`
             /// ```text
-            /// dot(u + v,  w) = dot(u, w) + dot(v, w)
+            /// dot(u + v,  w) ~= dot(u, w) + dot(v, w)
             /// ```
             #[test]
             fn prop_vector_dot_product_left_distributive(
@@ -1278,9 +1298,9 @@ macro_rules! approx_dot_product_props {
             
                 prop_assume!((u + v).dot(w).is_finite());
                 prop_assume!((u.dot(w) + v.dot(w)).is_finite());
-                prop_assert!(
-                    relative_eq!((u + v).dot(w), u.dot(w) + v.dot(w), epsilon = $tolerance)
-                );
+                prop_assert!(relative_eq!(
+                    (u + v).dot(w), u.dot(w) + v.dot(w), epsilon = $tolerance
+                ));
             }
 
             /// The dot product of vectors over floating point scalars is approximately 
@@ -1288,7 +1308,7 @@ macro_rules! approx_dot_product_props {
             ///
             /// Given vectors `v` and `w`, and scalars `a` and `b`
             /// ```text
-            /// dot(a * v, b * w) = a * b * dot(v, w)
+            /// dot(a * v, b * w) ~= a * b * dot(v, w)
             /// ```
             #[test]
             fn prop_vector_dot_product_times_scalars_commutative(
@@ -1297,7 +1317,9 @@ macro_rules! approx_dot_product_props {
 
                 prop_assume!((a * v).dot(b * w).is_finite());
                 prop_assume!((a * b * v.dot(w)).is_finite());
-                prop_assert!(relative_eq!((a * v).dot(b * w), a * b * v.dot(w), epsilon = $tolerance));
+                prop_assert!(relative_eq!(
+                    (a * v).dot(b * w), a * b * v.dot(w), epsilon = $tolerance
+                ));
             }
 
             /// The dot product of vectors over floating point scalars is 
@@ -1305,7 +1327,7 @@ macro_rules! approx_dot_product_props {
             ///
             /// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
             /// ```text
-            /// dot(u, a * v + b * w) = a * dot(u, v) + b * dot(u, w)
+            /// dot(u, a * v + b * w) ~= a * dot(u, v) + b * dot(u, w)
             /// ```
             #[test]
             fn prop_vector_dot_product_right_bilinear(
@@ -1315,9 +1337,9 @@ macro_rules! approx_dot_product_props {
 
                 prop_assume!((u.dot(a * v + b * w)).is_finite());
                 prop_assume!((a * u.dot(v) + b * u.dot(w)).is_finite());
-                prop_assert!(
-                    relative_eq!(u.dot(a * v + b * w), a * u.dot(v) + b * u.dot(w), epsilon = $tolerance)
-                );
+                prop_assert!(relative_eq!(
+                    u.dot(a * v + b * w), a * u.dot(v) + b * u.dot(w), epsilon = $tolerance
+                ));
             }
 
             /// The dot product of vectors over floating point scalars is 
@@ -1325,7 +1347,7 @@ macro_rules! approx_dot_product_props {
             ///
             /// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
             /// ```text
-            /// dot(a * u + b * v, w) = a * dot(u, w) + b * dot(v, w)
+            /// dot(a * u + b * v, w) ~= a * dot(u, w) + b * dot(v, w)
             /// ```
             #[test]
             fn prop_vector_dot_product_left_bilinear(
