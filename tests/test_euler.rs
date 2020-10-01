@@ -7,7 +7,7 @@ use cglinalg::{
     Angle,
     Matrix3x3,
     Matrix4x4,
-    AdditiveIdentity,
+    Zero,
     Identity,
 };
 use cglinalg::approx::{

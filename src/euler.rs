@@ -13,7 +13,7 @@ use crate::scalar::{
     ScalarFloat,
 };
 use crate::traits::{
-    AdditiveIdentity,
+    Zero,
 };
 use approx::{
     ulps_eq,
@@ -594,7 +594,7 @@ impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> where S: ScalarFloat {
 }
 
 impl<A> ops::Add<EulerAngles<A>> for EulerAngles<A> where
-    A: Copy + AdditiveIdentity + ops::Add<A> 
+    A: Copy + Zero + ops::Add<A> 
 {
     type Output = EulerAngles<A>;
 
@@ -609,7 +609,7 @@ impl<A> ops::Add<EulerAngles<A>> for EulerAngles<A> where
 }
 
 impl<A> ops::Add<&EulerAngles<A>> for EulerAngles<A> where 
-    A: Copy + AdditiveIdentity + ops::Add<A> 
+    A: Copy + Zero + ops::Add<A> 
 {
     type Output = EulerAngles<A>;
 
@@ -624,7 +624,7 @@ impl<A> ops::Add<&EulerAngles<A>> for EulerAngles<A> where
 }
 
 impl<A> ops::Add<EulerAngles<A>> for &EulerAngles<A> where 
-    A: Copy + AdditiveIdentity + ops::Add<A>
+    A: Copy + Zero + ops::Add<A>
 {
     type Output = EulerAngles<A>;
 
@@ -639,7 +639,7 @@ impl<A> ops::Add<EulerAngles<A>> for &EulerAngles<A> where
 }
 
 impl<'a, 'b, A> ops::Add<&'a EulerAngles<A>> for &'b EulerAngles<A> where 
-    A: Copy + AdditiveIdentity + ops::Add<A>
+    A: Copy + Zero + ops::Add<A>
 {
     type Output = EulerAngles<A>;
 
@@ -653,7 +653,7 @@ impl<'a, 'b, A> ops::Add<&'a EulerAngles<A>> for &'b EulerAngles<A> where
     }
 }
 
-impl<A> AdditiveIdentity for EulerAngles<A> where A: Angle {
+impl<A> Zero for EulerAngles<A> where A: Angle {
     #[inline]
     fn zero() -> EulerAngles<A> {
         EulerAngles::new(A::zero(), A::zero(), A::zero())

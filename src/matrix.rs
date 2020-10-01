@@ -21,7 +21,7 @@ use crate::traits::{
     CrossProduct,
     DotProduct,
     Identity, 
-    AdditiveIdentity, 
+    Zero, 
     Matrix, 
     SquareMatrix,
     InvertibleSquareMatrix,
@@ -800,7 +800,7 @@ impl<S> ops::IndexMut<usize> for Matrix2x2<S> {
     }
 }
 
-impl<S> AdditiveIdentity for Matrix2x2<S> where S: Scalar {
+impl<S> Zero for Matrix2x2<S> where S: Scalar {
     #[inline]
     fn zero() -> Matrix2x2<S> {
         Matrix2x2::new(S::zero(), S::zero(), S::zero(), S::zero())
@@ -2853,7 +2853,7 @@ impl<S> ops::IndexMut<usize> for Matrix3x3<S> {
     }
 }
 
-impl<S> AdditiveIdentity for Matrix3x3<S> where S: Scalar {
+impl<S> Zero for Matrix3x3<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn zero() -> Matrix3x3<S> {
@@ -5125,7 +5125,7 @@ impl<S> ops::IndexMut<usize> for Matrix4x4<S> {
     }
 }
 
-impl<S> AdditiveIdentity for Matrix4x4<S> where S: Scalar {
+impl<S> Zero for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn zero() -> Matrix4x4<S> {

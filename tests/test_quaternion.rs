@@ -394,7 +394,7 @@ mod exp_tests {
         Magnitude,
         Quaternion,
         Identity,
-        AdditiveIdentity,
+        Zero,
         Vector3,
     };
     use cglinalg::approx::{
@@ -521,7 +521,7 @@ mod logarithm_tests {
     use cglinalg::{
         Vector3,
         Quaternion,
-        AdditiveIdentity,
+        Zero,
         Identity,
     };
     use cglinalg::approx::relative_eq;
@@ -739,7 +739,7 @@ mod rotation_tests {
 mod inverse_tests {
     use cglinalg::{
         Quaternion,
-        AdditiveIdentity,
+        Zero,
     };
 
 

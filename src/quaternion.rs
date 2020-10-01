@@ -1,6 +1,6 @@
 use crate::traits::{
     Array,
-    AdditiveIdentity,
+    Zero,
     Identity,
     CrossProduct,
     DotProduct,
@@ -472,7 +472,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Quaternion,
     /// #     Matrix3x3,  
     /// #     Magnitude,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
@@ -503,7 +503,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Quaternion,
     /// #     Matrix3x3,  
     /// #     Magnitude,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
@@ -663,7 +663,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Quaternion,
     /// #     Matrix4x4,  
     /// #     Magnitude,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
@@ -696,7 +696,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Quaternion,
     /// #     Matrix4x4,  
     /// #     Magnitude,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
@@ -790,7 +790,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// ```
     /// # use cglinalg::{
     /// #     Quaternion,
-    /// #     AdditiveIdentity,   
+    /// #     Zero,   
     /// # };
     /// #
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
@@ -830,7 +830,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// ```
     /// # use cglinalg::{
     /// #     Quaternion,
-    /// #     AdditiveIdentity,   
+    /// #     Zero,   
     /// # };
     /// #
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
@@ -875,7 +875,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// ```
     /// # use cglinalg::{
     /// #     Quaternion,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// #     Vector3,
     /// # };
     /// # use cglinalg::approx::{
@@ -919,7 +919,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use core::f64;
     /// #
@@ -937,7 +937,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
@@ -958,7 +958,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
@@ -979,7 +979,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
@@ -1000,7 +1000,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
@@ -1054,7 +1054,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// # };
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
@@ -1074,7 +1074,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// ```
     /// # use cglinalg::{
     /// #     Quaternion,
-    /// #     AdditiveIdentity,
+    /// #     Zero,
     /// #     Vector3,
     /// # };
     /// # use cglinalg::approx::{
@@ -1468,7 +1468,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AdditiveIdentity for Quaternion<S> where S: Scalar {
+impl<S> Zero for Quaternion<S> where S: Scalar {
     #[inline]
     fn zero() -> Quaternion<S> {
         let zero = S::zero();

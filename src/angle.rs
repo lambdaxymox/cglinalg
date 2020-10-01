@@ -4,7 +4,7 @@ use crate::scalar::{
     ScalarFloat,
 };
 use crate::traits::{
-    AdditiveIdentity,
+    Zero,
 };
 
 use num_traits::{
@@ -26,7 +26,7 @@ use core::ops;
 pub trait Angle where 
     Self: Copy + Clone,
     Self: PartialEq + PartialOrd,
-    Self: AdditiveIdentity,
+    Self: Zero,
     Self: ops::Neg<Output = Self>,
     Self: ops::Add<Self, Output = Self>,
     Self: ops::Sub<Self, Output = Self>,
@@ -486,7 +486,7 @@ impl<S> ops::RemAssign<Degrees<S>> for Degrees<S> where S: ScalarFloat {
     } 
 }
 
-impl<S> AdditiveIdentity for Degrees<S> where S: Scalar {
+impl<S> Zero for Degrees<S> where S: Scalar {
     #[inline]
     fn zero() -> Degrees<S> {
         Degrees(S::zero())
@@ -769,7 +769,7 @@ impl<S> ops::RemAssign<Radians<S>> for Radians<S> where S: ScalarFloat {
     } 
 }
 
-impl<S> AdditiveIdentity for Radians<S> where S: Scalar {
+impl<S> Zero for Radians<S> where S: Scalar {
     #[inline]
     fn zero() -> Radians<S> {
         Radians(S::zero())

@@ -148,7 +148,7 @@ macro_rules! exact_arithmetic_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            AdditiveIdentity,
+            Zero,
         };
         use super::{
             $Generator,
@@ -279,7 +279,7 @@ macro_rules! approx_add_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            AdditiveIdentity,
+            Zero,
         };
         use super::{
             $Generator,
@@ -406,7 +406,7 @@ macro_rules! exact_add_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            AdditiveIdentity,
+            Zero,
         };
         use super::{
             $Generator,
@@ -530,7 +530,7 @@ macro_rules! approx_sub_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            AdditiveIdentity,
+            Zero,
         };
         use super::{
             $Generator,
@@ -622,7 +622,7 @@ macro_rules! exact_sub_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            AdditiveIdentity,
+            Zero,
         };
         use super::{
             $Generator,
