@@ -121,6 +121,20 @@ impl<S> Matrix2x2<S> where S: Copy {
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// 
+    /// let fill_value: u32 = 3;
+    /// let expected = Matrix2x2::new(fill_value, fill_value, fill_value, fill_value);
+    /// let result = Matrix2x2::from_fill(fill_value);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Matrix2x2<S> {
         Matrix2x2::new(value, value, value, value)
@@ -164,6 +178,23 @@ impl<S> Matrix2x2<S> where S: Scalar {
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the _y-axis_ to shearing along the _x-axis_.
+    ///
+    /// ### Example 
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// #     Vector2,
+    /// # };
+    /// 
+    /// let shear_x_with_y = 3_u32;
+    /// let matrix = Matrix2x2::from_shear_x(shear_x_with_y);
+    /// let vector = Vector2::new(1, 1);
+    /// let expected = Vector2::new(1 + 3*1, 1);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S) -> Matrix2x2<S> {
@@ -177,6 +208,23 @@ impl<S> Matrix2x2<S> where S: Scalar {
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the _x-axis_ to shearing along the _y-axis_.
+    ///
+    /// ### Example 
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// #     Vector2,
+    /// # };
+    /// 
+    /// let shear_y_with_x = 3_u32;
+    /// let matrix = Matrix2x2::from_shear_y(shear_y_with_x);
+    /// let vector = Vector2::new(1, 1);
+    /// let expected = Vector2::new(1, 1 + 3*1);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S) -> Matrix2x2<S> {
@@ -194,6 +242,24 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// contribution of the _x-axis_ to shearing along the _y-axis_.
     /// The parameter `shear_x_with_y` denotes the factor scaling the 
     /// contribution of the y-component to the shearing of the x-component. 
+    ///
+    /// ### Example 
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// #     Vector2,
+    /// # };
+    /// 
+    /// let shear_x_with_y = 15_u32;
+    /// let shear_y_with_x = 4_u32;
+    /// let matrix = Matrix2x2::from_shear(shear_x_with_y, shear_y_with_x);
+    /// let vector = Vector2::new(1, 1);
+    /// let expected = Vector2::new(1 + 15*1, 1 + 4*1);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix2x2<S> {
@@ -211,6 +277,23 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// component of a vector will be scaled by the same factor. In particular,
     /// calling `from_scale(scale)` is equivalent to calling 
     /// `from_nonuniform_scale(scale, scale)`.
+    ///
+    /// ### Example 
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// #     Vector2,
+    /// # };
+    /// 
+    /// let scale = 11_u32;
+    /// let matrix = Matrix2x2::from_scale(scale);
+    /// let vector = Vector2::new(1, 2);
+    /// let expected = Vector2::new(11, 22);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_scale(scale: S) -> Matrix2x2<S> {
         Matrix2x2::from_nonuniform_scale(scale, scale)
@@ -220,6 +303,24 @@ impl<S> Matrix2x2<S> where S: Scalar {
     ///
     /// This is the most general case for scaling matrices: the scale factor
     /// in each dimension need not be identical.
+    ///
+    /// ### Example 
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// #     Vector2,
+    /// # };
+    /// 
+    /// let scale_x = 3_u32;
+    /// let scale_y = 5_u32;
+    /// let matrix = Matrix2x2::from_nonuniform_scale(scale_x, scale_y);
+    /// let vector = Vector2::new(1, 2);
+    /// let expected = Vector2::new(3, 10);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix2x2<S> {
@@ -233,7 +334,45 @@ impl<S> Matrix2x2<S> where S: Scalar {
 
 impl<S> Matrix2x2<S> where S: ScalarSigned {
     /// Construct a two-dimensional reflection matrix for reflecting through a 
-    /// line through the origin in the xy-plane.
+    /// line through the origin in the **xy-plane**.
+    ///
+    /// ### Example
+    ///
+    /// Here is an example of reflecting a vector across the **x-axis**.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,
+    /// #     Vector2,
+    /// #     Unit, 
+    /// # };
+    ///
+    /// let normal = Unit::from_value(Vector2::unit_y());
+    /// let matrix = Matrix2x2::from_reflection(&normal);
+    /// let vector = Vector2::new(2_f64, 2_f64);
+    /// let expected = Vector2::new(2_f64, -2_f64);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// In two dimensions there is an ambiguity in the choice of normal 
+    /// vector, and as a result, a normal vector to the line---or 
+    /// its negation---will produce the same reflection.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,
+    /// #     Vector2,
+    /// #     Unit, 
+    /// # };
+    ///
+    /// let minus_normal = Unit::from_value(-Vector2::unit_y());
+    /// let matrix = Matrix2x2::from_reflection(&minus_normal);
+    /// let vector = Vector2::new(2_f64, 2_f64);
+    /// let expected = Vector2::new(2_f64, -2_f64);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_reflection(normal: &Unit<Vector2<S>>) -> Matrix2x2<S> {
@@ -249,7 +388,30 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
 
 impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// Construct a rotation matrix in two-dimensions that rotates a vector
-    /// in the xy-plane by an angle `angle`.
+    /// in the **xy-plane** by an angle `angle`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,
+    /// #     Radians,
+    /// #     Angle,
+    /// #     Vector2, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let unit_x = Vector2::unit_x();
+    /// let unit_y = Vector2::unit_y();
+    /// let matrix = Matrix2x2::from_angle(angle);
+    /// let expected = unit_y;
+    /// let result = matrix * unit_x;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Matrix2x2<S> {
@@ -263,6 +425,45 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two vectors.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,
+    /// #     Vector2, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///
+    /// let v1 = Vector2::new(1_f64, 1_f64);
+    /// let v2 = Vector2::new(-1_f64, 1_f64);
+    /// let matrix = Matrix2x2::rotation_between(&v1, &v2);
+    /// let vector = Vector2::unit_y();
+    /// let expected = -Vector2::unit_x();
+    /// let result = matrix * vector;
+    ///
+    /// assert!(relative_eq!(result, expected));
+    /// ```
+    /// The matrix returned by rotation_between should make v1 and v2 colinear.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,
+    /// #     Vector2, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///
+    /// let v1 = Vector2::new(1_f64, 1_f64);
+    /// let v2 = Vector2::new(-1_f64, 1_f64);
+    /// let matrix = Matrix2x2::rotation_between(&v1, &v2);
+    /// let result = matrix * v1;
+    /// let expected = v2;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector2<S>, v2: &Vector2<S>) -> Matrix2x2<S> {
         if let (Some(unit_v1), Some(unit_v2)) = (
@@ -277,6 +478,51 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two unit vectors.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///
+    /// let v1 = Vector2::new(1_f64, 1_f64);
+    /// let v2 = Vector2::new(-1_f64, 1_f64);
+    /// let unit_v1 = Unit::from_value(v1);
+    /// let unit_v2 = Unit::from_value(v2);
+    /// let matrix = Matrix2x2::rotation_between_axis(&unit_v1, &unit_v2);
+    /// let vector = Vector2::unit_y();
+    /// let expected = -Vector2::unit_x();
+    /// let result = matrix * vector;
+    ///
+    /// assert!(relative_eq!(result, expected));
+    /// ```
+    /// The matrix returned by rotation_between should make v1 and v2 colinear.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///
+    /// let v1 = Vector2::new(1_f64, 1_f64);
+    /// let v2 = Vector2::new(-1_f64, 1_f64);
+    /// let unit_v1 = Unit::from_value(v1);
+    /// let unit_v2 = Unit::from_value(v2);
+    /// let matrix = Matrix2x2::rotation_between_axis(&unit_v1, &unit_v2);
+    /// let result = matrix * v1;
+    /// let expected = v2;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn rotation_between_axis(v1: &Unit<Vector2<S>>, v2: &Unit<Vector2<S>>) -> Matrix2x2<S> {
         let cos_angle = v1.as_ref().dot(v2.as_ref());
@@ -286,6 +532,25 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     }
 
     /// Linearly interpolate between two matrices.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,    
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///
+    /// let matrix0 = Matrix2x2::new(0_f64, 0_f64, 1_f64, 1_f64);
+    /// let matrix1 = Matrix2x2::new(2_f64, 2_f64, 3_f64, 3_f64);
+    /// let amount = 0.5;
+    /// let expected = Matrix2x2::new(1_f64, 1_f64, 2_f64, 2_f64);
+    /// let result = matrix0.lerp(&matrix1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn lerp(&self, other: &Matrix2x2<S>, amount: S) -> Matrix2x2<S> {
         self + ((other - self) * amount)
@@ -296,8 +561,31 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     ///
     /// A matrix is finite when all of its elements are finite. This is useful 
     /// for vector and matrix types working with fixed precision floating point 
-    /// values. For example, when the vector elements are `f64`, the vector is 
-    /// finite when the elements are neither `NaN` nor infinite.
+    /// values.
+    ///
+    /// ### Example (Finite Matrix)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// 
+    /// let matrix = Matrix2x2::new(1_f64, 2_f64, 3_f64, 4_f64);
+    ///
+    /// assert!(matrix.is_finite());
+    /// ```
+    ///
+    /// ### Example (Not A Finite Matrix)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// 
+    /// let matrix = Matrix2x2::new(f64::NAN, f64::INFINITY, f64::NEG_INFINITY, 1_f64);
+    ///
+    /// assert!(!matrix.is_finite());
+    /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.c0r0.is_finite() && self.c0r1.is_finite() &&
@@ -1123,6 +1411,24 @@ impl<S> Matrix3x3<S> where S: Copy {
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,  
+    /// # };
+    /// 
+    /// let fill_value = 3_u32;
+    /// let expected = Matrix3x3::new(
+    ///     fill_value, fill_value, fill_value,
+    ///     fill_value, fill_value, fill_value,
+    ///     fill_value, fill_value, fill_value
+    /// );
+    /// let result = Matrix3x3::from_fill(fill_value);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Matrix3x3<S> {
         Matrix3x3::new(
@@ -1186,9 +1492,43 @@ impl<S> Matrix3x3<S> where S: NumCast + Copy {
 impl<S> Matrix3x3<S> where S: Scalar {
     /// Construct a two-dimensional affine translation matrix.
     ///
-    /// This represents a translation in the xy-plane as an affine 
+    /// This represents a translation in the **xy-plane** as an affine 
     /// transformation that displaces a vector along the length of the vector
     /// `distance`.
+    ///
+    /// ### Example
+    /// A homogeneous vector with a zero `z`-component should not translate.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Vector3,
+    /// # };
+    ///
+    /// let distance = Vector2::new(3_u32, 7_u32);
+    /// let matrix = Matrix3x3::from_affine_translation(distance);
+    /// let vector = Vector3::new(1_u32, 1_u32, 0_u32);
+    /// let expected = Vector3::new(1_u32, 1_u32, 0_u32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected); 
+    /// ```
+    /// A homogeneous vector with a one `z`-component should translate.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Vector3,
+    /// # };
+    ///
+    /// let distance = Vector2::new(3_u32, 7_u32);
+    /// let matrix = Matrix3x3::from_affine_translation(distance);
+    /// let vector = Vector3::new(1_u32, 1_u32, 1_u32);
+    /// let expected = Vector3::new(1_u32 + distance.x, 1_u32 + distance.y, 1_u32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected); 
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_translation(distance: Vector2<S>) -> Matrix3x3<S> {
@@ -1208,6 +1548,23 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// component of a vector will be scaled by the same factor. In particular,
     /// calling `from_scale(scale)` is equivalent to calling 
     /// `from_nonuniform_scale(scale, scale, scale)`.
+    ///
+    /// ### Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    ///
+    /// let scale = 5_i32;
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let matrix = Matrix3x3::from_scale(scale);
+    /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_scale(scale: S) -> Matrix3x3<S> {
         Matrix3x3::from_nonuniform_scale(scale, scale, scale)
@@ -1217,6 +1574,25 @@ impl<S> Matrix3x3<S> where S: Scalar {
     ///
     /// This is the most general case for scaling matrices: the scale factor
     /// in each dimension need not be identical.
+    ///
+    /// ### Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    ///
+    /// let scale_x = 5_i32;
+    /// let scale_y = 10_i32;
+    /// let scale_z = 15_i32;
+    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
+    /// let matrix = Matrix3x3::from_nonuniform_scale(scale_x, scale_y, scale_z);
+    /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Matrix3x3<S> {
@@ -1234,8 +1610,25 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
     /// calling `from_scale(scale)` is equivalent to calling 
-    /// `from_affine_nonuniform_scale(scale, scale)`. The z-component is 
+    /// `from_affine_nonuniform_scale(scale, scale)`. The `z~-component is 
     /// unaffected since this is an affine matrix.
+    ///
+    /// ### Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    ///
+    /// let scale = 5_i32;
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let matrix = Matrix3x3::from_affine_scale(scale);
+    /// let expected = Vector3::new(5_i32, 10_i32, 3_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_affine_scale(scale: S) -> Matrix3x3<S> {
         Matrix3x3::from_affine_nonuniform_scale(scale, scale)
@@ -1244,8 +1637,26 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// Construct a two-dimensional affine scaling matrix.
     ///
     /// This is the most general case for scaling matrices: the scale factor
-    /// in each dimension need not be identical. The z-component is unaffected because
-    /// this is an affine matrix.
+    /// in each dimension need not be identical. The `z`-component is unaffected 
+    /// because this is an affine matrix.
+    ///
+    /// ### Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    ///
+    /// let scale_x = 5_i32;
+    /// let scale_y = 10_i32;
+    /// let vector = Vector3::new(1_i32, 1_i32, 3_i32);
+    /// let matrix = Matrix3x3::from_affine_nonuniform_scale(scale_x, scale_y);
+    /// let expected = Vector3::new(5_i32, 10_i32, 3_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix3x3<S> {
@@ -1260,11 +1671,29 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// _x-axis_, holding the y-axis constant and the _z-axis_ constant.
+    /// _x-axis_, holding the **y-axis** constant and the **z-axis** constant.
     ///
     /// The parameters `shear_x_with_y` and `shear_x_with_z` are the 
     /// multiplicative factors for the contributions of the _y-axis_ and the 
-    /// _z-axis_, respectively to shearing along the _x-axis_. 
+    /// _z-axis_, respectively to shearing along the _x-axis_.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3, 
+    /// # };
+    /// 
+    /// let shear_x_with_y = 3_i32;
+    /// let shear_x_with_z = 8_i32;
+    /// let matrix = Matrix3x3::from_shear_x(shear_x_with_y, shear_x_with_z);
+    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
+    /// let expected = Vector3::new(12_i32, 1_i32, 1_i32);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix3x3<S> {
@@ -1279,11 +1708,29 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// _y-axis_, holding the x-axis constant and the z-axis constant.
+    /// _y-axis_, holding the **x-axis** constant and the **z-axis** constant.
     ///
     /// The parameters `shear_y_with_x` and `shear_y_with_z` are the
     /// multiplicative factors for the contributions of the _x-axis_, and the 
-    /// _z-axis_, respectively to shearing along the _y-axis_. 
+    /// _z-axis_, respectively to shearing along the _y-axis_.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3, 
+    /// # };
+    /// 
+    /// let shear_y_with_x = 3_i32;
+    /// let shear_y_with_z = 8_i32;
+    /// let matrix = Matrix3x3::from_shear_y(shear_y_with_x, shear_y_with_z);
+    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
+    /// let expected = Vector3::new(1_i32, 12_i32, 1_i32);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix3x3<S> {
@@ -1301,8 +1748,26 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// _z-axis_, holding the _x-axis_ constant and the _y-axis_ constant.
     ///
     /// The parameters `shear_z_with_x` and `shear_z_with_y` are the multiplicative
-    /// factors for the contributions of the _x-axis_, and the _y-axis_, respectively to 
-    /// shearing along the _z-axis_. 
+    /// factors for the contributions of the _x-axis_, and the _y-axis_, 
+    /// respectively to shearing along the _z-axis_. 
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3, 
+    /// # };
+    /// 
+    /// let shear_z_with_x = 3_i32;
+    /// let shear_z_with_y = 8_i32;
+    /// let matrix = Matrix3x3::from_shear_z(shear_z_with_x, shear_z_with_y);
+    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
+    /// let expected = Vector3::new(1_i32, 1_i32, 12_i32);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix3x3<S> {
@@ -1336,6 +1801,39 @@ impl<S> Matrix3x3<S> where S: Scalar {
     ///
     /// The parameter `shear_z_with_y` denotes the factor scaling the 
     /// contribution of the y-component to the shearing of the z-component. 
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3, 
+    /// # };
+    /// 
+    /// let shear_x_with_y = 1_usize;
+    /// let shear_x_with_z = 2_usize;
+    /// let shear_y_with_x = 3_usize;
+    /// let shear_y_with_z = 4_usize;
+    /// let shear_z_with_x = 5_usize;
+    /// let shear_z_with_y = 6_usize;
+    /// let matrix = Matrix3x3::from_shear(
+    ///     shear_x_with_y, 
+    ///     shear_x_with_z,
+    ///     shear_y_with_x,
+    ///     shear_y_with_z,
+    ///     shear_z_with_x,
+    ///     shear_z_with_y,
+    /// );
+    /// let vector = Vector3::new(1_usize, 1_usize, 1_usize);
+    /// let expected = Vector3::new(
+    ///     vector.x + shear_x_with_y * vector.y + shear_x_with_z * vector.z,
+    ///     vector.y + shear_y_with_x * vector.x + shear_y_with_z * vector.z,
+    ///     vector.z + shear_z_with_x * vector.x + shear_z_with_y * vector.y
+    /// );
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ``` 
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear(
