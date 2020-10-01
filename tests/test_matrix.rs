@@ -1410,7 +1410,7 @@ mod matrix3_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
-    /// An affine translation should only dispace points and not vectors. We 
+    /// An affine translation should only displace points and not vectors. We 
     /// distinguish points by using a `1` in the last coordinate, and vectors 
     /// by using a `0` in the last coordinate.
     #[test]
@@ -1424,7 +1424,7 @@ mod matrix3_tests {
         assert_eq!(result, expected);
     }
 
-    /// An affine translation should only dispace points and not vectors. We 
+    /// An affine translation should only displace points and not vectors. We 
     /// distinguish points by using a `1` in the last coordinate, and vectors 
     /// by using a `0` in the last coordinate.
     #[test]
@@ -1956,7 +1956,7 @@ mod matrix4_tests {
     /// ```
     /// The equality does not hold over a set of floating point numbers because floating point arithmetic
     /// is not commutative, so we cannot guarantee exact equality even though transposing a matrix does not
-    /// cause a loss of precesion in the matrix entries. We can only guarantee approximate equality.
+    /// cause a loss of precision in the matrix entries. We can only guarantee approximate equality.
     #[test]
     fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
         let matrix: Matrix4x4<f64> = Matrix4x4::new(
@@ -2389,7 +2389,7 @@ mod matrix4_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
-    /// An affine translation should only dispace points and not vectors. We 
+    /// An affine translation should only displace points and not vectors. We 
     /// distinguish points by using a `1` in the last coordinate, and vectors 
     /// by using a `0` in the last coordinate.
     #[test]
@@ -2403,7 +2403,7 @@ mod matrix4_tests {
         assert_eq!(result, expected);
     }
 
-    /// An affine translation should only dispace points and not vectors. We 
+    /// An affine translation should only displace points and not vectors. We 
     /// distinguish points by using a `1` in the last coordinate, and vectors 
     /// by using a `0` in the last coordinate.
     #[test]

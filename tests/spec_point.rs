@@ -151,7 +151,7 @@ macro_rules! approx_mul_props {
             /// ```text
             /// (a * b) * p ~= a * (b * p)
             /// ```
-            /// Note that the compatability of scalars with points can only be 
+            /// Note that the compatibility of scalars with points can only be 
             /// approximate and not exact because multiplication of the underlying 
             /// scalars is not associative. 
             #[test]
@@ -196,7 +196,7 @@ approx_mul_props!(point3_f64_mul_props, Point3, f64, any_point3, any_scalar, 1e-
 /// * `$ScalarType` denotes the underlying system of numbers that compose the
 ///    set of points.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$UpperBound` denotes the upperbound on the range of acceptable indices.
+/// * `$UpperBound` denotes the upper bound on the range of acceptable indices.
 macro_rules! index_props {
     ($TestModuleName:ident, $Point:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
     #[cfg(test)]
@@ -212,7 +212,7 @@ macro_rules! index_props {
             /// below the length of the array.
             ///
             /// Given a point `p`, it should return the entry at position `index` in the 
-            /// underlying storage of the point when the given index is inbounds.
+            /// underlying storage of the point when the given index is in bounds.
             #[test]
             fn prop_accepts_all_indices_in_of_bounds(
                 p in $Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {

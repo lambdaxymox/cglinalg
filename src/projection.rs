@@ -18,7 +18,7 @@ use crate::vector::{
 use core::fmt;
 
 
-/// A perspective projection based on arbitarary `left`, `right`, `bottom`,
+/// A perspective projection based on arbitrary `left`, `right`, `bottom`,
 /// `top`, `near`, and `far` planes.
 ///
 /// We assume the following constraints to construct a useful perspective 
@@ -280,7 +280,7 @@ impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Display {
 }
 
 
-/// A perspective projection tranformation for converting from camera space to
+/// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates.
 ///
 /// Orthographic projections differ from perspective projections because
@@ -484,8 +484,8 @@ impl<S> approx::UlpsEq for PerspectiveProjection3<S>
 }
 
 
-/// A perspective projection tranformation for converting from camera space to
-/// normalized device coordinates based on the perspective fov model.
+/// A perspective projection transformation for converting from camera space to
+/// normalized device coordinates based on the perspective field of view model.
 ///
 /// Orthographic projections differ from perspective projections because
 /// orthographic projections keeps parallel lines parallel, whereas perspective 
@@ -718,13 +718,13 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
         self.spec
     }
 
-    /// Get the underlying matrix implementing the orthographic tranformation.
+    /// Get the underlying matrix implementing the orthographic transformation.
     #[inline]
     pub fn to_matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
-    /// Apply the tranformation to a point.
+    /// Apply the transformation to a point.
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous())

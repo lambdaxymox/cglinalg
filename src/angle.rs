@@ -52,7 +52,7 @@ pub trait Angle where
     /// Compute the tangent of a typed angle.
     fn tan(self) -> Self::Scalar;
 
-    /// Compute the arcsin of a scalar value, returning a typed angle.
+    /// Compute the arc sine of a scalar value, returning a typed angle.
     fn asin(ratio: Self::Scalar) -> Self;
 
     /// Compute the arc cosine of a scalar value, returning a typed angle.
@@ -64,7 +64,7 @@ pub trait Angle where
     /// Compute the four quadrant arc tangent of two angles, returning a 
     /// typed angle.
     /// 
-    /// The return value is the arctangent of the quotient of the two input values. 
+    /// The return value is the arc tangent of the quotient of the two input values. 
     /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent 
     /// satisfies
     /// ```text

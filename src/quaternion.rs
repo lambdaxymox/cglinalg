@@ -260,7 +260,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// rotor.
     ///
     /// Let `p` be a three-dimensional vector we wish to rotate, 
-    /// repesented as a pure quaternion, and `q` be the quaternion that 
+    /// represented as a pure quaternion, and `q` be the quaternion that 
     /// rotates the vector `p` by an angle `angle`. Then the vector rotated 
     /// by the quaternion by an angle `angle` about the axis `axis` is given by
     /// ```text

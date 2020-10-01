@@ -50,7 +50,7 @@ fn test_to_matrix() {
     assert!(relative_eq!(result, expected, epsilon = 1e-8));
 }
 
-/// An euler rotation that's all zeros should be the identity.
+/// An Euler rotation that's all zeros should be the identity.
 #[test]
 fn test_to_matrix_identity() {
     let euler: EulerAngles<Radians<f64>> = EulerAngles::zero();
@@ -104,7 +104,7 @@ fn test_to_affine_matrix() {
     assert!(relative_eq!(result, expected, epsilon = 1e-8));  
 }
 
-/// An euler rotation that's all zeros should be the identity.
+/// An Euler rotation that's all zeros should be the identity.
 #[test]
 fn test_to_affine_matrix_identity() {
     let euler: EulerAngles<Radians<f64>> = EulerAngles::zero();

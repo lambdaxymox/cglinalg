@@ -460,7 +460,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     ///
     /// assert!(relative_eq!(result, expected));
     /// ```
-    /// The matrix returned by rotation_between should make v1 and v2 colinear.
+    /// The matrix returned by rotation_between should make `v1` and `v2` collinear.
     /// ```
     /// # use cglinalg::{
     /// #     Matrix2x2,
@@ -516,7 +516,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     ///
     /// assert!(relative_eq!(result, expected));
     /// ```
-    /// The matrix returned by rotation_between should make v1 and v2 colinear.
+    /// The matrix returned by `rotation_between` should make `v1` and `v2` collinear.
     /// ```
     /// # use cglinalg::{
     /// #     Matrix2x2,
@@ -1646,7 +1646,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
     /// calling `from_scale(scale)` is equivalent to calling 
-    /// `from_affine_nonuniform_scale(scale, scale)`. The `z~-component is 
+    /// `from_affine_nonuniform_scale(scale, scale)`. The `z`-component is 
     /// unaffected since this is an affine matrix.
     ///
     /// ### Example
@@ -1998,7 +1998,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
 }
 
 impl<S> Matrix3x3<S> where S: ScalarSigned {
-    /// Construct a two-dimensional affine reflection matrix in the xy-plane 
+    /// Construct a two-dimensional affine reflection matrix in the **xy-plane** 
     /// for a line with normal vector `normal` and bias vector `bias`. The bias 
     /// vector can be any known point on the line of reflection.
     /// 
@@ -2198,7 +2198,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
 
 impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// Construct an affine rotation matrix in two dimensions that rotates a 
-    /// vector in the xy-plane by an angle `angle`.
+    /// vector in the **xy-plane** by an angle `angle`.
     ///
     /// This is the affine matrix counterpart to the 2x2 matrix function 
     /// `from_angle`.

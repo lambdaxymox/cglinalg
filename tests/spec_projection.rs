@@ -375,7 +375,7 @@ macro_rules! orthographic_projection_props {
                 /// be approximately invertible.
                 ///
                 /// Given an orthographic projection transformation `P^-1` and a projected vector 
-                /// `pv`, there is an inverse inverse of th `P^-1` satisfies
+                /// `pv`, there is an inverse of `P^-1` that satisfies
                 /// ```text
                 /// P^-1 * (P^-1)^-1 * pv ~= pv
                 /// ```

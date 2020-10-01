@@ -80,7 +80,7 @@ fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
 /// * `$ScalarType` denotes the underlying system of numbers that compose the
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$UpperBound` denotes the upperbound on the range of acceptable indices.
+/// * `$UpperBound` denotes the upper bound on the range of acceptable indices.
 macro_rules! index_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
     #[cfg(test)]
@@ -96,7 +96,7 @@ macro_rules! index_props {
             /// below the length of the array.
             ///
             /// Given a vector `v`, it should return the entry at position `index` in the 
-            /// underlying storage of the vector when the given index is inbounds.
+            /// underlying storage of the vector when the given index is in bounds.
             #[test]
             fn prop_accepts_all_indices_in_of_bounds(
                 v in $Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
@@ -782,7 +782,7 @@ macro_rules! magnitude_props {
             }
 
             /// The magnitude function is point separating. In particular, if the 
-            /// distance between two vectors `v` and `w` is zero, then v = w.
+            /// distance between two vectors `v` and `w` is zero, then `v = w`.
             ///
             /// Given vectors `v` and `w`
             /// ```text
@@ -880,11 +880,11 @@ macro_rules! approx_mul_props {
             /// ```text
             /// (a * b) * v ~= a * (b * v)
             /// ```
-            /// Note that the compatability of scalars with vectors can only be 
+            /// Note that the compatibility of scalars with vectors can only be 
             /// approximate and not exact because multiplication of the underlying 
             /// scalars is not associative. 
             #[test]
-            fn prop_scalar_multiplication_compatability(
+            fn prop_scalar_multiplication_compatibility(
                 a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), 
                 v in $Generator::<$ScalarType>()) {
 
@@ -964,7 +964,7 @@ macro_rules! exact_mul_props {
             /// (a * b) * v = a * (b * v)
             /// ```
             #[test]
-            fn prop_scalar_multiplication_compatability(
+            fn prop_scalar_multiplication_compatibility(
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(a * (b * v), (a * b) * v);

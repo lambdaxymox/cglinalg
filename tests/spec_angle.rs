@@ -96,7 +96,7 @@ macro_rules! approx_arithmetic_props {
 
             /// Angle addition is approximately associative.
             /// 
-            /// Given typed angles `angle1`, `angle2, and `angle3`
+            /// Given typed angles `angle1`, `angle2`, and `angle3`
             /// ```text
             /// (angle1 + angle2) + angle3 ~= angle1 + (angle2 + angle3)
             /// ```
@@ -110,9 +110,10 @@ macro_rules! approx_arithmetic_props {
                 ));
             }
 
-            /// Multiplication of typed angles is compatible with unitless constants.
+            /// Multiplication of typed angles is compatible with dimensionless 
+            /// constants.
             ///
-            /// Given a typed angle `angle`, and unitless constants `a`, and `b`
+            /// Given a typed angle `angle`, and dimensionless constants `a`, and `b`
             /// ```text
             /// (a * b) * angle ~= a * (b * angle)
             /// ```
@@ -156,9 +157,10 @@ macro_rules! approx_arithmetic_props {
                 prop_assert_eq!((-angle) + angle, zero);
             }
 
-            /// Typed angles are compatible with unitless multiplicative unit element.
+            /// Typed angles are compatible with dimensionless multiplicative 
+            /// unit element.
             ///
-            /// Given a typed angle `angle`, and the unitless constant `1`
+            /// Given a typed angle `angle`, and the dimensionless constant `1`
             /// ```text
             /// angle * 1 = angle
             /// ```
@@ -206,10 +208,10 @@ macro_rules! approx_trigonometry_props {
 
     
         proptest! {
-            /// The sine and arcsine functions should be inverses to each other.
+            /// The sine and arc sine functions should be inverses to each other.
             ///
             /// Let `angle` be an angle and `recovered_angle = acos(cos(angle))` be an 
-            /// angle recovered from a call to the sine and then the arcsine. Then they
+            /// angle recovered from a call to the sine and then the arc sine. Then they
             /// should have matching sines. 
             ///
             /// Given a typed angle `angle`
@@ -226,10 +228,10 @@ macro_rules! approx_trigonometry_props {
                 prop_assert!(relative_eq!(sin_recovered_angle, sin_angle, epsilon = $tolerance));
             }
 
-            /// The cosine and arccosine functions should be inverses to each other.
+            /// The cosine and arc cosine functions should be inverses to each other.
             ///
             /// Let `angle` be an angle and `recovered_angle = acos(cos(angle))` be an 
-            /// angle recovered from a call to the cosine and then the arccosine. Then they
+            /// angle recovered from a call to the cosine and then the arc cosine. Then they
             /// should have matching cosines. 
             ///
             /// Given a typed angle `angle`
@@ -246,12 +248,12 @@ macro_rules! approx_trigonometry_props {
                 prop_assert!(relative_eq!(cos_recovered_angle, cos_angle, epsilon = $tolerance));
             }
 
-            /// The tangent and arctangent functions should be inverses to each other.
+            /// The tangent and arc tangent functions should be inverses to each other.
             ///
             /// Let `angle` be an angle and `recovered_angle = atan(tan(angle))` be an
-            /// angle recovered from a call to tangent and then arctangent. The recovered
+            /// angle recovered from a call to tangent and then arc tangent. The recovered
             /// angle `recovered_angle` is congruent to `angle`, `angle + pi` or `angle - pi`
-            /// modulo `2 * pi`. There are the three angles in the interval [0, 2*pi) that 
+            /// modulo `2 * pi`. There are the three angles in the interval `[0, 2pi)` that 
             /// have the same tangent.
             ///
             /// Given a typed angle `angle`
@@ -289,7 +291,7 @@ macro_rules! approx_trigonometry_props {
                 prop_assert!(relative_eq!(angle.cos(), angle_plus_full_turn.cos(), epsilon = $tolerance));
             }
 
-            /// Typed angle trigonometry satisfies the pythagorean identity.
+            /// Typed angle trigonometry satisfies the Pythagorean identity.
             ///
             /// Given a typed angle `angle`
             /// ```text

@@ -37,7 +37,7 @@ use core::ops;
 /// where each interval includes its endpoints.
 ///
 /// ## Note
-/// We recommend quaternions over euler angles for rotations because quaternions 
+/// We recommend quaternions over Euler angles for rotations because quaternions 
 /// do not gimbal lock. The library provides Euler angles for feature-completeness, or 
 /// in cases where the end user prefers Euler angles.
 /// 

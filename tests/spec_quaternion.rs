@@ -66,7 +66,7 @@ fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>>
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$UpperBound` denotes the upperbound on the range of acceptable indices.
+/// * `$UpperBound` denotes the upper bound on the range of acceptable indices.
 macro_rules! index_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
     #[cfg(test)]
@@ -83,7 +83,7 @@ macro_rules! index_props {
             ///
             /// Given a quaternion `q`, it should return the element at position 
             /// `index` in the underlying storage of the quaternion when the given 
-            /// index is inbounds.
+            /// index is in bounds.
             #[test]
             fn prop_accepts_all_indices_in_of_bounds(
                 q in $Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
@@ -720,7 +720,7 @@ macro_rules! approx_mul_props {
             /// ```text
             /// (a * b) * q ~= a * (b * q)
             /// ```
-            /// Note that the compatability of scalars with quaternions can only be 
+            /// Note that the compatibility of scalars with quaternions can only be 
             /// approximate and not exact because multiplication of the underlying 
             /// scalars is not associative. 
             #[test]
@@ -1612,7 +1612,7 @@ macro_rules! magnitude_props {
 
             /// The magnitude function is point separating. In particular, if 
             /// the distance between two quaternions `q1` and `q2` is 
-            /// zero, then q1 = q2.
+            /// zero, then `q1 = q2`.
             ///
             /// Given quaternions `q1` and `q2`
             /// ```text

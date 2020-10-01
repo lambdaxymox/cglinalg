@@ -145,7 +145,7 @@ pub trait Matrix {
     /// The column vector of a matrix.
     type Column: Array<Element = Self::Element>;
 
-    /// The type signature of the tranpose of the matrix.
+    /// The type signature of the transpose of the matrix.
     type Transpose: Matrix<Element = Self::Element, Row = Self::Column, Column = Self::Row>;
 
     /// Get the row of the matrix by value.
@@ -209,8 +209,8 @@ pub trait SquareMatrix where
 
     /// Determine whether a matrix is symmetric. 
     ///
-    /// A matrix is symmmetric when element `(i, j)` is equal to element `(j, i)` 
-    /// for each row `i` and column `j`. Otherwise, it is not a symmeric matrix. 
+    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
+    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
     /// Note that every diagonal matrix is a symmetric matrix.
     fn is_symmetric(&self) -> bool;
 
