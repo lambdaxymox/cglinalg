@@ -30,36 +30,36 @@ pub trait Angle where
     Self: ops::Neg<Output = Self>,
     Self: ops::Add<Self, Output = Self>,
     Self: ops::Sub<Self, Output = Self>,
-    Self: ops::Mul<<Self as Angle>::Scalar, Output = Self>,
-    Self: ops::Div<Self, Output = <Self as Angle>::Scalar>,
-    Self: ops::Div<<Self as Angle>::Scalar, Output = Self>,
+    Self: ops::Mul<<Self as Angle>::Dimensionless, Output = Self>,
+    Self: ops::Div<Self, Output = <Self as Angle>::Dimensionless>,
+    Self: ops::Div<<Self as Angle>::Dimensionless, Output = Self>,
     Self: ops::Rem<Self, Output = Self>,
-    Self: approx::AbsDiffEq<Epsilon = <Self as Angle>::Scalar>,
-    Self: approx::RelativeEq<Epsilon = <Self as Angle>::Scalar>,
-    Self: approx::UlpsEq<Epsilon = <Self as Angle>::Scalar>,
+    Self: approx::AbsDiffEq<Epsilon = <Self as Angle>::Dimensionless>,
+    Self: approx::RelativeEq<Epsilon = <Self as Angle>::Dimensionless>,
+    Self: approx::UlpsEq<Epsilon = <Self as Angle>::Dimensionless>,
 {
-    type Scalar: ScalarFloat;
+    type Dimensionless: ScalarFloat;
 
     /// The value of a full rotation around the unit circle for a typed angle.
     fn full_turn() -> Self;
 
     /// Compute the sine of a typed angle.
-    fn sin(self) -> Self::Scalar;
+    fn sin(self) -> Self::Dimensionless;
 
     /// Compute the cosine of a typed angle.
-    fn cos(self) -> Self::Scalar;
+    fn cos(self) -> Self::Dimensionless;
 
     /// Compute the tangent of a typed angle.
-    fn tan(self) -> Self::Scalar;
+    fn tan(self) -> Self::Dimensionless;
 
     /// Compute the arc sine of a scalar value, returning a typed angle.
-    fn asin(ratio: Self::Scalar) -> Self;
+    fn asin(ratio: Self::Dimensionless) -> Self;
 
     /// Compute the arc cosine of a scalar value, returning a typed angle.
-    fn acos(ratio: Self::Scalar) -> Self;
+    fn acos(ratio: Self::Dimensionless) -> Self;
 
     /// Compute the arc tangent of a scalar value, returning a typed angle.
-    fn atan(ratio: Self::Scalar) -> Self;
+    fn atan(ratio: Self::Dimensionless) -> Self;
 
     /// Compute the four quadrant arc tangent of two angles, returning a 
     /// typed angle.
@@ -82,39 +82,39 @@ pub trait Angle where
     /// y >= 0          -> (arctan(y / x) + pi) in (pi / 2, pi]
     /// y < 0           -> (arctan(y / x) - pi) in (-pi, -pi / 2)
     /// ```
-    fn atan2(y: Self::Scalar, x: Self::Scalar) -> Self;
+    fn atan2(y: Self::Dimensionless, x: Self::Dimensionless) -> Self;
 
     /// Simultaneously compute the sine and cosine of an angle.
     #[inline]
-    fn sin_cos(self) -> (Self::Scalar, Self::Scalar) {
+    fn sin_cos(self) -> (Self::Dimensionless, Self::Dimensionless) {
         (Self::sin(self), Self::cos(self))
     }
 
     /// The value of half of a full turn around the unit circle.
     #[inline]
     fn full_turn_div_2() -> Self {
-        let denominator: Self::Scalar = num_traits::cast(2).unwrap();
+        let denominator: Self::Dimensionless = num_traits::cast(2).unwrap();
         Self::full_turn() / denominator
     }
 
     /// The value of a one fourth of a full turn around the unit circle.
     #[inline]
     fn full_turn_div_4() -> Self {
-        let denominator: Self::Scalar = num_traits::cast(4).unwrap();
+        let denominator: Self::Dimensionless = num_traits::cast(4).unwrap();
         Self::full_turn() / denominator
     }
 
     /// The value of one sixth of a full turn around the unit circle.
     #[inline]
     fn full_turn_div_6() -> Self {
-        let denominator: Self::Scalar = num_traits::cast(6).unwrap();
+        let denominator: Self::Dimensionless = num_traits::cast(6).unwrap();
         Self::full_turn() / denominator
     }
 
     /// The value of one eighth of a full turn around the unit circle.
     #[inline]
     fn full_turn_div_8() -> Self {
-        let denominator: Self::Scalar = num_traits::cast(8).unwrap();
+        let denominator: Self::Dimensionless = num_traits::cast(8).unwrap();
         Self::full_turn() / denominator
     }
 
@@ -157,19 +157,19 @@ pub trait Angle where
 
     /// Compute the cosecant of a typed angle.
     #[inline]
-    fn csc(self) -> Self::Scalar {
+    fn csc(self) -> Self::Dimensionless {
         Self::sin(self).recip()
     }
 
     /// Compute the cotangent of a typed angle.
     #[inline]
-    fn cot(self) -> Self::Scalar {
+    fn cot(self) -> Self::Dimensionless {
         Self::tan(self).recip()
     }
 
     /// Compute the secant of a typed angle.
     #[inline]
-    fn sec(self) -> Self::Scalar {
+    fn sec(self) -> Self::Dimensionless {
         Self::cos(self).recip()
     }
 }
@@ -821,7 +821,7 @@ impl<S> approx::UlpsEq for Radians<S> where S: ScalarFloat {
 }
 
 impl<S> Angle for Radians<S> where S: ScalarFloat {
-    type Scalar = S;
+    type Dimensionless = S;
 
     #[inline]
     fn full_turn() -> Self {
@@ -829,43 +829,43 @@ impl<S> Angle for Radians<S> where S: ScalarFloat {
     }
 
     #[inline]
-    fn sin(self) -> Self::Scalar {
+    fn sin(self) -> Self::Dimensionless {
         S::sin(self.0)
     }
 
     #[inline]
-    fn cos(self) -> Self::Scalar {
+    fn cos(self) -> Self::Dimensionless {
         S::cos(self.0)
     }
 
     #[inline]
-    fn tan(self) -> Self::Scalar {
+    fn tan(self) -> Self::Dimensionless {
         S::tan(self.0)
     }
 
     #[inline]
-    fn asin(ratio: Self::Scalar) -> Self {
-        Radians(Self::Scalar::asin(ratio))
+    fn asin(ratio: Self::Dimensionless) -> Self {
+        Radians(Self::Dimensionless::asin(ratio))
     }
 
     #[inline]
-    fn acos(ratio: Self::Scalar) -> Self {
-        Radians(Self::Scalar::acos(ratio))
+    fn acos(ratio: Self::Dimensionless) -> Self {
+        Radians(Self::Dimensionless::acos(ratio))
     }
 
     #[inline]
-    fn atan(ratio: Self::Scalar) -> Self {
-        Radians(Self::Scalar::atan(ratio))
+    fn atan(ratio: Self::Dimensionless) -> Self {
+        Radians(Self::Dimensionless::atan(ratio))
     }
 
     #[inline]
-    fn atan2(a: Self::Scalar, b: Self::Scalar) -> Self {
-        Radians(Self::Scalar::atan2(a, b))
+    fn atan2(a: Self::Dimensionless, b: Self::Dimensionless) -> Self {
+        Radians(Self::Dimensionless::atan2(a, b))
     }
 }
 
 impl<S> Angle for Degrees<S> where S: ScalarFloat {
-    type Scalar = S;
+    type Dimensionless = S;
 
     #[inline]
     fn full_turn() -> Self {
@@ -873,38 +873,38 @@ impl<S> Angle for Degrees<S> where S: ScalarFloat {
     }
 
     #[inline]
-    fn sin(self) -> Self::Scalar {
+    fn sin(self) -> Self::Dimensionless {
         Radians::from(self).sin()
     }
 
     #[inline]
-    fn cos(self) -> Self::Scalar {
+    fn cos(self) -> Self::Dimensionless {
         Radians::from(self).cos()
     }
 
     #[inline]
-    fn tan(self) -> Self::Scalar {
+    fn tan(self) -> Self::Dimensionless {
         Radians::from(self).tan()
     }
 
     #[inline]
-    fn asin(ratio: Self::Scalar) -> Self {
+    fn asin(ratio: Self::Dimensionless) -> Self {
         Radians(ratio.asin()).into()
     }
 
     #[inline]
-    fn acos(ratio: Self::Scalar) -> Self {
+    fn acos(ratio: Self::Dimensionless) -> Self {
         Radians(ratio.acos()).into()
     }
 
     #[inline]
-    fn atan(ratio: Self::Scalar) -> Self {
+    fn atan(ratio: Self::Dimensionless) -> Self {
         Radians(ratio.atan()).into()
     }
 
     #[inline]
-    fn atan2(a: Self::Scalar, b: Self::Scalar) -> Self {
-        Radians(Self::Scalar::atan2(a, b)).into()
+    fn atan2(a: Self::Dimensionless, b: Self::Dimensionless) -> Self {
+        Radians(Self::Dimensionless::atan2(a, b)).into()
     }
 }
 
