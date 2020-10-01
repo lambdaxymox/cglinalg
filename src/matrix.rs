@@ -1855,6 +1855,23 @@ impl<S> Matrix3x3<S> where S: Scalar {
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the _y-axis_ to shearing along the _x-axis_.
+    ///
+    /// ### Example 
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// #     Vector3,
+    /// # };
+    /// 
+    /// let shear_x_with_y = 3_u32;
+    /// let matrix = Matrix3x3::from_affine_shear_x(shear_x_with_y);
+    /// let vector = Vector3::new(1, 1, 0);
+    /// let expected = Vector3::new(4, 1, 0);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_x(shear_x_with_y: S) -> Matrix3x3<S> {
@@ -1873,6 +1890,23 @@ impl<S> Matrix3x3<S> where S: Scalar {
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the _y-axis_ to shearing along the _x-axis_.
+    ///
+    /// ### Example 
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// #     Vector3,
+    /// # };
+    /// 
+    /// let shear_y_with_x = 3_u32;
+    /// let matrix = Matrix3x3::from_affine_shear_y(shear_y_with_x);
+    /// let vector = Vector3::new(1, 1, 0);
+    /// let expected = Vector3::new(1, 4, 0);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear_y(shear_y_with_x: S) -> Matrix3x3<S> {
@@ -1894,7 +1928,25 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// contribution of the _x-axis_ to shearing along the _y-axis_.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
-    /// of the _y-axis_ to the shearing along the _x-axis_. 
+    /// of the _y-axis_ to the shearing along the _x-axis_.
+    ///
+    /// ### Example 
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// #     Vector3,
+    /// # };
+    /// 
+    /// let shear_x_with_y = 15_u32;
+    /// let shear_y_with_x = 4_u32;
+    /// let matrix = Matrix3x3::from_affine_shear(shear_x_with_y, shear_y_with_x);
+    /// let vector = Vector3::new(1, 1, 0);
+    /// let expected = Vector3::new(16, 5, 0);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix3x3<S> {
@@ -1966,6 +2018,74 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// ```
     /// Here the terms `xr` and `yr` are the coordinates of the reflected point 
     /// across the line `L`.
+    ///
+    /// ### Example (Line Through The Origin)
+    ///
+    /// Here is an example of reflecting a vector across the **x-axis** with 
+    /// the line of reflection passing through the origin.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Vector2,
+    /// #     Unit, 
+    /// # };
+    ///
+    /// let normal = Unit::from_value(Vector2::unit_y());
+    /// let bias = Vector2::new(0_f64, 0_f64);
+    /// let matrix = Matrix3x3::from_affine_reflection(&normal, &bias);
+    /// let vector = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let expected = Vector3::new(2_f64, -2_f64, 0_f64);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// In two dimensions there is an ambiguity in the choice of normal 
+    /// vector, and as a result, a normal vector to the line---or 
+    /// its negation---will produce the same reflection.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Vector2,
+    /// #     Unit, 
+    /// # };
+    ///
+    /// let minus_normal = Unit::from_value(-Vector2::unit_y());
+    /// let bias = Vector2::new(0_f64, 0_f64);
+    /// let matrix = Matrix3x3::from_affine_reflection(&minus_normal, &bias);
+    /// let vector = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let expected = Vector3::new(2_f64, -2_f64, 0_f64);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    ///
+    /// ### Example (Line That Does Not Cross The Origin)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Vector2, 
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,  
+    /// # };
+    ///
+    /// let bias = Vector2::new(0.0, 2.0);
+    /// let normal = Unit::from_value(
+    ///     Vector2::new(-1.0 / f64::sqrt(5.0), 2.0 / f64::sqrt(5.0))
+    /// );
+    /// let matrix = Matrix3x3::from_affine_reflection(&normal, &bias);
+    /// let vector = Vector3::new(1.0, 0.0, 1.0);
+    /// let expected = Vector3::new(-1.0, 4.0, 1.0);
+    /// let result = matrix * vector;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_reflection(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Matrix3x3<S> {
@@ -1994,6 +2114,26 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
 
     /// Construct a three-dimensional reflection matrix for a plane that
     /// crosses the origin.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    ///
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let expected = Matrix3x3::new(
+    ///     1.0, 0.0,  0.0, 
+    ///     0.0, 1.0,  0.0,  
+    ///     0.0, 0.0, -1.0
+    /// );
+    /// let result = Matrix3x3::from_reflection(&normal);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_reflection(normal: &Unit<Vector3<S>>) -> Matrix3x3<S> {
@@ -2026,6 +2166,28 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     ///
     /// This is the affine matrix counterpart to the 2x2 matrix function 
     /// `from_angle`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Vector3, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let matrix = Matrix3x3::from_affine_angle(angle);
+    /// let unit_x = Vector3::unit_x();
+    /// let expected = Vector3::unit_y();
+    /// let result = matrix * unit_x;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_angle<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
@@ -2041,6 +2203,29 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     }
 
     /// Construct a rotation matrix about the _x-axis_ by an angle `angle`.
+    ///
+    /// ### Example
+    /// 
+    /// In this example the rotation is in the **yz-plane**.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Vector3, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// 
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let matrix = Matrix3x3::from_angle_x(angle);
+    /// let vector = Vector3::new(0_f64, 1_f64, 1_f64);
+    /// let expected = Vector3::new(0_f64, -1_f64, 1_f64);
+    /// let result = matrix * vector;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
@@ -2054,6 +2239,29 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     }
 
     /// Construct a rotation matrix about the _y-axis_ by an angle `angle`.
+    ///
+    /// ### Example
+    /// 
+    /// In this example the rotation is in the **zx-plane**.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Vector3, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// 
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let matrix = Matrix3x3::from_angle_y(angle);
+    /// let vector = Vector3::new(1_f64, 0_f64, 1_f64);
+    /// let expected = Vector3::new(1_f64, 0_f64, -1_f64);
+    /// let result = matrix * vector;
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
@@ -2067,6 +2275,29 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     }
 
     /// Construct a rotation matrix about the _z-axis_ by an angle `angle`.
+    ///
+    /// ### Example
+    /// 
+    /// In this example the rotation is in the **xy-plane**.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Vector3, 
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// 
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let matrix = Matrix3x3::from_angle_z(angle);
+    /// let vector = Vector3::new(1_f64, 1_f64, 0_f64);
+    /// let expected = Vector3::new(-1_f64, 1_f64, 0_f64);
+    /// let result = matrix * vector;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
@@ -2081,6 +2312,30 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix about an arbitrary axis by an angle 
     /// `angle`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Angle, 
+    /// #     Matrix3x3,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///  
+    /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let matrix = Matrix3x3::from_axis_angle(&axis, angle);
+    /// let unit_x = Vector3::unit_x();
+    /// let expected = Vector3::unit_y();
+    /// let result = matrix * unit_x;
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Matrix3x3<S> {
@@ -2153,6 +2408,28 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two vectors.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Radians,
+    /// #     Angle,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,   
+    /// # };
+    /// 
+    /// let v1: Vector3<f64> = Vector3::unit_x() * 2_f64;
+    /// let v2: Vector3<f64> = Vector3::unit_y() * 3_f64;
+    /// let matrix = Matrix3x3::rotation_between(&v1, &v2).unwrap();
+    /// let expected = Vector3::new(0_f64, 2_f64, 0_f64);
+    /// let result = matrix * v1;
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Matrix3x3<S>> {
         if let (Some(unit_v1), Some(unit_v2)) = (v1.try_normalize(S::zero()), v2.try_normalize(S::zero())) {
@@ -2164,12 +2441,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
                 );
             }
 
-            // Zero or PI.
             if unit_v1.dot(&unit_v2) < S::zero() {
-                // PI
-                //
-                // The rotation axis is undefined but the angle not zero. This is not a
-                // simple rotation.
                 return None;
             }
         }
@@ -2179,6 +2451,30 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two vectors.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Radians,
+    /// #     Angle,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq,   
+    /// # };
+    /// 
+    /// let unit_v1: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x() * 2_f64);
+    /// let unit_v2: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y() * 3_f64);
+    /// let matrix = Matrix3x3::rotation_between_axis(&unit_v1, &unit_v2).unwrap();
+    /// let vector = Vector3::unit_x() * 2_f64;
+    /// let expected = Vector3::unit_y() * 2_f64;
+    /// let result = matrix * vector;
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Matrix3x3<S>> {
         let cross = unit_v1.as_ref().cross(unit_v2.as_ref());
@@ -2198,6 +2494,37 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     }
 
     /// Linearly interpolate between two matrices.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,    
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    ///
+    /// let matrix0 = Matrix3x3::new(
+    ///     0_f64, 0_f64, 0_f64, 
+    ///     1_f64, 1_f64, 1_f64,
+    ///     2_f64, 2_f64, 2_f64
+    /// );
+    /// let matrix1 = Matrix3x3::new(
+    ///     3_f64, 3_f64, 3_f64, 
+    ///     4_f64, 4_f64, 4_f64,
+    ///     5_f64, 5_f64, 5_f64
+    /// );
+    /// let amount = 0.5;
+    /// let expected = Matrix3x3::new(
+    ///     1.5_f64, 1.5_f64, 1.5_f64, 
+    ///     2.5_f64, 2.5_f64, 2.5_f64,
+    ///     3.5_f64, 3.5_f64, 3.5_f64
+    /// );
+    /// let result = matrix0.lerp(&matrix1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn lerp(&self, other: &Matrix3x3<S>, amount: S) -> Matrix3x3<S> {
         self + ((other - self) * amount)
@@ -2210,6 +2537,39 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// for vector and matrix types working with fixed precision floating point 
     /// values. For example, when the vector elements are `f64`, the vector is 
     /// finite when the elements are neither `NaN` nor infinite.
+    ///
+    /// ### Example (Finite Matrix)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// # use core::f64;
+    ///
+    /// let matrix = Matrix3x3::new(
+    ///     1_f64, 2_f64, 3_f64,
+    ///     4_f64, 5_f64, 6_f64,
+    ///     7_f64, 8_f64, 9_f64 
+    /// );
+    /// 
+    /// assert!(matrix.is_finite());
+    /// ```
+    ///
+    /// ### Example (Not A Finite Matrix)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    ///
+    /// let matrix = Matrix3x3::new(
+    ///     f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY,
+    ///     f64::INFINITY,     f64::INFINITY,     f64::INFINITY,
+    ///     7_f64,             8_f64,             9_f64 
+    /// );
+    /// 
+    /// assert!(!matrix.is_finite());
+    /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.c0r0.is_finite() && self.c0r1.is_finite() && self.c0r2.is_finite() &&
@@ -3313,8 +3673,8 @@ impl<S> Matrix4x4<S> {
         }
     }
 
-    /// Map an operation on the elements of a matrix, returning a matrix whose elements
-    /// are elements of the new underlying type.
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
     #[rustfmt::skip]
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> where F: FnMut(S) -> T {

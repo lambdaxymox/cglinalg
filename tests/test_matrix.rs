@@ -1319,7 +1319,7 @@ mod matrix3_tests {
     }
 
     #[test]
-    fn test_from_reflection_xz_plane() {
+    fn test_from_reflection_zx_plane() {
         let normal = Unit::from_value(-Vector3::unit_y());
         let expected = Matrix3x3::new(
             1.0,  0.0, 0.0, 
