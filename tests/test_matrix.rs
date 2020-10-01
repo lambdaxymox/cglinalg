@@ -1416,7 +1416,7 @@ mod matrix3_tests {
     #[test]
     fn test_from_affine_translation_point() {
         let distance = Vector2::new(3, 7);
-        let matrix = Matrix3x3::from_affine_translation(distance);
+        let matrix = Matrix3x3::from_affine_translation(&distance);
         let point = Vector3::new(0, 0, 1);
         let expected = Vector3::new(3, 7, 1);
         let result = matrix * point;
@@ -1430,7 +1430,7 @@ mod matrix3_tests {
     #[test]
     fn test_from_affine_translation_vector() {
         let distance = Vector2::new(3, 7);
-        let matrix = Matrix3x3::from_affine_translation(distance);
+        let matrix = Matrix3x3::from_affine_translation(&distance);
         let vector = Vector3::zero();
         let expected = vector;
         let result = matrix * vector;
@@ -1694,13 +1694,13 @@ mod matrix4_tests {
 
     #[test]
     fn test_identity_mat4_translates_vector_along_vector() {
-        let v = Vector3::from((2.0, 2.0, 2.0));
-        let trans_mat = Matrix4x4::from_affine_translation(v);
+        let vector = Vector3::from((2.0, 2.0, 2.0));
+        let trans_mat = Matrix4x4::from_affine_translation(&vector);
         let zero_vec4 = Vector4::from((0.0, 0.0, 0.0, 1.0));
         let zero_vec3 = Vector3::from((0.0, 0.0, 0.0));
 
         let result = trans_mat * zero_vec4;
-        assert_eq!(result, Vector4::from((zero_vec3 + v, 1.0)));
+        assert_eq!(result, Vector4::from((zero_vec3 + vector, 1.0)));
     }
 
     #[test]
@@ -2395,7 +2395,7 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_translation_point() {
         let distance = Vector3::new(3, 7, 11);
-        let matrix = Matrix4x4::from_affine_translation(distance);
+        let matrix = Matrix4x4::from_affine_translation(&distance);
         let point = Vector4::new(0, 0, 0, 1);
         let expected = Vector4::new(3, 7, 11, 1);
         let result = matrix * point;
@@ -2409,7 +2409,7 @@ mod matrix4_tests {
     #[test]
     fn test_from_affine_translation_vector() {
         let distance = Vector3::new(3, 7, 11);
-        let matrix = Matrix4x4::from_affine_translation(distance);
+        let matrix = Matrix4x4::from_affine_translation(&distance);
         let vector = Vector4::new(0, 0, 0, 0);
         let expected = vector;
         let result = matrix * vector;

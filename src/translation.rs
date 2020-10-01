@@ -36,14 +36,14 @@ pub struct Translation2<S> {
 impl<S> Translation2<S> where S: ScalarSigned {
     /// Construct a translation operator from a vector of displacements.
     #[inline]
-    pub fn from_vector(distance: Vector2<S>) -> Translation2<S> {
+    pub fn from_vector(distance: &Vector2<S>) -> Translation2<S> {
         Translation2 {
             matrix: Matrix3x3::from_affine_translation(distance),
         }
     }
 
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_translation(distance: Vector2<S>) -> Translation2<S> {
+    pub fn from_translation(distance: &Vector2<S>) -> Translation2<S> {
         Translation2 {
             matrix: Matrix3x3::from_affine_translation(distance),
         }
@@ -54,7 +54,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     pub fn translation_between_vectors(vector1: &Vector2<S>, vector2: &Vector2<S>) -> Self {
         let distance = vector2 - vector1;
 
-        Translation2::from_vector(distance)
+        Translation2::from_vector(&distance)
     }
 
     /// Construct a translation between two points.
@@ -62,7 +62,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     pub fn translation_between_points(point1: &Point2<S>, point2: &Point2<S>) -> Self {
         let distance = point2 - point1;
 
-        Translation2::from_vector(distance)
+        Translation2::from_vector(&distance)
     }
 
     /// Construct a translation that translates a vector or point in the opposite
@@ -74,7 +74,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     pub fn inverse(&self) -> Self {
         let distance = Vector2::new(-self.matrix.c2r0, -self.matrix.c2r1);
 
-        Translation2::from_vector(distance)
+        Translation2::from_vector(&distance)
     }
     
     /// Apply the translation operation to a point.
@@ -166,14 +166,14 @@ pub struct Translation3<S> {
 
 impl<S> Translation3<S> where S: ScalarSigned {
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_vector(distance: Vector3<S>) -> Translation3<S> {
+    pub fn from_vector(distance: &Vector3<S>) -> Translation3<S> {
         Translation3 {
             matrix: Matrix4x4::from_affine_translation(distance),
         }
     }
 
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_translation(distance: Vector3<S>) -> Translation3<S> {
+    pub fn from_translation(distance: &Vector3<S>) -> Translation3<S> {
         Translation3 {
             matrix: Matrix4x4::from_affine_translation(distance),
         }
@@ -184,7 +184,7 @@ impl<S> Translation3<S> where S: ScalarSigned {
     pub fn translation_between_vectors(vector1: &Vector3<S>, vector2: &Vector3<S>) -> Self {
         let distance = vector2 - vector1;
 
-        Translation3::from_vector(distance)
+        Translation3::from_vector(&distance)
     }
 
     /// Construct a translation between two points.
@@ -192,7 +192,7 @@ impl<S> Translation3<S> where S: ScalarSigned {
     pub fn translation_between_points(point1: &Point3<S>, point2: &Point3<S>) -> Self {
         let distance = point2 - point1;
 
-        Translation3::from_vector(distance)
+        Translation3::from_vector(&distance)
     }
 
     /// Construct a translation that translates a vector or point in the opposite
@@ -208,7 +208,7 @@ impl<S> Translation3<S> where S: ScalarSigned {
             -self.matrix.c3r2
         );
 
-        Translation3::from_vector(distance)
+        Translation3::from_vector(&distance)
     }
     
     #[inline]

@@ -1546,7 +1546,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// # };
     /// #
     /// let distance = Vector2::new(3_u32, 7_u32);
-    /// let matrix = Matrix3x3::from_affine_translation(distance);
+    /// let matrix = Matrix3x3::from_affine_translation(&distance);
     /// let vector = Vector3::new(1_u32, 1_u32, 0_u32);
     /// let expected = Vector3::new(1_u32, 1_u32, 0_u32);
     /// let result = matrix * vector;
@@ -1562,7 +1562,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// # };
     /// #
     /// let distance = Vector2::new(3_u32, 7_u32);
-    /// let matrix = Matrix3x3::from_affine_translation(distance);
+    /// let matrix = Matrix3x3::from_affine_translation(&distance);
     /// let vector = Vector3::new(1_u32, 1_u32, 1_u32);
     /// let expected = Vector3::new(1_u32 + distance.x, 1_u32 + distance.y, 1_u32);
     /// let result = matrix * vector;
@@ -1571,7 +1571,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_translation(distance: Vector2<S>) -> Matrix3x3<S> {
+    pub fn from_affine_translation(distance: &Vector2<S>) -> Matrix3x3<S> {
         let one = S::one();
         let zero = S::zero();
         
@@ -3879,7 +3879,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// # };
     /// #
     /// let distance = Vector3::new(3_u32, 7_u32, 11_u32);
-    /// let matrix = Matrix4x4::from_affine_translation(distance);
+    /// let matrix = Matrix4x4::from_affine_translation(&distance);
     /// let vector = Vector4::new(1_u32, 1_u32, 1_u32, 0_u32);
     /// let expected = Vector4::new(1_u32, 1_u32, 1_u32, 0_u32);
     /// let result = matrix * vector;
@@ -3895,7 +3895,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// # };
     /// #
     /// let distance = Vector3::new(3_u32, 7_u32, 11_u32);
-    /// let matrix = Matrix4x4::from_affine_translation(distance);
+    /// let matrix = Matrix4x4::from_affine_translation(&distance);
     /// let vector = Vector4::new(1_u32, 1_u32, 1_u32, 1_u32);
     /// let expected = Vector4::new(
     ///     1_u32 + distance.x, 
@@ -3909,7 +3909,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_translation(distance: Vector3<S>) -> Matrix4x4<S> {
+    pub fn from_affine_translation(distance: &Vector3<S>) -> Matrix4x4<S> {
         let one = S::one();
         let zero = S::zero();
 
