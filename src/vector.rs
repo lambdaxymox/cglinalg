@@ -104,7 +104,7 @@ impl<S> Vector1<S> where S: Copy {
     /// #     Vector1,
     /// #     Vector2,   
     /// # };
-    /// 
+    /// #
     /// let v = Vector1::new(1_f64);
     /// let expected = Vector2::new(1_f64, 2_f64);
     /// let result = v.expand(2_f64);
@@ -127,7 +127,7 @@ impl<S> Vector1<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Vector1, 
     /// # };
-    ///
+    /// #
     /// let result = Vector1::from_fill(3_f64);
     /// let expected = Vector1::new(3_f64);
     /// 
@@ -159,7 +159,7 @@ impl<S> Vector1<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector1,
     /// # };
-    /// 
+    /// #
     /// let v0 = Vector1::new(0_f64);
     /// let v1 = Vector1::new(10_f64);
     /// let amount = 0.6;
@@ -186,7 +186,7 @@ impl<S> Vector1<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector1,  
     /// # };
-    /// 
+    /// #
     /// let v: Vector1<f64> = Vector1::new(2_f64);
     ///
     /// assert!(v.is_finite()); 
@@ -198,7 +198,7 @@ impl<S> Vector1<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector1,  
     /// # };
-    /// 
+    /// #
     /// let w: Vector1<f64> = Vector1::new(f64::INFINITY);
     ///
     /// assert!(!w.is_finite()); 
@@ -934,7 +934,7 @@ impl<S> Vector2<S> where S: Copy {
     /// #     Vector2,
     /// #     Vector3,   
     /// # };
-    /// 
+    /// #
     /// let v = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let result = v.expand(3_f64);
@@ -956,7 +956,7 @@ impl<S> Vector2<S> where S: Copy {
     /// #     Vector1,
     /// #     Vector2,   
     /// # };
-    /// 
+    /// #
     /// let v = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector1::new(1_f64);
     /// let result = v.contract();
@@ -979,7 +979,7 @@ impl<S> Vector2<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Vector2, 
     /// # };
-    ///
+    /// #
     /// let result = Vector2::from_fill(3_f64);
     /// let expected = Vector2::new(3_f64, 3_f64);
     /// 
@@ -1022,7 +1022,7 @@ impl<S> Vector2<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector2,  
     /// # };
-    ///
+    /// #
     /// let v0 = Vector2::new(0_f64, 0_f64);
     /// let v1 = Vector2::new(10_f64, 20_f64);
     /// let amount = 0.7;
@@ -1049,7 +1049,7 @@ impl<S> Vector2<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #    Vector2,
     /// # };
-    /// 
+    /// #
     /// let v = Vector2::new(1_f64, 2_f64);
     ///
     /// assert!(v.is_finite());
@@ -1826,7 +1826,7 @@ impl<S> Vector3<S> where S: Copy {
     /// #     Vector3,
     /// #     Vector4, 
     /// # };
-    ///
+    /// #
     /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let result = v.expand(4_f64);
@@ -1848,7 +1848,7 @@ impl<S> Vector3<S> where S: Copy {
     /// #     Vector2,
     /// #     Vector3, 
     /// # };
-    ///
+    /// #
     /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Vector2::new(1_f64, 2_f64);
     /// let result = v.contract();
@@ -1871,7 +1871,7 @@ impl<S> Vector3<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Vector3,   
     /// # };
-    ///
+    /// #
     /// let result = Vector3::from_fill(3_f64);
     /// let expected = Vector3::new(3_f64, 3_f64, 3_f64);
     ///
@@ -1927,7 +1927,7 @@ impl<S> Vector3<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector3,  
     /// # };
-    ///
+    /// #
     /// let v0 = Vector3::new(0_f64, 0_f64, 0_f64);
     /// let v1 = Vector3::new(10_f64, 20_f64, 30_f64);
     /// let amount = 0.7;
@@ -1954,7 +1954,7 @@ impl<S> Vector3<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector3,
     /// # };
-    /// 
+    /// #
     /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
     ///
     /// assert!(v.is_finite()); 
@@ -1966,7 +1966,7 @@ impl<S> Vector3<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector3,
     /// # };
-    /// 
+    /// #
     /// let w = Vector3::new(1_f64, f64::NAN, f64::NEG_INFINITY);
     ///
     /// assert!(!w.is_finite()); 
@@ -2809,7 +2809,7 @@ impl<S> Vector4<S> where S: Copy {
     /// #     Vector3,
     /// #     Vector4, 
     /// # };
-    ///
+    /// #
     /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let result = v.contract();
@@ -2832,7 +2832,7 @@ impl<S> Vector4<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Vector4,   
     /// # };
-    ///
+    /// #
     /// let result = Vector4::from_fill(3_f64);
     /// let expected = Vector4::new(3_f64, 3_f64, 3_f64, 3_f64);
     ///
@@ -2942,7 +2942,7 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector4,  
     /// # };
-    ///
+    /// #
     /// let v0 = Vector4::new(0_f64, 0_f64, 0_f64, 0_f64);
     /// let v1 = Vector4::new(10_f64, 20_f64, 30_f64, 40_f64);
     /// let amount = 0.7;
@@ -2969,7 +2969,7 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector4,
     /// # };
-    /// 
+    /// #
     /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
     ///
     /// assert!(v.is_finite()); 
@@ -2981,7 +2981,7 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Vector4,
     /// # };
-    /// 
+    /// #
     /// let w = Vector4::new(1_f64, f64::NAN, f64::NEG_INFINITY, 4_f64);
     ///
     /// assert!(!w.is_finite()); 

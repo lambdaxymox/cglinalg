@@ -200,7 +200,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// #     Matrix2x2, 
     /// #     Vector2,
     /// # };
-    /// 
+    /// #
     /// let shear_x_with_y = 3_u32;
     /// let matrix = Matrix2x2::from_shear_x(shear_x_with_y);
     /// let vector = Vector2::new(1, 1);
@@ -230,7 +230,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// #     Matrix2x2, 
     /// #     Vector2,
     /// # };
-    /// 
+    /// #
     /// let shear_y_with_x = 3_u32;
     /// let matrix = Matrix2x2::from_shear_y(shear_y_with_x);
     /// let vector = Vector2::new(1, 1);
@@ -264,7 +264,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// #     Matrix2x2, 
     /// #     Vector2,
     /// # };
-    /// 
+    /// #
     /// let shear_x_with_y = 15_u32;
     /// let shear_y_with_x = 4_u32;
     /// let matrix = Matrix2x2::from_shear(shear_x_with_y, shear_y_with_x);
@@ -299,7 +299,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// #     Matrix2x2, 
     /// #     Vector2,
     /// # };
-    /// 
+    /// #
     /// let scale = 11_u32;
     /// let matrix = Matrix2x2::from_scale(scale);
     /// let vector = Vector2::new(1, 2);
@@ -325,7 +325,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// #     Matrix2x2, 
     /// #     Vector2,
     /// # };
-    /// 
+    /// #
     /// let scale_x = 3_u32;
     /// let scale_y = 5_u32;
     /// let matrix = Matrix2x2::from_nonuniform_scale(scale_x, scale_y);
@@ -359,7 +359,7 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
     /// #     Vector2,
     /// #     Unit, 
     /// # };
-    ///
+    /// #
     /// let normal = Unit::from_value(Vector2::unit_y());
     /// let matrix = Matrix2x2::from_reflection(&normal);
     /// let vector = Vector2::new(2_f64, 2_f64);
@@ -378,7 +378,7 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
     /// #     Vector2,
     /// #     Unit, 
     /// # };
-    ///
+    /// #
     /// let minus_normal = Unit::from_value(-Vector2::unit_y());
     /// let matrix = Matrix2x2::from_reflection(&minus_normal);
     /// let vector = Vector2::new(2_f64, 2_f64);
@@ -416,7 +416,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///
+    /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let unit_x = Vector2::unit_x();
     /// let unit_y = Vector2::unit_y();
@@ -450,7 +450,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///
+    /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
     /// let v2 = Vector2::new(-1_f64, 1_f64);
     /// let matrix = Matrix2x2::rotation_between(&v1, &v2);
@@ -469,7 +469,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///
+    /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
     /// let v2 = Vector2::new(-1_f64, 1_f64);
     /// let matrix = Matrix2x2::rotation_between(&v1, &v2);
@@ -504,7 +504,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///
+    /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
     /// let v2 = Vector2::new(-1_f64, 1_f64);
     /// let unit_v1 = Unit::from_value(v1);
@@ -526,7 +526,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///
+    /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
     /// let v2 = Vector2::new(-1_f64, 1_f64);
     /// let unit_v1 = Unit::from_value(v1);
@@ -556,7 +556,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///
+    /// #
     /// let matrix0 = Matrix2x2::new(0_f64, 0_f64, 1_f64, 1_f64);
     /// let matrix1 = Matrix2x2::new(2_f64, 2_f64, 3_f64, 3_f64);
     /// let amount = 0.5;
@@ -583,7 +583,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Matrix2x2, 
     /// # };
-    /// 
+    /// #
     /// let matrix = Matrix2x2::new(1_f64, 2_f64, 3_f64, 4_f64);
     ///
     /// assert!(matrix.is_finite());
@@ -595,7 +595,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Matrix2x2, 
     /// # };
-    /// 
+    /// #
     /// let matrix = Matrix2x2::new(f64::NAN, f64::INFINITY, f64::NEG_INFINITY, 1_f64);
     ///
     /// assert!(!matrix.is_finite());
@@ -1432,7 +1432,7 @@ impl<S> Matrix3x3<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Matrix3x3,  
     /// # };
-    /// 
+    /// #
     /// let fill_value = 3_u32;
     /// let expected = Matrix3x3::new(
     ///     fill_value, fill_value, fill_value,
@@ -1540,7 +1540,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Vector2,
     /// #     Vector3,
     /// # };
-    ///
+    /// #
     /// let distance = Vector2::new(3_u32, 7_u32);
     /// let matrix = Matrix3x3::from_affine_translation(distance);
     /// let vector = Vector3::new(1_u32, 1_u32, 0_u32);
@@ -1556,7 +1556,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Vector2,
     /// #     Vector3,
     /// # };
-    ///
+    /// #
     /// let distance = Vector2::new(3_u32, 7_u32);
     /// let matrix = Matrix3x3::from_affine_translation(distance);
     /// let vector = Vector3::new(1_u32, 1_u32, 1_u32);
@@ -1592,7 +1592,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3,
     /// #     Vector3,  
     /// # };
-    ///
+    /// #
     /// let scale = 5_i32;
     /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
     /// let matrix = Matrix3x3::from_scale(scale);
@@ -1618,7 +1618,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3,
     /// #     Vector3,  
     /// # };
-    ///
+    /// #
     /// let scale_x = 5_i32;
     /// let scale_y = 10_i32;
     /// let scale_z = 15_i32;
@@ -1656,7 +1656,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3,
     /// #     Vector3,  
     /// # };
-    ///
+    /// #
     /// let scale = 5_i32;
     /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
     /// let matrix = Matrix3x3::from_affine_scale(scale);
@@ -1683,7 +1683,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3,
     /// #     Vector3,  
     /// # };
-    ///
+    /// #
     /// let scale_x = 5_i32;
     /// let scale_y = 10_i32;
     /// let vector = Vector3::new(1_i32, 1_i32, 3_i32);
@@ -1720,7 +1720,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3,
     /// #     Vector3, 
     /// # };
-    /// 
+    /// #
     /// let shear_x_with_y = 3_i32;
     /// let shear_x_with_z = 8_i32;
     /// let matrix = Matrix3x3::from_shear_x(shear_x_with_y, shear_x_with_z);
@@ -1757,7 +1757,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3,
     /// #     Vector3, 
     /// # };
-    /// 
+    /// #
     /// let shear_y_with_x = 3_i32;
     /// let shear_y_with_z = 8_i32;
     /// let matrix = Matrix3x3::from_shear_y(shear_y_with_x, shear_y_with_z);
@@ -1794,7 +1794,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3,
     /// #     Vector3, 
     /// # };
-    /// 
+    /// #
     /// let shear_z_with_x = 3_i32;
     /// let shear_z_with_y = 8_i32;
     /// let matrix = Matrix3x3::from_shear_z(shear_z_with_x, shear_z_with_y);
@@ -1845,7 +1845,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3,
     /// #     Vector3, 
     /// # };
-    /// 
+    /// #
     /// let shear_x_with_y = 1_usize;
     /// let shear_x_with_z = 2_usize;
     /// let shear_y_with_x = 3_usize;
@@ -1899,7 +1899,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3, 
     /// #     Vector3,
     /// # };
-    /// 
+    /// #
     /// let shear_x_with_y = 3_u32;
     /// let matrix = Matrix3x3::from_affine_shear_x(shear_x_with_y);
     /// let vector = Vector3::new(1, 1, 0);
@@ -1934,7 +1934,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3, 
     /// #     Vector3,
     /// # };
-    /// 
+    /// #
     /// let shear_y_with_x = 3_u32;
     /// let matrix = Matrix3x3::from_affine_shear_y(shear_y_with_x);
     /// let vector = Vector3::new(1, 1, 0);
@@ -1973,7 +1973,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// #     Matrix3x3, 
     /// #     Vector3,
     /// # };
-    /// 
+    /// #
     /// let shear_x_with_y = 15_u32;
     /// let shear_y_with_x = 4_u32;
     /// let matrix = Matrix3x3::from_affine_shear(shear_x_with_y, shear_y_with_x);
@@ -2066,7 +2066,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// #     Vector2,
     /// #     Unit, 
     /// # };
-    ///
+    /// #
     /// let normal = Unit::from_value(Vector2::unit_y());
     /// let bias = Vector2::new(0_f64, 0_f64);
     /// let matrix = Matrix3x3::from_affine_reflection(&normal, &bias);
@@ -2087,7 +2087,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// #     Vector2,
     /// #     Unit, 
     /// # };
-    ///
+    /// #
     /// let minus_normal = Unit::from_value(-Vector2::unit_y());
     /// let bias = Vector2::new(0_f64, 0_f64);
     /// let matrix = Matrix3x3::from_affine_reflection(&minus_normal, &bias);
@@ -2110,7 +2110,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
     /// # };
-    ///
+    /// #
     /// let bias = Vector2::new(0.0, 2.0);
     /// let normal = Unit::from_value(
     ///     Vector2::new(-1.0 / f64::sqrt(5.0), 2.0 / f64::sqrt(5.0))
@@ -2159,7 +2159,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// #     Vector3,
     /// #     Unit,
     /// # };
-    ///
+    /// #
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let expected = Matrix3x3::new(
     ///     1.0, 0.0,  0.0, 
@@ -2215,7 +2215,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///
+    /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let matrix = Matrix3x3::from_affine_angle(angle);
     /// let unit_x = Vector3::unit_x();
@@ -2253,7 +2253,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    /// 
+    /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let matrix = Matrix3x3::from_angle_x(angle);
     /// let vector = Vector3::new(0_f64, 1_f64, 1_f64);
@@ -2289,7 +2289,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    /// 
+    /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let matrix = Matrix3x3::from_angle_y(angle);
     /// let vector = Vector3::new(1_f64, 0_f64, 1_f64);
@@ -2325,7 +2325,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    /// 
+    /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let matrix = Matrix3x3::from_angle_z(angle);
     /// let vector = Vector3::new(1_f64, 1_f64, 0_f64);
@@ -2362,7 +2362,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///  
+    /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let matrix = Matrix3x3::from_axis_angle(&axis, angle);
@@ -2457,7 +2457,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,   
     /// # };
-    /// 
+    /// #
     /// let v1: Vector3<f64> = Vector3::unit_x() * 2_f64;
     /// let v2: Vector3<f64> = Vector3::unit_y() * 3_f64;
     /// let matrix = Matrix3x3::rotation_between(&v1, &v2).unwrap();
@@ -2501,7 +2501,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,   
     /// # };
-    /// 
+    /// #
     /// let unit_v1: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x() * 2_f64);
     /// let unit_v2: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y() * 3_f64);
     /// let matrix = Matrix3x3::rotation_between_axis(&unit_v1, &unit_v2).unwrap();
@@ -2540,7 +2540,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///
+    /// #
     /// let matrix0 = Matrix3x3::new(
     ///     0_f64, 0_f64, 0_f64, 
     ///     1_f64, 1_f64, 1_f64,
@@ -2581,7 +2581,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// #     Matrix3x3, 
     /// # };
     /// # use core::f64;
-    ///
+    /// #
     /// let matrix = Matrix3x3::new(
     ///     1_f64, 2_f64, 3_f64,
     ///     4_f64, 5_f64, 6_f64,
@@ -2597,7 +2597,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Matrix3x3, 
     /// # };
-    ///
+    /// #
     /// let matrix = Matrix3x3::new(
     ///     f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY,
     ///     f64::INFINITY,     f64::INFINITY,     f64::INFINITY,
@@ -3735,7 +3735,7 @@ impl<S> Matrix4x4<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Matrix4x4, 
     /// # };
-    ///
+    /// #
     /// let fill_value = 4_u32;
     /// let expected = Matrix4x4::new(
     ///     fill_value, fill_value, fill_value, fill_value,
@@ -3873,7 +3873,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// #     Vector4,
     /// #     Vector3,
     /// # };
-    ///
+    /// #
     /// let distance = Vector3::new(3_u32, 7_u32, 11_u32);
     /// let matrix = Matrix4x4::from_affine_translation(distance);
     /// let vector = Vector4::new(1_u32, 1_u32, 1_u32, 0_u32);
@@ -3889,7 +3889,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// #     Vector4,
     /// #     Vector3,
     /// # };
-    ///
+    /// #
     /// let distance = Vector3::new(3_u32, 7_u32, 11_u32);
     /// let matrix = Matrix4x4::from_affine_translation(distance);
     /// let vector = Vector4::new(1_u32, 1_u32, 1_u32, 1_u32);
@@ -3932,7 +3932,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// #     Matrix4x4,
     /// #     Vector4, 
     /// # };
-    /// 
+    /// #
     /// let scale = 4_usize;
     /// let matrix = Matrix4x4::from_affine_scale(scale);
     /// let vector = Vector4::new(1_usize, 1_usize, 1_usize, 1_usize);
@@ -3959,7 +3959,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// #     Matrix4x4,
     /// #     Vector4, 
     /// # };
-    /// 
+    /// #
     /// let scale_x = 4_usize;
     /// let scale_y = 6_usize;
     /// let scale_z = 8_usize;
@@ -4005,7 +4005,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// #     Matrix4x4,
     /// #     Vector4, 
     /// # };
-    ///
+    /// #
     /// let shear_x_with_y = 3_i32;
     /// let shear_x_with_z = 19_i32;
     /// let matrix = Matrix4x4::from_affine_shear_x(shear_x_with_y, shear_x_with_z);
@@ -4050,7 +4050,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// #     Matrix4x4,
     /// #     Vector4, 
     /// # };
-    ///
+    /// #
     /// let shear_y_with_x = 3_i32;
     /// let shear_y_with_z = 19_i32;
     /// let matrix = Matrix4x4::from_affine_shear_y(shear_y_with_x, shear_y_with_z);
@@ -4095,7 +4095,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// #     Matrix4x4,
     /// #     Vector4, 
     /// # };
-    ///
+    /// #
     /// let shear_z_with_x = 3_i32;
     /// let shear_z_with_y = 19_i32;
     /// let matrix = Matrix4x4::from_affine_shear_z(shear_z_with_x, shear_z_with_y);
@@ -4157,7 +4157,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// #     Matrix4x4,
     /// #     Vector4,   
     /// # };
-    ///
+    /// #
     /// let shear_x_with_y = 1_usize;
     /// let shear_x_with_z = 2_usize;
     /// let shear_y_with_x = 3_usize;
@@ -4264,6 +4264,29 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     /// ```
     /// Here the terms `xr`, `yr`, and `zr` are the coordinates of the 
     /// reflected point across the plane `P`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// let bias = Vector3::new(0_f64, 0_f64, 0_f64);
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let expected = Matrix4x4::new(
+    ///     1_f64, 0_f64,  0_f64, 0_f64,
+    ///     0_f64, 1_f64,  0_f64, 0_f64,
+    ///     0_f64, 0_f64, -1_f64, 0_f64,
+    ///     0_f64, 0_f64,  0_f64, 1_f64
+    /// );
+    /// let result = Matrix4x4::from_affine_reflection(&normal, &bias);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_reflection(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Matrix4x4<S> {
@@ -4316,7 +4339,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,   
     /// # };
-    ///
+    /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let matrix = Matrix4x4::from_affine_angle_x(angle);
     /// let vector = Vector4::new(0_f64, 1_f64, 1_f64, 1_f64);
@@ -4356,7 +4379,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    /// 
+    /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let matrix = Matrix4x4::from_affine_angle_y(angle);
     /// let vector = Vector4::new(1_f64, 0_f64, 1_f64, 1_f64);
@@ -4396,7 +4419,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    /// 
+    /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let matrix = Matrix4x4::from_affine_angle_z(angle);
     /// let vector = Vector4::new(1_f64, 1_f64, 0_f64, 1_f64);
@@ -4437,7 +4460,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///  
+    /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let matrix = Matrix4x4::from_affine_axis_angle(&axis, angle);
@@ -4485,7 +4508,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Matrix4x4, 
     /// # };
-    /// 
+    /// #
     /// let left = -4.0;
     /// let right = 4.0;
     /// let bottom = -2.0;
@@ -4533,7 +4556,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Matrix4x4, 
     /// # };
-    ///
+    /// #
     /// let left = -4.0;
     /// let right = 4.0;
     /// let bottom = -2.0;
@@ -4597,7 +4620,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// #     Matrix4x4,
     /// #     Degrees,
     /// # };
-    ///
+    /// #
     /// let fovy = Degrees(72.0);
     /// let aspect = 800 as f32 / 600 as f32;
     /// let near = 0.1;
@@ -4735,7 +4758,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #    Matrix4x4,
     /// # };
-    /// 
+    /// #
     /// let matrix0 = Matrix4x4::new(
     ///     0_f64, 0_f64, 0_f64, 0_f64,
     ///     1_f64, 1_f64, 1_f64, 1_f64,
@@ -4777,7 +4800,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Matrix4x4,  
     /// # };
-    ///
+    /// #
     /// let matrix = Matrix4x4::new(
     ///     1_f64,  2_f64,  3_f64,  4_f64,
     ///     5_f64,  6_f64,  7_f64,  8_f64,
@@ -4794,7 +4817,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Matrix4x4,    
     /// # };
-    /// 
+    /// #
     /// let matrix = Matrix4x4::new(
     ///     1_f64,             2_f64,             3_f64,             4_f64,
     ///     f64::NAN,          f64::NAN,          f64::NAN,          f64::NAN,

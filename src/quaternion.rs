@@ -117,7 +117,7 @@ impl<S> Quaternion<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Quaternion, 
     /// # };
-    /// 
+    /// #
     /// let result = Quaternion::from_fill(1_f64);
     /// let expected = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
     /// 
@@ -204,7 +204,7 @@ impl<S> Quaternion<S> where S: Scalar {
     /// #     Quaternion,
     /// #     Vector3,
     /// # };
-    /// 
+    /// #
     /// let pure = Quaternion::from_parts(0_f64, Vector3::unit_z());
     /// 
     /// assert!(pure.is_pure());
@@ -238,7 +238,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,
     /// # };
-    /// 
+    /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let pi_over_6: Radians<f64> = Radians::full_turn() / 12_f64;
     /// let cos_pi_over_12 = (f64::sqrt(3_f64) + 1_f64) / (2_f64 * f64::sqrt(2_f64));
@@ -280,7 +280,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    ///  
+    /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let p: Quaternion<f64> = Quaternion::unit_x();
@@ -387,7 +387,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let scale = 2_f64 / quaternion.magnitude_squared();
     /// let expected = Matrix3x3::new(
@@ -414,7 +414,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
     /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
@@ -477,7 +477,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let scale = 2_f64 / quaternion.magnitude_squared();
     /// let expected = Matrix3x3::new(
@@ -508,7 +508,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
     /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
@@ -566,7 +566,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let scale = 2_f64 / quaternion.magnitude_squared();
     /// let expected = Matrix4x4::new(
@@ -594,7 +594,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
     /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
@@ -668,7 +668,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let scale = 2_f64 / quaternion.magnitude_squared();
     /// let expected = Matrix4x4::new(
@@ -701,7 +701,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,  
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
     /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
@@ -765,7 +765,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Quaternion,
     /// #     Vector3,
     /// # };
-    /// 
+    /// #
     /// let scalar = 1_f64;
     /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
     /// let quaternion = Quaternion::from_parts(scalar, vector);
@@ -792,7 +792,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Quaternion,
     /// #     AdditiveIdentity,   
     /// # };
-    /// 
+    /// #
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
     /// 
     /// assert!(zero_quat.is_zero());
@@ -832,7 +832,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Quaternion,
     /// #     AdditiveIdentity,   
     /// # };
-    /// 
+    /// #
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
     /// 
     /// assert!(zero_quat.is_zero());
@@ -882,7 +882,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     relative_eq,  
     /// # };
     /// # use core::f64;
-    /// 
+    /// #
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
     /// let pi_over_two = f64::consts::FRAC_PI_2;
     ///
@@ -922,7 +922,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     AdditiveIdentity,
     /// # };
     /// # use core::f64;
-    ///
+    /// #
     /// let zero_vec = Vector3::zero();
     /// let s = 3_f64;
     /// let qs = Quaternion::from_parts(s, zero_vec);
@@ -943,7 +943,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
-    ///
+    /// #
     /// let zero_vec = Vector3::zero();
     /// let unit_x = Quaternion::unit_x();
     /// let pi = f64::consts::PI;
@@ -964,7 +964,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
-    ///
+    /// #
     /// let zero_vec = Vector3::zero();
     /// let unit_y = Quaternion::unit_y();
     /// let pi = f64::consts::PI;
@@ -985,7 +985,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
-    ///
+    /// #
     /// let zero_vec = Vector3::zero();
     /// let unit_z = Quaternion::unit_z();
     /// let pi = f64::consts::PI;
@@ -1006,7 +1006,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
-    ///
+    /// #
     /// let unit_z = Quaternion::unit_z();
     /// let pi_over_two = f64::consts::PI / 2_f64;
     /// let result = (unit_z * pi_over_two).exp();
@@ -1060,7 +1060,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
-    ///
+    /// #
     /// let unit_z: Vector3<f64> = Vector3::unit_z();
     /// let pi = f64::consts::PI;
     /// let quaternion = Quaternion::from_parts(1_f64, unit_z);
@@ -1081,7 +1081,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
     /// let pi_over_three = f64::consts::FRAC_PI_3;
     /// let scalar = f64::ln(2_f64);
@@ -1124,7 +1124,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    /// 
+    /// #
     /// let scalar = 1_f64;
     /// let vector = Vector3::unit_z();
     /// let quaternion = Quaternion::from_parts(scalar, vector);
@@ -1155,7 +1155,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,   
     /// # };
-    /// 
+    /// #
     /// let v1: Vector3<f64> = Vector3::unit_x() * 2_f64;
     /// let v2: Vector3<f64> = Vector3::unit_y() * 3_f64;
     /// let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -1196,7 +1196,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,   
     /// # };
-    /// 
+    /// #
     /// let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
     /// let unit_y: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
     /// let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -1281,7 +1281,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Quaternion,  
     /// # };
-    ///
+    /// #
     /// let v0 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
     /// let v1 = Quaternion::new(10_f64, 20_f64, 30_f64, 40_f64);
     /// let amount = 0.7;
@@ -1314,7 +1314,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq,   
     /// # };
-    /// 
+    /// #
     /// let angle1 = Degrees(30_f64);
     /// let angle2 = Degrees(150_f64);
     /// let unit_z = Vector3::unit_z();
@@ -1414,7 +1414,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Quaternion,
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     ///
     /// assert!(quaternion.is_finite()); 
@@ -1426,7 +1426,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Quaternion,
     /// # };
-    /// 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, f64::NAN, f64::NEG_INFINITY, 4_f64);
     ///
     /// assert!(!quaternion.is_finite());

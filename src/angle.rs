@@ -190,8 +190,8 @@ impl<S> Radians<S> where S: ScalarFloat {
     /// #     Angle,
     /// #     Radians,  
     /// # };
-    /// use core::f64;
-    /// 
+    /// # use core::f64;
+    /// #
     /// let angle: Radians<f64> = Radians(f64::consts::PI / 4_f64);
     /// assert!(angle.is_finite()); 
     /// ```
@@ -218,7 +218,6 @@ impl<S> Degrees<S> where S: ScalarFloat {
     /// #     Degrees,  
     /// # };
     /// #
-    ///
     /// let angle: Degrees<f64> = Degrees(45.0);
     /// assert!(angle.is_finite()); 
     /// ```

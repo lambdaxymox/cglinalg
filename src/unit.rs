@@ -86,7 +86,7 @@ impl<T> Unit<T> where T: Magnitude {
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// 
+    /// #
     /// let vector: Vector3<f64> = Vector3::new(0.0, 2.0, 0.0);
     /// let (wrapped, norm) = Unit::from_value_with_magnitude(vector);
     /// let unit_vector: &Vector3<f64> = &wrapped;
@@ -122,7 +122,7 @@ impl<T> Unit<T> where T: Magnitude {
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    ///
+    /// #
     /// let vector: Vector3<f64> = Vector3::new(0.0, 1e-20, 0.0);
     /// let threshold = 1e-10;
     /// let result = Unit::try_from_value_with_magnitude(vector, threshold);
@@ -162,8 +162,8 @@ impl<T> Unit<T> where T: Magnitude {
     /// #     Unit,
     /// #     Quaternion,
     /// # };
-    /// use core::f64;
-    ///
+    /// # use core::f64;
+    /// #
     /// let quaternion = Quaternion::new(0_f64, 1_f64, 1_f64, 1_f64);
     /// let expected = Some(Unit::from_value(quaternion / f64::sqrt(3_f64)));
     /// let result = Unit::try_from_value(quaternion, 0_f64);

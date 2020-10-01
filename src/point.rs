@@ -164,7 +164,7 @@ impl<S> Point1<S> where S: Scalar {
     /// #     Point1, 
     /// #     Vector1,
     /// # };
-    ///
+    /// #
     /// let vector = Vector1::new(1_u32);
     /// let expected = Point1::new(1_u32);
     /// let result = Point1::from_vector(vector);
@@ -188,7 +188,7 @@ impl<S> Point1<S> where S: Scalar {
     /// #     Point1, 
     /// #     Vector1,
     /// # };
-    ///
+    /// #
     /// let point = Point1::new(1_u32);
     /// let expected = Vector1::new(1_u32);
     /// let result = point.to_vector();
@@ -862,7 +862,7 @@ impl<S> Point2<S> where S: Copy {
     /// #    Point2,
     /// #    Point3,    
     /// # };
-    ///
+    /// #
     /// let point = Point2::new(1_u32, 2_u32);
     /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
     /// let result = point.expand(3_u32);
@@ -884,7 +884,7 @@ impl<S> Point2<S> where S: Copy {
     /// #     Point1,
     /// #     Point2, 
     /// # };
-    ///
+    /// #
     /// let point = Point2::new(1_u32, 2_u32);
     /// let expected = Point1::new(1_u32);
     /// let result = point.contract();
@@ -904,7 +904,7 @@ impl<S> Point2<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Point2, 
     /// # };
-    ///
+    /// #
     /// let fill_value = 2_u32;
     /// let expected = Point2::new(2_u32, 2_u32);
     /// let result = Point2::from_fill(fill_value);
@@ -958,7 +958,7 @@ impl<S> Point2<S> where S: Scalar {
     /// #     Point2, 
     /// #     Vector3,
     /// # };
-    /// 
+    /// #
     /// let vector = Vector3::new(3_f64, 6_f64, 3_f64);
     /// let expected = Point2::new(1_f64, 2_f64);
     /// let result = Point2::from_homogeneous(vector);
@@ -980,7 +980,7 @@ impl<S> Point2<S> where S: Scalar {
     /// #     Point2,
     /// #     Vector3,
     /// # };
-    ///
+    /// #
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = Vector3::new(1_f64, 2_f64, 1_f64);
     /// let result = point.to_homogeneous();
@@ -1010,7 +1010,7 @@ impl<S> Point2<S> where S: Scalar {
     /// #     Point2,
     /// #     Vector2, 
     /// # };
-    /// 
+    /// #
     /// let vector = Vector2::new(1_u32, 2_u32);
     /// let expected = Point2::new(1_u32, 2_u32);
     /// let result = Point2::from_vector(vector);
@@ -1034,7 +1034,7 @@ impl<S> Point2<S> where S: Scalar {
     /// #     Point2,
     /// #     Vector2, 
     /// # };
-    /// 
+    /// #
     /// let point = Point2::new(1_u32, 2_u32);
     /// let expected = Vector2::new(1_u32, 2_u32);
     /// let result = point.to_vector();
@@ -1718,7 +1718,7 @@ impl<S> Point3<S> where S: Copy {
     /// # use cglinalg::{
     /// #     Point3, 
     /// # };
-    ///
+    /// #
     /// let fill_value = 3_u32;
     /// let expected = Point3::new(3_u32, 3_u32, 3_u32);
     /// let result = Point3::from_fill(fill_value);
@@ -1739,7 +1739,7 @@ impl<S> Point3<S> where S: Copy {
     /// #     Point2,
     /// #     Point3, 
     /// # };
-    ///
+    /// #
     /// let point = Point3::new(1_u32, 2_u32, 3_u32);
     /// let expected = Point2::new(1_u32, 2_u32);
     /// let result = point.contract();
@@ -1797,7 +1797,7 @@ impl<S> Point3<S> where S: Scalar {
     /// #     Point3,
     /// #     Vector4, 
     /// # };
-    ///
+    /// #
     /// let vector = Vector4::new(5_f64, 10_f64, 15_f64, 5_f64);
     /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
     /// let result = Point3::from_homogeneous(vector);
@@ -1819,7 +1819,7 @@ impl<S> Point3<S> where S: Scalar {
     /// #     Point3,
     /// #     Vector4, 
     /// # };
-    ///
+    /// #
     /// let point = Point3::new(1_u32, 2_u32, 3_u32);
     /// let expected = Vector4::new(1_u32, 2_u32, 3_u32, 1_u32);
     /// let result = point.to_homogeneous();
@@ -1849,7 +1849,7 @@ impl<S> Point3<S> where S: Scalar {
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    ///
+    /// #
     /// let vector = Vector3::new(1_u32, 2_u32, 3_u32);
     /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
     /// let result = Point3::from_vector(vector);
@@ -1873,7 +1873,7 @@ impl<S> Point3<S> where S: Scalar {
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    ///
+    /// #
     /// let point = Point3::new(1_u32, 2_u32, 3_u32);
     /// let expected = Vector3::new(1_u32, 2_u32, 3_u32);
     /// let result = point.to_vector();
