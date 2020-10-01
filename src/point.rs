@@ -62,8 +62,8 @@ impl<S> Point1<S> {
         }
     }
 
-    /// Map an operation on that acts on the coordinates of a point, returning a point of the 
-    /// new underlying type.
+    /// Map an operation on that acts on the coordinates of a point, returning 
+    /// a point of the new underlying type.
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Point1<T> 
         where F: FnMut(S) -> T 
@@ -77,12 +77,41 @@ impl<S> Point1<S> {
 impl<S> Point1<S> where S: Copy {
     /// Construct a new two-dimensional point from a one-dimensional point by
     /// supplying the y-coordinate.
+    /// 
+    /// ### Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let point = Point1::new(1_u32);
+    /// let expected = Point2::new(1_u32, 2_u32);
+    /// let result = point.expand(2_u32);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn expand(self, y: S) -> Point2<S> {
         Point2::new(self.x, y)
     }
 
     /// Construct a new point from a fill value.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1,
+    /// # };
+    /// 
+    /// let fill_value = 1_u32;
+    /// let expected = Point1::new(1_u32);
+    /// let result = Point1::from_fill(fill_value);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Point1<S> {
         Point1::new(value)
@@ -113,6 +142,21 @@ impl<S> Point1<S> where S: Scalar {
     /// 
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1, 
+    /// #     Vector1,
+    /// # };
+    ///
+    /// let vector = Vector1::new(1_u32);
+    /// let expected = Point1::new(1_u32);
+    /// let result = Point1::from_vector(vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ``` 
     #[inline]
     pub fn from_vector(v: Vector1<S>) -> Point1<S> {
         Point1::new(v.x)
@@ -122,6 +166,21 @@ impl<S> Point1<S> where S: Scalar {
     /// 
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1, 
+    /// #     Vector1,
+    /// # };
+    ///
+    /// let point = Point1::new(1_u32);
+    /// let expected = Vector1::new(1_u32);
+    /// let result = point.to_vector();
+    ///
+    /// assert_eq!(result, expected);
+    /// ``` 
     #[inline]
     pub fn to_vector(self) -> Vector1<S> {
         Vector1::new(self.x)
@@ -759,7 +818,10 @@ impl<S> Point2<S> {
     /// Construct a new two-dimensional point.
     #[inline]
     pub const fn new(x: S, y: S) -> Point2<S> {
-        Point2 { x: x, y: y }
+        Point2 { 
+            x: x, 
+            y: y 
+        }
     }
 
     /// Map an operation on that acts on the coordinates of a point, returning 
@@ -778,6 +840,21 @@ impl<S> Point2<S> {
 impl<S> Point2<S> where S: Copy {
     /// Expand a two-dimensional point to a three-dimensional point using
     /// the supplied z-value.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #    Point2,
+    /// #    Point3,    
+    /// # };
+    ///
+    /// let point = Point2::new(1_u32, 2_u32);
+    /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let result = point.expand(3_u32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn expand(self, z: S) -> Point3<S> {
         Point3::new(self.x, self.y, z)
@@ -785,12 +862,41 @@ impl<S> Point2<S> where S: Copy {
 
     /// Contract a two-dimensional point to a one-dimensional point by
     /// removing its y-component.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1,
+    /// #     Point2, 
+    /// # };
+    ///
+    /// let point = Point2::new(1_u32, 2_u32);
+    /// let expected = Point1::new(1_u32);
+    /// let result = point.contract();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn contract(self) -> Point1<S> {
         Point1::new(self.x)
     }
 
     /// Construct a new point from a fill value.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2, 
+    /// # };
+    ///
+    /// let fill_value = 2_u32;
+    /// let expected = Point2::new(2_u32, 2_u32);
+    /// let result = Point2::from_fill(fill_value);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Point2<S> {
         Point2::new(value, value)
@@ -816,6 +922,21 @@ impl<S> Point2<S> where S: NumCast + Copy {
 
 impl<S> Point2<S> where S: Scalar {
     /// Convert a homogeneous vector into a point.
+    ///
+    /// ### Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2, 
+    /// #     Vector3,
+    /// # };
+    /// 
+    /// let vector = Vector3::new(3_f64, 6_f64, 3_f64);
+    /// let expected = Point2::new(1_f64, 2_f64);
+    /// let result = Point2::from_homogeneous(vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_homogeneous(vector: Vector3<S>) -> Point2<S> {
         let e = vector.contract() * (S::one() / vector.z);
@@ -823,6 +944,21 @@ impl<S> Point2<S> where S: Scalar {
     }
 
     /// Convert a point to a vector in homogeneous coordinates.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,
+    /// #     Vector3,
+    /// # };
+    ///
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = Vector3::new(1_f64, 2_f64, 1_f64);
+    /// let result = point.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_homogeneous(self) -> Vector3<S> {
         Vector3::new(self.x, self.y, S::one())
@@ -838,6 +974,21 @@ impl<S> Point2<S> where S: Scalar {
     /// 
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,
+    /// #     Vector2, 
+    /// # };
+    /// 
+    /// let vector = Vector2::new(1_u32, 2_u32);
+    /// let expected = Point2::new(1_u32, 2_u32);
+    /// let result = Point2::from_vector(vector);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_vector(vector: Vector2<S>) -> Point2<S> {
         Point2::new(vector.x, vector.y)
@@ -847,6 +998,21 @@ impl<S> Point2<S> where S: Scalar {
     /// 
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,
+    /// #     Vector2, 
+    /// # };
+    /// 
+    /// let point = Point2::new(1_u32, 2_u32);
+    /// let expected = Vector2::new(1_u32, 2_u32);
+    /// let result = point.to_vector();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_vector(self) -> Vector2<S> {
         Vector2::new(self.x, self.y)
@@ -1496,7 +1662,11 @@ impl<S> Point3<S> {
     /// Construct a new point in three-dimensional Euclidean space.
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Point3<S> {
-        Point3 { x: x, y: y, z: z }
+        Point3 { 
+            x: x, 
+            y: y, 
+            z: z 
+        }
     }
 
     /// Map an operation on that acts on the coordinates of a point, returning 
@@ -1513,12 +1683,41 @@ impl<S> Point3<S> {
 
 impl<S> Point3<S> where S: Copy {
     /// Construct a new point from a fill value.
+    /// 
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3, 
+    /// # };
+    ///
+    /// let fill_value = 3_u32;
+    /// let expected = Point3::new(3_u32, 3_u32, 3_u32);
+    /// let result = Point3::from_fill(fill_value);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_fill(value: S) -> Point3<S> {
         Point3::new(value, value, value)
     }
 
     /// Contract a three-dimensional point, removing its z-component.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,
+    /// #     Point3, 
+    /// # };
+    ///
+    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Point2::new(1_u32, 2_u32);
+    /// let result = point.contract();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn contract(self) -> Point2<S> {
         Point2::new(self.x, self.y)
@@ -1548,6 +1747,21 @@ impl<S> Point3<S> where S: NumCast + Copy {
 
 impl<S> Point3<S> where S: Scalar {
     /// Convert a vector in homogeneous coordinates into a point.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,
+    /// #     Vector4, 
+    /// # };
+    ///
+    /// let vector = Vector4::new(5_f64, 10_f64, 15_f64, 5_f64);
+    /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let result = Point3::from_homogeneous(vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_homogeneous(vector: Vector4<S>) -> Point3<S> {
         let e = vector.contract() * (S::one() / vector.w);
@@ -1555,6 +1769,21 @@ impl<S> Point3<S> where S: Scalar {
     }
 
     /// Convert a point to a vector in homogeneous coordinates.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,
+    /// #     Vector4, 
+    /// # };
+    ///
+    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Vector4::new(1_u32, 2_u32, 3_u32, 1_u32);
+    /// let result = point.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_homogeneous(self) -> Vector4<S> {
         Vector4::new(self.x, self.y, self.z, S::one())
@@ -1570,6 +1799,21 @@ impl<S> Point3<S> where S: Scalar {
     /// 
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    ///
+    /// let vector = Vector3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let result = Point3::from_vector(vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_vector(v: Vector3<S>) -> Point3<S> {
         Point3::new(v.x, v.y, v.z)
@@ -1579,6 +1823,21 @@ impl<S> Point3<S> where S: Scalar {
     /// 
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    ///
+    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Vector3::new(1_u32, 2_u32, 3_u32);
+    /// let result = point.to_vector();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_vector(self) -> Vector3<S> {
         Vector3::new(self.x, self.y, self.z)
