@@ -221,12 +221,12 @@ impl<S> Vector1<S> where S: ScalarFloat {
     /// # 
     /// let vector = Vector1::new(1_f64);
     /// let unit_x = Vector1::unit_x();
-    /// let projected_x = vector.project_onto(&unit_x);
+    /// let projected_x = vector.project(&unit_x);
     ///
     /// assert_eq!(projected_x, vector.x * unit_x);
     /// ```
     #[inline]
-    pub fn project_onto(&self, other: &Vector1<S>) -> Vector1<S> {
+    pub fn project(&self, other: &Vector1<S>) -> Vector1<S> {
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
@@ -1087,14 +1087,14 @@ impl<S> Vector2<S> where S: ScalarFloat {
     /// let vector = 3_f64 * Vector2::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64);
     /// let unit_x = Vector2::unit_x();
     /// let unit_y = Vector2::unit_y();
-    /// let projected_x = vector.project_onto(&unit_x);
-    /// let projected_y = vector.project_onto(&unit_y);
+    /// let projected_x = vector.project(&unit_x);
+    /// let projected_y = vector.project(&unit_y);
     ///
     /// assert_eq!(projected_x, vector.x * unit_x);
     /// assert_eq!(projected_y, vector.y * unit_y);
     /// ```
     #[inline]
-    pub fn project_onto(&self, other: &Vector2<S>) -> Vector2<S> {
+    pub fn project(&self, other: &Vector2<S>) -> Vector2<S> {
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
@@ -1991,16 +1991,16 @@ impl<S> Vector3<S> where S: ScalarFloat {
     /// let unit_x = Vector3::unit_x();
     /// let unit_y = Vector3::unit_y();
     /// let unit_z = Vector3::unit_z();
-    /// let projected_x = vector.project_onto(&unit_x);
-    /// let projected_y = vector.project_onto(&unit_y);
-    /// let projected_z = vector.project_onto(&unit_z);
+    /// let projected_x = vector.project(&unit_x);
+    /// let projected_y = vector.project(&unit_y);
+    /// let projected_z = vector.project(&unit_z);
     ///
     /// assert_eq!(projected_x, vector.x * unit_x);
     /// assert_eq!(projected_y, vector.y * unit_y);
     /// assert_eq!(projected_z, vector.z * unit_z);
     /// ```
     #[inline]
-    pub fn project_onto(&self, other: &Vector3<S>) -> Vector3<S> {
+    pub fn project(&self, other: &Vector3<S>) -> Vector3<S> {
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
@@ -3007,10 +3007,10 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// let unit_y = Vector4::unit_y();
     /// let unit_z = Vector4::unit_z();
     /// let unit_w = Vector4::unit_w();
-    /// let projected_x = vector.project_onto(&unit_x);
-    /// let projected_y = vector.project_onto(&unit_y);
-    /// let projected_z = vector.project_onto(&unit_z);
-    /// let projected_w = vector.project_onto(&unit_w);
+    /// let projected_x = vector.project(&unit_x);
+    /// let projected_y = vector.project(&unit_y);
+    /// let projected_z = vector.project(&unit_z);
+    /// let projected_w = vector.project(&unit_w);
     ///
     /// assert_eq!(projected_x, vector.x * unit_x);
     /// assert_eq!(projected_y, vector.y * unit_y);
@@ -3018,7 +3018,7 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// assert_eq!(projected_w, vector.w * unit_w);
     /// ```
     #[inline]
-    pub fn project_onto(&self, other: &Vector4<S>) -> Vector4<S> {
+    pub fn project(&self, other: &Vector4<S>) -> Vector4<S> {
         other * (self.dot(other) / other.magnitude_squared())
     }
 }

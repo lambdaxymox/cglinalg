@@ -1452,10 +1452,10 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// let unit_y = Quaternion::unit_y();
     /// let unit_z = Quaternion::unit_z();
     /// let unit_s = Quaternion::unit_s();
-    /// let projected_x = quaternion.project_onto(&unit_x);
-    /// let projected_y = quaternion.project_onto(&unit_y);
-    /// let projected_z = quaternion.project_onto(&unit_z);
-    /// let projected_s = quaternion.project_onto(&unit_s);
+    /// let projected_x = quaternion.project(&unit_x);
+    /// let projected_y = quaternion.project(&unit_y);
+    /// let projected_z = quaternion.project(&unit_z);
+    /// let projected_s = quaternion.project(&unit_s);
     ///
     /// assert_eq!(projected_x, quaternion.v.x * unit_x);
     /// assert_eq!(projected_y, quaternion.v.y * unit_y);
@@ -1463,7 +1463,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// assert_eq!(projected_s, quaternion.s * unit_s);
     /// ```
     #[inline]
-    pub fn project_onto(&self, other: &Quaternion<S>) -> Quaternion<S> {
+    pub fn project(&self, other: &Quaternion<S>) -> Quaternion<S> {
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
