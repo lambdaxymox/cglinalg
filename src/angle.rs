@@ -183,7 +183,7 @@ impl<S> Radians<S> where S: ScalarFloat {
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -210,7 +210,7 @@ impl<S> Degrees<S> where S: ScalarFloat {
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{

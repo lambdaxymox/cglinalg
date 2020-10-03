@@ -69,7 +69,7 @@ impl<S> Vector1<S> {
 impl<S> Vector1<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -97,7 +97,7 @@ impl<S> Vector1<S> where S: Copy {
     /// Extend a one-dimensional vector into a two-dimensional vector using 
     /// the supplied value for the `y`-component.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -121,7 +121,7 @@ impl<S> Vector1<S> where S: Copy {
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -154,7 +154,7 @@ impl<S> Vector1<S> where S: Scalar {
     ///
     /// The function appends a `0` to the vector.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -177,7 +177,7 @@ impl<S> Vector1<S> where S: Scalar {
 impl<S> Vector1<S> where S: ScalarFloat {
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -204,7 +204,7 @@ impl<S> Vector1<S> where S: ScalarFloat {
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ### Example (Finite Vector)
+    /// ## Example (Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -216,7 +216,7 @@ impl<S> Vector1<S> where S: ScalarFloat {
     /// assert!(v.is_finite()); 
     /// ```
     ///
-    /// ### Example (Infinite Vector)
+    /// ## Example (Infinite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -235,7 +235,7 @@ impl<S> Vector1<S> where S: ScalarFloat {
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -919,7 +919,7 @@ impl<S> Vector2<S> {
 impl<S> Vector2<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -951,7 +951,7 @@ impl<S> Vector2<S> where S: Copy {
     /// Extend a two-dimensional vector into a three-dimensional vector using the 
     /// supplied `z`-component.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -973,7 +973,7 @@ impl<S> Vector2<S> where S: Copy {
     /// Contract a two-dimensional vector to a one-dimensional vector by removing
     /// the `y`-component.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -997,7 +997,7 @@ impl<S> Vector2<S> where S: Copy {
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1041,7 +1041,7 @@ impl<S> Vector2<S> where S: Scalar {
     ///
     /// The function appends a `0` to the vector.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1065,7 +1065,7 @@ impl<S> Vector2<S> where S: Scalar {
     /// The function removes a `0` from the end of the vector, otherwise it
     /// returns `None`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1098,7 +1098,7 @@ impl<S> Vector2<S> where S: Scalar {
 impl<S> Vector2<S> where S: ScalarFloat {
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1125,7 +1125,7 @@ impl<S> Vector2<S> where S: ScalarFloat {
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ### Example (Finite Vector)
+    /// ## Example (Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -1137,7 +1137,7 @@ impl<S> Vector2<S> where S: ScalarFloat {
     /// assert!(v.is_finite());
     /// ```
     ///
-    /// ### Example (Not A Finite Vector)
+    /// ## Example (Not A Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -1158,7 +1158,7 @@ impl<S> Vector2<S> where S: ScalarFloat {
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1865,7 +1865,7 @@ impl<S> Vector3<S> {
 impl<S> Vector3<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1901,7 +1901,7 @@ impl<S> Vector3<S> where S: Copy {
     /// Extend a three-dimensional vector into a four-dimensional vector using the 
     /// supplied `w`-component.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1923,7 +1923,7 @@ impl<S> Vector3<S> where S: Copy {
     /// Contract a three-dimensional vector to a two-dimensional vector
     /// by removing the `z`-component.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1947,7 +1947,7 @@ impl<S> Vector3<S> where S: Copy {
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2004,7 +2004,7 @@ impl<S> Vector3<S> where S: Scalar {
     ///
     /// The function appends a `0` to the vector.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2028,7 +2028,7 @@ impl<S> Vector3<S> where S: Scalar {
     /// The function removes a `0` from the end of the vector, otherwise it
     /// returns `None`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2061,7 +2061,7 @@ impl<S> Vector3<S> where S: Scalar {
 impl<S> Vector3<S> where S: ScalarFloat {
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2088,7 +2088,7 @@ impl<S> Vector3<S> where S: ScalarFloat {
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ### Example (Finite Vector)
+    /// ## Example (Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -2100,7 +2100,7 @@ impl<S> Vector3<S> where S: ScalarFloat {
     /// assert!(v.is_finite()); 
     /// ```
     ///
-    /// ### Example (Not A Finite Vector)
+    /// ## Example (Not A Finite Vector)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -2119,7 +2119,7 @@ impl<S> Vector3<S> where S: ScalarFloat {
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2942,7 +2942,7 @@ impl<S> Vector4<S> where S: Copy {
     /// Contract a four-dimensional vector to a three-dimensional vector
     /// by removing the `w`-component.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2966,7 +2966,7 @@ impl<S> Vector4<S> where S: Copy {
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2988,7 +2988,7 @@ impl<S> Vector4<S> where S: Copy {
 impl<S> Vector4<S> where S: NumCast + Copy {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3078,7 +3078,7 @@ impl<S> Vector4<S> where S: Scalar {
     /// The function removes a `0` from the end of the vector, otherwise it
     /// returns `None`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3111,7 +3111,7 @@ impl<S> Vector4<S> where S: Scalar {
 impl<S> Vector4<S> where S: ScalarFloat {
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3138,7 +3138,7 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ### Example (Finite Vector)
+    /// ## Example (Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -3150,7 +3150,7 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// assert!(v.is_finite()); 
     /// ```
     ///
-    /// ### Example (Not A Finite Vector)
+    /// ## Example (Not A Finite Vector)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -3169,7 +3169,7 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{

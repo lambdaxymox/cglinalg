@@ -78,7 +78,7 @@ impl<S> Point1<S> where S: Copy {
     /// Construct a new two-dimensional point from a one-dimensional point by
     /// supplying the y-coordinate.
     /// 
-    /// ### Example
+    /// ## Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -99,7 +99,7 @@ impl<S> Point1<S> where S: Copy {
 
     /// Construct a new point from a fill value.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -121,7 +121,7 @@ impl<S> Point1<S> where S: Copy {
 impl<S> Point1<S> where S: NumCast + Copy {
     /// Cast a point of one type of scalars to a point of another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -157,7 +157,7 @@ impl<S> Point1<S> where S: Scalar {
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -181,7 +181,7 @@ impl<S> Point1<S> where S: Scalar {
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -855,7 +855,7 @@ impl<S> Point2<S> where S: Copy {
     /// Expand a two-dimensional point to a three-dimensional point using
     /// the supplied z-value.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -877,7 +877,7 @@ impl<S> Point2<S> where S: Copy {
     /// Contract a two-dimensional point to a one-dimensional point by
     /// removing its `y`-component.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -898,7 +898,7 @@ impl<S> Point2<S> where S: Copy {
 
     /// Construct a new point from a fill value.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -920,7 +920,7 @@ impl<S> Point2<S> where S: Copy {
 impl<S> Point2<S> where S: NumCast + Copy {
     /// Cast a point of one type of scalars to a point of another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -951,7 +951,7 @@ impl<S> Point2<S> where S: NumCast + Copy {
 impl<S> Point2<S> where S: Scalar {
     /// Convert a homogeneous vector into a point.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -973,7 +973,7 @@ impl<S> Point2<S> where S: Scalar {
 
     /// Convert a point to a vector in homogeneous coordinates.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1003,7 +1003,7 @@ impl<S> Point2<S> where S: Scalar {
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1027,7 +1027,7 @@ impl<S> Point2<S> where S: Scalar {
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1712,7 +1712,7 @@ impl<S> Point3<S> {
 impl<S> Point3<S> where S: Copy {
     /// Construct a new point from a fill value.
     /// 
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1732,7 +1732,7 @@ impl<S> Point3<S> where S: Copy {
 
     /// Contract a three-dimensional point, removing its `z`-component.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1755,7 +1755,7 @@ impl<S> Point3<S> where S: Copy {
 impl<S> Point3<S> where S: NumCast + Copy {
     /// Cast a point from one type of scalars to another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1790,7 +1790,7 @@ impl<S> Point3<S> where S: NumCast + Copy {
 impl<S> Point3<S> where S: Scalar {
     /// Convert a vector in homogeneous coordinates into a point.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1812,7 +1812,7 @@ impl<S> Point3<S> where S: Scalar {
 
     /// Convert a point to a vector in homogeneous coordinates.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1842,7 +1842,7 @@ impl<S> Point3<S> where S: Scalar {
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1866,7 +1866,7 @@ impl<S> Point3<S> where S: Scalar {
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{

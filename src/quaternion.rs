@@ -111,7 +111,7 @@ impl<S> Quaternion<S> where S: Copy {
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -132,7 +132,7 @@ impl<S> Quaternion<S> where S: Copy {
 impl<S> Quaternion<S> where S: NumCast + Copy {
     /// Cast a quaternion from one type of scalars to another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -197,7 +197,7 @@ impl<S> Quaternion<S> where S: Scalar {
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
     /// 
-    /// ### Example
+    /// ## Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -223,7 +223,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion corresponding to rotating about an axis `axis` 
     /// by an angle `angle` in radians from its unit polar decomposition.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// Construct a quaternion for performing a 30 degree rotation about the **z-axis**.
     /// ```
@@ -267,7 +267,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// q * p * q^-1
     /// ```
     /// 
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -306,7 +306,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// formula and working backwards to extract the components of the quaternion
     /// from the components of the matrix.
     ///
-    /// ### Example
+    /// ## Example
     /// Here we extract a quaternion from a 60-degree rotation about 
     /// the **z-axis**.
     /// ```
@@ -376,7 +376,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -403,7 +403,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// The following example shows the result of converting an unit 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -465,7 +465,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -496,7 +496,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// The following example shows the result of converting an unit 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -555,7 +555,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -583,7 +583,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// The following example shows the result of converting an unit 
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -656,7 +656,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -689,7 +689,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// The following example shows the result of converting an unit 
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -758,7 +758,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
     /// the conjugate of `q` is the quaternion `q* := s - v`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -785,7 +785,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// inverse. In this case the function return `None`. Otherwise it returns 
     /// the inverse of `self`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -825,7 +825,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// inverse. In this case the function return `None`. Otherwise it returns 
     /// the inverse of `self`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -870,7 +870,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// ```
     /// In the case of `theta = Arg(q)`, we have `n = 0`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -912,7 +912,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Calculate the exponential of a quaternion.
     ///
-    /// ### Examples
+    /// ## Examples
     ///
     /// Compute the exponential of a scalar quaternion.
     /// ```
@@ -1048,7 +1048,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// scalar. Returning the principal value allows us to define a unique 
     /// natural logarithm for each quaternion `q`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1070,7 +1070,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     ///
-    /// ### Example
+    /// ## Example
     /// ```
     /// # use cglinalg::{
     /// #     Quaternion,
@@ -1114,7 +1114,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Calculate the power of a quaternion where the exponent is a real number.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1142,7 +1142,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two vectors.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1183,7 +1183,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1275,7 +1275,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Linearly interpolate between two quaternions.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1302,7 +1302,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// normal to the plane swept out by the quaternions to get from one to the 
     /// other. The vector normal to the quaternions is not unique in this case.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1408,7 +1408,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     ///
     /// A quaternion is finite when all of its elements are finite.
     ///
-    /// ### Example (Finite Quaternion)
+    /// ## Example (Finite Quaternion)
     ///
     /// ```
     /// # use cglinalg::{
@@ -1420,7 +1420,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// assert!(quaternion.is_finite()); 
     /// ```
     ///
-    /// ### Example (Not A Finite Vector)
+    /// ## Example (Not A Finite Vector)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1439,7 +1439,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// Compute the projection of the quaternion `self` onto the quaternion
     /// `other`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{

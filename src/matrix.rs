@@ -126,7 +126,7 @@ impl<S> Matrix2x2<S> where S: Copy {
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -148,7 +148,7 @@ impl<S> Matrix2x2<S> where S: Copy {
 impl<S> Matrix2x2<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -197,7 +197,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
-    /// ### Example 
+    /// ## Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -227,7 +227,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the **x-axis** to shearing along the **y-axis**.
     ///
-    /// ### Example 
+    /// ## Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -261,7 +261,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// The parameter `shear_x_with_y` denotes the factor scaling the 
     /// contribution of the `y`-component to the shearing of the `x`-component. 
     ///
-    /// ### Example 
+    /// ## Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -296,7 +296,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// calling `from_scale(scale)` is equivalent to calling 
     /// `from_nonuniform_scale(scale, scale)`.
     ///
-    /// ### Example 
+    /// ## Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -322,7 +322,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// This is the most general case for scaling matrices: the scale factor
     /// in each dimension need not be identical.
     ///
-    /// ### Example 
+    /// ## Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -354,7 +354,7 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
     /// Construct a two-dimensional reflection matrix for reflecting through a 
     /// line through the origin in the **xy-plane**.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// Here is an example of reflecting a vector across the **x-axis**.
     /// ```
@@ -408,7 +408,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// Construct a rotation matrix in two-dimensions that rotates a vector
     /// in the **xy-plane** by an angle `angle`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -444,7 +444,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two vectors.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -497,7 +497,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two unit vectors.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -551,7 +551,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
 
     /// Linearly interpolate between two matrices.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -581,7 +581,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ### Example (Finite Matrix)
+    /// ## Example (Finite Matrix)
     ///
     /// ```
     /// # use cglinalg::{
@@ -593,7 +593,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// assert!(matrix.is_finite());
     /// ```
     ///
-    /// ### Example (Not A Finite Matrix)
+    /// ## Example (Not A Finite Matrix)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1430,7 +1430,7 @@ impl<S> Matrix3x3<S> where S: Copy {
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1460,7 +1460,7 @@ impl<S> Matrix3x3<S> where S: Copy {
 impl<S> Matrix3x3<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1536,7 +1536,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// transformation that displaces a vector along the length of the vector
     /// `distance`.
     ///
-    /// ### Example
+    /// ## Example
     /// A homogeneous vector with a zero `z`-component should not translate.
     /// ```
     /// # use cglinalg::{
@@ -1589,7 +1589,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// calling `from_scale(scale)` is equivalent to calling 
     /// `from_nonuniform_scale(scale, scale, scale)`.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1615,7 +1615,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// This is the most general case for scaling matrices: the scale factor
     /// in each dimension need not be identical.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1653,7 +1653,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// `from_affine_nonuniform_scale(scale, scale)`. The `z`-component is 
     /// unaffected since this is an affine matrix.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1680,7 +1680,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// in each dimension need not be identical. The `z`-component is unaffected 
     /// because this is an affine matrix.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1717,7 +1717,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// multiplicative factors for the contributions of the **y-axis** and the 
     /// **z-axis**, respectively to shearing along the **x-axis**.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1754,7 +1754,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// multiplicative factors for the contributions of the **x-axis**, and the 
     /// **z-axis**, respectively to shearing along the **y-axis**.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1791,7 +1791,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// factors for the contributions of the **x-axis**, and the **y-axis**, 
     /// respectively to shearing along the **z-axis**. 
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1842,7 +1842,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// The parameter `shear_z_with_y` denotes the factor scaling the 
     /// contribution of the `y`-component to the shearing of the `z`-component. 
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1896,7 +1896,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
-    /// ### Example 
+    /// ## Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1931,7 +1931,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
-    /// ### Example 
+    /// ## Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1970,7 +1970,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
     /// of the **y-axis** to the shearing along the **x-axis**.
     ///
-    /// ### Example 
+    /// ## Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -2059,7 +2059,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// Here the terms `xr` and `yr` are the coordinates of the reflected point 
     /// across the line `L`.
     ///
-    /// ### Example (Line Through The Origin)
+    /// ## Example (Line Through The Origin)
     ///
     /// Here is an example of reflecting a vector across the **x-axis** with 
     /// the line of reflection passing through the origin.
@@ -2102,7 +2102,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// assert_eq!(result, expected);
     /// ```
     ///
-    /// ### Example (Line That Does Not Cross The Origin)
+    /// ## Example (Line That Does Not Cross The Origin)
     ///
     /// ```
     /// # use cglinalg::{
@@ -2155,7 +2155,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// Construct a three-dimensional reflection matrix for a plane that
     /// crosses the origin.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2207,7 +2207,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// This is the affine matrix counterpart to the 2x2 matrix function 
     /// `from_angle`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2244,7 +2244,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix about the **x-axis** by an angle `angle`.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// In this example the rotation is in the **yz-plane**.
     /// ```
@@ -2280,7 +2280,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix about the **y-axis** by an angle `angle`.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// In this example the rotation is in the **zx-plane**.
     /// ```
@@ -2316,7 +2316,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Construct a rotation matrix about the **z-axis** by an angle `angle`.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// In this example the rotation is in the **xy-plane**.
     /// ```
@@ -2353,7 +2353,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// Construct a rotation matrix about an arbitrary axis by an angle 
     /// `angle`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2449,7 +2449,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two vectors.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2492,7 +2492,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two vectors.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2535,7 +2535,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
     /// Linearly interpolate between two matrices.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2578,7 +2578,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// values. For example, when the vector elements are `f64`, the vector is 
     /// finite when the elements are neither `NaN` nor infinite.
     ///
-    /// ### Example (Finite Matrix)
+    /// ## Example (Finite Matrix)
     ///
     /// ```
     /// # use cglinalg::{
@@ -2595,7 +2595,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// assert!(matrix.is_finite());
     /// ```
     ///
-    /// ### Example (Not A Finite Matrix)
+    /// ## Example (Not A Finite Matrix)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -3733,7 +3733,7 @@ impl<S> Matrix4x4<S> where S: Copy {
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3765,7 +3765,7 @@ impl<S> Matrix4x4<S> where S: Copy {
 impl<S> Matrix4x4<S> where S: NumCast + Copy {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3869,7 +3869,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// Construct an affine translation matrix in three-dimensions.
     ///
     ///
-    /// ### Example
+    /// ## Example
     /// A homogeneous vector with a zero `w`-component should not translate.
     /// ```
     /// # use cglinalg::{
@@ -3929,7 +3929,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// `from_nonuniform_scale(scale, scale, scale)`. Since this is an affine 
     /// matrix the `w` component is unaffected.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3956,7 +3956,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// factor in each dimension need not be identical. Since this is an 
     /// affine matrix, the `w` component is unaffected.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4002,7 +4002,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// affine transformation the `w` component of four-dimensional vectors is 
     /// unaffected.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4047,7 +4047,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// an affine transformation the `w` component of four-dimensional vectors 
     /// is unaffected.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4092,7 +4092,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// affine transformation the `w` component of four-dimensional vectors is 
     /// unaffected.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4154,7 +4154,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// Since this is an affine transformation the `w` component
     /// of four-dimensional vectors is unaffected.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4269,7 +4269,7 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     /// Here the terms `xr`, `yr`, and `zr` are the coordinates of the 
     /// reflected point across the plane `P`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4331,7 +4331,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
     /// **x-axis** by an angle `angle` radians/degrees.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4370,7 +4370,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the **y-axis** by an angle `angle` radians/degrees.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// In this example the rotation is in the **zx-plane**.
     /// ```
@@ -4410,7 +4410,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the **z-axis** by an angle `angle` radians/degrees.
     ///
-    /// ### Example
+    /// ## Example
     /// 
     /// In this example the rotation is in the **xy-plane**.
     /// ```
@@ -4450,7 +4450,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the axis `axis` by an angle `angle` radians/degrees.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4506,7 +4506,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
 
     /// Construct a new three-dimensional orthographic projection matrix.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4554,7 +4554,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Construct a new three-dimensional perspective projection matrix based
     /// on arbitrary `left`, `right`, `bottom`, `top`, `near` and `far` planes.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4617,7 +4617,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// plane and the vertical field of view angle `fovy` and the 
     /// horizontal/vertical aspect ratio `aspect`.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4756,7 +4756,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
 
     /// Linearly interpolate between two matrices.
     ///
-    /// ### Example
+    /// ## Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4798,7 +4798,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ### Example (Finite Matrix)
+    /// ## Example (Finite Matrix)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -4815,7 +4815,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// assert!(matrix.is_finite());
     /// ```
     ///
-    /// ### Example (Not A Finite Matrix)
+    /// ## Example (Not A Finite Matrix)
     ///
     /// ```
     /// # use cglinalg::{
