@@ -1090,7 +1090,7 @@ impl<S> fmt::Display for OrthographicFovProjection3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
-            "OrthographicProjection3 [{}]",
+            "OrthographicFovProjection3 [{}]",
             self.matrix
         )
     }
