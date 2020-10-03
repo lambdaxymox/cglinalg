@@ -3,13 +3,17 @@ pub extern crate cglinalg;
 
 use cglinalg::{
     OrthographicSpec,
+    OrthographicFovSpec,
     OrthographicProjection3,
+    OrthographicFovProjection3,
     PerspectiveFovSpec,
     PerspectiveSpec,
     PerspectiveProjection3,
     PerspectiveFovProjection3,
     Matrix4x4,
+    Angle,
     Degrees,
+    Radians,
     Point3,
     Vector3,
 };
@@ -180,6 +184,7 @@ fn test_orthographic_projection_matrix() {
     assert_eq!(result, expected);
 }
 
+
 #[test]
 fn test_orthographic_projection_transformation() {
     let left = -4.0;
@@ -227,6 +232,75 @@ fn test_orthographic_projection_unproject_vector() {
     let far = 100.0;
     let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
     let projection = OrthographicProjection3::new(spec);
+    let expected = Vector3::new(1.0, 1.0, 50.0);
+    let projected_vector = projection.project_vector(&expected);
+    let result = projection.unproject_vector(&projected_vector);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_orthographic_fov_projection_matrix() {
+    let aspect = 2.0;
+    // 9.1478425198 Degrees.
+    let fovy = Degrees::from(Radians::atan2(8.0, 100.0) * 2.0);
+    let near = 1.0;
+    let far = 100.0;
+    let expected = Matrix4x4::new(
+        1.0 / 4.0,  0.0,        0.0,          0.0,
+        0.0,        1.0 / 2.0,  0.0,          0.0,
+        0.0,        0.0,       -2.0 / 99.0,   0.0,
+        0.0,        0.0,       -101.0 / 99.0, 1.0
+    );
+    let result = Matrix4x4::from_orthographic_fov(fovy, aspect, near, far);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_orthographic_fov_projecton_transformation() {
+    let aspect = 2.0;
+    // 9.1478425198 Degrees.
+    let fovy = Degrees::from(Radians::atan2(8.0, 100.0) * 2.0);
+    let near = 1.0;
+    let far = 100.0;
+    let spec = OrthographicFovSpec::new(fovy, aspect, near, far);
+    let expected = Matrix4x4::new(
+        1.0 / 4.0,  0.0,        0.0,          0.0,
+        0.0,        1.0 / 2.0,  0.0,          0.0,
+        0.0,        0.0,       -2.0 / 99.0,   0.0,
+        0.0,        0.0,       -101.0 / 99.0, 1.0
+    );
+    let result = OrthographicFovProjection3::new(spec);
+
+    assert_eq!(result.to_matrix(), &expected);
+}
+
+#[test]
+fn test_orthographic_fov_projection_unproject_point() {
+    let aspect = 2.0;
+    // 9.1478425198 Degrees.
+    let fovy = Degrees::from(Radians::atan2(8.0, 100.0) * 2.0);
+    let near = 1.0;
+    let far = 100.0;
+    let spec = OrthographicFovSpec::new(fovy, aspect, near, far);
+    let projection = OrthographicFovProjection3::new(spec);
+    let expected = Point3::new(1.0, 1.0, 50.0);
+    let projected_point = projection.project_point(&expected);
+    let result = projection.unproject_point(&projected_point);
+
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_orthographic_fov_projection_unproject_vector() {
+    let aspect = 2.0;
+    // 9.1478425198 Degrees.
+    let fovy = Degrees::from(Radians::atan2(8.0, 100.0) * 2.0);
+    let near = 1.0;
+    let far = 100.0;
+    let spec = OrthographicFovSpec::new(fovy, aspect, near, far);
+    let projection = OrthographicFovProjection3::new(spec);
     let expected = Vector3::new(1.0, 1.0, 50.0);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
