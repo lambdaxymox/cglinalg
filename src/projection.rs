@@ -104,9 +104,9 @@ pub struct PerspectiveFovSpec<S> {
     fovy: Radians<S>,
     /// The ratio of the horizontal width to the vertical height.
     aspect: S,
-    /// The position of the near plane along the negative **z-axis**.
+    /// The position of the near plane along the **negative z-axis**.
     near: S,
-    /// The position of the far plane along the negative **z-axis**.
+    /// The position of the far plane along the **negative z-axis**.
     far: S,
 }
 

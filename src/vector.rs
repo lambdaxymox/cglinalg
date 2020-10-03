@@ -105,9 +105,9 @@ impl<S> Vector1<S> where S: Copy {
     /// #     Vector2,   
     /// # };
     /// #
-    /// let v = Vector1::new(1_f64);
+    /// let vector = Vector1::new(1_f64);
     /// let expected = Vector2::new(1_f64, 2_f64);
-    /// let result = v.expand(2_f64);
+    /// let result = vector.expand(2_f64);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -128,7 +128,8 @@ impl<S> Vector1<S> where S: Copy {
     /// #     Vector1, 
     /// # };
     /// #
-    /// let result = Vector1::from_fill(3_f64);
+    /// let fill_value = 3_f64;
+    /// let result = Vector1::from_fill(fill_value);
     /// let expected = Vector1::new(3_f64);
     /// 
     /// assert_eq!(result, expected);
@@ -147,6 +148,29 @@ impl<S> Vector1<S> where S: Scalar {
         Vector1 { 
             x: S::one() 
         }
+    }
+
+    /// Compute the coordinates of a vector in projective space.
+    ///
+    /// The function appends a `0` to the vector.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let vector = Vector1::new(1_i32);
+    /// let expected = Vector2::new(1_i32, 0_i32);
+    /// let result = vector.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector2<S> {
+        self.expand(S::zero())
     }
 }
 
@@ -980,7 +1004,8 @@ impl<S> Vector2<S> where S: Copy {
     /// #     Vector2, 
     /// # };
     /// #
-    /// let result = Vector2::from_fill(3_f64);
+    /// let fill_value = 3_f64;
+    /// let result = Vector2::from_fill(fill_value);
     /// let expected = Vector2::new(3_f64, 3_f64);
     /// 
     /// assert_eq!(result, expected);
@@ -1009,6 +1034,63 @@ impl<S> Vector2<S> where S: Scalar {
         Vector2 { 
             x: S::zero(), 
             y: S::one(),
+        }
+    }
+
+    /// Compute the coordinates of a vector in projective space.
+    ///
+    /// The function appends a `0` to the vector.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let vector = Vector2::new(1_i32, 2_i32);
+    /// let expected = Vector3::new(1_i32, 2_i32, 0_i32);
+    /// let result = vector.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector3<S> {
+        self.expand(S::zero())
+    }
+
+    /// Compute the coordinates of a projective vector in Euclidean space.
+    ///
+    /// The function removes a `0` from the end of the vector, otherwise it
+    /// returns `None`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let vector = Vector2::new(1_i32, 0_i32);
+    /// let expected = Some(Vector1::new(1_i32));
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector = Vector2::new(1_i32, 1_i32);
+    /// let expected: Option<Vector1<i32>> = None;
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(&self) -> Option<Vector1<S>> {
+        if self.y.is_zero() {
+            Some(self.contract())
+        } else {
+            None
         }
     }
 }
@@ -1872,7 +1954,8 @@ impl<S> Vector3<S> where S: Copy {
     /// #     Vector3,   
     /// # };
     /// #
-    /// let result = Vector3::from_fill(3_f64);
+    /// let fill_value = 3_f64;
+    /// let result = Vector3::from_fill(fill_value);
     /// let expected = Vector3::new(3_f64, 3_f64, 3_f64);
     ///
     /// assert_eq!(result, expected);
@@ -1914,6 +1997,63 @@ impl<S> Vector3<S> where S: Scalar {
             x: S::zero(),
             y: S::zero(), 
             z: S::one(),
+        }
+    }
+
+    /// Compute the coordinates of a vector in projective space.
+    ///
+    /// The function appends a `0` to the vector.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let expected = Vector4::new(1_i32, 2_i32, 3_i32, 0_i32);
+    /// let result = vector.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector4<S> {
+        self.expand(S::zero())
+    }
+
+    /// Compute the coordinates of a projective vector in Euclidean space.
+    ///
+    /// The function removes a `0` from the end of the vector, otherwise it
+    /// returns `None`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_i32, 2_i32, 0_i32);
+    /// let expected = Some(Vector2::new(1_i32, 2_i32));
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector = Vector3::new(1_i32, 2_i32, 1_i32);
+    /// let expected: Option<Vector2<i32>> = None;
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(&self) -> Option<Vector2<S>> {
+        if self.z.is_zero() {
+            Some(self.contract())
+        } else {
+            None
         }
     }
 }
@@ -2833,7 +2973,8 @@ impl<S> Vector4<S> where S: Copy {
     /// #     Vector4,   
     /// # };
     /// #
-    /// let result = Vector4::from_fill(3_f64);
+    /// let fill_value = 3_f64;
+    /// let result = Vector4::from_fill(fill_value);
     /// let expected = Vector4::new(3_f64, 3_f64, 3_f64, 3_f64);
     ///
     /// assert_eq!(result, expected);
@@ -2929,6 +3070,40 @@ impl<S> Vector4<S> where S: Scalar {
             y: S::zero(), 
             z: S::zero(), 
             w: S::one(),
+        }
+    }
+
+    /// Compute the coordinates of a projective vector in Euclidean space.
+    ///
+    /// The function removes a `0` from the end of the vector, otherwise it
+    /// returns `None`.
+    ///
+    /// ### Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let vector = Vector4::new(1_i32, 2_i32, 3_i32, 0_i32);
+    /// let expected = Some(Vector3::new(1_i32, 2_i32, 3_i32));
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector = Vector4::new(1_i32, 2_i32, 3_i32, 1_i32);
+    /// let expected: Option<Vector3<i32>> = None;
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(&self) -> Option<Vector3<S>> {
+        if self.w.is_zero() {
+            Some(self.contract())
+        } else {
+            None
         }
     }
 }
