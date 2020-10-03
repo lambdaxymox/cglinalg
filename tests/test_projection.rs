@@ -1,4 +1,4 @@
-pub extern crate cglinalg;
+extern crate cglinalg;
 
 
 use cglinalg::{
