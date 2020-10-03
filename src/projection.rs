@@ -279,6 +279,61 @@ impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Display {
     }
 }
 
+/// An orthographic projection based on the `near` plane, the `far` plane and 
+/// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
+/// ratio `aspect`.
+///
+/// We assume the following constraints to make a useful orthographic projection 
+/// transformation.
+/// ```text
+/// 0 radians < fovy < pi radians
+/// aspect > 0
+/// near < far (along the negative z-axis)
+/// ```
+/// This orthographic projection model imposes some constraints on the more 
+/// general orthographic specification based on the arbitrary planes. The `fovy` 
+/// parameter combined with the aspect ratio `aspect` ensures that the top and 
+/// bottom planes are the same distance from the eye position along the vertical 
+/// axis on opposite side. They ensure that the `left` and `right` planes are 
+/// equidistant from the eye on opposite sides along the horizontal axis. 
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub struct OrthographicFovSpec<S> {
+    /// The vertical field of view angle of the orthographic transformation
+    /// viewport.
+    fovy: Radians<S>,
+    /// The ratio of the horizontal width to the vertical height.
+    aspect: S,
+    /// The position of the near plane along the **negative z-axis**.
+    near: S,
+    /// The position of the far plane along the **negative z-axis**.
+    far: S,
+}
+
+impl<S> OrthographicFovSpec<S> {
+    /// Construct a new orthographic projection operation specification
+    /// based on the vertical field of view angle `fovy`, the `near` plane, the 
+    /// `far` plane, and aspect ratio `aspect`.
+    #[inline]
+    pub fn new<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> OrthographicFovSpec<S> {
+        OrthographicFovSpec {
+            fovy: fovy.into(),
+            aspect: aspect,
+            near: near,
+            far: far,
+        }
+    }
+}
+
+impl<S> fmt::Display for OrthographicFovSpec<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "OrthographicFovSpec [fovy={}, aspect={}, near={}, far={}]",
+            self.fovy, self.aspect, self.near, self.far
+        )
+    }
+}
+
 
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates.
@@ -861,6 +916,213 @@ impl<S> approx::RelativeEq for OrthographicProjection3<S> where S: ScalarFloat {
 }
 
 impl<S> approx::UlpsEq for OrthographicProjection3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
+
+/// An orthographic projection transformation for converting from camera space to
+/// normalized device coordinates.
+///
+/// Orthographic projections differ from perspective projections in that 
+/// orthographic projections keeps parallel lines parallel, whereas perspective 
+/// projections preserve the perception of distance. Perspective 
+/// projections preserve the spatial ordering in the distance that points are 
+/// located from the viewing plane.
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct OrthographicFovProjection3<S> {
+    /// The parameters for the orthographic projection.
+    spec: OrthographicFovSpec<S>,
+    /// The underlying matrix that implements the orthographic projection.
+    matrix: Matrix4x4<S>,
+}
+
+impl<S> OrthographicFovProjection3<S> where S: ScalarFloat {
+    /// Construct a new orthographic projection.
+    pub fn new(spec: OrthographicFovSpec<S>) -> OrthographicFovProjection3<S> {
+        OrthographicFovProjection3 {
+            spec: spec,
+            matrix: Matrix4x4::from_orthographic_fov(
+                spec.fovy, 
+                spec.aspect, 
+                spec.near, 
+                spec.far
+            ),
+        }
+    }
+
+    /// Get the parameters defining the orthographic specification.
+    #[inline]
+    pub fn to_spec(&self) -> OrthographicFovSpec<S> {
+        self.spec
+    }
+
+    /// Get the underlying matrix implementing the orthographic transformation.
+    #[inline]
+    pub fn to_matrix(&self) -> &Matrix4x4<S> {
+        &self.matrix
+    }
+
+    /// Apply the transformation to a point.
+    #[inline]
+    pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+    }
+
+    /// Apply the transformation to a vector.
+    #[inline]
+    pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.expand(S::zero())).contract()
+    }
+
+    /// Unproject a point from normalized devices coordinates back to camera
+    /// view space. 
+    ///
+    /// This is the inverse operation of `project_point`.
+    #[inline]
+    pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
+        let zero = S::zero();
+        let one  = S::one();
+        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        let width = self.spec.far * Angle::tan(self.spec.fovy * one_half);
+        let height = width / self.spec.aspect;
+        let left = -width * one_half;
+        let right = width * one_half;
+        let bottom = -height * one_half;
+        let top = height * one_half;
+        let near = self.spec.near;
+        let far = self.spec.far;
+        
+        let c0r0 =  one_half * (right - left);
+        let c0r1 =  zero;
+        let c0r2 =  zero;
+        let c0r3 =  zero;
+
+        let c1r0 =  zero;
+        let c1r1 =  one_half * (top - bottom);
+        let c1r2 =  zero;
+        let c1r3 =  zero;
+
+        let c2r0 =  zero;
+        let c2r1 =  zero;
+        let c2r2 = -one_half * (far - near);
+        let c2r3 =  zero;
+        
+        let c3r0 =  one_half * (left + right);
+        let c3r1 =  one_half * (bottom + top);
+        let c3r2 = -one_half * (far + near);
+        let c3r3 =  one;
+        
+        let matrix_inverse = Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        );
+
+        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous())
+    }
+
+    /// Unproject a vector from normalized device coordinates back to
+    /// camera view space. 
+    ///
+    /// This is the inverse operation of `project_vector`.
+    #[inline]
+    pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        let zero = S::zero();
+        let one  = S::one();
+        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        let width = self.spec.far * Angle::tan(self.spec.fovy * one_half);
+        let height = width / self.spec.aspect;
+        let left = -width * one_half;
+        let right = width * one_half;
+        let bottom = -height * one_half;
+        let top = height * one_half;
+        let near = self.spec.near;
+        let far = self.spec.far;
+        
+        let c0r0 =  one_half * (right - left);
+        let c0r1 =  zero;
+        let c0r2 =  zero;
+        let c0r3 =  zero;
+
+        let c1r0 =  zero;
+        let c1r1 =  one_half * (top - bottom);
+        let c1r2 =  zero;
+        let c1r3 =  zero;
+
+        let c2r0 =  zero;
+        let c2r1 =  zero;
+        let c2r2 = -one_half * (far - near);
+        let c2r3 =  zero;
+        
+        let c3r0 =  one_half * (left + right);
+        let c3r1 =  one_half * (bottom + top);
+        let c3r2 = -one_half * (far + near);
+        let c3r3 =  one;
+        
+        let matrix_inverse = Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        );
+
+        (matrix_inverse * vector.expand(S::zero())).contract()
+    }
+}
+
+impl<S> AsRef<Matrix4x4<S>> for OrthographicFovProjection3<S> {
+    #[inline]
+    fn as_ref(&self) -> &Matrix4x4<S> {
+        &self.matrix
+    }
+}
+
+impl<S> fmt::Display for OrthographicFovProjection3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "OrthographicProjection3 [{}]",
+            self.matrix
+        )
+    }
+}
+
+impl<S> approx::AbsDiffEq for OrthographicFovProjection3<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for OrthographicFovProjection3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for OrthographicFovProjection3<S> where S: ScalarFloat {
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
