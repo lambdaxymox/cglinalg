@@ -4551,6 +4551,51 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         )
     }
 
+    /// Construct a new three-dimensional orthographic projection matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// let fovy = Degrees(90.0);
+    /// let aspect = 800 as f64 / 600 as f64;
+    /// let near = 1.0;
+    /// let far = 100.0;
+    /// let expected = Matrix4x4::new(
+    ///     2.0 / 100.0, 0.0,         0.0,          0.0, 
+    ///     0.0,         2.0 / 75.0,  0.0,          0.0, 
+    ///     0.0,         0.0,        -2.0 / 99.0,   0.0, 
+    ///     0.0,         0.0,        -101.0 / 99.0, 1.0
+    /// );
+    /// let result = Matrix4x4::from_orthographic_fov(fovy, aspect, near, far);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_orthographic_fov<A: Into<Radians<S>>>(
+        fovy: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
+        
+        let one_half = num_traits::cast(0.5).unwrap();
+        let width = far * Angle::tan(fovy.into() * one_half);
+        let height = width / aspect;
+
+        Self::from_orthographic(
+            -width * one_half, 
+            width * one_half,
+            -height * one_half,
+            height * one_half,
+            near,
+            far
+        )
+    }
+
     /// Construct a new three-dimensional perspective projection matrix based
     /// on arbitrary `left`, `right`, `bottom`, `top`, `near` and `far` planes.
     ///
@@ -4613,9 +4658,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         )
     }
 
-    /// Construct a perspective projection based on the `near` plane, the `far` 
-    /// plane and the vertical field of view angle `fovy` and the 
-    /// horizontal/vertical aspect ratio `aspect`.
+    /// Construct a perspective projection matrix based on the `near` 
+    /// plane, the `far` plane and the vertical field of view angle `fovy` and 
+    /// the horizontal/vertical aspect ratio `aspect`.
     ///
     /// ## Example
     ///
