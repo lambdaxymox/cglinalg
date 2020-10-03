@@ -6,9 +6,7 @@ real-time collision detection. This library provides a strongly typed system
 for developing computer graphics applications.
 
 The design of the library has the following goals in mind:
-* **Ergonomics** -- The system should be easy to understand and use. The types 
-  and the language of the documentation are designed to be understandable to 
-  working graphics programmers.
+* **Ergonomics** -- The system should be easy to understand and use.
 * **Cross Platform** -- It should be portable to other ecosystems like 
   other C/C++ and Rust libraries. Every data type can be treated like a 
   fixed-sized array so they can be sent to across FFI boundaries.
