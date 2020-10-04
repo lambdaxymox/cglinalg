@@ -102,11 +102,11 @@ impl<S> Transform2<S> where S: Scalar {
     /// function is for internal use in implementing type conversions for 
     /// affine transformations.
     #[inline]
-    pub(crate) fn matrix_to_transform2d(matrix: Matrix3x3<S>) -> Transform2<S> {
+    pub(crate) fn to_transform2d<T: Into<Matrix3x3<S>>>(transform: T) -> Transform2<S> {
         // TODO: Make this function const when const fn stabilizes for traits other than
         // Sized. See issue #57563: <https://github.com/rust-lang/rust/issues/57563>
         Transform2 {
-            matrix: matrix,
+            matrix: transform.into(),
         }
     }
 }
@@ -193,11 +193,11 @@ impl<S> Transform3<S> where S: Scalar {
     /// This function is for internal use in implementing type conversions for 
     /// affine transformations.
     #[inline]
-    pub(crate) fn matrix_to_transform3d(matrix: Matrix4x4<S>) -> Transform3<S> {
+    pub(crate) fn to_transform3d<T: Into<Matrix4x4<S>>>(transform: T) -> Transform3<S> {
         // TODO: Make this function const when const fn stabilizes for traits other than
         // Sized. See issue #57563: <https://github.com/rust-lang/rust/issues/57563>.
         Transform3 {
-            matrix: matrix,
+            matrix: transform.into(),
         }
     }
 }

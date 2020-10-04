@@ -15,6 +15,7 @@ use crate::point::{
 };
 use crate::traits::{
     Identity,
+    Zero,
 };
 use crate::affine::*;
 
@@ -26,26 +27,18 @@ use core::fmt;
 /// A translation is an operation that creates displacement motions. 
 /// In a Euclidean setting, translations preserve differences between two points 
 /// and acts as the identity on vectors.
-#[repr(transparent)]
+#[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation2<S> {
-    /// The matrix representing the affine transformation.
-    matrix: Matrix3x3<S>,
+    distance: Vector2<S>,
 }
 
 impl<S> Translation2<S> where S: ScalarSigned {
     /// Construct a translation operator from a vector of displacements.
     #[inline]
-    pub fn from_vector(distance: &Vector2<S>) -> Translation2<S> {
+    pub fn from_vector(vector: &Vector2<S>) -> Translation2<S> {
         Translation2 {
-            matrix: Matrix3x3::from_affine_translation(distance),
-        }
-    }
-
-    /// Construct a translation operator from a vector of displacements.
-    pub fn from_translation(distance: &Vector2<S>) -> Translation2<S> {
-        Translation2 {
-            matrix: Matrix3x3::from_affine_translation(distance),
+            distance: vector.clone(),
         }
     }
 
@@ -72,15 +65,13 @@ impl<S> Translation2<S> where S: ScalarSigned {
     /// inverse will be a translation by a displacement `-distance`.
     #[inline]
     pub fn inverse(&self) -> Self {
-        let distance = Vector2::new(-self.matrix.c2r0, -self.matrix.c2r1);
-
-        Translation2::from_vector(&distance)
+        Translation2::from_vector(&(-self.distance))
     }
     
     /// Apply the translation operation to a point.
     #[inline]
     pub fn translate_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+        point + self.distance
     }
 
     /// Apply the translation operation to a vector. 
@@ -91,32 +82,36 @@ impl<S> Translation2<S> where S: ScalarSigned {
     /// then `(p2 + a) - (p1 + a) = p2 - p1 = v`.
     #[inline]
     pub fn translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        vector + self.distance
     }
 }
 
-impl<S> AsRef<Matrix3x3<S>> for Translation2<S> {
+impl<S> AsRef<Vector2<S>> for Translation2<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix3x3<S> {
-        &self.matrix
+    fn as_ref(&self) -> &Vector2<S> {
+        &self.distance
     }
 }
 
 impl<S> fmt::Display for Translation2<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "Translation2 [{}]", self.matrix)
+        write!(
+            formatter, 
+            "Translation2 [x={}, y={}]", 
+            self.distance.x, self.distance.y
+        )
     }
 }
 
-impl<S> From<Translation2<S>> for Matrix3x3<S> where S: Copy {
-    fn from(transformation: Translation2<S>) -> Matrix3x3<S> {
-        transformation.matrix
+impl<S> From<Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
+    fn from(transform: Translation2<S>) -> Matrix3x3<S> {
+        Matrix3x3::from_affine_translation(&transform.distance)
     }
 }
 
-impl<S> From<&Translation2<S>> for Matrix3x3<S> where S: Copy {
-    fn from(transformation: &Translation2<S>) -> Matrix3x3<S> {
-        transformation.matrix
+impl<S> From<&Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
+    fn from(transform: &Translation2<S>) -> Matrix3x3<S> {
+        Matrix3x3::from_affine_translation(&transform.distance)
     }
 }
 
@@ -126,7 +121,7 @@ impl<S> AffineTransformation2<S> for Translation2<S>
     #[inline]
     fn identity() -> Translation2<S> {
         Translation2 { 
-            matrix: Matrix3x3::identity(),
+            distance: Vector2::zero(),
         }
     }
 
@@ -147,7 +142,7 @@ impl<S> AffineTransformation2<S> for Translation2<S>
 
     #[inline]
     fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
+        Transform2::to_transform2d(self)
     }
 }
 
@@ -160,22 +155,14 @@ impl<S> AffineTransformation2<S> for Translation2<S>
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation3<S> {
-    /// The matrix representing the affine transformation.
-    matrix: Matrix4x4<S>,
+    distance: Vector3<S>,
 }
 
 impl<S> Translation3<S> where S: ScalarSigned {
     /// Construct a translation operator from a vector of displacements.
     pub fn from_vector(distance: &Vector3<S>) -> Translation3<S> {
         Translation3 {
-            matrix: Matrix4x4::from_affine_translation(distance),
-        }
-    }
-
-    /// Construct a translation operator from a vector of displacements.
-    pub fn from_translation(distance: &Vector3<S>) -> Translation3<S> {
-        Translation3 {
-            matrix: Matrix4x4::from_affine_translation(distance),
+            distance: distance.clone(),
         }
     }
 
@@ -202,48 +189,46 @@ impl<S> Translation3<S> where S: ScalarSigned {
     /// inverse will be a translation by a displacement `-distance`.
     #[inline]
     pub fn inverse(&self) -> Self {
-        let distance = Vector3::new(
-            -self.matrix.c3r0, 
-            -self.matrix.c3r1, 
-            -self.matrix.c3r2
-        );
-
-        Translation3::from_vector(&distance)
+        Translation3::from_vector(&(-self.distance))
     }
     
     #[inline]
     pub fn translate_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+        point + self.distance
     }
 
     #[inline]
     pub fn translate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        *vector
     }
 }
 
-impl<S> AsRef<Matrix4x4<S>> for Translation3<S> {
+impl<S> AsRef<Vector3<S>> for Translation3<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix4x4<S> {
-        &self.matrix
+    fn as_ref(&self) -> &Vector3<S> {
+        &self.distance
     }
 }
 
 impl<S> fmt::Display for Translation3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "Translation3 [{}]", self.matrix)
+        write!(
+            formatter, 
+            "Translation3 [x-{}, y={}, z={}]", 
+            self.distance.x, self.distance.y, self.distance.z
+        )
     }
 }
 
-impl<S> From<Translation3<S>> for Matrix4x4<S> where S: Copy {
-    fn from(transformation: Translation3<S>) -> Matrix4x4<S> {
-        transformation.matrix
+impl<S> From<Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
+    fn from(transform: Translation3<S>) -> Matrix4x4<S> {
+        Matrix4x4::from_affine_translation(&transform.distance)
     }
 }
 
-impl<S> From<&Translation3<S>> for Matrix4x4<S> where S: Copy {
-    fn from(transformation: &Translation3<S>) -> Matrix4x4<S> {
-        transformation.matrix
+impl<S> From<&Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
+    fn from(transform: &Translation3<S>) -> Matrix4x4<S> {
+        Matrix4x4::from_affine_translation(&transform.distance)
     }
 }
 
@@ -253,7 +238,7 @@ impl<S> AffineTransformation3<S> for Translation3<S>
     #[inline]
     fn identity() -> Translation3<S> {
         Translation3 { 
-            matrix: Matrix4x4::identity(),
+            distance: Vector3::zero(),
         }
     }
 
@@ -274,7 +259,7 @@ impl<S> AffineTransformation3<S> for Translation3<S>
 
     #[inline]
     fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
+        Transform3::to_transform3d(self)
     }
 }
 

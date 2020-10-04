@@ -1,12 +1,12 @@
 # Computer Graphics Linear Algebra Library
 
 ## Introduction
-The **cglinalg** library is a low-dimensional linear algebra library aimed 
-primarily at real-time computer graphics, game engine development, and 
-real-time collision detection. This library provides a strongly typed system 
-for developing computer graphics applications.
+**cglinalg** is a low-dimensional linear algebra library aimed at 
+real-time computer graphics, game engine development, and real-time collision 
+detection. This library provides a strongly typed system for computer graphics 
+applications.
 
-The design of the library has the following goals in mind:
+The library is designed with the following goals in mind:
 * **Ergonomics** -- The system should be easy to understand and use.
 * **Cross Platform** -- It should be portable to other ecosystems like 
   other C/C++ and Rust libraries. Every data type can be treated like a 

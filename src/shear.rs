@@ -153,7 +153,7 @@ impl<S> AffineTransformation2<S> for Shear2<S>
 
     #[inline]
     fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::matrix_to_transform2d(self.matrix)
+        Transform2::to_transform2d(self)
     }
 }
 
@@ -313,7 +313,7 @@ impl<S> AffineTransformation3<S> for Shear3<S>
 
     #[inline]
     fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::matrix_to_transform3d(self.matrix)
+        Transform3::to_transform3d(self.matrix)
     }
 }
 

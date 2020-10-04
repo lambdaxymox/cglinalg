@@ -61,7 +61,7 @@ pub trait Angle where
     /// Compute the arc tangent of a scalar value, returning a typed angle.
     fn atan(ratio: Self::Dimensionless) -> Self;
 
-    /// Compute the four quadrant arc tangent of two angles, returning a 
+    /// Compute the four quadrant arc tangent of two arguments, returning a 
     /// typed angle.
     /// 
     /// The return value is the arc tangent of the quotient of the two input values. 
