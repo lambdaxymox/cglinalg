@@ -8,8 +8,7 @@ use crate::scalar::{
 use crate::traits::{
     DotProduct,
     Identity,
-    InvertibleSquareMatrix,
-    Magnitude,
+    Matrix,
 };
 use crate::matrix::{
     Matrix2x2,
@@ -47,36 +46,26 @@ use core::fmt;
 /// If one wants to talk about rotating a vector in the the **xy-plane** about a 
 /// normal vector, we are implicitly rotating about the **z-axis** in 
 /// three dimensions.
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Rotation2<S> {
-    /// The angle of rotation.
-    angle: Radians<S>,
     /// The underlying rotation matrix.
-    matrix: Matrix3x3<S>,
+    matrix: Matrix2x2<S>,
 }
 
 impl<S> Rotation2<S> where S: ScalarFloat {
     /// Rotate a two-dimensional vector in the **xy-plane** by an angle `angle`.
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2<S> {
-        let radians = angle.into();
-        let matrix = Matrix3x3::from(Matrix2x2::from_angle(radians));
-        
+    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2<S> {  
         Rotation2 {
-            angle: radians,
-            matrix: matrix,
+            matrix: Matrix2x2::from_angle(angle.into()),
         }
     }
 
     /// Point a vector at the point `direction`.
     #[inline]
     pub fn look_at(direction: &Vector2<S>, up: &Vector2<S>) -> Rotation2<S> {
-        let matrix = Matrix3x3::from(Matrix2x2::look_at(direction, up));
-        let angle = Radians::acos(matrix.c0r0);
-        
         Rotation2 {
-            angle: angle,
-            matrix: matrix,
+            matrix: Matrix2x2::look_at(direction, up),
         }
     }
 
@@ -98,21 +87,23 @@ impl<S> Rotation2<S> where S: ScalarFloat {
     #[inline]
     pub fn inverse(&self) -> Rotation2<S> {
         Rotation2 {
-            angle: -self.angle,
-            matrix: self.matrix.inverse().unwrap(),
+            matrix: self.matrix.transpose(),
         }
     }
 
     /// Apply the rotation operation to a vector.
     #[inline]
     pub fn rotate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        self.matrix * vector
     }
 
     /// Apply the rotation operation to a point.
     #[inline]
-    pub fn rotate_point(&self, point: &Point2<S>) -> Point2<S> { 
-        Point2::from_vector(self.rotate_vector(&point.to_vector()))
+    pub fn rotate_point(&self, point: &Point2<S>) -> Point2<S> {
+        let vector = Vector2::new(point.x, point.y);
+        let result = self.matrix * vector;
+        
+        Point2::new(result.x, result.y)
     }
 }
 
@@ -122,17 +113,17 @@ impl<S> fmt::Display for Rotation2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Rotation2<S>> for Matrix3x3<S> where S: Copy {
+impl<S> From<Rotation2<S>> for Matrix2x2<S> where S: ScalarFloat {
     #[inline]
-    fn from(rotation: Rotation2<S>) -> Matrix3x3<S> {
+    fn from(rotation: Rotation2<S>) -> Matrix2x2<S> {
         rotation.matrix
     }
 }
 
-impl<S> AsRef<Matrix3x3<S>> for Rotation2<S> {
+impl<S> From<Rotation2<S>> for Matrix3x3<S> where S: ScalarFloat {
     #[inline]
-    fn as_ref(&self) -> &Matrix3x3<S> {
-        &self.matrix
+    fn from(rotation: Rotation2<S>) -> Matrix3x3<S> {
+        Matrix3x3::from(&rotation.matrix)
     }
 }
 
@@ -146,7 +137,7 @@ impl<S> approx::AbsDiffEq for Rotation2<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix3x3::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+        Matrix2x2::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
     }
 }
 
@@ -158,7 +149,7 @@ impl<S> approx::RelativeEq for Rotation2<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Matrix3x3::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+        Matrix2x2::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
     }
 }
 
@@ -170,7 +161,7 @@ impl<S> approx::UlpsEq for Rotation2<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+        Matrix2x2::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
 
@@ -180,8 +171,7 @@ impl<S> AffineTransformation2<S> for Rotation2<S>
     #[inline]
     fn identity() -> Rotation2<S> {
         Rotation2 { 
-            angle: Radians(S::zero()),
-            matrix: Matrix3x3::identity(),
+            matrix: Matrix2x2::identity(),
         }
     }
 
@@ -192,12 +182,12 @@ impl<S> AffineTransformation2<S> for Rotation2<S>
 
     #[inline]
     fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        self.rotate_vector(vector)
     }
 
     #[inline]
     fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+        self.rotate_point(point)
     }
 
     #[inline]
@@ -212,37 +202,27 @@ impl<S> AffineTransformation2<S> for Rotation2<S>
 /// A rotation is an operation that creates circular motions and 
 /// preserves at least one point. Rotations preserve the length of vectors and 
 /// therefore act as a class of rigid body transformations.
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Rotation3<S> {
-    /// The angle of rotation.
-    angle: Radians<S>,
     /// The underlying matrix representing the rotation.
-    matrix: Matrix4x4<S>,
+    matrix: Matrix3x3<S>,
 }
 
 impl<S> Rotation3<S> where S: ScalarFloat {
     /// Construct a three-dimensional rotation matrix from a quaternion.
     #[inline]
     pub fn from_quaternion(quaternion: &Quaternion<S>) -> Rotation3<S> {
-        let quaternion_normalized = quaternion.normalize();
-        let two = S::one() + S::one();
-        let angle = Radians::acos(quaternion_normalized.s) * two;
-
         Rotation3 {
-            angle: angle,
-            matrix: Matrix4x4::from(quaternion),
+            matrix: quaternion.to_matrix3x3(),
         }
     }
 
     /// Construct a new three-dimensional rotation about an axis `axis` by 
     /// an angle `angle`.
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Rotation3<S> {
-        let radians = angle.into();
-        
         Rotation3 {
-            angle: radians,
-            matrix: Matrix4x4::from_affine_axis_angle(axis, radians),
+            matrix: Matrix3x3::from_axis_angle(axis, angle.into()),
         }
     }
 
@@ -267,7 +247,7 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_z()), angle)
     }
 
-    /// Construct an affine coordinate transformation that transforms
+    /// Construct a coordinate transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction `direction` into the coordinate system of an observer located
     /// at the origin facing the **negative z-axis**.
@@ -278,19 +258,12 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// conventionally used in computer graphics for camera view transformations.
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
-        let matrix3 = Matrix3x3::look_at_rh(direction, up);
-        let quaternion = Quaternion::from(&matrix3);
-        let two = S::one() + S::one();
-        let angle = Radians::acos(quaternion.s) * two;
-        let matrix = quaternion.into();
-    
         Rotation3 {
-            angle: angle,
-            matrix: matrix,
+            matrix: Matrix3x3::look_at_rh(direction, up),
         }
     }
 
-    /// Construct an affine coordinate transformation that transforms
+    /// Construct a coordinate transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction `direction` into the coordinate system of an observer located
     /// at the origin facing the **positive z-axis**.
@@ -300,15 +273,8 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// This transformation is a **left-handed** coordinate transformation.
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
-        let matrix3 = Matrix3x3::look_at_lh(direction, up);
-        let quaternion = Quaternion::from(&matrix3);
-        let two = S::one() + S::one();
-        let angle = Radians::acos(quaternion.s) * two;
-        let matrix = quaternion.into();
-        
         Rotation3 {
-            angle: angle,
-            matrix: matrix,
+            matrix: Matrix3x3::look_at_lh(direction, up),
         }
     }
 
@@ -339,21 +305,23 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     #[inline]
     pub fn inverse(&self) -> Rotation3<S> {
         Rotation3 {
-            angle: -self.angle,
-            matrix: self.matrix.inverse().unwrap(),
+            matrix: self.matrix.transpose(),
         }
     }
 
     /// Apply the rotation operation to a vector.
     #[inline]
     pub fn rotate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        self.matrix * vector
     }
 
     /// Apply the rotation operation to a point.
     #[inline]
     pub fn rotate_point(&self, point: &Point3<S>) -> Point3<S> { 
-        Point3::from_vector(self.rotate_vector(&point.to_vector()))
+        let vector = Vector3::new(point.x, point.y, point.z);
+        let result = self.matrix * vector;
+
+        Point3::new(result.x, result.y, result.z)
     }
 }
 
@@ -363,10 +331,10 @@ impl<S> fmt::Display for Rotation3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Rotation3<S>> for Matrix4x4<S> where S: Copy {
+impl<S> From<Rotation3<S>> for Matrix4x4<S> where S: ScalarFloat {
     #[inline]
     fn from(rotation: Rotation3<S>) -> Matrix4x4<S> {
-        rotation.matrix
+        Matrix4x4::from(&rotation.matrix)
     }
 }
 
@@ -389,9 +357,9 @@ impl<S> From<Rotation3<S>> for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AsRef<Matrix4x4<S>> for Rotation3<S> {
+impl<S> AsRef<Matrix3x3<S>> for Rotation3<S> {
     #[inline]
-    fn as_ref(&self) -> &Matrix4x4<S> {
+    fn as_ref(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 }
@@ -406,7 +374,7 @@ impl<S> approx::AbsDiffEq for Rotation3<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+        Matrix3x3::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
     }
 }
 
@@ -418,7 +386,7 @@ impl<S> approx::RelativeEq for Rotation3<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+        Matrix3x3::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
     }
 }
 
@@ -430,7 +398,7 @@ impl<S> approx::UlpsEq for Rotation3<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+        Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
 
@@ -440,8 +408,7 @@ impl<S> AffineTransformation3<S> for Rotation3<S>
     #[inline]
     fn identity() -> Rotation3<S> {
         Rotation3 { 
-            angle: Radians(S::zero()),
-            matrix: Matrix4x4::identity(),
+            matrix: Matrix3x3::identity(),
         }
     }
 
@@ -452,12 +419,12 @@ impl<S> AffineTransformation3<S> for Rotation3<S>
 
     #[inline]
     fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        self.rotate_vector(vector)
     }
 
     #[inline]
     fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+        self.rotate_point(point)
     }
 
     #[inline]
