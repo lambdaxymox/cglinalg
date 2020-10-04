@@ -1563,6 +1563,49 @@ impl<S> Quaternion<S> where S: ScalarFloat {
             (S::zero(), Radians::zero(), None)
         }
     }
+
+    /// Construct a quaternion from its polar decomposition.
+    ///
+    /// Every quaternion can be written in polar form. Let `q` be a quaternion.
+    /// It can be written as
+    /// ```text
+    /// q := |q| * (cos(angle / 2) + sin(angle / 2 * axis))
+    ///   == |q| * cos(angle / 2) + |q| * sin(angle / 2) * axis
+    ///   =: s + v
+    /// ```
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// # use core::f64;
+    /// #
+    /// let scale = 3_f64;
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let scalar = 3_f64 * f64::sqrt(3_f64) / 2_f64;
+    /// let vector = Vector3::new(0_f64, 0_f64, 3_f64 / 2_f64);
+    /// let expected = Quaternion::from_parts(scalar, vector);
+    /// let result = Quaternion::from_polar_decomposition(scale, angle, &axis);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    pub fn from_polar_decomposition(
+        scale: S, angle: Radians<S>, axis: &Unit<Vector3<S>>) -> Self {
+
+        let two: S = num_traits::cast(2_i8).unwrap();
+        let (sin_angle_over_two, cos_angle_over_two) = (angle / two).sin_cos();
+        let scalar = cos_angle_over_two * scale;
+        let vector = axis.as_ref() * sin_angle_over_two * scale;
+
+        Quaternion::from_parts(scalar, vector)
+    }
 }
 
 impl<S> Zero for Quaternion<S> where S: Scalar {
