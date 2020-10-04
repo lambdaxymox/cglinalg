@@ -1492,6 +1492,77 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     pub fn project(&self, other: &Quaternion<S>) -> Quaternion<S> {
         other * (self.dot(other) / other.magnitude_squared())
     }
+
+    /// Compute the polar decomposition of a quaternion.
+    ///
+    /// Every quaternion `q` can be decomposed into a polars form. A
+    /// quaternion `q`, can be written in polar form as
+    /// ```text
+    /// q := s + v := |q| * exp((-theta / 2) * vhat) 
+    ///            := |q| * (cos(theta / 2) + vhat * sin(theta / 2))
+    /// ```
+    /// where `s` is the scalar part, `v` is the vector part, |q| is the length
+    /// of the quaternion, `vhat` denotes the normalized part of the vector 
+    /// part, and `theta` is the angle of rotation about the axis `vhat` 
+    /// encoded by the quaternion.
+    ///
+    /// The output of the function is a triple containing the magnitude of 
+    /// the quaternion, followed by the angle of rotation, followed optionally
+    /// by the axis of rotation, if there is one. There may not be one in the 
+    /// case where the quaternion is a real quaternion.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scalar = 3_f64 * (f64::sqrt(3_f64) / 2_f64);
+    /// let vector = (3_f64  / 2_f64) * Vector3::unit_z();
+    /// let quaternion = Quaternion::from_parts(scalar, vector);
+    /// let magnitude = 3_f64;
+    /// let angle_over_two = Radians(f64::consts::FRAC_PI_6);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let expected = (magnitude, angle_over_two, Some(axis));
+    /// let result = quaternion.polar_decomposition();
+    ///
+    /// assert!(relative_eq!(result.0, expected.0, epsilon = 1e-8));
+    /// assert!(relative_eq!(result.1, expected.1, epsilon = 1e-8));
+    /// assert!(result.2.is_some());
+    /// assert!(relative_eq!(
+    ///     result.2.unwrap().as_ref(), 
+    ///     expected.2.unwrap().as_ref(), 
+    ///     epsilon = 1e-8
+    /// ));
+    /// ```
+    #[inline]
+    pub fn polar_decomposition(&self) -> (S, Radians<S>, Option<Unit<Vector3<S>>>) {
+        let pair = Unit::try_from_value_with_magnitude(*self, S::zero());
+        if let Some((unit_q, magnitude_q)) = pair {
+            if let Some(axis) = Unit::try_from_value(self.v, S::zero()) {
+                let cos_angle_over_two = unit_q.s.abs();
+                let sin_angle_over_two = unit_q.v.magnitude();
+                let angle_over_two = Radians::atan2(
+                    sin_angle_over_two, 
+                    cos_angle_over_two
+                );
+
+                (magnitude_q, angle_over_two, Some(axis))
+            } else {
+                (magnitude_q, Radians::zero(), None)
+            }
+        } else {
+            (S::zero(), Radians::zero(), None)
+        }
+    }
 }
 
 impl<S> Zero for Quaternion<S> where S: Scalar {
