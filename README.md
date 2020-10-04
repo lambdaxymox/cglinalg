@@ -1,4 +1,5 @@
 # Computer Graphics Linear Algebra Library
+
 ## Introduction
 The `cglinalg` library is a low-dimensional linear algebra library aimed 
 primarily at real-time computer graphics, game engine development, and 
@@ -29,7 +30,7 @@ To use the library in your project, add `cglinalg` as a dependency in your
 `Cargo.toml` file:
 ```
 [dependencies]
-cglinalg = "0.10.0"
+cglinalg = "0.10.12"
 ```
 After that, place the crate declaration in either your `lib.rs` file or 
 your `main.rs` file
