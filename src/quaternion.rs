@@ -217,6 +217,32 @@ impl<S> Quaternion<S> where S: Scalar {
     pub fn is_pure(&self) -> bool {
         self.s.is_zero()
     }
+
+    /// Check whether a quaternion is a real quaternion.
+    ///
+    /// A real quaternion is a quaternion with zero vector part.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3, 
+    /// #     Zero,
+    /// # };
+    /// # 
+    /// let real = Quaternion::from_parts(1_f64, Vector3::zero());
+    /// 
+    /// assert!(real.is_real());
+    /// 
+    /// let not_real = Quaternion::from_parts(1_f64, Vector3::new(2_f64, 3_f64, 4_f64));
+    ///
+    /// assert!(!not_real.is_real());
+    /// ```
+    #[inline]
+    pub fn is_real(&self) -> bool {
+        self.v.is_zero()
+    }
 }
 
 impl<S> Quaternion<S> where S: ScalarFloat {
