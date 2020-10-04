@@ -2,7 +2,7 @@
 # Computer Graphics Linear Algebra Library
 
 ## Introduction
-The `cglinalg` library is a low-dimensional linear algebra library aimed 
+The **cglinalg** library is a low-dimensional linear algebra library aimed 
 primarily at real-time computer graphics, game engine development, and 
 real-time collision detection. This library provides a strongly typed system 
 for developing computer graphics applications.
@@ -14,21 +14,21 @@ The design of the library has the following goals in mind:
   other C/C++ and Rust libraries. Every data type can be treated like a 
   fixed-sized array so they can be sent to across FFI boundaries.
 * **Few Dependencies** -- The library should be relatively self-contained. To 
-  support portability and maintainability, `cglinalg` is designed with few 
+  support portability and maintainability, **cglinalg** is designed with few 
   external dependencies. The biggest dependency---`proptest`---is a development 
   dependency only.
 * **Type Safety** -- Leverage Rust's type system and zero-cost abstractions 
   to ensure code correctness, abstraction, and intelligibility do not come 
   at the cost of performance.
 * **Flexibility** -- The library should serve as a type-agnostic cornerstone 
-  for computer graphics applications. The data types in `cglinalg` are
+  for computer graphics applications. The data types in **cglinalg** are
   generic over their scalars so they can operate on multiple scalar types.
 * **Speed And Efficiency** -- Operations should be fast and efficient. SIMD 
   instructions and architecture specific optimizations should be used where 
   possible.
 
 ## Getting Started
-To use the library in your project, add `cglinalg` as a dependency in your 
+To use the library in your project, add **cglinalg** as a dependency in your 
 `Cargo.toml` file:
 
 ```ignore
@@ -44,12 +44,12 @@ extern crate cglinalg;
 ```
 
 ## Features
-`cglinalg` is a low-dimensional linear-algebra library aimed at specific 
+**cglinalg** is a low-dimensional linear-algebra library aimed at specific 
 application domains that make heavy use of computer graphics. It includes the 
 most common linear algebra operations for implementing rendering algorithms, 
 real-time collision detection, etc. All data types are designed to be exportable 
 to external interfaces such as foreign function interfaces or external hardware. 
-This serves the `cglinalg` goal to be a platform agnostic foundation for 
+This serves the **cglinalg** goal to be a platform agnostic foundation for 
 computer graphics applications in other languages and ecosystems as well. 
 
 Specific features of the library include:
@@ -75,7 +75,7 @@ Specific features of the library include:
 
 The library has design limitations for a number of reasons. 
 
-* `cglinalg` is a low-dimensional library; it can only do linear algebra up to 
+* **cglinalg** is a low-dimensional library; it can only do linear algebra up to 
   dimensional four. If one needs high-dimensional transformations, there are other 
   libraries fit to the task rather than this one. This library is not a replacement
   for `numpy`, BLAS, or LAPACK. It is a Rust counterpart to `DirectXMath` or `glm`.
