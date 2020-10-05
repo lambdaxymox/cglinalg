@@ -14,7 +14,6 @@ use crate::point::{
     Point3,
 };
 use crate::traits::{
-    Identity,
     Zero,
 };
 use crate::affine::*;
