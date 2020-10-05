@@ -115,7 +115,7 @@ mod rotation;
 mod scale;
 mod shear;
 mod translation;
-mod affine;
+mod transform;
 
 
 pub use angle::*;
@@ -134,5 +134,5 @@ pub use rotation::*;
 pub use scale::*;
 pub use shear::*;
 pub use translation::*;
-pub use affine::*;
+pub use transform::*;
 

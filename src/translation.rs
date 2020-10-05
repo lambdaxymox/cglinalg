@@ -16,7 +16,7 @@ use crate::point::{
 use crate::traits::{
     Zero,
 };
-use crate::affine::*;
+use crate::transform::*;
 
 use core::fmt;
 
