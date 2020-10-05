@@ -14,7 +14,8 @@ use crate::vector::{
     Vector3,
     Vector4,
 };
-use crate::num_traits::{
+
+use num_traits::{
     NumCast,
 };
 
