@@ -142,6 +142,44 @@ impl<S> From<&Transform2<S>> for Matrix3x3<S> where S: Copy {
     }
 }
 
+impl<S> approx::AbsDiffEq for Transform2<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Matrix3x3::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Transform2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Matrix3x3::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Transform2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
 impl<S> AffineTransformation2<S> for Transform2<S> 
     where S: ScalarFloat
 {
@@ -265,6 +303,44 @@ impl<S> AffineTransformation3<S> for Transform3<S>
     #[inline]
     fn to_transform3d(&self) -> Transform3<S> {
         *self
+    }
+}
+
+impl<S> approx::AbsDiffEq for Transform3<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Transform3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Transform3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
 

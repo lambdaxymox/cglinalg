@@ -1,5 +1,6 @@
 use crate::scalar::{
     ScalarSigned,
+    ScalarFloat,
 };
 use crate::matrix::{
     Matrix3x3,
@@ -111,6 +112,44 @@ impl<S> From<Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
 impl<S> From<&Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
     fn from(transform: &Translation2<S>) -> Matrix3x3<S> {
         Matrix3x3::from_affine_translation(&transform.distance)
+    }
+}
+
+impl<S> approx::AbsDiffEq for Translation2<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Vector2::abs_diff_eq(&self.distance, &other.distance, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Translation2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Vector2::relative_eq(&self.distance, &other.distance, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Translation2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Vector2::ulps_eq(&self.distance, &other.distance, epsilon, max_ulps)
     }
 }
 
@@ -228,6 +267,44 @@ impl<S> From<Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
 impl<S> From<&Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
     fn from(transform: &Translation3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_translation(&transform.distance)
+    }
+}
+
+impl<S> approx::AbsDiffEq for Translation3<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Vector3::abs_diff_eq(&self.distance, &other.distance, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Translation3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Vector3::relative_eq(&self.distance, &other.distance, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Translation3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Vector3::ulps_eq(&self.distance, &other.distance, epsilon, max_ulps)
     }
 }
 

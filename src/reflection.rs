@@ -22,6 +22,8 @@ use crate::unit::{
 };
 use crate::transform::*;
 
+use approx;
+
 use core::fmt;
 
 
@@ -131,6 +133,47 @@ impl<S> From<Reflection2<S>> for Matrix3x3<S> where S: Copy {
 impl<S> From<&Reflection2<S>> for Matrix3x3<S> where S: Copy {
     fn from(transformation: &Reflection2<S>) -> Matrix3x3<S> {
         transformation.matrix
+    }
+}
+
+impl<S> approx::AbsDiffEq for Reflection2<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Vector2::abs_diff_eq(&self.bias, &other.bias, epsilon)
+            && Vector2::abs_diff_eq(&self.normal, &other.normal, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Reflection2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+       Vector2::relative_eq(&self.bias, &other.bias, epsilon, max_relative)
+           && Vector2::relative_eq(&self.normal, &other.normal, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Reflection2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Vector2::ulps_eq(&self.bias, &other.bias, epsilon, max_ulps)
+            && Vector2::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps) 
     }
 }
 
@@ -316,6 +359,47 @@ impl<S> AffineTransformation3<S> for Reflection3<S> where S: ScalarFloat {
     #[inline]
     fn to_transform3d(&self) -> Transform3<S> {
         Transform3::to_transform3d(self.matrix)
+    }
+}
+
+impl<S> approx::AbsDiffEq for Reflection3<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Vector3::abs_diff_eq(&self.bias, &other.bias, epsilon)
+            && Vector3::abs_diff_eq(&self.normal, &other.normal, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Reflection3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+       Vector3::relative_eq(&self.bias, &other.bias, epsilon, max_relative)
+           && Vector3::relative_eq(&self.normal, &other.normal, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Reflection3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Vector3::ulps_eq(&self.bias, &other.bias, epsilon, max_ulps)
+            && Vector3::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps) 
     }
 }
 

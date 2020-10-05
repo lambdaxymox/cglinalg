@@ -1,5 +1,6 @@
 use crate::scalar::{
     ScalarSigned,
+    ScalarFloat,
 };
 use crate::matrix::{
     Matrix2x2,
@@ -135,6 +136,44 @@ impl<S> From<&Shear2<S>> for Matrix3x3<S> where S: ScalarSigned {
     #[inline]
     fn from(shear: &Shear2<S>) -> Matrix3x3<S> {
         Matrix3x3::from(&shear.matrix)
+    }
+}
+
+impl<S> approx::AbsDiffEq for Shear2<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Matrix2x2::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Shear2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Matrix2x2::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Shear2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Matrix2x2::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
 
@@ -312,6 +351,45 @@ impl<S> From<&Shear3<S>> for Matrix4x4<S> where S: ScalarSigned {
         Matrix4x4::from(&shear.matrix)
     }
 }
+
+impl<S> approx::AbsDiffEq for Shear3<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Matrix3x3::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Shear3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Matrix3x3::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Shear3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
 
 impl<S> AffineTransformation3<S> for Shear3<S>
     where S: ScalarSigned
