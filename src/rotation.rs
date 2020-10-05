@@ -54,7 +54,14 @@ pub struct Rotation2<S> {
 }
 
 impl<S> Rotation2<S> where S: ScalarFloat {
+    /// Get the rotation angle of the rotation transformation.
+    #[inline]
+    pub fn angle(&self) -> Radians<S> {
+        Radians::atan2(self.matrix.c0r1, self.matrix.c0r0)
+    }
+
     /// Rotate a two-dimensional vector in the **xy-plane** by an angle `angle`.
+    #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2<S> {  
         Rotation2 {
             matrix: Matrix2x2::from_angle(angle.into()),
@@ -210,6 +217,37 @@ pub struct Rotation3<S> {
 }
 
 impl<S> Rotation3<S> where S: ScalarFloat {
+    /// Compute the angle of the rotation.
+    #[inline]
+    pub fn angle(&self) -> Radians<S> {
+        let two = num_traits::cast(2_i8).unwrap();
+        Radians::acos((
+            self.matrix.c0r0 + self.matrix.c1r1 + self.matrix.c2r2 - S::one()) / two
+        )
+    }
+
+    /// Compute the axis of the rotation, if it exists.
+    #[inline]
+    pub fn axis(&self) -> Option<Unit<Vector3<S>>> {
+        let axis = Vector3::new(
+            self.matrix.c1r2 - self.matrix.c2r1,
+            self.matrix.c2r0 - self.matrix.c0r2,
+            self.matrix.c0r1 - self.matrix.c1r0
+        );
+
+        Unit::try_from_value(axis, S::default_epsilon())
+    }
+
+    /// Compute the axis and angle of the rotation.
+    #[inline]
+    pub fn axis_angle(&self) -> Option<(Unit<Vector3<S>>, Radians<S>)> {
+        if let Some(axis) = self.axis() {
+            Some((axis, self.angle()))
+        } else {
+            None
+        }
+    }
+
     /// Construct a three-dimensional rotation matrix from a quaternion.
     #[inline]
     pub fn from_quaternion(quaternion: &Quaternion<S>) -> Rotation3<S> {
