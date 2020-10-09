@@ -17,68 +17,7 @@ use crate::vector::{
 
 use core::fmt;
 
-/*
-/// A perspective projection based on arbitrary `left`, `right`, `bottom`,
-/// `top`, `near`, and `far` planes.
-///
-/// We assume the following constraints to construct a useful perspective 
-/// projection
-/// ```text
-/// left   < right
-/// bottom < top
-/// near   < far   (along the negative z-axis)
-/// ```
-/// Each parameter in the specification is a description of the position along
-/// an axis of a plane that the axis is perpendicular to.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct PerspectiveSpec<S> {
-    /// The horizontal position of the left-hand plane in camera space.
-    /// The left-hand plane is a plane parallel to the **yz-plane** at
-    /// the origin.
-    left: S,
-    /// The horizontal position of the right-hand plane in camera space.
-    /// The right-hand plane is a plane parallel to the **yz-plane** at
-    /// the origin.
-    right: S,
-    /// The vertical position of the bottom plane in camera space.
-    /// The bottom plane is a plane parallel to the **xz-plane** at the origin.
-    bottom: S,
-    /// The vertical position of the top plane in camera space.
-    /// the top plane is a plane parallel to the **xz-plane** at the origin.
-    top: S,
-    /// The distance along the **negative z-axis** of the near plane from the eye.
-    /// The near plane is a plane parallel to the **xy-plane** at the origin.
-    near: S,
-    /// the distance along the **negative z-axis** of the far plane from the eye.
-    /// The far plane is a plane parallel to the **xy-plane** at the origin.
-    far: S,
-}
 
-impl<S> PerspectiveSpec<S> {
-    /// Construct a new perspective specification.
-    #[inline]
-    pub const fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> PerspectiveSpec<S> {
-        PerspectiveSpec {
-            left: left,
-            right: right,
-            bottom: bottom,
-            top: top,
-            near: near,
-            far: far,
-        }
-    }
-}
-
-impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Display {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter,
-            "PerspectiveSpec [left={}, right={}, bottom={}, top={}, near={}, far={}]",
-            self.left, self.right, self.bottom, self.top, self.near, self.far
-        )
-    }
-}
-*/
 /// A perspective projection transformation based on arbitrary `left`, `right`, 
 /// `bottom`, `top`, `near`, and `far` planes.
 ///
