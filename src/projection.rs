@@ -164,38 +164,6 @@ impl<S> Perspective3<S>
         // We can save nine multiplications, nine additions, and one matrix 
         // construction by only applying the nonzero elements
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
-        //
-        // let spec = self.spec;
-        // let zero = S::zero();
-        // let one  = S::one();
-        // let two = one + one;
-        //
-        // let c0r0 =  (spec.right - spec.left) / (two * spec.near);
-        // let c0r1 =  zero;
-        // let c0r2 =  zero;
-        // let c0r3 =  zero;
-        //
-        // let c1r0 =  zero;
-        // let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
-        // let c1r2 =  zero;
-        // let c1r3 =  zero;
-        // 
-        // let c2r0 =  zero;
-        // let c2r1 =  zero;
-        // let c2r2 =  zero;
-        // let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        //
-        // let c3r0 =  (spec.left + spec.right) / (two * spec.near);
-        // let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
-        // let c3r2 = -one;
-        // let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
-        //
-        // let matrix_inverse = Matrix4x4::new(
-        //    c0r0, c0r1, c0r2, c0r3,
-        //    c1r0, c1r1, c1r2, c1r3,
-        //    c2r0, c2r1, c2r2, c2r3,
-        //    c3r0, c3r1, c3r2, c3r3
-        // );
         let one = S::one();
         let two = one + one;
         let c0r0 = (self.right - self.left) / (two * self.near);
@@ -242,38 +210,6 @@ impl<S> Perspective3<S>
         // We can save nine multiplications, nine additions, and one matrix 
         // construction by only applying the nonzero elements
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
-        //
-        // let spec = self.spec;
-        // let zero = S::zero();
-        // let one  = S::one();
-        // let two = one + one;
-        //
-        // let c0r0 =  (spec.right - spec.left) / (two * spec.near);
-        // let c0r1 =  zero;
-        // let c0r2 =  zero;
-        // let c0r3 =  zero;
-        //
-        // let c1r0 =  zero;
-        // let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
-        // let c1r2 =  zero;
-        // let c1r3 =  zero;
-        // 
-        // let c2r0 =  zero;
-        // let c2r1 =  zero;
-        // let c2r2 =  zero;
-        // let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        //
-        // let c3r0 =  (spec.left + spec.right) / (two * spec.near);
-        // let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
-        // let c3r2 = -one;
-        // let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
-        //
-        // let matrix_inverse = Matrix4x4::new(
-        //    c0r0, c0r1, c0r2, c0r3,
-        //    c1r0, c1r1, c1r2, c1r3,
-        //    c2r0, c2r1, c2r2, c2r3,
-        //    c3r0, c3r1, c3r2, c3r3
-        // );
         let one = S::one();
         let two = one + one;
         let c0r0 = (self.right - self.left) / (two * self.near);
@@ -468,38 +404,6 @@ impl<S> PerspectiveFov3<S>
         // We can save nine multiplications, nine additions, and one matrix 
         // construction by only applying the nonzero elements
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
-        //
-        // let spec = self.spec;
-        // let zero = S::zero();
-        // let one  = S::one();
-        // let two = one + one;
-        //
-        // let c0r0 =  (spec.right - spec.left) / (two * spec.near);
-        // let c0r1 =  zero;
-        // let c0r2 =  zero;
-        // let c0r3 =  zero;
-        //
-        // let c1r0 =  zero;
-        // let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
-        // let c1r2 =  zero;
-        // let c1r3 =  zero;
-        // 
-        // let c2r0 =  zero;
-        // let c2r1 =  zero;
-        // let c2r2 =  zero;
-        // let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        //
-        // let c3r0 =  (spec.left + spec.right) / (two * spec.near);
-        // let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
-        // let c3r2 = -one;
-        // let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
-        //
-        // let matrix_inverse = Matrix4x4::new(
-        //    c0r0, c0r1, c0r2, c0r3,
-        //    c1r0, c1r1, c1r2, c1r3,
-        //    c2r0, c2r1, c2r2, c2r3,
-        //    c3r0, c3r1, c3r2, c3r3
-        // );
         let one = S::one();
         let two = one + one;
         let near = self.near;
@@ -554,38 +458,6 @@ impl<S> PerspectiveFov3<S>
         // We can save nine multiplications, nine additions, and one matrix 
         // construction by only applying the nonzero elements
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
-        //
-        // let spec = self.spec;
-        // let zero = S::zero();
-        // let one  = S::one();
-        // let two = one + one;
-        //
-        // let c0r0 =  (spec.right - spec.left) / (two * spec.near);
-        // let c0r1 =  zero;
-        // let c0r2 =  zero;
-        // let c0r3 =  zero;
-        //
-        // let c1r0 =  zero;
-        // let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
-        // let c1r2 =  zero;
-        // let c1r3 =  zero;
-        // 
-        // let c2r0 =  zero;
-        // let c2r1 =  zero;
-        // let c2r2 =  zero;
-        // let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        //
-        // let c3r0 =  (spec.left + spec.right) / (two * spec.near);
-        // let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
-        // let c3r2 = -one;
-        // let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
-        //
-        // let matrix_inverse = Matrix4x4::new(
-        //    c0r0, c0r1, c0r2, c0r3,
-        //    c1r0, c1r1, c1r2, c1r3,
-        //    c2r0, c2r1, c2r2, c2r3,
-        //    c3r0, c3r1, c3r2, c3r3
-        // );
         let one = S::one();
         let two = one + one;
         let near = self.near;
