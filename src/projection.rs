@@ -82,37 +82,37 @@ impl<S> Perspective3<S>
 
     /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn znear(&self) -> S {
+    pub fn near_z(&self) -> S {
         self.near
     }
 
     /// Get the far plane along the **negative z-axis**.
     #[inline]
-    pub fn zfar(&self) -> S {
+    pub fn far_z(&self) -> S {
         self.far
     }
 
     /// Get the left plane along the **negative x-axis**.
     #[inline]
-    pub fn xleft(&self)-> S {
+    pub fn left_x(&self)-> S {
         self.near
     }
 
     /// Get the right plane along the **positive x-axis**.
     #[inline]
-    pub fn xright(&self) -> S {
+    pub fn right_x(&self) -> S {
         self.far
     }
 
     /// Get the bottom plane along the **negative y-axis**.
     #[inline]
-    pub fn ybottom(&self) -> S {
+    pub fn bottom_y(&self) -> S {
         self.bottom
     }
 
     /// Get the top plane along the **positive y-axis**.
     #[inline]
-    pub fn ytop(&self) -> S {
+    pub fn top_y(&self) -> S {
         self.top
     }
 
@@ -341,13 +341,13 @@ impl<S> PerspectiveFov3<S>
 
     /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn znear(&self) -> S {
+    pub fn near_z(&self) -> S {
         self.near
     }
 
     /// Get the far plane along the **negative z-axis**.
     #[inline]
-    pub fn zfar(&self) -> S {
+    pub fn far_z(&self) -> S {
         self.far
     }
 
@@ -608,37 +608,37 @@ impl<S> Orthographic3<S> where S: ScalarFloat {
 
     /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn znear(&self) -> S {
+    pub fn near_z(&self) -> S {
         self.near
     }
 
     /// Get the far plane along the **negative z-axis**.
     #[inline]
-    pub fn zfar(&self) -> S {
+    pub fn far_z(&self) -> S {
         self.far
     }
 
     /// Get the left plane along the **negative x-axis**.
     #[inline]
-    pub fn xleft(&self)-> S {
+    pub fn left_x(&self)-> S {
         self.near
     }
 
     /// Get the right plane along the **positive x-axis**.
     #[inline]
-    pub fn xright(&self) -> S {
+    pub fn right_x(&self) -> S {
         self.far
     }
 
     /// Get the bottom plane along the **negative y-axis**.
     #[inline]
-    pub fn ybottom(&self) -> S {
+    pub fn bottom_y(&self) -> S {
         self.bottom
     }
 
     /// Get the top plane along the **positive y-axis**.
     #[inline]
-    pub fn ytop(&self) -> S {
+    pub fn top_y(&self) -> S {
         self.top
     }
 
@@ -805,13 +805,13 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
 
     /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn znear(&self) -> S {
+    pub fn near_z(&self) -> S {
         self.near
     }
 
     /// Get the far plane along the **negative z-axis**.
     #[inline]
-    pub fn zfar(&self) -> S {
+    pub fn far_z(&self) -> S {
         self.far
     }
 
