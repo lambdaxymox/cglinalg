@@ -397,6 +397,59 @@ impl<S> PerspectiveProjection3<S>
     /// This is the inverse operation of `project_point`.
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
+        // The perspective projection matrix has the form
+        // ```text
+        // | c0r0 c1r0 c2r0 c3r0 |    | 2*n/(r - l)   0               (r + l)/(r - l)    0             |
+        // | c0r1 c1r1 c2r1 c3r1 | == | 0             2*n/(t - b)     (t + b)/(t - b)    0             |
+        // | c0r2 c1r2 c2r2 c3r2 |    | 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) |
+        // | c0r3 c1r3 c2r3 c3r3 |    | 0             0              -1                  0             |
+        // ```
+        //
+        // The inverse matrix of the perspective projection matrix has the form
+        // ```text
+        // | c0r0 c1r0 c2r0 c3r0 |    | (r - l)/(2*n)   0               0                   (r + l)/(2*n)   |
+        // | c0r1 c1r1 c2r1 c3r1 | == | 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   |
+        // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
+        // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
+        // ```
+        // 
+        // This leads to optimizated unprojection equivalent to the original
+        // calculation via matrix calclulation.
+        // We can save nine multiplications, nine additions, and one matrix 
+        // construction by only applying the nonzero elements
+        // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
+        //
+        // let spec = self.spec;
+        // let zero = S::zero();
+        // let one  = S::one();
+        // let two = one + one;
+        //
+        // let c0r0 =  (spec.right - spec.left) / (two * spec.near);
+        // let c0r1 =  zero;
+        // let c0r2 =  zero;
+        // let c0r3 =  zero;
+        //
+        // let c1r0 =  zero;
+        // let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
+        // let c1r2 =  zero;
+        // let c1r3 =  zero;
+        // 
+        // let c2r0 =  zero;
+        // let c2r1 =  zero;
+        // let c2r2 =  zero;
+        // let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
+        //
+        // let c3r0 =  (spec.left + spec.right) / (two * spec.near);
+        // let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        // let c3r2 = -one;
+        // let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        //
+        // let matrix_inverse = Matrix4x4::new(
+        //    c0r0, c0r1, c0r2, c0r3,
+        //    c1r0, c1r1, c1r2, c1r3,
+        //    c2r0, c2r1, c2r2, c2r3,
+        //    c3r0, c3r1, c3r2, c3r3
+        // );
         let spec = self.spec;
         let one = S::one();
         let two = one + one;
@@ -620,6 +673,59 @@ impl<S> PerspectiveFovProjection3<S>
     /// This is the inverse operation of `project_point`.
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
+        // The perspective projection matrix has the form
+        // ```text
+        // | c0r0 c1r0 c2r0 c3r0 |    | 2*n/(r - l)   0               (r + l)/(r - l)    0             |
+        // | c0r1 c1r1 c2r1 c3r1 | == | 0             2*n/(t - b)     (t + b)/(t - b)    0             |
+        // | c0r2 c1r2 c2r2 c3r2 |    | 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) |
+        // | c0r3 c1r3 c2r3 c3r3 |    | 0             0              -1                  0             |
+        // ```
+        //
+        // The inverse matrix of the perspective projection matrix has the form
+        // ```text
+        // | c0r0 c1r0 c2r0 c3r0 |    | (r - l)/(2*n)   0               0                   (r + l)/(2*n)   |
+        // | c0r1 c1r1 c2r1 c3r1 | == | 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   |
+        // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
+        // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
+        // ```
+        // 
+        // This leads to optimizated unprojection equivalent to the original
+        // calculation via matrix calclulation.
+        // We can save nine multiplications, nine additions, and one matrix 
+        // construction by only applying the nonzero elements
+        // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
+        //
+        // let spec = self.spec;
+        // let zero = S::zero();
+        // let one  = S::one();
+        // let two = one + one;
+        //
+        // let c0r0 =  (spec.right - spec.left) / (two * spec.near);
+        // let c0r1 =  zero;
+        // let c0r2 =  zero;
+        // let c0r3 =  zero;
+        //
+        // let c1r0 =  zero;
+        // let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
+        // let c1r2 =  zero;
+        // let c1r3 =  zero;
+        // 
+        // let c2r0 =  zero;
+        // let c2r1 =  zero;
+        // let c2r2 =  zero;
+        // let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
+        //
+        // let c3r0 =  (spec.left + spec.right) / (two * spec.near);
+        // let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        // let c3r2 = -one;
+        // let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        //
+        // let matrix_inverse = Matrix4x4::new(
+        //    c0r0, c0r1, c0r2, c0r3,
+        //    c1r0, c1r1, c1r2, c1r3,
+        //    c2r0, c2r1, c2r2, c2r3,
+        //    c3r0, c3r1, c3r2, c3r3
+        // );
         let spec: PerspectiveSpec<S> = self.spec.into();
         let one = S::one();
         let two = one + one;

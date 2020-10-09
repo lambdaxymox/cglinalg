@@ -23,27 +23,39 @@ fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S)>()
-        .prop_map(|(x, y, z)| Vector3::new(x, y, z))
+        .prop_map(|(x, y, z)| {
+            let modulus: S = num_traits::cast(1_000_000).unwrap();
+            let vector = Vector3::new(x, y, z);
+
+            vector % modulus
+        })
+        .no_shrink()
 }
 
 fn any_point3<S>() -> impl Strategy<Value = Point3<S>> 
     where S: ScalarFloat + Arbitrary 
 {
     any::<(S, S, S)>()
-        .prop_map(|(x, y, z)| Point3::new(x, y, z))
+        .prop_map(|(x, y, z)| {
+            let modulus: S = num_traits::cast(1_000_000).unwrap();
+            let point = Point3::new(x, y, z);
+
+            point % modulus
+        })
+        .no_shrink()
 }
 
 fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFovProjection3<S>> 
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S)>()
-        .prop_filter("", |(fovy, aspect, near, far)| {
-            fovy.is_finite()   &&
-            aspect.is_finite() &&
-            near.is_finite()   &&
-            far.is_finite()
-        })
-        .prop_map(|(fovy, aspect, near, far)| {
+        .prop_map(|(_fovy, _aspect, _near, _far)| {
+            let modulus: S = num_traits::cast(1_000_000).unwrap();
+            let fovy = _fovy % modulus;
+            let aspect = _aspect % modulus; 
+            let near = _near % modulus;
+            let far = _far % modulus;
+            
             (S::abs(fovy), S::abs(aspect), S::abs(near), S::abs(far))
         })    
         .prop_map(|(fovy, aspect, near, far)| {
