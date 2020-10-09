@@ -50,16 +50,6 @@ impl<S> Scale2<S> where S: Scalar {
         }
     }
 
-    /// Construct a scale transformation that scales each coordinate by the 
-    /// reciprocal of the scaling factors of the scale operator `self`.
-    #[inline]
-    pub fn inverse(&self) -> Scale2<S> {
-        Scale2::from_nonuniform_scale(
-            S::one() / self.x, 
-            S::one() / self.y
-        )
-    }
-
     /// Apply a scale operation to a vector.
     #[inline]
     pub fn scale_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
@@ -70,6 +60,44 @@ impl<S> Scale2<S> where S: Scalar {
     #[inline]
     pub fn scale_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::new(self.x * point.x, self.y * point.y)
+    }
+}
+
+impl<S> Scale2<S> where S: ScalarFloat {
+    /// Construct a scale transformation that scales each coordinate by the 
+    /// reciprocal of the scaling factors of the scale operator `self`.
+    #[inline]
+    pub fn inverse(&self) -> Scale2<S> {
+        Scale2::from_nonuniform_scale(
+            S::one() / self.x, 
+            S::one() / self.y
+        )
+    }
+
+    #[inline]
+    pub fn inverse_scale_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+        Vector2::new(
+            vector.x / self.x,
+            vector.y / self.y
+        )
+    }
+
+    #[inline]
+    pub fn inverse_scale_point(&self, point: &Point2<S>) -> Point2<S> {
+        Point2::new(
+            point.x / self.x,
+            point.y / self.y
+        )
+    }
+
+    #[inline]
+    pub fn identity() -> Scale2<S> {
+        Scale2::from_scale(S::one())
+    }
+
+    #[inline]
+    pub fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::to_transform2d(self)
     }
 }
 
@@ -136,35 +164,6 @@ impl<S> approx::UlpsEq for Scale2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation2<S> for Scale2<S> 
-    where S: ScalarFloat 
-{
-    #[inline]
-    fn identity() -> Scale2<S> {
-        Scale2::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        self.scale_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        self.scale_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::to_transform2d(self)
-    }
-}
-
 
 /// The scale transformation in three dimensions.
 #[repr(C)]
@@ -201,17 +200,6 @@ impl<S> Scale3<S> where S: Scalar {
         }
     }
 
-    /// Construct a scale transformation that scales each coordinate by the 
-    /// reciprocal of the scaling factors of the scale operator `self`.
-    #[inline]
-    pub fn inverse(&self) -> Option<Scale3<S>> {
-        Some(Scale3::from_nonuniform_scale(
-            S::one() / self.x, 
-            S::one() / self.y,
-            S::one() / self.z
-        ))
-    }
-
     /// Apply a scale operation to a vector.
     #[inline]
     pub fn scale_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -222,6 +210,47 @@ impl<S> Scale3<S> where S: Scalar {
     #[inline]
     pub fn scale_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::new(self.x * point.x, self.y * point.y, self.z * point.z)
+    }
+
+    #[inline]
+    pub fn identity() -> Scale3<S> {
+        Scale3::from_scale(S::one())
+    }
+
+    #[inline]
+    pub fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::to_transform3d(self)
+    }
+}
+
+impl<S> Scale3<S> where S: ScalarFloat {
+    /// Construct a scale transformation that scales each coordinate by the 
+    /// reciprocal of the scaling factors of the scale operator `self`.
+    #[inline]
+    pub fn inverse(&self) -> Scale3<S> {
+        Scale3::from_nonuniform_scale(
+            S::one() / self.x, 
+            S::one() / self.y,
+            S::one() / self.z
+        )
+    }
+
+    #[inline]
+    pub fn inverse_scale_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        Vector3::new(
+            vector.x / self.x,
+            vector.y / self.y,
+            vector.z / self.z
+        )
+    }
+
+    #[inline]
+    pub fn inverse_scale_point(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::new(
+            point.x / self.x,
+            point.y / self.y,
+            point.z / self.z
+        )
     }
 }
 
@@ -296,35 +325,6 @@ impl<S> approx::UlpsEq for Scale3<S> where S: ScalarFloat {
         S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
             && S::ulps_eq(&self.y, &other.y, epsilon, max_ulps)
             && S::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
-    }
-}
-
-impl<S> AffineTransformation3<S> for Scale3<S> 
-    where S: ScalarFloat 
-{
-    #[inline]
-    fn identity() -> Scale3<S> {
-        Scale3::from_scale(S::one())
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Scale3<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        self.scale_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        self.scale_point(point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::to_transform3d(self)
     }
 }
 

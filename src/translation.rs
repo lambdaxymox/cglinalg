@@ -82,7 +82,28 @@ impl<S> Translation2<S> where S: ScalarSigned {
     /// then `(p2 + a) - (p1 + a) = p2 - p1 = v`.
     #[inline]
     pub fn translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        vector + self.distance
+        *vector
+    }
+
+    /// Apply the inverse translation to a point.
+    #[inline]
+    pub fn inverse_translate_point(&self, point: &Point2<S>) -> Point2<S> {
+        point - self.distance
+    }
+
+    /// The identity transformation for translations, which displaces
+    /// a vector or point zero distance.
+    #[inline]
+    pub fn identity() -> Translation2<S> {
+        Translation2 { 
+            distance: Vector2::zero(),
+        }
+    }
+
+    /// Convert a tanslation into a generic two-dimensional transformation.
+    #[inline]
+    pub fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::to_transform2d(self)
     }
 }
 
@@ -153,37 +174,6 @@ impl<S> approx::UlpsEq for Translation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation2<S> for Translation2<S> 
-    where S: ScalarSigned 
-{
-    #[inline]
-    fn identity() -> Translation2<S> {
-        Translation2 { 
-            distance: Vector2::zero(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Translation2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        self.translate_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        self.translate_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::to_transform2d(self)
-    }
-}
-
 
 /// A translation transformation in three dimensions.
 ///
@@ -239,7 +229,28 @@ impl<S> Translation3<S> where S: ScalarSigned {
     pub fn translate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         *vector
     }
+
+    /// Apply the inverse of the translation to a point.
+    #[inline]
+    pub fn inverse_transform_point(&self, point: &Point3<S>) -> Point3<S> {
+        point - self.distance
+    }
+
+    /// The identity transformation for translations, which displaces
+    /// a vector or point zero distance.
+    #[inline]
+    pub fn identity() -> Translation3<S> {
+        Translation3 { 
+            distance: Vector3::zero(),
+        }
+    }
+
+    #[inline]
+    pub fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::to_transform3d(self)
+    }
 }
+
 
 impl<S> AsRef<Vector3<S>> for Translation3<S> {
     #[inline]
@@ -305,37 +316,6 @@ impl<S> approx::UlpsEq for Translation3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Vector3::ulps_eq(&self.distance, &other.distance, epsilon, max_ulps)
-    }
-}
-
-impl<S> AffineTransformation3<S> for Translation3<S> 
-    where S: ScalarSigned 
-{
-    #[inline]
-    fn identity() -> Translation3<S> {
-        Translation3 { 
-            distance: Vector3::zero(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Translation3<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        self.translate_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        self.translate_point(point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::to_transform3d(self)
     }
 }
 
