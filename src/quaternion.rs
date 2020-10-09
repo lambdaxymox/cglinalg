@@ -243,6 +243,46 @@ impl<S> Quaternion<S> where S: Scalar {
     pub fn is_real(&self) -> bool {
         self.v.is_zero()
     }
+
+    /// Construct a real quaternion from a scalar value.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let quaternion = Quaternion::from_real(1_u32);
+    ///
+    /// assert!(quaternion.is_real());
+    /// assert!(!quaternion.is_pure());
+    /// ```
+    #[inline]
+    pub fn from_real(value: S) -> Quaternion<S> {
+        Quaternion::from_parts(value, Vector3::zero())
+    }
+
+    /// Construct a pure quaternion from a vector value.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_u32, 2_u32, 3_u32);
+    /// let quaternion = Quaternion::from_pure(vector);
+    ///
+    /// assert!(quaternion.is_pure());
+    /// assert!(!quaternion.is_real());
+    /// ```
+    #[inline]
+    pub fn from_pure(vector: Vector3<S>) -> Quaternion<S> {
+        Quaternion::from_parts(S::zero(), vector)
+    }
 }
 
 impl<S> Quaternion<S> where S: ScalarFloat {
