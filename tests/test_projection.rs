@@ -4,7 +4,6 @@ extern crate cglinalg;
 use cglinalg::{
     Orthographic3,
     OrthographicFov3,
-    PerspectiveFovSpec,
     PerspectiveSpec,
     Perspective3,
     PerspectiveFov3,
@@ -28,14 +27,13 @@ fn test_perspective_projection_matrix() {
     let top = 3.0;
     let near = 1.0;
     let far = 100.0;
-    let spec = PerspectiveSpec::new(left, right, bottom, top, near, far);
     let expected = Matrix4x4::new(
         1.0 / 4.0,  0.0,        0.0,           0.0,
         0.0,        2.0 / 5.0,  0.0,           0.0,
         0.0,        1.0 / 5.0, -101.0 / 99.0, -1.0,
         0.0,        0.0,       -200.0 / 99.0,  0.0
     );
-    let result = Matrix4x4::from(spec);
+    let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
 
     assert_eq!(result, expected);
 }
@@ -66,14 +64,13 @@ fn test_perspective_projection_fov_matrix() {
     let aspect = 800 as f32 / 600 as f32;
     let near = 0.1;
     let far = 100.0;
-    let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
     let expected = Matrix4x4::new(
         1.0322863, 0.0,        0.0,       0.0, 
         0.0,       1.3763818,  0.0,       0.0, 
         0.0,       0.0,       -1.002002, -1.0, 
         0.0,       0.0,       -0.2002002, 0.0
     );
-    let result = Matrix4x4::from(spec);
+    let result = Matrix4x4::from_perspective_fov(fovy, aspect, near, far);
 
     assert_eq!(result, expected);
 }
@@ -84,14 +81,13 @@ fn test_perspective_projection_fov_transformation() {
     let aspect = 800 as f32 / 600 as f32;
     let near = 0.1;
     let far = 100.0;
-    let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
     let expected = Matrix4x4::new(
         1.0322863, 0.0,        0.0,       0.0, 
         0.0,       1.3763818,  0.0,       0.0, 
         0.0,       0.0,       -1.002002, -1.0, 
         0.0,       0.0,       -0.2002002, 0.0
     );
-    let result = PerspectiveFov3::new(spec);
+    let result = PerspectiveFov3::new(fovy, aspect, near, far);
 
     assert_eq!(result.to_matrix(), &expected);
 }
@@ -102,9 +98,8 @@ fn test_perspective_projection_unproject_point1() {
     let aspect = 800 as f64 / 600 as f64;
     let near = 0.1;
     let far = 100.0;
-    let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
     let point = Point3::new(-2.0, 2.0, -50.0);
-    let projection = PerspectiveFov3::new(spec);
+    let projection = PerspectiveFov3::new(fovy, aspect, near, far);
     let expected = point;
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -118,9 +113,8 @@ fn test_perspective_projection_unproject_vector1() {
     let aspect = 800 as f64 / 600 as f64;
     let near = 0.1;
     let far = 100.0;
-    let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
     let vector = Vector3::new(-2.0, 2.0, -50.0);
-    let projection = PerspectiveFov3::new(spec);
+    let projection = PerspectiveFov3::new(fovy, aspect, near, far);
     let expected = vector;
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
@@ -176,9 +170,9 @@ fn test_orthographic_projection_matrix() {
         0.0,        0.0,       -2.0 / 99.0,   0.0,
         0.0,        0.0,       -101.0 / 99.0, 1.0
     );
-    let result = Orthographic3::new(left, right, bottom, top, near, far);
+    let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
 
-    assert_eq!(result.to_matrix(), &expected);
+    assert_eq!(result, expected);
 }
 
 

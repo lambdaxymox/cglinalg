@@ -79,7 +79,7 @@ impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Display {
     }
 }
 
-
+/*
 /// A perspective projection based on the `near` plane, the `far` plane and 
 /// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
 /// ratio `aspect`.
@@ -198,7 +198,7 @@ impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat
         PerspectiveSpec::new(left, right, bottom, top, near, far)
     }
 }
-
+*/
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates.
 ///
@@ -224,7 +224,14 @@ impl<S> Perspective3<S>
     pub fn new(spec: PerspectiveSpec<S>) -> Perspective3<S> {
         Perspective3 {
             spec: spec,
-            matrix: spec.into(),
+            matrix: Matrix4x4::from_perspective(
+                spec.left, 
+                spec.right, 
+                spec.bottom, 
+                spec.top, 
+                spec.near, 
+                spec.far
+            ),
         }
     }
 
@@ -488,8 +495,15 @@ impl<S> approx::UlpsEq for Perspective3<S>
 /// occlusion detection.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFov3<S> {
-    /// The parameters of the perspective projection.
-    spec: PerspectiveFovSpec<S>,
+    /// The vertical field of view angle of the perspective transformation
+    /// viewport.
+    fovy: Radians<S>,
+    /// The ratio of the horizontal width to the vertical height.
+    aspect: S,
+    /// The position of the near plane along the **negative z-axis**.
+    near: S,
+    /// The position of the far plane along the **negative z-axis**.
+    far: S,
     /// The underlying matrix implementing the perspective projection.
     matrix: Matrix4x4<S>,
 }
@@ -498,17 +512,16 @@ impl<S> PerspectiveFov3<S>
     where S: ScalarFloat
 {
     /// Construct a new perspective projection transformation.
-    pub fn new(spec: PerspectiveFovSpec<S>) -> PerspectiveFov3<S> {
-        PerspectiveFov3 {
-            spec: spec,
-            matrix: spec.into(),
-        }
-    }
+    pub fn new<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> PerspectiveFov3<S> {
+        let spec_fovy = fovy.into();
 
-    /// Get the specification describing the perspective projection.
-    #[inline]
-    pub fn spec(&self) -> PerspectiveFovSpec<S> {
-        self.spec
+        PerspectiveFov3 {
+            fovy: spec_fovy,
+            aspect: aspect,
+            near: near,
+            far: far,
+            matrix: Matrix4x4::from_perspective_fov(spec_fovy, aspect, near, far),
+        }
     }
 
     /// Get the matrix that implements the perspective projection transformation.
@@ -590,16 +603,23 @@ impl<S> PerspectiveFov3<S>
         //    c2r0, c2r1, c2r2, c2r3,
         //    c3r0, c3r1, c3r2, c3r3
         // );
-        let spec: PerspectiveSpec<S> = self.spec.into();
         let one = S::one();
         let two = one + one;
-        let c0r0 = (spec.right - spec.left) / (two * spec.near);
-        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
-        let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        let c3r0 =  (spec.left + spec.right) / (two * spec.near);
-        let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        let near = self.near;
+        let far = self.far;
+        let tan_fovy_div_2 = Radians::tan(self.fovy / two); 
+        let top = self.near * tan_fovy_div_2;
+        let bottom = -top;
+        let right = self.aspect * top;
+        let left = -right;
+
+        let c0r0 = (right - left) / (two * near);
+        let c1r1 = (top - bottom) / (two * near);
+        let c2r3 =  (near - far) / (two * far * near);
+        let c3r0 =  (left + right) / (two * near);
+        let c3r1 =  (bottom + top) / (two * near);
         let c3r2 = -one;
-        let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        let c3r3 =  (far + near) / (two * far * near);
         let w = c2r3 * point.z + c3r3;
         let inverse_w = one / w;
 
@@ -669,16 +689,23 @@ impl<S> PerspectiveFov3<S>
         //    c2r0, c2r1, c2r2, c2r3,
         //    c3r0, c3r1, c3r2, c3r3
         // );
-        let spec: PerspectiveSpec<S> = self.spec.into();
         let one = S::one();
         let two = one + one;
-        let c0r0 = (spec.right - spec.left) / (two * spec.near);
-        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
-        let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        let c3r0 =  (spec.left + spec.right) / (two * spec.near);
-        let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        let near = self.near;
+        let far = self.far;
+        let tan_fovy_div_2 = Radians::tan(self.fovy / two); 
+        let top = self.near * tan_fovy_div_2;
+        let bottom = -top;
+        let right = self.aspect * top;
+        let left = -right;
+
+        let c0r0 = (right - left) / (two * near);
+        let c1r1 = (top - bottom) / (two * near);
+        let c2r3 =  (near - far) / (two * far * near);
+        let c3r0 =  (left + right) / (two * near);
+        let c3r1 =  (bottom + top) / (two * near);
         let c3r2 = -one;
-        let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        let c3r3 =  (far + near) / (two * far * near);
         let w = c2r3 * vector.z + c3r3;
         let inverse_w = one / w;
 

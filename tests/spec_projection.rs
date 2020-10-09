@@ -8,7 +8,6 @@ use cglinalg::{
     Vector3,
     Point3,
     PerspectiveSpec,
-    PerspectiveFovSpec,
     Perspective3,
     PerspectiveFov3,
     Orthographic3,
@@ -63,11 +62,8 @@ fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFov3<
             } else {
                 (near, far)
             };
-            let spec = PerspectiveFovSpec::new(
-                Degrees(fovy), aspect, spec_near, spec_far
-            );
 
-            PerspectiveFov3::new(spec)
+            PerspectiveFov3::new(Degrees(fovy), aspect, spec_near, spec_far)
         })
         .no_shrink()
 }
