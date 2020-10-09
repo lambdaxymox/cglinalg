@@ -561,7 +561,7 @@ impl<S> fmt::Display for Perspective3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
-            "PerspectiveProjection3 [{}]",
+            "Perspective3 [{}]",
             self.matrix
         )
     }
@@ -837,7 +837,7 @@ impl<S> fmt::Display for PerspectiveFov3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
-            "PerspectiveFovProjection3 [{}]",
+            "PerspectiveFov3 [{}]",
             self.matrix
         )
     }
@@ -984,7 +984,7 @@ impl<S> fmt::Display for Orthographic3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
-            "OrthographicProjection3 [{}]",
+            "Orthographic3 [{}]",
             self.matrix
         )
     }
@@ -1146,7 +1146,7 @@ impl<S> fmt::Display for OrthographicFov3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
-            "OrthographicFovProjection3 [{}]",
+            "OrthographicFov3 [{}]",
             self.matrix
         )
     }
