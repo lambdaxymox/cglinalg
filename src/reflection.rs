@@ -174,6 +174,7 @@ impl<S> approx::AbsDiffEq for Reflection2<S> where S: ScalarFloat {
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Vector2::abs_diff_eq(&self.bias, &other.bias, epsilon)
             && Vector2::abs_diff_eq(&self.normal, &other.normal, epsilon)
+            && Matrix3x3::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
     }
 }
 
@@ -187,6 +188,7 @@ impl<S> approx::RelativeEq for Reflection2<S> where S: ScalarFloat {
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
        Vector2::relative_eq(&self.bias, &other.bias, epsilon, max_relative)
            && Vector2::relative_eq(&self.normal, &other.normal, epsilon, max_relative)
+           && Matrix3x3::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
     }
 }
 
@@ -199,7 +201,8 @@ impl<S> approx::UlpsEq for Reflection2<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Vector2::ulps_eq(&self.bias, &other.bias, epsilon, max_ulps)
-            && Vector2::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps) 
+            && Vector2::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps)
+            && Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
 
@@ -355,6 +358,7 @@ impl<S> approx::AbsDiffEq for Reflection3<S> where S: ScalarFloat {
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Vector3::abs_diff_eq(&self.bias, &other.bias, epsilon)
             && Vector3::abs_diff_eq(&self.normal, &other.normal, epsilon)
+            && Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
     }
 }
 
@@ -368,6 +372,7 @@ impl<S> approx::RelativeEq for Reflection3<S> where S: ScalarFloat {
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
        Vector3::relative_eq(&self.bias, &other.bias, epsilon, max_relative)
            && Vector3::relative_eq(&self.normal, &other.normal, epsilon, max_relative)
+           && Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
     }
 }
 
@@ -380,7 +385,8 @@ impl<S> approx::UlpsEq for Reflection3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Vector3::ulps_eq(&self.bias, &other.bias, epsilon, max_ulps)
-            && Vector3::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps) 
+            && Vector3::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps)
+            && Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
 
