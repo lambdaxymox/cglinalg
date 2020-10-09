@@ -79,126 +79,6 @@ impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Display {
     }
 }
 
-/*
-/// A perspective projection based on the `near` plane, the `far` plane and 
-/// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
-/// ratio `aspect`.
-///
-/// We assume the following constraints to make a useful perspective projection 
-/// transformation.
-/// ```text
-/// 0 radians < fovy < pi radians
-/// aspect > 0
-/// near < far (along the negative z-axis)
-/// ```
-/// This perspective projection model imposes some constraints on the more 
-/// general perspective specification based on the arbitrary planes. The `fovy` 
-/// parameter combined with the aspect ratio `aspect` ensures that the top and 
-/// bottom planes are the same distance from the eye position along the vertical 
-/// axis on opposite side. They ensure that the `left` and `right` planes are 
-/// equidistant from the eye on opposite sides along the horizontal axis. 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct PerspectiveFovSpec<S> {
-    /// The vertical field of view angle of the perspective transformation
-    /// viewport.
-    fovy: Radians<S>,
-    /// The ratio of the horizontal width to the vertical height.
-    aspect: S,
-    /// The position of the near plane along the **negative z-axis**.
-    near: S,
-    /// The position of the far plane along the **negative z-axis**.
-    far: S,
-}
-
-impl<S> PerspectiveFovSpec<S> {
-    /// Construct a new perspective projection operation specification
-    /// based on the vertical field of view angle `fovy`, the `near` plane, the 
-    /// `far` plane, and aspect ratio `aspect`.
-    #[inline]
-    pub fn new<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> PerspectiveFovSpec<S> {
-        PerspectiveFovSpec {
-            fovy: fovy.into(),
-            aspect: aspect,
-            near: near,
-            far: far,
-        }
-    }
-}
-
-impl<S> fmt::Display for PerspectiveFovSpec<S> where S: fmt::Display {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-       write!(
-           formatter,
-           "PerspectiveFovSpec [fovy={}, aspect={}, near={}, far={}]",
-           self.fovy, self.aspect, self.near, self.far
-       )
-    }
-}
-
-impl<S> From<PerspectiveFovSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
-    #[inline]
-    fn from(spec: PerspectiveFovSpec<S>) -> Matrix4x4<S> {
-        Matrix4x4::from_perspective_fov(spec.fovy, spec.aspect, spec.near, spec.far)
-    }
-}
-
-impl<S> From<&PerspectiveFovSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
-    #[inline]
-    fn from(spec: &PerspectiveFovSpec<S>) -> Matrix4x4<S> {
-        Matrix4x4::from_perspective_fov(spec.fovy, spec.aspect, spec.near, spec.far)
-    }
-}
-
-impl<S> From<PerspectiveSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
-    #[inline]
-    fn from(spec: PerspectiveSpec<S>) -> Matrix4x4<S> {
-        Matrix4x4::from_perspective(
-            spec.left, spec.right, spec.bottom, spec.top, spec.near, spec.far
-        )
-    }
-}
-
-impl<S> From<&PerspectiveSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
-    #[inline]
-    fn from(spec: &PerspectiveSpec<S>) -> Matrix4x4<S> {
-        Matrix4x4::from_perspective(
-            spec.left, spec.right, spec.bottom, spec.top, spec.near, spec.far
-        )
-    }
-}
-
-impl<S> From<PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat {
-    #[inline]
-    fn from(spec: PerspectiveFovSpec<S>) -> PerspectiveSpec<S> {
-        let two = S::one() + S::one();
-        let tan_fovy_div_2 = Radians::tan(spec.fovy / two); 
-        let top = spec.near * tan_fovy_div_2;
-        let bottom = -top;
-        let right = spec.aspect * top;
-        let left = -right;
-        let near = spec.near;
-        let far = spec.far;
-
-        PerspectiveSpec::new(left, right, bottom, top, near, far)
-    }
-}
-
-impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat {
-    #[inline]
-    fn from(spec: &PerspectiveFovSpec<S>) -> PerspectiveSpec<S> {
-        let two = S::one() + S::one();
-        let tan_fovy_div_2 = Radians::tan(spec.fovy / two); 
-        let top = spec.near * tan_fovy_div_2;
-        let bottom = -top;
-        let right = spec.aspect * top;
-        let left = -right;
-        let near = spec.near;
-        let far = spec.far;
-
-        PerspectiveSpec::new(left, right, bottom, top, near, far)
-    }
-}
-*/
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates.
 ///
@@ -522,6 +402,30 @@ impl<S> PerspectiveFov3<S>
             far: far,
             matrix: Matrix4x4::from_perspective_fov(spec_fovy, aspect, near, far),
         }
+    }
+
+    /// Get the vertical field of view angle.
+    #[inline]
+    pub fn vfov(&self) -> Radians<S> {
+        self.fovy
+    }
+
+    /// Get the near plane along the **negative z-axis**.
+    #[inline]
+    pub fn znear(&self) -> S {
+        self.near
+    }
+
+    /// Get the far plane along the **negative z-axis**.
+    #[inline]
+    pub fn zfar(&self) -> S {
+        self.far
+    }
+
+    /// Get the aspect ratio.
+    #[inline]
+    pub fn aspect(&self) -> S {
+        self.aspect
     }
 
     /// Get the matrix that implements the perspective projection transformation.
