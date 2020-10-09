@@ -73,11 +73,10 @@ Specific features of the library include:
 ## Limitations On The Design
 
 The library has design limitations for a number of reasons. 
-
-* **cglinalg** is a low-dimensional library; it can only do linear algebra up to 
+* **cglinalg** is a computer graphics library; it can only do linear algebra up to 
   dimensional four. If one needs high-dimensional transformations, there are other 
   libraries fit to the task rather than this one. This library is not a replacement
-  for `numpy`, BLAS, or LAPACK. It is a Rust counterpart to `DirectXMath` or `glm`.
+  for `numpy`, `BLAS`, or `LAPACK`. It is a Rust counterpart to `DirectXMath` or `glm`.
 * The library is designed specifically with graphics applications in mind, which 
   tend to be mathematically simpler than other modeling and simulation applications. 
   As a consequence this library does not support most of the operations commonly used 
