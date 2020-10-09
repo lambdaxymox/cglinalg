@@ -346,19 +346,19 @@ impl<S> fmt::Display for OrthographicFovSpec<S> where S: fmt::Display {
 /// transformations is important for operations such as z-buffering and 
 /// occlusion detection.
 #[derive(Copy, Clone, Debug, PartialEq)]
-pub struct PerspectiveProjection3<S> {
+pub struct Perspective3<S> {
     /// The parameters of the perspective projection.
     spec: PerspectiveSpec<S>,
     /// The underlying matrix implementing the perspective projection.
     matrix: Matrix4x4<S>,
 }
 
-impl<S> PerspectiveProjection3<S> 
+impl<S> Perspective3<S> 
     where S: ScalarFloat
 {
     /// Construct a new perspective projection transformation.
-    pub fn new(spec: PerspectiveSpec<S>) -> PerspectiveProjection3<S> {
-        PerspectiveProjection3 {
+    pub fn new(spec: PerspectiveSpec<S>) -> Perspective3<S> {
+        Perspective3 {
             spec: spec,
             matrix: spec.into(),
         }
@@ -550,14 +550,14 @@ impl<S> PerspectiveProjection3<S>
     }
 }
 
-impl<S> AsRef<Matrix4x4<S>> for PerspectiveProjection3<S> {
+impl<S> AsRef<Matrix4x4<S>> for Perspective3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
 
-impl<S> fmt::Display for PerspectiveProjection3<S> where S: fmt::Display {
+impl<S> fmt::Display for Perspective3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -567,7 +567,7 @@ impl<S> fmt::Display for PerspectiveProjection3<S> where S: fmt::Display {
     }
 }
 
-impl<S> approx::AbsDiffEq for PerspectiveProjection3<S> 
+impl<S> approx::AbsDiffEq for Perspective3<S> 
     where S: ScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -583,7 +583,7 @@ impl<S> approx::AbsDiffEq for PerspectiveProjection3<S>
     }
 }
 
-impl<S> approx::RelativeEq for PerspectiveProjection3<S> 
+impl<S> approx::RelativeEq for Perspective3<S> 
     where S: ScalarFloat,
 {
     #[inline]
@@ -597,7 +597,7 @@ impl<S> approx::RelativeEq for PerspectiveProjection3<S>
     }
 }
 
-impl<S> approx::UlpsEq for PerspectiveProjection3<S> 
+impl<S> approx::UlpsEq for Perspective3<S> 
     where S: ScalarFloat   
 {
     #[inline]
@@ -623,19 +623,19 @@ impl<S> approx::UlpsEq for PerspectiveProjection3<S>
 /// transformations is important for operations such as z-buffering and 
 /// occlusion detection.
 #[derive(Copy, Clone, Debug, PartialEq)]
-pub struct PerspectiveFovProjection3<S> {
+pub struct PerspectiveFov3<S> {
     /// The parameters of the perspective projection.
     spec: PerspectiveFovSpec<S>,
     /// The underlying matrix implementing the perspective projection.
     matrix: Matrix4x4<S>,
 }
 
-impl<S> PerspectiveFovProjection3<S> 
+impl<S> PerspectiveFov3<S> 
     where S: ScalarFloat
 {
     /// Construct a new perspective projection transformation.
-    pub fn new(spec: PerspectiveFovSpec<S>) -> PerspectiveFovProjection3<S> {
-        PerspectiveFovProjection3 {
+    pub fn new(spec: PerspectiveFovSpec<S>) -> PerspectiveFov3<S> {
+        PerspectiveFov3 {
             spec: spec,
             matrix: spec.into(),
         }
@@ -826,14 +826,14 @@ impl<S> PerspectiveFovProjection3<S>
     }
 }
 
-impl<S> AsRef<Matrix4x4<S>> for PerspectiveFovProjection3<S> {
+impl<S> AsRef<Matrix4x4<S>> for PerspectiveFov3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
 
-impl<S> fmt::Display for PerspectiveFovProjection3<S> where S: fmt::Display {
+impl<S> fmt::Display for PerspectiveFov3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -843,7 +843,7 @@ impl<S> fmt::Display for PerspectiveFovProjection3<S> where S: fmt::Display {
     }
 }
 
-impl<S> approx::AbsDiffEq for PerspectiveFovProjection3<S> 
+impl<S> approx::AbsDiffEq for PerspectiveFov3<S> 
     where S: ScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -859,7 +859,7 @@ impl<S> approx::AbsDiffEq for PerspectiveFovProjection3<S>
     }
 }
 
-impl<S> approx::RelativeEq for PerspectiveFovProjection3<S> where 
+impl<S> approx::RelativeEq for PerspectiveFov3<S> where 
     S: ScalarFloat  
 {
     #[inline]
@@ -873,7 +873,7 @@ impl<S> approx::RelativeEq for PerspectiveFovProjection3<S> where
     }
 }
 
-impl<S> approx::UlpsEq for PerspectiveFovProjection3<S> where 
+impl<S> approx::UlpsEq for PerspectiveFov3<S> where 
     S: ScalarFloat
 {
     #[inline]
@@ -897,17 +897,17 @@ impl<S> approx::UlpsEq for PerspectiveFovProjection3<S> where
 /// projections preserve the spatial ordering in the distance that points are 
 /// located from the viewing plane.
 #[derive(Copy, Clone, Debug, PartialEq)]
-pub struct OrthographicProjection3<S> {
+pub struct Orthographic3<S> {
     /// The parameters for the orthographic projection.
     spec: OrthographicSpec<S>,
     /// The underlying matrix that implements the orthographic projection.
     matrix: Matrix4x4<S>,
 }
 
-impl<S> OrthographicProjection3<S> where S: ScalarFloat {
+impl<S> Orthographic3<S> where S: ScalarFloat {
     /// Construct a new orthographic projection.
-    pub fn new(spec: OrthographicSpec<S>) -> OrthographicProjection3<S> {
-        OrthographicProjection3 {
+    pub fn new(spec: OrthographicSpec<S>) -> Orthographic3<S> {
+        Orthographic3 {
             spec: spec,
             matrix: spec.into(),
         }
@@ -1041,14 +1041,14 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AsRef<Matrix4x4<S>> for OrthographicProjection3<S> {
+impl<S> AsRef<Matrix4x4<S>> for Orthographic3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
 
-impl<S> fmt::Display for OrthographicProjection3<S> where S: fmt::Display {
+impl<S> fmt::Display for Orthographic3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -1058,7 +1058,7 @@ impl<S> fmt::Display for OrthographicProjection3<S> where S: fmt::Display {
     }
 }
 
-impl<S> approx::AbsDiffEq for OrthographicProjection3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Orthographic3<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -1072,7 +1072,7 @@ impl<S> approx::AbsDiffEq for OrthographicProjection3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for OrthographicProjection3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Orthographic3<S> where S: ScalarFloat {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -1084,7 +1084,7 @@ impl<S> approx::RelativeEq for OrthographicProjection3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for OrthographicProjection3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Orthographic3<S> where S: ScalarFloat {
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -1106,17 +1106,17 @@ impl<S> approx::UlpsEq for OrthographicProjection3<S> where S: ScalarFloat {
 /// projections preserve the spatial ordering in the distance that points are 
 /// located from the viewing plane.
 #[derive(Copy, Clone, Debug, PartialEq)]
-pub struct OrthographicFovProjection3<S> {
+pub struct OrthographicFov3<S> {
     /// The parameters for the orthographic projection.
     spec: OrthographicFovSpec<S>,
     /// The underlying matrix that implements the orthographic projection.
     matrix: Matrix4x4<S>,
 }
 
-impl<S> OrthographicFovProjection3<S> where S: ScalarFloat {
+impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// Construct a new orthographic projection.
-    pub fn new(spec: OrthographicFovSpec<S>) -> OrthographicFovProjection3<S> {
-        OrthographicFovProjection3 {
+    pub fn new(spec: OrthographicFovSpec<S>) -> OrthographicFov3<S> {
+        OrthographicFov3 {
             spec: spec,
             matrix: Matrix4x4::from_orthographic_fov(
                 spec.fovy, 
@@ -1287,14 +1287,14 @@ impl<S> OrthographicFovProjection3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AsRef<Matrix4x4<S>> for OrthographicFovProjection3<S> {
+impl<S> AsRef<Matrix4x4<S>> for OrthographicFov3<S> {
     #[inline]
     fn as_ref(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 }
 
-impl<S> fmt::Display for OrthographicFovProjection3<S> where S: fmt::Display {
+impl<S> fmt::Display for OrthographicFov3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -1304,7 +1304,7 @@ impl<S> fmt::Display for OrthographicFovProjection3<S> where S: fmt::Display {
     }
 }
 
-impl<S> approx::AbsDiffEq for OrthographicFovProjection3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for OrthographicFov3<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -1318,7 +1318,7 @@ impl<S> approx::AbsDiffEq for OrthographicFovProjection3<S> where S: ScalarFloat
     }
 }
 
-impl<S> approx::RelativeEq for OrthographicFovProjection3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -1330,7 +1330,7 @@ impl<S> approx::RelativeEq for OrthographicFovProjection3<S> where S: ScalarFloa
     }
 }
 
-impl<S> approx::UlpsEq for OrthographicFovProjection3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()

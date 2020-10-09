@@ -9,10 +9,10 @@ use cglinalg::{
     Point3,
     PerspectiveSpec,
     PerspectiveFovSpec,
-    PerspectiveProjection3,
-    PerspectiveFovProjection3,
+    Perspective3,
+    PerspectiveFov3,
     OrthographicSpec,
-    OrthographicProjection3,
+    Orthographic3,
     ScalarFloat,
 };
 
@@ -45,7 +45,7 @@ fn any_point3<S>() -> impl Strategy<Value = Point3<S>>
         .no_shrink()
 }
 
-fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFovProjection3<S>> 
+fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFov3<S>> 
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S)>()
@@ -68,12 +68,12 @@ fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFovPr
                 Degrees(fovy), aspect, spec_near, spec_far
             );
 
-            PerspectiveFovProjection3::new(spec)
+            PerspectiveFov3::new(spec)
         })
         .no_shrink()
 }
 
-fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjection3<S>> 
+fn any_perspective_projection<S>() -> impl Strategy<Value = Perspective3<S>> 
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S, S, S)>()
@@ -108,12 +108,12 @@ fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjectio
                 spec_left, spec_right, spec_bottom, spec_top, spec_near, spec_far
             );
 
-            PerspectiveProjection3::new(spec)
+            Perspective3::new(spec)
         })
         .no_shrink()
 }
 
-fn any_orthographic_projection<S>() -> impl Strategy<Value = OrthographicProjection3<S>>
+fn any_orthographic_projection<S>() -> impl Strategy<Value = Orthographic3<S>>
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S, S, S)>()
@@ -148,7 +148,7 @@ fn any_orthographic_projection<S>() -> impl Strategy<Value = OrthographicProject
                 spec_left, spec_right, spec_bottom, spec_top, spec_near, spec_far
             );
 
-            OrthographicProjection3::new(spec)
+            Orthographic3::new(spec)
         })
         .no_shrink()
 }

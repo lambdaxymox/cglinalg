@@ -4,12 +4,12 @@ extern crate cglinalg;
 use cglinalg::{
     OrthographicSpec,
     OrthographicFovSpec,
-    OrthographicProjection3,
-    OrthographicFovProjection3,
+    Orthographic3,
+    OrthographicFov3,
     PerspectiveFovSpec,
     PerspectiveSpec,
-    PerspectiveProjection3,
-    PerspectiveFovProjection3,
+    Perspective3,
+    PerspectiveFov3,
     Matrix4x4,
     Angle,
     Degrees,
@@ -57,7 +57,7 @@ fn test_perspective_projection_transformation() {
         0.0,        1.0 / 5.0, -101.0 / 99.0, -1.0,
         0.0,        0.0,       -200.0 / 99.0,  0.0
     );
-    let result = PerspectiveProjection3::new(spec);
+    let result = Perspective3::new(spec);
 
     assert_eq!(result.to_matrix(), &expected);
 }
@@ -93,7 +93,7 @@ fn test_perspective_projection_fov_transformation() {
         0.0,       0.0,       -1.002002, -1.0, 
         0.0,       0.0,       -0.2002002, 0.0
     );
-    let result = PerspectiveFovProjection3::new(spec);
+    let result = PerspectiveFov3::new(spec);
 
     assert_eq!(result.to_matrix(), &expected);
 }
@@ -106,7 +106,7 @@ fn test_perspective_projection_unproject_point1() {
     let far = 100.0;
     let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
     let point = Point3::new(-2.0, 2.0, -50.0);
-    let projection = PerspectiveFovProjection3::new(spec);
+    let projection = PerspectiveFov3::new(spec);
     let expected = point;
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -122,7 +122,7 @@ fn test_perspective_projection_unproject_vector1() {
     let far = 100.0;
     let spec = PerspectiveFovSpec::new(fovy, aspect, near, far);
     let vector = Vector3::new(-2.0, 2.0, -50.0);
-    let projection = PerspectiveFovProjection3::new(spec);
+    let projection = PerspectiveFov3::new(spec);
     let expected = vector;
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
@@ -139,7 +139,7 @@ fn test_perspective_projection_unproject_point2() {
     let near = 1.0;
     let far = 100.0;
     let spec = PerspectiveSpec::new(left, right, bottom, top, near, far);
-    let projection = PerspectiveProjection3::new(spec);
+    let projection = Perspective3::new(spec);
     let expected = Point3::new(-2.0, 2.0, -50.0);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -156,7 +156,7 @@ fn test_perspective_projection_unproject_vector2() {
     let near = 1.0;
     let far = 100.0;
     let spec = PerspectiveSpec::new(left, right, bottom, top, near, far);
-    let projection = PerspectiveProjection3::new(spec);
+    let projection = Perspective3::new(spec);
     let expected = Vector3::new(-2.0, 2.0, -50.0);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
@@ -200,7 +200,7 @@ fn test_orthographic_projection_transformation() {
         0.0,        0.0,       -2.0 / 99.0,   0.0,
         0.0,        0.0,       -101.0 / 99.0, 1.0
     );
-    let result = OrthographicProjection3::new(spec);
+    let result = Orthographic3::new(spec);
 
     assert_eq!(result.to_matrix(), &expected);
 }
@@ -214,7 +214,7 @@ fn test_orthographic_projection_unproject_point() {
     let near = 1.0;
     let far = 100.0;
     let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
-    let projection = OrthographicProjection3::new(spec);
+    let projection = Orthographic3::new(spec);
     let expected = Point3::new(1.0, 1.0, 50.0);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -231,7 +231,7 @@ fn test_orthographic_projection_unproject_vector() {
     let near = 1.0;
     let far = 100.0;
     let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
-    let projection = OrthographicProjection3::new(spec);
+    let projection = Orthographic3::new(spec);
     let expected = Vector3::new(1.0, 1.0, 50.0);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
@@ -271,7 +271,7 @@ fn test_orthographic_fov_projecton_transformation() {
         0.0,        0.0,       -2.0 / 99.0,   0.0,
         0.0,        0.0,       -101.0 / 99.0, 1.0
     );
-    let result = OrthographicFovProjection3::new(spec);
+    let result = OrthographicFov3::new(spec);
 
     assert_eq!(result.to_matrix(), &expected);
 }
@@ -284,7 +284,7 @@ fn test_orthographic_fov_projection_unproject_point() {
     let near = 1.0;
     let far = 100.0;
     let spec = OrthographicFovSpec::new(fovy, aspect, near, far);
-    let projection = OrthographicFovProjection3::new(spec);
+    let projection = OrthographicFov3::new(spec);
     let expected = Point3::new(1.0, 1.0, 50.0);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -300,7 +300,7 @@ fn test_orthographic_fov_projection_unproject_vector() {
     let near = 1.0;
     let far = 100.0;
     let spec = OrthographicFovSpec::new(fovy, aspect, near, far);
-    let projection = OrthographicFovProjection3::new(spec);
+    let projection = OrthographicFov3::new(spec);
     let expected = Vector3::new(1.0, 1.0, 50.0);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
