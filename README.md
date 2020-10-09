@@ -54,11 +54,9 @@ Specific features of the library include:
   transformations on points and vectors. This library distinguishes points from 
   vectors and locations in space vs. displacements in space. This matters when 
   working with working with affine transformations in homogeneous coordinates.
-* Affine transformations including translation, reflection, shear, scale, 
+* Transformations including translation, reflection, shear, scale, 
   and rotation operations.
 * Orthographic projections and perspective projections for camera models.
-* The ability to treat vectors and matrices as arrays so they can be sent 
-  to across API boundaries.
 * Typed angles and typed angle trigonometry that statically guarantee that 
   trigonometry is done in the right units.
 * The library makes heavy use of property testing via the `proptest` crate
