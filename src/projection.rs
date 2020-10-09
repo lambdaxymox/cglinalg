@@ -651,13 +651,21 @@ impl<S> Orthographic3<S> where S: ScalarFloat {
     /// Apply the transformation to a point.
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+        Point3::new(
+            self.matrix.c0r0 * point.x + self.matrix.c3r0,
+            self.matrix.c1r1 * point.y + self.matrix.c3r1,
+            self.matrix.c2r2 * point.z + self.matrix.c3r2
+        )
     }
 
     /// Apply the transformation to a vector.
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        Vector3::new(
+            self.matrix.c0r0 * vector.x,
+            self.matrix.c1r1 * vector.y,
+            self.matrix.c2r2 * vector.z
+        )
     }
 
     /// Unproject a point from normalized devices coordinates back to camera
@@ -830,13 +838,21 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// Apply the transformation to a point.
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+        Point3::new(
+            self.matrix.c0r0 * point.x + self.matrix.c3r0,
+            self.matrix.c1r1 * point.y + self.matrix.c3r1,
+            self.matrix.c2r2 * point.z + self.matrix.c3r2
+        )
     }
 
     /// Apply the transformation to a vector.
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        Vector3::new(
+            self.matrix.c0r0 * vector.x,
+            self.matrix.c1r1 * vector.y,
+            self.matrix.c2r2 * vector.z
+        )
     }
 
     /// Unproject a point from normalized devices coordinates back to camera
