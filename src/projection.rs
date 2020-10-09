@@ -1074,10 +1074,34 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
         }
     }
 
+    /// Get the vertical field of view angle.
+    #[inline]
+    pub fn vfov(&self) -> Radians<S> {
+        self.fovy
+    }
+
     /// Get the underlying matrix implementing the orthographic transformation.
     #[inline]
     pub fn to_matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
+    }
+
+    /// Get the near plane along the **negative z-axis**.
+    #[inline]
+    pub fn znear(&self) -> S {
+        self.near
+    }
+
+    /// Get the far plane along the **negative z-axis**.
+    #[inline]
+    pub fn zfar(&self) -> S {
+        self.far
+    }
+
+    /// Get the aspect ratio.
+    #[inline]
+    pub fn aspect(&self) -> S {
+        self.aspect
     }
 
     /// Apply the transformation to a point.
