@@ -109,6 +109,13 @@ impl<S> Transform2<S> where S: Scalar {
             matrix: transform.into(),
         }
     }
+
+    /// Get a reference to the underlying matrix that represents the 
+    /// transformation.
+    #[inline]
+    pub fn matrix(&self) -> &Matrix3x3<S> {
+        &self.matrix
+    }
 }
 
 impl<S> AsRef<Matrix3x3<S>> for Transform2<S> {
@@ -237,6 +244,13 @@ impl<S> Transform3<S> where S: Scalar {
         Transform3 {
             matrix: transform.into(),
         }
+    }
+
+    /// Get a reference to the underlying matrix that represents the 
+    /// transformation.
+    #[inline]
+    pub fn matrix(&self) -> &Matrix4x4<S> {
+        &self.matrix
     }
 }
 

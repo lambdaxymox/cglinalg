@@ -54,6 +54,13 @@ pub struct Rotation2<S> {
 }
 
 impl<S> Rotation2<S> where S: ScalarFloat {
+    /// Get a reference to the underlying matrix that represents the 
+    /// rotation.
+    #[inline]
+    pub fn matrix(&self) -> &Matrix2x2<S> {
+        &self.matrix
+    }
+
     /// Get the rotation angle of the rotation transformation.
     #[inline]
     pub fn angle(&self) -> Radians<S> {
@@ -217,6 +224,13 @@ pub struct Rotation3<S> {
 }
 
 impl<S> Rotation3<S> where S: ScalarFloat {
+    /// Get a reference to the underlying matrix that represents the 
+    /// rotation.
+    #[inline]
+    pub fn matrix(&self) -> &Matrix3x3<S> {
+        &self.matrix
+    }
+
     /// Compute the angle of the rotation.
     #[inline]
     pub fn angle(&self) -> Radians<S> {
