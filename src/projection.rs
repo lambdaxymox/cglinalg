@@ -278,62 +278,6 @@ impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Display {
         )
     }
 }
-/*
-/// An orthographic projection based on the `near` plane, the `far` plane and 
-/// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
-/// ratio `aspect`.
-///
-/// We assume the following constraints to make a useful orthographic projection 
-/// transformation.
-/// ```text
-/// 0 radians < fovy < pi radians
-/// aspect > 0
-/// near < far (along the negative z-axis)
-/// ```
-/// This orthographic projection model imposes some constraints on the more 
-/// general orthographic specification based on the arbitrary planes. The `fovy` 
-/// parameter combined with the aspect ratio `aspect` ensures that the top and 
-/// bottom planes are the same distance from the eye position along the vertical 
-/// axis on opposite side. They ensure that the `left` and `right` planes are 
-/// equidistant from the eye on opposite sides along the horizontal axis. 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct OrthographicFovSpec<S> {
-    /// The vertical field of view angle of the orthographic transformation
-    /// viewport.
-    fovy: Radians<S>,
-    /// The ratio of the horizontal width to the vertical height.
-    aspect: S,
-    /// The position of the near plane along the **negative z-axis**.
-    near: S,
-    /// The position of the far plane along the **negative z-axis**.
-    far: S,
-}
-
-impl<S> OrthographicFovSpec<S> {
-    /// Construct a new orthographic projection operation specification
-    /// based on the vertical field of view angle `fovy`, the `near` plane, the 
-    /// `far` plane, and aspect ratio `aspect`.
-    #[inline]
-    pub fn new<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> OrthographicFovSpec<S> {
-        OrthographicFovSpec {
-            fovy: fovy.into(),
-            aspect: aspect,
-            near: near,
-            far: far,
-        }
-    }
-}
-
-impl<S> fmt::Display for OrthographicFovSpec<S> where S: fmt::Display {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter,
-            "OrthographicFovSpec [fovy={}, aspect={}, near={}, far={}]",
-            self.fovy, self.aspect, self.near, self.far
-        )
-    }
-}
-*/
 
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates.
@@ -1080,12 +1024,6 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
         self.fovy
     }
 
-    /// Get the underlying matrix implementing the orthographic transformation.
-    #[inline]
-    pub fn to_matrix(&self) -> &Matrix4x4<S> {
-        &self.matrix
-    }
-
     /// Get the near plane along the **negative z-axis**.
     #[inline]
     pub fn znear(&self) -> S {
@@ -1102,6 +1040,12 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     pub fn aspect(&self) -> S {
         self.aspect
+    }
+
+    /// Get the underlying matrix implementing the orthographic transformation.
+    #[inline]
+    pub fn to_matrix(&self) -> &Matrix4x4<S> {
+        &self.matrix
     }
 
     /// Apply the transformation to a point.
