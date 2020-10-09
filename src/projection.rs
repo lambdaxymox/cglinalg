@@ -118,7 +118,7 @@ impl<S> Perspective3<S>
 
     /// Get the matrix that implements the perspective projection transformation.
     #[inline]
-    pub fn to_matrix(&self) -> &Matrix4x4<S> {
+    pub fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
@@ -359,7 +359,7 @@ impl<S> PerspectiveFov3<S>
 
     /// Get the matrix that implements the perspective projection transformation.
     #[inline]
-    pub fn to_matrix(&self) -> &Matrix4x4<S> {
+    pub fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
@@ -644,7 +644,7 @@ impl<S> Orthographic3<S> where S: ScalarFloat {
 
     /// Get the underlying matrix implementing the orthographic transformation.
     #[inline]
-    pub fn to_matrix(&self) -> &Matrix4x4<S> {
+    pub fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
@@ -823,7 +823,7 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
 
     /// Get the underlying matrix implementing the orthographic transformation.
     #[inline]
-    pub fn to_matrix(&self) -> &Matrix4x4<S> {
+    pub fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 

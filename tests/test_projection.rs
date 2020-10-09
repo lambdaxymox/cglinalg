@@ -53,7 +53,7 @@ fn test_perspective_projection_transformation() {
     );
     let result = Perspective3::new(left, right, bottom, top, near, far);
 
-    assert_eq!(result.to_matrix(), &expected);
+    assert_eq!(result.matrix(), &expected);
 }
 
 #[test]
@@ -87,7 +87,7 @@ fn test_perspective_projection_fov_transformation() {
     );
     let result = PerspectiveFov3::new(fovy, aspect, near, far);
 
-    assert_eq!(result.to_matrix(), &expected);
+    assert_eq!(result.matrix(), &expected);
 }
 
 #[test]
@@ -188,7 +188,7 @@ fn test_orthographic_projection_transformation() {
     );
     let result = Orthographic3::new(left, right, bottom, top, near, far);
 
-    assert_eq!(result.to_matrix(), &expected);
+    assert_eq!(result.matrix(), &expected);
 }
 
 #[test]
@@ -256,7 +256,7 @@ fn test_orthographic_fov_projecton_transformation() {
     );
     let result = OrthographicFov3::new(fovy, aspect, near, far);
 
-    assert_eq!(result.to_matrix(), &expected);
+    assert_eq!(result.matrix(), &expected);
 }
 
 #[test]
