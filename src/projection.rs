@@ -260,6 +260,12 @@ impl<S> approx::AbsDiffEq for Perspective3<S>
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+            && S::abs_diff_eq(&self.left, &other.left, epsilon)
+            && S::abs_diff_eq(&self.right, &other.right, epsilon)
+            && S::abs_diff_eq(&self.bottom, &other.bottom, epsilon)
+            && S::abs_diff_eq(&self.top, &other.top, epsilon)
+            && S::abs_diff_eq(&self.near, &other.near, epsilon)
+            && S::abs_diff_eq(&self.far, &other.far, epsilon)
     }
 }
 
@@ -274,6 +280,12 @@ impl<S> approx::RelativeEq for Perspective3<S>
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
         Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+            && S::relative_eq(&self.left, &other.left, epsilon, max_relative)
+            && S::relative_eq(&self.right, &other.right, epsilon, max_relative)
+            && S::relative_eq(&self.bottom, &other.bottom, epsilon, max_relative)
+            && S::relative_eq(&self.top, &other.top, epsilon, max_relative)
+            && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
+            && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
     }
 }
 
@@ -288,6 +300,12 @@ impl<S> approx::UlpsEq for Perspective3<S>
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+            && S::ulps_eq(&self.left, &other.left, epsilon, max_ulps)
+            && S::ulps_eq(&self.right, &other.right, epsilon, max_ulps)
+            && S::ulps_eq(&self.bottom, &other.bottom, epsilon, max_ulps)
+            && S::ulps_eq(&self.top, &other.top, epsilon, max_ulps)
+            && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
+            && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
     }
 }
 
@@ -516,6 +534,10 @@ impl<S> approx::AbsDiffEq for PerspectiveFov3<S>
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+            && Radians::abs_diff_eq(&self.fovy, &other.fovy, epsilon)
+            && S::abs_diff_eq(&self.aspect, &other.aspect, epsilon)
+            && S::abs_diff_eq(&self.near, &other.near, epsilon)
+            && S::abs_diff_eq(&self.far, &other.far, epsilon)
     }
 }
 
@@ -530,6 +552,10 @@ impl<S> approx::RelativeEq for PerspectiveFov3<S> where
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
         Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+            && Radians::relative_eq(&self.fovy, &other.fovy, epsilon, max_relative)
+            && S::relative_eq(&self.aspect, &other.aspect, epsilon, max_relative)
+            && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
+            && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
     }
 }
 
@@ -544,6 +570,10 @@ impl<S> approx::UlpsEq for PerspectiveFov3<S> where
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+            && Radians::ulps_eq(&self.fovy, &other.fovy, epsilon, max_ulps)
+            && S::ulps_eq(&self.aspect, &other.aspect, epsilon, max_ulps)
+            && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
+            && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
     }
 }
 
@@ -732,6 +762,12 @@ impl<S> approx::AbsDiffEq for Orthographic3<S> where S: ScalarFloat {
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+            && S::abs_diff_eq(&self.left, &other.left, epsilon)
+            && S::abs_diff_eq(&self.right, &other.right, epsilon)
+            && S::abs_diff_eq(&self.bottom, &other.bottom, epsilon)
+            && S::abs_diff_eq(&self.top, &other.top, epsilon)
+            && S::abs_diff_eq(&self.near, &other.near, epsilon)
+            && S::abs_diff_eq(&self.far, &other.far, epsilon)
     }
 }
 
@@ -744,6 +780,12 @@ impl<S> approx::RelativeEq for Orthographic3<S> where S: ScalarFloat {
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
         Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+            && S::relative_eq(&self.left, &other.left, epsilon, max_relative)
+            && S::relative_eq(&self.right, &other.right, epsilon, max_relative)
+            && S::relative_eq(&self.bottom, &other.bottom, epsilon, max_relative)
+            && S::relative_eq(&self.top, &other.top, epsilon, max_relative)
+            && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
+            && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
     }
 }
 
@@ -756,6 +798,12 @@ impl<S> approx::UlpsEq for Orthographic3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+            && S::ulps_eq(&self.left, &other.left, epsilon, max_ulps)
+            && S::ulps_eq(&self.right, &other.right, epsilon, max_ulps)
+            && S::ulps_eq(&self.bottom, &other.bottom, epsilon, max_ulps)
+            && S::ulps_eq(&self.top, &other.top, epsilon, max_ulps)
+            && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
+            && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
     }
 }
 
@@ -935,6 +983,10 @@ impl<S> approx::AbsDiffEq for OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
+            && Radians::abs_diff_eq(&self.fovy, &other.fovy, epsilon)
+            && S::abs_diff_eq(&self.aspect, &other.aspect, epsilon)
+            && S::abs_diff_eq(&self.near, &other.near, epsilon)
+            && S::abs_diff_eq(&self.far, &other.far, epsilon)
     }
 }
 
@@ -947,6 +999,10 @@ impl<S> approx::RelativeEq for OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
         Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
+            && Radians::relative_eq(&self.fovy, &other.fovy, epsilon, max_relative)
+            && S::relative_eq(&self.aspect, &other.aspect, epsilon, max_relative)
+            && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
+            && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
     }
 }
 
@@ -959,6 +1015,10 @@ impl<S> approx::UlpsEq for OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+            && Radians::ulps_eq(&self.fovy, &other.fovy, epsilon, max_ulps)
+            && S::ulps_eq(&self.aspect, &other.aspect, epsilon, max_ulps)
+            && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
+            && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
     }
 }
 
