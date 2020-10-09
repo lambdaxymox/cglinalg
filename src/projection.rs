@@ -278,7 +278,7 @@ impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Display {
         )
     }
 }
-
+/*
 /// An orthographic projection based on the `near` plane, the `far` plane and 
 /// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
 /// ratio `aspect`.
@@ -333,7 +333,7 @@ impl<S> fmt::Display for OrthographicFovSpec<S> where S: fmt::Display {
         )
     }
 }
-
+*/
 
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates.
@@ -1029,40 +1029,49 @@ impl<S> approx::UlpsEq for Orthographic3<S> where S: ScalarFloat {
 }
 
 
-/// An orthographic projection transformation for converting from camera space to
-/// normalized device coordinates.
+/// An orthographic projection based on the `near` plane, the `far` plane and 
+/// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
+/// ratio `aspect`.
 ///
-/// Orthographic projections differ from perspective projections in that 
-/// orthographic projections keeps parallel lines parallel, whereas perspective 
-/// projections preserve the perception of distance. Perspective 
-/// projections preserve the spatial ordering in the distance that points are 
-/// located from the viewing plane.
+/// We assume the following constraints to make a useful orthographic projection 
+/// transformation.
+/// ```text
+/// 0 radians < fovy < pi radians
+/// aspect > 0
+/// near < far (along the negative z-axis)
+/// ```
+/// This orthographic projection model imposes some constraints on the more 
+/// general orthographic specification based on the arbitrary planes. The `fovy` 
+/// parameter combined with the aspect ratio `aspect` ensures that the top and 
+/// bottom planes are the same distance from the eye position along the vertical 
+/// axis on opposite side. They ensure that the `left` and `right` planes are 
+/// equidistant from the eye on opposite sides along the horizontal axis.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct OrthographicFov3<S> {
-    /// The parameters for the orthographic projection.
-    spec: OrthographicFovSpec<S>,
+    /// The vertical field of view angle of the orthographic transformation
+    /// viewport.
+    fovy: Radians<S>, 
+    /// The ratio of the horizontal width to the vertical height.
+    aspect: S, 
+    /// The position of the near plane along the **negative z-axis**.
+    near: S, 
+    /// The position of the far plane along the **negative z-axis**.
+    far: S,
     /// The underlying matrix that implements the orthographic projection.
     matrix: Matrix4x4<S>,
 }
 
 impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// Construct a new orthographic projection.
-    pub fn new(spec: OrthographicFovSpec<S>) -> OrthographicFov3<S> {
+    pub fn new<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> OrthographicFov3<S> {
+        let fovy_rad = fovy.into();
         OrthographicFov3 {
-            spec: spec,
-            matrix: Matrix4x4::from_orthographic_fov(
-                spec.fovy, 
-                spec.aspect, 
-                spec.near, 
-                spec.far
-            ),
+            fovy: fovy_rad,
+            aspect: aspect,
+            near: near,
+            far: far,
+            matrix: Matrix4x4::from_orthographic_fov(fovy_rad, aspect, near, far),
         }
-    }
-
-    /// Get the parameters defining the orthographic specification.
-    #[inline]
-    pub fn to_spec(&self) -> OrthographicFovSpec<S> {
-        self.spec
     }
 
     /// Get the underlying matrix implementing the orthographic transformation.
@@ -1090,14 +1099,14 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
-        let width = self.spec.far * Angle::tan(self.spec.fovy * one_half);
-        let height = width / self.spec.aspect;
+        let width = self.far * Angle::tan(self.fovy * one_half);
+        let height = width / self.aspect;
         let left = -width * one_half;
         let right = width * one_half;
         let bottom = -height * one_half;
         let top = height * one_half;
-        let near = self.spec.near;
-        let far = self.spec.far;
+        let near = self.near;
+        let far = self.far;
         let c0r0 =  one_half * (right - left);
         let c1r1 =  one_half * (top - bottom);
         let c2r2 = -one_half * (far - near);
@@ -1119,14 +1128,14 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
-        let width = self.spec.far * Angle::tan(self.spec.fovy * one_half);
-        let height = width / self.spec.aspect;
+        let width = self.far * Angle::tan(self.fovy * one_half);
+        let height = width / self.aspect;
         let left = -width * one_half;
         let right = width * one_half;
         let bottom = -height * one_half;
         let top = height * one_half;
-        let near = self.spec.near;
-        let far = self.spec.far;
+        let near = self.near;
+        let far = self.far;
         let c0r0 =  one_half * (right - left);
         let c1r1 =  one_half * (top - bottom);
         let c2r2 = -one_half * (far - near);
