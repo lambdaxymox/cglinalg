@@ -943,6 +943,7 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
     /// This is the inverse operation of `project_point`.
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
+        /*
         let zero = S::zero();
         let one  = S::one();
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
@@ -975,6 +976,20 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
         );
 
         Point3::from_homogeneous(matrix_inverse * point.to_homogeneous()).unwrap()
+        */
+        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        let c0r0 =  one_half * (self.spec.right - self.spec.left);
+        let c1r1 =  one_half * (self.spec.top - self.spec.bottom);
+        let c2r2 = -one_half * (self.spec.far - self.spec.near);
+        let c3r0 =  one_half * (self.spec.left + self.spec.right);
+        let c3r1 =  one_half * (self.spec.bottom + self.spec.top);
+        let c3r2 = -one_half * (self.spec.far + self.spec.near);
+
+        Point3::new(
+            c0r0 * point.x + c3r0,
+            c1r1 * point.y + c3r1,
+            c2r2 * point.z + c3r2
+        )
     }
 
     /// Unproject a vector from normalized device coordinates back to
@@ -983,6 +998,7 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
     /// This is the inverse operation of `project_vector`.
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        /*
         let zero = S::zero();
         let one  = S::one();
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
@@ -1015,6 +1031,16 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
         );
 
         (matrix_inverse * vector.expand(S::zero())).contract()
+        */
+        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        let c0r0 =  one_half * (self.spec.right - self.spec.left);
+        let c1r1 =  one_half * (self.spec.top - self.spec.bottom);
+        let c2r2 = -one_half * (self.spec.far - self.spec.near);
+        let c3r0 =  one_half * (self.spec.left + self.spec.right);
+        let c3r1 =  one_half * (self.spec.bottom + self.spec.top);
+        let c3r2 = -one_half * (self.spec.far + self.spec.near);
+
+        Vector3::new(c0r0 * vector.x, c1r1 * vector.y, c2r2 * vector.z)
     }
 }
 
@@ -1134,6 +1160,7 @@ impl<S> OrthographicFovProjection3<S> where S: ScalarFloat {
     /// This is the inverse operation of `project_point`.
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
+        /*
         let zero = S::zero();
         let one  = S::one();
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
@@ -1174,6 +1201,28 @@ impl<S> OrthographicFovProjection3<S> where S: ScalarFloat {
         );
 
         Point3::from_homogeneous(matrix_inverse * point.to_homogeneous()).unwrap()
+        */
+        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        let width = self.spec.far * Angle::tan(self.spec.fovy * one_half);
+        let height = width / self.spec.aspect;
+        let left = -width * one_half;
+        let right = width * one_half;
+        let bottom = -height * one_half;
+        let top = height * one_half;
+        let near = self.spec.near;
+        let far = self.spec.far;
+        let c0r0 =  one_half * (right - left);
+        let c1r1 =  one_half * (top - bottom);
+        let c2r2 = -one_half * (far - near);
+        let c3r0 =  one_half * (left + right);
+        let c3r1 =  one_half * (bottom + top);
+        let c3r2 = -one_half * (far + near);
+
+        Point3::new(
+            c0r0 * point.x + c3r0,
+            c1r1 * point.y + c3r1,
+            c2r2 * point.z + c3r2
+        )
     }
 
     /// Unproject a vector from normalized device coordinates back to
@@ -1182,6 +1231,7 @@ impl<S> OrthographicFovProjection3<S> where S: ScalarFloat {
     /// This is the inverse operation of `project_vector`.
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        /*
         let zero = S::zero();
         let one  = S::one();
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
@@ -1222,6 +1272,21 @@ impl<S> OrthographicFovProjection3<S> where S: ScalarFloat {
         );
 
         (matrix_inverse * vector.expand(S::zero())).contract()
+        */
+        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        let width = self.spec.far * Angle::tan(self.spec.fovy * one_half);
+        let height = width / self.spec.aspect;
+        let left = -width * one_half;
+        let right = width * one_half;
+        let bottom = -height * one_half;
+        let top = height * one_half;
+        let near = self.spec.near;
+        let far = self.spec.far;
+        let c0r0 =  one_half * (right - left);
+        let c1r1 =  one_half * (top - bottom);
+        let c2r2 = -one_half * (far - near);
+
+        Vector3::new(c0r0 * vector.x, c1r1 * vector.y, c2r2 * vector.z)
     }
 }
 
