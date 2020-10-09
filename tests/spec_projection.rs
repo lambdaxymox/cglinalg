@@ -39,7 +39,7 @@ fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFovPr
     any::<(S, S, S, S)>()
         .prop_filter("", |(fovy, aspect, near, far)| {
             fovy.is_finite()   &&
-            aspect.is_finite()  &&
+            aspect.is_finite() &&
             near.is_finite()   &&
             far.is_finite()
         })

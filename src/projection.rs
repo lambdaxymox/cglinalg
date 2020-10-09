@@ -398,38 +398,23 @@ impl<S> PerspectiveProjection3<S>
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let spec = self.spec;
-        let zero = S::zero();
-        let one  = S::one();
+        let one = S::one();
         let two = one + one;
-        
-        let c0r0 =  (spec.right - spec.left) / (two * spec.near);
-        let c0r1 =  zero;
-        let c0r2 =  zero;
-        let c0r3 =  zero;
-
-        let c1r0 =  zero;
-        let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
-        let c1r2 =  zero;
-        let c1r3 =  zero;
-
-        let c2r0 =  zero;
-        let c2r1 =  zero;
-        let c2r2 =  zero;
+        let c0r0 = (spec.right - spec.left) / (two * spec.near);
+        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
         let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        
         let c3r0 =  (spec.left + spec.right) / (two * spec.near);
         let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
         let c3r2 = -one;
         let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
-        
-        let matrix_inverse = Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
-        );
+        let w = c2r3 * point.z + c3r3;
+        let inverse_w = one / w;
 
-        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous()).unwrap()
+        Point3::new(
+            (c0r0 * point.x + c3r0) * inverse_w,
+            (c1r1 * point.y + c3r1) * inverse_w,
+            c3r2 * inverse_w,
+        )
     }
 
     /// Unproject a vector from normalized device coordinates back to
@@ -438,42 +423,77 @@ impl<S> PerspectiveProjection3<S>
     /// This is the inverse operation of `project_vector`.
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        // The perspective projection matrix has the form
+        // ```text
+        // | c0r0 c1r0 c2r0 c3r0 |    | 2*n/(r - l)   0               (r + l)/(r - l)    0             |
+        // | c0r1 c1r1 c2r1 c3r1 | == | 0             2*n/(t - b)     (t + b)/(t - b)    0             |
+        // | c0r2 c1r2 c2r2 c3r2 |    | 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) |
+        // | c0r3 c1r3 c2r3 c3r3 |    | 0             0              -1                  0             |
+        // ```
+        //
+        // The inverse matrix of the perspective projection matrix has the form
+        // ```text
+        // | c0r0 c1r0 c2r0 c3r0 |    | (r - l)/(2*n)   0               0                   (r + l)/(2*n)   |
+        // | c0r1 c1r1 c2r1 c3r1 | == | 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   |
+        // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
+        // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
+        // ```
+        // 
+        // This leads to optimizated unprojection equivalent to the original
+        // calculation via matrix calclulation.
+        // We can save nine multiplications, nine additions, and one matrix 
+        // construction by only applying the nonzero elements
+        // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
+        //
+        // let spec = self.spec;
+        // let zero = S::zero();
+        // let one  = S::one();
+        // let two = one + one;
+        //
+        // let c0r0 =  (spec.right - spec.left) / (two * spec.near);
+        // let c0r1 =  zero;
+        // let c0r2 =  zero;
+        // let c0r3 =  zero;
+        //
+        // let c1r0 =  zero;
+        // let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
+        // let c1r2 =  zero;
+        // let c1r3 =  zero;
+        // 
+        // let c2r0 =  zero;
+        // let c2r1 =  zero;
+        // let c2r2 =  zero;
+        // let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
+        //
+        // let c3r0 =  (spec.left + spec.right) / (two * spec.near);
+        // let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        // let c3r2 = -one;
+        // let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        //
+        // let matrix_inverse = Matrix4x4::new(
+        //    c0r0, c0r1, c0r2, c0r3,
+        //    c1r0, c1r1, c1r2, c1r3,
+        //    c2r0, c2r1, c2r2, c2r3,
+        //    c3r0, c3r1, c3r2, c3r3
+        // );
         let spec = self.spec;
-        let zero = S::zero();
-        let one  = S::one();
+        let one = S::one();
         let two = one + one;
-        
-        let c0r0 =  (spec.right - spec.left) / (two * spec.near);
-        let c0r1 =  zero;
-        let c0r2 =  zero;
-        let c0r3 =  zero;
-
-        let c1r0 =  zero;
-        let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
-        let c1r2 =  zero;
-        let c1r3 =  zero;
-
-        let c2r0 =  zero;
-        let c2r1 =  zero;
-        let c2r2 =  zero;
+        let c0r0 = (spec.right - spec.left) / (two * spec.near);
+        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
         let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        
         let c3r0 =  (spec.left + spec.right) / (two * spec.near);
         let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
         let c3r2 = -one;
         let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
-        
-        let matrix_inverse = Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
-        );
-        
-        let projected_vector = vector.expand(S::one());
-        let unprojected_vector = matrix_inverse * projected_vector;
-        
-        unprojected_vector.contract() * (S::one() / unprojected_vector.w)
+        let w = c2r3 * vector.z + c3r3;
+        let inverse_w = one / w;
+
+        Vector3::new(
+            (c0r0 * vector.x + c3r0) * inverse_w,
+            (c1r1 * vector.y + c3r1) * inverse_w,
+            c3r2 * inverse_w,
+        )
     }
 }
 
@@ -601,38 +621,23 @@ impl<S> PerspectiveFovProjection3<S>
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let spec: PerspectiveSpec<S> = self.spec.into();
-        let zero = S::zero();
-        let one  = S::one();
+        let one = S::one();
         let two = one + one;
-        
-        let c0r0 =  (spec.right - spec.left) / (two * spec.near);
-        let c0r1 =  zero;
-        let c0r2 =  zero;
-        let c0r3 =  zero;
-
-        let c1r0 =  zero;
-        let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
-        let c1r2 =  zero;
-        let c1r3 =  zero;
-
-        let c2r0 =  zero;
-        let c2r1 =  zero;
-        let c2r2 =  zero;
+        let c0r0 = (spec.right - spec.left) / (two * spec.near);
+        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
         let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        
         let c3r0 =  (spec.left + spec.right) / (two * spec.near);
         let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
         let c3r2 = -one;
         let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
-        
-        let matrix_inverse = Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
-        );
+        let w = c2r3 * point.z + c3r3;
+        let inverse_w = one / w;
 
-        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous()).unwrap()
+        Point3::new(
+            (c0r0 * point.x + c3r0) * inverse_w,
+            (c1r1 * point.y + c3r1) * inverse_w,
+            c3r2 * inverse_w,
+        )
     }
 
     /// Unproject a vector from normalized device coordinates back to
@@ -641,42 +646,77 @@ impl<S> PerspectiveFovProjection3<S>
     /// This is the inverse operation of `project_vector`.
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        // The perspective projection matrix has the form
+        // ```text
+        // | c0r0 c1r0 c2r0 c3r0 |    | 2*n/(r - l)   0               (r + l)/(r - l)    0             |
+        // | c0r1 c1r1 c2r1 c3r1 | == | 0             2*n/(t - b)     (t + b)/(t - b)    0             |
+        // | c0r2 c1r2 c2r2 c3r2 |    | 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) |
+        // | c0r3 c1r3 c2r3 c3r3 |    | 0             0              -1                  0             |
+        // ```
+        //
+        // The inverse matrix of the perspective projection matrix has the form
+        // ```text
+        // | c0r0 c1r0 c2r0 c3r0 |    | (r - l)/(2*n)   0               0                   (r + l)/(2*n)   |
+        // | c0r1 c1r1 c2r1 c3r1 | == | 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   |
+        // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
+        // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
+        // ```
+        // 
+        // This leads to optimizated unprojection equivalent to the original
+        // calculation via matrix calclulation.
+        // We can save nine multiplications, nine additions, and one matrix 
+        // construction by only applying the nonzero elements
+        // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
+        //
+        // let spec = self.spec;
+        // let zero = S::zero();
+        // let one  = S::one();
+        // let two = one + one;
+        //
+        // let c0r0 =  (spec.right - spec.left) / (two * spec.near);
+        // let c0r1 =  zero;
+        // let c0r2 =  zero;
+        // let c0r3 =  zero;
+        //
+        // let c1r0 =  zero;
+        // let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
+        // let c1r2 =  zero;
+        // let c1r3 =  zero;
+        // 
+        // let c2r0 =  zero;
+        // let c2r1 =  zero;
+        // let c2r2 =  zero;
+        // let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
+        //
+        // let c3r0 =  (spec.left + spec.right) / (two * spec.near);
+        // let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        // let c3r2 = -one;
+        // let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        //
+        // let matrix_inverse = Matrix4x4::new(
+        //    c0r0, c0r1, c0r2, c0r3,
+        //    c1r0, c1r1, c1r2, c1r3,
+        //    c2r0, c2r1, c2r2, c2r3,
+        //    c3r0, c3r1, c3r2, c3r3
+        // );
         let spec: PerspectiveSpec<S> = self.spec.into();
-        let zero = S::zero();
-        let one  = S::one();
+        let one = S::one();
         let two = one + one;
-        
-        let c0r0 =  (spec.right - spec.left) / (two * spec.near);
-        let c0r1 =  zero;
-        let c0r2 =  zero;
-        let c0r3 =  zero;
-
-        let c1r0 =  zero;
-        let c1r1 =  (spec.top - spec.bottom) / (two * spec.near);
-        let c1r2 =  zero;
-        let c1r3 =  zero;
-
-        let c2r0 =  zero;
-        let c2r1 =  zero;
-        let c2r2 =  zero;
+        let c0r0 = (spec.right - spec.left) / (two * spec.near);
+        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
         let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        
         let c3r0 =  (spec.left + spec.right) / (two * spec.near);
         let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
         let c3r2 = -one;
         let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
-        
-        let matrix_inverse = Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
-        );
-        
-        let projected_vector = vector.expand(S::one());
-        let unprojected_vector = matrix_inverse * projected_vector;
-        
-        unprojected_vector.contract() * (S::one() / unprojected_vector.w)
+        let w = c2r3 * vector.z + c3r3;
+        let inverse_w = one / w;
+
+        Vector3::new(
+            (c0r0 * vector.x + c3r0) * inverse_w,
+            (c1r1 * vector.y + c3r1) * inverse_w,
+            c3r2 * inverse_w,
+        )
     }
 }
 
