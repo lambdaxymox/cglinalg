@@ -74,6 +74,7 @@ impl<S> Shear2<S> where S: ScalarSigned {
     }
 
     /// Compute the inverse shearing operation.
+    #[inline]
     pub fn inverse(&self) -> Shear2<S> {
         let shear_y_with_x = -self.matrix.c0r1;
         let shear_x_with_y = -self.matrix.c1r0;
@@ -85,16 +86,46 @@ impl<S> Shear2<S> where S: ScalarSigned {
     }
 
     /// Apply a shearing transformation to a vector.
+    #[inline]
     pub fn shear_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         self.matrix * vector
     }
 
     /// Apply a shearing transformation to a point.
+    #[inline]
     pub fn shear_point(&self, point: &Point2<S>) -> Point2<S> {
         let vector = Vector2::new(point.x, point.y);
         let result = self.matrix * vector;
 
         Point2::new(result.x, result.y)
+    }
+
+    #[inline]
+    pub fn inverse_shear_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+        let inverse = self.inverse();
+
+        inverse.matrix * vector
+    }
+
+    #[inline]
+    pub fn inverse_shear_point(&self, point: &Point2<S>) -> Point2<S> {
+        let inverse = self.inverse();
+        let vector = Vector2::new(point.x, point.y);
+        let result = inverse.matrix * vector;
+
+        Point2::new(result.x, result.y)
+    }
+
+    #[inline]
+    pub fn identity() -> Shear2<S> {
+        Shear2 { 
+            matrix: Matrix2x2::identity(),
+        }
+    }
+
+    #[inline]
+    pub fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::to_transform2d(self)
     }
 }
 
@@ -177,37 +208,6 @@ impl<S> approx::UlpsEq for Shear2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation2<S> for Shear2<S> 
-    where S: ScalarSigned 
-{
-    #[inline]
-    fn identity() -> Shear2<S> {
-        Shear2 { 
-            matrix: Matrix2x2::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Shear2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        self.shear_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        self.shear_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::to_transform2d(self)
-    }
-}
-
 
 /// A shearing transformation in three dimensions.
 #[repr(transparent)]
@@ -283,6 +283,7 @@ impl<S> Shear3<S> where S: ScalarSigned {
     }
 
     /// Apply a shearing transformation to a vector.
+    #[inline]
     pub fn inverse(&self) -> Shear3<S> {
         let shear_x_with_y = -self.matrix.c1r0;
         let shear_x_with_z = -self.matrix.c2r0;
@@ -302,16 +303,46 @@ impl<S> Shear3<S> where S: ScalarSigned {
     }
 
     /// Apply a shearing transformation to a vector.
+    #[inline]
     pub fn shear_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         self.matrix * vector
     }
 
     /// Apply a shearing transformation to a point.
+    #[inline]
     pub fn shear_point(&self, point: &Point3<S>) -> Point3<S> {
         let vector = Vector3::new(point.x, point.y, point.z);
         let result = self.matrix * vector;
 
         Point3::new(result.x, result.y, result.z)
+    }
+
+    #[inline]
+    pub fn inverse_shear_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        let inverse = self.inverse();
+
+        inverse.matrix * vector
+    }
+
+    #[inline]
+    pub fn inverse_shear_point(&self, point: &Point3<S>) -> Point3<S> {
+        let inverse = self.inverse();
+        let vector = Vector3::new(point.x, point.y, point.z);
+        let result = inverse.matrix * vector;
+
+        Point3::new(result.x, result.y, result.z)
+    }
+
+    #[inline]
+    pub fn identity() -> Shear3<S> {
+        Shear3 { 
+            matrix: Matrix3x3::identity(),
+        }
+    }
+
+    #[inline]
+    pub fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::to_transform3d(self.matrix)
     }
 }
 
@@ -387,38 +418,6 @@ impl<S> approx::UlpsEq for Shear3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-    }
-}
-
-
-impl<S> AffineTransformation3<S> for Shear3<S>
-    where S: ScalarSigned
-{
-    #[inline]
-    fn identity() -> Shear3<S> {
-        Shear3 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Shear3<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        self.shear_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        self.shear_point(point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::to_transform3d(self.matrix)
     }
 }
 
