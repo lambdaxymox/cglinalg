@@ -119,7 +119,36 @@ impl<S> Rotation2<S> where S: ScalarFloat {
         
         Point2::new(result.x, result.y)
     }
+
+    #[inline]
+    pub fn inverse_rotate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+        let inverse = self.inverse();
+
+        inverse.matrix * vector
+    }
+
+    #[inline]
+    pub fn inverse_rotate_point(&self, point: &Vector2<S>) -> Point2<S> {
+        let inverse = self.inverse();
+        let vector = Vector2::new(point.x, point.y);
+        let result = inverse.matrix * vector;
+
+        Point2::new(result.x, result.y)
+    }
+
+    #[inline]
+    pub fn identity() -> Rotation2<S> {
+        Rotation2 { 
+            matrix: Matrix2x2::identity(),
+        }
+    }
+
+    #[inline]
+    pub fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::to_transform2d(self.matrix)
+    }
 }
+
 
 impl<S> fmt::Display for Rotation2<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -176,37 +205,6 @@ impl<S> approx::UlpsEq for Rotation2<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix2x2::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-    }
-}
-
-impl<S> AffineTransformation2<S> for Rotation2<S> 
-    where S: ScalarFloat 
-{
-    #[inline]
-    fn identity() -> Rotation2<S> {
-        Rotation2 { 
-            matrix: Matrix2x2::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Rotation2<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        self.rotate_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        self.rotate_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::to_transform2d(self.matrix)
     }
 }
 
@@ -375,6 +373,34 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
         Point3::new(result.x, result.y, result.z)
     }
+
+    #[inline]
+    pub fn inverse_rotate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        let inverse = self.inverse();
+        
+        inverse.matrix * vector
+    }
+
+    #[inline]
+    pub fn inverse_rotate_point(&self, point: &Point3<S>) -> Point3<S> {
+        let inverse = self.inverse();
+        let vector = Vector3::new(point.x, point.y, point.z);
+        let result = inverse.matrix * vector;
+
+        Point3::new(result.x, result.y, result.z)
+    }
+
+    #[inline]
+    pub fn identity() -> Rotation3<S> {
+        Rotation3 { 
+            matrix: Matrix3x3::identity(),
+        }
+    }
+
+    #[inline]
+    pub fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::to_transform3d(self.matrix)
+    }
 }
 
 impl<S> fmt::Display for Rotation3<S> where S: fmt::Display {
@@ -451,37 +477,6 @@ impl<S> approx::UlpsEq for Rotation3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-    }
-}
-
-impl<S> AffineTransformation3<S> for Rotation3<S> 
-    where S: ScalarFloat 
-{
-    #[inline]
-    fn identity() -> Rotation3<S> {
-        Rotation3 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Rotation3<S>> {
-        Some(self.inverse())
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        self.rotate_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        self.rotate_point(point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::to_transform3d(self.matrix)
     }
 }
 
