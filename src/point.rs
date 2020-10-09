@@ -961,15 +961,23 @@ impl<S> Point2<S> where S: Scalar {
     /// # };
     /// #
     /// let vector = Vector3::new(3_f64, 6_f64, 3_f64);
-    /// let expected = Point2::new(1_f64, 2_f64);
+    /// let expected = Some(Point2::new(1_f64, 2_f64));
     /// let result = Point2::from_homogeneous(vector);
     ///
     /// assert_eq!(result, expected);
+    ///
+    /// let vector_z_zero = Vector3::new(3_f64, 6_f64, 0_f64);
+    /// let result = Point2::from_homogeneous(vector_z_zero);
+    ///
+    /// assert!(result.is_none());
     /// ```
     #[inline]
-    pub fn from_homogeneous(vector: Vector3<S>) -> Point2<S> {
-        let e = vector.contract() * (S::one() / vector.z);
-        Point2::new(e.x, e.y)
+    pub fn from_homogeneous(vector: Vector3<S>) -> Option<Point2<S>> {
+        if !vector.z.is_zero() {
+            Some(Point2::new(vector.x / vector.z, vector.y / vector.z))
+        } else {
+            None
+        }
     }
 
     /// Convert a point to a vector in homogeneous coordinates.
@@ -1800,15 +1808,28 @@ impl<S> Point3<S> where S: Scalar {
     /// # };
     /// #
     /// let vector = Vector4::new(5_f64, 10_f64, 15_f64, 5_f64);
-    /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Some(Point3::new(1_f64, 2_f64, 3_f64));
     /// let result = Point3::from_homogeneous(vector);
     ///
+    /// assert!(result.is_some());
     /// assert_eq!(result, expected);
+    ///
+    /// let vector_w_zero = Vector4::new(5_f64, 10_f64, 15_f64, 0_f64);
+    /// let result = Point3::from_homogeneous(vector_w_zero);
+    ///
+    /// assert!(result.is_none());
     /// ```
     #[inline]
-    pub fn from_homogeneous(vector: Vector4<S>) -> Point3<S> {
-        let e = vector.contract() * (S::one() / vector.w);
-        Point3::new(e.x, e.y, e.z)
+    pub fn from_homogeneous(vector: Vector4<S>) -> Option<Point3<S>> {
+        if !vector.w.is_zero() {
+            Some(Point3::new(
+                vector.x / vector.w, 
+                vector.y / vector.w, 
+                vector.z / vector.w
+            ))
+        } else {
+            None
+        }
     }
 
     /// Convert a point to a vector in homogeneous coordinates.

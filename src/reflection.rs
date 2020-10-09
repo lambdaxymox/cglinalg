@@ -103,7 +103,7 @@ impl<S> Reflection2<S> where S: ScalarFloat {
 
     /// Reflect a point across a line.
     pub fn reflect_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 }
 
@@ -297,7 +297,7 @@ impl<S> Reflection3<S> where S: ScalarFloat {
 
     /// Reflect a point across a plane.
     pub fn reflect_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 }
 

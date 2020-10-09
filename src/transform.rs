@@ -208,7 +208,7 @@ impl<S> AffineTransformation2<S> for Transform2<S>
 
     #[inline]
     fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous())
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 
     #[inline]
@@ -297,7 +297,7 @@ impl<S> AffineTransformation3<S> for Transform3<S>
 
     #[inline]
     fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 
     #[inline]

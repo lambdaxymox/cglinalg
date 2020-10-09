@@ -379,7 +379,7 @@ impl<S> PerspectiveProjection3<S>
     /// Apply the transformation to a point.
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 
     /// Apply the transformation to a vector.
@@ -429,7 +429,7 @@ impl<S> PerspectiveProjection3<S>
             c3r0, c3r1, c3r2, c3r3
         );
 
-        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous())
+        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous()).unwrap()
     }
 
     /// Unproject a vector from normalized device coordinates back to
@@ -582,7 +582,7 @@ impl<S> PerspectiveFovProjection3<S>
 
     /// Apply the transformation to a point.
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 
     /// Apply the transformation to a vector.
@@ -632,7 +632,7 @@ impl<S> PerspectiveFovProjection3<S>
             c3r0, c3r1, c3r2, c3r3
         );
 
-        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous())
+        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous()).unwrap()
     }
 
     /// Unproject a vector from normalized device coordinates back to
@@ -782,7 +782,7 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
     /// Apply the transformation to a point.
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 
     /// Apply the transformation to a vector.
@@ -828,7 +828,7 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
             c3r0, c3r1, c3r2, c3r3
         );
 
-        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous())
+        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous()).unwrap()
     }
 
     /// Unproject a vector from normalized device coordinates back to
@@ -973,7 +973,7 @@ impl<S> OrthographicFovProjection3<S> where S: ScalarFloat {
     /// Apply the transformation to a point.
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous())
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 
     /// Apply the transformation to a vector.
@@ -1027,7 +1027,7 @@ impl<S> OrthographicFovProjection3<S> where S: ScalarFloat {
             c3r0, c3r1, c3r2, c3r3
         );
 
-        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous())
+        Point3::from_homogeneous(matrix_inverse * point.to_homogeneous()).unwrap()
     }
 
     /// Unproject a vector from normalized device coordinates back to
