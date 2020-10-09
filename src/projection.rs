@@ -17,7 +17,7 @@ use crate::vector::{
 
 use core::fmt;
 
-
+/*
 /// A perspective projection based on arbitrary `left`, `right`, `bottom`,
 /// `top`, `near`, and `far` planes.
 ///
@@ -78,9 +78,19 @@ impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Display {
         )
     }
 }
-
-/// A perspective projection transformation for converting from camera space to
-/// normalized device coordinates.
+*/
+/// A perspective projection transformation based on arbitrary `left`, `right`, 
+/// `bottom`, `top`, `near`, and `far` planes.
+///
+/// We assume the following constraints to construct a useful perspective 
+/// projection
+/// ```text
+/// left   < right
+/// bottom < top
+/// near   < far   (along the negative z-axis)
+/// ```
+/// Each parameter in the specification is a description of the position along
+/// an axis of a plane that the axis is perpendicular to.
 ///
 /// Orthographic projections differ from perspective projections because
 /// orthographic projections keeps parallel lines parallel, whereas perspective 
@@ -91,8 +101,26 @@ impl<S> fmt::Display for PerspectiveSpec<S> where S: fmt::Display {
 /// occlusion detection.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Perspective3<S> {
-    /// The parameters of the perspective projection.
-    spec: PerspectiveSpec<S>,
+    /// The horizontal position of the left-hand plane in camera space.
+    /// The left-hand plane is a plane parallel to the **yz-plane** at
+    /// the origin.
+    left: S,
+    /// The horizontal position of the right-hand plane in camera space.
+    /// The right-hand plane is a plane parallel to the **yz-plane** at
+    /// the origin.
+    right: S,
+    /// The vertical position of the bottom plane in camera space.
+    /// The bottom plane is a plane parallel to the **xz-plane** at the origin.
+    bottom: S,
+    /// The vertical position of the top plane in camera space.
+    /// the top plane is a plane parallel to the **zx-plane** at the origin.
+    top: S,
+    /// The distance along the **negative z-axis** of the near plane from the eye.
+    /// The near plane is a plane parallel to the **xy-plane** at the origin.
+    near: S,
+    /// the distance along the **negative z-axis** of the far plane from the eye.
+    /// The far plane is a plane parallel to the **xy-plane** at the origin.
+    far: S,
     /// The underlying matrix implementing the perspective projection.
     matrix: Matrix4x4<S>,
 }
@@ -101,24 +129,52 @@ impl<S> Perspective3<S>
     where S: ScalarFloat
 {
     /// Construct a new perspective projection transformation.
-    pub fn new(spec: PerspectiveSpec<S>) -> Perspective3<S> {
+    pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Perspective3<S> {
         Perspective3 {
-            spec: spec,
-            matrix: Matrix4x4::from_perspective(
-                spec.left, 
-                spec.right, 
-                spec.bottom, 
-                spec.top, 
-                spec.near, 
-                spec.far
-            ),
+            left: left,
+            right: right,
+            bottom: bottom,
+            top: top,
+            near: near,
+            far: far,
+            matrix: Matrix4x4::from_perspective(left, right, bottom, top, near, far),
         }
     }
 
-    /// Get the specification describing the perspective projection.
+    /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn spec(&self) -> PerspectiveSpec<S> {
-        self.spec
+    pub fn znear(&self) -> S {
+        self.near
+    }
+
+    /// Get the far plane along the **negative z-axis**.
+    #[inline]
+    pub fn zfar(&self) -> S {
+        self.far
+    }
+
+    /// Get the left plane along the **negative x-axis**.
+    #[inline]
+    pub fn xleft(&self)-> S {
+        self.near
+    }
+
+    /// Get the right plane along the **positive x-axis**.
+    #[inline]
+    pub fn xright(&self) -> S {
+        self.far
+    }
+
+    /// Get the bottom plane along the **negative y-axis**.
+    #[inline]
+    pub fn ybottom(&self) -> S {
+        self.bottom
+    }
+
+    /// Get the top plane along the **positive y-axis**.
+    #[inline]
+    pub fn ytop(&self) -> S {
+        self.top
     }
 
     /// Get the matrix that implements the perspective projection transformation.
@@ -201,16 +257,15 @@ impl<S> Perspective3<S>
         //    c2r0, c2r1, c2r2, c2r3,
         //    c3r0, c3r1, c3r2, c3r3
         // );
-        let spec = self.spec;
         let one = S::one();
         let two = one + one;
-        let c0r0 = (spec.right - spec.left) / (two * spec.near);
-        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
-        let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        let c3r0 =  (spec.left + spec.right) / (two * spec.near);
-        let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        let c0r0 = (self.right - self.left) / (two * self.near);
+        let c1r1 = (self.top - self.bottom) / (two * self.near);
+        let c2r3 =  (self.near - self.far) / (two * self.far * self.near);
+        let c3r0 =  (self.left + self.right) / (two * self.near);
+        let c3r1 =  (self.bottom + self.top) / (two * self.near);
         let c3r2 = -one;
-        let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        let c3r3 =  (self.far + self.near) / (two * self.far * self.near);
         let w = c2r3 * point.z + c3r3;
         let inverse_w = one / w;
 
@@ -280,16 +335,15 @@ impl<S> Perspective3<S>
         //    c2r0, c2r1, c2r2, c2r3,
         //    c3r0, c3r1, c3r2, c3r3
         // );
-        let spec = self.spec;
         let one = S::one();
         let two = one + one;
-        let c0r0 = (spec.right - spec.left) / (two * spec.near);
-        let c1r1 = (spec.top - spec.bottom) / (two * spec.near);
-        let c2r3 =  (spec.near - spec.far) / (two * spec.far * spec.near);
-        let c3r0 =  (spec.left + spec.right) / (two * spec.near);
-        let c3r1 =  (spec.bottom + spec.top) / (two * spec.near);
+        let c0r0 = (self.right - self.left) / (two * self.near);
+        let c1r1 = (self.top - self.bottom) / (two * self.near);
+        let c2r3 =  (self.near - self.far) / (two * self.far * self.near);
+        let c3r0 =  (self.left + self.right) / (two * self.near);
+        let c3r1 =  (self.bottom + self.top) / (two * self.near);
         let c3r2 = -one;
-        let c3r3 =  (spec.far + spec.near) / (two * spec.far * spec.near);
+        let c3r3 =  (self.far + self.near) / (two * self.far * self.near);
         let w = c2r3 * vector.z + c3r3;
         let inverse_w = one / w;
 

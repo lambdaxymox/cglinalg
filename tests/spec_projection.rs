@@ -7,7 +7,6 @@ use cglinalg::{
     Degrees,
     Vector3,
     Point3,
-    PerspectiveSpec,
     Perspective3,
     PerspectiveFov3,
     Orthographic3,
@@ -99,11 +98,15 @@ fn any_perspective_projection<S>() -> impl Strategy<Value = Perspective3<S>>
             } else {
                 (near, far)
             };
-            let spec = PerspectiveSpec::new(
-                spec_left, spec_right, spec_bottom, spec_top, spec_near, spec_far
-            );
 
-            Perspective3::new(spec)
+            Perspective3::new(
+                spec_left, 
+                spec_right, 
+                spec_bottom, 
+                spec_top, 
+                spec_near, 
+                spec_far
+            )
         })
         .no_shrink()
 }

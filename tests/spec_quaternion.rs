@@ -42,6 +42,7 @@ fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>>
 
         quaternion % modulus
     })
+    .no_shrink()
 }
 
 fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
@@ -52,6 +53,7 @@ fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>>
         .prop_map(|(x, y, z, w)| Quaternion::new(x, y, z, w))
         .prop_filter("Zero length quaternions are not invertible.", |q| !q.magnitude().is_zero())
         .prop_map(|q| q.normalize())
+        .no_shrink()
 }
 
 
