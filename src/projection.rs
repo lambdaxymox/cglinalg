@@ -1036,9 +1036,6 @@ impl<S> OrthographicProjection3<S> where S: ScalarFloat {
         let c0r0 =  one_half * (self.spec.right - self.spec.left);
         let c1r1 =  one_half * (self.spec.top - self.spec.bottom);
         let c2r2 = -one_half * (self.spec.far - self.spec.near);
-        let c3r0 =  one_half * (self.spec.left + self.spec.right);
-        let c3r1 =  one_half * (self.spec.bottom + self.spec.top);
-        let c3r2 = -one_half * (self.spec.far + self.spec.near);
 
         Vector3::new(c0r0 * vector.x, c1r1 * vector.y, c2r2 * vector.z)
     }

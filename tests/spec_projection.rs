@@ -51,12 +51,12 @@ fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFovPr
     any::<(S, S, S, S)>()
         .prop_map(|(_fovy, _aspect, _near, _far)| {
             let modulus: S = num_traits::cast(1_000_000).unwrap();
-            let fovy = _fovy % modulus;
-            let aspect = _aspect % modulus; 
-            let near = _near % modulus;
-            let far = _far % modulus;
-            
-            (S::abs(fovy), S::abs(aspect), S::abs(near), S::abs(far))
+            let fovy = S::abs(_fovy % modulus);
+            let aspect = S::abs(_aspect % modulus); 
+            let near = S::abs(_near % modulus);
+            let far = S::abs(_far % modulus);
+
+            (fovy, aspect, near, far)
         })    
         .prop_map(|(fovy, aspect, near, far)| {
             let (spec_near, spec_far) = if near > far {
@@ -77,22 +77,16 @@ fn any_perspective_projection<S>() -> impl Strategy<Value = PerspectiveProjectio
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S, S, S)>()
-        .prop_filter("", |(left, right, bottom, top, near, far)| {
-            left.is_finite()   &&
-            right.is_finite()  &&
-            bottom.is_finite() &&
-            top.is_finite()    &&
-            near.is_finite()   &&
-            far.is_finite()
-        })
-        .prop_map(|(left, right, bottom, top, near, far)| {
-            (-S::abs(left) - S::one(),
-              S::abs(right) + S::one(),
-             -S::abs(bottom) - S::one(),
-              S::abs(top) + S::one(),
-              S::abs(near),
-              S::abs(far) + S::one(),
-            )
+        .prop_map(|(_left, _right, _bottom, _top, _near, _far)| {
+            let modulus: S = num_traits::cast(1_000_000).unwrap();
+            let left = -S::abs(_left % modulus) - S::one();
+            let right = S::abs(_right % modulus) + S::one();
+            let bottom = -S::abs(_bottom % modulus) - S::one();
+            let top = S::abs(_top % modulus) + S::one();
+            let near = S::abs(_near % modulus);
+            let far = S::abs(_far % modulus) + S::one();
+
+            (left, right, bottom, top, near, far)
         })    
         .prop_map(|(left, right, bottom, top, near, far)| {
             let (spec_left, spec_right) = if left > right {
@@ -123,22 +117,16 @@ fn any_orthographic_projection<S>() -> impl Strategy<Value = OrthographicProject
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S, S, S)>()
-        .prop_filter("", |(left, right, bottom, top, near, far)| {
-            left.is_finite()   &&
-            right.is_finite()  &&
-            bottom.is_finite() &&
-            top.is_finite()    &&
-            near.is_finite()   &&
-            far.is_finite()
-        })
-        .prop_map(|(left, right, bottom, top, near, far)| {
-            (-S::abs(left) - S::one(),
-              S::abs(right) + S::one(),
-             -S::abs(bottom) - S::one(),
-              S::abs(top) + S::one(),
-              S::abs(near),
-              S::abs(far) + S::one(),
-            )
+        .prop_map(|(_left, _right, _bottom, _top, _near, _far)| {
+            let modulus: S = num_traits::cast(1_000_000).unwrap();
+            let left = -S::abs(_left % modulus) - S::one();
+            let right = S::abs(_right % modulus) + S::one();
+            let bottom = -S::abs(_bottom % modulus) - S::one();
+            let top = S::abs(_top % modulus) + S::one();
+            let near = S::abs(_near % modulus);
+            let far = S::abs(_far % modulus) + S::one();
+
+            (left, right, bottom, top, near, far)
         })    
         .prop_map(|(left, right, bottom, top, near, far)| {
             let (spec_left, spec_right) = if left > right {
