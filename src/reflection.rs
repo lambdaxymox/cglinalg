@@ -42,6 +42,7 @@ pub struct Reflection2<S> {
 impl<S> Reflection2<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
+    #[inline]
     pub fn from_normal_bias(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Reflection2<S> {
         Reflection2 {
             bias: *bias,
@@ -54,17 +55,25 @@ impl<S> Reflection2<S> where S: ScalarFloat {
     ///
     /// The `bias` is the coordinates of a known point in the plane of 
     /// reflection.
+    #[inline]
     pub fn bias(&self) -> Vector2<S> {
         self.bias
     }
 
     /// Return the normal vector to the reflection plane.
+    #[inline]
     pub fn normal(&self) -> Vector2<S> {
         self.normal
     }
 
+    #[inline]
+    pub fn matrix(&self) -> &Matrix3x3<S> {
+        &self.matrix
+    }
+
     /// Calculate the inverse reflection transformation.
-    pub fn inverse(&self) -> Option<Reflection2<S>> {
+    #[inline]
+    pub fn inverse(&self) -> Reflection2<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -89,23 +98,40 @@ impl<S> Reflection2<S> where S: ScalarFloat {
             c2r0, c2r1, c2r2
         );
 
-        Some(Reflection2 {
+        Reflection2 {
             bias: self.bias,
             normal: normal, 
             matrix: matrix * inverse_det 
-        })
+        }
     }
 
     /// Reflect a vector across a line.
+    #[inline]
     pub fn reflect_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     /// Reflect a point across a line.
+    #[inline]
     pub fn reflect_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
+
+    #[inline]
+    pub fn identity() -> Reflection2<S> {
+        Reflection2 { 
+            bias: Vector2::zero(),
+            normal: Vector2::zero(), 
+            matrix: Matrix3x3::identity(),
+        }
+    }
+
+    #[inline]
+    pub fn to_transform2d(&self) -> Transform2<S> {
+        Transform2::to_transform2d(self)
+    }
 }
+
 
 impl<S> AsRef<Matrix3x3<S>> for Reflection2<S> {
     #[inline]
@@ -177,39 +203,6 @@ impl<S> approx::UlpsEq for Reflection2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation2<S> for Reflection2<S> 
-    where S: ScalarFloat 
-{
-    #[inline]
-    fn identity() -> Reflection2<S> {
-        Reflection2 { 
-            bias: Vector2::zero(),
-            normal: Vector2::zero(), 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Reflection2<S>> {
-        self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        self.reflect_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        self.reflect_point(point)
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::to_transform2d(self)
-    }
-}
-
 
 /// A reflection transformation about a plane in three dimensions.
 #[repr(C)]
@@ -226,6 +219,7 @@ pub struct Reflection3<S> {
 impl<S> Reflection3<S> where S: ScalarFloat {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
+    #[inline]
     pub fn from_normal_bias(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Reflection3<S> {
         Reflection3 {
             bias: *bias,
@@ -238,17 +232,20 @@ impl<S> Reflection3<S> where S: ScalarFloat {
     ///
     /// The `bias` is the coordinates of a known point in the plane of 
     /// reflection.
+    #[inline]
     pub fn bias(&self) -> Vector3<S> {
         self.bias
     }
 
     /// Return the normal vector to the reflection plane.
+    #[inline]
     pub fn normal(&self) -> Vector3<S> {
         self.normal
     }
 
     /// Calculate the inverse reflection transformation.
-    pub fn inverse(&self) -> Option<Reflection3<S>> {
+    #[inline]
+    pub fn inverse(&self) -> Reflection3<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -283,21 +280,37 @@ impl<S> Reflection3<S> where S: ScalarFloat {
             c3r0, c3r1, c3r2, c3r3
         );
 
-        Some(Reflection3 { 
+        Reflection3 { 
             bias: self.bias,
             normal: normal, 
             matrix: matrix * inverse_det,
-        })
+        }
     }
 
     /// Reflect a vector across a line.
+    #[inline]
     pub fn reflect_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
     /// Reflect a point across a plane.
+    #[inline]
     pub fn reflect_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+    }
+
+    #[inline]
+    pub fn identity() -> Reflection3<S> {
+        Reflection3 { 
+            bias: Vector3::zero(),
+            normal: Vector3::zero(), 
+            matrix: Matrix4x4::identity(),
+        }
+    }
+
+    #[inline]
+    pub fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::to_transform3d(self.matrix)
     }
 }
 
@@ -327,38 +340,6 @@ impl<S> From<Reflection3<S>> for Matrix4x4<S> where S: Copy {
 impl<S> From<&Reflection3<S>> for Matrix4x4<S> where S: Copy {
     fn from(transformation: &Reflection3<S>) -> Matrix4x4<S> {
         transformation.matrix
-    }
-}
-
-
-impl<S> AffineTransformation3<S> for Reflection3<S> where S: ScalarFloat {
-    #[inline]
-    fn identity() -> Reflection3<S> {
-        Reflection3 { 
-            bias: Vector3::zero(),
-            normal: Vector3::zero(), 
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Reflection3<S>> {
-       self.inverse()
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        self.reflect_vector(vector)
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        self.reflect_point(point)
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::to_transform3d(self.matrix)
     }
 }
 
