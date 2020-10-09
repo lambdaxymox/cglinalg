@@ -2,7 +2,6 @@ extern crate cglinalg;
 
 
 use cglinalg::{
-    OrthographicSpec,
     Orthographic3,
     OrthographicFov3,
     PerspectiveFovSpec,
@@ -171,16 +170,15 @@ fn test_orthographic_projection_matrix() {
     let top = 2.0;
     let near = 1.0;
     let far = 100.0;
-    let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
     let expected = Matrix4x4::new(
         1.0 / 4.0,  0.0,        0.0,          0.0,
         0.0,        1.0 / 2.0,  0.0,          0.0,
         0.0,        0.0,       -2.0 / 99.0,   0.0,
         0.0,        0.0,       -101.0 / 99.0, 1.0
     );
-    let result = Matrix4x4::from(spec);
+    let result = Orthographic3::new(left, right, bottom, top, near, far);
 
-    assert_eq!(result, expected);
+    assert_eq!(result.to_matrix(), &expected);
 }
 
 
@@ -192,14 +190,13 @@ fn test_orthographic_projection_transformation() {
     let top = 2.0;
     let near = 1.0;
     let far = 100.0;
-    let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
     let expected = Matrix4x4::new(
         1.0 / 4.0,  0.0,        0.0,          0.0,
         0.0,        1.0 / 2.0,  0.0,          0.0,
         0.0,        0.0,       -2.0 / 99.0,   0.0,
         0.0,        0.0,       -101.0 / 99.0, 1.0
     );
-    let result = Orthographic3::new(spec);
+    let result = Orthographic3::new(left, right, bottom, top, near, far);
 
     assert_eq!(result.to_matrix(), &expected);
 }
@@ -212,8 +209,7 @@ fn test_orthographic_projection_unproject_point() {
     let top = 2.0;
     let near = 1.0;
     let far = 100.0;
-    let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
-    let projection = Orthographic3::new(spec);
+    let projection = Orthographic3::new(left, right, bottom, top, near, far);
     let expected = Point3::new(1.0, 1.0, 50.0);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -229,8 +225,7 @@ fn test_orthographic_projection_unproject_vector() {
     let top = 2.0;
     let near = 1.0;
     let far = 100.0;
-    let spec = OrthographicSpec::new(left, right, bottom, top, near, far);
-    let projection = Orthographic3::new(spec);
+    let projection = Orthographic3::new(left, right, bottom, top, near, far);
     let expected = Vector3::new(1.0, 1.0, 50.0);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);

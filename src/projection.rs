@@ -167,24 +167,6 @@ impl<S> From<&PerspectiveSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> From<OrthographicSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
-    #[inline]
-    fn from(spec: OrthographicSpec<S>) -> Matrix4x4<S> {
-        Matrix4x4::from_orthographic(
-            spec.left, spec.right, spec.bottom, spec.top, spec.near, spec.far
-        )
-    }
-}
-
-impl<S> From<&OrthographicSpec<S>> for Matrix4x4<S> where S: ScalarFloat {
-    #[inline]
-    fn from(spec: &OrthographicSpec<S>) -> Matrix4x4<S> {
-        Matrix4x4::from_orthographic(
-            spec.left, spec.right, spec.bottom, spec.top, spec.near, spec.far
-        )
-    }
-}
-
 impl<S> From<PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat {
     #[inline]
     fn from(spec: PerspectiveFovSpec<S>) -> PerspectiveSpec<S> {
@@ -217,7 +199,7 @@ impl<S> From<&PerspectiveFovSpec<S>> for PerspectiveSpec<S> where S: ScalarFloat
     }
 }
 
-
+/*
 /// A description of an orthographic projection with arbitrary `left`, `right`, 
 /// `top`, `bottom`, `near`, and `far` planes.
 ///
@@ -278,7 +260,7 @@ impl<S> fmt::Display for OrthographicSpec<S> where S: fmt::Display {
         )
     }
 }
-
+*/
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates.
 ///
@@ -832,8 +814,18 @@ impl<S> approx::UlpsEq for PerspectiveFov3<S> where
 }
 
 
-/// An orthographic projection transformation for converting from camera space to
-/// normalized device coordinates. 
+/// An orthographic projection with arbitrary `left`, `right`, 
+/// `top`, `bottom`, `near`, and `far` planes.
+///
+/// We assume the following constraints to construct a useful orthographic 
+/// projection
+/// ```text
+/// left   < right
+/// bottom < top
+/// near   < far   (along the negative z-axis).
+/// ```
+/// Each parameter in the specification is a description of the position along 
+/// an axis of a plane that the axis is perpendicular to.
 ///
 /// Orthographic projections differ from perspective projections in that 
 /// orthographic projections keeps parallel lines parallel, whereas perspective 
@@ -842,25 +834,78 @@ impl<S> approx::UlpsEq for PerspectiveFov3<S> where
 /// located from the viewing plane.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Orthographic3<S> {
-    /// The parameters for the orthographic projection.
-    spec: OrthographicSpec<S>,
+    /// The horizontal position of the left-hand plane in camera space.
+    /// The left-hand plane is a plane parallel to the **yz-plane** at
+    /// the origin.
+    left: S,
+    /// The horizontal position of the right-hand plane in camera space.
+    /// The right-hand plane is a plane parallel to the **yz-plane** at
+    /// the origin.
+    right: S,
+    /// The vertical position of the **bottom plane** in camera space.
+    /// The bottom plane is a plane parallel to the **zx-plane** at the origin.
+    bottom: S,
+    /// The vertical position of the **top plane** in camera space.
+    /// the top plane is a plane parallel to the **zx-plane** at the origin.
+    top: S,
+    /// The distance along the **negative z-axis** of the **near plane** from the eye.
+    /// The near plane is a plane parallel to the **xy-plane** at the origin.
+    near: S,
+    /// the distance along the **negative z-axis** of the **far plane** from the eye.
+    /// The far plane is a plane parallel to the **xy-plane** at the origin.
+    far: S,
     /// The underlying matrix that implements the orthographic projection.
     matrix: Matrix4x4<S>,
 }
 
 impl<S> Orthographic3<S> where S: ScalarFloat {
     /// Construct a new orthographic projection.
-    pub fn new(spec: OrthographicSpec<S>) -> Orthographic3<S> {
+    pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Orthographic3<S> {
         Orthographic3 {
-            spec: spec,
-            matrix: spec.into(),
+            left: left,
+            right: right,
+            bottom: bottom,
+            top: top,
+            near: near,
+            far: far,
+            matrix: Matrix4x4::from_orthographic(left, right, bottom, top, near, far),
         }
     }
 
-    /// Get the parameters defining the orthographic specification.
+    /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn to_spec(&self) -> OrthographicSpec<S> {
-        self.spec
+    pub fn znear(&self) -> S {
+        self.near
+    }
+
+    /// Get the far plane along the **negative z-axis**.
+    #[inline]
+    pub fn zfar(&self) -> S {
+        self.far
+    }
+
+    /// Get the left plane along the **negative x-axis**.
+    #[inline]
+    pub fn xleft(&self)-> S {
+        self.near
+    }
+
+    /// Get the right plane along the **positive x-axis**.
+    #[inline]
+    pub fn xright(&self) -> S {
+        self.far
+    }
+
+    /// Get the bottom plane along the **negative y-axis**.
+    #[inline]
+    pub fn ybottom(&self) -> S {
+        self.bottom
+    }
+
+    /// Get the top plane along the **positive y-axis**.
+    #[inline]
+    pub fn ytop(&self) -> S {
+        self.top
     }
 
     /// Get the underlying matrix implementing the orthographic transformation.
@@ -888,12 +933,12 @@ impl<S> Orthographic3<S> where S: ScalarFloat {
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
-        let c0r0 =  one_half * (self.spec.right - self.spec.left);
-        let c1r1 =  one_half * (self.spec.top - self.spec.bottom);
-        let c2r2 = -one_half * (self.spec.far - self.spec.near);
-        let c3r0 =  one_half * (self.spec.left + self.spec.right);
-        let c3r1 =  one_half * (self.spec.bottom + self.spec.top);
-        let c3r2 = -one_half * (self.spec.far + self.spec.near);
+        let c0r0 =  one_half * (self.right - self.left);
+        let c1r1 =  one_half * (self.top - self.bottom);
+        let c2r2 = -one_half * (self.far - self.near);
+        let c3r0 =  one_half * (self.left + self.right);
+        let c3r1 =  one_half * (self.bottom + self.top);
+        let c3r2 = -one_half * (self.far + self.near);
 
         Point3::new(
             c0r0 * point.x + c3r0,
@@ -909,9 +954,9 @@ impl<S> Orthographic3<S> where S: ScalarFloat {
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
-        let c0r0 =  one_half * (self.spec.right - self.spec.left);
-        let c1r1 =  one_half * (self.spec.top - self.spec.bottom);
-        let c2r2 = -one_half * (self.spec.far - self.spec.near);
+        let c0r0 =  one_half * (self.right - self.left);
+        let c1r1 =  one_half * (self.top - self.bottom);
+        let c2r2 = -one_half * (self.far - self.near);
 
         Vector3::new(c0r0 * vector.x, c1r1 * vector.y, c2r2 * vector.z)
     }

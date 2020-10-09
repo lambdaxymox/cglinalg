@@ -11,7 +11,6 @@ use cglinalg::{
     PerspectiveFovSpec,
     Perspective3,
     PerspectiveFov3,
-    OrthographicSpec,
     Orthographic3,
     ScalarFloat,
 };
@@ -144,11 +143,15 @@ fn any_orthographic_projection<S>() -> impl Strategy<Value = Orthographic3<S>>
             } else {
                 (near, far)
             };
-            let spec = OrthographicSpec::new(
-                spec_left, spec_right, spec_bottom, spec_top, spec_near, spec_far
-            );
 
-            Orthographic3::new(spec)
+            Orthographic3::new(
+                spec_left, 
+                spec_right, 
+                spec_bottom, 
+                spec_top, 
+                spec_near, 
+                spec_far
+            )
         })
         .no_shrink()
 }
