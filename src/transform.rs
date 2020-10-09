@@ -22,7 +22,7 @@ use crate::traits::{
 use core::fmt;
 
 
-/// A trait for implementing two-dimensional affine transformations.
+/// A trait for implementing two-dimensional transformations.
 pub trait AffineTransformation2<S> where Self: Sized {
     /// The identity transformation for this type.
     fn identity() -> Self;
@@ -89,7 +89,7 @@ pub trait AffineTransformation3<S> where Self: Sized {
 }
 
 
-/// A generic two dimensional affine transformation.
+/// A generic two dimensional transformation.
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Transform2<S> {
@@ -98,9 +98,8 @@ pub struct Transform2<S> {
 }
 
 impl<S> Transform2<S> where S: Scalar {
-    /// Convert a 3x3 matrix to a two-dimensional affine transformation. This 
-    /// function is for internal use in implementing type conversions for 
-    /// affine transformations.
+    /// Convert a 3x3 matrix to a two-dimensional transformation. This 
+    /// function is for internal use in implementing type conversions.
     #[inline]
     pub(crate) fn to_transform2d<T: Into<Matrix3x3<S>>>(transform: T) -> Transform2<S> {
         // TODO: Make this function const when const fn stabilizes for traits other than
@@ -115,6 +114,55 @@ impl<S> Transform2<S> where S: Scalar {
     #[inline]
     pub fn matrix(&self) -> &Matrix3x3<S> {
         &self.matrix
+    }
+
+    /// The identity transformation for a generic two-dimensional 
+    /// transformation.
+    #[inline]
+    pub fn identity() -> Transform2<S> {
+        Transform2 { 
+            matrix: Matrix3x3::identity(),
+        }
+    }
+}
+
+impl<S> Transform2<S> where S: ScalarFloat {
+    /// Compute the inverse of the transformation if it exists.
+    #[inline]
+    pub fn inverse(&self) -> Option<Transform2<S>> {
+        if let Some(matrix) = self.matrix.inverse() {
+            Some(Transform2 {
+                matrix: matrix
+            })
+        } else {
+            None
+        }
+    }
+
+    /// Apply the transformation to a vector.
+    #[inline]
+    pub fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+        (self.matrix * vector.expand(S::zero())).contract()
+    }
+
+    /// Apply the inverse of the transformation to a point.
+    #[inline]
+    pub fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
+        Point2::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+    }
+
+    /// Apply the inverse of the transformation to a vector.
+    #[inline]
+    pub fn inverse_transform_vector(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
+        self.inverse()
+            .map(|matrix_inverse| matrix_inverse.transform_vector(vector))
+    }
+
+    /// Apply the inverse of the transformation to a point.
+    #[inline]
+    pub fn inverse_transform_point(&self, point: &Point2<S>) -> Option<Point2<S>> {
+        self.inverse()
+            .map(|matrix_inverse| matrix_inverse.transform_point(point))
     }
 }
 
@@ -187,45 +235,8 @@ impl<S> approx::UlpsEq for Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> AffineTransformation2<S> for Transform2<S> 
-    where S: ScalarFloat
-{
-    #[inline]
-    fn identity() -> Transform2<S> {
-        Transform2 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
 
-    #[inline]
-    fn inverse(&self) -> Option<Transform2<S>> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform2 {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
-    }
-
-    #[inline]
-    fn to_transform2d(&self) -> Transform2<S> {
-        *self
-    }
-}
-
-
-/// A generic three-dimensional affine transformation.
+/// A generic three-dimensional transformation.
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Transform3<S> {
@@ -234,9 +245,8 @@ pub struct Transform3<S> {
 }
 
 impl<S> Transform3<S> where S: Scalar {
-    /// Convert a 4x4 matrix to a three-dimensional affine transformation. 
-    /// This function is for internal use in implementing type conversions for 
-    /// affine transformations.
+    /// Convert a 4x4 matrix to a three-dimensional transformation. 
+    /// This function is for internal use in implementing type conversions.
     #[inline]
     pub(crate) fn to_transform3d<T: Into<Matrix4x4<S>>>(transform: T) -> Transform3<S> {
         // TODO: Make this function const when const fn stabilizes for traits other than
@@ -251,6 +261,55 @@ impl<S> Transform3<S> where S: Scalar {
     #[inline]
     pub fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
+    }
+
+    /// The identity transformation for a generic three-dimensional 
+    /// transformation.
+    #[inline]
+    pub fn identity() -> Transform3<S> {
+        Transform3 { 
+            matrix: Matrix4x4::identity(),
+        }
+    }
+}
+
+impl<S> Transform3<S> where S: ScalarFloat {
+    /// Compute the inverse of the transformation if it exists.
+    #[inline]
+    pub fn inverse(&self) -> Option<Transform3<S>> {
+        if let Some(matrix) = self.matrix.inverse() {
+            Some(Transform3 {
+                matrix: matrix
+            })
+        } else {
+            None
+        }
+    }
+
+    /// Apply the transformation to a vector.
+    #[inline]
+    pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        (self.matrix * vector.expand(S::zero())).contract()
+    }
+
+    /// Apply the inverse of the transformation to a point.
+    #[inline]
+    pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
+        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+    }
+
+    /// Apply the inverse of the transformation to a vector.
+    #[inline]
+    pub fn transform_inverse_vector(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
+        self.inverse()
+            .map(|matrix_inverse| matrix_inverse.transform_vector(vector))
+    }
+
+    /// Apply the inverse of the transformation to a point.
+    #[inline]
+    pub fn inverse_transform_point(&self, point: &Point3<S>) -> Option<Point3<S>> {
+        self.inverse()
+            .map(|matrix_inverse| matrix_inverse.transform_point(point))
     }
 }
 
@@ -272,51 +331,16 @@ impl<S> fmt::Display for Transform3<S> where S: fmt::Display {
 }
 
 impl<S> From<Transform3<S>> for Matrix4x4<S> where S: Copy {
+    #[inline]
     fn from(transformation: Transform3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
 impl<S> From<&Transform3<S>> for Matrix4x4<S> where S: Copy {
+    #[inline]
     fn from(transformation: &Transform3<S>) -> Matrix4x4<S> {
         transformation.matrix
-    }
-}
-
-impl<S> AffineTransformation3<S> for Transform3<S> 
-    where S: ScalarFloat 
-{
-    #[inline]
-    fn identity() -> Transform3<S> {
-        Transform3 { 
-            matrix: Matrix4x4::identity(),
-        }
-    }
-
-    #[inline]
-    fn inverse(&self) -> Option<Transform3<S>> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform3 {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
-    }
-
-    #[inline]
-    fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
-    }
-
-    #[inline]
-    fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
-    }
-
-    #[inline]
-    fn to_transform3d(&self) -> Transform3<S> {
-        *self
     }
 }
 
