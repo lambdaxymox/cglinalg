@@ -74,18 +74,6 @@ impl<S> Shear2<S> where S: ScalarSigned {
         }
     }
 
-    /// Compute the inverse shearing operation.
-    #[inline]
-    pub fn inverse(&self) -> Shear2<S> {
-        let shear_y_with_x = -self.matrix.c0r1;
-        let shear_x_with_y = -self.matrix.c1r0;
-        let matrix = Matrix2x2::from_shear(shear_x_with_y, shear_y_with_x);
-        
-        Shear2 {
-            matrix: matrix,
-        }
-    }
-
     /// Apply a shearing transformation to a vector.
     #[inline]
     pub fn shear_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
@@ -102,22 +90,6 @@ impl<S> Shear2<S> where S: ScalarSigned {
     }
 
     #[inline]
-    pub fn inverse_shear_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        let inverse = self.inverse();
-
-        inverse.matrix * vector
-    }
-
-    #[inline]
-    pub fn inverse_shear_point(&self, point: &Point2<S>) -> Point2<S> {
-        let inverse = self.inverse();
-        let vector = Vector2::new(point.x, point.y);
-        let result = inverse.matrix * vector;
-
-        Point2::new(result.x, result.y)
-    }
-
-    #[inline]
     pub fn identity() -> Shear2<S> {
         Shear2 { 
             matrix: Matrix2x2::identity(),
@@ -127,6 +99,40 @@ impl<S> Shear2<S> where S: ScalarSigned {
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
+    }
+}
+
+impl<S> Shear2<S> where S: ScalarFloat {
+    /// Compute the inverse shearing operation.
+    #[inline]
+    pub fn inverse(&self) -> Shear2<S> {
+        let shear_y_with_x = self.matrix.c0r1;
+        let shear_x_with_y = self.matrix.c1r0;
+        let det_inverse = S::one() / (shear_x_with_y * shear_y_with_x - S::one());
+        let matrix = Matrix2x2::new(
+            -S::one() * det_inverse,        shear_y_with_x * det_inverse,
+             shear_x_with_y * det_inverse, -S::one() * det_inverse
+        );
+            
+        Shear2 {
+            matrix: matrix,
+        }
+    }
+    
+    #[inline]
+    pub fn inverse_shear_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+        let inverse = self.inverse();
+    
+        inverse.matrix * vector
+    }
+    
+    #[inline]
+    pub fn inverse_shear_point(&self, point: &Point2<S>) -> Point2<S> {
+        let inverse = self.inverse();
+        let vector = Vector2::new(point.x, point.y);
+        let result = inverse.matrix * vector;
+    
+        Point2::new(result.x, result.y)
     }
 }
 
@@ -321,26 +327,6 @@ impl<S> Shear3<S> where S: ScalarSigned {
 
     /// Apply a shearing transformation to a vector.
     #[inline]
-    pub fn inverse(&self) -> Shear3<S> {
-        let shear_x_with_y = -self.matrix.c1r0;
-        let shear_x_with_z = -self.matrix.c2r0;
-        let shear_y_with_x = -self.matrix.c0r1;
-        let shear_y_with_z = -self.matrix.c2r1;
-        let shear_z_with_x = -self.matrix.c0r2;
-        let shear_z_with_y = -self.matrix.c1r2;
-        let matrix = Matrix3x3::from_shear(
-            shear_x_with_y, shear_x_with_z, 
-            shear_y_with_x, shear_y_with_z, 
-            shear_z_with_x, shear_z_with_y
-        );
-        
-        Shear3 {
-            matrix: matrix,
-        }
-    }
-
-    /// Apply a shearing transformation to a vector.
-    #[inline]
     pub fn shear_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         self.matrix * vector
     }
@@ -352,6 +338,52 @@ impl<S> Shear3<S> where S: ScalarSigned {
         let result = self.matrix * vector;
 
         Point3::new(result.x, result.y, result.z)
+    }
+
+    #[inline]
+    pub fn identity() -> Shear3<S> {
+        Shear3 { 
+            matrix: Matrix3x3::identity(),
+        }
+    }
+
+    #[inline]
+    pub fn to_transform3d(&self) -> Transform3<S> {
+        Transform3::from_specialized(self.matrix)
+    }
+}
+
+impl<S> Shear3<S> where S: ScalarFloat {
+    /// Apply a shearing transformation to a vector.
+    #[inline]
+    pub fn inverse(&self) -> Shear3<S> {
+        use crate::traits::SquareMatrix;
+
+        let shear_x_with_y = self.matrix.c1r0;
+        let shear_x_with_z = self.matrix.c2r0;
+        let shear_y_with_x = self.matrix.c0r1;
+        let shear_y_with_z = self.matrix.c2r1;
+        let shear_z_with_x = self.matrix.c0r2;
+        let shear_z_with_y = self.matrix.c1r2;
+        let det_inverse = S::one() / self.matrix.determinant();
+        let c0r0 = det_inverse * (S::one() - shear_y_with_z * shear_z_with_y);
+        let c0r1 = det_inverse * (shear_y_with_z * shear_z_with_x - shear_y_with_x);
+        let c0r2 = det_inverse * (shear_y_with_x * shear_z_with_y - shear_z_with_x);
+        let c1r0 = det_inverse * (shear_x_with_z * shear_z_with_y - shear_x_with_y);
+        let c1r1 = det_inverse * (S::one() - shear_x_with_z * shear_z_with_x);
+        let c1r2 = det_inverse * (shear_x_with_y * shear_z_with_x - shear_z_with_y);
+        let c2r0 = det_inverse * (shear_x_with_y * shear_y_with_z - shear_x_with_z);
+        let c2r1 = det_inverse * (shear_x_with_z * shear_y_with_x - shear_y_with_z);
+        let c2r2 = det_inverse * (S::one() - shear_x_with_y * shear_y_with_x);
+        let matrix = Matrix3x3::new(
+            c0r0, c0r1, c0r2, 
+            c1r0, c1r1, c1r2,
+            c2r0, c2r1, c2r2
+        );
+        
+        Shear3 {
+            matrix: matrix,
+        }
     }
 
     #[inline]
@@ -368,18 +400,6 @@ impl<S> Shear3<S> where S: ScalarSigned {
         let result = inverse.matrix * vector;
 
         Point3::new(result.x, result.y, result.z)
-    }
-
-    #[inline]
-    pub fn identity() -> Shear3<S> {
-        Shear3 { 
-            matrix: Matrix3x3::identity(),
-        }
-    }
-
-    #[inline]
-    pub fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::from_specialized(self.matrix)
     }
 }
 
