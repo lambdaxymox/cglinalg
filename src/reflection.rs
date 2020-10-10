@@ -25,6 +25,7 @@ use crate::transform::*;
 use approx;
 
 use core::fmt;
+use core::ops;
 
 
 /// A reflection transformation about a plane (line) in two dimensions.
@@ -205,6 +206,43 @@ impl<S> approx::UlpsEq for Reflection2<S> where S: ScalarFloat {
             && Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
+
+impl<S> ops::Mul<Point2<S>> for Reflection2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.reflect_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point2<S>> for Reflection2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &Point2<S>) -> Self::Output {
+        self.reflect_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for &Reflection2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.reflect_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Reflection2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point2<S>) -> Self::Output {
+        self.reflect_point(other)
+    }
+}
+
 
 
 /// A reflection transformation about a plane in three dimensions.
@@ -387,6 +425,42 @@ impl<S> approx::UlpsEq for Reflection3<S> where S: ScalarFloat {
         Vector3::ulps_eq(&self.bias, &other.bias, epsilon, max_ulps)
             && Vector3::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps)
             && Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for Reflection3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.reflect_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for Reflection3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.reflect_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &Reflection3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.reflect_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Reflection3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.reflect_point(other)
     }
 }
 

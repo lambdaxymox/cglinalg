@@ -21,6 +21,7 @@ use crate::traits::{
 use crate::transform::*;
 
 use core::fmt;
+use core::ops;
 
 
 /// A shearing transformation in two dimensions.
@@ -205,6 +206,42 @@ impl<S> approx::UlpsEq for Shear2<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix2x2::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for Shear2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.shear_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point2<S>> for Shear2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &Point2<S>) -> Self::Output {
+        self.shear_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for &Shear2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.shear_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Shear2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point2<S>) -> Self::Output {
+        self.shear_point(other)
     }
 }
 
@@ -418,6 +455,42 @@ impl<S> approx::UlpsEq for Shear3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for Shear3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.shear_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for Shear3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.shear_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &Shear3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.shear_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Shear3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.shear_point(other)
     }
 }
 

@@ -20,6 +20,7 @@ use crate::traits::{
 use crate::transform::*;
 
 use core::fmt;
+use core::ops;
 
 
 /// A translation transformation in two dimensions.
@@ -174,6 +175,43 @@ impl<S> approx::UlpsEq for Translation2<S> where S: ScalarFloat {
     }
 }
 
+impl<S> ops::Mul<Point2<S>> for Translation2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.translate_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point2<S>> for Translation2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &Point2<S>) -> Self::Output {
+        self.translate_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for &Translation2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.translate_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Translation2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point2<S>) -> Self::Output {
+        self.translate_point(other)
+    }
+}
+
+
 
 /// A translation transformation in three dimensions.
 ///
@@ -316,6 +354,42 @@ impl<S> approx::UlpsEq for Translation3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Vector3::ulps_eq(&self.distance, &other.distance, epsilon, max_ulps)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for Translation3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.translate_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for Translation3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.translate_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &Translation3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.translate_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Translation3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.translate_point(other)
     }
 }
 

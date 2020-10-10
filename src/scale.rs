@@ -17,6 +17,7 @@ use crate::point::{
 use crate::transform::*;
 
 use core::fmt;
+use core::ops;
 
 
 /// The scale transformation in two dimensions.
@@ -161,6 +162,42 @@ impl<S> approx::UlpsEq for Scale2<S> where S: ScalarFloat {
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
             && S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) 
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for Scale2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.scale_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point2<S>> for Scale2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &Point2<S>) -> Self::Output {
+        self.scale_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for &Scale2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.scale_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Scale2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point2<S>) -> Self::Output {
+        self.scale_point(other)
     }
 }
 
@@ -325,6 +362,42 @@ impl<S> approx::UlpsEq for Scale3<S> where S: ScalarFloat {
         S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
             && S::ulps_eq(&self.y, &other.y, epsilon, max_ulps)
             && S::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for Scale3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.scale_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for Scale3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.scale_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &Scale3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.scale_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Scale3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.scale_point(other)
     }
 }
 

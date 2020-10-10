@@ -32,6 +32,7 @@ use crate::unit::{
 use crate::transform::*;
 
 use core::fmt;
+use core::ops;
 
 
 /// A rotation operator in two dimensions.
@@ -207,6 +208,43 @@ impl<S> approx::UlpsEq for Rotation2<S> where S: ScalarFloat {
         Matrix2x2::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
+
+impl<S> ops::Mul<Point2<S>> for Rotation2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.rotate_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point2<S>> for Rotation2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &Point2<S>) -> Self::Output {
+        self.rotate_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for &Rotation2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.rotate_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Rotation2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point2<S>) -> Self::Output {
+        self.rotate_point(other)
+    }
+}
+
 
 
 /// A rotation operator in three dimensions.
@@ -477,6 +515,42 @@ impl<S> approx::UlpsEq for Rotation3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix3x3::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for Rotation3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.rotate_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for Rotation3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.rotate_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &Rotation3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.rotate_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Rotation3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.rotate_point(other)
     }
 }
 
