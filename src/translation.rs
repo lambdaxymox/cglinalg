@@ -92,6 +92,12 @@ impl<S> Translation2<S> where S: ScalarSigned {
         point - self.vector
     }
 
+    /// Apply the inverse translation to a vector.
+    #[inline]
+    pub fn inverse_translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+        *vector
+    }
+
     /// The identity transformation for translations, which displaces
     /// a vector or point zero distance.
     #[inline]
@@ -270,8 +276,14 @@ impl<S> Translation3<S> where S: ScalarSigned {
 
     /// Apply the inverse of the translation to a point.
     #[inline]
-    pub fn inverse_transform_point(&self, point: &Point3<S>) -> Point3<S> {
+    pub fn inverse_translate_point(&self, point: &Point3<S>) -> Point3<S> {
         point - self.vector
+    }
+
+    /// Apply the inverse of the translation to a point.
+    #[inline]
+    pub fn inverse_translate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        *vector
     }
 
     /// The identity transformation for translations, which displaces
