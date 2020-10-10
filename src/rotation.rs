@@ -138,7 +138,7 @@ impl<S> Rotation2<S> where S: ScalarFloat {
     }
 
     #[inline]
-    pub fn inverse_rotate_point(&self, point: &Vector2<S>) -> Point2<S> {
+    pub fn inverse_rotate_point(&self, point: &Point2<S>) -> Point2<S> {
         let inverse = self.inverse();
         let vector = Vector2::new(point.x, point.y);
         let result = inverse.matrix * vector;
