@@ -31,7 +31,7 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation2<S> {
-    distance: Vector2<S>,
+    vector: Vector2<S>,
 }
 
 impl<S> Translation2<S> where S: ScalarSigned {
@@ -39,7 +39,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     #[inline]
     pub fn from_vector(vector: &Vector2<S>) -> Translation2<S> {
         Translation2 {
-            distance: vector.clone(),
+            vector: vector.clone(),
         }
     }
 
@@ -66,13 +66,13 @@ impl<S> Translation2<S> where S: ScalarSigned {
     /// inverse will be a translation by a displacement `-distance`.
     #[inline]
     pub fn inverse(&self) -> Self {
-        Translation2::from_vector(&(-self.distance))
+        Translation2::from_vector(&(-self.vector))
     }
     
     /// Apply the translation operation to a point.
     #[inline]
     pub fn translate_point(&self, point: &Point2<S>) -> Point2<S> {
-        point + self.distance
+        point + self.vector
     }
 
     /// Apply the translation operation to a vector. 
@@ -89,7 +89,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     /// Apply the inverse translation to a point.
     #[inline]
     pub fn inverse_translate_point(&self, point: &Point2<S>) -> Point2<S> {
-        point - self.distance
+        point - self.vector
     }
 
     /// The identity transformation for translations, which displaces
@@ -97,7 +97,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     #[inline]
     pub fn identity() -> Translation2<S> {
         Translation2 { 
-            distance: Vector2::zero(),
+            vector: Vector2::zero(),
         }
     }
 
@@ -111,7 +111,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
 impl<S> AsRef<Vector2<S>> for Translation2<S> {
     #[inline]
     fn as_ref(&self) -> &Vector2<S> {
-        &self.distance
+        &self.vector
     }
 }
 
@@ -120,20 +120,20 @@ impl<S> fmt::Display for Translation2<S> where S: fmt::Display {
         write!(
             formatter, 
             "Translation2 [x={}, y={}]", 
-            self.distance.x, self.distance.y
+            self.vector.x, self.vector.y
         )
     }
 }
 
 impl<S> From<Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
     fn from(transform: Translation2<S>) -> Matrix3x3<S> {
-        Matrix3x3::from_affine_translation(&transform.distance)
+        Matrix3x3::from_affine_translation(&transform.vector)
     }
 }
 
 impl<S> From<&Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
     fn from(transform: &Translation2<S>) -> Matrix3x3<S> {
-        Matrix3x3::from_affine_translation(&transform.distance)
+        Matrix3x3::from_affine_translation(&transform.vector)
     }
 }
 
@@ -147,7 +147,7 @@ impl<S> approx::AbsDiffEq for Translation2<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Vector2::abs_diff_eq(&self.distance, &other.distance, epsilon)
+        Vector2::abs_diff_eq(&self.vector, &other.vector, epsilon)
     }
 }
 
@@ -159,7 +159,7 @@ impl<S> approx::RelativeEq for Translation2<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Vector2::relative_eq(&self.distance, &other.distance, epsilon, max_relative)
+        Vector2::relative_eq(&self.vector, &other.vector, epsilon, max_relative)
     }
 }
 
@@ -171,7 +171,7 @@ impl<S> approx::UlpsEq for Translation2<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Vector2::ulps_eq(&self.distance, &other.distance, epsilon, max_ulps)
+        Vector2::ulps_eq(&self.vector, &other.vector, epsilon, max_ulps)
     }
 }
 
@@ -221,14 +221,14 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Translation2<S> where S: ScalarF
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation3<S> {
-    distance: Vector3<S>,
+    vector: Vector3<S>,
 }
 
 impl<S> Translation3<S> where S: ScalarSigned {
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_vector(distance: &Vector3<S>) -> Translation3<S> {
+    pub fn from_vector(vector: &Vector3<S>) -> Translation3<S> {
         Translation3 {
-            distance: distance.clone(),
+            vector: vector.clone(),
         }
     }
 
@@ -255,12 +255,12 @@ impl<S> Translation3<S> where S: ScalarSigned {
     /// inverse will be a translation by a displacement `-distance`.
     #[inline]
     pub fn inverse(&self) -> Self {
-        Translation3::from_vector(&(-self.distance))
+        Translation3::from_vector(&(-self.vector))
     }
     
     #[inline]
     pub fn translate_point(&self, point: &Point3<S>) -> Point3<S> {
-        point + self.distance
+        point + self.vector
     }
 
     #[inline]
@@ -271,7 +271,7 @@ impl<S> Translation3<S> where S: ScalarSigned {
     /// Apply the inverse of the translation to a point.
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        point - self.distance
+        point - self.vector
     }
 
     /// The identity transformation for translations, which displaces
@@ -279,7 +279,7 @@ impl<S> Translation3<S> where S: ScalarSigned {
     #[inline]
     pub fn identity() -> Translation3<S> {
         Translation3 { 
-            distance: Vector3::zero(),
+            vector: Vector3::zero(),
         }
     }
 
@@ -293,7 +293,7 @@ impl<S> Translation3<S> where S: ScalarSigned {
 impl<S> AsRef<Vector3<S>> for Translation3<S> {
     #[inline]
     fn as_ref(&self) -> &Vector3<S> {
-        &self.distance
+        &self.vector
     }
 }
 
@@ -302,20 +302,20 @@ impl<S> fmt::Display for Translation3<S> where S: fmt::Display {
         write!(
             formatter, 
             "Translation3 [x-{}, y={}, z={}]", 
-            self.distance.x, self.distance.y, self.distance.z
+            self.vector.x, self.vector.y, self.vector.z
         )
     }
 }
 
 impl<S> From<Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
     fn from(transform: Translation3<S>) -> Matrix4x4<S> {
-        Matrix4x4::from_affine_translation(&transform.distance)
+        Matrix4x4::from_affine_translation(&transform.vector)
     }
 }
 
 impl<S> From<&Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
     fn from(transform: &Translation3<S>) -> Matrix4x4<S> {
-        Matrix4x4::from_affine_translation(&transform.distance)
+        Matrix4x4::from_affine_translation(&transform.vector)
     }
 }
 
@@ -329,7 +329,7 @@ impl<S> approx::AbsDiffEq for Translation3<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Vector3::abs_diff_eq(&self.distance, &other.distance, epsilon)
+        Vector3::abs_diff_eq(&self.vector, &other.vector, epsilon)
     }
 }
 
@@ -341,7 +341,7 @@ impl<S> approx::RelativeEq for Translation3<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Vector3::relative_eq(&self.distance, &other.distance, epsilon, max_relative)
+        Vector3::relative_eq(&self.vector, &other.vector, epsilon, max_relative)
     }
 }
 
@@ -353,7 +353,7 @@ impl<S> approx::UlpsEq for Translation3<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Vector3::ulps_eq(&self.distance, &other.distance, epsilon, max_ulps)
+        Vector3::ulps_eq(&self.vector, &other.vector, epsilon, max_ulps)
     }
 }
 
