@@ -94,6 +94,9 @@ The biggest one is that it presently does not leverage SIMD instructions yet.
 */
 
 #![allow(clippy::redundant_field_names)]
+#![no_std]
+extern crate core;
+
 pub extern crate approx;
 pub extern crate num_traits;
 

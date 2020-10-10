@@ -22,8 +22,6 @@ use crate::unit::{
 };
 use crate::transform::*;
 
-use approx;
-
 use core::fmt;
 use core::ops;
 
@@ -129,7 +127,7 @@ impl<S> Reflection2<S> where S: ScalarFloat {
 
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::to_transform2d(self)
+        Transform2::from_specialized(self)
     }
 }
 
@@ -351,7 +349,7 @@ impl<S> Reflection3<S> where S: ScalarFloat {
 
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::to_transform3d(self.matrix)
+        Transform3::from_specialized(self.matrix)
     }
 }
 

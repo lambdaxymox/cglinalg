@@ -39,7 +39,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     #[inline]
     pub fn from_vector(vector: &Vector2<S>) -> Translation2<S> {
         Translation2 {
-            vector: vector.clone(),
+            vector: *vector,
         }
     }
 
@@ -104,7 +104,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
     /// Convert a tanslation into a generic two-dimensional transformation.
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::to_transform2d(self)
+        Transform2::from_specialized(self)
     }
 }
 
@@ -228,7 +228,7 @@ impl<S> Translation3<S> where S: ScalarSigned {
     /// Construct a translation operator from a vector of displacements.
     pub fn from_vector(vector: &Vector3<S>) -> Translation3<S> {
         Translation3 {
-            vector: vector.clone(),
+            vector: *vector,
         }
     }
 
@@ -285,7 +285,7 @@ impl<S> Translation3<S> where S: ScalarSigned {
 
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::to_transform3d(self)
+        Transform3::from_specialized(self)
     }
 }
 

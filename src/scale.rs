@@ -98,7 +98,7 @@ impl<S> Scale2<S> where S: ScalarFloat {
 
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::to_transform2d(self)
+        Transform2::from_specialized(self)
     }
 }
 
@@ -256,7 +256,7 @@ impl<S> Scale3<S> where S: Scalar {
 
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::to_transform3d(self)
+        Transform3::from_specialized(self)
     }
 }
 

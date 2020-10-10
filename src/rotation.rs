@@ -146,7 +146,7 @@ impl<S> Rotation2<S> where S: ScalarFloat {
 
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
-        Transform2::to_transform2d(self.matrix)
+        Transform2::from_specialized(self.matrix)
     }
 }
 
@@ -437,7 +437,7 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
-        Transform3::to_transform3d(self.matrix)
+        Transform3::from_specialized(self.matrix)
     }
 }
 
