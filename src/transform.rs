@@ -20,6 +20,7 @@ use crate::traits::{
 };
 
 use core::fmt;
+use core::ops;
 
 
 /// A generic two dimensional transformation.
@@ -47,6 +48,13 @@ impl<S> Transform2<S> where S: Scalar {
     #[inline]
     pub fn matrix(&self) -> &Matrix3x3<S> {
         &self.matrix
+    }
+
+    /// Get a mutable reference to the underlying matrix that represents the 
+    /// transformation.
+    #[inline]
+    pub fn matrix_mut(&mut self) -> &mut Matrix3x3<S> {
+        &mut self.matrix
     }
 
     /// The identity transformation for a generic two-dimensional 
@@ -168,6 +176,42 @@ impl<S> approx::UlpsEq for Transform2<S> where S: ScalarFloat {
     }
 }
 
+impl<S> ops::Mul<Point2<S>> for Transform2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point2<S>> for Transform2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &Point2<S>) -> Self::Output {
+        self.transform_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for &Transform2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Transform2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point2<S>) -> Self::Output {
+        self.transform_point(other)
+    }
+}
+
 
 /// A generic three-dimensional transformation.
 #[repr(transparent)]
@@ -194,6 +238,13 @@ impl<S> Transform3<S> where S: Scalar {
     #[inline]
     pub fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
+    }
+
+    /// Get a mutable reference to the underlying matrix that represents the 
+    /// transformation.
+    #[inline]
+    pub fn matrix_mut(&mut self) -> &mut Matrix4x4<S> {
+        &mut self.matrix
     }
 
     /// The identity transformation for a generic three-dimensional 
@@ -312,6 +363,42 @@ impl<S> approx::UlpsEq for Transform3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for Transform3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for Transform3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.transform_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &Transform3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Transform3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.transform_point(other)
     }
 }
 
