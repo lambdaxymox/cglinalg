@@ -16,6 +16,7 @@ use crate::vector::{
 };
 
 use core::fmt;
+use core::ops;
 
 
 /// A perspective projection transformation based on arbitrary `left`, `right`, 
@@ -309,6 +310,43 @@ impl<S> approx::UlpsEq for Perspective3<S>
     }
 }
 
+impl<S> ops::Mul<Point3<S>> for Perspective3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.project_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for Perspective3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.project_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &Perspective3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.project_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Perspective3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.project_point(other)
+    }
+}
+
+
 
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates based on the perspective field of view model.
@@ -577,6 +615,43 @@ impl<S> approx::UlpsEq for PerspectiveFov3<S> where
     }
 }
 
+impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.project_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for PerspectiveFov3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.project_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &PerspectiveFov3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.project_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b PerspectiveFov3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.project_point(other)
+    }
+}
+
+
 
 /// An orthographic projection with arbitrary `left`, `right`, 
 /// `top`, `bottom`, `near`, and `far` planes.
@@ -807,6 +882,43 @@ impl<S> approx::UlpsEq for Orthographic3<S> where S: ScalarFloat {
     }
 }
 
+impl<S> ops::Mul<Point3<S>> for Orthographic3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.project_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for Orthographic3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.project_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &Orthographic3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.project_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.project_point(other)
+    }
+}
+
+
 
 /// An orthographic projection based on the `near` plane, the `far` plane and 
 /// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
@@ -1019,6 +1131,42 @@ impl<S> approx::UlpsEq for OrthographicFov3<S> where S: ScalarFloat {
             && S::ulps_eq(&self.aspect, &other.aspect, epsilon, max_ulps)
             && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
             && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for OrthographicFov3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.project_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for OrthographicFov3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.project_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &OrthographicFov3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.project_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b OrthographicFov3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
+        self.project_point(other)
     }
 }
 
