@@ -76,14 +76,6 @@ impl<S> Rotation2<S> where S: ScalarFloat {
         }
     }
 
-    /// Point a vector at the point `direction`.
-    #[inline]
-    pub fn look_at(direction: &Vector2<S>, up: &Vector2<S>) -> Rotation2<S> {
-        Rotation2 {
-            matrix: Matrix2x2::look_at(direction, up),
-        }
-    }
-
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]

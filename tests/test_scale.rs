@@ -7,7 +7,6 @@ mod scale2_tests {
         Scale2,
         Point2,
         Vector2,
-        Zero,
     };
 
 
@@ -58,7 +57,6 @@ mod scale3_tests {
         Scale3,
         Point3,
         Vector3,
-        Zero,
     };
 
 

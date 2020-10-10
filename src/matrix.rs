@@ -185,13 +185,6 @@ impl<S> Matrix2x2<S> where S: NumCast + Copy {
 }
 
 impl<S> Matrix2x2<S> where S: Scalar {
-    /// Construct a matrix that will cause a vector to point 
-    /// at the vector `direction` using up for orientation.
-    #[inline]
-    pub fn look_at(direction: &Vector2<S>, up: &Vector2<S>) -> Matrix2x2<S> {
-        Matrix2x2::from_columns(*up, *direction).transpose()
-    }
-
     /// Construct a shearing matrix along the x-axis, holding the **y-axis** constant.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
