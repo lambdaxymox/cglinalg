@@ -209,3 +209,4 @@ fn test_translation3_multiplication_point() {
 
     assert_eq!(result, expected);
 }
+
