@@ -79,10 +79,27 @@ impl<S> Rotation2<S> where S: ScalarFloat {
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     #[inline]
-    pub fn rotation_between_vectors(a: &Unit<Vector2<S>>, b: &Unit<Vector2<S>>) -> Rotation2<S> {
-        let _a = a.as_ref();
-        let _b = b.as_ref();
-        Rotation2::from_angle(Radians::acos(DotProduct::dot(_a, _b)))
+    pub fn rotation_between_axis(a: &Unit<Vector2<S>>, b: &Unit<Vector2<S>>) -> Rotation2<S> {
+        let unit_a = a.as_ref();
+        let unit_b = b.as_ref();
+        let cos_angle = unit_a.dot(unit_b);
+        let sin_angle = unit_a.x * unit_b.y - unit_a.y * unit_b.x;
+
+        Rotation2::from_angle(Radians::atan2(sin_angle, cos_angle))
+    }
+
+    /// Construct a rotation that rotates the shortest angular distance 
+    /// between vectors.
+    #[inline]
+    pub fn rotation_between(a: &Vector2<S>, b: &Vector2<S>) -> Rotation2<S> {
+        if let (Some(unit_a), Some(unit_b)) = (
+            Unit::try_from_value(*a, S::zero()), 
+            Unit::try_from_value(*b, S::zero()))
+        {
+            Rotation2::rotation_between_axis(&unit_a, &unit_b)
+        } else {
+            Rotation2::identity()
+        }
     }
 
     /// Construct a rotation that rotates a vector in the opposite direction 

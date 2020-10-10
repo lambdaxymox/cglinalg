@@ -9,6 +9,7 @@ mod rotation2_tests {
         Radians,
         Point2,
         Vector2,
+        Unit,
     };
     use cglinalg::approx::{
         relative_eq,
@@ -59,7 +60,53 @@ mod rotation2_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
-    
+    #[test]
+    fn test_rotation_between_vectors_point1() {
+        let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
+        let vector1 = Unit::from_value(Vector2::unit_y());
+        let vector2 = Unit::from_value(Vector2::unit_x());
+        let rotation = Rotation2::rotation_between(&vector1, &vector2);
+        let expected = Point2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
+        let result = rotation.rotate_point(&point);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_rotation_between_vectors_point2() {
+        let point = Point2::new(0_f64, 1_f64);
+        let vector1 = Unit::from_value(Vector2::unit_y());
+        let vector2 = Unit::from_value(Vector2::unit_x());
+        let rotation = Rotation2::rotation_between(&vector1, &vector2);
+        let expected = Point2::new(1_f64, 0_f64);
+        let result = rotation.rotate_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_between_vectors_vector1() {
+        let vector = Vector2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
+        let vector1 = Unit::from_value(Vector2::unit_y());
+        let vector2 = Unit::from_value(Vector2::unit_x());
+        let rotation = Rotation2::rotation_between(&vector1, &vector2);
+        let expected = Vector2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
+        let result = rotation.rotate_vector(&vector);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_rotation_between_vectors_vector2() {
+        let vector1: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
+        let vector2: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
+        let rotation = Rotation2::rotation_between(&vector1, &vector2);
+        let vector = Vector2::unit_y();
+        let expected = Vector2::unit_x();
+        let result = rotation.rotate_vector(&vector);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
 }
 
 
