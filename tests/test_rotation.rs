@@ -617,5 +617,122 @@ mod rotation3_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_rotation_between_axis_vectors_point1() {
+        let point = Point3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
+        let vector1 = Unit::from_value(Vector3::unit_y());
+        let vector2 = Unit::from_value(Vector3::unit_x());
+        let rotation = Rotation3::rotation_between_axis(&vector1, &vector2).unwrap();
+        let expected = Point3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
+        let result = rotation.rotate_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_between_axis_vectors_point2() {
+        let point = Point3::new(0_f64, 1_f64, 0_f64);
+        let vector1 = Unit::from_value(Vector3::unit_y());
+        let vector2 = Unit::from_value(Vector3::unit_x());
+        let rotation = Rotation3::rotation_between_axis(&vector1, &vector2).unwrap();
+        let expected = Point3::new(1_f64, 0_f64, 0_f64);
+        let result = rotation.rotate_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_between_axis_vectors_vector1() {
+        let vector = Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
+        let vector1 = Unit::from_value(Vector3::unit_y());
+        let vector2 = Unit::from_value(Vector3::unit_x());
+        let rotation = Rotation3::rotation_between_axis(&vector1, &vector2).unwrap();
+        let expected = Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
+        let result = rotation.rotate_vector(&vector);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_between_axis_vectors_vector2() {
+        let vector1: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
+        let vector2: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
+        let rotation = Rotation3::rotation_between_axis(&vector1, &vector2).unwrap();
+        let vector = Vector3::unit_y();
+        let expected = Vector3::unit_x();
+        let result = rotation.rotate_vector(&vector);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_between_vectors_point() {
+        let point = 3_f64 * Point3::new(0_f64, 1_f64, 0_f64);
+        let vector1 = 5_f64 * Vector3::unit_y();
+        let vector2 = 12_f64 * Vector3::unit_x();
+        let rotation = Rotation3::rotation_between(&vector1, &vector2).unwrap();
+        let expected = 3_f64 * Point3::new(1_f64, 0_f64, 0_f64);
+        let result = rotation.rotate_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_between_vectors_vector() {
+        let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
+        let vector1 = 5_f64 * Vector3::unit_y();
+        let vector2 = 12_f64 * Vector3::unit_x();
+        let rotation = Rotation3::rotation_between(&vector1, &vector2).unwrap();
+        let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
+        let result = rotation.rotate_vector(&vector);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_look_at_rh_x_axis() {
+        let direction: Vector3<f64> = Vector3::unit_x();
+        let up: Vector3<f64> = Vector3::unit_y();
+        let angle = Degrees(90_f64);
+        let expected = Rotation3::from_angle_y(angle);
+        let result = Rotation3::look_at_rh(&direction, &up);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_look_at_rh_y_axis() {
+        let direction: Vector3<f64> = Vector3::unit_y();
+        let up: Vector3<f64> = Vector3::unit_x();
+        let rotation = Rotation3::look_at_rh(&direction, &up);
+        let result = rotation.rotate_vector(&direction);
+        let expected = -Vector3::unit_z();
+        
+        assert_eq!(result, expected);
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_look_at_lh_x_axis() {
+        let direction: Vector3<f64> = Vector3::unit_x();
+        let up: Vector3<f64> = Vector3::unit_y();
+        let angle = Degrees(-90_f64);
+        let expected = Rotation3::from_angle_y(angle);
+        let result = Rotation3::look_at_lh(&direction, &up);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_look_at_lh_y_axis() {
+        let direction: Vector3<f64> = Vector3::unit_y();
+        let up: Vector3<f64> = Vector3::unit_x();
+        let rotation = Rotation3::look_at_lh(&direction, &up);
+        let result = rotation.rotate_vector(&direction);
+        let expected = Vector3::unit_z();
+
+        assert_eq!(result, expected);
+    }
 }
 
