@@ -37,9 +37,6 @@ use core::ops;
 /// where each interval includes its endpoints.
 ///
 /// ## Note
-/// We recommend quaternions over Euler angles for rotations because quaternions 
-/// do not gimbal lock. The library provides Euler angles for feature-completeness, or 
-/// in cases where the end user prefers Euler angles.
 /// 
 /// Euler angles are prone to gimbal lock. Gimbal lock is the loss of one 
 /// degree of freedom when rotations about two axes come into parallel alignment. 
