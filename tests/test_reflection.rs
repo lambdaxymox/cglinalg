@@ -40,7 +40,7 @@ mod reflection2_tests {
     }
 
     #[test]
-    fn test_reflection_x_line_point2() {
+    fn test_reflection_y_line_point1() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
         let bias = Vector2::zero();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
@@ -52,7 +52,7 @@ mod reflection2_tests {
     }
 
     #[test]
-    fn test_reflection_x_line_vector2() {
+    fn test_reflection_y_line_vector1() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
         let bias = Vector2::zero();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
@@ -207,6 +207,99 @@ mod reflection2_tests {
         let result = reflection.reflect_vector(&vector);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+}
+
+#[cfg(test)]
+mod reflection3_tests {
+    use cglinalg::{
+        Reflection3,
+        Point3,
+        Vector3,
+        Unit,
+        Zero,
+    };
+    use approx::{
+        relative_eq,
+    };
+
+
+    /// Test reflecting points through the plane `x = 0`.
+    #[test]
+    fn test_reflection_x_plane_point1() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let point = Point3::new(1_f64, 1_f64, 1_f64);
+        let expected = Point3::new(-1_f64, 1_f64, 1_f64);
+        let result = reflection.reflect_point(&point);
+
+        assert_eq!(result, expected);
+    }
+
+    /// Test reflecting vectors through the plane `x = 0`.
+    #[test]
+    fn test_reflection_x_plane_vector1() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+        let expected = Vector3::new(-1_f64, 1_f64, 1_f64);
+        let result = reflection.reflect_vector(&vector);
+
+        assert_eq!(result, expected);
+    }
+
+    /// Test reflecting points through the plane `y = 0`.
+    #[test]
+    fn test_reflection_y_plane_point1() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let point = Point3::new(1_f64, 1_f64, 1_f64);
+        let expected = Point3::new(1_f64, -1_f64, 1_f64);
+        let result = reflection.reflect_point(&point);
+
+        assert_eq!(result, expected);
+    }
+
+    /// Test reflecting vectors through the plane `y = 0`.
+    #[test]
+    fn test_reflection_y_plane_vector1() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+        let expected = Vector3::new(1_f64, -1_f64, 1_f64);
+        let result = reflection.reflect_vector(&vector);
+
+        assert_eq!(result, expected);
+    }
+
+    /// Test reflecting points through the plane `z = 0`.
+    #[test]
+    fn test_reflection_z_plane_point1() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let point = Point3::new(1_f64, 1_f64, 1_f64);
+        let expected = Point3::new(1_f64, 1_f64, -1_f64);
+        let result = reflection.reflect_point(&point);
+
+        assert_eq!(result, expected);
+    }
+
+    /// Test reflecting vectors through the plane `z = 0`.
+    #[test]
+    fn test_reflection_z_plane_vector1() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+        let expected = Vector3::new(1_f64, 1_f64, -1_f64);
+        let result = reflection.reflect_vector(&vector);
+
+        assert_eq!(result, expected);
     }
 }
 
