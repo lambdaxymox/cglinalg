@@ -227,7 +227,7 @@ mod rotation3_tests {
     fn test_from_angle_x_rotate_point1() {
         let rotation = Rotation3::from_angle_x(Degrees(90_f64));
         let point = Point3::new(0_f64, 1_f64, 0_f64);
-        let expected = Point3::new(0_f64, 0_f64, 1_f64);;
+        let expected = Point3::new(0_f64, 0_f64, 1_f64);
         let result = rotation.rotate_point(&point);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
@@ -287,7 +287,7 @@ mod rotation3_tests {
     fn test_from_angle_y_rotate_point1() {
         let rotation = Rotation3::from_angle_y(Degrees(90_f64));
         let point = Point3::new(0_f64, 0_f64, 1_f64);
-        let expected = Point3::new(1_f64, 0_f64, 0_f64);;
+        let expected = Point3::new(1_f64, 0_f64, 0_f64);
         let result = rotation.rotate_point(&point);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
