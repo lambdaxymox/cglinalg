@@ -301,5 +301,159 @@ mod reflection3_tests {
 
         assert_eq!(result, expected);
     }
+
+    /// Test the reflection through the plane `y = x`.
+    /// Note that there is an ambiguity in the choice of normal to a plane in
+    /// two dimensions. We can choose either a normal vector or its negation
+    /// to construct the reflection and get the same reflection.
+    #[test]
+    fn test_reflection_plane_through_origin_point1() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
+            -1_f64 / f64::sqrt(2_f64), 
+            1_f64 / f64::sqrt(2_f64),
+            0_f64
+        ));
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let point = Point3::new(2_f64, 1_f64, 1_f64);
+        let expected = Point3::new(1_f64, 2_f64, 1_f64);
+        let result = reflection.reflect_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// Test the reflection through the plane `y = x`.
+    /// Note that there is an ambiguity in the choice of normal to a plane in
+    /// two dimensions. We can choose either a normal vector or its negation
+    /// to construct the reflection and get the same reflection.
+    #[test]
+    fn test_reflection_plane_through_origin_vector1() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
+            -1_f64 / f64::sqrt(2_f64), 
+            1_f64 / f64::sqrt(2_f64),
+            0_f64
+        ));
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let vector = Vector3::new(2_f64, 1_f64, 1_f64);
+        let expected = Vector3::new(1_f64, 2_f64, 1_f64);
+        let result = reflection.reflect_vector(&vector);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8)); 
+    }
+
+    /// Test the reflection through the plane `y = x`.
+    /// Note that there is an ambiguity in the choice of normal to a plane in
+    /// two dimensions. We can choose either a normal vector or its negation
+    /// to construct the reflection and get the same reflection.
+    #[test]
+    fn test_reflection_plane_through_origin_point2() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(-Vector3::new(
+            -1_f64 / f64::sqrt(2_f64), 
+            1_f64 / f64::sqrt(2_f64),
+            0_f64
+        ));
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let point = Point3::new(2_f64, 1_f64, 1_f64);
+        let expected = Point3::new(1_f64, 2_f64, 1_f64);
+        let result = reflection.reflect_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// Test the reflection through the plane `y = x`.
+    /// Note that there is an ambiguity in the choice of normal to a plane in
+    /// two dimensions. We can choose either a normal vector or its negation
+    /// to construct the reflection and get the same reflection.
+    #[test]
+    fn test_reflection_plane_through_origin_vector2() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(-Vector3::new(
+        -1_f64 / f64::sqrt(2_f64), 
+         1_f64 / f64::sqrt(2_f64),
+         0_f64
+        ));
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let vector = Vector3::new(2_f64, 1_f64, 1_f64);
+        let expected = Vector3::new(1_f64, 2_f64, 1_f64);
+        let result = reflection.reflect_vector(&vector);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// Test the reflection through the plane `y = x`.
+    /// Note that there is an ambiguity in the choice of normal to a plane in
+    /// two dimensions. We can choose either a normal vector or its negation
+    /// to construct the reflection and get the same reflection.
+    #[test]
+    fn test_reflection_plane_through_origin_point3() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
+             -1_f64 / f64::sqrt(2_f64), 
+             1_f64 / f64::sqrt(2_f64),
+             0_f64
+        ));
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let point = Point3::new(2_f64, 2_f64, 1_f64);
+        let expected = Point3::new(2_f64, 2_f64, 1_f64);
+        let result = reflection.reflect_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// Test the reflection through the plane `y = x`.
+    /// Note that there is an ambiguity in the choice of normal to a plane in
+    /// two dimensions. We can choose either a normal vector or its negation
+    /// to construct the reflection and get the same reflection.
+    #[test]
+    fn test_reflection_plane_through_origin_vector3() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
+            -1_f64 / f64::sqrt(2_f64), 
+            1_f64 / f64::sqrt(2_f64),
+            0_f64
+        ));
+        let bias = Vector3::zero();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let vector = Vector3::new(2_f64, 2_f64, 1_f64);
+        let expected = Vector3::new(2_f64, 2_f64, 1_f64);
+        let result = reflection.reflect_vector(&vector);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// Test the reflection through the plane `y = (1/2)*x + 1`.
+    #[test]
+    fn test_reflection_arbitrary_plane_point() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
+            -1_f64 / 2_f64, 
+            1_f64,
+            0_f64
+        ));
+        let bias = Vector3::new(0_f64, 1_f64, 0_f64);
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let point = Point3::new(1_f64, 1_f64, 20_f64);
+        let expected = Point3::new(3_f64 / 5_f64, 9_f64 / 5_f64, 20_f64);
+        let result = reflection.reflect_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    /// Test the reflection through the plane `y = (1/2)*x + 1.
+    #[test]
+    fn test_reflection_arbitrary_plane_vector() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
+            -1_f64 / 2_f64, 
+            1_f64,
+            0_f64
+        ));
+        let bias = Vector3::new(0_f64, 1_f64, 0_f64);
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let vector = Vector3::new(1_f64, 1_f64, 20_f64);
+        let expected = Vector3::new(7_f64 / 5_f64, 1_f64 / 5_f64, 20_f64);
+        let result = reflection.reflect_vector(&vector);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
 }
 
