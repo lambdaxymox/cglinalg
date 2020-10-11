@@ -187,6 +187,7 @@ mod rotation3_tests {
         Radians,
         Point3,
         Vector3,
+        Unit,
     };
     use cglinalg::approx::{
         relative_eq,
@@ -580,6 +581,41 @@ mod rotation3_tests {
         let result = rotation.inverse_rotate_vector(&vector);
     
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_axis_angle_rotate_point() {
+        let axis = Unit::from_value(Vector3::new(-1_f64, -1_f64, 1_f64));
+        let angle = Degrees(60_f64);
+        let rotation = Rotation3::from_axis_angle(&axis, angle);
+        let point = Point3::new(-1_f64, -1_f64, 0_f64);
+        let expected = Point3::new(-2_f64 / 6_f64,  -8_f64 / 6_f64, 2_f64 / 6_f64);
+        let result = rotation.rotate_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_axis_angle_rotate_vector() {
+        let axis = Unit::from_value(Vector3::new(-1_f64, -1_f64, 1_f64));
+        let angle = Degrees(60_f64);
+        let rotation = Rotation3::from_axis_angle(&axis, angle);
+        let point = Point3::new(-1_f64, -1_f64, 0_f64);
+        let expected = Point3::new(-2_f64 / 6_f64,  -8_f64 / 6_f64, 2_f64 / 6_f64);
+        let result = rotation.rotate_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_inverse_of_rotation_is_rotation_by_negative_angle() {
+        let axis = Unit::from_value(Vector3::new(-1_f64, -1_f64, 1_f64));
+        let angle = Radians::full_turn_div_6();
+        let rotation = Rotation3::from_axis_angle(&axis, angle);
+        let expected = Rotation3::from_axis_angle(&axis, -angle);
+        let result = rotation.inverse();
+
+        assert_eq!(result, expected);
     }
 }
 
