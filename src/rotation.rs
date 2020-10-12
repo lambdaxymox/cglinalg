@@ -345,6 +345,26 @@ impl<S> Rotation2<S> where S: ScalarFloat {
         Point2::new(result.x, result.y)
     }
 
+    /// Construct the identity rotation transformation.
+    ///
+    /// The identity rotation transformation is a rotation that rotates
+    /// a vector or point by and angle of zero radians. The inverse operation
+    /// will also rotate by zero radians.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let rotation = Rotation2::identity();
+    /// let point = Point2::new(1_f64, 2_f64);
+    ///
+    /// assert_eq!(rotation * point, point);
+    /// assert_eq!(rotation.inverse(), rotation);
+    /// ```
     #[inline]
     pub fn identity() -> Rotation2<S> {
         Rotation2 { 
@@ -352,6 +372,7 @@ impl<S> Rotation2<S> where S: ScalarFloat {
         }
     }
 
+    /// Convert a rotation into a generic transformation.
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
         Transform2::from_specialized(self.matrix)
