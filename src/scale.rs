@@ -196,9 +196,23 @@ impl<S> Scale2<S> where S: ScalarFloat {
     }
 
     /// Construct the identity scaling transformation. 
+    ///
+    /// The identity is the scale transform with a scale factor of `1` for 
+    /// each component.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale2,
+    /// #     Point2,  
+    /// # };
+    /// #
+    /// let scale = Scale2::identity();
+    /// let point = Point2::new(1_f64, 2_f64);
     /// 
-    /// The identity scaling transformation is a scaling transformation where 
-    /// each scale factor is `1`.
+    /// assert_eq!(scale * point, point);
+    /// ```
     #[inline]
     pub fn identity() -> Scale2<S> {
         Scale2::from_scale(S::one())
@@ -408,8 +422,24 @@ impl<S> Scale3<S> where S: Scalar {
         Point3::new(self.x * point.x, self.y * point.y, self.z * point.z)
     }
 
-    /// Construct the identity scaling transformation. The identity is just the
-    /// scaling transform with a scale factor of `1` for each component.
+    /// Construct the identity scaling transformation. 
+    ///
+    /// The identity is the scale transform with a scale factor of `1` for 
+    /// each component.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale3,
+    /// #     Point3,  
+    /// # };
+    /// #
+    /// let scale = Scale3::identity();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// 
+    /// assert_eq!(scale * point, point);
+    /// ```
     #[inline]
     pub fn identity() -> Scale3<S> {
         Scale3::from_scale(S::one())
@@ -531,6 +561,7 @@ impl<S> fmt::Display for Scale3<S> where S: fmt::Display {
 }
 
 impl<S> From<Scale3<S>> for Matrix4x4<S> where S: Scalar {
+    #[inline]
     fn from(scale: Scale3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_nonuniform_scale(
             scale.x, 
@@ -541,6 +572,7 @@ impl<S> From<Scale3<S>> for Matrix4x4<S> where S: Scalar {
 }
 
 impl<S> From<&Scale3<S>> for Matrix4x4<S> where S: Scalar {
+    #[inline]
     fn from(scale: &Scale3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_nonuniform_scale(
             scale.x, 
