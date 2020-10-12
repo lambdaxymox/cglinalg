@@ -681,6 +681,26 @@ impl<S> Shear3<S> where S: ScalarSigned {
         Point3::new(result.x, result.y, result.z)
     }
 
+    /// Construct the identity shear transformation.
+    ///
+    /// The identity shear is a shear transformation that does not shear
+    /// any coordinates of a vector or a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// #     Vector3,    
+    /// # };
+    /// #
+    /// let shear = Shear3::identity();
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = vector;
+    /// let result = shear.shear_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn identity() -> Shear3<S> {
         Shear3 { 
@@ -688,6 +708,7 @@ impl<S> Shear3<S> where S: ScalarSigned {
         }
     }
 
+    /// Convert a shear transformation into a generic transformation.
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
         Transform3::from_specialized(self.matrix)
@@ -695,7 +716,27 @@ impl<S> Shear3<S> where S: ScalarSigned {
 }
 
 impl<S> Shear3<S> where S: ScalarFloat {
-    /// Apply a shearing transformation to a vector.
+    /// Calculate the inverse of a shear transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3, 
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let shear_x_with_y = 5_f64;
+    /// let shear_x_with_z = 10_f64;
+    /// let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
+    /// let shear_inv = shear.inverse();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = point;
+    /// let sheared_point = shear.shear_point(&point);
+    /// let result = shear_inv.shear_point(&sheared_point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Shear3<S> {
         use crate::traits::SquareMatrix;
@@ -727,6 +768,26 @@ impl<S> Shear3<S> where S: ScalarFloat {
         }
     }
 
+    /// Apply the inverse of the shear transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3, 
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let shear_x_with_y = 5_f64;
+    /// let shear_x_with_z = 10_f64;
+    /// let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = vector;
+    /// let sheared_vector = shear.shear_vector(&vector);
+    /// let result = shear.inverse_shear_vector(&sheared_vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_shear_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let inverse = self.inverse();
@@ -734,6 +795,26 @@ impl<S> Shear3<S> where S: ScalarFloat {
         inverse.matrix * vector
     }
 
+    /// Apply the inverse of the shear transformation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3, 
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let shear_x_with_y = 5_f64;
+    /// let shear_x_with_z = 10_f64;
+    /// let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = point;
+    /// let sheared_point = shear.shear_point(&point);
+    /// let result = shear.inverse_shear_point(&sheared_point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_shear_point(&self, point: &Point3<S>) -> Point3<S> {
         let inverse = self.inverse();
@@ -764,18 +845,21 @@ impl<S> From<Shear3<S>> for Matrix3x3<S> where S: ScalarSigned {
 }
 
 impl<S> From<&Shear3<S>> for Matrix3x3<S> where S: ScalarSigned {
+    #[inline]
     fn from(shear: &Shear3<S>) -> Matrix3x3<S> {
         shear.matrix
     }
 }
 
 impl<S> From<Shear3<S>> for Matrix4x4<S> where S: ScalarSigned {
+    #[inline]
     fn from(shear: Shear3<S>) -> Matrix4x4<S> {
         Matrix4x4::from(&shear.matrix)
     }
 }
 
 impl<S> From<&Shear3<S>> for Matrix4x4<S> where S: ScalarSigned {
+    #[inline]
     fn from(shear: &Shear3<S>) -> Matrix4x4<S> {
         Matrix4x4::from(&shear.matrix)
     }
