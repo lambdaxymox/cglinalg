@@ -75,6 +75,7 @@ impl<S> Reflection2<S> where S: ScalarFloat {
         &self.matrix
     }
 
+    /* FIXME: Can we calculate an inverse reflection?
     /// Calculate the inverse reflection transformation.
     ///
     /// ## Example
@@ -132,6 +133,7 @@ impl<S> Reflection2<S> where S: ScalarFloat {
             matrix: matrix * inverse_det 
         }
     }
+    */
 
     /// Reflect a vector across a line described by the reflection 
     /// transformation.
@@ -387,6 +389,7 @@ impl<S> Reflection3<S> where S: ScalarFloat {
         self.normal
     }
 
+    /* FIXME: Can we calculate an inverse reflection?
     /// Calculate the inverse reflection transformation.
     #[inline]
     pub fn inverse(&self) -> Reflection3<S> {
@@ -430,6 +433,7 @@ impl<S> Reflection3<S> where S: ScalarFloat {
             matrix: matrix * inverse_det,
         }
     }
+    */
 
     /// Reflect a vector across the plane described by the reflection 
     /// transformation.
