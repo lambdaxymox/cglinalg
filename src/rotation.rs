@@ -918,12 +918,61 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     }
 
     /// Apply the rotation operation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(-f64::consts::FRAC_PI_2);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let vector = Vector3::unit_x();
+    /// let expected = -Vector3::unit_y();
+    /// let result = rotation.rotate_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn rotate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         self.matrix * vector
     }
 
     /// Apply the rotation operation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(-f64::consts::FRAC_PI_2);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let point = Point3::new(1_f64, 0_f64, 0_f64);
+    /// let expected = Point3::new(0_f64, -1_f64, 0_f64);
+    /// let result = rotation.rotate_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn rotate_point(&self, point: &Point3<S>) -> Point3<S> { 
         let vector = Vector3::new(point.x, point.y, point.z);
@@ -955,6 +1004,7 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         }
     }
 
+    /// Convert a rotation to a generic transformation.
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
         Transform3::from_specialized(self.matrix)
