@@ -63,6 +63,26 @@ impl<S> Rotation2<S> where S: ScalarFloat {
     }
 
     /// Get the rotation angle of the rotation transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Vector2,
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let angle = Degrees(90_f64);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let expected = angle.into();
+    /// let result = rotation.angle();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn angle(&self) -> Radians<S> {
         Radians::atan2(self.matrix.c0r1, self.matrix.c0r0)
