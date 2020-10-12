@@ -60,17 +60,46 @@ impl<S> Reflection2<S> where S: ScalarFloat {
     }
 
     /// Return the normal vector to the reflection plane.
+    ///
+    /// There is an ambiguity in the choice of normal to a line in
+    /// two dimensions. One can choose either a normal vector or its negation
+    /// to construct the reflection and get the same reflection transformation.
     #[inline]
     pub fn normal(&self) -> Vector2<S> {
         self.normal
     }
 
+    /// The underlying matrix of the reflection transformation.
     #[inline]
     pub fn matrix(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 
     /// Calculate the inverse reflection transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Reflection2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
+    ///     -1_f64 / 2_f64, 
+    ///      1_f64
+    /// ));
+    /// let bias = Vector2::new(0_f64, 1_f64);
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let reflection_inv = reflection.inverse();
+    /// let vector = Vector2::new(1_f64, 1_f64);
+    /// let expected = vector; // Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
+    /// let reflected_vector = reflection.reflect_vector(&vector);
+    /// let result = reflection_inv.reflect_vector(&reflected_vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Reflection2<S> {
         let zero = S::zero();
@@ -104,13 +133,66 @@ impl<S> Reflection2<S> where S: ScalarFloat {
         }
     }
 
-    /// Reflect a vector across a line.
+    /// Reflect a vector across a line described by the reflection 
+    /// transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Reflection2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
+    ///     -1_f64 / 2_f64, 
+    ///      1_f64
+    /// ));
+    /// let bias = Vector2::new(0_f64, 1_f64);
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let vector = Vector2::new(1_f64, 1_f64);
+    /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
+    /// let result = reflection.reflect_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn reflect_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
-    /// Reflect a point across a line.
+    /// Reflect a point across a line described by the reflection 
+    /// transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Reflection2,
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
+    ///     -1_f64 / 2_f64, 
+    ///      1_f64
+    /// ));
+    /// let bias = Vector2::new(0_f64, 1_f64);
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let point = Point2::new(1_f64, 1_f64);
+    /// let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
+    /// let result = reflection.reflect_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn reflect_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
