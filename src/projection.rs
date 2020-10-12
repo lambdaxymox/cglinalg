@@ -1025,12 +1025,60 @@ impl<S> Orthographic3<S> where S: ScalarFloat {
     }
 
     /// Get the underlying matrix implementing the orthographic transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Orthographic3,
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let expected = Matrix4x4::new(
+    ///     1_f64 / 6_f64, 0_f64,          0_f64,           0_f64,
+    ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64, 
+    ///     0_f64,         0_f64,         -1_f64 / 50_f64,  0_f64,
+    ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64
+    /// );
+    /// let result = orthographic.matrix();
+    ///
+    /// assert_eq!(result, &expected);
+    /// ```
     #[inline]
     pub fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
-    /// Apply the transformation to a point.
+    /// Apply the orthographic projection transformation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Orthographic3,
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let point = Point3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = Point3::new(1_f64 / 3_f64, 3_f64 / 4_f64, -81_f64 / 50_f64);
+    /// let result = orthographic.project_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::new(
@@ -1040,7 +1088,29 @@ impl<S> Orthographic3<S> where S: ScalarFloat {
         )
     }
 
-    /// Apply the transformation to a vector.
+    /// Apply the orthographic projection transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Orthographic3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = Vector3::new(1_f64 / 3_f64, 3_f64 / 4_f64, -3_f64 / 5_f64);
+    /// let result = orthographic.project_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         Vector3::new(
@@ -1054,6 +1124,29 @@ impl<S> Orthographic3<S> where S: ScalarFloat {
     /// view space. 
     ///
     /// This is the inverse operation of `project_point`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Orthographic3,
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let point = Point3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = point;
+    /// let projected_point = orthographic.project_point(&point);
+    /// let result = orthographic.unproject_point(&projected_point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
@@ -1075,6 +1168,29 @@ impl<S> Orthographic3<S> where S: ScalarFloat {
     /// camera view space. 
     ///
     /// This is the inverse operation of `project_vector`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Orthographic3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = vector;
+    /// let projected_vector = orthographic.project_vector(&vector);
+    /// let result = orthographic.unproject_vector(&projected_vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
