@@ -358,23 +358,64 @@ impl<S> Scale3<S> where S: Scalar {
         }
     }
 
-    /// Apply a scale operation to a vector.
+    /// Apply a scale transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale3,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale_z = 4_f64;
+    /// let scale = Scale3::from_nonuniform_scale(scale_x, scale_y, scale_z);
+    /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let result = scale.scale_vector(&vector);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn scale_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         Vector3::new(self.x * vector.x, self.y * vector.y, self.z * vector.z)
     }
 
-    /// Apply a scale operation to a point.
+    /// Apply a scale transformation operation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale3,
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale_z = 4_f64;
+    /// let scale = Scale3::from_nonuniform_scale(scale_x, scale_y, scale_z);
+    /// let point = Point3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = Point3::new(2_f64, 3_f64, 4_f64);
+    /// let result = scale.scale_point(&point);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn scale_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::new(self.x * point.x, self.y * point.y, self.z * point.z)
     }
 
+    /// Construct the identity scaling transformation. The identity is just the
+    /// scaling transform with a scale factor of `1` for each component.
     #[inline]
     pub fn identity() -> Scale3<S> {
         Scale3::from_scale(S::one())
     }
 
+    /// Convert a scale transformation into a generic transformation.
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
         Transform3::from_specialized(self)
@@ -384,6 +425,27 @@ impl<S> Scale3<S> where S: Scalar {
 impl<S> Scale3<S> where S: ScalarFloat {
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
+    /// 
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale3, 
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale_z = 4_f64;
+    /// let scale = Scale3::from_nonuniform_scale(scale_x, scale_y, scale_z);
+    /// let expected = Scale3::from_nonuniform_scale(
+    ///     1_f64 / scale_x,
+    ///     1_f64 / scale_y,
+    ///     1_f64 / scale_z  
+    /// );
+    /// let result = scale.inverse();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Scale3<S> {
         Scale3::from_nonuniform_scale(
@@ -393,6 +455,29 @@ impl<S> Scale3<S> where S: ScalarFloat {
         )
     }
 
+    /// Apply the inverse transformation of the scale transformation to a vector.
+    ///
+    /// Construct a scale transformation that scales each coordinate by the 
+    /// reciprocal of the scaling factors of the scale operator `self`.
+    /// 
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale_z = 4_f64;
+    /// let scale = Scale3::from_nonuniform_scale(scale_x, scale_y, scale_z);
+    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let expected = Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let result = scale.inverse_scale_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_scale_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         Vector3::new(
@@ -402,6 +487,29 @@ impl<S> Scale3<S> where S: ScalarFloat {
         )
     }
 
+    /// Apply the inverse transformation of the scale transformation to a point.
+    ///
+    /// Construct a scale transformation that scales each coordinate by the 
+    /// reciprocal of the scaling factors of the scale operator `self`.
+    /// 
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale3,
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale_z = 4_f64;
+    /// let scale = Scale3::from_nonuniform_scale(scale_x, scale_y, scale_z);
+    /// let point = Point3::new(2_f64, 3_f64, 4_f64);
+    /// let expected = Point3::new(1_f64, 1_f64, 1_f64);
+    /// let result = scale.inverse_scale_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_scale_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::new(
