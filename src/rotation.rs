@@ -888,6 +888,28 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// Given a rotation operator that rotates a vector about a normal vector 
     /// `axis` by an angle `theta`, construct a rotation that rotates a 
     /// vector about the same axis by an angle `-theta`.
+    /// 
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Radians,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let expected = Rotation3::from_axis_angle(&axis, -angle);
+    /// let result = rotation.inverse();
+    ///
+    /// assert_eq!(result, expected);
+    /// assert_eq!(result.angle(), expected.angle());
+    /// assert_eq!(result.axis(), expected.axis());
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Rotation3<S> {
         Rotation3 {
