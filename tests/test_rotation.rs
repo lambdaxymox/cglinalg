@@ -709,7 +709,6 @@ mod rotation3_tests {
         let result = rotation.rotate_vector(&direction);
         let expected = -Vector3::unit_z();
         
-        assert_eq!(result, expected);
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 

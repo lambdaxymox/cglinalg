@@ -757,6 +757,26 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// locates the `eye` position to the origin in the new the coordinate system.
     /// This transformation is a **right-handed** coordinate transformation. It is
     /// conventionally used in computer graphics for camera view transformations.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Rotation3,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// # 
+    /// let direction: Vector3<f64> = Vector3::unit_y();
+    /// let up: Vector3<f64> = Vector3::unit_x();
+    /// let rotation = Rotation3::look_at_rh(&direction, &up);
+    /// let result = rotation.rotate_vector(&direction);
+    /// let expected = -Vector3::unit_z();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
         Rotation3 {
@@ -772,6 +792,26 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// The function maps the direction `direction` to the **positive z-axis** and 
     /// locates the `eye` position to the origin in the new the coordinate system.
     /// This transformation is a **left-handed** coordinate transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Rotation3,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// # 
+    /// let direction: Vector3<f64> = Vector3::unit_y();
+    /// let up: Vector3<f64> = Vector3::unit_x();
+    /// let rotation = Rotation3::look_at_lh(&direction, &up);
+    /// let result = rotation.rotate_vector(&direction);
+    /// let expected = Vector3::unit_z();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
         Rotation3 {
@@ -781,6 +821,29 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two vectors.
+    ///
+    /// The rotation uses the unit directional vectors of the input vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
+    /// let vector1 = 5_f64 * Vector3::unit_y();
+    /// let vector2 = 12_f64 * Vector3::unit_x();
+    /// let rotation = Rotation3::rotation_between(&vector1, &vector2).unwrap();
+    /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
+    /// let result = rotation.rotate_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn rotation_between(
         v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Rotation3<S>> {
@@ -790,6 +853,28 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
+    /// let unit1 = Unit::from_value(5_f64 * Vector3::unit_y());
+    /// let unit2 = Unit::from_value(12_f64 * Vector3::unit_x());
+    /// let rotation = Rotation3::rotation_between_axis(&unit1, &unit2).unwrap();
+    /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
+    /// let result = rotation.rotate_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn rotation_between_axis(
         v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Rotation3<S>> {
