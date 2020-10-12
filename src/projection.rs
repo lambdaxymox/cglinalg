@@ -658,6 +658,34 @@ impl<S> PerspectiveFov3<S>
     /// view space. 
     /// 
     /// This is the inverse operation of `project_point`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     PerspectiveFov3,
+    /// #     Matrix4x4,
+    /// #     Degrees,
+    /// #     Angle,
+    /// #     Point3,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = PerspectiveFov3::new(vfov, aspect, near, far);
+    /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
+    /// let expected = point;
+    /// let projected_point = perspective.project_point(&point);
+    /// let result = perspective.unproject_point(&projected_point);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         // The perspective projection matrix has the form
@@ -712,6 +740,34 @@ impl<S> PerspectiveFov3<S>
     /// camera view space. 
     ///
     /// This is the inverse operation of `project_vector`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     PerspectiveFov3,
+    /// #     Matrix4x4,
+    /// #     Degrees,
+    /// #     Angle,
+    /// #     Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = PerspectiveFov3::new(vfov, aspect, near, far);
+    /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
+    /// let expected = vector;
+    /// let projected_vector = perspective.project_vector(&vector);
+    /// let result = perspective.unproject_vector(&projected_vector); 
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         // The perspective projection matrix has the form
