@@ -120,6 +120,26 @@ impl<S> Rotation2<S> where S: ScalarFloat {
 
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit, 
+    /// # };
+    /// #
+    /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
+    /// let vector1 = Unit::from_value(Vector2::unit_y());
+    /// let vector2 = Unit::from_value(Vector2::unit_x());
+    /// let rotation = Rotation2::rotation_between_axis(&vector1, &vector2);
+    /// let expected = Point2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
+    /// let result = rotation.rotate_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn rotation_between_axis(a: &Unit<Vector2<S>>, b: &Unit<Vector2<S>>) -> Rotation2<S> {
         let unit_a = a.as_ref();
@@ -132,6 +152,25 @@ impl<S> Rotation2<S> where S: ScalarFloat {
 
     /// Construct a rotation that rotates the shortest angular distance 
     /// between vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Point2,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
+    /// let vector1 = 3_f64 * Vector2::unit_y();
+    /// let vector2 = 6_f64 * Vector2::unit_x();
+    /// let rotation = Rotation2::rotation_between(&vector1, &vector2);
+    /// let expected = Point2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
+    /// let result = rotation.rotate_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn rotation_between(a: &Vector2<S>, b: &Vector2<S>) -> Rotation2<S> {
         if let (Some(unit_a), Some(unit_b)) = (
@@ -150,6 +189,24 @@ impl<S> Rotation2<S> where S: ScalarFloat {
     /// Given a rotation operator that rotates a vector about a normal vector 
     /// `axis` by an angle `theta`, construct a rotation that rotates a 
     /// vector about the same axis by an angle `-theta`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Radians,    
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let rotation_inv = rotation.inverse();
+    /// let expected = Radians(-f64::consts::FRAC_PI_3);
+    /// let result = rotation_inv.angle();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Rotation2<S> {
         Rotation2 {
@@ -158,12 +215,56 @@ impl<S> Rotation2<S> where S: ScalarFloat {
     }
 
     /// Apply the rotation operation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Radians,
+    /// #     Vector2, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let vector = Vector2::unit_x();
+    /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
+    /// let result = rotation.rotate_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn rotate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         self.matrix * vector
     }
 
     /// Apply the rotation operation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Radians,
+    /// #     Point2, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let point = Point2::new(1_f64, 0_f64);
+    /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
+    /// let result = rotation.rotate_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn rotate_point(&self, point: &Point2<S>) -> Point2<S> {
         let vector = Vector2::new(point.x, point.y);
@@ -172,6 +273,34 @@ impl<S> Rotation2<S> where S: ScalarFloat {
         Point2::new(result.x, result.y)
     }
 
+    /// Apply the inverse rotation operation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Radians,
+    /// #     Vector2, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let vector = Vector2::unit_x();
+    /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
+    /// let result = rotation.rotate_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    ///
+    /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
+    /// let result = rotation.inverse_rotate_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_rotate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         let inverse = self.inverse();
@@ -179,6 +308,34 @@ impl<S> Rotation2<S> where S: ScalarFloat {
         inverse.matrix * vector
     }
 
+    /// Apply the inverse rotation operation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Radians,
+    /// #     Point2, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let point = Point2::new(1_f64, 0_f64);
+    /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
+    /// let result = rotation.rotate_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    ///
+    /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
+    /// let result = rotation.inverse_rotate_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_rotate_point(&self, point: &Point2<S>) -> Point2<S> {
         let inverse = self.inverse();
