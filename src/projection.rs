@@ -118,6 +118,35 @@ impl<S> Perspective3<S>
     }
 
     /// Get the matrix that implements the perspective projection transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Perspective3,
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let result = perspective.matrix();
+    /// let expected = Matrix4x4::new(
+    ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
+    ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
+    ///     0_f64,         0_f64,         -101_f64 / 99_f64, -1_f64,
+    ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+    /// );
+    ///
+    /// assert_eq!(result, &expected);
+    /// 
     #[inline]
     pub fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
