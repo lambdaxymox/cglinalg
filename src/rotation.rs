@@ -496,7 +496,27 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         &self.matrix
     }
 
-    /// Compute the angle of the rotation.
+    /// Get the rotation angle of the rotation transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let angle = Degrees(90_f64);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let expected = angle.into();
+    /// let result = rotation.angle();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn angle(&self) -> Radians<S> {
         let two = num_traits::cast(2_i8).unwrap();
@@ -505,7 +525,52 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         )
     }
 
-    /// Compute the axis of the rotation, if it exists.
+    /// Compute the axis of the rotation if it exists.
+    ///
+    /// If the rotation angle is zero or `pi`, axis returns `None`.
+    ///
+    /// ## Examples
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Degrees,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let angle = Degrees(90_f64);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let expected = Some(axis);
+    /// let result = rotation.axis();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    ///
+    /// If the rotation angle is zero, the function returns `None`.
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Degrees,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let angle = Degrees(0_f64);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let expected = None;
+    /// let result = rotation.axis();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn axis(&self) -> Option<Unit<Vector3<S>>> {
         let axis = Vector3::new(
@@ -518,6 +583,29 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     }
 
     /// Compute the axis and angle of the rotation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let expected = Some((axis, angle));
+    /// let result = rotation.axis_angle();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn axis_angle(&self) -> Option<(Unit<Vector3<S>>, Radians<S>)> {
         if let Some(axis) = self.axis() {
@@ -528,6 +616,30 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     }
 
     /// Construct a three-dimensional rotation matrix from a quaternion.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Radians,
+    /// #     Quaternion,
+    /// #     Unit,
+    /// #     Vector3,
+    /// #     Rotation3, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let axis = Unit::from_value(Vector3::unit_y());
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = Rotation3::from_axis_angle(&axis, angle);
+    /// let result = Rotation3::from_quaternion(&quaternion);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn from_quaternion(quaternion: &Quaternion<S>) -> Rotation3<S> {
         Rotation3 {
