@@ -431,13 +431,56 @@ impl<S> Reflection3<S> where S: ScalarFloat {
         }
     }
 
-    /// Reflect a vector across a line.
+    /// Reflect a vector across the plane described by the reflection 
+    /// transformation.
+    /// 
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Reflection3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// #     Zero,
+    /// # };
+    /// #
+    /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let bias = Vector3::zero();
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = Vector3::new(1_f64, 1_f64, -1_f64);
+    /// let result = reflection.reflect_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn reflect_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         (self.matrix * vector.expand(S::zero())).contract()
     }
 
-    /// Reflect a point across a plane.
+    /// Reflect a point across the plane described by the reflection 
+    /// transformation.
+    ///
+    /// ## Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Reflection3,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Unit,
+    /// #     Zero,
+    /// # };
+    /// #
+    /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let bias = Vector3::zero();
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// let point = Point3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = Point3::new(1_f64, 1_f64, -1_f64);
+    /// let result = reflection.reflect_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn reflect_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
