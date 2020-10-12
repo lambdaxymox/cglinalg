@@ -490,6 +490,26 @@ impl<S> Reflection3<S> where S: ScalarFloat {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 
+    /// Compute the identity reflection. 
+    ///
+    /// The identity reflection is a reflection that does not move a point 
+    /// or vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Reflection3,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let reflection = Reflection3::identity();
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = vector;
+    /// let result = reflection.reflect_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn identity() -> Reflection3<S> {
         Reflection3 { 
@@ -499,6 +519,7 @@ impl<S> Reflection3<S> where S: ScalarFloat {
         }
     }
 
+    /// Convert a reflection to a generic transformation.
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
         Transform3::from_specialized(self.matrix)
@@ -523,12 +544,14 @@ impl<S> fmt::Display for Reflection3<S> where S: fmt::Display {
 }
 
 impl<S> From<Reflection3<S>> for Matrix4x4<S> where S: Copy {
+    #[inline]
     fn from(transformation: Reflection3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
 impl<S> From<&Reflection3<S>> for Matrix4x4<S> where S: Copy {
+    #[inline]
     fn from(transformation: &Reflection3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
