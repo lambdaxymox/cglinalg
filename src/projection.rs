@@ -65,9 +65,7 @@ pub struct Perspective3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> Perspective3<S> 
-    where S: ScalarFloat
-{
+impl<S> Perspective3<S> where S: ScalarFloat {
     /// Construct a new perspective projection transformation.
     ///
     /// The perspective projection transformation uses a right-handed 
@@ -507,9 +505,7 @@ pub struct PerspectiveFov3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> PerspectiveFov3<S> 
-    where S: ScalarFloat
-{
+impl<S> PerspectiveFov3<S> where S: ScalarFloat {
     /// Construct a new perspective projection transformation.
     pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> PerspectiveFov3<S> {
         let spec_vfov = vfov.into();
@@ -1383,12 +1379,64 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     }
 
     /// Get the underlying matrix implementing the orthographic transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
+    /// #     Matrix4x4,
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
+    /// let expected = Matrix4x4::new(
+    ///     2_f64 / 101_f64, 0_f64,            0_f64,             0_f64, 
+    ///     0_f64,           8_f64 / 303_f64,  0_f64,             0_f64, 
+    ///     0_f64,           0_f64,           -2_f64 / 100_f64,   0_f64, 
+    ///     0_f64,           0_f64,           -102_f64 / 100_f64, 1_f64
+    /// );
+    /// let result = orthographic.matrix();
+    ///
+    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
-    /// Apply the transformation to a point.
+    /// Apply the othographic projection transformation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
+    /// #     Point3,
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
+    /// let point = Point3::new(2_f64, 3_f64, 50_f64);
+    /// let expected = Point3::new(4_f64 / 101_f64, 8_f64 / 101_f64, -101_f64 / 50_f64);
+    /// let result = orthographic.project_point(&point);
+    /// 
+    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::new(
@@ -1398,7 +1446,31 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
         )
     }
 
-    /// Apply the transformation to a vector.
+    /// Apply the orthographic projection transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
+    /// #     Vector3,
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 50_f64);
+    /// let expected = Vector3::new(4_f64 / 101_f64, 8_f64 / 101_f64, -1_f64);
+    /// let result = orthographic.project_vector(&vector);
+    /// 
+    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         Vector3::new(
@@ -1412,6 +1484,31 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// view space. 
     ///
     /// This is the inverse operation of `project_point`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
+    /// #     Point3,
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
+    /// let point = Point3::new(2_f64, 3_f64, 50_f64);
+    /// let expected = point;
+    /// let projected_point = orthographic.project_point(&point);
+    /// let result = orthographic.unproject_point(&projected_point);
+    /// 
+    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
@@ -1441,6 +1538,31 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// camera view space. 
     ///
     /// This is the inverse operation of `project_vector`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
+    /// #     Vector3,
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg::approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 50_f64);
+    /// let expected = vector;
+    /// let projected_vector = orthographic.project_vector(&vector);
+    /// let result = orthographic.unproject_vector(&projected_vector);
+    /// 
+    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();

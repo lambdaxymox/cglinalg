@@ -4556,6 +4556,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
+    /// #
     /// let vfov = Degrees(90.0);
     /// let aspect = 800 as f64 / 600 as f64;
     /// let near = 1.0;
@@ -4573,8 +4574,8 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     #[rustfmt::skip]
     #[inline]
     pub fn from_orthographic_fov<A: Into<Radians<S>>>(
-        vfov: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
-        
+        vfov: A, aspect: S, near: S, far: S) -> Matrix4x4<S> 
+    {
         let one_half = num_traits::cast(0.5).unwrap();
         let width = far * Angle::tan(vfov.into() * one_half);
         let height = width / aspect;
@@ -4617,7 +4618,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_perspective(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> {
+    pub fn from_perspective(
+        left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> 
+    {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
