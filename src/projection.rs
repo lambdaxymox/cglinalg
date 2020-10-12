@@ -181,7 +181,13 @@ impl<S> Perspective3<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+        let inverse_w = -S::one() / point.z;
+        
+        Point3::new(
+            (self.matrix.c0r0 * point.x + self.matrix.c2r0 * point.z) * inverse_w,
+            (self.matrix.c1r1 * point.y + self.matrix.c3r1 * point.z) * inverse_w,
+            (self.matrix.c2r2 * point.z + self.matrix.c3r2) * inverse_w
+        )
     }
 
     /// Apply the perspective projection transformation to a vector.
@@ -611,7 +617,13 @@ impl<S> PerspectiveFov3<S> where S: ScalarFloat {
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+        let inverse_w = -S::one() / point.z;
+
+        Point3::new(
+            (self.matrix.c0r0 * point.x) * inverse_w,
+            (self.matrix.c1r1 * point.y) * inverse_w,
+            (self.matrix.c2r2 * point.z + self.matrix.c3r2) * inverse_w
+        )
     }
 
     /// Apply the perspective projection transformation to a vector.
