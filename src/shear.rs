@@ -24,7 +24,7 @@ use core::fmt;
 use core::ops;
 
 
-/// A shearing transformation in two dimensions.
+/// A shear transformation in two dimensions.
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear2<S> {
@@ -38,6 +38,23 @@ impl<S> Shear2<S> where S: ScalarSigned {
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the **y-axis** to shearing along the **x-axis**.
+    ///
+    /// ## Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear2,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let shear_x_with_y = 3_f64;
+    /// let shear = Shear2::from_shear_x(shear_x_with_y);
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = Point2::new(1_f64 + shear_x_with_y * point.y, 2_f64);
+    /// let result = shear * point;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S) -> Shear2<S> {
         Shear2 {
@@ -50,6 +67,23 @@ impl<S> Shear2<S> where S: ScalarSigned {
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the **x-axis** to shearing along the **y-axis**.
+    ///
+    /// ## Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear2,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let shear_y_with_x = 3_f64;
+    /// let shear = Shear2::from_shear_y(shear_y_with_x);
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = Point2::new(1_f64, 2_f64 + shear_y_with_x * point.x);
+    /// let result = shear * point;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S) -> Shear2<S> {
         Shear2 {
@@ -67,6 +101,27 @@ impl<S> Shear2<S> where S: ScalarSigned {
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the 
     /// contribution of the **y-axis** to the shearing along the **x-axis**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear2,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let shear_x_with_y = 5_f64;
+    /// let shear_y_with_x = 9_f64;
+    /// let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = Point2::new(
+    ///     1_f64 + shear_x_with_y * point.y, 
+    ///     2_f64 + shear_y_with_x * point.x
+    /// );
+    /// let result = shear * point;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Shear2<S> {
         Shear2 {
@@ -75,12 +130,54 @@ impl<S> Shear2<S> where S: ScalarSigned {
     }
 
     /// Apply a shearing transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear2,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let shear_x_with_y = 5_f64;
+    /// let shear_y_with_x = 9_f64;
+    /// let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let expected = Vector2::new(
+    ///     1_f64 + shear_x_with_y * vector.y, 
+    ///     2_f64 + shear_y_with_x * vector.x
+    /// );
+    /// let result = shear.shear_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn shear_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         self.matrix * vector
     }
 
     /// Apply a shearing transformation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear2,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let shear_x_with_y = 5_f64;
+    /// let shear_y_with_x = 9_f64;
+    /// let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = Point2::new(
+    ///     1_f64 + shear_x_with_y * point.y, 
+    ///     2_f64 + shear_y_with_x * point.x
+    /// );
+    /// let result = shear.shear_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn shear_point(&self, point: &Point2<S>) -> Point2<S> {
         let vector = Vector2::new(point.x, point.y);
@@ -89,6 +186,26 @@ impl<S> Shear2<S> where S: ScalarSigned {
         Point2::new(result.x, result.y)
     }
 
+    /// Construct the identity shear transformation.
+    ///
+    /// The identity shear is a shear transformation that does not shear
+    /// any coordinates of a vector or a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear2,
+    /// #     Vector2,    
+    /// # };
+    /// #
+    /// let shear = Shear2::identity();
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let expected = vector;
+    /// let result = shear.shear_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn identity() -> Shear2<S> {
         Shear2 { 
@@ -96,6 +213,7 @@ impl<S> Shear2<S> where S: ScalarSigned {
         }
     }
 
+    /// Convert a shear transformation into a generic transformation.
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
@@ -103,7 +221,27 @@ impl<S> Shear2<S> where S: ScalarSigned {
 }
 
 impl<S> Shear2<S> where S: ScalarFloat {
-    /// Compute the inverse shearing operation.
+    /// Compute the inverse of the shear transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear2,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let shear_x_with_y = 3_f64;
+    /// let shear_y_with_x = 8_f64;
+    /// let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
+    /// let shear_inv = shear.inverse();
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = point;
+    /// let sheared_point = shear.shear_point(&point);
+    /// let result = shear_inv.shear_point(&sheared_point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Shear2<S> {
         let shear_y_with_x = self.matrix.c0r1;
