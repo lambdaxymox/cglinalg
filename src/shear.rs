@@ -28,7 +28,7 @@ use core::ops;
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear2<S> {
-    /// The matrix representing the affine transformation.
+    /// The matrix representing the shear transformation.
     matrix: Matrix2x2<S>,
 }
 
@@ -257,6 +257,26 @@ impl<S> Shear2<S> where S: ScalarFloat {
         }
     }
     
+    /// Apply the inverse of the shear transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear2,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let shear_x_with_y = 3_f64;
+    /// let shear_y_with_x = 8_f64;
+    /// let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let expected = vector;
+    /// let sheared_vector = shear.shear_vector(&vector);
+    /// let result = shear.inverse_shear_vector(&sheared_vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_shear_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         let inverse = self.inverse();
@@ -264,6 +284,26 @@ impl<S> Shear2<S> where S: ScalarFloat {
         inverse.matrix * vector
     }
     
+    /// Apply the inverse of the shear transformation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear2,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let shear_x_with_y = 3_f64;
+    /// let shear_y_with_x = 8_f64;
+    /// let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = point;
+    /// let sheared_point = shear.shear_point(&point);
+    /// let result = shear.inverse_shear_point(&sheared_point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_shear_point(&self, point: &Point2<S>) -> Point2<S> {
         let inverse = self.inverse();
@@ -394,7 +434,7 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Shear2<S> where S: ScalarFloat {
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear3<S> {
-    /// The matrix representing the affine transformation.
+    /// The matrix representing the shear transformation.
     matrix: Matrix3x3<S>,
 }
 
