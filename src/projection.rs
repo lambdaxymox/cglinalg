@@ -1424,7 +1424,7 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
         &self.matrix
     }
 
-    /// Apply the othographic projection transformation to a point.
+    /// Apply the orthographic projection transformation to a point.
     ///
     /// ## Example
     ///

@@ -457,7 +457,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     ///
     /// assert!(relative_eq!(result, expected));
     /// ```
-    /// The matrix returned by rotation_between should make `v1` and `v2` collinear.
+    /// The matrix returned by `rotation_between` should make `v1` and `v2` collinear.
     /// ```
     /// # use cglinalg::{
     /// #     Matrix2x2,

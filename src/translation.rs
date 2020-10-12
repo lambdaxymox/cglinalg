@@ -107,7 +107,7 @@ impl<S> Translation2<S> where S: ScalarSigned {
         }
     }
 
-    /// Convert a tanslation into a generic two-dimensional transformation.
+    /// Convert a translation into a generic two-dimensional transformation.
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
