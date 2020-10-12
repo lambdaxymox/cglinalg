@@ -69,6 +69,28 @@ impl<S> Rotation2<S> where S: ScalarFloat {
     }
 
     /// Rotate a two-dimensional vector in the **xy-plane** by an angle `angle`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Vector2,
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let angle = Degrees(90_f64);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let unit_x = Vector2::unit_x();
+    /// let unit_y = Vector2::unit_y();
+    ///
+    /// assert!(relative_eq!(
+    ///     rotation.rotate_vector(&unit_x), unit_y, epsilon = 1e-8
+    /// ));
+    /// ```
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2<S> {  
         Rotation2 {
