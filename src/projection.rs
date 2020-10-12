@@ -123,13 +123,64 @@ impl<S> Perspective3<S>
         &self.matrix
     }
 
-    /// Apply the transformation to a point.
+    /// Apply the projective projection transformation to a point.
+    ///
+    /// ## Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Perspective3,
+    /// #     Point3, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let point = Point3::new(-1_f64, -1_f64, 4_f64);
+    /// let expected = Point3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
+    /// let result = perspective.project_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
     }
 
-    /// Apply the transformation to a vector.
+    /// Apply the perspective projection transformation to a vector.
+    /// Apply the projective transformation to a point.
+    ///
+    /// ## Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Perspective3,
+    /// #     Vector3, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(-1_f64, -1_f64, 4_f64);
+    /// let expected = Vector3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
+    /// let result = perspective.project_vector(&vector);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let projected_vector = self.matrix * vector.expand(S::one());
