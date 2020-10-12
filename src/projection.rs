@@ -362,7 +362,7 @@ impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Perspective3<S> where S: ScalarF
 pub struct PerspectiveFov3<S> {
     /// The vertical field of view angle of the perspective transformation
     /// viewport.
-    fovy: Radians<S>,
+    vfov: Radians<S>,
     /// The ratio of the horizontal width to the vertical height.
     aspect: S,
     /// The position of the near plane along the **negative z-axis**.
@@ -377,22 +377,22 @@ impl<S> PerspectiveFov3<S>
     where S: ScalarFloat
 {
     /// Construct a new perspective projection transformation.
-    pub fn new<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> PerspectiveFov3<S> {
-        let spec_fovy = fovy.into();
+    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> PerspectiveFov3<S> {
+        let spec_vfov = vfov.into();
 
         PerspectiveFov3 {
-            fovy: spec_fovy,
+            vfov: spec_vfov,
             aspect: aspect,
             near: near,
             far: far,
-            matrix: Matrix4x4::from_perspective_fov(spec_fovy, aspect, near, far),
+            matrix: Matrix4x4::from_perspective_fov(spec_vfov, aspect, near, far),
         }
     }
 
     /// Get the vertical field of view angle.
     #[inline]
     pub fn vfov(&self) -> Radians<S> {
-        self.fovy
+        self.vfov
     }
 
     /// Get the near plane along the **negative z-axis**.
@@ -464,8 +464,8 @@ impl<S> PerspectiveFov3<S>
         let two = one + one;
         let near = self.near;
         let far = self.far;
-        let tan_fovy_div_2 = Radians::tan(self.fovy / two); 
-        let top = self.near * tan_fovy_div_2;
+        let tan_vfov_div_2 = Radians::tan(self.vfov / two); 
+        let top = self.near * tan_vfov_div_2;
         let bottom = -top;
         let right = self.aspect * top;
         let left = -right;
@@ -518,8 +518,8 @@ impl<S> PerspectiveFov3<S>
         let two = one + one;
         let near = self.near;
         let far = self.far;
-        let tan_fovy_div_2 = Radians::tan(self.fovy / two); 
-        let top = self.near * tan_fovy_div_2;
+        let tan_vfov_div_2 = Radians::tan(self.vfov / two); 
+        let top = self.near * tan_vfov_div_2;
         let bottom = -top;
         let right = self.aspect * top;
         let left = -right;
@@ -572,7 +572,7 @@ impl<S> approx::AbsDiffEq for PerspectiveFov3<S>
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-            && Radians::abs_diff_eq(&self.fovy, &other.fovy, epsilon)
+            && Radians::abs_diff_eq(&self.vfov, &other.vfov, epsilon)
             && S::abs_diff_eq(&self.aspect, &other.aspect, epsilon)
             && S::abs_diff_eq(&self.near, &other.near, epsilon)
             && S::abs_diff_eq(&self.far, &other.far, epsilon)
@@ -590,7 +590,7 @@ impl<S> approx::RelativeEq for PerspectiveFov3<S> where
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
         Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-            && Radians::relative_eq(&self.fovy, &other.fovy, epsilon, max_relative)
+            && Radians::relative_eq(&self.vfov, &other.vfov, epsilon, max_relative)
             && S::relative_eq(&self.aspect, &other.aspect, epsilon, max_relative)
             && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
             && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
@@ -608,7 +608,7 @@ impl<S> approx::UlpsEq for PerspectiveFov3<S> where
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-            && Radians::ulps_eq(&self.fovy, &other.fovy, epsilon, max_ulps)
+            && Radians::ulps_eq(&self.vfov, &other.vfov, epsilon, max_ulps)
             && S::ulps_eq(&self.aspect, &other.aspect, epsilon, max_ulps)
             && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
             && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
@@ -921,18 +921,18 @@ impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S> where S: Scalar
 
 
 /// An orthographic projection based on the `near` plane, the `far` plane and 
-/// the vertical field of view angle `fovy` and the horizontal/vertical aspect 
+/// the vertical field of view angle `vfov` and the horizontal/vertical aspect 
 /// ratio `aspect`.
 ///
 /// We assume the following constraints to make a useful orthographic projection 
 /// transformation.
 /// ```text
-/// 0 radians < fovy < pi radians
+/// 0 radians < vfov < pi radians
 /// aspect > 0
 /// near < far (along the negative z-axis)
 /// ```
 /// This orthographic projection model imposes some constraints on the more 
-/// general orthographic specification based on the arbitrary planes. The `fovy` 
+/// general orthographic specification based on the arbitrary planes. The `vfov` 
 /// parameter combined with the aspect ratio `aspect` ensures that the top and 
 /// bottom planes are the same distance from the eye position along the vertical 
 /// axis on opposite side. They ensure that the `left` and `right` planes are 
@@ -941,7 +941,7 @@ impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S> where S: Scalar
 pub struct OrthographicFov3<S> {
     /// The vertical field of view angle of the orthographic transformation
     /// viewport.
-    fovy: Radians<S>, 
+    vfov: Radians<S>, 
     /// The ratio of the horizontal width to the vertical height.
     aspect: S, 
     /// The position of the near plane along the **negative z-axis**.
@@ -954,21 +954,21 @@ pub struct OrthographicFov3<S> {
 
 impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// Construct a new orthographic projection.
-    pub fn new<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> OrthographicFov3<S> {
-        let fovy_rad = fovy.into();
+    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> OrthographicFov3<S> {
+        let vfov_rad = vfov.into();
         OrthographicFov3 {
-            fovy: fovy_rad,
+            vfov: vfov_rad,
             aspect: aspect,
             near: near,
             far: far,
-            matrix: Matrix4x4::from_orthographic_fov(fovy_rad, aspect, near, far),
+            matrix: Matrix4x4::from_orthographic_fov(vfov_rad, aspect, near, far),
         }
     }
 
     /// Get the vertical field of view angle.
     #[inline]
     pub fn vfov(&self) -> Radians<S> {
-        self.fovy
+        self.vfov
     }
 
     /// Get the near plane along the **negative z-axis**.
@@ -1022,7 +1022,7 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
-        let width = self.far * Angle::tan(self.fovy * one_half);
+        let width = self.far * Angle::tan(self.vfov * one_half);
         let height = width / self.aspect;
         let left = -width * one_half;
         let right = width * one_half;
@@ -1051,7 +1051,7 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
-        let width = self.far * Angle::tan(self.fovy * one_half);
+        let width = self.far * Angle::tan(self.vfov * one_half);
         let height = width / self.aspect;
         let left = -width * one_half;
         let right = width * one_half;
@@ -1095,7 +1095,7 @@ impl<S> approx::AbsDiffEq for OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-            && Radians::abs_diff_eq(&self.fovy, &other.fovy, epsilon)
+            && Radians::abs_diff_eq(&self.vfov, &other.vfov, epsilon)
             && S::abs_diff_eq(&self.aspect, &other.aspect, epsilon)
             && S::abs_diff_eq(&self.near, &other.near, epsilon)
             && S::abs_diff_eq(&self.far, &other.far, epsilon)
@@ -1111,7 +1111,7 @@ impl<S> approx::RelativeEq for OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
         Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-            && Radians::relative_eq(&self.fovy, &other.fovy, epsilon, max_relative)
+            && Radians::relative_eq(&self.vfov, &other.vfov, epsilon, max_relative)
             && S::relative_eq(&self.aspect, &other.aspect, epsilon, max_relative)
             && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
             && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
@@ -1127,7 +1127,7 @@ impl<S> approx::UlpsEq for OrthographicFov3<S> where S: ScalarFloat {
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-            && Radians::ulps_eq(&self.fovy, &other.fovy, epsilon, max_ulps)
+            && Radians::ulps_eq(&self.vfov, &other.vfov, epsilon, max_ulps)
             && S::ulps_eq(&self.aspect, &other.aspect, epsilon, max_ulps)
             && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
             && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)

@@ -46,23 +46,23 @@ fn any_perspective_fov_projection<S>() -> impl Strategy<Value = PerspectiveFov3<
     where S: ScalarFloat + Arbitrary
 {
     any::<(S, S, S, S)>()
-        .prop_map(|(_fovy, _aspect, _near, _far)| {
+        .prop_map(|(_vfov, _aspect, _near, _far)| {
             let modulus: S = num_traits::cast(1_000_000).unwrap();
-            let fovy = S::abs(_fovy % modulus);
+            let vfov = S::abs(_vfov % modulus);
             let aspect = S::abs(_aspect % modulus); 
             let near = S::abs(_near % modulus);
             let far = S::abs(_far % modulus);
 
-            (fovy, aspect, near, far)
+            (vfov, aspect, near, far)
         })    
-        .prop_map(|(fovy, aspect, near, far)| {
+        .prop_map(|(vfov, aspect, near, far)| {
             let (spec_near, spec_far) = if near > far {
                 (far, near)
             } else {
                 (near, far)
             };
 
-            PerspectiveFov3::new(Degrees(fovy), aspect, spec_near, spec_far)
+            PerspectiveFov3::new(Degrees(vfov), aspect, spec_near, spec_far)
         })
         .no_shrink()
 }

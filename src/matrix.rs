@@ -4556,7 +4556,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// # use cglinalg::approx::{
     /// #     relative_eq, 
     /// # };
-    /// let fovy = Degrees(90.0);
+    /// let vfov = Degrees(90.0);
     /// let aspect = 800 as f64 / 600 as f64;
     /// let near = 1.0;
     /// let far = 100.0;
@@ -4566,17 +4566,17 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     ///     0.0,         0.0,        -2.0 / 99.0,   0.0, 
     ///     0.0,         0.0,        -101.0 / 99.0, 1.0
     /// );
-    /// let result = Matrix4x4::from_orthographic_fov(fovy, aspect, near, far);
+    /// let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
     ///
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_orthographic_fov<A: Into<Radians<S>>>(
-        fovy: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
+        vfov: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
         
         let one_half = num_traits::cast(0.5).unwrap();
-        let width = far * Angle::tan(fovy.into() * one_half);
+        let width = far * Angle::tan(vfov.into() * one_half);
         let height = width / aspect;
 
         Self::from_orthographic(
@@ -4652,7 +4652,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     }
 
     /// Construct a perspective projection matrix based on the `near` 
-    /// plane, the `far` plane and the vertical field of view angle `fovy` and 
+    /// plane, the `far` plane and the vertical field of view angle `vfov` and 
     /// the horizontal/vertical aspect ratio `aspect`.
     ///
     /// ## Example
@@ -4663,7 +4663,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// #     Degrees,
     /// # };
     /// #
-    /// let fovy = Degrees(72.0);
+    /// let vfov = Degrees(72.0);
     /// let aspect = 800 as f32 / 600 as f32;
     /// let near = 0.1;
     /// let far = 100.0;
@@ -4673,17 +4673,17 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     ///     0.0,       0.0,       -1.002002, -1.0, 
     ///     0.0,       0.0,       -0.2002002, 0.0
     /// );
-    /// let result = Matrix4x4::from_perspective_fov(fovy, aspect, near, far);
+    /// let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_perspective_fov<A: Into<Radians<S>>>(fovy: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
+    pub fn from_perspective_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
-        let range = Angle::tan(fovy.into() / two) * near;
+        let range = Angle::tan(vfov.into() / two) * near;
         let sx = (two * near) / (range * aspect + range * aspect);
         let sy = near / range;
         let sz = (far + near) / (near - far);
