@@ -61,13 +61,49 @@ impl<S> Scale2<S> where S: Scalar {
         }
     }
 
-    /// Apply a scale operation to a vector.
+    /// Apply a scale transformation to a vector.
+    ///
+    /// ## Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale2,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale = Scale2::from_nonuniform_scale(scale_x, scale_y);
+    /// let vector = Vector2::new(1_f64, 1_f64);
+    /// let expected = Vector2::new(2_f64, 3_f64);
+    /// let result = scale.scale_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn scale_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         Vector2::new(self.x * vector.x, self.y * vector.y)
     }
 
-    /// Apply a scale operation to a point.
+    /// Apply a scale transformation to a point.
+    ///
+    /// ## Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale2,
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale = Scale2::from_nonuniform_scale(scale_x, scale_y);
+    /// let point = Point2::new(1_f64, 1_f64);
+    /// let expected = Point2::new(2_f64, 3_f64);
+    /// let result = scale.scale_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn scale_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::new(self.x * point.x, self.y * point.y)
@@ -77,6 +113,25 @@ impl<S> Scale2<S> where S: Scalar {
 impl<S> Scale2<S> where S: ScalarFloat {
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale2, 
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale = Scale2::from_nonuniform_scale(scale_x, scale_y);
+    /// let expected = Scale2::from_nonuniform_scale(
+    ///     1_f64 / scale_x, 
+    ///     1_f64 / scale_y
+    /// );
+    /// let result = scale.inverse();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Scale2<S> {
         Scale2::from_nonuniform_scale(
@@ -85,6 +140,26 @@ impl<S> Scale2<S> where S: ScalarFloat {
         )
     }
 
+    /// Apply the inverse transformation of the scale transformation
+    /// to a vector.
+    ///
+    /// ## Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale2,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale = Scale2::from_nonuniform_scale(scale_x, scale_y);
+    /// let vector = Vector2::new(2_f64, 3_f64);
+    /// let expected = Vector2::new(1_f64, 1_f64);
+    /// let result = scale.inverse_scale_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_scale_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         Vector2::new(
@@ -93,6 +168,25 @@ impl<S> Scale2<S> where S: ScalarFloat {
         )
     }
 
+    /// Apply the inverse transformation of the scale transformation to a point.
+    ///
+    /// ## Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Scale2,
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let scale_x = 2_f64;
+    /// let scale_y = 3_f64;
+    /// let scale = Scale2::from_nonuniform_scale(scale_x, scale_y);
+    /// let point = Point2::new(2_f64, 3_f64);
+    /// let expected = Point2::new(1_f64, 1_f64);
+    /// let result = scale.inverse_scale_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_scale_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::new(
@@ -101,11 +195,16 @@ impl<S> Scale2<S> where S: ScalarFloat {
         )
     }
 
+    /// Construct the identity scaling transformation. 
+    /// 
+    /// The identity scaling transformation is a scaling transformation where 
+    /// each scale factor is `1`.
     #[inline]
     pub fn identity() -> Scale2<S> {
         Scale2::from_scale(S::one())
     }
 
+    /// Convert a scaling transformation into a generic transformation.
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
@@ -123,12 +222,14 @@ impl<S> fmt::Display for Scale2<S> where S: fmt::Display {
 }
 
 impl<S> From<Scale2<S>> for Matrix3x3<S> where S: Scalar {
+    #[inline]
     fn from(scale: Scale2<S>) -> Matrix3x3<S> {
         Matrix3x3::from_affine_nonuniform_scale(scale.x, scale.y)
     }
 }
 
 impl<S> From<&Scale2<S>> for Matrix3x3<S> where S: Scalar {
+    #[inline]
     fn from(scale: &Scale2<S>) -> Matrix3x3<S> {
         Matrix3x3::from_affine_nonuniform_scale(scale.x, scale.y)
     }
