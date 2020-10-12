@@ -444,6 +444,28 @@ impl<S> Shear3<S> where S: ScalarSigned {
     /// The parameters `shear_x_with_y` and `shear_x_with_z` denote the 
     /// multiplicative factors for the contributions from the **y-axis** and the 
     /// **z-axis** respectively for the shearing along the **x-axis**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// #     Point3, 
+    /// # }; 
+    /// #
+    /// let shear_x_with_y = 3_f64;
+    /// let shear_x_with_z = 7_f64;
+    /// let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Point3::new(
+    ///     1_f64 + shear_x_with_y * point.y + shear_x_with_z * point.z,
+    ///     2_f64,
+    ///     3_f64 
+    /// );
+    /// let result = shear * point;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Shear3<S> {
         Shear3 {
@@ -456,6 +478,28 @@ impl<S> Shear3<S> where S: ScalarSigned {
     /// The parameters `shear_y_with_x` and `shear_y_with_z` denote the 
     /// multiplicative factors for the contributions from the **x-axis** and the 
     /// **z-axis** respectively for the shearing along the **y-axis**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// #     Point3, 
+    /// # }; 
+    /// #
+    /// let shear_y_with_x = 3_f64;
+    /// let shear_y_with_z = 7_f64;
+    /// let shear = Shear3::from_shear_y(shear_y_with_x, shear_y_with_z);
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Point3::new(
+    ///     1_f64,
+    ///     2_f64 + shear_y_with_x * point.x + shear_y_with_z * point.z,
+    ///     3_f64 
+    /// );
+    /// let result = shear * point;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Shear3<S> {
         Shear3 {
@@ -468,6 +512,28 @@ impl<S> Shear3<S> where S: ScalarSigned {
     /// The parameters `shear_z_with_x` and `shear_z_with_y` denote the 
     /// multiplicative factors for the contributions from the **x-axis** and the 
     /// **y-axis** respectively for the shearing along the **z-axis**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// #     Point3, 
+    /// # }; 
+    /// #
+    /// let shear_z_with_x = 3_f64;
+    /// let shear_z_with_y = 7_f64;
+    /// let shear = Shear3::from_shear_z(shear_z_with_x, shear_z_with_y);
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Point3::new(
+    ///     1_f64,
+    ///     2_f64,
+    ///     3_f64 + shear_z_with_x * point.x + shear_z_with_y * point.y
+    /// );
+    /// let result = shear * point;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Shear3<S> {
         Shear3 {
@@ -488,6 +554,39 @@ impl<S> Shear3<S> where S: ScalarSigned {
     /// The parameters `shear_z_with_x` and `shear_z_with_y` denote the 
     /// multiplicative factors for the contributions from the **x-axis** and the 
     /// **y-axis** respectively for the shearing along the **z-axis**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// #     Point3, 
+    /// # }; 
+    /// #
+    /// let shear_x_with_y = 1_f64;
+    /// let shear_x_with_z = 2_f64;
+    /// let shear_y_with_x = 10_f64;
+    /// let shear_y_with_z = 20_f64;
+    /// let shear_z_with_x = 100_f64;
+    /// let shear_z_with_y = 200_f64;
+    /// let shear = Shear3::from_shear(
+    ///     shear_x_with_y,
+    ///     shear_x_with_z,
+    ///     shear_y_with_x,
+    ///     shear_y_with_z,
+    ///     shear_z_with_x, 
+    ///     shear_z_with_y
+    /// );
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Point3::new(
+    ///     1_f64 + shear_x_with_y * point.y + shear_x_with_z * point.z,
+    ///     2_f64 + shear_y_with_x * point.x + shear_y_with_z * point.z,
+    ///     3_f64 + shear_z_with_x * point.x + shear_z_with_y * point.y
+    /// );
+    /// let result = shear * point;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_shear(
         shear_x_with_y: S, shear_x_with_z: S, 
@@ -503,13 +602,77 @@ impl<S> Shear3<S> where S: ScalarSigned {
         }
     }
 
-    /// Apply a shearing transformation to a vector.
+    /// Apply a shear transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// #     Vector3, 
+    /// # }; 
+    /// #
+    /// let shear_x_with_y = 1_f64;
+    /// let shear_x_with_z = 2_f64;
+    /// let shear_y_with_x = 10_f64;
+    /// let shear_y_with_z = 20_f64;
+    /// let shear_z_with_x = 100_f64;
+    /// let shear_z_with_y = 200_f64;
+    /// let shear = Shear3::from_shear(
+    ///     shear_x_with_y,
+    ///     shear_x_with_z,
+    ///     shear_y_with_x,
+    ///     shear_y_with_z,
+    ///     shear_z_with_x, 
+    ///     shear_z_with_y
+    /// );
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector3::new(
+    ///     1_f64 + shear_x_with_y * vector.y + shear_x_with_z * vector.z,
+    ///     2_f64 + shear_y_with_x * vector.x + shear_y_with_z * vector.z,
+    ///     3_f64 + shear_z_with_x * vector.x + shear_z_with_y * vector.y
+    /// );
+    /// let result = shear.shear_vector(&vector);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn shear_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         self.matrix * vector
     }
 
-    /// Apply a shearing transformation to a point.
+    /// Apply a shear transformation to a point.
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// #     Point3, 
+    /// # }; 
+    /// #
+    /// let shear_x_with_y = 1_f64;
+    /// let shear_x_with_z = 2_f64;
+    /// let shear_y_with_x = 10_f64;
+    /// let shear_y_with_z = 20_f64;
+    /// let shear_z_with_x = 100_f64;
+    /// let shear_z_with_y = 200_f64;
+    /// let shear = Shear3::from_shear(
+    ///     shear_x_with_y,
+    ///     shear_x_with_z,
+    ///     shear_y_with_x,
+    ///     shear_y_with_z,
+    ///     shear_z_with_x, 
+    ///     shear_z_with_y
+    /// );
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Point3::new(
+    ///     1_f64 + shear_x_with_y * point.y + shear_x_with_z * point.z,
+    ///     2_f64 + shear_y_with_x * point.x + shear_y_with_z * point.z,
+    ///     3_f64 + shear_z_with_x * point.x + shear_z_with_y * point.y
+    /// );
+    /// let result = shear.shear_point(&point);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn shear_point(&self, point: &Point3<S>) -> Point3<S> {
         let vector = Vector3::new(point.x, point.y, point.z);
