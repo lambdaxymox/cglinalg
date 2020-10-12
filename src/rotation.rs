@@ -657,13 +657,61 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
     /// Construct a new three-dimensional rotation about the **x-axis** in the 
     /// **yz-plane** by an angle `angle`.
+    ///
+    /// ## Examples
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let axis = Unit::from_value(Vector3::unit_x());
+    /// let rotation = Rotation3::from_angle_x(angle);
+    /// let expected = Some(axis);
+    /// let result = rotation.axis();
+    ///
+    /// assert_eq!(rotation.angle(), angle);
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_x()), angle)
     }
 
     /// Construct a new three-dimensional rotation about the **y-axis** in the 
-    /// **xz-plane** by an angle `angle`.
+    /// **zx-plane** by an angle `angle`.
+    ///
+    /// ## Examples
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let axis = Unit::from_value(Vector3::unit_y());
+    /// let rotation = Rotation3::from_angle_y(angle);
+    /// let expected = Some(axis);
+    /// let result = rotation.axis();
+    ///
+    /// assert_eq!(rotation.angle(), angle);
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_y()), angle)
@@ -671,6 +719,30 @@ impl<S> Rotation3<S> where S: ScalarFloat {
 
     /// Construct a new three-dimensional rotation about the **z-axis** in the 
     /// **xy-plane** by an angle `angle`.
+    ///
+    /// ## Examples
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let expected = Some(axis);
+    /// let result = rotation.axis();
+    ///
+    /// assert_eq!(rotation.angle(), angle);
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_z()), angle)
