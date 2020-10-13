@@ -32,7 +32,7 @@ To use the library in your project, add **cglinalg** as a dependency in your
 
 ```ignore
 [dependencies]
-cglinalg = "0.10.12"
+cglinalg = "0.11.5"
 
 ```
 After that, place the crate declaration in either your `lib.rs` file or 
