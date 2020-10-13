@@ -31,6 +31,7 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation2<S> {
+    /// The vector along which a vector or point is displaced.
     vector: Vector2<S>,
 }
 
@@ -44,16 +45,53 @@ impl<S> Translation2<S> where S: ScalarSigned {
     }
 
     /// Construct a translation between two vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation2,
+    /// #     Vector2,
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let vector1 = Vector2::new(1_f64, 2_f64);
+    /// let vector2 = Vector2::new(3_f64, 4_f64);
+    /// let translation = Translation2::between_vectors(&vector1, &vector2);
+    /// let point = Point2::new(0_f64, 0_f64);
+    /// let expected = Point2::new(2_f64, 2_f64);
+    /// let result = translation.translate_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
-    pub fn translation_between_vectors(vector1: &Vector2<S>, vector2: &Vector2<S>) -> Self {
+    pub fn between_vectors(vector1: &Vector2<S>, vector2: &Vector2<S>) -> Self {
         let distance = vector2 - vector1;
 
         Translation2::from_vector(&distance)
     }
 
     /// Construct a translation between two points.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation2,
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let point1 = Point2::new(1_f64, 2_f64);
+    /// let point2 = Point2::new(3_f64, 4_f64);
+    /// let translation = Translation2::between_points(&point1, &point2);
+    /// let point = Point2::new(0_f64, 0_f64);
+    /// let expected = Point2::new(2_f64, 2_f64);
+    /// let result = translation.translate_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
-    pub fn translation_between_points(point1: &Point2<S>, point2: &Point2<S>) -> Self {
+    pub fn between_points(point1: &Point2<S>, point2: &Point2<S>) -> Self {
         let distance = point2 - point1;
 
         Translation2::from_vector(&distance)
@@ -64,12 +102,46 @@ impl<S> Translation2<S> where S: ScalarSigned {
     ///
     /// If `self` is a translation of a vector by a displacement `distance`, then its
     /// inverse will be a translation by a displacement `-distance`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation2,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let distance = Vector2::new(1_f64, 2_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let expected = Translation2::from_vector(&(-distance));
+    /// let result = translation.inverse();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Self {
         Translation2::from_vector(&(-self.vector))
     }
     
     /// Apply the translation operation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation2,
+    /// #     Vector2,
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let distance = Vector2::new(4_f64, 8_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let point = Point2::new(0_f64, 0_f64);
+    /// let expected = Point2::new(4_f64, 8_f64);
+    /// let result = translation.translate_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn translate_point(&self, point: &Point2<S>) -> Point2<S> {
         point + self.vector
@@ -81,18 +153,69 @@ impl<S> Translation2<S> where S: ScalarSigned {
     /// between points. Let `p1` and `p2` be points and let `v = p2 - p1` 
     /// be their difference. If we translate each point by a vector `a`, 
     /// then `(p2 + a) - (p1 + a) = p2 - p1 = v`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation2,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let distance = Vector2::new(4_f64, 8_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let vector = Vector2::new(0_f64, 0_f64);
+    /// let expected = vector;
+    /// let result = translation.translate_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         *vector
     }
 
     /// Apply the inverse translation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation2,
+    /// #     Point2,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let distance = Vector2::new(13_f64, 30_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let translation_inv = translation.inverse();
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = translation_inv.translate_point(&point);
+    /// let result = translation.inverse_translate_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_translate_point(&self, point: &Point2<S>) -> Point2<S> {
         point - self.vector
     }
 
     /// Apply the inverse translation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation2,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let distance = Vector2::new(13_f64, 30_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    ///
+    /// assert_eq!(translation.inverse_translate_vector(&vector), vector);
+    /// ```
     #[inline]
     pub fn inverse_translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         *vector
@@ -100,6 +223,20 @@ impl<S> Translation2<S> where S: ScalarSigned {
 
     /// The identity transformation for translations, which displaces
     /// a vector or point zero distance.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation2,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let translation = Translation2::identity();
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// 
+    /// assert_eq!(translation.translate_point(&point), point);
+    /// ```
     #[inline]
     pub fn identity() -> Translation2<S> {
         Translation2 { 

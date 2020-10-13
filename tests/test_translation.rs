@@ -83,7 +83,7 @@ mod translation2_tests {
         let point2 = Point2::new(5_f64, 6_f64);
         let diff = Vector2::new(4_f64, 4_f64);
         let expected = Translation2::from_vector(&diff);
-        let result = Translation2::translation_between_points(&point1, &point2);
+        let result = Translation2::between_points(&point1, &point2);
 
         assert_eq!(result, expected);
     }
@@ -94,7 +94,7 @@ mod translation2_tests {
         let vector2 = Vector2::new(5_f64, 6_f64);
         let diff = Vector2::new(4_f64, 4_f64);
         let expected = Translation2::from_vector(&diff);
-        let result = Translation2::translation_between_vectors(&vector1, &vector2);
+        let result = Translation2::between_vectors(&vector1, &vector2);
 
         assert_eq!(result, expected);    
     }
