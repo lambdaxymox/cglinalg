@@ -112,6 +112,7 @@ mod vector;
 mod traits;
 mod unit;
 
+mod isometry;
 mod reflection;
 mod rotation;
 mod scale;
@@ -131,6 +132,7 @@ pub use traits::*;
 pub use point::*;
 pub use unit::*;
 
+pub use isometry::*;
 pub use reflection::*;
 pub use rotation::*;
 pub use scale::*;
