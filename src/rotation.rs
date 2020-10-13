@@ -981,6 +981,32 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         Point3::new(result.x, result.y, result.z)
     }
 
+    /// Apply the inverse of the rotation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(-f64::consts::FRAC_PI_2);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let vector = Vector3::unit_x();
+    /// let expected = vector;
+    /// let rotated_vector = rotation.rotate_vector(&vector);
+    /// let result = rotation.inverse_rotate_vector(&rotated_vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```   
     #[inline]
     pub fn inverse_rotate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let inverse = self.inverse();
@@ -988,6 +1014,33 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         inverse.matrix * vector
     }
 
+    /// Apply the inverse of the rotation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(-f64::consts::FRAC_PI_2);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let point = Point3::new(1_f64, 0_f64, 0_f64);
+    /// let expected = point;
+    /// let rotated_point = rotation.rotate_point(&point);
+    /// let result = rotation.inverse_rotate_point(&rotated_point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_rotate_point(&self, point: &Point3<S>) -> Point3<S> {
         let inverse = self.inverse();
@@ -997,6 +1050,26 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         Point3::new(result.x, result.y, result.z)
     }
 
+    /// Construct the identity rotation transformation.
+    ///
+    /// The identity rotation transformation is a rotation that rotates
+    /// a vector or point by and angle of zero radians. The inverse operation
+    /// will also rotate by zero radians.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let rotation = Rotation3::identity();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    ///
+    /// assert_eq!(rotation * point, point);
+    /// assert_eq!(rotation.inverse(), rotation);
+    /// ```
     #[inline]
     pub fn identity() -> Rotation3<S> {
         Rotation3 { 
