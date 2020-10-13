@@ -14,7 +14,7 @@ The library is designed with the following goals in mind:
 * **Few Dependencies** -- The library should be relatively self-contained. To 
   support portability and maintainability, **cglinalg** is designed with few 
   external dependencies. The biggest dependency---`proptest`---is a development 
-  dependency only.
+  dependency only. Moreover the library should compile fast.
 * **Type Safety** -- Leverage Rust's type system and zero-cost abstractions 
   to ensure code correctness, abstraction, and intelligibility do not come 
   at the cost of performance.
