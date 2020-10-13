@@ -378,16 +378,53 @@ impl<S> Translation3<S> where S: ScalarSigned {
     }
 
     /// Construct a translation between two vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation3,
+    /// #     Vector3,
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let vector2 = Vector3::new(7_f64, 9_f64, 11_f64);
+    /// let translation = Translation3::between_vectors(&vector1, &vector2);
+    /// let point = Point3::new(0_f64, 0_f64, 0_f64);
+    /// let expected = Point3::new(6_f64, 7_f64, 8_f64);
+    /// let result = translation.translate_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
-    pub fn translation_between_vectors(vector1: &Vector3<S>, vector2: &Vector3<S>) -> Self {
+    pub fn between_vectors(vector1: &Vector3<S>, vector2: &Vector3<S>) -> Self {
         let distance = vector2 - vector1;
 
         Translation3::from_vector(&distance)
     }
 
     /// Construct a translation between two points.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation3,
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let point1 = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let point2 = Point3::new(7_f64, 9_f64, 11_f64);
+    /// let translation = Translation3::between_points(&point1, &point2);
+    /// let point = Point3::new(0_f64, 0_f64, 0_f64);
+    /// let expected = Point3::new(6_f64, 7_f64, 8_f64);
+    /// let result = translation.translate_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
-    pub fn translation_between_points(point1: &Point3<S>, point2: &Point3<S>) -> Self {
+    pub fn between_points(point1: &Point3<S>, point2: &Point3<S>) -> Self {
         let distance = point2 - point1;
 
         Translation3::from_vector(&distance)
@@ -398,28 +435,117 @@ impl<S> Translation3<S> where S: ScalarSigned {
     ///
     /// If `self` is a translation of a vector by a displacement `distance`, then its
     /// inverse will be a translation by a displacement `-distance`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation3,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let expected = Translation3::from_vector(&(-distance));
+    /// let result = translation.inverse();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Self {
         Translation3::from_vector(&(-self.vector))
     }
     
+    /// Apply the translation transformation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation3,
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let point = Point3::new(0_f64, 0_f64, 0_f64);
+    /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let result = translation.translate_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn translate_point(&self, point: &Point3<S>) -> Point3<S> {
         point + self.vector
     }
 
+    /// Apply the translation transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector3::new(100_f64, 200_f64, 300_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let vector = Vector3::new(0_f64, 0_f64, 0_f64);
+    /// let expected = vector;
+    /// let result = translation.translate_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn translate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         *vector
     }
 
     /// Apply the inverse of the translation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation3,
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let point = Point3::new(0_f64, 0_f64, 0_f64);
+    /// let expected = point;
+    /// let translated_point = translation.translate_point(&point);
+    /// let result = translation.inverse_translate_point(&translated_point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_translate_point(&self, point: &Point3<S>) -> Point3<S> {
         point - self.vector
     }
 
-    /// Apply the inverse of the translation to a point.
+    /// Apply the inverse of the translation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector3::new(100_f64, 200_f64, 300_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let vector = Vector3::new(0_f64, 0_f64, 0_f64);
+    /// let expected = vector;
+    /// let result = translation.inverse_translate_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_translate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         *vector
@@ -427,6 +553,20 @@ impl<S> Translation3<S> where S: ScalarSigned {
 
     /// The identity transformation for translations, which displaces
     /// a vector or point zero distance.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation3,
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let translation = Translation3::identity();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// 
+    /// assert_eq!(translation.translate_point(&point), point);
+    /// ```
     #[inline]
     pub fn identity() -> Translation3<S> {
         Translation3 { 
@@ -434,6 +574,7 @@ impl<S> Translation3<S> where S: ScalarSigned {
         }
     }
 
+    /// Convert a translation to a generic transformation.
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
         Transform3::from_specialized(self)
@@ -459,12 +600,14 @@ impl<S> fmt::Display for Translation3<S> where S: fmt::Display {
 }
 
 impl<S> From<Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
+    #[inline]
     fn from(transform: Translation3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_translation(&transform.vector)
     }
 }
 
 impl<S> From<&Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
+    #[inline]
     fn from(transform: &Translation3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_translation(&transform.vector)
     }
