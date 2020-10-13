@@ -269,12 +269,14 @@ impl<S> fmt::Display for Translation2<S> where S: fmt::Display {
 }
 
 impl<S> From<Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
+    #[inline]
     fn from(transform: Translation2<S>) -> Matrix3x3<S> {
         Matrix3x3::from_affine_translation(&transform.vector)
     }
 }
 
 impl<S> From<&Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
+    #[inline]
     fn from(transform: &Translation2<S>) -> Matrix3x3<S> {
         Matrix3x3::from_affine_translation(&transform.vector)
     }
