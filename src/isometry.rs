@@ -60,6 +60,15 @@ impl<S> Isometry2<S> where S: ScalarFloat {
     }
 
     #[inline]
+    pub fn from_angle_translation<A: Into<Radians<S>>>(angle: A, distance: &Vector2<S>) -> Isometry2<S>
+    {
+        Isometry2 {
+            rotation: Rotation2::from_angle(angle),
+            translation: Translation2::from_vector(distance),
+        }
+    }
+
+    #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Isometry2<S> {
         let translation = Translation2::identity();
         let rotation = Rotation2::from_angle(angle);
