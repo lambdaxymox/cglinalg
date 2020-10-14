@@ -7,9 +7,11 @@ mod isometry2_tests {
         Isometry2,
         Rotation2,
         Translation2,
+        Angle,
         Degrees,
         Point2,
         Vector2,
+        Matrix3x3,
         Unit,
     };
     use cglinalg::approx::{
@@ -70,6 +72,101 @@ mod isometry2_tests {
         let translation = Translation2::from_vector(&distance);
         let expected = Isometry2::from_parts(translation, rotation);
         let result = Isometry2::from_angle_translation(angle, &distance);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_rotation_between_axis() {
+        let unit_x: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
+        let unit_y: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
+        let isometry = Isometry2::rotation_between_axis(&unit_x, &unit_y);
+        let expected = unit_y.into_inner();
+        let result = isometry.transform_vector(&unit_x.into_inner());
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_between_vectors() {
+        let vector1: Vector2<f64> = 17_f64 * Vector2::unit_x();
+        let vector2: Vector2<f64> = 3_f64 * Vector2::unit_y();
+        let isometry = Isometry2::rotation_between(&vector1, &vector2);
+        let point = Point2::new(203_f64, 0_f64);
+        let expected = Point2::new(0_f64, 203_f64);
+        let result = isometry.transform_point(&point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_to_affine_matrix() {
+        let angle = Degrees(60_f64);
+        let cos_angle = angle.cos();
+        let sin_angle = angle.sin();
+        let distance = Vector2::new(5_f64, 18_f64);
+        let isometry = Isometry2::from_angle_translation(angle, &distance);
+        let expected = Matrix3x3::new(
+             cos_angle,  sin_angle,  0_f64,
+            -sin_angle,  cos_angle,  0_f64,
+             distance.x, distance.y, 1_f64
+        );
+        let result = isometry.to_affine_matrix();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_isometry_inverse() {
+        let angle = Degrees(72_f64);
+        let distance = Vector2::new(-567_f64, 23_f64);
+        let isometry = Isometry2::from_angle_translation(angle, &distance);
+        let expected = Isometry2::from_angle_translation(-angle, &(-distance));
+        let result = isometry.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_inverse_transform_point() {
+        let angle = Degrees(72_f64);
+        let cos_neg_angle = (-angle).cos();
+        let sin_neg_angle = (-angle).sin();
+        let distance = Vector2::new(-567_f64, 23_f64);
+        let isometry = Isometry2::from_angle_translation(angle, &distance);        
+        let point = Point2::new(1_f64, 2_f64);
+        let expected = Point2::new(
+            cos_neg_angle * point.x - sin_neg_angle * point.y - distance.x,
+            sin_neg_angle * point.x + cos_neg_angle * point.y - distance.y
+        );
+        let result = isometry.inverse_transform_point(&point);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_inverse_transform_vector() {
+        let angle = Degrees(72_f64);
+        let cos_neg_angle = (-angle).cos();
+        let sin_neg_angle = (-angle).sin();
+        let distance = Vector2::new(-567_f64, 23_f64);
+        let isometry = Isometry2::from_angle_translation(angle, &distance);        
+        let vector = Vector2::new(1_f64, 2_f64);
+        let expected = Vector2::new(
+            cos_neg_angle * vector.x - sin_neg_angle * vector.y,
+            sin_neg_angle * vector.x + cos_neg_angle * vector.y
+        );
+        let result = isometry.inverse_transform_vector(&vector);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_identity() {
+        let isometry = Isometry2::identity();
+        let point = Point2::new(1_f64, 2_f64);
+        let expected = point;
+        let result = isometry * point;
 
         assert_eq!(result, expected);
     }
