@@ -156,6 +156,16 @@ impl<S> Isometry2<S> where S: ScalarFloat {
     }
 }
 
+impl<S> fmt::Display for Isometry2<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter, 
+            "Isometry2 [rotation={}, translation={}]", 
+            self.rotation, self.translation
+        )
+    }
+}
+
 impl<S> ops::Mul<Point2<S>> for Isometry2<S> where S: ScalarFloat {
     type Output = Point2<S>;
 
@@ -336,6 +346,16 @@ impl<S> Isometry3<S> where S: ScalarFloat {
             rotation: Rotation3::identity(),
             translation: Translation3::identity()
         }
+    }
+}
+
+impl<S> fmt::Display for Isometry3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter, 
+            "Isometry3 [rotation={}, translation={}]", 
+            self.rotation, self.translation
+        )
     }
 }
 
