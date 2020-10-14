@@ -244,16 +244,46 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         )
     }
     
+    /// Get the rotation part of the isometry.
     #[inline]
     pub fn rotation(&self) -> &Rotation2<S> {
         &self.rotation
     }
 
+    /// Get the translation part of the isometry.
     #[inline]
     pub fn translation(&self) -> &Translation2<S> {
         &self.translation
     }
 
+    /// Construct the inverse isometry of an isometry.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Degrees,
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let angle = Degrees(90_f64);
+    /// let distance = Vector2::new(2_f64, 3_f64);
+    /// let isometry = Isometry2::from_angle_translation(angle, &distance);
+    /// let isometry_inv = isometry.inverse();
+    /// let expected = Matrix3x3::new(
+    ///      0_f64, -1_f64, 0_f64,
+    ///      1_f64,  0_f64, 0_f64,
+    ///     -2_f64, -3_f64, 1_f64  
+    /// );
+    /// let result = isometry_inv.to_affine_matrix();
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Isometry2<S> {
         Isometry2 {
