@@ -23,6 +23,7 @@ use crate::vector::{
 };
 use crate::angle::{
     Radians,
+    Angle,
 };
 use crate::transform::{
     Transform2,
@@ -30,6 +31,9 @@ use crate::transform::{
 };
 use crate::unit::{
     Unit,
+};
+use crate::traits::{
+    DotProduct,
 };
 
 use core::fmt;
@@ -77,6 +81,71 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         let rotation = Rotation2::from_angle(angle);
         
         Self::from_parts(translation, rotation)
+    }
+
+    /// Construct a rotation that rotates the shortest angular distance 
+    /// between two unit vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit, 
+    /// # };
+    /// #
+    /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
+    /// let vector1 = Unit::from_value(Vector2::unit_y());
+    /// let vector2 = Unit::from_value(Vector2::unit_x());
+    /// let isometry = Isometry2::rotation_between_axis(&vector1, &vector2);
+    /// let expected = Point2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
+    /// let result = isometry.transform_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn rotation_between_axis(a: &Unit<Vector2<S>>, b: &Unit<Vector2<S>>) -> Isometry2<S> {
+        let unit_a = a.as_ref();
+        let unit_b = b.as_ref();
+        let cos_angle = unit_a.dot(unit_b);
+        let sin_angle = unit_a.x * unit_b.y - unit_a.y * unit_b.x;
+
+        Isometry2::from_angle(Radians::atan2(sin_angle, cos_angle))
+    }
+
+    /// Construct a rotation that rotates the shortest angular distance 
+    /// between vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Point2,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
+    /// let vector1 = 3_f64 * Vector2::unit_y();
+    /// let vector2 = 6_f64 * Vector2::unit_x();
+    /// let isometry = Isometry2::rotation_between(&vector1, &vector2);
+    /// let expected = Point2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
+    /// let result = isometry.transform_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn rotation_between(a: &Vector2<S>, b: &Vector2<S>) -> Isometry2<S> {
+        if let (Some(unit_a), Some(unit_b)) = (
+            Unit::try_from_value(*a, S::zero()), 
+            Unit::try_from_value(*b, S::zero()))
+        {
+            Self::rotation_between_axis(&unit_a, &unit_b)
+        } else {
+            Self::identity()
+        }
     }
 
     #[inline]
