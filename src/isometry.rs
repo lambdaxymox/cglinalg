@@ -276,15 +276,6 @@ impl<S> Isometry2<S> where S: ScalarFloat {
     /// let distance = Vector2::new(2_f64, 3_f64);
     /// let isometry = Isometry2::from_angle_translation(angle, &distance);
     /// let isometry_inv = isometry.inverse();
-    /// let expected = Matrix3x3::new(
-    ///      0_f64, -1_f64, 0_f64,
-    ///      1_f64,  0_f64, 0_f64,
-    ///     -2_f64, -3_f64, 1_f64  
-    /// );
-    /// let result = isometry_inv.to_affine_matrix();
-    /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
-    ///
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = point;
     /// let result = isometry_inv * (isometry * point);
@@ -293,10 +284,12 @@ impl<S> Isometry2<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn inverse(&self) -> Isometry2<S> {
-        Isometry2 {
-            rotation: self.rotation.inverse(),
-            translation: self.translation.inverse(),
-        }
+        let rotation = self.rotation.inverse();
+        let distance = self.translation.as_ref();
+        let vector = rotation.rotate_vector(&(-distance));
+        let translation = Translation2::from_vector(&vector);
+        
+        Self::from_parts(translation, rotation)
     }
 
     /// Apply a rotation followed by a translation.

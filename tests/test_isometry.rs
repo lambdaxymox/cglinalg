@@ -121,10 +121,16 @@ mod isometry2_tests {
         let angle = Degrees(72_f64);
         let distance = Vector2::new(-567_f64, 23_f64);
         let isometry = Isometry2::from_angle_translation(angle, &distance);
-        let expected = Isometry2::from_angle_translation(-angle, &(-distance));
-        let result = isometry.inverse();
+        let isometry_inv = isometry.inverse();
+        let point = Point2::new(34_f64, 139_f64);
+        let expected = point;
+        let result = isometry_inv * (isometry * point);
 
-        assert_eq!(result, expected);
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+
+        let result = isometry * (isometry_inv * point);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
 
     #[test]
