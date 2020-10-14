@@ -34,6 +34,7 @@ use core::ops;
 
 
 #[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Isometry2<S> {
     rotation: Rotation2<S>,
     translation: Translation2<S>,
@@ -140,6 +141,42 @@ impl<S> Isometry2<S> where S: ScalarFloat {
             rotation: Rotation2::identity(),
             translation: Translation2::identity()
         }
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for Isometry2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point2<S>> for Isometry2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &Point2<S>) -> Self::Output {
+        self.transform_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for &Isometry2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Isometry2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point2<S>) -> Self::Output {
+        self.transform_point(other)
     }
 }
 
