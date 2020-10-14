@@ -28,6 +28,9 @@ use crate::transform::{
     Transform2,
     Transform3,
 };
+use crate::unit::{
+    Unit,
+};
 
 use core::fmt;
 use core::ops;
@@ -185,6 +188,189 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Isometry2<S> where S: ScalarFloa
 
     #[inline]
     fn mul(self, other: &'a Point2<S>) -> Self::Output {
+        self.transform_point(other)
+    }
+}
+
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct Isometry3<S> {
+    rotation: Rotation3<S>,
+    translation: Translation3<S>,
+}
+
+impl<S> Isometry3<S> where S: ScalarFloat {
+    #[inline]
+    pub fn from_parts(translation: Translation3<S>, rotation: Rotation3<S>) -> Isometry3<S> {
+        Isometry3 {
+            rotation: rotation,
+            translation: translation,
+        }
+    }
+
+    #[inline]
+    pub fn from_axis_angle_translation<A: Into<Radians<S>>>(
+        axis: &Unit<Vector3<S>>, angle: A, distance: &Vector3<S>) -> Isometry3<S>
+    {
+        Isometry3 {
+            rotation: Rotation3::from_axis_angle(axis, angle),
+            translation: Translation3::from_vector(distance),
+        }
+    }
+
+    #[inline]
+    pub fn from_translation(translation: Translation3<S>) -> Isometry3<S> {
+        Self::from_parts(translation, Rotation3::identity())
+    }
+
+    #[inline]
+    pub fn from_rotation(rotation: Rotation3<S>) -> Isometry3<S> {
+        Self::from_parts(Translation3::identity(), rotation)
+    }
+
+    #[inline]
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Isometry3<S> {
+        let translation = Translation3::identity();
+        let rotation = Rotation3::from_axis_angle(axis, angle);
+        
+        Self::from_parts(translation, rotation)
+    }
+
+    #[inline]
+    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Isometry3<S> {
+        let translation = Translation3::identity();
+        let rotation = Rotation3::from_angle_x(angle);
+        
+        Self::from_parts(translation, rotation)
+    }
+
+    #[inline]
+    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Isometry3<S> {
+        let translation = Translation3::identity();
+        let rotation = Rotation3::from_angle_y(angle);
+        
+        Self::from_parts(translation, rotation)
+    }
+
+    #[inline]
+    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Isometry3<S> {
+        let translation = Translation3::identity();
+        let rotation = Rotation3::from_angle_z(angle);
+        
+        Self::from_parts(translation, rotation)
+    }
+
+    #[inline]
+    pub fn to_transform3d(&self) -> Transform3<S> {
+        let matrix = self.to_affine_matrix();
+        Transform3::from_specialized(matrix)
+    }
+
+    #[inline]
+    pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
+        let zero = S::zero();
+        let one = S::one();
+        let rotation_matrix = self.rotation.matrix();
+        let translation = self.translation.as_ref();
+
+        Matrix4x4::new(
+            rotation_matrix.c0r0, rotation_matrix.c0r1, rotation_matrix.c0r2, zero,
+            rotation_matrix.c1r0, rotation_matrix.c1r1, rotation_matrix.c1r2, zero,
+            rotation_matrix.c2r0, rotation_matrix.c2r1, rotation_matrix.c2r2, zero,
+            translation[0], translation[1], translation[2], one
+        )
+    }
+    
+    #[inline]
+    pub fn rotation(&self) -> &Rotation3<S> {
+        &self.rotation
+    }
+
+    #[inline]
+    pub fn translation(&self) -> &Translation3<S> {
+        &self.translation
+    }
+
+    #[inline]
+    pub fn inverse(&self) -> Isometry3<S> {
+        Isometry3 {
+            rotation: self.rotation.inverse(),
+            translation: self.translation.inverse(),
+        }
+    }
+
+    /// Apply a rotation followed by a translation.
+    #[inline]
+    pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
+        let rotated_point = self.rotation.rotate_point(&point);
+
+        self.translation.translate_point(&rotated_point)
+    }
+
+    /// Apply a rotation followed by a translation.
+    #[inline]
+    pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        let rotated_vector = self.rotation.rotate_vector(vector);
+        
+        self.translation.translate_vector(&rotated_vector)
+    }
+
+    #[inline]
+    pub fn inverse_transform_point(&self, point: &Point3<S>) -> Point3<S> {
+        let rotated_point = self.rotation.inverse_rotate_point(point);
+
+        self.translation.inverse_translate_point(&rotated_point)
+    }
+    
+    #[inline]
+    pub fn inverse_transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+        let rotated_vector = self.rotation.inverse_rotate_vector(vector);
+
+        self.translation.inverse_translate_vector(&rotated_vector)
+    }
+
+    #[inline]
+    pub fn identity() -> Isometry3<S> {
+        Isometry3 {
+            rotation: Rotation3::identity(),
+            translation: Translation3::identity()
+        }
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for Isometry3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point3<S>> for Isometry3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &Point3<S>) -> Self::Output {
+        self.transform_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point3<S>> for &Isometry3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: Point3<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Isometry3<S> where S: ScalarFloat {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point3<S>) -> Self::Output {
         self.transform_point(other)
     }
 }
