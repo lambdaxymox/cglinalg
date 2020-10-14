@@ -265,6 +265,7 @@ impl<S> Isometry2<S> where S: ScalarFloat {
     /// #     Isometry2,
     /// #     Degrees,
     /// #     Matrix3x3,
+    /// #     Point2,
     /// #     Vector2,
     /// # };
     /// # use approx::{
@@ -283,6 +284,12 @@ impl<S> Isometry2<S> where S: ScalarFloat {
     /// let result = isometry_inv.to_affine_matrix();
     /// 
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    ///
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = point;
+    /// let result = isometry_inv * (isometry * point);
+    ///
+    /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub fn inverse(&self) -> Isometry2<S> {
