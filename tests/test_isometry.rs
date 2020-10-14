@@ -61,6 +61,18 @@ mod isometry2_tests {
         
         assert_eq!(isometry.translation(), &translation);
     }
+
+    #[test]
+    fn test_from_angle_translation() {
+        let angle = Degrees(70_f64);
+        let distance = Vector2::new(12_f64, 5_f64);
+        let rotation = Rotation2::from_angle(angle);
+        let translation = Translation2::from_vector(&distance);
+        let expected = Isometry2::from_parts(translation, rotation);
+        let result = Isometry2::from_angle_translation(angle, &distance);
+
+        assert_eq!(result, expected);
+    }
 }
 
 
