@@ -36,6 +36,14 @@ pub struct Translation2<S> {
 }
 
 impl<S> Translation2<S> where S: ScalarSigned {
+    /// Construct a translation from the components of the translation.
+    #[inline]
+    pub fn new(x: S, y: S) -> Translation2<S> {
+        Translation2 {
+            vector: Vector2::new(x, y)
+        }
+    }
+
     /// Construct a translation operator from a vector of displacements.
     #[inline]
     pub fn from_vector(vector: &Vector2<S>) -> Translation2<S> {
@@ -370,6 +378,14 @@ pub struct Translation3<S> {
 }
 
 impl<S> Translation3<S> where S: ScalarSigned {
+    /// Construct a translation from the components of the translation.
+    #[inline]
+    pub fn new(x: S, y: S, z: S) -> Translation3<S> {
+        Translation3 {
+            vector: Vector3::new(x, y, z)
+        }
+    }
+
     /// Construct a translation operator from a vector of displacements.
     pub fn from_vector(vector: &Vector3<S>) -> Translation3<S> {
         Translation3 {
