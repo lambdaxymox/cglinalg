@@ -13,6 +13,9 @@ use crate::matrix::{
     Matrix3x3,
     Matrix4x4,
 };
+use crate::quaternion::{
+    Quaternion,
+};
 use crate::point::{
     Point2,
     Point3,
@@ -338,6 +341,79 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let rotation = Rotation3::from_angle_z(angle);
         
         Self::from_parts(translation, rotation)
+    }
+
+    /// Construct a rotation that rotates the shortest angular distance 
+    /// between two vectors.
+    ///
+    /// The rotation uses the unit directional vectors of the input vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Vector3, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
+    /// let vector1 = 5_f64 * Vector3::unit_y();
+    /// let vector2 = 12_f64 * Vector3::unit_x();
+    /// let isometry = Isometry3::rotation_between(&vector1, &vector2).unwrap();
+    /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
+    /// let result = isometry.transform_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    #[inline]
+    pub fn rotation_between(
+        v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Isometry3<S>> {
+            
+        if let (Some(unit_v1), Some(unit_v2)) = (
+            Unit::try_from_value(*v1, S::default_epsilon()), 
+            Unit::try_from_value(*v2, S::default_epsilon())
+        ) {
+            Self::rotation_between_axis(&unit_v1, &unit_v2)
+        } else {
+            None
+        }
+    }
+
+    /// Construct a rotation that rotates the shortest angular distance 
+    /// between two unit vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
+    /// let unit1 = Unit::from_value(5_f64 * Vector3::unit_y());
+    /// let unit2 = Unit::from_value(12_f64 * Vector3::unit_x());
+    /// let isometry = Isometry3::rotation_between_axis(&unit1, &unit2).unwrap();
+    /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
+    /// let result = isometry.transform_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    #[inline]
+    pub fn rotation_between_axis(
+        v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Isometry3<S>> {
+        
+        Rotation3::rotation_between_axis(v1, v2).map(|rotation| {
+            let translation = Translation3::identity();
+            Self::from_parts(translation, rotation)
+        })
     }
 
     #[inline]
