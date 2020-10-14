@@ -48,6 +48,8 @@ pub struct Isometry2<S> {
 }
 
 impl<S> Isometry2<S> where S: ScalarFloat {
+    /// Construct a new isometry directly from a translation and a 
+    /// rotation.
     #[inline]
     pub fn from_parts(translation: Translation2<S>, rotation: Rotation2<S>) -> Isometry2<S> {
         Isometry2 {
@@ -56,16 +58,41 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a new isometry from a translation.
     #[inline]
     pub fn from_translation(translation: Translation2<S>) -> Isometry2<S> {
         Self::from_parts(translation, Rotation2::identity())
     }
 
+    /// Construct a new isometry from a rotation.
     #[inline]
     pub fn from_rotation(rotation: Rotation2<S>) -> Isometry2<S> {
         Self::from_parts(Translation2::identity(), rotation)
     }
 
+    /// Construct a new isometry from a rotation angle and a displacement vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Translation2,
+    /// #     Rotation2,
+    /// #     Vector2,
+    /// #     Angle,
+    /// #     Degrees, 
+    /// # };
+    /// #
+    /// let angle = Degrees(72_f64);
+    /// let distance = Vector2::new(1_f64, 2_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let expected = Isometry2::from_parts(translation, rotation);
+    /// let result = Isometry2::from_angle_translation(angle, &distance);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_angle_translation<A: Into<Radians<S>>>(angle: A, distance: &Vector2<S>) -> Isometry2<S>
     {
@@ -75,6 +102,27 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct an isometry that is a pure rotation by an angle `angle`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Degrees,
+    /// #     Point2, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let isometry = Isometry2::from_angle(Degrees(45_f64));
+    /// let point = Point2::new(f64::sqrt(8_f64), f64::sqrt(8_f64));
+    /// let expected = Point2::new(0_f64, 4_f64);
+    /// let result = isometry.transform_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Isometry2<S> {
         let translation = Translation2::identity();
@@ -148,12 +196,40 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         }
     }
 
+    /// Convert an isometry to a generic transformation.
     #[inline]
     pub fn to_transform2d(&self) -> Transform2<S> {
         let matrix = self.to_affine_matrix();
         Transform2::from_specialized(matrix)
     }
 
+    /// Convert an isometry to an equivalent affine transformation matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Degrees, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,    
+    /// # };
+    /// #
+    /// let angle = Degrees(90_f64);
+    /// let distance = Vector2::new(2_f64, 3_f64);
+    /// let isometry = Isometry2::from_angle_translation(angle, &distance);
+    /// let expected = Matrix3x3::new(
+    ///      0_f64, 1_f64, 0_f64,
+    ///     -1_f64, 0_f64, 0_f64,
+    ///      2_f64, 3_f64, 1_f64
+    /// );
+    /// let result = isometry.to_affine_matrix();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
         let zero = S::zero();
