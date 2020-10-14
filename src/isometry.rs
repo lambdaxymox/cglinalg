@@ -13,9 +13,6 @@ use crate::matrix::{
     Matrix3x3,
     Matrix4x4,
 };
-use crate::quaternion::{
-    Quaternion,
-};
 use crate::point::{
     Point2,
     Point3,
