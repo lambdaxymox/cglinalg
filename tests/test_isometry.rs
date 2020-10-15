@@ -183,12 +183,12 @@ mod isometry2_tests {
 #[cfg(test)]
 mod isometry3_tests {
     use cglinalg::{
+        Matrix4x4,
         Isometry3,
         Rotation3,
         Translation3,
         Angle,
         Degrees,
-        Radians,
         Point3,
         Vector3,
         Unit,
@@ -270,6 +270,94 @@ mod isometry3_tests {
         let result = isometry.transform_vector(&unit_x.into_inner());
     
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_rotation_between_vectors() {
+        let vector1: Vector3<f64> = 17_f64 * Vector3::unit_x();
+        let vector2: Vector3<f64> = 3_f64 * Vector3::unit_y();
+        let isometry = Isometry3::rotation_between(&vector1, &vector2).unwrap();
+        let point = Point3::new(203_f64, 0_f64, 0_f64);
+        let expected = Point3::new(0_f64, 203_f64, 0_f64);
+        let result = isometry.transform_point(&point);
+    
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+    
+    #[test]
+    fn test_to_affine_matrix() {
+        let axis = Unit::from_value(Vector3::unit_z());
+        let angle = Degrees(60_f64);
+        let cos_angle = angle.cos();
+        let sin_angle = angle.sin();
+        let distance = Vector3::new(5_f64, 18_f64, 12_f64);
+        let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
+        let expected = Matrix4x4::new(
+             cos_angle,  sin_angle,  0_f64,      0_f64,
+            -sin_angle,  cos_angle,  0_f64,      0_f64,
+             0_f64,      0_f64,      1_f64,      0_f64,
+             distance.x, distance.y, distance.z, 1_f64
+        );
+        let result = isometry.to_affine_matrix();
+    
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_isometry_inverse() {
+        let axis = Unit::from_value(Vector3::unit_z());
+        let angle = Degrees(72_f64);
+        let distance = Vector3::new(-567_f64, 23_f64, 201_f64);
+        let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
+        let isometry_inv = isometry.inverse();
+        let point = Point3::new(34_f64, 139_f64, 91_f64);
+        let expected = point;
+        let result = isometry_inv * (isometry * point);
+    
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    
+        let result = isometry * (isometry_inv * point);
+    
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_inverse_transform_point() {
+        let axis = Unit::from_value(Vector3::unit_z());
+        let angle = Degrees(72_f64);
+        let cos_neg_angle = (-angle).cos();
+        let sin_neg_angle = (-angle).sin();
+        let distance = Vector3::new(-567_f64, 23_f64, 201_f64);
+        let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);        
+        let point = Point3::new(1_f64, 2_f64, 3_f64);
+        let diff: Point3<f64> = point - distance;
+        let expected = Point3::new(
+            cos_neg_angle * diff.x - sin_neg_angle * diff.y,
+            sin_neg_angle * diff.x + cos_neg_angle * diff.y,
+            diff.z
+        );
+        let result = isometry.inverse_transform_point(&point);
+    
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_inverse_transform_vector() {
+        let axis = Unit::from_value(Vector3::unit_z());
+        let angle = Degrees(72_f64);
+        let cos_neg_angle = (-angle).cos();
+        let sin_neg_angle = (-angle).sin();
+        let distance = Vector3::new(-567_f64, 23_f64, 201_f64);
+        let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);        
+        let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+        let expected = Vector3::new(
+            cos_neg_angle * vector.x - sin_neg_angle * vector.y,
+            sin_neg_angle * vector.x + cos_neg_angle * vector.y,
+            vector.z
+        );
+        let result = isometry.inverse_transform_vector(&vector);
+    
+        assert_eq!(result, expected);
     }
 
     #[test]
