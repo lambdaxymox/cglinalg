@@ -365,7 +365,7 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         self.translation.translate_vector(&rotated_vector)
     }
 
-    /// Tranform a point with the inverse isometry.
+    /// Transform a point with the inverse isometry.
     ///
     /// The inverse isometry applies the inverse translation followed by the
     /// inverse rotation. This is the reverse of the isometry.
@@ -399,7 +399,7 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         self.rotation.inverse_rotate_point(&(point - self.translation.as_ref()))
     }
     
-    /// Tranform a vector with the inverse isometry.
+    /// Transform a vector with the inverse isometry.
     ///
     /// The inverse isometry applies the inverse rotation to the vector.
     ///
