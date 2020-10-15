@@ -395,7 +395,7 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Translation2<S> where S: ScalarF
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation3<S> {
-    vector: Vector3<S>,
+    pub(crate) vector: Vector3<S>,
 }
 
 impl<S> Translation3<S> where S: ScalarSigned {

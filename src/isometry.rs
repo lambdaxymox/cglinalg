@@ -299,6 +299,30 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
+    /// Mutably invert an isometry in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Degrees, 
+    /// # };
+    /// #
+    /// let angle = Degrees(90_f64);
+    /// let distance = Vector2::new(2_f64, 3_f64);
+    /// let isometry = Isometry2::from_angle_translation(angle, &distance);
+    /// let mut isometry_mut = Isometry2::from_angle_translation(angle, &distance);
+    /// isometry_mut.inverse_mut();
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = point;
+    /// let transformed_point = isometry.transform_point(&point);
+    /// let result = isometry_mut.transform_point(&transformed_point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse_mut(&mut self) {
         self.rotation.inverse_mut();
@@ -868,6 +892,39 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let translation = Translation3::from_vector(&vector);
         
         Self::from_parts(translation, rotation)
+    }
+
+    /// Mutably invert an isometry in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Point3,
+    /// #     Vector3,
+    /// #     Degrees,
+    /// #     Unit, 
+    /// # };
+    /// #
+    /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let angle = Degrees(90_f64);
+    /// let distance = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
+    /// let mut isometry_mut = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
+    /// isometry_mut.inverse_mut();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = point;
+    /// let transformed_point = isometry.transform_point(&point);
+    /// let result = isometry_mut.transform_point(&transformed_point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inverse_mut(&mut self) {
+        self.rotation.inverse_mut();
+        self.translation.inverse_mut();
+        self.translation.vector = self.rotation.rotate_vector(&self.translation.vector);
     }
 
     /// Transform a point with the isometry.
