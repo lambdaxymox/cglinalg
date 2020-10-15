@@ -40,16 +40,24 @@ use core::fmt;
 use core::ops;
 
 
+/// A two-dimensional isometry (i.e. rigid body transformation) is a 
+/// transformation whose motion does not distort the shape of an object. 
+///
+/// In terms of transformations, an isometry is a combination of 
+/// a rotation and a translation. Rigid body transformations preserve the lengths
+/// of vectors, hence the name isometry. In terms of transforming points and 
+/// vectors, an isometry applies the rotation, followed by the translation.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Isometry2<S> {
+    /// The rotation component of the isometry.
     rotation: Rotation2<S>,
+    /// The translation component of the isometry.
     translation: Translation2<S>,
 }
 
 impl<S> Isometry2<S> where S: ScalarFloat {
-    /// Construct a new isometry directly from a translation and a 
-    /// rotation.
+    /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
     pub fn from_parts(translation: Translation2<S>, rotation: Rotation2<S>) -> Isometry2<S> {
         Isometry2 {
@@ -493,14 +501,24 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Isometry2<S> where S: ScalarFloa
 }
 
 
+/// A three-dimensional isometry (i.e. rigid body transformation) is a 
+/// transformation whose motion does not distort the shape of an object. 
+///
+/// In terms of transformations, an isometry is a combination of 
+/// a rotation and a translation. Rigid body transformations preserve the lengths
+/// of vectors, hence the name isometry. In terms of transforming points and 
+/// vectors, an isometry applies the rotation, followed by the translation.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Isometry3<S> {
+    /// The rotation component of an isometry.
     rotation: Rotation3<S>,
+    /// The translation component of an isometry.
     translation: Translation3<S>,
 }
 
 impl<S> Isometry3<S> where S: ScalarFloat {
+    /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
     pub fn from_parts(translation: Translation3<S>, rotation: Rotation3<S>) -> Isometry3<S> {
         Isometry3 {
@@ -509,6 +527,31 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a new isometry from a rotation axis, rotation angle, and a 
+    /// displacement vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Translation3,
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Degrees,
+    /// #     Unit, 
+    /// # };
+    /// #
+    /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let angle = Degrees(72_f64);
+    /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let expected = Isometry3::from_parts(translation, rotation);
+    /// let result = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_axis_angle_translation<A: Into<Radians<S>>>(
         axis: &Unit<Vector3<S>>, angle: A, distance: &Vector3<S>) -> Isometry3<S>
@@ -519,16 +562,40 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a new isometry from a translation.
     #[inline]
     pub fn from_translation(translation: Translation3<S>) -> Isometry3<S> {
         Self::from_parts(translation, Rotation3::identity())
     }
 
+    /// Construct a new isometry from a rotation.
     #[inline]
     pub fn from_rotation(rotation: Rotation3<S>) -> Isometry3<S> {
         Self::from_parts(Translation3::identity(), rotation)
     }
 
+    /// Construct a new isometry from a rotation axis and a rotation angle.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Degrees,
+    /// #     Unit, 
+    /// # };
+    /// #
+    /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let angle = Degrees(72_f64);
+    /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let expected = Isometry3::from_rotation(rotation);
+    /// let result = Isometry3::from_axis_angle(&axis, angle);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Isometry3<S> {
         let translation = Translation3::identity();
@@ -537,6 +604,25 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
+    /// Construct an isometry from a rotation angle in the **yz-plane* about 
+    /// the **x-axis**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let angle = Degrees(72_f64);
+    /// let rotation = Rotation3::from_angle_x(angle);
+    /// let expected = Isometry3::from_rotation(rotation);
+    /// let result = Isometry3::from_angle_x(angle);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Isometry3<S> {
         let translation = Translation3::identity();
@@ -545,6 +631,25 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
+    /// Construct an isometry from a rotation angle in the **zx-plane* about 
+    /// the **y-axis**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let angle = Degrees(72_f64);
+    /// let rotation = Rotation3::from_angle_y(angle);
+    /// let expected = Isometry3::from_rotation(rotation);
+    /// let result = Isometry3::from_angle_y(angle);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Isometry3<S> {
         let translation = Translation3::identity();
@@ -553,6 +658,25 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
+    /// Construct an isometry from a rotation angle in the **xy-plane* about 
+    /// the **z-axis**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let angle = Degrees(72_f64);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let expected = Isometry3::from_rotation(rotation);
+    /// let result = Isometry3::from_angle_z(angle);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Isometry3<S> {
         let translation = Translation3::identity();
@@ -634,12 +758,43 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         })
     }
 
+    /// Convert an isometry into a generic transformation.
     #[inline]
     pub fn to_transform3d(&self) -> Transform3<S> {
         let matrix = self.to_affine_matrix();
         Transform3::from_specialized(matrix)
     }
 
+    /// Convert an isometry to an equivalent affine transformation matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Degrees,
+    /// #     Unit, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,    
+    /// # };
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Degrees(90_f64);
+    /// let distance = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
+    /// let expected = Matrix4x4::new(
+    ///      0_f64, 1_f64, 0_f64, 0_f64,
+    ///     -1_f64, 0_f64, 0_f64, 0_f64,
+    ///      0_f64, 0_f64, 1_f64, 0_f64,
+    ///      2_f64, 3_f64, 4_f64, 1_f64
+    /// );
+    /// let result = isometry.to_affine_matrix();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
         let zero = S::zero();
@@ -655,11 +810,13 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         )
     }
     
+    /// Get the rotation component of the isometry.
     #[inline]
     pub fn rotation(&self) -> &Rotation3<S> {
         &self.rotation
     }
 
+    /// Get the translation part of the isometry.
     #[inline]
     pub fn translation(&self) -> &Translation3<S> {
         &self.translation
