@@ -141,9 +141,10 @@ mod isometry2_tests {
         let distance = Vector2::new(-567_f64, 23_f64);
         let isometry = Isometry2::from_angle_translation(angle, &distance);        
         let point = Point2::new(1_f64, 2_f64);
+        let diff: Point2<f64> = point - distance;
         let expected = Point2::new(
-            cos_neg_angle * point.x - sin_neg_angle * point.y - distance.x,
-            sin_neg_angle * point.x + cos_neg_angle * point.y - distance.y
+            cos_neg_angle * diff.x - sin_neg_angle * diff.y,
+            sin_neg_angle * diff.x + cos_neg_angle * diff.y
         );
         let result = isometry.inverse_transform_point(&point);
 
