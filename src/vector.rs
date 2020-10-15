@@ -174,6 +174,28 @@ impl<S> Vector1<S> where S: Scalar {
     }
 }
 
+impl<S> Vector1<S> where S: ScalarSigned {
+    /// Compute the negation of a vector mutably in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1, 
+    /// # };
+    /// #
+    /// let mut result = Vector1::new(1_i32);
+    /// let expected = -result;
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        self.x = -self.x;
+    }
+}
+
 impl<S> Vector1<S> where S: ScalarFloat {
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
@@ -1092,6 +1114,29 @@ impl<S> Vector2<S> where S: Scalar {
         } else {
             None
         }
+    }
+}
+
+impl<S> Vector2<S> where S: ScalarSigned {
+    /// Compute the negation of a vector mutably in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let mut result = Vector2::new(1_i32, 2_i32);
+    /// let expected = -result;
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        self.x = -self.x;
+        self.y = -self.y;
     }
 }
 
@@ -2055,6 +2100,30 @@ impl<S> Vector3<S> where S: Scalar {
         } else {
             None
         }
+    }
+}
+
+impl<S> Vector3<S> where S: ScalarSigned {
+    /// Compute the negation of a vector mutably in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let mut result = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let expected = -result;
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        self.x = -self.x;
+        self.y = -self.y;
+        self.z = -self.z;
     }
 }
 
@@ -3105,6 +3174,31 @@ impl<S> Vector4<S> where S: Scalar {
         } else {
             None
         }
+    }
+}
+
+impl<S> Vector4<S> where S: ScalarSigned {
+    /// Compute the negation of a vector mutably in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let mut result = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let expected = -result;
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        self.x = -self.x;
+        self.y = -self.y;
+        self.z = -self.z;
+        self.w = -self.w;
     }
 }
 

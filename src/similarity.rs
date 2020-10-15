@@ -1,0 +1,229 @@
+use crate::rotation::{
+    Rotation2,
+    Rotation3,
+};
+use crate::translation::{
+    Translation2,
+    Translation3,
+};
+use crate::scalar::{
+    ScalarFloat,
+};
+use crate::matrix::{
+    Matrix3x3,
+    Matrix4x4,
+};
+use crate::point::{
+    Point2,
+    Point3,
+};
+use crate::vector::{
+    Vector2,
+    Vector3,
+};
+use crate::angle::{
+    Radians,
+    Angle,
+};
+use crate::transform::{
+    Transform2,
+    Transform3,
+};
+use crate::isometry::{
+    Isometry2,
+    Isometry3,
+};
+use crate::unit::{
+    Unit,
+};
+use crate::traits::{
+    DotProduct,
+};
+
+use core::fmt;
+use core::ops;
+
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct Similarity2<S> {
+    isometry: Isometry2<S>,
+    scale: S,
+}
+
+impl<S> Similarity2<S> where S: ScalarFloat {
+    #[inline]
+    pub fn from_parts(translation: Translation2<S>, rotation: Rotation2<S>, scale: S) -> Similarity2<S> {
+        let isometry = Isometry2::from_parts(translation, rotation);
+        
+        Similarity2 {
+            isometry: isometry,
+            scale: scale,
+        }
+    }
+
+    #[inline]
+    pub fn from_rotation(rotation: Rotation2<S>) -> Similarity2<S> {
+        let isometry = Isometry2::from_rotation(rotation);
+
+        Similarity2 {
+            isometry: isometry,
+            scale: S::one(),
+        }
+    }
+
+    #[inline]
+    pub fn from_scale(scale: S) -> Similarity2<S> {
+        let isometry = Isometry2::identity();
+
+        Similarity2 {
+            isometry: isometry,
+            scale: scale,
+        }
+    }
+
+    #[inline]
+    pub fn from_translation(translation: Translation2<S>) -> Similarity2<S> {
+        let isometry = Isometry2::from_translation(translation);
+
+        Similarity2 {
+            isometry: isometry,
+            scale: S::one(),
+        }
+    }
+
+    #[inline]
+    pub fn from_isometry(isometry: Isometry2<S>) -> Similarity2<S> {
+        Similarity2 {
+            isometry: isometry,
+            scale: S::one(),
+        }
+    }
+
+    #[inline]
+    pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
+        let distance = self.isometry.translation().as_ref();
+        let scale = self.scale;
+        let rotation = self.isometry.rotation().matrix();
+
+        Matrix3x3::new(
+            scale * rotation.c0r0, scale * rotation.c0r1, S::zero(),
+            scale * rotation.c1r0, scale * rotation.c1r1, S::zero(),
+            distance.x,      distance.y,      S::one()
+        )
+    }
+    
+    #[inline]
+    pub fn scale(&self) -> S {
+        self.scale
+    }
+
+    #[inline]
+    pub fn rotation(&self) -> &Rotation2<S> {
+        self.isometry.rotation()
+    }
+
+    #[inline]
+    pub fn translation(&self) -> &Translation2<S> {
+        self.isometry.translation()
+    }
+
+    #[inline]
+    pub fn identity() -> Similarity2<S> {
+        Similarity2 {
+            isometry: Isometry2::identity(),
+            scale: S::one(),
+        }
+    }
+
+    /// Convert a similarity transformation to a generic transformation.
+    #[inline]
+    pub fn to_transform2d(&self) -> Transform2<S> {
+        let matrix = self.to_affine_matrix();
+        Transform2::from_specialized(matrix)
+    }
+
+    #[inline]
+    pub fn inverse(&self) -> Similarity2<S> {
+        let mut similarity_inv = self.clone();
+        similarity_inv.inverse_mut();
+
+        similarity_inv
+    }
+
+    #[inline]
+    pub fn inverse_mut(&mut self) {
+        self.scale = S::one() / self.scale;
+        self.isometry.inverse_mut();
+        self.isometry.translation.vector *= self.scale;
+    }
+
+    #[inline]
+    pub fn inverse_transform_point(&self, point: &Point2<S>) -> Point2<S> {
+        self.isometry.inverse_transform_point(point) / self.scale
+    }
+    
+    #[inline]
+    pub fn inverse_transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+        self.isometry.inverse_transform_vector(vector) / self.scale
+    }
+
+    #[inline]
+    pub fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
+        let scaled_point = point * self.scale;
+        
+        self.isometry.transform_point(&scaled_point)
+    }
+
+    #[inline]
+    pub fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+        let scaled_vector = vector * self.scale;
+        
+        self.isometry.transform_vector(&scaled_vector)
+    }
+
+}
+
+impl<S> ops::Mul<Point2<S>> for Similarity2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<S> ops::Mul<&Point2<S>> for Similarity2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &Point2<S>) -> Self::Output {
+        self.transform_point(other)
+    }
+}
+
+impl<S> ops::Mul<Point2<S>> for &Similarity2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: Point2<S>) -> Self::Output {
+        self.transform_point(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Similarity2<S> where S: ScalarFloat {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Point2<S>) -> Self::Output {
+        self.transform_point(other)
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct Similarity3<S> {
+    isometry: Isometry3<S>,
+    scale: S,
+}
+

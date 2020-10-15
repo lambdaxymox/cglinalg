@@ -214,6 +214,31 @@ impl<S> Rotation2<S> where S: ScalarFloat {
         }
     }
 
+    /// Mutably invert a rotation in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation2,
+    /// #     Radians,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let mut result = Rotation2::from_angle(angle);
+    /// let expected = Rotation2::from_angle(-angle);
+    /// result.inverse_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ``` 
+    #[inline]
+    pub fn inverse_mut(&mut self) {
+        self.matrix.transpose_mut();
+    }
+
     /// Apply the rotation operation to a vector.
     ///
     /// ## Example
@@ -915,6 +940,32 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         Rotation3 {
             matrix: self.matrix.transpose(),
         }
+    }
+
+    /// Mutably invert a rotation in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Radians,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let mut result = Rotation3::from_axis_angle(&axis, angle);
+    /// let expected = Rotation3::from_axis_angle(&axis, -angle);
+    /// result.inverse_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ``` 
+    #[inline]
+    pub fn inverse_mut(&mut self) {
+        self.matrix.transpose_mut()
     }
 
     /// Apply the rotation operation to a vector.

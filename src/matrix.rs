@@ -341,6 +341,32 @@ impl<S> Matrix2x2<S> where S: Scalar {
             zero,      scale_y,
         )
     }
+
+    /// Mutably transpose a square matrix in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,    
+    /// # };
+    /// #
+    /// let mut result = Matrix2x2::new(
+    ///     1_i32, 1_i32,
+    ///     2_i32, 2_i32 
+    /// );
+    /// let expected = Matrix2x2::new(
+    ///     1_i32, 2_i32,
+    ///     1_i32, 2_i32 
+    /// );
+    /// result.transpose_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn transpose_mut(&mut self) {
+        self.swap_elements((0, 1), (1, 0));
+    }
 }
 
 impl<S> Matrix2x2<S> where S: ScalarSigned {
@@ -394,6 +420,35 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
              one - two * normal.x * normal.x, -two * normal.x * normal.y,
             -two * normal.x * normal.y,        one - two * normal.y * normal.y,
         )
+    }
+
+    /// Mutably negate the elements of a matrix in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// # 
+    /// let mut result = Matrix2x2::new(
+    ///     1_i32, 2_i32,
+    ///     3_i32, 4_i32
+    /// );
+    /// let expected = Matrix2x2::new(
+    ///     -1_i32, -2_i32,
+    ///     -3_i32, -4_i32   
+    /// );
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        self.c0r0 = -self.c0r0;
+        self.c0r1 = -self.c0r1;
+        self.c1r0 = -self.c1r0;
+        self.c1r1 = -self.c1r1;
     }
 }
 
@@ -1286,11 +1341,6 @@ impl<S> SquareMatrix for Matrix2x2<S> where S: ScalarFloat {
     }
     
     #[inline]
-    fn transpose_in_place(&mut self) {
-        self.swap_elements((0, 1), (1, 0));
-    }
-    
-    #[inline]
     fn trace(&self) -> S {
         self.c0r0 + self.c1r1
     }
@@ -1992,6 +2042,36 @@ impl<S> Matrix3x3<S> where S: Scalar {
             zero,           zero,           one
         )
     }
+
+    /// Mutably transpose a square matrix in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let mut result = Matrix3x3::new(
+    ///     1_i32, 1_i32, 1_i32,
+    ///     2_i32, 2_i32, 2_i32,
+    ///     3_i32, 3_i32, 3_i32,   
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32,
+    ///     1_i32, 2_i32, 3_i32,
+    ///     1_i32, 2_i32, 3_i32
+    /// );
+    /// result.transpose_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn transpose_mut(&mut self) {
+        self.swap_elements((0, 1), (1, 0));
+        self.swap_elements((0, 2), (2, 0));
+        self.swap_elements((1, 2), (2, 1));
+    }
 }
 
 impl<S> Matrix3x3<S> where S: ScalarSigned {
@@ -2190,6 +2270,42 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
             c1r0, c1r1, c1r2,
             c2r0, c2r1, c2r2
        )
+    }
+
+    /// Mutably negate the elements of a matrix in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// # 
+    /// let mut result = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32,
+    ///     4_i32, 5_i32, 6_i32,
+    ///     7_i32, 8_i32, 9_i32
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     -1_i32, -2_i32, -3_i32,
+    ///     -4_i32, -5_i32, -6_i32,
+    ///     -7_i32, -8_i32, -9_i32   
+    /// );
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        self.c0r0 = -self.c0r0;
+        self.c0r1 = -self.c0r1;
+        self.c0r2 = -self.c0r2;
+        self.c1r0 = -self.c1r0;
+        self.c1r1 = -self.c1r1;
+        self.c1r2 = -self.c1r2;
+        self.c2r0 = -self.c2r0;
+        self.c2r1 = -self.c2r1;
+        self.c2r2 = -self.c2r2;
     }
 }
 
@@ -3563,13 +3679,6 @@ impl<S> SquareMatrix for Matrix3x3<S> where S: ScalarFloat {
     }
     
     #[inline]
-    fn transpose_in_place(&mut self) {
-        self.swap_elements((0, 1), (1, 0));
-        self.swap_elements((0, 2), (2, 0));
-        self.swap_elements((1, 2), (2, 1));
-    }
-    
-    #[inline]
     fn trace(&self) -> Self::Element {
         self.c0r0 + self.c1r1 + self.c2r2
     }
@@ -4197,6 +4306,41 @@ impl<S> Matrix4x4<S> where S: Scalar {
             zero,           zero,           zero,           one
         )
     }
+
+    /// Mutably transpose a square matrix in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let mut result = Matrix4x4::new(
+    ///     1_i32, 1_i32, 1_i32, 1_i32,
+    ///     2_i32, 2_i32, 2_i32, 2_i32,
+    ///     3_i32, 3_i32, 3_i32, 3_i32,
+    ///     4_i32, 4_i32, 4_i32, 4_i32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32 
+    /// );
+    /// result.transpose_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn transpose_mut(&mut self) {
+        self.swap_elements((0, 1), (1, 0));
+        self.swap_elements((0, 2), (2, 0));
+        self.swap_elements((1, 2), (2, 1));
+        self.swap_elements((0, 3), (3, 0));
+        self.swap_elements((1, 3), (3, 1));
+        self.swap_elements((2, 3), (3, 2));
+    }
 }
 
 impl<S> Matrix4x4<S> where S: ScalarSigned {
@@ -4317,6 +4461,51 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
             c2r0, c2r1, c2r2, c2r3,
             c3r0, c3r1, c3r2, c3r3
         )
+    }
+
+    /// Mutably negate the elements of a matrix in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// # 
+    /// let mut result = Matrix4x4::new(
+    ///     1_i32,  2_i32,  3_i32,  4_i32,
+    ///     5_i32,  6_i32,  7_i32,  8_i32,
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     -1_i32,  -2_i32,  -3_i32,  -4_i32,
+    ///     -5_i32,  -6_i32,  -7_i32,  -8_i32, 
+    ///     -9_i32,  -10_i32, -11_i32, -12_i32,
+    ///     -13_i32, -14_i32, -15_i32, -16_i32   
+    /// );
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        self.c0r0 = -self.c0r0;
+        self.c0r1 = -self.c0r1;
+        self.c0r2 = -self.c0r2;
+        self.c0r3 = -self.c0r3;
+        self.c1r0 = -self.c1r0;
+        self.c1r1 = -self.c1r1;
+        self.c1r2 = -self.c1r2;
+        self.c1r3 = -self.c1r3;
+        self.c2r0 = -self.c2r0;
+        self.c2r1 = -self.c2r1;
+        self.c2r2 = -self.c2r2;
+        self.c2r3 = -self.c2r3;
+        self.c3r0 = -self.c3r0;
+        self.c3r1 = -self.c3r1;
+        self.c3r2 = -self.c3r2;
+        self.c3r3 = -self.c3r3;
     }
 }
 
@@ -6254,16 +6443,6 @@ impl<S> SquareMatrix for Matrix4x4<S> where S: ScalarFloat {
     #[inline]
     fn diagonal(&self) -> Self::ColumnRow {
         Vector4::new(self.c0r0, self.c1r1, self.c2r2, self.c3r3)
-    }
-    
-    #[inline]
-    fn transpose_in_place(&mut self) {
-        self.swap_elements((0, 1), (1, 0));
-        self.swap_elements((0, 2), (2, 0));
-        self.swap_elements((1, 2), (2, 1));
-        self.swap_elements((0, 3), (3, 0));
-        self.swap_elements((1, 3), (3, 1));
-        self.swap_elements((2, 3), (3, 2));
     }
 
     #[rustfmt::skip]

@@ -32,7 +32,7 @@ use core::ops;
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation2<S> {
     /// The vector along which a vector or point is displaced.
-    vector: Vector2<S>,
+    pub(crate) vector: Vector2<S>,
 }
 
 impl<S> Translation2<S> where S: ScalarSigned {
@@ -129,6 +129,27 @@ impl<S> Translation2<S> where S: ScalarSigned {
     #[inline]
     pub fn inverse(&self) -> Self {
         Translation2::from_vector(&(-self.vector))
+    }
+
+    /// Mutably invert a translation in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation2,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let mut result = Translation2::new(1_f64, 2_f64);
+    /// let expected = Translation2::new(-1_f64, -2_f64);
+    /// result.inverse_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inverse_mut(&mut self) {
+        self.vector.neg_mut();
     }
     
     /// Apply the translation operation to a point.
@@ -470,6 +491,27 @@ impl<S> Translation3<S> where S: ScalarSigned {
     #[inline]
     pub fn inverse(&self) -> Self {
         Translation3::from_vector(&(-self.vector))
+    }
+
+    /// Mutably invert a translation in place.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Translation3,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let mut result = Translation3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Translation3::new(-1_f64, -2_f64, -3_f64);
+    /// result.inverse_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inverse_mut(&mut self) {
+        self.vector.neg_mut();
     }
     
     /// Apply the translation transformation to a point.

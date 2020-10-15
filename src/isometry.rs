@@ -51,9 +51,9 @@ use core::ops;
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Isometry2<S> {
     /// The rotation component of the isometry.
-    rotation: Rotation2<S>,
+    pub(crate) rotation: Rotation2<S>,
     /// The translation component of the isometry.
-    translation: Translation2<S>,
+    pub(crate) translation: Translation2<S>,
 }
 
 impl<S> Isometry2<S> where S: ScalarFloat {
@@ -297,6 +297,13 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         let translation = Translation2::from_vector(&vector);
         
         Self::from_parts(translation, rotation)
+    }
+
+    #[inline]
+    pub fn inverse_mut(&mut self) {
+        self.rotation.inverse_mut();
+        self.translation.inverse_mut();
+        self.translation.vector = self.rotation.rotate_vector(&self.translation.vector);
     }
 
     /// Transform a point with the isometry.

@@ -192,9 +192,6 @@ pub trait SquareMatrix where
     /// Get the diagonal part of a square matrix.
     fn diagonal(&self) -> Self::ColumnRow;
 
-    /// Mutably transpose a square matrix in place.
-    fn transpose_in_place(&mut self);
-
     /// Compute the determinant of a square matrix.
     fn determinant(&self) -> Self::Element;
 

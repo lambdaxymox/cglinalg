@@ -119,6 +119,7 @@ mod scale;
 mod shear;
 mod translation;
 mod transform;
+mod similarity;
 
 
 pub use angle::*;
@@ -139,4 +140,5 @@ pub use scale::*;
 pub use shear::*;
 pub use translation::*;
 pub use transform::*;
+pub use similarity::*;
 
