@@ -184,6 +184,8 @@ mod isometry2_tests {
 mod isometry3_tests {
     use cglinalg::{
         Isometry3,
+        Rotation3,
+        Translation3,
         Angle,
         Degrees,
         Radians,
@@ -195,4 +197,88 @@ mod isometry3_tests {
         relative_eq,
     };
 
+    #[test]
+    fn test_isometry_transform_point() {
+        let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+        let translation = Translation3::from_vector(&vector);
+        let angle = Degrees(90_f64);
+        let axis = Unit::from_value(Vector3::unit_z());
+        let rotation = Rotation3::from_axis_angle(&axis, angle);
+        let isometry = Isometry3::from_parts(translation, rotation);
+        let point = Point3::new(4_f64, 5_f64, 6_f64);
+        let expected = Point3::new(-4_f64, 6_f64, 9_f64);
+        let result = isometry.transform_point(&point);
+    
+        assert_eq!(result, expected);
+    }
+    
+    #[test]
+    fn test_isometry_transform_vector() {
+        let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+        let translation = Translation3::from_vector(&vector);
+        let angle = Degrees(90_f64);
+        let axis = Unit::from_value(Vector3::unit_z());
+        let rotation = Rotation3::from_axis_angle(&axis, angle);
+        let isometry = Isometry3::from_parts(translation, rotation);
+        let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+        let expected = Vector3::new(-2_f64, 1_f64, 3_f64);
+        let result = isometry.transform_vector(&vector);
+    
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_from_rotation() {
+        let axis = Unit::from_value(Vector3::unit_z());
+        let angle = Degrees(90_f64);
+        let isometry = Isometry3::from_axis_angle(&axis, angle);
+        let vector = Vector3::unit_x();
+        let expected = Vector3::unit_y();
+        let result = isometry.transform_vector(&vector);
+    
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+    
+    #[test]
+    fn test_from_translation() {
+        let distance = Vector3::new(4_f64, 5_f64, 6_f64);
+        let translation = Translation3::from_vector(&distance);
+        let isometry = Isometry3::from_translation(translation);
+        
+        assert_eq!(isometry.translation(), &translation);
+    }
+    
+    #[test]
+    fn test_from_angle_translation() {
+        let axis = Unit::from_value(Vector3::unit_z());
+        let angle = Degrees(70_f64);
+        let distance = Vector3::new(12_f64, 5_f64, 77_f64);
+        let rotation = Rotation3::from_axis_angle(&axis, angle);
+        let translation = Translation3::from_vector(&distance);
+        let expected = Isometry3::from_parts(translation, rotation);
+        let result = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
+    
+        assert_eq!(result, expected);
+    }
+    
+    #[test]
+    fn test_rotation_between_axis() {
+        let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
+        let unit_y: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
+        let isometry = Isometry3::rotation_between_axis(&unit_x, &unit_y).unwrap();
+        let expected = unit_y.into_inner();
+        let result = isometry.transform_vector(&unit_x.into_inner());
+    
+        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_identity() {
+        let isometry = Isometry3::identity();
+        let point = Point3::new(1_f64, 2_f64, 3_f64);
+        let expected = point;
+        let result = isometry * point;
+
+        assert_eq!(result, expected);
+    }
 }
