@@ -547,9 +547,9 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Isometry2<S> where S: ScalarFloa
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Isometry3<S> {
     /// The rotation component of an isometry.
-    rotation: Rotation3<S>,
+    pub(crate) rotation: Rotation3<S>,
     /// The translation component of an isometry.
-    translation: Translation3<S>,
+    pub(crate) translation: Translation3<S>,
 }
 
 impl<S> Isometry3<S> where S: ScalarFloat {
