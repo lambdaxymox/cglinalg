@@ -292,7 +292,33 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
-    /// Apply a rotation followed by a translation.
+    /// Transform a point with the isometry.
+    ///
+    /// The isometry applies the rotation followed by the translation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let distance = Vector2::new(1_f64, 2_f64);
+    /// let isometry = Isometry2::from_angle_translation(angle, &distance);
+    /// let point = Point2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
+    /// let expected = Point2::new(1_f64, 4_f64);
+    /// let result = isometry.transform_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
         let rotated_point = self.rotation.rotate_point(&point);
@@ -301,6 +327,30 @@ impl<S> Isometry2<S> where S: ScalarFloat {
     }
 
     /// Apply a rotation followed by a translation.
+    ///
+    /// The isometry applies the rotation and not the translation to vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Vector2,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let distance = Vector2::new(1_f64, 2_f64);
+    /// let isometry = Isometry2::from_angle_translation(angle, &distance);
+    /// let vector = Vector2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
+    /// let expected = Vector2::new(0_f64, 2_f64);
+    /// let result = isometry.transform_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     #[inline]
     pub fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         let rotated_vector = self.rotation.rotate_vector(vector);
@@ -308,20 +358,85 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         self.translation.translate_vector(&rotated_vector)
     }
 
+    /// Tranform a point with the inverse isometry.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let distance = Vector2::new(1_f64, 2_f64);
+    /// let isometry = Isometry2::from_angle_translation(angle, &distance);
+    /// let point = Point2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
+    /// let transformed_point = isometry.transform_point(&point);
+    /// let expected = point;
+    /// let result = isometry.inverse_transform_point(&transformed_point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        let rotated_point = self.rotation.inverse_rotate_point(point);
-
-        self.translation.inverse_translate_point(&rotated_point)
+        self.rotation.inverse_rotate_point(&(point - self.translation.as_ref()))
     }
     
+    /// Tranform a vector with the inverse isometry.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Vector2,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let distance = Vector2::new(1_f64, 2_f64);
+    /// let isometry = Isometry2::from_angle_translation(angle, &distance);
+    /// let vector = Vector2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
+    /// let transformed_vector = isometry.transform_vector(&vector);
+    /// let expected = vector;
+    /// let result = isometry.inverse_transform_vector(&transformed_vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        let rotated_vector = self.rotation.inverse_rotate_vector(vector);
-
-        self.translation.inverse_translate_vector(&rotated_vector)
+        self.rotation.inverse_rotate_vector(vector)
     }
 
+    /// Construct the identity isometry.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry2,
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let isometry = Isometry2::identity();
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// 
+    /// assert_eq!(isometry * point, point);
+    /// ```
     #[inline]
     pub fn identity() -> Isometry2<S> {
         Isometry2 {
