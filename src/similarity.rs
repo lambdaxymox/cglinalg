@@ -184,6 +184,16 @@ impl<S> Similarity2<S> where S: ScalarFloat {
 
 }
 
+impl<S> fmt::Display for Similarity2<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "Similarity2 [scale={}, rotation={}, translation={}]",
+            self.scale, self.isometry.rotation, self.isometry.translation.vector
+        )
+    }
+}
+
 impl<S> ops::Mul<Point2<S>> for Similarity2<S> where S: ScalarFloat {
     type Output = Point2<S>;
 
@@ -360,6 +370,16 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         self.isometry.transform_vector(&scaled_vector)
     }
 
+}
+
+impl<S> fmt::Display for Similarity3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "Similarity3 [scale={}, rotation={}, translation={}]",
+            self.scale, self.isometry.rotation, self.isometry.translation.vector
+        )
+    }
 }
 
 impl<S> ops::Mul<Point3<S>> for Similarity3<S> where S: ScalarFloat {
