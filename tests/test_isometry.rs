@@ -361,6 +361,36 @@ mod isometry3_tests {
     }
 
     #[test]
+    fn test_from_angle_x() {
+        let angle = Degrees(72_f64);
+        let rotation = Rotation3::from_angle_x(angle);
+        let expected = Isometry3::from_rotation(rotation);
+        let result = Isometry3::from_angle_x(angle);
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_angle_y() {
+        let angle = Degrees(72_f64);
+        let rotation = Rotation3::from_angle_y(angle);
+        let expected = Isometry3::from_rotation(rotation);
+        let result = Isometry3::from_angle_y(angle);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_angle_z() {
+        let angle = Degrees(72_f64);
+        let rotation = Rotation3::from_angle_z(angle);
+        let expected = Isometry3::from_rotation(rotation);
+        let result = Isometry3::from_angle_z(angle);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_identity() {
         let isometry = Isometry3::identity();
         let point = Point3::new(1_f64, 2_f64, 3_f64);
