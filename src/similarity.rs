@@ -54,6 +54,8 @@ pub struct Similarity2<S> {
 }
 
 impl<S> Similarity2<S> where S: ScalarFloat {
+    /// Construct a similarity transformation directly from the scale, rotation,
+    /// and translation parts.
     #[inline]
     pub fn from_parts(translation: Translation2<S>, rotation: Rotation2<S>, scale: S) -> Similarity2<S> {
         let isometry = Isometry2::from_parts(translation, rotation);
@@ -64,6 +66,7 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a similarity transformation from a rotation only.
     #[inline]
     pub fn from_rotation(rotation: Rotation2<S>) -> Similarity2<S> {
         let isometry = Isometry2::from_rotation(rotation);
@@ -74,6 +77,7 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a similarity transformation from a scale only.
     #[inline]
     pub fn from_scale(scale: S) -> Similarity2<S> {
         let isometry = Isometry2::identity();
@@ -84,6 +88,7 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a similarity transformation from a translation only.
     #[inline]
     pub fn from_translation(translation: Translation2<S>) -> Similarity2<S> {
         let isometry = Isometry2::from_translation(translation);
@@ -94,6 +99,7 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a similarity transformation from an isometry.
     #[inline]
     pub fn from_isometry(isometry: Isometry2<S>) -> Similarity2<S> {
         Similarity2 {
@@ -102,6 +108,8 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a two-dimensional similarity transformation from a rotation
+    /// angle.
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Similarity2<S> {
         Similarity2 {
@@ -109,6 +117,7 @@ impl<S> Similarity2<S> where S: ScalarFloat {
             scale: S::one()
         }
     }
+
 
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
@@ -123,21 +132,39 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         )
     }
     
+    /// Get the uniform scale factor of the similarity transformation.
     #[inline]
     pub fn scale(&self) -> S {
         self.scale
     }
 
+    /// Get the rotation part of the similarity transformation.
     #[inline]
     pub fn rotation(&self) -> &Rotation2<S> {
         self.isometry.rotation()
     }
 
+    /// Get the translation part of the similarity transformation.
     #[inline]
     pub fn translation(&self) -> &Translation2<S> {
         self.isometry.translation()
     }
 
+    /// Construct an identity transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let similarity = Similarity2::identity();
+    /// let point = Point2::new(1_f64, 2_f64);
+    ///
+    /// assert_eq!(similarity * point, point);
+    /// ```
     #[inline]
     pub fn identity() -> Similarity2<S> {
         Similarity2 {
