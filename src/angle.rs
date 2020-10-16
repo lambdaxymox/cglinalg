@@ -242,14 +242,14 @@ impl<S> From<Radians<S>> for Degrees<S> where S: ScalarFloat {
 }
 
 impl<S> fmt::Display for Degrees<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{} degrees", self.0)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "{} degrees", self.0)
     }
 }
 
 impl<S> fmt::Display for Radians<S> where S: fmt::Display {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{} radians", self.0)
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "{} radians", self.0)
     }
 }
 
