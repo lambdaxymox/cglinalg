@@ -1,5 +1,6 @@
 use crate::scalar::{
     Scalar,
+    ScalarSigned,
     ScalarFloat,
 };
 use crate::traits::{
@@ -621,6 +622,28 @@ impl<S> ops::Rem<S> for &Point1<S> where S: Scalar {
         let x = self.x % other;
         
         Point1::new(x)
+    }
+}
+
+impl<S> ops::Neg for Point1<S> where S: ScalarSigned {
+    type Output = Point1<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Point1::new(
+            -self.x
+        )
+    }
+}
+
+impl<S> ops::Neg for &Point1<S> where S: ScalarSigned {
+    type Output = Point1<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Point1::new(
+            -self.x
+        )
     }
 }
 
@@ -1475,6 +1498,30 @@ impl<S> ops::Rem<S> for &Point2<S> where S: Scalar {
         let y = self.y % other;
         
         Point2::new(x, y)
+    }
+}
+
+impl<S> ops::Neg for Point2<S> where S: ScalarSigned {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Point2::new(
+            -self.x,
+            -self.y
+        )
+    }
+}
+
+impl<S> ops::Neg for &Point2<S> where S: ScalarSigned {
+    type Output = Point2<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Point2::new(
+            -self.x,
+            -self.y
+        )
     }
 }
 
@@ -2361,6 +2408,32 @@ impl<S> ops::Rem<S> for &Point3<S> where S: Scalar {
         let z = self.z % other;
         
         Point3::new(x, y, z)
+    }
+}
+
+impl<S> ops::Neg for Point3<S> where S: ScalarSigned {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Point3::new(
+            -self.x,
+            -self.y,
+            -self.z
+        )
+    }
+}
+
+impl<S> ops::Neg for &Point3<S> where S: ScalarSigned {
+    type Output = Point3<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Point3::new(
+            -self.x,
+            -self.y,
+            -self.z
+        )
     }
 }
 

@@ -4921,13 +4921,14 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
 
     /// Construct an affine coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
-    /// the direction `direction` into the coordinate system of an observer located
+    /// the position `target` into the coordinate system of an observer located
     /// at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `direction` to the **negative z-axis** and 
-    /// locates the `eye` position to the origin in the new the coordinate system.
-    /// This transformation is a **right-handed** coordinate transformation. It is
-    /// conventionally used in computer graphics for camera view transformations.
+    /// The function maps the direction of the target `target` to the 
+    /// **negative z-axis** and locates the `eye` position to the origin in the
+    /// new the coordinate system. This transformation is a **right-handed** 
+    /// coordinate transformation. It is conventionally used in computer graphics 
+    /// for camera view transformations.
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
@@ -4954,12 +4955,14 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
 
     /// Construct an affine coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
-    /// the direction `direction` into the coordinate system of an observer located
+    /// the position `target` into the coordinate system of an observer located
     /// at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `direction` to the **positive z-axis** and 
-    /// locates the `eye` position to the origin in the new the coordinate system.
-    /// This transformation is a **left-handed** coordinate transformation.
+    /// The function maps the direction of the target `target` to the 
+    /// **positive z-axis** and locates the `eye` position to the origin in the
+    /// new the coordinate system. This transformation is a **left-handed** 
+    /// coordinate transformation. It is conventionally used in computer graphics 
+    /// for camera view transformations.
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {

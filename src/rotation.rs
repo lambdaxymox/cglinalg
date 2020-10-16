@@ -773,6 +773,17 @@ impl<S> Rotation3<S> where S: ScalarFloat {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_z()), angle)
     }
 
+    /// Construct a coordinate transformation that maps the coordinate system 
+    /// of an observer located at the origin facing the **z-axis** into a coordinate 
+    /// system of an observer located at the position origin facing the target `target`.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
+        Rotation3 {
+            matrix: Matrix3x3::face_towards(direction, up),
+        }
+    }
+
     /// Construct a coordinate transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction `direction` into the coordinate system of an observer located

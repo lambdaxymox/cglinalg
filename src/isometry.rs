@@ -570,7 +570,6 @@ impl<S> approx::UlpsEq for Isometry2<S> where S: ScalarFloat {
     }
 }
 
-
 impl<S> ops::Mul<Point2<S>> for Isometry2<S> where S: ScalarFloat {
     type Output = Point2<S>;
 
@@ -863,6 +862,66 @@ impl<S> Isometry3<S> where S: ScalarFloat {
             let translation = Translation3::identity();
             Self::from_parts(translation, rotation)
         })
+    }
+
+    /// Construct a coordinate transformation that maps the coordinate system 
+    /// of an observer located at the origin facing the **z-axis** into a coordinate 
+    /// system of an observer located at the position `eye` facing the direction 
+    /// `direction`.
+    ///
+    /// The function maps the **z-axis** to the direction `direction`, and locates the 
+    /// origin of the coordinate system to the `eye` position.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn face_towards(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
+        let translation = Translation3::new(eye.x, eye.y, eye.z);
+        let rotation = Rotation3::face_towards(&(target - eye), up);
+
+        Self::from_parts(translation, rotation)
+    }
+
+    /// Construct an affine coordinate transformation that transforms
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the direction of the target `target` into the coordinate system of an 
+    /// observer located at the origin facing the **positive z-axis**.
+    ///
+    /// The function maps the direction along the ray between the eye position 
+    /// `eye` and position of the target `target` to the **positive z-axis** and 
+    /// locates the `eye` position to the origin in the new the coordinate system. 
+    /// This transformation is a **left-handed** coordinate transformation. 
+    /// It is conventionally used in computer graphics for camera view 
+    /// transformations.
+    #[inline]
+    pub fn look_at_lh(
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
+        
+        let rotation = Rotation3::look_at_lh(&(target - eye), up);
+        let vector = &rotation * (-eye) - Point3::origin();
+        let translation = Translation3::from_vector(&vector);
+
+        Self::from_parts(translation, rotation)
+    }
+
+    /// Construct an affine coordinate transformation that transforms
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the direction of the target `target` into the coordinate system of an 
+    /// observer located at the origin facing the **negative z-axis**.
+    ///
+    /// The function maps the direction along the ray between the eye position 
+    /// `eye` and position of the target `target` to the **negative z-axis** and 
+    /// locates the `eye` position to the origin in the new the coordinate system. 
+    /// This transformation is a **right-handed** coordinate transformation. 
+    /// It is conventionally used in computer graphics for camera view 
+    /// transformations.
+    #[inline]
+    pub fn look_at_rh(
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
+              
+        let rotation = Rotation3::look_at_rh(&(target - eye), up);
+        let vector = &rotation * (-eye) - Point3::origin();
+        let translation = Translation3::from_vector(&vector);
+    
+        Self::from_parts(translation, rotation)  
     }
 
     /// Convert an isometry into a generic transformation.
