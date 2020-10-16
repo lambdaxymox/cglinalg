@@ -348,6 +348,63 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         }
     }
 
+
+    /// Construct a similarity transformation that maps the coordinate system 
+    /// of an observer located at the origin facing the **z-axis** into a coordinate 
+    /// system of an observer located at the position `eye` facing the direction 
+    /// `direction`.
+    ///
+    /// The function maps the **z-axis** to the direction `direction`, and locates the 
+    /// origin of the coordinate system to the `eye` position.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn face_towards(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S> {
+                      
+        let isometry = Isometry3::face_towards(eye, target, up);
+    
+        Self::from_isometry(isometry)
+    }
+
+    /// Construct an similarity transformation that transforms
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the direction of the target `target` into the coordinate system of an 
+    /// observer located at the origin facing the **positive z-axis**.
+    ///
+    /// The function maps the direction along the ray between the eye position 
+    /// `eye` and position of the target `target` to the **positive z-axis** and 
+    /// locates the `eye` position to the origin in the new the coordinate system. 
+    /// This transformation is a **left-handed** coordinate transformation. 
+    /// It is conventionally used in computer graphics for camera view 
+    /// transformations.
+    #[inline]
+    pub fn look_at_lh(
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S> {
+              
+        let isometry = Isometry3::look_at_lh(eye, target, up);
+    
+        Self::from_isometry(isometry)
+    }
+
+    /// Construct an similarity transformation that transforms
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the direction of the target `target` into the coordinate system of an 
+    /// observer located at the origin facing the **negative z-axis**.
+    ///
+    /// The function maps the direction along the ray between the eye position 
+    /// `eye` and position of the target `target` to the **negative z-axis** and 
+    /// locates the `eye` position to the origin in the new the coordinate system. 
+    /// This transformation is a **right-handed** coordinate transformation. 
+    /// It is conventionally used in computer graphics for camera view 
+    /// transformations.
+    #[inline]
+    pub fn look_at_rh(
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S> {
+              
+        let isometry = Isometry3::look_at_rh(eye, target, up);
+    
+        Self::from_isometry(isometry)
+    }
+
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
         let distance = self.isometry.translation().as_ref();

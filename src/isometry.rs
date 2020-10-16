@@ -880,7 +880,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
-    /// Construct an affine coordinate transformation that transforms
+    /// Construct an coordinate transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction of the target `target` into the coordinate system of an 
     /// observer located at the origin facing the **positive z-axis**.
@@ -902,7 +902,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
-    /// Construct an affine coordinate transformation that transforms
+    /// Construct an coordinate transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction of the target `target` into the coordinate system of an 
     /// observer located at the origin facing the **negative z-axis**.
