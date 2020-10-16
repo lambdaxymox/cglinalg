@@ -354,13 +354,39 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     /// system of an observer located at the position `eye` facing the direction 
     /// `direction`.
     ///
-    /// The function maps the **z-axis** to the direction `direction`, and locates the 
-    /// origin of the coordinate system to the `eye` position.
+    /// The similarity transformation maps the **z-axis** to the direction 
+    /// of `target - eye`, and locates the origin of the coordinate system to 
+    /// the `eye` position.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Magnitude,
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let target = Point3::new(1_f64, -1_f64, 1_f64);
+    /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let isometry = Similarity3::face_towards(&eye, &target, &up);
+    /// let unit_z = Vector3::unit_z();
+    /// let direction = (target - eye).normalize();
+    ///
+    /// assert_eq!(isometry.transform_vector(&unit_z), direction);
+    /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn face_towards(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S> {
-                      
-        let isometry = Isometry3::face_towards(eye, target, up);
+    pub fn face_towards(
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S>
+    {
+       let isometry = Isometry3::face_towards(eye, target, up);
     
         Self::from_isometry(isometry)
     }
@@ -378,8 +404,8 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     /// transformations.
     #[inline]
     pub fn look_at_lh(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S> {
-              
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S> 
+    {      
         let isometry = Isometry3::look_at_lh(eye, target, up);
     
         Self::from_isometry(isometry)

@@ -871,6 +871,30 @@ impl<S> Isometry3<S> where S: ScalarFloat {
     ///
     /// The resulting isometry maps the **z-axis** to the direction `direction` 
     /// and locates the origin of the coordinate system to the `eye` position.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Magnitude,
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let target = Point3::new(1_f64, -1_f64, 1_f64);
+    /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let isometry = Isometry3::face_towards(&eye, &target, &up);
+    /// let unit_z = Vector3::unit_z();
+    /// let direction = (target - eye).normalize();
+    ///
+    /// assert_eq!(isometry.transform_vector(&unit_z), direction);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn face_towards(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
