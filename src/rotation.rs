@@ -774,8 +774,9 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     }
 
     /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **z-axis** into a coordinate 
-    /// system of an observer located at the position origin facing the target `target`.
+    /// of an observer located at the origin facing the **z-axis** into a 
+    /// coordinate system of an observer located at the position origin facing 
+    /// the direction `direction`.
     #[rustfmt::skip]
     #[inline]
     pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
