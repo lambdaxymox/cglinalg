@@ -711,7 +711,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
-    /// Construct an isometry from a rotation angle in the **yz-plane* about 
+    /// Construct an isometry from a rotation angle in the **yz-plane** about 
     /// the **x-axis**.
     ///
     /// ## Example
@@ -738,7 +738,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
-    /// Construct an isometry from a rotation angle in the **zx-plane* about 
+    /// Construct an isometry from a rotation angle in the **zx-plane** about 
     /// the **y-axis**.
     ///
     /// ## Example
@@ -765,7 +765,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         Self::from_parts(translation, rotation)
     }
 
-    /// Construct an isometry from a rotation angle in the **xy-plane* about 
+    /// Construct an isometry from a rotation angle in the **xy-plane** about 
     /// the **z-axis**.
     ///
     /// ## Example
