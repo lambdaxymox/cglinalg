@@ -2562,7 +2562,31 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     ///
     /// The function maps the direction `direction` to the **negative z-axis** in 
     /// the new the coordinate system. This corresponds to a rotation matrix.
-    /// This transformation is a **right-handed** coordinate transformation. 
+    /// This transformation is a **right-handed** coordinate transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64);
+    /// let up = Vector3::unit_z();
+    /// let expected = Matrix3x3::new(
+    ///      1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
+    ///     -1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
+    ///      0_f64,                    1_f64,  0_f64
+    /// );
+    /// let result = Matrix3x3::look_at_rh(&direction, &up);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
         // The inverse of a rotation matrix is its transpose.

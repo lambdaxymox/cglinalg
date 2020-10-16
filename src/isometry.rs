@@ -909,12 +909,36 @@ impl<S> Isometry3<S> where S: ScalarFloat {
     /// the direction of the target `target` into the coordinate system of an 
     /// observer located at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction along the ray between the eye position 
+    /// The isometry maps the direction along the ray between the eye position 
     /// `eye` and position of the target `target` to the **positive z-axis** and 
     /// locates the `eye` position to the origin in the new the coordinate system. 
     /// This transformation is a **left-handed** coordinate transformation. 
     /// It is conventionally used in computer graphics for camera view 
     /// transformations.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Isometry3,
+    /// #     Point3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// # 
+    /// let target = Point3::new(0_f64, 6_f64, 0_f64);
+    /// let up: Vector3<f64> = Vector3::unit_x();
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let isometry = Isometry3::look_at_lh(&eye, &target, &up);
+    /// let result = isometry.transform_vector(&(target - eye).normalize());
+    /// let expected = Vector3::unit_z();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_eq!(isometry.transform_point(&eye), Point3::origin());
+    /// ```
     #[inline]
     pub fn look_at_lh(
         eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
@@ -937,6 +961,30 @@ impl<S> Isometry3<S> where S: ScalarFloat {
     /// This transformation is a **right-handed** coordinate transformation. 
     /// It is conventionally used in computer graphics for camera view 
     /// transformations.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Isometry3,
+    /// #     Point3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// # 
+    /// let target = Point3::new(0_f64, 6_f64, 0_f64);
+    /// let up: Vector3<f64> = Vector3::unit_x();
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let isometry = Isometry3::look_at_rh(&eye, &target, &up);
+    /// let result = isometry.transform_vector(&(target - eye).normalize());
+    /// let expected = -Vector3::unit_z();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_eq!(isometry.transform_point(&eye), Point3::origin());
+    /// ```
     #[inline]
     pub fn look_at_rh(
         eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
