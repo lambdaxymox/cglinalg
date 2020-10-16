@@ -119,7 +119,7 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         Matrix3x3::new(
             scale * rotation.c0r0, scale * rotation.c0r1, S::zero(),
             scale * rotation.c1r0, scale * rotation.c1r1, S::zero(),
-            distance.x,      distance.y,      S::one()
+            distance.x,            distance.y,            S::one()
         )
     }
     
