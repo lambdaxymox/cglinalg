@@ -777,6 +777,28 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     /// of an observer located at the origin facing the **z-axis** into a 
     /// coordinate system of an observer located at the position origin facing 
     /// the direction `direction`.
+    ///
+    /// The resulting transformation maps the **positive z-axis** to `direction`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,    
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,    
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let rotation = Rotation3::face_towards(&direction, &up);
+    /// let unit_z = Vector3::unit_z();
+    ///
+    /// assert_eq!(rotation.rotate_vector(&unit_z), direction);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {

@@ -2513,6 +2513,34 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// direction `direction`.
     ///
     /// The function maps the **positive z-axis** to the direction `direction`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,    
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,    
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let expected = Matrix3x3::new(
+    ///      1_f64 / f64::sqrt(6_f64), -1_f64 / f64::sqrt(6_f64), -2_f64 / f64::sqrt(6_f64),
+    ///      1_f64 / f64::sqrt(2_f64),  1_f64 / f64::sqrt(2_f64),  0_f64,
+    ///      1_f64 / f64::sqrt(3_f64), -1_f64 / f64::sqrt(3_f64),  1_f64 / f64::sqrt(3_f64)
+    /// );
+    /// let result = Matrix3x3::face_towards(&direction, &up);
+    ///
+    /// assert!(relative_eq!(result, expected));
+    ///
+    /// let transformed_z = result * Vector3::unit_z();
+    ///
+    /// assert_eq!(transformed_z, direction);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {

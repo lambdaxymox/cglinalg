@@ -869,8 +869,8 @@ impl<S> Isometry3<S> where S: ScalarFloat {
     /// system of an observer located at the position `eye` facing the direction 
     /// `direction`.
     ///
-    /// The function maps the **z-axis** to the direction `direction`, and locates the 
-    /// origin of the coordinate system to the `eye` position.
+    /// The resulting isometry maps the **z-axis** to the direction `direction` 
+    /// and locates the origin of the coordinate system to the `eye` position.
     #[rustfmt::skip]
     #[inline]
     pub fn face_towards(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
