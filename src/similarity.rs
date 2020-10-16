@@ -103,6 +103,14 @@ impl<S> Similarity2<S> where S: ScalarFloat {
     }
 
     #[inline]
+    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Similarity2<S> {
+        Similarity2 {
+            isometry: Isometry2::from_angle(angle),
+            scale: S::one()
+        }
+    }
+
+    #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
         let distance = self.isometry.translation().as_ref();
         let scale = self.scale;
@@ -327,6 +335,16 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         Similarity3 {
             isometry: isometry,
             scale: S::one(),
+        }
+    }
+
+    #[inline]
+    pub fn from_axis_angle<A: Into<Radians<S>>>(
+        axis: &Unit<Vector3<S>>, angle: A) -> Similarity3<S> {
+        
+        Similarity3 {
+            isometry: Isometry3::from_axis_angle(axis, angle),
+            scale: S::one()
         }
     }
 
