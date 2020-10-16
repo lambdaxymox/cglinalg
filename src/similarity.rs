@@ -290,6 +290,8 @@ pub struct Similarity3<S> {
 }
 
 impl<S> Similarity3<S> where S: ScalarFloat {
+    /// Construct a similarity transformation directly from the scale, rotation,
+    /// and translation parts.
     #[inline]
     pub fn from_parts(translation: Translation3<S>, rotation: Rotation3<S>, scale: S) -> Similarity3<S> {
         let isometry = Isometry3::from_parts(translation, rotation);
@@ -300,6 +302,7 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a similarity transformation from a rotation only.
     #[inline]
     pub fn from_rotation(rotation: Rotation3<S>) -> Similarity3<S> {
         let isometry = Isometry3::from_rotation(rotation);
@@ -310,6 +313,7 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a similarity transformation from a scale factor only.
     #[inline]
     pub fn from_scale(scale: S) -> Similarity3<S> {
         let isometry = Isometry3::identity();
@@ -320,6 +324,7 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a similarity transformation from a translation only.
     #[inline]
     pub fn from_translation(translation: Translation3<S>) -> Similarity3<S> {
         let isometry = Isometry3::from_translation(translation);
@@ -330,6 +335,7 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a similarity transformation from an isometry.
     #[inline]
     pub fn from_isometry(isometry: Isometry3<S>) -> Similarity3<S> {
         Similarity3 {
@@ -338,6 +344,8 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         }
     }
 
+    /// Construct a similarity transformation from the axis and angle
+    /// of a rotation.
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(
         axis: &Unit<Vector3<S>>, angle: A) -> Similarity3<S> {
@@ -386,7 +394,7 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     pub fn face_towards(
         eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S>
     {
-       let isometry = Isometry3::face_towards(eye, target, up);
+        let isometry = Isometry3::face_towards(eye, target, up);
     
         Self::from_isometry(isometry)
     }
@@ -493,21 +501,39 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         )
     }
     
+    /// Get the uniform scale factor of the similarity transformation.
     #[inline]
     pub fn scale(&self) -> S {
         self.scale
     }
 
+    /// Get the rotation part of the similarity transformation.
     #[inline]
     pub fn rotation(&self) -> &Rotation3<S> {
         self.isometry.rotation()
     }
 
+    /// Get the translation part of the similarity transformation.
     #[inline]
     pub fn translation(&self) -> &Translation3<S> {
         self.isometry.translation()
     }
 
+    /// Construct an identity transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let similarity = Similarity3::identity();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    ///
+    /// assert_eq!(similarity * point, point);
+    /// ```
     #[inline]
     pub fn identity() -> Similarity3<S> {
         Similarity3 {

@@ -4981,6 +4981,33 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// new the coordinate system. This transformation is a **right-handed** 
     /// coordinate transformation. It is conventionally used in computer graphics 
     /// for camera view transformations.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Point3, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let target = Point3::new(4_f64, 5_f64, 3_f64);
+    /// let up = Vector3::unit_z();
+    /// let expected = Matrix4x4::new(
+    ///       1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,  0_f64,
+    ///       0_f64,                     0_f64,                    1_f64,  0_f64,
+    ///      -1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,  0_f64, 
+    ///       3_f64,                     3_f64,                    0_f64,  1_f64
+    /// );
+    /// let result = Matrix4x4::look_at_rh(&eye, &target, &up);
+    /// assert_eq!(result, expected);
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
@@ -5015,6 +5042,33 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// new the coordinate system. This transformation is a **left-handed** 
     /// coordinate transformation. It is conventionally used in computer graphics 
     /// for camera view transformations.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Point3, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let target = Point3::new(4_f64, 5_f64, 3_f64);
+    /// let up = Vector3::unit_z();
+    /// let expected = Matrix4x4::new(
+    ///       1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,  0_f64,
+    ///       0_f64,                     0_f64,                    1_f64,  0_f64,
+    ///      -1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,  0_f64, 
+    ///       3_f64,                     3_f64,                    0_f64,  1_f64
+    /// );
+    /// let result = Matrix4x4::look_at_lh(&eye, &target, &up);
+    /// assert_eq!(result, expected);
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
