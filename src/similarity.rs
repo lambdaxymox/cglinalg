@@ -40,6 +40,8 @@ use crate::traits::{
     DotProduct,
 };
 
+use approx;
+
 use core::fmt;
 use core::ops;
 
@@ -182,6 +184,47 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         self.isometry.transform_vector(&scaled_vector)
     }
 
+}
+
+impl<S> approx::AbsDiffEq for Similarity2<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Isometry2::abs_diff_eq(&self.isometry, &other.isometry, epsilon) 
+            && S::abs_diff_eq(&self.scale, &other.scale, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Similarity2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Isometry2::relative_eq(&self.isometry, &other.isometry, epsilon, max_relative) 
+            && S::relative_eq(&self.scale, &other.scale, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Similarity2<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Isometry2::ulps_eq(&self.isometry, &other.isometry, epsilon, max_ulps) 
+            && S::ulps_eq(&self.scale, &other.scale, epsilon, max_ulps)
+    }
 }
 
 impl<S> fmt::Display for Similarity2<S> where S: fmt::Display {
@@ -379,6 +422,47 @@ impl<S> fmt::Display for Similarity3<S> where S: fmt::Display {
             "Similarity3 [scale={}, rotation={}, translation={}]",
             self.scale, self.isometry.rotation, self.isometry.translation.vector
         )
+    }
+}
+
+impl<S> approx::AbsDiffEq for Similarity3<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Isometry3::abs_diff_eq(&self.isometry, &other.isometry, epsilon) 
+            && S::abs_diff_eq(&self.scale, &other.scale, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Similarity3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Isometry3::relative_eq(&self.isometry, &other.isometry, epsilon, max_relative) 
+            && S::relative_eq(&self.scale, &other.scale, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Similarity3<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Isometry3::ulps_eq(&self.isometry, &other.isometry, epsilon, max_ulps) 
+            && S::ulps_eq(&self.scale, &other.scale, epsilon, max_ulps)
     }
 }
 
