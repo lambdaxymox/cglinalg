@@ -839,6 +839,37 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     ///
     /// The transformation applies the scaling, followed by the rotation,
     /// and finally the translation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let distance = Vector3::new(2_f64, 2_f64, 2_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let similarity = Similarity3::from_parts(translation, rotation, scale);
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Point3::new(-22_f64, 14_f64, 38_f64);
+    /// let result = similarity.transform_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
         let scaled_point = point * self.scale;
@@ -850,6 +881,36 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     ///
     /// The transformation applies the scaling, followed by the rotation,
     /// and finally the translation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let distance = Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let similarity = Similarity3::from_parts(translation, rotation, scale);
+    /// let vector = Vector3::unit_x();
+    /// let expected = scale *  Vector3::unit_y();
+    /// let result = similarity.transform_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let scaled_vector = vector * self.scale;
