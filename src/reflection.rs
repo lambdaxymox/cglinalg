@@ -231,7 +231,7 @@ impl<S> Reflection2<S> where S: ScalarFloat {
 
     /// Convert a reflection into a generic transformation.
     #[inline]
-    pub fn to_transform2d(&self) -> Transform2<S> {
+    pub fn to_transform(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
     }
 }
@@ -521,7 +521,7 @@ impl<S> Reflection3<S> where S: ScalarFloat {
 
     /// Convert a reflection to a generic transformation.
     #[inline]
-    pub fn to_transform3d(&self) -> Transform3<S> {
+    pub fn to_transform(&self) -> Transform3<S> {
         Transform3::from_specialized(self.matrix)
     }
 }

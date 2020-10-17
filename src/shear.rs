@@ -215,7 +215,7 @@ impl<S> Shear2<S> where S: ScalarSigned {
 
     /// Convert a shear transformation into a generic transformation.
     #[inline]
-    pub fn to_transform2d(&self) -> Transform2<S> {
+    pub fn to_transform(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
     }
 }
@@ -710,7 +710,7 @@ impl<S> Shear3<S> where S: ScalarSigned {
 
     /// Convert a shear transformation into a generic transformation.
     #[inline]
-    pub fn to_transform3d(&self) -> Transform3<S> {
+    pub fn to_transform(&self) -> Transform3<S> {
         Transform3::from_specialized(self.matrix)
     }
 }
