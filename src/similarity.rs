@@ -140,7 +140,35 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         }
     }
 
-
+    /// Convert a similarity transformation to an affine matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let scale = 2_f64;
+    /// let angle = Degrees(72_f64);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let translation = Translation2::new(2_f64, 3_f64);
+    /// let similarity = Similarity2::from_parts(translation, rotation, scale);
+    /// let expected = Matrix3x3::new(
+    ///      scale * angle.cos(), scale * angle.sin(), 0_f64,
+    ///     -scale * angle.sin(), scale * angle.cos(), 0_f64,
+    ///      2_f64,               3_f64,               1_f64
+    /// );
+    /// let result = similarity.to_affine_matrix();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
         let distance = self.isometry.translation().as_ref();
@@ -536,6 +564,42 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         Self::from_isometry(isometry)
     }
 
+    /// Convert a similarity transformation to an affine matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Angle,
+    /// #     Degrees,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let scale = 2_f64;
+    /// let axis = Unit::from_value(Vector3::new(1_f64, 1_f64, 0_f64));
+    /// let angle = Degrees(60_f64);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let translation = Translation3::new(2_f64, 3_f64, 4_f64);
+    /// let similarity = Similarity3::from_parts(translation, rotation, scale);
+    /// let sq_3_8 = f64::sqrt(3_f64 / 8_f64);
+    /// let expected = Matrix4x4::new(
+    ///      scale * 3_f64 / 4_f64, scale * 1_f64 / 4_f64, scale * -sq_3_8,       0_f64,
+    ///      scale * 1_f64 / 4_f64, scale * 3_f64 / 4_f64, scale *  sq_3_8,       0_f64,
+    ///      scale * sq_3_8,        scale * -sq_3_8,       scale * 1_f64 / 2_f64, 0_f64,
+    ///      2_f64,                 3_f64,                 4_f64,                 1_f64
+    /// );
+    /// let result = similarity.to_affine_matrix();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
         let distance = self.isometry.translation().as_ref();
@@ -545,7 +609,7 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         Matrix4x4::new(
             scale * rotation.c0r0, scale * rotation.c0r1, scale * rotation.c0r2, S::zero(),
             scale * rotation.c1r0, scale * rotation.c1r1, scale * rotation.c1r2, S::zero(),
-            scale * rotation.c2r0, scale * rotation.c1r2, scale * rotation.c2r2, S::zero(),
+            scale * rotation.c2r0, scale * rotation.c2r1, scale * rotation.c2r2, S::zero(),
             distance.x,            distance.y,            distance.z,            S::one()
         )
     }
