@@ -156,9 +156,13 @@ macro_rules! approx_mul_props {
             /// scalars is not associative. 
             #[test]
             fn prop_scalar_multiplication_compatibility(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), p in $Generator::<$ScalarType>()) {
+                a in $ScalarGen::<$ScalarType>(), 
+                b in $ScalarGen::<$ScalarType>(), 
+                p in $Generator::<$ScalarType>()) {
 
-                prop_assert!(relative_eq!(a * (b * p), (a * b) * p, epsilon = $tolerance));
+                prop_assert!(
+                    relative_eq!(a * (b * p), (a * b) * p, epsilon = $tolerance)
+                );
             }
 
             /// A scalar `1` acts like a multiplicative identity element.
