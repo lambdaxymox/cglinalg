@@ -96,7 +96,7 @@ The Rust ecosystem has a number of linear algebra libraries including:
 
 ## Project Roadmap
 Major outstanding project goals include:
-* Implement nonsquare nonsquare matrix types up to dimension four.
+* Implement non-square matrix types up to dimension four.
 * Add support for row-major order matrices and vectors.
 * Improve performance with SIMD optimizations.
 * Implement swizzle operations.
