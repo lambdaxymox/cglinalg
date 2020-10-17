@@ -550,13 +550,67 @@ impl<S> Transform3<S> where S: ScalarFloat {
     }
 
     /// Apply the inverse of the transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Transform3,
+    /// #     Vector3,
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     5_f64,  6_f64,  5_f64, 0_f64,
+    ///     2_f64,  5_f64,  8_f64, 0_f64,
+    ///     12_f64, 15_f64, 9_f64, 0_f64, 
+    ///     6_f64,  6_f64,  6_f64, 1_f64
+    /// );
+    /// let transform = Transform3::from_matrix_unchecked(matrix);
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = vector;
+    /// let transformed_vector = transform.transform_vector(&vector);
+    /// let result = transform.inverse_transform_vector(&transformed_vector).unwrap();
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
-    pub fn transform_inverse_vector(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
+    pub fn inverse_transform_vector(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
         self.inverse()
             .map(|matrix_inverse| matrix_inverse.transform_vector(vector))
     }
 
     /// Apply the inverse of the transformation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Transform3,
+    /// #     Point3,
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     5_f64,  6_f64,  5_f64, 0_f64,
+    ///     2_f64,  5_f64,  8_f64, 0_f64,
+    ///     12_f64, 15_f64, 9_f64, 0_f64, 
+    ///     6_f64,  6_f64,  6_f64, 1_f64
+    /// );
+    /// let transform = Transform3::from_matrix_unchecked(matrix);
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = point;
+    /// let transformed_point = transform.transform_point(&point);
+    /// let result = transform.inverse_transform_point(&transformed_point).unwrap();
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point3<S>) -> Option<Point3<S>> {
         self.inverse()
