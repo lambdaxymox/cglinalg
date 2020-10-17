@@ -68,6 +68,30 @@ impl<S> Similarity2<S> where S: ScalarFloat {
     }
 
     /// Construct a similarity transformation from a rotation only.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Rotation2,
+    /// #     Vector2,
+    /// #     Radians, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let similarity = Similarity2::from_rotation(rotation);
+    /// let vector = Vector2::new(2_f64, 0_f64);
+    /// let expected = Vector2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
+    /// let result = similarity.transform_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn from_rotation(rotation: Rotation2<S>) -> Similarity2<S> {
         let isometry = Isometry2::from_rotation(rotation);
@@ -79,6 +103,23 @@ impl<S> Similarity2<S> where S: ScalarFloat {
     }
 
     /// Construct a similarity transformation from a scale only.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let scale = 10_f64;
+    /// let similarity = Similarity2::from_scale(scale);
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let expected = Vector2::new(10_f64, 20_f64);
+    /// let result = similarity.transform_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_scale(scale: S) -> Similarity2<S> {
         let isometry = Isometry2::identity();
@@ -90,6 +131,24 @@ impl<S> Similarity2<S> where S: ScalarFloat {
     }
 
     /// Construct a similarity transformation from a translation only.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Translation2,
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let similarity = Similarity2::from_translation(translation);
+    /// let point = Point2::new(5_f64, 5_f64);
+    /// let expected = Point2::new(6_f64, 7_f64);
+    /// let result = similarity.transform_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_translation(translation: Translation2<S>) -> Similarity2<S> {
         let isometry = Isometry2::from_translation(translation);
@@ -577,6 +636,32 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     }
 
     /// Construct a similarity transformation from a rotation only.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let similarity = Similarity3::from_rotation(rotation);
+    /// let vector = Vector3::new(2_f64, 0_f64, 5_f64);
+    /// let expected = Vector3::new(f64::sqrt(2_f64), f64::sqrt(2_f64), 5_f64);
+    /// let result = similarity.transform_vector(&vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn from_rotation(rotation: Rotation3<S>) -> Similarity3<S> {
         let isometry = Isometry3::from_rotation(rotation);
@@ -588,6 +673,23 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     }
 
     /// Construct a similarity transformation from a scale factor only.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Vector3, 
+    /// # }; 
+    /// #
+    /// let scale = 15_f64;
+    /// let similarity = Similarity3::from_scale(scale);
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector3::new(15_f64, 30_f64, 45_f64);
+    /// let result = similarity.transform_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_scale(scale: S) -> Similarity3<S> {
         let isometry = Isometry3::identity();
@@ -599,6 +701,24 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     }
 
     /// Construct a similarity transformation from a translation only.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Translation3,
+    /// #     Vector3,
+    /// #     Point3, 
+    /// # };
+    /// # 
+    /// let distance = Vector3::new(5_f64, 5_f64, 5_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let similarity = Similarity3::from_translation(translation);
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    ///
+    /// assert_eq!(similarity * point, point + distance);
+    /// ```
     #[inline]
     pub fn from_translation(translation: Translation3<S>) -> Similarity3<S> {
         let isometry = Isometry3::from_translation(translation);
