@@ -42,10 +42,15 @@ use core::fmt;
 use core::ops;
 
 
+/// A similarity transformation is a tranformation consisting of a scaling,
+/// a rotation, and a translation. The similarity transformation applies the
+/// scaling, followed by the rotaion, and finally the translation.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Similarity2<S> {
+    /// The underlying rigid body transformation.
     isometry: Isometry2<S>,
+    /// The uniform scaling factor.
     scale: S,
 }
 
@@ -317,6 +322,9 @@ impl<S> Similarity2<S> where S: ScalarFloat {
     }
 
     /// Apply the similarity transformation to a point.
+    ///
+    /// The transformation applies the scaling, followed by the rotation,
+    /// and finally the translation.
     #[inline]
     pub fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
         let scaled_point = point * self.scale;
@@ -325,6 +333,9 @@ impl<S> Similarity2<S> where S: ScalarFloat {
     }
 
     /// Apply the similarity transformation to a vector.
+    ///
+    /// The transformation applies the scaling, followed by the rotation,
+    /// and finally the translation.
     #[inline]
     pub fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         let scaled_vector = vector * self.scale;
@@ -422,10 +433,15 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Similarity2<S> where S: ScalarFl
 }
 
 
+/// A similarity transformation is a tranformation consisting of a scaling,
+/// a rotation, and a translation. The similarity transformation applies the
+/// scaling, followed by the rotaion, and finally the translation.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Similarity3<S> {
+    /// The underlying rigid body transformation of the similarity transformation.
     isometry: Isometry3<S>,
+    /// The uniform scale factor of the similarity transformation.
     scale: S,
 }
 
@@ -820,6 +836,9 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     }
 
     /// Apply a similarity transformation to a point.
+    ///
+    /// The transformation applies the scaling, followed by the rotation,
+    /// and finally the translation.
     #[inline]
     pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
         let scaled_point = point * self.scale;
@@ -828,6 +847,9 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     }
 
     /// Apply a similarity transformation to a vector.
+    ///
+    /// The transformation applies the scaling, followed by the rotation,
+    /// and finally the translation.
     #[inline]
     pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let scaled_vector = vector * self.scale;
