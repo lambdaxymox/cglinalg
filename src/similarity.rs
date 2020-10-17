@@ -230,6 +230,37 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         Transform2::from_specialized(matrix)
     }
 
+    /// Calculate the inverse of the similarity transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// #     Degrees,
+    /// #     Vector2,
+    /// #     Point2,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let scale = 5_f64;
+    /// let angle = Degrees(72_f64);
+    /// let distance = Vector2::new(1_f64, 2_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let similarity = Similarity2::from_parts(translation, rotation, scale);
+    /// let similarity_inv = similarity.inverse();
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = point;
+    /// let transformed_point = similarity.transform_point(&point);
+    /// let result = similarity_inv.transform_point(&transformed_point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Similarity2<S> {
         let mut similarity_inv = self.clone();
@@ -238,6 +269,38 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         similarity_inv
     }
 
+    /// Mutably invert a similarity transformation in place..
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// #     Degrees,
+    /// #     Vector2,
+    /// #     Point2,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let scale = 5_f64;
+    /// let angle = Degrees(72_f64);
+    /// let distance = Vector2::new(1_f64, 2_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let similarity = Similarity2::from_parts(translation, rotation, scale);
+    /// let mut similarity_mut = similarity;
+    /// similarity_mut.inverse_mut();
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = point;
+    /// let transformed_point = similarity.transform_point(&point);
+    /// let result = similarity_mut.transform_point(&transformed_point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_mut(&mut self) {
         self.scale = S::one() / self.scale;
