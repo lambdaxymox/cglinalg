@@ -720,11 +720,44 @@ impl<S> Similarity3<S> where S: ScalarFloat {
 
     /// Convert a similarity transformation to a generic transformation.
     #[inline]
-    pub fn to_transform2d(&self) -> Transform3<S> {
+    pub fn to_transform3d(&self) -> Transform3<S> {
         let matrix = self.to_affine_matrix();
         Transform3::from_specialized(matrix)
     }
 
+    /// Calculate the inverse of the similarity transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Degrees,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let scale = 5_f64;
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Degrees(72_f64);
+    /// let distance = Vector3::new(6_f64, 7_f64, 8_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let similarity = Similarity3::from_parts(translation, rotation, scale);
+    /// let similarity_inv = similarity.inverse();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = point;
+    /// let transformed_point = similarity.transform_point(&point);
+    /// let result = similarity_inv.transform_point(&transformed_point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse(&self) -> Similarity3<S> {
         let mut similarity_inv = self.clone();
@@ -733,6 +766,40 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         similarity_inv
     }
 
+    /// Calculate the inverse of the similarity transformation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Degrees,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let scale = 5_f64;
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Degrees(72_f64);
+    /// let distance = Vector3::new(6_f64, 7_f64, 8_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let similarity = Similarity3::from_parts(translation, rotation, scale);
+    /// let mut similarity_mut = similarity;
+    /// similarity_mut.inverse_mut();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = point;
+    /// let transformed_point = similarity.transform_point(&point);
+    /// let result = similarity_mut.transform_point(&transformed_point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_mut(&mut self) {
         self.scale = S::one() / self.scale;
