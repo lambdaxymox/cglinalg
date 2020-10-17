@@ -160,6 +160,32 @@ impl<S> Similarity2<S> where S: ScalarFloat {
     }
 
     /// Construct a similarity transformation from an isometry.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Isometry2,
+    /// #     Vector2,
+    /// #     Point2,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let distance = Vector2::new(5_f64, 5_f64);
+    /// let isometry = Isometry2::from_angle_translation(angle, &distance);
+    /// let similarity = Similarity2::from_isometry(isometry);
+    /// let point = Point2::new(2_f64, 0_f64);
+    /// let expected = Point2::new(6_f64, f64::sqrt(3_f64) + 5_f64);
+    /// let result = similarity.transform_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn from_isometry(isometry: Isometry2<S>) -> Similarity2<S> {
         Similarity2 {
@@ -730,6 +756,34 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     }
 
     /// Construct a similarity transformation from an isometry.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Isometry3,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Radians,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let distance = Vector3::new(5_f64, 5_f64, 0_f64);
+    /// let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
+    /// let similarity = Similarity3::from_isometry(isometry);
+    /// let point = Point3::new(2_f64, 0_f64, 13_f64);
+    /// let expected = Point3::new(6_f64, f64::sqrt(3_f64) + 5_f64, 13_f64);
+    /// let result = similarity.transform_point(&point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn from_isometry(isometry: Isometry3<S>) -> Similarity3<S> {
         Similarity3 {
@@ -740,6 +794,30 @@ impl<S> Similarity3<S> where S: ScalarFloat {
 
     /// Construct a similarity transformation from the axis and angle
     /// of a rotation.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// #     Radians, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let similarity = Similarity3::from_axis_angle(&axis, angle);
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector3::new(-1_f64 / f64::sqrt(2_f64), 3_f64 / f64::sqrt(2_f64), 3_f64);
+    /// let result = similarity.transform_vector(&vector);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(
         axis: &Unit<Vector3<S>>, angle: A) -> Similarity3<S> {
