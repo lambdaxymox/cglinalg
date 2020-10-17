@@ -41,7 +41,7 @@ features = ["libm"]
 proptest = "0.10.1"
 
 [profile.release]
-opt-level = 3
+opt-level = 2
 
 [profile.test]
 # Disable overflow checks during testing since overflowing in integer operations

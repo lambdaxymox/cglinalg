@@ -59,23 +59,23 @@ pub struct Isometry2<S> {
 impl<S> Isometry2<S> where S: ScalarFloat {
     /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
-    pub fn from_parts(translation: Translation2<S>, rotation: Rotation2<S>) -> Isometry2<S> {
+    pub fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>) -> Isometry2<S> {
         Isometry2 {
-            rotation: rotation,
-            translation: translation,
+            rotation: *rotation,
+            translation: *translation,
         }
     }
 
     /// Construct a new isometry from a translation.
     #[inline]
-    pub fn from_translation(translation: Translation2<S>) -> Isometry2<S> {
-        Self::from_parts(translation, Rotation2::identity())
+    pub fn from_translation(translation: &Translation2<S>) -> Isometry2<S> {
+        Self::from_parts(translation, &Rotation2::identity())
     }
 
     /// Construct a new isometry from a rotation.
     #[inline]
-    pub fn from_rotation(rotation: Rotation2<S>) -> Isometry2<S> {
-        Self::from_parts(Translation2::identity(), rotation)
+    pub fn from_rotation(rotation: &Rotation2<S>) -> Isometry2<S> {
+        Self::from_parts(&Translation2::identity(), rotation)
     }
 
     /// Construct a new isometry from a rotation angle and a displacement vector.
@@ -96,7 +96,7 @@ impl<S> Isometry2<S> where S: ScalarFloat {
     /// let distance = Vector2::new(1_f64, 2_f64);
     /// let translation = Translation2::from_vector(&distance);
     /// let rotation = Rotation2::from_angle(angle);
-    /// let expected = Isometry2::from_parts(translation, rotation);
+    /// let expected = Isometry2::from_parts(&translation, &rotation);
     /// let result = Isometry2::from_angle_translation(angle, &distance);
     ///
     /// assert_eq!(result, expected);
@@ -136,7 +136,7 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         let translation = Translation2::identity();
         let rotation = Rotation2::from_angle(angle);
         
-        Self::from_parts(translation, rotation)
+        Self::from_parts(&translation, &rotation)
     }
 
     /// Construct a rotation that rotates the shortest angular distance 
@@ -296,7 +296,7 @@ impl<S> Isometry2<S> where S: ScalarFloat {
         let vector = rotation.rotate_vector(&(-distance));
         let translation = Translation2::from_vector(&vector);
         
-        Self::from_parts(translation, rotation)
+        Self::from_parts(&translation, &rotation)
     }
 
     /// Mutably invert an isometry in place.
@@ -624,10 +624,10 @@ pub struct Isometry3<S> {
 impl<S> Isometry3<S> where S: ScalarFloat {
     /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
-    pub fn from_parts(translation: Translation3<S>, rotation: Rotation3<S>) -> Isometry3<S> {
+    pub fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>) -> Isometry3<S> {
         Isometry3 {
-            rotation: rotation,
-            translation: translation,
+            rotation: *rotation,
+            translation: *translation,
         }
     }
 
@@ -651,7 +651,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
     /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let translation = Translation3::from_vector(&distance);
     /// let rotation = Rotation3::from_axis_angle(&axis, angle);
-    /// let expected = Isometry3::from_parts(translation, rotation);
+    /// let expected = Isometry3::from_parts(&translation, &rotation);
     /// let result = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
     ///
     /// assert_eq!(result, expected);
@@ -668,14 +668,14 @@ impl<S> Isometry3<S> where S: ScalarFloat {
 
     /// Construct a new isometry from a translation.
     #[inline]
-    pub fn from_translation(translation: Translation3<S>) -> Isometry3<S> {
-        Self::from_parts(translation, Rotation3::identity())
+    pub fn from_translation(translation: &Translation3<S>) -> Isometry3<S> {
+        Self::from_parts(translation, &Rotation3::identity())
     }
 
     /// Construct a new isometry from a rotation.
     #[inline]
-    pub fn from_rotation(rotation: Rotation3<S>) -> Isometry3<S> {
-        Self::from_parts(Translation3::identity(), rotation)
+    pub fn from_rotation(rotation: &Rotation3<S>) -> Isometry3<S> {
+        Self::from_parts(&Translation3::identity(), rotation)
     }
 
     /// Construct a new isometry from a rotation axis and a rotation angle.
@@ -695,7 +695,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
     /// let angle = Degrees(72_f64);
     /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let rotation = Rotation3::from_axis_angle(&axis, angle);
-    /// let expected = Isometry3::from_rotation(rotation);
+    /// let expected = Isometry3::from_rotation(&rotation);
     /// let result = Isometry3::from_axis_angle(&axis, angle);
     ///
     /// assert_eq!(result, expected);
@@ -705,7 +705,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_axis_angle(axis, angle);
         
-        Self::from_parts(translation, rotation)
+        Self::from_parts(&translation, &rotation)
     }
 
     /// Construct an isometry from a rotation angle in the **yz-plane** about 
@@ -722,7 +722,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
     /// #
     /// let angle = Degrees(72_f64);
     /// let rotation = Rotation3::from_angle_x(angle);
-    /// let expected = Isometry3::from_rotation(rotation);
+    /// let expected = Isometry3::from_rotation(&rotation);
     /// let result = Isometry3::from_angle_x(angle);
     ///
     /// assert_eq!(result, expected);
@@ -732,7 +732,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_x(angle);
         
-        Self::from_parts(translation, rotation)
+        Self::from_parts(&translation, &rotation)
     }
 
     /// Construct an isometry from a rotation angle in the **zx-plane** about 
@@ -749,7 +749,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
     /// #
     /// let angle = Degrees(72_f64);
     /// let rotation = Rotation3::from_angle_y(angle);
-    /// let expected = Isometry3::from_rotation(rotation);
+    /// let expected = Isometry3::from_rotation(&rotation);
     /// let result = Isometry3::from_angle_y(angle);
     ///
     /// assert_eq!(result, expected);
@@ -759,7 +759,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_y(angle);
         
-        Self::from_parts(translation, rotation)
+        Self::from_parts(&translation, &rotation)
     }
 
     /// Construct an isometry from a rotation angle in the **xy-plane** about 
@@ -776,7 +776,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
     /// #
     /// let angle = Degrees(72_f64);
     /// let rotation = Rotation3::from_angle_z(angle);
-    /// let expected = Isometry3::from_rotation(rotation);
+    /// let expected = Isometry3::from_rotation(&rotation);
     /// let result = Isometry3::from_angle_z(angle);
     ///
     /// assert_eq!(result, expected);
@@ -786,7 +786,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_z(angle);
         
-        Self::from_parts(translation, rotation)
+        Self::from_parts(&translation, &rotation)
     }
 
     /// Construct a rotation that rotates the shortest angular distance 
@@ -858,7 +858,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         
         Rotation3::rotation_between_axis(v1, v2).map(|rotation| {
             let translation = Translation3::identity();
-            Self::from_parts(translation, rotation)
+            Self::from_parts(&translation, &rotation)
         })
     }
 
@@ -899,7 +899,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let translation = Translation3::new(eye.x, eye.y, eye.z);
         let rotation = Rotation3::face_towards(&(target - eye), up);
 
-        Self::from_parts(translation, rotation)
+        Self::from_parts(&translation, &rotation)
     }
 
     /// Construct an coordinate transformation that transforms
@@ -945,7 +945,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let vector = &rotation * (-eye) - Point3::origin();
         let translation = Translation3::from_vector(&vector);
 
-        Self::from_parts(translation, rotation)
+        Self::from_parts(&translation, &rotation)
     }
 
     /// Construct an coordinate transformation that transforms
@@ -991,7 +991,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let vector = &rotation * (-eye) - Point3::origin();
         let translation = Translation3::from_vector(&vector);
     
-        Self::from_parts(translation, rotation)  
+        Self::from_parts(&translation, &rotation)  
     }
 
     /// Convert an isometry into a generic transformation.
@@ -1092,7 +1092,7 @@ impl<S> Isometry3<S> where S: ScalarFloat {
         let vector = rotation.rotate_vector(&(-distance));
         let translation = Translation3::from_vector(&vector);
         
-        Self::from_parts(translation, rotation)
+        Self::from_parts(&translation, &rotation)
     }
 
     /// Mutably invert an isometry in place.

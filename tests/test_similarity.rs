@@ -24,7 +24,7 @@ mod similarity2_tests {
     #[test]
     fn test_from_translation() {
         let translation = Translation2::new(1_f64, 2_f64);
-        let similarity = Similarity2::from_translation(translation);
+        let similarity = Similarity2::from_translation(&translation);
         let point = Point2::new(5_f64, 5_f64);
         let expected = Point2::new(6_f64, 7_f64);
         let result = similarity.transform_point(&point);
@@ -36,7 +36,7 @@ mod similarity2_tests {
     fn test_from_rotation() {
         let angle = Radians(f64::consts::FRAC_PI_4);
         let rotation = Rotation2::from_angle(angle);
-        let similarity = Similarity2::from_rotation(rotation);
+        let similarity = Similarity2::from_rotation(&rotation);
         let vector = Vector2::new(2_f64, 0_f64);
         let expected = Vector2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
         let result = similarity.transform_vector(&vector);
@@ -75,7 +75,7 @@ mod similarity2_tests {
         let angle = Degrees(72_f64);
         let rotation = Rotation2::from_angle(angle);
         let translation = Translation2::new(2_f64, 3_f64);
-        let similarity = Similarity2::from_parts(translation, rotation, scale);
+        let similarity = Similarity2::from_parts(&translation, &rotation, scale);
         let expected = Matrix3x3::new(
              scale * angle.cos(), scale * angle.sin(), 0_f64,
             -scale * angle.sin(), scale * angle.cos(), 0_f64,
@@ -101,7 +101,7 @@ mod similarity2_tests {
         let distance = Vector2::new(1_f64, 2_f64);
         let translation = Translation2::from_vector(&distance);
         let rotation = Rotation2::from_angle(angle);
-        let similarity = Similarity2::from_parts(translation, rotation, scale);
+        let similarity = Similarity2::from_parts(&translation, &rotation, scale);
         let similarity_inv = similarity.inverse();
         let point = Point2::new(1_f64, 2_f64);
         let expected = point;
@@ -118,7 +118,7 @@ mod similarity2_tests {
         let distance = Vector2::new(1_f64, 2_f64);
         let translation = Translation2::from_vector(&distance);
         let rotation = Rotation2::from_angle(angle);
-        let similarity = Similarity2::from_parts(translation, rotation, scale);
+        let similarity = Similarity2::from_parts(&translation, &rotation, scale);
         let mut similarity_mut = similarity;
         similarity_mut.inverse_mut();
         let point = Point2::new(1_f64, 2_f64);
@@ -136,7 +136,7 @@ mod similarity2_tests {
         let distance = Vector2::new(2_f64, 2_f64);
         let translation = Translation2::from_vector(&distance);
         let rotation = Rotation2::from_angle(angle);
-        let similarity = Similarity2::from_parts(translation, rotation, scale);
+        let similarity = Similarity2::from_parts(&translation, &rotation, scale);
         let point = Point2::new(1_f64, 2_f64);
         let expected = point;
         let transformed_point = similarity.transform_point(&point);
@@ -152,7 +152,7 @@ mod similarity2_tests {
         let distance = Vector2::new(1_f64, 1_f64);
         let translation = Translation2::from_vector(&distance);
         let rotation = Rotation2::from_angle(angle);
-        let similarity = Similarity2::from_parts(translation, rotation, scale);
+        let similarity = Similarity2::from_parts(&translation, &rotation, scale);
         let vector = Vector2::unit_x();
         let expected = vector;
         let transformed_vector = similarity.transform_vector(&vector);
@@ -168,7 +168,7 @@ mod similarity2_tests {
         let distance = Vector2::new(2_f64, 2_f64);
         let translation = Translation2::from_vector(&distance);
         let rotation = Rotation2::from_angle(angle);
-        let similarity = Similarity2::from_parts(translation, rotation, scale);
+        let similarity = Similarity2::from_parts(&translation, &rotation, scale);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(-22_f64, 14_f64);
         let result = similarity.transform_point(&point);
@@ -183,7 +183,7 @@ mod similarity2_tests {
         let distance = Vector2::new(1_f64, 1_f64);
         let translation = Translation2::from_vector(&distance);
         let rotation = Rotation2::from_angle(angle);
-        let similarity = Similarity2::from_parts(translation, rotation, scale);
+        let similarity = Similarity2::from_parts(&translation, &rotation, scale);
         let vector = Vector2::unit_x();
         let expected = scale * Vector2::unit_y();
         let result = similarity.transform_vector(&vector);
@@ -218,7 +218,7 @@ mod similarity3_tests {
         let axis = Unit::from_value(Vector3::unit_z());
         let angle = Radians(f64::consts::FRAC_PI_4);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
-        let similarity = Similarity3::from_rotation(rotation);
+        let similarity = Similarity3::from_rotation(&rotation);
         let vector = Vector3::new(2_f64, 0_f64, 5_f64);
         let expected = Vector3::new(f64::sqrt(2_f64), f64::sqrt(2_f64), 5_f64);
         let result = similarity.transform_vector(&vector);
@@ -241,7 +241,7 @@ mod similarity3_tests {
     fn test_from_translation() {
         let distance = Vector3::new(5_f64, 5_f64, 5_f64);
         let translation = Translation3::from_vector(&distance);
-        let similarity = Similarity3::from_translation(translation);
+        let similarity = Similarity3::from_translation(&translation);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
     
         assert_eq!(similarity * point, point + distance);
@@ -253,7 +253,7 @@ mod similarity3_tests {
         let angle = Radians(f64::consts::FRAC_PI_3);
         let distance = Vector3::new(5_f64, 5_f64, 0_f64);
         let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
-        let similarity = Similarity3::from_isometry(isometry);
+        let similarity = Similarity3::from_isometry(&isometry);
         let point = Point3::new(2_f64, 0_f64, 13_f64);
         let expected = Point3::new(6_f64, f64::sqrt(3_f64) + 5_f64, 13_f64);
         let result = similarity.transform_point(&point);
@@ -318,7 +318,7 @@ mod similarity3_tests {
         let angle = Degrees(60_f64);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
         let translation = Translation3::new(2_f64, 3_f64, 4_f64);
-        let similarity = Similarity3::from_parts(translation, rotation, scale);
+        let similarity = Similarity3::from_parts(&translation, &rotation, scale);
         let sq_3_8 = f64::sqrt(3_f64 / 8_f64);
         let expected = Matrix4x4::new(
              scale * 3_f64 / 4_f64, scale * 1_f64 / 4_f64, scale * -sq_3_8,       0_f64,
@@ -347,7 +347,7 @@ mod similarity3_tests {
         let distance = Vector3::new(6_f64, 7_f64, 8_f64);
         let translation = Translation3::from_vector(&distance);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
-        let similarity = Similarity3::from_parts(translation, rotation, scale);
+        let similarity = Similarity3::from_parts(&translation, &rotation, scale);
         let similarity_inv = similarity.inverse();
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = point;
@@ -365,7 +365,7 @@ mod similarity3_tests {
         let distance = Vector3::new(6_f64, 7_f64, 8_f64);
         let translation = Translation3::from_vector(&distance);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
-        let similarity = Similarity3::from_parts(translation, rotation, scale);
+        let similarity = Similarity3::from_parts(&translation, &rotation, scale);
         let mut similarity_mut = similarity;
         similarity_mut.inverse_mut();
         let point = Point3::new(1_f64, 2_f64, 3_f64);
@@ -384,7 +384,7 @@ mod similarity3_tests {
         let distance = Vector3::new(2_f64, 2_f64, 2_f64);
         let translation = Translation3::from_vector(&distance);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
-        let similarity = Similarity3::from_parts(translation, rotation, scale);
+        let similarity = Similarity3::from_parts(&translation, &rotation, scale);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = point;
         let transformed_point = similarity.transform_point(&point);
@@ -401,7 +401,7 @@ mod similarity3_tests {
         let distance = Vector3::new(1_f64, 1_f64, 1_f64);
         let translation = Translation3::from_vector(&distance);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
-        let similarity = Similarity3::from_parts(translation, rotation, scale);
+        let similarity = Similarity3::from_parts(&translation, &rotation, scale);
         let vector = Vector3::unit_x();
         let expected = vector;
         let transformed_vector = similarity.transform_vector(&vector);
@@ -418,7 +418,7 @@ mod similarity3_tests {
         let distance = Vector3::new(2_f64, 2_f64, 2_f64);
         let translation = Translation3::from_vector(&distance);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
-        let similarity = Similarity3::from_parts(translation, rotation, scale);
+        let similarity = Similarity3::from_parts(&translation, &rotation, scale);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = Point3::new(-22_f64, 14_f64, 38_f64);
         let result = similarity.transform_point(&point);
@@ -434,7 +434,7 @@ mod similarity3_tests {
         let distance = Vector3::new(1_f64, 1_f64, 1_f64);
         let translation = Translation3::from_vector(&distance);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
-        let similarity = Similarity3::from_parts(translation, rotation, scale);
+        let similarity = Similarity3::from_parts(&translation, &rotation, scale);
         let vector = Vector3::unit_x();
         let expected = scale * Vector3::unit_y();
         let result = similarity.transform_vector(&vector);

@@ -24,7 +24,7 @@ mod isometry2_tests {
         let vector = Vector2::new(1_f64, 2_f64);
         let translation = Translation2::from_vector(&vector);
         let rotation = Rotation2::from_angle(Degrees(90_f64));
-        let isometry = Isometry2::from_parts(translation, rotation);
+        let isometry = Isometry2::from_parts(&translation, &rotation);
         let point = Point2::new(4_f64, 5_f64);
         let expected = Point2::new(-4_f64, 6_f64);
         let result = isometry.transform_point(&point);
@@ -37,7 +37,7 @@ mod isometry2_tests {
         let distance = Vector2::new(1_f64, 2_f64);
         let translation = Translation2::from_vector(&distance);
         let rotation = Rotation2::from_angle(Degrees(90_f64));
-        let isometry = Isometry2::from_parts(translation, rotation);
+        let isometry = Isometry2::from_parts(&translation, &rotation);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(-2_f64, 1_f64);
         let result = isometry.transform_vector(&vector);
@@ -59,7 +59,7 @@ mod isometry2_tests {
     fn test_from_translation() {
         let distance = Vector2::new(4_f64, 5_f64);
         let translation = Translation2::from_vector(&distance);
-        let isometry = Isometry2::from_translation(translation);
+        let isometry = Isometry2::from_translation(&translation);
         
         assert_eq!(isometry.translation(), &translation);
     }
@@ -70,7 +70,7 @@ mod isometry2_tests {
         let distance = Vector2::new(12_f64, 5_f64);
         let rotation = Rotation2::from_angle(angle);
         let translation = Translation2::from_vector(&distance);
-        let expected = Isometry2::from_parts(translation, rotation);
+        let expected = Isometry2::from_parts(&translation, &rotation);
         let result = Isometry2::from_angle_translation(angle, &distance);
 
         assert_eq!(result, expected);
@@ -204,7 +204,7 @@ mod isometry3_tests {
         let angle = Degrees(90_f64);
         let axis = Unit::from_value(Vector3::unit_z());
         let rotation = Rotation3::from_axis_angle(&axis, angle);
-        let isometry = Isometry3::from_parts(translation, rotation);
+        let isometry = Isometry3::from_parts(&translation, &rotation);
         let point = Point3::new(4_f64, 5_f64, 6_f64);
         let expected = Point3::new(-4_f64, 6_f64, 9_f64);
         let result = isometry.transform_point(&point);
@@ -219,7 +219,7 @@ mod isometry3_tests {
         let angle = Degrees(90_f64);
         let axis = Unit::from_value(Vector3::unit_z());
         let rotation = Rotation3::from_axis_angle(&axis, angle);
-        let isometry = Isometry3::from_parts(translation, rotation);
+        let isometry = Isometry3::from_parts(&translation, &rotation);
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(-2_f64, 1_f64, 3_f64);
         let result = isometry.transform_vector(&vector);
@@ -243,7 +243,7 @@ mod isometry3_tests {
     fn test_from_translation() {
         let distance = Vector3::new(4_f64, 5_f64, 6_f64);
         let translation = Translation3::from_vector(&distance);
-        let isometry = Isometry3::from_translation(translation);
+        let isometry = Isometry3::from_translation(&translation);
         
         assert_eq!(isometry.translation(), &translation);
     }
@@ -255,7 +255,7 @@ mod isometry3_tests {
         let distance = Vector3::new(12_f64, 5_f64, 77_f64);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
         let translation = Translation3::from_vector(&distance);
-        let expected = Isometry3::from_parts(translation, rotation);
+        let expected = Isometry3::from_parts(&translation, &rotation);
         let result = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
     
         assert_eq!(result, expected);
@@ -364,7 +364,7 @@ mod isometry3_tests {
     fn test_from_angle_x() {
         let angle = Degrees(72_f64);
         let rotation = Rotation3::from_angle_x(angle);
-        let expected = Isometry3::from_rotation(rotation);
+        let expected = Isometry3::from_rotation(&rotation);
         let result = Isometry3::from_angle_x(angle);
         
         assert_eq!(result, expected);
@@ -374,7 +374,7 @@ mod isometry3_tests {
     fn test_from_angle_y() {
         let angle = Degrees(72_f64);
         let rotation = Rotation3::from_angle_y(angle);
-        let expected = Isometry3::from_rotation(rotation);
+        let expected = Isometry3::from_rotation(&rotation);
         let result = Isometry3::from_angle_y(angle);
 
         assert_eq!(result, expected);
@@ -384,7 +384,7 @@ mod isometry3_tests {
     fn test_from_angle_z() {
         let angle = Degrees(72_f64);
         let rotation = Rotation3::from_angle_z(angle);
-        let expected = Isometry3::from_rotation(rotation);
+        let expected = Isometry3::from_rotation(&rotation);
         let result = Isometry3::from_angle_z(angle);
 
         assert_eq!(result, expected);
