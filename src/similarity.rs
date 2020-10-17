@@ -110,6 +110,28 @@ impl<S> Similarity2<S> where S: ScalarFloat {
 
     /// Construct a two-dimensional similarity transformation from a rotation
     /// angle.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Vector2,
+    /// #     Degrees, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let angle = Degrees(90_f64);
+    /// let similarity = Similarity2::from_angle(angle);
+    /// let unit_x = Vector2::unit_x();
+    /// let unit_y = Vector2::unit_y();
+    /// let expected = unit_y;
+    /// let result = similarity.transform_vector(&unit_x);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Similarity2<S> {
         Similarity2 {

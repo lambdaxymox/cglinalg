@@ -4999,13 +4999,13 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// let target = Point3::new(4_f64, 5_f64, 3_f64);
     /// let up = Vector3::unit_z();
     /// let expected = Matrix4x4::new(
-    ///       1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,  0_f64,
-    ///       0_f64,                     0_f64,                    1_f64,  0_f64,
-    ///      -1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,  0_f64, 
-    ///       3_f64,                     3_f64,                    0_f64,  1_f64
+    ///      1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
+    ///     -1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64, 
+    ///      0_f64,                     1_f64,  0_f64,                     0_f64,
+    ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
     /// let result = Matrix4x4::look_at_rh(&eye, &target, &up);
-    /// assert_eq!(result, expected);
+    ///
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[rustfmt::skip]
@@ -5060,13 +5060,13 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// let target = Point3::new(4_f64, 5_f64, 3_f64);
     /// let up = Vector3::unit_z();
     /// let expected = Matrix4x4::new(
-    ///       1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,  0_f64,
-    ///       0_f64,                     0_f64,                    1_f64,  0_f64,
-    ///      -1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,  0_f64, 
-    ///       3_f64,                     3_f64,                    0_f64,  1_f64
+    ///      -1_f64 / f64::sqrt(2_f64),  0_f64, 1_f64 / f64::sqrt(2_f64),  0_f64,
+    ///       1_f64 / f64::sqrt(2_f64),  0_f64, 1_f64 / f64::sqrt(2_f64),  0_f64, 
+    ///       0_f64,                     1_f64,                    0_f64,  0_f64,
+    ///      -1_f64 / f64::sqrt(2_f64), -3_f64,  -3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
     /// let result = Matrix4x4::look_at_lh(&eye, &target, &up);
-    /// assert_eq!(result, expected);
+    /// 
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[rustfmt::skip]
