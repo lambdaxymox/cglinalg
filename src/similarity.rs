@@ -42,9 +42,9 @@ use core::fmt;
 use core::ops;
 
 
-/// A similarity transformation is a tranformation consisting of a scaling,
+/// A similarity transformation is a transformation consisting of a scaling,
 /// a rotation, and a translation. The similarity transformation applies the
-/// scaling, followed by the rotaion, and finally the translation.
+/// scaling, followed by the rotation, and finally the translation.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Similarity2<S> {
@@ -310,12 +310,72 @@ impl<S> Similarity2<S> where S: ScalarFloat {
     }
 
     /// Apply the inverse of a similarity transformation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// #     Vector2,
+    /// #     Point2,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let distance = Vector2::new(2_f64, 2_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let similarity = Similarity2::from_parts(translation, rotation, scale);
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = point;
+    /// let transformed_point = similarity.transform_point(&point);
+    /// let result = similarity.inverse_transform_point(&transformed_point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point2<S>) -> Point2<S> {
         self.isometry.inverse_transform_point(point) / self.scale
     }
     
     /// Apply the inverse of a similarity transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// #     Vector2,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let distance = Vector2::new(1_f64, 1_f64);
+    /// let translation = Translation2::from_vector(&distance);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let similarity = Similarity2::from_parts(translation, rotation, scale);
+    /// let vector = Vector2::unit_x();
+    /// let expected = vector;
+    /// let transformed_vector = similarity.transform_vector(&vector);
+    /// let result = similarity.inverse_transform_vector(&transformed_vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         self.isometry.inverse_transform_vector(vector) / self.scale
@@ -491,9 +551,9 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Similarity2<S> where S: ScalarFl
 }
 
 
-/// A similarity transformation is a tranformation consisting of a scaling,
+/// A similarity transformation is a transformation consisting of a scaling,
 /// a rotation, and a translation. The similarity transformation applies the
-/// scaling, followed by the rotaion, and finally the translation.
+/// scaling, followed by the rotation, and finally the translation.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Similarity3<S> {
@@ -882,12 +942,75 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     }
 
     /// Apply the inverse of a similarity transformation to a point.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let distance = Vector3::new(2_f64, 2_f64, 2_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let similarity = Similarity3::from_parts(translation, rotation, scale);
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = point;
+    /// let transformed_point = similarity.transform_point(&point);
+    /// let result = similarity.inverse_transform_point(&transformed_point);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point3<S>) -> Point3<S> {
         self.isometry.inverse_transform_point(point) / self.scale
     }
     
     /// Apply the inverse of a similarity transformation to a vector.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let distance = Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let translation = Translation3::from_vector(&distance);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let similarity = Similarity3::from_parts(translation, rotation, scale);
+    /// let vector = Vector3::unit_x();
+    /// let expected = vector;
+    /// let transformed_vector = similarity.transform_vector(&vector);
+    /// let result = similarity.inverse_transform_vector(&transformed_vector);
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
     #[inline]
     pub fn inverse_transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         self.isometry.inverse_transform_vector(vector) / self.scale
