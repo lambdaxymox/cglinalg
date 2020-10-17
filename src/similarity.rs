@@ -349,7 +349,7 @@ impl<S> Similarity2<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn inverse(&self) -> Similarity2<S> {
-        let mut similarity_inv = self.clone();
+        let mut similarity_inv = *self;
         similarity_inv.inverse_mut();
 
         similarity_inv
@@ -1092,7 +1092,7 @@ impl<S> Similarity3<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn inverse(&self) -> Similarity3<S> {
-        let mut similarity_inv = self.clone();
+        let mut similarity_inv = *self;
         similarity_inv.inverse_mut();
 
         similarity_inv

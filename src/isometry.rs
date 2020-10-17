@@ -36,8 +36,6 @@ use crate::traits::{
     DotProduct,
 };
 
-use approx;
-
 use core::fmt;
 use core::ops;
 
