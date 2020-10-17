@@ -6,12 +6,15 @@ use crate::scalar::{
 use crate::traits::{
     Array,
     CrossProduct,
-    Zero,
     DotProduct,
     Magnitude,
     Metric,
+    Zero,
 };
-use num_traits::NumCast;
+use num_traits::{
+    NumCast,
+};
+
 use core::fmt;
 use core::iter;
 use core::ops;

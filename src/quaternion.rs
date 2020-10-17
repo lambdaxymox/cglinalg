@@ -1,13 +1,13 @@
 use crate::traits::{
     Array,
-    Zero,
-    Identity,
     CrossProduct,
     DotProduct,
+    Identity,
     Magnitude,
     Matrix,
     Metric,
     SquareMatrix,
+    Zero,
 };
 use crate::angle::{
     Angle,

@@ -1,9 +1,3 @@
-use approx::{
-    ulps_eq,
-};
-use num_traits::{
-    NumCast,
-};
 use crate::point::{
     Point3,
 };
@@ -20,12 +14,12 @@ use crate::traits::{
     Array,
     CrossProduct,
     DotProduct,
-    Identity, 
-    Zero, 
-    Matrix, 
-    SquareMatrix,
+    Identity,
     InvertibleSquareMatrix,
     Magnitude,
+    Matrix,
+    SquareMatrix,
+    Zero,
 };
 use crate::vector::{
     Vector2,
@@ -34,6 +28,13 @@ use crate::vector::{
 };
 use crate::unit::{
     Unit,
+};
+
+use approx::{
+    ulps_eq,
+};
+use num_traits::{
+    NumCast,
 };
 
 use core::fmt;

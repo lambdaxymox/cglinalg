@@ -4,15 +4,15 @@ extern crate cglinalg;
 #[cfg(test)]
 mod isometry2_tests {
     use cglinalg::{
-        Isometry2,
-        Rotation2,
-        Translation2,
         Angle,
         Degrees,
-        Point2,
-        Vector2,
+        Isometry2,
         Matrix3x3,
+        Point2,
+        Rotation2,
+        Translation2,
         Unit,
+        Vector2,
     };
     use cglinalg::approx::{
         relative_eq,
@@ -183,15 +183,15 @@ mod isometry2_tests {
 #[cfg(test)]
 mod isometry3_tests {
     use cglinalg::{
-        Matrix4x4,
-        Isometry3,
-        Rotation3,
-        Translation3,
         Angle,
         Degrees,
+        Isometry3,
+        Matrix4x4,
         Point3,
-        Vector3,
+        Rotation3,
+        Translation3,
         Unit,
+        Vector3,
     };
     use cglinalg::approx::{
         relative_eq,

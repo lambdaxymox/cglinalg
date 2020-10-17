@@ -5,9 +5,9 @@ use crate::scalar::{
 };
 use crate::traits::{
     Array,
-    Metric,
     DotProduct,
     Magnitude,
+    Metric,
 };
 use crate::vector::{
     Vector1,
