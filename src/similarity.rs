@@ -23,7 +23,6 @@ use crate::vector::{
 };
 use crate::angle::{
     Radians,
-    Angle,
 };
 use crate::transform::{
     Transform2,
@@ -35,9 +34,6 @@ use crate::isometry::{
 };
 use crate::unit::{
     Unit,
-};
-use crate::traits::{
-    DotProduct,
 };
 
 use approx;
@@ -308,16 +304,19 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         self.isometry.translation.vector *= self.scale;
     }
 
+    /// Apply the inverse of a similarity transformation to a point.
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point2<S>) -> Point2<S> {
         self.isometry.inverse_transform_point(point) / self.scale
     }
     
+    /// Apply the inverse of a similarity transformation to a vector.
     #[inline]
     pub fn inverse_transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         self.isometry.inverse_transform_vector(vector) / self.scale
     }
 
+    /// Apply the similarity transformation to a point.
     #[inline]
     pub fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
         let scaled_point = point * self.scale;
@@ -325,6 +324,7 @@ impl<S> Similarity2<S> where S: ScalarFloat {
         self.isometry.transform_point(&scaled_point)
     }
 
+    /// Apply the similarity transformation to a vector.
     #[inline]
     pub fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         let scaled_vector = vector * self.scale;
@@ -740,16 +740,19 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         self.isometry.translation.vector *= self.scale;
     }
 
+    /// Apply the inverse of a similarity transformation to a point.
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point3<S>) -> Point3<S> {
         self.isometry.inverse_transform_point(point) / self.scale
     }
     
+    /// Apply the inverse of a similarity transformation to a vector.
     #[inline]
     pub fn inverse_transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         self.isometry.inverse_transform_vector(vector) / self.scale
     }
 
+    /// Apply a similarity transformation to a point.
     #[inline]
     pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
         let scaled_point = point * self.scale;
@@ -757,6 +760,7 @@ impl<S> Similarity3<S> where S: ScalarFloat {
         self.isometry.transform_point(&scaled_point)
     }
 
+    /// Apply a similarity transformation to a vector.
     #[inline]
     pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let scaled_vector = vector * self.scale;
