@@ -206,7 +206,6 @@ mod similarity3_tests {
         Magnitude,
         Radians,
         Matrix4x4,
-        Angle,
         Unit,
     };
     use approx::{
