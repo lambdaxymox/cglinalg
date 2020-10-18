@@ -568,7 +568,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
         ) {
             Self::rotation_between_axis(&unit_v1, &unit_v2)
         } else {
-            <Self as SquareMatrix>::identity()
+            Self::identity()
         }
     }
 
@@ -1367,16 +1367,6 @@ impl<S> SquareMatrix for Matrix2x2<S> where S: ScalarFloat {
     #[inline]
     fn is_symmetric(&self) -> bool {
         ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1)
-    }
-
-    #[inline]
-    fn identity() -> Self {
-        Self::identity()
-    }
-
-    #[inline]
-    fn is_identity(&self) -> bool {
-        self.is_identity()
     }
 }
 
@@ -2709,7 +2699,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
             }
         }
 
-        Some(<Self as SquareMatrix>::identity())
+        Some(Self::identity())
     }
 
     /// Construct a rotation matrix that rotates the shortest angular distance 
@@ -2753,7 +2743,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
             return None;
         }
 
-        Some(<Self as SquareMatrix>::identity())
+        Some(Self::identity())
     }
 
     /// Linearly interpolate between two matrices.
@@ -3785,16 +3775,6 @@ impl<S> SquareMatrix for Matrix3x3<S> where S: ScalarFloat {
         ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1) &&
         ulps_eq!(self.c0r2, self.c2r0) && ulps_eq!(self.c2r0, self.c0r2) &&
         ulps_eq!(self.c1r2, self.c2r1) && ulps_eq!(self.c2r1, self.c1r2)
-    }
-
-    #[inline]
-    fn identity() -> Self {
-        Self::identity()
-    }
-
-    #[inline]
-    fn is_identity(&self) -> bool {
-        self.is_identity()
     }
 }
 
@@ -6651,16 +6631,6 @@ impl<S> SquareMatrix for Matrix4x4<S> where S: ScalarFloat {
         ulps_eq!(self.c0r3, self.c3r0) && ulps_eq!(self.c3r0, self.c0r3) &&
         ulps_eq!(self.c1r3, self.c3r1) && ulps_eq!(self.c3r1, self.c1r3) &&
         ulps_eq!(self.c2r3, self.c3r2) && ulps_eq!(self.c3r2, self.c2r3)
-    }
-
-    #[inline]
-    fn identity() -> Self {
-        Self::identity()
-    }
-
-    #[inline]
-    fn is_identity(&self) -> bool {
-        self.is_identity()
     }
 }
 

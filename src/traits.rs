@@ -189,15 +189,6 @@ pub trait SquareMatrix where
     /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
     /// Note that every diagonal matrix is a symmetric matrix.
     fn is_symmetric(&self) -> bool;
-
-    /// Determine whether a square matrix is the identity matrix.
-    fn is_identity(&self) -> bool;
-
-    /// Construct an identity matrix. 
-    /// 
-    /// This function gives the same result as the function as the `identity` 
-    /// function from the `Identity` trait.
-    fn identity() -> Self;
 }
 
 /// A trait expressing how to compute the inverse of a square matrix.
