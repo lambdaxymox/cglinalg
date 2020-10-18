@@ -1222,35 +1222,14 @@ macro_rules! magnitude_props {
         use proptest::prelude::*;
         use cglinalg::Magnitude;
         use approx::{
-            relative_eq,
             relative_ne
         };
         use super::{
             $Generator,
-            $ScalarGen,
         };
 
 
         proptest! {
-            #[test]
-            /// The magnitude of a quaternion preserves scales. 
-            /// 
-            /// Given a scalar constant `c`, and a quaternion `q` of scalars, the 
-            /// magnitude function satisfies
-            /// ```text
-            /// magnitude(c * q) = abs(c) * magnitude(q)
-            /// ```
-            fn prop_magnitude_preserves_scale(
-                q in $Generator::<$ScalarType>(), c in $ScalarGen::<$ScalarType>()) {
-                
-                let abs_c = <$ScalarType as num_traits::Float>::abs(c);   
-
-                prop_assert!(
-                    relative_eq!( (c * q).magnitude(), abs_c * q.magnitude(), epsilon = $tolerance),
-                    "\n||c * q|| = {}\n|c| * ||q|| = {}\n", (c * q).magnitude(), abs_c * q.magnitude(),
-                );
-            }
-
             /// The magnitude of a quaternion is nonnegative. 
             ///
             /// Given a quaternion `q`
@@ -1262,24 +1241,6 @@ macro_rules! magnitude_props {
                 let zero: $ScalarType = num_traits::zero();
 
                 prop_assert!(q.magnitude() >= zero);
-            }
-
-            /// The magnitude of a quaternion satisfies the triangle inequality. 
-            ///
-            /// Given a quaternions `q1` and `q2`, the magnitude function satisfies
-            /// ```text
-            /// magnitude(q1 + q2) <= magnitude(q1) + magnitude(q2)
-            /// ```
-            #[test]
-            fn prop_magnitude_satisfies_triangle_inequality(
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-            
-                prop_assume!((q1 + q2).magnitude().is_finite());
-                prop_assume!((q1.magnitude() + q2.magnitude()).is_finite());
-                prop_assert!((q1 + q2).magnitude() <= q1.magnitude() + q2.magnitude(), 
-                    "\n|q1 + q2| = {}\n|q1| = {}\n|q2| = {}\n|q1| + |q2| = {}\n",
-                    (q1 + q2).magnitude(), q1.magnitude(), q2.magnitude(), q1.magnitude() + q2.magnitude()
-                );
             }
 
             /// The magnitude function is point separating. In particular, if 
@@ -1338,7 +1299,6 @@ macro_rules! slerp_props {
         };
         use num_traits::{
             Zero,
-            One,
         };
         use super::{
             $Generator,
@@ -1366,27 +1326,6 @@ macro_rules! slerp_props {
                 
                 prop_assert!(
                     relative_eq!(qs, q0, epsilon = $tolerance) || relative_eq!(qs, -q0, epsilon = $tolerance),
-                    "qs = {}\nq0 = {}\nq1 = {}", 
-                    qs, q0, q1
-                );
-            }
-
-            /// Quaternion spherical linear interpolation should yield the 
-            /// respective interpolants at the endpoints.
-            ///
-            /// Given quaternions `q0` and `q1`
-            /// ```text
-            /// slerp(q0, q1, 0) = q0
-            /// slerp(q0, q1, 1) = q1
-            /// ```
-            #[test]
-            fn prop_quaternion_slerp_endpoints1(
-                q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
-
-                let qs = q0.slerp(&q1, <$ScalarType as One>::one());
-                
-                prop_assert!(
-                    relative_eq!(qs, q1, epsilon = $tolerance),
                     "qs = {}\nq0 = {}\nq1 = {}", 
                     qs, q0, q1
                 );
