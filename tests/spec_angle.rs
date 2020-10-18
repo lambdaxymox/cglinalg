@@ -15,7 +15,7 @@ fn any_scalar<S>() -> impl Strategy<Value = S>
     where S: Scalar + Arbitrary
 {
     any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
 
         scalar % modulus
     })
@@ -27,7 +27,7 @@ fn any_radians<S>() -> impl Strategy<Value = Radians<S>>
     any::<S>()
         .prop_map(|dimensionless| {
             let two_pi: S = num_traits::cast(2_f64 * core::f64::consts::PI).unwrap();
-            let one_million: S = num_traits::cast(1_000_000).unwrap();
+            let one_million: S = num_traits::cast(100_000_000).unwrap();
             Radians(dimensionless % (one_million * two_pi))
         })
         .no_shrink()
@@ -39,7 +39,7 @@ fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
     any::<S>()
         .prop_map(|dimensionless| {
             let two_pi: S = num_traits::cast(360_f64).unwrap();
-            let one_million: S = num_traits::cast(1_000_000).unwrap();
+            let one_million: S = num_traits::cast(100_000_000).unwrap();
             Degrees(dimensionless % (one_million * two_pi)) 
         })
         .no_shrink()
@@ -79,37 +79,6 @@ macro_rules! approx_arithmetic_props {
 
     
         proptest! {
-            /// Angle addition should be approximately commutative.
-            ///
-            /// Given typed angles `angle1` and `angle2`
-            /// ```text
-            /// angle1 + angle2 ~= angle2 + angle1
-            /// ```
-            #[test]
-            fn prop_angle_addition_commutative(
-                angle1 in $Generator::<$ScalarType>(), angle2 in $Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!(
-                    angle1 + angle2, angle2 + angle1, epsilon = $tolerance
-                ));
-            }
-
-            /// Angle addition is approximately associative.
-            /// 
-            /// Given typed angles `angle1`, `angle2`, and `angle3`
-            /// ```text
-            /// (angle1 + angle2) + angle3 ~= angle1 + (angle2 + angle3)
-            /// ```
-            #[test]
-            fn prop_angle_addition_associative(
-                angle1 in $Generator::<$ScalarType>(), 
-                angle2 in $Generator::<$ScalarType>(), angle3 in $Generator::<$ScalarType>()) {
-            
-                prop_assert!(relative_eq!(
-                    (angle1 + angle2) + angle3, angle1 + (angle2 + angle3), epsilon = $tolerance
-                ));
-            }
-
             /// Multiplication of typed angles is compatible with dimensionless 
             /// constants.
             ///

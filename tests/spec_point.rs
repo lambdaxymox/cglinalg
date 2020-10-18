@@ -20,7 +20,7 @@ fn any_scalar<S>() -> impl Strategy<Value = S>
     where S: Scalar + Arbitrary
 {
     any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
 
         scalar % modulus
     })
@@ -30,7 +30,7 @@ fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>>
     where S: Scalar + Arbitrary 
 {
     any::<S>().prop_map(|x| {
-        let modulus: S = num_traits::cast(1_000_000).unwrap();
+        let modulus: S = num_traits::cast(100_000_000).unwrap();
         let vector = Vector1::new(x);
 
         vector % modulus
@@ -41,7 +41,7 @@ fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>>
     where S: Scalar + Arbitrary
 {
     any::<(S, S)>().prop_map(|(x, y)| {
-        let modulus: S = num_traits::cast(1_000_000).unwrap();
+        let modulus: S = num_traits::cast(100_000_000).unwrap();
         let vector = Vector2::new(x, y);
     
         vector % modulus
@@ -52,7 +52,7 @@ fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
     where S: Scalar + Arbitrary
 {
     any::<(S, S, S)>().prop_map(|(x, y, z)| { 
-        let modulus: S = num_traits::cast(1_000_000).unwrap();
+        let modulus: S = num_traits::cast(100_000_000).unwrap();
         let vector = Vector3::new(x, y, z);
 
         vector % modulus
@@ -63,7 +63,7 @@ fn any_point1<S>() -> impl Strategy<Value = Point1<S>>
     where S: Scalar + Arbitrary 
 {
     any::<S>().prop_map(|x| {
-        let modulus: S = num_traits::cast(1_000_000).unwrap();
+        let modulus: S = num_traits::cast(100_000_000).unwrap();
         let point = Point1::new(x);
 
         point % modulus
@@ -74,7 +74,7 @@ fn any_point2<S>() -> impl Strategy<Value = Point2<S>>
     where S: Scalar + Arbitrary
 {
     any::<(S, S)>().prop_map(|(x, y)| {
-        let modulus: S = num_traits::cast(1_000_000).unwrap();
+        let modulus: S = num_traits::cast(100_000_000).unwrap();
         let point = Point2::new(x, y);
 
         point % modulus
@@ -85,7 +85,7 @@ fn any_point3<S>() -> impl Strategy<Value = Point3<S>>
     where S: Scalar + Arbitrary
 {
     any::<(S, S, S)>().prop_map(|(x, y, z)| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
         let point = Point3::new(x, y, z);
 
         point % modulus

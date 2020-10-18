@@ -18,7 +18,7 @@ fn any_scalar<S>() -> impl Strategy<Value = S>
     where S: Scalar + Arbitrary
 {
     any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
 
         scalar % modulus
     })
@@ -28,7 +28,7 @@ fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>>
     where S: Scalar + Arbitrary 
 {
     any::<S>().prop_map(|x| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
         let vector = Vector1::new(x);
 
         vector % modulus
@@ -39,7 +39,7 @@ fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>>
     where S: Scalar + Arbitrary
 {
     any::<(S, S)>().prop_map(|(x, y)| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
         let vector = Vector2::new(x, y);
 
         vector % modulus
@@ -50,7 +50,7 @@ fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
     where S: Scalar + Arbitrary
 {
     any::<(S, S, S)>().prop_map(|(x, y, z)| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
         let vector = Vector3::new(x, y, z);
 
         vector % modulus
@@ -61,7 +61,7 @@ fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
     where S: Scalar + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
         let vector = Vector4::new(x, y, z, w);
 
         vector % modulus

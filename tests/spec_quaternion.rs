@@ -15,7 +15,7 @@ fn any_scalar<S>() -> impl Strategy<Value = S>
     where S: Scalar + Arbitrary
 {
     any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
 
         scalar % modulus
     })
@@ -25,7 +25,7 @@ fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>>
     where S: Scalar + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
-        let modulus = num_traits::cast(1_000_000).unwrap();
+        let modulus = num_traits::cast(100_000_000).unwrap();
         let quaternion = Quaternion::new(x, y, z, w);
 
         quaternion % modulus
