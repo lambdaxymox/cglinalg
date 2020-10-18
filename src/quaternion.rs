@@ -1659,8 +1659,8 @@ impl<S> Zero for Quaternion<S> where S: Scalar {
 
     #[inline]
     fn is_zero(&self) -> bool {
-        let zero = S::zero();
-        self.s == zero && self.v.x == zero && self.v.y == zero && self.v.z == zero
+        self.s.is_zero() 
+            && self.v.x.is_zero() && self.v.y.is_zero() && self.v.z.is_zero()
     }
 }
 
@@ -1670,6 +1670,12 @@ impl<S> Identity for Quaternion<S> where S: Scalar {
         let one = S::one();
         let zero = S::zero();
         Quaternion::new(one, zero, zero, zero)
+    }
+
+    #[inline]
+    fn is_identity(&self) -> bool {
+        self.s.is_one()
+            && self.v.x.is_one() && self.v.y.is_one() && self.v.z.is_one()
     }
 }
 

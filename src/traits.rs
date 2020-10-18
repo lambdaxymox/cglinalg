@@ -54,10 +54,7 @@ pub trait Identity where Self: Sized + ops::Mul<Self, Output = Self> {
     fn identity() -> Self;
 
     /// Determine whether an element is equal to the multiplicative unit element.
-    #[inline]
-    fn is_identity(&self) -> bool where Self: PartialEq<Self> {
-        *self == Self::identity()
-    }
+    fn is_identity(&self) -> bool;
 }
 
 /// A type with this trait has a notion of comparing the distance (metric) 

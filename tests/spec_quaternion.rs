@@ -1330,11 +1330,15 @@ magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, any_scalar
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
 macro_rules! slerp_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $UnitScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         use approx::{
             relative_eq,
+        };
+        use num_traits::{
+            Zero,
+            One,
         };
         use super::{
             $Generator,
@@ -1358,7 +1362,7 @@ macro_rules! slerp_props {
             fn prop_quaternion_slerp_endpoints0(
                 q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
 
-                let qs = q0.slerp(&q1, 0.0);
+                let qs = q0.slerp(&q1, <$ScalarType as Zero>::zero());
                 
                 prop_assert!(
                     relative_eq!(qs, q0, epsilon = $tolerance) || relative_eq!(qs, -q0, epsilon = $tolerance),
@@ -1379,10 +1383,10 @@ macro_rules! slerp_props {
             fn prop_quaternion_slerp_endpoints1(
                 q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
 
-                let qs = q0.slerp(&q1, 1.0);
+                let qs = q0.slerp(&q1, <$ScalarType as One>::one());
                 
                 prop_assert!(
-                    relative_eq!(qs, q1, epsilon = $tolerance), 
+                    relative_eq!(qs, q1, epsilon = $tolerance),
                     "qs = {}\nq0 = {}\nq1 = {}", 
                     qs, q0, q1
                 );
@@ -1392,5 +1396,5 @@ macro_rules! slerp_props {
     }
 }
 
-slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, unit_interval, 1e-7);
+slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, 1e-7);
 

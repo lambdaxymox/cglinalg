@@ -867,6 +867,12 @@ impl<S> Identity for Matrix2x2<S> where S: Scalar {
     fn identity() -> Matrix2x2<S> {
         Matrix2x2::new(S::one(), S::zero(), S::zero(), S::one())
     }
+
+    #[inline]
+    fn is_identity(&self) -> bool {
+        self.c0r0.is_one()  && self.c0r1.is_zero() &&
+        self.c1r0.is_zero() && self.c1r1.is_one()
+    }
 }
 
 impl<S> ops::Add<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
@@ -3047,6 +3053,13 @@ impl<S> Identity for Matrix3x3<S> where S: Scalar {
             zero, one,  zero, 
             zero, zero, one
         )
+    }
+
+    #[inline]
+    fn is_identity(&self) -> bool {
+        self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() &&
+        self.c1r0.is_zero() && self.c1r1.is_one()  && self.c1r2.is_zero() &&
+        self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()
     }
 }
 
@@ -5504,6 +5517,14 @@ impl<S> Identity for Matrix4x4<S> where S: Scalar {
             zero, zero, one,  zero, 
             zero, zero, zero, one
         )
+    }
+
+    #[inline]
+    fn is_identity(&self) -> bool {
+        self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() && self.c0r3.is_zero() &&
+        self.c1r0.is_zero() && self.c1r1.is_one()  && self.c1r2.is_zero() && self.c1r3.is_zero() &&
+        self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()  && self.c2r3.is_zero() &&
+        self.c3r0.is_zero() && self.c3r1.is_zero() && self.c3r2.is_zero() && self.c3r3.is_one()
     }
 }
 
