@@ -98,7 +98,7 @@ The biggest one is that it presently does not leverage SIMD instructions yet.
 extern crate core;
 
 extern crate approx;
-pub extern crate num_traits;
+extern crate num_traits;
 
 
 mod scalar;
