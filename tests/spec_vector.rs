@@ -1565,9 +1565,9 @@ macro_rules! approx_cross_product_props {
                 u in $Generator::<$ScalarType>(), 
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
-                prop_assert!(
-                    relative_eq!(u.cross(&(v + w)), u.cross(&v) + u.cross(&w), epsilon = $tolerance)
-                );
+                prop_assert!(relative_eq!(
+                    u.cross(&(v + w)), u.cross(&v) + u.cross(&w), epsilon = $tolerance
+                ));
             }
 
             /// The three-dimensional vector cross product satisfies the scalar
@@ -1610,7 +1610,9 @@ macro_rules! approx_cross_product_props {
                 u in $Generator::<$ScalarType>(), 
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
-                prop_assert!(relative_eq!(u.cross(&v).cross(&w), u.dot(w) * v - u.dot(v) * w, epsilon = $tolerance));
+                prop_assert!(relative_eq!(
+                    u.cross(&v.cross(&w)), u.dot(w) * v - u.dot(v) * w, epsilon = $tolerance
+                ));
             }
         }
     }
@@ -1717,7 +1719,7 @@ macro_rules! exact_cross_product_props {
                 u in $Generator::<$ScalarType>(), 
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
-                prop_assert_eq!(u.cross(&v).cross(&w), u.dot(w) * v - u.dot(v) * w);
+                prop_assert_eq!(u.cross(&v.cross(&w)), u.dot(w) * v - u.dot(v) * w);
             }
         }
     }
