@@ -285,6 +285,34 @@ impl<S> Quaternion<S> where S: Scalar {
     }
 }
 
+impl<S> Quaternion<S> where S: ScalarSigned {
+    /// Compute the conjugate of a quaternion.
+    ///
+    /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
+    /// the conjugate of `q` is the quaternion `q* := s - v`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let scalar = 1_f64;
+    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let quaternion = Quaternion::from_parts(scalar, vector);
+    /// let expected = Quaternion::from_parts(scalar, -vector);
+    /// let result = quaternion.conjugate();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn conjugate(&self) -> Quaternion<S> {
+        Quaternion::from_parts(self.s, -self.v)
+    }
+}
+
 impl<S> Quaternion<S> where S: ScalarFloat {
     /// Construct a quaternion corresponding to rotating about an axis `axis` 
     /// by an angle `angle` in radians from its unit polar decomposition.
@@ -817,32 +845,6 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         matrix.c3r1 = zero;
         matrix.c3r2 = zero;
         matrix.c3r3 = one;
-    }
-
-    /// Compute the conjugate of a quaternion.
-    ///
-    /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
-    /// the conjugate of `q` is the quaternion `q* := s - v`.
-    ///
-    /// ## Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Quaternion,
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let scalar = 1_f64;
-    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
-    /// let quaternion = Quaternion::from_parts(scalar, vector);
-    /// let expected = Quaternion::from_parts(scalar, -vector);
-    /// let result = quaternion.conjugate();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn conjugate(&self) -> Quaternion<S> {
-        Quaternion::from_parts(self.s, -self.v)
     }
 
     /// Compute the inverse of a quaternion.

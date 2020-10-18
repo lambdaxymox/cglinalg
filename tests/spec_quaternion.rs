@@ -11,18 +11,6 @@ use cglinalg::{
 };
 
 
-fn unit_interval<S>() -> impl Strategy<Value = S>
-    where S: ScalarFloat + Arbitrary
-{
-    any::<S>().prop_map(|value| {
-        let one = S::one();
-        let two = S::one() + S::one();
-    
-        (S::sin(value) + one) / two
-    })
-}
-
-
 fn any_scalar<S>() -> impl Strategy<Value = S>
     where S: Scalar + Arbitrary
 {
@@ -708,56 +696,7 @@ macro_rules! approx_mul_props {
                 
                 prop_assume!(c.is_finite());
                 prop_assume!(q.is_finite());
-                prop_assert!(
-                    relative_eq!(c * q, q * c, epsilon = $tolerance)
-                );
-            }
-
-            /// Multiplication of two scalars and a quaternion should be compatible 
-            /// with multiplication of all scalars. 
-            ///
-            /// In other words, scalar multiplication of two scalar with a quaternion 
-            /// should act associatively, just like the multiplication of three scalars. 
-            /// Given scalars `a` and `b`, and a quaternion `q`, we have
-            /// ```text
-            /// (a * b) * q ~= a * (b * q)
-            /// ```
-            /// Note that the compatibility of scalars with quaternions can only be 
-            /// approximate and not exact because multiplication of the underlying 
-            /// scalars is not associative. 
-            #[test]
-            fn prop_scalar_multiplication_compatibility(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), q in $Generator::<$ScalarType>()) {
-
-                prop_assert!(
-                    relative_eq!(a * (b * q), (a * b) * q, epsilon = $tolerance),
-                    "a * (b * q) = {}\n(a * b) * q = {}",
-                    a * (b * q), (a * b) * q
-                );
-            }
-
-            /// Quaternion multiplication over floating point numbers is 
-            /// approximately associative.
-            ///
-            /// Given quaternions `q1`, `q2`, and `q3`, we have
-            /// ```text
-            /// (q1 * q2) * q3 ~= q1 * (q2 * q3)
-            /// ```
-            /// Note that the quaternion multiplication can only be approximately 
-            /// associative and not exactly associative because multiplication of 
-            /// the underlying scalars is not associative. 
-            #[test]
-            fn prop_quaternion_multiplication_associative(
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>(), 
-                q3 in $Generator::<$ScalarType>()) {
-
-                prop_assume!((q1 * (q2 * q3)).is_finite());
-                prop_assume!(((q1 * q2) * q3).is_finite());
-                prop_assert!(
-                    relative_eq!(q1 * (q2 * q3), (q1 * q2) * q3, epsilon = $tolerance),
-                    "q1 * (q2 * q3) = {}\n(q1 * q2) * q3 = {}",
-                    q1 * (q2 * q3), (q1 * q2) * q3
-                );
+                prop_assert_eq!(c * q, q * c);
             }
 
             /// Quaternions have a multiplicative unit element.
@@ -795,31 +734,6 @@ macro_rules! approx_mul_props {
 
                 prop_assert!(relative_eq!(q * q_inv, one, epsilon = $tolerance));
                 prop_assert!(relative_eq!(q_inv * q, one, epsilon = $tolerance));
-            }
-
-            /// Quaternion multiplication transposes under inversion.
-            ///
-            /// Given two invertible quaternions `q1` and `q2`
-            /// ```text
-            /// inverse(q1 * q2) = inverse(q2) * inverse(q1)
-            /// ```
-            /// Note that quaternion multiplication is noncommutative.
-            #[test]
-            fn prop_quaternion_inversion_involutive(
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-
-                prop_assume!(q1.is_finite());
-                prop_assume!(q1.is_invertible());
-                prop_assume!(q2.is_finite());
-                prop_assume!(q2.is_invertible());
-                prop_assume!((q1 * q2).is_finite());
-                prop_assume!((q1 * q2).is_invertible());
-
-                let q1_inv = q1.inverse().unwrap();
-                let q2_inv = q2.inverse().unwrap();
-                let q1_times_q2_inv = (q1 * q2).inverse().unwrap();
-
-                prop_assert!(relative_eq!(q1_times_q2_inv, q2_inv * q1_inv, epsilon = $tolerance));
             }
         }
     }
@@ -921,145 +835,6 @@ macro_rules! exact_mul_props {
 
 exact_mul_props!(quaternion_i32_mul_props, i32, any_quaternion);
 exact_mul_props!(quaternion_u32_mul_props, u32, any_quaternion);
-
-
-/// Generate property tests for quaternion distribution over floating point 
-/// scalars.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of quaternions.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! approx_distributive_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use approx::{
-            relative_eq
-        };
-        use super::{
-            $Generator,
-            $ScalarGen,
-        };
-
-    
-        proptest! {
-            /// Scalar multiplication should approximately distribute over 
-            /// quaternion addition.
-            ///
-            /// Given a scalar `a` and quaternions `q1` and `q2`
-            /// ```text
-            /// a * (q1 + q2) ~= a * q1 + a * q2
-            /// ```
-            #[test]
-            fn prop_distribution_over_quaternion_addition(
-                a in $ScalarGen::<$ScalarType>(), 
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-                
-                prop_assume!((a * (q1 + q2)).is_finite());
-                prop_assume!((a * q1 + a * q2).is_finite());
-                prop_assert!(relative_eq!(a * (q1 + q2), a * q1 + a * q2, epsilon = $tolerance));
-            }
-    
-            /// Multiplication of a sum of scalars should approximately distribute 
-            /// over a quaternion.
-            ///
-            /// Given scalars `a` and `b` and a quaternion `q`, we have
-            /// ```text
-            /// (a + b) * q ~= a * q + b * q
-            /// ```
-            #[test]
-            fn prop_distribution_over_scalar_addition(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), 
-                q in $Generator::<$ScalarType>()) {
-    
-                prop_assume!(((a + b) * q).is_finite());
-                prop_assume!((a * q + b * q).is_finite());
-                prop_assert!(relative_eq!((a + b) * q, a * q + b * q, epsilon = $tolerance));
-            }
-
-            /// Multiplication of two quaternions by a scalar on the right should 
-            /// approximately distribute.
-            ///
-            /// Given quaternions `q1` and `q2` and a scalar `a`
-            /// ```text
-            /// (q1 + q2) * a ~= q1 * a + q2 * a
-            /// ```
-            #[test]
-            fn prop_distribution_over_quaternion_addition1(
-                a in $ScalarGen::<$ScalarType>(), 
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-                    
-                prop_assume!(((q1 + q2) * a).is_finite());
-                prop_assume!((q1 * a + q2 * a).is_finite());
-                prop_assert!(relative_eq!((q1 + q2) * a,  q1 * a + q2 * a, epsilon = $tolerance));
-            }
-
-            /// Multiplication of a quaternion on the right by the sum of two 
-            /// scalars should approximately distribute over the two scalars.
-            ///
-            /// Given a quaternion `q` and scalars `a` and `b`
-            /// ```text
-            /// q * (a + b) ~= q * a + q * b
-            /// ```
-            #[test]
-            fn prop_distribution_over_scalar_addition1(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), 
-                q in $Generator::<$ScalarType>()) {
-    
-                prop_assume!((q * (a + b)).is_finite());
-                prop_assume!((q * a + q * b).is_finite());
-                prop_assert!(relative_eq!(q * (a + b), q * a + q * b, epsilon = $tolerance));
-            }
-
-            /// Quaternion multiplication over floating point numbers should be 
-            /// approximately distributive on the right.
-            ///
-            /// Given three quaternions `q1`, `q2`, and `q3`
-            /// ```text
-            /// (q1 + q2) * q3 ~= q1 * q3 + q2 * q3
-            /// ```
-            #[test]
-            fn prop_quaternion_multiplication_right_distributive(
-                q1 in $Generator::<$ScalarType>(), 
-                q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
-    
-                prop_assume!(((q1 + q2) * q3).is_finite());
-                prop_assume!((q1 * q3 + q2 * q3).is_finite());
-                prop_assert!(relative_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3, epsilon = $tolerance));
-            }
-
-            /// Quaternion multiplication over floating point numbers should be 
-            /// approximately distributive on the left.
-            ///
-            /// Given three quaternions `q1`, `q2`, and `q3`
-            /// ```text
-            /// q1 * (q2 + q3) ~= q1 * q2 + q1 * q3
-            /// ```
-            #[test]
-            fn prop_quaternion_multiplication_left_distributive(
-                q1 in $Generator::<$ScalarType>(), 
-                q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
-
-                prop_assume!(((q1 * (q2 + q3)).is_finite()));
-                prop_assume!((q1 * q2 + q1 * q3).is_finite());
-                prop_assert!(relative_eq!(q1 * (q2 + q3), q1 * q2 + q1 * q3, epsilon = $tolerance));
-            }
-        }
-    }
-    }    
-}
-
-approx_distributive_props!(quaternion_f64_distributive_props, f64, any_quaternion, any_scalar, 1e-7);
 
 
 /// Generate property tests for quaternion distribution over exact scalars.
@@ -1179,160 +954,6 @@ macro_rules! exact_distributive_props {
 
 exact_distributive_props!(quaternion_i32_distributive_props, i32, any_quaternion);
 exact_distributive_props!(quaternion_u32_distributive_props, u32, any_quaternion);
-
-
-/// Generate property tests for quaternion dot products over floating point 
-/// scalars.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of quaternions.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! approx_dot_product_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg::{
-            DotProduct
-        };
-        use approx::{
-            relative_eq,
-            ulps_eq
-        };
-        use super::{
-            $Generator,
-            $ScalarGen,
-        };
-
-    
-        proptest! {
-            /// The dot product of quaternions over floating point scalars is 
-            /// approximately commutative.
-            ///
-            /// Given quaternions `q1` and `q2`
-            /// ```text
-            /// dot(q1, q2) ~= dot(q2, q1)
-            /// ```
-            #[test]
-            fn prop_quaternion_dot_product_commutative(
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-
-                prop_assume!(q1.dot(q2).is_finite());
-                prop_assume!(q2.dot(q1).is_finite());
-                prop_assert!(relative_eq!(q1.dot(q2), q2.dot(q1), epsilon = $tolerance));
-            }
-
-            /// The dot product of quaternions over floating point scalars is 
-            /// approximately right distributive.
-            ///
-            /// Given quaternions `q1`, `q2`, and `q3`
-            /// ```text
-            /// dot(q1, q2 + q3) ~= dot(q1, q2) + dot(q1, q3)
-            /// ```
-            #[test]
-            fn prop_quaternion_dot_product_right_distributive(
-                q1 in $Generator::<$ScalarType>(),
-                q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
-            
-                prop_assume!(q1.dot(q2 + q3).is_finite());
-                prop_assume!((q1.dot(q2) + q1.dot(q3)).is_finite());
-                prop_assert!(
-                    relative_eq!(q1.dot(q2 + q3), q1.dot(q2) + q1.dot(q3), epsilon = $tolerance)
-                );
-            }
-
-            /// The dot product of quaternions over floating point scalars is 
-            /// approximately left distributive.
-            ///
-            /// Given quaternions `q1`, `q2`, and `q3`
-            /// ```text
-            /// dot(q1 + q2,  q3) ~= dot(q1, q3) + dot(q2, q3)
-            /// ```
-            #[test]
-            fn prop_quaternion_dot_product_left_distributive(
-                q1 in $Generator::<$ScalarType>(),
-                q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
-            
-                prop_assume!((q1 + q2).dot(q3).is_finite());
-                prop_assume!((q1.dot(q3) + q2.dot(q3)).is_finite());
-                prop_assert!(
-                    relative_eq!((q1 + q2).dot(q3), q1.dot(q3) + q2.dot(q3), epsilon = $tolerance)
-                );
-            }
-
-            /// The dot product of quaternions over floating point scalars is s
-            /// approximately commutative with scalars.
-            ///
-            /// Given quaternions `q1` and `q2`, and scalars `a` and `b`
-            /// ```text
-            /// dot(a * q1, b * q2) ~= a * b * dot(q1, q2)
-            /// ```
-            #[test]
-            fn prop_quaternion_dot_product_times_scalars_commutative(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(),
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-
-                prop_assume!((a * q1).dot(b * q2).is_finite());
-                prop_assume!((a * b * q1.dot(q2)).is_finite());
-                prop_assert!(relative_eq!((a * q1).dot(b * q2), a * b * q1.dot(q2), epsilon = $tolerance));
-            }
-
-            /// The dot product of quaternions over floating point scalars is 
-            /// approximately right bilinear.
-            ///
-            /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
-            /// ```text
-            /// dot(q1, a * q2 + b * q3) ~= a * dot(q1, q2) + b * dot(q1, q3)
-            /// ```
-            #[test]
-            fn prop_quaternion_dot_product_right_bilinear(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(),
-                q1 in $Generator::<$ScalarType>(),
-                q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
-
-                prop_assume!((q1.dot(a * q2 + b * q3)).is_finite());
-                prop_assume!((a * q1.dot(q2) + b * q1.dot(q3)).is_finite());
-                prop_assert!(
-                    relative_eq!(q1.dot(a * q2 + b * q3), a * q1.dot(q2) + b * q1.dot(q3), epsilon = $tolerance)
-                );
-            }
-
-            /// The dot product of quaternions over floating point scalars is 
-            /// approximately left bilinear.
-            ///
-            /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
-            /// ```text
-            /// dot(a * q1 + b * q2, q3) ~= a * dot(q1, q3) + b * dot(q2, q3)
-            /// ```
-            #[test]
-            fn prop_quaternion_dot_product_left_bilinear(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(),
-                q1 in $Generator::<$ScalarType>(),
-                q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
-
-                prop_assume!(((a * q1 + b * q2).dot(q3)).is_finite());
-                prop_assume!((a * q1.dot(q3) + b * q2.dot(q3)).is_finite());
-                prop_assert!(ulps_eq!(
-                    (a * q1 + b * q2).dot(q3), a * q1.dot(q3) + b * q2.dot(q3), epsilon = $tolerance), 
-                    "(a * q1 + b * q2).dot(q3) = {}\na * q1.dot(q3) + b * q2.dot(q3) = {}\n",
-                    (a * q1 + b * q2).dot(q3), a * q1.dot(q3) + b * q2.dot(q3)
-                );
-            }
-        }
-    }
-    }
-}
-
-approx_dot_product_props!(quaternion_f64_dot_product_props, f64, any_quaternion, any_scalar, 1e-7);
 
 
 /// Generate property tests for quaternion dot products over integer scalars.
@@ -1470,14 +1091,13 @@ exact_dot_product_props!(quaternion_u32_dot_product_props, u32, any_quaternion);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
-macro_rules! conjugation_props {
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! approx_conjugation_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_eq,
-        };
         use super::{
             $Generator,
         };
@@ -1505,9 +1125,60 @@ macro_rules! conjugation_props {
             fn prop_quaternion_conjugation_linear(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
 
-                prop_assert!(
-                    relative_eq!((q1 + q2).conjugate(), q1.conjugate() + q2.conjugate(), epsilon = $tolerance)
-                );
+                prop_assert_eq!((q1 + q2).conjugate(), q1.conjugate() + q2.conjugate());
+            }
+        }
+    }
+    }
+}
+
+approx_conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion, 1e-7);
+
+
+/// Generate property tests for quaternion conjugation over exact scalars.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_conjugation_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+    
+        proptest! {
+            /// Conjugating a quaternion twice should give the original quaternion.
+            ///
+            /// Given a quaternion `q`
+            /// ```text
+            /// q** = conjugate(conjugate(q)) = q
+            /// ```
+            #[test]
+            fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(q.conjugate().conjugate(), q);
+            }
+
+            /// Quaternion conjugation is linear.
+            ///
+            /// Given quaternions `q1` and `q2`, quaternion conjugation satisfies
+            /// ```text
+            /// conjugate(q1 + q2) = conjugate(q1) + conjugate(q2)
+            /// ```
+            #[test]
+            fn prop_quaternion_conjugation_linear(
+                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((q1 + q2).conjugate(), q1.conjugate() + q2.conjugate());
             }
 
             /// Quaternion multiplication transposes under conjugation.
@@ -1520,16 +1191,15 @@ macro_rules! conjugation_props {
             fn prop_quaternion_conjugation_transposes_products(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
 
-                prop_assert!(
-                    relative_eq!((q1 * q2).conjugate(), q2.conjugate() * q1.conjugate(), epsilon = $tolerance)
-                );
-            } 
+                prop_assert_eq!((q1 * q2).conjugate(), q2.conjugate() * q1.conjugate());
+            }
         }
     }
     }
 }
 
-conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion, 1e-7);
+exact_conjugation_props!(quaternion_i32_conjugation_props, i32, any_quaternion);
+exact_conjugation_props!(quaternion_i64_conjugation_props, i64, any_quaternion);
 
 
 /// Generate property tests for quaternion magnitudes.
@@ -1668,37 +1338,10 @@ macro_rules! slerp_props {
         };
         use super::{
             $Generator,
-            $UnitScalarGen,
         };
 
 
         proptest! {
-            /// Quaternion spherical linear interpolation should act like a 
-            /// quaternion rotor between two quaternions.
-            ///
-            /// Given quaternions `q1` and `q2`, and a scalar value `t` in the
-            /// closed unit interval [0, 1]
-            /// ```text
-            /// slerp(q1, q2, t) = q1 * (inverse(q1) * q2) ^ t
-            /// ```
-            #[test]
-            fn prop_quaternion_slerp_as_quaternion_rotor(
-                t in $UnitScalarGen::<$ScalarType>(),
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-
-                prop_assume!(q1.is_invertible());
-
-                let expected = q1.slerp(&q2, t);
-                let q1_inv = q1.inverse().unwrap();
-                let result = q1 * (q1_inv * q2).powf(t);
-
-                prop_assert!(
-                    relative_eq!(result, expected, epsilon = $tolerance),
-                    "result = {}\nexpected = {}\nq1 = {}\nq2 = {}\nt = {}",
-                    result, expected, q1, q2, t
-                );
-            }
-
             /// Quaternion spherical linear interpolation should yield the 
             /// respective interpolants at the endpoints.
             ///
@@ -1750,93 +1393,4 @@ macro_rules! slerp_props {
 }
 
 slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, unit_interval, 1e-7);
-
-
-
-/// Generate property tests for quaternion exponentiation and natural logarithms.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of quaternions.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! exp_log_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg::{
-            Quaternion,
-            Zero,
-            Identity
-        };
-        use approx::{
-            relative_eq,
-        };
-        use super::{
-            $Generator,
-        };
-
-
-        proptest! {
-            /// Quaternion exponentiation commutes with quaternion conjugation.
-            ///
-            /// Given a quaternion `q`
-            /// ```text
-            /// conjugate(exp(q)) = exp(conjugate(q))
-            /// ```
-            #[test]
-            fn prop_quaternion_conjugation_exp_commutes(q in $Generator::<$ScalarType>()) {
-                prop_assert_eq!(q.exp().conjugate(), q.conjugate().exp());
-            }
-
-            /// The exponential of a quaternion is never zero.
-            ///
-            /// Given a quaternion `q` and the zero quaternion `0`
-            /// ```text
-            /// exp(q) != 0
-            /// ```
-            #[test]
-            fn prop_quaternion_exp_nonzero(q in $Generator::<$ScalarType>()) {
-                prop_assert!(q.exp() != Quaternion::zero());
-            }
-
-            /// Every quaternion exponential has a multiplicative inverse.
-            ///
-            /// Given a quaternion `q` and the unit quaternion `1`
-            /// ```text
-            /// exp(-q) * exp(q) = exp(q) * exp(-q) = 1
-            /// ```
-            #[test]
-            fn prop_quaternion_exp_inverse(q in $Generator::<$ScalarType>()) {
-                prop_assert!(
-                    relative_eq!((-q).exp() * q.exp(), Quaternion::identity(), epsilon = $tolerance)
-                );
-                prop_assert!(
-                    relative_eq!(q.exp() * (-q).exp(), Quaternion::identity(), epsilon = $tolerance)
-                );
-            }
-
-            /// The quaternion logarithm is the inverse of the quaternion exponential.
-            ///
-            /// Given a quaternion `q`
-            /// ```text
-            /// exp(ln(q)) = ln(exp(q)) = q
-            /// ```
-            #[test]
-            fn prop_quaternion_exp_log_inverses(q in $Generator::<$ScalarType>()) {
-                prop_assert!(relative_eq!(q.ln().exp(), q, epsilon = $tolerance));
-                prop_assert!(relative_eq!(q.exp().ln(), q, epsilon = $tolerance));
-            }
-        }
-    }
-    }
-}
-
-exp_log_props!(quaternion_f64_exp_props, f64, any_quaternion, 1e-7);
 
