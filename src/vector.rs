@@ -9,7 +9,6 @@ use crate::traits::{
     DotProduct,
     Magnitude,
     Metric,
-    Zero,
 };
 use num_traits::{
     NumCast,
@@ -148,9 +147,21 @@ impl<S> Vector1<S> where S: Scalar {
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector1<S> {
-        Vector1 { 
-            x: S::one() 
-        }
+        Vector1::new(S::one())
+    }
+
+    /// Compute the zero vector.
+    ///
+    /// The zero vector is the vector in which all of its elements are zero.
+    #[inline]
+    pub fn zero() -> Vector1<S> {
+        Vector1::new(S::zero())
+    }
+    
+    /// Determine whether a vector is the zero vector.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.x.is_zero()
     }
 
     /// Compute the coordinates of a vector in projective space.
@@ -757,20 +768,6 @@ impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
     }
 }
 
-impl<S> Zero for Vector1<S> where S: Scalar {
-    #[inline]
-    fn zero() -> Vector1<S> {
-        Vector1 { 
-            x: S::zero(),
-        }
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        self.x == S::zero()
-    }
-}
-
 impl<S> DotProduct<Vector1<S>> for Vector1<S> where S: Scalar {
     type Output = S; 
 
@@ -1046,20 +1043,28 @@ impl<S> Vector2<S> where S: Scalar {
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector2<S> {
-        Vector2 { 
-            x: S::one(), 
-            y: S::zero(),
-        }
+        Vector2::new(S::one(), S::zero())
     }
 
     /// Returns the **y-axis** unit vector, a unit vector with the `y`-component
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_y() -> Vector2<S> {
-        Vector2 { 
-            x: S::zero(), 
-            y: S::one(),
-        }
+        Vector2::new(S::zero(), S::one())
+    }
+
+    /// Compute the zero vector.
+    ///
+    /// The zero vector is the vector in which all of its elements are zero.
+    #[inline]
+    pub fn zero() -> Vector2<S> {
+        Vector2::new(S::zero(), S::zero())
+    }
+    
+    /// Determine whether a vector is the zero vector.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.x.is_zero() && self.y.is_zero()
     }
 
     /// Compute the coordinates of a vector in projective space.
@@ -1692,21 +1697,6 @@ impl<S> ops::RemAssign<S> for Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> Zero for Vector2<S> where S: Scalar {
-    #[inline]
-    fn zero() -> Vector2<S> {
-        Vector2 { 
-            x: S::zero(), 
-            y: S::zero(), 
-        }
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        self.x == S::zero() && self.y == S::zero()
-    }
-}
-
 impl<S> Metric<Vector2<S>> for Vector2<S> where S: ScalarFloat {
     type Output = S;
 
@@ -2046,6 +2036,20 @@ impl<S> Vector3<S> where S: Scalar {
             y: S::zero(), 
             z: S::one(),
         }
+    }
+
+    /// Compute the zero vector.
+    ///
+    /// The zero vector is the vector in which all of its elements are zero.
+    #[inline]
+    pub fn zero() -> Vector3<S> {
+        Vector3::new(S::zero(), S::zero(), S::zero())
+    }
+    
+    /// Determine whether a vector is the zero vector.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.x.is_zero() && self.y.is_zero() && self.z.is_zero()
     }
 
     /// Compute the coordinates of a vector in projective space.
@@ -2725,22 +2729,6 @@ impl<S> ops::RemAssign<S> for Vector3<S> where S: Scalar {
     }
 }
 
-impl<S> Zero for Vector3<S> where S: Scalar {
-    #[inline]
-    fn zero() -> Vector3<S> {
-        Vector3 { 
-            x: S::zero(), 
-            y: S::zero(), 
-            z: S::zero(),
-        }
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        self.x == S::zero() && self.y == S::zero() && self.z == S::zero()
-    }
-}
-
 impl<S> Metric<Vector3<S>> for Vector3<S> where S: ScalarFloat {
     type Output = S;
 
@@ -3101,48 +3089,42 @@ impl<S> Vector4<S> where S: Scalar {
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector4<S> {
-        Vector4 { 
-            x: S::one(), 
-            y: S::zero(), 
-            z: S::zero(), 
-            w: S::zero(),
-        }
+        Vector4::new(S::one(), S::zero(), S::zero(), S::zero())
     }
 
     /// Returns the **y-axis** unit vector, a unit vector with the `y`-component
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_y() -> Vector4<S> {
-        Vector4 { 
-            x: S::zero(), 
-            y: S::one(), 
-            z: S::zero(), 
-            w: S::zero(),
-        }
+        Vector4::new(S::zero(), S::one(), S::zero(), S::zero())
     }
     
     /// Returns the **z-axis** unit vector, a unit vector with the `z`-component
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_z() -> Vector4<S> {
-        Vector4 { 
-            x: S::zero(), 
-            y: S::zero(), 
-            z: S::one(), 
-            w: S::zero(),
-        }
+        Vector4::new(S::zero(), S::zero(), S::one(), S::zero())
     }
 
     /// Returns the **w-axis** unit vector, a unit vector with the `w`-component
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_w() -> Vector4<S> {
-        Vector4 { 
-            x: S::zero(), 
-            y: S::zero(), 
-            z: S::zero(), 
-            w: S::one(),
-        }
+        Vector4::new(S::zero(), S::zero(), S::zero(), S::one())
+    }
+
+    /// Compute the zero vector.
+    ///
+    /// The zero vector is the vector in which all of its elements are zero.
+    #[inline]
+    pub fn zero() -> Vector4<S> {
+        Vector4::new(S::zero(), S::zero(), S::zero(), S::zero())
+    }
+    
+    /// Determine whether a vector is the zero vector.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+            self.x.is_zero() && self.y.is_zero() && self.z.is_zero() && self.w.is_zero()
     }
 
     /// Compute the coordinates of a projective vector in Euclidean space.
@@ -3836,23 +3818,6 @@ impl<S> ops::RemAssign<S> for Vector4<S> where S: Scalar {
         self.y %= other;
         self.z %= other;
         self.w %= other;
-    }
-}
-
-impl<S> Zero for Vector4<S> where S: Scalar {
-    #[inline]
-    fn zero() -> Vector4<S> {
-        Vector4 { 
-            x: S::zero(), 
-            y: S::zero(), 
-            z: S::zero(), 
-            w: S::zero(),
-        }
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        self.x == S::zero() && self.y == S::zero() && self.z == S::zero() && self.w == S::zero()
     }
 }
 

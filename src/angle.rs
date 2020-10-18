@@ -3,12 +3,10 @@ use crate::scalar::{
     ScalarSigned,
     ScalarFloat,
 };
-use crate::traits::{
-    Zero,
-};
 
 use num_traits::{
     Float,
+    Zero,
 };
 
 use core::f64;
@@ -26,7 +24,7 @@ use core::ops;
 pub trait Angle where 
     Self: Copy + Clone,
     Self: PartialEq + PartialOrd,
-    Self: Zero,
+    Self: num_traits::Zero,
     Self: ops::Neg<Output = Self>,
     Self: ops::Add<Self, Output = Self>,
     Self: ops::Sub<Self, Output = Self>,
@@ -179,6 +177,20 @@ pub trait Angle where
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Hash)]
 pub struct Radians<S>(pub S);
 
+impl<S> Radians<S> where S: Scalar {
+    /// Construct a typed angle of zero radians.
+    #[inline]
+    pub fn zero() -> Self {
+        Radians(S::zero())
+    }
+
+    /// Determine whether a typed angle is zero radians.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.0.is_zero()
+    }
+}
+
 impl<S> Radians<S> where S: ScalarFloat {
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
@@ -205,6 +217,20 @@ impl<S> Radians<S> where S: ScalarFloat {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Hash)]
 pub struct Degrees<S>(pub S);
+
+impl<S> Degrees<S> where S: Scalar {
+    /// Construct a typed angle of zero radians.
+    #[inline]
+    pub fn zero() -> Self {
+        Degrees(S::zero())
+    }
+
+    /// Determine whether a typed angle is zero radians.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.0.is_zero()
+    }
+}
 
 impl<S> Degrees<S> where S: ScalarFloat {
     /// Returns `true` if the underlying floating point number of the typed

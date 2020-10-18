@@ -7,7 +7,6 @@ mod translation2_tests {
         Translation2,
         Point2,
         Vector2,
-        Zero,
     };
 
 
@@ -117,7 +116,6 @@ mod translation3_tests {
         Translation3,
         Point3,
         Vector3,
-        Zero,
     };
 
 

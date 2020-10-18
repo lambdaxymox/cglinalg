@@ -83,7 +83,6 @@ mod arithmetic_tests {
     use cglinalg::{
         Quaternion,
         Vector3,
-        Identity
     };
 
 
@@ -393,8 +392,6 @@ mod exp_tests {
     use cglinalg::{
         Magnitude,
         Quaternion,
-        Identity,
-        Zero,
         Vector3,
     };
     use approx::{
@@ -521,8 +518,6 @@ mod logarithm_tests {
     use cglinalg::{
         Vector3,
         Quaternion,
-        Zero,
-        Identity,
     };
     use approx::relative_eq;
 
@@ -601,7 +596,6 @@ mod logarithm_tests {
 mod power_tests {
     use cglinalg::{
         Quaternion,
-        Identity,
     };
     use approx::{
         relative_eq
@@ -739,7 +733,6 @@ mod rotation_tests {
 mod inverse_tests {
     use cglinalg::{
         Quaternion,
-        Zero,
     };
 
 

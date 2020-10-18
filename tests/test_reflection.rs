@@ -8,7 +8,6 @@ mod reflection2_tests {
         Point2,
         Vector2,
         Unit,
-        Zero,
     };
     use approx::{
         relative_eq,
@@ -217,7 +216,6 @@ mod reflection3_tests {
         Point3,
         Vector3,
         Unit,
-        Zero,
     };
     use approx::{
         relative_eq,

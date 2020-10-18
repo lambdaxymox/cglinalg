@@ -70,7 +70,6 @@ macro_rules! approx_arithmetic_props {
         use approx::relative_eq;
         use cglinalg::{
             $AngleType,
-            Zero,
         };
         use super::{
             $Generator,

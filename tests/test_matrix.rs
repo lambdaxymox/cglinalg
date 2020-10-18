@@ -8,7 +8,6 @@ mod matrix2_tests {
     use cglinalg::{
         Vector2,
         Matrix2x2,
-        Zero, 
         Matrix,
         SquareMatrix,
         InvertibleSquareMatrix,
@@ -579,7 +578,6 @@ mod matrix3_tests {
         Vector3,
         Magnitude,
         Matrix3x3,
-        Zero, 
         Matrix,
         SquareMatrix,
         InvertibleSquareMatrix,
@@ -1496,7 +1494,6 @@ mod matrix4_tests {
         Vector4,
         Magnitude,
         Matrix4x4,
-        Zero, 
         Matrix,
         SquareMatrix,
         InvertibleSquareMatrix,

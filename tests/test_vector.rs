@@ -8,7 +8,6 @@ mod vector1_tests {
     use cglinalg::{
         Vector1,
         Magnitude,
-        Zero,
     };
     use core::slice::Iter;
 
@@ -192,7 +191,6 @@ mod vector2_tests {
     use cglinalg::{
         Vector2,
         Magnitude,   
-        Zero,
     };
     use core::slice::Iter;
 
@@ -390,8 +388,7 @@ mod vector2_tests {
 mod vector3_tests {
     use cglinalg::{
         Vector3,
-        Magnitude,   
-        Zero,
+        Magnitude,
     };
     use core::slice::Iter;
 
@@ -619,8 +616,7 @@ mod vector3_tests {
 mod vector4_tests {
     use cglinalg::{
         Vector4,
-        Magnitude,   
-        Zero,
+        Magnitude,
     };
     use core::slice::Iter;
 

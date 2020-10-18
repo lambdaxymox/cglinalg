@@ -15,7 +15,6 @@ use crate::point::{
     Point3,
 };
 use crate::traits::{
-    Identity,
     InvertibleSquareMatrix,
 };
 

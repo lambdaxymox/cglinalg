@@ -7,7 +7,6 @@ use crate::scalar::{
 };
 use crate::traits::{
     DotProduct,
-    Identity,
     Matrix,
 };
 use crate::matrix::{

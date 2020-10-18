@@ -148,7 +148,6 @@ macro_rules! exact_arithmetic_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero,
         };
         use super::{
             $Generator,
@@ -281,7 +280,6 @@ macro_rules! approx_add_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero,
         };
         use approx::{
             relative_eq,
@@ -411,7 +409,6 @@ macro_rules! exact_add_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero,
         };
         use super::{
             $Generator,
@@ -535,7 +532,6 @@ macro_rules! approx_sub_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero,
         };
         use super::{
             $Generator,
@@ -627,7 +623,6 @@ macro_rules! exact_sub_props {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
-            Zero,
         };
         use super::{
             $Generator,
@@ -1214,7 +1209,6 @@ macro_rules! exact_cross_product_props {
             DotProduct,
             CrossProduct,
             Vector3,
-            Zero,
         };
         use super::{
             $Generator,

@@ -39,24 +39,6 @@ pub trait Array {
     fn as_slice(&self) -> &[Self::Element];
 }
 
-/// This trait indicates that a type has an arithmetical zero element.
-pub trait Zero where Self: Sized + ops::Add<Self, Output = Self> {
-    /// Create a zero element.
-    fn zero() -> Self;
-
-    /// Determine whether an element is equal to the zero element.
-    fn is_zero(&self) -> bool;
-}
-
-/// This trait indicates that a type has a multiplicative unit element.
-pub trait Identity where Self: Sized + ops::Mul<Self, Output = Self> {
-    /// Create a multiplicative unit element.
-    fn identity() -> Self;
-
-    /// Determine whether an element is equal to the multiplicative unit element.
-    fn is_identity(&self) -> bool;
-}
-
 /// A type with this trait has a notion of comparing the distance (metric) 
 /// between two elements of that type. For example, one can use this trait 
 /// to compute the Euclidean distance between two vectors. 
@@ -166,7 +148,7 @@ pub trait Matrix {
 /// A matrix is said to be square if the number of rows and 
 /// the number of columns are are the same.
 pub trait SquareMatrix where
-    Self: Identity,
+    Self: Sized,
     Self: Matrix<
         Column = <Self as SquareMatrix>::ColumnRow,
         Row = <Self as SquareMatrix>::ColumnRow,
@@ -215,10 +197,7 @@ pub trait SquareMatrix where
     /// 
     /// This function gives the same result as the function as the `identity` 
     /// function from the `Identity` trait.
-    #[inline]
-    fn identity() -> Self {
-        <Self as Identity>::identity()
-    }
+    fn identity() -> Self;
 }
 
 /// A trait expressing how to compute the inverse of a square matrix.

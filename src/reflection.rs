@@ -13,10 +13,6 @@ use crate::point::{
     Point2,
     Point3,
 };
-use crate::traits::{
-    Identity,
-    Zero,
-};
 use crate::unit::{
     Unit,
 };
@@ -445,7 +441,6 @@ impl<S> Reflection3<S> where S: ScalarFloat {
     /// #     Reflection3,
     /// #     Vector3,
     /// #     Unit,
-    /// #     Zero,
     /// # };
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -473,7 +468,6 @@ impl<S> Reflection3<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
-    /// #     Zero,
     /// # };
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());

@@ -12,15 +12,8 @@ use crate::quaternion::{
 use crate::scalar::{
     ScalarFloat,
 };
-use crate::traits::{
-    Zero,
-};
-use approx::{
-    ulps_eq,
-};
 
 use core::fmt;
-use core::ops;
 
 
 /// A data type storing a set of Euler angles for representing a rotation about
@@ -185,6 +178,22 @@ impl<A> EulerAngles<A> {
             y: y, 
             z: z,
         }
+    }
+}
+
+impl<A> EulerAngles<A> where A: num_traits::Zero {
+    /// Construct a zero element of the set of Euler angles.
+    ///
+    /// The zero element is the element where each Euler angle is zero.
+    #[inline]
+    pub fn zero() -> EulerAngles<A> {
+        EulerAngles::new(A::zero(), A::zero(), A::zero())
+    }
+    
+    /// Test whether an Euler angle is self.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.x.is_zero() && self.y.is_zero() && self.z.is_zero()
     }
 }
 
@@ -587,78 +596,6 @@ impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> where S: ScalarFloat {
                 Radians::atan2(two * (-qx * qy + qz * qw), one - two * (sqy + sqz)),
             )
         }
-    }
-}
-
-impl<A> ops::Add<EulerAngles<A>> for EulerAngles<A> where
-    A: Copy + Zero + ops::Add<A> 
-{
-    type Output = EulerAngles<A>;
-
-    #[inline]
-    fn add(self, other: EulerAngles<A>) -> EulerAngles<A> {
-        EulerAngles {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl<A> ops::Add<&EulerAngles<A>> for EulerAngles<A> where 
-    A: Copy + Zero + ops::Add<A> 
-{
-    type Output = EulerAngles<A>;
-
-    #[inline]
-    fn add(self, other: &EulerAngles<A>) -> EulerAngles<A> {
-        EulerAngles {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl<A> ops::Add<EulerAngles<A>> for &EulerAngles<A> where 
-    A: Copy + Zero + ops::Add<A>
-{
-    type Output = EulerAngles<A>;
-
-    #[inline]
-    fn add(self, other: EulerAngles<A>) -> EulerAngles<A> {
-        EulerAngles {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl<'a, 'b, A> ops::Add<&'a EulerAngles<A>> for &'b EulerAngles<A> where 
-    A: Copy + Zero + ops::Add<A>
-{
-    type Output = EulerAngles<A>;
-
-    #[inline]
-    fn add(self, other: &'a EulerAngles<A>) -> EulerAngles<A> {
-        EulerAngles {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl<A> Zero for EulerAngles<A> where A: Angle {
-    #[inline]
-    fn zero() -> EulerAngles<A> {
-        EulerAngles::new(A::zero(), A::zero(), A::zero())
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        ulps_eq!(self, &Self::zero())
     }
 }
 

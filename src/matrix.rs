@@ -14,12 +14,10 @@ use crate::traits::{
     Array,
     CrossProduct,
     DotProduct,
-    Identity,
     InvertibleSquareMatrix,
     Magnitude,
     Matrix,
     SquareMatrix,
-    Zero,
 };
 use crate::vector::{
     Vector2,
@@ -367,6 +365,37 @@ impl<S> Matrix2x2<S> where S: Scalar {
     #[inline]
     pub fn transpose_mut(&mut self) {
         self.swap_elements((0, 1), (1, 0));
+    }
+
+    /// Compute a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    #[inline]
+    pub fn zero() -> Matrix2x2<S> {
+        Matrix2x2::new(S::zero(), S::zero(), S::zero(), S::zero())
+    }
+    
+    /// Determine whether a matrix is a zero matrix.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.c0r0.is_zero() && self.c0r1.is_zero() &&
+        self.c1r0.is_zero() && self.c1r1.is_zero()
+    }
+
+    /// Compute an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    #[inline]
+    pub fn identity() -> Matrix2x2<S> {
+        Matrix2x2::new(S::one(), S::zero(), S::zero(), S::one())
+    }
+    
+    /// Determine whether a matrix is an identity matrix.
+    #[inline]
+    pub fn is_identity(&self) -> bool {
+        self.c0r0.is_one()  && self.c0r1.is_zero() &&
+        self.c1r0.is_zero() && self.c1r1.is_one()
     }
 }
 
@@ -846,32 +875,6 @@ impl<S> ops::IndexMut<usize> for Matrix2x2<S> {
     fn index_mut(&mut self, index: usize) -> &mut Vector2<S> {
         let v: &mut [Vector2<S>; 2] = self.as_mut();
         &mut v[index]
-    }
-}
-
-impl<S> Zero for Matrix2x2<S> where S: Scalar {
-    #[inline]
-    fn zero() -> Matrix2x2<S> {
-        Matrix2x2::new(S::zero(), S::zero(), S::zero(), S::zero())
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        self.c0r0 == S::zero() && self.c0r1 == S::zero() &&
-        self.c1r0 == S::zero() && self.c1r1 == S::zero()
-    }
-}
-
-impl<S> Identity for Matrix2x2<S> where S: Scalar {
-    #[inline]
-    fn identity() -> Matrix2x2<S> {
-        Matrix2x2::new(S::one(), S::zero(), S::zero(), S::one())
-    }
-
-    #[inline]
-    fn is_identity(&self) -> bool {
-        self.c0r0.is_one()  && self.c0r1.is_zero() &&
-        self.c1r0.is_zero() && self.c1r1.is_one()
     }
 }
 
@@ -1367,8 +1370,13 @@ impl<S> SquareMatrix for Matrix2x2<S> where S: ScalarFloat {
     }
 
     #[inline]
+    fn identity() -> Self {
+        Self::identity()
+    }
+
+    #[inline]
     fn is_identity(&self) -> bool {
-        ulps_eq!(self, &<Self as Identity>::identity())
+        self.is_identity()
     }
 }
 
@@ -1376,7 +1384,7 @@ impl<S> InvertibleSquareMatrix for Matrix2x2<S> where S: ScalarFloat {
     #[rustfmt::skip]
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
-        if det == S::zero() {
+        if det.is_zero() {
             // A matrix with zero determinant has no inverse.
             None
         } else {
@@ -2078,6 +2086,53 @@ impl<S> Matrix3x3<S> where S: Scalar {
         self.swap_elements((0, 1), (1, 0));
         self.swap_elements((0, 2), (2, 0));
         self.swap_elements((1, 2), (2, 1));
+    }
+
+    /// Compute a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn zero() -> Matrix3x3<S> {
+            let zero = S::zero();
+            Matrix3x3::new(
+                zero, zero, zero, 
+                zero, zero, zero, 
+                zero, zero, zero
+            )
+    }
+    
+    /// Determine whether a matrix is a zero matrix.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.c0r0.is_zero() && self.c0r1.is_zero() && self.c0r2.is_zero() &&
+        self.c1r0.is_zero() && self.c1r1.is_zero() && self.c1r2.is_zero() &&
+        self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_zero()
+    }
+    
+    /// Compute an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn identity() -> Matrix3x3<S> {
+        let zero = S::zero();
+        let one = S::one();
+
+        Matrix3x3::new(
+            one,  zero, zero, 
+            zero, one,  zero, 
+            zero, zero, one
+        )
+    }
+    
+    /// Determine whether a matrix is an identity matrix.
+    #[inline]
+    pub fn is_identity(&self) -> bool {
+        self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() &&
+        self.c1r0.is_zero() && self.c1r1.is_one()  && self.c1r2.is_zero() &&
+        self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()
     }
 }
 
@@ -3021,48 +3076,6 @@ impl<S> ops::IndexMut<usize> for Matrix3x3<S> {
     }
 }
 
-impl<S> Zero for Matrix3x3<S> where S: Scalar {
-    #[rustfmt::skip]
-    #[inline]
-    fn zero() -> Matrix3x3<S> {
-        let zero = S::zero();
-        Matrix3x3::new(
-            zero, zero, zero, 
-            zero, zero, zero, 
-            zero, zero, zero
-        )
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        let zero = S::zero();
-        self.c0r0 == zero && self.c0r1 == zero && self.c0r2 == zero &&
-        self.c1r0 == zero && self.c1r1 == zero && self.c1r2 == zero &&
-        self.c2r0 == zero && self.c2r1 == zero && self.c2r2 == zero
-    }
-}
-
-impl<S> Identity for Matrix3x3<S> where S: Scalar {
-    #[rustfmt::skip]
-    #[inline]
-    fn identity() -> Matrix3x3<S> {
-        let zero = S::zero();
-        let one = S::one();
-        Matrix3x3::new(
-            one,  zero, zero, 
-            zero, one,  zero, 
-            zero, zero, one
-        )
-    }
-
-    #[inline]
-    fn is_identity(&self) -> bool {
-        self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() &&
-        self.c1r0.is_zero() && self.c1r1.is_one()  && self.c1r2.is_zero() &&
-        self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()
-    }
-}
-
 impl<S> ops::Add<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
@@ -3775,8 +3788,13 @@ impl<S> SquareMatrix for Matrix3x3<S> where S: ScalarFloat {
     }
 
     #[inline]
+    fn identity() -> Self {
+        Self::identity()
+    }
+
+    #[inline]
     fn is_identity(&self) -> bool {
-        ulps_eq!(self, &<Self as Identity>::identity())
+        self.is_identity()
     }
 }
 
@@ -3784,7 +3802,7 @@ impl<S> InvertibleSquareMatrix for Matrix3x3<S> where S: ScalarFloat {
     #[rustfmt::skip]
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
-        if det == S::zero() {
+        if det.is_zero() {
             // A matrix with zero determinant has no inverse.
             None
         } else {
@@ -4406,6 +4424,61 @@ impl<S> Matrix4x4<S> where S: Scalar {
         self.swap_elements((0, 3), (3, 0));
         self.swap_elements((1, 3), (3, 1));
         self.swap_elements((2, 3), (3, 2));
+    }
+
+    /// Compute a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn zero() -> Matrix4x4<S> {
+        let zero = S::zero();
+        Matrix4x4::new(
+            zero, zero, zero, zero, 
+            zero, zero, zero, zero, 
+            zero, zero, zero, zero, 
+            zero, zero, zero, zero
+        )
+    }
+    
+    /// Determine whether a matrix is a zero matrix.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.c0r0.is_zero() && self.c0r1.is_zero() && 
+        self.c0r2.is_zero() && self.c0r3.is_zero() &&
+        self.c1r0.is_zero() && self.c1r1.is_zero() && 
+        self.c1r2.is_zero() && self.c1r3.is_zero() &&
+        self.c2r0.is_zero() && self.c2r1.is_zero() && 
+        self.c2r2.is_zero() && self.c2r3.is_zero() &&
+        self.c3r0.is_zero() && self.c3r1.is_zero() && 
+        self.c3r2.is_zero() && self.c3r3.is_zero()
+    }
+    
+    /// Compute an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn identity() -> Matrix4x4<S> {
+        let one = S::one();
+        let zero = S::zero();
+
+        Matrix4x4::new(
+            one,  zero, zero, zero, 
+            zero, one,  zero, zero, 
+            zero, zero, one,  zero, 
+            zero, zero, zero, one
+        )
+    }
+    
+    /// Determine whether a matrix is an identity matrix.
+    #[inline]
+    pub fn is_identity(&self) -> bool {
+        self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() && self.c0r3.is_zero() &&
+        self.c1r0.is_zero() && self.c1r1.is_one()  && self.c1r2.is_zero() && self.c1r3.is_zero() &&
+        self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()  && self.c2r3.is_zero() &&
+        self.c3r0.is_zero() && self.c3r1.is_zero() && self.c3r2.is_zero() && self.c3r3.is_one()
     }
 }
 
@@ -5475,56 +5548,6 @@ impl<S> ops::IndexMut<usize> for Matrix4x4<S> {
     fn index_mut(&mut self, index: usize) -> &mut Vector4<S> {
         let v: &mut [Vector4<S>; 4] = self.as_mut();
         &mut v[index]
-    }
-}
-
-impl<S> Zero for Matrix4x4<S> where S: Scalar {
-    #[rustfmt::skip]
-    #[inline]
-    fn zero() -> Matrix4x4<S> {
-        let zero = S::zero();
-        Matrix4x4::new(
-            zero, zero, zero, zero, 
-            zero, zero, zero, zero, 
-            zero, zero, zero, zero, 
-            zero, zero, zero, zero
-        )
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        let zero = S::zero();
-        self.c0r0 == zero && self.c0r1 == zero && 
-        self.c0r2 == zero && self.c0r3 == zero &&
-        self.c1r0 == zero && self.c1r1 == zero && 
-        self.c1r2 == zero && self.c1r3 == zero &&
-        self.c2r0 == zero && self.c2r1 == zero && 
-        self.c2r2 == zero && self.c2r3 == zero &&
-        self.c3r0 == zero && self.c3r1 == zero && 
-        self.c3r2 == zero && self.c3r3 == zero
-    }
-}
-
-impl<S> Identity for Matrix4x4<S> where S: Scalar {
-    #[rustfmt::skip]
-    #[inline]
-    fn identity() -> Matrix4x4<S> {
-        let one = S::one();
-        let zero = S::zero();
-        Matrix4x4::new(
-            one,  zero, zero, zero, 
-            zero, one,  zero, zero, 
-            zero, zero, one,  zero, 
-            zero, zero, zero, one
-        )
-    }
-
-    #[inline]
-    fn is_identity(&self) -> bool {
-        self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() && self.c0r3.is_zero() &&
-        self.c1r0.is_zero() && self.c1r1.is_one()  && self.c1r2.is_zero() && self.c1r3.is_zero() &&
-        self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()  && self.c2r3.is_zero() &&
-        self.c3r0.is_zero() && self.c3r1.is_zero() && self.c3r2.is_zero() && self.c3r3.is_one()
     }
 }
 
@@ -6631,8 +6654,13 @@ impl<S> SquareMatrix for Matrix4x4<S> where S: ScalarFloat {
     }
 
     #[inline]
+    fn identity() -> Self {
+        Self::identity()
+    }
+
+    #[inline]
     fn is_identity(&self) -> bool {
-        ulps_eq!(self, &<Self as Identity>::identity())
+        self.is_identity()
     }
 }
 
@@ -6640,7 +6668,7 @@ impl<S> InvertibleSquareMatrix for Matrix4x4<S> where S: ScalarFloat {
     #[rustfmt::skip]
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
-        if det == S::zero() {
+        if det.is_zero() {
             // A matrix with zero determinant has no inverse.
             None
         } else {
