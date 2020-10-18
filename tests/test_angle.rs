@@ -395,15 +395,6 @@ mod radian_angle_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 
-    #[ignore]
-    #[test]
-    fn test_tangent_of_vertical_angle_should_be_infinite() {
-        let expected = f64::INFINITY;
-        let result = Radians(f64::consts::FRAC_PI_2).tan();
-
-        assert_eq!(result, expected);
-    }
-
     #[test]
     fn test_asin() {
         let expected = Radians(f64::consts::PI / 6_f64);
@@ -579,15 +570,6 @@ mod degree_angle_tests {
         let result = Degrees(30_f64).tan();
 
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
-    }
-
-    #[ignore]
-    #[test]
-    fn test_tangent_of_vertical_angle_should_be_infinite() {
-        let expected = f64::INFINITY;
-        let result = Degrees(f64::consts::FRAC_PI_2).tan();
-
-        assert_eq!(result, expected);
     }
 
     #[test]
