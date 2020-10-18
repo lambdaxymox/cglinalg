@@ -722,41 +722,18 @@ macro_rules! magnitude_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use cglinalg::{
-            Magnitude
+            Magnitude,
         };
         use approx::{
-            relative_eq,
-            relative_ne
+            relative_ne,
         };
         use super::{
             $Generator,
-            $ScalarGen,
         };
 
 
         proptest! {
-            #[test]
-            /// The magnitude of a vector preserves scales. 
-            /// 
-            /// Given a scalar constant `c`, and a vector `v` of scalars, the 
-            /// magnitude function satisfies
-            /// ```text
-            /// magnitude(c * v) = abs(c) * magnitude(v)
-            /// ```
-            fn prop_magnitude_preserves_scale(
-                v in $Generator::<$ScalarType>(), c in $ScalarGen::<$ScalarType>()) {
-                
-                let abs_c = <$ScalarType as num_traits::Float>::abs(c);                
-                prop_assume!((abs_c * v.magnitude()).is_finite());
-                prop_assume!((c * v).magnitude().is_finite());
-                
-                prop_assert!(
-                    relative_eq!( (c * v).magnitude(), abs_c * v.magnitude(), epsilon = $tolerance),
-                    "\n||c * v|| = {}\n|c| * ||v|| = {}\n", (c * v).magnitude(), abs_c * v.magnitude(),
-                );
-            }
-
-            /// The magnitude of a vector is nonnegative. 
+            /// The magnitude of a vector is nonnegative.
             ///
             /// Given a vector `v`
             /// ```text
@@ -766,24 +743,6 @@ macro_rules! magnitude_props {
             fn prop_magnitude_nonnegative(v in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
                 prop_assert!(v.magnitude() >= zero);
-            }
-
-            /// The magnitude of a vector satisfies the triangle inequality. 
-            ///
-            /// Given a vectors `v` and `w`, the magnitude function satisfies
-            /// ```text
-            /// magnitude(v + w) <= magnitude(v) + magnitude(w)
-            /// ```
-            #[test]
-            fn prop_magnitude_satisfies_triangle_inequality(
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-            
-                prop_assume!((v + w).magnitude().is_finite());
-                prop_assume!((v.magnitude() + w.magnitude()).is_finite());
-                prop_assert!((v + w).magnitude() <= v.magnitude() + w.magnitude(), 
-                    "\n|v + w| = {}\n|v| = {}\n|w| = {}\n|v| + |w| = {}\n",
-                    (v + w).magnitude(), v.magnitude(), w.magnitude(), v.magnitude() + w.magnitude()
-                );
             }
 
             /// The magnitude function is point separating. In particular, if the 
