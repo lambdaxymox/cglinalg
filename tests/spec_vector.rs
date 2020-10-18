@@ -1003,120 +1003,6 @@ exact_mul_props!(vector3_u32_mul_props, Vector3, u32, any_vector3);
 exact_mul_props!(vector4_u32_mul_props, Vector4, u32, any_vector4);
 
 
-/// Generate property tests for vector distribution over floating point scalars.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$VectorN` denotes the name of the vector type.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of vectors.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! approx_distributive_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use approx::{
-            relative_eq,
-        };
-        use super::{
-            $Generator,
-            $ScalarGen,
-        };
-
-    
-        proptest! {
-            /// Scalar multiplication should approximately distribute over vector 
-            /// addition.
-            ///
-            /// Given a scalar `a` and vectors `v` and `w`
-            /// ```text
-            /// a * (v + w) ~= a * v + a * w
-            /// ```
-            #[test]
-            fn prop_scalar_vector_addition_right_distributive(
-                a in $ScalarGen::<$ScalarType>(), 
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-                
-                prop_assume!((a * (v + w)).is_finite());
-                prop_assume!((a * v + a * w).is_finite());
-                prop_assert!(relative_eq!(a * (v + w), a * v + a * w, epsilon = $tolerance));
-            }
-    
-            /// Multiplication of a sum of scalars should approximately distribute 
-            /// over a vector.
-            ///
-            /// Given scalars `a` and `b` and a vector `v`, we have
-            /// ```text
-            /// (a + b) * v ~= a * v + b * v
-            /// ```
-            #[test]
-            fn prop_vector_scalar_addition_left_distributive(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), 
-                v in $Generator::<$ScalarType>()) {
-    
-                prop_assume!(((a + b) * v).is_finite());
-                prop_assume!((a * v + b * v).is_finite());
-                prop_assert!(relative_eq!((a + b) * v, a * v + b * v, epsilon = $tolerance));
-            }
-
-            /// Multiplication of two vectors by a scalar on the right should 
-            /// approximately distribute.
-            ///
-            /// Given vectors `v` and `w` and a scalar `a`
-            /// ```text
-            /// (v + w) * a ~= v * a + w * a
-            /// ```
-            /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the 
-            /// right of a vector.
-            #[test]
-            fn prop_scalar_vector_addition_left_distributive(
-                a in $ScalarGen::<$ScalarType>(), 
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-                    
-                prop_assume!(((v + w) * a).is_finite());
-                prop_assume!((v * a + w * a).is_finite());
-                prop_assert!(relative_eq!((v + w) * a,  v * a + w * a, epsilon = $tolerance));
-            }
-
-            /// Multiplication of a vector on the right by the sum of two scalars 
-            /// should approximately distribute over the two scalars.
-            ///
-            /// Given a vector `v` and scalars `a` and `b`
-            /// ```text
-            /// v * (a + b) ~= v * a + v * b
-            /// ```
-            /// We deviate from the usual formalisms of vector algebra in that we 
-            /// allow the ability to multiply scalars from the left, or from the 
-            /// right of a vector.
-            #[test]
-            fn prop_vector_scalar_addition_right_distributive(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), 
-                v in $Generator::<$ScalarType>()) {
-    
-                prop_assume!((v * (a + b)).is_finite());
-                prop_assume!((v * a + v * b).is_finite());
-                prop_assert!(relative_eq!(v * (a + b), v * a + v * b, epsilon = $tolerance));
-            }
-        }
-    }
-    }    
-}
-
-approx_distributive_props!(vector1_f64_distributive_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
-approx_distributive_props!(vector2_f64_distributive_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
-approx_distributive_props!(vector3_f64_distributive_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
-approx_distributive_props!(vector4_f64_distributive_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
-
-
 /// Generate property tests for vector distribution over exact scalars.
 ///
 /// ### Macro Parameters
@@ -1219,162 +1105,6 @@ exact_distributive_props!(vector1_u32_distributive_props, Vector1, u32, any_vect
 exact_distributive_props!(vector2_u32_distributive_props, Vector2, u32, any_vector2);
 exact_distributive_props!(vector3_u32_distributive_props, Vector3, u32, any_vector3);
 exact_distributive_props!(vector4_u32_distributive_props, Vector4, u32, any_vector4);
-
-
-/// Generate property tests for vector dot products over floating point scalars.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$VectorN` denotes the name of the vector type.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of vectors.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! approx_dot_product_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg::{
-            DotProduct,
-        };
-        use approx::{
-            relative_eq
-        };
-        use super::{
-            $Generator,
-            $ScalarGen,
-        };
-    
-
-        proptest! {
-            /// The dot product of vectors over floating point scalars is 
-            /// approximately commutative.
-            ///
-            /// Given vectors `v` and `w`
-            /// ```text
-            /// dot(v, w) ~= dot(w, v)
-            /// ```
-            #[test]
-            fn prop_vector_dot_product_commutative(
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-
-                prop_assume!(v.dot(w).is_finite());
-                prop_assume!(w.dot(v).is_finite());
-                prop_assert!(relative_eq!(v.dot(w), w.dot(v), epsilon = $tolerance));
-            }
-
-            /// The dot product of vectors over floating point scalars is 
-            /// approximately right distributive.
-            ///
-            /// Given vectors `u`, `v`, and `w`
-            /// ```text
-            /// dot(u, v + w) ~= dot(u, v) + dot(u, w)
-            /// ```
-            #[test]
-            fn prop_vector_dot_product_right_distributive(
-                u in $Generator::<$ScalarType>(),
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-            
-                prop_assume!(u.dot(v + w).is_finite());
-                prop_assume!((u.dot(v) + u.dot(w)).is_finite());
-                prop_assert!(relative_eq!(
-                    u.dot(v + w), u.dot(v) + u.dot(w), epsilon = $tolerance
-                ));
-            }
-
-            /// The dot product of vectors over floating point scalars is 
-            /// approximately left distributive.
-            ///
-            /// Given vectors `u`, `v`, and `w`
-            /// ```text
-            /// dot(u + v,  w) ~= dot(u, w) + dot(v, w)
-            /// ```
-            #[test]
-            fn prop_vector_dot_product_left_distributive(
-                u in $Generator::<$ScalarType>(),
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-            
-                prop_assume!((u + v).dot(w).is_finite());
-                prop_assume!((u.dot(w) + v.dot(w)).is_finite());
-                prop_assert!(relative_eq!(
-                    (u + v).dot(w), u.dot(w) + v.dot(w), epsilon = $tolerance
-                ));
-            }
-
-            /// The dot product of vectors over floating point scalars is approximately 
-            /// commutative with scalars.
-            ///
-            /// Given vectors `v` and `w`, and scalars `a` and `b`
-            /// ```text
-            /// dot(a * v, b * w) ~= a * b * dot(v, w)
-            /// ```
-            #[test]
-            fn prop_vector_dot_product_times_scalars_commutative(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(),
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-
-                prop_assume!((a * v).dot(b * w).is_finite());
-                prop_assume!((a * b * v.dot(w)).is_finite());
-                prop_assert!(relative_eq!(
-                    (a * v).dot(b * w), a * b * v.dot(w), epsilon = $tolerance
-                ));
-            }
-
-            /// The dot product of vectors over floating point scalars is 
-            /// approximately right bilinear.
-            ///
-            /// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
-            /// ```text
-            /// dot(u, a * v + b * w) ~= a * dot(u, v) + b * dot(u, w)
-            /// ```
-            #[test]
-            fn prop_vector_dot_product_right_bilinear(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(),
-                u in $Generator::<$ScalarType>(),
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-
-                prop_assume!((u.dot(a * v + b * w)).is_finite());
-                prop_assume!((a * u.dot(v) + b * u.dot(w)).is_finite());
-                prop_assert!(relative_eq!(
-                    u.dot(a * v + b * w), a * u.dot(v) + b * u.dot(w), epsilon = $tolerance
-                ));
-            }
-
-            /// The dot product of vectors over floating point scalars is 
-            /// approximately left bilinear.
-            ///
-            /// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
-            /// ```text
-            /// dot(a * u + b * v, w) ~= a * dot(u, w) + b * dot(v, w)
-            /// ```
-            #[test]
-            fn prop_vector_dot_product_left_bilinear(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(),
-                u in $Generator::<$ScalarType>(),
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-
-                prop_assume!(((a * u + b * v).dot(w)).is_finite());
-                prop_assume!((a * u.dot(w) + b * v.dot(w)).is_finite());
-                prop_assert!(relative_eq!((
-                    a * u + b * v).dot(w), a * u.dot(w) + b * v.dot(w), epsilon = $tolerance
-                ));
-            }
-        }
-    }
-    }
-}
-
-approx_dot_product_props!(vector1_f64_dot_product_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
-approx_dot_product_props!(vector2_f64_dot_product_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
-approx_dot_product_props!(vector3_f64_dot_product_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
-approx_dot_product_props!(vector4_f64_dot_product_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
 
 
 /// Generate property tests for vector dot products over integer scalars.
@@ -1510,124 +1240,6 @@ exact_dot_product_props!(vector4_u32_dot_product_props, Vector4, u32, any_vector
 /// ### Macro Parameters
 ///
 /// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property tests
-///    in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of vectors.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! approx_cross_product_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use approx::{
-            relative_eq
-        };
-        use cglinalg::{
-            DotProduct,
-            CrossProduct,
-        };
-        use super::{
-            $Generator,
-            $ScalarGen,
-        };
-
-    
-        proptest! {
-            /// The three-dimensional cross product should commute with 
-            /// multiplication by a scalar.
-            ///
-            /// Given vectors `u` and `v` and a scalar constant `c`
-            /// ```text
-            /// (c * u) x v ~= c * (u x v) ~= u x (c * v)
-            /// ```
-            #[test]
-            fn prop_vector_cross_product_multiplication_by_scalars(
-                c in $ScalarGen::<$ScalarType>(),
-                u in $Generator::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!((c * u).cross(&v), c * u.cross(&v), epsilon = $tolerance));
-                prop_assert!(relative_eq!(u.cross(&(c * v)), c * u.cross(&v), epsilon = $tolerance));
-            }
-
-            /// The three-dimensional vector cross product is distributive.
-            ///
-            /// Given vectors `u`, `v`, and `w`
-            /// ```text
-            /// u x (v + w) ~= u x v + u x w
-            /// ```
-            #[test]
-            fn prop_vector_cross_product_distribute(
-                u in $Generator::<$ScalarType>(), 
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!(
-                    u.cross(&(v + w)), u.cross(&v) + u.cross(&w), epsilon = $tolerance
-                ));
-            }
-
-            /// The three-dimensional vector cross product satisfies the scalar
-            /// triple product.
-            ///
-            /// Given vectors `u`, `v`, and `w`
-            /// ```text
-            /// u . (v x w) ~= (u x v) . w
-            /// ```
-            #[test]
-            fn prop_vector_cross_product_scalar_triple_product(
-                u in $Generator::<$ScalarType>(), 
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!(u.dot(v.cross(&w)), u.cross(&v).dot(w), epsilon = $tolerance));
-            }
-
-            /// The three-dimensional vector cross product is anti-commutative.
-            ///
-            /// Given vectors `u` and `v`
-            /// ```text
-            /// u x v ~= - v x u
-            /// ```
-            #[test]
-            fn prop_vector_cross_product_anticommutative(
-                u in $Generator::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!(u.cross(&v), -v.cross(&u), epsilon = $tolerance));
-            }
-
-            /// The three-dimensional vector cross product satisfies the vector 
-            /// triple product.
-            ///
-            /// Given vectors `u`, `v`, and `w`
-            /// ```text
-            /// u x (v x w) ~= (u . w) * v - (u . v) * w
-            /// ```
-            #[test]
-            fn prop_vector_cross_product_satisfies_vector_triple_product(
-                u in $Generator::<$ScalarType>(), 
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-            
-                prop_assert!(relative_eq!(
-                    u.cross(&v.cross(&w)), u.dot(w) * v - u.dot(v) * w, epsilon = $tolerance
-                ));
-            }
-        }
-    }
-    }
-}
-
-approx_cross_product_props!(vector3_f64_cross_product_props, f64, any_vector3, any_scalar, 1e-7);
-
-
-/// Generate property tests for three-dimensional vector cross products over 
-/// floating point scalars.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
 /// * `$TestModuleName` is a name we give to the module we place the property tests 
 ///    in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
@@ -1642,6 +1254,8 @@ macro_rules! exact_cross_product_props {
         use cglinalg::{
             DotProduct,
             CrossProduct,
+            Vector3,
+            Zero,
         };
         use super::{
             $Generator,
@@ -1649,6 +1263,20 @@ macro_rules! exact_cross_product_props {
 
     
         proptest! {
+            /// The three-dimensional vector cross product of a vector with
+            /// itself is zero.
+            ///
+            /// Given a vector `v`
+            /// ```text
+            /// v x v = 0
+            /// ```
+            #[test]
+            fn prop_vector_cross_itself_is_zero(v in $Generator::<$ScalarType>()) {
+                let zero_vec: Vector3<$ScalarType> = Vector3::zero();
+
+                prop_assert_eq!(v.cross(v), zero_vec);
+            }
+
             /// The three-dimensional cross product should commute with 
             /// multiplication by a scalar.
             ///
@@ -1727,4 +1355,5 @@ macro_rules! exact_cross_product_props {
 }
 
 exact_cross_product_props!(vector3_i32_cross_product_props, i32, any_vector3);
+exact_cross_product_props!(vector3_i64_cross_product_props, i64, any_vector3);
 
