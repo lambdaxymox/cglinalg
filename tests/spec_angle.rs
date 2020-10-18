@@ -67,7 +67,7 @@ macro_rules! approx_arithmetic_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::relative_eq;
+        use approx::relative_eq;
         use cglinalg::{
             $AngleType,
             Zero,
@@ -199,7 +199,7 @@ macro_rules! approx_trigonometry_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::relative_eq;
+        use approx::relative_eq;
         use cglinalg::{
             $AngleType,
             Angle,

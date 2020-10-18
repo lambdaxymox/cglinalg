@@ -88,7 +88,7 @@ macro_rules! approx_addition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::{
+        use approx::{
             relative_eq
         };
         use cglinalg::{
@@ -291,7 +291,7 @@ macro_rules! approx_scalar_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::relative_eq;
+        use approx::relative_eq;
         use cglinalg::{
             $MatrixN,
             Zero,
@@ -579,7 +579,7 @@ macro_rules! approx_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::relative_eq;
+        use approx::relative_eq;
         use cglinalg::{
             $MatrixN,
             Identity

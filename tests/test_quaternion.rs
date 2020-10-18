@@ -169,7 +169,7 @@ mod magnitude_tests {
         Magnitude,
         Vector3,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
 
@@ -223,7 +223,7 @@ mod slerp_tests {
         Degrees,
         Vector3,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
 
@@ -397,7 +397,7 @@ mod exp_tests {
         Zero,
         Vector3,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
 
@@ -524,7 +524,7 @@ mod logarithm_tests {
         Zero,
         Identity,
     };
-    use cglinalg::approx::relative_eq;
+    use approx::relative_eq;
 
 
     #[test]
@@ -603,7 +603,7 @@ mod power_tests {
         Quaternion,
         Identity,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq
     };
     use core::f64;
@@ -669,7 +669,7 @@ mod rotation_tests {
         Vector3,
         Quaternion,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
 

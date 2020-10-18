@@ -257,7 +257,7 @@ macro_rules! approx_add_props {
             Quaternion, 
             Zero,
         };
-        use cglinalg::approx::{
+        use approx::{
             relative_eq
         };
         use super::{
@@ -680,7 +680,7 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::relative_eq;
+        use approx::relative_eq;
         use cglinalg::{
             Quaternion,
             Identity,
@@ -943,7 +943,7 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::{
+        use approx::{
             relative_eq
         };
         use super::{
@@ -1204,7 +1204,7 @@ macro_rules! approx_dot_product_props {
         use cglinalg::{
             DotProduct
         };
-        use cglinalg::approx::{
+        use approx::{
             relative_eq,
             ulps_eq
         };
@@ -1475,7 +1475,7 @@ macro_rules! conjugation_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::{
+        use approx::{
             relative_eq,
         };
         use super::{
@@ -1551,7 +1551,7 @@ macro_rules! magnitude_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use cglinalg::Magnitude;
-        use cglinalg::approx::{
+        use approx::{
             relative_eq,
             relative_ne
         };
@@ -1663,7 +1663,7 @@ macro_rules! slerp_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $UnitScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::{
+        use approx::{
             relative_eq,
         };
         use super::{
@@ -1775,7 +1775,7 @@ macro_rules! exp_log_props {
             Zero,
             Identity
         };
-        use cglinalg::approx::{
+        use approx::{
             relative_eq,
         };
         use super::{

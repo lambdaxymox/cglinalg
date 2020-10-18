@@ -175,7 +175,7 @@ macro_rules! perspective_projection_props {
     ($TestModuleName:ident, $ScalarType:ty, $ProjGen:ident, $VecGen:ident, $PointGen:ident, $tolerance:expr) => {
         #[cfg(test)]
         mod $TestModuleName {
-            use cglinalg::approx::{
+            use approx::{
                 relative_eq,
             };
             use super::{
@@ -318,7 +318,7 @@ macro_rules! orthographic_projection_props {
     ($TestModuleName:ident, $ScalarType:ty, $ProjGen:ident, $VecGen:ident, $PointGen:ident, $tolerance:expr) => {
         #[cfg(test)]
         mod $TestModuleName {
-            use cglinalg::approx::{
+            use approx::{
                 relative_eq,
             };
             use super::{

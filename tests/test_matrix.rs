@@ -16,7 +16,7 @@ mod matrix2_tests {
         Angle,
         Unit,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
     use core::slice::Iter;
@@ -587,7 +587,7 @@ mod matrix3_tests {
         Radians,
         Unit,
     };
-    use cglinalg::approx::relative_eq;
+    use approx::relative_eq;
     use core::slice::Iter;
 
 
@@ -1506,7 +1506,7 @@ mod matrix4_tests {
         Unit,
         Point3,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
     use core::slice::Iter;

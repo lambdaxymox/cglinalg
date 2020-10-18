@@ -10,7 +10,7 @@ use cglinalg::{
     Zero,
     Identity,
 };
-use cglinalg::approx::{
+use approx::{
     relative_eq,
 };
 

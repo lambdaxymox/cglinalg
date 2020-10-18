@@ -14,7 +14,7 @@ mod isometry2_tests {
         Unit,
         Vector2,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
 
@@ -193,7 +193,7 @@ mod isometry3_tests {
         Unit,
         Vector3,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
 

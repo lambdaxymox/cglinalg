@@ -10,7 +10,7 @@ mod rotation2_tests {
         Vector2,
         Unit,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
 
@@ -189,7 +189,7 @@ mod rotation3_tests {
         Vector3,
         Unit,
     };
-    use cglinalg::approx::{
+    use approx::{
         relative_eq,
     };
 

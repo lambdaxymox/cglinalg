@@ -213,7 +213,7 @@ mod degrees_arithmetic_tests {
 #[cfg(test)]
 mod radians_arithmetic_tests {
     use cglinalg::Radians;
-    use cglinalg::approx::relative_eq;
+    use approx::relative_eq;
     use core::f64;
 
     const PI: Radians<f64> = Radians(f64::consts::PI);
@@ -359,7 +359,7 @@ mod radian_angle_tests {
         Radians,
         Angle
     };
-    use cglinalg::approx::relative_eq;
+    use approx::relative_eq;
     use core::f64;
 
 
@@ -545,7 +545,7 @@ mod degree_angle_tests {
         Degrees,
         Angle,
     };
-    use cglinalg::approx::relative_eq;
+    use approx::relative_eq;
     use core::f64;
 
 

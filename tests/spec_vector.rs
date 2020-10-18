@@ -272,14 +272,19 @@ exact_arithmetic_props!(vector4_u32_arithmetic_props, Vector4, u32, any_vector4)
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
 macro_rules! approx_add_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         use cglinalg::{
             $VectorN,
             Zero,
+        };
+        use approx::{
+            relative_eq,
         };
         use super::{
             $Generator,
@@ -374,17 +379,17 @@ macro_rules! approx_add_props {
                 u in $Generator::<$ScalarType>(), 
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!((u + v) + w, u + (v + w));
+                prop_assert!(relative_eq!((u + v) + w, u + (v + w), epsilon = $tolerance));
             }
         }
     }
     }
 }
 
-approx_add_props!(vector1_f64_add_props, Vector1, f64, any_vector1);
-approx_add_props!(vector2_f64_add_props, Vector2, f64, any_vector2);
-approx_add_props!(vector3_f64_add_props, Vector3, f64, any_vector3);
-approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4);
+approx_add_props!(vector1_f64_add_props, Vector1, f64, any_vector1, 1e-7);
+approx_add_props!(vector2_f64_add_props, Vector2, f64, any_vector2, 1e-7);
+approx_add_props!(vector3_f64_add_props, Vector3, f64, any_vector3, 1e-7);
+approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4, 1e-7);
 
 
 /// Generate property tests for vector arithmetic over exact scalars.
@@ -719,7 +724,7 @@ macro_rules! magnitude_props {
         use cglinalg::{
             Magnitude
         };
-        use cglinalg::approx::{
+        use approx::{
             relative_eq,
             relative_ne
         };
@@ -836,7 +841,7 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::{
+        use approx::{
             relative_eq
         };
         use super::{
@@ -1018,7 +1023,7 @@ macro_rules! approx_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::{
+        use approx::{
             relative_eq,
         };
         use super::{
@@ -1239,7 +1244,7 @@ macro_rules! approx_dot_product_props {
         use cglinalg::{
             DotProduct,
         };
-        use cglinalg::approx::{
+        use approx::{
             relative_eq
         };
         use super::{
@@ -1409,7 +1414,6 @@ macro_rules! exact_dot_product_props {
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
                 prop_assert_eq!(v.dot(w), w.dot(v));
-
             }
 
             /// The dot product of vectors over integer scalars is right distributive.
@@ -1520,7 +1524,7 @@ macro_rules! approx_cross_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::{
+        use approx::{
             relative_eq
         };
         use cglinalg::{

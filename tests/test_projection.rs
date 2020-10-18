@@ -13,7 +13,7 @@ use cglinalg::{
     Point3,
     Vector3,
 };
-use cglinalg::approx::{
+use approx::{
     relative_eq,
 };
 

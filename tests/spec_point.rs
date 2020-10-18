@@ -113,7 +113,7 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::approx::{
+        use approx::{
             relative_eq,
         };
         use super::{
@@ -268,7 +268,7 @@ macro_rules! approx_arithmetic_props {
             $VectorN,
             Zero,
         };
-        use cglinalg::approx::{
+        use approx::{
             relative_eq,
         };
         use super::{
