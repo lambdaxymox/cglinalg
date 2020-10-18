@@ -2,7 +2,6 @@ use crate::traits::{
     Array,
     CrossProduct,
     DotProduct,
-    Identity,
     Magnitude,
     Matrix,
     Metric,
@@ -191,6 +190,71 @@ impl<S> Quaternion<S> where S: Scalar {
     #[inline]
     pub fn unit_z() -> Quaternion<S> {
         Quaternion::from_parts(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
+    }
+
+    /// Construct a zero quaternion.
+    ///
+    /// A zero quaternion is a quaternion `zero` such that given another 
+    /// quaternion `q`
+    /// ```text
+    /// q + zero = zero + q = q
+    /// ```
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let zero_quat = Quaternion::zero();
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    ///
+    /// assert_eq!(zero_quat + quaternion, quaternion);
+    /// assert_eq!(quaternion + zero_quat, quaternion);
+    /// ```
+    #[inline]
+    pub fn zero() -> Quaternion<S> {
+        let zero = S::zero();
+
+        Quaternion::new(zero, zero, zero, zero)
+    }
+    
+    /// Determine whether is a quaternion is the zero quaternion.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.s.is_zero() 
+            && self.v.x.is_zero() && self.v.y.is_zero() && self.v.z.is_zero()
+    }
+    
+    /// Construct the multiplicate identity quaternion.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let identity = Quaternion::identity();
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    ///
+    /// assert_eq!(identity * quaternion, quaternion);
+    /// assert_eq!(quaternion * identity, quaternion);
+    /// ```
+    #[inline]
+    pub fn identity() -> Quaternion<S> {
+        let one = S::one();
+        let zero = S::zero();
+
+        Quaternion::new(one, zero, zero, zero)
+    }
+    
+    /// Determine whether a quaternion is equal to the identity quaternion.
+    #[inline]
+    pub fn is_identity(&self) -> bool {
+        self.s.is_one()
+            && self.v.x.is_one() && self.v.y.is_one() && self.v.z.is_one()
     }
 
     /// Check whether a quaternion is a pure quaternion.
@@ -1647,35 +1711,6 @@ impl<S> Quaternion<S> where S: ScalarFloat {
         let vector = axis.as_ref() * sin_angle_over_two * scale;
 
         Quaternion::from_parts(scalar, vector)
-    }
-}
-
-impl<S> Zero for Quaternion<S> where S: Scalar {
-    #[inline]
-    fn zero() -> Quaternion<S> {
-        let zero = S::zero();
-        Quaternion::new(zero, zero, zero, zero)
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        self.s.is_zero() 
-            && self.v.x.is_zero() && self.v.y.is_zero() && self.v.z.is_zero()
-    }
-}
-
-impl<S> Identity for Quaternion<S> where S: Scalar {
-    #[inline]
-    fn identity() -> Quaternion<S> {
-        let one = S::one();
-        let zero = S::zero();
-        Quaternion::new(one, zero, zero, zero)
-    }
-
-    #[inline]
-    fn is_identity(&self) -> bool {
-        self.s.is_one()
-            && self.v.x.is_one() && self.v.y.is_one() && self.v.z.is_one()
     }
 }
 

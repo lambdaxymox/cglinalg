@@ -122,7 +122,6 @@ macro_rules! exact_arithmetic_props {
         use proptest::prelude::*;
         use cglinalg::{
             Quaternion,
-            Zero,
         };
         use super::{
             $Generator,
@@ -243,7 +242,6 @@ macro_rules! approx_add_props {
         use proptest::prelude::*;
         use cglinalg::{
             Quaternion, 
-            Zero,
         };
         use approx::{
             relative_eq
@@ -368,7 +366,6 @@ macro_rules! exact_add_props {
         use proptest::prelude::*;
         use cglinalg::{
             Quaternion, 
-            Zero,
         };
         use super::{
             $Generator,
@@ -488,7 +485,6 @@ macro_rules! approx_sub_props {
         use proptest::prelude::*;
         use cglinalg::{
             Quaternion,
-            Zero,
         };
         use super::{
             $Generator,
@@ -578,7 +574,6 @@ macro_rules! exact_sub_props {
         use proptest::prelude::*;
         use cglinalg::{
             Quaternion,
-            Zero,
         };
         use super::{
             $Generator,
@@ -671,7 +666,6 @@ macro_rules! approx_mul_props {
         use approx::relative_eq;
         use cglinalg::{
             Quaternion,
-            Identity,
         };
         use super::{
             $Generator,
@@ -760,8 +754,7 @@ macro_rules! exact_mul_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use cglinalg::{
-            Quaternion, 
-            Identity,
+            Quaternion,
         };
         use super::{
             $Generator,
