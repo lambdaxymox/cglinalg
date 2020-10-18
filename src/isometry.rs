@@ -32,9 +32,6 @@ use crate::transform::{
 use crate::unit::{
     Unit,
 };
-use crate::traits::{
-    DotProduct,
-};
 
 use core::fmt;
 use core::ops;

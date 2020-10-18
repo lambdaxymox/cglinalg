@@ -1,7 +1,6 @@
 use crate::traits::{
     Array,
     CrossProduct,
-    DotProduct,
     Magnitude,
     Matrix,
     Metric,
@@ -344,6 +343,11 @@ impl<S> Quaternion<S> where S: Scalar {
     #[inline]
     pub fn from_pure(vector: Vector3<S>) -> Quaternion<S> {
         Quaternion::from_parts(S::zero(), vector)
+    }
+    
+    #[inline]
+    pub fn dot(self, other: &Quaternion<S>) -> S {
+        self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
     }
 }
 
@@ -2284,42 +2288,6 @@ impl<'a, 'b, S> Metric<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarF
     }
 }
 
-impl<S> DotProduct<Quaternion<S>> for Quaternion<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Quaternion<S>) -> Self::Output {
-        self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
-    }
-}
-
-impl<S> DotProduct<&Quaternion<S>> for Quaternion<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: &Quaternion<S>) -> Self::Output {
-        self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
-    }
-}
-
-impl<S> DotProduct<Quaternion<S>> for &Quaternion<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Quaternion<S>) -> Self::Output {
-        self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
-    }
-}
-
-impl<'a, 'b, S> DotProduct<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: &'a Quaternion<S>) -> Self::Output {
-        self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
-    }
-}
-
 impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
     type Output = S;
 
@@ -2330,7 +2298,7 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
-        <&Self as DotProduct<&Self>>::dot(self, self)
+        self.dot(self)
     }
 
     #[inline]

@@ -5,7 +5,6 @@ use crate::scalar::{
 };
 use crate::traits::{
     Array,
-    DotProduct,
     Magnitude,
     Metric,
 };
@@ -200,6 +199,25 @@ impl<S> Point1<S> where S: Scalar {
     #[inline]
     pub fn to_vector(self) -> Vector1<S> {
         Vector1::new(self.x)
+    }
+
+    /// Compute the dot product (inner product) of two points.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1, 
+    /// # };
+    /// #
+    /// let point1 = Point1::new(1_f64);
+    /// let point2 = Point1::new(2_f64);
+    /// 
+    /// assert_eq!(point1.dot(&point2), 2_f64);
+    /// ```
+    #[inline]
+    pub fn dot(self, other: &Point1<S>) -> S {
+        self.x * other.x
     }
 }
 
@@ -734,42 +752,6 @@ impl<S> approx::UlpsEq for Point1<S> where S: ScalarFloat {
     }
 }
 
-impl<S> DotProduct<Point1<S>> for Point1<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Point1<S>) -> Self::Output {
-        self.x * other.x
-    }
-}
-
-impl<S> DotProduct<&Point1<S>> for Point1<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: &Point1<S>) -> Self::Output {
-        self.x * other.x
-    }
-}
-
-impl<S> DotProduct<Point1<S>> for &Point1<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Point1<S>) -> Self::Output {
-        self.x * other.x
-    }
-}
-
-impl<'a, 'b, S> DotProduct<&'a Point1<S>> for &'b Point1<S> where S: Scalar {
-    type Output = S;
-    
-    #[inline]
-    fn dot(self, other: &'a Point1<S>) -> Self::Output {
-        self.x * other.x
-    }
-}
-
 impl<S> Magnitude for Point1<S> where S: ScalarFloat {
     type Output = S;
 
@@ -780,7 +762,7 @@ impl<S> Magnitude for Point1<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
-        DotProduct::dot(self, self)
+        self.dot(self)
     }
 
     #[inline]
@@ -1076,6 +1058,25 @@ impl<S> Point2<S> where S: Scalar {
     #[inline]
     pub fn to_vector(self) -> Vector2<S> {
         Vector2::new(self.x, self.y)
+    }
+
+    /// Compute the dot product (inner product) of two points.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let point1 = Point2::new(1_f64, 2_f64);
+    /// let point2 = Point2::new(3_f64, 4_f64);
+    /// 
+    /// assert_eq!(point1.dot(&point2), 11_f64);
+    /// ```
+    #[inline]
+    pub fn dot(self, other: &Point2<S>) -> S {
+        self.x * other.x + self.y * other.y
     }
 }
 
@@ -1622,42 +1623,6 @@ impl<S> approx::UlpsEq for Point2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> DotProduct<Point2<S>> for Point2<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Point2<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y
-    }
-}
-
-impl<S> DotProduct<&Point2<S>> for Point2<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: &Point2<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y
-    }
-}
-
-impl<S> DotProduct<Point2<S>> for &Point2<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Point2<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y
-    }
-}
-
-impl<'a, 'b, S> DotProduct<&'a Point2<S>> for &'b Point2<S> where S: Scalar {
-    type Output = S;
-    
-    #[inline]
-    fn dot(self, other: &'a Point2<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y
-    }
-}
-
 impl<S> Magnitude for Point2<S> where S: ScalarFloat {
     type Output = S;
 
@@ -1668,7 +1633,7 @@ impl<S> Magnitude for Point2<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
-        DotProduct::dot(self, self)
+        self.dot(self)
     }
 
     #[inline]
@@ -1952,6 +1917,25 @@ impl<S> Point3<S> where S: Scalar {
     #[inline]
     pub fn to_vector(self) -> Vector3<S> {
         Vector3::new(self.x, self.y, self.z)
+    }
+
+    /// Compute the dot product (inner product) of two points.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let point1 = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let point2 = Point3::new(4_f64, 5_f64, 6_f64);
+    /// 
+    /// assert_eq!(point1.dot(&point2), 32_f64);
+    /// ```
+    #[inline]
+    pub fn dot(self, other: &Point3<S>) -> S {
+        self.x * other.x + self.y * other.y + self.z * other.z
     }
 }
 
@@ -2544,42 +2528,6 @@ impl<S> approx::UlpsEq for Point3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> DotProduct<Point3<S>> for Point3<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Point3<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z
-    }
-}
-
-impl<S> DotProduct<&Point3<S>> for Point3<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: &Point3<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z
-    }
-}
-
-impl<S> DotProduct<Point3<S>> for &Point3<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Point3<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z
-    }
-}
-
-impl<'a, 'b, S> DotProduct<&'a Point3<S>> for &'b Point3<S> where S: Scalar {
-    type Output = S;
-    
-    #[inline]
-    fn dot(self, other: &'a Point3<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z
-    }
-}
-
 impl<S> Magnitude for Point3<S> where S: ScalarFloat {
     type Output = S;
 
@@ -2590,7 +2538,7 @@ impl<S> Magnitude for Point3<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
-        DotProduct::dot(self, self)
+        self.dot(self)
     }
 
     #[inline]

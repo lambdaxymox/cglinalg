@@ -965,9 +965,6 @@ macro_rules! exact_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{
-            DotProduct
-        };
         use super::{
             $Generator,
         };
@@ -984,7 +981,7 @@ macro_rules! exact_dot_product_props {
             fn prop_quaternion_dot_product_commutative(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!(q1.dot(q2), q2.dot(q1));
+                prop_assert_eq!(q1.dot(&q2), q2.dot(&q1));
 
             }
 
@@ -1000,7 +997,7 @@ macro_rules! exact_dot_product_props {
                 q1 in $Generator::<$ScalarType>(),
                 q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
             
-                prop_assert_eq!(q1.dot(q2 + q3), q1.dot(q2) + q1.dot(q3));
+                prop_assert_eq!(q1.dot(&(q2 + q3)), q1.dot(&q2) + q1.dot(&q3));
             }
 
             /// The dot product of quaternions over integer scalars is left 
@@ -1015,7 +1012,7 @@ macro_rules! exact_dot_product_props {
                 q1 in $Generator::<$ScalarType>(),
                 q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
             
-                prop_assert_eq!((q1 + q2).dot(q3), q1.dot(q3) + q2.dot(q3));
+                prop_assert_eq!((q1 + q2).dot(&q3), q1.dot(&q3) + q2.dot(&q3));
             }
 
             /// The dot product of quaternions over integer scalars is 
@@ -1030,7 +1027,7 @@ macro_rules! exact_dot_product_props {
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(),
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!((a * q1).dot(b * q2), a * b * q1.dot(q2));
+                prop_assert_eq!((a * q1).dot(&(b * q2)), a * b * q1.dot(&q2));
             }
 
             /// The dot product of quaternions over integer scalars is right
@@ -1046,7 +1043,7 @@ macro_rules! exact_dot_product_props {
                 q1 in $Generator::<$ScalarType>(),
                 q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!(q1.dot(a * q2 + b * q3), a * q1.dot(q2) + b * q1.dot(q3));
+                prop_assert_eq!(q1.dot(&(a * q2 + b * q3)), a * q1.dot(&q2) + b * q1.dot(&q3));
             }
 
             /// The dot product of quaternions over integer scalars is left
@@ -1062,7 +1059,7 @@ macro_rules! exact_dot_product_props {
                 q1 in $Generator::<$ScalarType>(),
                 q2 in $Generator::<$ScalarType>(), q3 in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!((a * q1 + b * q2).dot(q3), a * q1.dot(q3) + b * q2.dot(q3));
+                prop_assert_eq!((a * q1 + b * q2).dot(&q3), a * q1.dot(&q3) + b * q2.dot(&q3));
             }
         }
     }

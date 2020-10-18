@@ -13,7 +13,6 @@ use crate::angle::{
 use crate::traits::{
     Array,
     CrossProduct,
-    DotProduct,
     InvertibleSquareMatrix,
     Magnitude,
     Matrix,
@@ -5026,9 +5025,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         let y_axis = z_axis.cross(&x_axis).normalize();
 
         let eye_vec = eye - Point3::origin();
-        let eye_x = eye_vec.dot(x_axis);
-        let eye_y = eye_vec.dot(y_axis);
-        let eye_z = eye_vec.dot(z_axis);
+        let eye_x = eye_vec.dot(&x_axis);
+        let eye_y = eye_vec.dot(&y_axis);
+        let eye_z = eye_vec.dot(&z_axis);
         
         Matrix4x4::new(
              x_axis.x,  x_axis.y,  x_axis.z, zero,
@@ -5087,9 +5086,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         let y_axis = z_axis.cross(&x_axis).normalize();
 
         let eye_vec = eye - Point3::origin();
-        let neg_eye_x = -eye_vec.dot(x_axis);
-        let neg_eye_y = -eye_vec.dot(y_axis);
-        let neg_eye_z = -eye_vec.dot(z_axis);
+        let neg_eye_x = -eye_vec.dot(&x_axis);
+        let neg_eye_y = -eye_vec.dot(&y_axis);
+        let neg_eye_z = -eye_vec.dot(&z_axis);
         
         Matrix4x4::new(
             x_axis.x,  y_axis.x,  z_axis.x,  zero,
@@ -5148,9 +5147,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         let y_axis = z_axis.cross(&x_axis).normalize();
 
         let eye_vec = eye - Point3::origin();
-        let neg_eye_x = -eye_vec.dot(x_axis);
-        let neg_eye_y = -eye_vec.dot(y_axis);
-        let neg_eye_z = -eye_vec.dot(z_axis);
+        let neg_eye_x = -eye_vec.dot(&x_axis);
+        let neg_eye_y = -eye_vec.dot(&y_axis);
+        let neg_eye_z = -eye_vec.dot(&z_axis);
         
         Matrix4x4::new(
             x_axis.x,  y_axis.x,  z_axis.x,  zero,

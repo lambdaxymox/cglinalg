@@ -1078,9 +1078,6 @@ macro_rules! exact_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{
-            DotProduct,
-        };
         use super::{
             $Generator,
         };
@@ -1097,7 +1094,7 @@ macro_rules! exact_dot_product_props {
             fn prop_vector_dot_product_commutative(
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!(v.dot(w), w.dot(v));
+                prop_assert_eq!(v.dot(&w), w.dot(&v));
             }
 
             /// The dot product of vectors over integer scalars is right distributive.
@@ -1111,7 +1108,7 @@ macro_rules! exact_dot_product_props {
                 u in $Generator::<$ScalarType>(),
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
-                prop_assert_eq!(u.dot(v + w), u.dot(v) + u.dot(w));
+                prop_assert_eq!(u.dot(&(v + w)), u.dot(&v) + u.dot(&w));
             }
 
             /// The dot product of vectors over integer scalars is left distributive.
@@ -1125,7 +1122,7 @@ macro_rules! exact_dot_product_props {
                 u in $Generator::<$ScalarType>(),
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
-                prop_assert_eq!((u + v).dot(w), u.dot(w) + v.dot(w));
+                prop_assert_eq!((u + v).dot(&w), u.dot(&w) + v.dot(&w));
             }
 
             /// The dot product of vectors over integer scalars is commutative 
@@ -1140,7 +1137,7 @@ macro_rules! exact_dot_product_props {
                 a in any::<$ScalarType>(), b in any::<$ScalarType>(),
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!((a * v).dot(b * w), a * b * v.dot(w));
+                prop_assert_eq!((a * v).dot(&(b * w)), a * b * v.dot(&w));
             }
 
             /// The dot product of vectors over integer scalars is right bilinear.
@@ -1155,7 +1152,7 @@ macro_rules! exact_dot_product_props {
                 u in $Generator::<$ScalarType>(),
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!(u.dot(a * v + b * w), a * u.dot(v) + b * u.dot(w));
+                prop_assert_eq!(u.dot(&(a * v + b * w)), a * u.dot(&v) + b * u.dot(&w));
             }
 
             /// The dot product of vectors over integer scalars is left bilinear.
@@ -1170,7 +1167,7 @@ macro_rules! exact_dot_product_props {
                 u in $Generator::<$ScalarType>(),
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!((a * u + b * v).dot(w), a * u.dot(w) + b * v.dot(w));
+                prop_assert_eq!((a * u + b * v).dot(&w), a * u.dot(&w) + b * v.dot(&w));
             }
         }
     }
@@ -1206,7 +1203,6 @@ macro_rules! exact_cross_product_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use cglinalg::{
-            DotProduct,
             CrossProduct,
             Vector3,
         };
@@ -1272,7 +1268,7 @@ macro_rules! exact_cross_product_props {
                 u in $Generator::<$ScalarType>(), 
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
 
-                prop_assert_eq!(u.dot(v.cross(&w)), u.cross(&v).dot(w));
+                prop_assert_eq!(u.dot(&(v.cross(&w))), u.cross(&v).dot(&w));
             }
 
             /// The three-dimensional vector cross product is anti-commutative.
@@ -1300,7 +1296,7 @@ macro_rules! exact_cross_product_props {
                 u in $Generator::<$ScalarType>(), 
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
             
-                prop_assert_eq!(u.cross(&v.cross(&w)), u.dot(w) * v - u.dot(v) * w);
+                prop_assert_eq!(u.cross(&v.cross(&w)), u.dot(&w) * v - u.dot(&v) * w);
             }
         }
     }

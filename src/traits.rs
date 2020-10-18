@@ -54,15 +54,6 @@ pub trait Metric<V: Sized>: Sized {
     }
 }
 
-/// This trait enables one to define the dot product of two elements of a 
-/// vector space.
-pub trait DotProduct<V: Copy + Clone> where Self: Copy + Clone {
-    type Output: Scalar;
-
-    /// Compute the inner product (dot product) of two vectors.
-    fn dot(self, other: V) -> Self::Output;
-}
-
 /// This trait enables one to assign lengths to vectors.
 pub trait Magnitude where Self: Sized {
     type Output: Scalar;

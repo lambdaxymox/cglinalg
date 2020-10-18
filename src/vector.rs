@@ -6,7 +6,6 @@ use crate::scalar::{
 use crate::traits::{
     Array,
     CrossProduct,
-    DotProduct,
     Magnitude,
     Metric,
 };
@@ -185,6 +184,25 @@ impl<S> Vector1<S> where S: Scalar {
     #[inline]
     pub fn to_homogeneous(&self) -> Vector2<S> {
         self.expand(S::zero())
+    }
+    
+    /// Compute the Euclidean dot product (inner product) of two vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1, 
+    /// # };
+    /// #
+    /// let vector1 = Vector1::new(1_f64);
+    /// let vector2 = Vector1::new(2_f64);
+    /// 
+    /// assert_eq!(vector1.dot(&vector2), 2_f64);
+    /// ```
+    #[inline]
+    pub fn dot(self, other: &Vector1<S>) -> S {
+        self.x * other.x
     }
 }
 
@@ -768,53 +786,17 @@ impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
     }
 }
 
-impl<S> DotProduct<Vector1<S>> for Vector1<S> where S: Scalar {
-    type Output = S; 
-
-    #[inline]
-    fn dot(self, other: Vector1<S>) -> Self::Output {
-        self.x * other.x
-    }
-}
-
-impl<S> DotProduct<&Vector1<S>> for Vector1<S> where S: Scalar {
-    type Output = S; 
-
-    #[inline]
-    fn dot(self, other: &Vector1<S>) -> Self::Output {
-        self.x * other.x
-    }
-}
-
-impl<S> DotProduct<Vector1<S>> for &Vector1<S> where S: Scalar {
-    type Output = S; 
-
-    #[inline]
-    fn dot(self, other: Vector1<S>) -> Self::Output {
-        self.x * other.x
-    }
-}
-
-impl<S> DotProduct<&Vector1<S>> for &Vector1<S> where S: Scalar {
-    type Output = S; 
-
-    #[inline]
-    fn dot(self, other: &Vector1<S>) -> Self::Output {
-        self.x * other.x
-    }
-}
-
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
     
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
-        DotProduct::dot(self, self)
+        self.dot(self)
     }
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        S::sqrt(DotProduct::dot(self, self))
+        S::sqrt(self.magnitude_squared())
     }
     
     #[inline]
@@ -1122,6 +1104,25 @@ impl<S> Vector2<S> where S: Scalar {
         } else {
             None
         }
+    }
+
+    /// Compute the Euclidean dot product (inner product) of two vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let vector1 = Vector2::new(1_f64, 2_f64);
+    /// let vector2 = Vector2::new(3_f64, 4_f64);
+    /// 
+    /// assert_eq!(vector1.dot(&vector2), 11_f64);
+    /// ```
+    #[inline]
+    pub fn dot(self, other: &Vector2<S>) -> S {
+        self.x * other.x + self.y * other.y
     }
 }
 
@@ -1745,42 +1746,6 @@ impl<'a, 'b, S> Metric<&'a Vector2<S>> for &'b Vector2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> DotProduct<Vector2<S>> for Vector2<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Vector2<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y
-    }
-}
-
-impl<S> DotProduct<&Vector2<S>> for Vector2<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: &Vector2<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y
-    }
-}
-
-impl<S> DotProduct<Vector2<S>> for &Vector2<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Vector2<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y
-    }
-}
-
-impl<'a, 'b, S> DotProduct<&'a Vector2<S>> for &'b Vector2<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: &'a Vector2<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y
-    }
-}
-
 impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     type Output = S;
 
@@ -1791,7 +1756,7 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
-        DotProduct::dot(self, self)
+        self.dot(&self)
     }
 
     #[inline]
@@ -2107,6 +2072,25 @@ impl<S> Vector3<S> where S: Scalar {
         } else {
             None
         }
+    }
+
+    /// Compute the Euclidean dot product (inner product) of two vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let vector2 = Vector3::new(4_f64, 5_f64, 6_f64);
+    /// 
+    /// assert_eq!(vector1.dot(&vector2), 32_f64);
+    /// ```
+    #[inline]
+    pub fn dot(self, other: &Vector3<S>) -> S {
+        self.x * other.x + self.y * other.y + self.z * other.z
     }
 }
 
@@ -2781,42 +2765,6 @@ impl<'a, 'b, S> Metric<&'a Vector3<S>> for &'b Vector3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> DotProduct<Vector3<S>> for Vector3<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Vector3<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z
-    }
-}
-
-impl<S> DotProduct<&Vector3<S>> for Vector3<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: &Vector3<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z
-    }
-}
-
-impl<S> DotProduct<Vector3<S>> for &Vector3<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Vector3<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z
-    }
-}
-
-impl<'a, 'b, S> DotProduct<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar {
-    type Output = S;
-    
-    #[inline]
-    fn dot(self, other: &'a Vector3<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z
-    }
-}
-
 impl<S> CrossProduct<Vector3<S>> for Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
@@ -2879,7 +2827,7 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
-        DotProduct::dot(self, self)
+        self.dot(self)
     }
 
     #[inline]
@@ -3159,6 +3107,25 @@ impl<S> Vector4<S> where S: Scalar {
         } else {
             None
         }
+    }
+    
+    /// Compute the Euclidean dot product (inner product) of two vectors.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let vector1 = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let vector2 = Vector4::new(5_f64, 6_f64, 7_f64, 8_f64);
+    /// 
+    /// assert_eq!(vector1.dot(&vector2), 70_f64);
+    /// ```
+    #[inline]
+    pub fn dot(self, other: &Vector4<S>) -> S {
+        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
 }
 
@@ -3877,42 +3844,6 @@ impl<'a, 'b, S> Metric<&'a Vector4<S>> for &'b Vector4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> DotProduct<Vector4<S>> for Vector4<S> where S: Scalar {
-    type Output = S;
-    
-    #[inline]
-    fn dot(self, other: Vector4<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
-    }
-}
-
-impl<S> DotProduct<&Vector4<S>> for Vector4<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: &Vector4<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
-    }
-}
-
-impl<S> DotProduct<Vector4<S>> for &Vector4<S> where S: Scalar {
-    type Output = S;
-
-    #[inline]
-    fn dot(self, other: Vector4<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
-    }
-}
-
-impl<'a, 'b, S> DotProduct<&'a Vector4<S>> for &'b Vector4<S> where S: Scalar {
-    type Output = S;
-    
-    #[inline]
-    fn dot(self, other: &'a Vector4<S>) -> Self::Output {
-        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
-    }
-}
-
 impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     type Output = S;
 
@@ -3923,7 +3854,7 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
-        DotProduct::dot(self, self)
+        self.dot(self)
     }
 
     #[inline]

@@ -6,7 +6,6 @@ use crate::scalar::{
     ScalarFloat,
 };
 use crate::traits::{
-    DotProduct,
     Matrix,
 };
 use crate::matrix::{
