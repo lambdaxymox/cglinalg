@@ -301,7 +301,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Radians,
     /// #     Magnitude,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,
     /// # };
     /// #
@@ -343,7 +343,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -450,7 +450,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Matrix3x3,  
     /// #     Magnitude,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// #
@@ -477,7 +477,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Matrix3x3,  
     /// #     Magnitude,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// #
@@ -540,7 +540,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Magnitude,
     /// #     Zero,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// #
@@ -571,7 +571,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Magnitude,
     /// #     Zero,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// #
@@ -629,7 +629,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Matrix4x4,  
     /// #     Magnitude,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// #
@@ -657,7 +657,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Matrix4x4,  
     /// #     Magnitude,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// #
@@ -731,7 +731,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Magnitude,
     /// #     Zero,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// #
@@ -764,7 +764,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Magnitude,
     /// #     Zero,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// #
@@ -944,7 +944,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Zero,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// # use core::f64;
@@ -1005,7 +1005,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Zero,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
@@ -1026,7 +1026,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Zero,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
@@ -1047,7 +1047,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Zero,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
@@ -1068,7 +1068,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Zero,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
@@ -1122,7 +1122,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Zero,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
@@ -1143,7 +1143,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Zero,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;
@@ -1187,7 +1187,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Quaternion,
     /// #     Vector3, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -1218,7 +1218,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Unit,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,   
     /// # };
     /// #
@@ -1259,7 +1259,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,   
     /// # };
     /// #
@@ -1377,7 +1377,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Degrees,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,   
     /// # };
     /// #
@@ -1560,7 +1560,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// #     Radians,
     /// #     Unit,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// # use core::f64;

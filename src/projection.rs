@@ -1400,7 +1400,7 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// #     Matrix4x4,
     /// #     Degrees,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -1434,7 +1434,7 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// #     Point3,
     /// #     Degrees,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -1468,7 +1468,7 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Degrees,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -1505,7 +1505,7 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// #     Point3,
     /// #     Degrees,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -1559,7 +1559,7 @@ impl<S> OrthographicFov3<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Degrees,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #

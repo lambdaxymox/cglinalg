@@ -466,7 +466,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// #     Angle,
     /// #     Vector2, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -500,7 +500,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// #     Matrix2x2,
     /// #     Vector2, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -519,7 +519,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// #     Matrix2x2,
     /// #     Vector2, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -554,7 +554,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// #     Vector2,
     /// #     Unit,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -576,7 +576,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// #     Vector2,
     /// #     Unit,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -606,7 +606,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Matrix2x2,    
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -2185,7 +2185,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// #     Vector2, 
     /// #     Unit,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,  
     /// # };
     /// #
@@ -2326,7 +2326,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// #     Radians,
     /// #     Vector3, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -2364,7 +2364,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// #     Radians,
     /// #     Vector3, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -2400,7 +2400,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// #     Radians,
     /// #     Vector3, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -2436,7 +2436,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// #     Radians,
     /// #     Vector3, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -2473,7 +2473,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -2620,7 +2620,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// #     Angle,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,   
     /// # };
     /// #
@@ -2664,7 +2664,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// #     Vector3,
     /// #     Unit,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,   
     /// # };
     /// #
@@ -2703,7 +2703,7 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// # use cglinalg::{
     /// #     Matrix3x3,    
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -4575,7 +4575,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// #     Radians,
     /// #     Angle, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq,   
     /// # };
     /// #
@@ -4615,7 +4615,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// #     Radians,
     /// #     Vector4, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -4655,7 +4655,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// #     Radians,
     /// #     Vector4, 
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -4696,7 +4696,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// #     Vector4,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #
@@ -4795,7 +4795,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// #     Matrix4x4,
     /// #     Degrees,
     /// # };
-    /// # use cglinalg::approx::{
+    /// # use approx::{
     /// #     relative_eq, 
     /// # };
     /// #

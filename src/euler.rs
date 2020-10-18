@@ -55,7 +55,7 @@ use core::ops;
 /// #     EulerAngles,
 /// #     Matrix3x3,
 /// # };
-/// # use cglinalg::approx::{
+/// # use approx::{
 /// #     relative_eq,
 /// # };
 ///
@@ -133,7 +133,7 @@ use core::ops;
 /// #    EulerAngles,
 /// #    Matrix3x3,
 /// # };
-/// # use cglinalg::approx::{
+/// # use approx::{
 /// #    ulps_eq,
 /// # };
 ///
