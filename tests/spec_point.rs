@@ -113,9 +113,6 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_eq,
-        };
         use super::{
             $Generator,
             $ScalarGen,
@@ -137,32 +134,7 @@ macro_rules! approx_mul_props {
             fn prop_scalar_times_point_equals_point_times_scalar(
                 c in $ScalarGen::<$ScalarType>(), p in $Generator::<$ScalarType>()) {
                 
-                prop_assert!(
-                    relative_eq!(c * p, p * c, epsilon = $tolerance)
-                );
-            }
-
-            /// Multiplication of two scalars and a point should be compatible with 
-            /// multiplication of all scalars. In other words, scalar multiplication 
-            /// of two scalar with a point should act associatively, just like the 
-            /// multiplication of three scalars.
-            ///
-            /// Given scalars `a` and `b`, and a point `p`, we have
-            /// ```text
-            /// (a * b) * p ~= a * (b * p)
-            /// ```
-            /// Note that the compatibility of scalars with points can only be 
-            /// approximate and not exact because multiplication of the underlying 
-            /// scalars is not associative. 
-            #[test]
-            fn prop_scalar_multiplication_compatibility(
-                a in $ScalarGen::<$ScalarType>(), 
-                b in $ScalarGen::<$ScalarType>(), 
-                p in $Generator::<$ScalarType>()) {
-
-                prop_assert!(
-                    relative_eq!(a * (b * p), (a * b) * p, epsilon = $tolerance)
-                );
+                prop_assert_eq!(c * p, p * c);
             }
 
             /// A scalar `1` acts like a multiplicative identity element.
@@ -186,6 +158,87 @@ macro_rules! approx_mul_props {
 approx_mul_props!(point1_f64_mul_props, Point1, f64, any_point1, any_scalar, 1e-7);
 approx_mul_props!(point2_f64_mul_props, Point2, f64, any_point2, any_scalar, 1e-7);
 approx_mul_props!(point3_f64_mul_props, Point3, f64, any_point3, any_scalar, 1e-7);
+
+
+/// Generate property tests for point multiplication over floating point scalars.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$PointN` denotes the name of the point type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of points.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+macro_rules! exact_mul_props {
+    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+            $ScalarGen,
+        };
+
+
+        proptest! {
+            /// Multiplication of a scalar and a point should be approximately 
+            /// commutative.
+            ///
+            /// Given a constant `c` and a point `p`
+            /// ```text
+            /// c * p = p * c
+            /// ```
+            #[test]
+            fn prop_scalar_times_point_equals_point_times_scalar(
+                c in $ScalarGen::<$ScalarType>(), p in $Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!(c * p, p * c);
+            }
+
+            /// Multiplication of two scalars and a point should be compatible with 
+            /// multiplication of all scalars. In other words, scalar multiplication 
+            /// of two scalar with a point should act associatively, just like the 
+            /// multiplication of three scalars.
+            ///
+            /// Given scalars `a` and `b`, and a point `p`, we have
+            /// ```text
+            /// (a * b) * p = a * (b * p)
+            /// ```
+            #[test]
+            fn prop_scalar_multiplication_compatibility(
+                a in $ScalarGen::<$ScalarType>(), 
+                b in $ScalarGen::<$ScalarType>(), 
+                p in $Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(a * (b * p), (a * b) * p);
+            }
+
+            /// A scalar `1` acts like a multiplicative identity element.
+            ///
+            /// Given a vector `p`
+            /// ```text
+            /// 1 * p = p * 1 = p
+            /// ```
+            #[test]
+            fn prop_one_times_vector_equals_vector(p in $Generator::<$ScalarType>()) {
+                let one = num_traits::one();
+
+                prop_assert_eq!(one * p, p);
+                prop_assert_eq!(p * one, p);
+            }
+        }
+    }
+    }
+}
+
+exact_mul_props!(point1_i32_mul_props, Point1, i32, any_point1, any_scalar);
+exact_mul_props!(point2_i32_mul_props, Point2, i32, any_point2, any_scalar);
+exact_mul_props!(point3_i32_mul_props, Point3, i32, any_point3, any_scalar);
+
 
 
 /// Generate property tests for point indexing.
