@@ -1,6 +1,5 @@
 use crate::traits::{
     Array,
-    CrossProduct,
     Magnitude,
     Matrix,
     Metric,

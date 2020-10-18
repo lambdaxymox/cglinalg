@@ -12,7 +12,6 @@ use crate::angle::{
 };
 use crate::traits::{
     Array,
-    CrossProduct,
     InvertibleSquareMatrix,
     Magnitude,
     Matrix,

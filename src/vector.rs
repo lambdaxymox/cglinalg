@@ -5,7 +5,6 @@ use crate::scalar::{
 };
 use crate::traits::{
     Array,
-    CrossProduct,
     Magnitude,
     Metric,
 };
@@ -2116,6 +2115,45 @@ impl<S> Vector3<S> where S: ScalarSigned {
         self.y = -self.y;
         self.z = -self.z;
     }
+
+    /// Compute the cross product of two three-dimensional vectors. 
+    ///
+    /// For the vector dimensions used in computer graphics 
+    /// (up to four dimensions), the cross product is well-defined only in 
+    /// three dimensions. The cross product is a form of vector 
+    /// multiplication that computes a vector normal to the plane swept out by 
+    /// the two vectors. The magnitude of this vector is the area of the 
+    /// parallelogram swept out by thw two vectors. 
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let vector2 = Vector3::new(4_f64, 5_f64, 6_f64);
+    /// let cross = vector1.cross(&vector2);
+    ///
+    /// assert_eq!(cross, Vector3::new(-3_f64, 6_f64, -3_f64));
+    /// // The cross product is perpendicular to the two input vectors.
+    /// assert_eq!(cross.dot(&vector1), 0_f64);
+    /// assert_eq!(cross.dot(&vector2), 0_f64);
+    ///
+    /// // The cross product of a vector with itself is zero.
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    ///
+    /// assert_eq!(vector.cross(&vector), Vector3::zero());
+    /// ```
+    #[inline]
+    pub fn cross(&self, other: &Vector3<S>) -> Self {
+        let x = self.y * other.z - self.z * other.y;
+        let y = self.z * other.x - self.x * other.z;
+        let z = self.x * other.y - self.y * other.x;
+    
+        Vector3::new(x, y, z)
+    }
 }
 
 impl<S> Vector3<S> where S: ScalarFloat {
@@ -2762,58 +2800,6 @@ impl<'a, 'b, S> Metric<&'a Vector3<S>> for &'b Vector3<S> where S: ScalarFloat {
         let dz_squared = (to.z - self.z) * (to.z - self.z);
     
         dx_squared + dy_squared + dz_squared
-    }
-}
-
-impl<S> CrossProduct<Vector3<S>> for Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn cross(self, other: Vector3<S>) -> Self::Output {
-        let x = self.y * other.z - self.z * other.y;
-        let y = self.z * other.x - self.x * other.z;
-        let z = self.x * other.y - self.y * other.x;
-
-        Vector3::new(x, y, z)
-    }
-}
-
-impl<S> CrossProduct<&Vector3<S>> for Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn cross(self, other: &Vector3<S>) -> Self::Output {
-        let x = self.y * other.z - self.z * other.y;
-        let y = self.z * other.x - self.x * other.z;
-        let z = self.x * other.y - self.y * other.x;
-
-        Vector3::new(x, y, z)
-    }
-}
-
-impl<S> CrossProduct<Vector3<S>> for &Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn cross(self, other: Vector3<S>) -> Self::Output {
-        let x = self.y * other.z - self.z * other.y;
-        let y = self.z * other.x - self.x * other.z;
-        let z = self.x * other.y - self.y * other.x;
-
-        Vector3::new(x, y, z)
-    }
-}
-
-impl<'a, 'b, S> CrossProduct<&'a Vector3<S>> for &'b Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn cross(self, other: &'a Vector3<S>) -> Self::Output {
-        let x = self.y * other.z - self.z * other.y;
-        let y = self.z * other.x - self.x * other.z;
-        let z = self.x * other.y - self.y * other.x;
-
-        Vector3::new(x, y, z)
     }
 }
 

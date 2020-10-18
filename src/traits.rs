@@ -75,30 +75,6 @@ pub trait Magnitude where Self: Sized {
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self>;
 }
 
-/// A type implementing the `CrossProduct` trait implements a form of vector 
-/// multiplications that computes a vector normal to the plane swept out by 
-/// the two vectors. 
-/// 
-/// In the context of low-dimensional spaces, the cross 
-/// product only exists in dimension three. This trait allows us to treat 
-/// three-dimensional vectors as well as pointers to three-dimensional vectors 
-/// interchangeably. 
-pub trait CrossProduct<V> {
-    /// The output of the cross product. 
-    ///
-    /// This associated type allows us to handle pointers to three-dimensional 
-    /// vectors interchangeably with three-dimensional vectors in the inputs.
-    type Output;
-
-    /// Compute the cross product of two three-dimensional vectors. 
-    ///
-    /// Note that for the vectors used in computer graphics 
-    /// (up to four dimensions), the cross product is well-defined only in 
-    /// three dimensions.
-    fn cross(self, other: V) -> Self::Output;
-}
-
-
 /// A data type implementing the `Matrix` trait has the structure of a matrix 
 /// in column major order. 
 ///

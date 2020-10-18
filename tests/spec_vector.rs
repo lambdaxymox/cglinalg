@@ -1203,7 +1203,6 @@ macro_rules! exact_cross_product_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use cglinalg::{
-            CrossProduct,
             Vector3,
         };
         use super::{
@@ -1223,7 +1222,7 @@ macro_rules! exact_cross_product_props {
             fn prop_vector_cross_itself_is_zero(v in $Generator::<$ScalarType>()) {
                 let zero_vec: Vector3<$ScalarType> = Vector3::zero();
 
-                prop_assert_eq!(v.cross(v), zero_vec);
+                prop_assert_eq!(v.cross(&v), zero_vec);
             }
 
             /// The three-dimensional cross product should commute with 
