@@ -291,7 +291,6 @@ macro_rules! approx_scalar_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::relative_eq;
         use cglinalg::{
             $MatrixN,
             Zero,
@@ -303,44 +302,6 @@ macro_rules! approx_scalar_multiplication_props {
 
 
         proptest! {
-            /// Multiplication of matrices by scalars is compatible with matrix 
-            /// addition.
-            ///
-            /// Given matrices `m1` and `m2`, and a scalar `c`
-            /// ```text
-            /// c * (m1 + m2) ~= c * m1 + c * m2
-            /// ```
-            #[test]
-            fn prop_scalar_matrix_multiplication_compatible_addition(
-                c in $ScalarGen::<$ScalarType>(),
-                m1 in $Generator::<$ScalarType>(), m2 in $Generator::<$ScalarType>()) {
-
-                prop_assert!(
-                    relative_eq!(c * (m1 + m2), c * m1 + c * m2, epsilon = $tolerance), 
-                    "left = {}\nright = {}", 
-                    c * (m1 + m2), c * m1 + c * m2
-                );
-            }
-
-            /// Multiplication of matrices by scalars is compatible with matrix 
-            /// subtraction.
-            ///
-            /// Given matrices `m1` and `m2`, and a scalar `c`
-            /// ```text
-            /// c * (m1 - m2) ~= c * m1 - c * m2
-            /// ```
-            #[test]
-            fn prop_scalar_matrix_multiplication_compatible_subtraction(
-                c in $ScalarGen::<$ScalarType>(),
-                m1 in $Generator::<$ScalarType>(), m2 in $Generator::<$ScalarType>()) {
-
-                prop_assert!(
-                    relative_eq!(c * (m1 - m2), c * m1 - c * m2, epsilon = $tolerance),
-                    "left = {}\nright = {}", 
-                    c * (m1 - m2), c * m1 - c * m2
-                );
-            }
-
             /// Multiplication of a matrix by a scalar zero is the zero matrix.
             ///
             /// Given a matrix `m` and a zero scalar `0`
@@ -407,7 +368,7 @@ macro_rules! approx_scalar_multiplication_props {
             fn prop_scalar_matrix_multiplication_commutative(
                 c in $ScalarGen::<$ScalarType>(), m in $Generator::<$ScalarType>()) {
 
-                prop_assert!(relative_eq!(c * m, m * c, epsilon = $tolerance));
+                prop_assert_eq!(c * m, m * c);
             }
         }
     }
@@ -546,6 +507,21 @@ macro_rules! exact_scalar_multiplication_props {
 
                 prop_assert_eq!(c * m, m * c);
             }
+
+            /// Scalar multiplication of a matrix by scalars is compatible.
+            ///
+            /// Given a matrix `m` and scalars `a` and `b`
+            /// ```text
+            /// (a * b) * m = a * (b * m)
+            /// ```
+            #[test]
+            fn prop_scalar_matrix_multiplication_compatible(
+                a in any::<$ScalarType>(), 
+                b in any::<$ScalarType>(),
+                m in $Generator::<$ScalarType>()
+            ) {
+                prop_assert_eq!((a * b) * m, a * (b * m));
+            }
         }
     }
     }
@@ -572,17 +548,15 @@ exact_scalar_multiplication_props!(matrix4_i32_scalar_multiplication_props, Matr
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of matrices.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
 macro_rules! approx_multiplication_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::relative_eq;
         use cglinalg::{
             $MatrixN,
-            Identity
+            Identity,
+            Zero,
         };
         use super::{
             $Generator,
@@ -590,62 +564,20 @@ macro_rules! approx_multiplication_props {
 
 
         proptest! {
-            /// Matrix multiplication is associative.
+            /// Multiplication of a matrix by a scalar commutes with scalars.
             ///
-            /// Given matrices `m1`, `m2`, and `m3`
+            /// Given a matrix `m` and a scalar `c`
             /// ```text
-            /// (m1 * m2) * m3 ~= m1 * (m2 * m3)
+            /// c * m = m * c
             /// ```
+            /// Note that we diverse from traditional formalisms of matrix arithmetic 
+            /// in that we allow multiplication of matrices by scalars on the left-hand 
+            /// side as well as the right-hand side.
             #[test]
-            fn prop_matrix_multiplication_associative(
-                m1 in $Generator::<$ScalarType>(),
-                m2 in $Generator::<$ScalarType>(), m3 in $Generator::<$ScalarType>()) {
+            fn prop_scalar_matrix_multiplication_commutative(
+                c in any::<$ScalarType>(), m in $Generator::<$ScalarType>()) {
 
-                prop_assume!(((m1 * m2) * m3).is_finite());
-                prop_assume!((m1 * (m2 * m3)).is_finite());
-                prop_assert!(relative_eq!((m1 * m2) * m3, m1 * (m2 * m3), epsilon = $tolerance));
-            }
-
-            /// Matrix multiplication is distributive over matrix addition.
-            ///
-            /// Given matrices `m1`, `m2`, and `m3`
-            /// ```text
-            /// m1 * (m2 + m3) ~= m1 * m2 + m1 * m3
-            /// ```
-            #[test]
-            fn prop_matrix_multiplication_distributive(                
-                m1 in $Generator::<$ScalarType>(),
-                m2 in $Generator::<$ScalarType>(), m3 in $Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!(m1 * (m2 + m3), m1 * m2 + m1 * m3, epsilon = $tolerance));
-            }
-
-            /// Matrix multiplication is compatible with scalar multiplication.
-            ///
-            /// Given matrices `m1` and `m2` and a scalar `c`
-            /// ```text
-            /// c * (m1 * m2) ~= (c * m1) * m2 ~= m1 * (c * m2)
-            /// ```
-            #[test]
-            fn prop_matrix_multiplication_compatible_with_scalar_multiplication(
-                c in any::<$ScalarType>(),
-                m1 in $Generator::<$ScalarType>(), m2 in $Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!(c * (m1 * m2), (c * m1) * m2, epsilon = $tolerance));
-                prop_assert!(relative_eq!((c * m1) * m2, m1 * (c * m2), epsilon = $tolerance));
-            }
-
-            /// Matrix multiplication is compatible with scalar multiplication.
-            ///
-            /// Given a matrix `m`, scalars `c1` and `c2`
-            /// ```text
-            /// (c1 * c2) * m ~= c1 * (c2 * m)
-            /// ```
-            #[test]
-            fn prop_matrix_multiplication_compatible_with_scalar_multiplication1(
-                c1 in any::<$ScalarType>(), c2 in any::<$ScalarType>(), m in $Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!((c1 * c2) * m, c1 * (c2 * m), epsilon = $tolerance));
+                prop_assert_eq!(c * m, m * c);
             }
 
             /// Matrices over a set of floating point scalars have a 
@@ -662,14 +594,32 @@ macro_rules! approx_multiplication_props {
                 prop_assert_eq!(m * identity, m);
                 prop_assert_eq!(identity * m, m);
             }
+
+            /// Multiplication of a matrix by a scalar zero is the zero matrix.
+            ///
+            /// Given a matrix `m` and a zero scalar `0`
+            /// ```text
+            /// 0 * m = m * 0 = 0
+            /// ```
+            /// Note that we diverge from tradition formalisms of matrix arithmetic 
+            /// in that we allow multiplication of matrices by scalars on the right-hand 
+            /// side as well as left-hand side. 
+            #[test]
+            fn prop_zero_times_matrix_equals_zero_matrix(m in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+                let zero_mat = $MatrixN::zero();
+
+                prop_assert_eq!(zero * m, zero_mat);
+                prop_assert_eq!(m * zero, zero_mat);
+            }
         }
     }
     }
 }
 
-approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2x2, f64, any_matrix2, 1e-7);
-approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3x3, f64, any_matrix3, 1e-7);
-approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4x4, f64, any_matrix4, 1e-7);
+approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2x2, f64, any_matrix2);
+approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3x3, f64, any_matrix3);
+approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4x4, f64, any_matrix4);
 
 
 /// Generate property tests for the multiplication of matrices of floating 
