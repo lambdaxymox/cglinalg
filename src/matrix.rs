@@ -407,12 +407,43 @@ impl<S> Matrix2x2<S> where S: Scalar {
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let result: Matrix2x2<i32> = Matrix2x2::identity();
+    /// let expected = Matrix2x2::new(
+    ///     1_i32, 0_i32,
+    ///     0_i32, 1_i32,  
+    /// );
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn identity() -> Matrix2x2<S> {
         Matrix2x2::new(S::one(), S::zero(), S::zero(), S::one())
     }
     
     /// Determine whether a matrix is an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let matrix: Matrix2x2<i32> = Matrix2x2::identity();
+    /// 
+    /// assert!(matrix.is_identity());
+    /// ```
     #[inline]
     pub fn is_identity(&self) -> bool {
         self.c0r0.is_one()  && self.c0r1.is_zero() &&
@@ -421,6 +452,22 @@ impl<S> Matrix2x2<S> where S: Scalar {
 
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let result = Matrix2x2::from_diagonal_value(2_i32);
+    /// let expected = Matrix2x2::new(
+    ///     2_i32, 0_i32,
+    ///     0_i32, 2_i32 
+    /// );
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal_value(value: S) -> Self {
@@ -432,6 +479,23 @@ impl<S> Matrix2x2<S> where S: Scalar {
     
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let result = Matrix2x2::from_diagonal(&Vector2::new(2_i32, 3_i32));
+    /// let expected = Matrix2x2::new(
+    ///     2_i32, 0_i32,
+    ///     0_i32, 3_i32 
+    /// );
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal(diagonal: &Vector2<S>) -> Self {
@@ -442,12 +506,47 @@ impl<S> Matrix2x2<S> where S: Scalar {
     }
 
     /// Get the diagonal part of a square matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let matrix = Matrix2x2::new(
+    ///     1_i32, 2_i32,
+    ///     3_i32, 4_i32,   
+    /// );
+    /// let expected = Vector2::new(1_i32, 4_i32);
+    /// let result = matrix.diagonal();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn diagonal(&self) -> Vector2<S> {
         Vector2::new(self.c0r0, self.c1r1)
     }
 
     /// Compute the trace of a square matrix.
+    ///
+    /// The trace of a matrix is the sum of the diagonal elements.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x2::new(
+    ///     1_i32, 2_i32,
+    ///     3_i32, 4_i32 
+    /// );
+    ///
+    /// assert_eq!(matrix.trace(), 5_i32);
+    /// ```
     #[inline]
     pub fn trace(&self) -> S {
         self.c0r0 + self.c1r1
@@ -2232,6 +2331,23 @@ impl<S> Matrix3x3<S> where S: Scalar {
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let result = Matrix3x3::identity();
+    /// let expected = Matrix3x3::new(
+    ///     1_i32, 0_i32, 0_i32,
+    ///     0_i32, 1_i32, 0_i32,
+    ///     0_i32, 0_i32, 1_i32
+    /// );
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn identity() -> Matrix3x3<S> {
@@ -2246,6 +2362,21 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
     
     /// Determine whether a matrix is an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let matrix: Matrix3x3<i32> = Matrix3x3::identity();
+    /// 
+    /// assert!(matrix.is_identity());
+    /// ```
     #[inline]
     pub fn is_identity(&self) -> bool {
         self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() &&
@@ -2253,7 +2384,25 @@ impl<S> Matrix3x3<S> where S: Scalar {
         self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()
     }
 
-    /// The type of the columns are rows of the square matrix.
+    /// Construct a new diagonal matrix from a given value where
+    /// each element along the diagonal is equal to `value`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let result = Matrix3x3::from_diagonal_value(3_i32);
+    /// let expected = Matrix3x3::new(
+    ///     3_i32, 0_i32, 0_i32,
+    ///     0_i32, 3_i32, 0_i32,
+    ///     0_i32, 0_i32, 3_i32
+    /// );
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal_value(value: S) -> Self {
@@ -2266,6 +2415,24 @@ impl<S> Matrix3x3<S> where S: Scalar {
     
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let result = Matrix3x3::from_diagonal(&Vector3::new(2_i32, 3_i32, 4_i32));
+    /// let expected = Matrix3x3::new(
+    ///     2_i32, 0_i32, 0_i32,
+    ///     0_i32, 3_i32, 0_i32,
+    ///     0_i32, 0_i32, 4_i32, 
+    /// );
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal(diagonal: &Vector3<S>) -> Self {
@@ -2277,12 +2444,49 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Get the diagonal part of a square matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32,
+    ///     4_i32, 5_i32, 6_i32,
+    ///     7_i32, 8_i32, 9_i32
+    /// );
+    /// let expected = Vector3::new(1_i32, 5_i32, 9_i32);
+    /// let result = matrix.diagonal();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn diagonal(&self) -> Vector3<S> {
         Vector3::new(self.c0r0, self.c1r1, self.c2r2)
     }
 
     /// Compute the trace of a square matrix.
+    ///
+    /// The trace of a matrix is the sum of the diagonal elements.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32,
+    ///     4_i32, 5_i32, 6_i32,
+    ///     7_i32, 8_i32, 9_i32 
+    /// );
+    ///
+    /// assert_eq!(matrix.trace(), 15_i32);
+    /// ```
     #[inline]
     pub fn trace(&self) -> S {
         self.c0r0 + self.c1r1 + self.c2r2
@@ -4679,6 +4883,24 @@ impl<S> Matrix4x4<S> where S: Scalar {
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let result: Matrix4x4<i32> = Matrix4x4::identity();
+    /// let expected = Matrix4x4::new(
+    ///     1_i32, 0_i32, 0_i32, 0_i32,
+    ///     0_i32, 1_i32, 0_i32, 0_i32,
+    ///     0_i32, 0_i32, 1_i32, 0_i32,
+    ///     0_i32, 0_i32, 0_i32, 1_i32
+    /// );
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn identity() -> Matrix4x4<S> {
@@ -4694,6 +4916,21 @@ impl<S> Matrix4x4<S> where S: Scalar {
     }
     
     /// Determine whether a matrix is an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix4x4<i32> = Matrix4x4::identity();
+    /// 
+    /// assert!(matrix.is_identity());
+    /// ```
     #[inline]
     pub fn is_identity(&self) -> bool {
         self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() && self.c0r3.is_zero() &&
@@ -4704,6 +4941,24 @@ impl<S> Matrix4x4<S> where S: Scalar {
 
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let result = Matrix4x4::from_diagonal_value(4_i32);
+    /// let expected = Matrix4x4::new(
+    ///     4_i32, 0_i32, 0_i32, 0_i32,
+    ///     0_i32, 4_i32, 0_i32, 0_i32,
+    ///     0_i32, 0_i32, 4_i32, 0_i32,
+    ///     0_i32, 0_i32, 0_i32, 4_i32 
+    /// );
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal_value(value: S) -> Self {
@@ -4717,6 +4972,27 @@ impl<S> Matrix4x4<S> where S: Scalar {
     
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let result = Matrix4x4::from_diagonal(
+    ///     &Vector4::new(2_i32, 3_i32, 4_i32, 5_i32)
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     2_i32, 0_i32, 0_i32, 0_i32,
+    ///     0_i32, 3_i32, 0_i32, 0_i32,
+    ///     0_i32, 0_i32, 4_i32, 0_i32,
+    ///     0_i32, 0_i32, 0_i32, 5_i32 
+    /// );
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal(value: &Vector4<S>) -> Self {
@@ -4729,12 +5005,51 @@ impl<S> Matrix4x4<S> where S: Scalar {
     }
     
     /// Get the diagonal part of a square matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_i32,  2_i32,  3_i32,  4_i32,
+    ///     5_i32,  6_i32,  7_i32,  8_i32,
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32
+    /// );
+    /// let expected = Vector4::new(1_i32, 6_i32, 11_i32, 16_i32);
+    /// let result = matrix.diagonal();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn diagonal(&self) -> Vector4<S> {
         Vector4::new(self.c0r0, self.c1r1, self.c2r2, self.c3r3)
     }
 
     /// Compute the trace of a square matrix.
+    ///
+    /// The trace of a matrix is the sum of the diagonal elements.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_i32,  2_i32,  3_i32,  4_i32,
+    ///     5_i32,  6_i32,  7_i32,  8_i32,
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32 
+    /// );
+    ///
+    /// assert_eq!(matrix.trace(), 34_i32);
+    /// ```
     #[inline]
     pub fn trace(&self) -> S {
         self.c0r0 + self.c1r1 + self.c2r2 + self.c3r3
