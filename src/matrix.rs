@@ -12,7 +12,6 @@ use crate::angle::{
 };
 use crate::traits::{
     Array,
-    InvertibleSquareMatrix,
     Magnitude,
     Matrix,
     SquareMatrix,
@@ -28,6 +27,7 @@ use crate::unit::{
 
 use approx::{
     ulps_eq,
+    ulps_ne,
 };
 use num_traits::{
     NumCast,
@@ -478,6 +478,30 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
         self.c1r0 = -self.c1r0;
         self.c1r1 = -self.c1r1;
     }
+
+    /// Compute the determinant of a matrix.
+    /// 
+    /// The determinant of a matrix is the signed volume of the parallelopiped
+    /// swept out by the vectors represented by the matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x2::new(
+    ///     1_f64, 3_f64,
+    ///     2_f64, 4_f64 
+    /// );
+    ///
+    /// assert_eq!(matrix.determinant(), -2_f64);
+    /// ```
+    #[inline]
+    pub fn determinant(&self) -> S {
+        self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
+    }
 }
 
 impl<S> Matrix2x2<S> where S: ScalarFloat {
@@ -684,6 +708,76 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     pub fn is_finite(&self) -> bool {
         self.c0r0.is_finite() && self.c0r1.is_finite() &&
         self.c1r0.is_finite() && self.c1r1.is_finite()
+    }
+
+    /// Compute the inverse of a square matrix, if the inverse exists. 
+    ///
+    /// Given a square matrix `self` Compute the matrix `m` if it exists 
+    /// such that
+    /// ```text
+    /// m * self = self * m = 1.
+    /// ```
+    /// Not every square matrix has an inverse.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,  
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x2::new(
+    ///     2_f64, 3_f64,
+    ///     1_f64, 5_f64 
+    /// );
+    /// let expected = Matrix2x2::new(
+    ///      5_f64 / 7_f64, -3_f64 / 7_f64,
+    ///     -1_f64 / 7_f64,  2_f64 / 7_f64
+    /// );
+    /// let result = matrix.inverse().unwrap();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn inverse(&self) -> Option<Self> {
+        let det = self.determinant();
+        if det.is_zero() {
+            None
+        } else {
+            let inv_det = S::one() / det;
+            Some(Matrix2x2::new(
+                inv_det *  self.c1r1, inv_det * -self.c0r1,
+                inv_det * -self.c1r0, inv_det *  self.c0r0
+            ))
+        }
+    }
+
+    /// Determine whether a square matrix has an inverse matrix.
+    ///
+    /// A matrix is invertible is its determinant is not zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x2::new(
+    ///     1_f64, 2_f64,
+    ///     2_f64, 1_f64   
+    /// );
+    /// 
+    /// assert_eq!(matrix.determinant(), -3_f64);
+    /// assert!(matrix.is_invertible());
+    /// ```
+    #[inline]
+    pub fn is_invertible(&self) -> bool {
+        ulps_ne!(self.determinant(), S::zero())
     }
 }
 
@@ -1352,10 +1446,6 @@ impl<S> SquareMatrix for Matrix2x2<S> where S: ScalarFloat {
     fn trace(&self) -> S {
         self.c0r0 + self.c1r1
     }
-
-    fn determinant(&self) -> Self::Element {
-        self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
-    }
     
     #[inline]
     fn is_diagonal(&self) -> bool {
@@ -1365,23 +1455,6 @@ impl<S> SquareMatrix for Matrix2x2<S> where S: ScalarFloat {
     #[inline]
     fn is_symmetric(&self) -> bool {
         ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1)
-    }
-}
-
-impl<S> InvertibleSquareMatrix for Matrix2x2<S> where S: ScalarFloat {
-    #[rustfmt::skip]
-    fn inverse(&self) -> Option<Self> {
-        let det = self.determinant();
-        if det.is_zero() {
-            // A matrix with zero determinant has no inverse.
-            None
-        } else {
-            let inv_det = S::one() / det;
-            Some(Matrix2x2::new(
-                inv_det *  self.c1r1, inv_det * -self.c0r1,
-                inv_det * -self.c1r0, inv_det *  self.c0r0
-            ))
-        }
     }
 }
 
@@ -2357,6 +2430,34 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
         self.c2r1 = -self.c2r1;
         self.c2r2 = -self.c2r2;
     }
+
+    /// Compute the determinant of a matrix.
+    /// 
+    /// The determinant of a matrix is the signed volume of the parallelopiped
+    /// swept out by the vectors represented by the matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_f64, 4_f64, 7_f64,
+    ///     2_f64, 5_f64, 8_f64,
+    ///     3_f64, 6_f64, 9_f64
+    /// );
+    ///
+    /// assert_eq!(matrix.determinant(), 0_f64);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn determinant(&self) -> S {
+        self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
+        self.c1r0 * self.c0r1 * self.c2r2 + self.c1r0 * self.c0r2 * self.c2r1 +
+        self.c2r0 * self.c0r1 * self.c1r2 - self.c2r0 * self.c0r2 * self.c1r1
+    }
 }
 
 impl<S> Matrix3x3<S> where S: ScalarFloat {
@@ -2826,6 +2927,89 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         self.c0r0.is_finite() && self.c0r1.is_finite() && self.c0r2.is_finite() &&
         self.c1r0.is_finite() && self.c1r1.is_finite() && self.c1r2.is_finite() &&
         self.c2r0.is_finite() && self.c2r1.is_finite() && self.c2r2.is_finite()
+    }
+
+    /// Compute the inverse of a square matrix, if the inverse exists. 
+    ///
+    /// Given a square matrix `self` Compute the matrix `m` if it exists 
+    /// such that
+    /// ```text
+    /// m * self = self * m = 1.
+    /// ```
+    /// Not every square matrix has an inverse.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,  
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_f64, 4_f64, 7_f64,
+    ///     2_f64, 5_f64, 8_f64,
+    ///     5_f64, 6_f64, 11_f64
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     -7_f64 / 12_f64,   2_f64 / 12_f64,   3_f64 / 12_f64,
+    ///     -18_f64 / 12_f64,  24_f64 / 12_f64, -6_f64 / 12_f64,
+    ///      13_f64 / 12_f64, -14_f64 / 12_f64,  3_f64 / 12_f64
+    /// );
+    /// let result = matrix.inverse().unwrap();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn inverse(&self) -> Option<Self> {
+        let det = self.determinant();
+        if det.is_zero() {
+            None
+        } else {
+            let inv_det = S::one() / det;
+    
+            Some(Matrix3x3::new(
+                inv_det * (self.c1r1 * self.c2r2 - self.c1r2 * self.c2r1), 
+                inv_det * (self.c0r2 * self.c2r1 - self.c0r1 * self.c2r2), 
+                inv_det * (self.c0r1 * self.c1r2 - self.c0r2 * self.c1r1),
+        
+                inv_det * (self.c1r2 * self.c2r0 - self.c1r0 * self.c2r2),
+                inv_det * (self.c0r0 * self.c2r2 - self.c0r2 * self.c2r0),
+                inv_det * (self.c0r2 * self.c1r0 - self.c0r0 * self.c1r2),
+    
+                inv_det * (self.c1r0 * self.c2r1 - self.c1r1 * self.c2r0), 
+                inv_det * (self.c0r1 * self.c2r0 - self.c0r0 * self.c2r1), 
+                inv_det * (self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0)
+            ))
+        }
+    }
+
+    /// Determine whether a square matrix has an inverse matrix.
+    ///
+    /// A matrix is invertible is its determinant is not zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_f64, 2_f64, 3_f64,
+    ///     4_f64, 5_f64, 6_f64,
+    ///     7_f64, 8_f64, 9_f64   
+    /// );
+    /// 
+    /// assert_eq!(matrix.determinant(), 0_f64);
+    /// assert!(!matrix.is_invertible());
+    /// ```
+    #[inline]
+    pub fn is_invertible(&self) -> bool {
+        ulps_ne!(self.determinant(), S::zero())
     }
 }
 
@@ -3749,14 +3933,6 @@ impl<S> SquareMatrix for Matrix3x3<S> where S: ScalarFloat {
     fn trace(&self) -> Self::Element {
         self.c0r0 + self.c1r1 + self.c2r2
     }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn determinant(&self) -> Self::Element {
-        self.c0r0 * self.c1r1 * self.c2r2 - self.c0r0 * self.c1r2 * self.c2r1 -
-        self.c1r0 * self.c0r1 * self.c2r2 + self.c1r0 * self.c0r2 * self.c2r1 +
-        self.c2r0 * self.c0r1 * self.c1r2 - self.c2r0 * self.c0r2 * self.c1r1
-    }
     
     #[inline]
     fn is_diagonal(&self) -> bool {
@@ -3773,33 +3949,6 @@ impl<S> SquareMatrix for Matrix3x3<S> where S: ScalarFloat {
         ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1) &&
         ulps_eq!(self.c0r2, self.c2r0) && ulps_eq!(self.c2r0, self.c0r2) &&
         ulps_eq!(self.c1r2, self.c2r1) && ulps_eq!(self.c2r1, self.c1r2)
-    }
-}
-
-impl<S> InvertibleSquareMatrix for Matrix3x3<S> where S: ScalarFloat {
-    #[rustfmt::skip]
-    fn inverse(&self) -> Option<Self> {
-        let det = self.determinant();
-        if det.is_zero() {
-            // A matrix with zero determinant has no inverse.
-            None
-        } else {
-            let inv_det = S::one() / det;
-
-            Some(Matrix3x3::new(
-                inv_det * (self.c1r1 * self.c2r2 - self.c1r2 * self.c2r1), 
-                inv_det * (self.c0r2 * self.c2r1 - self.c0r1 * self.c2r2), 
-                inv_det * (self.c0r1 * self.c1r2 - self.c0r2 * self.c1r1),
-    
-                inv_det * (self.c1r2 * self.c2r0 - self.c1r0 * self.c2r2),
-                inv_det * (self.c0r0 * self.c2r2 - self.c0r2 * self.c2r0),
-                inv_det * (self.c0r2 * self.c1r0 - self.c0r0 * self.c1r2),
-
-                inv_det * (self.c1r0 * self.c2r1 - self.c1r1 * self.c2r0), 
-                inv_det * (self.c0r1 * self.c2r0 - self.c0r0 * self.c2r1), 
-                inv_det * (self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0)
-            ))
-        }
     }
 }
 
@@ -4624,6 +4773,56 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
         self.c3r2 = -self.c3r2;
         self.c3r3 = -self.c3r3;
     }
+
+    /// Compute the determinant of a matrix.
+    /// 
+    /// The determinant of a matrix is the signed volume of the parallelopiped
+    /// swept out by the vectors represented by the matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     4_f64, 12_f64, 34_f64, 67_f64,
+    ///     7_f64, 15_f64, 9_f64,  6_f64,
+    ///     1_f64, 3_f64,  3_f64,  7_f64,
+    ///     9_f64, 9_f64,  2_f64,  13_f64
+    /// );
+    ///
+    /// assert_eq!(matrix.determinant(), 7854_f64);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn determinant(&self) -> S {
+        self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
+        self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
+        self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
+        self.c0r0 * self.c2r1 * self.c1r3 * self.c3r2 +
+        self.c0r0 * self.c3r1 * self.c1r2 * self.c2r3 -
+        self.c0r0 * self.c3r1 * self.c1r3 * self.c2r2 -
+        self.c1r0 * self.c0r1 * self.c2r2 * self.c3r3 +
+        self.c1r0 * self.c0r1 * self.c2r3 * self.c3r2 +
+        self.c1r0 * self.c2r1 * self.c0r2 * self.c3r3 -
+        self.c1r0 * self.c2r1 * self.c0r3 * self.c3r2 -
+        self.c1r0 * self.c3r1 * self.c0r2 * self.c2r3 +
+        self.c1r0 * self.c3r1 * self.c0r3 * self.c2r2 +
+        self.c2r0 * self.c0r1 * self.c1r2 * self.c3r3 -
+        self.c2r0 * self.c0r1 * self.c1r3 * self.c3r2 -
+        self.c2r0 * self.c1r1 * self.c0r2 * self.c3r3 +
+        self.c2r0 * self.c1r1 * self.c0r3 * self.c3r2 +
+        self.c2r0 * self.c3r1 * self.c0r2 * self.c1r3 -
+        self.c2r0 * self.c3r1 * self.c0r3 * self.c1r2 -
+        self.c3r0 * self.c0r1 * self.c1r2 * self.c2r3 +
+        self.c3r0 * self.c0r1 * self.c1r3 * self.c2r2 +
+        self.c3r0 * self.c1r1 * self.c0r2 * self.c2r3 -
+        self.c3r0 * self.c1r1 * self.c0r3 * self.c2r2 -
+        self.c3r0 * self.c2r1 * self.c0r2 * self.c1r3 +
+        self.c3r0 * self.c2r1 * self.c0r3 * self.c1r2
+    }
 }
 
 impl<S> Matrix4x4<S> where S: ScalarFloat {
@@ -5245,6 +5444,138 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         self.c2r2.is_finite() && self.c2r3.is_finite() &&
         self.c3r0.is_finite() && self.c3r1.is_finite() &&
         self.c3r2.is_finite() && self.c3r3.is_finite()
+    }
+
+    /// Compute the inverse of a square matrix, if the inverse exists. 
+    ///
+    /// Given a square matrix `self` Compute the matrix `m` if it exists 
+    /// such that
+    /// ```text
+    /// m * self = self * m = 1.
+    /// ```
+    /// Not every square matrix has an inverse.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,  
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_f64, 4_f64, 7_f64,  8_f64,
+    ///     2_f64, 5_f64, 8_f64,  4_f64,
+    ///     5_f64, 6_f64, 11_f64, 4_f64,
+    ///     9_f64, 3_f64, 13_f64, 5_f64
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///      17_f64 / 60_f64, -41_f64 / 30_f64,  21_f64 / 20_f64, -1_f64 / 5_f64,
+    ///      7_f64 / 30_f64,  -16_f64 / 15_f64,  11_f64 / 10_f64, -2_f64 / 5_f64,
+    ///     -13_f64 / 36_f64,  25_f64 / 18_f64, -13_f64 / 12_f64,  1_f64 / 3_f64,
+    ///      13_f64 / 45_f64, -23_f64 / 45_f64,  4_f64 / 15_f64,  -1_f64 / 15_f64
+    /// );
+    /// let result = matrix.inverse().unwrap();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn inverse(&self) -> Option<Self> {
+        let det = self.determinant();
+        if det.is_zero() {
+            None
+        } else {
+            let det_inv = S::one() / det;
+            let _c0r0 = self.c1r1 * self.c2r2 * self.c3r3 + self.c2r1 * self.c3r2 * self.c1r3 + self.c3r1 * self.c1r2 * self.c2r3
+                      - self.c3r1 * self.c2r2 * self.c1r3 - self.c2r1 * self.c1r2 * self.c3r3 - self.c1r1 * self.c3r2 * self.c2r3;
+            let _c1r0 = self.c3r0 * self.c2r2 * self.c1r3 + self.c2r0 * self.c1r2 * self.c3r3 + self.c1r0 * self.c3r2 * self.c2r3
+                      - self.c1r0 * self.c2r2 * self.c3r3 - self.c2r0 * self.c3r2 * self.c1r3 - self.c3r0 * self.c1r2 * self.c2r3;
+            let _c2r0 = self.c1r0 * self.c2r1 * self.c3r3 + self.c2r0 * self.c3r1 * self.c1r3 + self.c3r0 * self.c1r1 * self.c2r3
+                      - self.c3r0 * self.c2r1 * self.c1r3 - self.c2r0 * self.c1r1 * self.c3r3 - self.c1r0 * self.c3r1 * self.c2r3;
+            let _c3r0 = self.c3r0 * self.c2r1 * self.c1r2 + self.c2r0 * self.c1r1 * self.c3r2 + self.c1r0 * self.c3r1 * self.c2r2
+                      - self.c1r0 * self.c2r1 * self.c3r2 - self.c2r0 * self.c3r1 * self.c1r2 - self.c3r0 * self.c1r1 * self.c2r2;
+            let _c0r1 = self.c3r1 * self.c2r2 * self.c0r3 + self.c2r1 * self.c0r2 * self.c3r3 + self.c0r1 * self.c3r2 * self.c2r3
+                      - self.c0r1 * self.c2r2 * self.c3r3 - self.c2r1 * self.c3r2 * self.c0r3 - self.c3r1 * self.c0r2 * self.c2r3;
+            let _c1r1 = self.c0r0 * self.c2r2 * self.c3r3 + self.c2r0 * self.c3r2 * self.c0r3 + self.c3r0 * self.c0r2 * self.c2r3
+                      - self.c3r0 * self.c2r2 * self.c0r3 - self.c2r0 * self.c0r2 * self.c3r3 - self.c0r0 * self.c3r2 * self.c2r3;
+            let _c2r1 = self.c3r0 * self.c2r1 * self.c0r3 + self.c2r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c3r1 * self.c2r3
+                      - self.c0r0 * self.c2r1 * self.c3r3 - self.c2r0 * self.c3r1 * self.c0r3 - self.c3r0 * self.c0r1 * self.c2r3;
+            let _c3r1 = self.c0r0 * self.c2r1 * self.c3r2 + self.c2r0 * self.c3r1 * self.c0r2 + self.c3r0 * self.c0r1 * self.c2r2
+                      - self.c3r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c0r1 * self.c3r2 - self.c0r0 * self.c3r1 * self.c2r2;
+            let _c0r2 = self.c0r1 * self.c1r2 * self.c3r3 + self.c1r1 * self.c3r2 * self.c0r3 + self.c3r1 * self.c0r2 * self.c1r3 
+                      - self.c3r1 * self.c1r2 * self.c0r3 - self.c1r1 * self.c0r2 * self.c3r3 - self.c0r1 * self.c3r2 * self.c1r3;
+            let _c1r2 = self.c3r0 * self.c1r2 * self.c0r3 + self.c1r0 * self.c0r2 * self.c3r3 + self.c0r0 * self.c3r2 * self.c1r3
+                      - self.c0r0 * self.c1r2 * self.c3r3 - self.c1r0 * self.c3r2 * self.c0r3 - self.c3r0 * self.c0r2 * self.c1r3;
+            let _c2r2 = self.c0r0 * self.c1r1 * self.c3r3 + self.c1r0 * self.c3r1 * self.c0r3 + self.c3r0 * self.c0r1 * self.c1r3
+                      - self.c3r0 * self.c1r1 * self.c0r3 - self.c1r0 * self.c0r1 * self.c3r3 - self.c0r0 * self.c3r1 * self.c1r3;
+            let _c3r2 = self.c3r0 * self.c1r1 * self.c0r2 + self.c1r0 * self.c0r1 * self.c3r2 + self.c0r0 * self.c3r1 * self.c1r2
+                      - self.c0r0 * self.c1r1 * self.c3r2 - self.c1r0 * self.c3r1 * self.c0r2 - self.c3r0 * self.c0r1 * self.c1r2;
+            let _c0r3 = self.c2r1 * self.c1r2 * self.c0r3 + self.c1r1 * self.c0r2 * self.c2r3 + self.c0r1 * self.c2r2 * self.c1r3
+                      - self.c0r1 * self.c1r2 * self.c2r3 - self.c1r1 * self.c2r2 * self.c0r3 - self.c2r1 * self.c0r2 * self.c1r3;  
+            let _c1r3 = self.c0r0 * self.c1r2 * self.c2r3 + self.c1r0 * self.c2r2 * self.c0r3 + self.c2r0 * self.c0r2 * self.c1r3
+                      - self.c2r0 * self.c1r2 * self.c0r3 - self.c1r0 * self.c0r2 * self.c2r3 - self.c0r0 * self.c2r2 * self.c1r3;
+            let _c2r3 = self.c2r0 * self.c1r1 * self.c0r3 + self.c1r0 * self.c0r1 * self.c2r3 + self.c0r0 * self.c2r1 * self.c1r3
+                      - self.c0r0 * self.c1r1 * self.c2r3 - self.c1r0 * self.c2r1 * self.c0r3 - self.c2r0 * self.c0r1 * self.c1r3;
+            let _c3r3 = self.c0r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c2r1 * self.c0r2 + self.c2r0 * self.c0r1 * self.c1r2
+                      - self.c2r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c2r1 * self.c1r2; 
+                
+            let c0r0 = det_inv * _c0r0; 
+            let c0r1 = det_inv * _c0r1; 
+            let c0r2 = det_inv * _c0r2; 
+            let c0r3 = det_inv * _c0r3;
+    
+            let c1r0 = det_inv * _c1r0; 
+            let c1r1 = det_inv * _c1r1; 
+            let c1r2 = det_inv * _c1r2; 
+            let c1r3 = det_inv * _c1r3;
+    
+            let c2r0 = det_inv * _c2r0; 
+            let c2r1 = det_inv * _c2r1; 
+            let c2r2 = det_inv * _c2r2; 
+            let c2r3 = det_inv * _c2r3;
+    
+            let c3r0 = det_inv * _c3r0; 
+            let c3r1 = det_inv * _c3r1; 
+            let c3r2 = det_inv * _c3r2; 
+            let c3r3 = det_inv * _c3r3;
+    
+            Some(Matrix4x4::new(
+                c0r0, c0r1, c0r2, c0r3,
+                c1r0, c1r1, c1r2, c1r3,
+                c2r0, c2r1, c2r2, c2r3,
+                c3r0, c3r1, c3r2, c3r3
+            ))
+        }
+    }
+
+    /// Determine whether a square matrix has an inverse matrix.
+    ///
+    /// A matrix is invertible is its determinant is not zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_f64,  2_f64,  3_f64,  4_f64,
+    ///     5_f64,  6_f64,  7_f64,  8_f64,
+    ///     9_f64,  10_f64, 11_f64, 12_f64,
+    ///     13_f64, 14_f64, 15_f64, 16_f64 
+    /// );
+    /// 
+    /// assert_eq!(matrix.determinant(), 0_f64);
+    /// eprintln!("{}", matrix.determinant());
+    /// assert!(!matrix.is_invertible());
+    /// ```
+    #[inline]
+    pub fn is_invertible(&self) -> bool {
+        ulps_ne!(self.determinant(), S::zero())
     }
 }
 
@@ -6576,35 +6907,6 @@ impl<S> SquareMatrix for Matrix4x4<S> where S: ScalarFloat {
     fn diagonal(&self) -> Self::ColumnRow {
         Vector4::new(self.c0r0, self.c1r1, self.c2r2, self.c3r3)
     }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn determinant(&self) -> Self::Element {
-        self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
-        self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
-        self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
-        self.c0r0 * self.c2r1 * self.c1r3 * self.c3r2 +
-        self.c0r0 * self.c3r1 * self.c1r2 * self.c2r3 -
-        self.c0r0 * self.c3r1 * self.c1r3 * self.c2r2 -
-        self.c1r0 * self.c0r1 * self.c2r2 * self.c3r3 +
-        self.c1r0 * self.c0r1 * self.c2r3 * self.c3r2 +
-        self.c1r0 * self.c2r1 * self.c0r2 * self.c3r3 -
-        self.c1r0 * self.c2r1 * self.c0r3 * self.c3r2 -
-        self.c1r0 * self.c3r1 * self.c0r2 * self.c2r3 +
-        self.c1r0 * self.c3r1 * self.c0r3 * self.c2r2 +
-        self.c2r0 * self.c0r1 * self.c1r2 * self.c3r3 -
-        self.c2r0 * self.c0r1 * self.c1r3 * self.c3r2 -
-        self.c2r0 * self.c1r1 * self.c0r2 * self.c3r3 +
-        self.c2r0 * self.c1r1 * self.c0r3 * self.c3r2 +
-        self.c2r0 * self.c3r1 * self.c0r2 * self.c1r3 -
-        self.c2r0 * self.c3r1 * self.c0r3 * self.c1r2 -
-        self.c3r0 * self.c0r1 * self.c1r2 * self.c2r3 +
-        self.c3r0 * self.c0r1 * self.c1r3 * self.c2r2 +
-        self.c3r0 * self.c1r1 * self.c0r2 * self.c2r3 -
-        self.c3r0 * self.c1r1 * self.c0r3 * self.c2r2 -
-        self.c3r0 * self.c2r1 * self.c0r2 * self.c1r3 +
-        self.c3r0 * self.c2r1 * self.c0r3 * self.c1r2
-    }
     
     #[inline]
     fn trace(&self) -> Self::Element {
@@ -6629,78 +6931,6 @@ impl<S> SquareMatrix for Matrix4x4<S> where S: ScalarFloat {
         ulps_eq!(self.c0r3, self.c3r0) && ulps_eq!(self.c3r0, self.c0r3) &&
         ulps_eq!(self.c1r3, self.c3r1) && ulps_eq!(self.c3r1, self.c1r3) &&
         ulps_eq!(self.c2r3, self.c3r2) && ulps_eq!(self.c3r2, self.c2r3)
-    }
-}
-
-impl<S> InvertibleSquareMatrix for Matrix4x4<S> where S: ScalarFloat {
-    #[rustfmt::skip]
-    fn inverse(&self) -> Option<Self> {
-        let det = self.determinant();
-        if det.is_zero() {
-            // A matrix with zero determinant has no inverse.
-            None
-        } else {
-            let det_inv = S::one() / det;
-            let _c0r0 = self.c1r1 * self.c2r2 * self.c3r3 + self.c2r1 * self.c3r2 * self.c1r3 + self.c3r1 * self.c1r2 * self.c2r3
-                      - self.c3r1 * self.c2r2 * self.c1r3 - self.c2r1 * self.c1r2 * self.c3r3 - self.c1r1 * self.c3r2 * self.c2r3;
-            let _c1r0 = self.c3r0 * self.c2r2 * self.c1r3 + self.c2r0 * self.c1r2 * self.c3r3 + self.c1r0 * self.c3r2 * self.c2r3
-                      - self.c1r0 * self.c2r2 * self.c3r3 - self.c2r0 * self.c3r2 * self.c1r3 - self.c3r0 * self.c1r2 * self.c2r3;
-            let _c2r0 = self.c1r0 * self.c2r1 * self.c3r3 + self.c2r0 * self.c3r1 * self.c1r3 + self.c3r0 * self.c1r1 * self.c2r3
-                      - self.c3r0 * self.c2r1 * self.c1r3 - self.c2r0 * self.c1r1 * self.c3r3 - self.c1r0 * self.c3r1 * self.c2r3;
-            let _c3r0 = self.c3r0 * self.c2r1 * self.c1r2 + self.c2r0 * self.c1r1 * self.c3r2 + self.c1r0 * self.c3r1 * self.c2r2
-                      - self.c1r0 * self.c2r1 * self.c3r2 - self.c2r0 * self.c3r1 * self.c1r2 - self.c3r0 * self.c1r1 * self.c2r2;
-            let _c0r1 = self.c3r1 * self.c2r2 * self.c0r3 + self.c2r1 * self.c0r2 * self.c3r3 + self.c0r1 * self.c3r2 * self.c2r3
-                      - self.c0r1 * self.c2r2 * self.c3r3 - self.c2r1 * self.c3r2 * self.c0r3 - self.c3r1 * self.c0r2 * self.c2r3;
-            let _c1r1 = self.c0r0 * self.c2r2 * self.c3r3 + self.c2r0 * self.c3r2 * self.c0r3 + self.c3r0 * self.c0r2 * self.c2r3
-                      - self.c3r0 * self.c2r2 * self.c0r3 - self.c2r0 * self.c0r2 * self.c3r3 - self.c0r0 * self.c3r2 * self.c2r3;
-            let _c2r1 = self.c3r0 * self.c2r1 * self.c0r3 + self.c2r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c3r1 * self.c2r3
-                      - self.c0r0 * self.c2r1 * self.c3r3 - self.c2r0 * self.c3r1 * self.c0r3 - self.c3r0 * self.c0r1 * self.c2r3;
-            let _c3r1 = self.c0r0 * self.c2r1 * self.c3r2 + self.c2r0 * self.c3r1 * self.c0r2 + self.c3r0 * self.c0r1 * self.c2r2
-                      - self.c3r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c0r1 * self.c3r2 - self.c0r0 * self.c3r1 * self.c2r2;
-            let _c0r2 = self.c0r1 * self.c1r2 * self.c3r3 + self.c1r1 * self.c3r2 * self.c0r3 + self.c3r1 * self.c0r2 * self.c1r3 
-                      - self.c3r1 * self.c1r2 * self.c0r3 - self.c1r1 * self.c0r2 * self.c3r3 - self.c0r1 * self.c3r2 * self.c1r3;
-            let _c1r2 = self.c3r0 * self.c1r2 * self.c0r3 + self.c1r0 * self.c0r2 * self.c3r3 + self.c0r0 * self.c3r2 * self.c1r3
-                      - self.c0r0 * self.c1r2 * self.c3r3 - self.c1r0 * self.c3r2 * self.c0r3 - self.c3r0 * self.c0r2 * self.c1r3;
-            let _c2r2 = self.c0r0 * self.c1r1 * self.c3r3 + self.c1r0 * self.c3r1 * self.c0r3 + self.c3r0 * self.c0r1 * self.c1r3
-                      - self.c3r0 * self.c1r1 * self.c0r3 - self.c1r0 * self.c0r1 * self.c3r3 - self.c0r0 * self.c3r1 * self.c1r3;
-            let _c3r2 = self.c3r0 * self.c1r1 * self.c0r2 + self.c1r0 * self.c0r1 * self.c3r2 + self.c0r0 * self.c3r1 * self.c1r2
-                      - self.c0r0 * self.c1r1 * self.c3r2 - self.c1r0 * self.c3r1 * self.c0r2 - self.c3r0 * self.c0r1 * self.c1r2;
-            let _c0r3 = self.c2r1 * self.c1r2 * self.c0r3 + self.c1r1 * self.c0r2 * self.c2r3 + self.c0r1 * self.c2r2 * self.c1r3
-                      - self.c0r1 * self.c1r2 * self.c2r3 - self.c1r1 * self.c2r2 * self.c0r3 - self.c2r1 * self.c0r2 * self.c1r3;  
-            let _c1r3 = self.c0r0 * self.c1r2 * self.c2r3 + self.c1r0 * self.c2r2 * self.c0r3 + self.c2r0 * self.c0r2 * self.c1r3
-                      - self.c2r0 * self.c1r2 * self.c0r3 - self.c1r0 * self.c0r2 * self.c2r3 - self.c0r0 * self.c2r2 * self.c1r3;
-            let _c2r3 = self.c2r0 * self.c1r1 * self.c0r3 + self.c1r0 * self.c0r1 * self.c2r3 + self.c0r0 * self.c2r1 * self.c1r3
-                      - self.c0r0 * self.c1r1 * self.c2r3 - self.c1r0 * self.c2r1 * self.c0r3 - self.c2r0 * self.c0r1 * self.c1r3;
-            let _c3r3 = self.c0r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c2r1 * self.c0r2 + self.c2r0 * self.c0r1 * self.c1r2
-                      - self.c2r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c2r1 * self.c1r2; 
-            
-            let c0r0 = det_inv * _c0r0; 
-            let c0r1 = det_inv * _c0r1; 
-            let c0r2 = det_inv * _c0r2; 
-            let c0r3 = det_inv * _c0r3;
-
-            let c1r0 = det_inv * _c1r0; 
-            let c1r1 = det_inv * _c1r1; 
-            let c1r2 = det_inv * _c1r2; 
-            let c1r3 = det_inv * _c1r3;
-
-            let c2r0 = det_inv * _c2r0; 
-            let c2r1 = det_inv * _c2r1; 
-            let c2r2 = det_inv * _c2r2; 
-            let c2r3 = det_inv * _c2r3;
-
-            let c3r0 = det_inv * _c3r0; 
-            let c3r1 = det_inv * _c3r1; 
-            let c3r2 = det_inv * _c3r2; 
-            let c3r3 = det_inv * _c3r3;
-
-            Some(Matrix4x4::new(
-                c0r0, c0r1, c0r2, c0r3,
-                c1r0, c1r1, c1r2, c1r3,
-                c2r0, c2r1, c2r2, c2r3,
-                c3r0, c3r1, c3r2, c3r3
-            ))
-        }
     }
 }
 

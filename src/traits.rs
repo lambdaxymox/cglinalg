@@ -5,9 +5,7 @@ use crate::scalar::{
 use num_traits::{
     Float,
 };
-use approx::{
-    ulps_ne,
-};
+
 use core::ops;
 
 
@@ -45,7 +43,7 @@ pub trait Array {
 pub trait Metric<V: Sized>: Sized {
     type Output: ScalarFloat;
 
-    /// Compute the squared distance between two vectors.
+    /// Compute the squared Eucliean distance between two vectors.
     fn distance_squared(self, other: V) -> Self::Output;
 
     /// Compute the Euclidean distance between two vectors.
@@ -138,9 +136,11 @@ pub trait SquareMatrix where
     /// Get the diagonal part of a square matrix.
     fn diagonal(&self) -> Self::ColumnRow;
 
+    /*
     /// Compute the determinant of a square matrix.
     fn determinant(&self) -> Self::Element;
-
+    */
+    
     /// Compute the trace of a square matrix.
     fn trace(&self) -> Self::Element;
 
@@ -157,7 +157,7 @@ pub trait SquareMatrix where
     /// Note that every diagonal matrix is a symmetric matrix.
     fn is_symmetric(&self) -> bool;
 }
-
+/*
 /// A trait expressing how to compute the inverse of a square matrix.
 pub trait InvertibleSquareMatrix where
     Self: SquareMatrix,
@@ -179,3 +179,4 @@ pub trait InvertibleSquareMatrix where
     }
 }
 
+*/

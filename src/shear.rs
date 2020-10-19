@@ -736,8 +736,6 @@ impl<S> Shear3<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn inverse(&self) -> Shear3<S> {
-        use crate::traits::SquareMatrix;
-
         let shear_x_with_y = self.matrix.c1r0;
         let shear_x_with_z = self.matrix.c2r0;
         let shear_y_with_x = self.matrix.c0r1;
