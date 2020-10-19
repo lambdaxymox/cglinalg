@@ -787,39 +787,12 @@ impl<S> Magnitude for Point1<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Metric<Point1<S>> for Point1<S> where S: ScalarFloat {
+impl<S> Metric for Point1<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn distance_squared(self, to: Point1<S>) -> Self::Output {
-        (self - to).magnitude_squared()
-    }
-}
-
-impl<S> Metric<&Point1<S>> for Point1<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, to: &Point1<S>) -> Self::Output {
-        (self - to).magnitude_squared()
-    }
-}
-
-impl<S> Metric<Point1<S>> for &Point1<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, to: Point1<S>) -> Self::Output {
-        (self - to).magnitude_squared()
-    }
-}
-
-impl<'a, 'b, S> Metric<&'a Point1<S>> for &'b Point1<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, to: &Point1<S>) -> Self::Output {
-        (self - to).magnitude_squared()
+    fn distance_squared(&self, other: &Point1<S>) -> Self::Output {
+        (self - other).magnitude_squared()
     }
 }
 
@@ -1659,39 +1632,12 @@ impl<S> Magnitude for Point2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Metric<Point2<S>> for Point2<S> where S: ScalarFloat {
+impl<S> Metric for Point2<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn distance_squared(self, to: Point2<S>) -> Self::Output {
-        (self - to).magnitude_squared()
-    }
-}
-
-impl<S> Metric<&Point2<S>> for Point2<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, to: &Point2<S>) -> Self::Output {
-        (self - to).magnitude_squared()
-    }
-}
-
-impl<S> Metric<Point2<S>> for &Point2<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, to: Point2<S>) -> Self::Output {
-        (self - to).magnitude_squared()
-    }
-}
-
-impl<'a, 'b, S> Metric<&'a Point2<S>> for &'b Point2<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, to: &Point2<S>) -> Self::Output {
-        (self - to).magnitude_squared()
+    fn distance_squared(&self, other: &Point2<S>) -> Self::Output {
+        (self - other).magnitude_squared()
     }
 }
 
@@ -2565,39 +2511,12 @@ impl<S> Magnitude for Point3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Metric<Point3<S>> for Point3<S> where S: ScalarFloat {
+impl<S> Metric for Point3<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn distance_squared(self, to: Point3<S>) -> Self::Output {
-        (self - to).magnitude_squared()
-    }
-}
-
-impl<S> Metric<&Point3<S>> for Point3<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, to: &Point3<S>) -> Self::Output {
-        (self - to).magnitude_squared()
-    }
-}
-
-impl<S> Metric<Point3<S>> for &Point3<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, to: Point3<S>) -> Self::Output {
-        (self - to).magnitude_squared()
-    }
-}
-
-impl<'a, 'b, S> Metric<&'a Point3<S>> for &'b Point3<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, to: &Point3<S>) -> Self::Output {
-        (self - to).magnitude_squared()
+    fn distance_squared(&self, other: &Point3<S>) -> Self::Output {
+        (self - other).magnitude_squared()
     }
 }
 

@@ -10,15 +10,15 @@ use num_traits::{
 /// A type with this trait has a notion of comparing the distance (metric) 
 /// between two elements of that type. For example, one can use this trait 
 /// to compute the Euclidean distance between two vectors. 
-pub trait Metric<V: Sized>: Sized {
+pub trait Metric: Sized {
     type Output: ScalarFloat;
 
     /// Compute the squared Eucliean distance between two vectors.
-    fn distance_squared(self, other: V) -> Self::Output;
+    fn distance_squared(&self, other: &Self) -> Self::Output;
 
     /// Compute the Euclidean distance between two vectors.
-    fn distance(self, other: V) -> Self::Output {
-        Self::Output::sqrt(Self::distance_squared(self, other))
+    fn distance(&self, other: &Self) -> Self::Output {
+        Self::Output::sqrt(Self::distance_squared(&self, other))
     }
 }
 

@@ -2237,47 +2237,11 @@ impl<S> ops::RemAssign<S> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> Metric<Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
+impl<S> Metric for Quaternion<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn distance_squared(self, other: Quaternion<S>) -> S {
-        (self.s - other.s)     * (self.s - other.s)     + 
-        (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
-        (self.v.x - other.v.y) * (self.v.x - other.v.y) + 
-        (self.v.x - other.v.z) * (self.v.x - other.v.z)
-    }
-}
-
-impl<S> Metric<&Quaternion<S>> for Quaternion<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, other: &Quaternion<S>) -> S {
-        (self.s - other.s)     * (self.s - other.s)     + 
-        (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
-        (self.v.x - other.v.y) * (self.v.x - other.v.y) + 
-        (self.v.x - other.v.z) * (self.v.x - other.v.z)
-    }
-}
-
-impl<S> Metric<Quaternion<S>> for &Quaternion<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, other: Quaternion<S>) -> S {
-        (self.s - other.s)     * (self.s - other.s)     + 
-        (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
-        (self.v.x - other.v.y) * (self.v.x - other.v.y) + 
-        (self.v.x - other.v.z) * (self.v.x - other.v.z)
-    }
-}
-
-impl<'a, 'b, S> Metric<&'a Quaternion<S>> for &'b Quaternion<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(self, other: &Quaternion<S>) -> S {
+    fn distance_squared(&self, other: &Quaternion<S>) -> S {
         (self.s - other.s)     * (self.s - other.s)     + 
         (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
         (self.v.x - other.v.y) * (self.v.x - other.v.y) + 
