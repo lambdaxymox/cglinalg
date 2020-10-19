@@ -109,7 +109,7 @@ mod projection;
 mod point;
 mod quaternion;
 mod vector;
-mod traits;
+mod magnitude;
 mod unit;
 
 mod isometry;
@@ -129,7 +129,7 @@ pub use projection::*;
 pub use quaternion::*;
 pub use scalar::*;
 pub use vector::*;
-pub use traits::*;
+pub use magnitude::*;
 pub use point::*;
 pub use unit::*;
 

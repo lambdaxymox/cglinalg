@@ -3,7 +3,7 @@ use crate::scalar::{
     ScalarSigned,
     ScalarFloat,   
 };
-use crate::traits::{
+use crate::magnitude::{
     Magnitude,
     Metric,
 };

@@ -1,4 +1,4 @@
-use crate::traits::{
+use crate::magnitude::{
     Magnitude,
     Metric,
 };

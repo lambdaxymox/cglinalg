@@ -10,7 +10,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::traits::{
+use crate::magnitude::{
     Magnitude,
 };
 use crate::vector::{
