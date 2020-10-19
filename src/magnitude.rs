@@ -1,10 +1,10 @@
 use crate::scalar::{
-    Scalar,
     ScalarFloat,   
 };
 use num_traits::{
     Float,
 };
+
 
 /// This trait enables one to assign lengths to vectors.
 pub trait Magnitude where Self: Sized {
