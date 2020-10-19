@@ -140,7 +140,7 @@ pub trait SquareMatrix where
     /// Compute the determinant of a square matrix.
     fn determinant(&self) -> Self::Element;
     */
-    
+
     /// Compute the trace of a square matrix.
     fn trace(&self) -> Self::Element;
 
@@ -157,26 +157,4 @@ pub trait SquareMatrix where
     /// Note that every diagonal matrix is a symmetric matrix.
     fn is_symmetric(&self) -> bool;
 }
-/*
-/// A trait expressing how to compute the inverse of a square matrix.
-pub trait InvertibleSquareMatrix where
-    Self: SquareMatrix,
-    <Self as Matrix>::Element: ScalarFloat
-{
-    /// Compute the inverse of a square matrix, if the inverse exists. 
-    /// Given a square matrix `self` Compute the matrix `m` if it exists 
-    /// such that
-    /// ```text
-    /// m * self = self * m = 1.
-    /// ```
-    /// Not every square matrix has an inverse.
-    fn inverse(&self) -> Option<Self>;
 
-    /// Determine whether a square matrix has an inverse matrix.
-    fn is_invertible(&self) -> bool {
-        use num_traits::Zero;
-        ulps_ne!(self.determinant(), &Self::Element::zero())
-    }
-}
-
-*/
