@@ -13,7 +13,6 @@ use crate::angle::{
 use crate::traits::{
     Array,
     Magnitude,
-    Matrix,
 };
 use crate::vector::{
     Vector2,
@@ -138,6 +137,48 @@ impl<S> Matrix2x2<S> where S: Copy {
     #[inline]
     pub fn from_fill(value: S) -> Matrix2x2<S> {
         Matrix2x2::new(value, value, value, value)
+    }
+
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector2<S> {
+        Vector2::new(self[0][r], self[1][r])
+    }
+
+    /// Get the column of the matrix by value
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector2<S> {
+        Vector2::new(self[c][0], self[c][1])
+    }
+    
+    /// Swap two rows of a matrix.
+    #[inline]
+    pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
+        let c0ra = self[0][row_a];
+        let c1ra = self[1][row_a];
+        self[0][row_a] = self[0][row_b];
+        self[1][row_a] = self[1][row_b];
+        self[0][row_b] = c0ra;
+        self[1][row_b] = c1ra;
+    }
+    
+     /// Swap two columns of a matrix.
+    #[inline]
+    pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        let car0 = self[col_a][0];
+        let car1 = self[col_a][1];
+        self[col_a][0] = self[col_b][0];
+        self[col_a][1] = self[col_b][1];
+        self[col_b][0] = car0;
+        self[col_b][1] = car1;
+    }
+    
+    /// Swap two elements of a matrix.
+    #[inline]
+    pub fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
+        let element_a = self[a.0][a.1];
+        self[a.0][a.1] = self[b.0][b.1];
+        self[b.0][b.1] = element_a;
     }
 }
 
@@ -362,6 +403,12 @@ impl<S> Matrix2x2<S> where S: Scalar {
     #[inline]
     pub fn transpose_mut(&mut self) {
         self.swap_elements((0, 1), (1, 0));
+    }
+
+    /// Transpose a matrix.
+    #[inline]
+    pub fn transpose(&self) -> Matrix2x2<S> {
+        Matrix2x2::new(self.c0r0, self.c1r0, self.c0r1, self.c1r1)
     }
 
     /// Compute a zero matrix.
@@ -982,50 +1029,6 @@ impl<S> Array for Matrix2x2<S> where S: Copy {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
-    }
-}
-
-impl<S> Matrix for Matrix2x2<S> where S: Scalar {
-    type Element = S;
-    type Row = Vector2<S>;
-    type Column = Vector2<S>;
-    type Transpose = Matrix2x2<S>;
-
-    #[inline]
-    fn row(&self, r: usize) -> Self::Row {
-        Vector2::new(self[0][r], self[1][r])
-    }
-    
-    #[inline]
-    fn swap_rows(&mut self, row_a: usize, row_b: usize) {
-        let c0ra = self[0][row_a];
-        let c1ra = self[1][row_a];
-        self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[1][row_b];
-        self[0][row_b] = c0ra;
-        self[1][row_b] = c1ra;
-    }
-    
-    #[inline]
-    fn swap_columns(&mut self, col_a: usize, col_b: usize) {
-        let car0 = self[col_a][0];
-        let car1 = self[col_a][1];
-        self[col_a][0] = self[col_b][0];
-        self[col_a][1] = self[col_b][1];
-        self[col_b][0] = car0;
-        self[col_b][1] = car1;
-    }
-    
-    #[inline]
-    fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
-        let element_a = self[a.0][a.1];
-        self[a.0][a.1] = self[b.0][b.1];
-        self[b.0][b.1] = element_a;
-    }
-    
-    #[inline]
-    fn transpose(&self) -> Self::Transpose {
-        Matrix2x2::new(self.c0r0, self.c1r0, self.c0r1, self.c1r1)
     }
 }
 
@@ -1706,6 +1709,54 @@ impl<S> Matrix3x3<S> where S: Copy {
             value, value, value
         )
     }
+
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector3<S> {
+        Vector3::new(self[0][r], self[1][r], self[2][r])
+    }
+
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector3<S> {
+        Vector3::new(self[c][0], self[c][1], self[c][2])
+    }
+    
+    /// Swap two rows of a matrix.
+    #[inline]
+    pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
+        let c0ra = self[0][row_a];
+        let c1ra = self[1][row_a];
+        let c2ra = self[2][row_a];
+        self[0][row_a] = self[0][row_b];
+        self[1][row_a] = self[1][row_b];
+        self[2][row_a] = self[2][row_b];
+        self[0][row_b] = c0ra;
+        self[1][row_b] = c1ra;
+        self[2][row_b] = c2ra;
+    }
+    
+    /// Swap two columns of a matrix.
+    #[inline]
+    pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        let car0 = self[col_a][0];
+        let car1 = self[col_a][1];
+        let car2 = self[col_a][2];
+        self[col_a][0] = self[col_b][0];
+        self[col_a][1] = self[col_b][1];
+        self[col_a][2] = self[col_b][2];
+        self[col_b][0] = car0;
+        self[col_b][1] = car1;
+        self[col_b][2] = car2;
+    }
+    
+    /// Swap two elements of a matrix.
+    #[inline]
+    pub fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
+        let element_a = self[a.0][a.1];
+        self[a.0][a.1] = self[b.0][b.1];
+        self[b.0][b.1] = element_a;
+    }
 }
 
 impl<S> Matrix3x3<S> where S: NumCast + Copy {
@@ -2279,6 +2330,17 @@ impl<S> Matrix3x3<S> where S: Scalar {
         self.swap_elements((0, 1), (1, 0));
         self.swap_elements((0, 2), (2, 0));
         self.swap_elements((1, 2), (2, 1));
+    }
+
+    /// Transpose a matrix.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn transpose(&self) -> Matrix3x3<S> {
+        Matrix3x3::new(
+            self.c0r0, self.c1r0, self.c2r0,
+            self.c0r1, self.c1r1, self.c2r1,
+            self.c0r2, self.c1r2, self.c2r2
+        )
     }
 
     /// Compute a zero matrix.
@@ -3365,61 +3427,6 @@ impl<S> Array for Matrix3x3<S> where S: Copy {
     }
 }
 
-impl<S> Matrix for Matrix3x3<S> where S: Scalar {
-    type Element = S;
-    type Row = Vector3<S>;
-    type Column = Vector3<S>;
-    type Transpose = Matrix3x3<S>;
-
-    #[inline]
-    fn row(&self, r: usize) -> Self::Row {
-        Vector3::new(self[0][r], self[1][r], self[2][r])
-    }
-    
-    #[inline]
-    fn swap_rows(&mut self, row_a: usize, row_b: usize) {
-        let c0ra = self[0][row_a];
-        let c1ra = self[1][row_a];
-        let c2ra = self[2][row_a];
-        self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[1][row_b];
-        self[2][row_a] = self[2][row_b];
-        self[0][row_b] = c0ra;
-        self[1][row_b] = c1ra;
-        self[2][row_b] = c2ra;
-    }
-    
-    #[inline]
-    fn swap_columns(&mut self, col_a: usize, col_b: usize) {
-        let car0 = self[col_a][0];
-        let car1 = self[col_a][1];
-        let car2 = self[col_a][2];
-        self[col_a][0] = self[col_b][0];
-        self[col_a][1] = self[col_b][1];
-        self[col_a][2] = self[col_b][2];
-        self[col_b][0] = car0;
-        self[col_b][1] = car1;
-        self[col_b][2] = car2;
-    }
-    
-    #[inline]
-    fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
-        let element_a = self[a.0][a.1];
-        self[a.0][a.1] = self[b.0][b.1];
-        self[b.0][b.1] = element_a;
-    }
-    
-    #[rustfmt::skip]
-    #[inline]
-    fn transpose(&self) -> Self::Transpose {
-        Matrix3x3::new(
-            self.c0r0, self.c1r0, self.c2r0,
-            self.c0r1, self.c1r1, self.c2r1,
-            self.c0r2, self.c1r2, self.c2r2
-        )
-    }
-}
-
 impl<S> From<[[S; 3]; 3]> for Matrix3x3<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
@@ -4345,6 +4352,60 @@ impl<S> Matrix4x4<S> where S: Copy {
             value, value, value, value
         )
     }
+
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector4<S> {
+        Vector4::new(self[0][r], self[1][r], self[2][r], self[3][r])
+    }
+ 
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector4<S> {
+        Vector4::new(self[c][0], self[c][1], self[c][2], self[c][3])
+    }
+     
+    /// Swap two rows of a matrix.
+    #[inline]
+    pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
+        let c0ra = self[0][row_a];
+        let c1ra = self[1][row_a];
+        let c2ra = self[2][row_a];
+        let c3ra = self[3][row_a];
+        self[0][row_a] = self[0][row_b];
+        self[1][row_a] = self[1][row_b];
+        self[2][row_a] = self[2][row_b];
+        self[3][row_a] = self[3][row_b];
+        self[0][row_b] = c0ra;
+        self[1][row_b] = c1ra;
+        self[2][row_b] = c2ra;
+        self[3][row_b] = c3ra;
+    }
+     
+    /// Swap two columns of a matrix.
+    #[inline]
+    pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        let car0 = self[col_a][0];
+        let car1 = self[col_a][1];
+        let car2 = self[col_a][2];
+        let car3 = self[col_a][3];
+        self[col_a][0] = self[col_b][0];
+        self[col_a][1] = self[col_b][1];
+        self[col_a][2] = self[col_b][2];
+        self[col_a][3] = self[col_b][3];
+        self[col_b][0] = car0;
+        self[col_b][1] = car1;
+        self[col_b][2] = car2;
+        self[col_b][3] = car3;
+    }
+     
+    /// Swap two elements of a matrix.
+    #[inline]
+    pub fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
+        let element_a = self[a.0][a.1];
+        self[a.0][a.1] = self[b.0][b.1];
+        self[b.0][b.1] = element_a;
+    }
 }
 
 impl<S> Matrix4x4<S> where S: NumCast + Copy {
@@ -4823,6 +4884,18 @@ impl<S> Matrix4x4<S> where S: Scalar {
         self.swap_elements((0, 3), (3, 0));
         self.swap_elements((1, 3), (3, 1));
         self.swap_elements((2, 3), (3, 2));
+    }
+
+    /// Transpose a matrix.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn transpose(&self) -> Matrix4x4<S> {
+        Matrix4x4::new(
+            self.c0r0, self.c1r0, self.c2r0, self.c3r0,
+            self.c0r1, self.c1r1, self.c2r1, self.c3r1, 
+            self.c0r2, self.c1r2, self.c2r2, self.c3r2, 
+            self.c0r3, self.c1r3, self.c2r3, self.c3r3
+        )
     }
 
     /// Compute a zero matrix.
@@ -6081,68 +6154,6 @@ impl<S> Array for Matrix4x4<S> where S: Copy {
     #[inline]
     fn as_slice(&self) -> &[Self::Element] {
         <Self as AsRef<[Self::Element; 16]>>::as_ref(self)
-    }
-}
-
-impl<S> Matrix for Matrix4x4<S> where S: Scalar {
-    type Element = S;
-    type Row = Vector4<S>;
-    type Column = Vector4<S>;
-    type Transpose = Matrix4x4<S>;
-
-    #[inline]
-    fn row(&self, r: usize) -> Self::Row {
-        Vector4::new(self[0][r], self[1][r], self[2][r], self[3][r])
-    }
-    
-    #[inline]
-    fn swap_rows(&mut self, row_a: usize, row_b: usize) {
-        let c0ra = self[0][row_a];
-        let c1ra = self[1][row_a];
-        let c2ra = self[2][row_a];
-        let c3ra = self[3][row_a];
-        self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[1][row_b];
-        self[2][row_a] = self[2][row_b];
-        self[3][row_a] = self[3][row_b];
-        self[0][row_b] = c0ra;
-        self[1][row_b] = c1ra;
-        self[2][row_b] = c2ra;
-        self[3][row_b] = c3ra;
-    }
-    
-    #[inline]
-    fn swap_columns(&mut self, col_a: usize, col_b: usize) {
-        let car0 = self[col_a][0];
-        let car1 = self[col_a][1];
-        let car2 = self[col_a][2];
-        let car3 = self[col_a][3];
-        self[col_a][0] = self[col_b][0];
-        self[col_a][1] = self[col_b][1];
-        self[col_a][2] = self[col_b][2];
-        self[col_a][3] = self[col_b][3];
-        self[col_b][0] = car0;
-        self[col_b][1] = car1;
-        self[col_b][2] = car2;
-        self[col_b][3] = car3;
-    }
-    
-    #[inline]
-    fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
-        let element_a = self[a.0][a.1];
-        self[a.0][a.1] = self[b.0][b.1];
-        self[b.0][b.1] = element_a;
-    }
-    
-    #[rustfmt::skip]
-    #[inline]
-    fn transpose(&self) -> Self::Transpose {
-        Matrix4x4::new(
-            self.c0r0, self.c1r0, self.c2r0, self.c3r0,
-            self.c0r1, self.c1r1, self.c2r1, self.c3r1, 
-            self.c0r2, self.c1r2, self.c2r2, self.c3r2, 
-            self.c0r3, self.c1r3, self.c2r3, self.c3r3
-        )
     }
 }
 

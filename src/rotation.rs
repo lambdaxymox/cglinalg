@@ -5,9 +5,6 @@ use crate::angle::{
 use crate::scalar::{
     ScalarFloat,
 };
-use crate::traits::{
-    Matrix,
-};
 use crate::matrix::{
     Matrix2x2,
     Matrix3x3,

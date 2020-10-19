@@ -70,7 +70,7 @@ pub trait Magnitude where Self: Sized {
     /// is too small.
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self>;
 }
-
+/*
 /// A data type implementing the `Matrix` trait has the structure of a matrix 
 /// in column major order. 
 ///
@@ -106,3 +106,4 @@ pub trait Matrix {
     fn transpose(&self) -> Self::Transpose;
 }
 
+*/

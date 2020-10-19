@@ -8,7 +8,6 @@ mod matrix2_tests {
     use cglinalg::{
         Vector2,
         Matrix2x2,
-        Matrix,
         Radians,
         Angle,
         Unit,
@@ -576,7 +575,6 @@ mod matrix3_tests {
         Vector3,
         Magnitude,
         Matrix3x3,
-        Matrix,
         Angle,
         Radians,
         Unit,
@@ -1490,7 +1488,6 @@ mod matrix4_tests {
         Vector4,
         Magnitude,
         Matrix4x4,
-        Matrix,
         Radians,
         Degrees,
         Angle,

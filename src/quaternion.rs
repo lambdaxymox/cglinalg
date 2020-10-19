@@ -1,7 +1,6 @@
 use crate::traits::{
     Array,
     Magnitude,
-    Matrix,
     Metric,
 };
 use crate::angle::{

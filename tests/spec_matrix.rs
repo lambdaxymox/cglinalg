@@ -746,9 +746,6 @@ macro_rules! approx_transposition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{
-            Matrix,
-        };
         use super::{
             $Generator,
         };
@@ -834,9 +831,6 @@ macro_rules! exact_transposition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{
-            Matrix,
-        };
         use super::{
             $Generator,
         };
@@ -923,9 +917,6 @@ macro_rules! swap_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg::{
-            Matrix,
-        };
         use super::{
             $Generator,
         };
