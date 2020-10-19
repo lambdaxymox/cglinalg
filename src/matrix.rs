@@ -367,12 +367,36 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let matrix: Matrix2x2<i32> = Matrix2x2::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
     #[inline]
     pub fn zero() -> Matrix2x2<S> {
         Matrix2x2::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether a matrix is a zero matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let matrix: Matrix2x2<i32> = Matrix2x2::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.c0r0.is_zero() && self.c0r1.is_zero() &&
@@ -2161,6 +2185,18 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let matrix: Matrix3x3<i32> = Matrix3x3::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn zero() -> Matrix3x3<S> {
@@ -2173,6 +2209,18 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
     
     /// Determine whether a matrix is a zero matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let matrix: Matrix3x3<i32> = Matrix3x3::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.c0r0.is_zero() && self.c0r1.is_zero() && self.c0r2.is_zero() &&
@@ -4576,6 +4624,18 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix4x4<i32> = Matrix4x4::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn zero() -> Matrix4x4<S> {
@@ -4589,6 +4649,20 @@ impl<S> Matrix4x4<S> where S: Scalar {
     }
     
     /// Determine whether a matrix is a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix4x4<i32> = Matrix4x4::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.c0r0.is_zero() && self.c0r1.is_zero() && 
