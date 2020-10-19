@@ -136,11 +136,6 @@ pub trait SquareMatrix where
     /// Get the diagonal part of a square matrix.
     fn diagonal(&self) -> Self::ColumnRow;
 
-    /*
-    /// Compute the determinant of a square matrix.
-    fn determinant(&self) -> Self::Element;
-    */
-
     /// Compute the trace of a square matrix.
     fn trace(&self) -> Self::Element;
 
