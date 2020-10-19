@@ -830,26 +830,6 @@ macro_rules! approx_mul_props {
                 );
             }
 
-            /// Multiplication of two scalars and a vector should be compatible with 
-            /// multiplication of all scalars. In other words, scalar multiplication 
-            /// of two scalar with a vector should act associatively, just like the 
-            /// multiplication of three scalars.
-            ///
-            /// Given scalars `a` and `b`, and a vector `v`, we have
-            /// ```text
-            /// (a * b) * v ~= a * (b * v)
-            /// ```
-            /// Note that the compatibility of scalars with vectors can only be 
-            /// approximate and not exact because multiplication of the underlying 
-            /// scalars is not associative. 
-            #[test]
-            fn prop_scalar_multiplication_compatibility(
-                a in $ScalarGen::<$ScalarType>(), b in $ScalarGen::<$ScalarType>(), 
-                v in $Generator::<$ScalarType>()) {
-
-                prop_assert!(relative_eq!(a * (b * v), (a * b) * v, epsilon = $tolerance));
-            }
-
             /// A scalar `1` acts like a multiplicative identity element.
             ///
             /// Given a vector `v`
