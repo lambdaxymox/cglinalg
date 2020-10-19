@@ -31,7 +31,7 @@ pub trait Magnitude where Self: Sized {
 
     /// Compute the Euclidean distance between two vectors.
     fn distance(&self, other: &Self) -> Self::Output {
-        Self::Output::sqrt(Self::distance_squared(&self, other))
+        self.distance_squared(other).sqrt()
     }
 }
 
