@@ -6,8 +6,6 @@ use num_traits::{
     Float,
 };
 
-use core::ops;
-
 
 /// A type implementing this trait has the structure of an array
 /// of its elements in its underlying storage. 
