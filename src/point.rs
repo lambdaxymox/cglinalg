@@ -4,7 +4,6 @@ use crate::scalar::{
     ScalarFloat,
 };
 use crate::traits::{
-    Array,
     Magnitude,
     Metric,
 };
@@ -117,6 +116,36 @@ impl<S> Point1<S> where S: Copy {
     pub fn from_fill(value: S) -> Point1<S> {
         Point1::new(value)
     }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        1
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (1, 1)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.x
+    }
+
+    // Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.x
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 1]>>::as_ref(self)
+    }
 }
 
 impl<S> Point1<S> where S: NumCast + Copy {
@@ -218,35 +247,6 @@ impl<S> Point1<S> where S: Scalar {
     #[inline]
     pub fn dot(self, other: &Point1<S>) -> S {
         self.x * other.x
-    }
-}
-
-impl<S> Array for Point1<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        1
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (1, 1)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const Self::Element {
-        &self.x
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut Self::Element {
-        &mut self.x
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 1]>>::as_ref(self)
     }
 }
 
@@ -921,6 +921,36 @@ impl<S> Point2<S> where S: Copy {
     pub fn from_fill(value: S) -> Point2<S> {
         Point2::new(value, value)
     }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        2
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (2, 1)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.x
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.x
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 2]>>::as_ref(self)
+    }
 }
 
 impl<S> Point2<S> where S: NumCast + Copy {
@@ -1077,35 +1107,6 @@ impl<S> Point2<S> where S: Scalar {
     #[inline]
     pub fn dot(self, other: &Point2<S>) -> S {
         self.x * other.x + self.y * other.y
-    }
-}
-
-impl<S> Array for Point2<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        2
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (2, 1)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const Self::Element {
-        &self.x
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut Self::Element {
-        &mut self.x
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 2]>>::as_ref(self)
     }
 }
 
@@ -1731,6 +1732,27 @@ impl<S> Point3<S> {
 }
 
 impl<S> Point3<S> where S: Copy {
+    /// Contract a three-dimensional point, removing its `z`-component.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Point2::new(1_u32, 2_u32);
+    /// let result = point.contract();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn contract(self) -> Point2<S> {
+        Point2::new(self.x, self.y)
+    }
+
     /// Construct a new point from a fill value.
     /// 
     /// ## Example
@@ -1751,25 +1773,34 @@ impl<S> Point3<S> where S: Copy {
         Point3::new(value, value, value)
     }
 
-    /// Contract a three-dimensional point, removing its `z`-component.
-    ///
-    /// ## Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point2,
-    /// #     Point3, 
-    /// # };
-    /// #
-    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let expected = Point2::new(1_u32, 2_u32);
-    /// let result = point.contract();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
+    /// The length of the the underlying array.
     #[inline]
-    pub fn contract(self) -> Point2<S> {
-        Point2::new(self.x, self.y)
+    pub fn len() -> usize {
+        3
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (3, 1)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.x
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.x
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 3]>>::as_ref(self)
     }
 }
 
@@ -1936,35 +1967,6 @@ impl<S> Point3<S> where S: Scalar {
     #[inline]
     pub fn dot(self, other: &Point3<S>) -> S {
         self.x * other.x + self.y * other.y + self.z * other.z
-    }
-}
-
-impl<S> Array for Point3<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        3
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (3, 1)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const Self::Element {
-        &self.x
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut Self::Element {
-        &mut self.x
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 3]>>::as_ref(self)
     }
 }
 

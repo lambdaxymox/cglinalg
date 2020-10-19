@@ -6,7 +6,7 @@ use num_traits::{
     Float,
 };
 
-
+/*
 /// A type implementing this trait has the structure of an array
 /// of its elements in its underlying storage. 
 /// 
@@ -23,18 +23,16 @@ pub trait Array {
     /// The shape of the underlying array.
     fn shape() -> (usize, usize);
 
-    /// Generate a pointer to the underlying array for passing a
-    /// matrix or vector to the graphics hardware.
+    /// Generate a pointer to the underlying array.
     fn as_ptr(&self) -> *const Self::Element; 
 
-    /// Generate a mutable pointer to the underlying array for passing a
-    /// matrix or vector to the graphics hardware.
+    /// Generate a mutable pointer to the underlying array.
     fn as_mut_ptr(&mut self) -> *mut Self::Element; 
 
     /// Get a slice of the underlying elements of the data type.
     fn as_slice(&self) -> &[Self::Element];
 }
-
+*/
 /// A type with this trait has a notion of comparing the distance (metric) 
 /// between two elements of that type. For example, one can use this trait 
 /// to compute the Euclidean distance between two vectors. 

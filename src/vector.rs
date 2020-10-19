@@ -4,7 +4,6 @@ use crate::scalar::{
     ScalarFloat,   
 };
 use crate::traits::{
-    Array,
     Magnitude,
     Metric,
 };
@@ -137,6 +136,36 @@ impl<S> Vector1<S> where S: Copy {
     #[inline]
     pub fn from_fill(value: S) -> Vector1<S> {
         Vector1::new(value)
+    }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        1
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (1, 1)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.x
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.x
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 1]>>::as_ref(self)
     }
 }
 
@@ -341,35 +370,6 @@ impl<'a, 'b, S> Metric<&'a Vector1<S>> for &'b Vector1<S> where S: ScalarFloat {
     #[inline]
     fn distance_squared(self, to: &'a Vector1<S>) -> S {
         (to.x - self.x) * (to.x - self.x)
-    }
-}
-
-impl<S> Array for Vector1<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        1
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (1, 1)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const Self::Element {
-        &self.x
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut Self::Element {
-        &mut self.x
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 1]>>::as_ref(self)
     }
 }
 
@@ -1017,6 +1017,36 @@ impl<S> Vector2<S> where S: Copy {
     pub fn from_fill(value: S) -> Vector2<S> {
         Vector2::new(value, value)
     }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        2
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (2, 1)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.x
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.x
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 2]>>::as_ref(self)
+    }
 }
 
 impl<S> Vector2<S> where S: Scalar {
@@ -1231,35 +1261,6 @@ impl<S> Vector2<S> where S: ScalarFloat {
     #[inline]
     pub fn project(&self, other: &Vector2<S>) -> Vector2<S> {
         other * (self.dot(other) / other.magnitude_squared())
-    }
-}
-
-impl<S> Array for Vector2<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        2
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (2, 1)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const Self::Element {
-        &self.x
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut Self::Element {
-        &mut self.x
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 2]>>::as_ref(self)
     }
 }
 
@@ -1966,6 +1967,36 @@ impl<S> Vector3<S> where S: Copy {
     pub fn from_fill(value: S) -> Vector3<S> {
         Vector3::new(value, value, value)
     }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        3
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (3, 1)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.x
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.x
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 3]>>::as_ref(self)
+    }
 }
 
 impl<S> Vector3<S> where S: Scalar {
@@ -2240,35 +2271,6 @@ impl<S> Vector3<S> where S: ScalarFloat {
     #[inline]
     pub fn project(&self, other: &Vector3<S>) -> Vector3<S> {
         other * (self.dot(other) / other.magnitude_squared())
-    }
-}
-
-impl<S> Array for Vector3<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        3
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (3, 1)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const Self::Element {
-        &self.x
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut Self::Element {
-        &mut self.x
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 3]>>::as_ref(self)
     }
 }
 
@@ -2977,6 +2979,36 @@ impl<S> Vector4<S> where S: Copy {
     pub fn from_fill(value: S) -> Vector4<S> {
         Vector4::new(value, value, value, value)
     }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        4
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (4, 1)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.x
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.x
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 4]>>::as_ref(self)
+    }
 }
 
 impl<S> Vector4<S> where S: NumCast + Copy {
@@ -3227,35 +3259,6 @@ impl<S> Vector4<S> where S: ScalarFloat {
     #[inline]
     pub fn project(&self, other: &Vector4<S>) -> Vector4<S> {
         other * (self.dot(other) / other.magnitude_squared())
-    }
-}
-
-impl<S> Array for Vector4<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        4
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (4, 1)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const Self::Element {
-        &self.x
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut Self::Element {
-        &mut self.x
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
     }
 }
 

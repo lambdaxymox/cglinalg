@@ -11,7 +11,6 @@ use crate::angle::{
     Radians,
 };
 use crate::traits::{
-    Array,
     Magnitude,
 };
 use crate::vector::{
@@ -179,6 +178,36 @@ impl<S> Matrix2x2<S> where S: Copy {
         let element_a = self[a.0][a.1];
         self[a.0][a.1] = self[b.0][b.1];
         self[b.0][b.1] = element_a;
+    }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        4
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (2, 2)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.c0r0
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.c0r0
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 4]>>::as_ref(self)
     }
 }
 
@@ -1003,35 +1032,6 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Matrix2x2<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        4
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (2, 2)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const S {
-        &self.c0r0
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.c0r0
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
-    }
-}
-
 impl<S> From<[[S; 2]; 2]> for Matrix2x2<S> where S: Scalar {
     #[inline]
     fn from(array: [[S; 2]; 2]) -> Matrix2x2<S> {
@@ -1756,6 +1756,36 @@ impl<S> Matrix3x3<S> where S: Copy {
         let element_a = self[a.0][a.1];
         self[a.0][a.1] = self[b.0][b.1];
         self[b.0][b.1] = element_a;
+    }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        9
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (3, 3)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.c0r0
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.c0r0
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 9]>>::as_ref(self)
     }
 }
 
@@ -3398,35 +3428,6 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Array for Matrix3x3<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        9
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (3, 3)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const S {
-        &self.c0r0
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.c0r0
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 9]>>::as_ref(self)
-    }
-}
-
 impl<S> From<[[S; 3]; 3]> for Matrix3x3<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
@@ -4405,6 +4406,36 @@ impl<S> Matrix4x4<S> where S: Copy {
         let element_a = self[a.0][a.1];
         self[a.0][a.1] = self[b.0][b.1];
         self[b.0][b.1] = element_a;
+    }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        16
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (4, 4)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.c0r0
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.c0r0
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 16]>>::as_ref(self)
     }
 }
 
@@ -6125,35 +6156,6 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         ulps_eq!(self.c0r3, self.c3r0) && ulps_eq!(self.c3r0, self.c0r3) &&
         ulps_eq!(self.c1r3, self.c3r1) && ulps_eq!(self.c3r1, self.c1r3) &&
         ulps_eq!(self.c2r3, self.c3r2) && ulps_eq!(self.c3r2, self.c2r3)
-    }
-}
-
-impl<S> Array for Matrix4x4<S> where S: Copy {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        16
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (4, 4)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const S {
-        &self.c0r0
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.c0r0
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 16]>>::as_ref(self)
     }
 }
 

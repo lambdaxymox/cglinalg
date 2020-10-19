@@ -1,5 +1,4 @@
 use crate::traits::{
-    Array,
     Magnitude,
     Metric,
 };
@@ -120,6 +119,36 @@ impl<S> Quaternion<S> where S: Copy {
     #[inline]
     pub fn from_fill(value: S) -> Quaternion<S> {
         Quaternion::new(value, value, value, value)
+    }
+
+    /// The length of the the underlying array.
+    #[inline]
+    pub fn len() -> usize {
+        4
+    }
+
+    /// The shape of the underlying array.
+    #[inline]
+    pub fn shape() -> (usize, usize) {
+        (4, 1)
+    }
+
+    /// Generate a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.s
+    }
+
+    /// Generate a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.s
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 4]>>::as_ref(self)
     }
 }
 
@@ -1732,35 +1761,6 @@ impl<S> AsMut<(S, S, S, S)> for Quaternion<S> {
         unsafe { 
             &mut *(self as *mut Quaternion<S> as *mut (S, S, S, S))
         }
-    }
-}
-
-impl<S> Array for Quaternion<S> where S: Copy + num_traits::Zero {
-    type Element = S;
-
-    #[inline]
-    fn len() -> usize {
-        4
-    }
-
-    #[inline]
-    fn shape() -> (usize, usize) {
-        (4, 1)
-    }
-
-    #[inline]
-    fn as_ptr(&self) -> *const Self::Element {
-        &self.s
-    }
-
-    #[inline]
-    fn as_mut_ptr(&mut self) -> *mut Self::Element {
-        &mut self.s
-    }
-
-    #[inline]
-    fn as_slice(&self) -> &[Self::Element] {
-        <Self as AsRef<[Self::Element; 4]>>::as_ref(self)
     }
 }
 
