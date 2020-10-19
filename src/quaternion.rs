@@ -1,6 +1,5 @@
 use crate::magnitude::{
     Magnitude,
-    Metric,
 };
 use crate::angle::{
     Angle,
@@ -2237,18 +2236,6 @@ impl<S> ops::RemAssign<S> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> Metric for Quaternion<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn distance_squared(&self, other: &Quaternion<S>) -> S {
-        (self.s - other.s)     * (self.s - other.s)     + 
-        (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
-        (self.v.x - other.v.y) * (self.v.x - other.v.y) + 
-        (self.v.x - other.v.z) * (self.v.x - other.v.z)
-    }
-}
-
 impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
     type Output = S;
 
@@ -2281,6 +2268,14 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
         } else {
             Some(self.normalize())
         }
+    }
+
+    #[inline]
+    fn distance_squared(&self, other: &Quaternion<S>) -> S {
+        (self.s - other.s)     * (self.s - other.s)     + 
+        (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
+        (self.v.x - other.v.y) * (self.v.x - other.v.y) + 
+        (self.v.x - other.v.z) * (self.v.x - other.v.z)
     }
 }
 
