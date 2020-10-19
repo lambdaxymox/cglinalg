@@ -70,40 +70,4 @@ pub trait Magnitude where Self: Sized {
     /// is too small.
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self>;
 }
-/*
-/// A data type implementing the `Matrix` trait has the structure of a matrix 
-/// in column major order. 
-///
-/// If a type represents a matrix, we can perform operations such as swapping 
-/// rows, swapping columns, getting a row of  the the matrix, or swapping 
-/// elements.
-pub trait Matrix {
-    /// The type of the underlying scalars of the matrix.
-    type Element: Scalar;
 
-    /// The row vector of a matrix.
-    type Row: Array<Element = Self::Element>;
-
-    /// The column vector of a matrix.
-    type Column: Array<Element = Self::Element>;
-
-    /// The type signature of the transpose of the matrix.
-    type Transpose: Matrix<Element = Self::Element, Row = Self::Column, Column = Self::Row>;
-
-    /// Get the row of the matrix by value.
-    fn row(&self, r: usize) -> Self::Row;
-    
-    /// Swap two rows of a matrix.
-    fn swap_rows(&mut self, row_a: usize, row_b: usize);
-    
-    /// Swap two columns of a matrix.
-    fn swap_columns(&mut self, col_a: usize, col_b: usize);
-    
-    /// Swap two elements of a matrix.
-    fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize));
-    
-    /// Transpose a matrix.
-    fn transpose(&self) -> Self::Transpose;
-}
-
-*/
