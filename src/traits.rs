@@ -107,7 +107,7 @@ pub trait Matrix {
     /// Transpose a matrix.
     fn transpose(&self) -> Self::Transpose;
 }
-
+/*
 /// Define operations on square matrices. 
 ///
 /// A matrix is said to be square if the number of rows and 
@@ -153,3 +153,4 @@ pub trait SquareMatrix where
     fn is_symmetric(&self) -> bool;
 }
 
+*/

@@ -3,7 +3,6 @@ use crate::traits::{
     Magnitude,
     Matrix,
     Metric,
-    SquareMatrix,
 };
 use crate::angle::{
     Angle,

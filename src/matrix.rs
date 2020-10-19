@@ -14,7 +14,6 @@ use crate::traits::{
     Array,
     Magnitude,
     Matrix,
-    SquareMatrix,
 };
 use crate::vector::{
     Vector2,
@@ -394,6 +393,40 @@ impl<S> Matrix2x2<S> where S: Scalar {
     pub fn is_identity(&self) -> bool {
         self.c0r0.is_one()  && self.c0r1.is_zero() &&
         self.c1r0.is_zero() && self.c1r1.is_one()
+    }
+
+    /// Construct a new diagonal matrix from a given value where
+    /// each element along the diagonal is equal to `value`.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_diagonal_value(value: S) -> Self {
+        Matrix2x2::new(
+            value,     S::zero(),
+            S::zero(), value
+        )
+    }
+    
+    /// Construct a new diagonal matrix from a vector of values
+    /// representing the elements along the diagonal.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_diagonal(diagonal: &Vector2<S>) -> Self {
+        Matrix2x2::new(
+            diagonal.x, S::zero(),
+            S::zero(),  diagonal.y
+        )
+    }
+
+    /// Get the diagonal part of a square matrix.
+    #[inline]
+    pub fn diagonal(&self) -> Vector2<S> {
+        Vector2::new(self.c0r0, self.c1r1)
+    }
+
+    /// Compute the trace of a square matrix.
+    #[inline]
+    pub fn trace(&self) -> S {
+        self.c0r0 + self.c1r1
     }
 }
 
@@ -778,6 +811,25 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     #[inline]
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero())
+    }
+
+    /// Determine whether a square matrix is a diagonal matrix. 
+    ///
+    /// A square matrix is a diagonal matrix if every off-diagonal 
+    /// element is zero.
+    #[inline]
+    pub fn is_diagonal(&self) -> bool {
+        ulps_eq!(self.c0r1, S::zero()) && ulps_eq!(self.c1r0, S::zero())
+    }
+    
+    /// Determine whether a matrix is symmetric. 
+    ///
+    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
+    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
+    /// Note that every diagonal matrix is a symmetric matrix.
+    #[inline]
+    pub fn is_symmetric(&self) -> bool {
+        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1)
     }
 }
 
@@ -1412,49 +1464,6 @@ impl<S> approx::UlpsEq for Matrix2x2<S> where S: ScalarFloat {
         S::ulps_eq(&self.c0r1, &other.c0r1, epsilon, max_ulps) &&
         S::ulps_eq(&self.c1r0, &other.c1r0, epsilon, max_ulps) &&
         S::ulps_eq(&self.c1r1, &other.c1r1, epsilon, max_ulps)
-    }
-}
-
-
-impl<S> SquareMatrix for Matrix2x2<S> where S: ScalarFloat {
-    type ColumnRow = Vector2<S>;
-
-    #[rustfmt::skip]
-    #[inline]
-    fn from_diagonal_value(value: Self::Element) -> Self {
-        Matrix2x2::new(
-            value,     S::zero(),
-            S::zero(), value
-        )
-    }
-    
-    #[rustfmt::skip]
-    #[inline]
-    fn from_diagonal(value: Vector2<S>) -> Self {
-        Matrix2x2::new(
-            value.x,   S::zero(),
-            S::zero(), value.y
-        )
-    }
-    
-    #[inline]
-    fn diagonal(&self) -> Vector2<S> {
-        Vector2::new(self.c0r0, self.c1r1)
-    }
-    
-    #[inline]
-    fn trace(&self) -> S {
-        self.c0r0 + self.c1r1
-    }
-    
-    #[inline]
-    fn is_diagonal(&self) -> bool {
-        ulps_eq!(self.c0r1, S::zero()) && ulps_eq!(self.c1r0, S::zero())
-    }
-    
-    #[inline]
-    fn is_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1)
     }
 }
 
@@ -2194,6 +2203,41 @@ impl<S> Matrix3x3<S> where S: Scalar {
         self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() &&
         self.c1r0.is_zero() && self.c1r1.is_one()  && self.c1r2.is_zero() &&
         self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()
+    }
+
+    /// The type of the columns are rows of the square matrix.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_diagonal_value(value: S) -> Self {
+        Matrix3x3::new(
+            value,     S::zero(), S::zero(),
+            S::zero(), value,     S::zero(),
+            S::zero(), S::zero(), value,
+        )
+    }
+    
+    /// Construct a new diagonal matrix from a given value where
+    /// each element along the diagonal is equal to `value`.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_diagonal(diagonal: &Vector3<S>) -> Self {
+        Matrix3x3::new(
+            diagonal.x, S::zero(),  S::zero(),
+            S::zero(),  diagonal.y, S::zero(),
+            S::zero(),  S::zero(),  diagonal.z
+        )
+    }
+
+    /// Get the diagonal part of a square matrix.
+    #[inline]
+    pub fn diagonal(&self) -> Vector3<S> {
+        Vector3::new(self.c0r0, self.c1r1, self.c2r2)
+    }
+
+    /// Compute the trace of a square matrix.
+    #[inline]
+    pub fn trace(&self) -> S {
+        self.c0r0 + self.c1r1 + self.c2r2
     }
 }
 
@@ -3010,6 +3054,33 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     #[inline]
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero())
+    }
+
+    
+    /// Determine whether a square matrix is a diagonal matrix. 
+    ///
+    /// A square matrix is a diagonal matrix if every off-diagonal 
+    /// element is zero.
+    #[inline]
+    pub fn is_diagonal(&self) -> bool {
+        ulps_eq!(self.c0r1, S::zero()) &&
+        ulps_eq!(self.c0r2, S::zero()) && 
+        ulps_eq!(self.c1r0, S::zero()) &&
+        ulps_eq!(self.c1r2, S::zero()) &&
+        ulps_eq!(self.c2r0, S::zero()) &&
+        ulps_eq!(self.c2r1, S::zero())
+    }
+    
+    /// Determine whether a matrix is symmetric. 
+    ///
+    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
+    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
+    /// Note that every diagonal matrix is a symmetric matrix.
+    #[inline]
+    pub fn is_symmetric(&self) -> bool {
+        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1) &&
+        ulps_eq!(self.c0r2, self.c2r0) && ulps_eq!(self.c2r0, self.c0r2) &&
+        ulps_eq!(self.c1r2, self.c2r1) && ulps_eq!(self.c2r1, self.c1r2)
     }
 }
 
@@ -3901,57 +3972,6 @@ impl<S> approx::UlpsEq for Matrix3x3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> SquareMatrix for Matrix3x3<S> where S: ScalarFloat {
-    type ColumnRow = Vector3<S>;
-
-    #[rustfmt::skip]
-    #[inline]
-    fn from_diagonal_value(value: Self::Element) -> Self {
-        Matrix3x3::new(
-            value,     S::zero(), S::zero(),
-            S::zero(), value,     S::zero(),
-            S::zero(), S::zero(), value,
-        )
-    }
-    
-    #[rustfmt::skip]
-    #[inline]
-    fn from_diagonal(value: Self::ColumnRow) -> Self {
-        Matrix3x3::new(
-            value.x, S::zero(),    S::zero(),
-            S::zero(),  value.y,   S::zero(),
-            S::zero(),  S::zero(), value.z
-        )
-    }
-    
-    #[inline]
-    fn diagonal(&self) -> Self::ColumnRow {
-        Vector3::new(self.c0r0, self.c1r1, self.c2r2)
-    }
-    
-    #[inline]
-    fn trace(&self) -> Self::Element {
-        self.c0r0 + self.c1r1 + self.c2r2
-    }
-    
-    #[inline]
-    fn is_diagonal(&self) -> bool {
-        ulps_eq!(self.c0r1, S::zero()) &&
-        ulps_eq!(self.c0r2, S::zero()) && 
-        ulps_eq!(self.c1r0, S::zero()) &&
-        ulps_eq!(self.c1r2, S::zero()) &&
-        ulps_eq!(self.c2r0, S::zero()) &&
-        ulps_eq!(self.c2r1, S::zero())
-    }
-    
-    #[inline]
-    fn is_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1) &&
-        ulps_eq!(self.c0r2, self.c2r0) && ulps_eq!(self.c2r0, self.c0r2) &&
-        ulps_eq!(self.c1r2, self.c2r1) && ulps_eq!(self.c2r1, self.c1r2)
-    }
-}
-
 impl<S: Scalar> iter::Sum<Matrix3x3<S>> for Matrix3x3<S> {
     #[inline]
     fn sum<I: Iterator<Item = Matrix3x3<S>>>(iter: I) -> Matrix3x3<S> {
@@ -4606,6 +4626,44 @@ impl<S> Matrix4x4<S> where S: Scalar {
         self.c1r0.is_zero() && self.c1r1.is_one()  && self.c1r2.is_zero() && self.c1r3.is_zero() &&
         self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()  && self.c2r3.is_zero() &&
         self.c3r0.is_zero() && self.c3r1.is_zero() && self.c3r2.is_zero() && self.c3r3.is_one()
+    }
+
+    /// Construct a new diagonal matrix from a given value where
+    /// each element along the diagonal is equal to `value`.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_diagonal_value(value: S) -> Self {
+        Matrix4x4::new(
+            value,     S::zero(), S::zero(), S::zero(),
+            S::zero(), value,     S::zero(), S::zero(),
+            S::zero(), S::zero(), value,     S::zero(),
+            S::zero(), S::zero(), S::zero(), value
+        )
+    }
+    
+    /// Construct a new diagonal matrix from a vector of values
+    /// representing the elements along the diagonal.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_diagonal(value: &Vector4<S>) -> Self {
+        Matrix4x4::new(
+            value.x,   S::zero(), S::zero(), S::zero(),
+            S::zero(), value.y,   S::zero(), S::zero(),
+            S::zero(), S::zero(), value.z,   S::zero(),
+            S::zero(), S::zero(), S::zero(), value.w,
+        )
+    }
+    
+    /// Get the diagonal part of a square matrix.
+    #[inline]
+    pub fn diagonal(&self) -> Vector4<S> {
+        Vector4::new(self.c0r0, self.c1r1, self.c2r2, self.c3r3)
+    }
+
+    /// Compute the trace of a square matrix.
+    #[inline]
+    pub fn trace(&self) -> S {
+        self.c0r0 + self.c1r1 + self.c2r2 + self.c3r3
     }
 }
 
@@ -5576,6 +5634,35 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     #[inline]
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero())
+    }
+
+    /// Determine whether a square matrix is a diagonal matrix. 
+    ///
+    /// A square matrix is a diagonal matrix if every off-diagonal 
+    /// element is zero.
+    #[inline]
+    pub fn is_diagonal(&self) -> bool {
+        ulps_eq!(self.c0r1, S::zero()) &&
+        ulps_eq!(self.c0r2, S::zero()) && 
+        ulps_eq!(self.c1r0, S::zero()) &&
+        ulps_eq!(self.c1r2, S::zero()) &&
+        ulps_eq!(self.c2r0, S::zero()) &&
+        ulps_eq!(self.c2r1, S::zero())
+    }
+    
+    /// Determine whether a matrix is symmetric. 
+    ///
+    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
+    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
+    /// Note that every diagonal matrix is a symmetric matrix.
+    #[inline]
+    pub fn is_symmetric(&self) -> bool {
+        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1) &&
+        ulps_eq!(self.c0r2, self.c2r0) && ulps_eq!(self.c2r0, self.c0r2) &&
+        ulps_eq!(self.c1r2, self.c2r1) && ulps_eq!(self.c2r1, self.c1r2) &&
+        ulps_eq!(self.c0r3, self.c3r0) && ulps_eq!(self.c3r0, self.c0r3) &&
+        ulps_eq!(self.c1r3, self.c3r1) && ulps_eq!(self.c3r1, self.c1r3) &&
+        ulps_eq!(self.c2r3, self.c3r2) && ulps_eq!(self.c3r2, self.c2r3)
     }
 }
 
@@ -6875,62 +6962,6 @@ impl<S> approx::UlpsEq for Matrix4x4<S> where S: ScalarFloat {
         S::ulps_eq(&self.c3r1, &other.c3r1, epsilon, max_ulps) &&
         S::ulps_eq(&self.c3r2, &other.c3r2, epsilon, max_ulps) &&
         S::ulps_eq(&self.c3r3, &other.c3r3, epsilon, max_ulps)
-    }
-}
-
-impl<S> SquareMatrix for Matrix4x4<S> where S: ScalarFloat {
-    type ColumnRow = Vector4<S>;
-
-    #[rustfmt::skip]
-    #[inline]
-    fn from_diagonal_value(value: Self::Element) -> Self {
-        Matrix4x4::new(
-            value,     S::zero(), S::zero(), S::zero(),
-            S::zero(), value,     S::zero(), S::zero(),
-            S::zero(), S::zero(), value,     S::zero(),
-            S::zero(), S::zero(), S::zero(), value
-        )
-    }
-    
-    #[rustfmt::skip]
-    #[inline]
-    fn from_diagonal(value: Self::ColumnRow) -> Self {
-        Matrix4x4::new(
-            value.x,   S::zero(), S::zero(), S::zero(),
-            S::zero(), value.y,   S::zero(), S::zero(),
-            S::zero(), S::zero(), value.z,   S::zero(),
-            S::zero(), S::zero(), S::zero(), value.w,
-        )
-    }
-    
-    #[inline]
-    fn diagonal(&self) -> Self::ColumnRow {
-        Vector4::new(self.c0r0, self.c1r1, self.c2r2, self.c3r3)
-    }
-    
-    #[inline]
-    fn trace(&self) -> Self::Element {
-        self.c0r0 + self.c1r1 + self.c2r2 + self.c3r3
-    }
-    
-    #[inline]
-    fn is_diagonal(&self) -> bool {
-        ulps_eq!(self.c0r1, S::zero()) &&
-        ulps_eq!(self.c0r2, S::zero()) && 
-        ulps_eq!(self.c1r0, S::zero()) &&
-        ulps_eq!(self.c1r2, S::zero()) &&
-        ulps_eq!(self.c2r0, S::zero()) &&
-        ulps_eq!(self.c2r1, S::zero())
-    }
-    
-    #[inline]
-    fn is_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1) &&
-        ulps_eq!(self.c0r2, self.c2r0) && ulps_eq!(self.c2r0, self.c0r2) &&
-        ulps_eq!(self.c1r2, self.c2r1) && ulps_eq!(self.c2r1, self.c1r2) &&
-        ulps_eq!(self.c0r3, self.c3r0) && ulps_eq!(self.c3r0, self.c0r3) &&
-        ulps_eq!(self.c1r3, self.c3r1) && ulps_eq!(self.c3r1, self.c1r3) &&
-        ulps_eq!(self.c2r3, self.c3r2) && ulps_eq!(self.c3r2, self.c2r3)
     }
 }
 
