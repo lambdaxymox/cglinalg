@@ -293,162 +293,6 @@ impl<S> Point1<S> where S: Scalar {
     }
 }
 
-impl_as_ref_ops!(Point1<S>, S);
-impl_as_ref_ops!(Point1<S>, (S,));
-impl_as_ref_ops!(Point1<S>, [S; 1]);
-
-impl_point_index_ops!(Point1<S>, 1, usize, S);
-impl_point_index_ops!(Point1<S>, 1, Range<usize>, [S]);
-impl_point_index_ops!(Point1<S>, 1, RangeTo<usize>, [S]);
-impl_point_index_ops!(Point1<S>, 1, RangeFrom<usize>, [S]);
-impl_point_index_ops!(Point1<S>, 1, RangeFull, [S]);
-/*
-impl<S> AsRef<[S; 1]> for Point1<S> {
-    #[inline]
-    fn as_ref(&self) -> &[S; 1] {
-        unsafe { 
-            &*(self as *const Point1<S> as *const [S; 1])
-        }
-    }
-}
-
-impl<S> AsRef<S> for Point1<S> {
-    #[inline]
-    fn as_ref(&self) -> &S {
-        unsafe { 
-            &*(self as *const Point1<S> as *const S)
-        }
-    }
-}
-
-impl<S> AsRef<(S,)> for Point1<S> {
-    #[inline]
-    fn as_ref(&self) -> &(S,) {
-        unsafe { 
-            &*(self as *const Point1<S> as *const (S,))
-        }
-    }
-}
-
-impl<S> AsMut<[S; 1]> for Point1<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [S; 1] {
-        unsafe { 
-            &mut *(self as *mut Point1<S> as *mut [S; 1])
-        }
-    }
-}
-
-impl<S> AsMut<S> for Point1<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut S {
-        unsafe { 
-            &mut *(self as *mut Point1<S> as *mut S)
-        }
-    }
-}
-
-impl<S> AsMut<(S,)> for Point1<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut (S,) {
-        unsafe { 
-            &mut *(self as *mut Point1<S> as *mut (S,))
-        }
-    }
-}
-*/
-
-/*
-impl<S> ops::Index<usize> for Point1<S> {
-    type Output = S;
-
-    #[inline]
-    fn index(&self, index: usize) -> &Self::Output {
-        let v: &[S; 1] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::Range<usize>> for Point1<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::Range<usize>) -> &Self::Output {
-        let v: &[S; 1] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeTo<usize>> for Point1<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
-        let v: &[S; 1] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeFrom<usize>> for Point1<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
-        let v: &[S; 1] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeFull> for Point1<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeFull) -> &Self::Output {
-        let v: &[S; 1] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::IndexMut<usize> for Point1<S> {
-    #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut S {
-        let v: &mut [S; 1] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::Range<usize>> for Point1<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
-        let v: &mut [S; 1] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeTo<usize>> for Point1<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
-        let v: &mut [S; 1] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Point1<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
-        let v: &mut [S; 1] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeFull> for Point1<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
-        let v: &mut [S; 1] = self.as_mut();
-        &mut v[index]
-    }
-}
-*/
 impl<S> fmt::Display for Point1<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Point1 [{}]", self.x)
@@ -484,6 +328,16 @@ impl<'a, S> From<&'a [S; 1]> for &'a Point1<S> where S: Scalar {
         }
     }
 }
+
+impl_as_ref_ops!(Point1<S>, S);
+impl_as_ref_ops!(Point1<S>, (S,));
+impl_as_ref_ops!(Point1<S>, [S; 1]);
+
+impl_point_index_ops!(Point1<S>, 1, usize, S);
+impl_point_index_ops!(Point1<S>, 1, Range<usize>, [S]);
+impl_point_index_ops!(Point1<S>, 1, RangeTo<usize>, [S]);
+impl_point_index_ops!(Point1<S>, 1, RangeFrom<usize>, [S]);
+impl_point_index_ops!(Point1<S>, 1, RangeFull, [S]);
 
 impl<S> ops::Add<Vector1<S>> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
@@ -1134,143 +988,6 @@ impl<S> Point2<S> where S: Scalar {
     }
 }
 
-impl_as_ref_ops!(Point2<S>, (S, S));
-impl_as_ref_ops!(Point2<S>, [S; 2]);
-
-impl_point_index_ops!(Point2<S>, 2, usize, S);
-impl_point_index_ops!(Point2<S>, 2, Range<usize>, [S]);
-impl_point_index_ops!(Point2<S>, 2, RangeTo<usize>, [S]);
-impl_point_index_ops!(Point2<S>, 2, RangeFrom<usize>, [S]);
-impl_point_index_ops!(Point2<S>, 2, RangeFull, [S]);
-/*
-
-impl<S> AsRef<[S; 2]> for Point2<S> {
-    #[inline]
-    fn as_ref(&self) -> &[S; 2] {
-        unsafe { 
-            &*(self as *const Point2<S> as *const [S; 2])
-        }
-    }
-}
-
-impl<S> AsRef<(S, S)> for Point2<S> {
-    #[inline]
-    fn as_ref(&self) -> &(S, S) {
-        unsafe { 
-            &*(self as *const Point2<S> as *const (S, S))
-        }
-    }
-}
-
-impl<S> AsMut<[S; 2]> for Point2<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [S; 2] {
-        unsafe { 
-            &mut *(self as *mut Point2<S> as *mut [S; 2])
-        }
-    }
-}
-
-impl<S> AsMut<(S, S)> for Point2<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut (S, S) {
-        unsafe { 
-            &mut *(self as *mut Point2<S> as *mut (S, S))
-        }
-    }
-}
-*/
-/*
-impl<S> ops::Index<usize> for Point2<S> {
-    type Output = S;
-
-    #[inline]
-    fn index(&self, index: usize) -> &Self::Output {
-        let v: &[S; 2] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::Range<usize>> for Point2<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::Range<usize>) -> &Self::Output {
-        let v: &[S; 2] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeTo<usize>> for Point2<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
-        let v: &[S; 2] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeFrom<usize>> for Point2<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
-        let v: &[S; 2] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeFull> for Point2<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeFull) -> &Self::Output {
-        let v: &[S; 2] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::IndexMut<usize> for Point2<S> {
-    #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut S {
-        let v: &mut [S; 2] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::Range<usize>> for Point2<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
-        let v: &mut [S; 2] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeTo<usize>> for Point2<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
-        let v: &mut [S; 2] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Point2<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
-        let v: &mut [S; 2] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeFull> for Point2<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
-        let v: &mut [S; 2] = self.as_mut();
-        &mut v[index]
-    }
-}
-*/
 impl<S> fmt::Display for Point2<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Point2 [{}, {}]", self.x, self.y)
@@ -1306,6 +1023,15 @@ impl<'a, S> From<&'a [S; 2]> for &'a Point2<S> where S: Scalar {
         }
     }
 }
+
+impl_as_ref_ops!(Point2<S>, (S, S));
+impl_as_ref_ops!(Point2<S>, [S; 2]);
+
+impl_point_index_ops!(Point2<S>, 2, usize, S);
+impl_point_index_ops!(Point2<S>, 2, Range<usize>, [S]);
+impl_point_index_ops!(Point2<S>, 2, RangeTo<usize>, [S]);
+impl_point_index_ops!(Point2<S>, 2, RangeFrom<usize>, [S]);
+impl_point_index_ops!(Point2<S>, 2, RangeFull, [S]);
 
 impl<S> ops::Add<Vector2<S>> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
@@ -1974,142 +1700,6 @@ impl<S> Point3<S> where S: Scalar {
     }
 }
 
-impl_as_ref_ops!(Point3<S>, (S, S, S));
-impl_as_ref_ops!(Point3<S>, [S; 3]);
-
-impl_point_index_ops!(Point3<S>, 3, usize, S);
-impl_point_index_ops!(Point3<S>, 3, Range<usize>, [S]);
-impl_point_index_ops!(Point3<S>, 3, RangeTo<usize>, [S]);
-impl_point_index_ops!(Point3<S>, 3, RangeFrom<usize>, [S]);
-impl_point_index_ops!(Point3<S>, 3, RangeFull, [S]);
-/*
-impl<S> AsRef<[S; 3]> for Point3<S> {
-    #[inline]
-    fn as_ref(&self) -> &[S; 3] {
-        unsafe { 
-            &*(self as *const Point3<S> as *const [S; 3])
-        }
-    }
-}
-
-impl<S> AsRef<(S, S, S)> for Point3<S> {
-    #[inline]
-    fn as_ref(&self) -> &(S, S, S) {
-        unsafe { 
-            &*(self as *const Point3<S> as *const (S, S, S))
-        }
-    }
-}
-
-impl<S> AsMut<[S; 3]> for Point3<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [S; 3] {
-        unsafe { 
-            &mut *(self as *mut Point3<S> as *mut [S; 3])
-        }
-    }
-}
-
-impl<S> AsMut<(S, S, S)> for Point3<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut (S, S, S) {
-        unsafe { 
-            &mut *(self as *mut Point3<S> as *mut (S, S, S))
-        }
-    }
-}
-*/
-/*
-impl<S> ops::Index<usize> for Point3<S> {
-    type Output = S;
-
-    #[inline]
-    fn index(&self, index: usize) -> &Self::Output {
-        let v: &[S; 3] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::Range<usize>> for Point3<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::Range<usize>) -> &Self::Output {
-        let v: &[S; 3] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeTo<usize>> for Point3<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
-        let v: &[S; 3] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeFrom<usize>> for Point3<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
-        let v: &[S; 3] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeFull> for Point3<S> {
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeFull) -> &Self::Output {
-        let v: &[S; 3] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::IndexMut<usize> for Point3<S> {
-    #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut S {
-        let v: &mut [S; 3] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::Range<usize>> for Point3<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
-        let v: &mut [S; 3] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeTo<usize>> for Point3<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
-        let v: &mut [S; 3] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Point3<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
-        let v: &mut [S; 3] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeFull> for Point3<S> {
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
-        let v: &mut [S; 3] = self.as_mut();
-        &mut v[index]
-    }
-}
-*/
 impl<S> fmt::Display for Point3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Point3 [{}, {}, {}]", self.x, self.y, self.z)
@@ -2161,6 +1751,15 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> where S: Scalar {
         }
     }
 }
+
+impl_as_ref_ops!(Point3<S>, (S, S, S));
+impl_as_ref_ops!(Point3<S>, [S; 3]);
+
+impl_point_index_ops!(Point3<S>, 3, usize, S);
+impl_point_index_ops!(Point3<S>, 3, Range<usize>, [S]);
+impl_point_index_ops!(Point3<S>, 3, RangeTo<usize>, [S]);
+impl_point_index_ops!(Point3<S>, 3, RangeFrom<usize>, [S]);
+impl_point_index_ops!(Point3<S>, 3, RangeFull, [S]);
 
 impl<S> ops::Add<Vector3<S>> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
