@@ -1688,7 +1688,7 @@ mod matrix4_tests {
         let zero_vec3 = Vector3::from((0.0, 0.0, 0.0));
 
         let result = trans_mat * zero_vec4;
-        assert_eq!(result, Vector4::from((zero_vec3 + vector, 1.0)));
+        assert_eq!(result, (zero_vec3 + vector).expand(1.0));
     }
 
     #[test]
@@ -2486,8 +2486,8 @@ mod matrix4_tests {
         let minus_unit_z = -Vector3::unit_z();
         let look_at = Matrix4x4::look_at_rh(&eye, &target, &up);
         let direction = target - Point3::origin();
-        let expected = Vector4::from((minus_unit_z, 0.0));
-        let result = look_at * Vector4::from((direction.normalize(), 0.0));
+        let expected = minus_unit_z.expand(0.0);
+        let result = look_at * direction.normalize().expand(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
@@ -2500,8 +2500,8 @@ mod matrix4_tests {
         let unit_z = Vector3::unit_z();
         let look_at = Matrix4x4::look_at_lh(&eye, &target, &up);
         let direction = target - Point3::origin();
-        let expected = Vector4::from((unit_z, 0.0));
-        let result = look_at * Vector4::from((direction.normalize(), 0.0));
+        let expected = unit_z.expand(0.0);
+        let result = look_at * direction.normalize().expand(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
@@ -2514,7 +2514,7 @@ mod matrix4_tests {
         let look_at = Matrix4x4::look_at_lh(&eye, &target, &up);
         let direction = target - Point3::origin();
         let expected = Vector4::new(0.0, 0.0, 1.0, 0.0);
-        let result = look_at * Vector4::from((direction.normalize(), 0.0));
+        let result = look_at * direction.normalize().expand(0.0);
 
         assert_eq!(result, expected);
     }
