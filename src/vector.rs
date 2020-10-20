@@ -638,7 +638,62 @@ impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { x });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { x });
 impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { x });
 
+macro_rules! impl_vector_binary_assign_ops {
+    ($T:ty, { $($field:ident),* }) => {
+        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: $T) {
+                $(self.$field += other.$field);*
+            }
+        }
 
+        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: &$T) {
+                $(self.$field += other.$field);*
+            }
+        }
+
+        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: $T) {
+                $(self.$field -= other.$field);*
+            }
+        }
+
+        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: &$T) {
+                $(self.$field -= other.$field);*
+            }
+        }
+
+        impl<S> ops::MulAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn mul_assign(&mut self, other: S) {
+                $(self.$field *= other);*
+            }
+        }
+        
+        impl<S> ops::DivAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn div_assign(&mut self, other: S) {
+                $(self.$field /= other);*
+            }
+        }
+        
+        impl<S> ops::RemAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn rem_assign(&mut self, other: S) {
+                $(self.$field %= other);*
+            }
+        }
+    }
+}
+
+impl_vector_binary_assign_ops!(Vector1<S>, { x });
+
+/*
 impl<S> ops::AddAssign<Vector1<S>> for Vector1<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector1<S>) {
@@ -687,7 +742,7 @@ impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
         self.x %= other;
     }
 }
-
+*/
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
 
@@ -1365,7 +1420,7 @@ impl_mul_operator!(i128,  Vector2<i128>,  Vector2<i128>,  { x, y });
 impl_mul_operator!(isize, Vector2<isize>, Vector2<isize>, { x, y });
 impl_mul_operator!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
 impl_mul_operator!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
-
+/*
 impl<S> ops::AddAssign<Vector2<S>> for Vector2<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector2<S>) {
@@ -1422,6 +1477,8 @@ impl<S> ops::RemAssign<S> for Vector2<S> where S: Scalar {
         self.y %= other;
     }
 }
+*/
+impl_vector_binary_assign_ops!(Vector2<S>, { x, y });
 
 impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     type Output = S;
@@ -2159,7 +2216,7 @@ impl_mul_operator!(i128,  Vector3<i128>,  Vector3<i128>,  { x, y, z });
 impl_mul_operator!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
 impl_mul_operator!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
 impl_mul_operator!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
-
+/*
 impl<S> ops::AddAssign<Vector3<S>> for Vector3<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector3<S>) {
@@ -2223,6 +2280,8 @@ impl<S> ops::RemAssign<S> for Vector3<S> where S: Scalar {
         self.z %= other;
     }
 }
+*/
+impl_vector_binary_assign_ops!(Vector3<S>, { x, y, z });
 
 impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     type Output = S;
@@ -2886,7 +2945,7 @@ impl_mul_operator!(i128,  Vector4<i128>,  Vector4<i128>,  { x, y, z, w });
 impl_mul_operator!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
 impl_mul_operator!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
 impl_mul_operator!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
-
+/*
 impl<S> ops::AddAssign<Vector4<S>> for Vector4<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector4<S>) {
@@ -2956,6 +3015,8 @@ impl<S> ops::RemAssign<S> for Vector4<S> where S: Scalar {
         self.w %= other;
     }
 }
+*/
+impl_vector_binary_assign_ops!(Vector4<S>, { x, y, z, w });
 
 impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     type Output = S;
