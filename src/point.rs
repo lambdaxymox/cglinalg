@@ -632,29 +632,6 @@ impl<S> ops::Rem<S> for &Point1<S> where S: Scalar {
 }
 
 impl_point_unary_ops!(Neg, neg, Point1<S>, Point1<S>, { x });
-/*
-impl<S> ops::Neg for Point1<S> where S: ScalarSigned {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Point1::new(
-            -self.x
-        )
-    }
-}
-
-impl<S> ops::Neg for &Point1<S> where S: ScalarSigned {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Point1::new(
-            -self.x
-        )
-    }
-}
-*/
 
 impl_point_binary_assign_ops!(Point1<S>, Vector1<S>, { x });
 
@@ -1300,31 +1277,6 @@ impl<S> ops::Rem<S> for &Point2<S> where S: Scalar {
 }
 impl_point_unary_ops!(Neg, neg, Point2<S>, Point2<S>, { x, y });
 
-/*
-impl<S> ops::Neg for Point2<S> where S: ScalarSigned {
-    type Output = Point2<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Point2::new(
-            -self.x,
-            -self.y
-        )
-    }
-}
-
-impl<S> ops::Neg for &Point2<S> where S: ScalarSigned {
-    type Output = Point2<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Point2::new(
-            -self.x,
-            -self.y
-        )
-    }
-}
-*/
 impl_point_binary_assign_ops!(Point2<S>, Vector2<S>, { x, y });
 
 impl<S> approx::AbsDiffEq for Point2<S> where S: ScalarFloat {
@@ -1994,33 +1946,7 @@ impl<S> ops::Rem<S> for &Point3<S> where S: Scalar {
 }
 
 impl_point_unary_ops!(Neg, neg, Point3<S>, Point3<S>, { x, y, z });
-/*
-impl<S> ops::Neg for Point3<S> where S: ScalarSigned {
-    type Output = Point3<S>;
 
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Point3::new(
-            -self.x,
-            -self.y,
-            -self.z
-        )
-    }
-}
-
-impl<S> ops::Neg for &Point3<S> where S: ScalarSigned {
-    type Output = Point3<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Point3::new(
-            -self.x,
-            -self.y,
-            -self.z
-        )
-    }
-}
-*/
 impl_point_binary_assign_ops!(Point3<S>, Vector3<S>, { x, y, z });
 
 impl<S> approx::AbsDiffEq for Point3<S> where S: ScalarFloat {
