@@ -354,15 +354,6 @@ impl<S> AsRef<S> for Vector1<S> {
     }
 }
 
-impl<S> AsRef<(S,)> for Vector1<S> {
-    #[inline]
-    fn as_ref(&self) -> &(S,) {
-        unsafe { 
-            &*(self as *const Vector1<S> as *const (S,))
-        }
-    }
-}
-
 impl<S> AsMut<[S; 1]> for Vector1<S> {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; 1] {
@@ -377,15 +368,6 @@ impl<S> AsMut<S> for Vector1<S> {
     fn as_mut(&mut self) -> &mut S {
         unsafe { 
             &mut *(self as *mut Vector1<S> as *mut S)
-        }
-    }
-}
-
-impl<S> AsMut<(S,)> for Vector1<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut (S,) {
-        unsafe { 
-            &mut *(self as *mut Vector1<S> as *mut (S,))
         }
     }
 }
@@ -1241,29 +1223,11 @@ impl<S> AsRef<[S; 2]> for Vector2<S> {
     }
 }
 
-impl<S> AsRef<(S, S)> for Vector2<S> {
-    #[inline]
-    fn as_ref(&self) -> &(S, S) {
-        unsafe { 
-            &*(self as *const Vector2<S> as *const (S, S))
-        }
-    }
-}
-
 impl<S> AsMut<[S; 2]> for Vector2<S> {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; 2] {
         unsafe { 
             &mut *(self as *mut Vector2<S> as *mut [S; 2])
-        }
-    }
-}
-
-impl<S> AsMut<(S, S)> for Vector2<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut (S, S) {
-        unsafe { 
-            &mut *(self as *mut Vector2<S> as *mut (S, S))
         }
     }
 }
@@ -2211,29 +2175,11 @@ impl<S> AsRef<[S; 3]> for Vector3<S> {
     }
 }
 
-impl<S> AsRef<(S, S, S)> for Vector3<S> {
-    #[inline]
-    fn as_ref(&self) -> &(S, S, S) {
-        unsafe { 
-            &*(self as *const Vector3<S> as *const (S, S, S))
-        }
-    }
-}
-
 impl<S> AsMut<[S; 3]> for Vector3<S> {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; 3] {
         unsafe { 
             &mut *(self as *mut Vector3<S> as *mut [S; 3])
-        }
-    }
-}
-
-impl<S> AsMut<(S, S, S)> for Vector3<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut (S, S, S) {
-        unsafe { 
-            &mut *(self as *mut Vector3<S> as *mut (S, S, S))
         }
     }
 }
@@ -3156,29 +3102,11 @@ impl<S> AsRef<[S; 4]> for Vector4<S> {
     }
 }
 
-impl<S> AsRef<(S, S, S, S)> for Vector4<S> {
-    #[inline]
-    fn as_ref(&self) -> &(S, S, S, S) {
-        unsafe { 
-            &*(self as *const Vector4<S> as *const (S, S, S, S))
-        }
-    }
-}
-
 impl<S> AsMut<[S; 4]> for Vector4<S> {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; 4] {
         unsafe { 
             &mut *(self as *mut Vector4<S> as *mut [S; 4])
-        }
-    }
-}
-
-impl<S> AsMut<(S, S, S, S)> for Vector4<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut (S, S, S, S) {
-        unsafe { 
-            &mut *(self as *mut Vector4<S> as *mut (S, S, S, S)) 
         }
     }
 }
