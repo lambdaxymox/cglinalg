@@ -2272,10 +2272,7 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(&self, other: &Quaternion<S>) -> S {
-        (self.s - other.s)     * (self.s - other.s)     + 
-        (self.v.x - other.v.x) * (self.v.x - other.v.x) + 
-        (self.v.x - other.v.y) * (self.v.x - other.v.y) + 
-        (self.v.x - other.v.z) * (self.v.x - other.v.z)
+        (self - other).magnitude_squared()
     }
 }
 

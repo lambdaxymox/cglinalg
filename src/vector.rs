@@ -793,7 +793,7 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn distance_squared(&self, other: &Vector1<S>) -> Self::Output {
-        (other.x - self.x) * (other.x - self.x)
+        (self - other).magnitude_squared()
     }
 }
 
@@ -1710,11 +1710,8 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     }
 
     #[inline]
-    fn distance_squared(&self, to: &Vector2<S>) -> Self::Output {
-        let dx_squared = (to.x - self.x) * (to.x - self.x);
-        let dy_squared = (to.y - self.y) * (to.y - self.y);
-    
-        dx_squared + dy_squared
+    fn distance_squared(&self, other: &Vector2<S>) -> Self::Output {
+        (self - other).magnitude_squared()
     }
 }
 
@@ -2715,12 +2712,8 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     }
 
     #[inline]
-    fn distance_squared(&self, to: &Vector3<S>) -> Self::Output {
-        let dx_squared = (to.x - self.x) * (to.x - self.x);
-        let dy_squared = (to.y - self.y) * (to.y - self.y);
-        let dz_squared = (to.z - self.z) * (to.z - self.z);
-    
-        dx_squared + dy_squared + dz_squared
+    fn distance_squared(&self, other: &Vector3<S>) -> Self::Output {
+        (self - other).magnitude_squared()
     }
 }
 
@@ -3668,13 +3661,8 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     }
 
     #[inline]
-    fn distance_squared(&self, to: &Vector4<S>) -> Self::Output {
-        let dx_squared = (to.x - self.x) * (to.x - self.x);
-        let dy_squared = (to.y - self.y) * (to.y - self.y);
-        let dz_squared = (to.z - self.z) * (to.z - self.z);
-        let dw_squared = (to.w - self.w) * (to.w - self.w);
-
-        dx_squared + dy_squared + dz_squared + dw_squared
+    fn distance_squared(&self, other: &Vector4<S>) -> Self::Output {
+        (self - other).magnitude_squared()
     }
 }
 
