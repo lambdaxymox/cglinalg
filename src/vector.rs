@@ -191,6 +191,28 @@ macro_rules! impl_vector_binary_assign_ops {
     }
 }
 
+macro_rules! impl_vector_index_ops {
+    ($T:ty, $n:expr, $IndexType:ty, $Output:ty) => {
+        impl<S> ops::Index<$IndexType> for $T {
+            type Output = $Output;
+
+            #[inline]
+            fn index(&self, index: $IndexType) -> &Self::Output {
+                let v: &[S; $n] = self.as_ref();
+                &v[index]
+            }
+        }
+
+        impl<S> ops::IndexMut<$IndexType> for $T {
+            #[inline]
+            fn index_mut(&mut self, index: $IndexType) -> &mut Self::Output {
+                let v: &mut [S; $n] = self.as_mut();
+                &mut v[index]
+            }
+        }
+    }
+}
+
 /// A representation of one-dimensional vectors.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -543,6 +565,13 @@ impl<S> AsMut<(S,)> for Vector2<S> {
     }
 }
 
+impl_vector_index_ops!(Vector1<S>, 1, usize, S);
+impl_vector_index_ops!(Vector1<S>, 1, Range<usize>, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, RangeFull, [S]);
+
+/*
 impl<S> ops::Index<usize> for Vector1<S> {
     type Output = S;
 
@@ -632,6 +661,7 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector1<S> {
         &mut v[index]
     }
 }
+*/
 
 impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -1213,6 +1243,13 @@ impl<S> AsMut<(S, S)> for Vector2<S> {
     }
 }
 
+impl_vector_index_ops!(Vector2<S>, 2, usize, S);
+impl_vector_index_ops!(Vector2<S>, 2, Range<usize>, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, RangeFull, [S]);
+
+/*
 impl<S> ops::Index<usize> for Vector2<S> {
     type Output = S;
 
@@ -1302,7 +1339,7 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector2<S> {
         &mut v[index]
     }
 }
-
+*/
 impl<S> fmt::Display for Vector2<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Vector2 [{}, {}]", self.x, self.y)
@@ -1945,6 +1982,12 @@ impl<S> AsMut<(S, S, S)> for Vector3<S> {
     }
 }
 
+impl_vector_index_ops!(Vector3<S>, 3, usize, S);
+impl_vector_index_ops!(Vector3<S>, 3, Range<usize>, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, RangeFull, [S]);
+/*
 impl<S> ops::Index<usize> for Vector3<S> {
     type Output = S;
 
@@ -2034,7 +2077,7 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector3<S> {
         &mut v[index]
     }
 }
-
+*/
 impl<S> fmt::Display for Vector3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Vector3 [{}, {}, {}]", self.x, self.y, self.z)
@@ -2608,6 +2651,12 @@ impl<S> AsMut<(S, S, S, S)> for Vector4<S> {
     }
 }
 
+impl_vector_index_ops!(Vector4<S>, 4, usize, S);
+impl_vector_index_ops!(Vector4<S>, 4, Range<usize>, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, RangeFull, [S]);
+/*
 impl<S> ops::Index<usize> for Vector4<S> {
     type Output = S;
 
@@ -2697,7 +2746,7 @@ impl<S> ops::IndexMut<ops::RangeFull> for Vector4<S> {
         &mut v[index]
     }
 }
-
+*/
 impl<S> From<(S, S, S, S)> for Vector4<S> where S: Scalar {
     #[inline]
     fn from((x, y, z, w): (S, S, S, S)) -> Vector4<S> {
