@@ -213,6 +213,28 @@ macro_rules! impl_vector_index_ops {
     }
 }
 
+macro_rules! impl_as_ref_ops {
+    ($VecType:ty, $RefType:ty) => {
+        impl<S> AsRef<$RefType> for $VecType {
+            #[inline]
+            fn as_ref(&self) -> &$RefType {
+                unsafe {
+                    &*(self as *const $VecType as *const $RefType)
+                }
+            }
+        }
+
+        impl<S> AsMut<$RefType> for $VecType {
+            #[inline]
+            fn as_mut(&mut self) -> &mut $RefType {
+                unsafe {
+                    &mut *(self as *mut $VecType as *mut $RefType)
+                }
+            }
+        }
+    }
+}
+
 /// A representation of one-dimensional vectors.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -511,6 +533,13 @@ impl<S> Vector1<S> where S: ScalarFloat {
     }
 }
 
+
+
+impl_as_ref_ops!(Vector1<S>, S);
+impl_as_ref_ops!(Vector1<S>, (S,));
+impl_as_ref_ops!(Vector1<S>, [S; 1]);
+
+/*
 impl<S> AsRef<[S; 1]> for Vector1<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 1] {
@@ -564,7 +593,7 @@ impl<S> AsMut<(S,)> for Vector2<S> {
         }
     }
 }
-
+*/
 impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Vector1 [{}]", self.x)
@@ -1115,6 +1144,11 @@ impl<S> Vector2<S> where S: ScalarFloat {
     }
 }
 
+
+impl_as_ref_ops!(Vector2<S>, (S, S));
+impl_as_ref_ops!(Vector2<S>, [S; 2]);
+
+/*
 impl<S> AsRef<[S; 2]> for Vector2<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 2] {
@@ -1150,6 +1184,7 @@ impl<S> AsMut<(S, S)> for Vector2<S> {
         }
     }
 }
+*/
 
 impl<S> fmt::Display for Vector2<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -1763,6 +1798,10 @@ impl<S> Vector3<S> where S: ScalarFloat {
     }
 }
 
+impl_as_ref_ops!(Vector3<S>, (S, S, S));
+impl_as_ref_ops!(Vector3<S>, [S; 3]);
+
+/*
 impl<S> AsRef<[S; 3]> for Vector3<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 3] {
@@ -1798,6 +1837,7 @@ impl<S> AsMut<(S, S, S)> for Vector3<S> {
         }
     }
 }
+*/
 
 impl<S> fmt::Display for Vector3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -2342,6 +2382,10 @@ impl<S> Vector4<S> where S: ScalarFloat {
     }
 }
 
+impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
+impl_as_ref_ops!(Vector4<S>, [S; 4]);
+
+/*
 impl<S> AsRef<[S; 4]> for Vector4<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 4] {
@@ -2377,6 +2421,7 @@ impl<S> AsMut<(S, S, S, S)> for Vector4<S> {
         }
     }
 }
+*/
 
 impl<S> From<(S, S, S, S)> for Vector4<S> where S: Scalar {
     #[inline]
