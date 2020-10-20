@@ -1327,20 +1327,6 @@ impl<S> From<(S, S, S)> for Point3<S> where S: Scalar {
     }
 }
 
-impl<S> From<(Point2<S>, S)> for Point3<S> where S: Scalar {
-    #[inline]
-    fn from((v, z): (Point2<S>, S)) -> Point3<S> {
-        Point3::new(v.x, v.y, z)
-    }
-}
-
-impl<S> From<(&Point2<S>, S)> for Point3<S> where S: Scalar {
-    #[inline]
-    fn from((v, z): (&Point2<S>, S)) -> Point3<S> {
-        Point3::new(v.x, v.y, z)
-    }
-}
-
 impl<S> From<[S; 3]> for Point3<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 3]) -> Point3<S> {
