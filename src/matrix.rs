@@ -1148,6 +1148,24 @@ impl<S> ops::IndexMut<usize> for Matrix2x2<S> {
     }
 }
 
+impl<S> ops::Index<(usize, usize)> for Matrix2x2<S>{
+    type Output = S;
+
+    #[inline]
+    fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
+        let v: &[[S; 2]; 2] = self.as_ref();
+        &v[column][row]
+    }
+}
+
+impl<S> ops::IndexMut<(usize, usize)> for Matrix2x2<S> {
+    #[inline]
+    fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut S {
+        let v: &mut [[S; 2]; 2] = self.as_mut();
+        &mut v[column][row]
+    }
+}
+
 impl<S> ops::Add<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
@@ -3576,6 +3594,24 @@ impl<S> ops::IndexMut<usize> for Matrix3x3<S> {
     fn index_mut(&mut self, index: usize) -> &mut Vector3<S> {
         let v: &mut [Vector3<S>; 3] = self.as_mut();
         &mut v[index]
+    }
+}
+
+impl<S> ops::Index<(usize, usize)> for Matrix3x3<S>{
+    type Output = S;
+
+    #[inline]
+    fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
+        let v: &[[S; 3]; 3] = self.as_ref();
+        &v[column][row]
+    }
+}
+
+impl<S> ops::IndexMut<(usize, usize)> for Matrix3x3<S> {
+    #[inline]
+    fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut S {
+        let v: &mut [[S; 3]; 3] = self.as_mut();
+        &mut v[column][row]
     }
 }
 
@@ -6346,6 +6382,24 @@ impl<S> ops::IndexMut<usize> for Matrix4x4<S> {
     fn index_mut(&mut self, index: usize) -> &mut Vector4<S> {
         let v: &mut [Vector4<S>; 4] = self.as_mut();
         &mut v[index]
+    }
+}
+
+impl<S> ops::Index<(usize, usize)> for Matrix4x4<S>{
+    type Output = S;
+
+    #[inline]
+    fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
+        let v: &[[S; 4]; 4] = self.as_ref();
+        &v[column][row]
+    }
+}
+
+impl<S> ops::IndexMut<(usize, usize)> for Matrix4x4<S> {
+    #[inline]
+    fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut S {
+        let v: &mut [[S; 4]; 4] = self.as_mut();
+        &mut v[column][row]
     }
 }
 
