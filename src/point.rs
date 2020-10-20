@@ -19,6 +19,7 @@ use num_traits::{
 
 use core::fmt;
 use core::ops;
+use core::ops::*;
 
 
 macro_rules! impl_mul_operator {
@@ -43,6 +44,49 @@ macro_rules! impl_mul_operator {
     }
 }
 
+macro_rules! impl_as_ref_ops {
+    ($PointType:ty, $RefType:ty) => {
+        impl<S> AsRef<$RefType> for $PointType {
+            #[inline]
+            fn as_ref(&self) -> &$RefType {
+                unsafe {
+                    &*(self as *const $PointType as *const $RefType)
+                }
+            }
+        }
+
+        impl<S> AsMut<$RefType> for $PointType {
+            #[inline]
+            fn as_mut(&mut self) -> &mut $RefType {
+                unsafe {
+                    &mut *(self as *mut $PointType as *mut $RefType)
+                }
+            }
+        }
+    }
+}
+
+macro_rules! impl_point_index_ops {
+    ($T:ty, $n:expr, $IndexType:ty, $Output:ty) => {
+        impl<S> ops::Index<$IndexType> for $T {
+            type Output = $Output;
+
+            #[inline]
+            fn index(&self, index: $IndexType) -> &Self::Output {
+                let v: &[S; $n] = self.as_ref();
+                &v[index]
+            }
+        }
+
+        impl<S> ops::IndexMut<$IndexType> for $T {
+            #[inline]
+            fn index_mut(&mut self, index: $IndexType) -> &mut Self::Output {
+                let v: &mut [S; $n] = self.as_mut();
+                &mut v[index]
+            }
+        }
+    }
+}
 
 /// A point is a location in a one-dimensional Euclidean space.
 #[repr(C)]
@@ -249,6 +293,16 @@ impl<S> Point1<S> where S: Scalar {
     }
 }
 
+impl_as_ref_ops!(Point1<S>, S);
+impl_as_ref_ops!(Point1<S>, (S,));
+impl_as_ref_ops!(Point1<S>, [S; 1]);
+
+impl_point_index_ops!(Point1<S>, 1, usize, S);
+impl_point_index_ops!(Point1<S>, 1, Range<usize>, [S]);
+impl_point_index_ops!(Point1<S>, 1, RangeTo<usize>, [S]);
+impl_point_index_ops!(Point1<S>, 1, RangeFrom<usize>, [S]);
+impl_point_index_ops!(Point1<S>, 1, RangeFull, [S]);
+/*
 impl<S> AsRef<[S; 1]> for Point1<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 1] {
@@ -302,7 +356,9 @@ impl<S> AsMut<(S,)> for Point1<S> {
         }
     }
 }
+*/
 
+/*
 impl<S> ops::Index<usize> for Point1<S> {
     type Output = S;
 
@@ -392,7 +448,7 @@ impl<S> ops::IndexMut<ops::RangeFull> for Point1<S> {
         &mut v[index]
     }
 }
-
+*/
 impl<S> fmt::Display for Point1<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Point1 [{}]", self.x)
@@ -1078,6 +1134,16 @@ impl<S> Point2<S> where S: Scalar {
     }
 }
 
+impl_as_ref_ops!(Point2<S>, (S, S));
+impl_as_ref_ops!(Point2<S>, [S; 2]);
+
+impl_point_index_ops!(Point2<S>, 2, usize, S);
+impl_point_index_ops!(Point2<S>, 2, Range<usize>, [S]);
+impl_point_index_ops!(Point2<S>, 2, RangeTo<usize>, [S]);
+impl_point_index_ops!(Point2<S>, 2, RangeFrom<usize>, [S]);
+impl_point_index_ops!(Point2<S>, 2, RangeFull, [S]);
+/*
+
 impl<S> AsRef<[S; 2]> for Point2<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 2] {
@@ -1113,7 +1179,8 @@ impl<S> AsMut<(S, S)> for Point2<S> {
         }
     }
 }
-
+*/
+/*
 impl<S> ops::Index<usize> for Point2<S> {
     type Output = S;
 
@@ -1203,7 +1270,7 @@ impl<S> ops::IndexMut<ops::RangeFull> for Point2<S> {
         &mut v[index]
     }
 }
-
+*/
 impl<S> fmt::Display for Point2<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Point2 [{}, {}]", self.x, self.y)
@@ -1907,6 +1974,15 @@ impl<S> Point3<S> where S: Scalar {
     }
 }
 
+impl_as_ref_ops!(Point3<S>, (S, S, S));
+impl_as_ref_ops!(Point3<S>, [S; 3]);
+
+impl_point_index_ops!(Point3<S>, 3, usize, S);
+impl_point_index_ops!(Point3<S>, 3, Range<usize>, [S]);
+impl_point_index_ops!(Point3<S>, 3, RangeTo<usize>, [S]);
+impl_point_index_ops!(Point3<S>, 3, RangeFrom<usize>, [S]);
+impl_point_index_ops!(Point3<S>, 3, RangeFull, [S]);
+/*
 impl<S> AsRef<[S; 3]> for Point3<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 3] {
@@ -1942,7 +2018,8 @@ impl<S> AsMut<(S, S, S)> for Point3<S> {
         }
     }
 }
-
+*/
+/*
 impl<S> ops::Index<usize> for Point3<S> {
     type Output = S;
 
@@ -2032,7 +2109,7 @@ impl<S> ops::IndexMut<ops::RangeFull> for Point3<S> {
         &mut v[index]
     }
 }
-
+*/
 impl<S> fmt::Display for Point3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Point3 [{}, {}, {}]", self.x, self.y, self.z)
