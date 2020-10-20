@@ -22,7 +22,7 @@ use core::ops;
 use core::ops::*;
 
 
-macro_rules! impl_mul_operator {
+macro_rules! impl_scalar_vector_mul_ops {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
             type Output = $Output;
@@ -572,21 +572,6 @@ impl<S> ops::Mul<S> for &Point1<S> where S: Scalar {
     }
 }
 
-impl_mul_operator!(u8,    Point1<u8>,    Point1<u8>,    { x });
-impl_mul_operator!(u16,   Point1<u16>,   Point1<u16>,   { x });
-impl_mul_operator!(u32,   Point1<u32>,   Point1<u32>,   { x });
-impl_mul_operator!(u64,   Point1<u64>,   Point1<u64>,   { x });
-impl_mul_operator!(u128,  Point1<u128>,  Point1<u128>,  { x });
-impl_mul_operator!(usize, Point1<usize>, Point1<usize>, { x });
-impl_mul_operator!(i8,    Point1<i8>,    Point1<i8>,    { x });
-impl_mul_operator!(i16,   Point1<i16>,   Point1<i16>,   { x });
-impl_mul_operator!(i32,   Point1<i32>,   Point1<i32>,   { x });
-impl_mul_operator!(i64,   Point1<i64>,   Point1<i64>,   { x });
-impl_mul_operator!(i128,  Point1<i128>,  Point1<i128>,  { x });
-impl_mul_operator!(isize, Point1<isize>, Point1<isize>, { x });
-impl_mul_operator!(f32,   Point1<f32>,   Point1<f32>,   { x });
-impl_mul_operator!(f64,   Point1<f64>,   Point1<f64>,   { x });
-
 impl<S> ops::Div<S> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
@@ -630,6 +615,21 @@ impl<S> ops::Rem<S> for &Point1<S> where S: Scalar {
         Point1::new(x)
     }
 }
+
+impl_scalar_vector_mul_ops!(u8,    Point1<u8>,    Point1<u8>,    { x });
+impl_scalar_vector_mul_ops!(u16,   Point1<u16>,   Point1<u16>,   { x });
+impl_scalar_vector_mul_ops!(u32,   Point1<u32>,   Point1<u32>,   { x });
+impl_scalar_vector_mul_ops!(u64,   Point1<u64>,   Point1<u64>,   { x });
+impl_scalar_vector_mul_ops!(u128,  Point1<u128>,  Point1<u128>,  { x });
+impl_scalar_vector_mul_ops!(usize, Point1<usize>, Point1<usize>, { x });
+impl_scalar_vector_mul_ops!(i8,    Point1<i8>,    Point1<i8>,    { x });
+impl_scalar_vector_mul_ops!(i16,   Point1<i16>,   Point1<i16>,   { x });
+impl_scalar_vector_mul_ops!(i32,   Point1<i32>,   Point1<i32>,   { x });
+impl_scalar_vector_mul_ops!(i64,   Point1<i64>,   Point1<i64>,   { x });
+impl_scalar_vector_mul_ops!(i128,  Point1<i128>,  Point1<i128>,  { x });
+impl_scalar_vector_mul_ops!(isize, Point1<isize>, Point1<isize>, { x });
+impl_scalar_vector_mul_ops!(f32,   Point1<f32>,   Point1<f32>,   { x });
+impl_scalar_vector_mul_ops!(f64,   Point1<f64>,   Point1<f64>,   { x });
 
 impl_point_unary_ops!(Neg, neg, Point1<S>, Point1<S>, { x });
 
@@ -1213,21 +1213,6 @@ impl<S> ops::Mul<S> for &Point2<S> where S: Scalar {
     }
 }
 
-impl_mul_operator!(u8,    Point2<u8>,    Point2<u8>,    { x, y });
-impl_mul_operator!(u16,   Point2<u16>,   Point2<u16>,   { x, y });
-impl_mul_operator!(u32,   Point2<u32>,   Point2<u32>,   { x, y });
-impl_mul_operator!(u64,   Point2<u64>,   Point2<u64>,   { x, y });
-impl_mul_operator!(u128,  Point2<u128>,  Point2<u128>,  { x, y });
-impl_mul_operator!(usize, Point2<usize>, Point2<usize>, { x, y });
-impl_mul_operator!(i8,    Point2<i8>,    Point2<i8>,    { x, y });
-impl_mul_operator!(i16,   Point2<i16>,   Point2<i16>,   { x, y });
-impl_mul_operator!(i32,   Point2<i32>,   Point2<i32>,   { x, y });
-impl_mul_operator!(i64,   Point2<i64>,   Point2<i64>,   { x, y });
-impl_mul_operator!(i128,  Point2<i128>,  Point2<i128>,  { x, y });
-impl_mul_operator!(isize, Point2<isize>, Point2<isize>, { x, y });
-impl_mul_operator!(f32,   Point2<f32>,   Point2<f32>,   { x, y });
-impl_mul_operator!(f64,   Point2<f64>,   Point2<f64>,   { x, y });
-
 impl<S> ops::Div<S> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
@@ -1275,6 +1260,23 @@ impl<S> ops::Rem<S> for &Point2<S> where S: Scalar {
         Point2::new(x, y)
     }
 }
+
+impl_scalar_vector_mul_ops!(u8,    Point2<u8>,    Point2<u8>,    { x, y });
+impl_scalar_vector_mul_ops!(u16,   Point2<u16>,   Point2<u16>,   { x, y });
+impl_scalar_vector_mul_ops!(u32,   Point2<u32>,   Point2<u32>,   { x, y });
+impl_scalar_vector_mul_ops!(u64,   Point2<u64>,   Point2<u64>,   { x, y });
+impl_scalar_vector_mul_ops!(u128,  Point2<u128>,  Point2<u128>,  { x, y });
+impl_scalar_vector_mul_ops!(usize, Point2<usize>, Point2<usize>, { x, y });
+impl_scalar_vector_mul_ops!(i8,    Point2<i8>,    Point2<i8>,    { x, y });
+impl_scalar_vector_mul_ops!(i16,   Point2<i16>,   Point2<i16>,   { x, y });
+impl_scalar_vector_mul_ops!(i32,   Point2<i32>,   Point2<i32>,   { x, y });
+impl_scalar_vector_mul_ops!(i64,   Point2<i64>,   Point2<i64>,   { x, y });
+impl_scalar_vector_mul_ops!(i128,  Point2<i128>,  Point2<i128>,  { x, y });
+impl_scalar_vector_mul_ops!(isize, Point2<isize>, Point2<isize>, { x, y });
+impl_scalar_vector_mul_ops!(f32,   Point2<f32>,   Point2<f32>,   { x, y });
+impl_scalar_vector_mul_ops!(f64,   Point2<f64>,   Point2<f64>,   { x, y });
+
+
 impl_point_unary_ops!(Neg, neg, Point2<S>, Point2<S>, { x, y });
 
 impl_point_binary_assign_ops!(Point2<S>, Vector2<S>, { x, y });
@@ -1878,21 +1880,6 @@ impl<S> ops::Mul<S> for &Point3<S> where S: Scalar {
     }
 }
 
-impl_mul_operator!(u8,    Point3<u8>,    Point3<u8>,    { x, y, z });
-impl_mul_operator!(u16,   Point3<u16>,   Point3<u16>,   { x, y, z });
-impl_mul_operator!(u32,   Point3<u32>,   Point3<u32>,   { x, y, z });
-impl_mul_operator!(u64,   Point3<u64>,   Point3<u64>,   { x, y, z });
-impl_mul_operator!(u128,  Point3<u128>,  Point3<u128>,  { x, y, z });
-impl_mul_operator!(usize, Point3<usize>, Point3<usize>, { x, y, z });
-impl_mul_operator!(i8,    Point3<i8>,    Point3<i8>,    { x, y, z });
-impl_mul_operator!(i16,   Point3<i16>,   Point3<i16>,   { x, y, z });
-impl_mul_operator!(i32,   Point3<i32>,   Point3<i32>,   { x, y, z });
-impl_mul_operator!(i64,   Point3<i64>,   Point3<i64>,   { x, y, z });
-impl_mul_operator!(i128,  Point3<i128>,  Point3<i128>,  { x, y, z });
-impl_mul_operator!(isize, Point3<isize>, Point3<isize>, { x, y, z });
-impl_mul_operator!(f32,   Point3<f32>,   Point3<f32>,   { x, y, z });
-impl_mul_operator!(f64,   Point3<f64>,   Point3<f64>,   { x, y, z });
-
 impl<S> ops::Div<S> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
@@ -1944,6 +1931,21 @@ impl<S> ops::Rem<S> for &Point3<S> where S: Scalar {
         Point3::new(x, y, z)
     }
 }
+
+impl_scalar_vector_mul_ops!(u8,    Point3<u8>,    Point3<u8>,    { x, y, z });
+impl_scalar_vector_mul_ops!(u16,   Point3<u16>,   Point3<u16>,   { x, y, z });
+impl_scalar_vector_mul_ops!(u32,   Point3<u32>,   Point3<u32>,   { x, y, z });
+impl_scalar_vector_mul_ops!(u64,   Point3<u64>,   Point3<u64>,   { x, y, z });
+impl_scalar_vector_mul_ops!(u128,  Point3<u128>,  Point3<u128>,  { x, y, z });
+impl_scalar_vector_mul_ops!(usize, Point3<usize>, Point3<usize>, { x, y, z });
+impl_scalar_vector_mul_ops!(i8,    Point3<i8>,    Point3<i8>,    { x, y, z });
+impl_scalar_vector_mul_ops!(i16,   Point3<i16>,   Point3<i16>,   { x, y, z });
+impl_scalar_vector_mul_ops!(i32,   Point3<i32>,   Point3<i32>,   { x, y, z });
+impl_scalar_vector_mul_ops!(i64,   Point3<i64>,   Point3<i64>,   { x, y, z });
+impl_scalar_vector_mul_ops!(i128,  Point3<i128>,  Point3<i128>,  { x, y, z });
+impl_scalar_vector_mul_ops!(isize, Point3<isize>, Point3<isize>, { x, y, z });
+impl_scalar_vector_mul_ops!(f32,   Point3<f32>,   Point3<f32>,   { x, y, z });
+impl_scalar_vector_mul_ops!(f64,   Point3<f64>,   Point3<f64>,   { x, y, z });
 
 impl_point_unary_ops!(Neg, neg, Point3<S>, Point3<S>, { x, y, z });
 
