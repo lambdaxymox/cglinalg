@@ -88,6 +88,54 @@ macro_rules! impl_point_index_ops {
     }
 }
 
+macro_rules! impl_point_vector_binary_ops {
+    ($OpType:ident, $op:ident, $T1:ty, $T2:ty, $Output:ty, { $($field:ident),* }) => {
+        impl<S> $OpType<$T2> for $T1 where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T2) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<&$T2> for $T1 where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &$T2) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<$T2> for &$T1 where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T2) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+
+        impl<'a, 'b, S> $OpType<&'a $T2> for &'b $T1 where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &'a $T2) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+    }
+}
+
 macro_rules! impl_point_scalar_binary_ops {
     ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
         impl<S> $OpType<S> for $T where S: Scalar {
@@ -444,6 +492,11 @@ impl_point_index_ops!(Point1<S>, 1, RangeTo<usize>, [S]);
 impl_point_index_ops!(Point1<S>, 1, RangeFrom<usize>, [S]);
 impl_point_index_ops!(Point1<S>, 1, RangeFull, [S]);
 
+impl_point_vector_binary_ops!(Add, add, Point1<S>, Vector1<S>, Point1<S>, { x });
+impl_point_vector_binary_ops!(Sub, sub, Point1<S>, Vector1<S>, Point1<S>, { x });
+impl_point_vector_binary_ops!(Sub, sub, Point1<S>, Point1<S>, Vector1<S>, { x });
+
+/*
 impl<S> ops::Add<Vector1<S>> for Point1<S> where S: Scalar {
     type Output = Point1<S>;
 
@@ -575,7 +628,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
         }
     }
 }
-
+*/
 impl_point_scalar_binary_ops!(Mul, mul, Point1<S>, Point1<S>, { x });
 impl_point_scalar_binary_ops!(Div, div, Point1<S>, Point1<S>, { x });
 impl_point_scalar_binary_ops!(Rem, rem, Point1<S>, Point1<S>, { x });
@@ -1009,6 +1062,10 @@ impl_point_index_ops!(Point2<S>, 2, RangeTo<usize>, [S]);
 impl_point_index_ops!(Point2<S>, 2, RangeFrom<usize>, [S]);
 impl_point_index_ops!(Point2<S>, 2, RangeFull, [S]);
 
+impl_point_vector_binary_ops!(Add, add, Point2<S>, Vector2<S>, Point2<S>, { x, y });
+impl_point_vector_binary_ops!(Sub, sub, Point2<S>, Vector2<S>, Point2<S>, { x, y });
+impl_point_vector_binary_ops!(Sub, sub, Point2<S>, Point2<S>, Vector2<S>, { x, y });
+/*
 impl<S> ops::Add<Vector2<S>> for Point2<S> where S: Scalar {
     type Output = Point2<S>;
 
@@ -1152,7 +1209,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
         }
     }
 }
-
+*/
 impl_point_scalar_binary_ops!(Mul, mul, Point2<S>, Point2<S>, { x, y });
 impl_point_scalar_binary_ops!(Div, div, Point2<S>, Point2<S>, { x, y });
 impl_point_scalar_binary_ops!(Rem, rem, Point2<S>, Point2<S>, { x, y });
@@ -1594,6 +1651,10 @@ impl_point_index_ops!(Point3<S>, 3, RangeTo<usize>, [S]);
 impl_point_index_ops!(Point3<S>, 3, RangeFrom<usize>, [S]);
 impl_point_index_ops!(Point3<S>, 3, RangeFull, [S]);
 
+impl_point_vector_binary_ops!(Add, add, Point3<S>, Vector3<S>, Point3<S>, { x, y, z });
+impl_point_vector_binary_ops!(Sub, sub, Point3<S>, Vector3<S>, Point3<S>, { x, y, z });
+impl_point_vector_binary_ops!(Sub, sub, Point3<S>, Point3<S>, Vector3<S>, { x, y, z });
+/*
 impl<S> ops::Add<Vector3<S>> for Point3<S> where S: Scalar {
     type Output = Point3<S>;
 
@@ -1749,7 +1810,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
         }
     }
 }
-
+*/
 impl_point_scalar_binary_ops!(Mul, mul, Point3<S>, Point3<S>, { x, y, z });
 impl_point_scalar_binary_ops!(Div, div, Point3<S>, Point3<S>, { x, y, z });
 impl_point_scalar_binary_ops!(Rem, rem, Point3<S>, Point3<S>, { x, y, z });
