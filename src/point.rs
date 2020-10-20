@@ -755,13 +755,13 @@ impl<S> Magnitude for Point1<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
     }
 
     #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
     }
 
     #[inline]
@@ -1596,13 +1596,13 @@ impl<S> Magnitude for Point2<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
     }
 
     #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
     }
 
     #[inline]
@@ -2471,13 +2471,13 @@ impl<S> Magnitude for Point3<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
     }
 
     #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
     }
 
     #[inline]

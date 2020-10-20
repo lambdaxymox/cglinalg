@@ -759,7 +759,8 @@ impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
 
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
-    
+
+
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         self.dot(self)
@@ -767,7 +768,7 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        S::sqrt(self.magnitude_squared())
+        Self::Output::sqrt(self.magnitude_squared())
     }
     
     #[inline]
@@ -1679,13 +1680,13 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
     }
 
     #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(&self)
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
     }
 
     #[inline]
@@ -2681,13 +2682,13 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
     }
 
     #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
     }
 
     #[inline]
@@ -3630,13 +3631,13 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     type Output = S;
 
     #[inline]
-    fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
     }
 
     #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
     }
 
     #[inline]
