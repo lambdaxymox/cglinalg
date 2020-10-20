@@ -88,6 +88,59 @@ macro_rules! impl_point_index_ops {
     }
 }
 
+macro_rules! impl_point_binary_assign_ops {
+    ($PointType:ty, $VectorType:ty, { $($field:ident),* }) => {
+        impl<S> ops::AddAssign<$VectorType> for $PointType where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: $VectorType) {
+                $(self.$field += other.$field);*
+            }
+        }
+
+        impl<S> ops::AddAssign<&$VectorType> for $PointType where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: &$VectorType) {
+                $(self.$field += other.$field);*
+            }
+        }
+
+        impl<S> ops::SubAssign<$VectorType> for $PointType where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: $VectorType) {
+                $(self.$field -= other.$field);*
+            }
+        }
+
+        impl<S> ops::SubAssign<&$VectorType> for $PointType where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: &$VectorType) {
+                $(self.$field -= other.$field);*
+            }
+        }
+
+        impl<S> ops::MulAssign<S> for $PointType where S: Scalar {
+            #[inline]
+            fn mul_assign(&mut self, other: S) {
+                $(self.$field *= other);*
+            }
+        }
+        
+        impl<S> ops::DivAssign<S> for $PointType where S: Scalar {
+            #[inline]
+            fn div_assign(&mut self, other: S) {
+                $(self.$field /= other);*
+            }
+        }
+        
+        impl<S> ops::RemAssign<S> for $PointType where S: Scalar {
+            #[inline]
+            fn rem_assign(&mut self, other: S) {
+                $(self.$field %= other);*
+            }
+        }
+    }
+}
+
 /// A point is a location in a one-dimensional Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -574,6 +627,8 @@ impl<S> ops::Neg for &Point1<S> where S: ScalarSigned {
     }
 }
 
+impl_point_binary_assign_ops!(Point1<S>, Vector1<S>, { x });
+/*
 impl<S> ops::AddAssign<Vector1<S>> for Point1<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector1<S>) {
@@ -622,7 +677,7 @@ impl<S> ops::RemAssign<S> for Point1<S> where S: Scalar {
         self.x %= other;
     }
 }
-
+*/
 impl<S> approx::AbsDiffEq for Point1<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1288,6 +1343,8 @@ impl<S> ops::Neg for &Point2<S> where S: ScalarSigned {
     }
 }
 
+impl_point_binary_assign_ops!(Point2<S>, Vector2<S>, { x, y });
+/*
 impl<S> ops::AddAssign<Vector2<S>> for Point2<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector2<S>) {
@@ -1343,7 +1400,7 @@ impl<S> ops::RemAssign<S> for Point2<S> where S: Scalar {
         self.y %= other;
     }
 }
-
+*/
 impl<S> approx::AbsDiffEq for Point2<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -2036,6 +2093,8 @@ impl<S> ops::Neg for &Point3<S> where S: ScalarSigned {
     }
 }
 
+impl_point_binary_assign_ops!(Point3<S>, Vector3<S>, { x, y, z });
+/*
 impl<S> ops::AddAssign<Vector3<S>> for Point3<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector3<S>) {
@@ -2098,7 +2157,7 @@ impl<S> ops::RemAssign<S> for Point3<S> where S: Scalar {
         self.z %= other;
     }
 }
-
+*/
 impl<S> approx::AbsDiffEq for Point3<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
