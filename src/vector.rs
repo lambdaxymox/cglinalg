@@ -13,6 +13,7 @@ use num_traits::{
 use core::fmt;
 use core::iter;
 use core::ops;
+use core::ops::*;
 
 
 macro_rules! impl_mul_operator {
@@ -37,6 +38,105 @@ macro_rules! impl_mul_operator {
     }
 }
 
+macro_rules! impl_vector_vector_binary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {        
+        impl<S> $OpType<$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<&$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &$T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<$T> for &$T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+
+        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &'a $T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+    }
+}
+
+macro_rules! impl_vector_scalar_binary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {        
+        impl<S> $OpType<S> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: S) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<S> for &$T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: S) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other) ),* 
+                )
+            }
+        }
+    }
+}
+
+macro_rules! impl_vector_unary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {        
+        impl<S> $OpType for $T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op() ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType for &$T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op() ),* 
+                )
+            }
+        }
+    }
+}
 
 /// A representation of one-dimensional vectors.
 #[repr(C)]
@@ -531,29 +631,13 @@ impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Neg for Vector1<S> where S: ScalarSigned {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector1 { 
-            x: -self.x,
-        }
-    }
-}
-
-impl<S> ops::Neg for &Vector1<S> where S: ScalarSigned {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector1 { 
-            x: -self.x,
-        }
-    }
-}
-
-
+impl_vector_vector_binary_ops!(Add, add, Vector1<S>, Vector1<S>, { x });
+impl_vector_vector_binary_ops!(Sub, sub, Vector1<S>, Vector1<S>, { x });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { x });
+impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { x });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { x });
+impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { x });
+/*
 impl<S> ops::Add<Vector1<S>> for &Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
@@ -641,7 +725,7 @@ impl<'a, 'b, S> ops::Sub<&'b Vector1<S>> for &'a Vector1<S> where S: Scalar {
         }
     }
 }
-
+*/
 impl<S> ops::AddAssign<Vector1<S>> for Vector1<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector1<S>) {
@@ -670,6 +754,28 @@ impl<S> ops::SubAssign<&Vector1<S>> for Vector1<S> where S: Scalar {
     }
 }
 
+impl<S> ops::MulAssign<S> for Vector1<S> where S: Scalar {
+    #[inline]
+    fn mul_assign(&mut self, other: S) {
+        self.x *= other;
+    }
+}
+
+impl<S> ops::DivAssign<S> for Vector1<S> where S: Scalar {
+    #[inline]
+    fn div_assign(&mut self, other: S) {
+        self.x = self.x / other;
+    }
+}
+
+impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
+    #[inline]
+    fn rem_assign(&mut self, other: S) {
+        self.x %= other;
+    }
+}
+
+/*
 impl<S> ops::Mul<S> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
@@ -689,13 +795,6 @@ impl<S> ops::Mul<S> for &Vector1<S> where S: Scalar {
         Vector1 {
             x: self.x * other,
         }
-    }
-}
-
-impl<S> ops::MulAssign<S> for Vector1<S> where S: Scalar {
-    #[inline]
-    fn mul_assign(&mut self, other: S) {
-        self.x *= other;
     }
 }
 
@@ -721,13 +820,6 @@ impl<S> ops::Div<S> for &Vector1<S> where S: Scalar {
     }
 }
 
-impl<S> ops::DivAssign<S> for Vector1<S> where S: Scalar {
-    #[inline]
-    fn div_assign(&mut self, other: S) {
-        self.x = self.x / other;
-    }
-}
-
 impl<S> ops::Rem<S> for Vector1<S> where S: Scalar {
     type Output = Vector1<S>;
 
@@ -749,13 +841,31 @@ impl<S> ops::Rem<S> for &Vector1<S> where S: Scalar {
         Vector1::new(x)
     }
 }
+*/
 
-impl<S> ops::RemAssign<S> for Vector1<S> where S: Scalar {
+/*
+impl<S> ops::Neg for Vector1<S> where S: ScalarSigned {
+    type Output = Vector1<S>;
+
     #[inline]
-    fn rem_assign(&mut self, other: S) {
-        self.x %= other;
+    fn neg(self) -> Self::Output {
+        Vector1 { 
+            x: -self.x,
+        }
     }
 }
+
+impl<S> ops::Neg for &Vector1<S> where S: ScalarSigned {
+    type Output = Vector1<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector1 { 
+            x: -self.x,
+        }
+    }
+}
+*/
 
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
@@ -1413,42 +1523,13 @@ impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Neg for Vector2<S> where S: ScalarSigned {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector2 { 
-            x: -self.x, 
-            y: -self.y,
-        }
-    }
-}
-
-impl<S> ops::Neg for &Vector2<S> where S: ScalarSigned {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector2 { 
-            x: -self.x, 
-            y: -self.y,
-        }
-    }
-}
-
-impl<S> ops::Add<Vector2<S>> for &Vector2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn add(self, other: Vector2<S>) -> Self::Output {
-        Vector2 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
+impl_vector_vector_binary_ops!(Add, add, Vector2<S>, Vector2<S>, { x, y });
+impl_vector_vector_binary_ops!(Sub, sub, Vector2<S>, Vector2<S>, { x, y });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector2<S>, Vector2<S>, { x, y });
+impl_vector_scalar_binary_ops!(Div, div, Vector2<S>, Vector2<S>, { x, y });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector2<S>, Vector2<S>, { x, y });
+impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { x, y });
+/*
 impl<S> ops::Add<Vector2<S>> for Vector2<S> where S: Scalar {
     type Output = Vector2<S>;
 
@@ -1466,6 +1547,18 @@ impl<S> ops::Add<&Vector2<S>> for Vector2<S> where S: Scalar {
 
     #[inline]
     fn add(self, other: &Vector2<S>) -> Self::Output {
+        Vector2 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<S> ops::Add<Vector2<S>> for &Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn add(self, other: Vector2<S>) -> Self::Output {
         Vector2 {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -1533,6 +1626,120 @@ impl<'a, 'b, S> ops::Sub<&'b Vector2<S>> for &'a Vector2<S> where S: Scalar {
     }
 }
 
+
+impl<S> ops::Mul<S> for Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Vector2 {
+            x: self.x * other,
+            y: self.y * other,
+        }
+    }
+}
+
+impl<S> ops::Mul<S> for &Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Vector2 {
+            x: self.x * other,
+            y: self.y * other,
+        }
+    }
+}
+
+impl<S> ops::Div<S> for Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Vector2 {
+            x: self.x / other,
+            y: self.y / other,
+        }
+    }
+}
+
+impl<S> ops::Div<S> for &Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Vector2 {
+            x: self.x / other,
+            y: self.y / other,
+        }
+    }
+}
+
+impl<S> ops::Rem<S> for Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        
+        Vector2::new(x, y)
+    }
+}
+
+impl<S> ops::Rem<S> for &Vector2<S> where S: Scalar {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        
+        Vector2::new(x, y)
+    }
+}
+
+
+impl<S> ops::Neg for Vector2<S> where S: ScalarSigned {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector2 { 
+            x: -self.x, 
+            y: -self.y,
+        }
+    }
+}
+
+impl<S> ops::Neg for &Vector2<S> where S: ScalarSigned {
+    type Output = Vector2<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector2 { 
+            x: -self.x, 
+            y: -self.y,
+        }
+    }
+}
+*/
+
+impl_mul_operator!(u8,    Vector2<u8>,    Vector2<u8>,    { x, y });
+impl_mul_operator!(u16,   Vector2<u16>,   Vector2<u16>,   { x, y });
+impl_mul_operator!(u32,   Vector2<u32>,   Vector2<u32>,   { x, y });
+impl_mul_operator!(u64,   Vector2<u64>,   Vector2<u64>,   { x, y });
+impl_mul_operator!(u128,  Vector2<u128>,  Vector2<u128>,  { x, y });
+impl_mul_operator!(usize, Vector2<usize>, Vector2<usize>, { x, y });
+impl_mul_operator!(i8,    Vector2<i8>,    Vector2<i8>,    { x, y });
+impl_mul_operator!(i16,   Vector2<i16>,   Vector2<i16>,   { x, y });
+impl_mul_operator!(i32,   Vector2<i32>,   Vector2<i32>,   { x, y });
+impl_mul_operator!(i64,   Vector2<i64>,   Vector2<i64>,   { x, y });
+impl_mul_operator!(i128,  Vector2<i128>,  Vector2<i128>,  { x, y });
+impl_mul_operator!(isize, Vector2<isize>, Vector2<isize>, { x, y });
+impl_mul_operator!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
+impl_mul_operator!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
+
 impl<S> ops::AddAssign<Vector2<S>> for Vector2<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector2<S>) {
@@ -1565,45 +1772,6 @@ impl<S> ops::SubAssign<&Vector2<S>> for Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Mul<S> for Vector2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn mul(self, other: S) -> Self::Output {
-        Vector2 {
-            x: self.x * other,
-            y: self.y * other,
-        }
-    }
-}
-
-impl<S> ops::Mul<S> for &Vector2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn mul(self, other: S) -> Self::Output {
-        Vector2 {
-            x: self.x * other,
-            y: self.y * other,
-        }
-    }
-}
-
-impl_mul_operator!(u8,    Vector2<u8>,    Vector2<u8>,    { x, y });
-impl_mul_operator!(u16,   Vector2<u16>,   Vector2<u16>,   { x, y });
-impl_mul_operator!(u32,   Vector2<u32>,   Vector2<u32>,   { x, y });
-impl_mul_operator!(u64,   Vector2<u64>,   Vector2<u64>,   { x, y });
-impl_mul_operator!(u128,  Vector2<u128>,  Vector2<u128>,  { x, y });
-impl_mul_operator!(usize, Vector2<usize>, Vector2<usize>, { x, y });
-impl_mul_operator!(i8,    Vector2<i8>,    Vector2<i8>,    { x, y });
-impl_mul_operator!(i16,   Vector2<i16>,   Vector2<i16>,   { x, y });
-impl_mul_operator!(i32,   Vector2<i32>,   Vector2<i32>,   { x, y });
-impl_mul_operator!(i64,   Vector2<i64>,   Vector2<i64>,   { x, y });
-impl_mul_operator!(i128,  Vector2<i128>,  Vector2<i128>,  { x, y });
-impl_mul_operator!(isize, Vector2<isize>, Vector2<isize>, { x, y });
-impl_mul_operator!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
-impl_mul_operator!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
-
 impl<S> ops::MulAssign<S> for Vector2<S> where S: Scalar {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -1612,59 +1780,12 @@ impl<S> ops::MulAssign<S> for Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Div<S> for Vector2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn div(self, other: S) -> Self::Output {
-        Vector2 {
-            x: self.x / other,
-            y: self.y / other,
-        }
-    }
-}
-
-impl<S> ops::Div<S> for &Vector2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn div(self, other: S) -> Self::Output {
-        Vector2 {
-            x: self.x / other,
-            y: self.y / other,
-        }
-    }
-}
 
 impl<S> ops::DivAssign<S> for Vector2<S> where S: Scalar {
     #[inline]
     fn div_assign(&mut self, other: S) {
         self.x = self.x / other;
         self.y = self.y / other;
-    }
-}
-
-impl<S> ops::Rem<S> for Vector2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn rem(self, other: S) -> Self::Output {
-        let x = self.x % other;
-        let y = self.y % other;
-        
-        Vector2::new(x, y)
-    }
-}
-
-impl<S> ops::Rem<S> for &Vector2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn rem(self, other: S) -> Self::Output {
-        let x = self.x % other;
-        let y = self.y % other;
-        
-        Vector2::new(x, y)
     }
 }
 
@@ -2391,32 +2512,13 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Neg for Vector3<S> where S: ScalarSigned {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector3 { 
-            x: -self.x,
-            y: -self.y, 
-            z: -self.z,
-        }
-    }
-}
-
-impl<S> ops::Neg for &Vector3<S> where S: ScalarSigned {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector3 { 
-            x: -self.x, 
-            y: -self.y, 
-            z: -self.z,
-        }
-    }
-}
-
+impl_vector_vector_binary_ops!(Add, add, Vector3<S>, Vector3<S>, { x, y, z });
+impl_vector_vector_binary_ops!(Sub, sub, Vector3<S>, Vector3<S>, { x, y, z });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector3<S>, Vector3<S>, { x, y, z });
+impl_vector_scalar_binary_ops!(Div, div, Vector3<S>, Vector3<S>, { x, y, z });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { x, y, z });
+impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { x, y, z });
+/*
 impl<S> ops::Add<Vector3<S>> for &Vector3<S> where S: Scalar {
     type Output = Vector3<S>;
 
@@ -2521,6 +2623,125 @@ impl<'a, 'b, S> ops::Sub<&'b Vector3<S>> for &'a Vector3<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Mul<S> for Vector3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Vector3 {
+            x: self.x * other,
+            y: self.y * other,
+            z: self.z * other,
+        }
+    }
+}
+
+impl<S> ops::Mul<S> for &Vector3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Vector3 {
+            x: self.x * other,
+            y: self.y * other,
+            z: self.z * other,
+        }
+    }
+}
+
+impl<S> ops::Div<S> for Vector3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Vector3 {
+            x: self.x / other,
+            y: self.y / other,
+            z: self.z / other,
+        }
+    }
+}
+
+impl<S> ops::Div<S> for &Vector3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Vector3 {
+            x: self.x / other,
+            y: self.y / other,
+            z: self.z / other,
+        }
+    }
+}
+
+impl<S> ops::Rem<S> for Vector3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        
+        Vector3::new(x, y, z)
+    }
+}
+
+impl<S> ops::Rem<S> for &Vector3<S> where S: Scalar {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        
+        Vector3::new(x, y, z)
+    }
+}
+
+impl<S> ops::Neg for Vector3<S> where S: ScalarSigned {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector3 { 
+            x: -self.x,
+            y: -self.y, 
+            z: -self.z,
+        }
+    }
+}
+
+impl<S> ops::Neg for &Vector3<S> where S: ScalarSigned {
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector3 { 
+            x: -self.x, 
+            y: -self.y, 
+            z: -self.z,
+        }
+    }
+}
+*/
+
+impl_mul_operator!(u8,    Vector3<u8>,    Vector3<u8>,    { x, y, z });
+impl_mul_operator!(u16,   Vector3<u16>,   Vector3<u16>,   { x, y, z });
+impl_mul_operator!(u32,   Vector3<u32>,   Vector3<u32>,   { x, y, z });
+impl_mul_operator!(u64,   Vector3<u64>,   Vector3<u64>,   { x, y, z });
+impl_mul_operator!(u128,  Vector3<u128>,  Vector3<u128>,  { x, y, z });
+impl_mul_operator!(usize, Vector3<usize>, Vector3<usize>, { x, y, z });
+impl_mul_operator!(i8,    Vector3<i8>,    Vector3<i8>,    { x, y, z });
+impl_mul_operator!(i16,   Vector3<i16>,   Vector3<i16>,   { x, y, z });
+impl_mul_operator!(i32,   Vector3<i32>,   Vector3<i32>,   { x, y, z });
+impl_mul_operator!(i64,   Vector3<i64>,   Vector3<i64>,   { x, y, z });
+impl_mul_operator!(i128,  Vector3<i128>,  Vector3<i128>,  { x, y, z });
+impl_mul_operator!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
+impl_mul_operator!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
+impl_mul_operator!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
 
 impl<S> ops::AddAssign<Vector3<S>> for Vector3<S> where S: Scalar {
     #[inline]
@@ -2558,47 +2779,6 @@ impl<S> ops::SubAssign<&Vector3<S>> for Vector3<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Mul<S> for Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn mul(self, other: S) -> Self::Output {
-        Vector3 {
-            x: self.x * other,
-            y: self.y * other,
-            z: self.z * other,
-        }
-    }
-}
-
-impl<S> ops::Mul<S> for &Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn mul(self, other: S) -> Self::Output {
-        Vector3 {
-            x: self.x * other,
-            y: self.y * other,
-            z: self.z * other,
-        }
-    }
-}
-
-impl_mul_operator!(u8,    Vector3<u8>,    Vector3<u8>,    { x, y, z });
-impl_mul_operator!(u16,   Vector3<u16>,   Vector3<u16>,   { x, y, z });
-impl_mul_operator!(u32,   Vector3<u32>,   Vector3<u32>,   { x, y, z });
-impl_mul_operator!(u64,   Vector3<u64>,   Vector3<u64>,   { x, y, z });
-impl_mul_operator!(u128,  Vector3<u128>,  Vector3<u128>,  { x, y, z });
-impl_mul_operator!(usize, Vector3<usize>, Vector3<usize>, { x, y, z });
-impl_mul_operator!(i8,    Vector3<i8>,    Vector3<i8>,    { x, y, z });
-impl_mul_operator!(i16,   Vector3<i16>,   Vector3<i16>,   { x, y, z });
-impl_mul_operator!(i32,   Vector3<i32>,   Vector3<i32>,   { x, y, z });
-impl_mul_operator!(i64,   Vector3<i64>,   Vector3<i64>,   { x, y, z });
-impl_mul_operator!(i128,  Vector3<i128>,  Vector3<i128>,  { x, y, z });
-impl_mul_operator!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
-impl_mul_operator!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
-impl_mul_operator!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
-
 impl<S> ops::MulAssign<S> for Vector3<S> where S: Scalar {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -2608,31 +2788,6 @@ impl<S> ops::MulAssign<S> for Vector3<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Div<S> for Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn div(self, other: S) -> Self::Output {
-        Vector3 {
-            x: self.x / other,
-            y: self.y / other,
-            z: self.z / other,
-        }
-    }
-}
-
-impl<S> ops::Div<S> for &Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn div(self, other: S) -> Self::Output {
-        Vector3 {
-            x: self.x / other,
-            y: self.y / other,
-            z: self.z / other,
-        }
-    }
-}
 
 impl<S> ops::DivAssign<S> for Vector3<S> where S: Scalar {
     #[inline]
@@ -2640,32 +2795,6 @@ impl<S> ops::DivAssign<S> for Vector3<S> where S: Scalar {
         self.x /= other;
         self.y /= other;
         self.z /= other;
-    }
-}
-
-impl<S> ops::Rem<S> for Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn rem(self, other: S) -> Self::Output {
-        let x = self.x % other;
-        let y = self.y % other;
-        let z = self.z % other;
-        
-        Vector3::new(x, y, z)
-    }
-}
-
-impl<S> ops::Rem<S> for &Vector3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn rem(self, other: S) -> Self::Output {
-        let x = self.x % other;
-        let y = self.y % other;
-        let z = self.z % other;
-        
-        Vector3::new(x, y, z)
     }
 }
 
@@ -3318,34 +3447,14 @@ impl<S> fmt::Display for Vector4<S> where S: fmt::Display {
     }
 }
 
-impl<S> ops::Neg for Vector4<S> where S: ScalarSigned {
-    type Output = Vector4<S>;
 
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector4 { 
-            x: -self.x,
-            y: -self.y,
-            z: -self.z, 
-            w: -self.w,
-        }
-    }
-}
-
-impl<S> ops::Neg for &Vector4<S> where S: ScalarSigned {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        Vector4 { 
-            x: -self.x,
-            y: -self.y,
-            z: -self.z,
-            w: -self.w,
-        }
-    }
-}
-
+impl_vector_vector_binary_ops!(Add, add, Vector4<S>, Vector4<S>, { x, y, z, w });
+impl_vector_vector_binary_ops!(Sub, sub, Vector4<S>, Vector4<S>, { x, y, z, w });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { x, y, z, w });
+impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { x, y, z, w });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { x, y, z, w });
+impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { x, y, z, w });
+/*
 impl<S> ops::Add<Vector4<S>> for &Vector4<S> where S: Scalar {
     type Output = Vector4<S>;
 
@@ -3458,6 +3567,134 @@ impl<'a, 'b, S> ops::Sub<&'b Vector4<S>> for &'a Vector4<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Mul<S> for Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Vector4 {
+            x: self.x * other,
+            y: self.y * other,
+            z: self.z * other,
+            w: self.w * other,
+        }
+    }
+}
+
+impl<S> ops::Mul<S> for &Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Vector4 {
+            x: self.x * other,
+            y: self.y * other,
+            z: self.z * other,
+            w: self.w * other,
+        }
+    }
+}
+
+impl<S> ops::Div<S> for Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Vector4 {
+            x: self.x / other,
+            y: self.y / other,
+            z: self.z / other,
+            w: self.w / other,
+        }
+    }
+}
+
+impl<S> ops::Div<S> for &Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Vector4 {
+            x: self.x / other,
+            y: self.y / other,
+            z: self.z / other,
+            w: self.w / other,
+        }
+    }
+}
+
+impl<S> ops::Rem<S> for Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        let w = self.w % other;
+
+        Vector4::new(x, y, z, w)
+    }
+}
+
+impl<S> ops::Rem<S> for &Vector4<S> where S: Scalar {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        let x = self.x % other;
+        let y = self.y % other;
+        let z = self.z % other;
+        let w = self.w % other;
+        
+        Vector4::new(x, y, z, w)
+    }
+}
+
+impl<S> ops::Neg for Vector4<S> where S: ScalarSigned {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector4 { 
+            x: -self.x,
+            y: -self.y,
+            z: -self.z, 
+            w: -self.w,
+        }
+    }
+}
+
+impl<S> ops::Neg for &Vector4<S> where S: ScalarSigned {
+    type Output = Vector4<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Vector4 { 
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
+            w: -self.w,
+        }
+    }
+}
+*/
+
+impl_mul_operator!(u8,    Vector4<u8>,    Vector4<u8>,    { x, y, z, w });
+impl_mul_operator!(u16,   Vector4<u16>,   Vector4<u16>,   { x, y, z, w });
+impl_mul_operator!(u32,   Vector4<u32>,   Vector4<u32>,   { x, y, z, w });
+impl_mul_operator!(u64,   Vector4<u64>,   Vector4<u64>,   { x, y, z, w });
+impl_mul_operator!(u128,  Vector4<u128>,  Vector4<u128>,  { x, y, z, w });
+impl_mul_operator!(usize, Vector4<usize>, Vector4<usize>, { x, y, z, w });
+impl_mul_operator!(i8,    Vector4<i8>,    Vector4<i8>,    { x, y, z, w });
+impl_mul_operator!(i16,   Vector4<i16>,   Vector4<i16>,   { x, y, z, w });
+impl_mul_operator!(i32,   Vector4<i32>,   Vector4<i32>,   { x, y, z, w });
+impl_mul_operator!(i64,   Vector4<i64>,   Vector4<i64>,   { x, y, z, w });
+impl_mul_operator!(i128,  Vector4<i128>,  Vector4<i128>,  { x, y, z, w });
+impl_mul_operator!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
+impl_mul_operator!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
+impl_mul_operator!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
+
 impl<S> ops::AddAssign<Vector4<S>> for Vector4<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Vector4<S>) {
@@ -3498,49 +3735,6 @@ impl<S> ops::SubAssign<&Vector4<S>> for Vector4<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Mul<S> for Vector4<S> where S: Scalar {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn mul(self, other: S) -> Self::Output {
-        Vector4 {
-            x: self.x * other,
-            y: self.y * other,
-            z: self.z * other,
-            w: self.w * other,
-        }
-    }
-}
-
-impl<S> ops::Mul<S> for &Vector4<S> where S: Scalar {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn mul(self, other: S) -> Self::Output {
-        Vector4 {
-            x: self.x * other,
-            y: self.y * other,
-            z: self.z * other,
-            w: self.w * other,
-        }
-    }
-}
-
-impl_mul_operator!(u8,    Vector4<u8>,    Vector4<u8>,    { x, y, z, w });
-impl_mul_operator!(u16,   Vector4<u16>,   Vector4<u16>,   { x, y, z, w });
-impl_mul_operator!(u32,   Vector4<u32>,   Vector4<u32>,   { x, y, z, w });
-impl_mul_operator!(u64,   Vector4<u64>,   Vector4<u64>,   { x, y, z, w });
-impl_mul_operator!(u128,  Vector4<u128>,  Vector4<u128>,  { x, y, z, w });
-impl_mul_operator!(usize, Vector4<usize>, Vector4<usize>, { x, y, z, w });
-impl_mul_operator!(i8,    Vector4<i8>,    Vector4<i8>,    { x, y, z, w });
-impl_mul_operator!(i16,   Vector4<i16>,   Vector4<i16>,   { x, y, z, w });
-impl_mul_operator!(i32,   Vector4<i32>,   Vector4<i32>,   { x, y, z, w });
-impl_mul_operator!(i64,   Vector4<i64>,   Vector4<i64>,   { x, y, z, w });
-impl_mul_operator!(i128,  Vector4<i128>,  Vector4<i128>,  { x, y, z, w });
-impl_mul_operator!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
-impl_mul_operator!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
-impl_mul_operator!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
-
 impl<S> ops::MulAssign<S> for Vector4<S> where S: Scalar {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -3551,34 +3745,6 @@ impl<S> ops::MulAssign<S> for Vector4<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Div<S> for Vector4<S> where S: Scalar {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn div(self, other: S) -> Self::Output {
-        Vector4 {
-            x: self.x / other,
-            y: self.y / other,
-            z: self.z / other,
-            w: self.w / other,
-        }
-    }
-}
-
-impl<S> ops::Div<S> for &Vector4<S> where S: Scalar {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn div(self, other: S) -> Self::Output {
-        Vector4 {
-            x: self.x / other,
-            y: self.y / other,
-            z: self.z / other,
-            w: self.w / other,
-        }
-    }
-}
-
 impl<S> ops::DivAssign<S> for Vector4<S> where S: Scalar {
     #[inline]
     fn div_assign(&mut self, other: S) {
@@ -3586,34 +3752,6 @@ impl<S> ops::DivAssign<S> for Vector4<S> where S: Scalar {
         self.y /= other;
         self.z /= other;
         self.w /= other;
-    }
-}
-
-impl<S> ops::Rem<S> for Vector4<S> where S: Scalar {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn rem(self, other: S) -> Self::Output {
-        let x = self.x % other;
-        let y = self.y % other;
-        let z = self.z % other;
-        let w = self.w % other;
-
-        Vector4::new(x, y, z, w)
-    }
-}
-
-impl<S> ops::Rem<S> for &Vector4<S> where S: Scalar {
-    type Output = Vector4<S>;
-
-    #[inline]
-    fn rem(self, other: S) -> Self::Output {
-        let x = self.x % other;
-        let y = self.y % other;
-        let z = self.z % other;
-        let w = self.w % other;
-        
-        Vector4::new(x, y, z, w)
     }
 }
 
