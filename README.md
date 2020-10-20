@@ -82,18 +82,6 @@ The library has design limitations for a number of reasons.
 The limitations on the implementation are addressed in the project roadmap. 
 The biggest one is that it presently does not leverage SIMD instructions yet.
 
-## Acknowledgements
-The Rust ecosystem has a number of linear algebra libraries including:
-* [cgmath](https://crates.io/crates/cgmath) -- One of the original Rust graphics 
-  mathematics libraries, and one of the most commonly used ones.
-* [nalgebra](https://nalgebra.org) -- The most powerful linear algebra library 
-  in the Rust ecosystem. It provides a strongly typed system for most linear 
-  algebra in arbitrarily many dimensions. It is useful in many domains that do 
-  heavy numerical computation, including computer graphics.
-* [euclid](https://crates.io/crates/euclid) -- A collection of strongly typed 
-  math tools for computer graphics with an inclination towards 2d graphics and 
-  layout. This one is used in the `Servo` browser engine.
-
 ## Project Roadmap
 Major outstanding project goals include:
 * Implement non-square matrix types up to dimension four.
