@@ -690,9 +690,22 @@ impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { x });
 impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { x });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { x });
 impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { x });
-
 impl_vector_binary_assign_ops!(Vector1<S>, { x });
 
+impl_mul_operator!(u8,    Vector1<u8>,    Vector1<u8>,    { x });
+impl_mul_operator!(u16,   Vector1<u16>,   Vector1<u16>,   { x });
+impl_mul_operator!(u32,   Vector1<u32>,   Vector1<u32>,   { x });
+impl_mul_operator!(u64,   Vector1<u64>,   Vector1<u64>,   { x });
+impl_mul_operator!(u128,  Vector1<u128>,  Vector1<u128>,  { x });
+impl_mul_operator!(usize, Vector1<usize>, Vector1<usize>, { x });
+impl_mul_operator!(i8,    Vector1<i8>,    Vector1<i8>,    { x });
+impl_mul_operator!(i16,   Vector1<i16>,   Vector1<i16>,   { x });
+impl_mul_operator!(i32,   Vector1<i32>,   Vector1<i32>,   { x });
+impl_mul_operator!(i64,   Vector1<i64>,   Vector1<i64>,   { x });
+impl_mul_operator!(i128,  Vector1<i128>,  Vector1<i128>,  { x });
+impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
+impl_mul_operator!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
+impl_mul_operator!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
@@ -786,21 +799,6 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector1<S>> for Vector1<S> {
         iter.fold(Vector1::zero(), ops::Add::add)
     }
 }
-
-impl_mul_operator!(u8,    Vector1<u8>,    Vector1<u8>,    { x });
-impl_mul_operator!(u16,   Vector1<u16>,   Vector1<u16>,   { x });
-impl_mul_operator!(u32,   Vector1<u32>,   Vector1<u32>,   { x });
-impl_mul_operator!(u64,   Vector1<u64>,   Vector1<u64>,   { x });
-impl_mul_operator!(u128,  Vector1<u128>,  Vector1<u128>,  { x });
-impl_mul_operator!(usize, Vector1<usize>, Vector1<usize>, { x });
-impl_mul_operator!(i8,    Vector1<i8>,    Vector1<i8>,    { x });
-impl_mul_operator!(i16,   Vector1<i16>,   Vector1<i16>,   { x });
-impl_mul_operator!(i32,   Vector1<i32>,   Vector1<i32>,   { x });
-impl_mul_operator!(i64,   Vector1<i64>,   Vector1<i64>,   { x });
-impl_mul_operator!(i128,  Vector1<i128>,  Vector1<i128>,  { x });
-impl_mul_operator!(isize, Vector1<isize>, Vector1<isize>, { x });
-impl_mul_operator!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
-impl_mul_operator!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
 
 /// A representation of two-dimensional vectors in a Euclidean space.
@@ -1356,6 +1354,7 @@ impl_vector_scalar_binary_ops!(Mul, mul, Vector2<S>, Vector2<S>, { x, y });
 impl_vector_scalar_binary_ops!(Div, div, Vector2<S>, Vector2<S>, { x, y });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector2<S>, Vector2<S>, { x, y });
 impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { x, y });
+impl_vector_binary_assign_ops!(Vector2<S>, { x, y });
 
 impl_mul_operator!(u8,    Vector2<u8>,    Vector2<u8>,    { x, y });
 impl_mul_operator!(u16,   Vector2<u16>,   Vector2<u16>,   { x, y });
@@ -1372,7 +1371,6 @@ impl_mul_operator!(isize, Vector2<isize>, Vector2<isize>, { x, y });
 impl_mul_operator!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
 impl_mul_operator!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
 
-impl_vector_binary_assign_ops!(Vector2<S>, { x, y });
 
 impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     type Output = S;
@@ -2095,6 +2093,7 @@ impl_vector_scalar_binary_ops!(Mul, mul, Vector3<S>, Vector3<S>, { x, y, z });
 impl_vector_scalar_binary_ops!(Div, div, Vector3<S>, Vector3<S>, { x, y, z });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { x, y, z });
 impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { x, y, z });
+impl_vector_binary_assign_ops!(Vector3<S>, { x, y, z });
 
 impl_mul_operator!(u8,    Vector3<u8>,    Vector3<u8>,    { x, y, z });
 impl_mul_operator!(u16,   Vector3<u16>,   Vector3<u16>,   { x, y, z });
@@ -2110,8 +2109,6 @@ impl_mul_operator!(i128,  Vector3<i128>,  Vector3<i128>,  { x, y, z });
 impl_mul_operator!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
 impl_mul_operator!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
 impl_mul_operator!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
-
-impl_vector_binary_assign_ops!(Vector3<S>, { x, y, z });
 
 impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     type Output = S;
@@ -2760,6 +2757,7 @@ impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { x, y, z, w })
 impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { x, y, z, w });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { x, y, z, w });
 impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { x, y, z, w });
+impl_vector_binary_assign_ops!(Vector4<S>, { x, y, z, w });
 
 impl_mul_operator!(u8,    Vector4<u8>,    Vector4<u8>,    { x, y, z, w });
 impl_mul_operator!(u16,   Vector4<u16>,   Vector4<u16>,   { x, y, z, w });
@@ -2775,8 +2773,6 @@ impl_mul_operator!(i128,  Vector4<i128>,  Vector4<i128>,  { x, y, z, w });
 impl_mul_operator!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
 impl_mul_operator!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
 impl_mul_operator!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
-
-impl_vector_binary_assign_ops!(Vector4<S>, { x, y, z, w });
 
 impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     type Output = S;
