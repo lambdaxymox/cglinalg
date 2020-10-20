@@ -496,139 +496,6 @@ impl_point_vector_binary_ops!(Add, add, Point1<S>, Vector1<S>, Point1<S>, { x })
 impl_point_vector_binary_ops!(Sub, sub, Point1<S>, Vector1<S>, Point1<S>, { x });
 impl_point_vector_binary_ops!(Sub, sub, Point1<S>, Point1<S>, Vector1<S>, { x });
 
-/*
-impl<S> ops::Add<Vector1<S>> for Point1<S> where S: Scalar {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn add(self, other: Vector1<S>) -> Self::Output {
-        Point1 {
-            x: self.x + other.x,
-        }
-    }
-}
-
-impl<S> ops::Add<Vector1<S>> for &Point1<S> where S: Scalar {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn add(self, other: Vector1<S>) -> Self::Output {
-        Point1 {
-            x: self.x + other.x,
-        }
-    }
-}
-
-impl<S> ops::Add<&Vector1<S>> for Point1<S> where S: Scalar {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn add(self, other: &Vector1<S>) -> Self::Output {
-        Point1 {
-            x: self.x + other.x,
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Add<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn add(self, other: &'b Vector1<S>) -> Self::Output {
-        Point1 {
-            x: self.x + other.x,
-        }
-    }
-}
-
-impl<S> ops::Sub<Point1<S>> for &Point1<S> where S: Scalar {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn sub(self, other: Point1<S>) -> Self::Output {
-        Vector1 {
-            x: self.x - other.x,
-        }
-    }
-}
-
-impl<S> ops::Sub<Point1<S>> for Point1<S> where S: Scalar {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn sub(self, other: Point1<S>) -> Self::Output {
-        Vector1 {
-            x: self.x - other.x,
-        }
-    }
-}
-
-impl<S> ops::Sub<&Point1<S>> for Point1<S> where S: Scalar {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn sub(self, other: &Point1<S>) -> Self::Output {
-        Vector1 {
-            x: self.x - other.x,          
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Sub<&'b Point1<S>> for &'a Point1<S> where S: Scalar {
-    type Output = Vector1<S>;
-
-    #[inline]
-    fn sub(self, other: &'b Point1<S>) -> Self::Output {
-        Vector1 {
-            x: self.x - other.x,
-        }
-    }
-}
-
-impl<S> ops::Sub<Vector1<S>> for &Point1<S> where S: Scalar {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn sub(self, other: Vector1<S>) -> Self::Output {
-        Point1 {
-            x: self.x - other.x,
-        }
-    }
-}
-
-impl<S> ops::Sub<Vector1<S>> for Point1<S> where S: Scalar {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn sub(self, other: Vector1<S>) -> Self::Output {
-        Point1 {
-            x: self.x - other.x,
-        }
-    }
-}
-
-impl<S> ops::Sub<&Vector1<S>> for Point1<S> where S: Scalar {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn sub(self, other: &Vector1<S>) -> Self::Output {
-        Point1 {
-            x: self.x - other.x,          
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Sub<&'b Vector1<S>> for &'a Point1<S> where S: Scalar {
-    type Output = Point1<S>;
-
-    #[inline]
-    fn sub(self, other: &'b Vector1<S>) -> Self::Output {
-        Point1 {
-            x: self.x - other.x,
-        }
-    }
-}
-*/
 impl_point_scalar_binary_ops!(Mul, mul, Point1<S>, Point1<S>, { x });
 impl_point_scalar_binary_ops!(Div, div, Point1<S>, Point1<S>, { x });
 impl_point_scalar_binary_ops!(Rem, rem, Point1<S>, Point1<S>, { x });
@@ -651,44 +518,6 @@ impl_scalar_vector_mul_ops!(f64,   Point1<f64>,   Point1<f64>,   { x });
 impl_point_unary_ops!(Neg, neg, Point1<S>, Point1<S>, { x });
 
 impl_point_binary_assign_ops!(Point1<S>, Vector1<S>, { x });
-
-impl<S> approx::AbsDiffEq for Point1<S> where S: ScalarFloat {
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.x, &other.x, epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for Point1<S> where S: ScalarFloat {
-    #[inline]
-    fn default_max_relative() -> S::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.x, &other.x, epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for Point1<S> where S: ScalarFloat {
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
-    }
-}
 
 impl<S> Magnitude for Point1<S> where S: ScalarFloat {
     type Output = S;
@@ -727,6 +556,44 @@ impl<S> Magnitude for Point1<S> where S: ScalarFloat {
     #[inline]
     fn distance_squared(&self, other: &Point1<S>) -> Self::Output {
         (self - other).magnitude_squared()
+    }
+}
+
+impl<S> approx::AbsDiffEq for Point1<S> where S: ScalarFloat {
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.x, &other.x, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Point1<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.x, &other.x, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Point1<S> where S: ScalarFloat {
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
     }
 }
 
@@ -1065,151 +932,7 @@ impl_point_index_ops!(Point2<S>, 2, RangeFull, [S]);
 impl_point_vector_binary_ops!(Add, add, Point2<S>, Vector2<S>, Point2<S>, { x, y });
 impl_point_vector_binary_ops!(Sub, sub, Point2<S>, Vector2<S>, Point2<S>, { x, y });
 impl_point_vector_binary_ops!(Sub, sub, Point2<S>, Point2<S>, Vector2<S>, { x, y });
-/*
-impl<S> ops::Add<Vector2<S>> for Point2<S> where S: Scalar {
-    type Output = Point2<S>;
 
-    #[inline]
-    fn add(self, other: Vector2<S>) -> Self::Output {
-        Point2 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-impl<S> ops::Add<Vector2<S>> for &Point2<S> where S: Scalar {
-    type Output = Point2<S>;
-
-    #[inline]
-    fn add(self, other: Vector2<S>) -> Self::Output {
-        Point2 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-impl<S> ops::Add<&Vector2<S>> for Point2<S> where S: Scalar {
-    type Output = Point2<S>;
-
-    #[inline]
-    fn add(self, other: &Vector2<S>) -> Self::Output {
-        Point2 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Add<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
-    type Output = Point2<S>;
-
-    #[inline]
-    fn add(self, other: &'b Vector2<S>) -> Self::Output {
-        Point2 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-impl<S> ops::Sub<Point2<S>> for &Point2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn sub(self, other: Point2<S>) -> Self::Output {
-        Vector2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
-impl<S> ops::Sub<Point2<S>> for Point2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn sub(self, other: Point2<S>) -> Self::Output {
-        Vector2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
-impl<S> ops::Sub<&Point2<S>> for Point2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn sub(self, other: &Point2<S>) -> Self::Output {
-        Vector2 {
-            x: self.x - other.x,
-            y: self.y - other.y,             
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Sub<&'b Point2<S>> for &'a Point2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn sub(self, other: &'b Point2<S>) -> Self::Output {
-        Vector2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
-impl<S> ops::Sub<Vector2<S>> for &Point2<S> where S: Scalar {
-    type Output = Point2<S>;
-
-    #[inline]
-    fn sub(self, other: Vector2<S>) -> Self::Output {
-        Point2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
-impl<S> ops::Sub<Vector2<S>> for Point2<S> where S: Scalar {
-    type Output = Point2<S>;
-
-    #[inline]
-    fn sub(self, other: Vector2<S>) -> Self::Output {
-        Point2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-
-impl<S> ops::Sub<&Vector2<S>> for Point2<S> where S: Scalar {
-    type Output = Point2<S>;
-
-    #[inline]
-    fn sub(self, other: &Vector2<S>) -> Self::Output {
-        Point2 {
-            x: self.x - other.x,
-            y: self.y - other.y,             
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Sub<&'b Vector2<S>> for &'a Point2<S> where S: Scalar {
-    type Output = Point2<S>;
-
-    #[inline]
-    fn sub(self, other: &'b Vector2<S>) -> Self::Output {
-        Point2 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
-    }
-}
-*/
 impl_point_scalar_binary_ops!(Mul, mul, Point2<S>, Point2<S>, { x, y });
 impl_point_scalar_binary_ops!(Div, div, Point2<S>, Point2<S>, { x, y });
 impl_point_scalar_binary_ops!(Rem, rem, Point2<S>, Point2<S>, { x, y });
@@ -1229,10 +952,50 @@ impl_scalar_vector_mul_ops!(isize, Point2<isize>, Point2<isize>, { x, y });
 impl_scalar_vector_mul_ops!(f32,   Point2<f32>,   Point2<f32>,   { x, y });
 impl_scalar_vector_mul_ops!(f64,   Point2<f64>,   Point2<f64>,   { x, y });
 
-
 impl_point_unary_ops!(Neg, neg, Point2<S>, Point2<S>, { x, y });
 
 impl_point_binary_assign_ops!(Point2<S>, Vector2<S>, { x, y });
+
+
+impl<S> Magnitude for Point2<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
+    }
+
+    #[inline]
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
+    }
+
+    #[inline]
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+
+    #[inline]
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+    
+    #[inline]
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
+
+    #[inline]
+    fn distance_squared(&self, other: &Point2<S>) -> Self::Output {
+        (self - other).magnitude_squared()
+    }
+}
 
 impl<S> approx::AbsDiffEq for Point2<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -1275,45 +1038,6 @@ impl<S> approx::UlpsEq for Point2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Magnitude for Point2<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
-    }
-
-    #[inline]
-    fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
-    }
-
-    #[inline]
-    fn normalize(&self) -> Self {
-        self / self.magnitude()
-    }
-
-    #[inline]
-    fn normalize_to(&self, magnitude: Self::Output) -> Self {
-        self * (magnitude / self.magnitude())
-    }
-    
-    #[inline]
-    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let magnitude = self.magnitude();
-
-        if magnitude <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
-    }
-
-    #[inline]
-    fn distance_squared(&self, other: &Point2<S>) -> Self::Output {
-        (self - other).magnitude_squared()
-    }
-}
 
 
 /// A representation of three-dimensional points in a Euclidean space.
@@ -1654,163 +1378,7 @@ impl_point_index_ops!(Point3<S>, 3, RangeFull, [S]);
 impl_point_vector_binary_ops!(Add, add, Point3<S>, Vector3<S>, Point3<S>, { x, y, z });
 impl_point_vector_binary_ops!(Sub, sub, Point3<S>, Vector3<S>, Point3<S>, { x, y, z });
 impl_point_vector_binary_ops!(Sub, sub, Point3<S>, Point3<S>, Vector3<S>, { x, y, z });
-/*
-impl<S> ops::Add<Vector3<S>> for Point3<S> where S: Scalar {
-    type Output = Point3<S>;
 
-    #[inline]
-    fn add(self, other: Vector3<S>) -> Self::Output {
-        Point3 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl<S> ops::Add<Vector3<S>> for &Point3<S> where S: Scalar {
-    type Output = Point3<S>;
-
-    #[inline]
-    fn add(self, other: Vector3<S>) -> Self::Output {
-        Point3 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl<S> ops::Add<&Vector3<S>> for Point3<S> where S: Scalar {
-    type Output = Point3<S>;
-
-    #[inline]
-    fn add(self, other: &Vector3<S>) -> Self::Output {
-        Point3 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,               
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Add<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
-    type Output = Point3<S>;
-
-    #[inline]
-    fn add(self, other: &'b Vector3<S>) -> Self::Output {
-        Point3 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
-    }
-}
-
-impl<S> ops::Sub<Point3<S>> for &Point3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn sub(self, other: Point3<S>) -> Self::Output {
-        Vector3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-
-impl<S> ops::Sub<Point3<S>> for Point3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn sub(self, other: Point3<S>) -> Self::Output {
-        Vector3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-
-impl<S> ops::Sub<&Point3<S>> for Point3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn sub(self, other: &Point3<S>) -> Self::Output {
-        Vector3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,               
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Sub<&'b Point3<S>> for &'a Point3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn sub(self, other: &'b Point3<S>) -> Self::Output {
-        Vector3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-
-impl<S> ops::Sub<Vector3<S>> for &Point3<S> where S: Scalar {
-    type Output = Point3<S>;
-
-    #[inline]
-    fn sub(self, other: Vector3<S>) -> Self::Output {
-        Point3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-
-impl<S> ops::Sub<Vector3<S>> for Point3<S> where S: Scalar {
-    type Output = Point3<S>;
-
-    #[inline]
-    fn sub(self, other: Vector3<S>) -> Self::Output {
-        Point3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-
-impl<S> ops::Sub<&Vector3<S>> for Point3<S> where S: Scalar {
-    type Output = Point3<S>;
-
-    #[inline]
-    fn sub(self, other: &Vector3<S>) -> Self::Output {
-        Point3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,               
-        }
-    }
-}
-
-impl<'a, 'b, S> ops::Sub<&'b Vector3<S>> for &'a Point3<S> where S: Scalar {
-    type Output = Point3<S>;
-
-    #[inline]
-    fn sub(self, other: &'b Vector3<S>) -> Self::Output {
-        Point3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
-    }
-}
-*/
 impl_point_scalar_binary_ops!(Mul, mul, Point3<S>, Point3<S>, { x, y, z });
 impl_point_scalar_binary_ops!(Div, div, Point3<S>, Point3<S>, { x, y, z });
 impl_point_scalar_binary_ops!(Rem, rem, Point3<S>, Point3<S>, { x, y, z });
@@ -1833,6 +1401,47 @@ impl_scalar_vector_mul_ops!(f64,   Point3<f64>,   Point3<f64>,   { x, y, z });
 impl_point_unary_ops!(Neg, neg, Point3<S>, Point3<S>, { x, y, z });
 
 impl_point_binary_assign_ops!(Point3<S>, Vector3<S>, { x, y, z });
+
+
+impl<S> Magnitude for Point3<S> where S: ScalarFloat {
+    type Output = S;
+
+    #[inline]
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
+    }
+
+    #[inline]
+    fn magnitude(&self) -> Self::Output {
+        Self::Output::sqrt(self.magnitude_squared())
+    }
+
+    #[inline]
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+
+    #[inline]
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+
+    #[inline]
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
+
+    #[inline]
+    fn distance_squared(&self, other: &Point3<S>) -> Self::Output {
+        (self - other).magnitude_squared()
+    }
+}
 
 impl<S> approx::AbsDiffEq for Point3<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -1875,46 +1484,6 @@ impl<S> approx::UlpsEq for Point3<S> where S: ScalarFloat {
         S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
         S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) &&
         S::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
-    }
-}
-
-impl<S> Magnitude for Point3<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
-    }
-
-    #[inline]
-    fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
-    }
-
-    #[inline]
-    fn normalize(&self) -> Self {
-        self / self.magnitude()
-    }
-
-    #[inline]
-    fn normalize_to(&self, magnitude: Self::Output) -> Self {
-        self * (magnitude / self.magnitude())
-    }
-
-    #[inline]
-    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let magnitude = self.magnitude();
-
-        if magnitude <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
-    }
-
-    #[inline]
-    fn distance_squared(&self, other: &Point3<S>) -> Self::Output {
-        (self - other).magnitude_squared()
     }
 }
 
