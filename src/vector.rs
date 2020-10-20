@@ -599,7 +599,9 @@ impl_vector_vector_binary_ops!(Sub, sub, Vector1<S>, Vector1<S>, { x });
 impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { x });
 impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { x });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { x });
+
 impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { x });
+
 impl_vector_binary_assign_ops!(Vector1<S>, { x });
 
 impl_scalar_vector_mul_ops!(u8,    Vector1<u8>,    Vector1<u8>,    { x });
@@ -1146,7 +1148,9 @@ impl_vector_vector_binary_ops!(Sub, sub, Vector2<S>, Vector2<S>, { x, y });
 impl_vector_scalar_binary_ops!(Mul, mul, Vector2<S>, Vector2<S>, { x, y });
 impl_vector_scalar_binary_ops!(Div, div, Vector2<S>, Vector2<S>, { x, y });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector2<S>, Vector2<S>, { x, y });
+
 impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { x, y });
+
 impl_vector_binary_assign_ops!(Vector2<S>, { x, y });
 
 impl_scalar_vector_mul_ops!(u8,    Vector2<u8>,    Vector2<u8>,    { x, y });
@@ -1768,7 +1772,9 @@ impl_vector_vector_binary_ops!(Sub, sub, Vector3<S>, Vector3<S>, { x, y, z });
 impl_vector_scalar_binary_ops!(Mul, mul, Vector3<S>, Vector3<S>, { x, y, z });
 impl_vector_scalar_binary_ops!(Div, div, Vector3<S>, Vector3<S>, { x, y, z });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { x, y, z });
+
 impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { x, y, z });
+
 impl_vector_binary_assign_ops!(Vector3<S>, { x, y, z });
 
 impl_scalar_vector_mul_ops!(u8,    Vector3<u8>,    Vector3<u8>,    { x, y, z });
@@ -2314,7 +2320,9 @@ impl_vector_vector_binary_ops!(Sub, sub, Vector4<S>, Vector4<S>, { x, y, z, w })
 impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { x, y, z, w });
 impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { x, y, z, w });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { x, y, z, w });
+
 impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { x, y, z, w });
+
 impl_vector_binary_assign_ops!(Vector4<S>, { x, y, z, w });
 
 impl_scalar_vector_mul_ops!(u8,    Vector4<u8>,    Vector4<u8>,    { x, y, z, w });

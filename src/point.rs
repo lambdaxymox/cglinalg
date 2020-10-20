@@ -88,6 +88,32 @@ macro_rules! impl_point_index_ops {
     }
 }
 
+macro_rules! impl_point_unary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
+        impl<S> $OpType for $T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op() ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType for &$T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op() ),* 
+                )
+            }
+        }
+    }
+}
+
 macro_rules! impl_point_binary_assign_ops {
     ($PointType:ty, $VectorType:ty, { $($field:ident),* }) => {
         impl<S> ops::AddAssign<$VectorType> for $PointType where S: Scalar {
@@ -605,6 +631,8 @@ impl<S> ops::Rem<S> for &Point1<S> where S: Scalar {
     }
 }
 
+impl_point_unary_ops!(Neg, neg, Point1<S>, Point1<S>, { x });
+/*
 impl<S> ops::Neg for Point1<S> where S: ScalarSigned {
     type Output = Point1<S>;
 
@@ -626,6 +654,7 @@ impl<S> ops::Neg for &Point1<S> where S: ScalarSigned {
         )
     }
 }
+*/
 
 impl_point_binary_assign_ops!(Point1<S>, Vector1<S>, { x });
 
@@ -1269,7 +1298,9 @@ impl<S> ops::Rem<S> for &Point2<S> where S: Scalar {
         Point2::new(x, y)
     }
 }
+impl_point_unary_ops!(Neg, neg, Point2<S>, Point2<S>, { x, y });
 
+/*
 impl<S> ops::Neg for Point2<S> where S: ScalarSigned {
     type Output = Point2<S>;
 
@@ -1293,7 +1324,7 @@ impl<S> ops::Neg for &Point2<S> where S: ScalarSigned {
         )
     }
 }
-
+*/
 impl_point_binary_assign_ops!(Point2<S>, Vector2<S>, { x, y });
 
 impl<S> approx::AbsDiffEq for Point2<S> where S: ScalarFloat {
@@ -1962,6 +1993,8 @@ impl<S> ops::Rem<S> for &Point3<S> where S: Scalar {
     }
 }
 
+impl_point_unary_ops!(Neg, neg, Point3<S>, Point3<S>, { x, y, z });
+/*
 impl<S> ops::Neg for Point3<S> where S: ScalarSigned {
     type Output = Point3<S>;
 
@@ -1987,7 +2020,7 @@ impl<S> ops::Neg for &Point3<S> where S: ScalarSigned {
         )
     }
 }
-
+*/
 impl_point_binary_assign_ops!(Point3<S>, Vector3<S>, { x, y, z });
 
 impl<S> approx::AbsDiffEq for Point3<S> where S: ScalarFloat {
