@@ -370,9 +370,25 @@ impl<S> Quaternion<S> where S: Scalar {
         Quaternion::from_parts(S::zero(), vector)
     }
     
+    /// Compute the dot product of two quaternions.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion, 
+    /// # };
+    /// #
+    /// let quaternion1 = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let quaternion2 = Quaternion::new(5_i32, 6_i32, 7_i32, 8_i32);
+    /// let expected = 70_i32;
+    /// let result = quaternion1.dot(&quaternion2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn dot(self, other: &Quaternion<S>) -> S {
-        self.s * other.s + self.v.x * other.v.x + self.v.y * other.v.y + self.v.z * other.v.z
+        self.s * other.s + self.v.dot(&other.v)
     }
 }
 
