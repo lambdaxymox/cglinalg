@@ -1350,8 +1350,7 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix2x2<S> {
     }
 }
 
-//impl_matrix_matrix_binary_ops!(Add, add, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
-//impl_matrix_matrix_binary_ops!(Sub, sub, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+
 
 macro_rules! impl_matrix_matrix_binary_ops1 {
     ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
@@ -1480,20 +1479,6 @@ macro_rules! impl_matrix_binary_assign_ops1 {
     }
 }
 
-
-impl_matrix_matrix_binary_ops1!(
-    Add, add, 
-    add_array2x2_array2x2, Matrix2x2<S>, Matrix2x2<S>, 
-    { (0, 0), (0, 1), (1, 0), (1, 1) }
-);
-impl_matrix_matrix_binary_ops1!(
-    Sub, sub, sub_array2x2_array2x2, Matrix2x2<S>, Matrix2x2<S>, 
-    { (0, 0), (0, 1), (1, 0), (1, 1) }
-);
-impl_matrix_unary_ops1!(
-    Neg, neg, neg_array2x2, Matrix2x2<S>, Matrix2x2<S>,
-    { (0, 0), (0, 1), (1, 0), (1, 1) }
-);
 
 #[inline(always)]
 fn dot_array2x2_col2<S>(arr: &[[S; 2]; 2], col: &[S; 2], r: usize) -> S
@@ -1681,16 +1666,24 @@ macro_rules! impl_matrix_scalar_binary_ops1 {
     }
 }
 
-//impl_matrix_scalar_binary_ops!(Mul, mul, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
-//impl_matrix_scalar_binary_ops!(Div, div, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
-//impl_matrix_scalar_binary_ops!(Rem, rem, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+impl_matrix_matrix_binary_ops1!(
+    Add, add, 
+    add_array2x2_array2x2, Matrix2x2<S>, Matrix2x2<S>, 
+    { (0, 0), (0, 1), (1, 0), (1, 1) }
+);
+impl_matrix_matrix_binary_ops1!(
+    Sub, sub, sub_array2x2_array2x2, Matrix2x2<S>, Matrix2x2<S>, 
+    { (0, 0), (0, 1), (1, 0), (1, 1) }
+);
+impl_matrix_unary_ops1!(
+    Neg, neg, neg_array2x2, Matrix2x2<S>, Matrix2x2<S>,
+    { (0, 0), (0, 1), (1, 0), (1, 1) }
+);
+
 impl_matrix_scalar_binary_ops1!(Mul, mul, mul_array2x2_scalar, Matrix2x2<S>, Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) });
 impl_matrix_scalar_binary_ops1!(Div, div, div_array2x2_scalar, Matrix2x2<S>, Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) });
 impl_matrix_scalar_binary_ops1!(Rem, rem, rem_array2x2_scalar, Matrix2x2<S>, Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) });
 
-// impl_matrix_unary_ops!(Neg, neg, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
-
-// impl_matrix_binary_assign_ops!(Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
 impl_matrix_binary_assign_ops1!(Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) });
 
 
