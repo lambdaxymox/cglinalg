@@ -435,6 +435,26 @@ impl<S> Matrix2x2<S> where S: Scalar {
     }
 
     /// Transpose a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x2::new(
+    ///     1_i32, 1_i32,
+    ///     2_i32, 2_i32
+    /// );
+    /// let expected = Matrix2x2::new(
+    ///     1_i32, 2_i32,
+    ///     1_i32, 2_i32
+    /// );
+    /// let result = matrix.transpose();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn transpose(&self) -> Matrix2x2<S> {
         Matrix2x2::new(self.c0r0, self.c1r0, self.c0r1, self.c1r1)
@@ -2381,6 +2401,28 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 
     /// Transpose a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_i32, 1_i32, 1_i32,
+    ///     2_i32, 2_i32, 2_i32,
+    ///     3_i32, 3_i32, 3_i32
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32,
+    ///     1_i32, 2_i32, 3_i32,
+    ///     1_i32, 2_i32, 3_i32, 
+    /// );
+    /// let result = matrix.transpose();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn transpose(&self) -> Matrix3x3<S> {
@@ -4954,6 +4996,30 @@ impl<S> Matrix4x4<S> where S: Scalar {
     }
 
     /// Transpose a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_i32, 1_i32, 1_i32, 1_i32,
+    ///     2_i32, 2_i32, 2_i32, 2_i32,
+    ///     3_i32, 3_i32, 3_i32, 3_i32,
+    ///     4_i32, 4_i32, 4_i32, 4_i32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32   
+    /// );
+    /// let result = matrix.transpose();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn transpose(&self) -> Matrix4x4<S> {
