@@ -154,6 +154,32 @@ macro_rules! impl_matrix_scalar_binary_ops {
     }
 }
 
+macro_rules! impl_matrix_unary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
+        impl<S> $OpType for $T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op() ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType for &$T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op() ),* 
+                )
+            }
+        }
+    }
+}
+
 
 /// A Type synonym for `Matrix2x2`.
 pub type Matrix2<S> = Matrix2x2<S>;
@@ -1344,6 +1370,9 @@ impl_matrix_scalar_binary_ops!(Mul, mul, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r
 impl_matrix_scalar_binary_ops!(Div, div, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
 impl_matrix_scalar_binary_ops!(Rem, rem, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
 
+impl_matrix_unary_ops!(Neg, neg, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+
+/*
 impl<S> ops::Neg for Matrix2x2<S> where S: ScalarSigned {
     type Output = Matrix2x2<S>;
 
@@ -1371,7 +1400,7 @@ impl<S> ops::Neg for &Matrix2x2<S> where S: ScalarSigned {
         Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
     }
 }
-
+*/
 impl<S> ops::AddAssign<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Matrix2x2<S>) {
@@ -3617,7 +3646,11 @@ impl_matrix_scalar_binary_ops!(Div, div, Matrix3x3<S>, Matrix3x3<S>, {
 impl_matrix_scalar_binary_ops!(Rem, rem, Matrix3x3<S>, Matrix3x3<S>, { 
     c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
 });
+impl_matrix_unary_ops!(Neg, neg, Matrix3x3<S>, Matrix3x3<S>, { 
+    c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
+});
 
+/*
 impl<S> ops::Neg for Matrix3x3<S> where S: ScalarSigned {
     type Output = Matrix3x3<S>;
 
@@ -3659,7 +3692,7 @@ impl<S> ops::Neg for &Matrix3x3<S> where S: ScalarSigned {
         Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
     }
 }
-
+*/
 impl<S> ops::AddAssign<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Matrix3x3<S>) {
@@ -6171,7 +6204,12 @@ impl_matrix_scalar_binary_ops!(Rem, rem, Matrix4x4<S>, Matrix4x4<S>, {
     c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
     c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
 });
+impl_matrix_unary_ops!(Neg, neg, Matrix4x4<S>, Matrix4x4<S>, { 
+    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
+});
 
+/*
 impl<S> ops::Neg for Matrix4x4<S> where S: ScalarSigned {
     type Output = Matrix4x4<S>;
 
@@ -6241,6 +6279,7 @@ impl<S> ops::Neg for &Matrix4x4<S> where S: ScalarSigned {
         )
     }
 }
+*/
 
 impl<S> ops::AddAssign<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     #[inline]
