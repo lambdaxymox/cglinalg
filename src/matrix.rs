@@ -3917,23 +3917,7 @@ impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Matrix3x3<S> where S: Scalar {
         Vector3::new(x, y, z)
     }
 }
-/*
-impl_matrix_scalar_binary_ops!(Mul, mul, Matrix3x3<S>, Matrix3x3<S>, { 
-    c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
-});
-impl_matrix_scalar_binary_ops!(Div, div, Matrix3x3<S>, Matrix3x3<S>, { 
-    c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
-});
-impl_matrix_scalar_binary_ops!(Rem, rem, Matrix3x3<S>, Matrix3x3<S>, { 
-    c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
-});
-impl_matrix_unary_ops!(Neg, neg, Matrix3x3<S>, Matrix3x3<S>, { 
-    c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
-});
-impl_matrix_binary_assign_ops!(Matrix3x3<S>, { 
-    c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
-});
-*/
+
 impl_matrix_scalar_binary_ops1!(
     Mul, mul, mul_array3x3_scalar, Matrix3x3<S>, Matrix3x3<S>, { 
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
@@ -6481,23 +6465,6 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix4x4<S>> for Matrix4x4<S> {
 }
 
 
-
-/*
-impl_scalar_matrix_mul_ops!(u8,    Matrix3x3<u8>,    Matrix3x3<u8>,    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(u16,   Matrix3x3<u16>,   Matrix3x3<u16>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(u32,   Matrix3x3<u32>,   Matrix3x3<u32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(u64,   Matrix3x3<u64>,   Matrix3x3<u64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(u128,  Matrix3x3<u128>,  Matrix3x3<u128>,  { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(usize, Matrix3x3<usize>, Matrix3x3<usize>, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(i8,    Matrix3x3<i8>,    Matrix3x3<i8>,    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(i16,   Matrix3x3<i16>,   Matrix3x3<i16>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(i32,   Matrix3x3<i32>,   Matrix3x3<i32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(i64,   Matrix3x3<i64>,   Matrix3x3<i64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(i128,  Matrix3x3<i128>,  Matrix3x3<i128>,  { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(isize, Matrix3x3<isize>, Matrix3x3<isize>, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(f32,   Matrix3x3<f32>,   Matrix3x3<f32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_scalar_matrix_mul_ops!(f64,   Matrix3x3<f64>,   Matrix3x3<f64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-*/
 impl_scalar_matrix_mul_ops!(u8,    Matrix4x4<u8>,    Matrix4x4<u8>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
