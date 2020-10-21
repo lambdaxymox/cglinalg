@@ -35,7 +35,7 @@ use core::ops;
 use core::iter;
 
 
-macro_rules! impl_mul_operator {
+macro_rules! impl_scalar_matrix_mul_ops {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
             type Output = $Output;
@@ -7450,76 +7450,76 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix4x4<S>> for Matrix4x4<S> {
 }
 
 
-impl_mul_operator!(u8,    Matrix2x2<u8>,    Matrix2x2<u8>,    { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(u16,   Matrix2x2<u16>,   Matrix2x2<u16>,   { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(u32,   Matrix2x2<u32>,   Matrix2x2<u32>,   { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(u64,   Matrix2x2<u64>,   Matrix2x2<u64>,   { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(u128,  Matrix2x2<u128>,  Matrix2x2<u128>,  { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(usize, Matrix2x2<usize>, Matrix2x2<usize>, { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(i8,    Matrix2x2<i8>,    Matrix2x2<i8>,    { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(i16,   Matrix2x2<i16>,   Matrix2x2<i16>,   { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(i32,   Matrix2x2<i32>,   Matrix2x2<i32>,   { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(i64,   Matrix2x2<i64>,   Matrix2x2<i64>,   { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(i128,  Matrix2x2<i128>,  Matrix2x2<i128>,  { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(isize, Matrix2x2<isize>, Matrix2x2<isize>, { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(f32,   Matrix2x2<f32>,   Matrix2x2<f32>,   { c0r0, c0r1, c1r0, c1r1 });
-impl_mul_operator!(f64,   Matrix2x2<f64>,   Matrix2x2<f64>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(u8,    Matrix2x2<u8>,    Matrix2x2<u8>,    { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(u16,   Matrix2x2<u16>,   Matrix2x2<u16>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(u32,   Matrix2x2<u32>,   Matrix2x2<u32>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(u64,   Matrix2x2<u64>,   Matrix2x2<u64>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(u128,  Matrix2x2<u128>,  Matrix2x2<u128>,  { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(usize, Matrix2x2<usize>, Matrix2x2<usize>, { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(i8,    Matrix2x2<i8>,    Matrix2x2<i8>,    { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(i16,   Matrix2x2<i16>,   Matrix2x2<i16>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(i32,   Matrix2x2<i32>,   Matrix2x2<i32>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(i64,   Matrix2x2<i64>,   Matrix2x2<i64>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(i128,  Matrix2x2<i128>,  Matrix2x2<i128>,  { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(isize, Matrix2x2<isize>, Matrix2x2<isize>, { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(f32,   Matrix2x2<f32>,   Matrix2x2<f32>,   { c0r0, c0r1, c1r0, c1r1 });
+impl_scalar_matrix_mul_ops!(f64,   Matrix2x2<f64>,   Matrix2x2<f64>,   { c0r0, c0r1, c1r0, c1r1 });
 
-impl_mul_operator!(u8,    Matrix3x3<u8>,    Matrix3x3<u8>,    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(u16,   Matrix3x3<u16>,   Matrix3x3<u16>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(u32,   Matrix3x3<u32>,   Matrix3x3<u32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(u64,   Matrix3x3<u64>,   Matrix3x3<u64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(u128,  Matrix3x3<u128>,  Matrix3x3<u128>,  { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(usize, Matrix3x3<usize>, Matrix3x3<usize>, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(i8,    Matrix3x3<i8>,    Matrix3x3<i8>,    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(i16,   Matrix3x3<i16>,   Matrix3x3<i16>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(i32,   Matrix3x3<i32>,   Matrix3x3<i32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(i64,   Matrix3x3<i64>,   Matrix3x3<i64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(i128,  Matrix3x3<i128>,  Matrix3x3<i128>,  { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(isize, Matrix3x3<isize>, Matrix3x3<isize>, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(f32,   Matrix3x3<f32>,   Matrix3x3<f32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_mul_operator!(f64,   Matrix3x3<f64>,   Matrix3x3<f64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(u8,    Matrix3x3<u8>,    Matrix3x3<u8>,    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(u16,   Matrix3x3<u16>,   Matrix3x3<u16>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(u32,   Matrix3x3<u32>,   Matrix3x3<u32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(u64,   Matrix3x3<u64>,   Matrix3x3<u64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(u128,  Matrix3x3<u128>,  Matrix3x3<u128>,  { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(usize, Matrix3x3<usize>, Matrix3x3<usize>, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(i8,    Matrix3x3<i8>,    Matrix3x3<i8>,    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(i16,   Matrix3x3<i16>,   Matrix3x3<i16>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(i32,   Matrix3x3<i32>,   Matrix3x3<i32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(i64,   Matrix3x3<i64>,   Matrix3x3<i64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(i128,  Matrix3x3<i128>,  Matrix3x3<i128>,  { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(isize, Matrix3x3<isize>, Matrix3x3<isize>, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(f32,   Matrix3x3<f32>,   Matrix3x3<f32>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_scalar_matrix_mul_ops!(f64,   Matrix3x3<f64>,   Matrix3x3<f64>,   { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
 
-impl_mul_operator!(u8,    Matrix4x4<u8>,    Matrix4x4<u8>, 
+impl_scalar_matrix_mul_ops!(u8,    Matrix4x4<u8>,    Matrix4x4<u8>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(u16,   Matrix4x4<u16>,   Matrix4x4<u16>, 
+impl_scalar_matrix_mul_ops!(u16,   Matrix4x4<u16>,   Matrix4x4<u16>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(u32,   Matrix4x4<u32>,   Matrix4x4<u32>, 
+impl_scalar_matrix_mul_ops!(u32,   Matrix4x4<u32>,   Matrix4x4<u32>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(u64,   Matrix4x4<u64>,   Matrix4x4<u64>, 
+impl_scalar_matrix_mul_ops!(u64,   Matrix4x4<u64>,   Matrix4x4<u64>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(u128,  Matrix4x4<u128>,  Matrix4x4<u128>, 
+impl_scalar_matrix_mul_ops!(u128,  Matrix4x4<u128>,  Matrix4x4<u128>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(usize, Matrix4x4<usize>, Matrix4x4<usize>, 
+impl_scalar_matrix_mul_ops!(usize, Matrix4x4<usize>, Matrix4x4<usize>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(i8,    Matrix4x4<i8>,    Matrix4x4<i8>, 
+impl_scalar_matrix_mul_ops!(i8,    Matrix4x4<i8>,    Matrix4x4<i8>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(i16,   Matrix4x4<i16>,   Matrix4x4<i16>, 
+impl_scalar_matrix_mul_ops!(i16,   Matrix4x4<i16>,   Matrix4x4<i16>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(i32,   Matrix4x4<i32>,   Matrix4x4<i32>, 
+impl_scalar_matrix_mul_ops!(i32,   Matrix4x4<i32>,   Matrix4x4<i32>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(i64,   Matrix4x4<i64>,   Matrix4x4<i64>, 
+impl_scalar_matrix_mul_ops!(i64,   Matrix4x4<i64>,   Matrix4x4<i64>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(i128,  Matrix4x4<i128>,  Matrix4x4<i128>, 
+impl_scalar_matrix_mul_ops!(i128,  Matrix4x4<i128>,  Matrix4x4<i128>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(isize, Matrix4x4<isize>, Matrix4x4<isize>, 
+impl_scalar_matrix_mul_ops!(isize, Matrix4x4<isize>, Matrix4x4<isize>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(f32,   Matrix4x4<f32>,   Matrix4x4<f32>, 
+impl_scalar_matrix_mul_ops!(f32,   Matrix4x4<f32>,   Matrix4x4<f32>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
-impl_mul_operator!(f64,   Matrix4x4<f64>,   Matrix4x4<f64>, 
+impl_scalar_matrix_mul_ops!(f64,   Matrix4x4<f64>,   Matrix4x4<f64>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
 
