@@ -1534,63 +1534,7 @@ impl_matrix_matrix_mul_ops!(
     Matrix2x2, Matrix2x2 => Matrix2x2, dot_array2x2_col2,
     { (0, 0), (0, 1), (1, 0), (1, 1) }
 );
-/*
-impl<S> ops::Mul<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
-    type Output = Matrix2x2<S>;
 
-    #[inline]
-    fn mul(self, other: Matrix2x2<S>) -> Self::Output {
-        Matrix2x2::new(
-            dot_array2x2_col2(&self.data, &other.data[0], 0), 
-            dot_array2x2_col2(&self.data, &other.data[0], 1),
-            dot_array2x2_col2(&self.data, &other.data[1], 0), 
-            dot_array2x2_col2(&self.data, &other.data[1], 1),
-        )
-    }
-}
-
-impl<S> ops::Mul<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
-    type Output = Matrix2x2<S>;
-
-    #[inline]
-    fn mul(self, other: Matrix2x2<S>) -> Self::Output {
-        Matrix2x2::new(
-            dot_array2x2_col2(&self.data, &other.data[0], 0), 
-            dot_array2x2_col2(&self.data, &other.data[0], 1),
-            dot_array2x2_col2(&self.data, &other.data[1], 0), 
-            dot_array2x2_col2(&self.data, &other.data[1], 1),
-        )
-    }
-}
-
-impl<S> ops::Mul<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
-    type Output = Matrix2x2<S>;
-
-    #[inline]
-    fn mul(self, other: &Matrix2x2<S>) -> Self::Output {
-        Matrix2x2::new(
-            dot_array2x2_col2(&self.data, &other.data[0], 0), 
-            dot_array2x2_col2(&self.data, &other.data[0], 1),
-            dot_array2x2_col2(&self.data, &other.data[1], 0), 
-            dot_array2x2_col2(&self.data, &other.data[1], 1),
-        )
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar {
-    type Output = Matrix2x2<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Matrix2x2<S>) -> Self::Output {
-        Matrix2x2::new(
-            dot_array2x2_col2(&self.data, &other.data[0], 0), 
-            dot_array2x2_col2(&self.data, &other.data[0], 1),
-            dot_array2x2_col2(&self.data, &other.data[1], 0), 
-            dot_array2x2_col2(&self.data, &other.data[1], 1),
-        )
-    }
-}
-*/
 impl<S> ops::Mul<Vector2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Vector2<S>;
 
@@ -3781,91 +3725,7 @@ impl_matrix_matrix_mul_ops!(
     Matrix3x3, Matrix3x3 => Matrix3x3, dot_array3x3_col3, { 
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)
 });
-/*
-impl<S> ops::Mul<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
-    type Output = Matrix3x3<S>;
 
-    #[inline]
-    fn mul(self, other: &Matrix3x3<S>) -> Self::Output {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
-        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2;
-
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2;
-        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2;
-
-        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2;
-        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2;
-        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2;
-
-        Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Matrix3x3<S>> for &'b Matrix3x3<S> where S: Scalar {
-    type Output = Matrix3x3<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Matrix3x3<S>) -> Matrix3x3<S> {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
-        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2;
-
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2;
-        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2;
-
-        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2;
-        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2;
-        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2;
-
-        Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
-    }
-}
-
-impl<S> ops::Mul<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
-    type Output = Matrix3x3<S>;
-
-    #[inline]
-    fn mul(self, other: Matrix3x3<S>) -> Matrix3x3<S> {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
-        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2;
-
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2;
-        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2;
-
-        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2;
-        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2;
-        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2;
-
-        Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
-    }
-}
-
-impl<S> ops::Mul<Matrix3x3<S>> for &Matrix3x3<S> where S: Scalar {
-    type Output = Matrix3x3<S>;
-
-    #[inline]
-    fn mul(self, other: Matrix3x3<S>) -> Matrix3x3<S> {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2;
-        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2;
-
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2;
-        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2;
-
-        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2;
-        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2;
-        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2;
-
-        Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
-    }
-}
-*/
 impl<S> ops::Mul<Vector3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Vector3<S>;
 
