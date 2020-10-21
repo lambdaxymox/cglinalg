@@ -235,50 +235,6 @@ macro_rules! impl_as_ref_ops {
     }
 }
 
-macro_rules! impl_magnitude {
-    ($T:ty) => {
-        impl<S> Magnitude for $T where S: ScalarFloat {
-            type Output = S;
-        
-            #[inline]
-            fn magnitude_squared(&self) -> Self::Output {
-                self.dot(self)
-            }
-        
-            #[inline]
-            fn magnitude(&self) -> Self::Output {
-                Self::Output::sqrt(self.magnitude_squared())
-            }
-        
-            #[inline]
-            fn normalize(&self) -> Self {
-                self / self.magnitude()
-            }
-        
-            #[inline]
-            fn normalize_to(&self, magnitude: Self::Output) -> Self {
-                self * (magnitude / self.magnitude())
-            }
-        
-            #[inline]
-            fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-                let magnitude = self.magnitude();
-        
-                if magnitude <= threshold {
-                    None
-                } else {
-                    Some(self.normalize())
-                }
-            }
-        
-            #[inline]
-            fn distance_squared(&self, other: &Self) -> Self::Output {
-                (self - other).magnitude_squared()
-            }
-        }
-    }
-}
-
 
 /// A representation of one-dimensional vectors.
 #[repr(C)]
@@ -656,9 +612,7 @@ impl_scalar_vector_mul_ops!(isize, Vector1<isize>, Vector1<isize>, { x });
 impl_scalar_vector_mul_ops!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
 impl_scalar_vector_mul_ops!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 
-impl_magnitude!(Vector1<S>);
 
-/*
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
 
@@ -699,7 +653,6 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
         (self - other).magnitude_squared()
     }
 }
-*/
 
 impl<S> approx::AbsDiffEq for Vector1<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -1200,8 +1153,7 @@ impl_scalar_vector_mul_ops!(isize, Vector2<isize>, Vector2<isize>, { x, y });
 impl_scalar_vector_mul_ops!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
 impl_scalar_vector_mul_ops!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
 
-impl_magnitude!(Vector2<S>);
-/*
+
 impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     type Output = S;
 
@@ -1241,7 +1193,7 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
         (self - other).magnitude_squared()
     }
 }
-*/
+
 impl<S> approx::AbsDiffEq for Vector2<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1825,8 +1777,7 @@ impl_scalar_vector_mul_ops!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
 impl_scalar_vector_mul_ops!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
 impl_scalar_vector_mul_ops!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
 
-impl_magnitude!(Vector3<S>);
-/*
+
 impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     type Output = S;
 
@@ -1866,7 +1817,7 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
         (self - other).magnitude_squared()
     }
 }
-*/
+
 impl<S> approx::AbsDiffEq for Vector3<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -2375,8 +2326,7 @@ impl_scalar_vector_mul_ops!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w 
 impl_scalar_vector_mul_ops!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
 impl_scalar_vector_mul_ops!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
 
-impl_magnitude!(Vector4<S>);
-/*
+
 impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     type Output = S;
 
@@ -2416,7 +2366,7 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
         (self - other).magnitude_squared()
     }
 }
-*/
+
 impl<S> approx::AbsDiffEq for Vector4<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 

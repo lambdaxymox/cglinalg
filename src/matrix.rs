@@ -1315,6 +1315,7 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix2x2<S> {
 impl_matrix_matrix_binary_ops!(Add, add, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
 impl_matrix_matrix_binary_ops!(Sub, sub, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
 
+
 impl<S> ops::Mul<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
