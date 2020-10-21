@@ -34,6 +34,7 @@ use core::fmt;
 use core::ops::*;
 use core::ops;
 use core::iter;
+use core::mem;
 
 
 macro_rules! impl_as_ref_ops {
@@ -248,19 +249,55 @@ pub type Matrix4<S> = Matrix4x4<S>;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x2<S> {
-    /// Column 0 of the matrix.
-    pub c0r0: S, pub c0r1: S,
-    /// Column 1 of the matrix.
-    pub c1r0: S, pub c1r1: S,
+    data: [[S; 2]; 2],
 }
+
+macro_rules! impl_coords {
+    ($T:ident, { $($comps: ident),* }) => {
+        /// Data structure used to provide access to matrix and vector coordinates with the dot
+        /// notation, e.g., `v.x` is the same as `v[0]` for a vector.
+        #[repr(C)]
+        #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
+        pub struct $T<S: Copy> {
+            $(pub $comps: S),*
+        }
+    }
+}
+
+macro_rules! impl_coords_deref {
+    ($Source:ident, $Target:ident) => {
+        impl<S> Deref for $Source<S> where S: Copy
+        {
+            type Target = $Target<S>;
+
+            #[inline]
+            fn deref(&self) -> &Self::Target {
+                unsafe { mem::transmute(self.data.as_ptr()) }
+            }
+        }
+
+        impl<S> DerefMut for $Source<S> where S: Copy
+        {
+            #[inline]
+            fn deref_mut(&mut self) -> &mut Self::Target {
+                unsafe { mem::transmute(self.data.as_mut_ptr()) }
+            }
+        }
+    }
+}
+
+impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1 });
+impl_coords_deref!(Matrix2x2, View2x2);
 
 impl<S> Matrix2x2<S> {
     /// Construct a new 2x2 matrix from its field elements.
     #[inline]
     pub const fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Matrix2x2<S> {
-        Matrix2x2 { 
-            c0r0: c0r0, c0r1: c0r1,
-            c1r0: c1r0, c1r1: c1r1,
+        Matrix2x2 {
+            data: [
+                [c0r0, c0r1],
+                [c1r0, c1r1],
+            ]
         }
     }
 
@@ -271,16 +308,6 @@ impl<S> Matrix2x2<S> {
             c0.x, c0.y, 
             c1.x, c1.y
         )
-    }
-
-    /// Map an operation on the elements of a matrix, returning a matrix whose 
-    /// elements are elements of the new underlying type.
-    #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Matrix2x2<T> where F: FnMut(S) -> T {
-        Matrix2x2 {
-            c0r0: op(self.c0r0), c0r1: op(self.c0r1),
-            c1r0: op(self.c1r0), c1r1: op(self.c1r1),
-        }
     }
 }
 
@@ -365,13 +392,15 @@ impl<S> Matrix2x2<S> where S: Copy {
     /// Generate a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
-        &self.c0r0
+        //&self.c0r0
+        &self.data[0][0]
     }
 
     /// Generate a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.c0r0
+        //&mut self.c0r0
+        &mut self.data[0][0]
     }
 
     /// Get a slice of the underlying elements of the data type.
@@ -399,24 +428,36 @@ impl<S> Matrix2x2<S> where S: NumCast + Copy {
     /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix2x2<T>> {
-        let c0r0 = match num_traits::cast(self.c0r0) {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
             Some(value) => value,
             None => return None,
         };
-        let c0r1 = match num_traits::cast(self.c0r1) {
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
             Some(value) => value,
             None => return None,
         };
-        let c1r0 = match num_traits::cast(self.c1r0) {
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
             Some(value) => value,
             None => return None,
         };
-        let c1r1 = match num_traits::cast(self.c1r1) {
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
             Some(value) => value,
             None => return None,
         };
 
         Some(Matrix2x2::new(c0r0, c0r1, c1r0, c1r1))
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix2x2<T> where F: FnMut(S) -> T {
+        Matrix2x2 {
+            data: [
+                [op(self.data[0][0]), op(self.data[0][1])],
+                [op(self.data[1][0]), op(self.data[1][1])]
+            ],
+        }
     }
 }
 
@@ -627,7 +668,10 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn transpose(&self) -> Matrix2x2<S> {
-        Matrix2x2::new(self.c0r0, self.c1r0, self.c0r1, self.c1r1)
+        Matrix2x2::new(
+            self.data[0][0], self.data[1][0], 
+            self.data[0][1], self.data[1][1]
+        )
     }
 
     /// Compute a zero matrix.
@@ -665,8 +709,8 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
-        self.c0r0.is_zero() && self.c0r1.is_zero() &&
-        self.c1r0.is_zero() && self.c1r1.is_zero()
+        self.data[0][0].is_zero() && self.data[0][1].is_zero() &&
+        self.data[1][0].is_zero() && self.data[1][1].is_zero()
     }
 
     /// Compute an identity matrix.
@@ -712,8 +756,8 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn is_identity(&self) -> bool {
-        self.c0r0.is_one()  && self.c0r1.is_zero() &&
-        self.c1r0.is_zero() && self.c1r1.is_one()
+        self.data[0][0].is_one()  && self.data[0][1].is_zero() &&
+        self.data[1][0].is_zero() && self.data[1][1].is_one()
     }
 
     /// Construct a new diagonal matrix from a given value where
@@ -792,7 +836,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn diagonal(&self) -> Vector2<S> {
-        Vector2::new(self.c0r0, self.c1r1)
+        Vector2::new(self.data[0][0], self.data[1][1])
     }
 
     /// Compute the trace of a square matrix.
@@ -815,7 +859,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn trace(&self) -> S {
-        self.c0r0 + self.c1r1
+        self.data[0][0] + self.data[1][1]
     }
 }
 
@@ -895,10 +939,10 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
     /// ```
     #[inline]
     pub fn neg_mut(&mut self) {
-        self.c0r0 = -self.c0r0;
-        self.c0r1 = -self.c0r1;
-        self.c1r0 = -self.c1r0;
-        self.c1r1 = -self.c1r1;
+        self.data[0][0] = -self.data[0][0];
+        self.data[0][1] = -self.data[0][1];
+        self.data[1][0] = -self.data[1][0];
+        self.data[1][1] = -self.data[1][1];
     }
 
     /// Compute the determinant of a matrix.
@@ -922,7 +966,7 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
     /// ```
     #[inline]
     pub fn determinant(&self) -> S {
-        self.c0r0 * self.c1r1 - self.c0r1 * self.c1r0
+        self.data[0][0] * self.data[1][1] - self.data[0][1] * self.data[1][0]
     }
 }
 
@@ -1128,8 +1172,8 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
-        self.c0r0.is_finite() && self.c0r1.is_finite() &&
-        self.c1r0.is_finite() && self.c1r1.is_finite()
+        self.data[0][0].is_finite() && self.data[0][1].is_finite() &&
+        self.data[1][0].is_finite() && self.data[1][1].is_finite()
     }
 
     /// Compute the inverse of a square matrix, if the inverse exists. 
@@ -1172,8 +1216,8 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
         } else {
             let inv_det = S::one() / det;
             Some(Matrix2x2::new(
-                inv_det *  self.c1r1, inv_det * -self.c0r1,
-                inv_det * -self.c1r0, inv_det *  self.c0r0
+                inv_det *  self.data[1][1], inv_det * -self.data[0][1],
+                inv_det * -self.data[1][0], inv_det *  self.data[0][0]
             ))
         }
     }
@@ -1208,7 +1252,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// element is zero.
     #[inline]
     pub fn is_diagonal(&self) -> bool {
-        ulps_eq!(self.c0r1, S::zero()) && ulps_eq!(self.c1r0, S::zero())
+        ulps_eq!(self.data[0][1], S::zero()) && ulps_eq!(self.data[1][0], S::zero())
     }
     
     /// Determine whether a matrix is symmetric. 
@@ -1218,7 +1262,7 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// Note that every diagonal matrix is a symmetric matrix.
     #[inline]
     pub fn is_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1)
+        ulps_eq!(self.data[0][1], self.data[1][0]) && ulps_eq!(self.data[1][0], self.data[0][1])
     }
 }
 
@@ -1227,8 +1271,8 @@ impl<S> fmt::Display for Matrix2x2<S> where S: fmt::Display {
         writeln!(
             formatter, 
             "Matrix2x2 [[{}, {}], [{}, {}]]", 
-            self.c0r0, self.c1r0,
-            self.c0r1, self.c1r1,
+            self.data[0][0], self.data[1][0],
+            self.data[0][1], self.data[1][1],
         )
     }
 }
@@ -1306,21 +1350,218 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix2x2<S> {
     }
 }
 
-impl_matrix_matrix_binary_ops!(Add, add, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
-impl_matrix_matrix_binary_ops!(Sub, sub, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+//impl_matrix_matrix_binary_ops!(Add, add, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+//impl_matrix_matrix_binary_ops!(Sub, sub, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
 
+macro_rules! impl_matrix_matrix_binary_ops1 {
+    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> $OpType<$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<&$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &$T) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<$T> for &$T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
+                )
+            }
+        }
+
+        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &'a $T) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
+                )
+            }
+        }
+    }
+}
+
+macro_rules! impl_matrix_unary_ops1 {
+    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> $OpType for $T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, $col, $row) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType for &$T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, $col, $row) ),* 
+                )
+            }
+        }
+    }
+}
+
+macro_rules! impl_matrix_binary_assign_ops1 {
+    ($T:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: $T) {
+                $( self.data[$col][$row] += other.data[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: &$T) {
+                $( self.data[$col][$row] += other.data[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: $T) {
+                $( self.data[$col][$row] -= other.data[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: &$T) {
+                $( self.data[$col][$row] -= other.data[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::MulAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn mul_assign(&mut self, other: S) {
+                $( self.data[$col][$row] *= other );*
+            }
+        }
+        
+        impl<S> ops::DivAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn div_assign(&mut self, other: S) {
+                $( self.data[$col][$row] /= other );*
+            }
+        }
+        
+        impl<S> ops::RemAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn rem_assign(&mut self, other: S) {
+                $( self.data[$col][$row] %= other );*
+            }
+        }
+    }
+}
+
+
+impl_matrix_matrix_binary_ops1!(
+    Add, add, 
+    add_array2x2_array2x2, Matrix2x2<S>, Matrix2x2<S>, 
+    { (0, 0), (0, 1), (1, 0), (1, 1) }
+);
+impl_matrix_matrix_binary_ops1!(
+    Sub, sub, sub_array2x2_array2x2, Matrix2x2<S>, Matrix2x2<S>, 
+    { (0, 0), (0, 1), (1, 0), (1, 1) }
+);
+impl_matrix_unary_ops1!(
+    Neg, neg, neg_array2x2, Matrix2x2<S>, Matrix2x2<S>,
+    { (0, 0), (0, 1), (1, 0), (1, 1) }
+);
+
+#[inline(always)]
+fn dot_array2x2_col2<S>(arr: &[[S; 2]; 2], col: &[S; 2], r: usize) -> S
+where
+    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
+{
+    arr[0][r] * col[0] + arr[1][r] * col[1]
+}
+
+#[inline(always)]
+fn add_array2x2_array2x2<S>(arr1: &[[S; 2]; 2], arr2: &[[S; 2]; 2], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Add<S, Output = S>
+{
+    arr1[c][r] + arr2[c][r]
+}
+
+#[inline(always)]
+fn sub_array2x2_array2x2<S>(arr1: &[[S; 2]; 2], arr2: &[[S; 2]; 2], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Sub<S, Output = S>
+{
+    arr1[c][r] - arr2[c][r]
+}
+
+#[inline(always)]
+fn neg_array2x2<S>(arr1: &[[S; 2]; 2], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Neg<Output = S>
+{
+    -arr1[c][r]
+}
+
+#[inline(always)]
+fn mul_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Mul<S, Output = S>
+{
+    arr[c][r] * other
+}
+
+#[inline(always)]
+fn div_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Div<S, Output = S>
+{
+    arr[c][r] / other
+}
+
+#[inline(always)]
+fn rem_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Rem<S, Output = S>
+{
+    arr[c][r] % other
+}
 
 impl<S> ops::Mul<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
     #[inline]
     fn mul(self, other: &Matrix2x2<S>) -> Self::Output {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1;
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1;
-
-        Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
+        Matrix2x2::new(
+            dot_array2x2_col2(&self.data, &other.data[0], 0), 
+            dot_array2x2_col2(&self.data, &other.data[0], 1),
+            dot_array2x2_col2(&self.data, &other.data[1], 0), 
+            dot_array2x2_col2(&self.data, &other.data[1], 1),
+        )
     }
 }
 
@@ -1329,12 +1570,12 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar 
 
     #[inline]
     fn mul(self, other: &'a Matrix2x2<S>) -> Self::Output {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1;
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1;
-
-        Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
+        Matrix2x2::new(
+            dot_array2x2_col2(&self.data, &other.data[0], 0), 
+            dot_array2x2_col2(&self.data, &other.data[0], 1),
+            dot_array2x2_col2(&self.data, &other.data[1], 0), 
+            dot_array2x2_col2(&self.data, &other.data[1], 1),
+        )
     }
 }
 
@@ -1343,12 +1584,12 @@ impl<S> ops::Mul<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: Matrix2x2<S>) -> Self::Output {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1;
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1;
-
-        Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
+        Matrix2x2::new(
+            dot_array2x2_col2(&self.data, &other.data[0], 0), 
+            dot_array2x2_col2(&self.data, &other.data[0], 1),
+            dot_array2x2_col2(&self.data, &other.data[1], 0), 
+            dot_array2x2_col2(&self.data, &other.data[1], 1),
+        )
     }
 }
 
@@ -1357,12 +1598,12 @@ impl<S> ops::Mul<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: Matrix2x2<S>) -> Self::Output {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1;
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1;
-
-        Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
+        Matrix2x2::new(
+            dot_array2x2_col2(&self.data, &other.data[0], 0), 
+            dot_array2x2_col2(&self.data, &other.data[0], 1),
+            dot_array2x2_col2(&self.data, &other.data[1], 0), 
+            dot_array2x2_col2(&self.data, &other.data[1], 1),
+        )
     }
 }
 
@@ -1371,8 +1612,8 @@ impl<S> ops::Mul<Vector2<S>> for Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: Vector2<S>) -> Self::Output {
-        let x = self.c0r0 * other[0] + self.c1r0 * other[1];
-        let y = self.c0r1 * other[0] + self.c1r1 * other[1];
+        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1];
+        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1];
 
         Vector2::new(x, y)
     }
@@ -1383,8 +1624,8 @@ impl<S> ops::Mul<&Vector2<S>> for Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: &Vector2<S>) -> Self::Output {
-        let x = self.c0r0 * other[0] + self.c1r0 * other[1];
-        let y = self.c0r1 * other[0] + self.c1r1 * other[1];
+        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1];
+        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1];
 
         Vector2::new(x, y)
     }
@@ -1395,8 +1636,8 @@ impl<S> ops::Mul<Vector2<S>> for &Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: Vector2<S>) -> Self::Output {
-        let x = self.c0r0 * other[0] + self.c1r0 * other[1];
-        let y = self.c0r1 * other[0] + self.c1r1 * other[1];
+        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1];
+        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1];
 
         Vector2::new(x, y)
     }
@@ -1407,20 +1648,50 @@ impl<'a, 'b, S> ops::Mul<&'a Vector2<S>> for &'b Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: &'a Vector2<S>) -> Self::Output {
-        let x = self.c0r0 * other[0] + self.c1r0 * other[1];
-        let y = self.c0r1 * other[0] + self.c1r1 * other[1];
+        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1];
+        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1];
 
         Vector2::new(x, y)
     }
 }
 
-impl_matrix_scalar_binary_ops!(Mul, mul, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
-impl_matrix_scalar_binary_ops!(Div, div, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
-impl_matrix_scalar_binary_ops!(Rem, rem, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+macro_rules! impl_matrix_scalar_binary_ops1 {
+    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> $OpType<S> for $T where S: Scalar {
+            type Output = $Output;
 
-impl_matrix_unary_ops!(Neg, neg, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+            #[inline]
+            fn $op(self, other: S) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, other, $col, $row) ),* 
+                )
+            }
+        }
 
-impl_matrix_binary_assign_ops!(Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+        impl<S> $OpType<S> for &$T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: S) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, other, $col, $row) ),* 
+                )
+            }
+        }
+    }
+}
+
+//impl_matrix_scalar_binary_ops!(Mul, mul, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+//impl_matrix_scalar_binary_ops!(Div, div, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+//impl_matrix_scalar_binary_ops!(Rem, rem, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+impl_matrix_scalar_binary_ops1!(Mul, mul, mul_array2x2_scalar, Matrix2x2<S>, Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) });
+impl_matrix_scalar_binary_ops1!(Div, div, div_array2x2_scalar, Matrix2x2<S>, Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) });
+impl_matrix_scalar_binary_ops1!(Rem, rem, rem_array2x2_scalar, Matrix2x2<S>, Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) });
+
+// impl_matrix_unary_ops!(Neg, neg, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+
+// impl_matrix_binary_assign_ops!(Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+impl_matrix_binary_assign_ops1!(Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) });
 
 
 impl<S> approx::AbsDiffEq for Matrix2x2<S> where S: ScalarFloat {
@@ -1433,10 +1704,10 @@ impl<S> approx::AbsDiffEq for Matrix2x2<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.c0r0, &other.c0r0, epsilon) && 
-        S::abs_diff_eq(&self.c0r1, &other.c0r1, epsilon) &&
-        S::abs_diff_eq(&self.c1r0, &other.c1r0, epsilon) && 
-        S::abs_diff_eq(&self.c1r1, &other.c1r1, epsilon)
+        S::abs_diff_eq(&self.data[0][0], &other.data[0][0], epsilon) && 
+        S::abs_diff_eq(&self.data[0][1], &other.data[0][1], epsilon) &&
+        S::abs_diff_eq(&self.data[1][0], &other.data[1][0], epsilon) && 
+        S::abs_diff_eq(&self.data[1][1], &other.data[1][1], epsilon)
     }
 }
 
@@ -1448,10 +1719,10 @@ impl<S> approx::RelativeEq for Matrix2x2<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.c0r0, &other.c0r0, epsilon, max_relative) &&
-        S::relative_eq(&self.c0r1, &other.c0r1, epsilon, max_relative) &&
-        S::relative_eq(&self.c1r0, &other.c1r0, epsilon, max_relative) &&
-        S::relative_eq(&self.c1r1, &other.c1r1, epsilon, max_relative)
+        S::relative_eq(&self.data[0][0], &other.data[0][0], epsilon, max_relative) &&
+        S::relative_eq(&self.data[0][1], &other.data[0][1], epsilon, max_relative) &&
+        S::relative_eq(&self.data[1][0], &other.data[1][0], epsilon, max_relative) &&
+        S::relative_eq(&self.data[1][1], &other.data[1][1], epsilon, max_relative)
     }
 }
 
@@ -1463,10 +1734,10 @@ impl<S> approx::UlpsEq for Matrix2x2<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.c0r0, &other.c0r0, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c0r1, &other.c0r1, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c1r0, &other.c1r0, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c1r1, &other.c1r1, epsilon, max_ulps)
+        S::ulps_eq(&self.data[0][0], &other.data[0][0], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[0][1], &other.data[0][1], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[1][0], &other.data[1][0], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[1][1], &other.data[1][1], epsilon, max_ulps)
     }
 }
 
@@ -3387,9 +3658,9 @@ impl<S> From<Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
     #[inline]
     fn from(matrix: Matrix2x2<S>) -> Matrix3x3<S> {
         Matrix3x3::new(
-            matrix.c0r0,     matrix.c0r1,     S::zero(),
-            matrix.c1r0,     matrix.c1r1,     S::zero(),
-            S::zero(), S::zero(), S::one()
+            matrix[0][0], matrix[0][1], S::zero(),
+            matrix[1][0], matrix[1][1], S::zero(),
+            S::zero(),    S::zero(),    S::one()
         )
     }
 }
@@ -3399,9 +3670,9 @@ impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
     #[inline]
     fn from(matrix: &Matrix2x2<S>) -> Matrix3x3<S> {
         Matrix3x3::new(
-            matrix.c0r0,     matrix.c0r1,     S::zero(),
-            matrix.c1r0,     matrix.c1r1,     S::zero(),
-            S::zero(), S::zero(), S::one()
+            matrix[0][0], matrix[0][1], S::zero(),
+            matrix[1][0], matrix[1][1], S::zero(),
+            S::zero(),    S::zero(),    S::one()
         )
     }
 }
@@ -5683,10 +5954,10 @@ impl<S> From<Matrix2x2<S>> for Matrix4x4<S> where S: Scalar {
         let one = S::one();
         let zero = S::zero();
         Matrix4x4::new(
-            matrix.c0r0, matrix.c0r1, zero, zero,
-            matrix.c1r0, matrix.c1r1, zero, zero,
-            zero,  zero,  one,  zero,
-            zero,  zero,  zero, one
+            matrix[0][0], matrix[0][1], zero, zero,
+            matrix[1][0], matrix[1][1], zero, zero,
+            zero,         zero,         one,  zero,
+            zero,         zero,         zero, one
         )
     }
 }
@@ -5698,10 +5969,10 @@ impl<S> From<&Matrix2x2<S>> for Matrix4x4<S> where S: Scalar {
         let one = S::one();
         let zero = S::zero();
         Matrix4x4::new(
-            matrix.c0r0, matrix.c0r1, zero, zero,
-            matrix.c1r0, matrix.c1r1, zero, zero,
-            zero,  zero,  one,  zero,
-            zero,  zero,  zero, one
+            matrix[0][0], matrix[0][1], zero, zero,
+            matrix[1][0], matrix[1][1], zero, zero,
+            zero,         zero,         one,  zero,
+            zero,         zero,         zero, one
         )
     }
 }
