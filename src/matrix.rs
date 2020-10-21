@@ -1372,35 +1372,6 @@ impl_matrix_scalar_binary_ops!(Rem, rem, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r
 
 impl_matrix_unary_ops!(Neg, neg, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
 
-/*
-impl<S> ops::Neg for Matrix2x2<S> where S: ScalarSigned {
-    type Output = Matrix2x2<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        let c0r0 = -self.c0r0;
-        let c0r1 = -self.c0r1;
-        let c1r0 = -self.c1r0;
-        let c1r1 = -self.c1r1;
-
-        Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
-    }
-}
-
-impl<S> ops::Neg for &Matrix2x2<S> where S: ScalarSigned {
-    type Output = Matrix2x2<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        let c0r0 = -self.c0r0;
-        let c0r1 = -self.c0r1;
-        let c1r0 = -self.c1r0;
-        let c1r1 = -self.c1r1;
-
-        Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
-    }
-}
-*/
 impl<S> ops::AddAssign<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Matrix2x2<S>) {
@@ -3650,49 +3621,6 @@ impl_matrix_unary_ops!(Neg, neg, Matrix3x3<S>, Matrix3x3<S>, {
     c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
 });
 
-/*
-impl<S> ops::Neg for Matrix3x3<S> where S: ScalarSigned {
-    type Output = Matrix3x3<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        let c0r0 = -self.c0r0;
-        let c0r1 = -self.c0r1;
-        let c0r2 = -self.c0r2;
-
-        let c1r0 = -self.c1r0;
-        let c1r1 = -self.c1r1;
-        let c1r2 = -self.c1r2;
-
-        let c2r0 = -self.c2r0;
-        let c2r1 = -self.c2r1;
-        let c2r2 = -self.c2r2;
-
-        Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
-    }
-}
-
-impl<S> ops::Neg for &Matrix3x3<S> where S: ScalarSigned {
-    type Output = Matrix3x3<S>;
-
-    #[inline]
-    fn neg(self) -> Self::Output {
-        let c0r0 = -self.c0r0;
-        let c0r1 = -self.c0r1;
-        let c0r2 = -self.c0r2;
-
-        let c1r0 = -self.c1r0;
-        let c1r1 = -self.c1r1;
-        let c1r2 = -self.c1r2;
-
-        let c2r0 = -self.c2r0;
-        let c2r1 = -self.c2r1;
-        let c2r2 = -self.c2r2;
-
-        Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
-    }
-}
-*/
 impl<S> ops::AddAssign<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Matrix3x3<S>) {
@@ -6208,78 +6136,6 @@ impl_matrix_unary_ops!(Neg, neg, Matrix4x4<S>, Matrix4x4<S>, {
     c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
     c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
 });
-
-/*
-impl<S> ops::Neg for Matrix4x4<S> where S: ScalarSigned {
-    type Output = Matrix4x4<S>;
-
-    #[rustfmt::skip]
-    #[inline]
-    fn neg(self) -> Self::Output {
-        let c0r0 = -self.c0r0;
-        let c0r1 = -self.c0r1;
-        let c0r2 = -self.c0r2;
-        let c0r3 = -self.c0r3;
-
-        let c1r0 = -self.c1r0;
-        let c1r1 = -self.c1r1;
-        let c1r2 = -self.c1r2;
-        let c1r3 = -self.c1r3;
-
-        let c2r0 = -self.c2r0;
-        let c2r1 = -self.c2r1;
-        let c2r2 = -self.c2r2;
-        let c2r3 = -self.c2r3;
-
-        let c3r0 = -self.c3r0;
-        let c3r1 = -self.c3r1;
-        let c3r2 = -self.c3r2;
-        let c3r3 = -self.c3r3;
-
-        Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3, 
-            c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c2r3, 
-            c3r0, c3r1, c3r2, c3r3
-        )
-    }
-}
-
-impl<S> ops::Neg for &Matrix4x4<S> where S: ScalarSigned {
-    type Output = Matrix4x4<S>;
-
-    #[rustfmt::skip]
-    #[inline]
-    fn neg(self) -> Self::Output {
-        let c0r0 = -self.c0r0;
-        let c0r1 = -self.c0r1;
-        let c0r2 = -self.c0r2;
-        let c0r3 = -self.c0r3;
-
-        let c1r0 = -self.c1r0;
-        let c1r1 = -self.c1r1;
-        let c1r2 = -self.c1r2;
-        let c1r3 = -self.c1r3;
-
-        let c2r0 = -self.c2r0;
-        let c2r1 = -self.c2r1;
-        let c2r2 = -self.c2r2;
-        let c2r3 = -self.c2r3;
-
-        let c3r0 = -self.c3r0;
-        let c3r1 = -self.c3r1;
-        let c3r2 = -self.c3r2;
-        let c3r3 = -self.c3r3;
-
-        Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3, 
-            c1r0, c1r1, c1r2, c1r3, 
-            c2r0, c2r1, c2r2, c2r3, 
-            c3r0, c3r1, c3r2, c3r3
-        )
-    }
-}
-*/
 
 impl<S> ops::AddAssign<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     #[inline]
