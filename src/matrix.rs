@@ -259,22 +259,18 @@ impl<S> Matrix2x2<S> {
     #[inline]
     pub const fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Matrix2x2<S> {
         Matrix2x2 { 
-            c0r0: c0r0, 
-            c0r1: c0r1, 
-            c1r0: c1r0, 
-            c1r1: c1r1 
+            c0r0: c0r0, c0r1: c0r1,
+            c1r0: c1r0, c1r1: c1r1,
         }
     }
 
     /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
     #[inline]
     pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>) -> Matrix2x2<S> {
-        Matrix2x2 { 
-            c0r0: c0.x, 
-            c0r1: c0.y, 
-            c1r0: c1.x, 
-            c1r1: c1.y 
-        }
+        Matrix2x2::new(
+            c0.x, c0.y, 
+            c1.x, c1.y
+        )
     }
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
@@ -282,10 +278,8 @@ impl<S> Matrix2x2<S> {
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix2x2<T> where F: FnMut(S) -> T {
         Matrix2x2 {
-            c0r0: op(self.c0r0), 
-            c1r0: op(self.c1r0),
-            c0r1: op(self.c0r1), 
-            c1r1: op(self.c1r1),
+            c0r0: op(self.c0r0), c0r1: op(self.c0r1),
+            c1r0: op(self.c1r0), c1r1: op(self.c1r1),
         }
     }
 }
@@ -1541,11 +1535,11 @@ impl<S> Matrix3x3<S> {
     #[rustfmt::skip]
     #[inline]
     pub fn from_columns(c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3x3<S> {
-        Matrix3x3 {
-            c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, 
-            c1r0: c1.x, c1r1: c1.y, c1r2: c1.z,
-            c2r0: c2.x, c2r1: c2.y, c2r2: c2.z,
-        }
+        Matrix3x3::new(
+            c0.x, c0.y, c0.z, 
+            c1.x, c1.y, c1.z,
+            c2.x, c2.y, c2.z,
+        )
     }
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
