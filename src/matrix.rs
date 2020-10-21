@@ -1371,8 +1371,8 @@ impl<S> ops::Mul<Vector2<S>> for Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: Vector2<S>) -> Self::Output {
-        let x = self.c0r0 * other.x + self.c1r0 * other.y;
-        let y = self.c0r1 * other.x + self.c1r1 * other.y;
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1];
 
         Vector2::new(x, y)
     }
@@ -1383,8 +1383,8 @@ impl<S> ops::Mul<&Vector2<S>> for Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: &Vector2<S>) -> Self::Output {
-        let x = self.c0r0 * other.x + self.c1r0 * other.y;
-        let y = self.c0r1 * other.x + self.c1r1 * other.y;
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1];
 
         Vector2::new(x, y)
     }
@@ -1395,8 +1395,8 @@ impl<S> ops::Mul<Vector2<S>> for &Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: Vector2<S>) -> Self::Output {
-        let x = self.c0r0 * other.x + self.c1r0 * other.y;
-        let y = self.c0r1 * other.x + self.c1r1 * other.y;
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1];
 
         Vector2::new(x, y)
     }
@@ -1407,8 +1407,8 @@ impl<'a, 'b, S> ops::Mul<&'a Vector2<S>> for &'b Matrix2x2<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: &'a Vector2<S>) -> Self::Output {
-        let x = self.c0r0 * other.x + self.c1r0 * other.y;
-        let y = self.c0r1 * other.x + self.c1r1 * other.y;
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1];
 
         Vector2::new(x, y)
     }
@@ -3542,9 +3542,9 @@ impl<S> ops::Mul<Vector3<S>> for Matrix3x3<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: Vector3<S>) -> Self::Output {
-        let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
-        let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
-        let z = self.c0r2 * other.x + self.c1r2 * other.y + self.c2r2 * other.z;
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2];
+        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2];
 
         Vector3::new(x, y, z)
     }
@@ -3555,9 +3555,9 @@ impl<S> ops::Mul<&Vector3<S>> for Matrix3x3<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: &Vector3<S>) -> Self::Output {
-        let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
-        let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
-        let z = self.c0r2 * other.x + self.c1r2 * other.y + self.c2r2 * other.z;
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2];
+        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2];
 
         Vector3::new(x, y, z)
     }
@@ -3568,9 +3568,9 @@ impl<S> ops::Mul<Vector3<S>> for &Matrix3x3<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: Vector3<S>) -> Self::Output {
-        let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
-        let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
-        let z = self.c0r2 * other.x + self.c1r2 * other.y + self.c2r2 * other.z;
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2];
+        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2];
 
         Vector3::new(x, y, z)
     }
@@ -3581,9 +3581,9 @@ impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Matrix3x3<S> where S: Scalar {
 
     #[inline]
     fn mul(self, other: &'a Vector3<S>) -> Self::Output {
-        let x = self.c0r0 * other.x + self.c1r0 * other.y + self.c2r0 * other.z;
-        let y = self.c0r1 * other.x + self.c1r1 * other.y + self.c2r1 * other.z;
-        let z = self.c0r2 * other.x + self.c1r2 * other.y + self.c2r2 * other.z;
+        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2];
+        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2];
+        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2];
 
         Vector3::new(x, y, z)
     }
