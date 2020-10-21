@@ -542,36 +542,28 @@ impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
 impl<S> From<S> for Vector1<S> where S: Scalar {
     #[inline]
     fn from(v: S) -> Vector1<S> {
-        Vector1 { 
-            x: v,
-        }
+        Vector1::new(v)
     }
 }
 
 impl<S> From<(S,)> for Vector1<S> where S: Scalar {
     #[inline]
     fn from(v: (S,)) -> Vector1<S> {
-        Vector1 { 
-            x: v.0,
-        }
+        Vector1::new(v.0)
     }
 }
 
 impl<S> From<[S; 1]> for Vector1<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 1]) -> Vector1<S> {
-        Vector1 { 
-            x: v[0],
-        }
+        Vector1::new(v[0])
     }
 }
 
 impl<S> From<&[S; 1]> for Vector1<S> where S: Scalar {
     #[inline]
     fn from(v: &[S; 1]) -> Vector1<S> {
-        Vector1 { 
-            x: v[0],
-        }
+        Vector1::new(v[0])
     }
 }
 
@@ -1098,30 +1090,21 @@ impl<S> fmt::Display for Vector2<S> where S: fmt::Display {
 impl<S> From<(S, S)> for Vector2<S> where S: Scalar {
     #[inline]
     fn from((x, y): (S, S)) -> Vector2<S> {
-        Vector2 { 
-            x: x, 
-            y: y,
-        }
+        Vector2::new(x, y)
     }
 }
 
 impl<S> From<[S; 2]> for Vector2<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 2]) -> Vector2<S> {
-        Vector2 { 
-            x: v[0], 
-            y: v[1],
-        }
+        Vector2::new(v[0], v[1])
     }
 }
 
 impl<S> From<&[S; 2]> for Vector2<S> where S: Scalar {
     #[inline]
     fn from(v: &[S; 2]) -> Vector2<S> {
-        Vector2 {
-            x: v[0], 
-            y: v[1],
-        }
+        Vector2::new(v[0], v[1])
     }
 }
 
@@ -2082,7 +2065,7 @@ impl<S> Vector4<S> where S: Scalar {
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
-            self.x.is_zero() && self.y.is_zero() && self.z.is_zero() && self.w.is_zero()
+        self.x.is_zero() && self.y.is_zero() && self.z.is_zero() && self.w.is_zero()
     }
 
     /// Compute the coordinates of a projective vector in Euclidean space.

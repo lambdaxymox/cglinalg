@@ -455,21 +455,21 @@ impl<S> fmt::Display for Point1<S> where S: fmt::Display {
 impl<S> From<S> for Point1<S> where S: Scalar {
     #[inline]
     fn from(v: S) -> Point1<S> {
-        Point1 { x: v }
+        Point1::new(v)
     }
 }
 
 impl<S> From<[S; 1]> for Point1<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 1]) -> Point1<S> {
-        Point1 { x: v[0] }
+        Point1::new(v[0])
     }
 }
 
 impl<S> From<&[S; 1]> for Point1<S> where S: Scalar {
     #[inline]
     fn from(v: &[S; 1]) -> Point1<S> {
-        Point1 { x: v[0] }
+        Point1::new(v[0])
     }
 }
 
@@ -893,21 +893,21 @@ impl<S> fmt::Display for Point2<S> where S: fmt::Display {
 impl<S> From<(S, S)> for Point2<S> where S: Scalar {
     #[inline]
     fn from((x, y): (S, S)) -> Point2<S> {
-        Point2 { x: x, y: y }
+        Point2::new(x, y)
     }
 }
 
 impl<S> From<[S; 2]> for Point2<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 2]) -> Point2<S> {
-        Point2 { x: v[0], y: v[1] }
+        Point2::new(v[0], v[1])
     }
 }
 
 impl<S> From<&[S; 2]> for Point2<S> where S: Scalar {
     #[inline]
     fn from(v: &[S; 2]) -> Point2<S> {
-        Point2 { x: v[0], y: v[1] }
+        Point2::new(v[0], v[1])
     }
 }
 
