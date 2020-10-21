@@ -31,6 +31,7 @@ use num_traits::{
 };
 
 use core::fmt;
+use core::ops::*;
 use core::ops;
 use core::iter;
 
@@ -1158,6 +1159,57 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix2x2<S> {
     }
 }
 
+macro_rules! impl_matrix_matrix_binary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
+        impl<S> $OpType<$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<&$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &$T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<$T> for &$T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+
+        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &'a $T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.$field.$op(other.$field) ),* 
+                )
+            }
+        }
+    }
+}
+
+impl_matrix_matrix_binary_ops!(Add, add, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+impl_matrix_matrix_binary_ops!(Sub, sub, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+/*
 impl<S> ops::Add<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
@@ -1269,7 +1321,7 @@ impl<'a, 'b, S> ops::Sub<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar 
         Matrix2x2::new(c0r0, c0r1, c1r0, c1r1)
     }
 }
-
+*/
 impl<S> ops::Mul<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
@@ -3579,6 +3631,13 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix3x3<S> {
     }
 }
 
+impl_matrix_matrix_binary_ops!(Add, add, Matrix3x3<S>, Matrix3x3<S>, 
+    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 }
+);
+impl_matrix_matrix_binary_ops!(Sub, sub, Matrix3x3<S>, Matrix3x3<S>, 
+    { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 }
+);
+/*
 impl<S> ops::Add<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
@@ -3746,7 +3805,7 @@ impl<'a, 'b, S> ops::Sub<&'a Matrix3x3<S>> for &'b Matrix3x3<S> where S: Scalar 
         Matrix3x3::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2)
     }
 }
-
+*/
 impl<S> ops::Mul<&Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Matrix3x3<S>;
 
@@ -6341,6 +6400,15 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix4x4<S> {
     }
 }
 
+impl_matrix_matrix_binary_ops!(Add, add, Matrix4x4<S>, Matrix4x4<S>, { 
+    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 
+});
+impl_matrix_matrix_binary_ops!(Sub, sub, Matrix4x4<S>, Matrix4x4<S>, { 
+    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 
+});
+/*
 impl<S> ops::Add<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
@@ -6620,7 +6688,7 @@ impl<'a, 'b, S> ops::Sub<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar 
         )
     }
 }
-
+*/
 impl<S> ops::Mul<Vector4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Vector4<S>;
 
