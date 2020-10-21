@@ -35,6 +35,28 @@ use core::ops;
 use core::iter;
 
 
+macro_rules! impl_as_ref_ops {
+    ($MatrixType:ty, $RefType:ty) => {
+        impl<S> AsRef<$RefType> for $MatrixType {
+            #[inline]
+            fn as_ref(&self) -> &$RefType {
+                unsafe {
+                    &*(self as *const $MatrixType as *const $RefType)
+                }
+            }
+        }
+
+        impl<S> AsMut<$RefType> for $MatrixType {
+            #[inline]
+            fn as_mut(&mut self) -> &mut $RefType {
+                unsafe {
+                    &mut *(self as *mut $MatrixType as *mut $RefType)
+                }
+            }
+        }
+    }
+}
+
 macro_rules! impl_scalar_matrix_mul_ops {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
@@ -1096,6 +1118,10 @@ impl<'a, S> From<&'a [S; 4]> for &'a Matrix2x2<S> where S: Scalar {
 }
 
 
+impl_as_ref_ops!(Matrix2x2<S>, [S; 4]);
+impl_as_ref_ops!(Matrix2x2<S>, [[S; 2]; 2]);
+impl_as_ref_ops!(Matrix2x2<S>, [Vector2<S>; 2]);
+/*
 impl<S> AsRef<[S; 4]> for Matrix2x2<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 4] {
@@ -1149,7 +1175,7 @@ impl<S> AsMut<[Vector2<S>; 2]> for Matrix2x2<S> {
         }
     }
 }
-
+*/
 impl<S> ops::Index<usize> for Matrix2x2<S> {
     type Output = Vector2<S>;
 
@@ -3567,6 +3593,10 @@ impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
     }
 }
 
+impl_as_ref_ops!(Matrix3x3<S>, [S; 9]);
+impl_as_ref_ops!(Matrix3x3<S>, [[S; 3]; 3]);
+impl_as_ref_ops!(Matrix3x3<S>, [Vector3<S>; 3]);
+/*
 impl<S> AsRef<[S; 9]> for Matrix3x3<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 9] {
@@ -3620,7 +3650,7 @@ impl<S> AsMut<[Vector3<S>; 3]> for Matrix3x3<S> {
         }
     }
 }
-
+*/
 impl<S> ops::Index<usize> for Matrix3x3<S> {
     type Output = Vector3<S>;
 
@@ -6379,7 +6409,10 @@ impl<S> From<&Matrix3x3<S>> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-
+impl_as_ref_ops!(Matrix4x4<S>, [S; 16]);
+impl_as_ref_ops!(Matrix4x4<S>, [[S; 4]; 4]);
+impl_as_ref_ops!(Matrix4x4<S>, [Vector4<S>; 4]);
+/*
 impl<S> AsRef<[S; 16]> for Matrix4x4<S>  {
     #[inline]
     fn as_ref(&self) -> &[S; 16] {
@@ -6433,7 +6466,7 @@ impl<S> AsMut<[Vector4<S>; 4]> for Matrix4x4<S> {
         }
     }
 }
-
+*/
 impl<S> ops::Index<usize> for Matrix4x4<S> {
     type Output = Vector4<S>;
 
