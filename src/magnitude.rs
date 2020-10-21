@@ -10,11 +10,11 @@ use num_traits::{
 pub trait Magnitude where Self: Sized {
     type Output: ScalarFloat;
 
-    /// Compute the norm (length) of a vector.
-    fn magnitude(&self) -> Self::Output;
-
     /// Compute the squared length of a vector.
     fn magnitude_squared(&self) -> Self::Output;
+
+    /// Compute the norm (length) of a vector.
+    fn magnitude(&self) -> Self::Output;
 
     /// Convert a vector into a unit vector.
     fn normalize(&self) -> Self;
@@ -30,6 +30,7 @@ pub trait Magnitude where Self: Sized {
     fn distance_squared(&self, other: &Self) -> Self::Output;
 
     /// Compute the Euclidean distance between two vectors.
+    #[inline]
     fn distance(&self, other: &Self) -> Self::Output {
         self.distance_squared(other).sqrt()
     }
