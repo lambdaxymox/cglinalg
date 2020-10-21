@@ -1121,61 +1121,7 @@ impl<'a, S> From<&'a [S; 4]> for &'a Matrix2x2<S> where S: Scalar {
 impl_as_ref_ops!(Matrix2x2<S>, [S; 4]);
 impl_as_ref_ops!(Matrix2x2<S>, [[S; 2]; 2]);
 impl_as_ref_ops!(Matrix2x2<S>, [Vector2<S>; 2]);
-/*
-impl<S> AsRef<[S; 4]> for Matrix2x2<S> {
-    #[inline]
-    fn as_ref(&self) -> &[S; 4] {
-        unsafe { 
-            &*(self as *const Matrix2x2<S> as *const [S; 4])
-        }
-    }
-}
 
-impl<S> AsRef<[[S; 2]; 2]> for Matrix2x2<S> {
-    #[inline]
-    fn as_ref(&self) -> &[[S; 2]; 2] {
-        unsafe { 
-            &*(self as *const Matrix2x2<S> as *const [[S; 2]; 2])
-        }
-    }
-}
-
-impl<S> AsRef<[Vector2<S>; 2]> for Matrix2x2<S> {
-    #[inline]
-    fn as_ref(&self) -> &[Vector2<S>; 2] {
-        unsafe { 
-            &*(self as *const Matrix2x2<S> as *const [Vector2<S>; 2])
-        }
-    }
-}
-
-impl<S> AsMut<[S; 4]> for Matrix2x2<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [S; 4] {
-        unsafe { 
-            &mut *(self as *mut Matrix2x2<S> as *mut [S; 4])
-        }
-    }
-}
-
-impl<S> AsMut<[[S; 2]; 2]> for Matrix2x2<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [[S; 2]; 2] {
-        unsafe { 
-            &mut *(self as *mut Matrix2x2<S> as *mut [[S; 2]; 2])
-        }
-    }
-}
-
-impl<S> AsMut<[Vector2<S>; 2]> for Matrix2x2<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [Vector2<S>; 2] {
-        unsafe { 
-            &mut *(self as *mut Matrix2x2<S> as *mut [Vector2<S>; 2])
-        }
-    }
-}
-*/
 impl<S> ops::Index<usize> for Matrix2x2<S> {
     type Output = Vector2<S>;
 
@@ -3596,61 +3542,7 @@ impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
 impl_as_ref_ops!(Matrix3x3<S>, [S; 9]);
 impl_as_ref_ops!(Matrix3x3<S>, [[S; 3]; 3]);
 impl_as_ref_ops!(Matrix3x3<S>, [Vector3<S>; 3]);
-/*
-impl<S> AsRef<[S; 9]> for Matrix3x3<S> {
-    #[inline]
-    fn as_ref(&self) -> &[S; 9] {
-        unsafe { 
-            &*(self as *const Matrix3x3<S> as *const [S; 9])
-        }
-    }
-}
 
-impl<S> AsRef<[[S; 3]; 3]> for Matrix3x3<S> {
-    #[inline]
-    fn as_ref(&self) -> &[[S; 3]; 3] {
-        unsafe { 
-            &*(self as *const Matrix3x3<S> as *const [[S; 3]; 3])
-        }
-    }
-}
-
-impl<S> AsRef<[Vector3<S>; 3]> for Matrix3x3<S> {
-    #[inline]
-    fn as_ref(&self) -> &[Vector3<S>; 3] {
-        unsafe { 
-            &*(self as *const Matrix3x3<S> as *const [Vector3<S>; 3])
-        }
-    }
-}
-
-impl<S> AsMut<[S; 9]> for Matrix3x3<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [S; 9] {
-        unsafe { 
-            &mut *(self as *mut Matrix3x3<S> as *mut [S; 9])
-        }
-    }
-}
-
-impl<S> AsMut<[[S; 3]; 3]> for Matrix3x3<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [[S; 3];3 ] {
-        unsafe { 
-            &mut *(self as *mut Matrix3x3<S> as *mut [[S; 3]; 3])
-        }
-    }
-}
-
-impl<S> AsMut<[Vector3<S>; 3]> for Matrix3x3<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [Vector3<S>; 3] {
-        unsafe { 
-            &mut *(self as *mut Matrix3x3<S> as *mut [Vector3<S>; 3])
-        }
-    }
-}
-*/
 impl<S> ops::Index<usize> for Matrix3x3<S> {
     type Output = Vector3<S>;
 
@@ -6412,61 +6304,7 @@ impl<S> From<&Matrix3x3<S>> for Matrix4x4<S> where S: Scalar {
 impl_as_ref_ops!(Matrix4x4<S>, [S; 16]);
 impl_as_ref_ops!(Matrix4x4<S>, [[S; 4]; 4]);
 impl_as_ref_ops!(Matrix4x4<S>, [Vector4<S>; 4]);
-/*
-impl<S> AsRef<[S; 16]> for Matrix4x4<S>  {
-    #[inline]
-    fn as_ref(&self) -> &[S; 16] {
-        unsafe { 
-            &*(self as *const Matrix4x4<S> as *const [S; 16])
-        }
-    }
-}
 
-impl<S> AsRef<[[S; 4]; 4]> for Matrix4x4<S> {
-    #[inline]
-    fn as_ref(&self) -> &[[S; 4]; 4] {
-        unsafe { 
-            &*(self as *const Matrix4x4<S> as *const [[S; 4]; 4])
-        }
-    }
-}
-
-impl<S> AsRef<[Vector4<S>; 4]> for Matrix4x4<S> {
-    #[inline]
-    fn as_ref(&self) -> &[Vector4<S>; 4] {
-        unsafe { 
-            &*(self as *const Matrix4x4<S> as *const [Vector4<S>; 4])
-        }
-    }
-}
-
-impl<S> AsMut<[S; 16]> for Matrix4x4<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [S; 16] {
-        unsafe { 
-            &mut *(self as *mut Matrix4x4<S> as *mut [S; 16])
-        }
-    }
-}
-
-impl<S> AsMut<[[S; 4]; 4]> for Matrix4x4<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [[S; 4]; 4] {
-        unsafe { 
-            &mut *(self as *mut Matrix4x4<S> as *mut [[S; 4]; 4])
-        }
-    }
-}
-
-impl<S> AsMut<[Vector4<S>; 4]> for Matrix4x4<S> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [Vector4<S>; 4] {
-        unsafe { 
-            &mut *(self as *mut Matrix4x4<S> as *mut [Vector4<S>; 4])
-        }
-    }
-}
-*/
 impl<S> ops::Index<usize> for Matrix4x4<S> {
     type Output = Vector4<S>;
 
