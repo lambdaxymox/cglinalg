@@ -1032,6 +1032,17 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     }
 }
 
+impl<S> fmt::Display for Matrix2x2<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        writeln!(
+            formatter, 
+            "Matrix2x2 [[{}, {}], [{}, {}]]", 
+            self.c0r0, self.c1r0,
+            self.c0r1, self.c1r1,
+        )
+    }
+}
+
 impl<S> From<[[S; 2]; 2]> for Matrix2x2<S> where S: Scalar {
     #[inline]
     fn from(array: [[S; 2]; 2]) -> Matrix2x2<S> {
@@ -1064,17 +1075,6 @@ impl<'a, S> From<&'a [S; 4]> for &'a Matrix2x2<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix2x2<S> where S: fmt::Display {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        // We print the matrix contents in row-major order like mathematical convention.
-        writeln!(
-            formatter, 
-            "Matrix2x2 [[{}, {}], [{}, {}]]", 
-            self.c0r0, self.c1r0,
-            self.c0r1, self.c1r1,
-        )
-    }
-}
 
 impl<S> AsRef<[S; 4]> for Matrix2x2<S> {
     #[inline]
@@ -3446,6 +3446,19 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     }
 }
 
+impl<S> fmt::Display for Matrix3x3<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        // We print the matrix contents in row-major order like mathematical convention.
+        writeln!(
+            formatter, 
+            "Matrix3x3 [[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]]", 
+            self.c0r0, self.c1r0, self.c2r0,
+            self.c0r1, self.c1r1, self.c2r1,
+            self.c0r2, self.c1r2, self.c2r2,
+        )
+    }
+}
+
 impl<S> From<[[S; 3]; 3]> for Matrix3x3<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
@@ -3508,19 +3521,6 @@ impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
             matrix.c0r0,     matrix.c0r1,     S::zero(),
             matrix.c1r0,     matrix.c1r1,     S::zero(),
             S::zero(), S::zero(), S::one()
-        )
-    }
-}
-
-impl<S> fmt::Display for Matrix3x3<S> where S: fmt::Display {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        // We print the matrix contents in row-major order like mathematical convention.
-        writeln!(
-            formatter, 
-            "Matrix3x3 [[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]]", 
-            self.c0r0, self.c1r0, self.c2r0,
-            self.c0r1, self.c1r1, self.c2r1,
-            self.c0r2, self.c1r2, self.c2r2,
         )
     }
 }
@@ -6195,6 +6195,20 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     }
 }
 
+impl<S> fmt::Display for Matrix4x4<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        // We print the matrix contents in row-major order like mathematical convention.
+        writeln!(
+            formatter, 
+            "Matrix4x4 [[{}, {}, {}, {}], [{}, {}, {}, {}], [{}, {}, {}, {}], [{}, {}, {}, {}]]",
+            self.c0r0, self.c1r0, self.c2r0, self.c3r0,
+            self.c0r1, self.c1r1, self.c2r1, self.c3r1,
+            self.c0r2, self.c1r2, self.c2r2, self.c3r2,
+            self.c0r3, self.c1r3, self.c2r3, self.c3r3
+        )
+    }
+}
+
 impl<S> From<[[S; 4]; 4]> for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
@@ -6299,19 +6313,6 @@ impl<S> From<&Matrix3x3<S>> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix4x4<S> where S: fmt::Display {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        // We print the matrix contents in row-major order like mathematical convention.
-        writeln!(
-            formatter, 
-            "Matrix4x4 [[{}, {}, {}, {}], [{}, {}, {}, {}], [{}, {}, {}, {}], [{}, {}, {}, {}]]",
-            self.c0r0, self.c1r0, self.c2r0, self.c3r0,
-            self.c0r1, self.c1r1, self.c2r1, self.c3r1,
-            self.c0r2, self.c1r2, self.c2r2, self.c3r2,
-            self.c0r3, self.c1r3, self.c2r3, self.c3r3
-        )
-    }
-}
 
 impl<S> AsRef<[S; 16]> for Matrix4x4<S>  {
     #[inline]
