@@ -180,6 +180,59 @@ macro_rules! impl_matrix_unary_ops {
     }
 }
 
+macro_rules! impl_matrix_binary_assign_ops {
+    ($T:ty, { $($field:ident),* }) => {
+        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: $T) {
+                $(self.$field += other.$field);*
+            }
+        }
+
+        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: &$T) {
+                $(self.$field += other.$field);*
+            }
+        }
+
+        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: $T) {
+                $(self.$field -= other.$field);*
+            }
+        }
+
+        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: &$T) {
+                $(self.$field -= other.$field);*
+            }
+        }
+
+        impl<S> ops::MulAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn mul_assign(&mut self, other: S) {
+                $(self.$field *= other);*
+            }
+        }
+        
+        impl<S> ops::DivAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn div_assign(&mut self, other: S) {
+                $(self.$field /= other);*
+            }
+        }
+        
+        impl<S> ops::RemAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn rem_assign(&mut self, other: S) {
+                $(self.$field %= other);*
+            }
+        }
+    }
+}
+
 
 /// A Type synonym for `Matrix2x2`.
 pub type Matrix2<S> = Matrix2x2<S>;
@@ -1372,6 +1425,8 @@ impl_matrix_scalar_binary_ops!(Rem, rem, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r
 
 impl_matrix_unary_ops!(Neg, neg, Matrix2x2<S>, Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
 
+impl_matrix_binary_assign_ops!(Matrix2x2<S>, { c0r0, c0r1, c1r0, c1r1 });
+/*
 impl<S> ops::AddAssign<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Matrix2x2<S>) {
@@ -1441,6 +1496,7 @@ impl<S> ops::RemAssign<S> for Matrix2x2<S> where S: Scalar {
         self.c1r1 %= other;
     }
 }
+*/
 
 impl<S> approx::AbsDiffEq for Matrix2x2<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -3620,7 +3676,11 @@ impl_matrix_scalar_binary_ops!(Rem, rem, Matrix3x3<S>, Matrix3x3<S>, {
 impl_matrix_unary_ops!(Neg, neg, Matrix3x3<S>, Matrix3x3<S>, { 
     c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
 });
+impl_matrix_binary_assign_ops!(Matrix3x3<S>, { 
+    c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 
+});
 
+/*
 impl<S> ops::AddAssign<Matrix3x3<S>> for Matrix3x3<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Matrix3x3<S>) {
@@ -3739,6 +3799,7 @@ impl<S> ops::RemAssign<S> for Matrix3x3<S> where S: Scalar {
         self.c2r2 %= other;
     }
 }
+*/
 
 impl<S> approx::AbsDiffEq for Matrix3x3<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -6136,7 +6197,11 @@ impl_matrix_unary_ops!(Neg, neg, Matrix4x4<S>, Matrix4x4<S>, {
     c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
     c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
 });
-
+impl_matrix_binary_assign_ops!(Matrix4x4<S>, { 
+    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
+    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
+});
+/*
 impl<S> ops::AddAssign<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     #[inline]
     fn add_assign(&mut self, other: Matrix4x4<S>) {
@@ -6311,7 +6376,7 @@ impl<S> ops::RemAssign<S> for Matrix4x4<S> where S: Scalar {
         self.c3r3 %= other;
     }
 }
-
+*/
 impl<S> approx::AbsDiffEq for Matrix4x4<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
