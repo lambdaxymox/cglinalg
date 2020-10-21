@@ -408,6 +408,18 @@ impl<S> Matrix2x2<S> where S: Copy {
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 4]>>::as_ref(self)
     }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix2x2<T> where F: FnMut(S) -> T {
+        Matrix2x2 {
+            data: [
+                [op(self.data[0][0]), op(self.data[0][1])],
+                [op(self.data[1][0]), op(self.data[1][1])]
+            ],
+        }
+    }
 }
 
 impl<S> Matrix2x2<S> where S: NumCast + Copy {
@@ -446,18 +458,6 @@ impl<S> Matrix2x2<S> where S: NumCast + Copy {
         };
 
         Some(Matrix2x2::new(c0r0, c0r1, c1r0, c1r1))
-    }
-
-    /// Map an operation on the elements of a matrix, returning a matrix whose 
-    /// elements are elements of the new underlying type.
-    #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix2x2<T> where F: FnMut(S) -> T {
-        Matrix2x2 {
-            data: [
-                [op(self.data[0][0]), op(self.data[0][1])],
-                [op(self.data[1][0]), op(self.data[1][1])]
-            ],
-        }
     }
 }
 
@@ -1536,34 +1536,59 @@ where
     arr[c][r] % other
 }
 
-impl<S> ops::Mul<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
-    type Output = Matrix2x2<S>;
+macro_rules! impl_matrix_matrix_mul_ops {
+    ($MatrixMxN:ident, $MatrixNxK:ident => $Output:ident, $dot_arr_col:ident, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> ops::Mul<$MatrixNxK<S>> for $MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
 
-    #[inline]
-    fn mul(self, other: &Matrix2x2<S>) -> Self::Output {
-        Matrix2x2::new(
-            dot_array2x2_col2(&self.data, &other.data[0], 0), 
-            dot_array2x2_col2(&self.data, &other.data[0], 1),
-            dot_array2x2_col2(&self.data, &other.data[1], 0), 
-            dot_array2x2_col2(&self.data, &other.data[1], 1),
-        )
+            #[inline]
+            fn mul(self, other: $MatrixNxK<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
+                )
+            }
+        }
+
+        impl<S> ops::Mul<&$MatrixNxK<S>> for $MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: &$MatrixNxK<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
+                )
+            }
+        }
+
+        impl<S> ops::Mul<$MatrixNxK<S>> for &$MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: $MatrixNxK<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
+                )
+            }
+        }
+
+        impl<'a, 'b, S> ops::Mul<&'a $MatrixNxK<S>> for &'b $MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: &'a $MatrixNxK<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
+                )
+            }
+        }
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar {
-    type Output = Matrix2x2<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Matrix2x2<S>) -> Self::Output {
-        Matrix2x2::new(
-            dot_array2x2_col2(&self.data, &other.data[0], 0), 
-            dot_array2x2_col2(&self.data, &other.data[0], 1),
-            dot_array2x2_col2(&self.data, &other.data[1], 0), 
-            dot_array2x2_col2(&self.data, &other.data[1], 1),
-        )
-    }
-}
-
+impl_matrix_matrix_mul_ops!(
+    Matrix2x2, Matrix2x2 => Matrix2x2, dot_array2x2_col2,
+    { (0, 0), (0, 1), (1, 0), (1, 1) }
+);
+/*
 impl<S> ops::Mul<Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Matrix2x2<S>;
 
@@ -1592,6 +1617,34 @@ impl<S> ops::Mul<Matrix2x2<S>> for &Matrix2x2<S> where S: Scalar {
     }
 }
 
+impl<S> ops::Mul<&Matrix2x2<S>> for Matrix2x2<S> where S: Scalar {
+    type Output = Matrix2x2<S>;
+
+    #[inline]
+    fn mul(self, other: &Matrix2x2<S>) -> Self::Output {
+        Matrix2x2::new(
+            dot_array2x2_col2(&self.data, &other.data[0], 0), 
+            dot_array2x2_col2(&self.data, &other.data[0], 1),
+            dot_array2x2_col2(&self.data, &other.data[1], 0), 
+            dot_array2x2_col2(&self.data, &other.data[1], 1),
+        )
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Matrix2x2<S>> for &'b Matrix2x2<S> where S: Scalar {
+    type Output = Matrix2x2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Matrix2x2<S>) -> Self::Output {
+        Matrix2x2::new(
+            dot_array2x2_col2(&self.data, &other.data[0], 0), 
+            dot_array2x2_col2(&self.data, &other.data[0], 1),
+            dot_array2x2_col2(&self.data, &other.data[1], 0), 
+            dot_array2x2_col2(&self.data, &other.data[1], 1),
+        )
+    }
+}
+*/
 impl<S> ops::Mul<Vector2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Vector2<S>;
 
@@ -1805,18 +1858,6 @@ impl<S> Matrix3x3<S> {
             c2.x, c2.y, c2.z,
         )
     }
-
-    /// Map an operation on the elements of a matrix, returning a matrix whose 
-    /// elements are elements of the new underlying type.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Matrix3x3<T> where F: FnMut(S) -> T {
-        Matrix3x3 {
-            c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0),
-            c0r1: op(self.c0r1), c1r1: op(self.c1r1), c2r1: op(self.c2r1),
-            c0r2: op(self.c0r2), c1r2: op(self.c1r2), c2r2: op(self.c2r2),
-        }
-    }
 }
 
 impl<S> Matrix3x3<S> where S: Copy {
@@ -1927,6 +1968,18 @@ impl<S> Matrix3x3<S> where S: Copy {
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 9]>>::as_ref(self)
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn map<T, F>(self, mut op: F) -> Matrix3x3<T> where F: FnMut(S) -> T {
+        Matrix3x3 {
+            c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0),
+            c0r1: op(self.c0r1), c1r1: op(self.c1r1), c2r1: op(self.c2r1),
+            c0r2: op(self.c0r2), c1r2: op(self.c1r2), c2r2: op(self.c2r2),
+        }
     }
 }
 
@@ -4004,19 +4057,6 @@ impl<S> Matrix4x4<S> {
             c3r0: c3.x, c3r1: c3.y, c3r2: c3.z, c3r3: c3.w,
         }
     }
-
-    /// Map an operation on the elements of a matrix, returning a matrix whose 
-    /// elements are elements of the new underlying type.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> where F: FnMut(S) -> T {
-        Matrix4x4 {
-            c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0), c3r0: op(self.c3r0),
-            c0r1: op(self.c0r1), c1r1: op(self.c1r1), c2r1: op(self.c2r1), c3r1: op(self.c3r1),
-            c0r2: op(self.c0r2), c1r2: op(self.c1r2), c2r2: op(self.c2r2), c3r2: op(self.c3r2),
-            c0r3: op(self.c0r3), c1r3: op(self.c1r3), c2r3: op(self.c2r3), c3r3: op(self.c3r3),
-        }
-    }
 }
 
 impl<S> Matrix4x4<S> where S: Copy {
@@ -4135,6 +4175,19 @@ impl<S> Matrix4x4<S> where S: Copy {
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 16]>>::as_ref(self)
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> where F: FnMut(S) -> T {
+        Matrix4x4 {
+            c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0), c3r0: op(self.c3r0),
+            c0r1: op(self.c0r1), c1r1: op(self.c1r1), c2r1: op(self.c2r1), c3r1: op(self.c3r1),
+            c0r2: op(self.c0r2), c1r2: op(self.c1r2), c2r2: op(self.c2r2), c3r2: op(self.c3r2),
+            c0r3: op(self.c0r3), c1r3: op(self.c1r3), c2r3: op(self.c2r3), c3r3: op(self.c3r3),
+        }
     }
 }
 
