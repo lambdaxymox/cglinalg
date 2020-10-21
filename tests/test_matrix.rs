@@ -385,7 +385,7 @@ mod matrix2_tests {
     #[test]
     fn test_matrix_swap_elements() {
         let mut result = Matrix2x2::new(1, 2, 3, 4);
-        result.swap_elements((0, 0), (1, 1));
+        result.swap((0, 0), (1, 1));
         let expected = Matrix2x2::new(4, 2, 3, 1);
 
         assert_eq!(result, expected);
@@ -1017,7 +1017,7 @@ mod matrix3_tests {
     #[test]
     fn test_matrix_swap_elements() {
         let mut result = Matrix3x3::new(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        result.swap_elements((0, 0), (2, 1));
+        result.swap((0, 0), (2, 1));
         let expected = Matrix3x3::new(8, 2, 3, 4, 5, 6, 7, 1, 9);
 
         assert_eq!(result, expected);
@@ -2065,7 +2065,7 @@ mod matrix4_tests {
             9,  10, 11, 12,
             13, 14, 15, 16
         );
-        result.swap_elements((2, 0), (1, 3));
+        result.swap((2, 0), (1, 3));
         let expected = Matrix4x4::new(
             1,  2,  3,  4,
             5,  6,  7,  9,

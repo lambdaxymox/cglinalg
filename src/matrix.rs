@@ -350,7 +350,7 @@ impl<S> Matrix2x2<S> where S: Copy {
     
     /// Swap two elements of a matrix.
     #[inline]
-    pub fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
+    pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
         let element_a = self[a.0][a.1];
         self[a.0][a.1] = self[b.0][b.1];
         self[b.0][b.1] = element_a;
@@ -607,7 +607,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn transpose_mut(&mut self) {
-        self.swap_elements((0, 1), (1, 0));
+        self.swap((0, 1), (1, 0));
     }
 
     /// Transpose a matrix.
@@ -1634,7 +1634,7 @@ impl<S> Matrix3x3<S> where S: Copy {
     
     /// Swap two elements of a matrix.
     #[inline]
-    pub fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
+    pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
         let element_a = self[a.0][a.1];
         self[a.0][a.1] = self[b.0][b.1];
         self[b.0][b.1] = element_a;
@@ -2239,9 +2239,9 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn transpose_mut(&mut self) {
-        self.swap_elements((0, 1), (1, 0));
-        self.swap_elements((0, 2), (2, 0));
-        self.swap_elements((1, 2), (2, 1));
+        self.swap((0, 1), (1, 0));
+        self.swap((0, 2), (2, 0));
+        self.swap((1, 2), (2, 1));
     }
 
     /// Transpose a matrix.
@@ -3842,7 +3842,7 @@ impl<S> Matrix4x4<S> where S: Copy {
      
     /// Swap two elements of a matrix.
     #[inline]
-    pub fn swap_elements(&mut self, a: (usize, usize), b: (usize, usize)) {
+    pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
         let element_a = self[a.0][a.1];
         self[a.0][a.1] = self[b.0][b.1];
         self[b.0][b.1] = element_a;
@@ -4349,12 +4349,12 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn transpose_mut(&mut self) {
-        self.swap_elements((0, 1), (1, 0));
-        self.swap_elements((0, 2), (2, 0));
-        self.swap_elements((1, 2), (2, 1));
-        self.swap_elements((0, 3), (3, 0));
-        self.swap_elements((1, 3), (3, 1));
-        self.swap_elements((2, 3), (3, 2));
+        self.swap((0, 1), (1, 0));
+        self.swap((0, 2), (2, 0));
+        self.swap((1, 2), (2, 1));
+        self.swap((0, 3), (3, 0));
+        self.swap((1, 3), (3, 1));
+        self.swap((2, 3), (3, 2));
     }
 
     /// Transpose a matrix.

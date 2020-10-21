@@ -1045,8 +1045,8 @@ macro_rules! swap_props {
                 
                 let mut m1 = m;
                 let mut m2 = m;
-                m1.swap_elements((col1, row1), (col2, row2));
-                m2.swap_elements((col2, row2), (col1, row1));
+                m1.swap((col1, row1), (col2, row2));
+                m2.swap((col2, row2), (col1, row1));
 
                 prop_assert_eq!(m1, m2);
             }
@@ -1063,7 +1063,7 @@ macro_rules! swap_props {
                 col in 0..$UpperBound as usize, row in 0..$UpperBound as usize) {
 
                 let mut m1 = m;
-                m1.swap_elements((col, row), (col, row));
+                m1.swap((col, row), (col, row));
 
                 prop_assert_eq!(m1, m);
             }
@@ -1082,8 +1082,8 @@ macro_rules! swap_props {
                 col2 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize) {
                 
                 let mut m1 = m;
-                m1.swap_elements((col1, row1), (col2, row2));
-                m1.swap_elements((col1, row1), (col2, row2));
+                m1.swap((col1, row1), (col2, row2));
+                m1.swap((col1, row1), (col2, row2));
 
                 prop_assert_eq!(m1, m);
             }
