@@ -21,7 +21,7 @@ use crate::vector::{
 use crate::unit::{
     Unit,
 };
-
+use crate::array::*;
 use approx::{
     ulps_eq,
     ulps_ne,
@@ -1480,61 +1480,7 @@ macro_rules! impl_matrix_binary_assign_ops1 {
 }
 
 
-#[inline(always)]
-fn dot_array2x2_col2<S>(arr: &[[S; 2]; 2], col: &[S; 2], r: usize) -> S
-where
-    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
-{
-    arr[0][r] * col[0] + arr[1][r] * col[1]
-}
 
-#[inline(always)]
-fn add_array2x2_array2x2<S>(arr1: &[[S; 2]; 2], arr2: &[[S; 2]; 2], c: usize, r: usize) -> S
-where
-    S: Copy + ops::Add<S, Output = S>
-{
-    arr1[c][r] + arr2[c][r]
-}
-
-#[inline(always)]
-fn sub_array2x2_array2x2<S>(arr1: &[[S; 2]; 2], arr2: &[[S; 2]; 2], c: usize, r: usize) -> S
-where
-    S: Copy + ops::Sub<S, Output = S>
-{
-    arr1[c][r] - arr2[c][r]
-}
-
-#[inline(always)]
-fn neg_array2x2<S>(arr1: &[[S; 2]; 2], c: usize, r: usize) -> S
-where
-    S: Copy + ops::Neg<Output = S>
-{
-    -arr1[c][r]
-}
-
-#[inline(always)]
-fn mul_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
-where
-    S: Copy + ops::Mul<S, Output = S>
-{
-    arr[c][r] * other
-}
-
-#[inline(always)]
-fn div_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
-where
-    S: Copy + ops::Div<S, Output = S>
-{
-    arr[c][r] / other
-}
-
-#[inline(always)]
-fn rem_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
-where
-    S: Copy + ops::Rem<S, Output = S>
-{
-    arr[c][r] % other
-}
 
 macro_rules! impl_matrix_matrix_mul_ops {
     ($MatrixMxN:ident, $MatrixNxK:ident => $Output:ident, $dot_arr_col:ident, { $( ($col:expr, $row:expr) ),* }) => {
@@ -3820,61 +3766,7 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix3x3<S> {
     }
 }
 
-#[inline(always)]
-fn dot_array3x3_col3<S>(arr: &[[S; 3]; 3], col: &[S; 3], r: usize) -> S
-where
-    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
-{
-    arr[0][r] * col[0] + arr[1][r] * col[1] + arr[2][r] * col[2]
-}
 
-#[inline(always)]
-fn add_array3x3_array3x3<S>(arr1: &[[S; 3]; 3], arr2: &[[S; 3]; 3], c: usize, r: usize) -> S
-where
-    S: Copy + ops::Add<S, Output = S>
-{
-    arr1[c][r] + arr2[c][r]
-}
-
-#[inline(always)]
-fn sub_array3x3_array3x3<S>(arr1: &[[S; 3]; 3], arr2: &[[S; 3]; 3], c: usize, r: usize) -> S
-where
-    S: Copy + ops::Sub<S, Output = S>
-{
-    arr1[c][r] - arr2[c][r]
-}
-
-#[inline(always)]
-fn neg_array3x3<S>(arr1: &[[S; 3]; 3], c: usize, r: usize) -> S
-where
-    S: Copy + ops::Neg<Output = S>
-{
-    -arr1[c][r]
-}
-
-#[inline(always)]
-fn mul_array3x3_scalar<S>(arr: &[[S; 3]; 3], other: S, c: usize, r: usize) -> S
-where
-    S: Copy + ops::Mul<S, Output = S>
-{
-    arr[c][r] * other
-}
-
-#[inline(always)]
-fn div_array3x3_scalar<S>(arr: &[[S; 3]; 3], other: S, c: usize, r: usize) -> S
-where
-    S: Copy + ops::Div<S, Output = S>
-{
-    arr[c][r] / other
-}
-
-#[inline(always)]
-fn rem_array3x3_scalar<S>(arr: &[[S; 3]; 3], other: S, c: usize, r: usize) -> S
-where
-    S: Copy + ops::Rem<S, Output = S>
-{
-    arr[c][r] % other
-}
 
 impl_matrix_matrix_binary_ops1!(
     Add, add, add_array3x3_array3x3, Matrix3x3<S>, Matrix3x3<S>, { 

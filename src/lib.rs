@@ -121,6 +121,8 @@ mod translation;
 mod transform;
 mod similarity;
 
+mod array;
+
 
 pub use angle::*;
 pub use euler::*;
