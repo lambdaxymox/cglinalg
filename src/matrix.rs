@@ -1731,9 +1731,15 @@ impl<S> Matrix3x3<S> where S: Copy {
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix3x3<T> where F: FnMut(S) -> T {
         Matrix3x3::new(
-            op(self.data[0][0]), op(self.data[0][1]), op(self.data[0][2]),
-            op(self.data[1][0]), op(self.data[1][1]), op(self.data[1][2]),
-            op(self.data[2][0]), op(self.data[2][1]), op(self.data[2][2]),
+            op(self.data[0][0]), 
+            op(self.data[0][1]), 
+            op(self.data[0][2]),
+            op(self.data[1][0]), 
+            op(self.data[1][1]), 
+            op(self.data[1][2]),
+            op(self.data[2][0]), 
+            op(self.data[2][1]), 
+            op(self.data[2][2]),
         )
     }
 }
@@ -2385,9 +2391,15 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
-        self.data[0][0].is_zero() && self.data[0][1].is_zero() && self.data[0][2].is_zero() &&
-        self.data[1][0].is_zero() && self.data[1][1].is_zero() && self.data[1][2].is_zero() &&
-        self.data[2][0].is_zero() && self.data[2][1].is_zero() && self.data[2][2].is_zero()
+        self.data[0][0].is_zero() && 
+        self.data[0][1].is_zero() && 
+        self.data[0][2].is_zero() &&
+        self.data[1][0].is_zero() && 
+        self.data[1][1].is_zero() && 
+        self.data[1][2].is_zero() &&
+        self.data[2][0].is_zero() && 
+        self.data[2][1].is_zero() && 
+        self.data[2][2].is_zero()
     }
     
     /// Compute an identity matrix.
@@ -3146,7 +3158,10 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Matrix3x3<S>> {
-        if let (Some(unit_v1), Some(unit_v2)) = (v1.try_normalize(S::zero()), v2.try_normalize(S::zero())) {
+        if let (Some(unit_v1), Some(unit_v2)) = (
+            v1.try_normalize(S::zero()), 
+            v2.try_normalize(S::zero()))
+         {
             let cross = unit_v1.cross(&unit_v2);
 
             if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
@@ -3921,10 +3936,22 @@ impl<S> Matrix4x4<S> where S: Copy {
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> where F: FnMut(S) -> T {
         Matrix4x4::new(
-            op(self.data[0][0]), op(self.data[0][1]), op(self.data[0][2]), op(self.data[0][3]),
-            op(self.data[1][0]), op(self.data[1][1]), op(self.data[1][2]), op(self.data[3][1]),
-            op(self.data[2][0]), op(self.data[2][1]), op(self.data[2][2]), op(self.data[2][3]),
-            op(self.data[3][0]), op(self.data[3][1]), op(self.data[3][2]), op(self.data[3][3]),
+            op(self.data[0][0]), 
+            op(self.data[0][1]), 
+            op(self.data[0][2]), 
+            op(self.data[0][3]),
+            op(self.data[1][0]), 
+            op(self.data[1][1]), 
+            op(self.data[1][2]), 
+            op(self.data[3][1]),
+            op(self.data[2][0]), 
+            op(self.data[2][1]), 
+            op(self.data[2][2]), 
+            op(self.data[2][3]),
+            op(self.data[3][0]), 
+            op(self.data[3][1]), 
+            op(self.data[3][2]), 
+            op(self.data[3][3]),
         )
     }
 }
@@ -4551,10 +4578,14 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn is_identity(&self) -> bool {
-        self.data[0][0].is_one()  && self.data[0][1].is_zero() && self.data[0][2].is_zero() && self.data[0][3].is_zero() &&
-        self.data[1][0].is_zero() && self.data[1][1].is_one()  && self.data[1][2].is_zero() && self.data[1][3].is_zero() &&
-        self.data[2][0].is_zero() && self.data[2][1].is_zero() && self.data[2][2].is_one()  && self.data[2][3].is_zero() &&
-        self.data[3][0].is_zero() && self.data[3][1].is_zero() && self.data[3][2].is_zero() && self.data[3][3].is_one()
+        self.data[0][0].is_one()  && self.data[0][1].is_zero() && 
+        self.data[0][2].is_zero() && self.data[0][3].is_zero() &&
+        self.data[1][0].is_zero() && self.data[1][1].is_one()  && 
+        self.data[1][2].is_zero() && self.data[1][3].is_zero() &&
+        self.data[2][0].is_zero() && self.data[2][1].is_zero() && 
+        self.data[2][2].is_one()  && self.data[2][3].is_zero() &&
+        self.data[3][0].is_zero() && self.data[3][1].is_zero() && 
+        self.data[3][2].is_zero() && self.data[3][3].is_one()
     }
 
     /// Construct a new diagonal matrix from a given value where
