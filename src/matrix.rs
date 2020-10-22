@@ -424,6 +424,22 @@ impl<S> Matrix2x2<S> where S: Copy {
     }
     
     /// Swap two elements of a matrix.
+    ///
+    /// The element order for each element to swap is **(column, row)**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let mut result = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let expected = Matrix2x2::new(1_i32, 3_i32, 2_i32, 4_i32);
+    /// result.swap((0, 1), (1, 0));
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
         let element_a = self[a.0][a.1];
@@ -1645,6 +1661,30 @@ impl<S> Matrix3x3<S> where S: Copy {
     }
     
     /// Swap two elements of a matrix.
+    ///
+    /// The element order for each element to swap is **(column, row)**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let mut result = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32, 
+    ///     4_i32, 5_i32, 6_i32,
+    ///     7_i32, 8_i32, 9_i32
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     1_i32, 2_i32, 7_i32, 
+    ///     4_i32, 5_i32, 6_i32,
+    ///     3_i32, 8_i32, 9_i32
+    /// );
+    /// result.swap((0, 2), (2, 0));
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
         let element_a = self[a.0][a.1];
@@ -3794,6 +3834,32 @@ impl<S> Matrix4x4<S> where S: Copy {
     }
      
     /// Swap two elements of a matrix.
+    ///
+    /// The element order for each element to swap is **(column, row)**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let mut result = Matrix4x4::new(
+    ///     1_i32,  2_i32,  3_i32,  4_i32, 
+    ///     5_i32,  6_i32,  7_i32,  8_i32,
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     1_i32, 2_i32,  3_i32,  13_i32, 
+    ///     5_i32, 6_i32,  7_i32,  8_i32,
+    ///     9_i32, 10_i32, 11_i32, 12_i32,
+    ///     4_i32, 14_i32, 15_i32, 16_i32
+    /// );
+    /// result.swap((0, 3), (3, 0));
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
         let element_a = self[a.0][a.1];
