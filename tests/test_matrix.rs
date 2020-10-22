@@ -76,6 +76,16 @@ mod matrix2_tests {
     }
 
     #[test]
+    fn test_matrix_coordinates() {
+        let matrix = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(matrix.c0r0, matrix[0][0]);
+        assert_eq!(matrix.c0r1, matrix[0][1]);
+        assert_eq!(matrix.c1r0, matrix[1][0]);
+        assert_eq!(matrix.c1r1, matrix[1][1]);
+    }
+
+    #[test]
     fn test_mat_times_identity_equals_mat() {
         test_cases().iter().for_each(|test| {
             let a_mat_times_identity = test.a_mat * Matrix2x2::identity();
@@ -662,6 +672,25 @@ mod matrix3_tests {
                 },
             ]
         }
+    }
+
+    #[test]
+    fn test_matrix_coordinates() {
+        let matrix = Matrix3x3::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32
+        );
+
+        assert_eq!(matrix.c0r0, matrix[0][0]);
+        assert_eq!(matrix.c0r1, matrix[0][1]);
+        assert_eq!(matrix.c0r2, matrix[0][2]);
+        assert_eq!(matrix.c1r0, matrix[1][0]);
+        assert_eq!(matrix.c1r1, matrix[1][1]);
+        assert_eq!(matrix.c1r2, matrix[1][2]);
+        assert_eq!(matrix.c2r0, matrix[2][0]);
+        assert_eq!(matrix.c2r1, matrix[2][1]);
+        assert_eq!(matrix.c2r2, matrix[2][2]);
     }
 
     #[test]
@@ -1585,6 +1614,33 @@ mod matrix4_tests {
                 },
             ]
         }
+    }
+
+    #[test]
+    fn test_matrix_coordinates() {
+        let matrix = Matrix4x4::new(
+            1_i32,  2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,  8_i32,
+            9_i32,  10_i32, 11_i32, 12_i32,
+            13_i32, 14_i32, 15_i32, 16_i32
+        );
+
+        assert_eq!(matrix.c0r0, matrix[0][0]);
+        assert_eq!(matrix.c0r1, matrix[0][1]);
+        assert_eq!(matrix.c0r2, matrix[0][2]);
+        assert_eq!(matrix.c0r3, matrix[0][3]);
+        assert_eq!(matrix.c1r0, matrix[1][0]);
+        assert_eq!(matrix.c1r1, matrix[1][1]);
+        assert_eq!(matrix.c1r2, matrix[1][2]);
+        assert_eq!(matrix.c1r3, matrix[1][3]);
+        assert_eq!(matrix.c2r0, matrix[2][0]);
+        assert_eq!(matrix.c2r1, matrix[2][1]);
+        assert_eq!(matrix.c2r2, matrix[2][2]);
+        assert_eq!(matrix.c2r3, matrix[2][3]);
+        assert_eq!(matrix.c3r0, matrix[3][0]);
+        assert_eq!(matrix.c3r1, matrix[3][1]);
+        assert_eq!(matrix.c3r2, matrix[3][2]);
+        assert_eq!(matrix.c3r3, matrix[3][3]);
     }
 
     #[test]
@@ -2555,3 +2611,4 @@ mod matrix4_tests {
         assert_eq!(result, expected);
     }
 }
+

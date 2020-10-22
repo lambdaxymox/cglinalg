@@ -590,6 +590,7 @@ impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> where S: Scalar {
 impl_as_ref_ops!(Vector1<S>, S);
 impl_as_ref_ops!(Vector1<S>, (S,));
 impl_as_ref_ops!(Vector1<S>, [S; 1]);
+impl_as_ref_ops!(Vector1<S>, [[S; 1]; 1]);
 
 impl_vector_index_ops!(Vector1<S>, 1, usize, S);
 impl_vector_index_ops!(Vector1<S>, 1, Range<usize>, [S]);
@@ -1135,6 +1136,7 @@ impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
 
 impl_as_ref_ops!(Vector2<S>, (S, S));
 impl_as_ref_ops!(Vector2<S>, [S; 2]);
+impl_as_ref_ops!(Vector2<S>, [[S; 2]; 1]);
 
 impl_vector_index_ops!(Vector2<S>, 2, usize, S);
 impl_vector_index_ops!(Vector2<S>, 2, Range<usize>, [S]);
@@ -1758,6 +1760,7 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
 
 impl_as_ref_ops!(Vector3<S>, (S, S, S));
 impl_as_ref_ops!(Vector3<S>, [S; 3]);
+impl_as_ref_ops!(Vector3<S>, [[S; 3]; 1]);
 
 impl_vector_index_ops!(Vector3<S>, 3, usize, S);
 impl_vector_index_ops!(Vector3<S>, 3, Range<usize>, [S]);
@@ -2323,6 +2326,7 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
 
 impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
 impl_as_ref_ops!(Vector4<S>, [S; 4]);
+impl_as_ref_ops!(Vector4<S>, [[S; 4]; 1]);
 
 impl_vector_index_ops!(Vector4<S>, 4, usize, S);
 impl_vector_index_ops!(Vector4<S>, 4, Range<usize>, [S]);
