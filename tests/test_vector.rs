@@ -53,6 +53,13 @@ mod vector1_tests {
     }
 
     #[test]
+    fn test_coordinates() {
+        let vector = Vector1::new(1_i32);
+
+        assert_eq!(vector.x, vector[0]);
+    }
+
+    #[test]
     fn test_addition() {
         test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.v1.x + test.v2.x);
@@ -234,6 +241,14 @@ mod vector2_tests {
                 TestCase { c: 61.891390,   v1: Vector2::from((8827.1983, 56.31)), v2: Vector2::from((89.0, 936.5)),        }
             ]
         }
+    }
+
+    #[test]
+    fn test_coordinates() {
+        let vector = Vector2::new(1_i32, 2_i32);
+
+        assert_eq!(vector.x, vector[0]);
+        assert_eq!(vector.y, vector[1]);
     }
 
     #[test]
@@ -448,6 +463,15 @@ mod vector3_tests {
                 }
             ]
         }
+    }
+
+    #[test]
+    fn test_coordinates() {
+        let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+
+        assert_eq!(vector.x, vector[0]);
+        assert_eq!(vector.y, vector[1]);
+        assert_eq!(vector.z, vector[2]);
     }
 
     #[test]
@@ -676,6 +700,16 @@ mod vector4_tests {
                 }
             ]
         }
+    }
+
+    #[test]
+    fn test_coordinates() {
+        let vector = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(vector.x, vector[0]);
+        assert_eq!(vector.y, vector[1]);
+        assert_eq!(vector.z, vector[2]);
+        assert_eq!(vector.w, vector[3]);
     }
 
     #[test]
