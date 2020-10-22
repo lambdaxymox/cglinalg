@@ -1421,55 +1421,7 @@ impl_matrix_vector_mul_ops!(
     Matrix2x2, Vector2 => Vector2, dot_array2x2_col2,
     { (0, 0), (0, 1) }
 );
-/*
-impl<S> ops::Mul<Vector2<S>> for Matrix2x2<S> where S: Scalar {
-    type Output = Vector2<S>;
 
-    #[inline]
-    fn mul(self, other: Vector2<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1];
-
-        Vector2::new(x, y)
-    }
-}
-
-impl<S> ops::Mul<&Vector2<S>> for Matrix2x2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn mul(self, other: &Vector2<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1];
-
-        Vector2::new(x, y)
-    }
-}
-
-impl<S> ops::Mul<Vector2<S>> for &Matrix2x2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn mul(self, other: Vector2<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1];
-
-        Vector2::new(x, y)
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Vector2<S>> for &'b Matrix2x2<S> where S: Scalar {
-    type Output = Vector2<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Vector2<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1];
-
-        Vector2::new(x, y)
-    }
-}
-*/
 impl_matrix_matrix_binary_ops!(
     Add, add, 
     add_array2x2_array2x2, Matrix2x2<S>, Matrix2x2<S>, 
@@ -3579,59 +3531,7 @@ impl_matrix_vector_mul_ops!(
     Matrix3x3, Vector3 => Vector3, dot_array3x3_col3,
     { (0, 0), (0, 1), (0, 2) }
 );
-/*
-impl<S> ops::Mul<Vector3<S>> for Matrix3x3<S> where S: Scalar {
-    type Output = Vector3<S>;
 
-    #[inline]
-    fn mul(self, other: Vector3<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2];
-        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2];
-
-        Vector3::new(x, y, z)
-    }
-}
-
-impl<S> ops::Mul<&Vector3<S>> for Matrix3x3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn mul(self, other: &Vector3<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2];
-        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2];
-
-        Vector3::new(x, y, z)
-    }
-}
-
-impl<S> ops::Mul<Vector3<S>> for &Matrix3x3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn mul(self, other: Vector3<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2];
-        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2];
-
-        Vector3::new(x, y, z)
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Matrix3x3<S> where S: Scalar {
-    type Output = Vector3<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Vector3<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2];
-        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2];
-
-        Vector3::new(x, y, z)
-    }
-}
-*/
 impl_matrix_scalar_binary_ops!(
     Mul, mul, mul_array3x3_scalar, Matrix3x3<S>, Matrix3x3<S>, { 
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
@@ -5909,67 +5809,7 @@ impl_matrix_vector_mul_ops!(
     Matrix4x4, Vector4 => Vector4, dot_array4x4_col4,
     { (0, 0), (0, 1), (0, 2), (0, 3) }
 );
-/*
-impl<S> ops::Mul<Vector4<S>> for Matrix4x4<S> where S: Scalar {
-    type Output = Vector4<S>;
 
-    #[rustfmt::skip]
-    #[inline]
-    fn mul(self, other: Vector4<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2] + self.data[3][0] * other[3];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2] + self.data[3][1] * other[3];
-        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2] + self.data[3][2] * other[3];
-        let w = self.data[0][3] * other[0] + self.data[1][3] * other[1] + self.data[2][3] * other[2] + self.data[3][3] * other[3];
-        
-        Vector4::new(x, y, z, w)
-    }
-}
-
-impl<S> ops::Mul<&Vector4<S>> for Matrix4x4<S> where S: Scalar {
-    type Output = Vector4<S>;
-
-    #[rustfmt::skip]
-    #[inline]
-    fn mul(self, other: &Vector4<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2] + self.data[3][0] * other[3];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2] + self.data[3][1] * other[3];
-        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2] + self.data[3][2] * other[3];
-        let w = self.data[0][3] * other[0] + self.data[1][3] * other[1] + self.data[2][3] * other[2] + self.data[3][3] * other[3];
-        
-        Vector4::new(x, y, z, w)
-    }
-}
-
-impl<S> ops::Mul<Vector4<S>> for &Matrix4x4<S> where S: Scalar {
-    type Output = Vector4<S>;
-
-    #[rustfmt::skip]
-    #[inline]
-    fn mul(self, other: Vector4<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2] + self.data[3][0] * other[3];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2] + self.data[3][1] * other[3];
-        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2] + self.data[3][2] * other[3];
-        let w = self.data[0][3] * other[0] + self.data[1][3] * other[1] + self.data[2][3] * other[2] + self.data[3][3] * other[3];
-        
-        Vector4::new(x, y, z, w)
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Vector4<S>> for &'b Matrix4x4<S> where S: Scalar {
-    type Output = Vector4<S>;
-
-    #[rustfmt::skip]
-    #[inline]
-    fn mul(self, other: &'a Vector4<S>) -> Self::Output {
-        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2] + self.data[3][0] * other[3];
-        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2] + self.data[3][1] * other[3];
-        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2] + self.data[3][2] * other[3];
-        let w = self.data[0][3] * other[0] + self.data[1][3] * other[1] + self.data[2][3] * other[2] + self.data[3][3] * other[3];
-        
-        Vector4::new(x, y, z, w)
-    }
-}
-*/
 impl_matrix_scalar_binary_ops!(
     Mul, mul, mul_array4x4_scalar, Matrix4x4<S>, Matrix4x4<S>, { 
     (0, 0), (0, 1), (0, 2), (0, 3), 
