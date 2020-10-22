@@ -264,6 +264,54 @@ macro_rules! impl_matrix_matrix_mul_ops {
     }
 }
 
+macro_rules! impl_matrix_vector_mul_ops {
+    ($MatrixMxN:ident, $VectorM:ident => $Output:ident, $dot_arr_col:ident, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> ops::Mul<$VectorM<S>> for $MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: $VectorM<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, other.as_ref(), $row) ),*
+                )
+            }
+        }
+
+        impl<S> ops::Mul<&$VectorM<S>> for $MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: &$VectorM<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, other.as_ref(), $row) ),*
+                )
+            }
+        }
+
+        impl<S> ops::Mul<$VectorM<S>> for &$MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: $VectorM<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, other.as_ref(), $row) ),*
+                )
+            }
+        }
+
+        impl<'a, 'b, S> ops::Mul<&'a $VectorM<S>> for &'b $MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: &'a $VectorM<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, other.as_ref(), $row) ),*
+                )
+            }
+        }
+    }
+}
+
 macro_rules! impl_scalar_matrix_mul_ops {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
@@ -1369,7 +1417,11 @@ impl_matrix_matrix_mul_ops!(
     Matrix2x2, Matrix2x2 => Matrix2x2, dot_array2x2_col2,
     { (0, 0), (0, 1), (1, 0), (1, 1) }
 );
-
+impl_matrix_vector_mul_ops!(
+    Matrix2x2, Vector2 => Vector2, dot_array2x2_col2,
+    { (0, 0), (0, 1) }
+);
+/*
 impl<S> ops::Mul<Vector2<S>> for Matrix2x2<S> where S: Scalar {
     type Output = Vector2<S>;
 
@@ -1417,7 +1469,7 @@ impl<'a, 'b, S> ops::Mul<&'a Vector2<S>> for &'b Matrix2x2<S> where S: Scalar {
         Vector2::new(x, y)
     }
 }
-
+*/
 impl_matrix_matrix_binary_ops!(
     Add, add, 
     add_array2x2_array2x2, Matrix2x2<S>, Matrix2x2<S>, 
@@ -3523,7 +3575,11 @@ impl_matrix_matrix_mul_ops!(
     Matrix3x3, Matrix3x3 => Matrix3x3, dot_array3x3_col3, { 
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)
 });
-
+impl_matrix_vector_mul_ops!(
+    Matrix3x3, Vector3 => Vector3, dot_array3x3_col3,
+    { (0, 0), (0, 1), (0, 2) }
+);
+/*
 impl<S> ops::Mul<Vector3<S>> for Matrix3x3<S> where S: Scalar {
     type Output = Vector3<S>;
 
@@ -3575,7 +3631,7 @@ impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Matrix3x3<S> where S: Scalar {
         Vector3::new(x, y, z)
     }
 }
-
+*/
 impl_matrix_scalar_binary_ops!(
     Mul, mul, mul_array3x3_scalar, Matrix3x3<S>, Matrix3x3<S>, { 
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
@@ -5842,7 +5898,18 @@ impl_matrix_matrix_binary_ops!(
     (0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), 
     (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3) 
 });
-
+impl_matrix_matrix_mul_ops!(
+    Matrix4x4, Matrix4x4 => Matrix4x4, dot_array4x4_col4, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), 
+    (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_matrix_vector_mul_ops!(
+    Matrix4x4, Vector4 => Vector4, dot_array4x4_col4,
+    { (0, 0), (0, 1), (0, 2), (0, 3) }
+);
+/*
 impl<S> ops::Mul<Vector4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Vector4<S>;
 
@@ -5902,14 +5969,7 @@ impl<'a, 'b, S> ops::Mul<&'a Vector4<S>> for &'b Matrix4x4<S> where S: Scalar {
         Vector4::new(x, y, z, w)
     }
 }
-
-impl_matrix_matrix_mul_ops!(
-    Matrix4x4, Matrix4x4 => Matrix4x4, dot_array4x4_col4, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3), 
-    (2, 0), (2, 1), (2, 2), (2, 3), 
-    (3, 0), (3, 1), (3, 2), (3, 3) 
-});
+*/
 impl_matrix_scalar_binary_ops!(
     Mul, mul, mul_array4x4_scalar, Matrix4x4<S>, Matrix4x4<S>, { 
     (0, 0), (0, 1), (0, 2), (0, 3), 
@@ -5945,6 +6005,106 @@ impl_matrix_binary_assign_ops!(
     (2, 0), (2, 1), (2, 2), (2, 3), 
     (3, 0), (3, 1), (3, 2), (3, 3) 
 });
+
+impl_scalar_matrix_mul_ops!(
+    u8,    Matrix4x4<u8>,    Matrix4x4<u8>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    u16,   Matrix4x4<u16>,   Matrix4x4<u16>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    u32,   Matrix4x4<u32>,   Matrix4x4<u32>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    u64,   Matrix4x4<u64>,   Matrix4x4<u64>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    u128,  Matrix4x4<u128>,  Matrix4x4<u128>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    usize, Matrix4x4<usize>, Matrix4x4<usize>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    i8,    Matrix4x4<i8>,    Matrix4x4<i8>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    i16,   Matrix4x4<i16>,   Matrix4x4<i16>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    i32,   Matrix4x4<i32>,   Matrix4x4<i32>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    i64,   Matrix4x4<i64>,   Matrix4x4<i64>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    i128,  Matrix4x4<i128>,  Matrix4x4<i128>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    isize, Matrix4x4<isize>, Matrix4x4<isize>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    f32,   Matrix4x4<f32>,   Matrix4x4<f32>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops!(
+    f64,   Matrix4x4<f64>,   Matrix4x4<f64>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+
 
 impl<S> approx::AbsDiffEq for Matrix4x4<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -6056,103 +6216,4 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix4x4<S>> for Matrix4x4<S> {
         iter.fold(Matrix4x4::<S>::identity(), ops::Mul::mul)
     }
 }
-
-impl_scalar_matrix_mul_ops!(
-    u8,    Matrix4x4<u8>,    Matrix4x4<u8>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    u16,   Matrix4x4<u16>,   Matrix4x4<u16>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    u32,   Matrix4x4<u32>,   Matrix4x4<u32>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    u64,   Matrix4x4<u64>,   Matrix4x4<u64>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    u128,  Matrix4x4<u128>,  Matrix4x4<u128>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    usize, Matrix4x4<usize>, Matrix4x4<usize>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    i8,    Matrix4x4<i8>,    Matrix4x4<i8>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    i16,   Matrix4x4<i16>,   Matrix4x4<i16>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    i32,   Matrix4x4<i32>,   Matrix4x4<i32>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    i64,   Matrix4x4<i64>,   Matrix4x4<i64>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    i128,  Matrix4x4<i128>,  Matrix4x4<i128>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    isize, Matrix4x4<isize>, Matrix4x4<isize>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    f32,   Matrix4x4<f32>,   Matrix4x4<f32>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-impl_scalar_matrix_mul_ops!(
-    f64,   Matrix4x4<f64>,   Matrix4x4<f64>, { 
-        (0, 0), (0, 1), (0, 2), (0, 3), 
-        (1, 0), (1, 1), (1, 2), (1, 3), 
-        (2, 0), (2, 1), (2, 2), (2, 3), 
-        (3, 0), (3, 1), (3, 2), (3, 3) 
-});
 
