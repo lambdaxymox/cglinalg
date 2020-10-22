@@ -529,7 +529,7 @@ impl<S> Magnitude for Point1<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+        self.magnitude_squared().sqrt()
     }
 
     #[inline]
@@ -972,7 +972,7 @@ impl<S> Magnitude for Point2<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+        self.magnitude_squared().sqrt()
     }
 
     #[inline]
@@ -1409,7 +1409,7 @@ impl<S> Magnitude for Point3<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+        self.magnitude_squared().sqrt()
     }
 
     #[inline]

@@ -2262,7 +2262,7 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+        self.magnitude_squared().sqrt()
     }
 
     #[inline]

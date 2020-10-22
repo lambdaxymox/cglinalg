@@ -616,7 +616,6 @@ impl_scalar_vector_mul_ops!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     type Output = S;
 
-
     #[inline]
     fn magnitude_squared(&self) -> Self::Output {
         self.dot(self)
@@ -624,7 +623,7 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+        self.magnitude_squared().sqrt()
     }
     
     #[inline]
@@ -1169,7 +1168,7 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+        self.magnitude_squared().sqrt()
     }
 
     #[inline]
@@ -1798,7 +1797,7 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+        self.magnitude_squared().sqrt()
     }
 
     #[inline]
@@ -2352,7 +2351,7 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
 
     #[inline]
     fn magnitude(&self) -> Self::Output {
-        Self::Output::sqrt(self.magnitude_squared())
+        self.magnitude_squared().sqrt()
     }
 
     #[inline]
