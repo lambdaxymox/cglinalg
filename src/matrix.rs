@@ -93,6 +93,229 @@ macro_rules! impl_as_ref_ops {
     }
 }
 
+macro_rules! impl_matrix_scalar_binary_ops1 {
+    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> $OpType<S> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: S) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, other, $col, $row) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<S> for &$T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: S) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, other, $col, $row) ),* 
+                )
+            }
+        }
+    }
+}
+
+macro_rules! impl_matrix_matrix_binary_ops1 {
+    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> $OpType<$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<&$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &$T) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<$T> for &$T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
+                )
+            }
+        }
+
+        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &'a $T) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
+                )
+            }
+        }
+    }
+}
+
+macro_rules! impl_matrix_unary_ops1 {
+    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> $OpType for $T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, $col, $row) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType for &$T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( $op_impl(&self.data, $col, $row) ),* 
+                )
+            }
+        }
+    }
+}
+
+macro_rules! impl_matrix_binary_assign_ops1 {
+    ($T:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: $T) {
+                $( self.data[$col][$row] += other.data[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: &$T) {
+                $( self.data[$col][$row] += other.data[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: $T) {
+                $( self.data[$col][$row] -= other.data[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: &$T) {
+                $( self.data[$col][$row] -= other.data[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::MulAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn mul_assign(&mut self, other: S) {
+                $( self.data[$col][$row] *= other );*
+            }
+        }
+        
+        impl<S> ops::DivAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn div_assign(&mut self, other: S) {
+                $( self.data[$col][$row] /= other );*
+            }
+        }
+        
+        impl<S> ops::RemAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn rem_assign(&mut self, other: S) {
+                $( self.data[$col][$row] %= other );*
+            }
+        }
+    }
+}
+
+macro_rules! impl_matrix_matrix_mul_ops {
+    ($MatrixMxN:ident, $MatrixNxK:ident => $Output:ident, $dot_arr_col:ident, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> ops::Mul<$MatrixNxK<S>> for $MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: $MatrixNxK<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
+                )
+            }
+        }
+
+        impl<S> ops::Mul<&$MatrixNxK<S>> for $MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: &$MatrixNxK<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
+                )
+            }
+        }
+
+        impl<S> ops::Mul<$MatrixNxK<S>> for &$MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: $MatrixNxK<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
+                )
+            }
+        }
+
+        impl<'a, 'b, S> ops::Mul<&'a $MatrixNxK<S>> for &'b $MatrixMxN<S> where S: Scalar {
+            type Output = $Output<S>;
+
+            #[inline]
+            fn mul(self, other: &'a $MatrixNxK<S>) -> Self::Output {
+                Self::Output::new(
+                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
+                )
+            }
+        }
+    }
+}
+
+macro_rules! impl_scalar_matrix_mul_ops1 {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.data[$col][$row]),* )
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.data[$col][$row]),* )
+            }
+        }
+    }
+}
+
 
 /// A Type synonym for `Matrix2x2`.
 pub type Matrix2<S> = Matrix2x2<S>;
@@ -1175,186 +1398,6 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix2x2<S> {
     }
 }
 
-
-
-macro_rules! impl_matrix_matrix_binary_ops1 {
-    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> $OpType<$T> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: $T) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType<&$T> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: &$T) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType<$T> for &$T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: $T) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
-                )
-            }
-        }
-
-        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: &'a $T) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, &other.data, $col, $row) ),* 
-                )
-            }
-        }
-    }
-}
-
-macro_rules! impl_matrix_unary_ops1 {
-    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> $OpType for $T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, $col, $row) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType for &$T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, $col, $row) ),* 
-                )
-            }
-        }
-    }
-}
-
-macro_rules! impl_matrix_binary_assign_ops1 {
-    ($T:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: $T) {
-                $( self.data[$col][$row] += other.data[$col][$row] );*
-            }
-        }
-
-        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: &$T) {
-                $( self.data[$col][$row] += other.data[$col][$row] );*
-            }
-        }
-
-        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: $T) {
-                $( self.data[$col][$row] -= other.data[$col][$row] );*
-            }
-        }
-
-        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: &$T) {
-                $( self.data[$col][$row] -= other.data[$col][$row] );*
-            }
-        }
-
-        impl<S> ops::MulAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn mul_assign(&mut self, other: S) {
-                $( self.data[$col][$row] *= other );*
-            }
-        }
-        
-        impl<S> ops::DivAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn div_assign(&mut self, other: S) {
-                $( self.data[$col][$row] /= other );*
-            }
-        }
-        
-        impl<S> ops::RemAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn rem_assign(&mut self, other: S) {
-                $( self.data[$col][$row] %= other );*
-            }
-        }
-    }
-}
-
-
-
-
-macro_rules! impl_matrix_matrix_mul_ops {
-    ($MatrixMxN:ident, $MatrixNxK:ident => $Output:ident, $dot_arr_col:ident, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> ops::Mul<$MatrixNxK<S>> for $MatrixMxN<S> where S: Scalar {
-            type Output = $Output<S>;
-
-            #[inline]
-            fn mul(self, other: $MatrixNxK<S>) -> Self::Output {
-                Self::Output::new(
-                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
-                )
-            }
-        }
-
-        impl<S> ops::Mul<&$MatrixNxK<S>> for $MatrixMxN<S> where S: Scalar {
-            type Output = $Output<S>;
-
-            #[inline]
-            fn mul(self, other: &$MatrixNxK<S>) -> Self::Output {
-                Self::Output::new(
-                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
-                )
-            }
-        }
-
-        impl<S> ops::Mul<$MatrixNxK<S>> for &$MatrixMxN<S> where S: Scalar {
-            type Output = $Output<S>;
-
-            #[inline]
-            fn mul(self, other: $MatrixNxK<S>) -> Self::Output {
-                Self::Output::new(
-                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
-                )
-            }
-        }
-
-        impl<'a, 'b, S> ops::Mul<&'a $MatrixNxK<S>> for &'b $MatrixMxN<S> where S: Scalar {
-            type Output = $Output<S>;
-
-            #[inline]
-            fn mul(self, other: &'a $MatrixNxK<S>) -> Self::Output {
-                Self::Output::new(
-                    $( $dot_arr_col(&self.data, &other.data[$col], $row) ),*
-                )
-            }
-        }
-    }
-}
-
 impl_matrix_matrix_mul_ops!(
     Matrix2x2, Matrix2x2 => Matrix2x2, dot_array2x2_col2,
     { (0, 0), (0, 1), (1, 0), (1, 1) }
@@ -1408,32 +1451,6 @@ impl<'a, 'b, S> ops::Mul<&'a Vector2<S>> for &'b Matrix2x2<S> where S: Scalar {
     }
 }
 
-macro_rules! impl_matrix_scalar_binary_ops1 {
-    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> $OpType<S> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: S) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, other, $col, $row) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType<S> for &$T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: S) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, other, $col, $row) ),* 
-                )
-            }
-        }
-    }
-}
-
 impl_matrix_matrix_binary_ops1!(
     Add, add, 
     add_array2x2_array2x2, Matrix2x2<S>, Matrix2x2<S>, 
@@ -1464,29 +1481,6 @@ impl_matrix_scalar_binary_ops1!(
 impl_matrix_binary_assign_ops1!(
     Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) }
 );
-
-
-macro_rules! impl_scalar_matrix_mul_ops1 {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.data[$col][$row]),* )
-            }
-        }
-
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.data[$col][$row]),* )
-            }
-        }
-    }
-}
 
 impl_scalar_matrix_mul_ops1!(u8,    Matrix2x2<u8>,    Matrix2x2<u8>,    { (0, 0), (0, 1), (1, 0), (1, 1) });
 impl_scalar_matrix_mul_ops1!(u16,   Matrix2x2<u16>,   Matrix2x2<u16>,   { (0, 0), (0, 1), (1, 0), (1, 1) });
