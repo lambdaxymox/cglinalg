@@ -3529,8 +3529,6 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix3x3<S> {
     }
 }
 
-
-
 impl_matrix_matrix_binary_ops1!(
     Add, add, add_array3x3_array3x3, Matrix3x3<S>, Matrix3x3<S>, { 
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
@@ -5881,6 +5879,14 @@ impl<'a, 'b, S> ops::Mul<&'a Vector4<S>> for &'b Matrix4x4<S> where S: Scalar {
     }
 }
 
+impl_matrix_matrix_mul_ops!(
+    Matrix4x4, Matrix4x4 => Matrix4x4, dot_array4x4_col4, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+/*
 impl<S> ops::Mul<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     type Output = Matrix4x4<S>;
 
@@ -6020,7 +6026,7 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar 
         )
     }
 }
-
+*/
 impl_matrix_scalar_binary_ops1!(
     Mul, mul, mul_array4x4_scalar, Matrix4x4<S>, Matrix4x4<S>, { 
     (0, 0), (0, 1), (0, 2), (0, 3), 
