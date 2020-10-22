@@ -289,7 +289,7 @@ impl<S> fmt::Display for Translation2<S> where S: fmt::Display {
         write!(
             formatter, 
             "Translation2 [x={}, y={}]", 
-            self.vector.x, self.vector.y
+            self.vector[0], self.vector[1]
         )
     }
 }
@@ -649,7 +649,7 @@ impl<S> fmt::Display for Translation3<S> where S: fmt::Display {
         write!(
             formatter, 
             "Translation3 [x-{}, y={}, z={}]", 
-            self.vector.x, self.vector.y, self.vector.z
+            self.vector[0], self.vector[1], self.vector[2]
         )
     }
 }

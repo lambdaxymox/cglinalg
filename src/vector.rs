@@ -6,24 +6,29 @@ use crate::scalar::{
 use crate::magnitude::{
     Magnitude,
 };
+use crate::{
+    impl_coords,
+    impl_coords_deref,
+};
 use num_traits::{
     NumCast,
 };
 
 use core::fmt;
 use core::iter;
+use core::mem;
 use core::ops;
 use core::ops::*;
 
 
 macro_rules! impl_scalar_vector_mul_ops {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($index:expr),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
             type Output = $Output;
 
             #[inline]
             fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
+                <$Output>::new( $(self * other.data[$index]),* )
             }
         }
 
@@ -32,21 +37,21 @@ macro_rules! impl_scalar_vector_mul_ops {
 
             #[inline]
             fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
+                <$Output>::new( $(self * other.data[$index]),* )
             }
         }
     }
 }
 
 macro_rules! impl_vector_vector_binary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
         impl<S> $OpType<$T> for $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
             fn $op(self, other: $T) -> Self::Output {
                 Self::Output::new( 
-                    $( self.$field.$op(other.$field) ),* 
+                    $( self.data[$index].$op(other.data[$index]) ),* 
                 )
             }
         }
@@ -57,7 +62,7 @@ macro_rules! impl_vector_vector_binary_ops {
             #[inline]
             fn $op(self, other: &$T) -> Self::Output {
                 Self::Output::new( 
-                    $( self.$field.$op(other.$field) ),* 
+                    $( self.data[$index].$op(other.data[$index]) ),* 
                 )
             }
         }
@@ -68,7 +73,7 @@ macro_rules! impl_vector_vector_binary_ops {
             #[inline]
             fn $op(self, other: $T) -> Self::Output {
                 Self::Output::new( 
-                    $( self.$field.$op(other.$field) ),* 
+                    $( self.data[$index].$op(other.data[$index]) ),* 
                 )
             }
         }
@@ -79,7 +84,7 @@ macro_rules! impl_vector_vector_binary_ops {
             #[inline]
             fn $op(self, other: &'a $T) -> Self::Output {
                 Self::Output::new( 
-                    $( self.$field.$op(other.$field) ),* 
+                    $( self.data[$index].$op(other.data[$index]) ),* 
                 )
             }
         }
@@ -87,14 +92,14 @@ macro_rules! impl_vector_vector_binary_ops {
 }
 
 macro_rules! impl_vector_scalar_binary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
         impl<S> $OpType<S> for $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
             fn $op(self, other: S) -> Self::Output {
                 Self::Output::new( 
-                    $( self.$field.$op(other) ),* 
+                    $( self.data[$index].$op(other) ),* 
                 )
             }
         }
@@ -105,7 +110,7 @@ macro_rules! impl_vector_scalar_binary_ops {
             #[inline]
             fn $op(self, other: S) -> Self::Output {
                 Self::Output::new( 
-                    $( self.$field.$op(other) ),* 
+                    $( self.data[$index].$op(other) ),* 
                 )
             }
         }
@@ -113,14 +118,14 @@ macro_rules! impl_vector_scalar_binary_ops {
 }
 
 macro_rules! impl_vector_unary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
         impl<S> $OpType for $T where S: ScalarSigned {
             type Output = $Output;
 
             #[inline]
             fn $op(self) -> Self::Output {
                 Self::Output::new( 
-                    $( self.$field.$op() ),* 
+                    $( self.data[$index].$op() ),* 
                 )
             }
         }
@@ -131,7 +136,7 @@ macro_rules! impl_vector_unary_ops {
             #[inline]
             fn $op(self) -> Self::Output {
                 Self::Output::new( 
-                    $( self.$field.$op() ),* 
+                    $( self.data[$index].$op() ),* 
                 )
             }
         }
@@ -139,53 +144,53 @@ macro_rules! impl_vector_unary_ops {
 }
 
 macro_rules! impl_vector_binary_assign_ops {
-    ($T:ty, { $($field:ident),* }) => {
+    ($T:ty, { $($index:expr),* }) => {
         impl<S> ops::AddAssign<$T> for $T where S: Scalar {
             #[inline]
             fn add_assign(&mut self, other: $T) {
-                $(self.$field += other.$field);*
+                $(self.data[$index] += other.data[$index]);*
             }
         }
 
         impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
             #[inline]
             fn add_assign(&mut self, other: &$T) {
-                $(self.$field += other.$field);*
+                $(self.data[$index] += other.data[$index]);*
             }
         }
 
         impl<S> ops::SubAssign<$T> for $T where S: Scalar {
             #[inline]
             fn sub_assign(&mut self, other: $T) {
-                $(self.$field -= other.$field);*
+                $(self.data[$index] -= other.data[$index]);*
             }
         }
 
         impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
             #[inline]
             fn sub_assign(&mut self, other: &$T) {
-                $(self.$field -= other.$field);*
+                $(self.data[$index] -= other.data[$index]);*
             }
         }
 
         impl<S> ops::MulAssign<S> for $T where S: Scalar {
             #[inline]
             fn mul_assign(&mut self, other: S) {
-                $(self.$field *= other);*
+                $(self.data[$index] *= other);*
             }
         }
         
         impl<S> ops::DivAssign<S> for $T where S: Scalar {
             #[inline]
             fn div_assign(&mut self, other: S) {
-                $(self.$field /= other);*
+                $(self.data[$index] /= other);*
             }
         }
         
         impl<S> ops::RemAssign<S> for $T where S: Scalar {
             #[inline]
             fn rem_assign(&mut self, other: S) {
-                $(self.$field %= other);*
+                $(self.data[$index] %= other);*
             }
         }
     }
@@ -240,24 +245,18 @@ macro_rules! impl_as_ref_ops {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector1<S> {
-    pub x: S,
+    data: [S; 1],
 }
+
+impl_coords!(View1x1, { x });
+impl_coords_deref!(Vector1, View1x1);
 
 impl<S> Vector1<S> {
     /// Construct a new vector.
     #[inline]
     pub const fn new(x: S) -> Vector1<S> {
         Vector1 { 
-            x: x 
-        }
-    }
-
-    /// Map an operation on the elements of a vector, returning a vector of the 
-    /// new underlying type.
-    #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector1<T> where F: FnMut(S) -> T {
-        Vector1 { 
-            x: op(self.x) 
+            data: [x], 
         }
     }
 }
@@ -280,7 +279,7 @@ impl<S> Vector1<S> where S: NumCast + Copy {
     /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector1<T>> {
-        let x = match num_traits::cast(self.x) {
+        let x = match num_traits::cast(self.data[0]) {
             Some(value) => value,
             None => return None,
         };
@@ -309,7 +308,7 @@ impl<S> Vector1<S> where S: Copy {
     /// ```
     #[inline]
     pub fn expand(self, y: S) -> Vector2<S> {
-        Vector2::new(self.x, y)
+        Vector2::new(self.data[0], y)
     }
 
     /// Construct a vector from a fill value.
@@ -350,19 +349,26 @@ impl<S> Vector1<S> where S: Copy {
     /// Generate a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
-        &self.x
+        &self.data[0]
     }
 
     /// Generate a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.x
+        &mut self.data[0]
     }
 
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 1]>>::as_ref(self)
+    }
+
+    /// Map an operation on the elements of a vector, returning a vector of the 
+    /// new underlying type.
+    #[inline]
+    pub fn map<T, F>(self, mut op: F) -> Vector1<T> where F: FnMut(S) -> T {
+        Vector1::new(op(self.data[0]))
     }
 }
 
@@ -385,7 +391,7 @@ impl<S> Vector1<S> where S: Scalar {
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
-        self.x.is_zero()
+        self.data[0].is_zero()
     }
 
     /// Compute the coordinates of a vector in projective space.
@@ -427,7 +433,7 @@ impl<S> Vector1<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn dot(self, other: &Vector1<S>) -> S {
-        self.x * other.x
+        self.data[0] * other.data[0]
     }
 }
 
@@ -449,7 +455,7 @@ impl<S> Vector1<S> where S: ScalarSigned {
     /// ```
     #[inline]
     pub fn neg_mut(&mut self) {
-        self.x = -self.x;
+        self.data[0] = -self.data[0];
     }
 }
 
@@ -508,7 +514,7 @@ impl<S> Vector1<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
-        self.x.is_finite()
+        self.data[0].is_finite()
     }
 
     /// Compute the projection of the vector `self` onto the vector
@@ -536,7 +542,11 @@ impl<S> Vector1<S> where S: ScalarFloat {
 
 impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "Vector1 [{}]", self.x)
+        write!(
+            formatter, 
+            "Vector1 [{}]", 
+            self.data[0]
+        )
     }
 }
 
@@ -587,30 +597,30 @@ impl_vector_index_ops!(Vector1<S>, 1, RangeTo<usize>, [S]);
 impl_vector_index_ops!(Vector1<S>, 1, RangeFrom<usize>, [S]);
 impl_vector_index_ops!(Vector1<S>, 1, RangeFull, [S]);
 
-impl_vector_vector_binary_ops!(Add, add, Vector1<S>, Vector1<S>, { x });
-impl_vector_vector_binary_ops!(Sub, sub, Vector1<S>, Vector1<S>, { x });
-impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { x });
-impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { x });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { x });
+impl_vector_vector_binary_ops!(Add, add, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_vector_binary_ops!(Sub, sub, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { 0 });
 
-impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { x });
+impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { 0 });
 
-impl_vector_binary_assign_ops!(Vector1<S>, { x });
+impl_vector_binary_assign_ops!(Vector1<S>, { 0 });
 
-impl_scalar_vector_mul_ops!(u8,    Vector1<u8>,    Vector1<u8>,    { x });
-impl_scalar_vector_mul_ops!(u16,   Vector1<u16>,   Vector1<u16>,   { x });
-impl_scalar_vector_mul_ops!(u32,   Vector1<u32>,   Vector1<u32>,   { x });
-impl_scalar_vector_mul_ops!(u64,   Vector1<u64>,   Vector1<u64>,   { x });
-impl_scalar_vector_mul_ops!(u128,  Vector1<u128>,  Vector1<u128>,  { x });
-impl_scalar_vector_mul_ops!(usize, Vector1<usize>, Vector1<usize>, { x });
-impl_scalar_vector_mul_ops!(i8,    Vector1<i8>,    Vector1<i8>,    { x });
-impl_scalar_vector_mul_ops!(i16,   Vector1<i16>,   Vector1<i16>,   { x });
-impl_scalar_vector_mul_ops!(i32,   Vector1<i32>,   Vector1<i32>,   { x });
-impl_scalar_vector_mul_ops!(i64,   Vector1<i64>,   Vector1<i64>,   { x });
-impl_scalar_vector_mul_ops!(i128,  Vector1<i128>,  Vector1<i128>,  { x });
-impl_scalar_vector_mul_ops!(isize, Vector1<isize>, Vector1<isize>, { x });
-impl_scalar_vector_mul_ops!(f32,   Vector1<f32>,   Vector1<f32>,   { x });
-impl_scalar_vector_mul_ops!(f64,   Vector1<f64>,   Vector1<f64>,   { x });
+impl_scalar_vector_mul_ops!(u8,    Vector1<u8>,    Vector1<u8>,    { 0 });
+impl_scalar_vector_mul_ops!(u16,   Vector1<u16>,   Vector1<u16>,   { 0 });
+impl_scalar_vector_mul_ops!(u32,   Vector1<u32>,   Vector1<u32>,   { 0 });
+impl_scalar_vector_mul_ops!(u64,   Vector1<u64>,   Vector1<u64>,   { 0 });
+impl_scalar_vector_mul_ops!(u128,  Vector1<u128>,  Vector1<u128>,  { 0 });
+impl_scalar_vector_mul_ops!(usize, Vector1<usize>, Vector1<usize>, { 0 });
+impl_scalar_vector_mul_ops!(i8,    Vector1<i8>,    Vector1<i8>,    { 0 });
+impl_scalar_vector_mul_ops!(i16,   Vector1<i16>,   Vector1<i16>,   { 0 });
+impl_scalar_vector_mul_ops!(i32,   Vector1<i32>,   Vector1<i32>,   { 0 });
+impl_scalar_vector_mul_ops!(i64,   Vector1<i64>,   Vector1<i64>,   { 0 });
+impl_scalar_vector_mul_ops!(i128,  Vector1<i128>,  Vector1<i128>,  { 0 });
+impl_scalar_vector_mul_ops!(isize, Vector1<isize>, Vector1<isize>, { 0 });
+impl_scalar_vector_mul_ops!(f32,   Vector1<f32>,   Vector1<f32>,   { 0 });
+impl_scalar_vector_mul_ops!(f64,   Vector1<f64>,   Vector1<f64>,   { 0 });
 
 
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
@@ -668,7 +678,7 @@ impl<S> approx::AbsDiffEq for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.x, &other.x, epsilon)
+        S::abs_diff_eq(&self.data[0], &other.data[0], epsilon)
     }
 }
 
@@ -680,7 +690,7 @@ impl<S> approx::RelativeEq for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.x, &other.x, epsilon, max_relative)
+        S::relative_eq(&self.data[0], &other.data[0], epsilon, max_relative)
     }
 }
 
@@ -692,7 +702,7 @@ impl<S> approx::UlpsEq for Vector1<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
+        S::ulps_eq(&self.data[0], &other.data[0], epsilon, max_ulps)
     }
 }
 
@@ -715,29 +725,18 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector1<S>> for Vector1<S> {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector2<S> {
-    /// The horizontal component.
-    pub x: S,
-    /// The vertical component.
-    pub y: S,
+    data: [S; 2],
 }
+
+impl_coords!(View2x1, { x, y });
+impl_coords_deref!(Vector2, View2x1);
 
 impl<S> Vector2<S> {
     /// Construct a new vector.
     #[inline]
     pub const fn new(x: S, y: S) -> Vector2<S> {
         Vector2 { 
-            x: x, 
-            y: y 
-        }
-    }
-
-    /// Map an operation on the elements of a vector, returning a vector of the 
-    /// new underlying type.
-    #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector2<T> where F: FnMut(S) -> T {
-        Vector2 {
-            x: op(self.x),
-            y: op(self.y),
+            data: [x, y],
         }
     }
 }
@@ -760,11 +759,11 @@ impl<S> Vector2<S> where S: NumCast + Copy {
     /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector2<T>> {
-        let x = match num_traits::cast(self.x) {
+        let x = match num_traits::cast(self.data[0]) {
             Some(value) => value,
             None => return None,
         };
-        let y = match num_traits::cast(self.y) {
+        let y = match num_traits::cast(self.data[1]) {
             Some(value) => value,
             None => return None,
         };
@@ -793,7 +792,7 @@ impl<S> Vector2<S> where S: Copy {
     /// ```
     #[inline]
     pub fn expand(self, z: S) -> Vector3<S> {
-        Vector3::new(self.x, self.y, z)
+        Vector3::new(self.data[0], self.data[1], z)
     }
 
     /// Contract a two-dimensional vector to a one-dimensional vector by removing
@@ -815,7 +814,7 @@ impl<S> Vector2<S> where S: Copy {
     /// ```
     #[inline]
     pub fn contract(self) -> Vector1<S> {
-        Vector1::new(self.x)
+        Vector1::new(self.data[0])
     }
 
     /// Construct a vector from a fill value.
@@ -856,19 +855,26 @@ impl<S> Vector2<S> where S: Copy {
     /// Generate a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
-        &self.x
+        &self.data[0]
     }
 
     /// Generate a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.x
+        &mut self.data[0]
     }
 
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 2]>>::as_ref(self)
+    }
+
+    /// Map an operation on the elements of a vector, returning a vector of the 
+    /// new underlying type.
+    #[inline]
+    pub fn map<T, F>(self, mut op: F) -> Vector2<T> where F: FnMut(S) -> T {
+        Vector2::new(op(self.data[0]), op(self.data[1]))
     }
 }
 
@@ -898,7 +904,7 @@ impl<S> Vector2<S> where S: Scalar {
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
-        self.x.is_zero() && self.y.is_zero()
+        self.data[0].is_zero() && self.data[1].is_zero()
     }
 
     /// Compute the coordinates of a vector in projective space.
@@ -951,7 +957,7 @@ impl<S> Vector2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn from_homogeneous(&self) -> Option<Vector1<S>> {
-        if self.y.is_zero() {
+        if self.data[1].is_zero() {
             Some(self.contract())
         } else {
             None
@@ -974,7 +980,7 @@ impl<S> Vector2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn dot(self, other: &Vector2<S>) -> S {
-        self.x * other.x + self.y * other.y
+        self.data[0] * other.data[0] + self.data[1] * other.data[1]
     }
 }
 
@@ -996,8 +1002,8 @@ impl<S> Vector2<S> where S: ScalarSigned {
     /// ```
     #[inline]
     pub fn neg_mut(&mut self) {
-        self.x = -self.x;
-        self.y = -self.y;
+        self.data[0] = -self.data[0];
+        self.data[1] = -self.data[1];
     }
 }
 
@@ -1058,7 +1064,7 @@ impl<S> Vector2<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
-        self.x.is_finite() && self.y.is_finite()
+        self.data[0].is_finite() && self.data[1].is_finite()
     }
 
     /// Compute the projection of the vector `self` onto the vector
@@ -1089,7 +1095,11 @@ impl<S> Vector2<S> where S: ScalarFloat {
 
 impl<S> fmt::Display for Vector2<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "Vector2 [{}, {}]", self.x, self.y)
+        write!(
+            formatter, 
+            "Vector2 [{}, {}]", 
+            self.data[0], self.data[1]
+        )
     }
 }
 
@@ -1132,30 +1142,31 @@ impl_vector_index_ops!(Vector2<S>, 2, RangeTo<usize>, [S]);
 impl_vector_index_ops!(Vector2<S>, 2, RangeFrom<usize>, [S]);
 impl_vector_index_ops!(Vector2<S>, 2, RangeFull, [S]);
 
-impl_vector_vector_binary_ops!(Add, add, Vector2<S>, Vector2<S>, { x, y });
-impl_vector_vector_binary_ops!(Sub, sub, Vector2<S>, Vector2<S>, { x, y });
-impl_vector_scalar_binary_ops!(Mul, mul, Vector2<S>, Vector2<S>, { x, y });
-impl_vector_scalar_binary_ops!(Div, div, Vector2<S>, Vector2<S>, { x, y });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector2<S>, Vector2<S>, { x, y });
+impl_vector_vector_binary_ops!(Add, add, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_vector_binary_ops!(Sub, sub, Vector2<S>, Vector2<S>, { 0, 1 });
 
-impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { x, y });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_scalar_binary_ops!(Div, div, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector2<S>, Vector2<S>, { 0, 1 });
 
-impl_vector_binary_assign_ops!(Vector2<S>, { x, y });
+impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { 0, 1 });
 
-impl_scalar_vector_mul_ops!(u8,    Vector2<u8>,    Vector2<u8>,    { x, y });
-impl_scalar_vector_mul_ops!(u16,   Vector2<u16>,   Vector2<u16>,   { x, y });
-impl_scalar_vector_mul_ops!(u32,   Vector2<u32>,   Vector2<u32>,   { x, y });
-impl_scalar_vector_mul_ops!(u64,   Vector2<u64>,   Vector2<u64>,   { x, y });
-impl_scalar_vector_mul_ops!(u128,  Vector2<u128>,  Vector2<u128>,  { x, y });
-impl_scalar_vector_mul_ops!(usize, Vector2<usize>, Vector2<usize>, { x, y });
-impl_scalar_vector_mul_ops!(i8,    Vector2<i8>,    Vector2<i8>,    { x, y });
-impl_scalar_vector_mul_ops!(i16,   Vector2<i16>,   Vector2<i16>,   { x, y });
-impl_scalar_vector_mul_ops!(i32,   Vector2<i32>,   Vector2<i32>,   { x, y });
-impl_scalar_vector_mul_ops!(i64,   Vector2<i64>,   Vector2<i64>,   { x, y });
-impl_scalar_vector_mul_ops!(i128,  Vector2<i128>,  Vector2<i128>,  { x, y });
-impl_scalar_vector_mul_ops!(isize, Vector2<isize>, Vector2<isize>, { x, y });
-impl_scalar_vector_mul_ops!(f32,   Vector2<f32>,   Vector2<f32>,   { x, y });
-impl_scalar_vector_mul_ops!(f64,   Vector2<f64>,   Vector2<f64>,   { x, y });
+impl_vector_binary_assign_ops!(Vector2<S>, { 0, 1 });
+
+impl_scalar_vector_mul_ops!(u8,    Vector2<u8>,    Vector2<u8>,    { 0, 1 });
+impl_scalar_vector_mul_ops!(u16,   Vector2<u16>,   Vector2<u16>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u32,   Vector2<u32>,   Vector2<u32>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u64,   Vector2<u64>,   Vector2<u64>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u128,  Vector2<u128>,  Vector2<u128>,  { 0, 1 });
+impl_scalar_vector_mul_ops!(usize, Vector2<usize>, Vector2<usize>, { 0, 1 });
+impl_scalar_vector_mul_ops!(i8,    Vector2<i8>,    Vector2<i8>,    { 0, 1 });
+impl_scalar_vector_mul_ops!(i16,   Vector2<i16>,   Vector2<i16>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(i32,   Vector2<i32>,   Vector2<i32>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(i64,   Vector2<i64>,   Vector2<i64>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(i128,  Vector2<i128>,  Vector2<i128>,  { 0, 1 });
+impl_scalar_vector_mul_ops!(isize, Vector2<isize>, Vector2<isize>, { 0, 1 });
+impl_scalar_vector_mul_ops!(f32,   Vector2<f32>,   Vector2<f32>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(f64,   Vector2<f64>,   Vector2<f64>,   { 0, 1 });
 
 
 impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
@@ -1213,8 +1224,8 @@ impl<S> approx::AbsDiffEq for Vector2<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.x, &other.x, epsilon) && 
-        S::abs_diff_eq(&self.y, &other.y, epsilon)
+        S::abs_diff_eq(&self.data[0], &other.data[0], epsilon) && 
+        S::abs_diff_eq(&self.data[1], &other.data[1], epsilon)
     }
 }
 
@@ -1226,8 +1237,8 @@ impl<S> approx::RelativeEq for Vector2<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.x, &other.x, epsilon, max_relative) &&
-        S::relative_eq(&self.y, &other.y, epsilon, max_relative)
+        S::relative_eq(&self.data[0], &other.data[0], epsilon, max_relative) &&
+        S::relative_eq(&self.data[1], &other.data[1], epsilon, max_relative)
     }
 }
 
@@ -1239,8 +1250,8 @@ impl<S> approx::UlpsEq for Vector2<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
-        S::ulps_eq(&self.y, &other.y, epsilon, max_ulps)
+        S::ulps_eq(&self.data[0], &other.data[0], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[1], &other.data[1], epsilon, max_ulps)
     }
 }
 
@@ -1263,30 +1274,18 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector2<S>> for Vector2<S> {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector3<S> {
-    pub x: S,
-    pub y: S,
-    pub z: S,
+    data: [S; 3],
 }
+
+impl_coords!(View3x1, { x, y, z });
+impl_coords_deref!(Vector3, View3x1);
 
 impl<S> Vector3<S> {
     /// Construct a new vector.
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Vector3<S> {
         Vector3 { 
-            x: x, 
-            y: y, 
-            z: z 
-        }
-    }
-
-    /// Map an operation on the elements of a vector, returning a vector of the 
-    /// new underlying type.
-    #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector3<T> where F: FnMut(S) -> T {
-        Vector3 {
-            x: op(self.x),
-            y: op(self.y),
-            z: op(self.z),
+            data: [x, y, z],
         }
     }
 }
@@ -1309,15 +1308,15 @@ impl<S> Vector3<S> where S: NumCast + Copy {
     /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector3<T>> {
-        let x = match num_traits::cast(self.x) {
+        let x = match num_traits::cast(self.data[0]) {
             Some(value) => value,
             None => return None,
         };
-        let y = match num_traits::cast(self.y) {
+        let y = match num_traits::cast(self.data[1]) {
             Some(value) => value,
             None => return None,
         };
-        let z = match num_traits::cast(self.z) {
+        let z = match num_traits::cast(self.data[2]) {
             Some(value) => value,
             None => return None,
         };
@@ -1346,7 +1345,7 @@ impl<S> Vector3<S> where S: Copy {
     /// ```
     #[inline]
     pub fn expand(self, w: S) -> Vector4<S> {
-        Vector4::new(self.x, self.y, self.z, w)
+        Vector4::new(self.data[0], self.data[1], self.data[2], w)
     }
 
     /// Contract a three-dimensional vector to a two-dimensional vector
@@ -1368,7 +1367,7 @@ impl<S> Vector3<S> where S: Copy {
     /// ```
     #[inline]
     pub fn contract(self) -> Vector2<S> {
-        Vector2::new(self.x, self.y)
+        Vector2::new(self.data[0], self.data[1])
     }
 
     /// Construct a vector from a fill value.
@@ -1409,19 +1408,26 @@ impl<S> Vector3<S> where S: Copy {
     /// Generate a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
-        &self.x
+        &self.data[0]
     }
 
     /// Generate a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.x
+        &mut self.data[0]
     }
 
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 3]>>::as_ref(self)
+    }
+
+    /// Map an operation on the elements of a vector, returning a vector of the 
+    /// new underlying type.
+    #[inline]
+    pub fn map<T, F>(self, mut op: F) -> Vector3<T> where F: FnMut(S) -> T {
+        Vector3::new(op(self.data[0]), op(self.data[1]), op(self.data[2]))
     }
 }
 
@@ -1430,33 +1436,21 @@ impl<S> Vector3<S> where S: Scalar {
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector3<S> {
-        Vector3 { 
-            x: S::one(), 
-            y: S::zero(), 
-            z: S::zero(),
-        }
+        Vector3::new(S::one(), S::zero(), S::zero())
     }
 
     /// Returns the **y-axis** unit vector, a unit vector with the `y`-component
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_y() -> Vector3<S> {
-        Vector3 { 
-            x: S::zero(), 
-            y: S::one(), 
-            z: S::zero(),
-        }
+        Vector3::new(S::zero(), S::one(), S::zero())
     }
     
     /// Returns the **z-axis** unit vector, a unit vector with the `z`-component
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_z() -> Vector3<S> {
-        Vector3 { 
-            x: S::zero(),
-            y: S::zero(), 
-            z: S::one(),
-        }
+        Vector3::new(S::zero(), S::zero(), S::one())
     }
 
     /// Compute the zero vector.
@@ -1470,7 +1464,9 @@ impl<S> Vector3<S> where S: Scalar {
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
-        self.x.is_zero() && self.y.is_zero() && self.z.is_zero()
+        self.data[0].is_zero() && 
+        self.data[1].is_zero() && 
+        self.data[2].is_zero()
     }
 
     /// Compute the coordinates of a vector in projective space.
@@ -1523,7 +1519,7 @@ impl<S> Vector3<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn from_homogeneous(&self) -> Option<Vector2<S>> {
-        if self.z.is_zero() {
+        if self.data[2].is_zero() {
             Some(self.contract())
         } else {
             None
@@ -1546,7 +1542,9 @@ impl<S> Vector3<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn dot(self, other: &Vector3<S>) -> S {
-        self.x * other.x + self.y * other.y + self.z * other.z
+        self.data[0] * other.data[0] + 
+        self.data[1] * other.data[1] + 
+        self.data[2] * other.data[2]
     }
 }
 
@@ -1568,9 +1566,9 @@ impl<S> Vector3<S> where S: ScalarSigned {
     /// ```
     #[inline]
     pub fn neg_mut(&mut self) {
-        self.x = -self.x;
-        self.y = -self.y;
-        self.z = -self.z;
+        self.data[0] = -self.data[0];
+        self.data[1] = -self.data[1];
+        self.data[2] = -self.data[2];
     }
 
     /// Compute the cross product of two three-dimensional vectors. 
@@ -1605,9 +1603,9 @@ impl<S> Vector3<S> where S: ScalarSigned {
     /// ```
     #[inline]
     pub fn cross(&self, other: &Vector3<S>) -> Self {
-        let x = self.y * other.z - self.z * other.y;
-        let y = self.z * other.x - self.x * other.z;
-        let z = self.x * other.y - self.y * other.x;
+        let x = self.data[1] * other.data[2] - self.data[2] * other.data[1];
+        let y = self.data[2] * other.data[0] - self.data[0] * other.data[2];
+        let z = self.data[0] * other.data[1] - self.data[1] * other.data[0];
     
         Vector3::new(x, y, z)
     }
@@ -1668,7 +1666,9 @@ impl<S> Vector3<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
-        self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
+        self.data[0].is_finite() && 
+        self.data[1].is_finite() && 
+        self.data[2].is_finite()
     }
 
     /// Compute the projection of the vector `self` onto the vector
@@ -1702,7 +1702,11 @@ impl<S> Vector3<S> where S: ScalarFloat {
 
 impl<S> fmt::Display for Vector3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "Vector3 [{}, {}, {}]", self.x, self.y, self.z)
+        write!(
+            formatter, 
+            "Vector3 [{}, {}, {}]", 
+            self.data[0], self.data[1], self.data[2]
+        )
     }
 }
 
@@ -1723,14 +1727,14 @@ impl<S> From<[S; 3]> for Vector3<S> where S: Scalar {
 impl<S> From<Vector4<S>> for Vector3<S> where S: Scalar {
     #[inline]
     fn from(v: Vector4<S>) -> Vector3<S> {
-        Vector3::new(v.x, v.y, v.z)
+        Vector3::new(v.data[0], v.data[1], v.data[2])
     }
 }
 
 impl<S> From<&Vector4<S>> for Vector3<S> where S: Scalar {
     #[inline]
     fn from(v: &Vector4<S>) -> Vector3<S> {
-        Vector3::new(v.x, v.y, v.z)
+        Vector3::new(v.data[0], v.data[1], v.data[2])
     }
 }
 
@@ -1761,30 +1765,31 @@ impl_vector_index_ops!(Vector3<S>, 3, RangeTo<usize>, [S]);
 impl_vector_index_ops!(Vector3<S>, 3, RangeFrom<usize>, [S]);
 impl_vector_index_ops!(Vector3<S>, 3, RangeFull, [S]);
 
-impl_vector_vector_binary_ops!(Add, add, Vector3<S>, Vector3<S>, { x, y, z });
-impl_vector_vector_binary_ops!(Sub, sub, Vector3<S>, Vector3<S>, { x, y, z });
-impl_vector_scalar_binary_ops!(Mul, mul, Vector3<S>, Vector3<S>, { x, y, z });
-impl_vector_scalar_binary_ops!(Div, div, Vector3<S>, Vector3<S>, { x, y, z });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { x, y, z });
+impl_vector_vector_binary_ops!(Add, add, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_vector_binary_ops!(Sub, sub, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 
-impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { x, y, z });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_scalar_binary_ops!(Div, div, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 
-impl_vector_binary_assign_ops!(Vector3<S>, { x, y, z });
+impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 
-impl_scalar_vector_mul_ops!(u8,    Vector3<u8>,    Vector3<u8>,    { x, y, z });
-impl_scalar_vector_mul_ops!(u16,   Vector3<u16>,   Vector3<u16>,   { x, y, z });
-impl_scalar_vector_mul_ops!(u32,   Vector3<u32>,   Vector3<u32>,   { x, y, z });
-impl_scalar_vector_mul_ops!(u64,   Vector3<u64>,   Vector3<u64>,   { x, y, z });
-impl_scalar_vector_mul_ops!(u128,  Vector3<u128>,  Vector3<u128>,  { x, y, z });
-impl_scalar_vector_mul_ops!(usize, Vector3<usize>, Vector3<usize>, { x, y, z });
-impl_scalar_vector_mul_ops!(i8,    Vector3<i8>,    Vector3<i8>,    { x, y, z });
-impl_scalar_vector_mul_ops!(i16,   Vector3<i16>,   Vector3<i16>,   { x, y, z });
-impl_scalar_vector_mul_ops!(i32,   Vector3<i32>,   Vector3<i32>,   { x, y, z });
-impl_scalar_vector_mul_ops!(i64,   Vector3<i64>,   Vector3<i64>,   { x, y, z });
-impl_scalar_vector_mul_ops!(i128,  Vector3<i128>,  Vector3<i128>,  { x, y, z });
-impl_scalar_vector_mul_ops!(isize, Vector3<isize>, Vector3<isize>, { x, y, z });
-impl_scalar_vector_mul_ops!(f32,   Vector3<f32>,   Vector3<f32>,   { x, y, z });
-impl_scalar_vector_mul_ops!(f64,   Vector3<f64>,   Vector3<f64>,   { x, y, z });
+impl_vector_binary_assign_ops!(Vector3<S>, { 0, 1, 2 });
+
+impl_scalar_vector_mul_ops!(u8,    Vector3<u8>,    Vector3<u8>,    { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u16,   Vector3<u16>,   Vector3<u16>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u32,   Vector3<u32>,   Vector3<u32>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u64,   Vector3<u64>,   Vector3<u64>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u128,  Vector3<u128>,  Vector3<u128>,  { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(usize, Vector3<usize>, Vector3<usize>, { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i8,    Vector3<i8>,    Vector3<i8>,    { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i16,   Vector3<i16>,   Vector3<i16>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i32,   Vector3<i32>,   Vector3<i32>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i64,   Vector3<i64>,   Vector3<i64>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i128,  Vector3<i128>,  Vector3<i128>,  { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(isize, Vector3<isize>, Vector3<isize>, { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(f32,   Vector3<f32>,   Vector3<f32>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(f64,   Vector3<f64>,   Vector3<f64>,   { 0, 1, 2 });
 
 
 impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
@@ -1842,9 +1847,9 @@ impl<S> approx::AbsDiffEq for Vector3<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.x, &other.x, epsilon) && 
-        S::abs_diff_eq(&self.y, &other.y, epsilon) &&
-        S::abs_diff_eq(&self.z, &other.z, epsilon)
+        S::abs_diff_eq(&self.data[0], &other.data[0], epsilon) && 
+        S::abs_diff_eq(&self.data[1], &other.data[1], epsilon) &&
+        S::abs_diff_eq(&self.data[2], &other.data[2], epsilon)
     }
 }
 
@@ -1856,9 +1861,9 @@ impl<S> approx::RelativeEq for Vector3<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.x, &other.x, epsilon, max_relative) &&
-        S::relative_eq(&self.y, &other.y, epsilon, max_relative) &&
-        S::relative_eq(&self.z, &other.z, epsilon, max_relative)
+        S::relative_eq(&self.data[0], &other.data[0], epsilon, max_relative) &&
+        S::relative_eq(&self.data[1], &other.data[1], epsilon, max_relative) &&
+        S::relative_eq(&self.data[2], &other.data[2], epsilon, max_relative)
     }
 }
 
@@ -1870,9 +1875,9 @@ impl<S> approx::UlpsEq for Vector3<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
-        S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) &&
-        S::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
+        S::ulps_eq(&self.data[0], &other.data[0], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[1], &other.data[1], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[2], &other.data[2], epsilon, max_ulps)
     }
 }
 
@@ -1895,33 +1900,18 @@ impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector3<S>> for Vector3<S> {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector4<S> {
-    pub x: S,
-    pub y: S,
-    pub z: S,
-    pub w: S,
+    data: [S; 4],
 }
+
+impl_coords!(View4x1, { x, y, z, w });
+impl_coords_deref!(Vector4, View4x1);
 
 impl<S> Vector4<S> {
     /// Construct a new four-dimensional vector.
     #[inline]
     pub const fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
         Vector4 { 
-            x: x, 
-            y: y, 
-            z: z, 
-            w: w,
-        }
-    }
-
-    /// Map an operation on the elements of a vector, returning a vector of the 
-    /// new underlying type.
-    #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector4<T> where F: FnMut(S) -> T {
-        Vector4 {
-            x: op(self.x),
-            y: op(self.y),
-            z: op(self.z),
-            w: op(self.w),
+            data: [x, y, z, w],
         }
     }
 }
@@ -1946,7 +1936,7 @@ impl<S> Vector4<S> where S: Copy {
     /// ```
     #[inline]
     pub fn contract(self) -> Vector3<S> {
-        Vector3::new(self.x, self.y, self.z)
+        Vector3::new(self.data[0], self.data[1], self.data[2])
     }
 
     /// Construct a vector from a fill value.
@@ -1987,19 +1977,31 @@ impl<S> Vector4<S> where S: Copy {
     /// Generate a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
-        &self.x
+        &self.data[0]
     }
 
     /// Generate a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.x
+        &mut self.data[0]
     }
 
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 4]>>::as_ref(self)
+    }
+
+    /// Map an operation on the elements of a vector, returning a vector of the 
+    /// new underlying type.
+    #[inline]
+    pub fn map<T, F>(self, mut op: F) -> Vector4<T> where F: FnMut(S) -> T {
+        Vector4::new(
+            op(self.data[0]),
+            op(self.data[1]),
+            op(self.data[2]),
+            op(self.data[3]),
+        )
     }
 }
 
@@ -2021,19 +2023,19 @@ impl<S> Vector4<S> where S: NumCast + Copy {
     /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector4<T>> {
-        let x = match num_traits::cast(self.x) {
+        let x = match num_traits::cast(self.data[0]) {
             Some(value) => value,
             None => return None,
         };
-        let y = match num_traits::cast(self.y) {
+        let y = match num_traits::cast(self.data[1]) {
             Some(value) => value,
             None => return None,
         };
-        let z = match num_traits::cast(self.z) {
+        let z = match num_traits::cast(self.data[2]) {
             Some(value) => value,
             None => return None,
         };
-        let w = match num_traits::cast(self.w) {
+        let w = match num_traits::cast(self.data[3]) {
             Some(value) => value,
             None => return None,
         };
@@ -2082,7 +2084,10 @@ impl<S> Vector4<S> where S: Scalar {
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
-        self.x.is_zero() && self.y.is_zero() && self.z.is_zero() && self.w.is_zero()
+        self.data[0].is_zero() && 
+        self.data[1].is_zero() && 
+        self.data[2].is_zero() && 
+        self.data[3].is_zero()
     }
 
     /// Compute the coordinates of a projective vector in Euclidean space.
@@ -2112,7 +2117,7 @@ impl<S> Vector4<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn from_homogeneous(&self) -> Option<Vector3<S>> {
-        if self.w.is_zero() {
+        if self.data[3].is_zero() {
             Some(self.contract())
         } else {
             None
@@ -2135,7 +2140,10 @@ impl<S> Vector4<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn dot(self, other: &Vector4<S>) -> S {
-        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+        self.data[0] * other.data[0] + 
+        self.data[1] * other.data[1] + 
+        self.data[2] * other.data[2] + 
+        self.data[3] * other.data[3]
     }
 }
 
@@ -2157,10 +2165,10 @@ impl<S> Vector4<S> where S: ScalarSigned {
     /// ```
     #[inline]
     pub fn neg_mut(&mut self) {
-        self.x = -self.x;
-        self.y = -self.y;
-        self.z = -self.z;
-        self.w = -self.w;
+        self.data[0] = -self.data[0];
+        self.data[1] = -self.data[1];
+        self.data[2] = -self.data[2];
+        self.data[3] = -self.data[3];
     }
 }
 
@@ -2219,7 +2227,10 @@ impl<S> Vector4<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
-        self.x.is_finite() && self.y.is_finite() && self.z.is_finite() && self.w.is_finite()
+        self.data[0].is_finite() && 
+        self.data[1].is_finite() && 
+        self.data[2].is_finite() && 
+        self.data[3].is_finite()
     }
 
     /// Compute the projection of the vector `self` onto the vector
@@ -2256,7 +2267,11 @@ impl<S> Vector4<S> where S: ScalarFloat {
 
 impl<S> fmt::Display for Vector4<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "Vector4 [{}, {}, {}, {}]", self.x, self.y, self.z, self.w)
+        write!(
+            formatter, 
+            "Vector4 [{}, {}, {}, {}]", 
+            self.data[0], self.data[1], self.data[2], self.data[3]
+        )
     }
 }
 
@@ -2315,30 +2330,31 @@ impl_vector_index_ops!(Vector4<S>, 4, RangeTo<usize>, [S]);
 impl_vector_index_ops!(Vector4<S>, 4, RangeFrom<usize>, [S]);
 impl_vector_index_ops!(Vector4<S>, 4, RangeFull, [S]);
 
-impl_vector_vector_binary_ops!(Add, add, Vector4<S>, Vector4<S>, { x, y, z, w });
-impl_vector_vector_binary_ops!(Sub, sub, Vector4<S>, Vector4<S>, { x, y, z, w });
-impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { x, y, z, w });
-impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { x, y, z, w });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { x, y, z, w });
+impl_vector_vector_binary_ops!(Add, add, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+impl_vector_vector_binary_ops!(Sub, sub, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 
-impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { x, y, z, w });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 
-impl_vector_binary_assign_ops!(Vector4<S>, { x, y, z, w });
+impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 
-impl_scalar_vector_mul_ops!(u8,    Vector4<u8>,    Vector4<u8>,    { x, y, z, w });
-impl_scalar_vector_mul_ops!(u16,   Vector4<u16>,   Vector4<u16>,   { x, y, z, w });
-impl_scalar_vector_mul_ops!(u32,   Vector4<u32>,   Vector4<u32>,   { x, y, z, w });
-impl_scalar_vector_mul_ops!(u64,   Vector4<u64>,   Vector4<u64>,   { x, y, z, w });
-impl_scalar_vector_mul_ops!(u128,  Vector4<u128>,  Vector4<u128>,  { x, y, z, w });
-impl_scalar_vector_mul_ops!(usize, Vector4<usize>, Vector4<usize>, { x, y, z, w });
-impl_scalar_vector_mul_ops!(i8,    Vector4<i8>,    Vector4<i8>,    { x, y, z, w });
-impl_scalar_vector_mul_ops!(i16,   Vector4<i16>,   Vector4<i16>,   { x, y, z, w });
-impl_scalar_vector_mul_ops!(i32,   Vector4<i32>,   Vector4<i32>,   { x, y, z, w });
-impl_scalar_vector_mul_ops!(i64,   Vector4<i64>,   Vector4<i64>,   { x, y, z, w });
-impl_scalar_vector_mul_ops!(i128,  Vector4<i128>,  Vector4<i128>,  { x, y, z, w });
-impl_scalar_vector_mul_ops!(isize, Vector4<isize>, Vector4<isize>, { x, y, z, w });
-impl_scalar_vector_mul_ops!(f32,   Vector4<f32>,   Vector4<f32>,   { x, y, z, w });
-impl_scalar_vector_mul_ops!(f64,   Vector4<f64>,   Vector4<f64>,   { x, y, z, w });
+impl_vector_binary_assign_ops!(Vector4<S>, { 0, 1, 2, 3 });
+
+impl_scalar_vector_mul_ops!(u8,    Vector4<u8>,    Vector4<u8>,    { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(u16,   Vector4<u16>,   Vector4<u16>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(u32,   Vector4<u32>,   Vector4<u32>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(u64,   Vector4<u64>,   Vector4<u64>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(u128,  Vector4<u128>,  Vector4<u128>,  { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(usize, Vector4<usize>, Vector4<usize>, { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i8,    Vector4<i8>,    Vector4<i8>,    { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i16,   Vector4<i16>,   Vector4<i16>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i32,   Vector4<i32>,   Vector4<i32>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i64,   Vector4<i64>,   Vector4<i64>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i128,  Vector4<i128>,  Vector4<i128>,  { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(isize, Vector4<isize>, Vector4<isize>, { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(f32,   Vector4<f32>,   Vector4<f32>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(f64,   Vector4<f64>,   Vector4<f64>,   { 0, 1, 2, 3 });
 
 
 impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
@@ -2396,10 +2412,10 @@ impl<S> approx::AbsDiffEq for Vector4<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.x, &other.x, epsilon) && 
-        S::abs_diff_eq(&self.y, &other.y, epsilon) &&
-        S::abs_diff_eq(&self.z, &other.z, epsilon) &&
-        S::abs_diff_eq(&self.w, &other.w, epsilon)
+        S::abs_diff_eq(&self.data[0], &other.data[0], epsilon) && 
+        S::abs_diff_eq(&self.data[1], &other.data[1], epsilon) &&
+        S::abs_diff_eq(&self.data[2], &other.data[2], epsilon) &&
+        S::abs_diff_eq(&self.data[3], &other.data[3], epsilon)
     }
 }
 
@@ -2411,10 +2427,10 @@ impl<S> approx::RelativeEq for Vector4<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.x, &other.x, epsilon, max_relative) &&
-        S::relative_eq(&self.y, &other.y, epsilon, max_relative) &&
-        S::relative_eq(&self.z, &other.z, epsilon, max_relative) &&
-        S::relative_eq(&self.w, &other.w, epsilon, max_relative)
+        S::relative_eq(&self.data[0], &other.data[0], epsilon, max_relative) &&
+        S::relative_eq(&self.data[1], &other.data[1], epsilon, max_relative) &&
+        S::relative_eq(&self.data[2], &other.data[2], epsilon, max_relative) &&
+        S::relative_eq(&self.data[3], &other.data[3], epsilon, max_relative)
     }
 }
 
@@ -2426,10 +2442,10 @@ impl<S> approx::UlpsEq for Vector4<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps) &&
-        S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) &&
-        S::ulps_eq(&self.z, &other.z, epsilon, max_ulps) &&
-        S::ulps_eq(&self.w, &other.w, epsilon, max_ulps)
+        S::ulps_eq(&self.data[0], &other.data[0], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[1], &other.data[1], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[2], &other.data[2], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[3], &other.data[3], epsilon, max_ulps)
     }
 }
 

@@ -22,6 +22,10 @@ use crate::unit::{
     Unit,
 };
 use crate::array::*;
+use crate::{
+    impl_coords,
+    impl_coords_deref,
+};
 use approx::{
     ulps_eq,
     ulps_ne,
@@ -36,38 +40,6 @@ use core::ops;
 use core::iter;
 use core::mem;
 
-
-macro_rules! impl_coords {
-    ($T:ident, { $($comps: ident),* }) => {
-        #[repr(C)]
-        #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
-        pub struct $T<S: Copy> {
-            $(pub $comps: S),*
-        }
-    }
-}
-
-macro_rules! impl_coords_deref {
-    ($Source:ident, $Target:ident) => {
-        impl<S> Deref for $Source<S> where S: Copy
-        {
-            type Target = $Target<S>;
-
-            #[inline]
-            fn deref(&self) -> &Self::Target {
-                unsafe { mem::transmute(self.data.as_ptr()) }
-            }
-        }
-
-        impl<S> DerefMut for $Source<S> where S: Copy
-        {
-            #[inline]
-            fn deref_mut(&mut self) -> &mut Self::Target {
-                unsafe { mem::transmute(self.data.as_mut_ptr()) }
-            }
-        }
-    }
-}
 
 macro_rules! impl_as_ref_ops {
     ($MatrixType:ty, $RefType:ty) => {
@@ -335,6 +307,7 @@ pub struct Matrix2x2<S> {
 impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1 });
 impl_coords_deref!(Matrix2x2, View2x2);
 
+
 impl<S> Matrix2x2<S> {
     /// Construct a new 2x2 matrix from its field elements.
     #[inline]
@@ -345,15 +318,6 @@ impl<S> Matrix2x2<S> {
                 [c1r0, c1r1],
             ]
         }
-    }
-
-    /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
-    #[inline]
-    pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>) -> Matrix2x2<S> {
-        Matrix2x2::new(
-            c0.x, c0.y, 
-            c1.x, c1.y
-        )
     }
 }
 
@@ -453,6 +417,15 @@ impl<S> Matrix2x2<S> where S: Copy {
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 4]>>::as_ref(self)
+    }
+
+    /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
+    #[inline]
+    pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>) -> Matrix2x2<S> {
+        Matrix2x2::new(
+            c0[0], c0[1], 
+            c1[0], c1[1]
+        )
     }
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
@@ -1600,17 +1573,6 @@ impl<S> Matrix3x3<S> {
             ]
         }
     }
-
-    /// Create a 3x3 matrix from a triple of three-dimensional column vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3x3<S> {
-        Matrix3x3::new(
-            c0.x, c0.y, c0.z, 
-            c1.x, c1.y, c1.z,
-            c2.x, c2.y, c2.z,
-        )
-    }
 }
 
 impl<S> Matrix3x3<S> where S: Copy {
@@ -1721,6 +1683,17 @@ impl<S> Matrix3x3<S> where S: Copy {
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 9]>>::as_ref(self)
+    }
+
+    /// Create a 3x3 matrix from a triple of three-dimensional column vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_columns(c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3x3<S> {
+        Matrix3x3::new(
+            c0[0], c0[1], c0[2], 
+            c1[0], c1[1], c1[2],
+            c2[0], c2[1], c2[2],
+        )
     }
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
@@ -3626,7 +3599,6 @@ impl_matrix_unary_ops!(Neg, neg, neg_array3x3, Matrix3x3<S>, Matrix3x3<S>, {
 impl_matrix_binary_assign_ops!(Matrix3x3<S>, { 
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
 });
-
 impl_scalar_matrix_mul_ops!(u8,    Matrix3x3<u8>,    Matrix3x3<u8>,    { 
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
 });
@@ -3796,18 +3768,6 @@ impl<S> Matrix4x4<S> {
             ]
         }
     }
-
-    /// Construct a 4x4 matrix from column vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4x4<S> {
-        Matrix4x4::new(
-            c0.x, c0.y, c0.z, c0.w,
-            c1.x, c1.y, c1.z, c1.w,
-            c2.x, c2.y, c2.z, c2.w,
-            c3.x, c3.y, c3.z, c3.w,
-        )
-    }
 }
 
 impl<S> Matrix4x4<S> where S: Copy {
@@ -3926,6 +3886,18 @@ impl<S> Matrix4x4<S> where S: Copy {
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 16]>>::as_ref(self)
+    }
+
+    /// Construct a 4x4 matrix from column vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4x4<S> {
+        Matrix4x4::new(
+            c0[0], c0[1], c0[2], c0[3],
+            c1[0], c1[1], c1[2], c1[3],
+            c2[0], c2[1], c2[2], c2[3],
+            c3[0], c3[1], c3[2], c3[3],
+        )
     }
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 

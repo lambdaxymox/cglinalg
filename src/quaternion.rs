@@ -1948,7 +1948,7 @@ impl<S> fmt::Display for Quaternion<S> where S: fmt::Display {
         writeln!(
             formatter, 
             "Quaternion [s: {}, v: [{}, {}, {}]]", 
-            self.s, self.v.x, self.v.y, self.v.z
+            self.s, self.v[0], self.v[1], self.v[2]
         )
     }
 }

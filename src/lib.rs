@@ -101,6 +101,9 @@ extern crate approx;
 extern crate num_traits;
 
 
+mod array;
+mod coordinates;
+
 mod scalar;
 mod angle;
 mod euler;
@@ -120,9 +123,6 @@ mod shear;
 mod translation;
 mod transform;
 mod similarity;
-
-mod array;
-
 
 pub use angle::*;
 pub use euler::*;
