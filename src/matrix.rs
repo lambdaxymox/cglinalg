@@ -304,10 +304,6 @@ pub struct Matrix2x2<S> {
     data: [[S; 2]; 2],
 }
 
-impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1 });
-impl_coords_deref!(Matrix2x2, View2x2);
-
-
 impl<S> Matrix2x2<S> {
     /// Construct a new 2x2 matrix from its field elements.
     #[inline]
@@ -1328,6 +1324,8 @@ impl<'a, S> From<&'a [S; 4]> for &'a Matrix2x2<S> where S: Scalar {
     }
 }
 
+impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1 });
+impl_coords_deref!(Matrix2x2, View2x2);
 
 impl_as_ref_ops!(Matrix2x2<S>, [S; 4]);
 impl_as_ref_ops!(Matrix2x2<S>, [[S; 2]; 2]);
@@ -1552,9 +1550,6 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix2x2<S>> for Matrix2x2<S> {
 pub struct Matrix3x3<S> {
     data: [[S; 3]; 3],
 }
-
-impl_coords!(View3x3, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_coords_deref!(Matrix3x3, View3x3);
 
 impl<S> Matrix3x3<S> {
     /// Construct a new 3x3 matrix.
@@ -3475,6 +3470,9 @@ impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
     }
 }
 
+impl_coords!(View3x3, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_coords_deref!(Matrix3x3, View3x3);
+
 impl_as_ref_ops!(Matrix3x3<S>, [S; 9]);
 impl_as_ref_ops!(Matrix3x3<S>, [[S; 3]; 3]);
 impl_as_ref_ops!(Matrix3x3<S>, [Vector3<S>; 3]);
@@ -3740,14 +3738,6 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix3x3<S>> for Matrix3x3<S> {
 pub struct Matrix4x4<S> {
     data: [[S; 4]; 4],
 }
-
-impl_coords!(View4x4, { 
-    c0r0, c0r1, c0r2, c0r3, 
-    c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, 
-    c3r0, c3r1, c3r2, c3r3 
-});
-impl_coords_deref!(Matrix4x4, View4x4);
 
 impl<S> Matrix4x4<S> {
     /// Construct a new 4x4 matrix.
@@ -5796,6 +5786,14 @@ impl<S> From<&Matrix3x3<S>> for Matrix4x4<S> where S: Scalar {
         )
     }
 }
+
+impl_coords!(View4x4, { 
+    c0r0, c0r1, c0r2, c0r3, 
+    c1r0, c1r1, c1r2, c1r3, 
+    c2r0, c2r1, c2r2, c2r3, 
+    c3r0, c3r1, c3r2, c3r3 
+});
+impl_coords_deref!(Matrix4x4, View4x4);
 
 impl_as_ref_ops!(Matrix4x4<S>, [S; 16]);
 impl_as_ref_ops!(Matrix4x4<S>, [[S; 4]; 4]);
