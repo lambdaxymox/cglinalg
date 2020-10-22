@@ -3908,15 +3908,16 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix3x3<S>> for Matrix3x3<S> {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Matrix4x4<S> {
-    /// Column 0 of the matrix.
-    pub c0r0: S, pub c0r1: S, pub c0r2: S, pub c0r3: S,
-    /// Column 1 of the matrix.
-    pub c1r0: S, pub c1r1: S, pub c1r2: S, pub c1r3: S,
-    /// Column 2 of the matrix.
-    pub c2r0: S, pub c2r1: S, pub c2r2: S, pub c2r3: S,
-    /// Column 3 of the matrix.
-    pub c3r0: S, pub c3r1: S, pub c3r2: S, pub c3r3: S,
+    data: [[S; 4]; 4],
 }
+
+impl_coords!(View4x4, { 
+    c0r0, c0r1, c0r2, c0r3, 
+    c1r0, c1r1, c1r2, c1r3, 
+    c2r0, c2r1, c2r2, c2r3, 
+    c3r0, c3r1, c3r2, c3r3 
+});
+impl_coords_deref!(Matrix4x4, View4x4);
 
 impl<S> Matrix4x4<S> {
     /// Construct a new 4x4 matrix.
@@ -3929,10 +3930,12 @@ impl<S> Matrix4x4<S> {
         c3r0: S, c3r1: S, c3r2: S, c3r3: S) -> Matrix4x4<S> {
 
         Matrix4x4 {
-            c0r0: c0r0, c0r1: c0r1, c0r2: c0r2, c0r3: c0r3,
-            c1r0: c1r0, c1r1: c1r1, c1r2: c1r2, c1r3: c1r3,
-            c2r0: c2r0, c2r1: c2r1, c2r2: c2r2, c2r3: c2r3,
-            c3r0: c3r0, c3r1: c3r1, c3r2: c3r2, c3r3: c3r3,
+            data: [
+                [c0r0, c0r1, c0r2, c0r3],
+                [c1r0, c1r1, c1r2, c1r3],
+                [c2r0, c2r1, c2r2, c2r3],
+                [c3r0, c3r1, c3r2, c3r3],
+            ]
         }
     }
 
@@ -3940,12 +3943,12 @@ impl<S> Matrix4x4<S> {
     #[rustfmt::skip]
     #[inline]
     pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4x4<S> {
-        Matrix4x4 {
-            c0r0: c0.x, c0r1: c0.y, c0r2: c0.z, c0r3: c0.w,
-            c1r0: c1.x, c1r1: c1.y, c1r2: c1.z, c1r3: c1.w,
-            c2r0: c2.x, c2r1: c2.y, c2r2: c2.z, c2r3: c2.w,
-            c3r0: c3.x, c3r1: c3.y, c3r2: c3.z, c3r3: c3.w,
-        }
+        Matrix4x4::new(
+            c0.x, c0.y, c0.z, c0.w,
+            c1.x, c1.y, c1.z, c1.w,
+            c2.x, c2.y, c2.z, c2.w,
+            c3.x, c3.y, c3.z, c3.w,
+        )
     }
 }
 
@@ -4052,13 +4055,13 @@ impl<S> Matrix4x4<S> where S: Copy {
     /// Generate a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
-        &self.c0r0
+        &self.data[0][0]
     }
 
     /// Generate a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.c0r0
+        &mut self.data[0][0]
     }
 
     /// Get a slice of the underlying elements of the data type.
@@ -4072,12 +4075,12 @@ impl<S> Matrix4x4<S> where S: Copy {
     #[rustfmt::skip]
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> where F: FnMut(S) -> T {
-        Matrix4x4 {
-            c0r0: op(self.c0r0), c1r0: op(self.c1r0), c2r0: op(self.c2r0), c3r0: op(self.c3r0),
-            c0r1: op(self.c0r1), c1r1: op(self.c1r1), c2r1: op(self.c2r1), c3r1: op(self.c3r1),
-            c0r2: op(self.c0r2), c1r2: op(self.c1r2), c2r2: op(self.c2r2), c3r2: op(self.c3r2),
-            c0r3: op(self.c0r3), c1r3: op(self.c1r3), c2r3: op(self.c2r3), c3r3: op(self.c3r3),
-        }
+        Matrix4x4::new(
+            op(self.data[0][0]), op(self.data[0][1]), op(self.data[0][2]), op(self.data[0][3]),
+            op(self.data[1][0]), op(self.data[1][1]), op(self.data[1][2]), op(self.data[3][1]),
+            op(self.data[2][0]), op(self.data[2][1]), op(self.data[2][2]), op(self.data[2][3]),
+            op(self.data[3][0]), op(self.data[3][1]), op(self.data[3][2]), op(self.data[3][3]),
+        )
     }
 }
 
@@ -4110,67 +4113,67 @@ impl<S> Matrix4x4<S> where S: NumCast + Copy {
     #[rustfmt::skip]
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix4x4<T>> {
-        let c0r0 = match num_traits::cast(self.c0r0) {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
             Some(value) => value,
             None => return None,
         };
-        let c0r1 = match num_traits::cast(self.c0r1) {
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
             Some(value) => value,
             None => return None,
         };
-        let c0r2 = match num_traits::cast(self.c0r2) {
+        let c0r2 = match num_traits::cast(self.data[0][2]) {
             Some(value) => value,
             None => return None,
         };
-        let c0r3 = match num_traits::cast(self.c0r3) {
+        let c0r3 = match num_traits::cast(self.data[0][3]) {
             Some(value) => value,
             None => return None,
         };
-        let c1r0 = match num_traits::cast(self.c1r0) {
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
             Some(value) => value,
             None => return None,
         };
-        let c1r1 = match num_traits::cast(self.c1r1) {
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
             Some(value) => value,
             None => return None,
         };
-        let c1r2 = match num_traits::cast(self.c1r2) {
+        let c1r2 = match num_traits::cast(self.data[1][2]) {
             Some(value) => value,
             None => return None,
         };
-        let c1r3 = match num_traits::cast(self.c1r3) {
+        let c1r3 = match num_traits::cast(self.data[1][3]) {
             Some(value) => value,
             None => return None,
         };
-        let c2r0 = match num_traits::cast(self.c2r0) {
+        let c2r0 = match num_traits::cast(self.data[2][0]) {
             Some(value) => value,
             None => return None,
         };
-        let c2r1 = match num_traits::cast(self.c2r1) {
+        let c2r1 = match num_traits::cast(self.data[2][1]) {
             Some(value) => value,
             None => return None,
         };
-        let c2r2 = match num_traits::cast(self.c2r2) {
+        let c2r2 = match num_traits::cast(self.data[2][2]) {
             Some(value) => value,
             None => return None,
         };
-        let c2r3 = match num_traits::cast(self.c2r3) {
+        let c2r3 = match num_traits::cast(self.data[2][3]) {
             Some(value) => value,
             None => return None,
         };
-        let c3r0 = match num_traits::cast(self.c3r0) {
+        let c3r0 = match num_traits::cast(self.data[3][0]) {
             Some(value) => value,
             None => return None,
         };
-        let c3r1 = match num_traits::cast(self.c3r1) {
+        let c3r1 = match num_traits::cast(self.data[3][1]) {
             Some(value) => value,
             None => return None,
         };
-        let c3r2 = match num_traits::cast(self.c3r2) {
+        let c3r2 = match num_traits::cast(self.data[3][2]) {
             Some(value) => value,
             None => return None,
         };
-        let c3r3 = match num_traits::cast(self.c3r3) {
+        let c3r3 = match num_traits::cast(self.data[3][3]) {
             Some(value) => value,
             None => return None,
         };
@@ -4588,10 +4591,10 @@ impl<S> Matrix4x4<S> where S: Scalar {
     #[inline]
     pub fn transpose(&self) -> Matrix4x4<S> {
         Matrix4x4::new(
-            self.c0r0, self.c1r0, self.c2r0, self.c3r0,
-            self.c0r1, self.c1r1, self.c2r1, self.c3r1, 
-            self.c0r2, self.c1r2, self.c2r2, self.c3r2, 
-            self.c0r3, self.c1r3, self.c2r3, self.c3r3
+            self.data[0][0], self.data[1][0], self.data[2][0], self.data[3][0],
+            self.data[0][1], self.data[1][1], self.data[2][1], self.data[3][1], 
+            self.data[0][2], self.data[1][2], self.data[2][2], self.data[3][2], 
+            self.data[0][3], self.data[1][3], self.data[2][3], self.data[3][3]
         )
     }
 
@@ -4639,14 +4642,14 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
-        self.c0r0.is_zero() && self.c0r1.is_zero() && 
-        self.c0r2.is_zero() && self.c0r3.is_zero() &&
-        self.c1r0.is_zero() && self.c1r1.is_zero() && 
-        self.c1r2.is_zero() && self.c1r3.is_zero() &&
-        self.c2r0.is_zero() && self.c2r1.is_zero() && 
-        self.c2r2.is_zero() && self.c2r3.is_zero() &&
-        self.c3r0.is_zero() && self.c3r1.is_zero() && 
-        self.c3r2.is_zero() && self.c3r3.is_zero()
+        self.data[0][0].is_zero() && self.data[0][1].is_zero() && 
+        self.data[0][2].is_zero() && self.data[0][3].is_zero() &&
+        self.data[1][0].is_zero() && self.data[1][1].is_zero() && 
+        self.data[1][2].is_zero() && self.data[1][3].is_zero() &&
+        self.data[2][0].is_zero() && self.data[2][1].is_zero() && 
+        self.data[2][2].is_zero() && self.data[2][3].is_zero() &&
+        self.data[3][0].is_zero() && self.data[3][1].is_zero() && 
+        self.data[3][2].is_zero() && self.data[3][3].is_zero()
     }
     
     /// Compute an identity matrix.
@@ -4703,10 +4706,10 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn is_identity(&self) -> bool {
-        self.c0r0.is_one()  && self.c0r1.is_zero() && self.c0r2.is_zero() && self.c0r3.is_zero() &&
-        self.c1r0.is_zero() && self.c1r1.is_one()  && self.c1r2.is_zero() && self.c1r3.is_zero() &&
-        self.c2r0.is_zero() && self.c2r1.is_zero() && self.c2r2.is_one()  && self.c2r3.is_zero() &&
-        self.c3r0.is_zero() && self.c3r1.is_zero() && self.c3r2.is_zero() && self.c3r3.is_one()
+        self.data[0][0].is_one()  && self.data[0][1].is_zero() && self.data[0][2].is_zero() && self.data[0][3].is_zero() &&
+        self.data[1][0].is_zero() && self.data[1][1].is_one()  && self.data[1][2].is_zero() && self.data[1][3].is_zero() &&
+        self.data[2][0].is_zero() && self.data[2][1].is_zero() && self.data[2][2].is_one()  && self.data[2][3].is_zero() &&
+        self.data[3][0].is_zero() && self.data[3][1].is_zero() && self.data[3][2].is_zero() && self.data[3][3].is_one()
     }
 
     /// Construct a new diagonal matrix from a given value where
@@ -4797,7 +4800,12 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn diagonal(&self) -> Vector4<S> {
-        Vector4::new(self.c0r0, self.c1r1, self.c2r2, self.c3r3)
+        Vector4::new(
+            self.data[0][0], 
+            self.data[1][1], 
+            self.data[2][2], 
+            self.data[3][3]
+        )
     }
 
     /// Compute the trace of a square matrix.
@@ -4822,7 +4830,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn trace(&self) -> S {
-        self.c0r0 + self.c1r1 + self.c2r2 + self.c3r3
+        self.data[0][0] + self.data[1][1] + self.data[2][2] + self.data[3][3]
     }
 }
 
@@ -4973,22 +4981,22 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     /// ```
     #[inline]
     pub fn neg_mut(&mut self) {
-        self.c0r0 = -self.c0r0;
-        self.c0r1 = -self.c0r1;
-        self.c0r2 = -self.c0r2;
-        self.c0r3 = -self.c0r3;
-        self.c1r0 = -self.c1r0;
-        self.c1r1 = -self.c1r1;
-        self.c1r2 = -self.c1r2;
-        self.c1r3 = -self.c1r3;
-        self.c2r0 = -self.c2r0;
-        self.c2r1 = -self.c2r1;
-        self.c2r2 = -self.c2r2;
-        self.c2r3 = -self.c2r3;
-        self.c3r0 = -self.c3r0;
-        self.c3r1 = -self.c3r1;
-        self.c3r2 = -self.c3r2;
-        self.c3r3 = -self.c3r3;
+        self.data[0][0] = -self.data[0][0];
+        self.data[0][1] = -self.data[0][1];
+        self.data[0][2] = -self.data[0][2];
+        self.data[0][3] = -self.data[0][3];
+        self.data[1][0] = -self.data[1][0];
+        self.data[1][1] = -self.data[1][1];
+        self.data[1][2] = -self.data[1][2];
+        self.data[1][3] = -self.data[1][3];
+        self.data[2][0] = -self.data[2][0];
+        self.data[2][1] = -self.data[2][1];
+        self.data[2][2] = -self.data[2][2];
+        self.data[2][3] = -self.data[2][3];
+        self.data[3][0] = -self.data[3][0];
+        self.data[3][1] = -self.data[3][1];
+        self.data[3][2] = -self.data[3][2];
+        self.data[3][3] = -self.data[3][3];
     }
 
     /// Compute the determinant of a matrix.
@@ -5015,6 +5023,7 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     #[rustfmt::skip]
     #[inline]
     pub fn determinant(&self) -> S {
+        /*
         self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
         self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
         self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
@@ -5039,6 +5048,31 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
         self.c3r0 * self.c1r1 * self.c0r3 * self.c2r2 -
         self.c3r0 * self.c2r1 * self.c0r2 * self.c1r3 +
         self.c3r0 * self.c2r1 * self.c0r3 * self.c1r2
+        */
+        self.data[0][0] * self.data[1][1] * self.data[2][2] * self.data[3][3] -
+        self.data[0][0] * self.data[1][1] * self.data[2][3] * self.data[3][2] -
+        self.data[0][0] * self.data[2][1] * self.data[1][2] * self.data[3][3] +
+        self.data[0][0] * self.data[2][1] * self.data[1][3] * self.data[3][2] +
+        self.data[0][0] * self.data[3][1] * self.data[1][2] * self.data[2][3] -
+        self.data[0][0] * self.data[3][1] * self.data[1][3] * self.data[2][2] -
+        self.data[1][0] * self.data[0][1] * self.data[2][2] * self.data[3][3] +
+        self.data[1][0] * self.data[0][1] * self.data[2][3] * self.data[3][2] +
+        self.data[1][0] * self.data[2][1] * self.data[0][2] * self.data[3][3] -
+        self.data[1][0] * self.data[2][1] * self.data[0][3] * self.data[3][2] -
+        self.data[1][0] * self.data[3][1] * self.data[0][2] * self.data[2][3] +
+        self.data[1][0] * self.data[3][1] * self.data[0][3] * self.data[2][2] +
+        self.data[2][0] * self.data[0][1] * self.data[1][2] * self.data[3][3] -
+        self.data[2][0] * self.data[0][1] * self.data[1][3] * self.data[3][2] -
+        self.data[2][0] * self.data[1][1] * self.data[0][2] * self.data[3][3] +
+        self.data[2][0] * self.data[1][1] * self.data[0][3] * self.data[3][2] +
+        self.data[2][0] * self.data[3][1] * self.data[0][2] * self.data[1][3] -
+        self.data[2][0] * self.data[3][1] * self.data[0][3] * self.data[1][2] -
+        self.data[3][0] * self.data[0][1] * self.data[1][2] * self.data[2][3] +
+        self.data[3][0] * self.data[0][1] * self.data[1][3] * self.data[2][2] +
+        self.data[3][0] * self.data[1][1] * self.data[0][2] * self.data[2][3] -
+        self.data[3][0] * self.data[1][1] * self.data[0][3] * self.data[2][2] -
+        self.data[3][0] * self.data[2][1] * self.data[0][2] * self.data[1][3] +
+        self.data[3][0] * self.data[2][1] * self.data[0][3] * self.data[1][2]
     }
 }
 
@@ -5653,14 +5687,14 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
-        self.c0r0.is_finite() && self.c0r1.is_finite() && 
-        self.c0r2.is_finite() && self.c0r3.is_finite() &&
-        self.c1r0.is_finite() && self.c1r1.is_finite() && 
-        self.c1r2.is_finite() && self.c1r3.is_finite() &&
-        self.c2r0.is_finite() && self.c2r1.is_finite() && 
-        self.c2r2.is_finite() && self.c2r3.is_finite() &&
-        self.c3r0.is_finite() && self.c3r1.is_finite() &&
-        self.c3r2.is_finite() && self.c3r3.is_finite()
+        self.data[0][0].is_finite() && self.data[0][1].is_finite() && 
+        self.data[0][2].is_finite() && self.data[0][3].is_finite() &&
+        self.data[1][0].is_finite() && self.data[1][1].is_finite() && 
+        self.data[1][2].is_finite() && self.data[1][3].is_finite() &&
+        self.data[2][0].is_finite() && self.data[2][1].is_finite() && 
+        self.data[2][2].is_finite() && self.data[2][3].is_finite() &&
+        self.data[3][0].is_finite() && self.data[3][1].is_finite() &&
+        self.data[3][2].is_finite() && self.data[3][3].is_finite()
     }
 
     /// Compute the inverse of a square matrix, if the inverse exists. 
@@ -5706,6 +5740,7 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
             None
         } else {
             let det_inv = S::one() / det;
+            /*
             let _c0r0 = self.c1r1 * self.c2r2 * self.c3r3 + self.c2r1 * self.c3r2 * self.c1r3 + self.c3r1 * self.c1r2 * self.c2r3
                       - self.c3r1 * self.c2r2 * self.c1r3 - self.c2r1 * self.c1r2 * self.c3r3 - self.c1r1 * self.c3r2 * self.c2r3;
             let _c1r0 = self.c3r0 * self.c2r2 * self.c1r3 + self.c2r0 * self.c1r2 * self.c3r3 + self.c1r0 * self.c3r2 * self.c2r3
@@ -5738,7 +5773,40 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
                       - self.c0r0 * self.c1r1 * self.c2r3 - self.c1r0 * self.c2r1 * self.c0r3 - self.c2r0 * self.c0r1 * self.c1r3;
             let _c3r3 = self.c0r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c2r1 * self.c0r2 + self.c2r0 * self.c0r1 * self.c1r2
                       - self.c2r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c2r1 * self.c1r2; 
-                
+            */
+            let _c0r0 = self.data[1][1] * self.data[2][2] * self.data[3][3] + self.data[2][1] * self.data[3][2] * self.data[1][3] + self.data[3][1] * self.data[1][2] * self.data[2][3]
+                      - self.data[3][1] * self.data[2][2] * self.data[1][3] - self.data[2][1] * self.data[1][2] * self.data[3][3] - self.data[1][1] * self.data[3][2] * self.data[2][3];
+            let _c1r0 = self.data[3][0] * self.data[2][2] * self.data[1][3] + self.data[2][0] * self.data[1][2] * self.data[3][3] + self.data[1][0] * self.data[3][2] * self.data[2][3]
+                      - self.data[1][0] * self.data[2][2] * self.data[3][3] - self.data[2][0] * self.data[3][2] * self.data[1][3] - self.data[3][0] * self.data[1][2] * self.data[2][3];
+            let _c2r0 = self.data[1][0] * self.data[2][1] * self.data[3][3] + self.data[2][0] * self.data[3][1] * self.data[1][3] + self.data[3][0] * self.data[1][1] * self.data[2][3]
+                      - self.data[3][0] * self.data[2][1] * self.data[1][3] - self.data[2][0] * self.data[1][1] * self.data[3][3] - self.data[1][0] * self.data[3][1] * self.data[2][3];
+            let _c3r0 = self.data[3][0] * self.data[2][1] * self.data[1][2] + self.data[2][0] * self.data[1][1] * self.data[3][2] + self.data[1][0] * self.data[3][1] * self.data[2][2]
+                      - self.data[1][0] * self.data[2][1] * self.data[3][2] - self.data[2][0] * self.data[3][1] * self.data[1][2] - self.data[3][0] * self.data[1][1] * self.data[2][2];
+            let _c0r1 = self.data[3][1] * self.data[2][2] * self.data[0][3] + self.data[2][1] * self.data[0][2] * self.data[3][3] + self.data[0][1] * self.data[3][2] * self.data[2][3]
+                      - self.data[0][1] * self.data[2][2] * self.data[3][3] - self.data[2][1] * self.data[3][2] * self.data[0][3] - self.data[3][1] * self.data[0][2] * self.data[2][3];
+            let _c1r1 = self.data[0][0] * self.data[2][2] * self.data[3][3] + self.data[2][0] * self.data[3][2] * self.data[0][3] + self.data[3][0] * self.data[0][2] * self.data[2][3]
+                      - self.data[3][0] * self.data[2][2] * self.data[0][3] - self.data[2][0] * self.data[0][2] * self.data[3][3] - self.data[0][0] * self.data[3][2] * self.data[2][3];
+            let _c2r1 = self.data[3][0] * self.data[2][1] * self.data[0][3] + self.data[2][0] * self.data[0][1] * self.data[3][3] + self.data[0][0] * self.data[3][1] * self.data[2][3]
+                      - self.data[0][0] * self.data[2][1] * self.data[3][3] - self.data[2][0] * self.data[3][1] * self.data[0][3] - self.data[3][0] * self.data[0][1] * self.data[2][3];
+            let _c3r1 = self.data[0][0] * self.data[2][1] * self.data[3][2] + self.data[2][0] * self.data[3][1] * self.data[0][2] + self.data[3][0] * self.data[0][1] * self.data[2][2]
+                      - self.data[3][0] * self.data[2][1] * self.data[0][2] - self.data[2][0] * self.data[0][1] * self.data[3][2] - self.data[0][0] * self.data[3][1] * self.data[2][2];
+            let _c0r2 = self.data[0][1] * self.data[1][2] * self.data[3][3] + self.data[1][1] * self.data[3][2] * self.data[0][3] + self.data[3][1] * self.data[0][2] * self.data[1][3] 
+                      - self.data[3][1] * self.data[1][2] * self.data[0][3] - self.data[1][1] * self.data[0][2] * self.data[3][3] - self.data[0][1] * self.data[3][2] * self.data[1][3];
+            let _c1r2 = self.data[3][0] * self.data[1][2] * self.data[0][3] + self.data[1][0] * self.data[0][2] * self.data[3][3] + self.data[0][0] * self.data[3][2] * self.data[1][3]
+                      - self.data[0][0] * self.data[1][2] * self.data[3][3] - self.data[1][0] * self.data[3][2] * self.data[0][3] - self.data[3][0] * self.data[0][2] * self.data[1][3];
+            let _c2r2 = self.data[0][0] * self.data[1][1] * self.data[3][3] + self.data[1][0] * self.data[3][1] * self.data[0][3] + self.data[3][0] * self.data[0][1] * self.data[1][3]
+                      - self.data[3][0] * self.data[1][1] * self.data[0][3] - self.data[1][0] * self.data[0][1] * self.data[3][3] - self.data[0][0] * self.data[3][1] * self.data[1][3];
+            let _c3r2 = self.data[3][0] * self.data[1][1] * self.data[0][2] + self.data[1][0] * self.data[0][1] * self.data[3][2] + self.data[0][0] * self.data[3][1] * self.data[1][2]
+                      - self.data[0][0] * self.data[1][1] * self.data[3][2] - self.data[1][0] * self.data[3][1] * self.data[0][2] - self.data[3][0] * self.data[0][1] * self.data[1][2];
+            let _c0r3 = self.data[2][1] * self.data[1][2] * self.data[0][3] + self.data[1][1] * self.data[0][2] * self.data[2][3] + self.data[0][1] * self.data[2][2] * self.data[1][3]
+                      - self.data[0][1] * self.data[1][2] * self.data[2][3] - self.data[1][1] * self.data[2][2] * self.data[0][3] - self.data[2][1] * self.data[0][2] * self.data[1][3];  
+            let _c1r3 = self.data[0][0] * self.data[1][2] * self.data[2][3] + self.data[1][0] * self.data[2][2] * self.data[0][3] + self.data[2][0] * self.data[0][2] * self.data[1][3]
+                      - self.data[2][0] * self.data[1][2] * self.data[0][3] - self.data[1][0] * self.data[0][2] * self.data[2][3] - self.data[0][0] * self.data[2][2] * self.data[1][3];
+            let _c2r3 = self.data[2][0] * self.data[1][1] * self.data[0][3] + self.data[1][0] * self.data[0][1] * self.data[2][3] + self.data[0][0] * self.data[2][1] * self.data[1][3]
+                      - self.data[0][0] * self.data[1][1] * self.data[2][3] - self.data[1][0] * self.data[2][1] * self.data[0][3] - self.data[2][0] * self.data[0][1] * self.data[1][3];
+            let _c3r3 = self.data[0][0] * self.data[1][1] * self.data[2][2] + self.data[1][0] * self.data[2][1] * self.data[0][2] + self.data[2][0] * self.data[0][1] * self.data[1][2]
+                      - self.data[2][0] * self.data[1][1] * self.data[0][2] - self.data[1][0] * self.data[0][1] * self.data[2][2] - self.data[0][0] * self.data[2][1] * self.data[1][2]; 
+
             let c0r0 = det_inv * _c0r0; 
             let c0r1 = det_inv * _c0r1; 
             let c0r2 = det_inv * _c0r2; 
@@ -5801,12 +5869,12 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// element is zero.
     #[inline]
     pub fn is_diagonal(&self) -> bool {
-        ulps_eq!(self.c0r1, S::zero()) &&
-        ulps_eq!(self.c0r2, S::zero()) && 
-        ulps_eq!(self.c1r0, S::zero()) &&
-        ulps_eq!(self.c1r2, S::zero()) &&
-        ulps_eq!(self.c2r0, S::zero()) &&
-        ulps_eq!(self.c2r1, S::zero())
+        ulps_eq!(self.data[0][1], S::zero()) &&
+        ulps_eq!(self.data[0][2], S::zero()) && 
+        ulps_eq!(self.data[1][0], S::zero()) &&
+        ulps_eq!(self.data[1][2], S::zero()) &&
+        ulps_eq!(self.data[2][0], S::zero()) &&
+        ulps_eq!(self.data[2][1], S::zero())
     }
     
     /// Determine whether a matrix is symmetric. 
@@ -5816,12 +5884,12 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// Note that every diagonal matrix is a symmetric matrix.
     #[inline]
     pub fn is_symmetric(&self) -> bool {
-        ulps_eq!(self.c0r1, self.c1r0) && ulps_eq!(self.c1r0, self.c0r1) &&
-        ulps_eq!(self.c0r2, self.c2r0) && ulps_eq!(self.c2r0, self.c0r2) &&
-        ulps_eq!(self.c1r2, self.c2r1) && ulps_eq!(self.c2r1, self.c1r2) &&
-        ulps_eq!(self.c0r3, self.c3r0) && ulps_eq!(self.c3r0, self.c0r3) &&
-        ulps_eq!(self.c1r3, self.c3r1) && ulps_eq!(self.c3r1, self.c1r3) &&
-        ulps_eq!(self.c2r3, self.c3r2) && ulps_eq!(self.c3r2, self.c2r3)
+        ulps_eq!(self.data[0][1], self.data[1][0]) && ulps_eq!(self.data[1][0], self.data[0][1]) &&
+        ulps_eq!(self.data[0][2], self.data[2][0]) && ulps_eq!(self.data[2][0], self.data[0][2]) &&
+        ulps_eq!(self.data[1][2], self.data[2][1]) && ulps_eq!(self.data[2][1], self.data[1][2]) &&
+        ulps_eq!(self.data[0][3], self.data[3][0]) && ulps_eq!(self.data[3][0], self.data[0][3]) &&
+        ulps_eq!(self.data[1][3], self.data[3][1]) && ulps_eq!(self.data[3][1], self.data[1][3]) &&
+        ulps_eq!(self.data[2][3], self.data[3][2]) && ulps_eq!(self.data[3][2], self.data[2][3])
     }
 }
 
@@ -5831,10 +5899,10 @@ impl<S> fmt::Display for Matrix4x4<S> where S: fmt::Display {
         writeln!(
             formatter, 
             "Matrix4x4 [[{}, {}, {}, {}], [{}, {}, {}, {}], [{}, {}, {}, {}], [{}, {}, {}, {}]]",
-            self.c0r0, self.c1r0, self.c2r0, self.c3r0,
-            self.c0r1, self.c1r1, self.c2r1, self.c3r1,
-            self.c0r2, self.c1r2, self.c2r2, self.c3r2,
-            self.c0r3, self.c1r3, self.c2r3, self.c3r3
+            self.data[0][0], self.data[1][0], self.data[2][0], self.data[3][0],
+            self.data[0][1], self.data[1][1], self.data[2][1], self.data[3][1],
+            self.data[0][2], self.data[1][2], self.data[2][2], self.data[3][2],
+            self.data[0][3], self.data[1][3], self.data[2][3], self.data[3][3]
         )
     }
 }
@@ -5983,13 +6051,15 @@ impl<S> ops::IndexMut<(usize, usize)> for Matrix4x4<S> {
     }
 }
 
-impl_matrix_matrix_binary_ops!(Add, add, Matrix4x4<S>, Matrix4x4<S>, { 
-    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 
+impl_matrix_matrix_binary_ops1!(
+    Add, add, add_array4x4_array4x4, Matrix4x4<S>, Matrix4x4<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3) 
 });
-impl_matrix_matrix_binary_ops!(Sub, sub, Matrix4x4<S>, Matrix4x4<S>, { 
-    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 
+impl_matrix_matrix_binary_ops1!(
+    Sub, sub, sub_array4x4_array4x4, Matrix4x4<S>, Matrix4x4<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3) 
 });
 
 impl<S> ops::Mul<Vector4<S>> for Matrix4x4<S> where S: Scalar {
@@ -5998,10 +6068,10 @@ impl<S> ops::Mul<Vector4<S>> for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Vector4<S>) -> Self::Output {
-        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
-        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
-        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2] + self.c3r2 * other[3];
-        let w = self.c0r3 * other[0] + self.c1r3 * other[1] + self.c2r3 * other[2] + self.c3r3 * other[3];
+        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2] + self.data[3][0] * other[3];
+        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2] + self.data[3][1] * other[3];
+        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2] + self.data[3][2] * other[3];
+        let w = self.data[0][3] * other[0] + self.data[1][3] * other[1] + self.data[2][3] * other[2] + self.data[3][3] * other[3];
         
         Vector4::new(x, y, z, w)
     }
@@ -6013,10 +6083,10 @@ impl<S> ops::Mul<&Vector4<S>> for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &Vector4<S>) -> Self::Output {
-        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
-        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
-        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2] + self.c3r2 * other[3];
-        let w = self.c0r3 * other[0] + self.c1r3 * other[1] + self.c2r3 * other[2] + self.c3r3 * other[3];
+        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2] + self.data[3][0] * other[3];
+        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2] + self.data[3][1] * other[3];
+        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2] + self.data[3][2] * other[3];
+        let w = self.data[0][3] * other[0] + self.data[1][3] * other[1] + self.data[2][3] * other[2] + self.data[3][3] * other[3];
         
         Vector4::new(x, y, z, w)
     }
@@ -6028,10 +6098,10 @@ impl<S> ops::Mul<Vector4<S>> for &Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Vector4<S>) -> Self::Output {
-        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
-        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
-        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2] + self.c3r2 * other[3];
-        let w = self.c0r3 * other[0] + self.c1r3 * other[1] + self.c2r3 * other[2] + self.c3r3 * other[3];
+        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2] + self.data[3][0] * other[3];
+        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2] + self.data[3][1] * other[3];
+        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2] + self.data[3][2] * other[3];
+        let w = self.data[0][3] * other[0] + self.data[1][3] * other[1] + self.data[2][3] * other[2] + self.data[3][3] * other[3];
         
         Vector4::new(x, y, z, w)
     }
@@ -6043,10 +6113,10 @@ impl<'a, 'b, S> ops::Mul<&'a Vector4<S>> for &'b Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'a Vector4<S>) -> Self::Output {
-        let x = self.c0r0 * other[0] + self.c1r0 * other[1] + self.c2r0 * other[2] + self.c3r0 * other[3];
-        let y = self.c0r1 * other[0] + self.c1r1 * other[1] + self.c2r1 * other[2] + self.c3r1 * other[3];
-        let z = self.c0r2 * other[0] + self.c1r2 * other[1] + self.c2r2 * other[2] + self.c3r2 * other[3];
-        let w = self.c0r3 * other[0] + self.c1r3 * other[1] + self.c2r3 * other[2] + self.c3r3 * other[3];
+        let x = self.data[0][0] * other[0] + self.data[1][0] * other[1] + self.data[2][0] * other[2] + self.data[3][0] * other[3];
+        let y = self.data[0][1] * other[0] + self.data[1][1] * other[1] + self.data[2][1] * other[2] + self.data[3][1] * other[3];
+        let z = self.data[0][2] * other[0] + self.data[1][2] * other[1] + self.data[2][2] * other[2] + self.data[3][2] * other[3];
+        let w = self.data[0][3] * other[0] + self.data[1][3] * other[1] + self.data[2][3] * other[2] + self.data[3][3] * other[3];
         
         Vector4::new(x, y, z, w)
     }
@@ -6058,25 +6128,25 @@ impl<S> ops::Mul<Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Matrix4x4<S>) -> Self::Output {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
-        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2 + self.c3r2 * other.c0r3;
-        let c0r3 = self.c0r3 * other.c0r0 + self.c1r3 * other.c0r1 + self.c2r3 * other.c0r2 + self.c3r3 * other.c0r3;
+        let c0r0 = self.data[0][0] * other.data[0][0] + self.data[1][0] * other.data[0][1] + self.data[2][0] * other.data[0][2] + self.data[3][0] * other.data[0][3];
+        let c0r1 = self.data[0][1] * other.data[0][0] + self.data[1][1] * other.data[0][1] + self.data[2][1] * other.data[0][2] + self.data[3][1] * other.data[0][3];
+        let c0r2 = self.data[0][2] * other.data[0][0] + self.data[1][2] * other.data[0][1] + self.data[2][2] * other.data[0][2] + self.data[3][2] * other.data[0][3];
+        let c0r3 = self.data[0][3] * other.data[0][0] + self.data[1][3] * other.data[0][1] + self.data[2][3] * other.data[0][2] + self.data[3][3] * other.data[0][3];
 
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2 + self.c3r0 * other.c1r3;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2 + self.c3r1 * other.c1r3;
-        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2 + self.c3r2 * other.c1r3;
-        let c1r3 = self.c0r3 * other.c1r0 + self.c1r3 * other.c1r1 + self.c2r3 * other.c1r2 + self.c3r3 * other.c1r3;
+        let c1r0 = self.data[0][0] * other.data[1][0] + self.data[1][0] * other.data[1][1] + self.data[2][0] * other.data[1][2] + self.data[3][0] * other.data[1][3];
+        let c1r1 = self.data[0][1] * other.data[1][0] + self.data[1][1] * other.data[1][1] + self.data[2][1] * other.data[1][2] + self.data[3][1] * other.data[1][3];
+        let c1r2 = self.data[0][2] * other.data[1][0] + self.data[1][2] * other.data[1][1] + self.data[2][2] * other.data[1][2] + self.data[3][2] * other.data[1][3];
+        let c1r3 = self.data[0][3] * other.data[1][0] + self.data[1][3] * other.data[1][1] + self.data[2][3] * other.data[1][2] + self.data[3][3] * other.data[1][3];
 
-        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2 + self.c3r0 * other.c2r3;
-        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2 + self.c3r1 * other.c2r3;
-        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2 + self.c3r2 * other.c2r3;
-        let c2r3 = self.c0r3 * other.c2r0 + self.c1r3 * other.c2r1 + self.c2r3 * other.c2r2 + self.c3r3 * other.c2r3;
+        let c2r0 = self.data[0][0] * other.data[2][0] + self.data[1][0] * other.data[2][1] + self.data[2][0] * other.data[2][2] + self.data[3][0] * other.data[2][3];
+        let c2r1 = self.data[0][1] * other.data[2][0] + self.data[1][1] * other.data[2][1] + self.data[2][1] * other.data[2][2] + self.data[3][1] * other.data[2][3];
+        let c2r2 = self.data[0][2] * other.data[2][0] + self.data[1][2] * other.data[2][1] + self.data[2][2] * other.data[2][2] + self.data[3][2] * other.data[2][3];
+        let c2r3 = self.data[0][3] * other.data[2][0] + self.data[1][3] * other.data[2][1] + self.data[2][3] * other.data[2][2] + self.data[3][3] * other.data[2][3];
 
-        let c3r0 = self.c0r0 * other.c3r0 + self.c1r0 * other.c3r1 + self.c2r0 * other.c3r2 + self.c3r0 * other.c3r3;
-        let c3r1 = self.c0r1 * other.c3r0 + self.c1r1 * other.c3r1 + self.c2r1 * other.c3r2 + self.c3r1 * other.c3r3;
-        let c3r2 = self.c0r2 * other.c3r0 + self.c1r2 * other.c3r1 + self.c2r2 * other.c3r2 + self.c3r2 * other.c3r3;
-        let c3r3 = self.c0r3 * other.c3r0 + self.c1r3 * other.c3r1 + self.c2r3 * other.c3r2 + self.c3r3 * other.c3r3;
+        let c3r0 = self.data[0][0] * other.data[3][0] + self.data[1][0] * other.data[3][1] + self.data[2][0] * other.data[3][2] + self.data[3][0] * other.data[3][3];
+        let c3r1 = self.data[0][1] * other.data[3][0] + self.data[1][1] * other.data[3][1] + self.data[2][1] * other.data[3][2] + self.data[3][1] * other.data[3][3];
+        let c3r2 = self.data[0][2] * other.data[3][0] + self.data[1][2] * other.data[3][1] + self.data[2][2] * other.data[3][2] + self.data[3][2] * other.data[3][3];
+        let c3r3 = self.data[0][3] * other.data[3][0] + self.data[1][3] * other.data[3][1] + self.data[2][3] * other.data[3][2] + self.data[3][3] * other.data[3][3];
 
         Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3, 
@@ -6093,25 +6163,25 @@ impl<S> ops::Mul<&Matrix4x4<S>> for Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &Matrix4x4<S>) -> Self::Output {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
-        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2 + self.c3r2 * other.c0r3;
-        let c0r3 = self.c0r3 * other.c0r0 + self.c1r3 * other.c0r1 + self.c2r3 * other.c0r2 + self.c3r3 * other.c0r3;
+        let c0r0 = self.data[0][0] * other.data[0][0] + self.data[1][0] * other.data[0][1] + self.data[2][0] * other.data[0][2] + self.data[3][0] * other.data[0][3];
+        let c0r1 = self.data[0][1] * other.data[0][0] + self.data[1][1] * other.data[0][1] + self.data[2][1] * other.data[0][2] + self.data[3][1] * other.data[0][3];
+        let c0r2 = self.data[0][2] * other.data[0][0] + self.data[1][2] * other.data[0][1] + self.data[2][2] * other.data[0][2] + self.data[3][2] * other.data[0][3];
+        let c0r3 = self.data[0][3] * other.data[0][0] + self.data[1][3] * other.data[0][1] + self.data[2][3] * other.data[0][2] + self.data[3][3] * other.data[0][3];
 
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2 + self.c3r0 * other.c1r3;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2 + self.c3r1 * other.c1r3;
-        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2 + self.c3r2 * other.c1r3;
-        let c1r3 = self.c0r3 * other.c1r0 + self.c1r3 * other.c1r1 + self.c2r3 * other.c1r2 + self.c3r3 * other.c1r3;
+        let c1r0 = self.data[0][0] * other.data[1][0] + self.data[1][0] * other.data[1][1] + self.data[2][0] * other.data[1][2] + self.data[3][0] * other.data[1][3];
+        let c1r1 = self.data[0][1] * other.data[1][0] + self.data[1][1] * other.data[1][1] + self.data[2][1] * other.data[1][2] + self.data[3][1] * other.data[1][3];
+        let c1r2 = self.data[0][2] * other.data[1][0] + self.data[1][2] * other.data[1][1] + self.data[2][2] * other.data[1][2] + self.data[3][2] * other.data[1][3];
+        let c1r3 = self.data[0][3] * other.data[1][0] + self.data[1][3] * other.data[1][1] + self.data[2][3] * other.data[1][2] + self.data[3][3] * other.data[1][3];
 
-        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2 + self.c3r0 * other.c2r3;
-        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2 + self.c3r1 * other.c2r3;
-        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2 + self.c3r2 * other.c2r3;
-        let c2r3 = self.c0r3 * other.c2r0 + self.c1r3 * other.c2r1 + self.c2r3 * other.c2r2 + self.c3r3 * other.c2r3;
+        let c2r0 = self.data[0][0] * other.data[2][0] + self.data[1][0] * other.data[2][1] + self.data[2][0] * other.data[2][2] + self.data[3][0] * other.data[2][3];
+        let c2r1 = self.data[0][1] * other.data[2][0] + self.data[1][1] * other.data[2][1] + self.data[2][1] * other.data[2][2] + self.data[3][1] * other.data[2][3];
+        let c2r2 = self.data[0][2] * other.data[2][0] + self.data[1][2] * other.data[2][1] + self.data[2][2] * other.data[2][2] + self.data[3][2] * other.data[2][3];
+        let c2r3 = self.data[0][3] * other.data[2][0] + self.data[1][3] * other.data[2][1] + self.data[2][3] * other.data[2][2] + self.data[3][3] * other.data[2][3];
 
-        let c3r0 = self.c0r0 * other.c3r0 + self.c1r0 * other.c3r1 + self.c2r0 * other.c3r2 + self.c3r0 * other.c3r3;
-        let c3r1 = self.c0r1 * other.c3r0 + self.c1r1 * other.c3r1 + self.c2r1 * other.c3r2 + self.c3r1 * other.c3r3;
-        let c3r2 = self.c0r2 * other.c3r0 + self.c1r2 * other.c3r1 + self.c2r2 * other.c3r2 + self.c3r2 * other.c3r3;
-        let c3r3 = self.c0r3 * other.c3r0 + self.c1r3 * other.c3r1 + self.c2r3 * other.c3r2 + self.c3r3 * other.c3r3;
+        let c3r0 = self.data[0][0] * other.data[3][0] + self.data[1][0] * other.data[3][1] + self.data[2][0] * other.data[3][2] + self.data[3][0] * other.data[3][3];
+        let c3r1 = self.data[0][1] * other.data[3][0] + self.data[1][1] * other.data[3][1] + self.data[2][1] * other.data[3][2] + self.data[3][1] * other.data[3][3];
+        let c3r2 = self.data[0][2] * other.data[3][0] + self.data[1][2] * other.data[3][1] + self.data[2][2] * other.data[3][2] + self.data[3][2] * other.data[3][3];
+        let c3r3 = self.data[0][3] * other.data[3][0] + self.data[1][3] * other.data[3][1] + self.data[2][3] * other.data[3][2] + self.data[3][3] * other.data[3][3];
 
         Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3, 
@@ -6128,25 +6198,25 @@ impl<S> ops::Mul<Matrix4x4<S>> for &Matrix4x4<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Matrix4x4<S>) -> Self::Output {
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
-        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2 + self.c3r2 * other.c0r3;
-        let c0r3 = self.c0r3 * other.c0r0 + self.c1r3 * other.c0r1 + self.c2r3 * other.c0r2 + self.c3r3 * other.c0r3;
+        let c0r0 = self.data[0][0] * other.data[0][0] + self.data[1][0] * other.data[0][1] + self.data[2][0] * other.data[0][2] + self.data[3][0] * other.data[0][3];
+        let c0r1 = self.data[0][1] * other.data[0][0] + self.data[1][1] * other.data[0][1] + self.data[2][1] * other.data[0][2] + self.data[3][1] * other.data[0][3];
+        let c0r2 = self.data[0][2] * other.data[0][0] + self.data[1][2] * other.data[0][1] + self.data[2][2] * other.data[0][2] + self.data[3][2] * other.data[0][3];
+        let c0r3 = self.data[0][3] * other.data[0][0] + self.data[1][3] * other.data[0][1] + self.data[2][3] * other.data[0][2] + self.data[3][3] * other.data[0][3];
 
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2 + self.c3r0 * other.c1r3;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2 + self.c3r1 * other.c1r3;
-        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2 + self.c3r2 * other.c1r3;
-        let c1r3 = self.c0r3 * other.c1r0 + self.c1r3 * other.c1r1 + self.c2r3 * other.c1r2 + self.c3r3 * other.c1r3;
+        let c1r0 = self.data[0][0] * other.data[1][0] + self.data[1][0] * other.data[1][1] + self.data[2][0] * other.data[1][2] + self.data[3][0] * other.data[1][3];
+        let c1r1 = self.data[0][1] * other.data[1][0] + self.data[1][1] * other.data[1][1] + self.data[2][1] * other.data[1][2] + self.data[3][1] * other.data[1][3];
+        let c1r2 = self.data[0][2] * other.data[1][0] + self.data[1][2] * other.data[1][1] + self.data[2][2] * other.data[1][2] + self.data[3][2] * other.data[1][3];
+        let c1r3 = self.data[0][3] * other.data[1][0] + self.data[1][3] * other.data[1][1] + self.data[2][3] * other.data[1][2] + self.data[3][3] * other.data[1][3];
 
-        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2 + self.c3r0 * other.c2r3;
-        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2 + self.c3r1 * other.c2r3;
-        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2 + self.c3r2 * other.c2r3;
-        let c2r3 = self.c0r3 * other.c2r0 + self.c1r3 * other.c2r1 + self.c2r3 * other.c2r2 + self.c3r3 * other.c2r3;
+        let c2r0 = self.data[0][0] * other.data[2][0] + self.data[1][0] * other.data[2][1] + self.data[2][0] * other.data[2][2] + self.data[3][0] * other.data[2][3];
+        let c2r1 = self.data[0][1] * other.data[2][0] + self.data[1][1] * other.data[2][1] + self.data[2][1] * other.data[2][2] + self.data[3][1] * other.data[2][3];
+        let c2r2 = self.data[0][2] * other.data[2][0] + self.data[1][2] * other.data[2][1] + self.data[2][2] * other.data[2][2] + self.data[3][2] * other.data[2][3];
+        let c2r3 = self.data[0][3] * other.data[2][0] + self.data[1][3] * other.data[2][1] + self.data[2][3] * other.data[2][2] + self.data[3][3] * other.data[2][3];
 
-        let c3r0 = self.c0r0 * other.c3r0 + self.c1r0 * other.c3r1 + self.c2r0 * other.c3r2 + self.c3r0 * other.c3r3;
-        let c3r1 = self.c0r1 * other.c3r0 + self.c1r1 * other.c3r1 + self.c2r1 * other.c3r2 + self.c3r1 * other.c3r3;
-        let c3r2 = self.c0r2 * other.c3r0 + self.c1r2 * other.c3r1 + self.c2r2 * other.c3r2 + self.c3r2 * other.c3r3;
-        let c3r3 = self.c0r3 * other.c3r0 + self.c1r3 * other.c3r1 + self.c2r3 * other.c3r2 + self.c3r3 * other.c3r3;
+        let c3r0 = self.data[0][0] * other.data[3][0] + self.data[1][0] * other.data[3][1] + self.data[2][0] * other.data[3][2] + self.data[3][0] * other.data[3][3];
+        let c3r1 = self.data[0][1] * other.data[3][0] + self.data[1][1] * other.data[3][1] + self.data[2][1] * other.data[3][2] + self.data[3][1] * other.data[3][3];
+        let c3r2 = self.data[0][2] * other.data[3][0] + self.data[1][2] * other.data[3][1] + self.data[2][2] * other.data[3][2] + self.data[3][2] * other.data[3][3];
+        let c3r3 = self.data[0][3] * other.data[3][0] + self.data[1][3] * other.data[3][1] + self.data[2][3] * other.data[3][2] + self.data[3][3] * other.data[3][3];
 
         Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3, 
@@ -6163,6 +6233,7 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar 
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'a Matrix4x4<S>) -> Self::Output {
+        /*
         let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
         let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
         let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2 + self.c3r2 * other.c0r3;
@@ -6182,6 +6253,26 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar 
         let c3r1 = self.c0r1 * other.c3r0 + self.c1r1 * other.c3r1 + self.c2r1 * other.c3r2 + self.c3r1 * other.c3r3;
         let c3r2 = self.c0r2 * other.c3r0 + self.c1r2 * other.c3r1 + self.c2r2 * other.c3r2 + self.c3r2 * other.c3r3;
         let c3r3 = self.c0r3 * other.c3r0 + self.c1r3 * other.c3r1 + self.c2r3 * other.c3r2 + self.c3r3 * other.c3r3;
+        */
+        let c0r0 = self.data[0][0] * other.data[0][0] + self.data[1][0] * other.data[0][1] + self.data[2][0] * other.data[0][2] + self.data[3][0] * other.data[0][3];
+        let c0r1 = self.data[0][1] * other.data[0][0] + self.data[1][1] * other.data[0][1] + self.data[2][1] * other.data[0][2] + self.data[3][1] * other.data[0][3];
+        let c0r2 = self.data[0][2] * other.data[0][0] + self.data[1][2] * other.data[0][1] + self.data[2][2] * other.data[0][2] + self.data[3][2] * other.data[0][3];
+        let c0r3 = self.data[0][3] * other.data[0][0] + self.data[1][3] * other.data[0][1] + self.data[2][3] * other.data[0][2] + self.data[3][3] * other.data[0][3];
+
+        let c1r0 = self.data[0][0] * other.data[1][0] + self.data[1][0] * other.data[1][1] + self.data[2][0] * other.data[1][2] + self.data[3][0] * other.data[1][3];
+        let c1r1 = self.data[0][1] * other.data[1][0] + self.data[1][1] * other.data[1][1] + self.data[2][1] * other.data[1][2] + self.data[3][1] * other.data[1][3];
+        let c1r2 = self.data[0][2] * other.data[1][0] + self.data[1][2] * other.data[1][1] + self.data[2][2] * other.data[1][2] + self.data[3][2] * other.data[1][3];
+        let c1r3 = self.data[0][3] * other.data[1][0] + self.data[1][3] * other.data[1][1] + self.data[2][3] * other.data[1][2] + self.data[3][3] * other.data[1][3];
+
+        let c2r0 = self.data[0][0] * other.data[2][0] + self.data[1][0] * other.data[2][1] + self.data[2][0] * other.data[2][2] + self.data[3][0] * other.data[2][3];
+        let c2r1 = self.data[0][1] * other.data[2][0] + self.data[1][1] * other.data[2][1] + self.data[2][1] * other.data[2][2] + self.data[3][1] * other.data[2][3];
+        let c2r2 = self.data[0][2] * other.data[2][0] + self.data[1][2] * other.data[2][1] + self.data[2][2] * other.data[2][2] + self.data[3][2] * other.data[2][3];
+        let c2r3 = self.data[0][3] * other.data[2][0] + self.data[1][3] * other.data[2][1] + self.data[2][3] * other.data[2][2] + self.data[3][3] * other.data[2][3];
+
+        let c3r0 = self.data[0][0] * other.data[3][0] + self.data[1][0] * other.data[3][1] + self.data[2][0] * other.data[3][2] + self.data[3][0] * other.data[3][3];
+        let c3r1 = self.data[0][1] * other.data[3][0] + self.data[1][1] * other.data[3][1] + self.data[2][1] * other.data[3][2] + self.data[3][1] * other.data[3][3];
+        let c3r2 = self.data[0][2] * other.data[3][0] + self.data[1][2] * other.data[3][1] + self.data[2][2] * other.data[3][2] + self.data[3][2] * other.data[3][3];
+        let c3r3 = self.data[0][3] * other.data[3][0] + self.data[1][3] * other.data[3][1] + self.data[2][3] * other.data[3][2] + self.data[3][3] * other.data[3][3];
 
         Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3, 
@@ -6192,25 +6283,40 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar 
     }
 }
 
-impl_matrix_scalar_binary_ops!(Mul, mul, Matrix4x4<S>, Matrix4x4<S>, { 
-    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 
+impl_matrix_scalar_binary_ops1!(
+    Mul, mul, mul_array4x4_scalar, Matrix4x4<S>, Matrix4x4<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), 
+    (3, 0), (3, 1), (3, 2), (3, 3) 
 });
-impl_matrix_scalar_binary_ops!(Div, div, Matrix4x4<S>, Matrix4x4<S>, { 
-    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
+impl_matrix_scalar_binary_ops1!(
+    Div, div, div_array4x4_scalar, Matrix4x4<S>, Matrix4x4<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), 
+    (3, 0), (3, 1), (3, 2), (3, 3) 
 });
-impl_matrix_scalar_binary_ops!(Rem, rem, Matrix4x4<S>, Matrix4x4<S>, { 
-    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
+impl_matrix_scalar_binary_ops1!(
+    Rem, rem, rem_array4x4_scalar, Matrix4x4<S>, Matrix4x4<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), 
+    (3, 0), (3, 1), (3, 2), (3, 3) 
 });
-impl_matrix_unary_ops!(Neg, neg, Matrix4x4<S>, Matrix4x4<S>, { 
-    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
+impl_matrix_unary_ops1!(
+    Neg, neg, neg_array4x4, Matrix4x4<S>, Matrix4x4<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), 
+    (3, 0), (3, 1), (3, 2), (3, 3) 
 });
-impl_matrix_binary_assign_ops!(Matrix4x4<S>, { 
-    c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3
+impl_matrix_binary_assign_ops1!(
+    Matrix4x4<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), 
+    (3, 0), (3, 1), (3, 2), (3, 3) 
 });
 
 impl<S> approx::AbsDiffEq for Matrix4x4<S> where S: ScalarFloat {
@@ -6223,22 +6329,22 @@ impl<S> approx::AbsDiffEq for Matrix4x4<S> where S: ScalarFloat {
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.c0r0, &other.c0r0, epsilon) && 
-        S::abs_diff_eq(&self.c0r1, &other.c0r1, epsilon) &&
-        S::abs_diff_eq(&self.c0r2, &other.c0r2, epsilon) &&
-        S::abs_diff_eq(&self.c0r3, &other.c0r3, epsilon) && 
-        S::abs_diff_eq(&self.c1r0, &other.c1r0, epsilon) && 
-        S::abs_diff_eq(&self.c1r1, &other.c1r1, epsilon) &&
-        S::abs_diff_eq(&self.c1r2, &other.c1r2, epsilon) &&
-        S::abs_diff_eq(&self.c1r3, &other.c1r3, epsilon) && 
-        S::abs_diff_eq(&self.c2r0, &other.c2r0, epsilon) && 
-        S::abs_diff_eq(&self.c2r1, &other.c2r1, epsilon) &&
-        S::abs_diff_eq(&self.c2r2, &other.c2r2, epsilon) &&
-        S::abs_diff_eq(&self.c2r3, &other.c2r3, epsilon) && 
-        S::abs_diff_eq(&self.c3r0, &other.c3r0, epsilon) && 
-        S::abs_diff_eq(&self.c3r1, &other.c3r1, epsilon) &&
-        S::abs_diff_eq(&self.c3r2, &other.c3r2, epsilon) &&
-        S::abs_diff_eq(&self.c3r3, &other.c3r3, epsilon) 
+        S::abs_diff_eq(&self.data[0][0], &other.data[0][0], epsilon) && 
+        S::abs_diff_eq(&self.data[0][1], &other.data[0][1], epsilon) &&
+        S::abs_diff_eq(&self.data[0][2], &other.data[0][2], epsilon) &&
+        S::abs_diff_eq(&self.data[0][3], &other.data[0][3], epsilon) && 
+        S::abs_diff_eq(&self.data[1][0], &other.data[1][0], epsilon) && 
+        S::abs_diff_eq(&self.data[1][1], &other.data[1][1], epsilon) &&
+        S::abs_diff_eq(&self.data[1][2], &other.data[1][2], epsilon) &&
+        S::abs_diff_eq(&self.data[1][3], &other.data[1][3], epsilon) && 
+        S::abs_diff_eq(&self.data[2][0], &other.data[2][0], epsilon) && 
+        S::abs_diff_eq(&self.data[2][1], &other.data[2][1], epsilon) &&
+        S::abs_diff_eq(&self.data[2][2], &other.data[2][2], epsilon) &&
+        S::abs_diff_eq(&self.data[2][3], &other.data[2][3], epsilon) && 
+        S::abs_diff_eq(&self.data[3][0], &other.data[3][0], epsilon) && 
+        S::abs_diff_eq(&self.data[3][1], &other.data[3][1], epsilon) &&
+        S::abs_diff_eq(&self.data[3][2], &other.data[3][2], epsilon) &&
+        S::abs_diff_eq(&self.data[3][3], &other.data[3][3], epsilon) 
     }
 }
 
@@ -6250,22 +6356,22 @@ impl<S> approx::RelativeEq for Matrix4x4<S> where S: ScalarFloat {
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.c0r0, &other.c0r0, epsilon, max_relative) &&
-        S::relative_eq(&self.c0r1, &other.c0r1, epsilon, max_relative) &&
-        S::relative_eq(&self.c0r2, &other.c0r2, epsilon, max_relative) &&
-        S::relative_eq(&self.c0r3, &other.c0r3, epsilon, max_relative) &&
-        S::relative_eq(&self.c1r0, &other.c1r0, epsilon, max_relative) &&
-        S::relative_eq(&self.c1r1, &other.c1r1, epsilon, max_relative) &&
-        S::relative_eq(&self.c1r2, &other.c1r2, epsilon, max_relative) &&
-        S::relative_eq(&self.c1r3, &other.c1r3, epsilon, max_relative) &&
-        S::relative_eq(&self.c2r0, &other.c2r0, epsilon, max_relative) &&
-        S::relative_eq(&self.c2r1, &other.c2r1, epsilon, max_relative) &&
-        S::relative_eq(&self.c2r2, &other.c2r2, epsilon, max_relative) &&
-        S::relative_eq(&self.c2r3, &other.c2r3, epsilon, max_relative) &&
-        S::relative_eq(&self.c3r0, &other.c3r0, epsilon, max_relative) &&
-        S::relative_eq(&self.c3r1, &other.c3r1, epsilon, max_relative) &&
-        S::relative_eq(&self.c3r2, &other.c3r2, epsilon, max_relative) &&
-        S::relative_eq(&self.c3r3, &other.c3r3, epsilon, max_relative)
+        S::relative_eq(&self.data[0][0], &other.data[0][0], epsilon, max_relative) &&
+        S::relative_eq(&self.data[0][1], &other.data[0][1], epsilon, max_relative) &&
+        S::relative_eq(&self.data[0][2], &other.data[0][2], epsilon, max_relative) &&
+        S::relative_eq(&self.data[0][3], &other.data[0][3], epsilon, max_relative) &&
+        S::relative_eq(&self.data[1][0], &other.data[1][0], epsilon, max_relative) &&
+        S::relative_eq(&self.data[1][1], &other.data[1][1], epsilon, max_relative) &&
+        S::relative_eq(&self.data[1][2], &other.data[1][2], epsilon, max_relative) &&
+        S::relative_eq(&self.data[1][3], &other.data[1][3], epsilon, max_relative) &&
+        S::relative_eq(&self.data[2][0], &other.data[2][0], epsilon, max_relative) &&
+        S::relative_eq(&self.data[2][1], &other.data[2][1], epsilon, max_relative) &&
+        S::relative_eq(&self.data[2][2], &other.data[2][2], epsilon, max_relative) &&
+        S::relative_eq(&self.data[2][3], &other.data[2][3], epsilon, max_relative) &&
+        S::relative_eq(&self.data[3][0], &other.data[3][0], epsilon, max_relative) &&
+        S::relative_eq(&self.data[3][1], &other.data[3][1], epsilon, max_relative) &&
+        S::relative_eq(&self.data[3][2], &other.data[3][2], epsilon, max_relative) &&
+        S::relative_eq(&self.data[3][3], &other.data[3][3], epsilon, max_relative)
     }
 }
 
@@ -6277,22 +6383,22 @@ impl<S> approx::UlpsEq for Matrix4x4<S> where S: ScalarFloat {
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.c0r0, &other.c0r0, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c0r1, &other.c0r1, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c0r2, &other.c0r2, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c0r3, &other.c0r3, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c1r0, &other.c1r0, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c1r1, &other.c1r1, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c1r2, &other.c1r2, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c1r3, &other.c1r3, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c2r0, &other.c2r0, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c2r1, &other.c2r1, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c2r2, &other.c2r2, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c2r3, &other.c2r3, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c3r0, &other.c3r0, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c3r1, &other.c3r1, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c3r2, &other.c3r2, epsilon, max_ulps) &&
-        S::ulps_eq(&self.c3r3, &other.c3r3, epsilon, max_ulps)
+        S::ulps_eq(&self.data[0][0], &other.data[0][0], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[0][1], &other.data[0][1], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[0][2], &other.data[0][2], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[0][3], &other.data[0][3], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[1][0], &other.data[1][0], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[1][1], &other.data[1][1], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[1][2], &other.data[1][2], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[1][3], &other.data[1][3], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[2][0], &other.data[2][0], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[2][1], &other.data[2][1], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[2][2], &other.data[2][2], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[2][3], &other.data[2][3], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[3][0], &other.data[3][0], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[3][1], &other.data[3][1], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[3][2], &other.data[3][2], epsilon, max_ulps) &&
+        S::ulps_eq(&self.data[3][3], &other.data[3][3], epsilon, max_ulps)
     }
 }
 
@@ -6324,7 +6430,7 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix4x4<S>> for Matrix4x4<S> {
     }
 }
 
-
+/*
 impl_scalar_matrix_mul_ops!(u8,    Matrix4x4<u8>,    Matrix4x4<u8>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
@@ -6367,4 +6473,104 @@ impl_scalar_matrix_mul_ops!(f32,   Matrix4x4<f32>,   Matrix4x4<f32>,
 impl_scalar_matrix_mul_ops!(f64,   Matrix4x4<f64>,   Matrix4x4<f64>, 
     { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
 );
+
+*/
+impl_scalar_matrix_mul_ops1!(
+    u8,    Matrix4x4<u8>,    Matrix4x4<u8>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    u16,   Matrix4x4<u16>,   Matrix4x4<u16>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    u32,   Matrix4x4<u32>,   Matrix4x4<u32>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    u64,   Matrix4x4<u64>,   Matrix4x4<u64>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    u128,  Matrix4x4<u128>,  Matrix4x4<u128>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    usize, Matrix4x4<usize>, Matrix4x4<usize>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    i8,    Matrix4x4<i8>,    Matrix4x4<i8>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    i16,   Matrix4x4<i16>,   Matrix4x4<i16>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    i32,   Matrix4x4<i32>,   Matrix4x4<i32>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    i64,   Matrix4x4<i64>,   Matrix4x4<i64>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    i128,  Matrix4x4<i128>,  Matrix4x4<i128>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    isize, Matrix4x4<isize>, Matrix4x4<isize>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    f32,   Matrix4x4<f32>,   Matrix4x4<f32>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_scalar_matrix_mul_ops1!(
+    f64,   Matrix4x4<f64>,   Matrix4x4<f64>, { 
+        (0, 0), (0, 1), (0, 2), (0, 3), 
+        (1, 0), (1, 1), (1, 2), (1, 3), 
+        (2, 0), (2, 1), (2, 2), (2, 3), 
+        (3, 0), (3, 1), (3, 2), (3, 3) 
+});
 
