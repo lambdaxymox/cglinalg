@@ -2290,6 +2290,11 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
     fn distance_squared(&self, other: &Quaternion<S>) -> S {
         (self - other).magnitude_squared()
     }
+
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.distance_squared(other).sqrt()
+    }
 }
 
 impl<S> approx::AbsDiffEq for Quaternion<S> where S: ScalarFloat {

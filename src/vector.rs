@@ -652,6 +652,11 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     fn distance_squared(&self, other: &Vector1<S>) -> Self::Output {
         (self - other).magnitude_squared()
     }
+
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.distance_squared(other).sqrt()
+    }
 }
 
 impl<S> approx::AbsDiffEq for Vector1<S> where S: ScalarFloat {
@@ -1191,6 +1196,11 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     #[inline]
     fn distance_squared(&self, other: &Vector2<S>) -> Self::Output {
         (self - other).magnitude_squared()
+    }
+
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.distance_squared(other).sqrt()
     }
 }
 
@@ -1816,6 +1826,11 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     fn distance_squared(&self, other: &Vector3<S>) -> Self::Output {
         (self - other).magnitude_squared()
     }
+
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.distance_squared(other).sqrt()
+    }
 }
 
 impl<S> approx::AbsDiffEq for Vector3<S> where S: ScalarFloat {
@@ -2364,6 +2379,11 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     #[inline]
     fn distance_squared(&self, other: &Vector4<S>) -> Self::Output {
         (self - other).magnitude_squared()
+    }
+
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.distance_squared(other).sqrt()
     }
 }
 
