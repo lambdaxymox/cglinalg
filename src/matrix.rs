@@ -39,8 +39,6 @@ use core::mem;
 
 macro_rules! impl_coords {
     ($T:ident, { $($comps: ident),* }) => {
-        /// Data structure used to provide access to matrix and vector coordinates with the dot
-        /// notation, e.g., `v.x` is the same as `v[0]` for a vector.
         #[repr(C)]
         #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
         pub struct $T<S: Copy> {
