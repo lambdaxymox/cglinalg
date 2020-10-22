@@ -37,221 +37,6 @@ use core::iter;
 use core::mem;
 
 
-macro_rules! impl_as_ref_ops {
-    ($MatrixType:ty, $RefType:ty) => {
-        impl<S> AsRef<$RefType> for $MatrixType {
-            #[inline]
-            fn as_ref(&self) -> &$RefType {
-                unsafe {
-                    &*(self as *const $MatrixType as *const $RefType)
-                }
-            }
-        }
-
-        impl<S> AsMut<$RefType> for $MatrixType {
-            #[inline]
-            fn as_mut(&mut self) -> &mut $RefType {
-                unsafe {
-                    &mut *(self as *mut $MatrixType as *mut $RefType)
-                }
-            }
-        }
-    }
-}
-
-macro_rules! impl_scalar_matrix_mul_ops {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($field:ident),* }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
-            }
-        }
-
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.$field),*)
-            }
-        }
-    }
-}
-
-macro_rules! impl_matrix_matrix_binary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
-        impl<S> $OpType<$T> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: $T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.$field.$op(other.$field) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType<&$T> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: &$T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.$field.$op(other.$field) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType<$T> for &$T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: $T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.$field.$op(other.$field) ),* 
-                )
-            }
-        }
-
-        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: &'a $T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.$field.$op(other.$field) ),* 
-                )
-            }
-        }
-    }
-}
-
-macro_rules! impl_matrix_scalar_binary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
-        impl<S> $OpType<S> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: S) -> Self::Output {
-                Self::Output::new( 
-                    $( self.$field.$op(other) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType<S> for &$T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: S) -> Self::Output {
-                Self::Output::new( 
-                    $( self.$field.$op(other) ),* 
-                )
-            }
-        }
-    }
-}
-
-macro_rules! impl_matrix_unary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($field:ident),* }) => {
-        impl<S> $OpType for $T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( self.$field.$op() ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType for &$T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( self.$field.$op() ),* 
-                )
-            }
-        }
-    }
-}
-
-macro_rules! impl_matrix_binary_assign_ops {
-    ($T:ty, { $($field:ident),* }) => {
-        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: $T) {
-                $(self.$field += other.$field);*
-            }
-        }
-
-        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: &$T) {
-                $(self.$field += other.$field);*
-            }
-        }
-
-        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: $T) {
-                $(self.$field -= other.$field);*
-            }
-        }
-
-        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: &$T) {
-                $(self.$field -= other.$field);*
-            }
-        }
-
-        impl<S> ops::MulAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn mul_assign(&mut self, other: S) {
-                $(self.$field *= other);*
-            }
-        }
-        
-        impl<S> ops::DivAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn div_assign(&mut self, other: S) {
-                $(self.$field /= other);*
-            }
-        }
-        
-        impl<S> ops::RemAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn rem_assign(&mut self, other: S) {
-                $(self.$field %= other);*
-            }
-        }
-    }
-}
-
-
-/// A Type synonym for `Matrix2x2`.
-pub type Matrix2<S> = Matrix2x2<S>;
-
-/// A Type synonym for `Matrix3x3`.
-pub type Matrix3<S> = Matrix3x3<S>;
-
-/// A Type synonym for `Matrix4x4`
-pub type Matrix4<S> = Matrix4x4<S>;
-
-
-/// The `Matrix2x2` type represents 2x2 matrices in column-major order.
-#[repr(C)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
-pub struct Matrix2x2<S> {
-    data: [[S; 2]; 2],
-}
-
 macro_rules! impl_coords {
     ($T:ident, { $($comps: ident),* }) => {
         /// Data structure used to provide access to matrix and vector coordinates with the dot
@@ -284,6 +69,46 @@ macro_rules! impl_coords_deref {
             }
         }
     }
+}
+
+macro_rules! impl_as_ref_ops {
+    ($MatrixType:ty, $RefType:ty) => {
+        impl<S> AsRef<$RefType> for $MatrixType {
+            #[inline]
+            fn as_ref(&self) -> &$RefType {
+                unsafe {
+                    &*(self as *const $MatrixType as *const $RefType)
+                }
+            }
+        }
+
+        impl<S> AsMut<$RefType> for $MatrixType {
+            #[inline]
+            fn as_mut(&mut self) -> &mut $RefType {
+                unsafe {
+                    &mut *(self as *mut $MatrixType as *mut $RefType)
+                }
+            }
+        }
+    }
+}
+
+
+/// A Type synonym for `Matrix2x2`.
+pub type Matrix2<S> = Matrix2x2<S>;
+
+/// A Type synonym for `Matrix3x3`.
+pub type Matrix3<S> = Matrix3x3<S>;
+
+/// A Type synonym for `Matrix4x4`
+pub type Matrix4<S> = Matrix4x4<S>;
+
+
+/// The `Matrix2x2` type represents 2x2 matrices in column-major order.
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub struct Matrix2x2<S> {
+    data: [[S; 2]; 2],
 }
 
 impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1 });
