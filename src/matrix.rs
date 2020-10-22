@@ -5023,32 +5023,6 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     #[rustfmt::skip]
     #[inline]
     pub fn determinant(&self) -> S {
-        /*
-        self.c0r0 * self.c1r1 * self.c2r2 * self.c3r3 -
-        self.c0r0 * self.c1r1 * self.c2r3 * self.c3r2 -
-        self.c0r0 * self.c2r1 * self.c1r2 * self.c3r3 +
-        self.c0r0 * self.c2r1 * self.c1r3 * self.c3r2 +
-        self.c0r0 * self.c3r1 * self.c1r2 * self.c2r3 -
-        self.c0r0 * self.c3r1 * self.c1r3 * self.c2r2 -
-        self.c1r0 * self.c0r1 * self.c2r2 * self.c3r3 +
-        self.c1r0 * self.c0r1 * self.c2r3 * self.c3r2 +
-        self.c1r0 * self.c2r1 * self.c0r2 * self.c3r3 -
-        self.c1r0 * self.c2r1 * self.c0r3 * self.c3r2 -
-        self.c1r0 * self.c3r1 * self.c0r2 * self.c2r3 +
-        self.c1r0 * self.c3r1 * self.c0r3 * self.c2r2 +
-        self.c2r0 * self.c0r1 * self.c1r2 * self.c3r3 -
-        self.c2r0 * self.c0r1 * self.c1r3 * self.c3r2 -
-        self.c2r0 * self.c1r1 * self.c0r2 * self.c3r3 +
-        self.c2r0 * self.c1r1 * self.c0r3 * self.c3r2 +
-        self.c2r0 * self.c3r1 * self.c0r2 * self.c1r3 -
-        self.c2r0 * self.c3r1 * self.c0r3 * self.c1r2 -
-        self.c3r0 * self.c0r1 * self.c1r2 * self.c2r3 +
-        self.c3r0 * self.c0r1 * self.c1r3 * self.c2r2 +
-        self.c3r0 * self.c1r1 * self.c0r2 * self.c2r3 -
-        self.c3r0 * self.c1r1 * self.c0r3 * self.c2r2 -
-        self.c3r0 * self.c2r1 * self.c0r2 * self.c1r3 +
-        self.c3r0 * self.c2r1 * self.c0r3 * self.c1r2
-        */
         self.data[0][0] * self.data[1][1] * self.data[2][2] * self.data[3][3] -
         self.data[0][0] * self.data[1][1] * self.data[2][3] * self.data[3][2] -
         self.data[0][0] * self.data[2][1] * self.data[1][2] * self.data[3][3] +
@@ -5740,40 +5714,6 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
             None
         } else {
             let det_inv = S::one() / det;
-            /*
-            let _c0r0 = self.c1r1 * self.c2r2 * self.c3r3 + self.c2r1 * self.c3r2 * self.c1r3 + self.c3r1 * self.c1r2 * self.c2r3
-                      - self.c3r1 * self.c2r2 * self.c1r3 - self.c2r1 * self.c1r2 * self.c3r3 - self.c1r1 * self.c3r2 * self.c2r3;
-            let _c1r0 = self.c3r0 * self.c2r2 * self.c1r3 + self.c2r0 * self.c1r2 * self.c3r3 + self.c1r0 * self.c3r2 * self.c2r3
-                      - self.c1r0 * self.c2r2 * self.c3r3 - self.c2r0 * self.c3r2 * self.c1r3 - self.c3r0 * self.c1r2 * self.c2r3;
-            let _c2r0 = self.c1r0 * self.c2r1 * self.c3r3 + self.c2r0 * self.c3r1 * self.c1r3 + self.c3r0 * self.c1r1 * self.c2r3
-                      - self.c3r0 * self.c2r1 * self.c1r3 - self.c2r0 * self.c1r1 * self.c3r3 - self.c1r0 * self.c3r1 * self.c2r3;
-            let _c3r0 = self.c3r0 * self.c2r1 * self.c1r2 + self.c2r0 * self.c1r1 * self.c3r2 + self.c1r0 * self.c3r1 * self.c2r2
-                      - self.c1r0 * self.c2r1 * self.c3r2 - self.c2r0 * self.c3r1 * self.c1r2 - self.c3r0 * self.c1r1 * self.c2r2;
-            let _c0r1 = self.c3r1 * self.c2r2 * self.c0r3 + self.c2r1 * self.c0r2 * self.c3r3 + self.c0r1 * self.c3r2 * self.c2r3
-                      - self.c0r1 * self.c2r2 * self.c3r3 - self.c2r1 * self.c3r2 * self.c0r3 - self.c3r1 * self.c0r2 * self.c2r3;
-            let _c1r1 = self.c0r0 * self.c2r2 * self.c3r3 + self.c2r0 * self.c3r2 * self.c0r3 + self.c3r0 * self.c0r2 * self.c2r3
-                      - self.c3r0 * self.c2r2 * self.c0r3 - self.c2r0 * self.c0r2 * self.c3r3 - self.c0r0 * self.c3r2 * self.c2r3;
-            let _c2r1 = self.c3r0 * self.c2r1 * self.c0r3 + self.c2r0 * self.c0r1 * self.c3r3 + self.c0r0 * self.c3r1 * self.c2r3
-                      - self.c0r0 * self.c2r1 * self.c3r3 - self.c2r0 * self.c3r1 * self.c0r3 - self.c3r0 * self.c0r1 * self.c2r3;
-            let _c3r1 = self.c0r0 * self.c2r1 * self.c3r2 + self.c2r0 * self.c3r1 * self.c0r2 + self.c3r0 * self.c0r1 * self.c2r2
-                      - self.c3r0 * self.c2r1 * self.c0r2 - self.c2r0 * self.c0r1 * self.c3r2 - self.c0r0 * self.c3r1 * self.c2r2;
-            let _c0r2 = self.c0r1 * self.c1r2 * self.c3r3 + self.c1r1 * self.c3r2 * self.c0r3 + self.c3r1 * self.c0r2 * self.c1r3 
-                      - self.c3r1 * self.c1r2 * self.c0r3 - self.c1r1 * self.c0r2 * self.c3r3 - self.c0r1 * self.c3r2 * self.c1r3;
-            let _c1r2 = self.c3r0 * self.c1r2 * self.c0r3 + self.c1r0 * self.c0r2 * self.c3r3 + self.c0r0 * self.c3r2 * self.c1r3
-                      - self.c0r0 * self.c1r2 * self.c3r3 - self.c1r0 * self.c3r2 * self.c0r3 - self.c3r0 * self.c0r2 * self.c1r3;
-            let _c2r2 = self.c0r0 * self.c1r1 * self.c3r3 + self.c1r0 * self.c3r1 * self.c0r3 + self.c3r0 * self.c0r1 * self.c1r3
-                      - self.c3r0 * self.c1r1 * self.c0r3 - self.c1r0 * self.c0r1 * self.c3r3 - self.c0r0 * self.c3r1 * self.c1r3;
-            let _c3r2 = self.c3r0 * self.c1r1 * self.c0r2 + self.c1r0 * self.c0r1 * self.c3r2 + self.c0r0 * self.c3r1 * self.c1r2
-                      - self.c0r0 * self.c1r1 * self.c3r2 - self.c1r0 * self.c3r1 * self.c0r2 - self.c3r0 * self.c0r1 * self.c1r2;
-            let _c0r3 = self.c2r1 * self.c1r2 * self.c0r3 + self.c1r1 * self.c0r2 * self.c2r3 + self.c0r1 * self.c2r2 * self.c1r3
-                      - self.c0r1 * self.c1r2 * self.c2r3 - self.c1r1 * self.c2r2 * self.c0r3 - self.c2r1 * self.c0r2 * self.c1r3;  
-            let _c1r3 = self.c0r0 * self.c1r2 * self.c2r3 + self.c1r0 * self.c2r2 * self.c0r3 + self.c2r0 * self.c0r2 * self.c1r3
-                      - self.c2r0 * self.c1r2 * self.c0r3 - self.c1r0 * self.c0r2 * self.c2r3 - self.c0r0 * self.c2r2 * self.c1r3;
-            let _c2r3 = self.c2r0 * self.c1r1 * self.c0r3 + self.c1r0 * self.c0r1 * self.c2r3 + self.c0r0 * self.c2r1 * self.c1r3
-                      - self.c0r0 * self.c1r1 * self.c2r3 - self.c1r0 * self.c2r1 * self.c0r3 - self.c2r0 * self.c0r1 * self.c1r3;
-            let _c3r3 = self.c0r0 * self.c1r1 * self.c2r2 + self.c1r0 * self.c2r1 * self.c0r2 + self.c2r0 * self.c0r1 * self.c1r2
-                      - self.c2r0 * self.c1r1 * self.c0r2 - self.c1r0 * self.c0r1 * self.c2r2 - self.c0r0 * self.c2r1 * self.c1r2; 
-            */
             let _c0r0 = self.data[1][1] * self.data[2][2] * self.data[3][3] + self.data[2][1] * self.data[3][2] * self.data[1][3] + self.data[3][1] * self.data[1][2] * self.data[2][3]
                       - self.data[3][1] * self.data[2][2] * self.data[1][3] - self.data[2][1] * self.data[1][2] * self.data[3][3] - self.data[1][1] * self.data[3][2] * self.data[2][3];
             let _c1r0 = self.data[3][0] * self.data[2][2] * self.data[1][3] + self.data[2][0] * self.data[1][2] * self.data[3][3] + self.data[1][0] * self.data[3][2] * self.data[2][3]
@@ -6233,27 +6173,6 @@ impl<'a, 'b, S> ops::Mul<&'a Matrix4x4<S>> for &'b Matrix4x4<S> where S: Scalar 
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'a Matrix4x4<S>) -> Self::Output {
-        /*
-        let c0r0 = self.c0r0 * other.c0r0 + self.c1r0 * other.c0r1 + self.c2r0 * other.c0r2 + self.c3r0 * other.c0r3;
-        let c0r1 = self.c0r1 * other.c0r0 + self.c1r1 * other.c0r1 + self.c2r1 * other.c0r2 + self.c3r1 * other.c0r3;
-        let c0r2 = self.c0r2 * other.c0r0 + self.c1r2 * other.c0r1 + self.c2r2 * other.c0r2 + self.c3r2 * other.c0r3;
-        let c0r3 = self.c0r3 * other.c0r0 + self.c1r3 * other.c0r1 + self.c2r3 * other.c0r2 + self.c3r3 * other.c0r3;
-
-        let c1r0 = self.c0r0 * other.c1r0 + self.c1r0 * other.c1r1 + self.c2r0 * other.c1r2 + self.c3r0 * other.c1r3;
-        let c1r1 = self.c0r1 * other.c1r0 + self.c1r1 * other.c1r1 + self.c2r1 * other.c1r2 + self.c3r1 * other.c1r3;
-        let c1r2 = self.c0r2 * other.c1r0 + self.c1r2 * other.c1r1 + self.c2r2 * other.c1r2 + self.c3r2 * other.c1r3;
-        let c1r3 = self.c0r3 * other.c1r0 + self.c1r3 * other.c1r1 + self.c2r3 * other.c1r2 + self.c3r3 * other.c1r3;
-
-        let c2r0 = self.c0r0 * other.c2r0 + self.c1r0 * other.c2r1 + self.c2r0 * other.c2r2 + self.c3r0 * other.c2r3;
-        let c2r1 = self.c0r1 * other.c2r0 + self.c1r1 * other.c2r1 + self.c2r1 * other.c2r2 + self.c3r1 * other.c2r3;
-        let c2r2 = self.c0r2 * other.c2r0 + self.c1r2 * other.c2r1 + self.c2r2 * other.c2r2 + self.c3r2 * other.c2r3;
-        let c2r3 = self.c0r3 * other.c2r0 + self.c1r3 * other.c2r1 + self.c2r3 * other.c2r2 + self.c3r3 * other.c2r3;
-
-        let c3r0 = self.c0r0 * other.c3r0 + self.c1r0 * other.c3r1 + self.c2r0 * other.c3r2 + self.c3r0 * other.c3r3;
-        let c3r1 = self.c0r1 * other.c3r0 + self.c1r1 * other.c3r1 + self.c2r1 * other.c3r2 + self.c3r1 * other.c3r3;
-        let c3r2 = self.c0r2 * other.c3r0 + self.c1r2 * other.c3r1 + self.c2r2 * other.c3r2 + self.c3r2 * other.c3r3;
-        let c3r3 = self.c0r3 * other.c3r0 + self.c1r3 * other.c3r1 + self.c2r3 * other.c3r2 + self.c3r3 * other.c3r3;
-        */
         let c0r0 = self.data[0][0] * other.data[0][0] + self.data[1][0] * other.data[0][1] + self.data[2][0] * other.data[0][2] + self.data[3][0] * other.data[0][3];
         let c0r1 = self.data[0][1] * other.data[0][0] + self.data[1][1] * other.data[0][1] + self.data[2][1] * other.data[0][2] + self.data[3][1] * other.data[0][3];
         let c0r2 = self.data[0][2] * other.data[0][0] + self.data[1][2] * other.data[0][1] + self.data[2][2] * other.data[0][2] + self.data[3][2] * other.data[0][3];
@@ -6430,51 +6349,6 @@ impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix4x4<S>> for Matrix4x4<S> {
     }
 }
 
-/*
-impl_scalar_matrix_mul_ops!(u8,    Matrix4x4<u8>,    Matrix4x4<u8>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(u16,   Matrix4x4<u16>,   Matrix4x4<u16>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(u32,   Matrix4x4<u32>,   Matrix4x4<u32>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(u64,   Matrix4x4<u64>,   Matrix4x4<u64>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(u128,  Matrix4x4<u128>,  Matrix4x4<u128>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(usize, Matrix4x4<usize>, Matrix4x4<usize>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(i8,    Matrix4x4<i8>,    Matrix4x4<i8>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(i16,   Matrix4x4<i16>,   Matrix4x4<i16>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(i32,   Matrix4x4<i32>,   Matrix4x4<i32>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(i64,   Matrix4x4<i64>,   Matrix4x4<i64>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(i128,  Matrix4x4<i128>,  Matrix4x4<i128>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(isize, Matrix4x4<isize>, Matrix4x4<isize>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(f32,   Matrix4x4<f32>,   Matrix4x4<f32>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-impl_scalar_matrix_mul_ops!(f64,   Matrix4x4<f64>,   Matrix4x4<f64>, 
-    { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, c2r0, c2r1, c2r2, c2r3, c3r0, c3r1, c3r2, c3r3 }
-);
-
-*/
 impl_scalar_matrix_mul_ops1!(
     u8,    Matrix4x4<u8>,    Matrix4x4<u8>, { 
         (0, 0), (0, 1), (0, 2), (0, 3), 
