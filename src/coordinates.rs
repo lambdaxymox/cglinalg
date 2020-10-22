@@ -1,13 +1,3 @@
-use core::ops::{
-    Deref,
-    DerefMut,
-};
-use crate::matrix::{
-    Matrix2x2,
-};
-use core::mem;
-
-
 #[macro_export]
 macro_rules! impl_coords {
     ($T:ident, { $($comps: ident),* }) => {
