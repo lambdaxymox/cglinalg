@@ -6,7 +6,12 @@ use num_traits::{
 };
 
 
-/// This trait enables one to assign lengths to vectors.
+/// A type with this trait acts as a vector with a notion of magnitude (length)
+/// in a Euclidean vector space.
+///
+/// Examples of types that can be made into Euclidean normed spaces include 
+/// vectors, quaternions, complex numbers, points, and scalar numbers. In the 
+/// scalar case, the Euclidean magnitude is the absolute value of the scalar.
 pub trait Magnitude where Self: Sized {
     type Output: ScalarFloat;
 
