@@ -398,14 +398,12 @@ impl<S> Matrix2x2<S> where S: Copy {
     /// Generate a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
-        //&self.c0r0
         &self.data[0][0]
     }
 
     /// Generate a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
-        //&mut self.c0r0
         &mut self.data[0][0]
     }
 
@@ -3393,7 +3391,6 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
 
 impl<S> fmt::Display for Matrix3x3<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        // We print the matrix contents in row-major order like mathematical convention.
         writeln!(
             formatter, 
             "Matrix3x3 [[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]]", 
