@@ -52,8 +52,16 @@ mod vector1_tests {
         }
     }
 
+
     #[test]
-    fn test_coordinates() {
+    fn test_coordinates1() {
+        let vector = Vector1::new(1_i32);
+
+        assert_eq!(vector[0], 1_i32);
+    }
+
+    #[test]
+    fn test_coordinates2() {
         let vector = Vector1::new(1_i32);
 
         assert_eq!(vector.x, vector[0]);
@@ -244,7 +252,15 @@ mod vector2_tests {
     }
 
     #[test]
-    fn test_coordinates() {
+    fn test_coordinates1() {
+        let vector = Vector2::new(1_i32, 2_i32);
+
+        assert_eq!(vector[0], 1_i32);
+        assert_eq!(vector[1], 2_i32);
+    }
+
+    #[test]
+    fn test_coordinates2() {
         let vector = Vector2::new(1_i32, 2_i32);
 
         assert_eq!(vector.x, vector[0]);
@@ -466,7 +482,16 @@ mod vector3_tests {
     }
 
     #[test]
-    fn test_coordinates() {
+    fn test_coordinates1() {
+        let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+
+        assert_eq!(vector[0], 1_i32);
+        assert_eq!(vector[1], 2_i32);
+        assert_eq!(vector[2], 3_i32);
+    }
+
+    #[test]
+    fn test_coordinates2() {
         let vector = Vector3::new(1_i32, 2_i32, 3_i32);
 
         assert_eq!(vector.x, vector[0]);
@@ -702,8 +727,19 @@ mod vector4_tests {
         }
     }
 
+
     #[test]
-    fn test_coordinates() {
+    fn test_coordinates1() {
+        let vector = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(vector[0], 1_i32);
+        assert_eq!(vector[1], 2_i32);
+        assert_eq!(vector[2], 3_i32);
+        assert_eq!(vector[3], 4_i32);
+    }
+
+    #[test]
+    fn test_coordinates2() {
         let vector = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
 
         assert_eq!(vector.x, vector[0]);
