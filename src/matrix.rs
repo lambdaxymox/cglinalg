@@ -483,6 +483,26 @@ impl<S> Matrix2x2<S> where S: Copy {
     }
     
     /// Swap two rows of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let mut result = Matrix2x2::new(
+    ///     1_i32, 2_i32,
+    ///     1_i32, 2_i32,   
+    /// );
+    /// let expected = Matrix2x2::new(
+    ///     2_i32, 1_i32,
+    ///     2_i32, 1_i32,    
+    /// );
+    /// result.swap_rows(0, 1);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
         let c0ra = self[0][row_a];
@@ -1655,6 +1675,28 @@ impl<S> Matrix3x3<S> where S: Copy {
     }
     
     /// Swap two rows of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let mut result = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32,
+    ///     1_i32, 2_i32, 3_i32,
+    ///     1_i32, 2_i32, 3_i32
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     3_i32, 2_i32, 1_i32,
+    ///     3_i32, 2_i32, 1_i32,
+    ///     3_i32, 2_i32, 1_i32
+    /// );
+    /// result.swap_rows(0, 2);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
         let c0ra = self[0][row_a];
@@ -3765,6 +3807,30 @@ impl<S> Matrix4x4<S> where S: Copy {
     }
      
     /// Swap two rows of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let mut result = Matrix4x4::new(
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     3_i32, 2_i32, 1_i32, 4_i32,
+    ///     3_i32, 2_i32, 1_i32, 4_i32,
+    ///     3_i32, 2_i32, 1_i32, 4_i32,
+    ///     3_i32, 2_i32, 1_i32, 4_i32
+    /// );
+    /// result.swap_rows(0, 2);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
         let c0ra = self[0][row_a];
