@@ -513,7 +513,27 @@ impl<S> Matrix2x2<S> where S: Copy {
         self[1][row_b] = c1ra;
     }
     
-     /// Swap two columns of a matrix.
+    /// Swap two columns of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let mut result = Matrix2x2::new(
+    ///     1_i32, 1_i32,
+    ///     2_i32, 2_i32,   
+    /// );
+    /// let expected = Matrix2x2::new(
+    ///     2_i32, 2_i32,
+    ///     1_i32, 1_i32,    
+    /// );
+    /// result.swap_columns(0, 1);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
         let car0 = self[col_a][0];
@@ -1711,6 +1731,28 @@ impl<S> Matrix3x3<S> where S: Copy {
     }
     
     /// Swap two columns of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let mut result = Matrix3x3::new(
+    ///     1_i32, 1_i32, 1_i32,
+    ///     2_i32, 2_i32, 2_i32,
+    ///     3_i32, 3_i32, 3_i32
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     3_i32, 3_i32, 3_i32,
+    ///     2_i32, 2_i32, 2_i32,
+    ///     1_i32, 1_i32, 1_i32
+    /// );
+    /// result.swap_columns(0, 2);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
         let car0 = self[col_a][0];
@@ -3848,6 +3890,30 @@ impl<S> Matrix4x4<S> where S: Copy {
     }
      
     /// Swap two columns of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let mut result = Matrix4x4::new(
+    ///     1_i32, 1_i32, 1_i32, 1_i32,
+    ///     2_i32, 2_i32, 2_i32, 2_i32,
+    ///     3_i32, 3_i32, 3_i32, 3_i32,
+    ///     4_i32, 4_i32, 4_i32, 4_i32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     3_i32, 3_i32, 3_i32, 3_i32,
+    ///     2_i32, 2_i32, 2_i32, 2_i32,
+    ///     1_i32, 1_i32, 1_i32, 1_i32,
+    ///     4_i32, 4_i32, 4_i32, 4_i32
+    /// );
+    /// result.swap_columns(0, 2);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
         let car0 = self[col_a][0];
