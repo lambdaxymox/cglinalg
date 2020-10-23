@@ -340,7 +340,21 @@ impl<S> Point1<S> where S: Copy {
     }
 
     /// Map an operation on that acts on the coordinates of a point, returning 
-    /// a point of the new underlying type.
+    /// a point whose coordinates are of the new scalar type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1,  
+    /// # };
+    /// #
+    /// let vector: Point1<u32> = Point1::new(1_u32);
+    /// let expected: Point1<i32> = Point1::new(2_i32);
+    /// let result: Point1<i32> = vector.map(|comp| (comp + 1) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn map<T, F>(self, op: F) -> Point1<T> 
         where F: FnMut(S) -> T 
@@ -733,6 +747,20 @@ impl<S> Point2<S> where S: Copy {
 
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,  
+    /// # };
+    /// #
+    /// let vector: Point2<u32> = Point2::new(1_u32, 2_u32);
+    /// let expected: Point2<i32> = Point2::new(2_i32, 3_i32);
+    /// let result: Point2<i32> = vector.map(|comp| (comp + 1) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn map<T, F>(self, op: F) -> Point2<T> 
         where F: FnMut(S) -> T 
@@ -1158,6 +1186,20 @@ impl<S> Point3<S> where S: Copy {
 
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,  
+    /// # };
+    /// #
+    /// let vector: Point3<u32> = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected: Point3<i32> = Point3::new(2_i32, 3_i32, 4_i32);
+    /// let result: Point3<i32> = vector.map(|comp| (comp + 1) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn map<T, F>(self, op: F) -> Point3<T> where F: FnMut(S) -> T {
         Point3 {

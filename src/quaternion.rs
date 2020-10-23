@@ -153,6 +153,32 @@ impl<S> Quaternion<S> where S: Copy {
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 4]>>::as_ref(self)
     }
+
+    /// Map an operation on that acts on the coordinates of a vector, returning 
+    /// a vector whose coordinates are of the new scalar type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,  
+    /// # };
+    /// #
+    /// let vector: Quaternion<f32> = Quaternion::new(1_f32, 2_f32, 3_f32, 4_f32);
+    /// let expected: Quaternion<f64> = Quaternion::new(-2_f64, -3_f64, -4_f64, -5_f64);
+    /// let result: Quaternion<f64> = vector.map(|comp| -(comp + 1_f32) as f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(self, mut op: F) -> Quaternion<T> where F: FnMut(S) -> T {
+        Quaternion::new(
+            op(self.s),
+            op(self.v.x),
+            op(self.v.y),
+            op(self.v.z),
+        )
+    }
 }
 
 impl<S> Quaternion<S> where S: NumCast + Copy {

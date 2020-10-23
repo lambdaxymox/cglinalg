@@ -406,8 +406,22 @@ impl<S> Vector1<S> where S: Copy {
         <Self as AsRef<[S; 1]>>::as_ref(self)
     }
 
-    /// Map an operation on the elements of a vector, returning a vector of the 
-    /// new underlying type.
+    /// Map an operation on that acts on the coordinates of a vector, returning 
+    /// a vector whose coordinates are of the new scalar type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,  
+    /// # };
+    /// #
+    /// let vector: Vector1<u32> = Vector1::new(1_u32);
+    /// let expected: Vector1<i32> = Vector1::new(2_i32);
+    /// let result: Vector1<i32> = vector.map(|comp| (comp + 1) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Vector1<T> where F: FnMut(S) -> T {
         Vector1::new(op(self.data[0]))
@@ -883,8 +897,22 @@ impl<S> Vector2<S> where S: Copy {
         <Self as AsRef<[S; 2]>>::as_ref(self)
     }
 
-    /// Map an operation on the elements of a vector, returning a vector of the 
-    /// new underlying type.
+    /// Map an operation on that acts on the coordinates of a vector, returning 
+    /// a vector whose coordinates are of the new scalar type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,  
+    /// # };
+    /// #
+    /// let vector: Vector2<u32> = Vector2::new(1_u32, 2_u32);
+    /// let expected: Vector2<i32> = Vector2::new(2_i32, 3_i32);
+    /// let result: Vector2<i32> = vector.map(|comp| (comp + 1) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Vector2<T> where F: FnMut(S) -> T {
         Vector2::new(op(self.data[0]), op(self.data[1]))
@@ -1403,8 +1431,22 @@ impl<S> Vector3<S> where S: Copy {
         <Self as AsRef<[S; 3]>>::as_ref(self)
     }
 
-    /// Map an operation on the elements of a vector, returning a vector of the 
-    /// new underlying type.
+    /// Map an operation on that acts on the coordinates of a vector, returning 
+    /// a vector whose coordinates are of the new scalar type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let vector: Vector3<u32> = Vector3::new(1_u32, 2_u32, 3_u32);
+    /// let expected: Vector3<i32> = Vector3::new(2_i32, 3_i32, 4_i32);
+    /// let result: Vector3<i32> = vector.map(|comp| (comp + 1) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Vector3<T> where F: FnMut(S) -> T {
         Vector3::new(op(self.data[0]), op(self.data[1]), op(self.data[2]))
@@ -1936,8 +1978,22 @@ impl<S> Vector4<S> where S: Copy {
         <Self as AsRef<[S; 4]>>::as_ref(self)
     }
 
-    /// Map an operation on the elements of a vector, returning a vector of the 
-    /// new underlying type.
+    /// Map an operation on that acts on the coordinates of a vector, returning 
+    /// a vector whose coordinates are of the new scalar type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,  
+    /// # };
+    /// #
+    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Vector4<i32> = Vector4::new(2_i32, 3_i32, 4_i32, 5_i32);
+    /// let result: Vector4<i32> = vector.map(|comp| (comp + 1) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Vector4<T> where F: FnMut(S) -> T {
         Vector4::new(
