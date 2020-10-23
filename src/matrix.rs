@@ -1109,7 +1109,7 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
 
     /// Compute the determinant of a matrix.
     /// 
-    /// The determinant of a matrix is the signed volume of the parallelopiped
+    /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
     /// ## Example
@@ -2828,7 +2828,7 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
 
     /// Compute the determinant of a matrix.
     /// 
-    /// The determinant of a matrix is the signed volume of the parallelopiped
+    /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
     /// ## Example
@@ -4793,7 +4793,7 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
 
     /// Compute the determinant of a matrix.
     /// 
-    /// The determinant of a matrix is the signed volume of the parallelopiped
+    /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
     /// ## Example

@@ -1600,7 +1600,7 @@ impl<S> Vector3<S> where S: ScalarSigned {
     /// three dimensions. The cross product is a form of vector 
     /// multiplication that computes a vector normal to the plane swept out by 
     /// the two vectors. The magnitude of this vector is the area of the 
-    /// parallelogram swept out by thw two vectors. 
+    /// parallelogram swept out by the two vectors. 
     ///
     /// ## Example
     ///

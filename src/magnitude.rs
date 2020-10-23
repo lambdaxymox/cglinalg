@@ -68,7 +68,7 @@ pub trait Magnitude where Self: Sized {
     /// `threshold`, the function returns `None`.
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self>;
 
-    /// Compute the squared Eucliean distance between two vectors.
+    /// Compute the squared Euclidean distance between two vectors.
     fn distance_squared(&self, other: &Self) -> Self::Output;
 
     /// Compute the Euclidean distance between two vectors.

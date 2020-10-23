@@ -1743,7 +1743,7 @@ impl<S> Quaternion<S> where S: ScalarFloat {
 
     /// Compute the polar decomposition of a quaternion.
     ///
-    /// Every quaternion `q` can be decomposed into a polars form. A
+    /// Every quaternion `q` can be decomposed into a polar form. A
     /// quaternion `q`, can be written in polar form as
     /// ```text
     /// q := s + v := |q| * exp((-theta / 2) * vhat) 
