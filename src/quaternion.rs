@@ -23,7 +23,6 @@ use crate::unit::{
 
 use num_traits::NumCast;
 use core::fmt;
-use core::iter;
 use core::ops;
 
 
@@ -2448,34 +2447,6 @@ impl<S> approx::UlpsEq for Quaternion<S> where S: ScalarFloat {
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.s, &other.s, epsilon, max_ulps) &&
         Vector3::ulps_eq(&self.v, &other.v, epsilon, max_ulps)
-    }
-}
-
-impl<S: Scalar> iter::Sum<Quaternion<S>> for Quaternion<S> {
-    #[inline]
-    fn sum<I: Iterator<Item = Quaternion<S>>>(iter: I) -> Quaternion<S> {
-        iter.fold(Quaternion::<S>::zero(), ops::Add::add)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Sum<&'a Quaternion<S>> for Quaternion<S> {
-    #[inline]
-    fn sum<I: Iterator<Item = &'a Quaternion<S>>>(iter: I) -> Quaternion<S> {
-        iter.fold(Quaternion::<S>::zero(), ops::Add::add)
-    }
-}
-
-impl<S: Scalar> iter::Product<Quaternion<S>> for Quaternion<S> {
-    #[inline]
-    fn product<I: Iterator<Item = Quaternion<S>>>(iter: I) -> Quaternion<S> {
-        iter.fold(Quaternion::<S>::identity(), ops::Mul::mul)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Product<&'a Quaternion<S>> for Quaternion<S> {
-    #[inline]
-    fn product<I: Iterator<Item = &'a Quaternion<S>>>(iter: I) -> Quaternion<S> {
-        iter.fold(Quaternion::<S>::identity(), ops::Mul::mul)
     }
 }
 

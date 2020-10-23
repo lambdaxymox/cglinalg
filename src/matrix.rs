@@ -38,7 +38,6 @@ use num_traits::{
 use core::fmt;
 use core::ops::*;
 use core::ops;
-use core::iter;
 
 
 pub type RowVector1<S> = Matrix1x1<S>;
@@ -649,6 +648,8 @@ impl_scalar_matrix_mul_ops!(f32,   Matrix1x1<f32>,   Matrix1x1<f32>,   { (0, 0) 
 impl_scalar_matrix_mul_ops!(f64,   Matrix1x1<f64>,   Matrix1x1<f64>,   { (0, 0) });
 
 impl_approx_eq_ops!(Matrix1x1, { (0, 0) });
+
+
 
 
 /// The `Matrix2x2` type represents 2x2 matrices in column-major order.
@@ -1818,34 +1819,6 @@ impl_scalar_matrix_mul_ops!(f64,   Matrix2x2<f64>,   Matrix2x2<f64>,   { (0, 0),
 
 impl_approx_eq_ops!(Matrix2x2, { (0, 0), (0, 1), (1, 0), (1, 1) });
 
-
-impl<S: Scalar> iter::Sum<Matrix2x2<S>> for Matrix2x2<S> {
-    #[inline]
-    fn sum<I: Iterator<Item = Matrix2x2<S>>>(iter: I) -> Matrix2x2<S> {
-        iter.fold(Matrix2x2::<S>::zero(), ops::Add::add)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Sum<&'a Matrix2x2<S>> for Matrix2x2<S> {
-    #[inline]
-    fn sum<I: Iterator<Item = &'a Matrix2x2<S>>>(iter: I) -> Matrix2x2<S> {
-        iter.fold(Matrix2x2::<S>::zero(), ops::Add::add)
-    }
-}
-
-impl<S: Scalar> iter::Product<Matrix2x2<S>> for Matrix2x2<S> {
-    #[inline]
-    fn product<I: Iterator<Item = Matrix2x2<S>>>(iter: I) -> Matrix2x2<S> {
-        iter.fold(Matrix2x2::<S>::identity(), ops::Mul::mul)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix2x2<S>> for Matrix2x2<S> {
-    #[inline]
-    fn product<I: Iterator<Item = &'a Matrix2x2<S>>>(iter: I) -> Matrix2x2<S> {
-        iter.fold(Matrix2x2::<S>::identity(), ops::Mul::mul)
-    }
-}
 
 
 
@@ -3969,33 +3942,6 @@ impl_approx_eq_ops!(
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
 });
 
-impl<S: Scalar> iter::Sum<Matrix3x3<S>> for Matrix3x3<S> {
-    #[inline]
-    fn sum<I: Iterator<Item = Matrix3x3<S>>>(iter: I) -> Matrix3x3<S> {
-        iter.fold(Matrix3x3::<S>::zero(), ops::Add::add)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Sum<&'a Matrix3x3<S>> for Matrix3x3<S> {
-    #[inline]
-    fn sum<I: Iterator<Item = &'a Matrix3x3<S>>>(iter: I) -> Matrix3x3<S> {
-        iter.fold(Matrix3x3::<S>::zero(), ops::Add::add)
-    }
-}
-
-impl<S: Scalar> iter::Product<Matrix3x3<S>> for Matrix3x3<S> {
-    #[inline]
-    fn product<I: Iterator<Item = Matrix3x3<S>>>(iter: I) -> Matrix3x3<S> {
-        iter.fold(Matrix3x3::<S>::identity(), ops::Mul::mul)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix3x3<S>> for Matrix3x3<S> {
-    #[inline]
-    fn product<I: Iterator<Item = &'a Matrix3x3<S>>>(iter: I) -> Matrix3x3<S> {
-        iter.fold(Matrix3x3::<S>::identity(), ops::Mul::mul)
-    }
-}
 
 
 
@@ -6360,31 +6306,4 @@ impl_approx_eq_ops!(
     (3, 0), (3, 1), (3, 2), (3, 3) 
 });
 
-impl<S: Scalar> iter::Sum<Matrix4x4<S>> for Matrix4x4<S> {
-    #[inline]
-    fn sum<I: Iterator<Item = Matrix4x4<S>>>(iter: I) -> Matrix4x4<S> {
-        iter.fold(Matrix4x4::<S>::zero(), ops::Add::add)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Sum<&'a Matrix4x4<S>> for Matrix4x4<S> {
-    #[inline]
-    fn sum<I: Iterator<Item = &'a Matrix4x4<S>>>(iter: I) -> Matrix4x4<S> {
-        iter.fold(Matrix4x4::<S>::zero(), ops::Add::add)
-    }
-}
-
-impl<S: Scalar> iter::Product<Matrix4x4<S>> for Matrix4x4<S> {
-    #[inline]
-    fn product<I: Iterator<Item = Matrix4x4<S>>>(iter: I) -> Matrix4x4<S> {
-        iter.fold(Matrix4x4::<S>::identity(), ops::Mul::mul)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Product<&'a Matrix4x4<S>> for Matrix4x4<S> {
-    #[inline]
-    fn product<I: Iterator<Item = &'a Matrix4x4<S>>>(iter: I) -> Matrix4x4<S> {
-        iter.fold(Matrix4x4::<S>::identity(), ops::Mul::mul)
-    }
-}
 

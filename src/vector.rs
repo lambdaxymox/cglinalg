@@ -15,7 +15,6 @@ use num_traits::{
 };
 
 use core::fmt;
-use core::iter;
 use core::ops;
 use core::ops::*;
 
@@ -732,19 +731,6 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
 impl_approx_eq_ops!(Vector1, { 0 });
 
 
-impl<S: Scalar> iter::Sum<Vector1<S>> for Vector1<S> {
-    #[inline]
-    fn sum<I: Iterator<Item=Vector1<S>>>(iter: I) -> Vector1<S> {
-        iter.fold(Vector1::zero(), ops::Add::add)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector1<S>> for Vector1<S> {
-    #[inline]
-    fn sum<I: Iterator<Item=&'a Vector1<S>>>(iter: I) -> Vector1<S> {
-        iter.fold(Vector1::zero(), ops::Add::add)
-    }
-}
 
 
 /// A representation of two-dimensional vectors in a Euclidean space.
@@ -1262,19 +1248,6 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
 impl_approx_eq_ops!(Vector2, { 0, 1 });
 
 
-impl<S: Scalar> iter::Sum<Vector2<S>> for Vector2<S> {
-    #[inline]
-    fn sum<I: Iterator<Item=Vector2<S>>>(iter: I) -> Vector2<S> {
-        iter.fold(Vector2::zero(), ops::Add::add)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector2<S>> for Vector2<S> {
-    #[inline]
-    fn sum<I: Iterator<Item=&'a Vector2<S>>>(iter: I) -> Vector2<S> {
-        iter.fold(Vector2::zero(), ops::Add::add)
-    }
-}
 
 
 /// A representation of three-dimensional vectors in a Euclidean space.
@@ -1866,19 +1839,6 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
 impl_approx_eq_ops!(Vector3, { 0, 1, 2 });
 
 
-impl<S: Scalar> iter::Sum<Vector3<S>> for Vector3<S> {
-    #[inline]
-    fn sum<I: Iterator<Item=Vector3<S>>>(iter: I) -> Vector3<S> {
-        iter.fold(Vector3::zero(), ops::Add::add)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector3<S>> for Vector3<S> {
-    #[inline]
-    fn sum<I: Iterator<Item=&'a Vector3<S>>>(iter: I) -> Vector3<S> {
-        iter.fold(Vector3::zero(), ops::Add::add)
-    }
-}
 
 
 /// A representation of four-dimensional vectors in a Euclidean space.
@@ -2407,19 +2367,4 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
 }
 
 impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
-
-
-impl<S: Scalar> iter::Sum<Vector4<S>> for Vector4<S> {
-    #[inline]
-    fn sum<I: Iterator<Item=Vector4<S>>>(iter: I) -> Vector4<S> {
-        iter.fold(Vector4::zero(), ops::Add::add)
-    }
-}
-
-impl<'a, S: 'a + Scalar> iter::Sum<&'a Vector4<S>> for Vector4<S> {
-    #[inline]
-    fn sum<I: Iterator<Item=&'a Vector4<S>>>(iter: I) -> Vector4<S> {
-        iter.fold(Vector4::zero(), ops::Add::add)
-    }
-}
 
