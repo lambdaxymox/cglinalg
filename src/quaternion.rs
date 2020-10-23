@@ -216,6 +216,19 @@ impl<S> Quaternion<S> where S: Scalar {
     /// Returns the unit real quaternion. 
     ///
     /// A real quaternion is a quaternion with zero vector part.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion, 
+    /// # };
+    /// #
+    /// let unit_s: Quaternion<f64> = Quaternion::unit_s();
+    ///
+    /// assert!(unit_s.is_real());
+    /// assert!(!unit_s.is_pure());
+    /// ```
     #[inline]
     pub fn unit_s() -> Quaternion<S> {
         Quaternion::from_parts(S::one(), Vector3::zero())
@@ -224,6 +237,19 @@ impl<S> Quaternion<S> where S: Scalar {
     /// Return the **x-axis** unit pure quaternion.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion, 
+    /// # };
+    /// #
+    /// let unit_x: Quaternion<f64> = Quaternion::unit_x();
+    ///
+    /// assert!(!unit_x.is_real());
+    /// assert!(unit_x.is_pure());
+    /// ```
     #[inline]
     pub fn unit_x() -> Quaternion<S> {
         Quaternion::from_parts(
@@ -235,6 +261,19 @@ impl<S> Quaternion<S> where S: Scalar {
     /// Returns the **y-axis** unit pure quaternion.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion, 
+    /// # };
+    /// #
+    /// let unit_y: Quaternion<f64> = Quaternion::unit_y();
+    ///
+    /// assert!(!unit_y.is_real());
+    /// assert!(unit_y.is_pure());
+    /// ```
     #[inline]
     pub fn unit_y() -> Quaternion<S> {
         Quaternion::from_parts(
@@ -246,6 +285,19 @@ impl<S> Quaternion<S> where S: Scalar {
     /// Returns the **z-axis** unit pure quaternion.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion, 
+    /// # };
+    /// #
+    /// let unit_z: Quaternion<f64> = Quaternion::unit_z();
+    ///
+    /// assert!(!unit_z.is_real());
+    /// assert!(unit_z.is_pure());
+    /// ```
     #[inline]
     pub fn unit_z() -> Quaternion<S> {
         Quaternion::from_parts(
@@ -313,10 +365,29 @@ impl<S> Quaternion<S> where S: Scalar {
     }
     
     /// Determine whether a quaternion is equal to the identity quaternion.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion, 
+    /// # };
+    /// #
+    /// let identity: Quaternion<f64> = Quaternion::identity();
+    /// assert!(identity.is_identity());
+    ///
+    /// let unit_x: Quaternion<f64> = Quaternion::unit_x();
+    /// assert!(!unit_x.is_identity());
+    ///
+    /// let unit_y: Quaternion<f64> = Quaternion::unit_y();
+    /// assert!(!unit_y.is_identity());
+    ///
+    /// let unit_z: Quaternion<f64> = Quaternion::unit_z();
+    /// assert!(!unit_z.is_identity());
+    /// ```
     #[inline]
     pub fn is_identity(&self) -> bool {
-        self.s.is_one()
-            && self.v.x.is_one() && self.v.y.is_one() && self.v.z.is_one()
+        self.s.is_one() && self.v.is_zero()
     }
 
     /// Check whether a quaternion is a pure quaternion.
