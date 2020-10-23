@@ -528,29 +528,29 @@ impl<S> Matrix2x2<S> where S: Copy {
         self[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix entries.
+    /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub fn len(&self) -> usize {
         4
     }
 
-    /// The shape of the underlying array storing the matrix entries.
+    /// The shape of the underlying array storing the matrix components.
     ///
-    /// The shape of the matrix is the number of columns and rows of the 
-    /// matrix. The order of the descriptions of the shape of the matrix
-    /// is **(rows, columns)**.
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (2, 2)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         &self.data[0][0]
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.data[0][0]
@@ -1700,29 +1700,29 @@ impl<S> Matrix3x3<S> where S: Copy {
         self[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix entries.
+    /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub fn len(&self) -> usize {
         9
     }
 
-    /// The shape of the underlying array storing the matrix entries.
+    /// The shape of the underlying array storing the matrix components.
     ///
-    /// The shape of the matrix is the number of columns and rows of the 
-    /// matrix. The order of the descriptions of the shape of the matrix
-    /// is **(rows, columns)**.
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (3, 3)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         &self.data[0][0]
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.data[0][0]
@@ -3796,29 +3796,29 @@ impl<S> Matrix4x4<S> where S: Copy {
         self[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix entries.
+    /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub fn len(&self) -> usize {
         16
     }
 
-    /// The shape of the underlying array storing the matrix entries.
+    /// The shape of the underlying array storing the matrix components.
     ///
-    /// The shape of the matrix is the number of columns and rows of the 
-    /// matrix. The order of the descriptions of the shape of the matrix
-    /// is **(rows, columns)**.
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (4, 4)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         &self.data[0][0]
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.data[0][0]

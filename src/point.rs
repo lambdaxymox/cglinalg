@@ -305,25 +305,29 @@ impl<S> Point1<S> where S: Copy {
         Point1::new(value)
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the point components.
     #[inline]
     pub fn len(&self) -> usize {
         1
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the point components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (1, 1)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         self.data.as_ptr()
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         self.data.as_mut_ptr()
@@ -693,25 +697,29 @@ impl<S> Point2<S> where S: Copy {
         Point2::new(value, value)
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the point components.
     #[inline]
     pub fn len(&self) -> usize {
         2
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the point components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (2, 1)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         self.data.as_ptr()
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         self.data.as_mut_ptr()
@@ -1114,25 +1122,29 @@ impl<S> Point3<S> where S: Copy {
         Point3::new(value, value, value)
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the point components.
     #[inline]
     pub fn len(&self) -> usize {
         3
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the point components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (3, 1)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         self.data.as_ptr()
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         self.data.as_mut_ptr()

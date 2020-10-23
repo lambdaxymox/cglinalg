@@ -372,29 +372,29 @@ impl<S> Vector1<S> where S: Copy {
         Vector1::new(value)
     }
 
-    /// The length of the the underlying array storing the vector entries.
+    /// The length of the the underlying array storing the vector components.
     #[inline]
     pub fn len(&self) -> usize {
         1
     }
 
-    /// The shape of the underlying array storing the vector entries.
+    /// The shape of the underlying array storing the vector components.
     ///
-    /// The shape of the matrix is the number of columns and rows of the 
-    /// matrix. The order of the descriptions of the shape of the matrix
-    /// is **(rows, columns)**.
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (1, 1)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         &self.data[0]
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.data[0]
@@ -849,29 +849,29 @@ impl<S> Vector2<S> where S: Copy {
         Vector2::new(value, value)
     }
 
-    /// The length of the the underlying array storing the vector entries.
+    /// The length of the the underlying array storing the vector components.
     #[inline]
     pub fn len(&self) -> usize {
         2
     }
 
-    /// The shape of the underlying array storing the vector entries.
+    /// The shape of the underlying array storing the vector components.
     ///
-    /// The shape of the matrix is the number of columns and rows of the 
-    /// matrix. The order of the descriptions of the shape of the matrix
-    /// is **(rows, columns)**.
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (2, 1)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         &self.data[0]
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.data[0]
@@ -1369,29 +1369,29 @@ impl<S> Vector3<S> where S: Copy {
         Vector3::new(value, value, value)
     }
 
-    /// The length of the the underlying array storing the vector entries.
+    /// The length of the the underlying array storing the vector components.
     #[inline]
     pub fn len(&self) -> usize {
         3
     }
 
-    /// The shape of the underlying array storing the vector entries.
+    /// The shape of the underlying array storing the vector components.
     ///
-    /// The shape of the matrix is the number of columns and rows of the 
-    /// matrix. The order of the descriptions of the shape of the matrix
-    /// is **(rows, columns)**.
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (3, 1)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         &self.data[0]
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.data[0]
@@ -1902,29 +1902,29 @@ impl<S> Vector4<S> where S: Copy {
         Vector4::new(value, value, value, value)
     }
 
-    /// The length of the the underlying array storing the vector entries.
+    /// The length of the the underlying array storing the vector components.
     #[inline]
     pub fn len(&self) -> usize {
         4
     }
 
-    /// The shape of the underlying array storing the vector entries.
+    /// The shape of the underlying array storing the vector components.
     ///
-    /// The shape of the matrix is the number of columns and rows of the 
-    /// matrix. The order of the descriptions of the shape of the matrix
-    /// is **(rows, columns)**.
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (4, 1)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         &self.data[0]
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.data[0]

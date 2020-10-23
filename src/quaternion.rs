@@ -120,29 +120,29 @@ impl<S> Quaternion<S> where S: Copy {
         Quaternion::new(value, value, value, value)
     }
 
-    /// The length of the the underlying array storing the quaternion entries.
+    /// The length of the the underlying array storing the quaternion components.
     #[inline]
     pub fn len(&self) -> usize {
         4
     }
 
-    /// The shape of the underlying array storing the quaternion entries.
+    /// The shape of the underlying array storing the quaternion components.
     ///
-    /// The shape of the matrix is the number of columns and rows of the 
-    /// matrix. The order of the descriptions of the shape of the matrix
-    /// is **(rows, columns)**.
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub fn shape(&self) -> (usize, usize) {
         (4, 1)
     }
 
-    /// Generate a pointer to the underlying array.
+    /// Get a pointer to the underlying array.
     #[inline]
     pub fn as_ptr(&self) -> *const S {
         &self.s
     }
 
-    /// Generate a mutable pointer to the underlying array.
+    /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.s
