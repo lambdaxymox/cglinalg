@@ -630,8 +630,8 @@ impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> where S: Scalar {
 }
 
 
-impl_coords!(View1x1, { x });
-impl_coords_deref!(Vector1, View1x1);
+impl_coords!(X, { x });
+impl_coords_deref!(Vector1, X);
 
 impl_as_ref_ops!(Vector1<S>, S);
 impl_as_ref_ops!(Vector1<S>, (S,));
@@ -1146,8 +1146,8 @@ impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
     }
 }
 
-impl_coords!(View2x1, { x, y });
-impl_coords_deref!(Vector2, View2x1);
+impl_coords!(XY, { x, y });
+impl_coords_deref!(Vector2, XY);
 
 impl_as_ref_ops!(Vector2<S>, (S, S));
 impl_as_ref_ops!(Vector2<S>, [S; 2]);
@@ -1736,8 +1736,8 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
     }
 }
 
-impl_coords!(View3x1, { x, y, z });
-impl_coords_deref!(Vector3, View3x1);
+impl_coords!(XYZ, { x, y, z });
+impl_coords_deref!(Vector3, XYZ);
 
 impl_as_ref_ops!(Vector3<S>, (S, S, S));
 impl_as_ref_ops!(Vector3<S>, [S; 3]);
@@ -2265,8 +2265,8 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
     }
 }
 
-impl_coords!(View4x1, { x, y, z, w });
-impl_coords_deref!(Vector4, View4x1);
+impl_coords!(XYZW, { x, y, z, w });
+impl_coords_deref!(Vector4, XYZW);
 
 impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
 impl_as_ref_ops!(Vector4<S>, [S; 4]);
