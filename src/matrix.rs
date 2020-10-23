@@ -1480,43 +1480,7 @@ impl_as_ref_ops!(Matrix2x2<S>, [[S; 2]; 2]);
 impl_as_ref_ops!(Matrix2x2<S>, [Vector2<S>; 2]);
 
 impl_index_ops!(Matrix2x2, Vector2, (2, 2));
-/*
-impl<S> ops::Index<usize> for Matrix2x2<S> {
-    type Output = Vector2<S>;
 
-    #[inline]
-    fn index(&self, index: usize) -> &Self::Output {
-        let v: &[Vector2<S>; 2] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::IndexMut<usize> for Matrix2x2<S> {
-    #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut Vector2<S> {
-        let v: &mut [Vector2<S>; 2] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::Index<(usize, usize)> for Matrix2x2<S>{
-    type Output = S;
-
-    #[inline]
-    fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
-        let v: &[[S; 2]; 2] = self.as_ref();
-        &v[column][row]
-    }
-}
-
-impl<S> ops::IndexMut<(usize, usize)> for Matrix2x2<S> {
-    #[inline]
-    fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut S {
-        let v: &mut [[S; 2]; 2] = self.as_mut();
-        &mut v[column][row]
-    }
-}
-*/
 impl_matrix_matrix_mul_ops!(
     Matrix2x2, Matrix2x2 => Matrix2x2, dot_array2x2_col2,
     { (0, 0), (0, 1), (1, 0), (1, 1) }
@@ -3566,43 +3530,7 @@ impl_as_ref_ops!(Matrix3x3<S>, [[S; 3]; 3]);
 impl_as_ref_ops!(Matrix3x3<S>, [Vector3<S>; 3]);
 
 impl_index_ops!(Matrix3x3, Vector3, (3, 3));
-/*
-impl<S> ops::Index<usize> for Matrix3x3<S> {
-    type Output = Vector3<S>;
 
-    #[inline]
-    fn index(&self, index: usize) -> &Self::Output {
-        let v: &[Vector3<S>; 3] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::IndexMut<usize> for Matrix3x3<S> {
-    #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut Vector3<S> {
-        let v: &mut [Vector3<S>; 3] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::Index<(usize, usize)> for Matrix3x3<S>{
-    type Output = S;
-
-    #[inline]
-    fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
-        let v: &[[S; 3]; 3] = self.as_ref();
-        &v[column][row]
-    }
-}
-
-impl<S> ops::IndexMut<(usize, usize)> for Matrix3x3<S> {
-    #[inline]
-    fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut S {
-        let v: &mut [[S; 3]; 3] = self.as_mut();
-        &mut v[column][row]
-    }
-}
-*/
 impl_matrix_matrix_binary_ops!(
     Add, add, add_array3x3_array3x3, Matrix3x3<S>, Matrix3x3<S>, { 
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
@@ -5815,43 +5743,7 @@ impl_as_ref_ops!(Matrix4x4<S>, [[S; 4]; 4]);
 impl_as_ref_ops!(Matrix4x4<S>, [Vector4<S>; 4]);
 
 impl_index_ops!(Matrix4x4, Vector4, (4, 4));
-/*
-impl<S> ops::Index<usize> for Matrix4x4<S> {
-    type Output = Vector4<S>;
 
-    #[inline]
-    fn index(&self, index: usize) -> &Self::Output {
-        let v: &[Vector4<S>; 4] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::IndexMut<usize> for Matrix4x4<S> {
-    #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut Vector4<S> {
-        let v: &mut [Vector4<S>; 4] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::Index<(usize, usize)> for Matrix4x4<S>{
-    type Output = S;
-
-    #[inline]
-    fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
-        let v: &[[S; 4]; 4] = self.as_ref();
-        &v[column][row]
-    }
-}
-
-impl<S> ops::IndexMut<(usize, usize)> for Matrix4x4<S> {
-    #[inline]
-    fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut S {
-        let v: &mut [[S; 4]; 4] = self.as_mut();
-        &mut v[column][row]
-    }
-}
-*/
 impl_matrix_matrix_binary_ops!(
     Add, add, add_array4x4_array4x4, Matrix4x4<S>, Matrix4x4<S>, { 
     (0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), 
