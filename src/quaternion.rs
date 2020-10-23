@@ -200,7 +200,10 @@ impl<S> Quaternion<S> where S: Scalar {
     /// A pure quaternion is a quaternion with zero scalar part.
     #[inline]
     pub fn unit_x() -> Quaternion<S> {
-        Quaternion::from_parts(S::zero(), Vector3::new(S::one(), S::zero(), S::zero()))
+        Quaternion::from_parts(
+            S::zero(), 
+            Vector3::new(S::one(), S::zero(), S::zero())
+        )
     }
 
     /// Returns the **y-axis** unit pure quaternion.
@@ -208,7 +211,10 @@ impl<S> Quaternion<S> where S: Scalar {
     /// A pure quaternion is a quaternion with zero scalar part.
     #[inline]
     pub fn unit_y() -> Quaternion<S> {
-        Quaternion::from_parts(S::zero(), Vector3::new(S::zero(), S::one(), S::zero()))
+        Quaternion::from_parts(
+            S::zero(), 
+            Vector3::new(S::zero(), S::one(), S::zero())
+        )
     }
 
     /// Returns the **z-axis** unit pure quaternion.
@@ -216,7 +222,10 @@ impl<S> Quaternion<S> where S: Scalar {
     /// A pure quaternion is a quaternion with zero scalar part.
     #[inline]
     pub fn unit_z() -> Quaternion<S> {
-        Quaternion::from_parts(S::zero(), Vector3::new(S::zero(), S::zero(), S::one()))
+        Quaternion::from_parts(
+            S::zero(), 
+            Vector3::new(S::zero(), S::zero(), S::one())
+        )
     }
 
     /// Construct a zero quaternion.
@@ -1333,7 +1342,8 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// assert!(relative_eq!(result, expected));
     /// ```
     #[inline]
-    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Quaternion<S>>
+    pub fn rotation_between(
+        v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Quaternion<S>>
     {
         if let (Some(unit_v1), Some(unit_v2)) = (
             Unit::try_from_value(*v1, S::zero()),
@@ -1374,7 +1384,9 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     /// assert!(relative_eq!(result, expected));
     /// ```
     #[inline]
-    pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Quaternion<S>> {
+    pub fn rotation_between_axis(
+        unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Quaternion<S>> 
+    {
         let v1 = unit_v1.as_ref();
         let v2 = unit_v2.as_ref();
         let v1_cross_v2 = v1.cross(v2);
