@@ -240,6 +240,48 @@ macro_rules! impl_as_ref_ops {
     }
 }
 
+macro_rules! impl_approx_eq_ops {
+    ($T:ident, { $($index:expr),* }) => {
+        impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
+            type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+        
+            #[inline]
+            fn default_epsilon() -> Self::Epsilon {
+                S::default_epsilon()
+            }
+        
+            #[inline]
+            fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+                $(S::abs_diff_eq(&self.data[$index], &other.data[$index], epsilon)) &&*
+            }
+        }
+        
+        impl<S> approx::RelativeEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_relative() -> S::Epsilon {
+                S::default_max_relative()
+            }
+        
+            #[inline]
+            fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+                $(S::relative_eq(&self.data[$index], &other.data[$index], epsilon, max_relative)) &&*
+            }
+        }
+        
+        impl<S> approx::UlpsEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_ulps() -> u32 {
+                S::default_max_ulps()
+            }
+        
+            #[inline]
+            fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+                $(S::ulps_eq(&self.data[$index], &other.data[$index], epsilon, max_ulps)) &&*
+            }
+        }
+    }
+}
+
 
 /// A representation of one-dimensional vectors.
 #[repr(C)]
@@ -674,6 +716,8 @@ impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
     }
 }
 
+impl_approx_eq_ops!(Vector1, { 0 });
+/*
 impl<S> approx::AbsDiffEq for Vector1<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -711,7 +755,7 @@ impl<S> approx::UlpsEq for Vector1<S> where S: ScalarFloat {
         S::ulps_eq(&self.data[0], &other.data[0], epsilon, max_ulps)
     }
 }
-
+*/
 impl<S: Scalar> iter::Sum<Vector1<S>> for Vector1<S> {
     #[inline]
     fn sum<I: Iterator<Item=Vector1<S>>>(iter: I) -> Vector1<S> {
@@ -1225,6 +1269,8 @@ impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
     }
 }
 
+impl_approx_eq_ops!(Vector2, { 0, 1 });
+/*
 impl<S> approx::AbsDiffEq for Vector2<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1265,7 +1311,7 @@ impl<S> approx::UlpsEq for Vector2<S> where S: ScalarFloat {
         S::ulps_eq(&self.data[1], &other.data[1], epsilon, max_ulps)
     }
 }
-
+*/
 impl<S: Scalar> iter::Sum<Vector2<S>> for Vector2<S> {
     #[inline]
     fn sum<I: Iterator<Item=Vector2<S>>>(iter: I) -> Vector2<S> {
@@ -1853,6 +1899,8 @@ impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
     }
 }
 
+impl_approx_eq_ops!(Vector3, { 0, 1, 2 });
+/*
 impl<S> approx::AbsDiffEq for Vector3<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1896,7 +1944,7 @@ impl<S> approx::UlpsEq for Vector3<S> where S: ScalarFloat {
         S::ulps_eq(&self.data[2], &other.data[2], epsilon, max_ulps)
     }
 }
-
+*/
 impl<S: Scalar> iter::Sum<Vector3<S>> for Vector3<S> {
     #[inline]
     fn sum<I: Iterator<Item=Vector3<S>>>(iter: I) -> Vector3<S> {
@@ -2423,6 +2471,8 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
     }
 }
 
+impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
+/*
 impl<S> approx::AbsDiffEq for Vector4<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -2469,7 +2519,7 @@ impl<S> approx::UlpsEq for Vector4<S> where S: ScalarFloat {
         S::ulps_eq(&self.data[3], &other.data[3], epsilon, max_ulps)
     }
 }
-
+*/
 impl<S: Scalar> iter::Sum<Vector4<S>> for Vector4<S> {
     #[inline]
     fn sum<I: Iterator<Item=Vector4<S>>>(iter: I) -> Vector4<S> {
