@@ -4,7 +4,7 @@ extern crate proptest;
 
 
 #[cfg(test)]
-mod matrix2_tests {
+mod matrix2x2_tests {
     use cglinalg::{
         Vector2,
         Matrix2x2,
@@ -590,7 +590,7 @@ mod matrix2_tests {
 
 
 #[cfg(test)]
-mod matrix3_tests {
+mod matrix3x3_tests {
     use cglinalg::{
         Vector2,
         Vector3,
@@ -1542,7 +1542,7 @@ mod matrix3_tests {
 }
 
 #[cfg(test)]
-mod matrix4_tests {
+mod matrix4x4_tests {
     use cglinalg::{
         Vector3,
         Vector4,
