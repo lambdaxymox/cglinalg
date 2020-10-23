@@ -7,7 +7,6 @@ use proptest::prelude::*;
 use cglinalg::{
     Quaternion, 
     Scalar,
-    ScalarFloat,
 };
 
 
@@ -31,17 +30,6 @@ fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>>
         quaternion % modulus
     })
     .no_shrink()
-}
-
-fn any_unit_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
-    where S: ScalarFloat + Arbitrary
-{
-    use cglinalg::Magnitude;
-    any::<(S, S, S, S)>()
-        .prop_map(|(x, y, z, w)| Quaternion::new(x, y, z, w))
-        .prop_filter("Zero length quaternions are not invertible.", |q| !q.magnitude().is_zero())
-        .prop_map(|q| q.normalize())
-        .no_shrink()
 }
 
 
@@ -1265,65 +1253,4 @@ macro_rules! magnitude_props {
 }
 
 magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, any_scalar, 1e-7);
-
-
-/// Generate property tests for quaternion spherical linear interpolation (slerp).
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of quaternions.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! slerp_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use approx::{
-            relative_eq,
-        };
-        use num_traits::{
-            Zero,
-        };
-        use super::{
-            $Generator,
-        };
-
-
-        proptest! {
-            /// Quaternion spherical linear interpolation should yield the 
-            /// respective interpolants at the endpoints.
-            ///
-            /// Given quaternions `q0` and `q1`
-            /// ```text
-            /// slerp(q0, q1, 0) = q0 OR slerp(q0, q1, 0) = -q0
-            /// slerp(q0, q1, 1) = q1
-            /// ```
-            /// In our slerp function we allow the slerp function to negate the 
-            /// quaternion `q0` depending on which direction around the sphere
-            /// the shortest path is. Both a quaternion and its negation will produce
-            /// the same rotation.
-            #[test]
-            fn prop_quaternion_slerp_endpoints0(
-                q0 in $Generator::<$ScalarType>(), q1 in $Generator::<$ScalarType>()) {
-
-                let qs = q0.slerp(&q1, <$ScalarType as Zero>::zero());
-                
-                prop_assert!(
-                    relative_eq!(qs, q0, epsilon = $tolerance) || relative_eq!(qs, -q0, epsilon = $tolerance),
-                    "qs = {}\nq0 = {}\nq1 = {}", 
-                    qs, q0, q1
-                );
-            }
-        }
-    }
-    }
-}
-
-slerp_props!(quaternion_f64_slerp_props, f64, any_unit_quaternion, 1e-7);
 
