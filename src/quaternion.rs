@@ -120,15 +120,19 @@ impl<S> Quaternion<S> where S: Copy {
         Quaternion::new(value, value, value, value)
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the quaternion entries.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         4
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the quaternion entries.
+    ///
+    /// The shape of the matrix is the number of columns and rows of the 
+    /// matrix. The order of the descriptions of the shape of the matrix
+    /// is **(rows, columns)**.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (4, 1)
     }
 

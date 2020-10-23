@@ -447,15 +447,19 @@ impl<S> Matrix2x2<S> where S: Copy {
         self[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the matrix entries.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         4
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the matrix entries.
+    ///
+    /// The shape of the matrix is the number of columns and rows of the 
+    /// matrix. The order of the descriptions of the shape of the matrix
+    /// is **(rows, columns)**.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (2, 2)
     }
 
@@ -1692,15 +1696,19 @@ impl<S> Matrix3x3<S> where S: Copy {
         self[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the matrix entries.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         9
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the matrix entries.
+    ///
+    /// The shape of the matrix is the number of columns and rows of the 
+    /// matrix. The order of the descriptions of the shape of the matrix
+    /// is **(rows, columns)**.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (3, 3)
     }
 
@@ -3867,15 +3875,19 @@ impl<S> Matrix4x4<S> where S: Copy {
         self[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the matrix entries.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         16
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the matrix entries.
+    ///
+    /// The shape of the matrix is the number of columns and rows of the 
+    /// matrix. The order of the descriptions of the shape of the matrix
+    /// is **(rows, columns)**.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (4, 4)
     }
 

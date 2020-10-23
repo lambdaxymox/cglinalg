@@ -331,15 +331,19 @@ impl<S> Vector1<S> where S: Copy {
         Vector1::new(value)
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the vector entries.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         1
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the vector entries.
+    ///
+    /// The shape of the matrix is the number of columns and rows of the 
+    /// matrix. The order of the descriptions of the shape of the matrix
+    /// is **(rows, columns)**.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (1, 1)
     }
 
@@ -839,15 +843,19 @@ impl<S> Vector2<S> where S: Copy {
         Vector2::new(value, value)
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the vector entries.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         2
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the vector entries.
+    ///
+    /// The shape of the matrix is the number of columns and rows of the 
+    /// matrix. The order of the descriptions of the shape of the matrix
+    /// is **(rows, columns)**.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (2, 1)
     }
 
@@ -1393,15 +1401,19 @@ impl<S> Vector3<S> where S: Copy {
         Vector3::new(value, value, value)
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the vector entries.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         3
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the vector entries.
+    ///
+    /// The shape of the matrix is the number of columns and rows of the 
+    /// matrix. The order of the descriptions of the shape of the matrix
+    /// is **(rows, columns)**.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (3, 1)
     }
 
@@ -1963,15 +1975,19 @@ impl<S> Vector4<S> where S: Copy {
         Vector4::new(value, value, value, value)
     }
 
-    /// The length of the the underlying array.
+    /// The length of the the underlying array storing the vector entries.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         4
     }
 
-    /// The shape of the underlying array.
+    /// The shape of the underlying array storing the vector entries.
+    ///
+    /// The shape of the matrix is the number of columns and rows of the 
+    /// matrix. The order of the descriptions of the shape of the matrix
+    /// is **(rows, columns)**.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (4, 1)
     }
 
