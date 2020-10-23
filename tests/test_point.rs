@@ -11,6 +11,13 @@ mod point1_tests {
 
 
     #[test]
+    fn test_coordindates() {
+        let point = Point1::new(1_i32);
+
+        assert_eq!(point.x, point[0]);
+    }
+
+    #[test]
     fn test_addition() {
         let p = Point1::new(27.6189);
         let v = Vector1::new(258.083);
@@ -130,6 +137,14 @@ mod point2_tests {
         Magnitude,   
     };
 
+
+    #[test]
+    fn test_coordindates() {
+        let point = Point2::new(1_i32, 2_i32);
+
+        assert_eq!(point.x, point[0]);
+        assert_eq!(point.y, point[1]);
+    }
 
     #[test]
     fn test_addition() {
@@ -253,6 +268,15 @@ mod point3_tests {
         Magnitude,   
     };
 
+
+    #[test]
+    fn test_coordindates() {
+        let point = Point3::new(1_i32, 2_i32, 3_i32);
+
+        assert_eq!(point.x, point[0]);
+        assert_eq!(point.y, point[1]);
+        assert_eq!(point.z, point[2]);
+    }
 
     #[test]
     fn test_addition() {
