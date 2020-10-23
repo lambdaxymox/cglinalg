@@ -14,6 +14,7 @@ use crate::magnitude::{
     Magnitude,
 };
 use crate::vector::{
+    Vector1,
     Vector2,
     Vector3,
     Vector4,
@@ -38,6 +39,21 @@ use core::fmt;
 use core::ops::*;
 use core::ops;
 use core::iter;
+
+
+pub type RowVector1<S> = Matrix1x1<S>;
+
+/// A type synonym for `Matrix1x1`.
+pub type Matrix1<S> = Matrix1x1<S>;
+
+/// A type synonym for `Matrix2x2`.
+pub type Matrix2<S> = Matrix2x2<S>;
+
+/// A type synonym for `Matrix3x3`.
+pub type Matrix3<S> = Matrix3x3<S>;
+
+/// A type synonym for `Matrix4x4`
+pub type Matrix4<S> = Matrix4x4<S>;
 
 
 macro_rules! impl_as_ref_ops {
@@ -416,14 +432,223 @@ macro_rules! impl_index_ops {
 }
 
 
-/// A Type synonym for `Matrix2x2`.
-pub type Matrix2<S> = Matrix2x2<S>;
+/// The `Matrix1x1` type represents 1x1 matrices in column-major order.
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub struct Matrix1x1<S> {
+    data: [[S; 1]; 1],
+}
 
-/// A Type synonym for `Matrix3x3`.
-pub type Matrix3<S> = Matrix3x3<S>;
+impl<S> Matrix1x1<S> {
+    /// Construct a new 2x2 matrix from its field elements.
+    #[inline]
+    pub const fn new(c0r0: S) -> Matrix1x1<S> {
+        Matrix1x1 {
+            data: [[c0r0]]
+        }
+    }
+}
 
-/// A Type synonym for `Matrix4x4`
-pub type Matrix4<S> = Matrix4x4<S>;
+impl<S> Matrix1x1<S> where S: Copy {
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector1<S> {
+        Vector1::new(self.data[0][r])
+    }
+
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector1<S> {
+        Vector1::new(self.data[c][0])
+    }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub fn len(&self) -> usize {
+        1
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub fn shape(&self) -> (usize, usize) {
+        (1, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 1]>>::as_ref(self)
+    }
+
+    /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
+    #[inline]
+    pub fn from_columns(c0: Vector1<S>) -> Matrix1x1<S> {
+        Matrix1x1::new(c0[0])
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1, 
+    /// # };
+    /// #
+    /// let matrix = Matrix1x1::new(1_u32);
+    /// let expected = Matrix1x1::new(2_i32);
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix1x1<T> where F: FnMut(S) -> T {
+        Matrix1x1 {
+            data: [
+                [op(self.data[0][0])]
+            ],
+        }
+    }
+}
+
+impl<S> Matrix1x1<S> where S: NumCast + Copy {
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix1x1<u32> = Matrix1x1::new(1_u32);
+    /// let expected: Option<Matrix1x1<i32>> = Some(Matrix1x1::new(1_i32));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix1x1<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix1x1::new(c0r0))
+    }
+}
+
+impl<S> From<[[S; 1]; 1]> for Matrix1x1<S> where S: Scalar {
+    #[inline]
+    fn from(array: [[S; 1]; 1]) -> Matrix1x1<S> {
+        Matrix1x1::new(array[0][0])
+    }
+}
+
+impl<'a, S> From<&'a [[S; 1]; 1]> for &'a Matrix1x1<S> where S: Scalar {
+    #[inline]
+    fn from(array: &'a [[S; 1]; 1]) -> &'a Matrix1x1<S> {
+        unsafe { 
+            &*(array as *const [[S; 1]; 1] as *const Matrix1x1<S>)
+        }
+    }    
+}
+
+impl<S> From<[S; 1]> for Matrix1x1<S> where S: Scalar {
+    #[inline]
+    fn from(array: [S; 1]) -> Matrix1x1<S> {
+        Matrix1x1::new(array[0])
+    }
+}
+
+impl<'a, S> From<&'a [S; 1]> for &'a Matrix1x1<S> where S: Scalar {
+    #[inline]
+    fn from(array: &'a [S; 1]) -> &'a Matrix1x1<S> {
+        unsafe { 
+            &*(array as *const [S; 1] as *const Matrix1x1<S>)
+        }
+    }
+}
+
+impl_coords!(View1x1, { c0r0 });
+impl_coords_deref!(Matrix1x1, View1x1);
+
+impl_as_ref_ops!(Matrix1x1<S>, [S; 1]);
+impl_as_ref_ops!(Matrix1x1<S>, [[S; 1]; 1]);
+impl_as_ref_ops!(Matrix1x1<S>, [Vector1<S>; 1]);
+
+impl_index_ops!(Matrix1x1, Vector1, (1, 1));
+
+impl_matrix_matrix_mul_ops!(
+    Matrix1x1, Matrix1x1 => Matrix1x1, dot_array1x1_col1,
+    { (0, 0) }
+);
+impl_matrix_vector_mul_ops!(
+    Matrix1x1, Vector1 => Vector1, dot_array1x1_col1,
+    { (0, 0) }
+);
+
+impl_matrix_matrix_binary_ops!(
+    Add, add, add_array1x1_array1x1, Matrix1x1<S>, Matrix1x1<S>, 
+    { (0, 0) }
+);
+impl_matrix_matrix_binary_ops!(
+    Sub, sub, sub_array1x1_array1x1, Matrix1x1<S>, Matrix1x1<S>, 
+    { (0, 0) }
+);
+impl_matrix_unary_ops!(
+    Neg, neg, neg_array1x1, Matrix1x1<S>, Matrix1x1<S>,
+    { (0, 0) }
+);
+
+impl_matrix_scalar_binary_ops!(
+    Mul, mul, mul_array1x1_scalar, Matrix1x1<S>, Matrix1x1<S>, 
+    { (0, 0) }
+);
+impl_matrix_scalar_binary_ops!(
+    Div, div, div_array1x1_scalar, Matrix1x1<S>, Matrix1x1<S>, 
+    { (0, 0) }
+);
+impl_matrix_scalar_binary_ops!(
+    Rem, rem, rem_array1x1_scalar, Matrix1x1<S>, Matrix1x1<S>, 
+    { (0, 0) }
+);
+
+impl_matrix_binary_assign_ops!(Matrix1x1<S>, { (0, 0) });
+
+impl_scalar_matrix_mul_ops!(u8,    Matrix1x1<u8>,    Matrix1x1<u8>,    { (0, 0) });
+impl_scalar_matrix_mul_ops!(u16,   Matrix1x1<u16>,   Matrix1x1<u16>,   { (0, 0) });
+impl_scalar_matrix_mul_ops!(u32,   Matrix1x1<u32>,   Matrix1x1<u32>,   { (0, 0) });
+impl_scalar_matrix_mul_ops!(u64,   Matrix1x1<u64>,   Matrix1x1<u64>,   { (0, 0) });
+impl_scalar_matrix_mul_ops!(u128,  Matrix1x1<u128>,  Matrix1x1<u128>,  { (0, 0) });
+impl_scalar_matrix_mul_ops!(usize, Matrix1x1<usize>, Matrix1x1<usize>, { (0, 0) });
+impl_scalar_matrix_mul_ops!(i8,    Matrix1x1<i8>,    Matrix1x1<i8>,    { (0, 0) });
+impl_scalar_matrix_mul_ops!(i16,   Matrix1x1<i16>,   Matrix1x1<i16>,   { (0, 0) });
+impl_scalar_matrix_mul_ops!(i32,   Matrix1x1<i32>,   Matrix1x1<i32>,   { (0, 0) });
+impl_scalar_matrix_mul_ops!(i64,   Matrix1x1<i64>,   Matrix1x1<i64>,   { (0, 0) });
+impl_scalar_matrix_mul_ops!(i128,  Matrix1x1<i128>,  Matrix1x1<i128>,  { (0, 0) });
+impl_scalar_matrix_mul_ops!(isize, Matrix1x1<isize>, Matrix1x1<isize>, { (0, 0) });
+impl_scalar_matrix_mul_ops!(f32,   Matrix1x1<f32>,   Matrix1x1<f32>,   { (0, 0) });
+impl_scalar_matrix_mul_ops!(f64,   Matrix1x1<f64>,   Matrix1x1<f64>,   { (0, 0) });
+
+impl_approx_eq_ops!(Matrix1x1, { (0, 0) });
 
 
 /// The `Matrix2x2` type represents 2x2 matrices in column-major order.
@@ -473,13 +698,13 @@ impl<S> Matrix2x2<S> where S: Copy {
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector2<S> {
-        Vector2::new(self[0][r], self[1][r])
+        Vector2::new(self.data[0][r], self.data[1][r])
     }
 
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector2<S> {
-        Vector2::new(self[c][0], self[c][1])
+        Vector2::new(self.data[c][0], self.data[c][1])
     }
     
     /// Swap two rows of a matrix.
@@ -1685,13 +1910,13 @@ impl<S> Matrix3x3<S> where S: Copy {
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector3<S> {
-        Vector3::new(self[0][r], self[1][r], self[2][r])
+        Vector3::new(self.data[0][r], self.data[1][r], self.data[2][r])
     }
 
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector3<S> {
-        Vector3::new(self[c][0], self[c][1], self[c][2])
+        Vector3::new(self.data[c][0], self.data[c][1], self.data[c][2])
     }
     
     /// Swap two rows of a matrix.
@@ -3839,13 +4064,23 @@ impl<S> Matrix4x4<S> where S: Copy {
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector4<S> {
-        Vector4::new(self[0][r], self[1][r], self[2][r], self[3][r])
+        Vector4::new(
+            self.data[0][r], 
+            self.data[1][r], 
+            self.data[2][r], 
+            self.data[3][r]
+        )
     }
  
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector4<S> {
-        Vector4::new(self[c][0], self[c][1], self[c][2], self[c][3])
+        Vector4::new(
+            self.data[c][0], 
+            self.data[c][1], 
+            self.data[c][2], 
+            self.data[c][3]
+        )
     }
      
     /// Swap two rows of a matrix.
