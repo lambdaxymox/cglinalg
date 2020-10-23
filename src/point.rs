@@ -401,8 +401,10 @@ impl<S> Point1<S> where S: Scalar {
     /// assert_eq!(result, expected);
     /// ``` 
     #[inline]
-    pub fn from_vector(v: Vector1<S>) -> Point1<S> {
-        Point1::new(v.x)
+    pub fn from_vector(vector: Vector1<S>) -> Point1<S> {
+        Point1 {
+            data: vector,
+        }
     }
     
     /// Convert a point to a vector.
