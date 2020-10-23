@@ -227,3 +227,59 @@ where
     arr[c][r] % other
 }
 
+#[inline(always)]
+pub fn dot_array1x2_col2<S>(arr: &[[S; 1]; 2], col: &[S; 2], r: usize) -> S
+where
+    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
+{
+    arr[0][r] * col[0] + arr[1][r] * col[1]
+}
+
+#[inline(always)]
+pub fn add_array1x2_array1x2<S>(arr1: &[[S; 1]; 2], arr2: &[[S; 1]; 2], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Add<S, Output = S>
+{
+    arr1[c][r] + arr2[c][r]
+}
+
+#[inline(always)]
+pub fn sub_array1x2_array1x2<S>(arr1: &[[S; 1]; 2], arr2: &[[S; 1]; 2], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Sub<S, Output = S>
+{
+    arr1[c][r] - arr2[c][r]
+}
+
+#[inline(always)]
+pub fn neg_array1x2<S>(arr: &[[S; 1]; 2], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Neg<Output = S>
+{
+    -arr[c][r]
+}
+
+#[inline(always)]
+pub fn mul_array1x2_scalar<S>(arr: &[[S; 1]; 2], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Mul<S, Output = S>
+{
+    arr[c][r] * other
+}
+
+#[inline(always)]
+pub fn div_array1x2_scalar<S>(arr: &[[S; 1]; 2], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Div<S, Output = S>
+{
+    arr[c][r] / other
+}
+
+#[inline(always)]
+pub fn rem_array1x2_scalar<S>(arr: &[[S; 1]; 2], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Rem<S, Output = S>
+{
+    arr[c][r] % other
+}
+
