@@ -573,6 +573,20 @@ impl<S> Matrix2x2<S> where S: Copy {
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x2::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected = Matrix2x2::new(2_i32, 4_i32, 6_i32, 8_i32);
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn map<T, F>(&self, mut op: F) -> Matrix2x2<T> where F: FnMut(S) -> T {
         Matrix2x2 {
@@ -1749,6 +1763,28 @@ impl<S> Matrix3x3<S> where S: Copy {
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_u32, 2_u32, 3_u32, 
+    ///     4_u32, 5_u32, 6_u32,
+    ///     7_u32, 8_u32, 9_u32
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     2_i32,  4_i32,  6_i32, 
+    ///     8_i32,  10_i32, 12_i32,
+    ///     14_i32, 16_i32, 18_i32
+    /// );
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix3x3<T> where F: FnMut(S) -> T {
@@ -3846,6 +3882,30 @@ impl<S> Matrix4x4<S> where S: Copy {
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_u32,  2_u32,  3_u32,  4_u32, 
+    ///     5_u32,  6_u32,  7_u32,  8_u32,
+    ///     9_u32,  10_u32, 11_u32, 12_u32,
+    ///     13_u32, 14_u32, 15_u32, 16_u32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     2_i32,  4_i32,  6_i32,  8_i32,
+    ///     10_i32, 12_i32, 14_i32, 16_i32,
+    ///     18_i32, 20_i32, 22_i32, 24_i32,
+    ///     26_i32, 28_i32, 30_i32, 32_i32
+    /// );
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> where F: FnMut(S) -> T {
@@ -3857,7 +3917,7 @@ impl<S> Matrix4x4<S> where S: Copy {
             op(self.data[1][0]), 
             op(self.data[1][1]), 
             op(self.data[1][2]), 
-            op(self.data[3][1]),
+            op(self.data[1][3]),
             op(self.data[2][0]), 
             op(self.data[2][1]), 
             op(self.data[2][2]), 
