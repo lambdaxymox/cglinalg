@@ -144,7 +144,7 @@ impl<S> Transform2<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     /// Apply the transformation to a point.
@@ -513,7 +513,7 @@ impl<S> Transform3<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     /// Apply the inverse of the transformation to a point.

@@ -160,7 +160,7 @@ impl<S> Reflection2<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn reflect_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     /// Reflect a point across a line described by the reflection 
@@ -454,7 +454,7 @@ impl<S> Reflection3<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn reflect_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        (self.matrix * vector.expand(S::zero())).contract()
+        (self.matrix * vector.extend(S::zero())).contract()
     }
 
     /// Reflect a point across the plane described by the reflection 

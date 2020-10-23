@@ -276,12 +276,12 @@ impl<S> Point1<S> where S: Copy {
     /// #
     /// let point = Point1::new(1_u32);
     /// let expected = Point2::new(1_u32, 2_u32);
-    /// let result = point.expand(2_u32);
+    /// let result = point.extend(2_u32);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn expand(self, y: S) -> Point2<S> {
+    pub fn extend(self, y: S) -> Point2<S> {
         Point2::new(self.data[0], y)
     }
 
@@ -636,18 +636,18 @@ impl<S> Point2<S> where S: Copy {
     ///
     /// ```
     /// # use cglinalg::{
-    /// #    Point2,
-    /// #    Point3,    
+    /// #     Point2,
+    /// #     Point3,    
     /// # };
     /// #
     /// let point = Point2::new(1_u32, 2_u32);
     /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let result = point.expand(3_u32);
+    /// let result = point.extend(3_u32);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn expand(self, z: S) -> Point3<S> {
+    pub fn extend(self, z: S) -> Point3<S> {
         Point3::new(self.data[0], self.data[1], z)
     }
 
@@ -815,7 +815,7 @@ impl<S> Point2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn to_homogeneous(self) -> Vector3<S> {
-        self.data.expand(S::one())
+        self.data.extend(S::one())
     }
 
     /// Compute the origin of the Euclidean vector space.
@@ -1243,7 +1243,7 @@ impl<S> Point3<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn to_homogeneous(self) -> Vector4<S> {
-        self.data.expand(S::one())
+        self.data.extend(S::one())
     }
 
     /// Compute the origin of the Euclidean vector space.

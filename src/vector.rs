@@ -340,12 +340,12 @@ impl<S> Vector1<S> where S: Copy {
     /// #
     /// let vector = Vector1::new(1_f64);
     /// let expected = Vector2::new(1_f64, 2_f64);
-    /// let result = vector.expand(2_f64);
+    /// let result = vector.extend(2_f64);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn expand(self, y: S) -> Vector2<S> {
+    pub fn extend(self, y: S) -> Vector2<S> {
         Vector2::new(self.data[0], y)
     }
 
@@ -456,7 +456,7 @@ impl<S> Vector1<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn to_homogeneous(&self) -> Vector2<S> {
-        self.expand(S::zero())
+        self.extend(S::zero())
     }
     
     /// Compute the Euclidean dot product (inner product) of two vectors.
@@ -795,12 +795,12 @@ impl<S> Vector2<S> where S: Copy {
     /// #
     /// let v = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let result = v.expand(3_f64);
+    /// let result = v.extend(3_f64);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn expand(self, z: S) -> Vector3<S> {
+    pub fn extend(self, z: S) -> Vector3<S> {
         Vector3::new(self.data[0], self.data[1], z)
     }
 
@@ -940,7 +940,7 @@ impl<S> Vector2<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn to_homogeneous(&self) -> Vector3<S> {
-        self.expand(S::zero())
+        self.extend(S::zero())
     }
 
     /// Compute the coordinates of a projective vector in Euclidean space.
@@ -1315,12 +1315,12 @@ impl<S> Vector3<S> where S: Copy {
     /// #
     /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let result = v.expand(4_f64);
+    /// let result = v.extend(4_f64);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn expand(self, w: S) -> Vector4<S> {
+    pub fn extend(self, w: S) -> Vector4<S> {
         Vector4::new(self.data[0], self.data[1], self.data[2], w)
     }
 
@@ -1469,7 +1469,7 @@ impl<S> Vector3<S> where S: Scalar {
     /// ```
     #[inline]
     pub fn to_homogeneous(&self) -> Vector4<S> {
-        self.expand(S::zero())
+        self.extend(S::zero())
     }
 
     /// Compute the coordinates of a projective vector in Euclidean space.

@@ -218,7 +218,7 @@ impl<S> Perspective3<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        let projected_vector = self.matrix * vector.expand(S::one());
+        let projected_vector = self.matrix * vector.extend(S::one());
         let one_div_w = S::one() / projected_vector.w;
         
         (projected_vector * one_div_w).contract()
@@ -656,7 +656,7 @@ impl<S> PerspectiveFov3<S> where S: ScalarFloat {
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        let projected_vector = self.matrix * vector.expand(S::one());
+        let projected_vector = self.matrix * vector.extend(S::one());
         let one_div_w = S::one() / projected_vector.w;
         
         (projected_vector * one_div_w).contract()

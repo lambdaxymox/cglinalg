@@ -1451,13 +1451,13 @@ mod matrix3_tests {
         let matrix: Matrix3x3<f64> = Matrix3x3::from_affine_angle(Radians::full_turn_div_4());
         let unit_x = Vector2::unit_x();
         let unit_y = Vector2::unit_y();
-        let expected = unit_y.expand(0.0);
-        let result = matrix * unit_x.expand(0.0);
+        let expected = unit_y.extend(0.0);
+        let result = matrix * unit_x.extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
 
-        let expected = -unit_x.expand(0.0);
-        let result = matrix * unit_y.expand(0.0);
+        let expected = -unit_x.extend(0.0);
+        let result = matrix * unit_y.extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
@@ -1803,7 +1803,7 @@ mod matrix4_tests {
         let zero_vec3 = Vector3::from((0.0, 0.0, 0.0));
 
         let result = trans_mat * zero_vec4;
-        assert_eq!(result, (zero_vec3 + vector).expand(1.0));
+        assert_eq!(result, (zero_vec3 + vector).extend(1.0));
     }
 
     #[test]
@@ -2412,8 +2412,8 @@ mod matrix4_tests {
         let unit_y = Vector3::unit_y();
         let unit_z = Vector3::unit_z();
         let matrix = Matrix4x4::from_affine_angle_x(angle);
-        let expected = unit_z.expand(0.0);
-        let result = matrix * unit_y.expand(0.0);
+        let expected = unit_z.extend(0.0);
+        let result = matrix * unit_y.extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
@@ -2424,8 +2424,8 @@ mod matrix4_tests {
         let unit_z = Vector3::unit_z();
         let unit_x = Vector3::unit_x();
         let matrix = Matrix4x4::from_affine_angle_y(angle);
-        let expected = unit_x.expand(0.0);
-        let result = matrix * unit_z.expand(0.0);
+        let expected = unit_x.extend(0.0);
+        let result = matrix * unit_z.extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
@@ -2436,8 +2436,8 @@ mod matrix4_tests {
         let unit_x = Vector3::unit_x();
         let unit_y = Vector3::unit_y();
         let matrix = Matrix4x4::from_affine_angle_z(angle);
-        let expected = unit_y.expand(0.0);
-        let result = matrix * unit_x.expand(0.0);
+        let expected = unit_y.extend(0.0);
+        let result = matrix * unit_x.extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
@@ -2448,8 +2448,8 @@ mod matrix4_tests {
         let unit_y = Vector3::unit_y();
         let unit_z = Vector3::unit_z();
         let matrix = Matrix4x4::from_affine_angle_x(angle);
-        let expected = unit_z.expand(0.0);
-        let result = matrix * unit_y.expand(0.0);
+        let expected = unit_z.extend(0.0);
+        let result = matrix * unit_y.extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
@@ -2460,8 +2460,8 @@ mod matrix4_tests {
         let unit_z = Vector3::unit_z();
         let unit_x = Vector3::unit_x();
         let matrix = Matrix4x4::from_affine_angle_y(angle);
-        let expected = unit_x.expand(0.0);
-        let result = matrix * unit_z.expand(0.0);
+        let expected = unit_x.extend(0.0);
+        let result = matrix * unit_z.extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
@@ -2472,8 +2472,8 @@ mod matrix4_tests {
         let unit_x = Vector3::unit_x();
         let unit_y = Vector3::unit_y();
         let matrix = Matrix4x4::from_affine_angle_z(angle);
-        let expected = unit_y.expand(0.0);
-        let result = matrix * unit_x.expand(0.0);
+        let expected = unit_y.extend(0.0);
+        let result = matrix * unit_x.extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
@@ -2601,8 +2601,8 @@ mod matrix4_tests {
         let minus_unit_z = -Vector3::unit_z();
         let look_at = Matrix4x4::look_at_rh(&eye, &target, &up);
         let direction = target - Point3::origin();
-        let expected = minus_unit_z.expand(0.0);
-        let result = look_at * direction.normalize().expand(0.0);
+        let expected = minus_unit_z.extend(0.0);
+        let result = look_at * direction.normalize().extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
@@ -2615,8 +2615,8 @@ mod matrix4_tests {
         let unit_z = Vector3::unit_z();
         let look_at = Matrix4x4::look_at_lh(&eye, &target, &up);
         let direction = target - Point3::origin();
-        let expected = unit_z.expand(0.0);
-        let result = look_at * direction.normalize().expand(0.0);
+        let expected = unit_z.extend(0.0);
+        let result = look_at * direction.normalize().extend(0.0);
 
         assert!(relative_eq!(result, expected, epsilon = 1e-7));
     }
@@ -2629,7 +2629,7 @@ mod matrix4_tests {
         let look_at = Matrix4x4::look_at_lh(&eye, &target, &up);
         let direction = target - Point3::origin();
         let expected = Vector4::new(0.0, 0.0, 1.0, 0.0);
-        let result = look_at * direction.normalize().expand(0.0);
+        let result = look_at * direction.normalize().extend(0.0);
 
         assert_eq!(result, expected);
     }
