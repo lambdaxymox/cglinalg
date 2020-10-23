@@ -38,7 +38,6 @@ use core::fmt;
 use core::ops::*;
 use core::ops;
 use core::iter;
-use core::mem;
 
 
 macro_rules! impl_as_ref_ops {

@@ -16,7 +16,6 @@ use num_traits::{
 
 use core::fmt;
 use core::iter;
-use core::mem;
 use core::ops;
 use core::ops::*;
 

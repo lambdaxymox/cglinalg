@@ -36,8 +36,6 @@ use crate::unit::{
     Unit,
 };
 
-use approx;
-
 use core::fmt;
 use core::ops;
 

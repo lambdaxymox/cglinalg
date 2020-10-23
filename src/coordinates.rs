@@ -18,7 +18,9 @@ macro_rules! impl_coords_deref {
 
             #[inline]
             fn deref(&self) -> &Self::Target {
-                unsafe { mem::transmute(self.as_ptr()) }
+                unsafe { 
+                    &*(self.as_ptr() as *const $Target<S>) 
+                }
             }
         }
 
@@ -26,7 +28,9 @@ macro_rules! impl_coords_deref {
         {
             #[inline]
             fn deref_mut(&mut self) -> &mut Self::Target {
-                unsafe { mem::transmute(self.as_mut_ptr()) }
+                unsafe { 
+                    &mut *(self.as_mut_ptr() as *mut $Target<S>) 
+                }
             }
         }
     }
