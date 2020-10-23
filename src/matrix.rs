@@ -476,7 +476,7 @@ impl<S> Matrix2x2<S> where S: Copy {
         Vector2::new(self[0][r], self[1][r])
     }
 
-    /// Get the column of the matrix by value
+    /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector2<S> {
         Vector2::new(self[c][0], self[c][1])
