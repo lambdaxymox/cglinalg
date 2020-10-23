@@ -307,13 +307,13 @@ impl<S> Point1<S> where S: Copy {
 
     /// The length of the the underlying array.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         1
     }
 
     /// The shape of the underlying array.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (1, 1)
     }
 
@@ -323,7 +323,7 @@ impl<S> Point1<S> where S: Copy {
         self.data.as_ptr()
     }
 
-    // Generate a mutable pointer to the underlying array.
+    /// Generate a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         self.data.as_mut_ptr()
@@ -695,13 +695,13 @@ impl<S> Point2<S> where S: Copy {
 
     /// The length of the the underlying array.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         2
     }
 
     /// The shape of the underlying array.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (2, 1)
     }
 
@@ -1116,13 +1116,13 @@ impl<S> Point3<S> where S: Copy {
 
     /// The length of the the underlying array.
     #[inline]
-    pub fn len() -> usize {
+    pub fn len(&self) -> usize {
         3
     }
 
     /// The shape of the underlying array.
     #[inline]
-    pub fn shape() -> (usize, usize) {
+    pub fn shape(&self) -> (usize, usize) {
         (3, 1)
     }
 
