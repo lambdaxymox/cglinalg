@@ -75,8 +75,19 @@ mod matrix2_tests {
         }
     }
 
+
     #[test]
-    fn test_matrix_coordinates() {
+    fn test_matrix_components1() {
+        let matrix = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(matrix[0][0], 1_i32);
+        assert_eq!(matrix[0][1], 2_i32);
+        assert_eq!(matrix[1][0], 3_i32);
+        assert_eq!(matrix[1][1], 4_i32);
+    }
+
+    #[test]
+    fn test_matrix_components2() {
         let matrix = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -674,8 +685,28 @@ mod matrix3_tests {
         }
     }
 
+
     #[test]
-    fn test_matrix_coordinates() {
+    fn test_matrix_components1() {
+        let matrix = Matrix3x3::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32
+        );
+
+        assert_eq!(matrix[0][0], 1_i32);
+        assert_eq!(matrix[0][1], 2_i32);
+        assert_eq!(matrix[0][2], 3_i32);
+        assert_eq!(matrix[1][0], 4_i32);
+        assert_eq!(matrix[1][1], 5_i32);
+        assert_eq!(matrix[1][2], 6_i32);
+        assert_eq!(matrix[2][0], 7_i32);
+        assert_eq!(matrix[2][1], 8_i32);
+        assert_eq!(matrix[2][2], 9_i32);
+    }
+
+    #[test]
+    fn test_matrix_components2() {
         let matrix = Matrix3x3::new(
             1_i32, 2_i32, 3_i32, 
             4_i32, 5_i32, 6_i32,
@@ -1616,8 +1647,36 @@ mod matrix4_tests {
         }
     }
 
+
     #[test]
-    fn test_matrix_coordinates() {
+    fn test_matrix_components1() {
+        let matrix = Matrix4x4::new(
+            1_i32,  2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,  8_i32,
+            9_i32,  10_i32, 11_i32, 12_i32,
+            13_i32, 14_i32, 15_i32, 16_i32
+        );
+
+        assert_eq!(matrix[0][0], 1_i32);
+        assert_eq!(matrix[0][1], 2_i32);
+        assert_eq!(matrix[0][2], 3_i32);
+        assert_eq!(matrix[0][3], 4_i32);
+        assert_eq!(matrix[1][0], 5_i32);
+        assert_eq!(matrix[1][1], 6_i32);
+        assert_eq!(matrix[1][2], 7_i32);
+        assert_eq!(matrix[1][3], 8_i32);
+        assert_eq!(matrix[2][0], 9_i32);
+        assert_eq!(matrix[2][1], 10_i32);
+        assert_eq!(matrix[2][2], 11_i32);
+        assert_eq!(matrix[2][3], 12_i32);
+        assert_eq!(matrix[3][0], 13_i32);
+        assert_eq!(matrix[3][1], 14_i32);
+        assert_eq!(matrix[3][2], 15_i32);
+        assert_eq!(matrix[3][3], 16_i32);
+    }
+
+    #[test]
+    fn test_matrix_components2() {
         let matrix = Matrix4x4::new(
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
