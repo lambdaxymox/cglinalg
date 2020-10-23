@@ -41,17 +41,13 @@ use core::ops;
 
 
 pub type RowVector1<S> = Matrix1x1<S>;
+pub type RowVector2<S> = Matrix1x2<S>;
+pub type RowVector3<S> = Matrix1x3<S>;
+pub type RowVector4<S> = Matrix1x4<S>;
 
-/// A type synonym for `Matrix1x1`.
 pub type Matrix1<S> = Matrix1x1<S>;
-
-/// A type synonym for `Matrix2x2`.
 pub type Matrix2<S> = Matrix2x2<S>;
-
-/// A type synonym for `Matrix3x3`.
 pub type Matrix3<S> = Matrix3x3<S>;
-
-/// A type synonym for `Matrix4x4`
 pub type Matrix4<S> = Matrix4x4<S>;
 
 
@@ -439,7 +435,7 @@ pub struct Matrix1x1<S> {
 }
 
 impl<S> Matrix1x1<S> {
-    /// Construct a new 2x2 matrix from its field elements.
+    /// Construct a new matrix from its elements.
     #[inline]
     pub const fn new(c0r0: S) -> Matrix1x1<S> {
         Matrix1x1 {
@@ -666,7 +662,7 @@ pub struct Matrix2x2<S> {
 }
 
 impl<S> Matrix2x2<S> {
-    /// Construct a new 2x2 matrix from its field elements.
+    /// Construct a new matrix from its elements.
     #[inline]
     pub const fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Matrix2x2<S> {
         Matrix2x2 {
@@ -1836,7 +1832,7 @@ pub struct Matrix3x3<S> {
 }
 
 impl<S> Matrix3x3<S> {
-    /// Construct a new 3x3 matrix.
+    /// Construct a new matrix from its elements.
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
@@ -3959,7 +3955,7 @@ pub struct Matrix4x4<S> {
 }
 
 impl<S> Matrix4x4<S> {
-    /// Construct a new 4x4 matrix.
+    /// Construct a new matrix from its elements.
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
@@ -4606,7 +4602,6 @@ impl<S> Matrix4x4<S> where S: Scalar {
     pub fn from_affine_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4x4<S> {
         let one = S::one();
         let zero = S::zero();
-
         Matrix4x4::new(
             one,  zero, shear_z_with_x, zero,
             zero, one,  shear_z_with_y, zero,
@@ -6322,7 +6317,7 @@ pub struct Matrix1x2<S> {
 }
 
 impl<S> Matrix1x2<S> {
-    /// Construct a new 2x2 matrix from its field elements.
+    /// Construct a new matrix from its elements.
     #[inline]
     pub const fn new(c0r0: S, c1r0: S) -> Matrix1x2<S> {
         Matrix1x2 {
@@ -6418,8 +6413,8 @@ impl<S> Matrix1x2<S> where S: NumCast + Copy {
     /// #     Matrix1x2,   
     /// # };
     /// # 
-    /// let matrix: Matrix1x2<u32> = Matrix1x2::new(1_u32);
-    /// let expected: Option<Matrix1x2<i32>> = Some(Matrix1x2::new(1_i32));
+    /// let matrix: Matrix1x2<u32> = Matrix1x2::new(1_u32, 2_u32);
+    /// let expected: Option<Matrix1x2<i32>> = Some(Matrix1x2::new(1_i32, 2_i32));
     /// let result = matrix.cast::<i32>();
     ///
     /// assert_eq!(result, expected);
@@ -6550,7 +6545,7 @@ pub struct Matrix1x3<S> {
 }
 
 impl<S> Matrix1x3<S> {
-    /// Construct a new 2x2 matrix from its field elements.
+    /// Construct a new matrix from its elements.
     #[inline]
     pub const fn new(c0r0: S, c1r0: S, c2r0: S) -> Matrix1x3<S> {
         Matrix1x3 {
@@ -6620,8 +6615,8 @@ impl<S> Matrix1x3<S> where S: Copy {
     /// #     Matrix1x3, 
     /// # };
     /// #
-    /// let matrix = Matrix1x3::new(1_u32, 2_u32);
-    /// let expected = Matrix1x3::new(2_i32, 4_i32);
+    /// let matrix = Matrix1x3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Matrix1x3::new(2_i32, 4_i32, 6_i32);
     /// let result = matrix.map(|comp| (2 * comp) as i32);
     ///
     /// assert_eq!(result, expected);
@@ -6648,8 +6643,8 @@ impl<S> Matrix1x3<S> where S: NumCast + Copy {
     /// #     Matrix1x3,   
     /// # };
     /// # 
-    /// let matrix: Matrix1x3<u32> = Matrix1x3::new(1_u32);
-    /// let expected: Option<Matrix1x3<i32>> = Some(Matrix1x3::new(1_i32));
+    /// let matrix: Matrix1x3<u32> = Matrix1x3::new(1_u32, 2_u32, 3_u32);
+    /// let expected: Option<Matrix1x3<i32>> = Some(Matrix1x3::new(1_i32, 2_i32, 3_i32));
     /// let result = matrix.cast::<i32>();
     ///
     /// assert_eq!(result, expected);
@@ -6818,4 +6813,294 @@ impl_scalar_matrix_mul_ops!(
 );
 
 impl_approx_eq_ops!(Matrix1x3, { (0, 0), (1, 0), (2, 0) });
+
+
+/// The `Matrix1x4` type represents 1x4 matrices in column-major order.
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub struct Matrix1x4<S> {
+    data: [[S; 1]; 4],
+}
+
+impl<S> Matrix1x4<S> {
+    /// Construct a new matrix from its elements.
+    #[inline]
+    pub const fn new(c0r0: S, c1r0: S, c2r0: S, c3r0: S) -> Matrix1x4<S> {
+        Matrix1x4 {
+            data: [
+                [c0r0],
+                [c1r0],
+                [c2r0],
+                [c3r0],
+            ]
+        }
+    }
+}
+
+impl<S> Matrix1x4<S> where S: Copy {
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector4<S> {
+        Vector4::new(
+            self.data[0][r], 
+            self.data[1][r], 
+            self.data[2][r],
+            self.data[3][r],
+        )
+    }
+
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector1<S> {
+        Vector1::new(self.data[c][0])
+    }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub fn len(&self) -> usize {
+        4
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub fn shape(&self) -> (usize, usize) {
+        (1, 4)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 4]>>::as_ref(self)
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x4, 
+    /// # };
+    /// #
+    /// let matrix = Matrix1x4::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected = Matrix1x4::new(2_i32, 4_i32, 6_i32, 8_i32);
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix1x4<T> where F: FnMut(S) -> T {
+        Matrix1x4 {
+            data: [
+                [op(self.data[0][0])],
+                [op(self.data[1][0])],
+                [op(self.data[2][0])],
+                [op(self.data[3][0])],
+            ],
+        }
+    }
+}
+
+impl<S> Matrix1x4<S> where S: NumCast + Copy {
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x4,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix1x4<u32> = Matrix1x4::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Option<Matrix1x4<i32>> = Some(Matrix1x4::new(1_i32, 2_i32, 3_i32, 4_i32));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix1x4<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match num_traits::cast(self.data[2][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r0 = match num_traits::cast(self.data[3][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix1x4::new(c0r0, c1r0, c2r0, c3r0))
+    }
+}
+
+impl<S> fmt::Display for Matrix1x4<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter, 
+            "Matrix1x4 [[{}], [{}], [{}], [{}]]", 
+            self.data[0][0], self.data[1][0], self.data[2][0], self.data[3][0]
+        )
+    }
+}
+
+impl<S> From<[[S; 1]; 4]> for Matrix1x4<S> where S: Scalar {
+    #[inline]
+    fn from(array: [[S; 1]; 4]) -> Matrix1x4<S> {
+        Matrix1x4::new(array[0][0], array[1][0], array[2][0], array[3][0])
+    }
+}
+
+impl<'a, S> From<&'a [[S; 1]; 4]> for &'a Matrix1x4<S> where S: Scalar {
+    #[inline]
+    fn from(array: &'a [[S; 1]; 4]) -> &'a Matrix1x4<S> {
+        unsafe { 
+            &*(array as *const [[S; 1]; 4] as *const Matrix1x4<S>)
+        }
+    }    
+}
+
+impl<S> From<[S; 4]> for Matrix1x4<S> where S: Scalar {
+    #[inline]
+    fn from(array: [S; 4]) -> Matrix1x4<S> {
+        Matrix1x4::new(array[0], array[1], array[2], array[3])
+    }
+}
+
+impl<'a, S> From<&'a [S; 4]> for &'a Matrix1x4<S> where S: Scalar {
+    #[inline]
+    fn from(array: &'a [S; 4]) -> &'a Matrix1x4<S> {
+        unsafe { 
+            &*(array as *const [S; 4] as *const Matrix1x4<S>)
+        }
+    }
+}
+
+impl_coords!(View1x4, { c0r0, c1r0, c2r0, c3r0 });
+impl_coords_deref!(Matrix1x4, View1x4);
+
+impl_as_ref_ops!(Matrix1x4<S>, [S; 4]);
+impl_as_ref_ops!(Matrix1x4<S>, [[S; 1]; 4]);
+impl_as_ref_ops!(Matrix1x4<S>, [Vector1<S>; 4]);
+
+impl_index_ops!(Matrix1x4, Vector1, (1, 4));
+
+impl_matrix_matrix_mul_ops!(
+    Matrix1x4, Matrix4x4 => Matrix1x4, dot_array1x4_col4,
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_matrix_vector_mul_ops!(
+    Matrix1x4, Vector4 => Vector1, dot_array1x4_col4,
+    { (0, 0) }
+);
+
+impl_matrix_matrix_binary_ops!(
+    Add, add, add_array1x4_array1x4, Matrix1x4<S>, Matrix1x4<S>, 
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_matrix_matrix_binary_ops!(
+    Sub, sub, sub_array1x4_array1x4, Matrix1x4<S>, Matrix1x4<S>, 
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_matrix_unary_ops!(
+    Neg, neg, neg_array1x4, Matrix1x4<S>, Matrix1x4<S>,
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+
+impl_matrix_scalar_binary_ops!(
+    Mul, mul, mul_array1x4_scalar, Matrix1x4<S>, Matrix1x4<S>, 
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_matrix_scalar_binary_ops!(
+    Div, div, div_array1x4_scalar, Matrix1x4<S>, Matrix1x4<S>, 
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_matrix_scalar_binary_ops!(
+    Rem, rem, rem_array1x4_scalar, Matrix1x4<S>, Matrix1x4<S>, 
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+
+impl_matrix_binary_assign_ops!(Matrix1x4<S>, { (0, 0), (1, 0), (2, 0), (3, 0) });
+
+impl_scalar_matrix_mul_ops!(
+    u8,    Matrix1x4<u8>,    Matrix1x4<u8>,    
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    u16,   Matrix1x4<u16>,   Matrix1x4<u16>,   
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    u32,   Matrix1x4<u32>,   Matrix1x4<u32>,   
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    u64,   Matrix1x4<u64>,   Matrix1x4<u64>,   
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    u128,  Matrix1x4<u128>,  Matrix1x4<u128>,  
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    usize, Matrix1x4<usize>, Matrix1x4<usize>, 
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    i8,    Matrix1x4<i8>,    Matrix1x4<i8>,    
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    i16,   Matrix1x4<i16>,   Matrix1x4<i16>,   
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    i32,   Matrix1x4<i32>,   Matrix1x4<i32>,   
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    i64,   Matrix1x4<i64>,   Matrix1x4<i64>,   
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    i128,  Matrix1x4<i128>,  Matrix1x4<i128>,  
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    isize, Matrix1x4<isize>, Matrix1x4<isize>, 
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+impl_scalar_matrix_mul_ops!(
+    f32,   Matrix1x4<f32>,   Matrix1x4<f32>,   
+    { (0, 0), (1, 0), (2, 0), (3, 0) });
+impl_scalar_matrix_mul_ops!(
+    f64,   Matrix1x4<f64>,   Matrix1x4<f64>,   
+    { (0, 0), (1, 0), (2, 0), (3, 0) }
+);
+
+impl_approx_eq_ops!(Matrix1x4, { (0, 0), (1, 0), (2, 0), (3, 0) });
+
 
