@@ -1270,7 +1270,9 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     #[inline]
-    pub fn rotation_between_axis(v1: &Unit<Vector2<S>>, v2: &Unit<Vector2<S>>) -> Matrix2x2<S> {
+    pub fn rotation_between_axis(
+        v1: &Unit<Vector2<S>>, v2: &Unit<Vector2<S>>) -> Matrix2x2<S>
+    {
         let cos_angle = v1.as_ref().dot(v2.as_ref());
         let sin_angle = S::sqrt(S::one() - cos_angle * cos_angle);
 
@@ -1735,7 +1737,9 @@ impl<S> Matrix3x3<S> where S: Copy {
     /// Create a 3x3 matrix from a triple of three-dimensional column vectors.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_columns(c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3x3<S> {
+    pub fn from_columns(
+        c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3x3<S> 
+    {
         Matrix3x3::new(
             c0[0], c0[1], c0[2], 
             c1[0], c1[1], c1[2],
@@ -2713,7 +2717,9 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Matrix3x3<S> {
+    pub fn from_affine_reflection(
+        normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Matrix3x3<S> 
+    {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -3030,7 +3036,9 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Matrix3x3<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(
+        axis: &Unit<Vector3<S>>, angle: A) -> Matrix3x3<S> 
+    {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();
@@ -3223,7 +3231,9 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Matrix3x3<S>> {
+    pub fn rotation_between_axis(
+        unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Matrix3x3<S>> 
+    {
         let cross = unit_v1.as_ref().cross(unit_v2.as_ref());
         let cos_angle = unit_v1.as_ref().dot(unit_v2.as_ref());
 
@@ -3823,7 +3833,9 @@ impl<S> Matrix4x4<S> where S: Copy {
     /// Construct a 4x4 matrix from column vectors.
     #[rustfmt::skip]
     #[inline]
-    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4x4<S> {
+    pub fn from_columns(
+        c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4x4<S> 
+    {
         Matrix4x4::new(
             c0[0], c0[1], c0[2], c0[3],
             c1[0], c1[1], c1[2], c1[3],
@@ -4699,7 +4711,9 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Matrix4x4<S> {
+    pub fn from_affine_reflection(
+        normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Matrix4x4<S>
+    {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -4977,7 +4991,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Matrix4x4<S> {
+    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(
+        axis: &Unit<Vector3<S>>, angle: A) -> Matrix4x4<S>
+    {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();
@@ -5032,7 +5048,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_orthographic(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> {
+    pub fn from_orthographic(
+        left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> 
+    {
         let zero = S::zero();
         let one  = S::one();
         let two = one + one;
@@ -5190,7 +5208,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_perspective_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Matrix4x4<S> {
+    pub fn from_perspective_fov<A: Into<Radians<S>>>(
+        vfov: A, aspect: S, near: S, far: S) -> Matrix4x4<S> 
+    {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -5218,7 +5238,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// origin of the coordinate system to the `eye` position.
     #[rustfmt::skip]
     #[inline]
-    pub fn face_towards(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
+    pub fn face_towards(
+        eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Matrix4x4<S>
+    {
         let zero = S::zero();
         let one = S::one();
         let z_axis = direction.normalize();
@@ -5277,7 +5299,8 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
+    pub fn look_at_rh(
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
         let direction = -(target - eye);
         
         let zero = S::zero();
@@ -5338,7 +5361,9 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
+    pub fn look_at_lh(
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
+
         let direction = target - eye;
          
         let zero = S::zero();
