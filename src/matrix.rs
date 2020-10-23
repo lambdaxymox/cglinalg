@@ -334,6 +334,48 @@ macro_rules! impl_scalar_matrix_mul_ops {
     }
 }
 
+macro_rules! impl_approx_eq_ops {
+    ($T:ident, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
+            type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+        
+            #[inline]
+            fn default_epsilon() -> Self::Epsilon {
+                S::default_epsilon()
+            }
+        
+            #[inline]
+            fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+                $(S::abs_diff_eq(&self.data[$col][$row], &other.data[$col][$row], epsilon)) &&*
+            }
+        }
+        
+        impl<S> approx::RelativeEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_relative() -> S::Epsilon {
+                S::default_max_relative()
+            }
+        
+            #[inline]
+            fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+                $(S::relative_eq(&self.data[$col][$row], &other.data[$col][$row], epsilon, max_relative)) &&*
+            }
+        }
+        
+        impl<S> approx::UlpsEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_ulps() -> u32 {
+                S::default_max_ulps()
+            }
+        
+            #[inline]
+            fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+                $(S::ulps_eq(&self.data[$col][$row], &other.data[$col][$row], epsilon, max_ulps)) &&*
+            }
+        }
+    }
+}
+
 
 /// A Type synonym for `Matrix2x2`.
 pub type Matrix2<S> = Matrix2x2<S>;
@@ -1488,7 +1530,8 @@ impl_scalar_matrix_mul_ops!(isize, Matrix2x2<isize>, Matrix2x2<isize>, { (0, 0),
 impl_scalar_matrix_mul_ops!(f32,   Matrix2x2<f32>,   Matrix2x2<f32>,   { (0, 0), (0, 1), (1, 0), (1, 1) });
 impl_scalar_matrix_mul_ops!(f64,   Matrix2x2<f64>,   Matrix2x2<f64>,   { (0, 0), (0, 1), (1, 0), (1, 1) });
 
-
+impl_approx_eq_ops!(Matrix2x2, { (0, 0), (0, 1), (1, 0), (1, 1) });
+/*
 impl<S> approx::AbsDiffEq for Matrix2x2<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1535,7 +1578,7 @@ impl<S> approx::UlpsEq for Matrix2x2<S> where S: ScalarFloat {
         S::ulps_eq(&self.data[1][1], &other.data[1][1], epsilon, max_ulps)
     }
 }
-
+*/
 impl<S: Scalar> iter::Sum<Matrix2x2<S>> for Matrix2x2<S> {
     #[inline]
     fn sum<I: Iterator<Item = Matrix2x2<S>>>(iter: I) -> Matrix2x2<S> {
@@ -3641,6 +3684,11 @@ impl_scalar_matrix_mul_ops!(f64,   Matrix3x3<f64>,   Matrix3x3<f64>,   {
     (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
 });
 
+impl_approx_eq_ops!(
+    Matrix3x3, { 
+    (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
+});
+/*
 impl<S> approx::AbsDiffEq for Matrix3x3<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -3702,7 +3750,7 @@ impl<S> approx::UlpsEq for Matrix3x3<S> where S: ScalarFloat {
         S::ulps_eq(&self.data[2][2], &other.data[2][2], epsilon, max_ulps)
     }
 }
-
+*/
 impl<S: Scalar> iter::Sum<Matrix3x3<S>> for Matrix3x3<S> {
     #[inline]
     fn sum<I: Iterator<Item = Matrix3x3<S>>>(iter: I) -> Matrix3x3<S> {
@@ -6023,7 +6071,14 @@ impl_scalar_matrix_mul_ops!(
         (3, 0), (3, 1), (3, 2), (3, 3) 
 });
 
-
+impl_approx_eq_ops!(
+    Matrix4x4, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), 
+    (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+/*
 impl<S> approx::AbsDiffEq for Matrix4x4<S> where S: ScalarFloat {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -6106,7 +6161,7 @@ impl<S> approx::UlpsEq for Matrix4x4<S> where S: ScalarFloat {
         S::ulps_eq(&self.data[3][3], &other.data[3][3], epsilon, max_ulps)
     }
 }
-
+*/
 impl<S: Scalar> iter::Sum<Matrix4x4<S>> for Matrix4x4<S> {
     #[inline]
     fn sum<I: Iterator<Item = Matrix4x4<S>>>(iter: I) -> Matrix4x4<S> {
