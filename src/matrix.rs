@@ -554,6 +554,12 @@ impl<S> Matrix1x1<S> where S: NumCast + Copy {
     }
 }
 
+impl<S> fmt::Display for Matrix1x1<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Matrix1x1 [[{}]]", self.data[0][0])
+    }
+}
+
 impl<S> From<[[S; 1]; 1]> for Matrix1x1<S> where S: Scalar {
     #[inline]
     fn from(array: [[S; 1]; 1]) -> Matrix1x1<S> {
