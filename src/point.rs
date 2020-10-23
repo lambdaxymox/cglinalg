@@ -338,7 +338,7 @@ impl<S> Point1<S> where S: Copy {
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point of the new underlying type.
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Point1<T> 
+    pub fn map<T, F>(self, op: F) -> Point1<T> 
         where F: FnMut(S) -> T 
     {
         Point1 { 
@@ -724,7 +724,7 @@ impl<S> Point2<S> where S: Copy {
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Point2<T> 
+    pub fn map<T, F>(self, op: F) -> Point2<T> 
         where F: FnMut(S) -> T 
     {
         Point2 {
@@ -1145,7 +1145,7 @@ impl<S> Point3<S> where S: Copy {
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Point3<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(self, op: F) -> Point3<T> where F: FnMut(S) -> T {
         Point3 {
             data: self.data.map(op),
         }
