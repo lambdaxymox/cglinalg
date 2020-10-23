@@ -11,7 +11,14 @@ mod point1_tests {
 
 
     #[test]
-    fn test_coordindates() {
+    fn test_components1() {
+        let point = Point1::new(1_i32);
+
+        assert_eq!(point[0], 1_i32);
+    }
+
+    #[test]
+    fn test_components2() {
         let point = Point1::new(1_i32);
 
         assert_eq!(point.x, point[0]);
@@ -139,7 +146,15 @@ mod point2_tests {
 
 
     #[test]
-    fn test_coordindates() {
+    fn test_components1() {
+        let point = Point2::new(1_i32, 2_i32);
+
+        assert_eq!(point[0], 1_i32);
+        assert_eq!(point[1], 2_i32);
+    }
+
+    #[test]
+    fn test_components2() {
         let point = Point2::new(1_i32, 2_i32);
 
         assert_eq!(point.x, point[0]);
@@ -270,7 +285,16 @@ mod point3_tests {
 
 
     #[test]
-    fn test_coordindates() {
+    fn test_components1() {
+        let point = Point3::new(1_i32, 2_i32, 3_i32);
+
+        assert_eq!(point[0], 1_i32);
+        assert_eq!(point[1], 2_i32);
+        assert_eq!(point[2], 3_i32);
+    }
+
+    #[test]
+    fn test_components2() {
         let point = Point3::new(1_i32, 2_i32, 3_i32);
 
         assert_eq!(point.x, point[0]);
