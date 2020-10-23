@@ -6434,6 +6434,46 @@ impl<S> Matrix1x2<S> where S: NumCast + Copy {
     }
 }
 
+impl<S> Matrix1x2<S> where S: Scalar {
+    /// Compute a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x2, 
+    /// # };
+    /// #
+    /// let matrix: Matrix1x2<i32> = Matrix1x2::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn zero() -> Matrix1x2<S> {
+        Matrix1x2::new(S::zero(), S::zero())
+    }
+    
+    /// Determine whether a matrix is a zero matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x2, 
+    /// # };
+    /// #
+    /// let matrix: Matrix1x2<i32> = Matrix1x2::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.data[0][0].is_zero() && self.data[1][0].is_zero()
+    }
+}
+
 impl<S> fmt::Display for Matrix1x2<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Matrix1x2 [[{}], [{}]]", self.data[0][0], self.data[1][0])
@@ -6665,6 +6705,48 @@ impl<S> Matrix1x3<S> where S: NumCast + Copy {
         };
 
         Some(Matrix1x3::new(c0r0, c1r0, c2r0))
+    }
+}
+
+impl<S> Matrix1x3<S> where S: Scalar {
+    /// Compute a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x3, 
+    /// # };
+    /// #
+    /// let matrix: Matrix1x3<i32> = Matrix1x3::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn zero() -> Matrix1x3<S> {
+        Matrix1x3::new(S::zero(), S::zero(), S::zero())
+    }
+    
+    /// Determine whether a matrix is a zero matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x3, 
+    /// # };
+    /// #
+    /// let matrix: Matrix1x3<i32> = Matrix1x3::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.data[0][0].is_zero() && 
+        self.data[1][0].is_zero() && 
+        self.data[2][0].is_zero()
     }
 }
 
@@ -6954,6 +7036,49 @@ impl<S> Matrix1x4<S> where S: NumCast + Copy {
         };
 
         Some(Matrix1x4::new(c0r0, c1r0, c2r0, c3r0))
+    }
+}
+
+impl<S> Matrix1x4<S> where S: Scalar {
+    /// Compute a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix1x4<i32> = Matrix1x4::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn zero() -> Matrix1x4<S> {
+        Matrix1x4::new(S::zero(), S::zero(), S::zero(), S::zero())
+    }
+    
+    /// Determine whether a matrix is a zero matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix1x4<i32> = Matrix1x4::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.data[0][0].is_zero() && 
+        self.data[1][0].is_zero() && 
+        self.data[2][0].is_zero() &&
+        self.data[3][0].is_zero()
     }
 }
 
