@@ -8307,3 +8307,1176 @@ impl_approx_eq_ops!(
     { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
 );
 
+
+/// The `Matrix2x4` type represents 2x4 matrices in column-major order.
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub struct Matrix2x4<S> {
+    data: [[S; 2]; 4],
+}
+
+impl<S> Matrix2x4<S> {
+    /// Construct a new matrix from its elements.
+    #[inline]
+    pub const fn new(
+        c0r0: S, c0r1: S, 
+        c1r0: S, c1r1: S, 
+        c2r0: S, c2r1: S,
+        c3r0: S, c3r1: S) -> Matrix2x4<S> 
+    {
+        Matrix2x4 {
+            data: [
+                [c0r0, c0r1],
+                [c1r0, c1r1],
+                [c2r0, c2r1],
+                [c3r0, c3r1],
+            ]
+        }
+    }
+}
+
+impl<S> Matrix2x4<S> where S: Copy {
+    /// Construct a new matrix from a fill value.
+    ///
+    /// The resulting matrix is a matrix where each entry is the supplied fill
+    /// value.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4, 
+    /// # };
+    /// #
+    /// let fill_value: u32 = 4;
+    /// let expected = Matrix2x4::new(
+    ///     fill_value, fill_value, 
+    ///     fill_value, fill_value, 
+    ///     fill_value, fill_value,
+    ///     fill_value, fill_value
+    /// );
+    /// let result = Matrix2x4::from_fill(fill_value);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_fill(value: S) -> Matrix2x4<S> {
+        Matrix2x4::new(
+            value, value, 
+            value, value,
+            value, value,
+            value, value
+        )
+    }
+
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector4<S> {
+        Vector4::new(
+            self.data[0][r], 
+            self.data[1][r], 
+            self.data[2][r],
+            self.data[3][r]
+        )
+    }
+
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector2<S> {
+        Vector2::new(self.data[c][0], self.data[c][1])
+    }
+
+    /// Swap two rows of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4, 
+    /// # };
+    /// #
+    /// let mut result = Matrix2x4::new(
+    ///     1_i32, 2_i32,
+    ///     1_i32, 2_i32,
+    ///     1_i32, 2_i32,
+    ///     1_i32, 2_i32
+    /// );
+    /// let expected = Matrix2x4::new(
+    ///     2_i32, 1_i32,
+    ///     2_i32, 1_i32,
+    ///     2_i32, 1_i32,
+    ///     2_i32, 1_i32
+    /// );
+    /// result.swap_rows(0, 1);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
+        let c0ra = self.data[0][row_a];
+        let c1ra = self.data[1][row_a];
+        let c2ra = self.data[2][row_a];
+        let c3ra = self.data[3][row_a];
+        self.data[0][row_a] = self.data[0][row_b];
+        self.data[1][row_a] = self.data[1][row_b];
+        self.data[2][row_a] = self.data[2][row_b];
+        self.data[3][row_a] = self.data[3][row_b];
+        self.data[0][row_b] = c0ra;
+        self.data[1][row_b] = c1ra;
+        self.data[2][row_b] = c2ra;
+        self.data[3][row_b] = c3ra;
+    }
+    
+    /// Swap two columns of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4, 
+    /// # };
+    /// #
+    /// let mut result = Matrix2x4::new(
+    ///     1_i32, 1_i32,
+    ///     2_i32, 2_i32,
+    ///     3_i32, 3_i32,
+    ///     4_i32, 4_i32
+    ///
+    /// );
+    /// let expected = Matrix2x4::new(
+    ///     2_i32, 2_i32,
+    ///     4_i32, 4_i32,
+    ///     3_i32, 3_i32,
+    ///     1_i32, 1_i32,    
+    /// );
+    /// result.swap_columns(0, 1);
+    /// result.swap_columns(1, 3);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        let car0 = self.data[col_a][0];
+        let car1 = self.data[col_a][1];
+        self.data[col_a][0] = self.data[col_b][0];
+        self.data[col_a][1] = self.data[col_b][1];
+        self.data[col_b][0] = car0;
+        self.data[col_b][1] = car1;
+    }
+    
+    /// Swap two elements of a matrix.
+    ///
+    /// The element order for each element to swap is **(column, row)**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4, 
+    /// # };
+    /// #
+    /// let mut result = Matrix2x4::new(
+    ///     1_i32, 2_i32, 
+    ///     3_i32, 4_i32,
+    ///     5_i32, 6_i32
+    /// );
+    /// let expected = Matrix2x4::new(
+    ///     1_i32, 3_i32, 
+    ///     2_i32, 4_i32,
+    ///     5_i32, 6_i32
+    /// );
+    /// result.swap((0, 1), (1, 0));
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
+        let element_a = self.data[a.0][a.1];
+        self.data[a.0][a.1] = self.data[b.0][b.1];
+        self.data[b.0][b.1] = element_a;
+    }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub fn len(&self) -> usize {
+        8
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub fn shape(&self) -> (usize, usize) {
+        (2, 4)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 8]>>::as_ref(self)
+    }
+
+    /// Construct a matrix from a set of column vectors.
+    #[inline]
+    pub fn from_columns(
+        c0: Vector2<S>, c1: Vector2<S>, c2: Vector2<S>, c3: Vector2<S>) -> Matrix2x4<S> {
+        Matrix2x4::new(
+            c0[0], c0[1], 
+            c1[0], c1[1],
+            c2[0], c2[1],
+            c3[0], c3[1]
+        )
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x4::new(
+    ///     1_u32, 2_u32, 
+    ///     3_u32, 4_u32, 
+    ///     5_u32, 6_u32,
+    ///     7_u32, 8_u32
+    /// );
+    /// let expected = Matrix2x4::new(
+    ///     2_i32,  4_i32, 
+    ///     6_i32,  8_i32, 
+    ///     10_i32, 12_i32,
+    ///     14_i32, 16_i32
+    /// );
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix2x4<T> where F: FnMut(S) -> T {
+        Matrix2x4 {
+            data: [
+                [op(self.data[0][0]), op(self.data[0][1])],
+                [op(self.data[1][0]), op(self.data[1][1])],
+                [op(self.data[2][0]), op(self.data[2][1])],
+                [op(self.data[3][0]), op(self.data[3][1])]
+            ],
+        }
+    }
+}
+
+impl<S> Matrix2x4<S> where S: NumCast + Copy {
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix2x4<u32> = Matrix2x4::new(
+    ///     1_u32, 2_u32, 
+    ///     3_u32, 4_u32, 
+    ///     5_u32, 6_u32, 
+    ///     7_u32, 8_u32
+    /// );
+    /// let expected: Option<Matrix2x4<i32>> = Some(Matrix2x4::new(
+    ///     1_i32, 2_i32,
+    ///     3_i32, 4_i32,
+    ///     5_i32, 6_i32,
+    ///     7_i32, 8_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix2x4<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match num_traits::cast(self.data[2][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match num_traits::cast(self.data[2][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r0 = match num_traits::cast(self.data[3][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r1 = match num_traits::cast(self.data[3][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix2x4::new(c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, c3r0, c3r1))
+    }
+}
+
+impl<S> Matrix2x4<S> where S: Scalar {
+    /// Transpose a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4,
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x4::new(
+    ///     1_i32, 1_i32, 
+    ///     2_i32, 2_i32, 
+    ///     3_i32, 3_i32,
+    ///     4_i32, 4_i32
+    /// );
+    /// let expected = Matrix4x2::new(
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32
+    /// );
+    /// let result = matrix.transpose();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn transpose(&self) -> Matrix4x2<S> {
+        Matrix4x2::new(
+            self.data[0][0], self.data[1][0], self.data[2][0], self.data[3][0],
+            self.data[0][1], self.data[1][1], self.data[2][1], self.data[3][1]
+        )
+    }
+
+    /// Compute a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix2x4<i32> = Matrix2x4::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn zero() -> Matrix2x4<S> {
+        Matrix2x4::new(
+            S::zero(), S::zero(), 
+            S::zero(), S::zero(), 
+            S::zero(), S::zero(),
+            S::zero(), S::zero()
+        )
+    }
+    
+    /// Determine whether a matrix is a zero matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix2x4<i32> = Matrix2x4::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.data[0][0].is_zero() && self.data[0][1].is_zero() &&
+        self.data[1][0].is_zero() && self.data[1][1].is_zero() &&
+        self.data[2][0].is_zero() && self.data[2][1].is_zero() &&
+        self.data[3][0].is_zero() && self.data[3][1].is_zero()
+    }
+}
+
+impl<S> fmt::Display for Matrix2x4<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        // NOTE: We display matrices in traditional row-major order.
+        write!(
+            formatter, 
+            "Matrix2x4 [[{}, {}, {}, {}], [{}, {}, {}, {}]]", 
+            self.data[0][0], self.data[1][0], self.data[2][0], self.data[3][0], 
+            self.data[0][1], self.data[1][1], self.data[2][1], self.data[3][1]
+        )
+    }
+}
+
+impl<S> From<[[S; 2]; 4]> for Matrix2x4<S> where S: Scalar {
+    #[inline]
+    fn from(array: [[S; 2]; 4]) -> Matrix2x4<S> {
+        Matrix2x4::new(
+            array[0][0], array[0][1], 
+            array[1][0], array[1][1], 
+            array[2][0], array[2][1],
+            array[3][0], array[3][1]
+        )
+    }
+}
+
+impl<'a, S> From<&'a [[S; 2]; 4]> for &'a Matrix2x4<S> where S: Scalar {
+    #[inline]
+    fn from(array: &'a [[S; 2]; 4]) -> &'a Matrix2x4<S> {
+        unsafe { 
+            &*(array as *const [[S; 2]; 4] as *const Matrix2x4<S>)
+        }
+    }    
+}
+
+impl<S> From<[S; 8]> for Matrix2x4<S> where S: Scalar {
+    #[inline]
+    fn from(array: [S; 8]) -> Matrix2x4<S> {
+        Matrix2x4::new(
+            array[0], array[1], 
+            array[2], array[3],
+            array[4], array[5],
+            array[6], array[7]
+        )
+    }
+}
+
+impl<'a, S> From<&'a [S; 8]> for &'a Matrix2x4<S> where S: Scalar {
+    #[inline]
+    fn from(array: &'a [S; 8]) -> &'a Matrix2x4<S> {
+        unsafe { 
+            &*(array as *const [S; 8] as *const Matrix2x4<S>)
+        }
+    }
+}
+
+impl_coords!(View2x4, { c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, c3r0, c3r1 });
+impl_coords_deref!(Matrix2x4, View2x4);
+
+impl_as_ref_ops!(Matrix2x4<S>, [S; 8]);
+impl_as_ref_ops!(Matrix2x4<S>, [[S; 2]; 4]);
+impl_as_ref_ops!(Matrix2x4<S>, [Vector2<S>; 4]);
+
+impl_index_ops!(Matrix2x4, Vector2, (2, 4));
+
+impl_matrix_matrix_mul_ops!(
+    Matrix2x4, Matrix4x4 => Matrix2x4, dot_array2x4_col4, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_matrix_matrix_mul_ops!(
+    Matrix2x4, Matrix4x2 => Matrix2x2, dot_array2x4_col4,
+    { (0, 0), (0, 1), (1, 0), (1, 1) }
+);
+impl_matrix_vector_mul_ops!(
+    Matrix2x4, Vector4 => Vector2, dot_array2x4_col4,
+    { (0, 0), (0, 1) }
+);
+
+impl_matrix_matrix_binary_ops!(
+    Add, add, add_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_matrix_matrix_binary_ops!(
+    Sub, sub, sub_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_matrix_unary_ops!(
+    Neg, neg, neg_array2x4, Matrix2x4<S>, Matrix2x4<S>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1) 
+});
+
+impl_matrix_scalar_binary_ops!(
+    Mul, mul, mul_array2x4_scalar, Matrix2x4<S>, Matrix2x4<S>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_matrix_scalar_binary_ops!(
+    Div, div, div_array2x4_scalar, Matrix2x4<S>, Matrix2x4<S>, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_matrix_scalar_binary_ops!(
+    Rem, rem, rem_array2x4_scalar, Matrix2x4<S>, Matrix2x4<S>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+
+impl_matrix_binary_assign_ops!(
+    Matrix2x4<S>, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+
+impl_scalar_matrix_mul_ops!(
+    u8,    Matrix2x4<u8>,    Matrix2x4<u8>, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    u16,   Matrix2x4<u16>,   Matrix2x4<u16>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    u32,   Matrix2x4<u32>,   Matrix2x4<u32>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    u64,   Matrix2x4<u64>,   Matrix2x4<u64>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1) 
+});
+impl_scalar_matrix_mul_ops!(
+    u128,  Matrix2x4<u128>,  Matrix2x4<u128>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    usize, Matrix2x4<usize>, Matrix2x4<usize>, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    i8,    Matrix2x4<i8>,    Matrix2x4<i8>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    i16,   Matrix2x4<i16>,   Matrix2x4<i16>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    i32,   Matrix2x4<i32>,   Matrix2x4<i32>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    i64,   Matrix2x4<i64>,   Matrix2x4<i64>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    i128,  Matrix2x4<i128>,  Matrix2x4<i128>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    isize, Matrix2x4<isize>, Matrix2x4<isize>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    f32,   Matrix2x4<f32>,   Matrix2x4<f32>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_scalar_matrix_mul_ops!(
+    f64,   Matrix2x4<f64>,   Matrix2x4<f64>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+
+impl_approx_eq_ops!(
+    Matrix2x4, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+
+
+/// The `Matrix4x2` type represents 4x2 matrices in column-major order.
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub struct Matrix4x2<S> {
+    data: [[S; 4]; 2],
+}
+
+impl<S> Matrix4x2<S> {
+    /// Construct a new matrix from its elements.
+    #[inline]
+    pub const fn new(
+        c0r0: S, c0r1: S, c0r2: S, c0r3: S, 
+        c1r0: S, c1r1: S, c1r2: S, c1r3: S) -> Matrix4x2<S> 
+    {
+        Matrix4x2 {
+            data: [
+                [c0r0, c0r1, c0r2, c0r3],
+                [c1r0, c1r1, c1r2, c1r3],
+            ]
+        }
+    }
+}
+
+impl<S> Matrix4x2<S> where S: Copy {
+    /// Construct a new matrix from a fill value.
+    ///
+    /// The resulting matrix is a matrix where each entry is the supplied fill
+    /// value.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let fill_value: u32 = 4;
+    /// let expected = Matrix4x2::new(
+    ///     fill_value, fill_value, fill_value, fill_value,
+    ///     fill_value, fill_value, fill_value, fill_value
+    /// );
+    /// let result = Matrix4x2::from_fill(fill_value);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_fill(value: S) -> Matrix4x2<S> {
+        Matrix4x2::new(
+            value, value, value, value,
+            value, value, value, value
+        )
+    }
+
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector2<S> {
+        Vector2::new(self.data[0][r], self.data[1][r])
+    }
+
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector4<S> {
+        Vector4::new(
+            self.data[c][0], 
+            self.data[c][1], 
+            self.data[c][2], 
+            self.data[c][3]
+        )
+    }
+
+    /// Swap two rows of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let mut result = Matrix4x2::new(
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     1_i32, 2_i32, 3_i32, 4_i32
+    /// );
+    /// let expected = Matrix4x2::new(
+    ///     3_i32, 2_i32, 1_i32, 4_i32,
+    ///     3_i32, 2_i32, 1_i32, 4_i32
+    /// );
+    /// result.swap_rows(0, 2);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
+        let c0ra = self.data[0][row_a];
+        let c1ra = self.data[1][row_a];
+        self.data[0][row_a] = self.data[0][row_b];
+        self.data[1][row_a] = self.data[1][row_b];
+        self.data[0][row_b] = c0ra;
+        self.data[1][row_b] = c1ra;
+    }
+    
+    /// Swap two columns of a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let mut result = Matrix4x2::new(
+    ///     1_i32, 1_i32, 1_i32, 1_i32,
+    ///     2_i32, 2_i32, 2_i32, 2_i32
+    /// );
+    /// let expected = Matrix4x2::new(
+    ///     2_i32, 2_i32, 2_i32, 2_i32,
+    ///     1_i32, 1_i32, 1_i32, 1_i32
+    /// );
+    /// result.swap_columns(0, 1);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        let car0 = self.data[col_a][0];
+        let car1 = self.data[col_a][1];
+        let car2 = self.data[col_a][2];
+        let car3 = self.data[col_a][3];
+        self.data[col_a][0] = self.data[col_b][0];
+        self.data[col_a][1] = self.data[col_b][1];
+        self.data[col_a][2] = self.data[col_b][2];
+        self.data[col_a][3] = self.data[col_b][3];
+        self.data[col_b][0] = car0;
+        self.data[col_b][1] = car1;
+        self.data[col_b][2] = car2;
+        self.data[col_b][3] = car3;
+    }
+    
+    /// Swap two elements of a matrix.
+    ///
+    /// The element order for each element to swap is **(column, row)**.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let mut result = Matrix4x2::new(
+    ///     1_i32, 2_i32, 
+    ///     3_i32, 4_i32,
+    ///     5_i32, 6_i32
+    /// );
+    /// let expected = Matrix4x2::new(
+    ///     1_i32, 3_i32, 
+    ///     2_i32, 4_i32,
+    ///     5_i32, 6_i32
+    /// );
+    /// result.swap((0, 1), (1, 0));
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
+        let element_a = self.data[a.0][a.1];
+        self.data[a.0][a.1] = self.data[b.0][b.1];
+        self.data[b.0][b.1] = element_a;
+    }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub fn len(&self) -> usize {
+        8
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub fn shape(&self) -> (usize, usize) {
+        (4, 2)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 8]>>::as_ref(self)
+    }
+
+    /// Construct a matrix from a set of column vectors.
+    #[inline]
+    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>) -> Matrix4x2<S> {
+        Matrix4x2::new(
+            c0[0], c0[1], c0[2], c0[3],
+            c1[0], c1[1], c1[2], c1[3]
+        )
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x2::new(
+    ///     1_u32, 2_u32, 3_u32, 4_u32,
+    ///     5_u32, 6_u32, 7_u32, 8_u32
+    /// );
+    /// let expected = Matrix4x2::new(
+    ///     2_i32,  4_i32,  6_i32,  8_i32, 
+    ///     10_i32, 12_i32, 14_i32, 16_i32
+    /// );
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix4x2<T> where F: FnMut(S) -> T {
+        Matrix4x2 {
+            data: [
+                [op(self.data[0][0]), op(self.data[0][1]), op(self.data[0][2]), op(self.data[0][3])],
+                [op(self.data[1][0]), op(self.data[1][1]), op(self.data[1][2]), op(self.data[1][3])],
+            ],
+        }
+    }
+}
+
+impl<S> Matrix4x2<S> where S: NumCast + Copy {
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x2,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix4x2<u32> = Matrix4x2::new(
+    ///     1_u32, 2_u32, 3_u32, 4_u32,
+    ///     5_u32, 6_u32, 7_u32, 8_u32
+    /// );
+    /// let expected: Option<Matrix4x2<i32>> = Some(Matrix4x2::new(
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     5_i32, 6_i32, 7_i32, 8_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix4x2<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match num_traits::cast(self.data[0][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r3 = match num_traits::cast(self.data[0][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match num_traits::cast(self.data[1][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r3 = match num_traits::cast(self.data[1][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix4x2::new(
+            c0r0, c0r1, c0r2, c0r3, 
+            c1r0, c1r1, c1r2, c1r3
+        ))
+    }
+}
+
+impl<S> Matrix4x2<S> where S: Scalar {
+    /// Transpose a matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4,
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x4::new(
+    ///     1_i32, 1_i32, 
+    ///     2_i32, 2_i32, 
+    ///     3_i32, 3_i32,
+    ///     4_i32, 4_i32
+    /// );
+    /// let expected = Matrix4x2::new(
+    ///     1_i32, 2_i32, 3_i32, 4_i32, 
+    ///     1_i32, 2_i32, 3_i32, 4_i32
+    /// );
+    /// let result = matrix.transpose();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn transpose(&self) -> Matrix2x4<S> {
+        Matrix2x4::new(
+            self.data[0][0], self.data[0][0], self.data[0][2], self.data[0][3],
+            self.data[1][0], self.data[1][1], self.data[1][2], self.data[1][3]
+        )
+    }
+
+    /// Compute a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let matrix: Matrix4x2<i32> = Matrix4x2::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn zero() -> Matrix4x2<S> {
+        Matrix4x2::new(
+            S::zero(), S::zero(), S::zero(), S::zero(),
+            S::zero(), S::zero(), S::zero(), S::zero()
+        )
+    }
+    
+    /// Determine whether a matrix is a zero matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let matrix: Matrix4x2<i32> = Matrix4x2::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.data[0][0].is_zero() && 
+        self.data[0][1].is_zero() && 
+        self.data[0][2].is_zero() && 
+        self.data[0][3].is_zero() &&
+        self.data[1][0].is_zero() && 
+        self.data[1][1].is_zero() &&
+        self.data[1][2].is_zero() &&
+        self.data[1][3].is_zero()
+    }
+}
+
+impl<S> fmt::Display for Matrix4x2<S> where S: fmt::Display {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        // NOTE: We display matrices in traditional row-major order.
+        write!(
+            formatter, 
+            "Matrix4x2 [[{}, {}], [{}, {}], [{}, {}], [{}, {}]]", 
+            self.data[0][0], self.data[1][0], 
+            self.data[0][1], self.data[1][1], 
+            self.data[0][2], self.data[1][2],
+            self.data[0][3], self.data[1][3]
+        )
+    }
+}
+
+impl<S> From<[[S; 4]; 2]> for Matrix4x2<S> where S: Scalar {
+    #[inline]
+    fn from(array: [[S; 4]; 2]) -> Matrix4x2<S> {
+        Matrix4x2::new(
+            array[0][0], array[0][1], array[0][2], array[0][3],
+            array[1][0], array[1][1], array[1][2], array[1][3]
+        )
+    }
+}
+
+impl<'a, S> From<&'a [[S; 4]; 2]> for &'a Matrix4x2<S> where S: Scalar {
+    #[inline]
+    fn from(array: &'a [[S; 4]; 2]) -> &'a Matrix4x2<S> {
+        unsafe { 
+            &*(array as *const [[S; 4]; 2] as *const Matrix4x2<S>)
+        }
+    }    
+}
+
+impl<S> From<[S; 8]> for Matrix4x2<S> where S: Scalar {
+    #[inline]
+    fn from(array: [S; 8]) -> Matrix4x2<S> {
+        Matrix4x2::new(
+            array[0], array[1], array[2], array[3], 
+            array[4], array[5], array[6], array[7]
+        )
+    }
+}
+
+impl<'a, S> From<&'a [S; 8]> for &'a Matrix4x2<S> where S: Scalar {
+    #[inline]
+    fn from(array: &'a [S; 8]) -> &'a Matrix4x2<S> {
+        unsafe { 
+            &*(array as *const [S; 8] as *const Matrix4x2<S>)
+        }
+    }
+}
+
+impl_coords!(View4x2, { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3 });
+impl_coords_deref!(Matrix4x2, View4x2);
+
+impl_as_ref_ops!(Matrix4x2<S>, [S; 8]);
+impl_as_ref_ops!(Matrix4x2<S>, [[S; 4]; 2]);
+impl_as_ref_ops!(Matrix4x2<S>, [Vector4<S>; 2]);
+
+impl_index_ops!(Matrix4x2, Vector4, (4, 2));
+
+impl_matrix_matrix_mul_ops!(
+    Matrix4x2, Matrix2x2 => Matrix4x2, dot_array4x2_col2, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_matrix_matrix_mul_ops!(
+    Matrix4x2, Matrix2x4 => Matrix4x4, dot_array4x2_col2, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3),
+    (2, 0), (2, 1), (2, 2), (2, 3),
+    (3, 0), (3, 1), (3, 2), (3, 3)
+});
+impl_matrix_vector_mul_ops!(
+    Matrix4x2, Vector2 => Vector4, dot_array4x2_col2,
+    { (0, 0), (0, 1), (0, 2), (0, 3) }
+);
+
+impl_matrix_matrix_binary_ops!(
+    Add, add, add_array4x2_array4x2, Matrix4x2<S>, Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_matrix_matrix_binary_ops!(
+    Sub, sub, sub_array4x2_array4x2, Matrix4x2<S>, Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_matrix_unary_ops!(
+    Neg, neg, neg_array4x2, Matrix4x2<S>, Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_matrix_scalar_binary_ops!(
+    Mul, mul, mul_array4x2_scalar, Matrix4x2<S>, Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_matrix_scalar_binary_ops!(
+    Div, div, div_array4x2_scalar, Matrix4x2<S>, Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_matrix_scalar_binary_ops!(
+    Rem, rem, rem_array4x2_scalar, Matrix4x2<S>, Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_matrix_binary_assign_ops!(
+    Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+
+impl_scalar_matrix_mul_ops!(
+    u8,    Matrix4x2<u8>,    Matrix4x2<u8>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    u16,   Matrix4x2<u16>,   Matrix4x2<u16>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    u32,   Matrix4x2<u32>,   Matrix4x2<u32>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    u64,   Matrix4x2<u64>,   Matrix4x2<u64>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    u128,  Matrix4x2<u128>,  Matrix4x2<u128>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    usize, Matrix4x2<usize>, Matrix4x2<usize>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i8,    Matrix4x2<i8>,    Matrix4x2<i8>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i16,   Matrix4x2<i16>,   Matrix4x2<i16>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i32,   Matrix4x2<i32>,   Matrix4x2<i32>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i64,   Matrix4x2<i64>,   Matrix4x2<i64>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i128,  Matrix4x2<i128>,  Matrix4x2<i128>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    isize, Matrix4x2<isize>, Matrix4x2<isize>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    f32,   Matrix4x2<f32>,   Matrix4x2<f32>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    f64,   Matrix4x2<f64>,   Matrix4x2<f64>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+
+impl_approx_eq_ops!(
+    Matrix4x2, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+
+

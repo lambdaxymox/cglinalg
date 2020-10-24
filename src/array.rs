@@ -507,3 +507,115 @@ where
     arr[c][r] % other
 }
 
+#[inline(always)]
+pub fn dot_array4x2_col2<S>(arr: &[[S; 4]; 2], col: &[S; 2], r: usize) -> S
+where
+    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
+{
+    arr[0][r] * col[0] + arr[1][r] * col[1]
+}
+
+#[inline(always)]
+pub fn add_array4x2_array4x2<S>(arr1: &[[S; 4]; 2], arr2: &[[S; 4]; 2], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Add<S, Output = S>
+{
+    arr1[c][r] + arr2[c][r]
+}
+
+#[inline(always)]
+pub fn sub_array4x2_array4x2<S>(arr1: &[[S; 4]; 2], arr2: &[[S; 4]; 2], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Sub<S, Output = S>
+{
+    arr1[c][r] - arr2[c][r]
+}
+
+#[inline(always)]
+pub fn neg_array4x2<S>(arr: &[[S; 4]; 2], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Neg<Output = S>
+{
+    -arr[c][r]
+}
+
+#[inline(always)]
+pub fn mul_array4x2_scalar<S>(arr: &[[S; 4]; 2], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Mul<S, Output = S>
+{
+    arr[c][r] * other
+}
+
+#[inline(always)]
+pub fn div_array4x2_scalar<S>(arr: &[[S; 4]; 2], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Div<S, Output = S>
+{
+    arr[c][r] / other
+}
+
+#[inline(always)]
+pub fn rem_array4x2_scalar<S>(arr: &[[S; 4]; 2], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Rem<S, Output = S>
+{
+    arr[c][r] % other
+}
+
+#[inline(always)]
+pub fn dot_array2x4_col4<S>(arr: &[[S; 2]; 4], col: &[S; 4], r: usize) -> S
+where
+    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
+{
+    arr[0][r] * col[0] + arr[1][r] * col[1] + arr[2][r] * col[2] + arr[3][r] * col[3]
+}
+
+#[inline(always)]
+pub fn add_array2x4_array2x4<S>(arr1: &[[S; 2]; 4], arr2: &[[S; 2]; 4], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Add<S, Output = S>
+{
+    arr1[c][r] + arr2[c][r]
+}
+
+#[inline(always)]
+pub fn sub_array2x4_array2x4<S>(arr1: &[[S; 2]; 4], arr2: &[[S; 2]; 4], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Sub<S, Output = S>
+{
+    arr1[c][r] - arr2[c][r]
+}
+
+#[inline(always)]
+pub fn neg_array2x4<S>(arr: &[[S; 2]; 4], c: usize, r: usize) -> S
+where
+    S: Copy + ops::Neg<Output = S>
+{
+    -arr[c][r]
+}
+
+#[inline(always)]
+pub fn mul_array2x4_scalar<S>(arr: &[[S; 2]; 4], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Mul<S, Output = S>
+{
+    arr[c][r] * other
+}
+
+#[inline(always)]
+pub fn div_array2x4_scalar<S>(arr: &[[S; 2]; 4], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Div<S, Output = S>
+{
+    arr[c][r] / other
+}
+
+#[inline(always)]
+pub fn rem_array2x4_scalar<S>(arr: &[[S; 2]; 4], other: S, c: usize, r: usize) -> S
+where
+    S: Copy + ops::Rem<S, Output = S>
+{
+    arr[c][r] % other
+}
+
