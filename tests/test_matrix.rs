@@ -3105,6 +3105,7 @@ mod matrix2x3_tests {
     use cglinalg::{
         Vector3,
         Vector2,
+        Matrix2x2,
         Matrix2x3,
         Matrix3x2,
         Matrix3x3,
@@ -3205,6 +3206,26 @@ mod matrix2x3_tests {
 
     #[test]
     fn test_matrix_multiplication2() {
+        let matrix2x3 = Matrix2x3::new(
+            2_i32, 3_i32, 
+            4_i32, 5_i32, 
+            6_i32, 7_i32
+        );
+        let matrix3x2 = Matrix3x2::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 8_i32
+        );
+        let expected = Matrix2x2::new(
+            28_i32,  34_i32, 
+            76_i32,  93_i32
+        );
+        let result = matrix2x3 * matrix3x2;
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_multiplication3() {
         let matrix2x3 = Matrix2x3::new(
             4_i32, 5_i32, 
             6_i32, 7_i32, 
