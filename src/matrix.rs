@@ -733,12 +733,12 @@ impl<S> Matrix2x2<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
-        let c0ra = self[0][row_a];
-        let c1ra = self[1][row_a];
-        self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[1][row_b];
-        self[0][row_b] = c0ra;
-        self[1][row_b] = c1ra;
+        let c0ra = self.data[0][row_a];
+        let c1ra = self.data[1][row_a];
+        self.data[0][row_a] = self.data[0][row_b];
+        self.data[1][row_a] = self.data[1][row_b];
+        self.data[0][row_b] = c0ra;
+        self.data[1][row_b] = c1ra;
     }
     
     /// Swap two columns of a matrix.
@@ -764,12 +764,12 @@ impl<S> Matrix2x2<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
-        let car0 = self[col_a][0];
-        let car1 = self[col_a][1];
-        self[col_a][0] = self[col_b][0];
-        self[col_a][1] = self[col_b][1];
-        self[col_b][0] = car0;
-        self[col_b][1] = car1;
+        let car0 = self.data[col_a][0];
+        let car1 = self.data[col_a][1];
+        self.data[col_a][0] = self.data[col_b][0];
+        self.data[col_a][1] = self.data[col_b][1];
+        self.data[col_b][0] = car0;
+        self.data[col_b][1] = car1;
     }
     
     /// Swap two elements of a matrix.
@@ -791,9 +791,9 @@ impl<S> Matrix2x2<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
-        let element_a = self[a.0][a.1];
-        self[a.0][a.1] = self[b.0][b.1];
-        self[b.0][b.1] = element_a;
+        let element_a = self.data[a.0][a.1];
+        self.data[a.0][a.1] = self.data[b.0][b.1];
+        self.data[b.0][b.1] = element_a;
     }
 
     /// The length of the the underlying array storing the matrix components.
@@ -1057,6 +1057,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     #[inline]
     pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix2x2<S> {
         let zero = S::zero();
+
         Matrix2x2::new(
             scale_x,   zero,
             zero,      scale_y,
@@ -1919,15 +1920,15 @@ impl<S> Matrix3x3<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
-        let c0ra = self[0][row_a];
-        let c1ra = self[1][row_a];
-        let c2ra = self[2][row_a];
-        self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[1][row_b];
-        self[2][row_a] = self[2][row_b];
-        self[0][row_b] = c0ra;
-        self[1][row_b] = c1ra;
-        self[2][row_b] = c2ra;
+        let c0ra = self.data[0][row_a];
+        let c1ra = self.data[1][row_a];
+        let c2ra = self.data[2][row_a];
+        self.data[0][row_a] = self.data[0][row_b];
+        self.data[1][row_a] = self.data[1][row_b];
+        self.data[2][row_a] = self.data[2][row_b];
+        self.data[0][row_b] = c0ra;
+        self.data[1][row_b] = c1ra;
+        self.data[2][row_b] = c2ra;
     }
     
     /// Swap two columns of a matrix.
@@ -1955,15 +1956,15 @@ impl<S> Matrix3x3<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
-        let car0 = self[col_a][0];
-        let car1 = self[col_a][1];
-        let car2 = self[col_a][2];
-        self[col_a][0] = self[col_b][0];
-        self[col_a][1] = self[col_b][1];
-        self[col_a][2] = self[col_b][2];
-        self[col_b][0] = car0;
-        self[col_b][1] = car1;
-        self[col_b][2] = car2;
+        let car0 = self.data[col_a][0];
+        let car1 = self.data[col_a][1];
+        let car2 = self.data[col_a][2];
+        self.data[col_a][0] = self.data[col_b][0];
+        self.data[col_a][1] = self.data[col_b][1];
+        self.data[col_a][2] = self.data[col_b][2];
+        self.data[col_b][0] = car0;
+        self.data[col_b][1] = car1;
+        self.data[col_b][2] = car2;
     }
     
     /// Swap two elements of a matrix.
@@ -1993,9 +1994,9 @@ impl<S> Matrix3x3<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
-        let element_a = self[a.0][a.1];
-        self[a.0][a.1] = self[b.0][b.1];
-        self[b.0][b.1] = element_a;
+        let element_a = self.data[a.0][a.1];
+        self.data[a.0][a.1] = self.data[b.0][b.1];
+        self.data[b.0][b.1] = element_a;
     }
 
     /// The length of the the underlying array storing the matrix components.
@@ -2710,12 +2711,13 @@ impl<S> Matrix3x3<S> where S: Scalar {
     #[rustfmt::skip]
     #[inline]
     pub fn zero() -> Matrix3x3<S> {
-            let zero = S::zero();
-            Matrix3x3::new(
-                zero, zero, zero, 
-                zero, zero, zero, 
-                zero, zero, zero
-            )
+        let zero = S::zero();
+        
+        Matrix3x3::new(
+            zero, zero, zero, 
+            zero, zero, zero, 
+            zero, zero, zero
+        )
     }
     
     /// Determine whether a matrix is a zero matrix.
@@ -4058,18 +4060,18 @@ impl<S> Matrix4x4<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
-        let c0ra = self[0][row_a];
-        let c1ra = self[1][row_a];
-        let c2ra = self[2][row_a];
-        let c3ra = self[3][row_a];
-        self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[1][row_b];
-        self[2][row_a] = self[2][row_b];
-        self[3][row_a] = self[3][row_b];
-        self[0][row_b] = c0ra;
-        self[1][row_b] = c1ra;
-        self[2][row_b] = c2ra;
-        self[3][row_b] = c3ra;
+        let c0ra = self.data[0][row_a];
+        let c1ra = self.data[1][row_a];
+        let c2ra = self.data[2][row_a];
+        let c3ra = self.data[3][row_a];
+        self.data[0][row_a] = self.data[0][row_b];
+        self.data[1][row_a] = self.data[1][row_b];
+        self.data[2][row_a] = self.data[2][row_b];
+        self.data[3][row_a] = self.data[3][row_b];
+        self.data[0][row_b] = c0ra;
+        self.data[1][row_b] = c1ra;
+        self.data[2][row_b] = c2ra;
+        self.data[3][row_b] = c3ra;
     }
      
     /// Swap two columns of a matrix.
@@ -4099,18 +4101,18 @@ impl<S> Matrix4x4<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
-        let car0 = self[col_a][0];
-        let car1 = self[col_a][1];
-        let car2 = self[col_a][2];
-        let car3 = self[col_a][3];
-        self[col_a][0] = self[col_b][0];
-        self[col_a][1] = self[col_b][1];
-        self[col_a][2] = self[col_b][2];
-        self[col_a][3] = self[col_b][3];
-        self[col_b][0] = car0;
-        self[col_b][1] = car1;
-        self[col_b][2] = car2;
-        self[col_b][3] = car3;
+        let car0 = self.data[col_a][0];
+        let car1 = self.data[col_a][1];
+        let car2 = self.data[col_a][2];
+        let car3 = self.data[col_a][3];
+        self.data[col_a][0] = self.data[col_b][0];
+        self.data[col_a][1] = self.data[col_b][1];
+        self.data[col_a][2] = self.data[col_b][2];
+        self.data[col_a][3] = self.data[col_b][3];
+        self.data[col_b][0] = car0;
+        self.data[col_b][1] = car1;
+        self.data[col_b][2] = car2;
+        self.data[col_b][3] = car3;
     }
      
     /// Swap two elements of a matrix.
@@ -4142,9 +4144,9 @@ impl<S> Matrix4x4<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
-        let element_a = self[a.0][a.1];
-        self[a.0][a.1] = self[b.0][b.1];
-        self[b.0][b.1] = element_a;
+        let element_a = self.data[a.0][a.1];
+        self.data[a.0][a.1] = self.data[b.0][b.1];
+        self.data[b.0][b.1] = element_a;
     }
 
     /// The length of the the underlying array storing the matrix components.
@@ -4602,6 +4604,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     pub fn from_affine_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4x4<S> {
         let one = S::one();
         let zero = S::zero();
+
         Matrix4x4::new(
             one,  zero, shear_z_with_x, zero,
             zero, one,  shear_z_with_y, zero,
@@ -5627,10 +5630,10 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         let eye_z = eye_vec.dot(&z_axis);
         
         Matrix4x4::new(
-             x_axis.x,  x_axis.y,  x_axis.z, zero,
-             y_axis.x,  y_axis.y,  y_axis.z, zero,
-             z_axis.x,  z_axis.y,  z_axis.z, zero,
-             eye_x,     eye_y,     eye_z,    one
+            x_axis.x,  x_axis.y,  x_axis.z, zero,
+            y_axis.x,  y_axis.y,  y_axis.z, zero,
+            z_axis.x,  z_axis.y,  z_axis.z, zero,
+            eye_x,     eye_y,     eye_z,    one
         )
     }
 
@@ -5972,7 +5975,6 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     /// );
     /// 
     /// assert_eq!(matrix.determinant(), 0_f64);
-    /// eprintln!("{}", matrix.determinant());
     /// assert!(!matrix.is_invertible());
     /// ```
     #[inline]
@@ -7329,15 +7331,15 @@ impl<S> Matrix2x3<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
-        let c0ra = self[0][row_a];
-        let c1ra = self[1][row_a];
-        let c2ra = self[2][row_a];
-        self[0][row_a] = self[0][row_b];
-        self[1][row_a] = self[1][row_b];
-        self[2][row_a] = self[2][row_b];
-        self[0][row_b] = c0ra;
-        self[1][row_b] = c1ra;
-        self[2][row_b] = c2ra;
+        let c0ra = self.data[0][row_a];
+        let c1ra = self.data[1][row_a];
+        let c2ra = self.data[2][row_a];
+        self.data[0][row_a] = self.data[0][row_b];
+        self.data[1][row_a] = self.data[1][row_b];
+        self.data[2][row_a] = self.data[2][row_b];
+        self.data[0][row_b] = c0ra;
+        self.data[1][row_b] = c1ra;
+        self.data[2][row_b] = c2ra;
     }
     
     /// Swap two columns of a matrix.
@@ -7365,12 +7367,12 @@ impl<S> Matrix2x3<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
-        let car0 = self[col_a][0];
-        let car1 = self[col_a][1];
-        self[col_a][0] = self[col_b][0];
-        self[col_a][1] = self[col_b][1];
-        self[col_b][0] = car0;
-        self[col_b][1] = car1;
+        let car0 = self.data[col_a][0];
+        let car1 = self.data[col_a][1];
+        self.data[col_a][0] = self.data[col_b][0];
+        self.data[col_a][1] = self.data[col_b][1];
+        self.data[col_b][0] = car0;
+        self.data[col_b][1] = car1;
     }
     
     /// Swap two elements of a matrix.
@@ -7400,9 +7402,9 @@ impl<S> Matrix2x3<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
-        let element_a = self[a.0][a.1];
-        self[a.0][a.1] = self[b.0][b.1];
-        self[b.0][b.1] = element_a;
+        let element_a = self.data[a.0][a.1];
+        self.data[a.0][a.1] = self.data[b.0][b.1];
+        self.data[b.0][b.1] = element_a;
     }
 
     /// The length of the the underlying array storing the matrix components.
@@ -7931,9 +7933,9 @@ impl<S> Matrix3x2<S> where S: Copy {
     /// ```
     #[inline]
     pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
-        let element_a = self[a.0][a.1];
-        self[a.0][a.1] = self[b.0][b.1];
-        self[b.0][b.1] = element_a;
+        let element_a = self.data[a.0][a.1];
+        self.data[a.0][a.1] = self.data[b.0][b.1];
+        self.data[b.0][b.1] = element_a;
     }
 
     /// The length of the the underlying array storing the matrix components.
