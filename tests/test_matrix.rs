@@ -3492,6 +3492,22 @@ mod matrix2x3_tests {
 
         assert_eq!(matrix - matrix, zero_mat2x3);
     }
+
+    #[test]
+    fn test_matrix_transpose() {
+        let matrix = Matrix2x3::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32,
+            5_i32, 6_i32
+        );
+        let expected = Matrix3x2::new(
+            1_i32, 3_i32, 5_i32,
+            2_i32, 4_i32, 6_i32
+        );
+        let result = matrix.transpose();
+
+        assert_eq!(result, expected);
+    }
 }
 
 
@@ -3748,6 +3764,22 @@ mod matrix3x2_tests {
         let zero_mat3x2 = Matrix3x2::zero();
 
         assert_eq!(matrix - matrix, zero_mat3x2);
+    }
+
+    #[test]
+    fn test_matrix_transpose() {
+        let matrix = Matrix3x2::new(
+            1_i32, 3_i32, 5_i32,
+            2_i32, 4_i32, 6_i32
+        );
+        let expected = Matrix2x3::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32,
+            5_i32, 6_i32
+        );
+        let result = matrix.transpose();
+
+        assert_eq!(result, expected);
     }
 }
 
