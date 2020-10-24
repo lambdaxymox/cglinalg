@@ -3098,3 +3098,240 @@ mod matrix1x4_tests {
     }
 }
 
+
+
+#[cfg(test)]
+mod matrix2x3_tests {
+    use cglinalg::{
+        Vector3,
+        Vector2,
+        Matrix2x3,
+        Matrix3x2,
+        Matrix3x3,
+    };
+
+
+    #[test]
+    fn test_matrix_components1() {
+        let matrix = Matrix2x3::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32,
+            5_i32, 6_i32
+        );
+
+        assert_eq!(matrix[0][0], 1_i32);
+        assert_eq!(matrix[0][1], 2_i32);
+        assert_eq!(matrix[1][0], 3_i32);
+        assert_eq!(matrix[1][1], 4_i32);
+        assert_eq!(matrix[2][0], 5_i32);
+        assert_eq!(matrix[2][1], 6_i32);
+    }
+
+    #[test]
+    fn test_matrix_components2() {
+        let matrix = Matrix2x3::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32,
+            5_i32, 6_i32
+        );
+
+        assert_eq!(matrix.c0r0, matrix[0][0]);
+        assert_eq!(matrix.c0r1, matrix[0][1]);
+        assert_eq!(matrix.c1r0, matrix[1][0]);
+        assert_eq!(matrix.c1r1, matrix[1][1]);
+        assert_eq!(matrix.c2r0, matrix[2][0]);
+        assert_eq!(matrix.c2r1, matrix[2][1]);
+    }
+
+    #[test]
+    fn test_mat_times_identity_equals_mat() {
+        let matrix = Matrix2x3::new(
+            2_i32, 3_i32, 
+            4_i32, 5_i32,
+            6_i32, 7_i32
+        );
+        let identity = Matrix3x3::identity();
+
+        assert_eq!(matrix * identity, matrix);
+    }
+
+    #[test]
+    fn test_mat_times_zero_equals_zero() {
+        let matrix = Matrix2x3::new(
+            33_i32,  54_i32, 
+            19_i32,  5_i32,
+            793_i32, 23_i32
+        );
+        let zero_mat3x3 = Matrix3x3::zero();
+        let zero_mat2x3 = Matrix2x3::zero();
+
+        assert_eq!(matrix * zero_mat3x3, zero_mat2x3);
+    }
+
+    #[test]
+    fn test_zero_times_mat_equals_zero() {
+        let matrix = Matrix2x3::new(
+            33_i32,  54_i32, 
+            19_i32,  5_i32,
+            234_i32, 98_i32
+        );
+        let zero = 0_i32;
+        let zero_mat2x3 = Matrix2x3::zero();
+
+        assert_eq!(zero * matrix, zero_mat2x3);
+    }
+
+    #[test]
+    fn test_matrix_multiplication1() {
+        let matrix2x3 = Matrix2x3::new(
+            2_i32, 3_i32, 
+            4_i32, 5_i32, 
+            6_i32, 7_i32
+        );
+        let matrix3x3 = Matrix3x3::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 8_i32,
+            7_i32, 8_i32, 9_i32
+        );
+        let expected = Matrix2x3::new(
+            28_i32,  34_i32, 
+            76_i32,  93_i32, 
+            100_i32, 124_i32    
+        );
+        let result = matrix2x3 * matrix3x3;
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_multiplication2() {
+        let matrix2x3 = Matrix2x3::new(
+            4_i32, 5_i32, 
+            6_i32, 7_i32, 
+            8_i32, 9_i32
+        );
+        let vector = Vector3::new(9_i32, 6_i32, -12_i32);
+        let expected = Vector2::new(-24_i32, -21_i32);
+        let result = matrix2x3 * vector;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_scalar_multiplication() {
+        let matrix2x3 = Matrix2x3::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32,
+            5_i32, 7_i32
+        );
+        let scalar = 13_i32;
+        let expected = Matrix2x3::new(
+            13, 26,
+            39, 52,
+            65, 91
+        );
+        let result = matrix2x3 * scalar;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_matrix_multiplication() {
+        let matrix2x3 = Matrix2x3::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32,
+            5_i32, 7_i32
+        );
+        let scalar = 13_i32;
+        let expected = Matrix2x3::new(
+            13, 26,
+            39, 52,
+            65, 91
+        );
+        let result = scalar * matrix2x3;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_plus_zero_equals_matrix() {
+        let zero_mat2x3 = Matrix2x3::zero();
+        let matrix = Matrix2x3::new(
+            3684_i32, 42746_i32, 345_i32, 
+            546_i32,  76_i32,    167_i32
+        );
+
+        assert_eq!(matrix + zero_mat2x3, matrix);
+    }
+
+    #[test]
+    fn test_zero_plus_matrix_equals_matrix() {
+        let zero_mat2x3 = Matrix2x3::zero();
+        let matrix = Matrix2x3::new(
+            3684_i32, 42746_i32, 345_i32, 
+            546_i32,  76_i32,    167_i32
+        );
+
+        assert_eq!(zero_mat2x3 + matrix, matrix);
+    }
+
+    #[test]
+    fn test_addition() {
+        let matrix1 = Matrix2x3::new(
+            23_i32,  76_i32, 
+            89_i32,  34_i32,
+            324_i32, 75_i32
+        );
+        let matrix2 = Matrix2x3::new(
+            1_i32,  5_i32, 
+            9_i32,  13_i32,
+            17_i32, 21_i32
+        );
+        let expected = Matrix2x3::new(
+            24_i32,  81_i32, 
+            98_i32,  47_i32,
+            341_i32, 96_i32
+        );
+        let result = matrix1 + matrix2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction() {
+        let matrix1 = Matrix2x3::new(
+            3_i32, 6_i32, 
+            9_i32, 12_i32,
+            15_i32, 18_i32
+            
+        );
+        let matrix2 = Matrix2x3::new(
+            1_i32,   15_i32, 
+            29_i32,  6_i32,
+            234_i32, 93_i32,
+        );
+        let expected = Matrix2x3::new(
+             2_i32,  -9_i32, 
+            -20_i32,  6_i32,
+            -219_i32, -75_i32
+        );
+        let result = matrix1 - matrix2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_matrix_minus_matrix_is_zero() {
+        let matrix = Matrix2x3::new(
+            3_i32,  6_i32, 
+            9_i32,  12_i32,
+            15_i32, 18_i32
+        );
+        let zero_mat2x3 = Matrix2x3::zero();
+
+        assert_eq!(matrix - matrix, zero_mat2x3);
+    }
+}
+
+
+
