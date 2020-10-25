@@ -6,7 +6,7 @@ use crate::base::scalar::{
 use crate::base::magnitude::{
     Magnitude,
 };
-use crate::base::vector::{
+use crate::vector::{
     Vector1,
     Vector2,
     Vector3,

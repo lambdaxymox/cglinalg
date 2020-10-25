@@ -104,6 +104,7 @@ extern crate num_traits;
 mod angle;
 mod array;
 mod base;
+mod vector;
 
 mod euler;
 mod projection;
@@ -126,7 +127,7 @@ pub use base::matrix::*;
 pub use projection::*;
 pub use quaternion::*;
 pub use base::scalar::*;
-pub use base::vector::*;
+pub use vector::*;
 pub use base::magnitude::*;
 pub use point::*;
 pub use base::unit::*;

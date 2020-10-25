@@ -14,7 +14,7 @@ use crate::base::matrix::{
     Matrix3x3, 
     Matrix4x4,
 };
-use crate::base::vector::{
+use crate::vector::{
     Vector3,
 };
 use crate::base::unit::{

@@ -11,7 +11,7 @@ use crate::base::matrix::{
 use crate::point::{
     Point3,
 };
-use crate::base::vector::{
+use crate::vector::{
     Vector3,
 };
 
