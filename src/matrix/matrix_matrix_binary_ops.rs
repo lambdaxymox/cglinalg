@@ -125,6 +125,15 @@ impl_matrix_matrix_binary_ops!(
 );
 
 impl_matrix_matrix_binary_ops!(
+    Add, add, add_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_matrix_matrix_binary_ops!(
+    Sub, sub, sub_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+
+impl_matrix_matrix_binary_ops!(
     Add, add, add_array2x3_array2x3, Matrix2x3<S>, Matrix2x3<S>, 
     { (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1) }
 );
@@ -143,26 +152,6 @@ impl_matrix_matrix_binary_ops!(
 );
 
 impl_matrix_matrix_binary_ops!(
-    Add, add, add_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, { 
-    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
-});
-impl_matrix_matrix_binary_ops!(
-    Sub, sub, sub_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, {
-    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
-});
-
-impl_matrix_matrix_binary_ops!(
-    Add, add, add_array4x2_array4x2, Matrix4x2<S>, Matrix4x2<S>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
-impl_matrix_matrix_binary_ops!(
-    Sub, sub, sub_array4x2_array4x2, Matrix4x2<S>, Matrix4x2<S>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
-
-impl_matrix_matrix_binary_ops!(
     Add, add, add_array3x4_array3x4, Matrix3x4<S>, Matrix3x4<S>, { 
     (0, 0), (0, 1), (0, 2), 
     (1, 0), (1, 1), (1, 2), 
@@ -175,6 +164,17 @@ impl_matrix_matrix_binary_ops!(
     (1, 0), (1, 1), (1, 2), 
     (2, 0), (2, 1), (2, 2), 
     (3, 0), (3, 1), (3, 2)
+});
+
+impl_matrix_matrix_binary_ops!(
+    Add, add, add_array4x2_array4x2, Matrix4x2<S>, Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_matrix_matrix_binary_ops!(
+    Sub, sub, sub_array4x2_array4x2, Matrix4x2<S>, Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
 });
 
 impl_matrix_matrix_binary_ops!(
