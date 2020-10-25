@@ -9238,8 +9238,10 @@ impl<S> Matrix4x2<S> where S: Scalar {
     #[inline]
     pub fn transpose(&self) -> Matrix2x4<S> {
         Matrix2x4::new(
-            self.data[0][0], self.data[0][0], self.data[0][2], self.data[0][3],
-            self.data[1][0], self.data[1][1], self.data[1][2], self.data[1][3]
+            self.data[0][0], self.data[1][0], 
+            self.data[0][1], self.data[1][1],
+            self.data[0][2], self.data[1][2], 
+            self.data[0][3], self.data[1][3]
         )
     }
 
