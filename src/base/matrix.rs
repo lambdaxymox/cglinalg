@@ -1,28 +1,28 @@
 use crate::point::{
     Point3,
 };
-use crate::scalar::{
+use crate::base::scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,
 };
-use crate::angle::{
+use crate::base::angle::{
     Angle,
     Radians,
 };
-use crate::magnitude::{
+use crate::base::magnitude::{
     Magnitude,
 };
-use crate::vector::{
+use crate::base::vector::{
     Vector1,
     Vector2,
     Vector3,
     Vector4,
 };
-use crate::unit::{
+use crate::base::unit::{
     Unit,
 };
-use crate::array::*;
+use crate::base::array::*;
 use crate::{
     impl_coords,
     impl_coords_deref,

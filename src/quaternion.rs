@@ -1,23 +1,23 @@
-use crate::magnitude::{
+use crate::base::magnitude::{
     Magnitude,
 };
-use crate::angle::{
+use crate::base::angle::{
     Angle,
     Radians,
 };
-use crate::scalar::{
+use crate::base::scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,
 };
-use crate::matrix::{
+use crate::base::matrix::{
     Matrix3x3, 
     Matrix4x4,
 };
-use crate::vector::{
+use crate::base::vector::{
     Vector3,
 };
-use crate::unit::{
+use crate::base::unit::{
     Unit,
 };
 

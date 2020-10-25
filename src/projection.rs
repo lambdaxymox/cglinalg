@@ -1,17 +1,17 @@
-use crate::scalar::{
+use crate::base::scalar::{
     ScalarFloat,
 };
-use crate::angle::{
+use crate::base::angle::{
     Angle,
     Radians,
 };
-use crate::matrix::{
+use crate::base::matrix::{
     Matrix4x4,
 };
 use crate::point::{
     Point3,
 };
-use crate::vector::{
+use crate::base::vector::{
     Vector3,
 };
 

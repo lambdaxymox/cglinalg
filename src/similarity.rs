@@ -6,10 +6,10 @@ use crate::translation::{
     Translation2,
     Translation3,
 };
-use crate::scalar::{
+use crate::base::scalar::{
     ScalarFloat,
 };
-use crate::matrix::{
+use crate::base::matrix::{
     Matrix3x3,
     Matrix4x4,
 };
@@ -17,11 +17,11 @@ use crate::point::{
     Point2,
     Point3,
 };
-use crate::vector::{
+use crate::base::vector::{
     Vector2,
     Vector3,
 };
-use crate::angle::{
+use crate::base::angle::{
     Radians,
 };
 use crate::transform::{
@@ -32,7 +32,7 @@ use crate::isometry::{
     Isometry2,
     Isometry3,
 };
-use crate::unit::{
+use crate::base::unit::{
     Unit,
 };
 

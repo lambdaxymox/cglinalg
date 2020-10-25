@@ -1,9 +1,8 @@
-use crate::scalar::{
+use crate::base::scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,
 };
-
 use num_traits::{
     Float,
     Zero,

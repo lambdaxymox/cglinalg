@@ -1,12 +1,12 @@
-use crate::scalar::{
+use crate::base::scalar::{
     Scalar,
     ScalarSigned,
     ScalarFloat,
 };
-use crate::magnitude::{
+use crate::base::magnitude::{
     Magnitude,
 };
-use crate::vector::{
+use crate::base::vector::{
     Vector1,
     Vector2,
     Vector3,

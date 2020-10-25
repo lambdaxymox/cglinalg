@@ -1,11 +1,11 @@
-use crate::angle::{
+use crate::base::angle::{
     Angle,
     Radians,
 };
-use crate::scalar::{
+use crate::base::scalar::{
     ScalarFloat,
 };
-use crate::matrix::{
+use crate::base::matrix::{
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
@@ -14,14 +14,14 @@ use crate::point::{
     Point2,
     Point3,
 };
-use crate::vector::{
+use crate::base::vector::{
     Vector2,
     Vector3,
 };
 use crate::quaternion::{
     Quaternion,
 };
-use crate::unit::{
+use crate::base::unit::{
     Unit,
 };
 use crate::transform::*;
