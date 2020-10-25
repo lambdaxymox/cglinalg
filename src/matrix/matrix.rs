@@ -146,33 +146,7 @@ macro_rules! impl_matrix_matrix_binary_ops {
         }
     }
 }
-/*
-macro_rules! impl_matrix_unary_ops {
-    ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> $OpType for $T where S: ScalarSigned {
-            type Output = $Output;
 
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, $col, $row) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType for &$T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( $op_impl(&self.data, $col, $row) ),* 
-                )
-            }
-        }
-    }
-}
-*/
 macro_rules! impl_matrix_binary_assign_ops {
     ($T:ty, { $( ($col:expr, $row:expr) ),* }) => {
         impl<S> ops::AddAssign<$T> for $T where S: Scalar {
