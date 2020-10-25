@@ -22,7 +22,7 @@ use crate::base::vector::{
 use crate::base::unit::{
     Unit,
 };
-use crate::base::array::*;
+use crate::array::*;
 use crate::{
     impl_coords,
     impl_coords_deref,

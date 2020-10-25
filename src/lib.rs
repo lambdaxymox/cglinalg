@@ -102,6 +102,7 @@ extern crate num_traits;
 
 
 mod angle;
+mod array;
 mod base;
 
 mod euler;

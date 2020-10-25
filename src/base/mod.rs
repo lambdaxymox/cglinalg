@@ -1,5 +1,3 @@
-mod array;
-
 pub mod coordinates;
 pub mod magnitude;
 pub mod matrix;
