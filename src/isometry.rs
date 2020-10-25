@@ -21,7 +21,7 @@ use crate::base::vector::{
     Vector2,
     Vector3,
 };
-use crate::base::angle::{
+use crate::angle::{
     Radians,
     Angle,
 };

@@ -100,21 +100,8 @@ extern crate core;
 extern crate approx;
 extern crate num_traits;
 
-/*
-mod array;
-mod coordinates;
 
-mod scalar;
 mod angle;
-mod euler;
-mod matrix;
-mod projection;
-mod point;
-mod quaternion;
-mod vector;
-mod magnitude;
-mod unit;
-*/
 mod base;
 
 mod euler;
@@ -132,7 +119,7 @@ mod translation;
 mod transform;
 mod similarity;
 
-pub use base::angle::*;
+pub use angle::*;
 pub use euler::*;
 pub use base::matrix::*;
 pub use projection::*;

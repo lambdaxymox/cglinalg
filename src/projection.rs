@@ -1,7 +1,7 @@
 use crate::base::scalar::{
     ScalarFloat,
 };
-use crate::base::angle::{
+use crate::angle::{
     Angle,
     Radians,
 };

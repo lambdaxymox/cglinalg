@@ -6,7 +6,7 @@ use crate::base::scalar::{
     ScalarSigned,
     ScalarFloat,
 };
-use crate::base::angle::{
+use crate::angle::{
     Angle,
     Radians,
 };
