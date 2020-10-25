@@ -1,10 +1,8 @@
-use crate::base::scalar::{
+use crate::base::{
+    Magnitude,
     Scalar,
     ScalarSigned,
     ScalarFloat,
-};
-use crate::base::magnitude::{
-    Magnitude,
 };
 use crate::vector::{
     Vector1,

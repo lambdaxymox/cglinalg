@@ -1,5 +1,10 @@
-pub mod coordinates;
-pub mod magnitude;
-pub mod scalar;
-pub mod unit;
+mod coordinates;
+mod magnitude;
+mod scalar;
+mod unit;
+
+pub use coordinates::*;
+pub use magnitude::*;
+pub use scalar::*;
+pub use unit::*;
 

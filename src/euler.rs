@@ -9,7 +9,7 @@ use crate::matrix::{
 use crate::quaternion::{
     Quaternion,
 };
-use crate::base::scalar::{
+use crate::base::{
     ScalarFloat,
 };
 

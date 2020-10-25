@@ -6,8 +6,9 @@ use crate::translation::{
     Translation2,
     Translation3,
 };
-use crate::base::scalar::{
+use crate::base::{
     ScalarFloat,
+    Unit,
 };
 use crate::matrix::{
     Matrix3x3,
@@ -31,9 +32,6 @@ use crate::transform::{
 use crate::isometry::{
     Isometry2,
     Isometry3,
-};
-use crate::base::unit::{
-    Unit,
 };
 
 use core::fmt;

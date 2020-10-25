@@ -123,9 +123,7 @@ mod transform;
 mod similarity;
 
 
-pub use base::scalar::*;
-pub use base::magnitude::*;
-pub use base::unit::*;
+pub use base::*;
 
 pub use angle::*;
 pub use euler::*;

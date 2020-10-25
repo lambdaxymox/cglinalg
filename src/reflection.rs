@@ -1,5 +1,6 @@
-use crate::base::scalar::{
+use crate::base::{
     ScalarFloat,
+    Unit,
 };
 use crate::matrix::{
     Matrix3x3,
@@ -12,9 +13,6 @@ use crate::vector::{
 use crate::point::{
     Point2,
     Point3,
-};
-use crate::base::unit::{
-    Unit,
 };
 use crate::transform::*;
 

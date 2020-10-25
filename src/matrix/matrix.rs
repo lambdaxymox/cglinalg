@@ -1,7 +1,7 @@
 use crate::point::{
     Point3,
 };
-use crate::base::scalar::{
+use crate::base::{
     Scalar,
     ScalarSigned,
     ScalarFloat,
@@ -10,7 +10,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::base::magnitude::{
+use crate::base::{
     Magnitude,
 };
 use crate::vector::{
@@ -19,7 +19,7 @@ use crate::vector::{
     Vector3,
     Vector4,
 };
-use crate::base::unit::{
+use crate::base::{
     Unit,
 };
 use crate::array::*;

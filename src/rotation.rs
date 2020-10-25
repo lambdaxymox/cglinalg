@@ -2,8 +2,9 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::base::scalar::{
+use crate::base::{
     ScalarFloat,
+    Unit,
 };
 use crate::matrix::{
     Matrix2x2,
@@ -20,9 +21,6 @@ use crate::vector::{
 };
 use crate::quaternion::{
     Quaternion,
-};
-use crate::base::unit::{
-    Unit,
 };
 use crate::transform::*;
 

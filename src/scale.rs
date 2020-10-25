@@ -1,4 +1,4 @@
-use crate::base::scalar::{
+use crate::base::{
     Scalar,
     ScalarFloat,
 };

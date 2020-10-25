@@ -1,14 +1,13 @@
-use crate::base::magnitude::{
+use crate::base::{
     Magnitude,
+    Scalar,
+    ScalarSigned,
+    ScalarFloat,
+    Unit,
 };
 use crate::angle::{
     Angle,
     Radians,
-};
-use crate::base::scalar::{
-    Scalar,
-    ScalarSigned,
-    ScalarFloat,
 };
 use crate::matrix::{
     Matrix3x3, 
@@ -16,9 +15,6 @@ use crate::matrix::{
 };
 use crate::vector::{
     Vector3,
-};
-use crate::base::unit::{
-    Unit,
 };
 
 use num_traits::NumCast;
