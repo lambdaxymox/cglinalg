@@ -10022,6 +10022,13 @@ impl_matrix_matrix_mul_ops!(
     (1, 0), (1, 1), (1, 2), 
     (2, 0), (2, 1), (2, 2)
 });
+impl_matrix_matrix_mul_ops!(
+    Matrix3x3, Matrix3x4 => Matrix3x4, dot_array3x3_col3, { 
+    (0, 0), (0, 1), (0, 2), 
+    (1, 0), (1, 1), (1, 2), 
+    (2, 0), (2, 1), (2, 2),
+    (3, 0), (3, 1), (3, 2)
+});
 impl_matrix_vector_mul_ops!(
     Matrix3x4, Vector4 => Vector3, dot_array3x4_col4,
     { (0, 0), (0, 1), (0, 2) }
