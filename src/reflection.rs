@@ -14,7 +14,10 @@ use crate::point::{
     Point2,
     Point3,
 };
-use crate::transform::*;
+use crate::transform::{
+    Transform2,
+    Transform3,
+};
 
 use core::fmt;
 use core::ops;
