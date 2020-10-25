@@ -8794,6 +8794,10 @@ impl_matrix_matrix_mul_ops!(
     (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
 });
 impl_matrix_matrix_mul_ops!(
+    Matrix2x2, Matrix2x4 => Matrix2x4, dot_array2x2_col2, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_matrix_matrix_mul_ops!(
     Matrix2x4, Matrix4x2 => Matrix2x2, dot_array2x4_col4,
     { (0, 0), (0, 1), (1, 0), (1, 1) }
 );
