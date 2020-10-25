@@ -101,16 +101,17 @@ extern crate approx;
 extern crate num_traits;
 
 
+mod base;
+
 mod angle;
 mod array;
-mod base;
+mod matrix;
 mod vector;
 
 mod euler;
 mod projection;
 mod point;
 mod quaternion;
-
 
 mod isometry;
 mod reflection;
@@ -121,16 +122,18 @@ mod translation;
 mod transform;
 mod similarity;
 
+
+pub use base::scalar::*;
+pub use base::magnitude::*;
+pub use base::unit::*;
+
 pub use angle::*;
 pub use euler::*;
-pub use base::matrix::*;
+pub use matrix::*;
 pub use projection::*;
 pub use quaternion::*;
-pub use base::scalar::*;
 pub use vector::*;
-pub use base::magnitude::*;
 pub use point::*;
-pub use base::unit::*;
 
 pub use isometry::*;
 pub use reflection::*;

@@ -2,7 +2,7 @@ use crate::base::scalar::{
     Scalar,
     ScalarFloat,
 };
-use crate::base::matrix::{
+use crate::matrix::{
     Matrix3x3,
     Matrix4x4,
 };

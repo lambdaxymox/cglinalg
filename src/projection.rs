@@ -5,7 +5,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::base::matrix::{
+use crate::matrix::{
     Matrix4x4,
 };
 use crate::point::{
