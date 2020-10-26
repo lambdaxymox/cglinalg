@@ -73,59 +73,6 @@ macro_rules! impl_as_ref_ops {
     }
 }
 
-macro_rules! impl_matrix_binary_assign_ops {
-    ($T:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: $T) {
-                $( self.data[$col][$row] += other.data[$col][$row] );*
-            }
-        }
-
-        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: &$T) {
-                $( self.data[$col][$row] += other.data[$col][$row] );*
-            }
-        }
-
-        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: $T) {
-                $( self.data[$col][$row] -= other.data[$col][$row] );*
-            }
-        }
-
-        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: &$T) {
-                $( self.data[$col][$row] -= other.data[$col][$row] );*
-            }
-        }
-
-        impl<S> ops::MulAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn mul_assign(&mut self, other: S) {
-                $( self.data[$col][$row] *= other );*
-            }
-        }
-        
-        impl<S> ops::DivAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn div_assign(&mut self, other: S) {
-                $( self.data[$col][$row] /= other );*
-            }
-        }
-        
-        impl<S> ops::RemAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn rem_assign(&mut self, other: S) {
-                $( self.data[$col][$row] %= other );*
-            }
-        }
-    }
-}
-
 macro_rules! impl_matrix_matrix_mul_ops {
     ($MatrixMxN:ident, $MatrixNxK:ident => $Output:ident, $dot_arr_col:ident, { $( ($col:expr, $row:expr) ),* }) => {
         impl<S> ops::Mul<$MatrixNxK<S>> for $MatrixMxN<S> where S: Scalar {
@@ -495,8 +442,6 @@ impl_matrix_matrix_mul_ops!(
     Matrix1x1, Matrix1x4 => Matrix1x4, dot_array1x1_col1,
     { (0, 0), (1, 0), (2, 0), (3, 0) }
 );
-
-impl_matrix_binary_assign_ops!(Matrix1x1<S>, { (0, 0) });
 
 impl_approx_eq_ops!(Matrix1x1, { (0, 0) });
 
@@ -1595,10 +1540,6 @@ impl_matrix_matrix_mul_ops!(
 impl_matrix_vector_mul_ops!(
     Matrix2x2, Vector2 => Vector2, dot_array2x2_col2,
     { (0, 0), (0, 1) }
-);
-
-impl_matrix_binary_assign_ops!(
-    Matrix2x2<S>, { (0, 0), (0, 1), (1, 0), (1, 1) }
 );
 
 impl_approx_eq_ops!(Matrix2x2, { (0, 0), (0, 1), (1, 0), (1, 1) });
@@ -3612,11 +3553,6 @@ impl_matrix_vector_mul_ops!(
     Matrix3x3, Vector3 => Vector3, dot_array3x3_col3,
     { (0, 0), (0, 1), (0, 2) }
 );
-
-impl_matrix_binary_assign_ops!(Matrix3x3<S>, { 
-    (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
-});
-
 
 impl_approx_eq_ops!(
     Matrix3x3, { 
@@ -5794,15 +5730,6 @@ impl_matrix_vector_mul_ops!(
     { (0, 0), (0, 1), (0, 2), (0, 3) }
 );
 
-
-impl_matrix_binary_assign_ops!(
-    Matrix4x4<S>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3), 
-    (2, 0), (2, 1), (2, 2), (2, 3), 
-    (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-
 impl_approx_eq_ops!(
     Matrix4x4, { 
     (0, 0), (0, 1), (0, 2), (0, 3), 
@@ -6037,8 +5964,6 @@ impl_matrix_vector_mul_ops!(
     Matrix1x2, Vector2 => Vector1, dot_array1x2_col2,
     { (0, 0) }
 );
-
-impl_matrix_binary_assign_ops!(Matrix1x2<S>, { (0, 0), (1, 0) });
 
 impl_approx_eq_ops!(Matrix1x2, { (0, 0), (1, 0) });
 
@@ -6275,8 +6200,6 @@ impl_matrix_vector_mul_ops!(
     Matrix1x3, Vector3 => Vector1, dot_array1x3_col3,
     { (0, 0) }
 );
-
-impl_matrix_binary_assign_ops!(Matrix1x3<S>, { (0, 0), (1, 0), (2, 0) });
 
 impl_approx_eq_ops!(Matrix1x3, { (0, 0), (1, 0), (2, 0) });
 
@@ -6525,8 +6448,6 @@ impl_matrix_vector_mul_ops!(
     Matrix1x4, Vector4 => Vector1, dot_array1x4_col4,
     { (0, 0) }
 );
-
-impl_matrix_binary_assign_ops!(Matrix1x4<S>, { (0, 0), (1, 0), (2, 0), (3, 0) });
 
 impl_approx_eq_ops!(Matrix1x4, { (0, 0), (1, 0), (2, 0), (3, 0) });
 
@@ -6989,11 +6910,6 @@ impl_matrix_vector_mul_ops!(
     { (0, 0), (0, 1) }
 );
 
-impl_matrix_binary_assign_ops!(
-    Matrix2x3<S>, 
-    { (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1) }
-);
-
 impl_approx_eq_ops!(
     Matrix2x3, 
     { (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1) }
@@ -7441,11 +7357,6 @@ impl_matrix_matrix_mul_ops!(
 impl_matrix_vector_mul_ops!(
     Matrix3x2, Vector2 => Vector3, dot_array3x2_col2,
     { (0, 0), (0, 1), (0, 2) }
-);
-
-impl_matrix_binary_assign_ops!(
-    Matrix3x2<S>, 
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
 );
 
 impl_approx_eq_ops!(
@@ -7958,11 +7869,6 @@ impl_matrix_vector_mul_ops!(
     { (0, 0), (0, 1) }
 );
 
-impl_matrix_binary_assign_ops!(
-    Matrix2x4<S>, { 
-    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
-});
-
 impl_approx_eq_ops!(
     Matrix2x4, { 
     (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
@@ -8456,12 +8362,6 @@ impl_matrix_vector_mul_ops!(
     Matrix4x2, Vector2 => Vector4, dot_array4x2_col2,
     { (0, 0), (0, 1), (0, 2), (0, 3) }
 );
-
-impl_matrix_binary_assign_ops!(
-    Matrix4x2<S>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
 
 impl_approx_eq_ops!(
     Matrix4x2, { 
@@ -9022,14 +8922,6 @@ impl_matrix_vector_mul_ops!(
     { (0, 0), (0, 1), (0, 2) }
 );
 
-impl_matrix_binary_assign_ops!(
-    Matrix3x4<S>, { 
-    (0, 0), (0, 1), (0, 2), 
-    (1, 0), (1, 1), (1, 2), 
-    (2, 0), (2, 1), (2, 2), 
-    (3, 0), (3, 1), (3, 2)
-});
-
 impl_approx_eq_ops!(
     Matrix3x4, { 
     (0, 0), (0, 1), (0, 2), 
@@ -9576,13 +9468,6 @@ impl_matrix_vector_mul_ops!(
     Matrix4x3, Vector3 => Vector4, dot_array4x3_col3,
     { (0, 0), (0, 1), (0, 2), (0, 3) }
 );
-
-impl_matrix_binary_assign_ops!(
-    Matrix4x3<S>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3),
-    (2, 0), (2, 1), (2, 2), (2, 3)
-});
 
 impl_approx_eq_ops!(
     Matrix4x3, { 
