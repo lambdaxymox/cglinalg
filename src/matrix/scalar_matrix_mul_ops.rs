@@ -383,63 +383,6 @@ impl_scalar_matrix_mul_ops!(
 );
 
 impl_scalar_matrix_mul_ops!(
-    u8,    Matrix3x2<u8>,    Matrix3x2<u8>,    
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    u16,   Matrix3x2<u16>,   Matrix3x2<u16>,   
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    u32,   Matrix3x2<u32>,   Matrix3x2<u32>,   
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    u64,   Matrix3x2<u64>,   Matrix3x2<u64>,   
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    u128,  Matrix3x2<u128>,  Matrix3x2<u128>,  
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    usize, Matrix3x2<usize>, Matrix3x2<usize>, 
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    i8,    Matrix3x2<i8>,    Matrix3x2<i8>,    
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    i16,   Matrix3x2<i16>,   Matrix3x2<i16>,   
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    i32,   Matrix3x2<i32>,   Matrix3x2<i32>,   
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    i64,   Matrix3x2<i64>,   Matrix3x2<i64>,   
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    i128,  Matrix3x2<i128>,  Matrix3x2<i128>,  
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    isize, Matrix3x2<isize>, Matrix3x2<isize>, 
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    f32,   Matrix3x2<f32>,   Matrix3x2<f32>,   
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_scalar_matrix_mul_ops!(
-    f64,   Matrix3x2<f64>,   Matrix3x2<f64>,   
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-
-impl_scalar_matrix_mul_ops!(
     u8,    Matrix2x4<u8>,    Matrix2x4<u8>, { 
     (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
 });
@@ -497,75 +440,61 @@ impl_scalar_matrix_mul_ops!(
 });
 
 impl_scalar_matrix_mul_ops!(
-    u8,    Matrix4x2<u8>,    Matrix4x2<u8>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    u8,    Matrix3x2<u8>,    Matrix3x2<u8>,    
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    u16,   Matrix4x2<u16>,   Matrix4x2<u16>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    u16,   Matrix3x2<u16>,   Matrix3x2<u16>,   
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    u32,   Matrix4x2<u32>,   Matrix4x2<u32>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    u32,   Matrix3x2<u32>,   Matrix3x2<u32>,   
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    u64,   Matrix4x2<u64>,   Matrix4x2<u64>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    u64,   Matrix3x2<u64>,   Matrix3x2<u64>,   
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    u128,  Matrix4x2<u128>,  Matrix4x2<u128>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    u128,  Matrix3x2<u128>,  Matrix3x2<u128>,  
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    usize, Matrix4x2<usize>, Matrix4x2<usize>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    usize, Matrix3x2<usize>, Matrix3x2<usize>, 
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    i8,    Matrix4x2<i8>,    Matrix4x2<i8>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    i8,    Matrix3x2<i8>,    Matrix3x2<i8>,    
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    i16,   Matrix4x2<i16>,   Matrix4x2<i16>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    i16,   Matrix3x2<i16>,   Matrix3x2<i16>,   
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    i32,   Matrix4x2<i32>,   Matrix4x2<i32>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    i32,   Matrix3x2<i32>,   Matrix3x2<i32>,   
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    i64,   Matrix4x2<i64>,   Matrix4x2<i64>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    i64,   Matrix3x2<i64>,   Matrix3x2<i64>,   
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    i128,  Matrix4x2<i128>,  Matrix4x2<i128>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    i128,  Matrix3x2<i128>,  Matrix3x2<i128>,  
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    isize, Matrix4x2<isize>, Matrix4x2<isize>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    isize, Matrix3x2<isize>, Matrix3x2<isize>, 
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    f32,   Matrix4x2<f32>,   Matrix4x2<f32>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    f32,   Matrix3x2<f32>,   Matrix3x2<f32>,   
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 impl_scalar_matrix_mul_ops!(
-    f64,   Matrix4x2<f64>,   Matrix4x2<f64>, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
+    f64,   Matrix3x2<f64>,   Matrix3x2<f64>,   
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 
 impl_scalar_matrix_mul_ops!(
     u8,    Matrix3x4<u8>,    Matrix3x4<u8>, { 
@@ -664,6 +593,77 @@ impl_scalar_matrix_mul_ops!(
     (1, 0), (1, 1), (1, 2), 
     (2, 0), (2, 1), (2, 2), 
     (3, 0), (3, 1), (3, 2)
+});
+
+impl_scalar_matrix_mul_ops!(
+    u8,    Matrix4x2<u8>,    Matrix4x2<u8>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    u16,   Matrix4x2<u16>,   Matrix4x2<u16>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    u32,   Matrix4x2<u32>,   Matrix4x2<u32>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    u64,   Matrix4x2<u64>,   Matrix4x2<u64>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    u128,  Matrix4x2<u128>,  Matrix4x2<u128>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    usize, Matrix4x2<usize>, Matrix4x2<usize>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i8,    Matrix4x2<i8>,    Matrix4x2<i8>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i16,   Matrix4x2<i16>,   Matrix4x2<i16>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i32,   Matrix4x2<i32>,   Matrix4x2<i32>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i64,   Matrix4x2<i64>,   Matrix4x2<i64>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    i128,  Matrix4x2<i128>,  Matrix4x2<i128>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    isize, Matrix4x2<isize>, Matrix4x2<isize>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    f32,   Matrix4x2<f32>,   Matrix4x2<f32>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_scalar_matrix_mul_ops!(
+    f64,   Matrix4x2<f64>,   Matrix4x2<f64>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
 });
 
 impl_scalar_matrix_mul_ops!(

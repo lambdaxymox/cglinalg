@@ -151,19 +151,6 @@ impl_matrix_scalar_binary_ops!(
 );
 
 impl_matrix_scalar_binary_ops!(
-    Mul, mul, mul_array3x2_scalar, Matrix3x2<S>, Matrix3x2<S>, 
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_matrix_scalar_binary_ops!(
-    Div, div, div_array3x2_scalar, Matrix3x2<S>, Matrix3x2<S>, 
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-impl_matrix_scalar_binary_ops!(
-    Rem, rem, rem_array3x2_scalar, Matrix3x2<S>, Matrix3x2<S>, 
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
-
-impl_matrix_scalar_binary_ops!(
     Mul, mul, mul_array2x4_scalar, Matrix2x4<S>, Matrix2x4<S>, {
     (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
 });
@@ -175,6 +162,19 @@ impl_matrix_scalar_binary_ops!(
     Rem, rem, rem_array2x4_scalar, Matrix2x4<S>, Matrix2x4<S>, {
     (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
 });
+
+impl_matrix_scalar_binary_ops!(
+    Mul, mul, mul_array3x2_scalar, Matrix3x2<S>, Matrix3x2<S>, 
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
+impl_matrix_scalar_binary_ops!(
+    Div, div, div_array3x2_scalar, Matrix3x2<S>, Matrix3x2<S>, 
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
+impl_matrix_scalar_binary_ops!(
+    Rem, rem, rem_array3x2_scalar, Matrix3x2<S>, Matrix3x2<S>, 
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
 
 impl_matrix_scalar_binary_ops!(
     Mul, mul, mul_array3x4_scalar, Matrix3x4<S>, Matrix3x4<S>, {

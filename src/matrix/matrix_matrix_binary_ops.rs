@@ -125,15 +125,6 @@ impl_matrix_matrix_binary_ops!(
 );
 
 impl_matrix_matrix_binary_ops!(
-    Add, add, add_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, { 
-    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
-});
-impl_matrix_matrix_binary_ops!(
-    Sub, sub, sub_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, {
-    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
-});
-
-impl_matrix_matrix_binary_ops!(
     Add, add, add_array2x3_array2x3, Matrix2x3<S>, Matrix2x3<S>, 
     { (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1) }
 );
@@ -141,6 +132,15 @@ impl_matrix_matrix_binary_ops!(
     Sub, sub, sub_array2x3_array2x3, Matrix2x3<S>, Matrix2x3<S>, 
     { (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1) }
 );
+
+impl_matrix_matrix_binary_ops!(
+    Add, add, add_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_matrix_matrix_binary_ops!(
+    Sub, sub, sub_array2x4_array2x4, Matrix2x4<S>, Matrix2x4<S>, {
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
 
 impl_matrix_matrix_binary_ops!(
     Add, add, add_array3x2_array3x2, Matrix3x2<S>, Matrix3x2<S>, 
