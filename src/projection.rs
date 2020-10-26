@@ -50,7 +50,7 @@ pub struct Perspective3<S> {
     /// the origin.
     right: S,
     /// The vertical position of the bottom plane in camera space.
-    /// The bottom plane is a plane parallel to the **xz-plane** at the origin.
+    /// The bottom plane is a plane parallel to the **zx-plane** at the origin.
     bottom: S,
     /// The vertical position of the top plane in camera space.
     /// the top plane is a plane parallel to the **zx-plane** at the origin.

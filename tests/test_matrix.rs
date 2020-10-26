@@ -2404,7 +2404,7 @@ mod matrix4x4_tests {
     }
 
     #[test]
-    fn test_from_affine_reflection_xz_plane() {
+    fn test_from_affine_reflection_zx_plane() {
         let bias = Vector3::zero();
         let normal = Unit::from_value(-Vector3::unit_y());
         let expected = Matrix4x4::new(
