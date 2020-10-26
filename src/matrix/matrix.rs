@@ -219,7 +219,7 @@ impl<S> Matrix1x1<S> where S: Copy {
         <Self as AsRef<[S; 1]>>::as_ref(self)
     }
 
-    /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
+    /// Construct a matrix from a set of column vectors.
     #[inline]
     pub fn from_columns(c0: Vector1<S>) -> Matrix1x1<S> {
         Matrix1x1::new(c0[0])
@@ -505,7 +505,7 @@ impl<S> Matrix2x2<S> where S: Copy {
         <Self as AsRef<[S; 4]>>::as_ref(self)
     }
 
-    /// Construct a 2x2 matrix from a pair of two-dimensional vectors.
+    /// Construct a matrix from a set of column vectors.
     #[inline]
     pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>) -> Matrix2x2<S> {
         Matrix2x2::new(
@@ -1626,7 +1626,7 @@ impl<S> Matrix3x3<S> where S: Copy {
         <Self as AsRef<[S; 9]>>::as_ref(self)
     }
 
-    /// Create a 3x3 matrix from a triple of three-dimensional column vectors.
+    /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
     pub fn from_columns(
@@ -3658,7 +3658,7 @@ impl<S> Matrix4x4<S> where S: Copy {
         <Self as AsRef<[S; 16]>>::as_ref(self)
     }
 
-    /// Construct a 4x4 matrix from column vectors.
+    /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
     pub fn from_columns(
