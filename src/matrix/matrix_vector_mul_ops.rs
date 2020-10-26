@@ -77,54 +77,55 @@ macro_rules! impl_matrix_vector_mul_ops {
 }
 
 impl_matrix_vector_mul_ops!(
-    Matrix1x1, Vector1 => Vector1, dot_array1x1_col1,
-    { (0, 0) }
-);
+    Matrix1x1, Vector1 => Vector1, dot_array1x1_col1, {
+    (0, 0)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix2x2, Vector2 => Vector2, dot_array2x2_col2,
-    { (0, 0), (0, 1) }
-);
+    Matrix2x2, Vector2 => Vector2, dot_array2x2_col2, {
+    (0, 0), (0, 1)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix3x3, Vector3 => Vector3, dot_array3x3_col3,
-    { (0, 0), (0, 1), (0, 2) }
-);
+    Matrix3x3, Vector3 => Vector3, dot_array3x3_col3, {
+    (0, 0), (0, 1), (0, 2)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix4x4, Vector4 => Vector4, dot_array4x4_col4,
-    { (0, 0), (0, 1), (0, 2), (0, 3) }
-);
+    Matrix4x4, Vector4 => Vector4, dot_array4x4_col4, {
+    (0, 0), (0, 1), (0, 2), (0, 3)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix1x2, Vector2 => Vector1, dot_array1x2_col2,
-    { (0, 0) }
-);
+    Matrix1x2, Vector2 => Vector1, dot_array1x2_col2, {
+    (0, 0)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix1x3, Vector3 => Vector1, dot_array1x3_col3,
-    { (0, 0) }
-);
+    Matrix1x3, Vector3 => Vector1, dot_array1x3_col3, {
+    (0, 0)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix1x4, Vector4 => Vector1, dot_array1x4_col4,
-    { (0, 0) }
-);
+    Matrix1x4, Vector4 => Vector1, dot_array1x4_col4, {
+    (0, 0)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix2x3, Vector3 => Vector2, dot_array2x3_col3,
-    { (0, 0), (0, 1) }
-);
+    Matrix2x3, Vector3 => Vector2, dot_array2x3_col3, {
+    (0, 0), (0, 1)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix3x2, Vector2 => Vector3, dot_array3x2_col2,
-    { (0, 0), (0, 1), (0, 2) }
-);
+    Matrix3x2, Vector2 => Vector3, dot_array3x2_col2, {
+    (0, 0), (0, 1), (0, 2)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix2x4, Vector4 => Vector2, dot_array2x4_col4,
-    { (0, 0), (0, 1) }
-);
+    Matrix2x4, Vector4 => Vector2, dot_array2x4_col4, {
+    (0, 0), (0, 1)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix4x2, Vector2 => Vector4, dot_array4x2_col2,
-    { (0, 0), (0, 1), (0, 2), (0, 3) }
-);
+    Matrix4x2, Vector2 => Vector4, dot_array4x2_col2, {
+    (0, 0), (0, 1), (0, 2), (0, 3)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix3x4, Vector4 => Vector3, dot_array3x4_col4,
-    { (0, 0), (0, 1), (0, 2) }
-);
+    Matrix3x4, Vector4 => Vector3, dot_array3x4_col4, {
+    (0, 0), (0, 1), (0, 2)
+});
 impl_matrix_vector_mul_ops!(
-    Matrix4x3, Vector3 => Vector4, dot_array4x3_col3,
-    { (0, 0), (0, 1), (0, 2), (0, 3) }
-);
+    Matrix4x3, Vector3 => Vector4, dot_array4x3_col3, {
+    (0, 0), (0, 1), (0, 2), (0, 3)
+});
+
