@@ -155,7 +155,7 @@ macro_rules! impl_index_ops {
 }
 
 
-/// The `Matrix1x1` type represents 1x1 matrices in column-major order.
+/// A **(1 row, 1 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x1<S> {
@@ -329,7 +329,7 @@ impl_approx_eq_ops!(Matrix1x1, { (0, 0) });
 
 
 
-/// The `Matrix2x2` type represents 2x2 matrices in column-major order.
+/// A **(2 row, 2 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x2<S> {
@@ -1418,7 +1418,7 @@ impl_index_ops!(Matrix2x2, Vector2, (2, 2));
 impl_approx_eq_ops!(Matrix2x2, { (0, 0), (0, 1), (1, 0), (1, 1) });
 
 
-/// The `Matrix3x3` type represents 3x3 matrices in column-major order.
+/// A **(3 row, 3 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Matrix3x3<S> {
@@ -3424,7 +3424,7 @@ impl_approx_eq_ops!(
 });
 
 
-/// The `Matrix4x4` type represents 4x4 matrices in column-major order.
+/// A **(4 row, 4 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Matrix4x4<S> {
@@ -5592,7 +5592,7 @@ impl_approx_eq_ops!(
 
 
 
-/// The `Matrix1x2` type represents 1x2 matrices in column-major order.
+/// A **(1 row, 2 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x2<S> {
@@ -5811,7 +5811,7 @@ impl_index_ops!(Matrix1x2, Vector1, (1, 2));
 impl_approx_eq_ops!(Matrix1x2, { (0, 0), (1, 0) });
 
 
-/// The `Matrix1x3` type represents 1x3 matrices in column-major order.
+/// A **(1 row, 3 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x3<S> {
@@ -6038,7 +6038,7 @@ impl_index_ops!(Matrix1x3, Vector1, (1, 3));
 impl_approx_eq_ops!(Matrix1x3, { (0, 0), (1, 0), (2, 0) });
 
 
-/// The `Matrix1x4` type represents 1x4 matrices in column-major order.
+/// A **(1 row, 4 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x4<S> {
@@ -6277,7 +6277,7 @@ impl_index_ops!(Matrix1x4, Vector1, (1, 4));
 impl_approx_eq_ops!(Matrix1x4, { (0, 0), (1, 0), (2, 0), (3, 0) });
 
 
-/// The `Matrix2x3` type represents 2x3 matrices in column-major order.
+/// A **(2 row, 3 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x3<S> {
@@ -6720,7 +6720,7 @@ impl_approx_eq_ops!(
 );
 
 
-/// The `Matrix3x2` type represents 3x2 matrices in column-major order.
+/// A **(3 row, 2 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix3x2<S> {
@@ -7148,7 +7148,7 @@ impl_approx_eq_ops!(
 );
 
 
-/// The `Matrix2x4` type represents 2x4 matrices in column-major order.
+/// A **(2 row, 4 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x4<S> {
@@ -7636,7 +7636,7 @@ impl_approx_eq_ops!(
     (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
 });
 
-/// The `Matrix4x2` type represents 4x2 matrices in column-major order.
+/// A **(4 row, 2 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix4x2<S> {
@@ -8096,7 +8096,7 @@ impl_approx_eq_ops!(
 });
 
 
-/// The `Matrix3x4` type represents 2x4 matrices in column-major order.
+/// A **(3 row, 4 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix3x4<S> {
@@ -8628,7 +8628,7 @@ impl_approx_eq_ops!(
 });
 
 
-/// The `Matrix4x3` type represents 4x2 matrices in column-major order.
+/// A **(4 row, 3 column)** in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix4x3<S> {
