@@ -20,7 +20,7 @@ use core::ops::*;
 
 
 macro_rules! impl_scalar_vector_mul_ops {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $($index:expr),* }) => {
+    ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
             type Output = $Output;
 
@@ -667,20 +667,20 @@ impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { 0 });
 
 impl_vector_binary_assign_ops!(Vector1<S>, { 0 });
 
-impl_scalar_vector_mul_ops!(u8,    Vector1<u8>,    Vector1<u8>,    { 0 });
-impl_scalar_vector_mul_ops!(u16,   Vector1<u16>,   Vector1<u16>,   { 0 });
-impl_scalar_vector_mul_ops!(u32,   Vector1<u32>,   Vector1<u32>,   { 0 });
-impl_scalar_vector_mul_ops!(u64,   Vector1<u64>,   Vector1<u64>,   { 0 });
-impl_scalar_vector_mul_ops!(u128,  Vector1<u128>,  Vector1<u128>,  { 0 });
-impl_scalar_vector_mul_ops!(usize, Vector1<usize>, Vector1<usize>, { 0 });
-impl_scalar_vector_mul_ops!(i8,    Vector1<i8>,    Vector1<i8>,    { 0 });
-impl_scalar_vector_mul_ops!(i16,   Vector1<i16>,   Vector1<i16>,   { 0 });
-impl_scalar_vector_mul_ops!(i32,   Vector1<i32>,   Vector1<i32>,   { 0 });
-impl_scalar_vector_mul_ops!(i64,   Vector1<i64>,   Vector1<i64>,   { 0 });
-impl_scalar_vector_mul_ops!(i128,  Vector1<i128>,  Vector1<i128>,  { 0 });
-impl_scalar_vector_mul_ops!(isize, Vector1<isize>, Vector1<isize>, { 0 });
-impl_scalar_vector_mul_ops!(f32,   Vector1<f32>,   Vector1<f32>,   { 0 });
-impl_scalar_vector_mul_ops!(f64,   Vector1<f64>,   Vector1<f64>,   { 0 });
+impl_scalar_vector_mul_ops!(u8    => Vector1<u8>    => Vector1<u8>,    { 0 });
+impl_scalar_vector_mul_ops!(u16   => Vector1<u16>   => Vector1<u16>,   { 0 });
+impl_scalar_vector_mul_ops!(u32   => Vector1<u32>   => Vector1<u32>,   { 0 });
+impl_scalar_vector_mul_ops!(u64   => Vector1<u64>   => Vector1<u64>,   { 0 });
+impl_scalar_vector_mul_ops!(u128  => Vector1<u128>  => Vector1<u128>,  { 0 });
+impl_scalar_vector_mul_ops!(usize => Vector1<usize> => Vector1<usize>, { 0 });
+impl_scalar_vector_mul_ops!(i8    => Vector1<i8>    => Vector1<i8>,    { 0 });
+impl_scalar_vector_mul_ops!(i16   => Vector1<i16>   => Vector1<i16>,   { 0 });
+impl_scalar_vector_mul_ops!(i32   => Vector1<i32>   => Vector1<i32>,   { 0 });
+impl_scalar_vector_mul_ops!(i64   => Vector1<i64>   => Vector1<i64>,   { 0 });
+impl_scalar_vector_mul_ops!(i128  => Vector1<i128>  => Vector1<i128>,  { 0 });
+impl_scalar_vector_mul_ops!(isize => Vector1<isize> => Vector1<isize>, { 0 });
+impl_scalar_vector_mul_ops!(f32   => Vector1<f32>   => Vector1<f32>,   { 0 });
+impl_scalar_vector_mul_ops!(f64   => Vector1<f64>   =>  Vector1<f64>,  { 0 });
 
 
 impl<S> Magnitude for Vector1<S> where S: ScalarFloat {
@@ -1184,20 +1184,20 @@ impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { 0, 1 });
 
 impl_vector_binary_assign_ops!(Vector2<S>, { 0, 1 });
 
-impl_scalar_vector_mul_ops!(u8,    Vector2<u8>,    Vector2<u8>,    { 0, 1 });
-impl_scalar_vector_mul_ops!(u16,   Vector2<u16>,   Vector2<u16>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(u32,   Vector2<u32>,   Vector2<u32>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(u64,   Vector2<u64>,   Vector2<u64>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(u128,  Vector2<u128>,  Vector2<u128>,  { 0, 1 });
-impl_scalar_vector_mul_ops!(usize, Vector2<usize>, Vector2<usize>, { 0, 1 });
-impl_scalar_vector_mul_ops!(i8,    Vector2<i8>,    Vector2<i8>,    { 0, 1 });
-impl_scalar_vector_mul_ops!(i16,   Vector2<i16>,   Vector2<i16>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(i32,   Vector2<i32>,   Vector2<i32>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(i64,   Vector2<i64>,   Vector2<i64>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(i128,  Vector2<i128>,  Vector2<i128>,  { 0, 1 });
-impl_scalar_vector_mul_ops!(isize, Vector2<isize>, Vector2<isize>, { 0, 1 });
-impl_scalar_vector_mul_ops!(f32,   Vector2<f32>,   Vector2<f32>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(f64,   Vector2<f64>,   Vector2<f64>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u8    => Vector2<u8>    => Vector2<u8>,    { 0, 1 });
+impl_scalar_vector_mul_ops!(u16   => Vector2<u16>   => Vector2<u16>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u32   => Vector2<u32>   => Vector2<u32>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u64   => Vector2<u64>   => Vector2<u64>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u128  => Vector2<u128>  => Vector2<u128>,  { 0, 1 });
+impl_scalar_vector_mul_ops!(usize => Vector2<usize> => Vector2<usize>, { 0, 1 });
+impl_scalar_vector_mul_ops!(i8    => Vector2<i8>    => Vector2<i8>,    { 0, 1 });
+impl_scalar_vector_mul_ops!(i16   => Vector2<i16>   => Vector2<i16>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(i32   => Vector2<i32>   => Vector2<i32>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(i64   => Vector2<i64>   => Vector2<i64>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(i128  => Vector2<i128>  => Vector2<i128>,  { 0, 1 });
+impl_scalar_vector_mul_ops!(isize => Vector2<isize> => Vector2<isize>, { 0, 1 });
+impl_scalar_vector_mul_ops!(f32   => Vector2<f32>   => Vector2<f32>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(f64   => Vector2<f64>   => Vector2<f64>,   { 0, 1 });
 
 
 impl<S> Magnitude for Vector2<S> where S: ScalarFloat {
@@ -1775,20 +1775,20 @@ impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 
 impl_vector_binary_assign_ops!(Vector3<S>, { 0, 1, 2 });
 
-impl_scalar_vector_mul_ops!(u8,    Vector3<u8>,    Vector3<u8>,    { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u16,   Vector3<u16>,   Vector3<u16>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u32,   Vector3<u32>,   Vector3<u32>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u64,   Vector3<u64>,   Vector3<u64>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u128,  Vector3<u128>,  Vector3<u128>,  { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(usize, Vector3<usize>, Vector3<usize>, { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i8,    Vector3<i8>,    Vector3<i8>,    { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i16,   Vector3<i16>,   Vector3<i16>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i32,   Vector3<i32>,   Vector3<i32>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i64,   Vector3<i64>,   Vector3<i64>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i128,  Vector3<i128>,  Vector3<i128>,  { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(isize, Vector3<isize>, Vector3<isize>, { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(f32,   Vector3<f32>,   Vector3<f32>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(f64,   Vector3<f64>,   Vector3<f64>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u8    => Vector3<u8>    => Vector3<u8>,    { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u16   => Vector3<u16>   => Vector3<u16>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u32   => Vector3<u32>   => Vector3<u32>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u64   => Vector3<u64>   => Vector3<u64>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u128  => Vector3<u128>  => Vector3<u128>,  { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(usize => Vector3<usize> => Vector3<usize>, { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i8    => Vector3<i8>    => Vector3<i8>,    { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i16   => Vector3<i16>   => Vector3<i16>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i32   => Vector3<i32>   => Vector3<i32>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i64   => Vector3<i64>   => Vector3<i64>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i128  => Vector3<i128>  => Vector3<i128>,  { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(isize => Vector3<isize> => Vector3<isize>, { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(f32   => Vector3<f32>   => Vector3<f32>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(f64   => Vector3<f64>   => Vector3<f64>,   { 0, 1, 2 });
 
 
 impl<S> Magnitude for Vector3<S> where S: ScalarFloat {
@@ -2305,20 +2305,20 @@ impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 
 impl_vector_binary_assign_ops!(Vector4<S>, { 0, 1, 2, 3 });
 
-impl_scalar_vector_mul_ops!(u8,    Vector4<u8>,    Vector4<u8>,    { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(u16,   Vector4<u16>,   Vector4<u16>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(u32,   Vector4<u32>,   Vector4<u32>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(u64,   Vector4<u64>,   Vector4<u64>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(u128,  Vector4<u128>,  Vector4<u128>,  { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(usize, Vector4<usize>, Vector4<usize>, { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i8,    Vector4<i8>,    Vector4<i8>,    { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i16,   Vector4<i16>,   Vector4<i16>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i32,   Vector4<i32>,   Vector4<i32>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i64,   Vector4<i64>,   Vector4<i64>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i128,  Vector4<i128>,  Vector4<i128>,  { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(isize, Vector4<isize>, Vector4<isize>, { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(f32,   Vector4<f32>,   Vector4<f32>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(f64,   Vector4<f64>,   Vector4<f64>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(u8    => Vector4<u8>    => Vector4<u8>,    { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(u16   => Vector4<u16>   => Vector4<u16>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(u32   => Vector4<u32>   => Vector4<u32>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(u64   => Vector4<u64>   => Vector4<u64>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(u128  => Vector4<u128>  => Vector4<u128>,  { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(usize => Vector4<usize> => Vector4<usize>, { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i8    => Vector4<i8>    => Vector4<i8>,    { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i16   => Vector4<i16>   => Vector4<i16>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i32   => Vector4<i32>   => Vector4<i32>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i64   => Vector4<i64>   => Vector4<i64>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(i128  => Vector4<i128>  => Vector4<i128>,  { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(isize => Vector4<isize> => Vector4<isize>, { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(f32   => Vector4<f32>   => Vector4<f32>,   { 0, 1, 2, 3 });
+impl_scalar_vector_mul_ops!(f64   => Vector4<f64>   => Vector4<f64>,   { 0, 1, 2, 3 });
 
 
 impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
