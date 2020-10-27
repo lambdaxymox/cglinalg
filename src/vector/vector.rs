@@ -2368,3 +2368,70 @@ impl<S> Magnitude for Vector4<S> where S: ScalarFloat {
 
 impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
 
+
+macro_rules! impl_swizzle {
+    ($name:ident() => $VectorN:ident => $Output:ident { $($i:expr),+ }) => {
+        impl<S> $VectorN<S> where S: Copy {
+            /// Construct a new vector from the components of 
+            #[inline]
+            pub fn $name(&self) -> $Output<S> {
+                $Output::new(
+                    $(self.data[$i]),*
+                )
+            }
+        }
+    }
+}
+
+impl_swizzle!(x() => Vector1 => Vector1 { 0 });
+
+impl_swizzle!(x() => Vector2 => Vector1 { 0 });
+impl_swizzle!(y() => Vector2 => Vector1 { 1 });
+
+impl_swizzle!(xx() => Vector2 => Vector2 { 0, 0 });
+impl_swizzle!(xy() => Vector2 => Vector2 { 0, 1 });
+impl_swizzle!(yx() => Vector2 => Vector2 { 1, 0 });
+impl_swizzle!(yy() => Vector2 => Vector2 { 1, 1 });
+
+impl_swizzle!(x() => Vector3 => Vector1 { 0 });
+impl_swizzle!(y() => Vector3 => Vector1 { 1 });
+impl_swizzle!(z() => Vector3 => Vector1 { 2 });
+
+impl_swizzle!(xx() => Vector3 => Vector2 { 0, 0 });
+impl_swizzle!(xy() => Vector3 => Vector2 { 0, 1 });
+impl_swizzle!(xz() => Vector3 => Vector2 { 0, 2 });
+impl_swizzle!(yx() => Vector3 => Vector2 { 1, 0 });
+impl_swizzle!(yy() => Vector3 => Vector2 { 1, 1 });
+impl_swizzle!(yz() => Vector3 => Vector2 { 1, 2 });
+impl_swizzle!(zx() => Vector3 => Vector2 { 2, 0 });
+impl_swizzle!(zy() => Vector3 => Vector2 { 2, 1 });
+impl_swizzle!(zz() => Vector3 => Vector2 { 2, 2 });
+
+impl_swizzle!(xxx() => Vector3 => Vector3 { 0, 0, 0 });
+impl_swizzle!(xxy() => Vector3 => Vector3 { 0, 0, 1 });
+impl_swizzle!(xxz() => Vector3 => Vector3 { 0, 0, 2 });
+impl_swizzle!(xyx() => Vector3 => Vector3 { 0, 1, 0 });
+impl_swizzle!(xyy() => Vector3 => Vector3 { 0, 1, 1 });
+impl_swizzle!(xyz() => Vector3 => Vector3 { 0, 1, 2 });
+impl_swizzle!(xzx() => Vector3 => Vector3 { 0, 2, 0 });
+impl_swizzle!(xzy() => Vector3 => Vector3 { 0, 2, 1 });
+impl_swizzle!(xzz() => Vector3 => Vector3 { 0, 2, 2 });
+impl_swizzle!(yxx() => Vector3 => Vector3 { 1, 0, 0 });
+impl_swizzle!(yxy() => Vector3 => Vector3 { 1, 0, 1 });
+impl_swizzle!(yxz() => Vector3 => Vector3 { 1, 0, 2 });
+impl_swizzle!(yyx() => Vector3 => Vector3 { 1, 1, 0 });
+impl_swizzle!(yyy() => Vector3 => Vector3 { 1, 1, 1 });
+impl_swizzle!(yyz() => Vector3 => Vector3 { 1, 1, 2 });
+impl_swizzle!(yzx() => Vector3 => Vector3 { 1, 2, 0 });
+impl_swizzle!(yzy() => Vector3 => Vector3 { 1, 2, 1 });
+impl_swizzle!(yzz() => Vector3 => Vector3 { 1, 2, 2 });
+impl_swizzle!(zxx() => Vector3 => Vector3 { 2, 0, 0 });
+impl_swizzle!(zxy() => Vector3 => Vector3 { 2, 0, 1 });
+impl_swizzle!(zxz() => Vector3 => Vector3 { 2, 0, 2 });
+impl_swizzle!(zyx() => Vector3 => Vector3 { 2, 1, 0 });
+impl_swizzle!(zyy() => Vector3 => Vector3 { 2, 1, 1 });
+impl_swizzle!(zyz() => Vector3 => Vector3 { 2, 1, 2 });
+impl_swizzle!(zzx() => Vector3 => Vector3 { 2, 2, 0 });
+impl_swizzle!(zzy() => Vector3 => Vector3 { 2, 2, 1 });
+impl_swizzle!(zzz() => Vector3 => Vector3 { 2, 2, 2 });
+
