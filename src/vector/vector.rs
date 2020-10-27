@@ -238,48 +238,6 @@ macro_rules! impl_as_ref_ops {
     }
 }
 
-macro_rules! impl_approx_eq_ops {
-    ($T:ident, { $($index:expr),* }) => {
-        impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
-            type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-        
-            #[inline]
-            fn default_epsilon() -> Self::Epsilon {
-                S::default_epsilon()
-            }
-        
-            #[inline]
-            fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-                $(S::abs_diff_eq(&self.data[$index], &other.data[$index], epsilon)) &&*
-            }
-        }
-        
-        impl<S> approx::RelativeEq for $T<S> where S: ScalarFloat {
-            #[inline]
-            fn default_max_relative() -> S::Epsilon {
-                S::default_max_relative()
-            }
-        
-            #[inline]
-            fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-                $(S::relative_eq(&self.data[$index], &other.data[$index], epsilon, max_relative)) &&*
-            }
-        }
-        
-        impl<S> approx::UlpsEq for $T<S> where S: ScalarFloat {
-            #[inline]
-            fn default_max_ulps() -> u32 {
-                S::default_max_ulps()
-            }
-        
-            #[inline]
-            fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-                $(S::ulps_eq(&self.data[$index], &other.data[$index], epsilon, max_ulps)) &&*
-            }
-        }
-    }
-}
-
 
 /// A representation of one-dimensional vectors.
 #[repr(C)]
@@ -682,10 +640,6 @@ impl_scalar_vector_mul_ops!(isize => Vector1<isize> => Vector1<isize>, { 0 });
 impl_scalar_vector_mul_ops!(f32   => Vector1<f32>   => Vector1<f32>,   { 0 });
 impl_scalar_vector_mul_ops!(f64   => Vector1<f64>   =>  Vector1<f64>,  { 0 });
 
-
-
-
-impl_approx_eq_ops!(Vector1, { 0 });
 
 
 
@@ -1156,7 +1110,7 @@ impl_scalar_vector_mul_ops!(isize => Vector2<isize> => Vector2<isize>, { 0, 1 })
 impl_scalar_vector_mul_ops!(f32   => Vector2<f32>   => Vector2<f32>,   { 0, 1 });
 impl_scalar_vector_mul_ops!(f64   => Vector2<f64>   => Vector2<f64>,   { 0, 1 });
 
-impl_approx_eq_ops!(Vector2, { 0, 1 });
+
 
 
 
@@ -1701,7 +1655,7 @@ impl_scalar_vector_mul_ops!(isize => Vector3<isize> => Vector3<isize>, { 0, 1, 2
 impl_scalar_vector_mul_ops!(f32   => Vector3<f32>   => Vector3<f32>,   { 0, 1, 2 });
 impl_scalar_vector_mul_ops!(f64   => Vector3<f64>   => Vector3<f64>,   { 0, 1, 2 });
 
-impl_approx_eq_ops!(Vector3, { 0, 1, 2 });
+
 
 
 
@@ -2186,6 +2140,51 @@ impl_scalar_vector_mul_ops!(f32   => Vector4<f32>   => Vector4<f32>,   { 0, 1, 2
 impl_scalar_vector_mul_ops!(f64   => Vector4<f64>   => Vector4<f64>,   { 0, 1, 2, 3 });
 
 
+macro_rules! impl_approx_eq_ops {
+    ($T:ident, { $($index:expr),* }) => {
+        impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
+            type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+        
+            #[inline]
+            fn default_epsilon() -> Self::Epsilon {
+                S::default_epsilon()
+            }
+        
+            #[inline]
+            fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+                $(S::abs_diff_eq(&self.data[$index], &other.data[$index], epsilon)) &&*
+            }
+        }
+        
+        impl<S> approx::RelativeEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_relative() -> S::Epsilon {
+                S::default_max_relative()
+            }
+        
+            #[inline]
+            fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+                $(S::relative_eq(&self.data[$index], &other.data[$index], epsilon, max_relative)) &&*
+            }
+        }
+        
+        impl<S> approx::UlpsEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_ulps() -> u32 {
+                S::default_max_ulps()
+            }
+        
+            #[inline]
+            fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+                $(S::ulps_eq(&self.data[$index], &other.data[$index], epsilon, max_ulps)) &&*
+            }
+        }
+    }
+}
+
+impl_approx_eq_ops!(Vector1, { 0 });
+impl_approx_eq_ops!(Vector2, { 0, 1 });
+impl_approx_eq_ops!(Vector3, { 0, 1, 2 });
 impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
 
 
