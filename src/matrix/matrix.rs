@@ -174,6 +174,190 @@ impl<S> Matrix1x1<S> where S: NumCast + Copy {
     }
 }
 
+impl<S> Matrix1x1<S> where S: Scalar {
+    /// Compute a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1, 
+    /// # };
+    /// #
+    /// let matrix: Matrix1x1<i32> = Matrix1x1::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn zero() -> Matrix1x1<S> {
+        Matrix1x1::new(S::zero())
+    }
+    
+    /// Determine whether a matrix is a zero matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1,
+    /// # };
+    /// #
+    /// let matrix: Matrix1x1<i32> = Matrix1x1::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.data[0][0].is_zero()
+    }
+
+    /// Compute an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1, 
+    /// # };
+    /// #
+    /// let result: Matrix1x1<i32> = Matrix1x1::identity();
+    /// let expected = Matrix1x1::new(1_i32);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn identity() -> Matrix1x1<S> {
+        Matrix1x1::new(S::one())
+    }
+    
+    /// Determine whether a matrix is an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1, 
+    /// # };
+    /// #
+    /// let matrix: Matrix1x1<i32> = Matrix1x1::identity();
+    /// 
+    /// assert!(matrix.is_identity());
+    /// ```
+    #[inline]
+    pub fn is_identity(&self) -> bool {
+        self.data[0][0].is_one()
+    }
+
+    /// Compute the trace of a square matrix.
+    ///
+    /// The trace of a matrix is the sum of the diagonal elements.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1, 
+    /// # };
+    /// #
+    /// let matrix = Matrix1x1::new(13_i32);
+    ///
+    /// assert_eq!(matrix.trace(), 13_i32);
+    /// ```
+    #[inline]
+    pub fn trace(&self) -> S {
+        self.data[0][0]
+    }
+}
+
+impl<S> Matrix1x1<S> where S: ScalarSigned {
+     /// Compute the determinant of a matrix.
+    /// 
+    /// The determinant of a matrix is the signed volume of the parallelepiped
+    /// swept out by the vectors represented by the matrix.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1, 
+    /// # };
+    /// #
+    /// let matrix = Matrix1x1::new(-3_f64);
+    ///
+    /// assert_eq!(matrix.determinant(), -3_f64);
+    /// ```
+    #[inline]
+    pub fn determinant(&self) -> S {
+        self.data[0][0]
+    }
+}
+
+impl<S> Matrix1x1<S> where S: ScalarFloat {
+    /// Compute the inverse of a square matrix, if the inverse exists. 
+    ///
+    /// Given a square matrix `self` Compute the matrix `m` if it exists 
+    /// such that
+    /// ```text
+    /// m * self = self * m = 1.
+    /// ```
+    /// Not every square matrix has an inverse.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1,  
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let matrix = Matrix1x1::new(5_f64);
+    /// let expected = Matrix1x1::new(1_f64 / 5_f64);
+    /// let result = matrix.inverse().unwrap();
+    ///
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn inverse(&self) -> Option<Self> {
+        if self.data[0][0].is_zero() {
+            None
+        } else {
+            Some(Matrix1x1::new(S::one() / self.data[0][0]))
+        }
+    }
+
+    /// Determine whether a square matrix has an inverse matrix.
+    ///
+    /// A matrix is invertible is its determinant is not zero.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1, 
+    /// # };
+    /// #
+    /// let matrix = Matrix1x1::new(-2_f64);
+    /// 
+    /// assert_eq!(matrix.determinant(), -2_f64);
+    /// assert!(matrix.is_invertible());
+    /// ```
+    #[inline]
+    pub fn is_invertible(&self) -> bool {
+        ulps_ne!(self.determinant(), S::zero())
+    }
+}
+
 impl<S> fmt::Display for Matrix1x1<S> where S: fmt::Display {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Matrix1x1 [[{}]]", self.data[0][0])
@@ -211,12 +395,6 @@ impl<'a, S> From<&'a [S; 1]> for &'a Matrix1x1<S> where S: Scalar {
         }
     }
 }
-
-
-
-
-
-
 
 
 /// A **(2 row, 2 column)** matrix in column-major order.
