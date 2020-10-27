@@ -2372,7 +2372,7 @@ impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
 macro_rules! impl_swizzle {
     ($name:ident() => $VectorN:ident => $Output:ident { $($i:expr),+ }) => {
         impl<S> $VectorN<S> where S: Copy {
-            /// Construct a new vector from the components of 
+            /// Construct a new vector from the components of the input vector.
             #[inline]
             pub fn $name(&self) -> $Output<S> {
                 $Output::new(

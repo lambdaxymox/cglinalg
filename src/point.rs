@@ -1539,3 +1539,69 @@ impl<S> approx::UlpsEq for Point3<S> where S: ScalarFloat {
     }
 }
 
+macro_rules! impl_swizzle {
+    ($name:ident() => $PointN:ident => $Output:ident { $($i:expr),+ }) => {
+        impl<S> $PointN<S> where S: Copy {
+            /// Construct a new point from the components of the input point.
+            #[inline]
+            pub fn $name(&self) -> $Output<S> {
+                $Output::new(
+                    $(self.data[$i]),*
+                )
+            }
+        }
+    }
+}
+
+impl_swizzle!(x() => Point1 => Point1 { 0 });
+
+impl_swizzle!(x() => Point2 => Point1 { 0 });
+impl_swizzle!(y() => Point2 => Point1 { 1 });
+
+impl_swizzle!(xx() => Point2 => Point2 { 0, 0 });
+impl_swizzle!(xy() => Point2 => Point2 { 0, 1 });
+impl_swizzle!(yx() => Point2 => Point2 { 1, 0 });
+impl_swizzle!(yy() => Point2 => Point2 { 1, 1 });
+
+impl_swizzle!(x() => Point3 => Point1 { 0 });
+impl_swizzle!(y() => Point3 => Point1 { 1 });
+impl_swizzle!(z() => Point3 => Point1 { 2 });
+
+impl_swizzle!(xx() => Point3 => Point2 { 0, 0 });
+impl_swizzle!(xy() => Point3 => Point2 { 0, 1 });
+impl_swizzle!(xz() => Point3 => Point2 { 0, 2 });
+impl_swizzle!(yx() => Point3 => Point2 { 1, 0 });
+impl_swizzle!(yy() => Point3 => Point2 { 1, 1 });
+impl_swizzle!(yz() => Point3 => Point2 { 1, 2 });
+impl_swizzle!(zx() => Point3 => Point2 { 2, 0 });
+impl_swizzle!(zy() => Point3 => Point2 { 2, 1 });
+impl_swizzle!(zz() => Point3 => Point2 { 2, 2 });
+
+impl_swizzle!(xxx() => Point3 => Point3 { 0, 0, 0 });
+impl_swizzle!(xxy() => Point3 => Point3 { 0, 0, 1 });
+impl_swizzle!(xxz() => Point3 => Point3 { 0, 0, 2 });
+impl_swizzle!(xyx() => Point3 => Point3 { 0, 1, 0 });
+impl_swizzle!(xyy() => Point3 => Point3 { 0, 1, 1 });
+impl_swizzle!(xyz() => Point3 => Point3 { 0, 1, 2 });
+impl_swizzle!(xzx() => Point3 => Point3 { 0, 2, 0 });
+impl_swizzle!(xzy() => Point3 => Point3 { 0, 2, 1 });
+impl_swizzle!(xzz() => Point3 => Point3 { 0, 2, 2 });
+impl_swizzle!(yxx() => Point3 => Point3 { 1, 0, 0 });
+impl_swizzle!(yxy() => Point3 => Point3 { 1, 0, 1 });
+impl_swizzle!(yxz() => Point3 => Point3 { 1, 0, 2 });
+impl_swizzle!(yyx() => Point3 => Point3 { 1, 1, 0 });
+impl_swizzle!(yyy() => Point3 => Point3 { 1, 1, 1 });
+impl_swizzle!(yyz() => Point3 => Point3 { 1, 1, 2 });
+impl_swizzle!(yzx() => Point3 => Point3 { 1, 2, 0 });
+impl_swizzle!(yzy() => Point3 => Point3 { 1, 2, 1 });
+impl_swizzle!(yzz() => Point3 => Point3 { 1, 2, 2 });
+impl_swizzle!(zxx() => Point3 => Point3 { 2, 0, 0 });
+impl_swizzle!(zxy() => Point3 => Point3 { 2, 0, 1 });
+impl_swizzle!(zxz() => Point3 => Point3 { 2, 0, 2 });
+impl_swizzle!(zyx() => Point3 => Point3 { 2, 1, 0 });
+impl_swizzle!(zyy() => Point3 => Point3 { 2, 1, 1 });
+impl_swizzle!(zyz() => Point3 => Point3 { 2, 1, 2 });
+impl_swizzle!(zzx() => Point3 => Point3 { 2, 2, 0 });
+impl_swizzle!(zzy() => Point3 => Point3 { 2, 2, 1 });
+impl_swizzle!(zzz() => Point3 => Point3 { 2, 2, 2 });
+
