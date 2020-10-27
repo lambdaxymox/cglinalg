@@ -542,52 +542,7 @@ impl_scalar_vector_mul_ops!(f64,   Point1<f64>,   Point1<f64>,   { 0 });
 impl_point_unary_ops!(Neg, neg, Point1<S>, Point1<S>, { 0 });
 
 impl_point_binary_assign_ops!(Point1<S>, Vector1<S>, { 0 });
-/*
-impl<S> Magnitude for Point1<S> where S: ScalarFloat {
-    type Output = S;
 
-    #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
-    }
-
-    #[inline]
-    fn magnitude(&self) -> Self::Output {
-        self.magnitude_squared().sqrt()
-    }
-
-    #[inline]
-    fn normalize(&self) -> Self {
-        self / self.magnitude()
-    }
-
-    #[inline]
-    fn normalize_to(&self, magnitude: Self::Output) -> Self {
-        self * (magnitude / self.magnitude())
-    }
-
-    #[inline]
-    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let magnitude = self.magnitude();
-
-        if magnitude <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
-    }
-
-    #[inline]
-    fn distance_squared(&self, other: &Point1<S>) -> Self::Output {
-        (self - other).magnitude_squared()
-    }
-
-    #[inline]
-    fn distance(&self, other: &Self) -> Self::Output {
-        self.distance_squared(other).sqrt()
-    }
-}
-*/
 
 /// A point is a location in a two-dimensional Euclidean space.
 #[repr(C)]
@@ -965,52 +920,6 @@ impl_point_unary_ops!(Neg, neg, Point2<S>, Point2<S>, { 0, 1 });
 
 impl_point_binary_assign_ops!(Point2<S>, Vector2<S>, { 0, 1 });
 
-/*
-impl<S> Magnitude for Point2<S> where S: ScalarFloat {
-    type Output = S;
-
-    #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
-    }
-
-    #[inline]
-    fn magnitude(&self) -> Self::Output {
-        self.magnitude_squared().sqrt()
-    }
-
-    #[inline]
-    fn normalize(&self) -> Self {
-        self / self.magnitude()
-    }
-
-    #[inline]
-    fn normalize_to(&self, magnitude: Self::Output) -> Self {
-        self * (magnitude / self.magnitude())
-    }
-    
-    #[inline]
-    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let magnitude = self.magnitude();
-
-        if magnitude <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
-    }
-
-    #[inline]
-    fn distance_squared(&self, other: &Point2<S>) -> Self::Output {
-        (self - other).magnitude_squared()
-    }
-
-    #[inline]
-    fn distance(&self, other: &Self) -> Self::Output {
-        self.distance_squared(other).sqrt()
-    }
-}
-*/
 
 /// A representation of three-dimensional points in a Euclidean space.
 #[repr(C)]
@@ -1431,52 +1340,7 @@ macro_rules! impl_magnitude {
 impl_magnitude!(Point1);
 impl_magnitude!(Point2);
 impl_magnitude!(Point3);
-/*
-impl<S> Magnitude for Point3<S> where S: ScalarFloat {
-    type Output = S;
 
-    #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
-    }
-
-    #[inline]
-    fn magnitude(&self) -> Self::Output {
-        self.magnitude_squared().sqrt()
-    }
-
-    #[inline]
-    fn normalize(&self) -> Self {
-        self / self.magnitude()
-    }
-
-    #[inline]
-    fn normalize_to(&self, magnitude: Self::Output) -> Self {
-        self * (magnitude / self.magnitude())
-    }
-
-    #[inline]
-    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let magnitude = self.magnitude();
-
-        if magnitude <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
-    }
-
-    #[inline]
-    fn distance_squared(&self, other: &Point3<S>) -> Self::Output {
-        (self - other).magnitude_squared()
-    }
-
-    #[inline]
-    fn distance(&self, other: &Self) -> Self::Output {
-        self.distance_squared(other).sqrt()
-    }
-}
-*/
 
 macro_rules! impl_approx_eq_ops {
     ($PointN:ident, $VectorN:ident) => {
