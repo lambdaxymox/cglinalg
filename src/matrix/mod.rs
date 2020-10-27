@@ -1,3 +1,4 @@
+mod array;
 mod matrix;
 mod matrix_assign_ops;
 mod matrix_interpolate;

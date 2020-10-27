@@ -23,7 +23,7 @@ use crate::vector::{
     Vector4,
 };
 
-use crate::array::*;
+use crate::matrix::array::*;
 
 use core::ops;
 

@@ -16,7 +16,7 @@ use crate::matrix::{
     Matrix4x2,
     Matrix4x3,
 };
-use crate::array::*;
+use crate::matrix::array::*;
 
 use core::ops;
 

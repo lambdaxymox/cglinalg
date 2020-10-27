@@ -104,7 +104,6 @@ extern crate num_traits;
 mod base;
 
 mod angle;
-mod array;
 mod matrix;
 mod vector;
 
