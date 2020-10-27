@@ -19,156 +19,6 @@ use core::ops;
 use core::ops::*;
 
 
-macro_rules! impl_scalar_vector_mul_ops {
-    ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.data[$index]),* )
-            }
-        }
-
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.data[$index]),* )
-            }
-        }
-    }
-}
-
-macro_rules! impl_vector_vector_binary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType<$T> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: $T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other.data[$index]) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType<&$T> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: &$T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other.data[$index]) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType<$T> for &$T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: $T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other.data[$index]) ),* 
-                )
-            }
-        }
-
-        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: &'a $T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other.data[$index]) ),* 
-                )
-            }
-        }
-    }
-}
-
-macro_rules! impl_vector_scalar_binary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType<S> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: S) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other) ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType<S> for &$T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: S) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other) ),* 
-                )
-            }
-        }
-    }
-}
-
-macro_rules! impl_vector_binary_assign_ops {
-    ($T:ty, { $($index:expr),* }) => {
-        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: $T) {
-                $(self.data[$index] += other.data[$index]);*
-            }
-        }
-
-        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: &$T) {
-                $(self.data[$index] += other.data[$index]);*
-            }
-        }
-
-        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: $T) {
-                $(self.data[$index] -= other.data[$index]);*
-            }
-        }
-
-        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: &$T) {
-                $(self.data[$index] -= other.data[$index]);*
-            }
-        }
-
-        impl<S> ops::MulAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn mul_assign(&mut self, other: S) {
-                $(self.data[$index] *= other);*
-            }
-        }
-        
-        impl<S> ops::DivAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn div_assign(&mut self, other: S) {
-                $(self.data[$index] /= other);*
-            }
-        }
-        
-        impl<S> ops::RemAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn rem_assign(&mut self, other: S) {
-                $(self.data[$index] %= other);*
-            }
-        }
-    }
-}
-
-
 /// A representation of one-dimensional vectors.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -529,33 +379,6 @@ impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> where S: Scalar {
         }
     }
 }
-
-
-impl_vector_vector_binary_ops!(Add, add, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_vector_binary_ops!(Sub, sub, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { 0 });
-
-impl_vector_binary_assign_ops!(Vector1<S>, { 0 });
-
-impl_scalar_vector_mul_ops!(u8    => Vector1<u8>    => Vector1<u8>,    { 0 });
-impl_scalar_vector_mul_ops!(u16   => Vector1<u16>   => Vector1<u16>,   { 0 });
-impl_scalar_vector_mul_ops!(u32   => Vector1<u32>   => Vector1<u32>,   { 0 });
-impl_scalar_vector_mul_ops!(u64   => Vector1<u64>   => Vector1<u64>,   { 0 });
-impl_scalar_vector_mul_ops!(u128  => Vector1<u128>  => Vector1<u128>,  { 0 });
-impl_scalar_vector_mul_ops!(usize => Vector1<usize> => Vector1<usize>, { 0 });
-impl_scalar_vector_mul_ops!(i8    => Vector1<i8>    => Vector1<i8>,    { 0 });
-impl_scalar_vector_mul_ops!(i16   => Vector1<i16>   => Vector1<i16>,   { 0 });
-impl_scalar_vector_mul_ops!(i32   => Vector1<i32>   => Vector1<i32>,   { 0 });
-impl_scalar_vector_mul_ops!(i64   => Vector1<i64>   => Vector1<i64>,   { 0 });
-impl_scalar_vector_mul_ops!(i128  => Vector1<i128>  => Vector1<i128>,  { 0 });
-impl_scalar_vector_mul_ops!(isize => Vector1<isize> => Vector1<isize>, { 0 });
-impl_scalar_vector_mul_ops!(f32   => Vector1<f32>   => Vector1<f32>,   { 0 });
-impl_scalar_vector_mul_ops!(f64   => Vector1<f64>   =>  Vector1<f64>,  { 0 });
-
-
-
 
 
 /// A representation of two-dimensional vectors in a Euclidean space.
@@ -984,34 +807,6 @@ impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
         }
     }
 }
-
-impl_vector_vector_binary_ops!(Add, add, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_vector_binary_ops!(Sub, sub, Vector2<S>, Vector2<S>, { 0, 1 });
-
-impl_vector_scalar_binary_ops!(Mul, mul, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_scalar_binary_ops!(Div, div, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector2<S>, Vector2<S>, { 0, 1 });
-
-impl_vector_binary_assign_ops!(Vector2<S>, { 0, 1 });
-
-impl_scalar_vector_mul_ops!(u8    => Vector2<u8>    => Vector2<u8>,    { 0, 1 });
-impl_scalar_vector_mul_ops!(u16   => Vector2<u16>   => Vector2<u16>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(u32   => Vector2<u32>   => Vector2<u32>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(u64   => Vector2<u64>   => Vector2<u64>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(u128  => Vector2<u128>  => Vector2<u128>,  { 0, 1 });
-impl_scalar_vector_mul_ops!(usize => Vector2<usize> => Vector2<usize>, { 0, 1 });
-impl_scalar_vector_mul_ops!(i8    => Vector2<i8>    => Vector2<i8>,    { 0, 1 });
-impl_scalar_vector_mul_ops!(i16   => Vector2<i16>   => Vector2<i16>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(i32   => Vector2<i32>   => Vector2<i32>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(i64   => Vector2<i64>   => Vector2<i64>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(i128  => Vector2<i128>  => Vector2<i128>,  { 0, 1 });
-impl_scalar_vector_mul_ops!(isize => Vector2<isize> => Vector2<isize>, { 0, 1 });
-impl_scalar_vector_mul_ops!(f32   => Vector2<f32>   => Vector2<f32>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(f64   => Vector2<f64>   => Vector2<f64>,   { 0, 1 });
-
-
-
-
 
 
 /// A representation of three-dimensional vectors in a Euclidean space.
@@ -1515,34 +1310,6 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
     }
 }
 
-impl_vector_vector_binary_ops!(Add, add, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_vector_binary_ops!(Sub, sub, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-
-impl_vector_scalar_binary_ops!(Mul, mul, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_scalar_binary_ops!(Div, div, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-
-impl_vector_binary_assign_ops!(Vector3<S>, { 0, 1, 2 });
-
-impl_scalar_vector_mul_ops!(u8    => Vector3<u8>    => Vector3<u8>,    { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u16   => Vector3<u16>   => Vector3<u16>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u32   => Vector3<u32>   => Vector3<u32>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u64   => Vector3<u64>   => Vector3<u64>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u128  => Vector3<u128>  => Vector3<u128>,  { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(usize => Vector3<usize> => Vector3<usize>, { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i8    => Vector3<i8>    => Vector3<i8>,    { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i16   => Vector3<i16>   => Vector3<i16>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i32   => Vector3<i32>   => Vector3<i32>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i64   => Vector3<i64>   => Vector3<i64>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i128  => Vector3<i128>  => Vector3<i128>,  { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(isize => Vector3<isize> => Vector3<isize>, { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(f32   => Vector3<f32>   => Vector3<f32>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(f64   => Vector3<f64>   => Vector3<f64>,   { 0, 1, 2 });
-
-
-
-
-
 
 /// A representation of four-dimensional vectors in a Euclidean space.
 #[repr(C)]
@@ -1984,14 +1751,72 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
     }
 }
 
-impl_vector_vector_binary_ops!(Add, add, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-impl_vector_vector_binary_ops!(Sub, sub, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+macro_rules! impl_scalar_vector_mul_ops {
+    ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
 
-impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.data[$index]),* )
+            }
+        }
 
-impl_vector_binary_assign_ops!(Vector4<S>, { 0, 1, 2, 3 });
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( $(self * other.data[$index]),* )
+            }
+        }
+    }
+}
+
+impl_scalar_vector_mul_ops!(u8    => Vector1<u8>    => Vector1<u8>,    { 0 });
+impl_scalar_vector_mul_ops!(u16   => Vector1<u16>   => Vector1<u16>,   { 0 });
+impl_scalar_vector_mul_ops!(u32   => Vector1<u32>   => Vector1<u32>,   { 0 });
+impl_scalar_vector_mul_ops!(u64   => Vector1<u64>   => Vector1<u64>,   { 0 });
+impl_scalar_vector_mul_ops!(u128  => Vector1<u128>  => Vector1<u128>,  { 0 });
+impl_scalar_vector_mul_ops!(usize => Vector1<usize> => Vector1<usize>, { 0 });
+impl_scalar_vector_mul_ops!(i8    => Vector1<i8>    => Vector1<i8>,    { 0 });
+impl_scalar_vector_mul_ops!(i16   => Vector1<i16>   => Vector1<i16>,   { 0 });
+impl_scalar_vector_mul_ops!(i32   => Vector1<i32>   => Vector1<i32>,   { 0 });
+impl_scalar_vector_mul_ops!(i64   => Vector1<i64>   => Vector1<i64>,   { 0 });
+impl_scalar_vector_mul_ops!(i128  => Vector1<i128>  => Vector1<i128>,  { 0 });
+impl_scalar_vector_mul_ops!(isize => Vector1<isize> => Vector1<isize>, { 0 });
+impl_scalar_vector_mul_ops!(f32   => Vector1<f32>   => Vector1<f32>,   { 0 });
+impl_scalar_vector_mul_ops!(f64   => Vector1<f64>   =>  Vector1<f64>,  { 0 });
+
+impl_scalar_vector_mul_ops!(u8    => Vector2<u8>    => Vector2<u8>,    { 0, 1 });
+impl_scalar_vector_mul_ops!(u16   => Vector2<u16>   => Vector2<u16>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u32   => Vector2<u32>   => Vector2<u32>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u64   => Vector2<u64>   => Vector2<u64>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(u128  => Vector2<u128>  => Vector2<u128>,  { 0, 1 });
+impl_scalar_vector_mul_ops!(usize => Vector2<usize> => Vector2<usize>, { 0, 1 });
+impl_scalar_vector_mul_ops!(i8    => Vector2<i8>    => Vector2<i8>,    { 0, 1 });
+impl_scalar_vector_mul_ops!(i16   => Vector2<i16>   => Vector2<i16>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(i32   => Vector2<i32>   => Vector2<i32>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(i64   => Vector2<i64>   => Vector2<i64>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(i128  => Vector2<i128>  => Vector2<i128>,  { 0, 1 });
+impl_scalar_vector_mul_ops!(isize => Vector2<isize> => Vector2<isize>, { 0, 1 });
+impl_scalar_vector_mul_ops!(f32   => Vector2<f32>   => Vector2<f32>,   { 0, 1 });
+impl_scalar_vector_mul_ops!(f64   => Vector2<f64>   => Vector2<f64>,   { 0, 1 });
+
+impl_scalar_vector_mul_ops!(u8    => Vector3<u8>    => Vector3<u8>,    { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u16   => Vector3<u16>   => Vector3<u16>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u32   => Vector3<u32>   => Vector3<u32>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u64   => Vector3<u64>   => Vector3<u64>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(u128  => Vector3<u128>  => Vector3<u128>,  { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(usize => Vector3<usize> => Vector3<usize>, { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i8    => Vector3<i8>    => Vector3<i8>,    { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i16   => Vector3<i16>   => Vector3<i16>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i32   => Vector3<i32>   => Vector3<i32>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i64   => Vector3<i64>   => Vector3<i64>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(i128  => Vector3<i128>  => Vector3<i128>,  { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(isize => Vector3<isize> => Vector3<isize>, { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(f32   => Vector3<f32>   => Vector3<f32>,   { 0, 1, 2 });
+impl_scalar_vector_mul_ops!(f64   => Vector3<f64>   => Vector3<f64>,   { 0, 1, 2 });
 
 impl_scalar_vector_mul_ops!(u8    => Vector4<u8>    => Vector4<u8>,    { 0, 1, 2, 3 });
 impl_scalar_vector_mul_ops!(u16   => Vector4<u16>   => Vector4<u16>,   { 0, 1, 2, 3 });
@@ -2007,6 +1832,163 @@ impl_scalar_vector_mul_ops!(i128  => Vector4<i128>  => Vector4<i128>,  { 0, 1, 2
 impl_scalar_vector_mul_ops!(isize => Vector4<isize> => Vector4<isize>, { 0, 1, 2, 3 });
 impl_scalar_vector_mul_ops!(f32   => Vector4<f32>   => Vector4<f32>,   { 0, 1, 2, 3 });
 impl_scalar_vector_mul_ops!(f64   => Vector4<f64>   => Vector4<f64>,   { 0, 1, 2, 3 });
+
+
+macro_rules! impl_vector_scalar_binary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
+        impl<S> $OpType<S> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: S) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op(other) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<S> for &$T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: S) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op(other) ),* 
+                )
+            }
+        }
+    }
+}
+
+impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_scalar_binary_ops!(Div, div, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_scalar_binary_ops!(Div, div, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+
+
+macro_rules! impl_vector_vector_binary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
+        impl<S> $OpType<$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op(other.data[$index]) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<&$T> for $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &$T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op(other.data[$index]) ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType<$T> for &$T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: $T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op(other.data[$index]) ),* 
+                )
+            }
+        }
+
+        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self, other: &'a $T) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op(other.data[$index]) ),* 
+                )
+            }
+        }
+    }
+}
+
+impl_vector_vector_binary_ops!(Add, add, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_vector_binary_ops!(Sub, sub, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_vector_binary_ops!(Add, add, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_vector_binary_ops!(Sub, sub, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_vector_binary_ops!(Add, add, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_vector_binary_ops!(Sub, sub, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_vector_binary_ops!(Add, add, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+impl_vector_vector_binary_ops!(Sub, sub, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+
+
+macro_rules! impl_vector_binary_assign_ops {
+    ($T:ty, { $($index:expr),* }) => {
+        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: $T) {
+                $(self.data[$index] += other.data[$index]);*
+            }
+        }
+
+        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: &$T) {
+                $(self.data[$index] += other.data[$index]);*
+            }
+        }
+
+        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: $T) {
+                $(self.data[$index] -= other.data[$index]);*
+            }
+        }
+
+        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: &$T) {
+                $(self.data[$index] -= other.data[$index]);*
+            }
+        }
+
+        impl<S> ops::MulAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn mul_assign(&mut self, other: S) {
+                $(self.data[$index] *= other);*
+            }
+        }
+        
+        impl<S> ops::DivAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn div_assign(&mut self, other: S) {
+                $(self.data[$index] /= other);*
+            }
+        }
+        
+        impl<S> ops::RemAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn rem_assign(&mut self, other: S) {
+                $(self.data[$index] %= other);*
+            }
+        }
+    }
+}
+
+impl_vector_binary_assign_ops!(Vector1<S>, { 0 });
+impl_vector_binary_assign_ops!(Vector2<S>, { 0, 1 });
+impl_vector_binary_assign_ops!(Vector3<S>, { 0, 1, 2 });
+impl_vector_binary_assign_ops!(Vector4<S>, { 0, 1, 2, 3 });
 
 
 impl_coords!(X, { x });
