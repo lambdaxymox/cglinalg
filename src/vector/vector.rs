@@ -115,32 +115,6 @@ macro_rules! impl_vector_scalar_binary_ops {
     }
 }
 
-macro_rules! impl_vector_unary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType for $T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op() ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType for &$T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op() ),* 
-                )
-            }
-        }
-    }
-}
-
 macro_rules! impl_vector_binary_assign_ops {
     ($T:ty, { $($index:expr),* }) => {
         impl<S> ops::AddAssign<$T> for $T where S: Scalar {
@@ -189,50 +163,6 @@ macro_rules! impl_vector_binary_assign_ops {
             #[inline]
             fn rem_assign(&mut self, other: S) {
                 $(self.data[$index] %= other);*
-            }
-        }
-    }
-}
-
-macro_rules! impl_vector_index_ops {
-    ($T:ty, $n:expr, $IndexType:ty, $Output:ty) => {
-        impl<S> ops::Index<$IndexType> for $T {
-            type Output = $Output;
-
-            #[inline]
-            fn index(&self, index: $IndexType) -> &Self::Output {
-                let v: &[S; $n] = self.as_ref();
-                &v[index]
-            }
-        }
-
-        impl<S> ops::IndexMut<$IndexType> for $T {
-            #[inline]
-            fn index_mut(&mut self, index: $IndexType) -> &mut Self::Output {
-                let v: &mut [S; $n] = self.as_mut();
-                &mut v[index]
-            }
-        }
-    }
-}
-
-macro_rules! impl_as_ref_ops {
-    ($VecType:ty, $RefType:ty) => {
-        impl<S> AsRef<$RefType> for $VecType {
-            #[inline]
-            fn as_ref(&self) -> &$RefType {
-                unsafe {
-                    &*(self as *const $VecType as *const $RefType)
-                }
-            }
-        }
-
-        impl<S> AsMut<$RefType> for $VecType {
-            #[inline]
-            fn as_mut(&mut self) -> &mut $RefType {
-                unsafe {
-                    &mut *(self as *mut $VecType as *mut $RefType)
-                }
             }
         }
     }
@@ -601,27 +531,11 @@ impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> where S: Scalar {
 }
 
 
-impl_coords!(X, { x });
-impl_coords_deref!(Vector1, X);
-
-impl_as_ref_ops!(Vector1<S>, S);
-impl_as_ref_ops!(Vector1<S>, (S,));
-impl_as_ref_ops!(Vector1<S>, [S; 1]);
-impl_as_ref_ops!(Vector1<S>, [[S; 1]; 1]);
-
-impl_vector_index_ops!(Vector1<S>, 1, usize, S);
-impl_vector_index_ops!(Vector1<S>, 1, Range<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, RangeFull, [S]);
-
 impl_vector_vector_binary_ops!(Add, add, Vector1<S>, Vector1<S>, { 0 });
 impl_vector_vector_binary_ops!(Sub, sub, Vector1<S>, Vector1<S>, { 0 });
 impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { 0 });
 impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { 0 });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { 0 });
-
-impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { 0 });
 
 impl_vector_binary_assign_ops!(Vector1<S>, { 0 });
 
@@ -1071,27 +985,12 @@ impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
     }
 }
 
-impl_coords!(XY, { x, y });
-impl_coords_deref!(Vector2, XY);
-
-impl_as_ref_ops!(Vector2<S>, (S, S));
-impl_as_ref_ops!(Vector2<S>, [S; 2]);
-impl_as_ref_ops!(Vector2<S>, [[S; 2]; 1]);
-
-impl_vector_index_ops!(Vector2<S>, 2, usize, S);
-impl_vector_index_ops!(Vector2<S>, 2, Range<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, RangeFull, [S]);
-
 impl_vector_vector_binary_ops!(Add, add, Vector2<S>, Vector2<S>, { 0, 1 });
 impl_vector_vector_binary_ops!(Sub, sub, Vector2<S>, Vector2<S>, { 0, 1 });
 
 impl_vector_scalar_binary_ops!(Mul, mul, Vector2<S>, Vector2<S>, { 0, 1 });
 impl_vector_scalar_binary_ops!(Div, div, Vector2<S>, Vector2<S>, { 0, 1 });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector2<S>, Vector2<S>, { 0, 1 });
-
-impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { 0, 1 });
 
 impl_vector_binary_assign_ops!(Vector2<S>, { 0, 1 });
 
@@ -1616,27 +1515,12 @@ impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
     }
 }
 
-impl_coords!(XYZ, { x, y, z });
-impl_coords_deref!(Vector3, XYZ);
-
-impl_as_ref_ops!(Vector3<S>, (S, S, S));
-impl_as_ref_ops!(Vector3<S>, [S; 3]);
-impl_as_ref_ops!(Vector3<S>, [[S; 3]; 1]);
-
-impl_vector_index_ops!(Vector3<S>, 3, usize, S);
-impl_vector_index_ops!(Vector3<S>, 3, Range<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, RangeFull, [S]);
-
 impl_vector_vector_binary_ops!(Add, add, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 impl_vector_vector_binary_ops!(Sub, sub, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 
 impl_vector_scalar_binary_ops!(Mul, mul, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 impl_vector_scalar_binary_ops!(Div, div, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-
-impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 
 impl_vector_binary_assign_ops!(Vector3<S>, { 0, 1, 2 });
 
@@ -2100,27 +1984,12 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
     }
 }
 
-impl_coords!(XYZW, { x, y, z, w });
-impl_coords_deref!(Vector4, XYZW);
-
-impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
-impl_as_ref_ops!(Vector4<S>, [S; 4]);
-impl_as_ref_ops!(Vector4<S>, [[S; 4]; 1]);
-
-impl_vector_index_ops!(Vector4<S>, 4, usize, S);
-impl_vector_index_ops!(Vector4<S>, 4, Range<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, RangeFull, [S]);
-
 impl_vector_vector_binary_ops!(Add, add, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 impl_vector_vector_binary_ops!(Sub, sub, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 
 impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-
-impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 
 impl_vector_binary_assign_ops!(Vector4<S>, { 0, 1, 2, 3 });
 
@@ -2140,52 +2009,104 @@ impl_scalar_vector_mul_ops!(f32   => Vector4<f32>   => Vector4<f32>,   { 0, 1, 2
 impl_scalar_vector_mul_ops!(f64   => Vector4<f64>   => Vector4<f64>,   { 0, 1, 2, 3 });
 
 
-macro_rules! impl_approx_eq_ops {
-    ($T:ident, { $($index:expr),* }) => {
-        impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
-            type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-        
+impl_coords!(X, { x });
+impl_coords_deref!(Vector1, X);
+
+impl_coords!(XY, { x, y });
+impl_coords_deref!(Vector2, XY);
+
+impl_coords!(XYZ, { x, y, z });
+impl_coords_deref!(Vector3, XYZ);
+
+impl_coords!(XYZW, { x, y, z, w });
+impl_coords_deref!(Vector4, XYZW);
+
+
+macro_rules! impl_vector_index_ops {
+    ($T:ty, $n:expr, $IndexType:ty, $Output:ty) => {
+        impl<S> ops::Index<$IndexType> for $T {
+            type Output = $Output;
+
             #[inline]
-            fn default_epsilon() -> Self::Epsilon {
-                S::default_epsilon()
-            }
-        
-            #[inline]
-            fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-                $(S::abs_diff_eq(&self.data[$index], &other.data[$index], epsilon)) &&*
-            }
-        }
-        
-        impl<S> approx::RelativeEq for $T<S> where S: ScalarFloat {
-            #[inline]
-            fn default_max_relative() -> S::Epsilon {
-                S::default_max_relative()
-            }
-        
-            #[inline]
-            fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-                $(S::relative_eq(&self.data[$index], &other.data[$index], epsilon, max_relative)) &&*
+            fn index(&self, index: $IndexType) -> &Self::Output {
+                let v: &[S; $n] = self.as_ref();
+                &v[index]
             }
         }
-        
-        impl<S> approx::UlpsEq for $T<S> where S: ScalarFloat {
+
+        impl<S> ops::IndexMut<$IndexType> for $T {
             #[inline]
-            fn default_max_ulps() -> u32 {
-                S::default_max_ulps()
-            }
-        
-            #[inline]
-            fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-                $(S::ulps_eq(&self.data[$index], &other.data[$index], epsilon, max_ulps)) &&*
+            fn index_mut(&mut self, index: $IndexType) -> &mut Self::Output {
+                let v: &mut [S; $n] = self.as_mut();
+                &mut v[index]
             }
         }
     }
 }
 
-impl_approx_eq_ops!(Vector1, { 0 });
-impl_approx_eq_ops!(Vector2, { 0, 1 });
-impl_approx_eq_ops!(Vector3, { 0, 1, 2 });
-impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
+impl_vector_index_ops!(Vector1<S>, 1, usize, S);
+impl_vector_index_ops!(Vector1<S>, 1, Range<usize>, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, RangeFull, [S]);
+
+impl_vector_index_ops!(Vector2<S>, 2, usize, S);
+impl_vector_index_ops!(Vector2<S>, 2, Range<usize>, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, RangeFull, [S]);
+
+impl_vector_index_ops!(Vector3<S>, 3, usize, S);
+impl_vector_index_ops!(Vector3<S>, 3, Range<usize>, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, RangeFull, [S]);
+
+impl_vector_index_ops!(Vector4<S>, 4, usize, S);
+impl_vector_index_ops!(Vector4<S>, 4, Range<usize>, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, RangeFull, [S]);
+
+
+macro_rules! impl_as_ref_ops {
+    ($VecType:ty, $RefType:ty) => {
+        impl<S> AsRef<$RefType> for $VecType {
+            #[inline]
+            fn as_ref(&self) -> &$RefType {
+                unsafe {
+                    &*(self as *const $VecType as *const $RefType)
+                }
+            }
+        }
+
+        impl<S> AsMut<$RefType> for $VecType {
+            #[inline]
+            fn as_mut(&mut self) -> &mut $RefType {
+                unsafe {
+                    &mut *(self as *mut $VecType as *mut $RefType)
+                }
+            }
+        }
+    }
+}
+
+impl_as_ref_ops!(Vector1<S>, S);
+impl_as_ref_ops!(Vector1<S>, (S,));
+impl_as_ref_ops!(Vector1<S>, [S; 1]);
+impl_as_ref_ops!(Vector1<S>, [[S; 1]; 1]);
+
+impl_as_ref_ops!(Vector2<S>, (S, S));
+impl_as_ref_ops!(Vector2<S>, [S; 2]);
+impl_as_ref_ops!(Vector2<S>, [[S; 2]; 1]);
+
+impl_as_ref_ops!(Vector3<S>, (S, S, S));
+impl_as_ref_ops!(Vector3<S>, [S; 3]);
+impl_as_ref_ops!(Vector3<S>, [[S; 3]; 1]);
+
+impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
+impl_as_ref_ops!(Vector4<S>, [S; 4]);
+impl_as_ref_ops!(Vector4<S>, [[S; 4]; 1]);
 
 
 macro_rules! impl_magnitude {
@@ -2241,6 +2162,86 @@ impl_magnitude!(Vector1);
 impl_magnitude!(Vector2);
 impl_magnitude!(Vector3);
 impl_magnitude!(Vector4);
+
+
+macro_rules! impl_vector_unary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
+        impl<S> $OpType for $T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op() ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType for &$T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op() ),* 
+                )
+            }
+        }
+    }
+}
+
+impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+
+
+macro_rules! impl_approx_eq_ops {
+    ($T:ident, { $($index:expr),* }) => {
+        impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
+            type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+        
+            #[inline]
+            fn default_epsilon() -> Self::Epsilon {
+                S::default_epsilon()
+            }
+        
+            #[inline]
+            fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+                $(S::abs_diff_eq(&self.data[$index], &other.data[$index], epsilon)) &&*
+            }
+        }
+        
+        impl<S> approx::RelativeEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_relative() -> S::Epsilon {
+                S::default_max_relative()
+            }
+        
+            #[inline]
+            fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+                $(S::relative_eq(&self.data[$index], &other.data[$index], epsilon, max_relative)) &&*
+            }
+        }
+        
+        impl<S> approx::UlpsEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_ulps() -> u32 {
+                S::default_max_ulps()
+            }
+        
+            #[inline]
+            fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+                $(S::ulps_eq(&self.data[$index], &other.data[$index], epsilon, max_ulps)) &&*
+            }
+        }
+    }
+}
+
+impl_approx_eq_ops!(Vector1, { 0 });
+impl_approx_eq_ops!(Vector2, { 0, 1 });
+impl_approx_eq_ops!(Vector3, { 0, 1, 2 });
+impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
 
 
 macro_rules! impl_swizzle {
