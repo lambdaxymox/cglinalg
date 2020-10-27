@@ -587,45 +587,7 @@ impl<S> Magnitude for Point1<S> where S: ScalarFloat {
         self.distance_squared(other).sqrt()
     }
 }
-/*
-impl<S> approx::AbsDiffEq for Point1<S> where S: ScalarFloat {
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Vector1::abs_diff_eq(&self.data, &other.data, epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for Point1<S> where S: ScalarFloat {
-    #[inline]
-    fn default_max_relative() -> S::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Vector1::relative_eq(&self.data, &other.data, epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for Point1<S> where S: ScalarFloat {
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Vector1::ulps_eq(&self.data, &other.data, epsilon, max_ulps)
-    }
-}
-*/
 
 /// A point is a location in a two-dimensional Euclidean space.
 #[repr(C)]
@@ -1048,45 +1010,6 @@ impl<S> Magnitude for Point2<S> where S: ScalarFloat {
         self.distance_squared(other).sqrt()
     }
 }
-/*
-impl<S> approx::AbsDiffEq for Point2<S> where S: ScalarFloat {
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Vector2::abs_diff_eq(&self.data, &other.data, epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for Point2<S> where S: ScalarFloat {
-    #[inline]
-    fn default_max_relative() -> S::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Vector2::relative_eq(&self.data, &other.data, epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for Point2<S> where S: ScalarFloat {
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Vector2::ulps_eq(&self.data, &other.data, epsilon, max_ulps)
-    }
-}
-*/
 
 
 /// A representation of three-dimensional points in a Euclidean space.
@@ -1547,45 +1470,7 @@ impl_approx_eq_ops!(Point1, Vector1);
 impl_approx_eq_ops!(Point2, Vector2);
 impl_approx_eq_ops!(Point3, Vector3);
 
-/*
-impl<S> approx::AbsDiffEq for Point3<S> where S: ScalarFloat {
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Vector3::abs_diff_eq(&self.data, &other.data, epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for Point3<S> where S: ScalarFloat {
-    #[inline]
-    fn default_max_relative() -> S::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Vector3::relative_eq(&self.data, &other.data, epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for Point3<S> where S: ScalarFloat {
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Vector3::ulps_eq(&self.data, &other.data, epsilon, max_ulps)
-    }
-}
-*/
 macro_rules! impl_swizzle {
     ($name:ident() => $PointN:ident => $Output:ident { $($i:expr),+ }) => {
         impl<S> $PointN<S> where S: Copy {
