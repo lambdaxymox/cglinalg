@@ -50,111 +50,6 @@ pub type Matrix3<S> = Matrix3x3<S>;
 pub type Matrix4<S> = Matrix4x4<S>;
 
 
-macro_rules! impl_as_ref_ops {
-    ($MatrixType:ty, $RefType:ty) => {
-        impl<S> AsRef<$RefType> for $MatrixType {
-            #[inline]
-            fn as_ref(&self) -> &$RefType {
-                unsafe {
-                    &*(self as *const $MatrixType as *const $RefType)
-                }
-            }
-        }
-
-        impl<S> AsMut<$RefType> for $MatrixType {
-            #[inline]
-            fn as_mut(&mut self) -> &mut $RefType {
-                unsafe {
-                    &mut *(self as *mut $MatrixType as *mut $RefType)
-                }
-            }
-        }
-    }
-}
-
-macro_rules! impl_approx_eq_ops {
-    ($T:ident, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
-            type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-        
-            #[inline]
-            fn default_epsilon() -> Self::Epsilon {
-                S::default_epsilon()
-            }
-        
-            #[inline]
-            fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-                $(S::abs_diff_eq(&self.data[$col][$row], &other.data[$col][$row], epsilon)) &&*
-            }
-        }
-        
-        impl<S> approx::RelativeEq for $T<S> where S: ScalarFloat {
-            #[inline]
-            fn default_max_relative() -> S::Epsilon {
-                S::default_max_relative()
-            }
-        
-            #[inline]
-            fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-                $(S::relative_eq(&self.data[$col][$row], &other.data[$col][$row], epsilon, max_relative)) &&*
-            }
-        }
-        
-        impl<S> approx::UlpsEq for $T<S> where S: ScalarFloat {
-            #[inline]
-            fn default_max_ulps() -> u32 {
-                S::default_max_ulps()
-            }
-        
-            #[inline]
-            fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-                $(S::ulps_eq(&self.data[$col][$row], &other.data[$col][$row], epsilon, max_ulps)) &&*
-            }
-        }
-    }
-}
-
-macro_rules! impl_index_ops {
-    ($MatrixNxM:ident, $VectorN:ident, ($rows:expr, $columns:expr) ) => {
-        impl<S> ops::Index<usize> for $MatrixNxM<S> {
-            type Output = $VectorN<S>;
-        
-            #[inline]
-            fn index(&self, index: usize) -> &Self::Output {
-                let v: &[$VectorN<S>; $columns] = self.as_ref();
-                &v[index]
-            }
-        }
-        
-        impl<S> ops::IndexMut<usize> for $MatrixNxM<S> {
-            #[inline]
-            fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-                let v: &mut [$VectorN<S>; $columns] = self.as_mut();
-                &mut v[index]
-            }
-        }
-        
-        impl<S> ops::Index<(usize, usize)> for $MatrixNxM<S>{
-            type Output = S;
-        
-            #[inline]
-            fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
-                let v: &[[S; $rows]; $columns] = self.as_ref();
-                &v[column][row]
-            }
-        }
-        
-        impl<S> ops::IndexMut<(usize, usize)> for $MatrixNxM<S> {
-            #[inline]
-            fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut Self::Output {
-                let v: &mut [[S; $rows]; $columns] = self.as_mut();
-                &mut v[column][row]
-            }
-        }
-    }
-}
-
-
 /// A **(1 row, 1 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
@@ -316,16 +211,10 @@ impl<'a, S> From<&'a [S; 1]> for &'a Matrix1x1<S> where S: Scalar {
     }
 }
 
-impl_coords!(View1x1, { c0r0 });
-impl_coords_deref!(Matrix1x1, View1x1);
 
-impl_as_ref_ops!(Matrix1x1<S>, [S; 1]);
-impl_as_ref_ops!(Matrix1x1<S>, [[S; 1]; 1]);
-impl_as_ref_ops!(Matrix1x1<S>, [Vector1<S>; 1]);
 
-impl_index_ops!(Matrix1x1, Vector1, (1, 1));
 
-impl_approx_eq_ops!(Matrix1x1, { (0, 0) });
+
 
 
 
@@ -1405,17 +1294,6 @@ impl<'a, S> From<&'a [S; 4]> for &'a Matrix2x2<S> where S: Scalar {
         }
     }
 }
-
-impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1 });
-impl_coords_deref!(Matrix2x2, View2x2);
-
-impl_as_ref_ops!(Matrix2x2<S>, [S; 4]);
-impl_as_ref_ops!(Matrix2x2<S>, [[S; 2]; 2]);
-impl_as_ref_ops!(Matrix2x2<S>, [Vector2<S>; 2]);
-
-impl_index_ops!(Matrix2x2, Vector2, (2, 2));
-
-impl_approx_eq_ops!(Matrix2x2, { (0, 0), (0, 1), (1, 0), (1, 1) });
 
 
 /// A **(3 row, 3 column)** in column-major order.
@@ -3408,20 +3286,6 @@ impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
         )
     }
 }
-
-impl_coords!(View3x3, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_coords_deref!(Matrix3x3, View3x3);
-
-impl_as_ref_ops!(Matrix3x3<S>, [S; 9]);
-impl_as_ref_ops!(Matrix3x3<S>, [[S; 3]; 3]);
-impl_as_ref_ops!(Matrix3x3<S>, [Vector3<S>; 3]);
-
-impl_index_ops!(Matrix3x3, Vector3, (3, 3));
-
-impl_approx_eq_ops!(
-    Matrix3x3, { 
-    (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
-});
 
 
 /// A **(4 row, 4 column)** in column-major order.
@@ -5568,29 +5432,6 @@ impl<S> From<&Matrix3x3<S>> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl_coords!(View4x4, { 
-    c0r0, c0r1, c0r2, c0r3, 
-    c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, 
-    c3r0, c3r1, c3r2, c3r3 
-});
-impl_coords_deref!(Matrix4x4, View4x4);
-
-impl_as_ref_ops!(Matrix4x4<S>, [S; 16]);
-impl_as_ref_ops!(Matrix4x4<S>, [[S; 4]; 4]);
-impl_as_ref_ops!(Matrix4x4<S>, [Vector4<S>; 4]);
-
-impl_index_ops!(Matrix4x4, Vector4, (4, 4));
-
-impl_approx_eq_ops!(
-    Matrix4x4, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3), 
-    (2, 0), (2, 1), (2, 2), (2, 3), 
-    (3, 0), (3, 1), (3, 2), (3, 3) 
-});
-
-
 
 /// A **(1 row, 2 column)** in column-major order.
 #[repr(C)]
@@ -5798,17 +5639,6 @@ impl<'a, S> From<&'a [S; 2]> for &'a Matrix1x2<S> where S: Scalar {
         }
     }
 }
-
-impl_coords!(View1x2, { c0r0, c1r0 });
-impl_coords_deref!(Matrix1x2, View1x2);
-
-impl_as_ref_ops!(Matrix1x2<S>, [S; 2]);
-impl_as_ref_ops!(Matrix1x2<S>, [[S; 1]; 2]);
-impl_as_ref_ops!(Matrix1x2<S>, [Vector1<S>; 2]);
-
-impl_index_ops!(Matrix1x2, Vector1, (1, 2));
-
-impl_approx_eq_ops!(Matrix1x2, { (0, 0), (1, 0) });
 
 
 /// A **(1 row, 3 column)** in column-major order.
@@ -6025,17 +5855,6 @@ impl<'a, S> From<&'a [S; 3]> for &'a Matrix1x3<S> where S: Scalar {
         }
     }
 }
-
-impl_coords!(View1x3, { c0r0, c1r0, c2r0 });
-impl_coords_deref!(Matrix1x3, View1x3);
-
-impl_as_ref_ops!(Matrix1x3<S>, [S; 3]);
-impl_as_ref_ops!(Matrix1x3<S>, [[S; 1]; 3]);
-impl_as_ref_ops!(Matrix1x3<S>, [Vector1<S>; 3]);
-
-impl_index_ops!(Matrix1x3, Vector1, (1, 3));
-
-impl_approx_eq_ops!(Matrix1x3, { (0, 0), (1, 0), (2, 0) });
 
 
 /// A **(1 row, 4 column)** in column-major order.
@@ -6264,17 +6083,6 @@ impl<'a, S> From<&'a [S; 4]> for &'a Matrix1x4<S> where S: Scalar {
         }
     }
 }
-
-impl_coords!(View1x4, { c0r0, c1r0, c2r0, c3r0 });
-impl_coords_deref!(Matrix1x4, View1x4);
-
-impl_as_ref_ops!(Matrix1x4<S>, [S; 4]);
-impl_as_ref_ops!(Matrix1x4<S>, [[S; 1]; 4]);
-impl_as_ref_ops!(Matrix1x4<S>, [Vector1<S>; 4]);
-
-impl_index_ops!(Matrix1x4, Vector1, (1, 4));
-
-impl_approx_eq_ops!(Matrix1x4, { (0, 0), (1, 0), (2, 0), (3, 0) });
 
 
 /// A **(2 row, 3 column)** in column-major order.
@@ -6705,20 +6513,6 @@ impl<'a, S> From<&'a [S; 6]> for &'a Matrix2x3<S> where S: Scalar {
     }
 }
 
-impl_coords!(View2x3, { c0r0, c0r1, c1r0, c1r1, c2r0, c2r1 });
-impl_coords_deref!(Matrix2x3, View2x3);
-
-impl_as_ref_ops!(Matrix2x3<S>, [S; 6]);
-impl_as_ref_ops!(Matrix2x3<S>, [[S; 2]; 3]);
-impl_as_ref_ops!(Matrix2x3<S>, [Vector2<S>; 3]);
-
-impl_index_ops!(Matrix2x3, Vector2, (2, 3));
-
-impl_approx_eq_ops!(
-    Matrix2x3, 
-    { (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1) }
-);
-
 
 /// A **(3 row, 2 column)** in column-major order.
 #[repr(C)]
@@ -7132,20 +6926,6 @@ impl<'a, S> From<&'a [S; 6]> for &'a Matrix3x2<S> where S: Scalar {
         }
     }
 }
-
-impl_coords!(View3x2, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2 });
-impl_coords_deref!(Matrix3x2, View3x2);
-
-impl_as_ref_ops!(Matrix3x2<S>, [S; 6]);
-impl_as_ref_ops!(Matrix3x2<S>, [[S; 3]; 2]);
-impl_as_ref_ops!(Matrix3x2<S>, [Vector3<S>; 2]);
-
-impl_index_ops!(Matrix3x2, Vector3, (3, 2));
-
-impl_approx_eq_ops!(
-    Matrix3x2, 
-    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
-);
 
 
 /// A **(2 row, 4 column)** in column-major order.
@@ -7622,19 +7402,6 @@ impl<'a, S> From<&'a [S; 8]> for &'a Matrix2x4<S> where S: Scalar {
     }
 }
 
-impl_coords!(View2x4, { c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, c3r0, c3r1 });
-impl_coords_deref!(Matrix2x4, View2x4);
-
-impl_as_ref_ops!(Matrix2x4<S>, [S; 8]);
-impl_as_ref_ops!(Matrix2x4<S>, [[S; 2]; 4]);
-impl_as_ref_ops!(Matrix2x4<S>, [Vector2<S>; 4]);
-
-impl_index_ops!(Matrix2x4, Vector2, (2, 4));
-
-impl_approx_eq_ops!(
-    Matrix2x4, { 
-    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
-});
 
 /// A **(4 row, 2 column)** in column-major order.
 #[repr(C)]
@@ -8079,21 +7846,6 @@ impl<'a, S> From<&'a [S; 8]> for &'a Matrix4x2<S> where S: Scalar {
         }
     }
 }
-
-impl_coords!(View4x2, { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3 });
-impl_coords_deref!(Matrix4x2, View4x2);
-
-impl_as_ref_ops!(Matrix4x2<S>, [S; 8]);
-impl_as_ref_ops!(Matrix4x2<S>, [[S; 4]; 2]);
-impl_as_ref_ops!(Matrix4x2<S>, [Vector4<S>; 2]);
-
-impl_index_ops!(Matrix4x2, Vector4, (4, 2));
-
-impl_approx_eq_ops!(
-    Matrix4x2, { 
-    (0, 0), (0, 1), (0, 2), (0, 3), 
-    (1, 0), (1, 1), (1, 2), (1, 3)
-});
 
 
 /// A **(3 row, 4 column)** in column-major order.
@@ -8605,28 +8357,6 @@ impl<'a, S> From<&'a [S; 12]> for &'a Matrix3x4<S> where S: Scalar {
     }
 }
 
-impl_coords!(View3x4, { 
-    c0r0, c0r1, c0r2, 
-    c1r0, c1r1, c1r2, 
-    c2r0, c2r1, c2r2, 
-    c3r0, c3r1, c3r2
-});
-impl_coords_deref!(Matrix3x4, View3x4);
-
-impl_as_ref_ops!(Matrix3x4<S>, [S; 12]);
-impl_as_ref_ops!(Matrix3x4<S>, [[S; 3]; 4]);
-impl_as_ref_ops!(Matrix3x4<S>, [Vector3<S>; 4]);
-
-impl_index_ops!(Matrix3x4, Vector3, (3, 4));
-
-impl_approx_eq_ops!(
-    Matrix3x4, { 
-    (0, 0), (0, 1), (0, 2), 
-    (1, 0), (1, 1), (1, 2), 
-    (2, 0), (2, 1), (2, 2), 
-    (3, 0), (3, 1), (3, 2)
-});
-
 
 /// A **(4 row, 3 column)** in column-major order.
 #[repr(C)]
@@ -9116,23 +8846,284 @@ impl<'a, S> From<&'a [S; 12]> for &'a Matrix4x3<S> where S: Scalar {
     }
 }
 
+
+
+impl_coords!(View1x1, { c0r0 });
+impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1 });
+impl_coords!(View3x3, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
+impl_coords!(View4x4, { 
+    c0r0, c0r1, c0r2, c0r3, 
+    c1r0, c1r1, c1r2, c1r3, 
+    c2r0, c2r1, c2r2, c2r3, 
+    c3r0, c3r1, c3r2, c3r3 
+});
+impl_coords!(View1x2, { c0r0, c1r0 });
+impl_coords!(View1x3, { c0r0, c1r0, c2r0 });
+impl_coords!(View1x4, { c0r0, c1r0, c2r0, c3r0 });
+impl_coords!(View2x3, { c0r0, c0r1, c1r0, c1r1, c2r0, c2r1 });
+impl_coords!(View2x4, { c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, c3r0, c3r1 });
+impl_coords!(View3x4, { 
+    c0r0, c0r1, c0r2, 
+    c1r0, c1r1, c1r2, 
+    c2r0, c2r1, c2r2, 
+    c3r0, c3r1, c3r2
+});
+impl_coords!(View3x2, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2 });
+impl_coords!(View4x2, { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3 });
 impl_coords!(View4x3, { 
     c0r0, c0r1, c0r2, c0r3, 
     c1r0, c1r1, c1r2, c1r3,
     c2r0, c2r1, c2r2, c2r3
 });
+
+impl_coords_deref!(Matrix1x1, View1x1);
+impl_coords_deref!(Matrix2x2, View2x2);
+impl_coords_deref!(Matrix3x3, View3x3);
+impl_coords_deref!(Matrix4x4, View4x4);
+impl_coords_deref!(Matrix1x2, View1x2);
+impl_coords_deref!(Matrix1x3, View1x3);
+impl_coords_deref!(Matrix1x4, View1x4);
+impl_coords_deref!(Matrix2x3, View2x3);
+impl_coords_deref!(Matrix2x4, View2x4);
+impl_coords_deref!(Matrix3x2, View3x2);
+impl_coords_deref!(Matrix3x4, View3x4);
+impl_coords_deref!(Matrix4x2, View4x2);
 impl_coords_deref!(Matrix4x3, View4x3);
+
+
+macro_rules! impl_as_ref_ops {
+    ($MatrixType:ty, $RefType:ty) => {
+        impl<S> AsRef<$RefType> for $MatrixType {
+            #[inline]
+            fn as_ref(&self) -> &$RefType {
+                unsafe {
+                    &*(self as *const $MatrixType as *const $RefType)
+                }
+            }
+        }
+
+        impl<S> AsMut<$RefType> for $MatrixType {
+            #[inline]
+            fn as_mut(&mut self) -> &mut $RefType {
+                unsafe {
+                    &mut *(self as *mut $MatrixType as *mut $RefType)
+                }
+            }
+        }
+    }
+}
+
+impl_as_ref_ops!(Matrix1x1<S>, [S; 1]);
+impl_as_ref_ops!(Matrix1x1<S>, [[S; 1]; 1]);
+impl_as_ref_ops!(Matrix1x1<S>, [Vector1<S>; 1]);
+
+impl_as_ref_ops!(Matrix2x2<S>, [S; 4]);
+impl_as_ref_ops!(Matrix2x2<S>, [[S; 2]; 2]);
+impl_as_ref_ops!(Matrix2x2<S>, [Vector2<S>; 2]);
+
+impl_as_ref_ops!(Matrix3x3<S>, [S; 9]);
+impl_as_ref_ops!(Matrix3x3<S>, [[S; 3]; 3]);
+impl_as_ref_ops!(Matrix3x3<S>, [Vector3<S>; 3]);
+
+impl_as_ref_ops!(Matrix4x4<S>, [S; 16]);
+impl_as_ref_ops!(Matrix4x4<S>, [[S; 4]; 4]);
+impl_as_ref_ops!(Matrix4x4<S>, [Vector4<S>; 4]);
+
+impl_as_ref_ops!(Matrix1x2<S>, [S; 2]);
+impl_as_ref_ops!(Matrix1x2<S>, [[S; 1]; 2]);
+impl_as_ref_ops!(Matrix1x2<S>, [Vector1<S>; 2]);
+
+impl_as_ref_ops!(Matrix1x3<S>, [S; 3]);
+impl_as_ref_ops!(Matrix1x3<S>, [[S; 1]; 3]);
+impl_as_ref_ops!(Matrix1x3<S>, [Vector1<S>; 3]);
+
+impl_as_ref_ops!(Matrix1x4<S>, [S; 4]);
+impl_as_ref_ops!(Matrix1x4<S>, [[S; 1]; 4]);
+impl_as_ref_ops!(Matrix1x4<S>, [Vector1<S>; 4]);
+
+impl_as_ref_ops!(Matrix2x3<S>, [S; 6]);
+impl_as_ref_ops!(Matrix2x3<S>, [[S; 2]; 3]);
+impl_as_ref_ops!(Matrix2x3<S>, [Vector2<S>; 3]);
+
+impl_as_ref_ops!(Matrix2x4<S>, [S; 8]);
+impl_as_ref_ops!(Matrix2x4<S>, [[S; 2]; 4]);
+impl_as_ref_ops!(Matrix2x4<S>, [Vector2<S>; 4]);
+
+impl_as_ref_ops!(Matrix3x2<S>, [S; 6]);
+impl_as_ref_ops!(Matrix3x2<S>, [[S; 3]; 2]);
+impl_as_ref_ops!(Matrix3x2<S>, [Vector3<S>; 2]);
+
+impl_as_ref_ops!(Matrix3x4<S>, [S; 12]);
+impl_as_ref_ops!(Matrix3x4<S>, [[S; 3]; 4]);
+impl_as_ref_ops!(Matrix3x4<S>, [Vector3<S>; 4]);
+
+impl_as_ref_ops!(Matrix4x2<S>, [S; 8]);
+impl_as_ref_ops!(Matrix4x2<S>, [[S; 4]; 2]);
+impl_as_ref_ops!(Matrix4x2<S>, [Vector4<S>; 2]);
 
 impl_as_ref_ops!(Matrix4x3<S>, [S; 12]);
 impl_as_ref_ops!(Matrix4x3<S>, [[S; 4]; 3]);
 impl_as_ref_ops!(Matrix4x3<S>, [Vector4<S>; 3]);
 
+
+macro_rules! impl_index_ops {
+    ($MatrixNxM:ident, $VectorN:ident, ($rows:expr, $columns:expr) ) => {
+        impl<S> ops::Index<usize> for $MatrixNxM<S> {
+            type Output = $VectorN<S>;
+        
+            #[inline]
+            fn index(&self, index: usize) -> &Self::Output {
+                let v: &[$VectorN<S>; $columns] = self.as_ref();
+                &v[index]
+            }
+        }
+        
+        impl<S> ops::IndexMut<usize> for $MatrixNxM<S> {
+            #[inline]
+            fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+                let v: &mut [$VectorN<S>; $columns] = self.as_mut();
+                &mut v[index]
+            }
+        }
+        
+        impl<S> ops::Index<(usize, usize)> for $MatrixNxM<S>{
+            type Output = S;
+        
+            #[inline]
+            fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
+                let v: &[[S; $rows]; $columns] = self.as_ref();
+                &v[column][row]
+            }
+        }
+        
+        impl<S> ops::IndexMut<(usize, usize)> for $MatrixNxM<S> {
+            #[inline]
+            fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut Self::Output {
+                let v: &mut [[S; $rows]; $columns] = self.as_mut();
+                &mut v[column][row]
+            }
+        }
+    }
+}
+
+impl_index_ops!(Matrix1x1, Vector1, (1, 1));
+impl_index_ops!(Matrix2x2, Vector2, (2, 2));
+impl_index_ops!(Matrix3x3, Vector3, (3, 3));
+impl_index_ops!(Matrix4x4, Vector4, (4, 4));
+impl_index_ops!(Matrix1x2, Vector1, (1, 2));
+impl_index_ops!(Matrix1x3, Vector1, (1, 3));
+impl_index_ops!(Matrix1x4, Vector1, (1, 4));
+impl_index_ops!(Matrix2x3, Vector2, (2, 3));
+impl_index_ops!(Matrix3x2, Vector3, (3, 2));
+impl_index_ops!(Matrix2x4, Vector2, (2, 4));
+impl_index_ops!(Matrix4x2, Vector4, (4, 2));
+impl_index_ops!(Matrix3x4, Vector3, (3, 4));
 impl_index_ops!(Matrix4x3, Vector4, (4, 3));
 
+
+
+macro_rules! impl_approx_eq_ops {
+    ($T:ident, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
+            type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+        
+            #[inline]
+            fn default_epsilon() -> Self::Epsilon {
+                S::default_epsilon()
+            }
+        
+            #[inline]
+            fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+                $(S::abs_diff_eq(&self.data[$col][$row], &other.data[$col][$row], epsilon)) &&*
+            }
+        }
+        
+        impl<S> approx::RelativeEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_relative() -> S::Epsilon {
+                S::default_max_relative()
+            }
+        
+            #[inline]
+            fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+                $(S::relative_eq(&self.data[$col][$row], &other.data[$col][$row], epsilon, max_relative)) &&*
+            }
+        }
+        
+        impl<S> approx::UlpsEq for $T<S> where S: ScalarFloat {
+            #[inline]
+            fn default_max_ulps() -> u32 {
+                S::default_max_ulps()
+            }
+        
+            #[inline]
+            fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+                $(S::ulps_eq(&self.data[$col][$row], &other.data[$col][$row], epsilon, max_ulps)) &&*
+            }
+        }
+    }
+}
+
+impl_approx_eq_ops!(
+    Matrix1x1, { 
+    (0, 0)
+});
+impl_approx_eq_ops!(
+    Matrix2x2, { 
+    (0, 0), (0, 1), (1, 0), (1, 1)
+});
+impl_approx_eq_ops!(
+    Matrix3x3, { 
+    (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) 
+});
+impl_approx_eq_ops!(
+    Matrix4x4, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), 
+    (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_approx_eq_ops!(
+    Matrix1x2, { 
+    (0, 0), (1, 0)
+});
+impl_approx_eq_ops!(
+    Matrix1x3, { 
+    (0, 0), (1, 0), (2, 0)
+});
+impl_approx_eq_ops!(
+    Matrix1x4, { 
+    (0, 0), (1, 0), (2, 0), (3, 0)
+});
+impl_approx_eq_ops!(
+    Matrix2x3, 
+    { (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1) }
+);
+impl_approx_eq_ops!(
+    Matrix3x2, 
+    { (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2) }
+);
+impl_approx_eq_ops!(
+    Matrix2x4, { 
+    (0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (3, 0), (3, 1)
+});
+impl_approx_eq_ops!(
+    Matrix4x2, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_approx_eq_ops!(
+    Matrix3x4, { 
+    (0, 0), (0, 1), (0, 2), 
+    (1, 0), (1, 1), (1, 2), 
+    (2, 0), (2, 1), (2, 2), 
+    (3, 0), (3, 1), (3, 2)
+});
 impl_approx_eq_ops!(
     Matrix4x3, { 
     (0, 0), (0, 1), (0, 2), (0, 3), 
     (1, 0), (1, 1), (1, 2), (1, 3),
     (2, 0), (2, 1), (2, 2), (2, 3)
 });
+
 
