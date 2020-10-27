@@ -2019,6 +2019,38 @@ impl_vector_binary_assign_ops!(Vector3<S>, { 0, 1, 2 });
 impl_vector_binary_assign_ops!(Vector4<S>, { 0, 1, 2, 3 });
 
 
+macro_rules! impl_vector_unary_ops {
+    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
+        impl<S> $OpType for $T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op() ),* 
+                )
+            }
+        }
+
+        impl<S> $OpType for &$T where S: ScalarSigned {
+            type Output = $Output;
+
+            #[inline]
+            fn $op(self) -> Self::Output {
+                Self::Output::new( 
+                    $( self.data[$index].$op() ),* 
+                )
+            }
+        }
+    }
+}
+
+impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { 0 });
+impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { 0, 1 });
+impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { 0, 1, 2 });
+impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+
+
 impl_coords!(X, { x });
 impl_coords_deref!(Vector1, X);
 
@@ -2172,38 +2204,6 @@ impl_magnitude!(Vector1);
 impl_magnitude!(Vector2);
 impl_magnitude!(Vector3);
 impl_magnitude!(Vector4);
-
-
-macro_rules! impl_vector_unary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType for $T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op() ),* 
-                )
-            }
-        }
-
-        impl<S> $OpType for &$T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op() ),* 
-                )
-            }
-        }
-    }
-}
-
-impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 
 
 macro_rules! impl_approx_eq_ops {
