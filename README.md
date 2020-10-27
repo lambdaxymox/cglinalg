@@ -30,7 +30,7 @@ To use the library in your project, add **cglinalg** as a dependency in your
 `Cargo.toml` file:
 ```
 [dependencies]
-cglinalg = "0.12.3"
+cglinalg = "0.14.0"
 ```
 After that, place the crate declaration in either your `lib.rs` file or 
 your `main.rs` file
@@ -84,7 +84,4 @@ The biggest one is that it presently does not leverage SIMD instructions yet.
 
 ## Project Roadmap
 Major outstanding project goals include:
-* Implement non-square matrix types up to dimension four.
-* Add support for row-major order matrices and vectors.
 * Improve performance with SIMD optimizations.
-* Implement swizzle operations.
