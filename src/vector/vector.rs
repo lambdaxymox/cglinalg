@@ -2385,18 +2385,16 @@ macro_rules! impl_swizzle {
 
 impl_swizzle!(x() => Vector1 => Vector1 { 0 });
 
-impl_swizzle!(x() => Vector2 => Vector1 { 0 });
-impl_swizzle!(y() => Vector2 => Vector1 { 1 });
-
+impl_swizzle!(x()  => Vector2 => Vector1 { 0 });
+impl_swizzle!(y()  => Vector2 => Vector1 { 1 });
 impl_swizzle!(xx() => Vector2 => Vector2 { 0, 0 });
 impl_swizzle!(xy() => Vector2 => Vector2 { 0, 1 });
 impl_swizzle!(yx() => Vector2 => Vector2 { 1, 0 });
 impl_swizzle!(yy() => Vector2 => Vector2 { 1, 1 });
 
-impl_swizzle!(x() => Vector3 => Vector1 { 0 });
-impl_swizzle!(y() => Vector3 => Vector1 { 1 });
-impl_swizzle!(z() => Vector3 => Vector1 { 2 });
-
+impl_swizzle!(x()  => Vector3 => Vector1 { 0 });
+impl_swizzle!(y()  => Vector3 => Vector1 { 1 });
+impl_swizzle!(z()  => Vector3 => Vector1 { 2 });
 impl_swizzle!(xx() => Vector3 => Vector2 { 0, 0 });
 impl_swizzle!(xy() => Vector3 => Vector2 { 0, 1 });
 impl_swizzle!(xz() => Vector3 => Vector2 { 0, 2 });
@@ -2434,4 +2432,93 @@ impl_swizzle!(zyz() => Vector3 => Vector3 { 2, 1, 2 });
 impl_swizzle!(zzx() => Vector3 => Vector3 { 2, 2, 0 });
 impl_swizzle!(zzy() => Vector3 => Vector3 { 2, 2, 1 });
 impl_swizzle!(zzz() => Vector3 => Vector3 { 2, 2, 2 });
+
+
+impl_swizzle!(x() => Vector4 => Vector1 { 0 });
+impl_swizzle!(y() => Vector4 => Vector1 { 1 });
+impl_swizzle!(z() => Vector4 => Vector1 { 2 });
+impl_swizzle!(w() => Vector4 => Vector1 { 3 });
+
+impl_swizzle!(xx() => Vector4 => Vector2 { 0, 0 });
+impl_swizzle!(xy() => Vector4 => Vector2 { 0, 1 });
+impl_swizzle!(xz() => Vector4 => Vector2 { 0, 2 });
+impl_swizzle!(xw() => Vector4 => Vector2 { 0, 3 });
+impl_swizzle!(yx() => Vector4 => Vector2 { 1, 0 });
+impl_swizzle!(yy() => Vector4 => Vector2 { 1, 1 });
+impl_swizzle!(yz() => Vector4 => Vector2 { 1, 2 });
+impl_swizzle!(yw() => Vector4 => Vector2 { 1, 3 });
+impl_swizzle!(zx() => Vector4 => Vector2 { 2, 0 });
+impl_swizzle!(zy() => Vector4 => Vector2 { 2, 1 });
+impl_swizzle!(zz() => Vector4 => Vector2 { 2, 2 });
+impl_swizzle!(zw() => Vector4 => Vector2 { 2, 3 });
+impl_swizzle!(wx() => Vector4 => Vector2 { 3, 0 });
+impl_swizzle!(wy() => Vector4 => Vector2 { 3, 1 });
+impl_swizzle!(wz() => Vector4 => Vector2 { 3, 2 });
+impl_swizzle!(ww() => Vector4 => Vector2 { 3, 3 });
+
+impl_swizzle!(xxx() => Vector4 => Vector3 { 0, 0, 0 });
+impl_swizzle!(xxy() => Vector4 => Vector3 { 0, 0, 1 });
+impl_swizzle!(xxz() => Vector4 => Vector3 { 0, 0, 2 });
+impl_swizzle!(xxw() => Vector4 => Vector3 { 0, 0, 3 });
+impl_swizzle!(xyx() => Vector4 => Vector3 { 0, 1, 0 });
+impl_swizzle!(xyy() => Vector4 => Vector3 { 0, 1, 1 });
+impl_swizzle!(xyz() => Vector4 => Vector3 { 0, 1, 2 });
+impl_swizzle!(xyw() => Vector4 => Vector3 { 0, 1, 3 });
+impl_swizzle!(xzx() => Vector4 => Vector3 { 0, 2, 0 });
+impl_swizzle!(xzy() => Vector4 => Vector3 { 0, 2, 1 });
+impl_swizzle!(xzz() => Vector4 => Vector3 { 0, 2, 2 });
+impl_swizzle!(xzw() => Vector4 => Vector3 { 0, 2, 3 });
+impl_swizzle!(xwx() => Vector4 => Vector3 { 0, 3, 0 });
+impl_swizzle!(xwy() => Vector4 => Vector3 { 0, 3, 1 });
+impl_swizzle!(xwz() => Vector4 => Vector3 { 0, 3, 2 });
+impl_swizzle!(xww() => Vector4 => Vector3 { 0, 3, 3 });
+impl_swizzle!(yxx() => Vector4 => Vector3 { 1, 0, 0 });
+impl_swizzle!(yxy() => Vector4 => Vector3 { 1, 0, 1 });
+impl_swizzle!(yxz() => Vector4 => Vector3 { 1, 0, 2 });
+impl_swizzle!(yxw() => Vector4 => Vector3 { 1, 0, 3 });
+impl_swizzle!(yyx() => Vector4 => Vector3 { 1, 1, 0 });
+impl_swizzle!(yyy() => Vector4 => Vector3 { 1, 1, 1 });
+impl_swizzle!(yyz() => Vector4 => Vector3 { 1, 1, 2 });
+impl_swizzle!(yyw() => Vector4 => Vector3 { 1, 1, 3 });
+impl_swizzle!(yzx() => Vector4 => Vector3 { 1, 2, 0 });
+impl_swizzle!(yzy() => Vector4 => Vector3 { 1, 2, 1 });
+impl_swizzle!(yzz() => Vector4 => Vector3 { 1, 2, 2 });
+impl_swizzle!(yzw() => Vector4 => Vector3 { 1, 2, 3 });
+impl_swizzle!(ywx() => Vector4 => Vector3 { 1, 3, 0 });
+impl_swizzle!(ywy() => Vector4 => Vector3 { 1, 3, 1 });
+impl_swizzle!(ywz() => Vector4 => Vector3 { 1, 3, 2 });
+impl_swizzle!(yww() => Vector4 => Vector3 { 1, 3, 3 });
+impl_swizzle!(zxx() => Vector4 => Vector3 { 2, 0, 0 });
+impl_swizzle!(zxy() => Vector4 => Vector3 { 2, 0, 1 });
+impl_swizzle!(zxz() => Vector4 => Vector3 { 2, 0, 2 });
+impl_swizzle!(zxw() => Vector4 => Vector3 { 2, 0, 3 });
+impl_swizzle!(zyx() => Vector4 => Vector3 { 2, 1, 0 });
+impl_swizzle!(zyy() => Vector4 => Vector3 { 2, 1, 1 });
+impl_swizzle!(zyz() => Vector4 => Vector3 { 2, 1, 2 });
+impl_swizzle!(zyw() => Vector4 => Vector3 { 2, 1, 3 });
+impl_swizzle!(zzx() => Vector4 => Vector3 { 2, 2, 0 });
+impl_swizzle!(zzy() => Vector4 => Vector3 { 2, 2, 1 });
+impl_swizzle!(zzz() => Vector4 => Vector3 { 2, 2, 2 });
+impl_swizzle!(zzw() => Vector4 => Vector3 { 2, 2, 3 });
+impl_swizzle!(zwx() => Vector4 => Vector3 { 2, 3, 0 });
+impl_swizzle!(zwy() => Vector4 => Vector3 { 2, 3, 1 });
+impl_swizzle!(zwz() => Vector4 => Vector3 { 2, 3, 2 });
+impl_swizzle!(zww() => Vector4 => Vector3 { 2, 3, 3 });
+impl_swizzle!(wxx() => Vector4 => Vector3 { 3, 0, 0 });
+impl_swizzle!(wxy() => Vector4 => Vector3 { 3, 0, 1 });
+impl_swizzle!(wxz() => Vector4 => Vector3 { 3, 0, 2 });
+impl_swizzle!(wxw() => Vector4 => Vector3 { 3, 0, 3 });
+impl_swizzle!(wyx() => Vector4 => Vector3 { 3, 1, 0 });
+impl_swizzle!(wyy() => Vector4 => Vector3 { 3, 1, 1 });
+impl_swizzle!(wyz() => Vector4 => Vector3 { 3, 1, 2 });
+impl_swizzle!(wyw() => Vector4 => Vector3 { 3, 1, 3 });
+impl_swizzle!(wzx() => Vector4 => Vector3 { 3, 2, 0 });
+impl_swizzle!(wzy() => Vector4 => Vector3 { 3, 2, 1 });
+impl_swizzle!(wzz() => Vector4 => Vector3 { 3, 2, 2 });
+impl_swizzle!(wzw() => Vector4 => Vector3 { 3, 2, 3 });
+impl_swizzle!(wwx() => Vector4 => Vector3 { 3, 3, 0 });
+impl_swizzle!(wwy() => Vector4 => Vector3 { 3, 3, 1 });
+impl_swizzle!(wwz() => Vector4 => Vector3 { 3, 3, 2 });
+impl_swizzle!(www() => Vector4 => Vector3 { 3, 3, 3 });
+
 
