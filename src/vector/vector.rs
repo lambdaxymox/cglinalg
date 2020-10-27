@@ -357,6 +357,13 @@ impl<S> From<(S,)> for Vector1<S> where S: Scalar {
     }
 }
 
+impl<S> From<&(S,)> for Vector1<S> where S: Scalar {
+    #[inline]
+    fn from(v: &(S,)) -> Vector1<S> {
+        Vector1::new(v.0)
+    }
+}
+
 impl<S> From<[S; 1]> for Vector1<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 1]) -> Vector1<S> {
@@ -789,6 +796,13 @@ impl<S> From<[S; 2]> for Vector2<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 2]) -> Vector2<S> {
         Vector2::new(v[0], v[1])
+    }
+}
+
+impl<S> From<&(S, S)> for Vector2<S> where S: Scalar {
+    #[inline]
+    fn from(v: &(S, S)) -> Vector2<S> {
+        Vector2::new(v.0, v.1)
     }
 }
 
@@ -1275,6 +1289,20 @@ impl<S> From<[S; 3]> for Vector3<S> where S: Scalar {
     #[inline]
     fn from(v: [S; 3]) -> Vector3<S> {
         Vector3::new(v[0], v[1], v[2])
+    }
+}
+
+impl<S> From<&[S; 3]> for Vector3<S> where S: Scalar {
+    #[inline]
+    fn from(v: &[S; 3]) -> Vector3<S> {
+        Vector3::new(v[0], v[1], v[2])
+    }
+}
+
+impl<S> From<&(S, S, S)> for Vector3<S> where S: Scalar {
+    #[inline]
+    fn from(v: &(S, S, S)) -> Vector3<S> {
+        Vector3::new(v.0, v.1, v.2)
     }
 }
 
