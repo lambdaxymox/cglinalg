@@ -682,59 +682,7 @@ impl_scalar_vector_mul_ops!(isize => Vector1<isize> => Vector1<isize>, { 0 });
 impl_scalar_vector_mul_ops!(f32   => Vector1<f32>   => Vector1<f32>,   { 0 });
 impl_scalar_vector_mul_ops!(f64   => Vector1<f64>   =>  Vector1<f64>,  { 0 });
 
-macro_rules! impl_magnitude {
-    ($VectorN:ident) => {
-        impl<S> Magnitude for $VectorN<S> where S: ScalarFloat {
-            type Output = S;
 
-            #[inline]
-            fn magnitude_squared(&self) -> Self::Output {
-                self.dot(self)
-            }
-        
-            #[inline]
-            fn magnitude(&self) -> Self::Output {
-                self.magnitude_squared().sqrt()
-            }
-            
-            #[inline]
-            fn normalize(&self) -> Self {
-                self / self.magnitude()
-            }
-            
-            #[inline]
-            fn normalize_to(&self, magnitude: Self::Output) -> Self {
-                self * (magnitude / self.magnitude())
-            }
-        
-            #[inline]
-            fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-                let magnitude = self.magnitude();
-        
-                if magnitude <= threshold {
-                    None
-                } else {
-                    Some(self.normalize())
-                }
-            }
-        
-            #[inline]
-            fn distance_squared(&self, other: &$VectorN<S>) -> Self::Output {
-                (self - other).magnitude_squared()
-            }
-        
-            #[inline]
-            fn distance(&self, other: &Self) -> Self::Output {
-                self.distance_squared(other).sqrt()
-            }
-        }
-    }
-}
-
-impl_magnitude!(Vector1);
-impl_magnitude!(Vector2);
-impl_magnitude!(Vector3);
-impl_magnitude!(Vector4);
 
 
 impl_approx_eq_ops!(Vector1, { 0 });
@@ -2239,6 +2187,61 @@ impl_scalar_vector_mul_ops!(f64   => Vector4<f64>   => Vector4<f64>,   { 0, 1, 2
 
 
 impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
+
+
+macro_rules! impl_magnitude {
+    ($VectorN:ident) => {
+        impl<S> Magnitude for $VectorN<S> where S: ScalarFloat {
+            type Output = S;
+
+            #[inline]
+            fn magnitude_squared(&self) -> Self::Output {
+                self.dot(self)
+            }
+        
+            #[inline]
+            fn magnitude(&self) -> Self::Output {
+                self.magnitude_squared().sqrt()
+            }
+            
+            #[inline]
+            fn normalize(&self) -> Self {
+                self / self.magnitude()
+            }
+            
+            #[inline]
+            fn normalize_to(&self, magnitude: Self::Output) -> Self {
+                self * (magnitude / self.magnitude())
+            }
+        
+            #[inline]
+            fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+                let magnitude = self.magnitude();
+        
+                if magnitude <= threshold {
+                    None
+                } else {
+                    Some(self.normalize())
+                }
+            }
+        
+            #[inline]
+            fn distance_squared(&self, other: &$VectorN<S>) -> Self::Output {
+                (self - other).magnitude_squared()
+            }
+        
+            #[inline]
+            fn distance(&self, other: &Self) -> Self::Output {
+                self.distance_squared(other).sqrt()
+            }
+        }
+    }
+}
+
+impl_magnitude!(Vector1);
+impl_magnitude!(Vector2);
+impl_magnitude!(Vector3);
+impl_magnitude!(Vector4);
 
 
 macro_rules! impl_swizzle {
