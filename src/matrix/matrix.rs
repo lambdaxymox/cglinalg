@@ -1251,6 +1251,31 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     pub fn is_symmetric(&self) -> bool {
         ulps_eq!(self.data[0][1], self.data[1][0]) && ulps_eq!(self.data[1][0], self.data[0][1])
     }
+
+    /// Linearly interpolate between two matrices.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,    
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let matrix0 = Matrix2x2::new(0_f64, 0_f64, 1_f64, 1_f64);
+    /// let matrix1 = Matrix2x2::new(2_f64, 2_f64, 3_f64, 3_f64);
+    /// let amount = 0.5;
+    /// let expected = Matrix2x2::new(1_f64, 1_f64, 2_f64, 2_f64);
+    /// let result = matrix0.lerp(&matrix1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn lerp(&self, other: &Matrix2x2<S>, amount: S) -> Matrix2x2<S> {
+        self + ((other - self) * amount)
+    }
 }
 
 impl<S> fmt::Display for Matrix2x2<S> where S: fmt::Display {
@@ -3207,6 +3232,43 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
         ulps_eq!(self.data[2][0], self.data[0][2]) &&
         ulps_eq!(self.data[1][2], self.data[2][1]) && 
         ulps_eq!(self.data[2][1], self.data[1][2])
+    }
+
+    /// Linearly interpolate between two matrices.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,    
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq, 
+    /// # };
+    /// #
+    /// let matrix0 = Matrix3x3::new(
+    ///     0_f64, 0_f64, 0_f64, 
+    ///     1_f64, 1_f64, 1_f64,
+    ///     2_f64, 2_f64, 2_f64
+    /// );
+    /// let matrix1 = Matrix3x3::new(
+    ///     3_f64, 3_f64, 3_f64, 
+    ///     4_f64, 4_f64, 4_f64,
+    ///     5_f64, 5_f64, 5_f64
+    /// );
+    /// let amount = 0.5;
+    /// let expected = Matrix3x3::new(
+    ///     1.5_f64, 1.5_f64, 1.5_f64, 
+    ///     2.5_f64, 2.5_f64, 2.5_f64,
+    ///     3.5_f64, 3.5_f64, 3.5_f64
+    /// );
+    /// let result = matrix0.lerp(&matrix1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn lerp(&self, other: &Matrix3x3<S>, amount: S) -> Matrix3x3<S> {
+        self + ((other - self) * amount)
     }
 }
 
@@ -5312,6 +5374,43 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
         ulps_eq!(self.data[0][3], self.data[3][0]) && ulps_eq!(self.data[3][0], self.data[0][3]) &&
         ulps_eq!(self.data[1][3], self.data[3][1]) && ulps_eq!(self.data[3][1], self.data[1][3]) &&
         ulps_eq!(self.data[2][3], self.data[3][2]) && ulps_eq!(self.data[3][2], self.data[2][3])
+    }
+
+    /// Linearly interpolate between two matrices.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #    Matrix4x4,
+    /// # };
+    /// #
+    /// let matrix0 = Matrix4x4::new(
+    ///     0_f64, 0_f64, 0_f64, 0_f64,
+    ///     1_f64, 1_f64, 1_f64, 1_f64,
+    ///     2_f64, 2_f64, 2_f64, 2_f64,
+    ///     3_f64, 3_f64, 3_f64, 3_f64
+    /// );
+    /// let matrix1 = Matrix4x4::new(
+    ///     4_f64, 4_f64, 4_f64, 4_f64,
+    ///     5_f64, 5_f64, 5_f64, 5_f64,
+    ///     6_f64, 6_f64, 6_f64, 6_f64,
+    ///     7_f64, 7_f64, 7_f64, 7_f64
+    /// );
+    /// let amount = 0.5;
+    /// let expected = Matrix4x4::new(
+    ///     2_f64, 2_f64, 2_f64, 2_f64,
+    ///     3_f64, 3_f64, 3_f64, 3_f64,
+    ///     4_f64, 4_f64, 4_f64, 4_f64,
+    ///     5_f64, 5_f64, 5_f64, 5_f64
+    /// );
+    /// let result = matrix0.lerp(&matrix1, amount);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn lerp(&self, other: &Matrix4x4<S>, amount: S) -> Matrix4x4<S> {
+        self + ((other - self) * amount)
     }
 }
 
@@ -10707,6 +10806,138 @@ impl_scalar_matrix_mul_ops!(
 });
 impl_scalar_matrix_mul_ops!(
     f64 => Matrix4x3<f64> => Matrix4x3<f64>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3),
+    (2, 0), (2, 1), (2, 2), (2, 3)
+});
+
+
+
+macro_rules! impl_matrix_binary_assign_ops {
+    ($T:ty, { $( ($col:expr, $row:expr) ),* }) => {
+        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: $T) {
+                $( self[$col][$row] += other[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn add_assign(&mut self, other: &$T) {
+                $( self[$col][$row] += other[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: $T) {
+                $( self[$col][$row] -= other[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
+            #[inline]
+            fn sub_assign(&mut self, other: &$T) {
+                $( self[$col][$row] -= other[$col][$row] );*
+            }
+        }
+
+        impl<S> ops::MulAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn mul_assign(&mut self, other: S) {
+                $( self[$col][$row] *= other );*
+            }
+        }
+        
+        impl<S> ops::DivAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn div_assign(&mut self, other: S) {
+                $( self[$col][$row] /= other );*
+            }
+        }
+        
+        impl<S> ops::RemAssign<S> for $T where S: Scalar {
+            #[inline]
+            fn rem_assign(&mut self, other: S) {
+                $( self[$col][$row] %= other );*
+            }
+        }
+    }
+}
+
+impl_matrix_binary_assign_ops!(
+    Matrix1x1<S>, { 
+    (0, 0) 
+});
+impl_matrix_binary_assign_ops!(
+    Matrix2x2<S>, { 
+    (0, 0), (0, 1), 
+    (1, 0), (1, 1)
+});
+impl_matrix_binary_assign_ops!(
+    Matrix3x3<S>, { 
+    (0, 0), (0, 1), (0, 2), 
+    (1, 0), (1, 1), (1, 2), 
+    (2, 0), (2, 1), (2, 2) 
+});
+impl_matrix_binary_assign_ops!(
+    Matrix4x4<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3), 
+    (2, 0), (2, 1), (2, 2), (2, 3), 
+    (3, 0), (3, 1), (3, 2), (3, 3) 
+});
+impl_matrix_binary_assign_ops!(
+    Matrix1x2<S>, { 
+    (0, 0),
+    (1, 0)
+});
+impl_matrix_binary_assign_ops!(
+    Matrix1x3<S>, { 
+    (0, 0),
+    (1, 0),
+    (2, 0)
+});
+impl_matrix_binary_assign_ops!(
+    Matrix1x4<S>, {
+    (0, 0),
+    (1, 0),
+    (2, 0),
+    (3, 0)
+});
+impl_matrix_binary_assign_ops!(
+    Matrix2x3<S>, { 
+    (0, 0), (0, 1), 
+    (1, 0), (1, 1), 
+    (2, 0), (2, 1)
+});
+impl_matrix_binary_assign_ops!(
+    Matrix2x4<S>, { 
+    (0, 0), (0, 1), 
+    (1, 0), (1, 1), 
+    (2, 0), (2, 1), 
+    (3, 0), (3, 1)
+});
+impl_matrix_binary_assign_ops!(
+    Matrix3x2<S>, { 
+    (0, 0), (0, 1), (0, 2), 
+    (1, 0), (1, 1), (1, 2) 
+});
+impl_matrix_binary_assign_ops!(
+    Matrix3x4<S>, { 
+    (0, 0), (0, 1), (0, 2), 
+    (1, 0), (1, 1), (1, 2), 
+    (2, 0), (2, 1), (2, 2), 
+    (3, 0), (3, 1), (3, 2)
+});
+impl_matrix_binary_assign_ops!(
+    Matrix4x2<S>, { 
+    (0, 0), (0, 1), (0, 2), (0, 3), 
+    (1, 0), (1, 1), (1, 2), (1, 3)
+});
+impl_matrix_binary_assign_ops!(
+    Matrix4x3<S>, { 
     (0, 0), (0, 1), (0, 2), (0, 3), 
     (1, 0), (1, 1), (1, 2), (1, 3),
     (2, 0), (2, 1), (2, 2), (2, 3)
