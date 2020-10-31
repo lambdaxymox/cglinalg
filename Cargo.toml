@@ -8,7 +8,8 @@ categories = [
     "graphics",
     "mathematics",
     "game-development",
-    "game-engines"
+    "game-engines",
+    "no_std"
 ]
 keywords = [
     "graphics", 
