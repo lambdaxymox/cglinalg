@@ -1667,6 +1667,23 @@ impl<S> Quaternion<S> where S: ScalarFloat {
     }
 
     /// Compute the normalized linear interpolation between two quaternions.
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Magnitude,
+    /// # };
+    /// #
+    /// let v0 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
+    /// let v1 = Quaternion::new(10_f64, 20_f64, 30_f64, 40_f64);
+    /// let amount = 0.7;
+    /// let expected = v0.lerp(&v1, amount).normalize();
+    /// let result = v0.nlerp(&v1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn nlerp(&self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
         (self * (S::one() - amount) + other * amount).normalize()
