@@ -22,29 +22,6 @@ use core::fmt;
 use core::ops;
 
 
-macro_rules! impl_scalar_quaternion_mul_ops {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $scalar:ident, { $($field:ident),* } }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
-            }
-        }
-
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
-            }
-        }
-    }
-}
-
-
 /// A quaternion is a generalization of vectors in three dimensions that 
 /// enables one to perform rotations about an arbitrary axis. They are a
 /// three-dimensional analogue of complex numbers. In geometric algebra terms,
@@ -2250,6 +2227,28 @@ impl<'a, 'b, S> ops::Mul<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
             other.s * self.v.y + other.v.x * self.v.z + other.v.y * self.s   - other.v.z * self.v.x,
             other.s * self.v.z - other.v.x * self.v.y + other.v.y * self.v.x + other.v.z * self.s,
         )
+    }
+}
+
+macro_rules! impl_scalar_quaternion_mul_ops {
+    ($Lhs:ty, $Rhs:ty, $Output:ty, { $scalar:ident, { $($field:ident),* } }) => {
+        impl ops::Mul<$Rhs> for $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            }
+        }
+
+        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
+            type Output = $Output;
+
+            #[inline]
+            fn mul(self, other: $Rhs) -> $Output {
+                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            }
+        }
     }
 }
 
