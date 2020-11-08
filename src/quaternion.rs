@@ -2231,41 +2231,41 @@ impl<'a, 'b, S> ops::Mul<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
 }
 
 macro_rules! impl_scalar_quaternion_mul_ops {
-    ($Lhs:ty, $Rhs:ty, $Output:ty, { $scalar:ident, { $($field:ident),* } }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
+    ($Lhs:ty, { $scalar:ident, { $($field:ident),* } }) => {
+        impl ops::Mul<Quaternion<$Lhs>> for $Lhs {
+            type Output = Quaternion<$Lhs>;
 
             #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            fn mul(self, other: Quaternion<$Lhs>) -> Self::Output {
+                Self::Output::new( self * other.$scalar, $(self * other.v.$field),*)
             }
         }
 
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
+        impl<'a> ops::Mul<Quaternion<$Lhs>> for &'a $Lhs {
+            type Output = Quaternion<$Lhs>;
 
             #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( self * other.$scalar, $(self * other.v.$field),*)
+            fn mul(self, other: Quaternion<$Lhs>) -> Self::Output {
+                Self::Output::new( self * other.$scalar, $(self * other.v.$field),*)
             }
         }
     }
 }
 
-impl_scalar_quaternion_mul_ops!(u8,    Quaternion<u8>,    Quaternion<u8>,    { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(u16,   Quaternion<u16>,   Quaternion<u16>,   { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(u32,   Quaternion<u32>,   Quaternion<u32>,   { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(u64,   Quaternion<u64>,   Quaternion<u64>,   { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(u128,  Quaternion<u128>,  Quaternion<u128>,  { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(usize, Quaternion<usize>, Quaternion<usize>, { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(i8,    Quaternion<i8>,    Quaternion<i8>,    { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(i16,   Quaternion<i16>,   Quaternion<i16>,   { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(i32,   Quaternion<i32>,   Quaternion<i32>,   { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(i64,   Quaternion<i64>,   Quaternion<i64>,   { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(i128,  Quaternion<i128>,  Quaternion<i128>,  { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(isize, Quaternion<isize>, Quaternion<isize>, { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(f32,   Quaternion<f32>,   Quaternion<f32>,   { s, { x, y, z } });
-impl_scalar_quaternion_mul_ops!(f64,   Quaternion<f64>,   Quaternion<f64>,   { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(u8,    { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(u16,   { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(u32,   { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(u64,   { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(u128,  { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(usize, { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(i8,    { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(i16,   { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(i32,   { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(i64,   { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(i128,  { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(isize, { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(f32,   { s, { x, y, z } });
+impl_scalar_quaternion_mul_ops!(f64,   { s, { x, y, z } });
 
 
 impl<S> ops::Div<S> for Quaternion<S> where S: Scalar {
