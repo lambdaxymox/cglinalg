@@ -1,6 +1,6 @@
 [package]
 name = "cglinalg"
-version = "0.14.1"
+version = "0.14.2"
 edition = "2018"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
@@ -25,6 +25,7 @@ repository = "https://github.com/lambdaxymox/cglinalg"
 [lib]
 name = "cglinalg"
 path = "src/lib.rs"
+crate-type=["rlib", "cdylib"]
 
 [features]
 default = []
@@ -34,7 +35,7 @@ version = "0.4.0"
 default-features = false
 
 [dependencies.num-traits]
-version = "0.2.12"
+version = "0.2.14"
 default-features = false
 features = ["libm"]
 
