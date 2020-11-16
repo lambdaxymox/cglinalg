@@ -25,7 +25,7 @@ repository = "https://github.com/lambdaxymox/cglinalg"
 [lib]
 name = "cglinalg"
 path = "src/lib.rs"
-crate-type=["rlib", "cdylib"]
+crate-type = ["rlib", "cdylib"]
 
 [features]
 default = []
