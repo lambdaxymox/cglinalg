@@ -65,7 +65,7 @@ impl<S> Vector1<S> where S: NumCast + Copy {
 
 impl<S> Vector1<S> where S: Copy {
     /// Extend a one-dimensional vector into a two-dimensional vector using 
-    /// the supplied value for the `y`-component.
+    /// the supplied value for the **y-component**.
     ///
     /// ## Example
     ///
@@ -166,7 +166,7 @@ impl<S> Vector1<S> where S: Copy {
 }
 
 impl<S> Vector1<S> where S: Scalar {
-    /// Returns the **x-axis** unit vector, a unit vector with the `x`-component
+    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector1<S> {
@@ -438,7 +438,7 @@ impl<S> Vector2<S> where S: NumCast + Copy {
 
 impl<S> Vector2<S> where S: Copy {
     /// Extend a two-dimensional vector into a three-dimensional vector using the 
-    /// supplied `z`-component.
+    /// supplied **z-component**.
     ///
     /// ## Example
     ///
@@ -460,7 +460,7 @@ impl<S> Vector2<S> where S: Copy {
     }
 
     /// Contract a two-dimensional vector to a one-dimensional vector by removing
-    /// the `y`-component.
+    /// the **y-component**.
     ///
     /// ## Example
     ///
@@ -561,14 +561,14 @@ impl<S> Vector2<S> where S: Copy {
 }
 
 impl<S> Vector2<S> where S: Scalar {
-    /// Returns the **x-axis** unit vector, a unit vector with the `x`-component
+    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector2<S> {
         Vector2::new(S::one(), S::zero())
     }
 
-    /// Returns the **y-axis** unit vector, a unit vector with the `y`-component
+    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_y() -> Vector2<S> {
@@ -877,7 +877,7 @@ impl<S> Vector3<S> where S: NumCast + Copy {
 
 impl<S> Vector3<S> where S: Copy {
     /// Extend a three-dimensional vector into a four-dimensional vector using the 
-    /// supplied `w`-component.
+    /// supplied **w-component**.
     ///
     /// ## Example
     ///
@@ -899,7 +899,7 @@ impl<S> Vector3<S> where S: Copy {
     }
 
     /// Contract a three-dimensional vector to a two-dimensional vector
-    /// by removing the `z`-component.
+    /// by removing the **z-component**.
     ///
     /// ## Example
     ///
@@ -1000,21 +1000,21 @@ impl<S> Vector3<S> where S: Copy {
 }
 
 impl<S> Vector3<S> where S: Scalar {
-    /// Returns the **x-axis** unit vector, a unit vector with the `x`-component
+    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector3<S> {
         Vector3::new(S::one(), S::zero(), S::zero())
     }
 
-    /// Returns the **y-axis** unit vector, a unit vector with the `y`-component
+    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_y() -> Vector3<S> {
         Vector3::new(S::zero(), S::one(), S::zero())
     }
     
-    /// Returns the **z-axis** unit vector, a unit vector with the `z`-component
+    /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_z() -> Vector3<S> {
@@ -1358,7 +1358,7 @@ impl<S> Vector4<S> {
 
 impl<S> Vector4<S> where S: Copy {
     /// Contract a four-dimensional vector to a three-dimensional vector
-    /// by removing the `w`-component.
+    /// by removing the **w-component**.
     ///
     /// ## Example
     ///
@@ -1503,28 +1503,28 @@ impl<S> Vector4<S> where S: NumCast + Copy {
 }
 
 impl<S> Vector4<S> where S: Scalar {
-    /// Returns the **x-axis** unit vector, a unit vector with the `x`-component
+    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_x() -> Vector4<S> {
         Vector4::new(S::one(), S::zero(), S::zero(), S::zero())
     }
 
-    /// Returns the **y-axis** unit vector, a unit vector with the `y`-component
+    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_y() -> Vector4<S> {
         Vector4::new(S::zero(), S::one(), S::zero(), S::zero())
     }
     
-    /// Returns the **z-axis** unit vector, a unit vector with the `z`-component
+    /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_z() -> Vector4<S> {
         Vector4::new(S::zero(), S::zero(), S::one(), S::zero())
     }
 
-    /// Returns the **w-axis** unit vector, a unit vector with the `w`-component
+    /// Returns the **w-axis** unit vector, a unit vector with the **w-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
     pub fn unit_w() -> Vector4<S> {

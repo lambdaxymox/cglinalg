@@ -716,7 +716,7 @@ impl<S> Matrix2x2<S> where S: Scalar {
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the **x-axis** to shearing along the **y-axis**.
     /// The parameter `shear_x_with_y` denotes the factor scaling the 
-    /// contribution of the `y`-component to the shearing of the `x`-component. 
+    /// contribution of the **y-component** to the shearing of the **x-component**. 
     ///
     /// ## Example 
     /// 
@@ -1842,7 +1842,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// `distance`.
     ///
     /// ## Example
-    /// A homogeneous vector with a zero `z`-component should not translate.
+    /// A homogeneous vector with a zero **z-component** should not translate.
     /// ```
     /// # use cglinalg::{
     /// #     Matrix3x3,
@@ -1858,7 +1858,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// 
     /// assert_eq!(result, expected); 
     /// ```
-    /// A homogeneous vector with a unit `z`-component should translate.
+    /// A homogeneous vector with a unit **z-component** should translate.
     /// ```
     /// # use cglinalg::{
     /// #     Matrix3x3,
@@ -1955,7 +1955,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
     /// calling `from_scale(scale)` is equivalent to calling 
-    /// `from_affine_nonuniform_scale(scale, scale)`. The `z`-component is 
+    /// `from_affine_nonuniform_scale(scale, scale)`. The **z-component** is 
     /// unaffected since this is an affine matrix.
     ///
     /// ## Example
@@ -1982,7 +1982,7 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// Construct a two-dimensional affine scaling matrix.
     ///
     /// This is the most general case for scaling matrices: the scale factor
-    /// in each dimension need not be identical. The `z`-component is unaffected 
+    /// in each dimension need not be identical. The **z-component** is unaffected 
     /// because this is an affine matrix.
     ///
     /// ## Example
@@ -2130,22 +2130,22 @@ impl<S> Matrix3x3<S> where S: Scalar {
     /// parameters describing a shearing transformation in three dimensions.
     /// 
     /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the `y`-component to shearing of the `x`-component.
+    /// contribution of the **y-component** to shearing of the **x-component**.
     ///
     /// The parameter `shear_x_with_z` denotes the factor scaling the 
-    /// contribution  of the `z`-component to the shearing of the `x`-component.
+    /// contribution  of the **z-component** to the shearing of the **x-component**.
     ///
     /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the `x`-component to shearing of the `y`-component.
+    /// contribution of the **x-component** to shearing of the **y-component**.
     ///
     /// The parameter `shear_y_with_z` denotes the factor scaling the 
-    /// contribution of the **z-axis** to the shearing of the `y`-component. 
+    /// contribution of the **z-axis** to the shearing of the **y-component**. 
     ///
     /// The parameter `shear_z_with_x` denotes the factor scaling the
     /// contribution of the **x-axis** to shearing of the **z-axis**.
     ///
     /// The parameter `shear_z_with_y` denotes the factor scaling the 
-    /// contribution of the `y`-component to the shearing of the `z`-component. 
+    /// contribution of the **y-component** to the shearing of the **z-component**. 
     ///
     /// ## Example
     ///
@@ -3935,7 +3935,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     ///
     ///
     /// ## Example
-    /// A homogeneous vector with a zero `w`-component should not translate.
+    /// A homogeneous vector with a zero **w-component** should not translate.
     /// ```
     /// # use cglinalg::{
     /// #     Matrix4x4,
@@ -3951,7 +3951,7 @@ impl<S> Matrix4x4<S> where S: Scalar {
     /// 
     /// assert_eq!(result, expected); 
     /// ```
-    /// A homogeneous vector with a unit `w`-component should translate.
+    /// A homogeneous vector with a unit **w-component** should translate.
     /// ```
     /// # use cglinalg::{
     /// #     Matrix4x4,

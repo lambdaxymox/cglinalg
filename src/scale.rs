@@ -27,7 +27,7 @@ use core::ops;
 ///
 /// A scale transformation is a linear map that scales each component of a 
 /// vector by a specified amount. Let `sx` be a scaling factor for the 
-/// `x`-component and `sy` be a scaling factor for the `y`-component of a 
+/// **x-component** and `sy` be a scaling factor for the **y-component** of a 
 /// two-dimensional vector. Then the scale transformation `S` acts on a 
 /// vector `v = [vx, vy]^T` as follows:
 /// ```text
@@ -37,9 +37,9 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Scale2<S> {
-    /// The scale factor for the `x`-component.
+    /// The scale factor for the **x-component**.
     x: S,
-    /// The scale factor for the `y`-component.
+    /// The scale factor for the **y-component**.
     y: S,
 }
 
@@ -334,8 +334,8 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Scale2<S> where S: ScalarFloat {
 ///
 /// A scale transformation is a linear map that scales each component of a 
 /// vector by a specified amount. Let `sx` be a scaling factor for the 
-/// `x`-component, `sy` be a scaling factor for the `y`-component, and `sz` be 
-/// the scaling factor for `z`-component of a three-dimensional vector. Then the 
+/// **x-component**, `sy` be a scaling factor for the **y-component**, and `sz` be 
+/// the scaling factor for **z-component** of a three-dimensional vector. Then the 
 /// scale transformation `S` acts on a vector `v = [vx, vy, vz]^T` as follows:
 /// ```text
 /// Sv == [sx * vx, sy * vy, sz * vz]^T
@@ -344,11 +344,11 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Scale2<S> where S: ScalarFloat {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Scale3<S> {
-    /// The scale factor for the `x`-component.
+    /// The scale factor for the **x-component**.
     x: S,
-    /// The scale factor for the `y`-component.
+    /// The scale factor for the **y-component**.
     y: S,
-    /// The scale factor for the `z`-component.
+    /// The scale factor for the **z-component**.
     z: S,
 }
 

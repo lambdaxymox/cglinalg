@@ -325,7 +325,7 @@ impl<S> Point2<S> where S: Copy {
     }
 
     /// Contract a two-dimensional point to a one-dimensional point by
-    /// removing its `y`-component.
+    /// removing its **y-component**.
     ///
     /// ## Example
     ///
@@ -640,7 +640,7 @@ impl<S> Point3<S> {
 }
 
 impl<S> Point3<S> where S: Copy {
-    /// Contract a three-dimensional point, removing its `z`-component.
+    /// Contract a three-dimensional point, removing its **z-component**.
     ///
     /// ## Example
     ///
