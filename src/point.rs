@@ -40,7 +40,10 @@ impl<S> Point1<S> {
     }
 }
 
-impl<S> Point1<S> where S: Copy {
+impl<S> Point1<S> 
+where 
+    S: Copy
+{
     /// Construct a new two-dimensional point from a one-dimensional point by
     /// supplying the y-coordinate.
     /// 
@@ -135,7 +138,8 @@ impl<S> Point1<S> where S: Copy {
     /// ```
     #[inline]
     pub fn map<T, F>(self, op: F) -> Point1<T> 
-        where F: FnMut(S) -> T 
+    where 
+        F: FnMut(S) -> T 
     {
         Point1 { 
             data: self.data.map(op),
@@ -143,7 +147,10 @@ impl<S> Point1<S> where S: Copy {
     }
 }
 
-impl<S> Point1<S> where S: NumCast + Copy {
+impl<S> Point1<S> 
+where 
+    S: NumCast + Copy 
+{
     /// Cast a point of one type of scalars to a point of another type of scalars.
     ///
     /// ## Example
@@ -170,7 +177,10 @@ impl<S> Point1<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Point1<S> where S: Scalar {
+impl<S> Point1<S> 
+where 
+    S: Scalar
+{
     /// Compute the origin of the Euclidean vector space.
     #[inline]
     pub fn origin() -> Point1<S> {
@@ -247,34 +257,49 @@ impl<S> Point1<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Point1<S> where S: fmt::Display {
+impl<S> fmt::Display for Point1<S> 
+where
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Point1 [{}]", self.data[0])
     }
 }
 
-impl<S> From<S> for Point1<S> where S: Scalar {
+impl<S> From<S> for Point1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: S) -> Point1<S> {
         Point1::new(v)
     }
 }
 
-impl<S> From<[S; 1]> for Point1<S> where S: Scalar {
+impl<S> From<[S; 1]> for Point1<S>
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: [S; 1]) -> Point1<S> {
         Point1::new(v[0])
     }
 }
 
-impl<S> From<&[S; 1]> for Point1<S> where S: Scalar {
+impl<S> From<&[S; 1]> for Point1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &[S; 1]) -> Point1<S> {
         Point1::new(v[0])
     }
 }
 
-impl<'a, S> From<&'a [S; 1]> for &'a Point1<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 1]> for &'a Point1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &'a [S; 1]) -> &'a Point1<S> {
         unsafe { 
@@ -301,7 +326,10 @@ impl<S> Point2<S> {
     }
 }
 
-impl<S> Point2<S> where S: Copy {
+impl<S> Point2<S> 
+where 
+    S: Copy
+{
     /// Expand a two-dimensional point to a three-dimensional point using
     /// the supplied z-value.
     ///
@@ -418,7 +446,8 @@ impl<S> Point2<S> where S: Copy {
     /// ```
     #[inline]
     pub fn map<T, F>(self, op: F) -> Point2<T> 
-        where F: FnMut(S) -> T 
+    where 
+        F: FnMut(S) -> T 
     {
         Point2 {
             data: self.data.map(op),
@@ -426,7 +455,10 @@ impl<S> Point2<S> where S: Copy {
     }
 }
 
-impl<S> Point2<S> where S: NumCast + Copy {
+impl<S> Point2<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a point of one type of scalars to a point of another type of scalars.
     ///
     /// ## Example
@@ -457,7 +489,10 @@ impl<S> Point2<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Point2<S> where S: Scalar {
+impl<S> Point2<S> 
+where 
+    S: Scalar
+{
     /// Convert a homogeneous vector into a point.
     ///
     /// ## Example
@@ -585,34 +620,49 @@ impl<S> Point2<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Point2<S> where S: fmt::Display {
+impl<S> fmt::Display for Point2<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Point2 [{}, {}]", self.data[0], self.data[1])
     }
 }
 
-impl<S> From<(S, S)> for Point2<S> where S: Scalar {
+impl<S> From<(S, S)> for Point2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from((x, y): (S, S)) -> Point2<S> {
         Point2::new(x, y)
     }
 }
 
-impl<S> From<[S; 2]> for Point2<S> where S: Scalar {
+impl<S> From<[S; 2]> for Point2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: [S; 2]) -> Point2<S> {
         Point2::new(v[0], v[1])
     }
 }
 
-impl<S> From<&[S; 2]> for Point2<S> where S: Scalar {
+impl<S> From<&[S; 2]> for Point2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &[S; 2]) -> Point2<S> {
         Point2::new(v[0], v[1])
     }
 }
 
-impl<'a, S> From<&'a [S; 2]> for &'a Point2<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 2]> for &'a Point2<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: &'a [S; 2]) -> &'a Point2<S> {
         unsafe { 
@@ -639,7 +689,10 @@ impl<S> Point3<S> {
     }
 }
 
-impl<S> Point3<S> where S: Copy {
+impl<S> Point3<S> 
+where 
+    S: Copy
+{
     /// Contract a three-dimensional point, removing its **z-component**.
     ///
     /// ## Example
@@ -732,14 +785,20 @@ impl<S> Point3<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, op: F) -> Point3<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(self, op: F) -> Point3<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Point3 {
             data: self.data.map(op),
         }
     }
 }
 
-impl<S> Point3<S> where S: NumCast + Copy {
+impl<S> Point3<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a point from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -774,7 +833,10 @@ impl<S> Point3<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Point3<S> where S: Scalar {
+impl<S> Point3<S> 
+where 
+    S: Scalar
+{
     /// Convert a vector in homogeneous coordinates into a point.
     ///
     /// ## Example
@@ -907,7 +969,10 @@ impl<S> Point3<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Point3<S> where S: fmt::Display {
+impl<S> fmt::Display for Point3<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -917,21 +982,30 @@ impl<S> fmt::Display for Point3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<(S, S, S)> for Point3<S> where S: Scalar {
+impl<S> From<(S, S, S)> for Point3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from((x, y, z): (S, S, S)) -> Point3<S> {
         Point3::new(x, y, z)
     }
 }
 
-impl<S> From<[S; 3]> for Point3<S> where S: Scalar {
+impl<S> From<[S; 3]> for Point3<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: [S; 3]) -> Point3<S> {
         Point3::new(v[0], v[1], v[2])
     }
 }
 
-impl<'a, S> From<&'a [S; 3]> for &'a Point3<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 3]> for &'a Point3<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: &'a [S; 3]) -> &'a Point3<S> {
         unsafe { 
@@ -940,7 +1014,10 @@ impl<'a, S> From<&'a [S; 3]> for &'a Point3<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> where S: Scalar {
+impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Point3<S> {
         unsafe { 

@@ -46,7 +46,10 @@ use crate::base::scalar::{
 /// assert_eq!(vector1.distance_squared(&vector2), 4_f64);
 /// assert_eq!(vector1.distance(&vector2), 2_f64);
 /// ```
-pub trait Magnitude where Self: Sized {
+pub trait Magnitude 
+where 
+    Self: Sized
+{
     type Output: ScalarFloat;
 
     /// Compute the Euclidean squared magnitude of a vector.

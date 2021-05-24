@@ -63,13 +63,19 @@ impl<T> ops::Deref for Unit<T> {
     }
 }
 
-impl<T> fmt::Display for Unit<T> where T: fmt::Display {
+impl<T> fmt::Display for Unit<T> 
+where
+    T: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         self.value.fmt(formatter)
     }
 }
 
-impl<T> Unit<T> where T: Magnitude {
+impl<T> Unit<T> 
+where 
+    T: Magnitude
+{
     /// Construct a new unit value, normalizing the input value.
     #[inline]
     pub fn from_value(value: T) -> Self {
@@ -131,7 +137,8 @@ impl<T> Unit<T> where T: Magnitude {
     /// ```
     #[inline]
     pub fn try_from_value_with_magnitude(value: T, threshold: T::Output) -> Option<(Self, T::Output)>
-        where T::Output: ScalarFloat, 
+    where 
+        T::Output: ScalarFloat, 
     {
         let magnitude_squared = value.magnitude_squared();
 
@@ -172,7 +179,8 @@ impl<T> Unit<T> where T: Magnitude {
     /// ```
     #[inline]
     pub fn try_from_value(value: T, threshold: T::Output) -> Option<Self>
-        where T::Output: ScalarFloat,
+    where
+        T::Output: ScalarFloat,
     {
         Self::try_from_value_with_magnitude(value, threshold).map(|(unit, _)| unit)
     }

@@ -19,7 +19,8 @@ use core::ops::{
 /// A data type with this trait has the properties of a 
 /// set of scalar numbers underlying vector and matrix 
 /// data types.
-pub trait Scalar where
+pub trait Scalar 
+where
     Self: Copy,
     Self: Clone,
     Self: Debug,
@@ -34,7 +35,8 @@ pub trait Scalar where
 {
 }
 
-impl<T> Scalar for T where 
+impl<T> Scalar for T 
+where 
     T: Copy
      + Clone 
      + Debug 
@@ -51,9 +53,17 @@ impl<T> Scalar for T where
 
 /// Scalar numbers with a notion of subtraction and have additive 
 /// inverses. 
-pub trait ScalarSigned where Self: Scalar + Neg<Output = Self> {}
+pub trait ScalarSigned 
+where 
+    Self: Scalar + Neg<Output = Self> 
+{
+}
 
-impl<T> ScalarSigned for T where T: Scalar + Neg<Output = T> {}
+impl<T> ScalarSigned for T 
+where 
+    T: Scalar + Neg<Output = T> 
+{
+}
 
 /// Scalar numbers that have the properties of finite precision
 /// floating point arithmetic.
@@ -66,7 +76,8 @@ pub trait ScalarFloat:
 {
 }
 
-impl<T> ScalarFloat for T where 
+impl<T> ScalarFloat for T 
+where 
     T: Scalar 
      + Float
      + approx::AbsDiffEq<Epsilon = Self>
@@ -74,3 +85,4 @@ impl<T> ScalarFloat for T where
      + approx::UlpsEq<Epsilon = Self>
 {
 }
+
