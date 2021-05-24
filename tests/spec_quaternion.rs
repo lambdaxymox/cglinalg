@@ -11,7 +11,8 @@ use cglinalg::{
 
 
 fn any_scalar<S>() -> impl Strategy<Value = S>
-    where S: Scalar + Arbitrary
+where
+    S: Scalar + Arbitrary
 {
     any::<S>().prop_map(|scalar| {
         let modulus = num_traits::cast(100_000_000).unwrap();
@@ -21,7 +22,8 @@ fn any_scalar<S>() -> impl Strategy<Value = S>
 }
 
 fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
-    where S: Scalar + Arbitrary
+where 
+    S: Scalar + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
         let modulus = num_traits::cast(100_000_000).unwrap();
@@ -1200,7 +1202,7 @@ macro_rules! magnitude_props {
         use proptest::prelude::*;
         use cglinalg::Magnitude;
         use approx::{
-            relative_ne
+            relative_ne,
         };
         use super::{
             $Generator,

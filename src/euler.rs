@@ -181,7 +181,10 @@ impl<A> EulerAngles<A> {
     }
 }
 
-impl<A> EulerAngles<A> where A: num_traits::Zero {
+impl<A> EulerAngles<A> 
+where 
+    A: num_traits::Zero 
+{
     /// Construct a zero element of the set of Euler angles.
     ///
     /// The zero element is the element where each Euler angle is zero.
@@ -197,7 +200,10 @@ impl<A> EulerAngles<A> where A: num_traits::Zero {
     }
 }
 
-impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
+impl<S> EulerAngles<Radians<S>> 
+where 
+    S: ScalarFloat
+{
     /// Construct an rotation matrix about an axis and an angle from a set 
     /// of Euler angles.
     ///
@@ -516,7 +522,10 @@ impl<S> EulerAngles<Radians<S>> where S: ScalarFloat {
     }
 }
 
-impl<A> fmt::Display for EulerAngles<A> where A: fmt::Display {
+impl<A> fmt::Display for EulerAngles<A> 
+where 
+    A: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -526,7 +535,8 @@ impl<A> fmt::Display for EulerAngles<A> where A: fmt::Display {
     }
 }
 
-impl<A, S> From<EulerAngles<A>> for Matrix3x3<S> where 
+impl<A, S> From<EulerAngles<A>> for Matrix3x3<S> 
+where 
     A: Angle + Into<Radians<S>>,
     S: ScalarFloat,
 {
@@ -541,7 +551,8 @@ impl<A, S> From<EulerAngles<A>> for Matrix3x3<S> where
     }
 }
 
-impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> where 
+impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> 
+where 
     A: Angle + Into<Radians<S>>,
     S: ScalarFloat,
 {
@@ -556,7 +567,10 @@ impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> where
     }
 }
 
-impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> where S: ScalarFloat {
+impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(src: Quaternion<S>) -> EulerAngles<Radians<S>> {
         let sig: S = num_traits::cast(0.499).unwrap();

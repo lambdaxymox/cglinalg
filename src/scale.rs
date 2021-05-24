@@ -43,7 +43,10 @@ pub struct Scale2<S> {
     y: S,
 }
 
-impl<S> Scale2<S> where S: Scalar {
+impl<S> Scale2<S> 
+where 
+    S: Scalar 
+{
     /// Construct a two-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
     #[inline]
@@ -113,7 +116,10 @@ impl<S> Scale2<S> where S: Scalar {
     }
 }
 
-impl<S> Scale2<S> where S: ScalarFloat {
+impl<S> Scale2<S> 
+where 
+    S: ScalarFloat 
+{
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     ///
@@ -228,7 +234,10 @@ impl<S> Scale2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Scale2<S> where S: fmt::Display {
+impl<S> fmt::Display for Scale2<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -238,21 +247,30 @@ impl<S> fmt::Display for Scale2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Scale2<S>> for Matrix3x3<S> where S: Scalar {
+impl<S> From<Scale2<S>> for Matrix3x3<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(scale: Scale2<S>) -> Matrix3x3<S> {
         Matrix3x3::from_affine_nonuniform_scale(scale.x, scale.y)
     }
 }
 
-impl<S> From<&Scale2<S>> for Matrix3x3<S> where S: Scalar {
+impl<S> From<&Scale2<S>> for Matrix3x3<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(scale: &Scale2<S>) -> Matrix3x3<S> {
         Matrix3x3::from_affine_nonuniform_scale(scale.x, scale.y)
     }
 }
 
-impl<S> approx::AbsDiffEq for Scale2<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Scale2<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -267,7 +285,10 @@ impl<S> approx::AbsDiffEq for Scale2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Scale2<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Scale2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -280,7 +301,10 @@ impl<S> approx::RelativeEq for Scale2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Scale2<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Scale2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -293,7 +317,10 @@ impl<S> approx::UlpsEq for Scale2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for Scale2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for Scale2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -302,7 +329,10 @@ impl<S> ops::Mul<Point2<S>> for Scale2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point2<S>> for Scale2<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point2<S>> for Scale2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -311,7 +341,10 @@ impl<S> ops::Mul<&Point2<S>> for Scale2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for &Scale2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for &Scale2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -320,7 +353,10 @@ impl<S> ops::Mul<Point2<S>> for &Scale2<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Scale2<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Scale2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -352,7 +388,10 @@ pub struct Scale3<S> {
     z: S,
 }
 
-impl<S> Scale3<S> where S: Scalar {
+impl<S> Scale3<S> 
+where 
+    S: Scalar 
+{
     /// Construct a three-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
     #[inline]
@@ -455,7 +494,10 @@ impl<S> Scale3<S> where S: Scalar {
     }
 }
 
-impl<S> Scale3<S> where S: ScalarFloat {
+impl<S> Scale3<S> 
+where 
+    S: ScalarFloat 
+{
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     /// 
@@ -553,7 +595,10 @@ impl<S> Scale3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Scale3<S> where S: fmt::Display {
+impl<S> fmt::Display for Scale3<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -563,7 +608,10 @@ impl<S> fmt::Display for Scale3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Scale3<S>> for Matrix4x4<S> where S: Scalar {
+impl<S> From<Scale3<S>> for Matrix4x4<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(scale: Scale3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_nonuniform_scale(
@@ -574,7 +622,10 @@ impl<S> From<Scale3<S>> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<S> From<&Scale3<S>> for Matrix4x4<S> where S: Scalar {
+impl<S> From<&Scale3<S>> for Matrix4x4<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(scale: &Scale3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_nonuniform_scale(
@@ -585,7 +636,10 @@ impl<S> From<&Scale3<S>> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<S> approx::AbsDiffEq for Scale3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Scale3<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -601,7 +655,10 @@ impl<S> approx::AbsDiffEq for Scale3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Scale3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Scale3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -615,7 +672,10 @@ impl<S> approx::RelativeEq for Scale3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Scale3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Scale3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -629,7 +689,10 @@ impl<S> approx::UlpsEq for Scale3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Scale3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for Scale3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -638,7 +701,10 @@ impl<S> ops::Mul<Point3<S>> for Scale3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Scale3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for Scale3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -647,7 +713,10 @@ impl<S> ops::Mul<&Point3<S>> for Scale3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Scale3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &Scale3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -656,7 +725,10 @@ impl<S> ops::Mul<Point3<S>> for &Scale3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Scale3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Scale3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]

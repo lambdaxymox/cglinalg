@@ -35,7 +35,10 @@ pub struct Translation2<S> {
     pub(crate) vector: Vector2<S>,
 }
 
-impl<S> Translation2<S> where S: ScalarSigned {
+impl<S> Translation2<S> 
+where 
+    S: ScalarSigned 
+{
     /// Construct a translation from the components of the translation.
     #[inline]
     pub fn new(x: S, y: S) -> Translation2<S> {
@@ -287,7 +290,10 @@ impl<S> AsRef<Vector2<S>> for Translation2<S> {
     }
 }
 
-impl<S> fmt::Display for Translation2<S> where S: fmt::Display {
+impl<S> fmt::Display for Translation2<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -297,21 +303,30 @@ impl<S> fmt::Display for Translation2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
+impl<S> From<Translation2<S>> for Matrix3x3<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(transform: Translation2<S>) -> Matrix3x3<S> {
         Matrix3x3::from_affine_translation(&transform.vector)
     }
 }
 
-impl<S> From<&Translation2<S>> for Matrix3x3<S> where S: ScalarSigned {
+impl<S> From<&Translation2<S>> for Matrix3x3<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(transform: &Translation2<S>) -> Matrix3x3<S> {
         Matrix3x3::from_affine_translation(&transform.vector)
     }
 }
 
-impl<S> approx::AbsDiffEq for Translation2<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Translation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -325,7 +340,10 @@ impl<S> approx::AbsDiffEq for Translation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Translation2<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Translation2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -337,7 +355,10 @@ impl<S> approx::RelativeEq for Translation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Translation2<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Translation2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -349,7 +370,10 @@ impl<S> approx::UlpsEq for Translation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for Translation2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for Translation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -358,7 +382,10 @@ impl<S> ops::Mul<Point2<S>> for Translation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point2<S>> for Translation2<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point2<S>> for Translation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -367,7 +394,10 @@ impl<S> ops::Mul<&Point2<S>> for Translation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for &Translation2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for &Translation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -376,7 +406,10 @@ impl<S> ops::Mul<Point2<S>> for &Translation2<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Translation2<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Translation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -398,7 +431,10 @@ pub struct Translation3<S> {
     pub(crate) vector: Vector3<S>,
 }
 
-impl<S> Translation3<S> where S: ScalarSigned {
+impl<S> Translation3<S> 
+where 
+    S: ScalarSigned 
+{
     /// Construct a translation from the components of the translation.
     #[inline]
     pub fn new(x: S, y: S, z: S) -> Translation3<S> {
@@ -647,7 +683,10 @@ impl<S> AsRef<Vector3<S>> for Translation3<S> {
     }
 }
 
-impl<S> fmt::Display for Translation3<S> where S: fmt::Display {
+impl<S> fmt::Display for Translation3<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -657,21 +696,30 @@ impl<S> fmt::Display for Translation3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
+impl<S> From<Translation3<S>> for Matrix4x4<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(transform: Translation3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_translation(&transform.vector)
     }
 }
 
-impl<S> From<&Translation3<S>> for Matrix4x4<S> where S: ScalarSigned {
+impl<S> From<&Translation3<S>> for Matrix4x4<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(transform: &Translation3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_translation(&transform.vector)
     }
 }
 
-impl<S> approx::AbsDiffEq for Translation3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Translation3<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -685,7 +733,10 @@ impl<S> approx::AbsDiffEq for Translation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Translation3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Translation3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -697,7 +748,10 @@ impl<S> approx::RelativeEq for Translation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Translation3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Translation3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -709,7 +763,10 @@ impl<S> approx::UlpsEq for Translation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Translation3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for Translation3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -718,7 +775,10 @@ impl<S> ops::Mul<Point3<S>> for Translation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Translation3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for Translation3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -727,7 +787,10 @@ impl<S> ops::Mul<&Point3<S>> for Translation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Translation3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &Translation3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -736,7 +799,10 @@ impl<S> ops::Mul<Point3<S>> for &Translation3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Translation3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Translation3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]

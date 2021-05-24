@@ -36,7 +36,10 @@ impl<S> Vector1<S> {
     }
 }
 
-impl<S> Vector1<S> where S: NumCast + Copy {
+impl<S> Vector1<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -63,7 +66,10 @@ impl<S> Vector1<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Vector1<S> where S: Copy {
+impl<S> Vector1<S> 
+where 
+    S: Copy
+{
     /// Extend a one-dimensional vector into a two-dimensional vector using 
     /// the supplied value for the **y-component**.
     ///
@@ -160,12 +166,18 @@ impl<S> Vector1<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector1<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(self, mut op: F) -> Vector1<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Vector1::new(op(self.data[0]))
     }
 }
 
-impl<S> Vector1<S> where S: Scalar {
+impl<S> Vector1<S> 
+where 
+    S: Scalar
+{
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
@@ -230,7 +242,10 @@ impl<S> Vector1<S> where S: Scalar {
     }
 }
 
-impl<S> Vector1<S> where S: ScalarSigned {
+impl<S> Vector1<S> 
+where 
+    S: ScalarSigned
+{
     /// Compute the negation of a vector mutably in place.
     ///
     /// ## Example
@@ -252,7 +267,10 @@ impl<S> Vector1<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Vector1<S> where S: ScalarFloat {
+impl<S> Vector1<S> 
+where 
+    S: ScalarFloat
+{
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
     /// ## Example
@@ -333,7 +351,10 @@ impl<S> Vector1<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
+impl<S> fmt::Display for Vector1<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -343,42 +364,60 @@ impl<S> fmt::Display for Vector1<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<S> for Vector1<S> where S: Scalar {
+impl<S> From<S> for Vector1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: S) -> Vector1<S> {
         Vector1::new(v)
     }
 }
 
-impl<S> From<(S,)> for Vector1<S> where S: Scalar {
+impl<S> From<(S,)> for Vector1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: (S,)) -> Vector1<S> {
         Vector1::new(v.0)
     }
 }
 
-impl<S> From<&(S,)> for Vector1<S> where S: Scalar {
+impl<S> From<&(S,)> for Vector1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &(S,)) -> Vector1<S> {
         Vector1::new(v.0)
     }
 }
 
-impl<S> From<[S; 1]> for Vector1<S> where S: Scalar {
+impl<S> From<[S; 1]> for Vector1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: [S; 1]) -> Vector1<S> {
         Vector1::new(v[0])
     }
 }
 
-impl<S> From<&[S; 1]> for Vector1<S> where S: Scalar {
+impl<S> From<&[S; 1]> for Vector1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &[S; 1]) -> Vector1<S> {
         Vector1::new(v[0])
     }
 }
 
-impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &'a [S; 1]) -> &'a Vector1<S> {
         unsafe { 
@@ -405,7 +444,10 @@ impl<S> Vector2<S> {
     }
 }
 
-impl<S> Vector2<S> where S: NumCast + Copy {
+impl<S> Vector2<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -436,7 +478,10 @@ impl<S> Vector2<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Vector2<S> where S: Copy {
+impl<S> Vector2<S> 
+where 
+    S: Copy 
+{
     /// Extend a two-dimensional vector into a three-dimensional vector using the 
     /// supplied **z-component**.
     ///
@@ -555,12 +600,18 @@ impl<S> Vector2<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector2<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(self, mut op: F) -> Vector2<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Vector2::new(op(self.data[0]), op(self.data[1]))
     }
 }
 
-impl<S> Vector2<S> where S: Scalar {
+impl<S> Vector2<S> 
+where 
+    S: Scalar 
+{
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
@@ -666,7 +717,10 @@ impl<S> Vector2<S> where S: Scalar {
     }
 }
 
-impl<S> Vector2<S> where S: ScalarSigned {
+impl<S> Vector2<S> 
+where 
+    S: ScalarSigned 
+{
     /// Compute the negation of a vector mutably in place.
     ///
     /// ## Example
@@ -689,7 +743,10 @@ impl<S> Vector2<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Vector2<S> where S: ScalarFloat {
+impl<S> Vector2<S> 
+where 
+    S: ScalarFloat
+{
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
     /// ## Example
@@ -775,7 +832,10 @@ impl<S> Vector2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Vector2<S> where S: fmt::Display {
+impl<S> fmt::Display for Vector2<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -785,35 +845,50 @@ impl<S> fmt::Display for Vector2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<(S, S)> for Vector2<S> where S: Scalar {
+impl<S> From<(S, S)> for Vector2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from((x, y): (S, S)) -> Vector2<S> {
         Vector2::new(x, y)
     }
 }
 
-impl<S> From<[S; 2]> for Vector2<S> where S: Scalar {
+impl<S> From<[S; 2]> for Vector2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: [S; 2]) -> Vector2<S> {
         Vector2::new(v[0], v[1])
     }
 }
 
-impl<S> From<&(S, S)> for Vector2<S> where S: Scalar {
+impl<S> From<&(S, S)> for Vector2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &(S, S)) -> Vector2<S> {
         Vector2::new(v.0, v.1)
     }
 }
 
-impl<S> From<&[S; 2]> for Vector2<S> where S: Scalar {
+impl<S> From<&[S; 2]> for Vector2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &[S; 2]) -> Vector2<S> {
         Vector2::new(v[0], v[1])
     }
 }
 
-impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &'a [S; 2]) -> &'a Vector2<S> {
         unsafe { 
@@ -840,7 +915,10 @@ impl<S> Vector3<S> {
     }
 }
 
-impl<S> Vector3<S> where S: NumCast + Copy {
+impl<S> Vector3<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -875,7 +953,10 @@ impl<S> Vector3<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Vector3<S> where S: Copy {
+impl<S> Vector3<S> 
+where 
+    S: Copy
+{
     /// Extend a three-dimensional vector into a four-dimensional vector using the 
     /// supplied **w-component**.
     ///
@@ -994,12 +1075,18 @@ impl<S> Vector3<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector3<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(self, mut op: F) -> Vector3<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Vector3::new(op(self.data[0]), op(self.data[1]), op(self.data[2]))
     }
 }
 
-impl<S> Vector3<S> where S: Scalar {
+impl<S> Vector3<S> 
+where 
+    S: Scalar
+{
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
@@ -1116,7 +1203,10 @@ impl<S> Vector3<S> where S: Scalar {
     }
 }
 
-impl<S> Vector3<S> where S: ScalarSigned {
+impl<S> Vector3<S> 
+where 
+    S: ScalarSigned
+{
     /// Compute the negation of a vector mutably in place.
     ///
     /// ## Example
@@ -1179,7 +1269,10 @@ impl<S> Vector3<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Vector3<S> where S: ScalarFloat {
+impl<S> Vector3<S> 
+where 
+    S: ScalarFloat
+{
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
     /// ## Example
@@ -1268,7 +1361,10 @@ impl<S> Vector3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Vector3<S> where S: fmt::Display {
+impl<S> fmt::Display for Vector3<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -1278,49 +1374,70 @@ impl<S> fmt::Display for Vector3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<(S, S, S)> for Vector3<S> where S: Scalar {
+impl<S> From<(S, S, S)> for Vector3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from((x, y, z): (S, S, S)) -> Vector3<S> {
         Vector3::new(x, y, z)
     }
 }
 
-impl<S> From<[S; 3]> for Vector3<S> where S: Scalar {
+impl<S> From<[S; 3]> for Vector3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: [S; 3]) -> Vector3<S> {
         Vector3::new(v[0], v[1], v[2])
     }
 }
 
-impl<S> From<&[S; 3]> for Vector3<S> where S: Scalar {
+impl<S> From<&[S; 3]> for Vector3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &[S; 3]) -> Vector3<S> {
         Vector3::new(v[0], v[1], v[2])
     }
 }
 
-impl<S> From<&(S, S, S)> for Vector3<S> where S: Scalar {
+impl<S> From<&(S, S, S)> for Vector3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &(S, S, S)) -> Vector3<S> {
         Vector3::new(v.0, v.1, v.2)
     }
 }
 
-impl<S> From<Vector4<S>> for Vector3<S> where S: Scalar {
+impl<S> From<Vector4<S>> for Vector3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: Vector4<S>) -> Vector3<S> {
         Vector3::new(v.data[0], v.data[1], v.data[2])
     }
 }
 
-impl<S> From<&Vector4<S>> for Vector3<S> where S: Scalar {
+impl<S> From<&Vector4<S>> for Vector3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &Vector4<S>) -> Vector3<S> {
         Vector3::new(v.data[0], v.data[1], v.data[2])
     }
 }
 
-impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
         unsafe { 
@@ -1329,7 +1446,10 @@ impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> where S: Scalar {
+impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
         unsafe { 
@@ -1356,7 +1476,10 @@ impl<S> Vector4<S> {
     }
 }
 
-impl<S> Vector4<S> where S: Copy {
+impl<S> Vector4<S> 
+where 
+    S: Copy
+{
     /// Contract a four-dimensional vector to a three-dimensional vector
     /// by removing the **w-component**.
     ///
@@ -1453,7 +1576,10 @@ impl<S> Vector4<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector4<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(self, mut op: F) -> Vector4<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Vector4::new(
             op(self.data[0]),
             op(self.data[1]),
@@ -1463,7 +1589,10 @@ impl<S> Vector4<S> where S: Copy {
     }
 }
 
-impl<S> Vector4<S> where S: NumCast + Copy {
+impl<S> Vector4<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -1502,7 +1631,10 @@ impl<S> Vector4<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Vector4<S> where S: Scalar {
+impl<S> Vector4<S> 
+where 
+    S: Scalar
+{
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
@@ -1605,7 +1737,10 @@ impl<S> Vector4<S> where S: Scalar {
     }
 }
 
-impl<S> Vector4<S> where S: ScalarSigned {
+impl<S> Vector4<S> 
+where 
+    S: ScalarSigned
+{
     /// Compute the negation of a vector mutably in place.
     ///
     /// ## Example
@@ -1630,7 +1765,10 @@ impl<S> Vector4<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Vector4<S> where S: ScalarFloat {
+impl<S> Vector4<S> 
+where 
+    S: ScalarFloat
+{
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
     /// ## Example
@@ -1723,7 +1861,10 @@ impl<S> Vector4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Vector4<S> where S: fmt::Display {
+impl<S> fmt::Display for Vector4<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -1733,35 +1874,50 @@ impl<S> fmt::Display for Vector4<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<(S, S, S, S)> for Vector4<S> where S: Scalar {
+impl<S> From<(S, S, S, S)> for Vector4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from((x, y, z, w): (S, S, S, S)) -> Vector4<S> {
         Vector4::new(x, y, z, w)
     }
 }
 
-impl<S> From<[S; 4]> for Vector4<S> where S: Scalar {
+impl<S> From<[S; 4]> for Vector4<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: [S; 4]) -> Vector4<S> {
         Vector4::new(v[0], v[1], v[2], v[3])
     }
 }
 
-impl<S> From<&[S; 4]> for Vector4<S> where S: Scalar {
+impl<S> From<&[S; 4]> for Vector4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &[S; 4]) -> Vector4<S> {
         Vector4::new(v[0], v[1], v[2], v[3])
     }
 }
 
-impl<S> From<&(S, S, S, S)> for Vector4<S> where S: Scalar {
+impl<S> From<&(S, S, S, S)> for Vector4<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: &(S, S, S, S)) -> Vector4<S> {
         Vector4::new(v.0, v.1, v.2, v.3)
     }
 }
 
-impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(v: &'a [S; 4]) -> &'a Vector4<S> {
         unsafe { 
@@ -1770,7 +1926,10 @@ impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> where S: Scalar {
+impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
         unsafe { 

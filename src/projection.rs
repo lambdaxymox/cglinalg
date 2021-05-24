@@ -65,7 +65,10 @@ pub struct Perspective3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> Perspective3<S> where S: ScalarFloat {
+impl<S> Perspective3<S> 
+where 
+    S: ScalarFloat 
+{
     /// Construct a new perspective projection transformation.
     ///
     /// The perspective projection transformation uses a right-handed 
@@ -376,7 +379,10 @@ impl<S> AsRef<Matrix4x4<S>> for Perspective3<S> {
     }
 }
 
-impl<S> fmt::Display for Perspective3<S> where S: fmt::Display {
+impl<S> fmt::Display for Perspective3<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -387,7 +393,8 @@ impl<S> fmt::Display for Perspective3<S> where S: fmt::Display {
 }
 
 impl<S> approx::AbsDiffEq for Perspective3<S> 
-    where S: ScalarFloat 
+where 
+    S: ScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -409,7 +416,8 @@ impl<S> approx::AbsDiffEq for Perspective3<S>
 }
 
 impl<S> approx::RelativeEq for Perspective3<S> 
-    where S: ScalarFloat,
+where 
+    S: ScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -429,7 +437,8 @@ impl<S> approx::RelativeEq for Perspective3<S>
 }
 
 impl<S> approx::UlpsEq for Perspective3<S> 
-    where S: ScalarFloat   
+where 
+    S: ScalarFloat   
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -448,7 +457,10 @@ impl<S> approx::UlpsEq for Perspective3<S>
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Perspective3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for Perspective3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -457,7 +469,10 @@ impl<S> ops::Mul<Point3<S>> for Perspective3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Perspective3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for Perspective3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -466,7 +481,10 @@ impl<S> ops::Mul<&Point3<S>> for Perspective3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Perspective3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &Perspective3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -475,7 +493,10 @@ impl<S> ops::Mul<Point3<S>> for &Perspective3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Perspective3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Perspective3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -511,7 +532,10 @@ pub struct PerspectiveFov3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> PerspectiveFov3<S> where S: ScalarFloat {
+impl<S> PerspectiveFov3<S> 
+where 
+    S: ScalarFloat
+{
     /// Construct a new perspective projection transformation.
     pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> PerspectiveFov3<S> {
         let spec_vfov = vfov.into();
@@ -834,7 +858,10 @@ impl<S> AsRef<Matrix4x4<S>> for PerspectiveFov3<S> {
     }
 }
 
-impl<S> fmt::Display for PerspectiveFov3<S> where S: fmt::Display {
+impl<S> fmt::Display for PerspectiveFov3<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -845,7 +872,8 @@ impl<S> fmt::Display for PerspectiveFov3<S> where S: fmt::Display {
 }
 
 impl<S> approx::AbsDiffEq for PerspectiveFov3<S> 
-    where S: ScalarFloat
+where 
+    S: ScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -864,7 +892,8 @@ impl<S> approx::AbsDiffEq for PerspectiveFov3<S>
     }
 }
 
-impl<S> approx::RelativeEq for PerspectiveFov3<S> where 
+impl<S> approx::RelativeEq for PerspectiveFov3<S> 
+where 
     S: ScalarFloat  
 {
     #[inline]
@@ -882,7 +911,8 @@ impl<S> approx::RelativeEq for PerspectiveFov3<S> where
     }
 }
 
-impl<S> approx::UlpsEq for PerspectiveFov3<S> where 
+impl<S> approx::UlpsEq for PerspectiveFov3<S> 
+where 
     S: ScalarFloat
 {
     #[inline]
@@ -900,7 +930,10 @@ impl<S> approx::UlpsEq for PerspectiveFov3<S> where
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -909,7 +942,10 @@ impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for PerspectiveFov3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for PerspectiveFov3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -918,7 +954,10 @@ impl<S> ops::Mul<&Point3<S>> for PerspectiveFov3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &PerspectiveFov3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &PerspectiveFov3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -927,7 +966,10 @@ impl<S> ops::Mul<Point3<S>> for &PerspectiveFov3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b PerspectiveFov3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b PerspectiveFov3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -982,7 +1024,10 @@ pub struct Orthographic3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> Orthographic3<S> where S: ScalarFloat {
+impl<S> Orthographic3<S> 
+where 
+    S: ScalarFloat
+{
     /// Construct a new orthographic projection.
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Orthographic3<S> {
         Orthographic3 {
@@ -1217,7 +1262,10 @@ impl<S> AsRef<Matrix4x4<S>> for Orthographic3<S> {
     }
 }
 
-impl<S> fmt::Display for Orthographic3<S> where S: fmt::Display {
+impl<S> fmt::Display for Orthographic3<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -1227,7 +1275,10 @@ impl<S> fmt::Display for Orthographic3<S> where S: fmt::Display {
     }
 }
 
-impl<S> approx::AbsDiffEq for Orthographic3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Orthographic3<S> 
+where 
+    S: ScalarFloat
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -1247,7 +1298,10 @@ impl<S> approx::AbsDiffEq for Orthographic3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Orthographic3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Orthographic3<S> 
+where 
+    S: ScalarFloat
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -1265,7 +1319,10 @@ impl<S> approx::RelativeEq for Orthographic3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Orthographic3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Orthographic3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -1283,7 +1340,10 @@ impl<S> approx::UlpsEq for Orthographic3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Orthographic3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for Orthographic3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1292,7 +1352,10 @@ impl<S> ops::Mul<Point3<S>> for Orthographic3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Orthographic3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for Orthographic3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1301,7 +1364,10 @@ impl<S> ops::Mul<&Point3<S>> for Orthographic3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Orthographic3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &Orthographic3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1310,7 +1376,10 @@ impl<S> ops::Mul<Point3<S>> for &Orthographic3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1353,7 +1422,10 @@ pub struct OrthographicFov3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> OrthographicFov3<S> where S: ScalarFloat {
+impl<S> OrthographicFov3<S> 
+where 
+    S: ScalarFloat
+{
     /// Construct a new orthographic projection.
     pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> OrthographicFov3<S> {
         let vfov_rad = vfov.into();
@@ -1601,7 +1673,10 @@ impl<S> AsRef<Matrix4x4<S>> for OrthographicFov3<S> {
     }
 }
 
-impl<S> fmt::Display for OrthographicFov3<S> where S: fmt::Display {
+impl<S> fmt::Display for OrthographicFov3<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -1611,7 +1686,10 @@ impl<S> fmt::Display for OrthographicFov3<S> where S: fmt::Display {
     }
 }
 
-impl<S> approx::AbsDiffEq for OrthographicFov3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for OrthographicFov3<S> 
+where 
+    S: ScalarFloat
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -1629,7 +1707,10 @@ impl<S> approx::AbsDiffEq for OrthographicFov3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for OrthographicFov3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for OrthographicFov3<S> 
+where 
+    S: ScalarFloat
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -1645,7 +1726,10 @@ impl<S> approx::RelativeEq for OrthographicFov3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for OrthographicFov3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for OrthographicFov3<S> 
+where 
+    S: ScalarFloat
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -1661,7 +1745,10 @@ impl<S> approx::UlpsEq for OrthographicFov3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for OrthographicFov3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for OrthographicFov3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1670,7 +1757,10 @@ impl<S> ops::Mul<Point3<S>> for OrthographicFov3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for OrthographicFov3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for OrthographicFov3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1679,7 +1769,10 @@ impl<S> ops::Mul<&Point3<S>> for OrthographicFov3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &OrthographicFov3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &OrthographicFov3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1688,7 +1781,10 @@ impl<S> ops::Mul<Point3<S>> for &OrthographicFov3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b OrthographicFov3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b OrthographicFov3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]

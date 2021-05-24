@@ -50,7 +50,10 @@ pub struct Rotation2<S> {
     matrix: Matrix2x2<S>,
 }
 
-impl<S> Rotation2<S> where S: ScalarFloat {
+impl<S> Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
     /// Get a reference to the underlying matrix that represents the 
     /// rotation.
     #[inline]
@@ -401,27 +404,39 @@ impl<S> Rotation2<S> where S: ScalarFloat {
 }
 
 
-impl<S> fmt::Display for Rotation2<S> where S: fmt::Display {
+impl<S> fmt::Display for Rotation2<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Rotation2 [{}]", self.matrix)
     }
 }
 
-impl<S> From<Rotation2<S>> for Matrix2x2<S> where S: ScalarFloat {
+impl<S> From<Rotation2<S>> for Matrix2x2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(rotation: Rotation2<S>) -> Matrix2x2<S> {
         rotation.matrix
     }
 }
 
-impl<S> From<Rotation2<S>> for Matrix3x3<S> where S: ScalarFloat {
+impl<S> From<Rotation2<S>> for Matrix3x3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(rotation: Rotation2<S>) -> Matrix3x3<S> {
         Matrix3x3::from(&rotation.matrix)
     }
 }
 
-impl<S> approx::AbsDiffEq for Rotation2<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -435,7 +450,10 @@ impl<S> approx::AbsDiffEq for Rotation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Rotation2<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -447,7 +465,10 @@ impl<S> approx::RelativeEq for Rotation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Rotation2<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -459,7 +480,10 @@ impl<S> approx::UlpsEq for Rotation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for Rotation2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -468,7 +492,10 @@ impl<S> ops::Mul<Point2<S>> for Rotation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point2<S>> for Rotation2<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point2<S>> for Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -477,7 +504,10 @@ impl<S> ops::Mul<&Point2<S>> for Rotation2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for &Rotation2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for &Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -486,7 +516,10 @@ impl<S> ops::Mul<Point2<S>> for &Rotation2<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Rotation2<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -509,7 +542,10 @@ pub struct Rotation3<S> {
     matrix: Matrix3x3<S>,
 }
 
-impl<S> Rotation3<S> where S: ScalarFloat {
+impl<S> Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
     /// Get a reference to the underlying matrix that represents the 
     /// rotation.
     #[inline]
@@ -1165,27 +1201,39 @@ impl<S> Rotation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Rotation3<S> where S: fmt::Display {
+impl<S> fmt::Display for Rotation3<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Rotation3 [{}]", self.matrix)
     }
 }
 
-impl<S> From<Rotation3<S>> for Matrix4x4<S> where S: ScalarFloat {
+impl<S> From<Rotation3<S>> for Matrix4x4<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(rotation: Rotation3<S>) -> Matrix4x4<S> {
         Matrix4x4::from(&rotation.matrix)
     }
 }
 
-impl<S> From<Quaternion<S>> for Rotation3<S> where S: ScalarFloat {
+impl<S> From<Quaternion<S>> for Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Rotation3<S> {
         Rotation3::from_quaternion(&quaternion)
     }
 }
 
-impl<S> From<Rotation3<S>> for Quaternion<S> where S: ScalarFloat {
+impl<S> From<Rotation3<S>> for Quaternion<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(rotation: Rotation3<S>) -> Quaternion<S> {
         let matrix = Matrix3x3::new(
@@ -1204,7 +1252,10 @@ impl<S> AsRef<Matrix3x3<S>> for Rotation3<S> {
     }
 }
 
-impl<S> approx::AbsDiffEq for Rotation3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -1218,7 +1269,10 @@ impl<S> approx::AbsDiffEq for Rotation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Rotation3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -1230,7 +1284,10 @@ impl<S> approx::RelativeEq for Rotation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Rotation3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -1242,7 +1299,10 @@ impl<S> approx::UlpsEq for Rotation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Rotation3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for Rotation3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1251,7 +1311,10 @@ impl<S> ops::Mul<Point3<S>> for Rotation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Rotation3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1260,7 +1323,10 @@ impl<S> ops::Mul<&Point3<S>> for Rotation3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Rotation3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &Rotation3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -1269,7 +1335,10 @@ impl<S> ops::Mul<Point3<S>> for &Rotation3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Rotation3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]

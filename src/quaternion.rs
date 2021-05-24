@@ -69,7 +69,10 @@ impl<S> Quaternion<S> {
     }
 }
 
-impl<S> Quaternion<S> where S: Copy {
+impl<S> Quaternion<S> 
+where 
+    S: Copy 
+{
     /// Construct a new quaternion from a fill value. 
     ///
     /// Every component of the resulting vector will have the same value
@@ -143,7 +146,10 @@ impl<S> Quaternion<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Quaternion<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(self, mut op: F) -> Quaternion<T> 
+    where 
+        F: FnMut(S) -> T 
+    {
         Quaternion::new(
             op(self.s),
             op(self.v.x),
@@ -153,7 +159,10 @@ impl<S> Quaternion<S> where S: Copy {
     }
 }
 
-impl<S> Quaternion<S> where S: NumCast + Copy {
+impl<S> Quaternion<S> 
+where 
+    S: NumCast + Copy 
+{
     /// Cast a quaternion from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -184,7 +193,10 @@ impl<S> Quaternion<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Quaternion<S> where S: Scalar {
+impl<S> Quaternion<S> 
+where 
+    S: Scalar 
+{
     /// Returns the unit real quaternion. 
     ///
     /// A real quaternion is a quaternion with zero vector part.
@@ -474,7 +486,10 @@ impl<S> Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> Quaternion<S> where S: ScalarSigned {
+impl<S> Quaternion<S> 
+where 
+    S: ScalarSigned 
+{
     /// Compute the conjugate of a quaternion.
     ///
     /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
@@ -502,7 +517,10 @@ impl<S> Quaternion<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Quaternion<S> where S: ScalarFloat {
+impl<S> Quaternion<S> 
+where 
+    S: ScalarFloat 
+{
     /// Construct a quaternion corresponding to rotating about an axis `axis` 
     /// by an angle `angle` in radians from its unit polar decomposition.
     ///
@@ -1881,42 +1899,60 @@ impl<S> AsMut<(S, S, S, S)> for Quaternion<S> {
     }
 }
 
-impl<S> From<Quaternion<S>> for Matrix3x3<S> where S: ScalarFloat {
+impl<S> From<Quaternion<S>> for Matrix3x3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix3x3<S> {
         quaternion.to_matrix3x3()
     }
 }
 
-impl<S> From<&Quaternion<S>> for Matrix3x3<S> where S: ScalarFloat {
+impl<S> From<&Quaternion<S>> for Matrix3x3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix3x3<S> {
         quaternion.to_matrix3x3()
     }
 }
 
-impl<S> From<Quaternion<S>> for Matrix4x4<S> where S: ScalarFloat {
+impl<S> From<Quaternion<S>> for Matrix4x4<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix4x4<S> {
         quaternion.to_matrix4x4()
     }
 }
 
-impl<S> From<&Quaternion<S>> for Matrix4x4<S> where S: ScalarFloat {
+impl<S> From<&Quaternion<S>> for Matrix4x4<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix4x4<S> {
         quaternion.to_matrix4x4()
     }
 }
 
-impl<S> From<[S; 4]> for Quaternion<S> where S: Scalar {
+impl<S> From<[S; 4]> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: [S; 4]) -> Quaternion<S> {
         Quaternion::new(v[0], v[1], v[2], v[3])
     }
 }
 
-impl<'a, S> From<&'a [S; 4]> for &'a Quaternion<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 4]> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: &'a [S; 4]) -> &'a Quaternion<S> {
         unsafe { 
@@ -1925,14 +1961,20 @@ impl<'a, S> From<&'a [S; 4]> for &'a Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> From<(S, S, S, S)> for Quaternion<S> where S: Scalar {
+impl<S> From<(S, S, S, S)> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: (S, S, S, S)) -> Quaternion<S> {
         Quaternion::new(v.0, v.1, v.2, v.3)
     }
 }
 
-impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> where S: Scalar {
+impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Quaternion<S> {
         unsafe { 
@@ -1941,21 +1983,30 @@ impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> From<Matrix3x3<S>> for Quaternion<S> where S: ScalarFloat {
+impl<S> From<Matrix3x3<S>> for Quaternion<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(matrix: Matrix3x3<S>) -> Quaternion<S> {
         Self::from_matrix(&matrix)
     }
 }
 
-impl<S> From<&Matrix3x3<S>> for Quaternion<S> where S: ScalarFloat {
+impl<S> From<&Matrix3x3<S>> for Quaternion<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(matrix: &Matrix3x3<S>) -> Quaternion<S> {
         Self::from_matrix(matrix)
     }
 }
 
-impl<S> ops::Index<usize> for Quaternion<S> where S: Scalar {
+impl<S> ops::Index<usize> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = S;
 
     #[inline]
@@ -1965,7 +2016,10 @@ impl<S> ops::Index<usize> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Index<ops::Range<usize>> for Quaternion<S> where S: Scalar {
+impl<S> ops::Index<ops::Range<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = [S];
 
     #[inline]
@@ -1975,7 +2029,10 @@ impl<S> ops::Index<ops::Range<usize>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Index<ops::RangeTo<usize>> for Quaternion<S> where S: Scalar {
+impl<S> ops::Index<ops::RangeTo<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = [S];
 
     #[inline]
@@ -1985,7 +2042,10 @@ impl<S> ops::Index<ops::RangeTo<usize>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Index<ops::RangeFrom<usize>> for Quaternion<S> where S: Scalar {
+impl<S> ops::Index<ops::RangeFrom<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = [S];
 
     #[inline]
@@ -1995,7 +2055,10 @@ impl<S> ops::Index<ops::RangeFrom<usize>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Index<ops::RangeFull> for Quaternion<S> where S: Scalar {
+impl<S> ops::Index<ops::RangeFull> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = [S];
 
     #[inline]
@@ -2005,7 +2068,10 @@ impl<S> ops::Index<ops::RangeFull> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::IndexMut<usize> for Quaternion<S> where S: Scalar {
+impl<S> ops::IndexMut<usize> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn index_mut(&mut self, index: usize) -> &mut S {
         let v: &mut [S; 4] = self.as_mut();
@@ -2013,7 +2079,10 @@ impl<S> ops::IndexMut<usize> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::IndexMut<ops::Range<usize>> for Quaternion<S> where S: Scalar {
+impl<S> ops::IndexMut<ops::Range<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
         let v: &mut [S; 4] = self.as_mut();
@@ -2021,7 +2090,10 @@ impl<S> ops::IndexMut<ops::Range<usize>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::IndexMut<ops::RangeTo<usize>> for Quaternion<S> where S: Scalar {
+impl<S> ops::IndexMut<ops::RangeTo<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
         let v: &mut [S; 4] = self.as_mut();
@@ -2029,7 +2101,10 @@ impl<S> ops::IndexMut<ops::RangeTo<usize>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Quaternion<S> where S: Scalar {
+impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
         let v: &mut [S; 4] = self.as_mut();
@@ -2037,7 +2112,10 @@ impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::IndexMut<ops::RangeFull> for Quaternion<S> where S: Scalar {
+impl<S> ops::IndexMut<ops::RangeFull> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
         let v: &mut [S; 4] = self.as_mut();
@@ -2045,7 +2123,10 @@ impl<S> ops::IndexMut<ops::RangeFull> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Quaternion<S> where S: fmt::Display {
+impl<S> fmt::Display for Quaternion<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         writeln!(
             formatter, 
@@ -2055,7 +2136,10 @@ impl<S> fmt::Display for Quaternion<S> where S: fmt::Display {
     }
 }
 
-impl<S> ops::Neg for Quaternion<S> where S: ScalarSigned {
+impl<S> ops::Neg for Quaternion<S> 
+where 
+    S: ScalarSigned 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2064,7 +2148,10 @@ impl<S> ops::Neg for Quaternion<S> where S: ScalarSigned {
     }
 }
 
-impl<'a, S> ops::Neg for &'a Quaternion<S> where S: ScalarSigned {
+impl<'a, S> ops::Neg for &'a Quaternion<S> 
+where 
+    S: ScalarSigned 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2073,7 +2160,10 @@ impl<'a, S> ops::Neg for &'a Quaternion<S> where S: ScalarSigned {
     }
 }
 
-impl<S> ops::Add<Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<S> ops::Add<Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2082,7 +2172,10 @@ impl<S> ops::Add<Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Add<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
+impl<'a, S> ops::Add<Quaternion<S>> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2091,7 +2184,10 @@ impl<'a, S> ops::Add<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Add<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<'a, S> ops::Add<&'a Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2100,7 +2196,10 @@ impl<'a, S> ops::Add<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, 'b, S> ops::Add<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scalar {
+impl<'a, 'b, S> ops::Add<&'a Quaternion<S>> for &'b Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2109,7 +2208,10 @@ impl<'a, 'b, S> ops::Add<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
     }
 }
 
-impl<S> ops::Sub<Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<S> ops::Sub<Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2118,7 +2220,10 @@ impl<S> ops::Sub<Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Sub<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
+impl<'a, S> ops::Sub<Quaternion<S>> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2127,7 +2232,10 @@ impl<'a, S> ops::Sub<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Sub<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<'a, S> ops::Sub<&'a Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2136,7 +2244,10 @@ impl<'a, S> ops::Sub<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, 'b, S> ops::Sub<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scalar {
+impl<'a, 'b, S> ops::Sub<&'a Quaternion<S>> for &'b Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2145,7 +2256,10 @@ impl<'a, 'b, S> ops::Sub<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scala
     }
 }
 
-impl<S> ops::Mul<S> for Quaternion<S> where S: Scalar {
+impl<S> ops::Mul<S> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[inline]
@@ -2157,7 +2271,10 @@ impl<S> ops::Mul<S> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Mul<S> for &Quaternion<S> where S: Scalar {
+impl<S> ops::Mul<S> for &Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[rustfmt::skip]
@@ -2170,7 +2287,10 @@ impl<S> ops::Mul<S> for &Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Mul<Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<'a, S> ops::Mul<Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[rustfmt::skip]
@@ -2185,7 +2305,10 @@ impl<'a, S> ops::Mul<Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Mul<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<'a, S> ops::Mul<&'a Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[rustfmt::skip]
@@ -2200,7 +2323,10 @@ impl<'a, S> ops::Mul<&'a Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Mul<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
+impl<'a, S> ops::Mul<Quaternion<S>> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[rustfmt::skip]
@@ -2215,7 +2341,10 @@ impl<'a, S> ops::Mul<Quaternion<S>> for &'a Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Quaternion<S>> for &'b Quaternion<S> where S: Scalar {
+impl<'a, 'b, S> ops::Mul<&'a Quaternion<S>> for &'b Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[rustfmt::skip]
@@ -2286,7 +2415,10 @@ impl_scalar_quaternion_mul_ops!(f32,   { s, { x, y, z } });
 impl_scalar_quaternion_mul_ops!(f64,   { s, { x, y, z } });
 
 
-impl<S> ops::Div<S> for Quaternion<S> where S: Scalar {
+impl<S> ops::Div<S> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[rustfmt::skip]
@@ -2299,7 +2431,10 @@ impl<S> ops::Div<S> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Div<S> for &'a Quaternion<S> where S: Scalar {
+impl<'a, S> ops::Div<S> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[rustfmt::skip]
@@ -2312,7 +2447,10 @@ impl<'a, S> ops::Div<S> for &'a Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Rem<S> for Quaternion<S> where S: Scalar {
+impl<S> ops::Rem<S> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[rustfmt::skip]
@@ -2325,7 +2463,10 @@ impl<S> ops::Rem<S> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Rem<S> for &Quaternion<S> where S: Scalar {
+impl<S> ops::Rem<S> for &Quaternion<S> 
+where 
+    S: Scalar 
+{
     type Output = Quaternion<S>;
 
     #[rustfmt::skip]
@@ -2338,7 +2479,10 @@ impl<S> ops::Rem<S> for &Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::AddAssign<Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<S> ops::AddAssign<Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn add_assign(&mut self, other: Quaternion<S>) {
         self.s += other.s;
@@ -2346,7 +2490,10 @@ impl<S> ops::AddAssign<Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::AddAssign<&Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<S> ops::AddAssign<&Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn add_assign(&mut self, other: &Quaternion<S>) {
         self.s += other.s;
@@ -2354,7 +2501,10 @@ impl<S> ops::AddAssign<&Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::SubAssign<Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<S> ops::SubAssign<Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn sub_assign(&mut self, other: Quaternion<S>) {
         self.s -= other.s;
@@ -2362,7 +2512,10 @@ impl<S> ops::SubAssign<Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::SubAssign<&Quaternion<S>> for Quaternion<S> where S: Scalar {
+impl<S> ops::SubAssign<&Quaternion<S>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn sub_assign(&mut self, other: &Quaternion<S>) {
         self.s -= other.s;
@@ -2370,7 +2523,10 @@ impl<S> ops::SubAssign<&Quaternion<S>> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::MulAssign<S> for Quaternion<S> where S: Scalar {
+impl<S> ops::MulAssign<S> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn mul_assign(&mut self, other: S) {
         self.s *= other;
@@ -2378,7 +2534,10 @@ impl<S> ops::MulAssign<S> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::DivAssign<S> for Quaternion<S> where S: Scalar {
+impl<S> ops::DivAssign<S> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn div_assign(&mut self, other: S) {
         self.s /= other;
@@ -2386,7 +2545,10 @@ impl<S> ops::DivAssign<S> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> ops::RemAssign<S> for Quaternion<S> where S: Scalar {
+impl<S> ops::RemAssign<S> for Quaternion<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn rem_assign(&mut self, other: S) {
         self.s %= other;
@@ -2394,7 +2556,10 @@ impl<S> ops::RemAssign<S> for Quaternion<S> where S: Scalar {
     }
 }
 
-impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
+impl<S> Magnitude for Quaternion<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = S;
 
     #[inline]
@@ -2439,7 +2604,10 @@ impl<S> Magnitude for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::AbsDiffEq for Quaternion<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Quaternion<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -2454,7 +2622,10 @@ impl<S> approx::AbsDiffEq for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Quaternion<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Quaternion<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -2467,7 +2638,10 @@ impl<S> approx::RelativeEq for Quaternion<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Quaternion<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Quaternion<S> 
+where 
+    S: ScalarFloat
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()

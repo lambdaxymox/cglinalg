@@ -35,7 +35,10 @@ pub struct Reflection2<S> {
     matrix: Matrix3x3<S>,
 }
 
-impl<S> Reflection2<S> where S: ScalarFloat {
+impl<S> Reflection2<S> 
+where 
+    S: ScalarFloat 
+{
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
     #[inline]
@@ -241,7 +244,10 @@ impl<S> AsRef<Matrix3x3<S>> for Reflection2<S> {
     }
 }
 
-impl<S> fmt::Display for Reflection2<S> where S: fmt::Display {
+impl<S> fmt::Display for Reflection2<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -251,21 +257,30 @@ impl<S> fmt::Display for Reflection2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Reflection2<S>> for Matrix3x3<S> where S: Copy {
+impl<S> From<Reflection2<S>> for Matrix3x3<S> 
+where 
+    S: Copy 
+{
     #[inline]
     fn from(transformation: Reflection2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Reflection2<S>> for Matrix3x3<S> where S: Copy {
+impl<S> From<&Reflection2<S>> for Matrix3x3<S> 
+where 
+    S: Copy
+{
     #[inline]
     fn from(transformation: &Reflection2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> approx::AbsDiffEq for Reflection2<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Reflection2<S> 
+where 
+    S: ScalarFloat
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -281,7 +296,10 @@ impl<S> approx::AbsDiffEq for Reflection2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Reflection2<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Reflection2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -295,7 +313,10 @@ impl<S> approx::RelativeEq for Reflection2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Reflection2<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Reflection2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -309,7 +330,10 @@ impl<S> approx::UlpsEq for Reflection2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for Reflection2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for Reflection2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -318,7 +342,10 @@ impl<S> ops::Mul<Point2<S>> for Reflection2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point2<S>> for Reflection2<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point2<S>> for Reflection2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -327,7 +354,10 @@ impl<S> ops::Mul<&Point2<S>> for Reflection2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for &Reflection2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for &Reflection2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -336,7 +366,10 @@ impl<S> ops::Mul<Point2<S>> for &Reflection2<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Reflection2<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Reflection2<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -359,7 +392,10 @@ pub struct Reflection3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> Reflection3<S> where S: ScalarFloat {
+impl<S> Reflection3<S> 
+where 
+    S: ScalarFloat 
+{
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
     #[inline]
@@ -528,7 +564,10 @@ impl<S> AsRef<Matrix4x4<S>> for Reflection3<S> {
     }
 }
 
-impl<S> fmt::Display for Reflection3<S> where S: fmt::Display {
+impl<S> fmt::Display for Reflection3<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -538,21 +577,30 @@ impl<S> fmt::Display for Reflection3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Reflection3<S>> for Matrix4x4<S> where S: Copy {
+impl<S> From<Reflection3<S>> for Matrix4x4<S> 
+where 
+    S: Copy
+{
     #[inline]
     fn from(transformation: Reflection3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Reflection3<S>> for Matrix4x4<S> where S: Copy {
+impl<S> From<&Reflection3<S>> for Matrix4x4<S> 
+where 
+    S: Copy
+{
     #[inline]
     fn from(transformation: &Reflection3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> approx::AbsDiffEq for Reflection3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Reflection3<S> 
+where 
+    S: ScalarFloat
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -568,7 +616,10 @@ impl<S> approx::AbsDiffEq for Reflection3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Reflection3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Reflection3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -582,7 +633,10 @@ impl<S> approx::RelativeEq for Reflection3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Reflection3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Reflection3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -596,7 +650,10 @@ impl<S> approx::UlpsEq for Reflection3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Reflection3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for Reflection3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -605,7 +662,10 @@ impl<S> ops::Mul<Point3<S>> for Reflection3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Reflection3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for Reflection3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -614,7 +674,10 @@ impl<S> ops::Mul<&Point3<S>> for Reflection3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Reflection3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &Reflection3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -623,7 +686,10 @@ impl<S> ops::Mul<Point3<S>> for &Reflection3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Reflection3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Reflection3<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Point3<S>;
 
     #[inline]

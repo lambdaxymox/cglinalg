@@ -27,7 +27,10 @@ pub struct Transform2<S> {
     matrix: Matrix3x3<S>,
 }
 
-impl<S> Transform2<S> where S: Scalar {
+impl<S> Transform2<S> 
+where 
+    S: Scalar 
+{
     /// Convert a 3x3 matrix to a two-dimensional transformation. This 
     /// function is for internal use in implementing type conversions.
     #[inline]
@@ -86,7 +89,10 @@ impl<S> Transform2<S> where S: Scalar {
     }
 }
 
-impl<S> Transform2<S> where S: ScalarFloat {
+impl<S> Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     /// Compute the inverse of the transformation if it exists.
     ///
     /// ## Example
@@ -243,7 +249,10 @@ impl<S> AsRef<Matrix3x3<S>> for Transform2<S> {
     }
 }
 
-impl<S> fmt::Display for Transform2<S> where S: fmt::Display {
+impl<S> fmt::Display for Transform2<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -253,21 +262,30 @@ impl<S> fmt::Display for Transform2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Transform2<S>> for Matrix3x3<S> where S: Copy {
+impl<S> From<Transform2<S>> for Matrix3x3<S> 
+where 
+    S: Copy 
+{
     #[inline]
     fn from(transformation: Transform2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Transform2<S>> for Matrix3x3<S> where S: Copy {
+impl<S> From<&Transform2<S>> for Matrix3x3<S> 
+where 
+    S: Copy 
+{
     #[inline]
     fn from(transformation: &Transform2<S>) -> Matrix3x3<S> {
         transformation.matrix
     }
 }
 
-impl<S> approx::AbsDiffEq for Transform2<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -281,7 +299,10 @@ impl<S> approx::AbsDiffEq for Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Transform2<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -293,7 +314,10 @@ impl<S> approx::RelativeEq for Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Transform2<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -305,7 +329,10 @@ impl<S> approx::UlpsEq for Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for Transform2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -314,7 +341,10 @@ impl<S> ops::Mul<Point2<S>> for Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point2<S>> for Transform2<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point2<S>> for Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -323,7 +353,10 @@ impl<S> ops::Mul<&Point2<S>> for Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for &Transform2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for &Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -332,7 +365,10 @@ impl<S> ops::Mul<Point2<S>> for &Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Transform2<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -341,7 +377,10 @@ impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Transform2<S> where S: ScalarFlo
     }
 }
 
-impl<S> ops::Mul<Transform2<S>> for Transform2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Transform2<S>> for Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Transform2<S>;
 
     #[inline]
@@ -352,7 +391,10 @@ impl<S> ops::Mul<Transform2<S>> for Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Transform2<S>> for Transform2<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Transform2<S>> for Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Transform2<S>;
 
     #[inline]
@@ -363,7 +405,10 @@ impl<S> ops::Mul<&Transform2<S>> for Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Transform2<S>> for &Transform2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Transform2<S>> for &Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Transform2<S>;
 
     #[inline]
@@ -374,7 +419,10 @@ impl<S> ops::Mul<Transform2<S>> for &Transform2<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Transform2<S>> for &'b Transform2<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Transform2<S>> for &'b Transform2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Transform2<S>;
 
     #[inline]
@@ -394,7 +442,10 @@ pub struct Transform3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> Transform3<S> where S: Scalar {
+impl<S> Transform3<S> 
+where 
+    S: Scalar 
+{
     /// Convert a 4x4 matrix to a three-dimensional transformation. 
     /// This function is for internal use in implementing type conversions.
     #[inline]
@@ -453,7 +504,10 @@ impl<S> Transform3<S> where S: Scalar {
     }
 }
 
-impl<S> Transform3<S> where S: ScalarFloat {
+impl<S> Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     /// Compute the inverse of the transformation if it exists.
     ///
     /// ## Example
@@ -621,7 +675,10 @@ impl<S> AsRef<Matrix4x4<S>> for Transform3<S> {
     }
 }
 
-impl<S> fmt::Display for Transform3<S> where S: fmt::Display {
+impl<S> fmt::Display for Transform3<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter,
@@ -631,21 +688,30 @@ impl<S> fmt::Display for Transform3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<Transform3<S>> for Matrix4x4<S> where S: Copy {
+impl<S> From<Transform3<S>> for Matrix4x4<S> 
+where 
+    S: Copy 
+{
     #[inline]
     fn from(transformation: Transform3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> From<&Transform3<S>> for Matrix4x4<S> where S: Copy {
+impl<S> From<&Transform3<S>> for Matrix4x4<S> 
+where 
+    S: Copy 
+{
     #[inline]
     fn from(transformation: &Transform3<S>) -> Matrix4x4<S> {
         transformation.matrix
     }
 }
 
-impl<S> approx::AbsDiffEq for Transform3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -659,7 +725,10 @@ impl<S> approx::AbsDiffEq for Transform3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Transform3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -671,7 +740,10 @@ impl<S> approx::RelativeEq for Transform3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Transform3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -683,7 +755,10 @@ impl<S> approx::UlpsEq for Transform3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Transform3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -692,7 +767,10 @@ impl<S> ops::Mul<Point3<S>> for Transform3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Transform3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -701,7 +779,10 @@ impl<S> ops::Mul<&Point3<S>> for Transform3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Transform3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -710,7 +791,10 @@ impl<S> ops::Mul<Point3<S>> for &Transform3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Transform3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -719,7 +803,10 @@ impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Transform3<S> where S: ScalarFlo
     }
 }
 
-impl<S> ops::Mul<Transform3<S>> for Transform3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Transform3<S>> for Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Transform3<S>;
 
     #[inline]
@@ -730,7 +817,10 @@ impl<S> ops::Mul<Transform3<S>> for Transform3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Transform3<S>> for Transform3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Transform3<S>> for Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Transform3<S>;
 
     #[inline]
@@ -741,7 +831,10 @@ impl<S> ops::Mul<&Transform3<S>> for Transform3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Transform3<S>> for &Transform3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Transform3<S>> for &Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Transform3<S>;
 
     #[inline]
@@ -752,7 +845,10 @@ impl<S> ops::Mul<Transform3<S>> for &Transform3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Transform3<S>> for &'b Transform3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Transform3<S>> for &'b Transform3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Transform3<S>;
 
     #[inline]

@@ -32,7 +32,10 @@ pub struct Shear2<S> {
     matrix: Matrix2x2<S>,
 }
 
-impl<S> Shear2<S> where S: ScalarSigned {
+impl<S> Shear2<S> 
+where 
+    S: ScalarSigned 
+{
     /// Construct a shearing transformation along the **x-axis**, holding the 
     /// **y-axis** constant.
     ///
@@ -220,7 +223,10 @@ impl<S> Shear2<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Shear2<S> where S: ScalarFloat {
+impl<S> Shear2<S> 
+where 
+    S: ScalarFloat 
+{
     /// Compute the inverse of the shear transformation.
     ///
     /// ## Example
@@ -321,41 +327,59 @@ impl<S> AsRef<Matrix2x2<S>> for Shear2<S> {
     }
 }
 
-impl<S> fmt::Display for Shear2<S> where S: fmt::Display {
+impl<S> fmt::Display for Shear2<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Shear2 [{}]", self.matrix)
     }
 }
 
-impl<S> From<Shear2<S>> for Matrix2x2<S> where S: ScalarSigned {
+impl<S> From<Shear2<S>> for Matrix2x2<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(shear: Shear2<S>) -> Matrix2x2<S> {
         shear.matrix
     }
 }
 
-impl<S> From<&Shear2<S>> for Matrix2x2<S> where S: ScalarSigned {
+impl<S> From<&Shear2<S>> for Matrix2x2<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(shear: &Shear2<S>) -> Matrix2x2<S> {
         shear.matrix
     }
 }
 
-impl<S> From<Shear2<S>> for Matrix3x3<S> where S: ScalarSigned {
+impl<S> From<Shear2<S>> for Matrix3x3<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(shear: Shear2<S>) -> Matrix3x3<S> {
         Matrix3x3::from(&shear.matrix)
     }
 }
 
-impl<S> From<&Shear2<S>> for Matrix3x3<S> where S: ScalarSigned {
+impl<S> From<&Shear2<S>> for Matrix3x3<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(shear: &Shear2<S>) -> Matrix3x3<S> {
         Matrix3x3::from(&shear.matrix)
     }
 }
 
-impl<S> approx::AbsDiffEq for Shear2<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Shear2<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -369,7 +393,10 @@ impl<S> approx::AbsDiffEq for Shear2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Shear2<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Shear2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -381,7 +408,10 @@ impl<S> approx::RelativeEq for Shear2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Shear2<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Shear2<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -393,7 +423,10 @@ impl<S> approx::UlpsEq for Shear2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for Shear2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for Shear2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -402,7 +435,10 @@ impl<S> ops::Mul<Point2<S>> for Shear2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point2<S>> for Shear2<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point2<S>> for Shear2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -411,7 +447,10 @@ impl<S> ops::Mul<&Point2<S>> for Shear2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point2<S>> for &Shear2<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point2<S>> for &Shear2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -420,7 +459,10 @@ impl<S> ops::Mul<Point2<S>> for &Shear2<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Shear2<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Shear2<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point2<S>;
 
     #[inline]
@@ -438,7 +480,10 @@ pub struct Shear3<S> {
     matrix: Matrix3x3<S>,
 }
 
-impl<S> Shear3<S> where S: ScalarSigned {
+impl<S> Shear3<S> 
+where 
+    S: ScalarSigned 
+{
     /// Construct a shearing transformation along the **x-axis**.
     ///
     /// The parameters `shear_x_with_y` and `shear_x_with_z` denote the 
@@ -715,7 +760,10 @@ impl<S> Shear3<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Shear3<S> where S: ScalarFloat {
+impl<S> Shear3<S> 
+where 
+    S: ScalarFloat 
+{
     /// Calculate the inverse of a shear transformation.
     ///
     /// ## Example
@@ -830,40 +878,58 @@ impl<S> AsRef<Matrix3x3<S>> for Shear3<S> {
     }
 }
 
-impl<S> fmt::Display for Shear3<S> where S: fmt::Display {
+impl<S> fmt::Display for Shear3<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Shear3 [{}]", self.matrix)
     }
 }
 
-impl<S> From<Shear3<S>> for Matrix3x3<S> where S: ScalarSigned {
+impl<S> From<Shear3<S>> for Matrix3x3<S> 
+where 
+    S: ScalarSigned 
+{
     fn from(shear: Shear3<S>) -> Matrix3x3<S> {
         shear.matrix
     }
 }
 
-impl<S> From<&Shear3<S>> for Matrix3x3<S> where S: ScalarSigned {
+impl<S> From<&Shear3<S>> for Matrix3x3<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(shear: &Shear3<S>) -> Matrix3x3<S> {
         shear.matrix
     }
 }
 
-impl<S> From<Shear3<S>> for Matrix4x4<S> where S: ScalarSigned {
+impl<S> From<Shear3<S>> for Matrix4x4<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(shear: Shear3<S>) -> Matrix4x4<S> {
         Matrix4x4::from(&shear.matrix)
     }
 }
 
-impl<S> From<&Shear3<S>> for Matrix4x4<S> where S: ScalarSigned {
+impl<S> From<&Shear3<S>> for Matrix4x4<S> 
+where 
+    S: ScalarSigned 
+{
     #[inline]
     fn from(shear: &Shear3<S>) -> Matrix4x4<S> {
         Matrix4x4::from(&shear.matrix)
     }
 }
 
-impl<S> approx::AbsDiffEq for Shear3<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Shear3<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -877,7 +943,10 @@ impl<S> approx::AbsDiffEq for Shear3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Shear3<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Shear3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -889,7 +958,10 @@ impl<S> approx::RelativeEq for Shear3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Shear3<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Shear3<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -901,7 +973,10 @@ impl<S> approx::UlpsEq for Shear3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Shear3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for Shear3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -910,7 +985,10 @@ impl<S> ops::Mul<Point3<S>> for Shear3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Shear3<S> where S: ScalarFloat {
+impl<S> ops::Mul<&Point3<S>> for Shear3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -919,7 +997,10 @@ impl<S> ops::Mul<&Point3<S>> for Shear3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Shear3<S> where S: ScalarFloat {
+impl<S> ops::Mul<Point3<S>> for &Shear3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]
@@ -928,7 +1009,10 @@ impl<S> ops::Mul<Point3<S>> for &Shear3<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Shear3<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Shear3<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Point3<S>;
 
     #[inline]

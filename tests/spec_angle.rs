@@ -12,7 +12,8 @@ use cglinalg::{
 
 
 fn any_scalar<S>() -> impl Strategy<Value = S>
-    where S: Scalar + Arbitrary
+where 
+    S: Scalar + Arbitrary
 {
     any::<S>().prop_map(|scalar| {
         let modulus = num_traits::cast(100_000_000).unwrap();
@@ -22,7 +23,8 @@ fn any_scalar<S>() -> impl Strategy<Value = S>
 }
 
 fn any_radians<S>() -> impl Strategy<Value = Radians<S>> 
-    where S: Scalar + Arbitrary
+where 
+    S: Scalar + Arbitrary
 {
     any::<S>()
         .prop_map(|dimensionless| {
@@ -34,7 +36,8 @@ fn any_radians<S>() -> impl Strategy<Value = Radians<S>>
 }
 
 fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
-    where S: Scalar + Arbitrary
+where 
+    S: Scalar + Arbitrary
 {
     any::<S>()
         .prop_map(|dimensionless| {

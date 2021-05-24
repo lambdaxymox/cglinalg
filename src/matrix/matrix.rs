@@ -68,7 +68,10 @@ impl<S> Matrix1x1<S> {
     }
 }
 
-impl<S> Matrix1x1<S> where S: Copy {
+impl<S> Matrix1x1<S> 
+where 
+    S: Copy
+{
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector1<S> {
@@ -138,7 +141,10 @@ impl<S> Matrix1x1<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix1x1<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix1x1<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix1x1 {
             data: [
                 [op(self.data[0][0])]
@@ -147,7 +153,10 @@ impl<S> Matrix1x1<S> where S: Copy {
     }
 }
 
-impl<S> Matrix1x1<S> where S: NumCast + Copy {
+impl<S> Matrix1x1<S>
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -174,7 +183,10 @@ impl<S> Matrix1x1<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix1x1<S> where S: Scalar {
+impl<S> Matrix1x1<S> 
+where 
+    S: Scalar 
+{
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -277,7 +289,10 @@ impl<S> Matrix1x1<S> where S: Scalar {
     }
 }
 
-impl<S> Matrix1x1<S> where S: ScalarSigned {
+impl<S> Matrix1x1<S> 
+where 
+    S: ScalarSigned 
+{
      /// Compute the determinant of a matrix.
     /// 
     /// The determinant of a matrix is the signed volume of the parallelepiped
@@ -300,7 +315,10 @@ impl<S> Matrix1x1<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Matrix1x1<S> where S: ScalarFloat {
+impl<S> Matrix1x1<S> 
+where 
+    S: ScalarFloat
+{
     /// Compute the inverse of a square matrix, if the inverse exists. 
     ///
     /// Given a square matrix `self` Compute the matrix `m` if it exists 
@@ -358,20 +376,29 @@ impl<S> Matrix1x1<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Matrix1x1<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix1x1<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Matrix1x1 [[{}]]", self.data[0][0])
     }
 }
 
-impl<S> From<[[S; 1]; 1]> for Matrix1x1<S> where S: Scalar {
+impl<S> From<[[S; 1]; 1]> for Matrix1x1<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(array: [[S; 1]; 1]) -> Matrix1x1<S> {
         Matrix1x1::new(array[0][0])
     }
 }
 
-impl<'a, S> From<&'a [[S; 1]; 1]> for &'a Matrix1x1<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 1]; 1]> for &'a Matrix1x1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 1]; 1]) -> &'a Matrix1x1<S> {
         unsafe { 
@@ -380,14 +407,20 @@ impl<'a, S> From<&'a [[S; 1]; 1]> for &'a Matrix1x1<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 1]> for Matrix1x1<S> where S: Scalar {
+impl<S> From<[S; 1]> for Matrix1x1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 1]) -> Matrix1x1<S> {
         Matrix1x1::new(array[0])
     }
 }
 
-impl<'a, S> From<&'a [S; 1]> for &'a Matrix1x1<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 1]> for &'a Matrix1x1<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 1]) -> &'a Matrix1x1<S> {
         unsafe { 
@@ -417,7 +450,10 @@ impl<S> Matrix2x2<S> {
     }
 }
 
-impl<S> Matrix2x2<S> where S: Copy {
+impl<S> Matrix2x2<S> 
+where 
+    S: Copy 
+{
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -599,7 +635,10 @@ impl<S> Matrix2x2<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix2x2<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix2x2<T> 
+    where 
+        F: FnMut(S) -> T 
+    {
         Matrix2x2 {
             data: [
                 [op(self.data[0][0]), op(self.data[0][1])],
@@ -609,7 +648,10 @@ impl<S> Matrix2x2<S> where S: Copy {
     }
 }
 
-impl<S> Matrix2x2<S> where S: NumCast + Copy {
+impl<S> Matrix2x2<S> 
+where 
+    S: NumCast + Copy 
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -648,7 +690,10 @@ impl<S> Matrix2x2<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix2x2<S> where S: Scalar {
+impl<S> Matrix2x2<S> 
+where 
+    S: Scalar 
+{
     /// Construct a shearing matrix along the x-axis, holding the **y-axis** constant.
     ///
     /// The parameter `shear_x_with_y` denotes the factor scaling the
@@ -1051,7 +1096,10 @@ impl<S> Matrix2x2<S> where S: Scalar {
     }
 }
 
-impl<S> Matrix2x2<S> where S: ScalarSigned {
+impl<S> Matrix2x2<S> 
+where 
+    S: ScalarSigned 
+{
     /// Construct a two-dimensional reflection matrix for reflecting through a 
     /// line through the origin in the **xy-plane**.
     ///
@@ -1158,7 +1206,10 @@ impl<S> Matrix2x2<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Matrix2x2<S> where S: ScalarFloat {
+impl<S> Matrix2x2<S> 
+where 
+    S: ScalarFloat
+{
     /// Construct a rotation matrix in two-dimensions that rotates a vector
     /// in the **xy-plane** by an angle `angle`.
     ///
@@ -1456,7 +1507,10 @@ impl<S> Matrix2x2<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Matrix2x2<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix2x2<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         writeln!(
             formatter, 
@@ -1467,14 +1521,20 @@ impl<S> fmt::Display for Matrix2x2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 2]; 2]> for Matrix2x2<S> where S: Scalar {
+impl<S> From<[[S; 2]; 2]> for Matrix2x2<S>
+where
+    S: Scalar
+{
     #[inline]
     fn from(array: [[S; 2]; 2]) -> Matrix2x2<S> {
         Matrix2x2::new(array[0][0], array[0][1], array[1][0], array[1][1])
     }
 }
 
-impl<'a, S> From<&'a [[S; 2]; 2]> for &'a Matrix2x2<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 2]; 2]> for &'a Matrix2x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 2]; 2]) -> &'a Matrix2x2<S> {
         unsafe { 
@@ -1483,14 +1543,20 @@ impl<'a, S> From<&'a [[S; 2]; 2]> for &'a Matrix2x2<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 4]> for Matrix2x2<S> where S: Scalar {
+impl<S> From<[S; 4]> for Matrix2x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 4]) -> Matrix2x2<S> {
         Matrix2x2::new(array[0], array[1], array[2], array[3])
     }
 }
 
-impl<'a, S> From<&'a [S; 4]> for &'a Matrix2x2<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 4]> for &'a Matrix2x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 4]) -> &'a Matrix2x2<S> {
         unsafe { 
@@ -1526,7 +1592,10 @@ impl<S> Matrix3x3<S> {
     }
 }
 
-impl<S> Matrix3x3<S> where S: Copy {
+impl<S> Matrix3x3<S> 
+where 
+    S: Copy
+{
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -1747,7 +1816,10 @@ impl<S> Matrix3x3<S> where S: Copy {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Matrix3x3<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(self, mut op: F) -> Matrix3x3<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix3x3::new(
             op(self.data[0][0]), 
             op(self.data[0][1]), 
@@ -1762,7 +1834,10 @@ impl<S> Matrix3x3<S> where S: Copy {
     }
 }
 
-impl<S> Matrix3x3<S> where S: NumCast + Copy {
+impl<S> Matrix3x3<S>
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -1834,7 +1909,10 @@ impl<S> Matrix3x3<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix3x3<S> where S: Scalar {
+impl<S> Matrix3x3<S> 
+where 
+    S: Scalar
+{
     /// Construct a two-dimensional affine translation matrix.
     ///
     /// This represents a translation in the **xy-plane** as an affine 
@@ -2587,7 +2665,10 @@ impl<S> Matrix3x3<S> where S: Scalar {
     }
 }
 
-impl<S> Matrix3x3<S> where S: ScalarSigned {
+impl<S> Matrix3x3<S> 
+where 
+    S: ScalarSigned
+{
     /// Construct a two-dimensional affine reflection matrix in the **xy-plane** 
     /// for a line with normal vector `normal` and bias vector `bias`. The bias 
     /// vector can be any known point on the line of reflection.
@@ -2855,7 +2936,10 @@ impl<S> Matrix3x3<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Matrix3x3<S> where S: ScalarFloat {
+impl<S> Matrix3x3<S> 
+where 
+    S: ScalarFloat
+{
     /// Construct an affine rotation matrix in two dimensions that rotates a 
     /// vector in the **xy-plane** by an angle `angle`.
     ///
@@ -3450,7 +3534,10 @@ impl<S> Matrix3x3<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Matrix3x3<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix3x3<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         writeln!(
             formatter, 
@@ -3462,7 +3549,10 @@ impl<S> fmt::Display for Matrix3x3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 3]; 3]> for Matrix3x3<S> where S: Scalar {
+impl<S> From<[[S; 3]; 3]> for Matrix3x3<S> 
+where 
+    S: Scalar 
+{
     #[rustfmt::skip]
     #[inline]
     fn from(array: [[S; 3]; 3]) -> Matrix3x3<S> {
@@ -3474,7 +3564,10 @@ impl<S> From<[[S; 3]; 3]> for Matrix3x3<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [[S; 3]; 3]> for &'a Matrix3x3<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 3]; 3]> for &'a Matrix3x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 3]; 3]) -> &'a Matrix3x3<S> {
         unsafe { 
@@ -3483,7 +3576,10 @@ impl<'a, S> From<&'a [[S; 3]; 3]> for &'a Matrix3x3<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 9]> for Matrix3x3<S> where S: Scalar {
+impl<S> From<[S; 9]> for Matrix3x3<S> 
+where 
+    S: Scalar
+{
     #[rustfmt::skip]
     #[inline]
     fn from(array: [S; 9]) -> Matrix3x3<S> {
@@ -3495,7 +3591,10 @@ impl<S> From<[S; 9]> for Matrix3x3<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [S; 9]> for &'a Matrix3x3<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 9]> for &'a Matrix3x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 9]) -> &'a Matrix3x3<S> {
         unsafe { 
@@ -3504,7 +3603,10 @@ impl<'a, S> From<&'a [S; 9]> for &'a Matrix3x3<S> where S: Scalar {
     }
 }
 
-impl<S> From<Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
+impl<S> From<Matrix2x2<S>> for Matrix3x3<S> 
+where 
+    S: Scalar
+{
     #[rustfmt::skip]
     #[inline]
     fn from(matrix: Matrix2x2<S>) -> Matrix3x3<S> {
@@ -3516,7 +3618,10 @@ impl<S> From<Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
     }
 }
 
-impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> where S: Scalar {
+impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> 
+where 
+    S: Scalar
+{
     #[rustfmt::skip]
     #[inline]
     fn from(matrix: &Matrix2x2<S>) -> Matrix3x3<S> {
@@ -3557,7 +3662,10 @@ impl<S> Matrix4x4<S> {
     }
 }
 
-impl<S> Matrix4x4<S> where S: Copy {
+impl<S> Matrix4x4<S> 
+where 
+    S: Copy
+{
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -3805,7 +3913,10 @@ impl<S> Matrix4x4<S> where S: Copy {
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix4x4::new(
             op(self.data[0][0]), 
             op(self.data[0][1]), 
@@ -3827,7 +3938,10 @@ impl<S> Matrix4x4<S> where S: Copy {
     }
 }
 
-impl<S> Matrix4x4<S> where S: NumCast + Copy {
+impl<S> Matrix4x4<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -3930,7 +4044,10 @@ impl<S> Matrix4x4<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix4x4<S> where S: Scalar {
+impl<S> Matrix4x4<S>
+where 
+    S: Scalar
+{
     /// Construct an affine translation matrix in three-dimensions.
     ///
     ///
@@ -4581,7 +4698,10 @@ impl<S> Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<S> Matrix4x4<S> where S: ScalarSigned {
+impl<S> Matrix4x4<S> 
+where 
+    S: ScalarSigned
+{
     /// Construct a three-dimensional affine reflection matrix for a plane with
     /// normal vector `normal` and bias vector `bias`. The bias vector can be 
     /// any known point on the plane of reflection.
@@ -4799,7 +4919,10 @@ impl<S> Matrix4x4<S> where S: ScalarSigned {
     }
 }
 
-impl<S> Matrix4x4<S> where S: ScalarFloat {
+impl<S> Matrix4x4<S> 
+where 
+    S: ScalarFloat
+{
     /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
     /// **x-axis** by an angle `angle` radians/degrees.
     ///
@@ -5592,7 +5715,10 @@ impl<S> Matrix4x4<S> where S: ScalarFloat {
     }
 }
 
-impl<S> fmt::Display for Matrix4x4<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix4x4<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         // We print the matrix contents in row-major order like mathematical convention.
         writeln!(
@@ -5606,7 +5732,10 @@ impl<S> fmt::Display for Matrix4x4<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 4]; 4]> for Matrix4x4<S> where S: Scalar {
+impl<S> From<[[S; 4]; 4]> for Matrix4x4<S> 
+where 
+    S: Scalar
+{
     #[rustfmt::skip]
     #[inline]
     fn from(array: [[S; 4]; 4]) -> Matrix4x4<S> {
@@ -5619,7 +5748,10 @@ impl<S> From<[[S; 4]; 4]> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [[S; 4]; 4]> for &'a Matrix4x4<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 4]; 4]> for &'a Matrix4x4<S>
+where
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 4]; 4]) -> &'a Matrix4x4<S> {
         unsafe { 
@@ -5628,7 +5760,10 @@ impl<'a, S> From<&'a [[S; 4]; 4]> for &'a Matrix4x4<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 16]> for Matrix4x4<S> where S: Scalar {
+impl<S> From<[S; 16]> for Matrix4x4<S> 
+where 
+    S: Scalar
+{
     #[rustfmt::skip]
     #[inline]
     fn from(array: [S; 16]) -> Matrix4x4<S> {
@@ -5641,7 +5776,10 @@ impl<S> From<[S; 16]> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [S; 16]> for &'a Matrix4x4<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 16]> for &'a Matrix4x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 16]) -> &'a Matrix4x4<S> {
         unsafe { 
@@ -5650,7 +5788,10 @@ impl<'a, S> From<&'a [S; 16]> for &'a Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<S> From<Matrix2x2<S>> for Matrix4x4<S> where S: Scalar {
+impl<S> From<Matrix2x2<S>> for Matrix4x4<S> 
+where 
+    S: Scalar 
+{
     #[rustfmt::skip]
     #[inline]
     fn from(matrix: Matrix2x2<S>) -> Matrix4x4<S> {
@@ -5665,7 +5806,10 @@ impl<S> From<Matrix2x2<S>> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<S> From<&Matrix2x2<S>> for Matrix4x4<S> where S: Scalar {
+impl<S> From<&Matrix2x2<S>> for Matrix4x4<S> 
+where 
+    S: Scalar
+{
     #[rustfmt::skip]
     #[inline]
     fn from(matrix: &Matrix2x2<S>) -> Matrix4x4<S> {
@@ -5680,7 +5824,10 @@ impl<S> From<&Matrix2x2<S>> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<S> From<Matrix3x3<S>> for Matrix4x4<S> where S: Scalar {
+impl<S> From<Matrix3x3<S>> for Matrix4x4<S> 
+where 
+    S: Scalar
+{
     #[rustfmt::skip]
     #[inline]
     fn from(matrix: Matrix3x3<S>) -> Matrix4x4<S> {
@@ -5695,7 +5842,10 @@ impl<S> From<Matrix3x3<S>> for Matrix4x4<S> where S: Scalar {
     }
 }
 
-impl<S> From<&Matrix3x3<S>> for Matrix4x4<S> where S: Scalar {
+impl<S> From<&Matrix3x3<S>> for Matrix4x4<S> 
+where 
+    S: Scalar
+{
     #[rustfmt::skip]
     #[inline]
     fn from(matrix: &Matrix3x3<S>) -> Matrix4x4<S> {
@@ -5731,7 +5881,10 @@ impl<S> Matrix1x2<S> {
     }
 }
 
-impl<S> Matrix1x2<S> where S: Copy {
+impl<S> Matrix1x2<S> 
+where 
+    S: Copy
+{
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector2<S> {
@@ -5795,7 +5948,10 @@ impl<S> Matrix1x2<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix1x2<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix1x2<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix1x2 {
             data: [
                 [op(self.data[0][0])],
@@ -5805,7 +5961,10 @@ impl<S> Matrix1x2<S> where S: Copy {
     }
 }
 
-impl<S> Matrix1x2<S> where S: NumCast + Copy {
+impl<S> Matrix1x2<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -5836,7 +5995,10 @@ impl<S> Matrix1x2<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix1x2<S> where S: Scalar {
+impl<S> Matrix1x2<S> 
+where 
+    S: Scalar
+{
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -5876,7 +6038,10 @@ impl<S> Matrix1x2<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix1x2<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix1x2<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -5886,14 +6051,20 @@ impl<S> fmt::Display for Matrix1x2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 1]; 2]> for Matrix1x2<S> where S: Scalar {
+impl<S> From<[[S; 1]; 2]> for Matrix1x2<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(array: [[S; 1]; 2]) -> Matrix1x2<S> {
         Matrix1x2::new(array[0][0], array[1][0])
     }
 }
 
-impl<'a, S> From<&'a [[S; 1]; 2]> for &'a Matrix1x2<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 1]; 2]> for &'a Matrix1x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 1]; 2]) -> &'a Matrix1x2<S> {
         unsafe { 
@@ -5902,14 +6073,20 @@ impl<'a, S> From<&'a [[S; 1]; 2]> for &'a Matrix1x2<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 2]> for Matrix1x2<S> where S: Scalar {
+impl<S> From<[S; 2]> for Matrix1x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 2]) -> Matrix1x2<S> {
         Matrix1x2::new(array[0], array[1])
     }
 }
 
-impl<'a, S> From<&'a [S; 2]> for &'a Matrix1x2<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 2]> for &'a Matrix1x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 2]) -> &'a Matrix1x2<S> {
         unsafe { 
@@ -5940,7 +6117,10 @@ impl<S> Matrix1x3<S> {
     }
 }
 
-impl<S> Matrix1x3<S> where S: Copy {
+impl<S> Matrix1x3<S> 
+where 
+    S: Copy 
+{
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector3<S> {
@@ -6004,7 +6184,10 @@ impl<S> Matrix1x3<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix1x3<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix1x3<T> 
+    where 
+        F: FnMut(S) -> T 
+    {
         Matrix1x3 {
             data: [
                 [op(self.data[0][0])],
@@ -6015,7 +6198,10 @@ impl<S> Matrix1x3<S> where S: Copy {
     }
 }
 
-impl<S> Matrix1x3<S> where S: NumCast + Copy {
+impl<S> Matrix1x3<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -6050,7 +6236,10 @@ impl<S> Matrix1x3<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix1x3<S> where S: Scalar {
+impl<S> Matrix1x3<S> 
+where 
+    S: Scalar
+{
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -6092,7 +6281,10 @@ impl<S> Matrix1x3<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix1x3<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix1x3<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -6102,14 +6294,20 @@ impl<S> fmt::Display for Matrix1x3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 1]; 3]> for Matrix1x3<S> where S: Scalar {
+impl<S> From<[[S; 1]; 3]> for Matrix1x3<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(array: [[S; 1]; 3]) -> Matrix1x3<S> {
         Matrix1x3::new(array[0][0], array[1][0], array[2][0])
     }
 }
 
-impl<'a, S> From<&'a [[S; 1]; 3]> for &'a Matrix1x3<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 1]; 3]> for &'a Matrix1x3<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(array: &'a [[S; 1]; 3]) -> &'a Matrix1x3<S> {
         unsafe { 
@@ -6118,14 +6316,20 @@ impl<'a, S> From<&'a [[S; 1]; 3]> for &'a Matrix1x3<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 3]> for Matrix1x3<S> where S: Scalar {
+impl<S> From<[S; 3]> for Matrix1x3<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(array: [S; 3]) -> Matrix1x3<S> {
         Matrix1x3::new(array[0], array[1], array[2])
     }
 }
 
-impl<'a, S> From<&'a [S; 3]> for &'a Matrix1x3<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 3]> for &'a Matrix1x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 3]) -> &'a Matrix1x3<S> {
         unsafe { 
@@ -6157,7 +6361,10 @@ impl<S> Matrix1x4<S> {
     }
 }
 
-impl<S> Matrix1x4<S> where S: Copy {
+impl<S> Matrix1x4<S> 
+where 
+    S: Copy
+{
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector4<S> {
@@ -6226,7 +6433,10 @@ impl<S> Matrix1x4<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix1x4<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix1x4<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix1x4 {
             data: [
                 [op(self.data[0][0])],
@@ -6238,7 +6448,10 @@ impl<S> Matrix1x4<S> where S: Copy {
     }
 }
 
-impl<S> Matrix1x4<S> where S: NumCast + Copy {
+impl<S> Matrix1x4<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -6277,7 +6490,10 @@ impl<S> Matrix1x4<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix1x4<S> where S: Scalar {
+impl<S> Matrix1x4<S> 
+where 
+    S: Scalar
+{
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -6320,7 +6536,10 @@ impl<S> Matrix1x4<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix1x4<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix1x4<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
             formatter, 
@@ -6330,14 +6549,20 @@ impl<S> fmt::Display for Matrix1x4<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 1]; 4]> for Matrix1x4<S> where S: Scalar {
+impl<S> From<[[S; 1]; 4]> for Matrix1x4<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn from(array: [[S; 1]; 4]) -> Matrix1x4<S> {
         Matrix1x4::new(array[0][0], array[1][0], array[2][0], array[3][0])
     }
 }
 
-impl<'a, S> From<&'a [[S; 1]; 4]> for &'a Matrix1x4<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 1]; 4]> for &'a Matrix1x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 1]; 4]) -> &'a Matrix1x4<S> {
         unsafe { 
@@ -6346,14 +6571,20 @@ impl<'a, S> From<&'a [[S; 1]; 4]> for &'a Matrix1x4<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 4]> for Matrix1x4<S> where S: Scalar {
+impl<S> From<[S; 4]> for Matrix1x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 4]) -> Matrix1x4<S> {
         Matrix1x4::new(array[0], array[1], array[2], array[3])
     }
 }
 
-impl<'a, S> From<&'a [S; 4]> for &'a Matrix1x4<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 4]> for &'a Matrix1x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 4]) -> &'a Matrix1x4<S> {
         unsafe { 
@@ -6386,7 +6617,10 @@ impl<S> Matrix2x3<S> {
     }
 }
 
-impl<S> Matrix2x3<S> where S: Copy {
+impl<S> Matrix2x3<S> 
+where 
+    S: Copy 
+{
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -6596,7 +6830,10 @@ impl<S> Matrix2x3<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix2x3<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix2x3<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix2x3 {
             data: [
                 [op(self.data[0][0]), op(self.data[0][1])],
@@ -6607,7 +6844,10 @@ impl<S> Matrix2x3<S> where S: Copy {
     }
 }
 
-impl<S> Matrix2x3<S> where S: NumCast + Copy {
+impl<S> Matrix2x3<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -6739,7 +6979,10 @@ impl<S> Matrix2x3<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix2x3<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix2x3<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         // NOTE: We display matrices in traditional row-major order.
         write!(
@@ -6751,7 +6994,10 @@ impl<S> fmt::Display for Matrix2x3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 2]; 3]> for Matrix2x3<S> where S: Scalar {
+impl<S> From<[[S; 2]; 3]> for Matrix2x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [[S; 2]; 3]) -> Matrix2x3<S> {
         Matrix2x3::new(
@@ -6762,7 +7008,10 @@ impl<S> From<[[S; 2]; 3]> for Matrix2x3<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [[S; 2]; 3]> for &'a Matrix2x3<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 2]; 3]> for &'a Matrix2x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 2]; 3]) -> &'a Matrix2x3<S> {
         unsafe { 
@@ -6771,7 +7020,10 @@ impl<'a, S> From<&'a [[S; 2]; 3]> for &'a Matrix2x3<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 6]> for Matrix2x3<S> where S: Scalar {
+impl<S> From<[S; 6]> for Matrix2x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 6]) -> Matrix2x3<S> {
         Matrix2x3::new(
@@ -6782,7 +7034,10 @@ impl<S> From<[S; 6]> for Matrix2x3<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [S; 6]> for &'a Matrix2x3<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 6]> for &'a Matrix2x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 6]) -> &'a Matrix2x3<S> {
         unsafe { 
@@ -6814,7 +7069,10 @@ impl<S> Matrix3x2<S> {
     }
 }
 
-impl<S> Matrix3x2<S> where S: Copy {
+impl<S> Matrix3x2<S> 
+where 
+    S: Copy
+{
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -7011,7 +7269,10 @@ impl<S> Matrix3x2<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix3x2<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix3x2<T> 
+    where 
+        F: FnMut(S) -> T 
+    {
         Matrix3x2 {
             data: [
                 [op(self.data[0][0]), op(self.data[0][1]), op(self.data[0][2])],
@@ -7021,7 +7282,10 @@ impl<S> Matrix3x2<S> where S: Copy {
     }
 }
 
-impl<S> Matrix3x2<S> where S: NumCast + Copy {
+impl<S> Matrix3x2<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -7074,7 +7338,10 @@ impl<S> Matrix3x2<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix3x2<S> where S: Scalar {
+impl<S> Matrix3x2<S> 
+where 
+    S: Scalar
+{
     /// Transpose a matrix.
     ///
     /// ## Example
@@ -7154,7 +7421,10 @@ impl<S> Matrix3x2<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix3x2<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix3x2<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         // NOTE: We display matrices in traditional row-major order.
         write!(
@@ -7167,7 +7437,10 @@ impl<S> fmt::Display for Matrix3x2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 3]; 2]> for Matrix3x2<S> where S: Scalar {
+impl<S> From<[[S; 3]; 2]> for Matrix3x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [[S; 3]; 2]) -> Matrix3x2<S> {
         Matrix3x2::new(
@@ -7177,7 +7450,10 @@ impl<S> From<[[S; 3]; 2]> for Matrix3x2<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [[S; 3]; 2]> for &'a Matrix3x2<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 3]; 2]> for &'a Matrix3x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 3]; 2]) -> &'a Matrix3x2<S> {
         unsafe { 
@@ -7186,7 +7462,10 @@ impl<'a, S> From<&'a [[S; 3]; 2]> for &'a Matrix3x2<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 6]> for Matrix3x2<S> where S: Scalar {
+impl<S> From<[S; 6]> for Matrix3x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 6]) -> Matrix3x2<S> {
         Matrix3x2::new(
@@ -7196,7 +7475,10 @@ impl<S> From<[S; 6]> for Matrix3x2<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [S; 6]> for &'a Matrix3x2<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 6]> for &'a Matrix3x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 6]) -> &'a Matrix3x2<S> {
         unsafe { 
@@ -7233,7 +7515,10 @@ impl<S> Matrix2x4<S> {
     }
 }
 
-impl<S> Matrix2x4<S> where S: Copy {
+impl<S> Matrix2x4<S> 
+where 
+    S: Copy
+{
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -7469,7 +7754,10 @@ impl<S> Matrix2x4<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix2x4<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix2x4<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix2x4 {
             data: [
                 [op(self.data[0][0]), op(self.data[0][1])],
@@ -7481,7 +7769,10 @@ impl<S> Matrix2x4<S> where S: Copy {
     }
 }
 
-impl<S> Matrix2x4<S> where S: NumCast + Copy {
+impl<S> Matrix2x4<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -7546,7 +7837,10 @@ impl<S> Matrix2x4<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix2x4<S> where S: Scalar {
+impl<S> Matrix2x4<S> 
+where 
+    S: Scalar
+{
     /// Transpose a matrix.
     ///
     /// ## Example
@@ -7626,7 +7920,10 @@ impl<S> Matrix2x4<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix2x4<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix2x4<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         // NOTE: We display matrices in traditional row-major order.
         write!(
@@ -7638,7 +7935,10 @@ impl<S> fmt::Display for Matrix2x4<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 2]; 4]> for Matrix2x4<S> where S: Scalar {
+impl<S> From<[[S; 2]; 4]> for Matrix2x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [[S; 2]; 4]) -> Matrix2x4<S> {
         Matrix2x4::new(
@@ -7650,7 +7950,10 @@ impl<S> From<[[S; 2]; 4]> for Matrix2x4<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [[S; 2]; 4]> for &'a Matrix2x4<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 2]; 4]> for &'a Matrix2x4<S>
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 2]; 4]) -> &'a Matrix2x4<S> {
         unsafe { 
@@ -7659,7 +7962,10 @@ impl<'a, S> From<&'a [[S; 2]; 4]> for &'a Matrix2x4<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 8]> for Matrix2x4<S> where S: Scalar {
+impl<S> From<[S; 8]> for Matrix2x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 8]) -> Matrix2x4<S> {
         Matrix2x4::new(
@@ -7671,7 +7977,10 @@ impl<S> From<[S; 8]> for Matrix2x4<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [S; 8]> for &'a Matrix2x4<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 8]> for &'a Matrix2x4<S>
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 8]) -> &'a Matrix2x4<S> {
         unsafe { 
@@ -7704,7 +8013,10 @@ impl<S> Matrix4x2<S> {
     }
 }
 
-impl<S> Matrix4x2<S> where S: Copy {
+impl<S> Matrix4x2<S> 
+where 
+    S: Copy
+{
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -7915,7 +8227,10 @@ impl<S> Matrix4x2<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix4x2<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix4x2<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix4x2 {
             data: [
                 [op(self.data[0][0]), op(self.data[0][1]), op(self.data[0][2]), op(self.data[0][3])],
@@ -7925,7 +8240,10 @@ impl<S> Matrix4x2<S> where S: Copy {
     }
 }
 
-impl<S> Matrix4x2<S> where S: NumCast + Copy {
+impl<S> Matrix4x2<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -7989,7 +8307,10 @@ impl<S> Matrix4x2<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix4x2<S> where S: Scalar {
+impl<S> Matrix4x2<S> 
+where 
+    S: Scalar
+{
     /// Transpose a matrix.
     ///
     /// ## Example
@@ -8073,7 +8394,10 @@ impl<S> Matrix4x2<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix4x2<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix4x2<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         // NOTE: We display matrices in traditional row-major order.
         write!(
@@ -8087,7 +8411,10 @@ impl<S> fmt::Display for Matrix4x2<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 4]; 2]> for Matrix4x2<S> where S: Scalar {
+impl<S> From<[[S; 4]; 2]> for Matrix4x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [[S; 4]; 2]) -> Matrix4x2<S> {
         Matrix4x2::new(
@@ -8097,7 +8424,10 @@ impl<S> From<[[S; 4]; 2]> for Matrix4x2<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [[S; 4]; 2]> for &'a Matrix4x2<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 4]; 2]> for &'a Matrix4x2<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 4]; 2]) -> &'a Matrix4x2<S> {
         unsafe { 
@@ -8106,7 +8436,10 @@ impl<'a, S> From<&'a [[S; 4]; 2]> for &'a Matrix4x2<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 8]> for Matrix4x2<S> where S: Scalar {
+impl<S> From<[S; 8]> for Matrix4x2<S>
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 8]) -> Matrix4x2<S> {
         Matrix4x2::new(
@@ -8116,7 +8449,10 @@ impl<S> From<[S; 8]> for Matrix4x2<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [S; 8]> for &'a Matrix4x2<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 8]> for &'a Matrix4x2<S>
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 8]) -> &'a Matrix4x2<S> {
         unsafe { 
@@ -8153,7 +8489,10 @@ impl<S> Matrix3x4<S> {
     }
 }
 
-impl<S> Matrix3x4<S> where S: Copy {
+impl<S> Matrix3x4<S> 
+where 
+    S: Copy
+{
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -8392,7 +8731,10 @@ impl<S> Matrix3x4<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix3x4<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix3x4<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix3x4 {
             data: [
                 [op(self.data[0][0]), op(self.data[0][1]), op(self.data[0][2])],
@@ -8404,7 +8746,10 @@ impl<S> Matrix3x4<S> where S: Copy {
     }
 }
 
-impl<S> Matrix3x4<S> where S: NumCast + Copy {
+impl<S> Matrix3x4<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -8490,7 +8835,10 @@ impl<S> Matrix3x4<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix3x4<S> where S: Scalar {
+impl<S> Matrix3x4<S> 
+where 
+    S: Scalar
+{
     /// Transpose a matrix.
     ///
     /// ## Example
@@ -8580,7 +8928,10 @@ impl<S> Matrix3x4<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix3x4<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix3x4<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         // NOTE: We display matrices in traditional row-major order.
         write!(
@@ -8593,7 +8944,10 @@ impl<S> fmt::Display for Matrix3x4<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 3]; 4]> for Matrix3x4<S> where S: Scalar {
+impl<S> From<[[S; 3]; 4]> for Matrix3x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [[S; 3]; 4]) -> Matrix3x4<S> {
         Matrix3x4::new(
@@ -8605,7 +8959,10 @@ impl<S> From<[[S; 3]; 4]> for Matrix3x4<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [[S; 3]; 4]> for &'a Matrix3x4<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 3]; 4]> for &'a Matrix3x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 3]; 4]) -> &'a Matrix3x4<S> {
         unsafe { 
@@ -8614,7 +8971,10 @@ impl<'a, S> From<&'a [[S; 3]; 4]> for &'a Matrix3x4<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 12]> for Matrix3x4<S> where S: Scalar {
+impl<S> From<[S; 12]> for Matrix3x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 12]) -> Matrix3x4<S> {
         Matrix3x4::new(
@@ -8626,7 +8986,10 @@ impl<S> From<[S; 12]> for Matrix3x4<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [S; 12]> for &'a Matrix3x4<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 12]> for &'a Matrix3x4<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 12]) -> &'a Matrix3x4<S> {
         unsafe { 
@@ -8661,7 +9024,10 @@ impl<S> Matrix4x3<S> {
     }
 }
 
-impl<S> Matrix4x3<S> where S: Copy {
+impl<S> Matrix4x3<S> 
+where 
+    S: Copy 
+{
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -8886,7 +9252,10 @@ impl<S> Matrix4x3<S> where S: Copy {
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix4x3<T> where F: FnMut(S) -> T {
+    pub fn map<T, F>(&self, mut op: F) -> Matrix4x3<T> 
+    where 
+        F: FnMut(S) -> T
+    {
         Matrix4x3 {
             data: [
                 [op(self.data[0][0]), op(self.data[0][1]), op(self.data[0][2]), op(self.data[0][3])],
@@ -8897,7 +9266,10 @@ impl<S> Matrix4x3<S> where S: Copy {
     }
 }
 
-impl<S> Matrix4x3<S> where S: NumCast + Copy {
+impl<S> Matrix4x3<S> 
+where 
+    S: NumCast + Copy
+{
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// ## Example
@@ -8980,7 +9352,10 @@ impl<S> Matrix4x3<S> where S: NumCast + Copy {
     }
 }
 
-impl<S> Matrix4x3<S> where S: Scalar {
+impl<S> Matrix4x3<S> 
+where 
+    S: Scalar
+{
     /// Transpose a matrix.
     ///
     /// ## Example
@@ -9070,7 +9445,10 @@ impl<S> Matrix4x3<S> where S: Scalar {
     }
 }
 
-impl<S> fmt::Display for Matrix4x3<S> where S: fmt::Display {
+impl<S> fmt::Display for Matrix4x3<S> 
+where 
+    S: fmt::Display
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         // NOTE: We display matrices in traditional row-major order.
         write!(
@@ -9084,7 +9462,10 @@ impl<S> fmt::Display for Matrix4x3<S> where S: fmt::Display {
     }
 }
 
-impl<S> From<[[S; 4]; 3]> for Matrix4x3<S> where S: Scalar {
+impl<S> From<[[S; 4]; 3]> for Matrix4x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [[S; 4]; 3]) -> Matrix4x3<S> {
         Matrix4x3::new(
@@ -9095,7 +9476,10 @@ impl<S> From<[[S; 4]; 3]> for Matrix4x3<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [[S; 4]; 3]> for &'a Matrix4x3<S> where S: Scalar {
+impl<'a, S> From<&'a [[S; 4]; 3]> for &'a Matrix4x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [[S; 4]; 3]) -> &'a Matrix4x3<S> {
         unsafe { 
@@ -9104,7 +9488,10 @@ impl<'a, S> From<&'a [[S; 4]; 3]> for &'a Matrix4x3<S> where S: Scalar {
     }    
 }
 
-impl<S> From<[S; 12]> for Matrix4x3<S> where S: Scalar {
+impl<S> From<[S; 12]> for Matrix4x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: [S; 12]) -> Matrix4x3<S> {
         Matrix4x3::new(
@@ -9115,7 +9502,10 @@ impl<S> From<[S; 12]> for Matrix4x3<S> where S: Scalar {
     }
 }
 
-impl<'a, S> From<&'a [S; 12]> for &'a Matrix4x3<S> where S: Scalar {
+impl<'a, S> From<&'a [S; 12]> for &'a Matrix4x3<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn from(array: &'a [S; 12]) -> &'a Matrix4x3<S> {
         unsafe { 

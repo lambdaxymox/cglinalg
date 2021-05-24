@@ -20,7 +20,8 @@ use core::ops;
 /// errors that arise from using incorrect angular units. For example, adding
 /// radians to degrees, or passing an angle in degrees to a trigonometric 
 /// function when one meant to pass an angle in units of radians.
-pub trait Angle where 
+pub trait Angle 
+where 
     Self: Copy + Clone,
     Self: PartialEq + PartialOrd,
     Self: num_traits::Zero,
@@ -176,7 +177,10 @@ pub trait Angle where
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Hash)]
 pub struct Radians<S>(pub S);
 
-impl<S> Radians<S> where S: Scalar {
+impl<S> Radians<S> 
+where 
+    S: Scalar
+{
     /// Construct a typed angle of zero radians.
     #[inline]
     pub fn zero() -> Self {
@@ -190,7 +194,10 @@ impl<S> Radians<S> where S: Scalar {
     }
 }
 
-impl<S> Radians<S> where S: ScalarFloat {
+impl<S> Radians<S> 
+where 
+    S: ScalarFloat
+{
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
     ///
@@ -217,7 +224,10 @@ impl<S> Radians<S> where S: ScalarFloat {
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Hash)]
 pub struct Degrees<S>(pub S);
 
-impl<S> Degrees<S> where S: Scalar {
+impl<S> Degrees<S> 
+where 
+    S: Scalar 
+{
     /// Construct a typed angle of zero radians.
     #[inline]
     pub fn zero() -> Self {
@@ -231,7 +241,10 @@ impl<S> Degrees<S> where S: Scalar {
     }
 }
 
-impl<S> Degrees<S> where S: ScalarFloat {
+impl<S> Degrees<S> 
+where 
+    S: ScalarFloat 
+{
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
     ///
@@ -252,33 +265,48 @@ impl<S> Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<S> From<Degrees<S>> for Radians<S> where S: ScalarFloat {
+impl<S> From<Degrees<S>> for Radians<S> 
+where 
+    S: ScalarFloat
+{
     #[inline]
     fn from(degrees: Degrees<S>) -> Radians<S> {
         Radians(degrees.0 * num_traits::cast(f64::consts::PI / 180_f64).unwrap())
     }
 }
 
-impl<S> From<Radians<S>> for Degrees<S> where S: ScalarFloat {
+impl<S> From<Radians<S>> for Degrees<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn from(radians: Radians<S>) -> Degrees<S> {
         Degrees(radians.0 * num_traits::cast(180_f64 / f64::consts::PI).unwrap())
     }
 }
 
-impl<S> fmt::Display for Degrees<S> where S: fmt::Display {
+impl<S> fmt::Display for Degrees<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "{} degrees", self.0)
     }
 }
 
-impl<S> fmt::Display for Radians<S> where S: fmt::Display {
+impl<S> fmt::Display for Radians<S> 
+where 
+    S: fmt::Display 
+{
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "{} radians", self.0)
     }
 }
 
-impl<S> ops::Add<Degrees<S>> for Degrees<S> where S: Scalar {
+impl<S> ops::Add<Degrees<S>> for Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -287,7 +315,10 @@ impl<S> ops::Add<Degrees<S>> for Degrees<S> where S: Scalar {
     } 
 }
 
-impl<'a, S> ops::Add<&'a Degrees<S>> for Degrees<S> where S: Scalar {
+impl<'a, S> ops::Add<&'a Degrees<S>> for Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -296,7 +327,10 @@ impl<'a, S> ops::Add<&'a Degrees<S>> for Degrees<S> where S: Scalar {
     } 
 }
 
-impl<'a, S> ops::Add<Degrees<S>> for &'a Degrees<S> where S: Scalar{
+impl<'a, S> ops::Add<Degrees<S>> for &'a Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -305,7 +339,10 @@ impl<'a, S> ops::Add<Degrees<S>> for &'a Degrees<S> where S: Scalar{
     } 
 }
 
-impl<'a, 'b, S> ops::Add<&'a Degrees<S>> for &'b Degrees<S> where S: Scalar {
+impl<'a, 'b, S> ops::Add<&'a Degrees<S>> for &'b Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -314,7 +351,10 @@ impl<'a, 'b, S> ops::Add<&'a Degrees<S>> for &'b Degrees<S> where S: Scalar {
     } 
 }
 
-impl<S> ops::Sub<Degrees<S>> for Degrees<S> where S: Scalar {
+impl<S> ops::Sub<Degrees<S>> for Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -323,7 +363,10 @@ impl<S> ops::Sub<Degrees<S>> for Degrees<S> where S: Scalar {
     } 
 }
 
-impl<'a, S> ops::Sub<&'a Degrees<S>> for Degrees<S> where S: Scalar {
+impl<'a, S> ops::Sub<&'a Degrees<S>> for Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -332,7 +375,10 @@ impl<'a, S> ops::Sub<&'a Degrees<S>> for Degrees<S> where S: Scalar {
     } 
 }
 
-impl<'a, S> ops::Sub<Degrees<S>> for &'a Degrees<S> where S: Scalar {
+impl<'a, S> ops::Sub<Degrees<S>> for &'a Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -341,7 +387,10 @@ impl<'a, S> ops::Sub<Degrees<S>> for &'a Degrees<S> where S: Scalar {
     } 
 }
 
-impl<'a, 'b, S> ops::Sub<&'a Degrees<S>> for &'b Degrees<S> where S: Scalar {
+impl<'a, 'b, S> ops::Sub<&'a Degrees<S>> for &'b Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -350,7 +399,10 @@ impl<'a, 'b, S> ops::Sub<&'a Degrees<S>> for &'b Degrees<S> where S: Scalar {
     } 
 }
 
-impl<S> ops::Mul<S> for Degrees<S> where S: Scalar {
+impl<S> ops::Mul<S> for Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -359,7 +411,10 @@ impl<S> ops::Mul<S> for Degrees<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Mul<S> for &'a Degrees<S> where S: Scalar {
+impl<'a, S> ops::Mul<S> for &'a Degrees<S> 
+where 
+    S: Scalar
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -368,7 +423,10 @@ impl<'a, S> ops::Mul<S> for &'a Degrees<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Div<S> for Degrees<S> where S: ScalarFloat {
+impl<S> ops::Div<S> for Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -377,7 +435,10 @@ impl<S> ops::Div<S> for Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Div<S> for &'a Degrees<S> where S: ScalarFloat {
+impl<'a, S> ops::Div<S> for &'a Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -386,7 +447,10 @@ impl<'a, S> ops::Div<S> for &'a Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Div<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+impl<S> ops::Div<Degrees<S>> for Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Output = S;
 
     #[inline]
@@ -395,7 +459,10 @@ impl<S> ops::Div<Degrees<S>> for Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Div<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
+impl<'a, S> ops::Div<&'a Degrees<S>> for Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Output = S;
 
     #[inline]
@@ -404,7 +471,10 @@ impl<'a, S> ops::Div<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Div<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
+impl<'a, S> ops::Div<Degrees<S>> for &'a Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Output = S;
 
     #[inline]
@@ -413,7 +483,10 @@ impl<'a, S> ops::Div<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Div<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Div<&'a Degrees<S>> for &'b Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Output = S;
 
     #[inline]
@@ -422,7 +495,10 @@ impl<'a, 'b, S> ops::Div<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat
     }
 }
 
-impl<S> ops::Rem<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+impl<S> ops::Rem<Degrees<S>> for Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -431,7 +507,10 @@ impl<S> ops::Rem<Degrees<S>> for Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Rem<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
+impl<'a, S> ops::Rem<&'a Degrees<S>> for Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -440,7 +519,10 @@ impl<'a, S> ops::Rem<&'a Degrees<S>> for Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Rem<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
+impl<'a, S> ops::Rem<Degrees<S>> for &'a Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -449,7 +531,10 @@ impl<'a, S> ops::Rem<Degrees<S>> for &'a Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Rem<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Rem<&'a Degrees<S>> for &'b Degrees<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -458,7 +543,10 @@ impl<'a, 'b, S> ops::Rem<&'a Degrees<S>> for &'b Degrees<S> where S: ScalarFloat
     }
 }
 
-impl<S> ops::Neg for Degrees<S> where S: ScalarSigned {
+impl<S> ops::Neg for Degrees<S> 
+where 
+    S: ScalarSigned 
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -467,7 +555,10 @@ impl<S> ops::Neg for Degrees<S> where S: ScalarSigned {
     }
 }
 
-impl<'a, S> ops::Neg for &'a Degrees<S> where S: ScalarSigned {
+impl<'a, S> ops::Neg for &'a Degrees<S> 
+where 
+    S: ScalarSigned
+{
     type Output = Degrees<S>;
 
     #[inline]
@@ -476,42 +567,60 @@ impl<'a, S> ops::Neg for &'a Degrees<S> where S: ScalarSigned {
     }
 }
 
-impl<S> ops::AddAssign<Degrees<S>> for Degrees<S> where S: Scalar {
+impl<S> ops::AddAssign<Degrees<S>> for Degrees<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn add_assign(&mut self, other: Degrees<S>) {
         *self = *self + other;
     } 
 }
 
-impl<S> ops::SubAssign<Degrees<S>> for Degrees<S> where S: Scalar {
+impl<S> ops::SubAssign<Degrees<S>> for Degrees<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn sub_assign(&mut self, other: Degrees<S>) {
         *self = *self - other;
     } 
 }
 
-impl<S> ops::MulAssign<S> for Degrees<S> where S: Scalar {
+impl<S> ops::MulAssign<S> for Degrees<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn mul_assign(&mut self, other: S) {
         *self = *self * other;
     } 
 }
 
-impl<S> ops::DivAssign<S> for Degrees<S> where S: ScalarFloat {
+impl<S> ops::DivAssign<S> for Degrees<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn div_assign(&mut self, other: S) {
         *self = *self / other;
     } 
 }
 
-impl<S> ops::RemAssign<Degrees<S>> for Degrees<S> where S: ScalarFloat {
+impl<S> ops::RemAssign<Degrees<S>> for Degrees<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn rem_assign(&mut self, other: Degrees<S>) {
         *self = *self % other;
     } 
 }
 
-impl<S> Zero for Degrees<S> where S: Scalar {
+impl<S> Zero for Degrees<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn zero() -> Degrees<S> {
         Degrees(S::zero())
@@ -523,7 +632,10 @@ impl<S> Zero for Degrees<S> where S: Scalar {
     }
 }
 
-impl<S> approx::AbsDiffEq for Degrees<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Degrees<S> 
+where 
+    S: ScalarFloat 
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -537,7 +649,10 @@ impl<S> approx::AbsDiffEq for Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Degrees<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Degrees<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -549,7 +664,10 @@ impl<S> approx::RelativeEq for Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Degrees<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Degrees<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -561,7 +679,10 @@ impl<S> approx::UlpsEq for Degrees<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Add<Radians<S>> for Radians<S> where S: Scalar {
+impl<S> ops::Add<Radians<S>> for Radians<S> 
+where 
+    S: Scalar 
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -570,7 +691,10 @@ impl<S> ops::Add<Radians<S>> for Radians<S> where S: Scalar {
     } 
 }
 
-impl<'a, S> ops::Add<&'a Radians<S>> for Radians<S> where S: Scalar {
+impl<'a, S> ops::Add<&'a Radians<S>> for Radians<S> 
+where 
+    S: Scalar
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -579,7 +703,10 @@ impl<'a, S> ops::Add<&'a Radians<S>> for Radians<S> where S: Scalar {
     } 
 }
 
-impl<'a, S> ops::Add<Radians<S>> for &'a Radians<S> where S: Scalar {
+impl<'a, S> ops::Add<Radians<S>> for &'a Radians<S> 
+where 
+    S: Scalar 
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -588,7 +715,10 @@ impl<'a, S> ops::Add<Radians<S>> for &'a Radians<S> where S: Scalar {
     } 
 }
 
-impl<'a, 'b, S> ops::Add<&'a Radians<S>> for &'b Radians<S> where S: Scalar {
+impl<'a, 'b, S> ops::Add<&'a Radians<S>> for &'b Radians<S> 
+where 
+    S: Scalar
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -597,7 +727,10 @@ impl<'a, 'b, S> ops::Add<&'a Radians<S>> for &'b Radians<S> where S: Scalar {
     } 
 }
 
-impl<S> ops::Sub<Radians<S>> for Radians<S> where S: Scalar {
+impl<S> ops::Sub<Radians<S>> for Radians<S> 
+where 
+    S: Scalar
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -606,7 +739,10 @@ impl<S> ops::Sub<Radians<S>> for Radians<S> where S: Scalar {
     } 
 }
 
-impl<'a, S> ops::Sub<&'a Radians<S>> for Radians<S> where S: Scalar {
+impl<'a, S> ops::Sub<&'a Radians<S>> for Radians<S> 
+where 
+    S: Scalar
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -615,7 +751,10 @@ impl<'a, S> ops::Sub<&'a Radians<S>> for Radians<S> where S: Scalar {
     } 
 }
 
-impl<'a, S> ops::Sub<Radians<S>> for &'a Radians<S> where S: Scalar {
+impl<'a, S> ops::Sub<Radians<S>> for &'a Radians<S> 
+where 
+    S: Scalar
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -624,7 +763,10 @@ impl<'a, S> ops::Sub<Radians<S>> for &'a Radians<S> where S: Scalar {
     } 
 }
 
-impl<'a, 'b, S> ops::Sub<&'a Radians<S>> for &'b Radians<S> where S: Scalar {
+impl<'a, 'b, S> ops::Sub<&'a Radians<S>> for &'b Radians<S> 
+where 
+    S: Scalar
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -633,7 +775,10 @@ impl<'a, 'b, S> ops::Sub<&'a Radians<S>> for &'b Radians<S> where S: Scalar {
     } 
 }
 
-impl<S> ops::Mul<S> for Radians<S> where S: Scalar {
+impl<S> ops::Mul<S> for Radians<S> 
+where 
+    S: Scalar
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -642,7 +787,10 @@ impl<S> ops::Mul<S> for Radians<S> where S: Scalar {
     }
 }
 
-impl<'a, S> ops::Mul<S> for &'a Radians<S> where S: Scalar {
+impl<'a, S> ops::Mul<S> for &'a Radians<S> 
+where 
+    S: Scalar
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -651,7 +799,10 @@ impl<'a, S> ops::Mul<S> for &'a Radians<S> where S: Scalar {
     }
 }
 
-impl<S> ops::Div<S> for Radians<S> where S: ScalarFloat {
+impl<S> ops::Div<S> for Radians<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -660,7 +811,10 @@ impl<S> ops::Div<S> for Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Div<S> for &'a Radians<S> where S: ScalarFloat {
+impl<'a, S> ops::Div<S> for &'a Radians<S> 
+where 
+    S: ScalarFloat 
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -669,7 +823,10 @@ impl<'a, S> ops::Div<S> for &'a Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<S> ops::Div<Radians<S>> for Radians<S> where S: ScalarFloat {
+impl<S> ops::Div<Radians<S>> for Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Output = S;
 
     #[inline]
@@ -678,7 +835,10 @@ impl<S> ops::Div<Radians<S>> for Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Div<&'a Radians<S>> for Radians<S> where S: ScalarFloat {
+impl<'a, S> ops::Div<&'a Radians<S>> for Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Output = S;
 
     #[inline]
@@ -687,7 +847,10 @@ impl<'a, S> ops::Div<&'a Radians<S>> for Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Div<Radians<S>> for &'a Radians<S> where S: ScalarFloat {
+impl<'a, S> ops::Div<Radians<S>> for &'a Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Output = S;
 
     #[inline]
@@ -696,7 +859,10 @@ impl<'a, S> ops::Div<Radians<S>> for &'a Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Div<&'a Radians<S>> for &'b Radians<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Div<&'a Radians<S>> for &'b Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Output = S;
 
     #[inline]
@@ -705,7 +871,10 @@ impl<'a, 'b, S> ops::Div<&'a Radians<S>> for &'b Radians<S> where S: ScalarFloat
     }
 }
 
-impl<S> ops::Rem<Radians<S>> for Radians<S> where S: ScalarFloat {
+impl<S> ops::Rem<Radians<S>> for Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -714,7 +883,10 @@ impl<S> ops::Rem<Radians<S>> for Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Rem<&'a Radians<S>> for Radians<S> where S: ScalarFloat {
+impl<'a, S> ops::Rem<&'a Radians<S>> for Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -723,7 +895,10 @@ impl<'a, S> ops::Rem<&'a Radians<S>> for Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, S> ops::Rem<Radians<S>> for &'a Radians<S> where S: ScalarFloat {
+impl<'a, S> ops::Rem<Radians<S>> for &'a Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -732,7 +907,10 @@ impl<'a, S> ops::Rem<Radians<S>> for &'a Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<'a, 'b, S> ops::Rem<&'a Radians<S>> for &'b Radians<S> where S: ScalarFloat {
+impl<'a, 'b, S> ops::Rem<&'a Radians<S>> for &'b Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -741,7 +919,10 @@ impl<'a, 'b, S> ops::Rem<&'a Radians<S>> for &'b Radians<S> where S: ScalarFloat
     }
 }
 
-impl<S> ops::Neg for Radians<S> where S: ScalarSigned {
+impl<S> ops::Neg for Radians<S> 
+where 
+    S: ScalarSigned
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -750,7 +931,10 @@ impl<S> ops::Neg for Radians<S> where S: ScalarSigned {
     }
 }
 
-impl<'a, S> ops::Neg for &'a Radians<S> where S: ScalarSigned {
+impl<'a, S> ops::Neg for &'a Radians<S> 
+where 
+    S: ScalarSigned
+{
     type Output = Radians<S>;
 
     #[inline]
@@ -759,42 +943,60 @@ impl<'a, S> ops::Neg for &'a Radians<S> where S: ScalarSigned {
     }
 }
 
-impl<S> ops::AddAssign<Radians<S>> for Radians<S> where S: Scalar {
+impl<S> ops::AddAssign<Radians<S>> for Radians<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn add_assign(&mut self, other: Radians<S>) {
         self.0 += other.0;
     } 
 }
 
-impl<S> ops::SubAssign<Radians<S>> for Radians<S> where S: Scalar {
+impl<S> ops::SubAssign<Radians<S>> for Radians<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn sub_assign(&mut self, other: Radians<S>) {
         self.0 -= other.0;
     } 
 }
 
-impl<S> ops::MulAssign<S> for Radians<S> where S: Scalar {
+impl<S> ops::MulAssign<S> for Radians<S> 
+where 
+    S: Scalar
+{
     #[inline]
     fn mul_assign(&mut self, other: S) {
         self.0 *= other;
     } 
 }
 
-impl<S> ops::DivAssign<S> for Radians<S> where S: ScalarFloat {
+impl<S> ops::DivAssign<S> for Radians<S> 
+where 
+    S: ScalarFloat
+{
     #[inline]
     fn div_assign(&mut self, other: S) {
         self.0 /= other;
     } 
 }
 
-impl<S> ops::RemAssign<Radians<S>> for Radians<S> where S: ScalarFloat {
+impl<S> ops::RemAssign<Radians<S>> for Radians<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn rem_assign(&mut self, other: Radians<S>) {
         self.0 = self.0 % other.0;
     } 
 }
 
-impl<S> Zero for Radians<S> where S: Scalar {
+impl<S> Zero for Radians<S> 
+where 
+    S: Scalar 
+{
     #[inline]
     fn zero() -> Radians<S> {
         Radians(S::zero())
@@ -806,7 +1008,10 @@ impl<S> Zero for Radians<S> where S: Scalar {
     }
 }
 
-impl<S> approx::AbsDiffEq for Radians<S> where S: ScalarFloat {
+impl<S> approx::AbsDiffEq for Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
     #[inline]
@@ -820,7 +1025,10 @@ impl<S> approx::AbsDiffEq for Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::RelativeEq for Radians<S> where S: ScalarFloat {
+impl<S> approx::RelativeEq for Radians<S> 
+where 
+    S: ScalarFloat 
+{
     #[inline]
     fn default_max_relative() -> S::Epsilon {
         S::default_max_relative()
@@ -832,7 +1040,10 @@ impl<S> approx::RelativeEq for Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<S> approx::UlpsEq for Radians<S> where S: ScalarFloat {
+impl<S> approx::UlpsEq for Radians<S> 
+where 
+    S: ScalarFloat
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         S::default_max_ulps()
@@ -844,7 +1055,10 @@ impl<S> approx::UlpsEq for Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Angle for Radians<S> where S: ScalarFloat {
+impl<S> Angle for Radians<S> 
+where 
+    S: ScalarFloat
+{
     type Dimensionless = S;
 
     #[inline]
@@ -888,7 +1102,10 @@ impl<S> Angle for Radians<S> where S: ScalarFloat {
     }
 }
 
-impl<S> Angle for Degrees<S> where S: ScalarFloat {
+impl<S> Angle for Degrees<S> 
+where 
+    S: ScalarFloat
+{
     type Dimensionless = S;
 
     #[inline]
