@@ -418,6 +418,54 @@ where
     }
 }
 
+impl<S> ops::Mul<Translation2<S>> for Translation2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Translation2<S>;
+
+    #[inline]
+    fn mul(self, other: Translation2<S>) -> Self::Output {
+        Translation2::from_vector(&(self.vector + other.vector))
+    }
+}
+
+impl<S> ops::Mul<&Translation2<S>> for Translation2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Translation2<S>;
+
+    #[inline]
+    fn mul(self, other: &Translation2<S>) -> Self::Output {
+        Translation2::from_vector(&(self.vector + other.vector))
+    }
+}
+
+impl<S> ops::Mul<Translation2<S>> for &Translation2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Translation2<S>;
+
+    #[inline]
+    fn mul(self, other: Translation2<S>) -> Self::Output {
+        Translation2::from_vector(&(self.vector + other.vector))
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Translation2<S>> for &'b Translation2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Translation2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Translation2<S>) -> Self::Output {
+        Translation2::from_vector(&(self.vector + other.vector))
+    }
+}
+
 
 
 /// A translation transformation in three dimensions.
@@ -808,6 +856,54 @@ where
     #[inline]
     fn mul(self, other: &'a Point3<S>) -> Self::Output {
         self.translate_point(other)
+    }
+}
+
+impl<S> ops::Mul<Translation3<S>> for Translation3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Translation3<S>;
+
+    #[inline]
+    fn mul(self, other: Translation3<S>) -> Self::Output {
+        Translation3::from_vector(&(self.vector + other.vector))
+    }
+}
+
+impl<S> ops::Mul<&Translation3<S>> for Translation3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Translation3<S>;
+
+    #[inline]
+    fn mul(self, other: &Translation3<S>) -> Self::Output {
+        Translation3::from_vector(&(self.vector + other.vector))
+    }
+}
+
+impl<S> ops::Mul<Translation3<S>> for &Translation3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Translation3<S>;
+
+    #[inline]
+    fn mul(self, other: Translation3<S>) -> Self::Output {
+        Translation3::from_vector(&(self.vector + other.vector))
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Translation3<S>> for &'b Translation3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Translation3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Translation3<S>) -> Self::Output {
+        Translation3::from_vector(&(self.vector + other.vector))
     }
 }
 
