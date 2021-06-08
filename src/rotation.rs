@@ -528,6 +528,62 @@ where
     }
 }
 
+impl<S> ops::Mul<Rotation2<S>> for Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Rotation2<S>;
+
+    #[inline]
+    fn mul(self, other: Rotation2<S>) -> Self::Output {
+        Rotation2 {
+            matrix: self.matrix() * other.matrix()
+        }
+    }
+}
+
+impl<S> ops::Mul<&Rotation2<S>> for Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Rotation2<S>;
+
+    #[inline]
+    fn mul(self, other: &Rotation2<S>) -> Self::Output {
+        Rotation2 {
+            matrix: self.matrix() * other.matrix()
+        }
+    }
+}
+
+impl<S> ops::Mul<Rotation2<S>> for &Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Rotation2<S>;
+
+    #[inline]
+    fn mul(self, other: Rotation2<S>) -> Self::Output {
+        Rotation2 {
+            matrix: self.matrix() * other.matrix()
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Rotation2<S>> for &'b Rotation2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Rotation2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Rotation2<S>) -> Self::Output {
+        Rotation2 {
+            matrix: self.matrix() * other.matrix()
+        }
+    }
+}
+
 
 
 /// A rotation operator in three dimensions.
@@ -1344,6 +1400,62 @@ where
     #[inline]
     fn mul(self, other: &'a Point3<S>) -> Self::Output {
         self.rotate_point(other)
+    }
+}
+
+impl<S> ops::Mul<Rotation3<S>> for Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Rotation3<S>;
+
+    #[inline]
+    fn mul(self, other: Rotation3<S>) -> Self::Output {
+        Rotation3 {
+            matrix: self.matrix() * other.matrix()
+        }
+    }
+}
+
+impl<S> ops::Mul<&Rotation3<S>> for Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Rotation3<S>;
+
+    #[inline]
+    fn mul(self, other: &Rotation3<S>) -> Self::Output {
+        Rotation3 {
+            matrix: self.matrix() * other.matrix()
+        }
+    }
+}
+
+impl<S> ops::Mul<Rotation3<S>> for &Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Rotation3<S>;
+
+    #[inline]
+    fn mul(self, other: Rotation3<S>) -> Self::Output {
+        Rotation3 {
+            matrix: self.matrix() * other.matrix()
+        }
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Rotation3<S>> for &'b Rotation3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Rotation3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Rotation3<S>) -> Self::Output {
+        Rotation3 {
+            matrix: self.matrix() * other.matrix()
+        }
     }
 }
 
