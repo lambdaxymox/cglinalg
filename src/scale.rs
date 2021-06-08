@@ -365,6 +365,66 @@ where
     }
 }
 
+impl<S> ops::Mul<Scale2<S>> for Scale2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Scale2<S>;
+
+    #[inline]
+    fn mul(self, other: Scale2<S>) -> Self::Output {
+        Scale2::from_nonuniform_scale(
+            self.x * other.x, 
+            self.y * other.y
+        )
+    }
+}
+
+impl<S> ops::Mul<&Scale2<S>> for Scale2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Scale2<S>;
+
+    #[inline]
+    fn mul(self, other: &Scale2<S>) -> Self::Output {
+        Scale2::from_nonuniform_scale(
+            self.x * other.x, 
+            self.y * other.y
+        )
+    }
+}
+
+impl<S> ops::Mul<Scale2<S>> for &Scale2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Scale2<S>;
+
+    #[inline]
+    fn mul(self, other: Scale2<S>) -> Self::Output {
+        Scale2::from_nonuniform_scale(
+            self.x * other.x, 
+            self.y * other.y
+        )
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Scale2<S>> for &'b Scale2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Scale2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Scale2<S>) -> Self::Output {
+        Scale2::from_nonuniform_scale(
+            self.x * other.x, 
+            self.y * other.y
+        )
+    }
+}
+
 
 /// The scale transformation in three dimensions.
 ///
@@ -734,6 +794,70 @@ where
     #[inline]
     fn mul(self, other: &'a Point3<S>) -> Self::Output {
         self.scale_point(other)
+    }
+}
+
+impl<S> ops::Mul<Scale3<S>> for Scale3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Scale3<S>;
+
+    #[inline]
+    fn mul(self, other: Scale3<S>) -> Self::Output {
+        Scale3::from_nonuniform_scale(
+            self.x * other.x, 
+            self.y * other.y,
+            self.z * other.z
+        )
+    }
+}
+
+impl<S> ops::Mul<&Scale3<S>> for Scale3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Scale3<S>;
+
+    #[inline]
+    fn mul(self, other: &Scale3<S>) -> Self::Output {
+        Scale3::from_nonuniform_scale(
+            self.x * other.x, 
+            self.y * other.y,
+            self.z * other.z
+        )
+    }
+}
+
+impl<S> ops::Mul<Scale3<S>> for &Scale3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Scale3<S>;
+
+    #[inline]
+    fn mul(self, other: Scale3<S>) -> Self::Output {
+        Scale3::from_nonuniform_scale(
+            self.x * other.x, 
+            self.y * other.y,
+            self.z * other.z
+        )
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Scale3<S>> for &'b Scale3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Scale3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Scale3<S>) -> Self::Output {
+        Scale3::from_nonuniform_scale(
+            self.x * other.x, 
+            self.y * other.y,
+            self.z * other.z
+        )
     }
 }
 
