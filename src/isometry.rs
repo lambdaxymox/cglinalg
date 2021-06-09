@@ -616,13 +616,81 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Isometry2<S> 
 where 
-    S: ScalarFloat 
+    S: ScalarFloat
 {
     type Output = Point2<S>;
 
     #[inline]
     fn mul(self, other: &'a Point2<S>) -> Self::Output {
         self.transform_point(other)
+    }
+}
+
+impl<S> ops::Mul<Isometry2<S>> for Isometry2<S> 
+where 
+    S: ScalarFloat
+{
+    type Output = Isometry2<S>;
+
+    #[inline]
+    fn mul(self, other: Isometry2<S>) -> Self::Output {
+        let shift = self.rotation.rotate_vector(&other.translation.vector);
+
+        Isometry2::from_parts(
+            &Translation2::from_vector(&(self.translation.vector + shift)),
+            &(&self.rotation * &other.rotation)
+        )
+    }
+}
+
+impl<S> ops::Mul<&Isometry2<S>> for Isometry2<S> 
+where 
+    S: ScalarFloat
+{
+    type Output = Isometry2<S>;
+
+    #[inline]
+    fn mul(self, other: &Isometry2<S>) -> Self::Output {
+        let shift = self.rotation.rotate_vector(&other.translation.vector);
+
+        Isometry2::from_parts(
+            &Translation2::from_vector(&(self.translation.vector + shift)),
+            &(&self.rotation * &other.rotation)
+        )
+    }
+}
+
+impl<S> ops::Mul<Isometry2<S>> for &Isometry2<S> 
+where 
+    S: ScalarFloat
+{
+    type Output = Isometry2<S>;
+
+    #[inline]
+    fn mul(self, other: Isometry2<S>) -> Self::Output {
+        let shift = self.rotation.rotate_vector(&other.translation.vector);
+
+        Isometry2::from_parts(
+            &Translation2::from_vector(&(self.translation.vector + shift)),
+            &(&self.rotation * &other.rotation)
+        )
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Isometry2<S>> for &'b Isometry2<S> 
+where 
+    S: ScalarFloat
+{
+    type Output = Isometry2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Isometry2<S>) -> Self::Output {
+        let shift = self.rotation.rotate_vector(&other.translation.vector);
+
+        Isometry2::from_parts(
+            &Translation2::from_vector(&(self.translation.vector + shift)),
+            &(&self.rotation * &other.rotation)
+        )
     }
 }
 
@@ -1455,6 +1523,74 @@ where
     #[inline]
     fn mul(self, other: &'a Point3<S>) -> Self::Output {
         self.transform_point(other)
+    }
+}
+
+impl<S> ops::Mul<Isometry3<S>> for Isometry3<S> 
+where 
+    S: ScalarFloat
+{
+    type Output = Isometry3<S>;
+
+    #[inline]
+    fn mul(self, other: Isometry3<S>) -> Self::Output {
+        let shift = self.rotation.rotate_vector(&other.translation.vector);
+
+        Isometry3::from_parts(
+            &Translation3::from_vector(&(self.translation.vector + shift)),
+            &(&self.rotation * &other.rotation)
+        )
+    }
+}
+
+impl<S> ops::Mul<&Isometry3<S>> for Isometry3<S> 
+where 
+    S: ScalarFloat
+{
+    type Output = Isometry3<S>;
+
+    #[inline]
+    fn mul(self, other: &Isometry3<S>) -> Self::Output {
+        let shift = self.rotation.rotate_vector(&other.translation.vector);
+
+        Isometry3::from_parts(
+            &Translation3::from_vector(&(self.translation.vector + shift)),
+            &(&self.rotation * &other.rotation)
+        )
+    }
+}
+
+impl<S> ops::Mul<Isometry3<S>> for &Isometry3<S> 
+where 
+    S: ScalarFloat
+{
+    type Output = Isometry3<S>;
+
+    #[inline]
+    fn mul(self, other: Isometry3<S>) -> Self::Output {
+        let shift = self.rotation.rotate_vector(&other.translation.vector);
+
+        Isometry3::from_parts(
+            &Translation3::from_vector(&(self.translation.vector + shift)),
+            &(&self.rotation * &other.rotation)
+        )
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Isometry3<S>> for &'b Isometry3<S> 
+where 
+    S: ScalarFloat
+{
+    type Output = Isometry3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Isometry3<S>) -> Self::Output {
+        let shift = self.rotation.rotate_vector(&other.translation.vector);
+
+        Isometry3::from_parts(
+            &Translation3::from_vector(&(self.translation.vector + shift)),
+            &(&self.rotation * &other.rotation)
+        )
     }
 }
 
