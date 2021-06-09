@@ -658,6 +658,71 @@ where
     }
 }
 
+impl<S> ops::Mul<Isometry2<S>> for Similarity2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Similarity2<S>;
+
+    #[inline]
+    fn mul(self, other: Isometry2<S>) -> Self::Output {
+        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let translation = Translation2::from_vector(&(self.isometry.translation.vector + shift));
+        let rotation = &self.isometry.rotation * &other.rotation;
+
+        Similarity2::from_parts(&translation, &rotation, self.scale())
+    }
+}
+
+impl<S> ops::Mul<&Isometry2<S>> for Similarity2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Similarity2<S>;
+
+    #[inline]
+    fn mul(self, other: &Isometry2<S>) -> Self::Output {
+        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let translation = Translation2::from_vector(&(self.isometry.translation.vector + shift));
+        let rotation = &self.isometry.rotation * &other.rotation;
+
+        Similarity2::from_parts(&translation, &rotation, self.scale())
+    }
+}
+
+impl<S> ops::Mul<Isometry2<S>> for &Similarity2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Similarity2<S>;
+
+    #[inline]
+    fn mul(self, other: Isometry2<S>) -> Self::Output {
+        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let translation = Translation2::from_vector(&(self.isometry.translation.vector + shift));
+        let rotation = &self.isometry.rotation * &other.rotation;
+
+        Similarity2::from_parts(&translation, &rotation, self.scale())
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Isometry2<S>> for &'b Similarity2<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Similarity2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Isometry2<S>) -> Self::Output {
+        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let translation = Translation2::from_vector(&(self.isometry.translation.vector + shift));
+        let rotation = &self.isometry.rotation * &other.rotation;
+
+        Similarity2::from_parts(&translation, &rotation, self.scale())
+    }
+}
+
+
 
 /// A similarity transformation is a transformation consisting of a scaling,
 /// a rotation, and a translation. The similarity transformation applies the
@@ -1433,6 +1498,70 @@ where
     #[inline]
     fn mul(self, other: &'a Point3<S>) -> Self::Output {
         self.transform_point(other)
+    }
+}
+
+impl<S> ops::Mul<Isometry3<S>> for Similarity3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Similarity3<S>;
+
+    #[inline]
+    fn mul(self, other: Isometry3<S>) -> Self::Output {
+        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let translation = Translation3::from_vector(&(self.isometry.translation.vector + shift));
+        let rotation = &self.isometry.rotation * &other.rotation;
+
+        Similarity3::from_parts(&translation, &rotation, self.scale())
+    }
+}
+
+impl<S> ops::Mul<&Isometry3<S>> for Similarity3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Similarity3<S>;
+
+    #[inline]
+    fn mul(self, other: &Isometry3<S>) -> Self::Output {
+        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let translation = Translation3::from_vector(&(self.isometry.translation.vector + shift));
+        let rotation = &self.isometry.rotation * &other.rotation;
+
+        Similarity3::from_parts(&translation, &rotation, self.scale())
+    }
+}
+
+impl<S> ops::Mul<Isometry3<S>> for &Similarity3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Similarity3<S>;
+
+    #[inline]
+    fn mul(self, other: Isometry3<S>) -> Self::Output {
+        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let translation = Translation3::from_vector(&(self.isometry.translation.vector + shift));
+        let rotation = &self.isometry.rotation * &other.rotation;
+
+        Similarity3::from_parts(&translation, &rotation, self.scale())
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Isometry3<S>> for &'b Similarity3<S> 
+where 
+    S: ScalarFloat 
+{
+    type Output = Similarity3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Isometry3<S>) -> Self::Output {
+        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let translation = Translation3::from_vector(&(self.isometry.translation.vector + shift));
+        let rotation = &self.isometry.rotation * &other.rotation;
+
+        Similarity3::from_parts(&translation, &rotation, self.scale())
     }
 }
 
