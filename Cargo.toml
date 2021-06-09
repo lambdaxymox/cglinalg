@@ -40,7 +40,7 @@ default-features = false
 features = ["libm"]
 
 [dev-dependencies]
-proptest = "0.10.1"
+proptest = "1.0.0"
 
 [profile.release]
 opt-level = 2
