@@ -731,7 +731,7 @@ where
     #[inline]
     fn mul(self, other: Similarity2<S>) -> Self::Output {
         let mut result = self * &other.isometry;
-        result.scale *= self.scale();
+        result.scale *= other.scale();
 
         result
     }
@@ -746,7 +746,7 @@ where
     #[inline]
     fn mul(self, other: &Similarity2<S>) -> Self::Output {
         let mut result = self * &other.isometry;
-        result.scale *= self.scale();
+        result.scale *= other.scale();
 
         result
     }
@@ -761,7 +761,7 @@ where
     #[inline]
     fn mul(self, other: Similarity2<S>) -> Self::Output {
         let mut result = self * &other.isometry;
-        result.scale *= self.scale();
+        result.scale *= other.scale();
 
         result
     }
@@ -776,7 +776,7 @@ where
     #[inline]
     fn mul(self, other: &'a Similarity2<S>) -> Self::Output {
         let mut result = self * &other.isometry;
-        result.scale *= self.scale();
+        result.scale *= other.scale();
 
         result
     }
@@ -1634,7 +1634,7 @@ where
     #[inline]
     fn mul(self, other: Similarity3<S>) -> Self::Output {
         let mut result = self * &other.isometry;
-        result.scale *= self.scale();
+        result.scale *= other.scale();
 
         result
     }
@@ -1649,7 +1649,7 @@ where
     #[inline]
     fn mul(self, other: &Similarity3<S>) -> Self::Output {
         let mut result = self * &other.isometry;
-        result.scale *= self.scale();
+        result.scale *= other.scale();
 
         result
     }
@@ -1664,7 +1664,7 @@ where
     #[inline]
     fn mul(self, other: Similarity3<S>) -> Self::Output {
         let mut result = self * &other.isometry;
-        result.scale *= self.scale();
+        result.scale *= other.scale();
 
         result
     }
@@ -1679,7 +1679,7 @@ where
     #[inline]
     fn mul(self, other: &'a Similarity3<S>) -> Self::Output {
         let mut result = self * &other.isometry;
-        result.scale *= self.scale();
+        result.scale *= other.scale();
 
         result
     }
