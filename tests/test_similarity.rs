@@ -190,6 +190,16 @@ mod similarity2_tests {
     
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
     }
+
+    #[test]
+    fn test_scale_multiplication() {
+        let scale1 = Similarity2::from_scale(12_f64);
+        let scale2 = Similarity2::from_scale(34_f64);
+        let expected = Similarity2::from_scale(12_f64 * 34_f64);
+        let result = scale1 * scale2;
+
+        assert_eq!(result, expected);
+    }
 }
 
 
@@ -440,6 +450,16 @@ mod similarity3_tests {
         let result = similarity.transform_vector(&vector);
     
         assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    }
+
+    #[test]
+    fn test_scale_multiplication() {
+        let scale1 = Similarity3::from_scale(12_f64);
+        let scale2 = Similarity3::from_scale(34_f64);
+        let expected = Similarity3::from_scale(12_f64 * 34_f64);
+        let result = scale1 * scale2;
+
+        assert_eq!(result, expected);
     }
 }
 
