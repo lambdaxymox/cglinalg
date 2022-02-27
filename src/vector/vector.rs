@@ -16,7 +16,6 @@ use num_traits::{
 
 use core::fmt;
 use core::ops;
-// use core::ops::*;
 
 
 /// A representation of one-dimensional vectors.
