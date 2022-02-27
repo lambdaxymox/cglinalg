@@ -20,7 +20,7 @@ use num_traits::{
 
 use core::fmt;
 use core::ops;
-use core::ops::*;
+//use core::ops::*;
 
 
 /// A point is a location in a one-dimensional Euclidean space.
@@ -1093,27 +1093,27 @@ macro_rules! impl_point_index_ops {
 }
 
 impl_point_index_ops!(Point1<S>, 1, usize, S);
-impl_point_index_ops!(Point1<S>, 1, Range<usize>, [S]);
-impl_point_index_ops!(Point1<S>, 1, RangeTo<usize>, [S]);
-impl_point_index_ops!(Point1<S>, 1, RangeFrom<usize>, [S]);
-impl_point_index_ops!(Point1<S>, 1, RangeFull, [S]);
+impl_point_index_ops!(Point1<S>, 1, ops::Range<usize>, [S]);
+impl_point_index_ops!(Point1<S>, 1, ops::RangeTo<usize>, [S]);
+impl_point_index_ops!(Point1<S>, 1, ops::RangeFrom<usize>, [S]);
+impl_point_index_ops!(Point1<S>, 1, ops::RangeFull, [S]);
 
 impl_point_index_ops!(Point2<S>, 2, usize, S);
-impl_point_index_ops!(Point2<S>, 2, Range<usize>, [S]);
-impl_point_index_ops!(Point2<S>, 2, RangeTo<usize>, [S]);
-impl_point_index_ops!(Point2<S>, 2, RangeFrom<usize>, [S]);
-impl_point_index_ops!(Point2<S>, 2, RangeFull, [S]);
+impl_point_index_ops!(Point2<S>, 2, ops::Range<usize>, [S]);
+impl_point_index_ops!(Point2<S>, 2, ops::RangeTo<usize>, [S]);
+impl_point_index_ops!(Point2<S>, 2, ops::RangeFrom<usize>, [S]);
+impl_point_index_ops!(Point2<S>, 2, ops::RangeFull, [S]);
 
 impl_point_index_ops!(Point3<S>, 3, usize, S);
-impl_point_index_ops!(Point3<S>, 3, Range<usize>, [S]);
-impl_point_index_ops!(Point3<S>, 3, RangeTo<usize>, [S]);
-impl_point_index_ops!(Point3<S>, 3, RangeFrom<usize>, [S]);
-impl_point_index_ops!(Point3<S>, 3, RangeFull, [S]);
+impl_point_index_ops!(Point3<S>, 3, ops::Range<usize>, [S]);
+impl_point_index_ops!(Point3<S>, 3, ops::RangeTo<usize>, [S]);
+impl_point_index_ops!(Point3<S>, 3, ops::RangeFrom<usize>, [S]);
+impl_point_index_ops!(Point3<S>, 3, ops::RangeFull, [S]);
 
 
 macro_rules! impl_point_vector_binary_ops {
     ($OpType:ident, $op:ident, $T1:ty, $T2:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType<$T2> for $T1 where S: Scalar {
+        impl<S> ops::$OpType<$T2> for $T1 where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -1124,7 +1124,7 @@ macro_rules! impl_point_vector_binary_ops {
             }
         }
 
-        impl<S> $OpType<&$T2> for $T1 where S: Scalar {
+        impl<S> ops::$OpType<&$T2> for $T1 where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -1135,7 +1135,7 @@ macro_rules! impl_point_vector_binary_ops {
             }
         }
 
-        impl<S> $OpType<$T2> for &$T1 where S: Scalar {
+        impl<S> ops::$OpType<$T2> for &$T1 where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -1146,7 +1146,7 @@ macro_rules! impl_point_vector_binary_ops {
             }
         }
 
-        impl<'a, 'b, S> $OpType<&'a $T2> for &'b $T1 where S: Scalar {
+        impl<'a, 'b, S> ops::$OpType<&'a $T2> for &'b $T1 where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -1174,7 +1174,7 @@ impl_point_vector_binary_ops!(Sub, sub, Point3<S>, Point3<S>, Vector3<S>, { 0, 1
 
 macro_rules! impl_point_scalar_binary_ops {
     ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType<S> for $T where S: Scalar {
+        impl<S> ops::$OpType<S> for $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -1185,7 +1185,7 @@ macro_rules! impl_point_scalar_binary_ops {
             }
         }
 
-        impl<S> $OpType<S> for &$T where S: Scalar {
+        impl<S> ops::$OpType<S> for &$T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -1281,7 +1281,7 @@ impl_scalar_point_mul_ops!(f64,   Point3<f64>,   Point3<f64>,   { 0, 1, 2 });
 
 macro_rules! impl_point_unary_ops {
     ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType for $T where S: ScalarSigned {
+        impl<S> ops::$OpType for $T where S: ScalarSigned {
             type Output = $Output;
 
             #[inline]
@@ -1292,7 +1292,7 @@ macro_rules! impl_point_unary_ops {
             }
         }
 
-        impl<S> $OpType for &$T where S: ScalarSigned {
+        impl<S> ops::$OpType for &$T where S: ScalarSigned {
             type Output = $Output;
 
             #[inline]
