@@ -666,8 +666,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from((x, y): (S, S)) -> Self {
-        Self::new(x, y)
+    fn from(v: (S, S)) -> Self {
+        Self::new(v.0, v.1)
     }
 }
 
@@ -1042,8 +1042,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from((x, y, z): (S, S, S)) -> Self {
-        Self::new(x, y, z)
+    fn from(v: (S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2)
     }
 }
 
