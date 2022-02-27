@@ -32,7 +32,7 @@ pub struct Point1<S> {
 impl<S> Point1<S> {
     /// Construct a new point in one-dimensional Euclidean space.
     #[inline]
-    pub const fn new(x: S) -> Point1<S> {
+    pub const fn new(x: S) -> Self {
         Point1 { 
             data: Vector1::new(x), 
         }
@@ -81,8 +81,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Point1<S> {
-        Point1::new(value)
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value)
     }
 
     /// The length of the the underlying array storing the point components.
@@ -182,8 +182,8 @@ where
 {
     /// Compute the origin of the Euclidean vector space.
     #[inline]
-    pub fn origin() -> Point1<S> {
-        Point1::new(S::zero())
+    pub fn origin() -> Self {
+        Self::new(S::zero())
     }
 
     /// Convert a vector to a point. 
@@ -206,8 +206,8 @@ where
     /// assert_eq!(result, expected);
     /// ``` 
     #[inline]
-    pub fn from_vector(vector: Vector1<S>) -> Point1<S> {
-        Point1 {
+    pub fn from_vector(vector: Vector1<S>) -> Self {
+        Self {
             data: vector,
         }
     }
@@ -251,7 +251,7 @@ where
     /// assert_eq!(point1.dot(&point2), 2_f64);
     /// ```
     #[inline]
-    pub fn dot(&self, other: &Point1<S>) -> S {
+    pub fn dot(&self, other: &Self) -> S {
         self.data.dot(&other.data)
     }
 }
@@ -270,8 +270,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: S) -> Point1<S> {
-        Point1::new(v)
+    fn from(v: S) -> Self {
+        Self::new(v)
     }
 }
 
@@ -280,8 +280,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: [S; 1]) -> Point1<S> {
-        Point1::new(v[0])
+    fn from(v: [S; 1]) -> Self {
+        Self::new(v[0])
     }
 }
 
@@ -290,8 +290,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &[S; 1]) -> Point1<S> {
-        Point1::new(v[0])
+    fn from(v: &[S; 1]) -> Self {
+        Self::new(v[0])
     }
 }
 
@@ -318,8 +318,8 @@ pub struct Point2<S> {
 impl<S> Point2<S> {
     /// Construct a new two-dimensional point.
     #[inline]
-    pub const fn new(x: S, y: S) -> Point2<S> {
-        Point2 { 
+    pub const fn new(x: S, y: S) -> Self {
+        Self { 
             data: Vector2::new(x, y) 
         }
     }
@@ -389,8 +389,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Point2<S> {
-        Point2::new(value, value)
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value, value)
     }
 
     /// The length of the the underlying array storing the point components.
@@ -514,7 +514,7 @@ where
     /// assert!(result.is_none());
     /// ```
     #[inline]
-    pub fn from_homogeneous(vector: Vector3<S>) -> Option<Point2<S>> {
+    pub fn from_homogeneous(vector: Vector3<S>) -> Option<Self> {
         if !vector.z.is_zero() {
             Some(Point2::new(vector.x / vector.z, vector.y / vector.z))
         } else {
@@ -545,8 +545,8 @@ where
 
     /// Compute the origin of the Euclidean vector space.
     #[inline]
-    pub fn origin() -> Point2<S> {
-        Point2::new(S::zero(), S::zero())
+    pub fn origin() -> Self {
+        Self::new(S::zero(), S::zero())
     }
 
     /// Convert a vector to a point. 
@@ -569,8 +569,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_vector(vector: Vector2<S>) -> Point2<S> {
-        Point2 {
+    pub fn from_vector(vector: Vector2<S>) -> Self {
+        Self {
             data: vector,
         }
     }
@@ -614,7 +614,7 @@ where
     /// assert_eq!(point1.dot(&point2), 11_f64);
     /// ```
     #[inline]
-    pub fn dot(&self, other: &Point2<S>) -> S {
+    pub fn dot(&self, other: &Self) -> S {
         self.data.dot(&other.data)
     }
 }
@@ -633,8 +633,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from((x, y): (S, S)) -> Point2<S> {
-        Point2::new(x, y)
+    fn from((x, y): (S, S)) -> Self {
+        Self::new(x, y)
     }
 }
 
@@ -643,8 +643,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: [S; 2]) -> Point2<S> {
-        Point2::new(v[0], v[1])
+    fn from(v: [S; 2]) -> Self {
+        Self::new(v[0], v[1])
     }
 }
 
@@ -653,8 +653,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &[S; 2]) -> Point2<S> {
-        Point2::new(v[0], v[1])
+    fn from(v: &[S; 2]) -> Self {
+        Self::new(v[0], v[1])
     }
 }
 
@@ -681,8 +681,8 @@ pub struct Point3<S> {
 impl<S> Point3<S> {
     /// Construct a new point in three-dimensional Euclidean space.
     #[inline]
-    pub const fn new(x: S, y: S, z: S) -> Point3<S> {
-        Point3 { 
+    pub const fn new(x: S, y: S, z: S) -> Self {
+        Self { 
             data: Vector3::new(x, y, z),
         }
     }
@@ -729,8 +729,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Point3<S> {
-        Point3::new(value, value, value)
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value, value, value)
     }
 
     /// The length of the the underlying array storing the point components.
@@ -859,9 +859,9 @@ where
     /// assert!(result.is_none());
     /// ```
     #[inline]
-    pub fn from_homogeneous(vector: Vector4<S>) -> Option<Point3<S>> {
+    pub fn from_homogeneous(vector: Vector4<S>) -> Option<Self> {
         if !vector.w.is_zero() {
-            Some(Point3::new(
+            Some(Self::new(
                 vector.x / vector.w, 
                 vector.y / vector.w, 
                 vector.z / vector.w
@@ -894,8 +894,8 @@ where
 
     /// Compute the origin of the Euclidean vector space.
     #[inline]
-    pub fn origin() -> Point3<S> {
-        Point3::new(S::zero(), S::zero(), S::zero())
+    pub fn origin() -> Self {
+        Self::new(S::zero(), S::zero(), S::zero())
     }
 
     /// Convert a vector to a point. 
@@ -918,8 +918,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_vector(vector: Vector3<S>) -> Point3<S> {
-        Point3 {
+    pub fn from_vector(vector: Vector3<S>) -> Self {
+        Self {
             data: vector,
         }
     }
@@ -963,7 +963,7 @@ where
     /// assert_eq!(point1.dot(&point2), 32_f64);
     /// ```
     #[inline]
-    pub fn dot(&self, other: &Point3<S>) -> S {
+    pub fn dot(&self, other: &Self) -> S {
         self.data.dot(&other.data)
     }
 }
@@ -986,8 +986,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from((x, y, z): (S, S, S)) -> Point3<S> {
-        Point3::new(x, y, z)
+    fn from((x, y, z): (S, S, S)) -> Self {
+        Self::new(x, y, z)
     }
 }
 
@@ -996,7 +996,7 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(v: [S; 3]) -> Point3<S> {
+    fn from(v: [S; 3]) -> Self {
         Point3::new(v[0], v[1], v[2])
     }
 }
@@ -1217,7 +1217,7 @@ macro_rules! impl_scalar_point_mul_ops {
 
             #[inline]
             fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other[$index]),*)
+                Self::Output::new( $(self * other[$index]),*)
             }
         }
 
@@ -1226,7 +1226,7 @@ macro_rules! impl_scalar_point_mul_ops {
 
             #[inline]
             fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other[$index]),*)
+                Self::Output::new( $(self * other[$index]),*)
             }
         }
     }

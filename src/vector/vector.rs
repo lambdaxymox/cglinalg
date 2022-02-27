@@ -418,9 +418,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a [S; 1]) -> Self {
+    fn from(v: &'a [S; 1]) -> &'a Vector1<S> {
         unsafe { 
-            &*(v as *const [S; 1] as *const Self)
+            &*(v as *const [S; 1] as *const Vector1<S>)
         }
     }
 }
@@ -889,9 +889,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a [S; 2]) -> Self {
+    fn from(v: &'a [S; 2]) -> &'a Vector2<S> {
         unsafe { 
-            &*(v as *const [S; 2] as *const Self)
+            &*(v as *const [S; 2] as *const Vector2<S>)
         }
     }
 }
@@ -1438,9 +1438,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a [S; 3]) -> Self {
+    fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
         unsafe { 
-            &*(v as *const [S; 3] as *const Self)
+            &*(v as *const [S; 3] as *const Vector3<S>)
         }
     }
 }
@@ -1450,9 +1450,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a (S, S, S)) -> Self {
+    fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
         unsafe { 
-            &*(v as *const (S, S, S) as *const Self)
+            &*(v as *const (S, S, S) as *const Vector3<S>)
         }
     }
 }
@@ -1918,9 +1918,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a [S; 4]) -> Self {
+    fn from(v: &'a [S; 4]) -> &'a Vector4<S> {
         unsafe { 
-            &*(v as *const [S; 4] as *const Self)    
+            &*(v as *const [S; 4] as *const Vector4<S>)    
         }
     }
 }
@@ -1930,9 +1930,9 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(v: &'a (S, S, S, S)) -> Self {
+    fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
         unsafe { 
-            &*(v as *const (S, S, S, S) as *const Self)
+            &*(v as *const (S, S, S, S) as *const Vector4<S>)
         }
     }
 }
