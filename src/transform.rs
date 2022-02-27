@@ -178,7 +178,7 @@ where
     /// ```
     #[inline]
     pub fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+        Point2::from_homogeneous(&(self.matrix * point.to_homogeneous())).unwrap()
     }
 
     /// Apply the inverse of the transformation to a vector.
@@ -596,7 +596,7 @@ where
     /// ```
     #[inline]
     pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+        Point3::from_homogeneous(&(self.matrix * point.to_homogeneous())).unwrap()
     }
 
     /// Apply the inverse of the transformation to a vector.

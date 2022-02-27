@@ -197,7 +197,7 @@ where
     /// ```
     #[inline]
     pub fn reflect_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+        Point2::from_homogeneous(&(self.matrix * point.to_homogeneous())).unwrap()
     }
 
     /// Compute the identity reflection. 
@@ -518,7 +518,7 @@ where
     /// ```
     #[inline]
     pub fn reflect_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::from_homogeneous(self.matrix * point.to_homogeneous()).unwrap()
+        Point3::from_homogeneous(&(self.matrix * point.to_homogeneous())).unwrap()
     }
 
     /// Compute the identity reflection. 

@@ -87,7 +87,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn extend(self, y: S) -> Vector2<S> {
+    pub fn extend(&self, y: S) -> Vector2<S> {
         Vector2::new(self.data[0], y)
     }
 
@@ -511,7 +511,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn extend(self, z: S) -> Vector3<S> {
+    pub fn extend(&self, z: S) -> Vector3<S> {
         Vector3::new(self.data[0], self.data[1], z)
     }
 
@@ -533,7 +533,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn contract(self) -> Vector1<S> {
+    pub fn contract(&self) -> Vector1<S> {
         Vector1::new(self.data[0])
     }
 
@@ -997,7 +997,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn extend(self, w: S) -> Vector4<S> {
+    pub fn extend(&self, w: S) -> Vector4<S> {
         Vector4::new(self.data[0], self.data[1], self.data[2], w)
     }
 
@@ -1019,7 +1019,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn contract(self) -> Vector2<S> {
+    pub fn contract(&self) -> Vector2<S> {
         Vector2::new(self.data[0], self.data[1])
     }
 
@@ -1521,7 +1521,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn contract(self) -> Vector3<S> {
+    pub fn contract(&self) -> Vector3<S> {
         Vector3::new(self.data[0], self.data[1], self.data[2])
     }
 

@@ -61,7 +61,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn extend(self, y: S) -> Point2<S> {
+    pub fn extend(&self, y: S) -> Point2<S> {
         Point2::new(self.data[0], y)
     }
 
@@ -201,14 +201,14 @@ where
     /// #
     /// let vector = Vector1::new(1_u32);
     /// let expected = Point1::new(1_u32);
-    /// let result = Point1::from_vector(vector);
+    /// let result = Point1::from_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ``` 
     #[inline]
-    pub fn from_vector(vector: Vector1<S>) -> Self {
+    pub fn from_vector(vector: &Vector1<S>) -> Self {
         Self {
-            data: vector,
+            data: *vector,
         }
     }
     
@@ -232,7 +232,7 @@ where
     /// assert_eq!(result, expected);
     /// ``` 
     #[inline]
-    pub fn to_vector(self) -> Vector1<S> {
+    pub fn to_vector(&self) -> Vector1<S> {
         self.data
     }
 
@@ -380,7 +380,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn extend(self, z: S) -> Point3<S> {
+    pub fn extend(&self, z: S) -> Point3<S> {
         Point3::new(self.data[0], self.data[1], z)
     }
 
@@ -402,7 +402,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn contract(self) -> Point1<S> {
+    pub fn contract(&self) -> Point1<S> {
         Point1::new(self.data[0])
     }
 
@@ -537,17 +537,17 @@ where
     /// #
     /// let vector = Vector3::new(3_f64, 6_f64, 3_f64);
     /// let expected = Some(Point2::new(1_f64, 2_f64));
-    /// let result = Point2::from_homogeneous(vector);
+    /// let result = Point2::from_homogeneous(&vector);
     ///
     /// assert_eq!(result, expected);
     ///
     /// let vector_z_zero = Vector3::new(3_f64, 6_f64, 0_f64);
-    /// let result = Point2::from_homogeneous(vector_z_zero);
+    /// let result = Point2::from_homogeneous(&vector_z_zero);
     ///
     /// assert!(result.is_none());
     /// ```
     #[inline]
-    pub fn from_homogeneous(vector: Vector3<S>) -> Option<Self> {
+    pub fn from_homogeneous(vector: &Vector3<S>) -> Option<Self> {
         if !vector.z.is_zero() {
             Some(Point2::new(vector.x / vector.z, vector.y / vector.z))
         } else {
@@ -572,7 +572,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_homogeneous(self) -> Vector3<S> {
+    pub fn to_homogeneous(&self) -> Vector3<S> {
         self.data.extend(S::one())
     }
 
@@ -597,14 +597,14 @@ where
     /// #
     /// let vector = Vector2::new(1_u32, 2_u32);
     /// let expected = Point2::new(1_u32, 2_u32);
-    /// let result = Point2::from_vector(vector);
+    /// let result = Point2::from_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_vector(vector: Vector2<S>) -> Self {
+    pub fn from_vector(vector: &Vector2<S>) -> Self {
         Self {
-            data: vector,
+            data: *vector,
         }
     }
 
@@ -628,7 +628,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_vector(self) -> Vector2<S> {
+    pub fn to_vector(&self) -> Vector2<S> {
         self.data
     }
 
@@ -765,7 +765,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn contract(self) -> Point2<S> {
+    pub fn contract(&self) -> Point2<S> {
         Point2::new(self.data[0], self.data[1])
     }
 
@@ -904,18 +904,18 @@ where
     /// #
     /// let vector = Vector4::new(5_f64, 10_f64, 15_f64, 5_f64);
     /// let expected = Some(Point3::new(1_f64, 2_f64, 3_f64));
-    /// let result = Point3::from_homogeneous(vector);
+    /// let result = Point3::from_homogeneous(&vector);
     ///
     /// assert!(result.is_some());
     /// assert_eq!(result, expected);
     ///
     /// let vector_w_zero = Vector4::new(5_f64, 10_f64, 15_f64, 0_f64);
-    /// let result = Point3::from_homogeneous(vector_w_zero);
+    /// let result = Point3::from_homogeneous(&vector_w_zero);
     ///
     /// assert!(result.is_none());
     /// ```
     #[inline]
-    pub fn from_homogeneous(vector: Vector4<S>) -> Option<Self> {
+    pub fn from_homogeneous(vector: &Vector4<S>) -> Option<Self> {
         if !vector.w.is_zero() {
             Some(Self::new(
                 vector.x / vector.w, 
@@ -944,7 +944,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_homogeneous(self) -> Vector4<S> {
+    pub fn to_homogeneous(&self) -> Vector4<S> {
         self.data.extend(S::one())
     }
 
@@ -969,14 +969,14 @@ where
     /// #
     /// let vector = Vector3::new(1_u32, 2_u32, 3_u32);
     /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let result = Point3::from_vector(vector);
+    /// let result = Point3::from_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_vector(vector: Vector3<S>) -> Self {
+    pub fn from_vector(vector: &Vector3<S>) -> Self {
         Self {
-            data: vector,
+            data: *vector,
         }
     }
 
@@ -1000,7 +1000,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_vector(self) -> Vector3<S> {
+    pub fn to_vector(&self) -> Vector3<S> {
         self.data
     }
 
