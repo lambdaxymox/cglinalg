@@ -8,6 +8,7 @@
  * vector are `x`, `y` and `z`. The underlying data structure for the vector is
  * an array of length three, and each component name corresponds to an element 
  * of the array:
+ * 
  * ```text
  * vector.x <--> vector[0]
  * vector.y <--> vector[1]
