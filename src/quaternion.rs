@@ -52,8 +52,8 @@ impl<S> Quaternion<S> {
     /// Construct a new quaternion from its scalar component and its three
     /// vector components.
     #[inline]
-    pub const fn new(qs: S, qx: S, qy: S, qz: S) -> Quaternion<S> {
-        Quaternion { 
+    pub const fn new(qs: S, qx: S, qy: S, qz: S) -> Self {
+        Self { 
             s: qs, 
             v: Vector3::new(qx, qy, qz)
         }
@@ -61,8 +61,8 @@ impl<S> Quaternion<S> {
 
     /// Construct a quaternion from its scalar and vector parts.
     #[inline]
-    pub fn from_parts(qs: S, qv: Vector3<S>) -> Quaternion<S> {
-        Quaternion { 
+    pub fn from_parts(qs: S, qv: Vector3<S>) -> Self {
+        Self { 
             s: qs, 
             v: qv 
         }
@@ -91,8 +91,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Quaternion<S> {
-        Quaternion::new(value, value, value, value)
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value, value, value, value)
     }
 
     /// The length of the the underlying array storing the quaternion components.
@@ -214,8 +214,8 @@ where
     /// assert!(!unit_s.is_pure());
     /// ```
     #[inline]
-    pub fn unit_s() -> Quaternion<S> {
-        Quaternion::from_parts(S::one(), Vector3::zero())
+    pub fn unit_s() -> Self {
+        Self::from_parts(S::one(), Vector3::zero())
     }
 
     /// Return the **x-axis** unit pure quaternion.
@@ -235,8 +235,8 @@ where
     /// assert!(unit_x.is_pure());
     /// ```
     #[inline]
-    pub fn unit_x() -> Quaternion<S> {
-        Quaternion::from_parts(
+    pub fn unit_x() -> Self {
+        Self::from_parts(
             S::zero(), 
             Vector3::new(S::one(), S::zero(), S::zero())
         )
@@ -259,8 +259,8 @@ where
     /// assert!(unit_y.is_pure());
     /// ```
     #[inline]
-    pub fn unit_y() -> Quaternion<S> {
-        Quaternion::from_parts(
+    pub fn unit_y() -> Self {
+        Self::from_parts(
             S::zero(), 
             Vector3::new(S::zero(), S::one(), S::zero())
         )
@@ -283,8 +283,8 @@ where
     /// assert!(unit_z.is_pure());
     /// ```
     #[inline]
-    pub fn unit_z() -> Quaternion<S> {
-        Quaternion::from_parts(
+    pub fn unit_z() -> Self {
+        Self::from_parts(
             S::zero(), 
             Vector3::new(S::zero(), S::zero(), S::one())
         )
@@ -312,10 +312,10 @@ where
     /// assert_eq!(quaternion + zero_quat, quaternion);
     /// ```
     #[inline]
-    pub fn zero() -> Quaternion<S> {
+    pub fn zero() -> Self {
         let zero = S::zero();
 
-        Quaternion::new(zero, zero, zero, zero)
+        Self::new(zero, zero, zero, zero)
     }
     
     /// Determine whether is a quaternion is the zero quaternion.
@@ -341,11 +341,11 @@ where
     /// assert_eq!(quaternion * identity, quaternion);
     /// ```
     #[inline]
-    pub fn identity() -> Quaternion<S> {
+    pub fn identity() -> Self {
         let one = S::one();
         let zero = S::zero();
 
-        Quaternion::new(one, zero, zero, zero)
+        Self::new(one, zero, zero, zero)
     }
     
     /// Determine whether a quaternion is equal to the identity quaternion.
@@ -439,8 +439,8 @@ where
     /// assert!(!quaternion.is_pure());
     /// ```
     #[inline]
-    pub fn from_real(value: S) -> Quaternion<S> {
-        Quaternion::from_parts(value, Vector3::zero())
+    pub fn from_real(value: S) -> Self {
+        Self::from_parts(value, Vector3::zero())
     }
 
     /// Construct a pure quaternion from a vector value.
@@ -460,8 +460,8 @@ where
     /// assert!(!quaternion.is_real());
     /// ```
     #[inline]
-    pub fn from_pure(vector: Vector3<S>) -> Quaternion<S> {
-        Quaternion::from_parts(S::zero(), vector)
+    pub fn from_pure(vector: Vector3<S>) -> Self {
+        Self::from_parts(S::zero(), vector)
     }
     
     /// Compute the dot product of two quaternions.
@@ -481,7 +481,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn dot(&self, other: &Quaternion<S>) -> S {
+    pub fn dot(&self, other: &Self) -> S {
         self.s * other.s + self.v.dot(&other.v)
     }
 }
@@ -512,8 +512,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn conjugate(&self) -> Quaternion<S> {
-        Quaternion::from_parts(self.s, -self.v)
+    pub fn conjugate(&self) -> Self {
+        Self::from_parts(self.s, -self.v)
     }
 }
 
@@ -593,12 +593,12 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Quaternion<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
         let one_half = num_traits::cast(0.5_f64).unwrap();
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
         let _axis = axis.into_inner();
     
-        Quaternion::from_parts(cos_angle, _axis * sin_angle)
+        Self::from_parts(cos_angle, _axis * sin_angle)
     }
 
     /// Construct a quaternion from an equivalent 3x3 matrix.
@@ -630,7 +630,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_matrix(matrix: &Matrix3x3<S>) -> Quaternion<S> {
+    pub fn from_matrix(matrix: &Matrix3x3<S>) -> Self {
         let trace = matrix.trace();
         let one_half: S = num_traits::cast(0.5_f64).unwrap();
         if trace >= S::zero() {
@@ -641,7 +641,7 @@ where
             let qy = (matrix[2][0] - matrix[0][2]) * s;
             let qz = (matrix[0][1] - matrix[1][0]) * s;
             
-            Quaternion::new(qs, qx, qy, qz)
+            Self::new(qs, qx, qy, qz)
         } else if (matrix[0][0] > matrix[1][1]) && (matrix[0][0] > matrix[2][2]) {
             let s = ((matrix[0][0] - matrix[1][1] - matrix[2][2]) + S::one()).sqrt();
             let qx = one_half * s;
@@ -650,7 +650,7 @@ where
             let qz = (matrix[0][2] + matrix[2][0]) * s;
             let qs = (matrix[1][2] - matrix[2][1]) * s;
             
-            Quaternion::new(qs, qx, qy, qz)
+            Self::new(qs, qx, qy, qz)
         } else if matrix[1][1] > matrix[2][2] {
             let s = ((matrix[1][1] - matrix[0][0] - matrix[2][2]) + S::one()).sqrt();
             let qy = one_half * s;
@@ -659,7 +659,7 @@ where
             let qx = (matrix[1][0] + matrix[0][1]) * s;
             let qs = (matrix[2][0] - matrix[0][2]) * s;
             
-            Quaternion::new(qs, qx, qy, qz)
+            Self::new(qs, qx, qy, qz)
         } else {
             let s = ((matrix[2][2] - matrix[0][0] - matrix[1][1]) + S::one()).sqrt();
             let qz = one_half * s;
@@ -668,7 +668,7 @@ where
             let qy = (matrix[2][1] + matrix[1][2]) * s;
             let qs = (matrix[0][1] - matrix[1][0]) * s;
             
-            Quaternion::new(qs, qx, qy, qz)
+            Self::new(qs, qx, qy, qz)
         }
     }
 
@@ -1075,12 +1075,12 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Option<Quaternion<S>> {
+    pub fn inverse(&self) -> Option<Self> {
         self.inverse_eps(S::default_epsilon())
     }
 
     #[inline]
-    fn inverse_eps(&self, epsilon: S) -> Option<Quaternion<S>> {
+    fn inverse_eps(&self, epsilon: S) -> Option<Self> {
         let magnitude_squared = self.magnitude_squared();
         if magnitude_squared <= epsilon * epsilon {
             None
@@ -1278,22 +1278,22 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     #[inline]
-    pub fn exp(&self) -> Quaternion<S> {
+    pub fn exp(&self) -> Self {
         self.exp_eps(S::default_epsilon())
     }
 
     #[inline]
-    fn exp_eps(&self, epsilon: S) -> Quaternion<S> {
+    fn exp_eps(&self, epsilon: S) -> Self {
         let magnitude_v_squared = self.v.magnitude_squared();
         if magnitude_v_squared <= epsilon * epsilon {
-            Quaternion::from_parts(self.s.exp(), Vector3::zero())
+            Self::from_parts(self.s.exp(), Vector3::zero())
         } else {
             let magnitude_v = magnitude_v_squared.sqrt();
             let exp_s = self.s.exp();
             let q_scalar = exp_s * S::cos(magnitude_v);
             let q_vector = self.v * (exp_s * S::sin(magnitude_v) / magnitude_v);
             
-            Quaternion::from_parts(q_scalar, q_vector)
+            Self::from_parts(q_scalar, q_vector)
         }
     }
 
@@ -1353,23 +1353,24 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     #[inline]
-    pub fn ln(&self) -> Quaternion<S> {
+    pub fn ln(&self) -> Self {
         self.ln_eps(S::default_epsilon())
     }
 
     #[inline]
-    fn ln_eps(&self, epsilon: S) -> Quaternion<S> {
+    fn ln_eps(&self, epsilon: S) -> Self {
         let magnitude_v_squared = self.v.magnitude_squared();
         if magnitude_v_squared <= epsilon * epsilon {
             let magnitude = self.s.abs();
-            Quaternion::from_parts(magnitude.ln(), Vector3::zero())
+            
+            Self::from_parts(magnitude.ln(), Vector3::zero())
         } else {
             let magnitude = self.magnitude();
             let arccos_s_over_mag_q = S::acos(self.s / magnitude);
             let q_scalar = S::ln(magnitude);
             let q_vector = self.v * (arccos_s_over_mag_q / magnitude_v_squared.sqrt());
 
-            Quaternion::from_parts(q_scalar, q_vector)
+            Self::from_parts(q_scalar, q_vector)
         }
     }
 
@@ -1396,7 +1397,7 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     #[inline]
-    pub fn powf(&self, exponent: S) -> Quaternion<S> {
+    pub fn powf(&self, exponent: S) -> Self {
         (self.ln() * exponent).exp()
     }
 
@@ -1429,9 +1430,7 @@ where
     /// assert!(relative_eq!(result, expected));
     /// ```
     #[inline]
-    pub fn rotation_between(
-        v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Quaternion<S>>
-    {
+    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
         if let (Some(unit_v1), Some(unit_v2)) = (
             Unit::try_from_value(*v1, S::zero()),
             Unit::try_from_value(*v2, S::zero()),
@@ -1472,7 +1471,7 @@ where
     /// ```
     #[inline]
     pub fn rotation_between_axis(
-        unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Quaternion<S>> 
+        unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Self> 
     {
         let v1 = unit_v1.as_ref();
         let v2 = unit_v2.as_ref();
@@ -1511,7 +1510,7 @@ where
     ///
     /// This rotation maps the **z-axis** to the direction `direction`.
     #[inline]
-    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Quaternion<S> {
+    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self::from(&Matrix3x3::face_towards(direction, up))
     }
 
@@ -1522,7 +1521,7 @@ where
     /// **negative z-axis**. It is conventionally used in computer graphics for
     /// camera view transformations.
     #[inline]
-    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Quaternion<S> {
+    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self::from(&Matrix3x3::face_towards(direction, up).transpose())
     }
 
@@ -1533,7 +1532,7 @@ where
     /// **negative z-axis**. It is conventionally used in computer graphics for
     /// camera view transformations.
     #[inline]
-    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Quaternion<S> {
+    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self::from(&Matrix3x3::face_towards(direction, up).transpose())
     }
 
@@ -1555,7 +1554,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn lerp(&self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + (other - self) * amount
     }
 
@@ -1600,7 +1599,7 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-7));
     /// ```
     #[inline]
-    pub fn slerp(&self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
+    pub fn slerp(&self, other: &Self, amount: S) -> Self {
         let zero = S::zero();
         let one = S::one();
         // There are two possible routes along a great circle arc between two 
@@ -1658,7 +1657,7 @@ where
         let v_y = result.v.y * a + other.v.y * b;
         let v_z = result.v.z * a + other.v.z * b;
 
-        Quaternion::new(s, v_x, v_y, v_z)
+        Self::new(s, v_x, v_y, v_z)
     }
 
     /// Compute the normalized linear interpolation between two quaternions.
@@ -1680,7 +1679,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn nlerp(&self, other: &Quaternion<S>, amount: S) -> Quaternion<S> {
+    pub fn nlerp(&self, other: &Self, amount: S) -> Self {
         (self * (S::one() - amount) + other * amount).normalize()
     }
 
@@ -1744,7 +1743,7 @@ where
     /// assert_eq!(projected_s, quaternion.s * unit_s);
     /// ```
     #[inline]
-    pub fn project(&self, other: &Quaternion<S>) -> Quaternion<S> {
+    pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
 
@@ -1859,7 +1858,7 @@ where
         let scalar = cos_angle_over_two * scale;
         let vector = axis.as_ref() * sin_angle_over_two * scale;
 
-        Quaternion::from_parts(scalar, vector)
+        Self::from_parts(scalar, vector)
     }
 }
 
