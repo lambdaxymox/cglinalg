@@ -2619,7 +2619,7 @@ mod matrix4x4_tests {
         );
         let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
     
-        assert_eq!(result, expected);
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 
     #[test]

@@ -202,7 +202,7 @@ fn test_euler_angles_from_matrix_rotation_matrix1() {
     let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
     let result = EulerAngles::from_matrix(&matrix);
 
-    assert_eq!(result, expected);
+    assert!(relative_eq!(result, expected, epsilon = 1e-10));
 }
 
 #[test]

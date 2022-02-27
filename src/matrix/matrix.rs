@@ -5271,6 +5271,9 @@ where
     /// #     Matrix4x4,
     /// #     Degrees,
     /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
     /// #
     /// let vfov = Degrees(72.0);
     /// let aspect = 800 as f32 / 600 as f32;
@@ -5284,7 +5287,7 @@ where
     /// );
     /// let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
     ///
-    /// assert_eq!(result, expected);
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     #[rustfmt::skip]
     #[inline]
