@@ -288,7 +288,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn lerp(&self, other: &Vector1<S>, amount: S) -> Self {
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
 
