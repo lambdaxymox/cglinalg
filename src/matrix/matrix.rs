@@ -119,7 +119,7 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector1<S>) -> Self {
+    pub fn from_columns(c0: &Vector1<S>) -> Self {
         Self::new(c0[0])
     }
 
@@ -610,7 +610,7 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>) -> Self {
+    pub fn from_columns(c0: &Vector2<S>, c1: &Vector2<S>) -> Self {
         Self::new(
             c0[0], c0[1], 
             c1[0], c1[1]
@@ -1780,7 +1780,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_columns(
-        c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Self
+        c0: &Vector3<S>, c1: &Vector3<S>, c2: &Vector3<S>) -> Self
     {
         Self::new(
             c0[0], c0[1], c0[2], 
@@ -3874,7 +3874,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_columns(
-        c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Self 
+        c0: &Vector4<S>, c1: &Vector4<S>, c2: &Vector4<S>, c3: &Vector4<S>) -> Self 
     {
         Self::new(
             c0[0], c0[1], c0[2], c0[3],
@@ -6808,7 +6808,7 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>, c2: Vector2<S>) -> Self {
+    pub fn from_columns(c0: &Vector2<S>, c1: &Vector2<S>, c2: &Vector2<S>) -> Self {
         Self::new(
             c0[0], c0[1], 
             c1[0], c1[1],
@@ -7248,7 +7248,7 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector3<S>, c1: Vector3<S>) -> Self {
+    pub fn from_columns(c0: &Vector3<S>, c1: &Vector3<S>) -> Self {
         Self::new(
             c0[0], c0[1], c0[2], 
             c1[0], c1[1], c1[2]
@@ -7721,7 +7721,7 @@ where
     /// Construct a matrix from a set of column vectors.
     #[inline]
     pub fn from_columns(
-        c0: Vector2<S>, c1: Vector2<S>, c2: Vector2<S>, c3: Vector2<S>) -> Self {
+        c0: &Vector2<S>, c1: &Vector2<S>, c2: &Vector2<S>, c3: &Vector2<S>) -> Self {
         Self::new(
             c0[0], c0[1], 
             c1[0], c1[1],
@@ -8200,7 +8200,7 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>) -> Self {
+    pub fn from_columns(c0: &Vector4<S>, c1: &Vector4<S>) -> Self {
         Self::new(
             c0[0], c0[1], c0[2], c0[3],
             c1[0], c1[1], c1[2], c1[3]
@@ -8698,7 +8698,7 @@ where
     /// Construct a matrix from a set of column vectors.
     #[inline]
     pub fn from_columns(
-        c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>, c3: Vector3<S>) -> Self 
+        c0: &Vector3<S>, c1: &Vector3<S>, c2: &Vector3<S>, c3: &Vector3<S>) -> Self 
     {
         Self::new(
             c0[0], c0[1], c0[2],
@@ -9223,7 +9223,7 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>) -> Self {
+    pub fn from_columns(c0: &Vector4<S>, c1: &Vector4<S>, c2: &Vector4<S>) -> Self {
         Self::new(
             c0[0], c0[1], c0[2], c0[3],
             c1[0], c1[1], c1[2], c1[3],

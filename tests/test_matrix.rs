@@ -195,7 +195,7 @@ mod matrix2x2_tests {
             1.0, 2.0, 
             3.0, 4.0
         );
-        let result = Matrix2x2::from_columns(c0, c1);
+        let result = Matrix2x2::from_columns(&c0, &c1);
 
         assert_eq!(result, expected);
     }
@@ -849,7 +849,7 @@ mod matrix3x3_tests {
             4.0, 5.0, 6.0, 
             7.0, 8.0, 9.0
         );
-        let result = Matrix3x3::from_columns(c0, c1, c2);
+        let result = Matrix3x3::from_columns(&c0, &c1, &c2);
 
         assert_eq!(result, expected);
     }
@@ -1856,7 +1856,7 @@ mod matrix4x4_tests {
             9,  10, 11, 12, 
             13, 14 ,15, 16
         );
-        let result = Matrix4x4::from_columns(c0, c1, c2, c3);
+        let result = Matrix4x4::from_columns(&c0, &c1, &c2, &c3);
 
         assert_eq!(result, expected);
     }
