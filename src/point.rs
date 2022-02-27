@@ -251,7 +251,7 @@ where
     /// assert_eq!(point1.dot(&point2), 2_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Point1<S>) -> S {
+    pub fn dot(&self, other: &Point1<S>) -> S {
         self.data.dot(&other.data)
     }
 }
@@ -614,7 +614,7 @@ where
     /// assert_eq!(point1.dot(&point2), 11_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Point2<S>) -> S {
+    pub fn dot(&self, other: &Point2<S>) -> S {
         self.data.dot(&other.data)
     }
 }
@@ -963,7 +963,7 @@ where
     /// assert_eq!(point1.dot(&point2), 32_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Point3<S>) -> S {
+    pub fn dot(&self, other: &Point3<S>) -> S {
         self.data.dot(&other.data)
     }
 }

@@ -236,7 +236,7 @@ where
     /// assert_eq!(vector1.dot(&vector2), 2_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Self) -> S {
+    pub fn dot(&self, other: &Self) -> S {
         self.data[0] * other.data[0]
     }
 }
@@ -711,7 +711,7 @@ where
     /// assert_eq!(vector1.dot(&vector2), 11_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Self) -> S {
+    pub fn dot(&self, other: &Self) -> S {
         self.data[0] * other.data[0] + self.data[1] * other.data[1]
     }
 }
@@ -1195,7 +1195,7 @@ where
     /// assert_eq!(vector1.dot(&vector2), 32_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Self) -> S {
+    pub fn dot(&self, other: &Self) -> S {
         self.data[0] * other.data[0] + 
         self.data[1] * other.data[1] + 
         self.data[2] * other.data[2]
@@ -1728,7 +1728,7 @@ where
     /// assert_eq!(vector1.dot(&vector2), 70_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Self) -> S {
+    pub fn dot(&self, other: &Self) -> S {
         self.data[0] * other.data[0] + 
         self.data[1] * other.data[1] + 
         self.data[2] * other.data[2] + 

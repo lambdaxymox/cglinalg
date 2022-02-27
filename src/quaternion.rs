@@ -481,7 +481,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Quaternion<S>) -> S {
+    pub fn dot(&self, other: &Quaternion<S>) -> S {
         self.s * other.s + self.v.dot(&other.v)
     }
 }

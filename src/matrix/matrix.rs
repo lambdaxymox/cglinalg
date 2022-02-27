@@ -36,7 +36,6 @@ use num_traits::{
 };
 
 use core::fmt;
-use core::ops::*;
 use core::ops;
 
 
@@ -9695,7 +9694,7 @@ impl_index_ops!(Matrix4x3, Vector4, (4, 3));
 
 macro_rules! impl_matrix_matrix_binary_ops {
     ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> $OpType<$T> for $T where S: Scalar {
+        impl<S> ops::$OpType<$T> for $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -9706,7 +9705,7 @@ macro_rules! impl_matrix_matrix_binary_ops {
             }
         }
 
-        impl<S> $OpType<&$T> for $T where S: Scalar {
+        impl<S> ops::$OpType<&$T> for $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -9717,7 +9716,7 @@ macro_rules! impl_matrix_matrix_binary_ops {
             }
         }
 
-        impl<S> $OpType<$T> for &$T where S: Scalar {
+        impl<S> ops::$OpType<$T> for &$T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -9728,7 +9727,7 @@ macro_rules! impl_matrix_matrix_binary_ops {
             }
         }
 
-        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
+        impl<'a, 'b, S> ops::$OpType<&'a $T> for &'b $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -9910,7 +9909,7 @@ impl_matrix_matrix_binary_ops!(
 
 macro_rules! impl_matrix_unary_ops {
     ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> $OpType for $T where S: ScalarSigned {
+        impl<S> ops::$OpType for $T where S: ScalarSigned {
             type Output = $Output;
 
             #[inline]
@@ -9921,7 +9920,7 @@ macro_rules! impl_matrix_unary_ops {
             }
         }
 
-        impl<S> $OpType for &$T where S: ScalarSigned {
+        impl<S> ops::$OpType for &$T where S: ScalarSigned {
             type Output = $Output;
 
             #[inline]
@@ -10015,7 +10014,7 @@ impl_matrix_unary_ops!(
 
 macro_rules! impl_matrix_scalar_binary_ops {
     ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
-        impl<S> $OpType<S> for $T where S: Scalar {
+        impl<S> ops::$OpType<S> for $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -10026,7 +10025,7 @@ macro_rules! impl_matrix_scalar_binary_ops {
             }
         }
 
-        impl<S> $OpType<S> for &$T where S: Scalar {
+        impl<S> ops::$OpType<S> for &$T where S: Scalar {
             type Output = $Output;
 
             #[inline]
