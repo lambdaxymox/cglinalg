@@ -16,7 +16,7 @@ use num_traits::{
 
 use core::fmt;
 use core::ops;
-use core::ops::*;
+// use core::ops::*;
 
 
 /// A representation of one-dimensional vectors.
@@ -2023,7 +2023,7 @@ impl_scalar_vector_mul_ops!(f64   => Vector4<f64>   => Vector4<f64>,   { 0, 1, 2
 
 macro_rules! impl_vector_scalar_binary_ops {
     ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType<S> for $T where S: Scalar {
+        impl<S> ops::$OpType<S> for $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -2034,7 +2034,7 @@ macro_rules! impl_vector_scalar_binary_ops {
             }
         }
 
-        impl<S> $OpType<S> for &$T where S: Scalar {
+        impl<S> ops::$OpType<S> for &$T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -2063,7 +2063,7 @@ impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 })
 
 macro_rules! impl_vector_vector_binary_ops {
     ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType<$T> for $T where S: Scalar {
+        impl<S> ops::$OpType<$T> for $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -2074,7 +2074,7 @@ macro_rules! impl_vector_vector_binary_ops {
             }
         }
 
-        impl<S> $OpType<&$T> for $T where S: Scalar {
+        impl<S> ops::$OpType<&$T> for $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -2085,7 +2085,7 @@ macro_rules! impl_vector_vector_binary_ops {
             }
         }
 
-        impl<S> $OpType<$T> for &$T where S: Scalar {
+        impl<S> ops::$OpType<$T> for &$T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -2096,7 +2096,7 @@ macro_rules! impl_vector_vector_binary_ops {
             }
         }
 
-        impl<'a, 'b, S> $OpType<&'a $T> for &'b $T where S: Scalar {
+        impl<'a, 'b, S> ops::$OpType<&'a $T> for &'b $T where S: Scalar {
             type Output = $Output;
 
             #[inline]
@@ -2180,7 +2180,7 @@ impl_vector_binary_assign_ops!(Vector4<S>, { 0, 1, 2, 3 });
 
 macro_rules! impl_vector_unary_ops {
     ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> $OpType for $T where S: ScalarSigned {
+        impl<S> ops::$OpType for $T where S: ScalarSigned {
             type Output = $Output;
 
             #[inline]
@@ -2191,7 +2191,7 @@ macro_rules! impl_vector_unary_ops {
             }
         }
 
-        impl<S> $OpType for &$T where S: ScalarSigned {
+        impl<S> ops::$OpType for &$T where S: ScalarSigned {
             type Output = $Output;
 
             #[inline]
@@ -2246,28 +2246,28 @@ macro_rules! impl_vector_index_ops {
 }
 
 impl_vector_index_ops!(Vector1<S>, 1, usize, S);
-impl_vector_index_ops!(Vector1<S>, 1, Range<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, RangeFull, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, ops::Range<usize>, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, ops::RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, ops::RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector1<S>, 1, ops::RangeFull, [S]);
 
 impl_vector_index_ops!(Vector2<S>, 2, usize, S);
-impl_vector_index_ops!(Vector2<S>, 2, Range<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, RangeFull, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, ops::Range<usize>, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, ops::RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, ops::RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector2<S>, 2, ops::RangeFull, [S]);
 
 impl_vector_index_ops!(Vector3<S>, 3, usize, S);
-impl_vector_index_ops!(Vector3<S>, 3, Range<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, RangeFull, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, ops::Range<usize>, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, ops::RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, ops::RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector3<S>, 3, ops::RangeFull, [S]);
 
 impl_vector_index_ops!(Vector4<S>, 4, usize, S);
-impl_vector_index_ops!(Vector4<S>, 4, Range<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, RangeFull, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, ops::Range<usize>, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, ops::RangeTo<usize>, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFrom<usize>, [S]);
+impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFull, [S]);
 
 
 macro_rules! impl_as_ref_ops {
