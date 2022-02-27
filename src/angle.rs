@@ -184,7 +184,7 @@ where
     /// Construct a typed angle of zero radians.
     #[inline]
     pub fn zero() -> Self {
-        Radians(S::zero())
+        Self(S::zero())
     }
 
     /// Determine whether a typed angle is zero radians.
@@ -231,7 +231,7 @@ where
     /// Construct a typed angle of zero radians.
     #[inline]
     pub fn zero() -> Self {
-        Degrees(S::zero())
+        Self(S::zero())
     }
 
     /// Determine whether a typed angle is zero radians.
@@ -270,8 +270,8 @@ where
     S: ScalarFloat
 {
     #[inline]
-    fn from(degrees: Degrees<S>) -> Radians<S> {
-        Radians(degrees.0 * num_traits::cast(f64::consts::PI / 180_f64).unwrap())
+    fn from(degrees: Degrees<S>) -> Self {
+        Self(degrees.0 * num_traits::cast(f64::consts::PI / 180_f64).unwrap())
     }
 }
 
@@ -280,8 +280,8 @@ where
     S: ScalarFloat 
 {
     #[inline]
-    fn from(radians: Radians<S>) -> Degrees<S> {
-        Degrees(radians.0 * num_traits::cast(180_f64 / f64::consts::PI).unwrap())
+    fn from(radians: Radians<S>) -> Self {
+        Self(radians.0 * num_traits::cast(180_f64 / f64::consts::PI).unwrap())
     }
 }
 
@@ -572,7 +572,7 @@ where
     S: Scalar 
 {
     #[inline]
-    fn add_assign(&mut self, other: Degrees<S>) {
+    fn add_assign(&mut self, other: Self) {
         *self = *self + other;
     } 
 }
@@ -582,7 +582,7 @@ where
     S: Scalar 
 {
     #[inline]
-    fn sub_assign(&mut self, other: Degrees<S>) {
+    fn sub_assign(&mut self, other: Self) {
         *self = *self - other;
     } 
 }
@@ -612,7 +612,7 @@ where
     S: ScalarFloat 
 {
     #[inline]
-    fn rem_assign(&mut self, other: Degrees<S>) {
+    fn rem_assign(&mut self, other: Self) {
         *self = *self % other;
     } 
 }
@@ -622,8 +622,8 @@ where
     S: Scalar 
 {
     #[inline]
-    fn zero() -> Degrees<S> {
-        Degrees(S::zero())
+    fn zero() -> Self {
+        Self(S::zero())
     }
 
     #[inline]
@@ -988,7 +988,7 @@ where
     S: ScalarFloat 
 {
     #[inline]
-    fn rem_assign(&mut self, other: Radians<S>) {
+    fn rem_assign(&mut self, other: Self) {
         self.0 = self.0 % other.0;
     } 
 }
@@ -998,8 +998,8 @@ where
     S: Scalar 
 {
     #[inline]
-    fn zero() -> Radians<S> {
-        Radians(S::zero())
+    fn zero() -> Self {
+        Self(S::zero())
     }
 
     #[inline]
@@ -1063,7 +1063,7 @@ where
 
     #[inline]
     fn full_turn() -> Self {
-        Radians(num_traits::cast(2_f64 * f64::consts::PI).unwrap())
+        Self(num_traits::cast(2_f64 * f64::consts::PI).unwrap())
     }
 
     #[inline]
@@ -1083,22 +1083,22 @@ where
 
     #[inline]
     fn asin(ratio: Self::Dimensionless) -> Self {
-        Radians(Self::Dimensionless::asin(ratio))
+        Self(Self::Dimensionless::asin(ratio))
     }
 
     #[inline]
     fn acos(ratio: Self::Dimensionless) -> Self {
-        Radians(Self::Dimensionless::acos(ratio))
+        Self(Self::Dimensionless::acos(ratio))
     }
 
     #[inline]
     fn atan(ratio: Self::Dimensionless) -> Self {
-        Radians(Self::Dimensionless::atan(ratio))
+        Self(Self::Dimensionless::atan(ratio))
     }
 
     #[inline]
     fn atan2(a: Self::Dimensionless, b: Self::Dimensionless) -> Self {
-        Radians(Self::Dimensionless::atan2(a, b))
+        Self(Self::Dimensionless::atan2(a, b))
     }
 }
 
@@ -1110,7 +1110,7 @@ where
 
     #[inline]
     fn full_turn() -> Self {
-        Degrees(num_traits::cast(360).unwrap())
+        Self(num_traits::cast(360).unwrap())
     }
 
     #[inline]

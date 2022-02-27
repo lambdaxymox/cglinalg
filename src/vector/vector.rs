@@ -28,8 +28,8 @@ pub struct Vector1<S> {
 impl<S> Vector1<S> {
     /// Construct a new vector.
     #[inline]
-    pub const fn new(x: S) -> Vector1<S> {
-        Vector1 { 
+    pub const fn new(x: S) -> Self {
+        Self { 
             data: [x], 
         }
     }
@@ -110,8 +110,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Vector1<S> {
-        Vector1::new(value)
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value)
     }
 
     /// The length of the the underlying array storing the vector components.
@@ -180,7 +180,7 @@ where
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_x() -> Vector1<S> {
+    pub fn unit_x() -> Self {
         Vector1::new(S::one())
     }
 
@@ -188,7 +188,7 @@ where
     ///
     /// The zero vector is the vector in which all of its elements are zero.
     #[inline]
-    pub fn zero() -> Vector1<S> {
+    pub fn zero() -> Self {
         Vector1::new(S::zero())
     }
     
@@ -236,7 +236,7 @@ where
     /// assert_eq!(vector1.dot(&vector2), 2_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Vector1<S>) -> S {
+    pub fn dot(self, other: &Self) -> S {
         self.data[0] * other.data[0]
     }
 }
@@ -288,7 +288,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn lerp(&self, other: &Vector1<S>, amount: S) -> Vector1<S> {
+    pub fn lerp(&self, other: &Vector1<S>, amount: S) -> Self {
         self + ((other - self) * amount)
     }
 
@@ -345,7 +345,7 @@ where
     /// assert_eq!(projected_x, vector.x * unit_x);
     /// ```
     #[inline]
-    pub fn project(&self, other: &Vector1<S>) -> Vector1<S> {
+    pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
@@ -368,8 +368,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: S) -> Vector1<S> {
-        Vector1::new(v)
+    fn from(v: S) -> Self {
+        Self::new(v)
     }
 }
 
@@ -378,8 +378,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: (S,)) -> Vector1<S> {
-        Vector1::new(v.0)
+    fn from(v: (S,)) -> Self {
+        Self::new(v.0)
     }
 }
 
@@ -388,8 +388,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &(S,)) -> Vector1<S> {
-        Vector1::new(v.0)
+    fn from(v: &(S,)) -> Self  {
+        Self::new(v.0)
     }
 }
 
@@ -398,8 +398,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: [S; 1]) -> Vector1<S> {
-        Vector1::new(v[0])
+    fn from(v: [S; 1]) -> Self {
+        Self::new(v[0])
     }
 }
 
@@ -408,8 +408,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &[S; 1]) -> Vector1<S> {
-        Vector1::new(v[0])
+    fn from(v: &[S; 1]) -> Self {
+        Self::new(v[0])
     }
 }
 
@@ -418,9 +418,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a [S; 1]) -> &'a Vector1<S> {
+    fn from(v: &'a [S; 1]) -> Self {
         unsafe { 
-            &*(v as *const [S; 1] as *const Vector1<S>)
+            &*(v as *const [S; 1] as *const Self)
         }
     }
 }
@@ -436,8 +436,8 @@ pub struct Vector2<S> {
 impl<S> Vector2<S> {
     /// Construct a new vector.
     #[inline]
-    pub const fn new(x: S, y: S) -> Vector2<S> {
-        Vector2 { 
+    pub const fn new(x: S, y: S) -> Self {
+        Self { 
             data: [x, y],
         }
     }
@@ -544,8 +544,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Vector2<S> {
-        Vector2::new(value, value)
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value, value)
     }
 
     /// The length of the the underlying array storing the vector components.
@@ -614,23 +614,23 @@ where
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_x() -> Vector2<S> {
-        Vector2::new(S::one(), S::zero())
+    pub fn unit_x() -> Self {
+        Self::new(S::one(), S::zero())
     }
 
     /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_y() -> Vector2<S> {
-        Vector2::new(S::zero(), S::one())
+    pub fn unit_y() -> Self {
+        Self::new(S::zero(), S::one())
     }
 
     /// Compute the zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
     #[inline]
-    pub fn zero() -> Vector2<S> {
-        Vector2::new(S::zero(), S::zero())
+    pub fn zero() -> Self {
+        Self::new(S::zero(), S::zero())
     }
     
     /// Determine whether a vector is the zero vector.
@@ -711,7 +711,7 @@ where
     /// assert_eq!(vector1.dot(&vector2), 11_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Vector2<S>) -> S {
+    pub fn dot(self, other: &Self) -> S {
         self.data[0] * other.data[0] + self.data[1] * other.data[1]
     }
 }
@@ -764,7 +764,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn lerp(&self, other: &Vector2<S>, amount: S) -> Vector2<S> {
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
 
@@ -826,7 +826,7 @@ where
     /// assert_eq!(projected_y, vector.y * unit_y);
     /// ```
     #[inline]
-    pub fn project(&self, other: &Vector2<S>) -> Vector2<S> {
+    pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
@@ -849,8 +849,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from((x, y): (S, S)) -> Vector2<S> {
-        Vector2::new(x, y)
+    fn from((x, y): (S, S)) -> Self {
+        Self::new(x, y)
     }
 }
 
@@ -859,8 +859,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: [S; 2]) -> Vector2<S> {
-        Vector2::new(v[0], v[1])
+    fn from(v: [S; 2]) -> Self {
+        Self::new(v[0], v[1])
     }
 }
 
@@ -869,8 +869,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &(S, S)) -> Vector2<S> {
-        Vector2::new(v.0, v.1)
+    fn from(v: &(S, S)) -> Self {
+        Self::new(v.0, v.1)
     }
 }
 
@@ -879,8 +879,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &[S; 2]) -> Vector2<S> {
-        Vector2::new(v[0], v[1])
+    fn from(v: &[S; 2]) -> Self {
+        Self::new(v[0], v[1])
     }
 }
 
@@ -889,9 +889,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a [S; 2]) -> &'a Vector2<S> {
+    fn from(v: &'a [S; 2]) -> Self {
         unsafe { 
-            &*(v as *const [S; 2] as *const Vector2<S>)
+            &*(v as *const [S; 2] as *const Self)
         }
     }
 }
@@ -907,8 +907,8 @@ pub struct Vector3<S> {
 impl<S> Vector3<S> {
     /// Construct a new vector.
     #[inline]
-    pub const fn new(x: S, y: S, z: S) -> Vector3<S> {
-        Vector3 { 
+    pub const fn new(x: S, y: S, z: S) -> Self {
+        Self { 
             data: [x, y, z],
         }
     }
@@ -1019,8 +1019,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Vector3<S> {
-        Vector3::new(value, value, value)
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value, value, value)
     }
 
     /// The length of the the underlying array storing the vector components.
@@ -1089,30 +1089,30 @@ where
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_x() -> Vector3<S> {
-        Vector3::new(S::one(), S::zero(), S::zero())
+    pub fn unit_x() -> Self {
+        Self::new(S::one(), S::zero(), S::zero())
     }
 
     /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_y() -> Vector3<S> {
-        Vector3::new(S::zero(), S::one(), S::zero())
+    pub fn unit_y() -> Self {
+        Self::new(S::zero(), S::one(), S::zero())
     }
     
     /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_z() -> Vector3<S> {
-        Vector3::new(S::zero(), S::zero(), S::one())
+    pub fn unit_z() -> Self {
+        Self::new(S::zero(), S::zero(), S::one())
     }
 
     /// Compute the zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
     #[inline]
-    pub fn zero() -> Vector3<S> {
-        Vector3::new(S::zero(), S::zero(), S::zero())
+    pub fn zero() -> Self {
+        Self::new(S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether a vector is the zero vector.
@@ -1195,7 +1195,7 @@ where
     /// assert_eq!(vector1.dot(&vector2), 32_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Vector3<S>) -> S {
+    pub fn dot(self, other: &Self) -> S {
         self.data[0] * other.data[0] + 
         self.data[1] * other.data[1] + 
         self.data[2] * other.data[2]
@@ -1259,7 +1259,7 @@ where
     /// assert_eq!(vector.cross(&vector), Vector3::zero());
     /// ```
     #[inline]
-    pub fn cross(&self, other: &Vector3<S>) -> Self {
+    pub fn cross(&self, other: &Self) -> Self {
         let x = self.data[1] * other.data[2] - self.data[2] * other.data[1];
         let y = self.data[2] * other.data[0] - self.data[0] * other.data[2];
         let z = self.data[0] * other.data[1] - self.data[1] * other.data[0];
@@ -1290,7 +1290,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn lerp(&self, other: &Vector3<S>, amount: S) -> Vector3<S> {
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
 
@@ -1355,7 +1355,7 @@ where
     /// assert_eq!(projected_z, vector.z * unit_z);
     /// ```
     #[inline]
-    pub fn project(&self, other: &Vector3<S>) -> Vector3<S> {
+    pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
@@ -1378,8 +1378,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from((x, y, z): (S, S, S)) -> Vector3<S> {
-        Vector3::new(x, y, z)
+    fn from((x, y, z): (S, S, S)) -> Self {
+        Self::new(x, y, z)
     }
 }
 
@@ -1388,8 +1388,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: [S; 3]) -> Vector3<S> {
-        Vector3::new(v[0], v[1], v[2])
+    fn from(v: [S; 3]) -> Self {
+        Self::new(v[0], v[1], v[2])
     }
 }
 
@@ -1398,8 +1398,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &[S; 3]) -> Vector3<S> {
-        Vector3::new(v[0], v[1], v[2])
+    fn from(v: &[S; 3]) -> Self {
+        Self::new(v[0], v[1], v[2])
     }
 }
 
@@ -1408,8 +1408,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &(S, S, S)) -> Vector3<S> {
-        Vector3::new(v.0, v.1, v.2)
+    fn from(v: &(S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2)
     }
 }
 
@@ -1418,8 +1418,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: Vector4<S>) -> Vector3<S> {
-        Vector3::new(v.data[0], v.data[1], v.data[2])
+    fn from(v: Vector4<S>) -> Self {
+        Self::new(v.data[0], v.data[1], v.data[2])
     }
 }
 
@@ -1428,8 +1428,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &Vector4<S>) -> Vector3<S> {
-        Vector3::new(v.data[0], v.data[1], v.data[2])
+    fn from(v: &Vector4<S>) -> Self {
+        Self::new(v.data[0], v.data[1], v.data[2])
     }
 }
 
@@ -1438,9 +1438,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
+    fn from(v: &'a [S; 3]) -> Self {
         unsafe { 
-            &*(v as *const [S; 3] as *const Vector3<S>)
+            &*(v as *const [S; 3] as *const Self)
         }
     }
 }
@@ -1450,9 +1450,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
+    fn from(v: &'a (S, S, S)) -> Self {
         unsafe { 
-            &*(v as *const (S, S, S) as *const Vector3<S>)
+            &*(v as *const (S, S, S) as *const Self)
         }
     }
 }
@@ -1468,8 +1468,8 @@ pub struct Vector4<S> {
 impl<S> Vector4<S> {
     /// Construct a new four-dimensional vector.
     #[inline]
-    pub const fn new(x: S, y: S, z: S, w: S) -> Vector4<S> {
-        Vector4 { 
+    pub const fn new(x: S, y: S, z: S, w: S) -> Self {
+        Self { 
             data: [x, y, z, w],
         }
     }
@@ -1520,8 +1520,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Vector4<S> {
-        Vector4::new(value, value, value, value)
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value, value, value, value)
     }
 
     /// The length of the the underlying array storing the vector components.
@@ -1637,37 +1637,37 @@ where
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_x() -> Vector4<S> {
-        Vector4::new(S::one(), S::zero(), S::zero(), S::zero())
+    pub fn unit_x() -> Self {
+        Self::new(S::one(), S::zero(), S::zero(), S::zero())
     }
 
     /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_y() -> Vector4<S> {
-        Vector4::new(S::zero(), S::one(), S::zero(), S::zero())
+    pub fn unit_y() -> Self {
+        Self::new(S::zero(), S::one(), S::zero(), S::zero())
     }
     
     /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_z() -> Vector4<S> {
-        Vector4::new(S::zero(), S::zero(), S::one(), S::zero())
+    pub fn unit_z() -> Self {
+        Self::new(S::zero(), S::zero(), S::one(), S::zero())
     }
 
     /// Returns the **w-axis** unit vector, a unit vector with the **w-component**
     /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_w() -> Vector4<S> {
-        Vector4::new(S::zero(), S::zero(), S::zero(), S::one())
+    pub fn unit_w() -> Self {
+        Self::new(S::zero(), S::zero(), S::zero(), S::one())
     }
 
     /// Compute the zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
     #[inline]
-    pub fn zero() -> Vector4<S> {
-        Vector4::new(S::zero(), S::zero(), S::zero(), S::zero())
+    pub fn zero() -> Self {
+        Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether a vector is the zero vector.
@@ -1728,7 +1728,7 @@ where
     /// assert_eq!(vector1.dot(&vector2), 70_f64);
     /// ```
     #[inline]
-    pub fn dot(self, other: &Vector4<S>) -> S {
+    pub fn dot(self, other: &Self) -> S {
         self.data[0] * other.data[0] + 
         self.data[1] * other.data[1] + 
         self.data[2] * other.data[2] + 
@@ -1786,7 +1786,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn lerp(&self, other: &Vector4<S>, amount: S) -> Vector4<S> {
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
 
@@ -1855,7 +1855,7 @@ where
     /// assert_eq!(projected_w, vector.w * unit_w);
     /// ```
     #[inline]
-    pub fn project(&self, other: &Vector4<S>) -> Vector4<S> {
+    pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
@@ -1878,8 +1878,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from((x, y, z, w): (S, S, S, S)) -> Vector4<S> {
-        Vector4::new(x, y, z, w)
+    fn from((x, y, z, w): (S, S, S, S)) -> Self {
+        Self::new(x, y, z, w)
     }
 }
 
@@ -1888,8 +1888,8 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(v: [S; 4]) -> Vector4<S> {
-        Vector4::new(v[0], v[1], v[2], v[3])
+    fn from(v: [S; 4]) -> Self {
+        Self::new(v[0], v[1], v[2], v[3])
     }
 }
 
@@ -1898,8 +1898,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &[S; 4]) -> Vector4<S> {
-        Vector4::new(v[0], v[1], v[2], v[3])
+    fn from(v: &[S; 4]) -> Self {
+        Self::new(v[0], v[1], v[2], v[3])
     }
 }
 
@@ -1908,8 +1908,8 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(v: &(S, S, S, S)) -> Vector4<S> {
-        Vector4::new(v.0, v.1, v.2, v.3)
+    fn from(v: &(S, S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2, v.3)
     }
 }
 
@@ -1918,9 +1918,9 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a [S; 4]) -> &'a Vector4<S> {
+    fn from(v: &'a [S; 4]) -> Self {
         unsafe { 
-            &*(v as *const [S; 4] as *const Vector4<S>)    
+            &*(v as *const [S; 4] as *const Self)    
         }
     }
 }
@@ -1930,9 +1930,9 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
+    fn from(v: &'a (S, S, S, S)) -> Self {
         unsafe { 
-            &*(v as *const (S, S, S, S) as *const Vector4<S>)
+            &*(v as *const (S, S, S, S) as *const Self)
         }
     }
 }
@@ -1944,7 +1944,7 @@ macro_rules! impl_scalar_vector_mul_ops {
 
             #[inline]
             fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.data[$index]),* )
+                Self::Output::new( $(self * other.data[$index]),* )
             }
         }
 
@@ -1953,7 +1953,7 @@ macro_rules! impl_scalar_vector_mul_ops {
 
             #[inline]
             fn mul(self, other: $Rhs) -> $Output {
-                <$Output>::new( $(self * other.data[$index]),* )
+                Self::Output::new( $(self * other.data[$index]),* )
             }
         }
     }
@@ -1972,7 +1972,7 @@ impl_scalar_vector_mul_ops!(i64   => Vector1<i64>   => Vector1<i64>,   { 0 });
 impl_scalar_vector_mul_ops!(i128  => Vector1<i128>  => Vector1<i128>,  { 0 });
 impl_scalar_vector_mul_ops!(isize => Vector1<isize> => Vector1<isize>, { 0 });
 impl_scalar_vector_mul_ops!(f32   => Vector1<f32>   => Vector1<f32>,   { 0 });
-impl_scalar_vector_mul_ops!(f64   => Vector1<f64>   =>  Vector1<f64>,  { 0 });
+impl_scalar_vector_mul_ops!(f64   => Vector1<f64>   => Vector1<f64>,   { 0 });
 
 impl_scalar_vector_mul_ops!(u8    => Vector2<u8>    => Vector2<u8>,    { 0, 1 });
 impl_scalar_vector_mul_ops!(u16   => Vector2<u16>   => Vector2<u16>,   { 0, 1 });
