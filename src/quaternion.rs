@@ -1899,6 +1899,70 @@ impl<S> AsMut<(S, S, S, S)> for Quaternion<S> {
     }
 }
 
+impl<S> From<(S, S, S, S)> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(v: (S, S, S, S)) -> Quaternion<S> {
+        Quaternion::new(v.0, v.1, v.2, v.3)
+    }
+}
+
+impl<S> From<[S; 4]> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(v: [S; 4]) -> Quaternion<S> {
+        Quaternion::new(v[0], v[1], v[2], v[3])
+    }
+}
+
+impl<S> From<&(S, S, S, S)> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(v: &(S, S, S, S)) -> Quaternion<S> {
+        Quaternion::new(v.0, v.1, v.2, v.3)
+    }
+}
+
+impl<S> From<&[S; 4]> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(v: &[S; 4]) -> Quaternion<S> {
+        Quaternion::new(v[0], v[1], v[2], v[3])
+    }
+}
+
+impl<'a, S> From<&'a [S; 4]> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(v: &'a [S; 4]) -> &'a Quaternion<S> {
+        unsafe { 
+            &*(v as *const [S; 4] as *const Quaternion<S>)
+        }
+    }
+}
+
+impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(v: &'a (S, S, S, S)) -> &'a Quaternion<S> {
+        unsafe { 
+            &*(v as *const (S, S, S, S) as *const Quaternion<S>)
+        }
+    }
+}
+
 impl<S> From<Quaternion<S>> for Matrix3x3<S> 
 where 
     S: ScalarFloat 
@@ -1936,50 +2000,6 @@ where
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix4x4<S> {
         quaternion.to_matrix4x4()
-    }
-}
-
-impl<S> From<[S; 4]> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn from(v: [S; 4]) -> Quaternion<S> {
-        Quaternion::new(v[0], v[1], v[2], v[3])
-    }
-}
-
-impl<'a, S> From<&'a [S; 4]> for &'a Quaternion<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn from(v: &'a [S; 4]) -> &'a Quaternion<S> {
-        unsafe { 
-            &*(v as *const [S; 4] as *const Quaternion<S>)
-        }
-    }
-}
-
-impl<S> From<(S, S, S, S)> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn from(v: (S, S, S, S)) -> Quaternion<S> {
-        Quaternion::new(v.0, v.1, v.2, v.3)
-    }
-}
-
-impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn from(v: &'a (S, S, S, S)) -> &'a Quaternion<S> {
-        unsafe { 
-            &*(v as *const (S, S, S, S) as *const Quaternion<S>)
-        }
     }
 }
 

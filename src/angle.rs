@@ -400,7 +400,7 @@ where
 }
 
 impl<S> ops::Mul<S> for Degrees<S> 
-where 
+where
     S: Scalar
 {
     type Output = Degrees<S>;
@@ -412,7 +412,7 @@ where
 }
 
 impl<'a, S> ops::Mul<S> for &'a Degrees<S> 
-where 
+where
     S: Scalar
 {
     type Output = Degrees<S>;

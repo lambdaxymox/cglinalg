@@ -275,6 +275,16 @@ where
     }
 }
 
+impl<S> From<(S,)> for Point1<S>
+where
+    S: Scalar
+{
+    #[inline]
+    fn from(v: (S,)) -> Self {
+        Self::new(v.0)
+    }
+}
+
 impl<S> From<[S; 1]> for Point1<S>
 where 
     S: Scalar
@@ -282,6 +292,16 @@ where
     #[inline]
     fn from(v: [S; 1]) -> Self {
         Self::new(v[0])
+    }
+}
+
+impl<S> From<&(S,)> for Point1<S>
+where
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &(S,)) -> Self {
+        Self::new(v.0)
     }
 }
 
@@ -294,6 +314,19 @@ where
         Self::new(v[0])
     }
 }
+
+impl<'a, S> From<&'a (S,)> for &'a Point1<S>
+where
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &'a (S,)) -> &'a Point1<S> {
+        unsafe {
+            &*(v as *const (S,) as *const Point1<S>)
+        }
+    }
+}
+
 
 impl<'a, S> From<&'a [S; 1]> for &'a Point1<S> 
 where 
@@ -648,6 +681,16 @@ where
     }
 }
 
+impl<S> From<&(S, S)> for Point2<S> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &(S, S)) -> Self {
+        Self::new(v.0, v.1)
+    }
+}
+
 impl<S> From<&[S; 2]> for Point2<S> 
 where 
     S: Scalar
@@ -657,6 +700,19 @@ where
         Self::new(v[0], v[1])
     }
 }
+
+impl<'a, S> From<&'a (S, S)> for &'a Point2<S> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &'a (S, S)) -> &'a Point2<S> {
+        unsafe { 
+            &*(v as *const (S, S) as *const Point2<S>)
+        }
+    }
+}
+
 
 impl<'a, S> From<&'a [S; 2]> for &'a Point2<S> 
 where 
@@ -1001,15 +1057,23 @@ where
     }
 }
 
-impl<'a, S> From<&'a [S; 3]> for &'a Point3<S> 
+impl<S> From<&(S, S, S)> for Point3<S> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &(S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2)
+    }
+}
+
+impl<S> From<&[S; 3]> for Point3<S> 
 where 
     S: Scalar 
 {
     #[inline]
-    fn from(v: &'a [S; 3]) -> &'a Point3<S> {
-        unsafe { 
-            &*(v as *const [S; 3] as *const Point3<S>)
-        }
+    fn from(v: &[S; 3]) -> Self {
+        Point3::new(v[0], v[1], v[2])
     }
 }
 
@@ -1021,6 +1085,18 @@ where
     fn from(v: &'a (S, S, S)) -> &'a Point3<S> {
         unsafe { 
             &*(v as *const (S, S, S) as *const Point3<S>)
+        }
+    }
+}
+
+impl<'a, S> From<&'a [S; 3]> for &'a Point3<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(v: &'a [S; 3]) -> &'a Point3<S> {
+        unsafe { 
+            &*(v as *const [S; 3] as *const Point3<S>)
         }
     }
 }

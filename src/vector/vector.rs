@@ -413,6 +413,18 @@ where
     }
 }
 
+impl<'a, S> From<&'a (S,)> for &'a Vector1<S> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &'a (S,)) -> &'a Vector1<S> {
+        unsafe { 
+            &*(v as *const (S,) as *const Vector1<S>)
+        }
+    }
+}
+
 impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> 
 where 
     S: Scalar
@@ -884,6 +896,18 @@ where
     }
 }
 
+impl<'a, S> From<&'a (S, S)> for &'a Vector2<S> 
+where
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &'a (S, S)) -> &'a Vector2<S> {
+        unsafe {
+            &*(v as *const (S, S) as *const Vector2<S>)
+        }
+    }
+}
+
 impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> 
 where 
     S: Scalar
@@ -895,7 +919,6 @@ where
         }
     }
 }
-
 
 /// A representation of three-dimensional vectors in a Euclidean space.
 #[repr(C)]
@@ -1393,6 +1416,16 @@ where
     }
 }
 
+impl<S> From<&(S, S, S)> for Vector3<S> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &(S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2)
+    }
+}
+
 impl<S> From<&[S; 3]> for Vector3<S> 
 where 
     S: Scalar
@@ -1403,15 +1436,30 @@ where
     }
 }
 
-impl<S> From<&(S, S, S)> for Vector3<S> 
+impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> 
 where 
     S: Scalar
 {
     #[inline]
-    fn from(v: &(S, S, S)) -> Self {
-        Self::new(v.0, v.1, v.2)
+    fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
+        unsafe { 
+            &*(v as *const (S, S, S) as *const Vector3<S>)
+        }
     }
 }
+
+impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
+        unsafe { 
+            &*(v as *const [S; 3] as *const Vector3<S>)
+        }
+    }
+}
+
 
 impl<S> From<Vector4<S>> for Vector3<S> 
 where 
@@ -1430,30 +1478,6 @@ where
     #[inline]
     fn from(v: &Vector4<S>) -> Self {
         Self::new(v.data[0], v.data[1], v.data[2])
-    }
-}
-
-impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
-        unsafe { 
-            &*(v as *const [S; 3] as *const Vector3<S>)
-        }
-    }
-}
-
-impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
-        unsafe { 
-            &*(v as *const (S, S, S) as *const Vector3<S>)
-        }
     }
 }
 
@@ -1893,16 +1917,6 @@ where
     }
 }
 
-impl<S> From<&[S; 4]> for Vector4<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &[S; 4]) -> Self {
-        Self::new(v[0], v[1], v[2], v[3])
-    }
-}
-
 impl<S> From<&(S, S, S, S)> for Vector4<S> 
 where 
     S: Scalar 
@@ -1913,15 +1927,13 @@ where
     }
 }
 
-impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> 
+impl<S> From<&[S; 4]> for Vector4<S> 
 where 
     S: Scalar
 {
     #[inline]
-    fn from(v: &'a [S; 4]) -> &'a Vector4<S> {
-        unsafe { 
-            &*(v as *const [S; 4] as *const Vector4<S>)    
-        }
+    fn from(v: &[S; 4]) -> Self {
+        Self::new(v[0], v[1], v[2], v[3])
     }
 }
 
@@ -1933,6 +1945,18 @@ where
     fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
         unsafe { 
             &*(v as *const (S, S, S, S) as *const Vector4<S>)
+        }
+    }
+}
+
+impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &'a [S; 4]) -> &'a Vector4<S> {
+        unsafe { 
+            &*(v as *const [S; 4] as *const Vector4<S>)    
         }
     }
 }
