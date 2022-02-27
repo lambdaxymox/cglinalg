@@ -5175,7 +5175,7 @@ where
     /// );
     /// let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     #[rustfmt::skip]
     #[inline]
