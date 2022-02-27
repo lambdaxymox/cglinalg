@@ -41,16 +41,16 @@ where
 {
     /// Construct a translation from the components of the translation.
     #[inline]
-    pub fn new(x: S, y: S) -> Translation2<S> {
-        Translation2 {
+    pub fn new(x: S, y: S) -> Self {
+        Self {
             vector: Vector2::new(x, y)
         }
     }
 
     /// Construct a translation operator from a vector of displacements.
     #[inline]
-    pub fn from_vector(vector: &Vector2<S>) -> Translation2<S> {
-        Translation2 {
+    pub fn from_vector(vector: &Vector2<S>) -> Self {
+        Self {
             vector: *vector,
         }
     }
@@ -79,7 +79,7 @@ where
     pub fn between_vectors(vector1: &Vector2<S>, vector2: &Vector2<S>) -> Self {
         let distance = vector2 - vector1;
 
-        Translation2::from_vector(&distance)
+        Self::from_vector(&distance)
     }
 
     /// Construct a translation between two points.
@@ -105,7 +105,7 @@ where
     pub fn between_points(point1: &Point2<S>, point2: &Point2<S>) -> Self {
         let distance = point2 - point1;
 
-        Translation2::from_vector(&distance)
+        Self::from_vector(&distance)
     }
 
     /// Construct a translation that translates a vector or point in the opposite
@@ -131,7 +131,7 @@ where
     /// ```
     #[inline]
     pub fn inverse(&self) -> Self {
-        Translation2::from_vector(&(-self.vector))
+        Self::from_vector(&(-self.vector))
     }
 
     /// Mutably invert a translation in place.
@@ -270,8 +270,8 @@ where
     /// assert_eq!(translation.translate_point(&point), point);
     /// ```
     #[inline]
-    pub fn identity() -> Translation2<S> {
-        Translation2 { 
+    pub fn identity() -> Self {
+        Self { 
             vector: Vector2::zero(),
         }
     }
@@ -485,15 +485,15 @@ where
 {
     /// Construct a translation from the components of the translation.
     #[inline]
-    pub fn new(x: S, y: S, z: S) -> Translation3<S> {
-        Translation3 {
+    pub fn new(x: S, y: S, z: S) -> Self {
+        Self {
             vector: Vector3::new(x, y, z)
         }
     }
 
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_vector(vector: &Vector3<S>) -> Translation3<S> {
-        Translation3 {
+    pub fn from_vector(vector: &Vector3<S>) -> Self {
+        Self {
             vector: *vector,
         }
     }
@@ -522,7 +522,7 @@ where
     pub fn between_vectors(vector1: &Vector3<S>, vector2: &Vector3<S>) -> Self {
         let distance = vector2 - vector1;
 
-        Translation3::from_vector(&distance)
+        Self::from_vector(&distance)
     }
 
     /// Construct a translation between two points.
@@ -548,7 +548,7 @@ where
     pub fn between_points(point1: &Point3<S>, point2: &Point3<S>) -> Self {
         let distance = point2 - point1;
 
-        Translation3::from_vector(&distance)
+        Self::from_vector(&distance)
     }
 
     /// Construct a translation that translates a vector or point in the opposite
@@ -574,7 +574,7 @@ where
     /// ```
     #[inline]
     pub fn inverse(&self) -> Self {
-        Translation3::from_vector(&(-self.vector))
+        Self::from_vector(&(-self.vector))
     }
 
     /// Mutably invert a translation in place.
@@ -710,8 +710,8 @@ where
     /// assert_eq!(translation.translate_point(&point), point);
     /// ```
     #[inline]
-    pub fn identity() -> Translation3<S> {
-        Translation3 { 
+    pub fn identity() -> Self {
+        Self { 
             vector: Vector3::zero(),
         }
     }

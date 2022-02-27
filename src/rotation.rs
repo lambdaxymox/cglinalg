@@ -111,8 +111,8 @@ where
     /// ));
     /// ```
     #[inline]
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Rotation2<S> {  
-        Rotation2 {
+    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {  
+        Self {
             matrix: Matrix2x2::from_angle(angle.into()),
         }
     }
@@ -140,13 +140,13 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn rotation_between_axis(a: &Unit<Vector2<S>>, b: &Unit<Vector2<S>>) -> Rotation2<S> {
+    pub fn rotation_between_axis(a: &Unit<Vector2<S>>, b: &Unit<Vector2<S>>) -> Self {
         let unit_a = a.as_ref();
         let unit_b = b.as_ref();
         let cos_angle = unit_a.dot(unit_b);
         let sin_angle = unit_a.x * unit_b.y - unit_a.y * unit_b.x;
 
-        Rotation2::from_angle(Radians::atan2(sin_angle, cos_angle))
+        Self::from_angle(Radians::atan2(sin_angle, cos_angle))
     }
 
     /// Construct a rotation that rotates the shortest angular distance 
@@ -171,14 +171,14 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn rotation_between(a: &Vector2<S>, b: &Vector2<S>) -> Rotation2<S> {
+    pub fn rotation_between(a: &Vector2<S>, b: &Vector2<S>) -> Self {
         if let (Some(unit_a), Some(unit_b)) = (
             Unit::try_from_value(*a, S::zero()), 
             Unit::try_from_value(*b, S::zero()))
         {
-            Rotation2::rotation_between_axis(&unit_a, &unit_b)
+            Self::rotation_between_axis(&unit_a, &unit_b)
         } else {
-            Rotation2::identity()
+            Self::identity()
         }
     }
 
@@ -207,8 +207,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Rotation2<S> {
-        Rotation2 {
+    pub fn inverse(&self) -> Self {
+        Self {
             matrix: self.matrix.transpose(),
         }
     }
@@ -390,8 +390,8 @@ where
     /// assert_eq!(rotation.inverse(), rotation);
     /// ```
     #[inline]
-    pub fn identity() -> Rotation2<S> {
-        Rotation2 { 
+    pub fn identity() -> Self {
+        Self { 
             matrix: Matrix2x2::identity(),
         }
     }
@@ -754,16 +754,16 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn from_quaternion(quaternion: &Quaternion<S>) -> Rotation3<S> {
-        Rotation3 {
+    pub fn from_quaternion(quaternion: &Quaternion<S>) -> Self {
+        Self {
             matrix: quaternion.to_matrix3x3(),
         }
     }
 
     /// Construct a new three-dimensional rotation about an axis `axis` by 
     /// an angle `angle`.
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Rotation3<S> {
-        Rotation3 {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
+        Self {
             matrix: Matrix3x3::from_axis_angle(axis, angle.into()),
         }
     }
@@ -889,8 +889,8 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
-        Rotation3 {
+    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        Self {
             matrix: Matrix3x3::face_towards(direction, up),
         }
     }
@@ -925,8 +925,8 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
-        Rotation3 {
+    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        Self {
             matrix: Matrix3x3::look_at_rh(direction, up),
         }
     }
@@ -960,8 +960,8 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Rotation3<S> {
-        Rotation3 {
+    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        Self {
             matrix: Matrix3x3::look_at_lh(direction, up),
         }
     }
@@ -994,7 +994,7 @@ where
     #[inline]
     pub fn rotation_between(
         v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Rotation3<S>> {
-            
+        
         Quaternion::rotation_between(v1, v2).map(|q| q.into())
     }
 
@@ -1024,7 +1024,7 @@ where
     /// ```
     #[inline]
     pub fn rotation_between_axis(
-        v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Rotation3<S>> {
+        v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> {
             
         Quaternion::rotation_between_axis(v1, v2).map(|q| q.into())
     }
@@ -1058,8 +1058,8 @@ where
     /// assert_eq!(result.axis(), expected.axis());
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Rotation3<S> {
-        Rotation3 {
+    pub fn inverse(&self) -> Self {
+        Self {
             matrix: self.matrix.transpose(),
         }
     }
@@ -1244,8 +1244,8 @@ where
     /// assert_eq!(rotation.inverse(), rotation);
     /// ```
     #[inline]
-    pub fn identity() -> Rotation3<S> {
-        Rotation3 { 
+    pub fn identity() -> Self {
+        Self { 
             matrix: Matrix3x3::identity(),
         }
     }

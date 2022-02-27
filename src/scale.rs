@@ -50,8 +50,8 @@ where
     /// Construct a two-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
     #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Scale2<S> {
-        Scale2 {
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Self {
+        Self {
             x: scale_x,
             y: scale_y,
         }
@@ -60,8 +60,8 @@ where
     /// Construct a two-dimensional scale transformation from a uniform scale 
     /// factor.
     #[inline]
-    pub fn from_scale(scale: S) -> Scale2<S> {
-        Scale2 {
+    pub fn from_scale(scale: S) -> Self {
+        Self {
             x: scale,
             y: scale,
         }
@@ -142,7 +142,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Scale2<S> {
+    pub fn inverse(&self) -> Self {
         Scale2::from_nonuniform_scale(
             S::one() / self.x, 
             S::one() / self.y
@@ -223,7 +223,7 @@ where
     /// assert_eq!(scale * point, point);
     /// ```
     #[inline]
-    pub fn identity() -> Scale2<S> {
+    pub fn identity() -> Self {
         Scale2::from_scale(S::one())
     }
 
@@ -455,8 +455,8 @@ where
     /// Construct a three-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
     #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Scale3<S> {
-        Scale3 {
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Self {
+        Self {
             x: scale_x,
             y: scale_y,
             z: scale_z,
@@ -466,8 +466,8 @@ where
     /// Construct a three-dimensional scale transformation from a uniform scale 
     /// factor.
     #[inline]
-    pub fn from_scale(scale: S) -> Scale3<S> {
-        Scale3 {
+    pub fn from_scale(scale: S) -> Self {
+        Self {
             x: scale,
             y: scale,
             z: scale,
@@ -475,7 +475,7 @@ where
     }
 
     /// Apply a scale transformation to a vector.
-    ///
+    /// 
     /// ## Example
     ///
     /// ```
@@ -543,8 +543,8 @@ where
     /// assert_eq!(scale * point, point);
     /// ```
     #[inline]
-    pub fn identity() -> Scale3<S> {
-        Scale3::from_scale(S::one())
+    pub fn identity() -> Self {
+        Self::from_scale(S::one())
     }
 
     /// Convert a scale transformation into a generic transformation.
@@ -582,8 +582,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Scale3<S> {
-        Scale3::from_nonuniform_scale(
+    pub fn inverse(&self) -> Self {
+        Self::from_nonuniform_scale(
             S::one() / self.x, 
             S::one() / self.y,
             S::one() / self.z

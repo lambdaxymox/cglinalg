@@ -34,10 +34,10 @@ where
     /// Convert a 3x3 matrix to a two-dimensional transformation. This 
     /// function is for internal use in implementing type conversions.
     #[inline]
-    pub(crate) fn from_specialized<T: Into<Matrix3x3<S>>>(transform: T) -> Transform2<S> {
+    pub(crate) fn from_specialized<T: Into<Matrix3x3<S>>>(transform: T) -> Self {
         // TODO: Make this function const when const fn stabilizes for traits other than
         // Sized. See issue #57563: <https://github.com/rust-lang/rust/issues/57563>
-        Transform2 {
+        Self {
             matrix: transform.into(),
         }
     }
@@ -45,8 +45,8 @@ where
     /// Construct a new transformation from a given homogeneous matrix. The input
     /// matrix is not checked that it is a valid homogeneous matrix.
     #[inline]
-    pub fn from_matrix_unchecked(matrix: Matrix3x3<S>) -> Transform2<S> {
-        Transform2 {
+    pub fn from_matrix_unchecked(matrix: Matrix3x3<S>) -> Self {
+        Self {
             matrix: matrix,
         }
     }
@@ -82,8 +82,8 @@ where
     /// assert_eq!(transform * point, point);
     /// ```
     #[inline]
-    pub fn identity() -> Transform2<S> {
-        Transform2 { 
+    pub fn identity() -> Self {
+        Self { 
             matrix: Matrix3x3::identity(),
         }
     }
@@ -115,9 +115,9 @@ where
     /// assert_eq!(transform * transform_inv, Transform2::identity());
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Option<Transform2<S>> {
+    pub fn inverse(&self) -> Option<Self> {
         if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform2 {
+            Some(Self {
                 matrix: matrix
             })
         } else {
@@ -449,10 +449,10 @@ where
     /// Convert a 4x4 matrix to a three-dimensional transformation. 
     /// This function is for internal use in implementing type conversions.
     #[inline]
-    pub(crate) fn from_specialized<T: Into<Matrix4x4<S>>>(transform: T) -> Transform3<S> {
+    pub(crate) fn from_specialized<T: Into<Matrix4x4<S>>>(transform: T) -> Self {
         // TODO: Make this function const when const fn stabilizes for traits other than
         // Sized. See issue #57563: <https://github.com/rust-lang/rust/issues/57563>.
-        Transform3 {
+        Self {
             matrix: transform.into(),
         }
     }
@@ -460,8 +460,8 @@ where
     /// Construct a new transformation from a given homogeneous matrix. The input
     /// matrix is not checked that it is a valid homogeneous matrix.
     #[inline]
-    pub fn from_matrix_unchecked(matrix: Matrix4x4<S>) -> Transform3<S> {
-        Transform3 {
+    pub fn from_matrix_unchecked(matrix: Matrix4x4<S>) -> Self {
+        Self {
             matrix: matrix,
         }
     }
@@ -497,8 +497,8 @@ where
     /// assert_eq!(transform * point, point);
     /// ```
     #[inline]
-    pub fn identity() -> Transform3<S> {
-        Transform3 { 
+    pub fn identity() -> Self {
+        Self { 
             matrix: Matrix4x4::identity(),
         }
     }
@@ -531,9 +531,9 @@ where
     /// assert_eq!(transform * transform_inv, Transform3::identity());
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Option<Transform3<S>> {
+    pub fn inverse(&self) -> Option<Self> {
         if let Some(matrix) = self.matrix.inverse() {
-            Some(Transform3 {
+            Some(Self {
                 matrix: matrix
             })
         } else {

@@ -42,8 +42,8 @@ where
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
     #[inline]
-    pub fn from_normal_bias(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Reflection2<S> {
-        Reflection2 {
+    pub fn from_normal_bias(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Self {
+        Self {
             bias: *bias,
             normal: normal.into_inner(),
             matrix: Matrix3x3::from_affine_reflection(normal, bias),
@@ -221,8 +221,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn identity() -> Reflection2<S> {
-        Reflection2 { 
+    pub fn identity() -> Self {
+        Self { 
             bias: Vector2::zero(),
             normal: Vector2::zero(), 
             matrix: Matrix3x3::identity(),
@@ -399,8 +399,8 @@ where
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
     #[inline]
-    pub fn from_normal_bias(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Reflection3<S> {
-        Reflection3 {
+    pub fn from_normal_bias(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Self {
+        Self {
             bias: *bias,
             normal: normal.into_inner(),
             matrix: Matrix4x4::from_affine_reflection(normal, bias),
@@ -542,8 +542,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn identity() -> Reflection3<S> {
-        Reflection3 { 
+    pub fn identity() -> Self {
+        Self { 
             bias: Vector3::zero(),
             normal: Vector3::zero(), 
             matrix: Matrix4x4::identity(),

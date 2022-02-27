@@ -57,10 +57,10 @@ where
     /// Construct a similarity transformation directly from the scale, rotation,
     /// and translation parts.
     #[inline]
-    pub fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>, scale: S) -> Similarity2<S> {
+    pub fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>, scale: S) -> Self {
         let isometry = Isometry2::from_parts(translation, rotation);
         
-        Similarity2 {
+        Self  {
             isometry: isometry,
             scale: scale,
         }
@@ -92,10 +92,10 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn from_rotation(rotation: &Rotation2<S>) -> Similarity2<S> {
+    pub fn from_rotation(rotation: &Rotation2<S>) -> Self {
         let isometry = Isometry2::from_rotation(rotation);
 
-        Similarity2 {
+        Self {
             isometry: isometry,
             scale: S::one(),
         }
@@ -120,10 +120,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_scale(scale: S) -> Similarity2<S> {
+    pub fn from_scale(scale: S) -> Self {
         let isometry = Isometry2::identity();
 
-        Similarity2 {
+        Self {
             isometry: isometry,
             scale: scale,
         }
@@ -149,10 +149,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_translation(translation: &Translation2<S>) -> Similarity2<S> {
+    pub fn from_translation(translation: &Translation2<S>) -> Self {
         let isometry = Isometry2::from_translation(translation);
 
-        Similarity2 {
+        Self {
             isometry: isometry,
             scale: S::one(),
         }
@@ -186,8 +186,8 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn from_isometry(isometry: Isometry2<S>) -> Similarity2<S> {
-        Similarity2 {
+    pub fn from_isometry(isometry: Isometry2<S>) -> Self {
+        Self {
             isometry: isometry,
             scale: S::one(),
         }
@@ -218,8 +218,8 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Similarity2<S> {
-        Similarity2 {
+    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
+        Self {
             isometry: Isometry2::from_angle(angle),
             scale: S::one()
         }
@@ -301,8 +301,8 @@ where
     /// assert_eq!(similarity * point, point);
     /// ```
     #[inline]
-    pub fn identity() -> Similarity2<S> {
-        Similarity2 {
+    pub fn identity() -> Self {
+        Self {
             isometry: Isometry2::identity(),
             scale: S::one(),
         }
@@ -347,7 +347,7 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Similarity2<S> {
+    pub fn inverse(&self) -> Self {
         let mut similarity_inv = *self;
         similarity_inv.inverse_mut();
 
@@ -803,10 +803,10 @@ where
     /// Construct a similarity transformation directly from the scale, rotation,
     /// and translation parts.
     #[inline]
-    pub fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>, scale: S) -> Similarity3<S> {
+    pub fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>, scale: S) -> Self {
         let isometry = Isometry3::from_parts(translation, rotation);
         
-        Similarity3 {
+        Self {
             isometry: isometry,
             scale: scale,
         }
@@ -840,10 +840,10 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn from_rotation(rotation: &Rotation3<S>) -> Similarity3<S> {
+    pub fn from_rotation(rotation: &Rotation3<S>) -> Self {
         let isometry = Isometry3::from_rotation(rotation);
 
-        Similarity3 {
+        Self {
             isometry: isometry,
             scale: S::one(),
         }
@@ -868,10 +868,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_scale(scale: S) -> Similarity3<S> {
+    pub fn from_scale(scale: S) -> Self {
         let isometry = Isometry3::identity();
 
-        Similarity3 {
+        Self {
             isometry: isometry,
             scale: scale,
         }
@@ -897,10 +897,10 @@ where
     /// assert_eq!(similarity * point, point + distance);
     /// ```
     #[inline]
-    pub fn from_translation(translation: &Translation3<S>) -> Similarity3<S> {
+    pub fn from_translation(translation: &Translation3<S>) -> Self {
         let isometry = Isometry3::from_translation(translation);
 
-        Similarity3 {
+        Self {
             isometry: isometry,
             scale: S::one(),
         }
@@ -936,8 +936,8 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn from_isometry(isometry: &Isometry3<S>) -> Similarity3<S> {
-        Similarity3 {
+    pub fn from_isometry(isometry: &Isometry3<S>) -> Self {
+        Self {
             isometry: *isometry,
             scale: S::one(),
         }
@@ -971,14 +971,13 @@ where
     /// ```
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(
-        axis: &Unit<Vector3<S>>, angle: A) -> Similarity3<S> {
+        axis: &Unit<Vector3<S>>, angle: A) -> Self {
         
-        Similarity3 {
+        Self {
             isometry: Isometry3::from_axis_angle(axis, angle),
             scale: S::one()
         }
     }
-
 
     /// Construct a similarity transformation that maps the coordinate system 
     /// of an observer located at the origin facing the **z-axis** into a coordinate 
@@ -1015,7 +1014,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn face_towards(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S>
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self
     {
         let isometry = Isometry3::face_towards(eye, target, up);
     
@@ -1059,7 +1058,7 @@ where
     /// ```
     #[inline]
     pub fn look_at_lh(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S> 
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self
     {      
         let isometry = Isometry3::look_at_lh(eye, target, up);
     
@@ -1103,7 +1102,7 @@ where
     /// ```
     #[inline]
     pub fn look_at_rh(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Similarity3<S> {
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
               
         let isometry = Isometry3::look_at_rh(eye, target, up);
     
@@ -1194,8 +1193,8 @@ where
     /// assert_eq!(similarity * point, point);
     /// ```
     #[inline]
-    pub fn identity() -> Similarity3<S> {
-        Similarity3 {
+    pub fn identity() -> Self {
+        Self {
             isometry: Isometry3::identity(),
             scale: S::one(),
         }
@@ -1242,7 +1241,7 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Similarity3<S> {
+    pub fn inverse(&self) -> Self {
         let mut similarity_inv = *self;
         similarity_inv.inverse_mut();
 

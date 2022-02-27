@@ -73,8 +73,8 @@ where
     ///
     /// The perspective projection transformation uses a right-handed 
     /// coordinate system where the **negative z-axis** is the depth direction.
-    pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Perspective3<S> {
-        Perspective3 {
+    pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
+        Self {
             left: left,
             right: right,
             bottom: bottom,
@@ -537,10 +537,10 @@ where
     S: ScalarFloat
 {
     /// Construct a new perspective projection transformation.
-    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> PerspectiveFov3<S> {
+    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
         let spec_vfov = vfov.into();
 
-        PerspectiveFov3 {
+        Self {
             vfov: spec_vfov,
             aspect: aspect,
             near: near,
@@ -1029,8 +1029,8 @@ where
     S: ScalarFloat
 {
     /// Construct a new orthographic projection.
-    pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Orthographic3<S> {
-        Orthographic3 {
+    pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
+        Self {
             left: left,
             right: right,
             bottom: bottom,
@@ -1427,9 +1427,9 @@ where
     S: ScalarFloat
 {
     /// Construct a new orthographic projection.
-    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> OrthographicFov3<S> {
+    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
         let vfov_rad = vfov.into();
-        OrthographicFov3 {
+        Self {
             vfov: vfov_rad,
             aspect: aspect,
             near: near,

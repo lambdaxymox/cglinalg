@@ -59,8 +59,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_shear_x(shear_x_with_y: S) -> Shear2<S> {
-        Shear2 {
+    pub fn from_shear_x(shear_x_with_y: S) -> Self {
+        Self {
             matrix: Matrix2x2::from_shear_x(shear_x_with_y),
         }
     }
@@ -88,8 +88,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_shear_y(shear_y_with_x: S) -> Shear2<S> {
-        Shear2 {
+    pub fn from_shear_y(shear_y_with_x: S) -> Self {
+        Self {
             matrix: Matrix2x2::from_shear_y(shear_y_with_x),
         }
     }
@@ -126,8 +126,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Shear2<S> {
-        Shear2 {
+    pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Self {
+        Self {
             matrix: Matrix2x2::from_shear(shear_x_with_y, shear_y_with_x),
         }
     }
@@ -210,8 +210,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn identity() -> Shear2<S> {
-        Shear2 { 
+    pub fn identity() -> Self {
+        Self { 
             matrix: Matrix2x2::identity(),
         }
     }
@@ -249,7 +249,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Shear2<S> {
+    pub fn inverse(&self) -> Self {
         let shear_y_with_x = self.matrix.c0r1;
         let shear_x_with_y = self.matrix.c1r0;
         let det_inverse = S::one() / (shear_x_with_y * shear_y_with_x - S::one());
@@ -258,7 +258,7 @@ where
              shear_x_with_y * det_inverse, -S::one() * det_inverse
         );
             
-        Shear2 {
+        Self {
             matrix: matrix,
         }
     }
@@ -512,8 +512,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Shear3<S> {
-        Shear3 {
+    pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Self {
+        Self {
             matrix: Matrix3x3::from_shear_x(shear_x_with_y, shear_x_with_z),
         }
     }
@@ -546,8 +546,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Shear3<S> {
-        Shear3 {
+    pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Self {
+        Self {
             matrix: Matrix3x3::from_shear_y(shear_y_with_x, shear_y_with_z),
         }
     }
@@ -580,8 +580,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Shear3<S> {
-        Shear3 {
+    pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Self {
+        Self {
             matrix: Matrix3x3::from_shear_z(shear_z_with_x, shear_z_with_y),
         }
     }
@@ -636,9 +636,9 @@ where
     pub fn from_shear(
         shear_x_with_y: S, shear_x_with_z: S, 
         shear_y_with_x: S, shear_y_with_z: S, 
-        shear_z_with_x: S, shear_z_with_y: S) -> Shear3<S>
+        shear_z_with_x: S, shear_z_with_y: S) -> Self
     {
-        Shear3 {
+        Self {
             matrix: Matrix3x3::from_shear(
                 shear_x_with_y, shear_x_with_z, 
                 shear_y_with_x, shear_y_with_z, 
@@ -747,8 +747,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn identity() -> Shear3<S> {
-        Shear3 { 
+    pub fn identity() -> Self {
+        Self { 
             matrix: Matrix3x3::identity(),
         }
     }
@@ -786,7 +786,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Shear3<S> {
+    pub fn inverse(&self) -> Self {
         let shear_x_with_y = self.matrix.c1r0;
         let shear_x_with_z = self.matrix.c2r0;
         let shear_y_with_x = self.matrix.c0r1;
@@ -809,7 +809,7 @@ where
             c2r0, c2r1, c2r2
         );
         
-        Shear3 {
+        Self {
             matrix: matrix,
         }
     }
