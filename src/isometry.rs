@@ -57,8 +57,8 @@ where
 {
     /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
-    pub fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>) -> Isometry2<S> {
-        Isometry2 {
+    pub fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>) -> Self {
+        Self {
             rotation: *rotation,
             translation: *translation,
         }
@@ -66,13 +66,13 @@ where
 
     /// Construct a new isometry from a translation.
     #[inline]
-    pub fn from_translation(translation: &Translation2<S>) -> Isometry2<S> {
+    pub fn from_translation(translation: &Translation2<S>) -> Self {
         Self::from_parts(translation, &Rotation2::identity())
     }
 
     /// Construct a new isometry from a rotation.
     #[inline]
-    pub fn from_rotation(rotation: &Rotation2<S>) -> Isometry2<S> {
+    pub fn from_rotation(rotation: &Rotation2<S>) -> Self {
         Self::from_parts(&Translation2::identity(), rotation)
     }
 
@@ -100,9 +100,9 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_translation<A: Into<Radians<S>>>(angle: A, distance: &Vector2<S>) -> Isometry2<S>
+    pub fn from_angle_translation<A: Into<Radians<S>>>(angle: A, distance: &Vector2<S>) -> Self
     {
-        Isometry2 {
+        Self {
             rotation: Rotation2::from_angle(angle),
             translation: Translation2::from_vector(distance),
         }
@@ -130,7 +130,7 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Isometry2<S> {
+    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
         let translation = Translation2::identity();
         let rotation = Rotation2::from_angle(angle);
         
@@ -160,13 +160,13 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn rotation_between_axis(a: &Unit<Vector2<S>>, b: &Unit<Vector2<S>>) -> Isometry2<S> {
+    pub fn rotation_between_axis(a: &Unit<Vector2<S>>, b: &Unit<Vector2<S>>) -> Self {
         let unit_a = a.as_ref();
         let unit_b = b.as_ref();
         let cos_angle = unit_a.dot(unit_b);
         let sin_angle = unit_a.x * unit_b.y - unit_a.y * unit_b.x;
 
-        Isometry2::from_angle(Radians::atan2(sin_angle, cos_angle))
+        Self::from_angle(Radians::atan2(sin_angle, cos_angle))
     }
 
     /// Construct a rotation that rotates the shortest angular distance 
@@ -191,7 +191,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn rotation_between(a: &Vector2<S>, b: &Vector2<S>) -> Isometry2<S> {
+    pub fn rotation_between(a: &Vector2<S>, b: &Vector2<S>) -> Self {
         if let (Some(unit_a), Some(unit_b)) = (
             Unit::try_from_value(*a, S::zero()), 
             Unit::try_from_value(*b, S::zero()))
@@ -288,7 +288,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Isometry2<S> {
+    pub fn inverse(&self) -> Self {
         let rotation = self.rotation.inverse();
         let distance = self.translation.as_ref();
         let vector = rotation.rotate_vector(&(-distance));
@@ -479,8 +479,8 @@ where
     /// assert_eq!(isometry * point, point);
     /// ```
     #[inline]
-    pub fn identity() -> Isometry2<S> {
-        Isometry2 {
+    pub fn identity() -> Self {
+        Self {
             rotation: Rotation2::identity(),
             translation: Translation2::identity()
         }
@@ -717,8 +717,8 @@ where
 {
     /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
-    pub fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>) -> Isometry3<S> {
-        Isometry3 {
+    pub fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>) -> Self {
+        Self {
             rotation: *rotation,
             translation: *translation,
         }
@@ -751,9 +751,9 @@ where
     /// ```
     #[inline]
     pub fn from_axis_angle_translation<A: Into<Radians<S>>>(
-        axis: &Unit<Vector3<S>>, angle: A, distance: &Vector3<S>) -> Isometry3<S>
+        axis: &Unit<Vector3<S>>, angle: A, distance: &Vector3<S>) -> Self
     {
-        Isometry3 {
+        Self {
             rotation: Rotation3::from_axis_angle(axis, angle),
             translation: Translation3::from_vector(distance),
         }
@@ -761,13 +761,13 @@ where
 
     /// Construct a new isometry from a translation.
     #[inline]
-    pub fn from_translation(translation: &Translation3<S>) -> Isometry3<S> {
+    pub fn from_translation(translation: &Translation3<S>) -> Self {
         Self::from_parts(translation, &Rotation3::identity())
     }
 
     /// Construct a new isometry from a rotation.
     #[inline]
-    pub fn from_rotation(rotation: &Rotation3<S>) -> Isometry3<S> {
+    pub fn from_rotation(rotation: &Rotation3<S>) -> Self {
         Self::from_parts(&Translation3::identity(), rotation)
     }
 
@@ -794,7 +794,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Isometry3<S> {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_axis_angle(axis, angle);
         
@@ -821,7 +821,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Isometry3<S> {
+    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_x(angle);
         
@@ -848,7 +848,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Isometry3<S> {
+    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_y(angle);
         
@@ -875,7 +875,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Isometry3<S> {
+    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_z(angle);
         
@@ -909,8 +909,8 @@ where
     /// ```
     #[inline]
     pub fn rotation_between(
-        v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Isometry3<S>> {
-            
+        v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> 
+    {        
         if let (Some(unit_v1), Some(unit_v2)) = (
             Unit::try_from_value(*v1, S::default_epsilon()), 
             Unit::try_from_value(*v2, S::default_epsilon())
@@ -947,8 +947,8 @@ where
     /// ```
     #[inline]
     pub fn rotation_between_axis(
-        v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Isometry3<S>> {
-        
+        v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> 
+    {    
         Rotation3::rotation_between_axis(v1, v2).map(|rotation| {
             let translation = Translation3::identity();
             Self::from_parts(&translation, &rotation)
@@ -988,7 +988,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn face_towards(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
+    pub fn face_towards(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         let translation = Translation3::new(eye.x, eye.y, eye.z);
         let rotation = Rotation3::face_towards(&(target - eye), up);
 
@@ -1031,9 +1031,7 @@ where
     /// assert_eq!(isometry.transform_point(&eye), Point3::origin());
     /// ```
     #[inline]
-    pub fn look_at_lh(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
-        
+    pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         let rotation = Rotation3::look_at_lh(&(target - eye), up);
         let vector = &rotation * (-eye) - Point3::origin();
         let translation = Translation3::from_vector(&vector);
@@ -1077,9 +1075,7 @@ where
     /// assert_eq!(isometry.transform_point(&eye), Point3::origin());
     /// ```
     #[inline]
-    pub fn look_at_rh(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
-              
+    pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S>{
         let rotation = Rotation3::look_at_rh(&(target - eye), up);
         let vector = &rotation * (-eye) - Point3::origin();
         let translation = Translation3::from_vector(&vector);
@@ -1179,7 +1175,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Isometry3<S> {
+    pub fn inverse(&self) -> Self {
         let rotation = self.rotation.inverse();
         let distance = self.translation.as_ref();
         let vector = rotation.rotate_vector(&(-distance));
@@ -1379,8 +1375,8 @@ where
     /// assert_eq!(isometry * point, point);
     /// ```
     #[inline]
-    pub fn identity() -> Isometry3<S> {
-        Isometry3 {
+    pub fn identity() -> Self {
+        Self {
             rotation: Rotation3::identity(),
             translation: Translation3::identity()
         }

@@ -172,8 +172,8 @@ pub struct EulerAngles<A> {
 impl<A> EulerAngles<A> {
     /// Construct a new set of Euler angles.
     #[inline]
-    pub const fn new(x: A, y: A, z: A) -> EulerAngles<A> {
-        EulerAngles { 
+    pub const fn new(x: A, y: A, z: A) -> Self {
+        Self { 
             x: x,
             y: y, 
             z: z,
@@ -189,7 +189,7 @@ where
     ///
     /// The zero element is the element where each Euler angle is zero.
     #[inline]
-    pub fn zero() -> EulerAngles<A> {
+    pub fn zero() -> Self {
         EulerAngles::new(A::zero(), A::zero(), A::zero())
     }
     
