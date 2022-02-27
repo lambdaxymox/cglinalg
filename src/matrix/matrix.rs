@@ -5382,7 +5382,8 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_rh(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self 
+    {
         let direction = -(target - eye);
         
         let zero = S::zero();
@@ -5444,8 +5445,8 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
-
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self 
+    {
         let direction = target - eye;
          
         let zero = S::zero();
@@ -8697,7 +8698,8 @@ where
     /// Construct a matrix from a set of column vectors.
     #[inline]
     pub fn from_columns(
-        c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>, c3: Vector3<S>) -> Self {
+        c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>, c3: Vector3<S>) -> Self 
+    {
         Self::new(
             c0[0], c0[1], c0[2],
             c1[0], c1[1], c1[2],
