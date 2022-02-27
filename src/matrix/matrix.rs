@@ -60,8 +60,8 @@ pub struct Matrix1x1<S> {
 impl<S> Matrix1x1<S> {
     /// Construct a new matrix from its elements.
     #[inline]
-    pub const fn new(c0r0: S) -> Matrix1x1<S> {
-        Matrix1x1 {
+    pub const fn new(c0r0: S) -> Self {
+        Self {
             data: [[c0r0]]
         }
     }
@@ -119,8 +119,8 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector1<S>) -> Matrix1x1<S> {
-        Matrix1x1::new(c0[0])
+    pub fn from_columns(c0: Vector1<S>) -> Self {
+        Self::new(c0[0])
     }
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
@@ -202,8 +202,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix1x1<S> {
-        Matrix1x1::new(S::zero())
+    pub fn zero() -> Self {
+        Self::new(S::zero())
     }
     
     /// Determine whether a matrix is a zero matrix.
@@ -242,8 +242,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn identity() -> Matrix1x1<S> {
-        Matrix1x1::new(S::one())
+    pub fn identity() -> Self {
+        Self::new(S::one())
     }
     
     /// Determine whether a matrix is an identity matrix.
@@ -349,7 +349,7 @@ where
         if self.data[0][0].is_zero() {
             None
         } else {
-            Some(Matrix1x1::new(S::one() / self.data[0][0]))
+            Some(Self::new(S::one() / self.data[0][0]))
         }
     }
 
@@ -389,8 +389,8 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(array: [[S; 1]; 1]) -> Matrix1x1<S> {
-        Matrix1x1::new(array[0][0])
+    fn from(array: [[S; 1]; 1]) -> Self {
+        Self::new(array[0][0])
     }
 }
 
@@ -411,8 +411,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 1]) -> Matrix1x1<S> {
-        Matrix1x1::new(array[0])
+    fn from(array: [S; 1]) -> Self {
+        Self::new(array[0])
     }
 }
 
@@ -439,8 +439,8 @@ pub struct Matrix2x2<S> {
 impl<S> Matrix2x2<S> {
     /// Construct a new matrix from its elements.
     #[inline]
-    pub const fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Matrix2x2<S> {
-        Matrix2x2 {
+    pub const fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Self {
+        Self {
             data: [
                 [c0r0, c0r1],
                 [c1r0, c1r1],
@@ -472,8 +472,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Matrix2x2<S> {
-        Matrix2x2::new(value, value, value, value)
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value, value, value, value)
     }
 
     /// Get the row of the matrix by value.
@@ -610,8 +610,8 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>) -> Matrix2x2<S> {
-        Matrix2x2::new(
+    pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>) -> Self {
+        Self::new(
             c0[0], c0[1], 
             c1[0], c1[1]
         )
@@ -716,8 +716,8 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_x(shear_x_with_y: S) -> Matrix2x2<S> {
-        Matrix2x2::new(
+    pub fn from_shear_x(shear_x_with_y: S) -> Self {
+        Self::new(
             S::one(),       S::zero(),
             shear_x_with_y, S::one(),
         )
@@ -746,8 +746,8 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_y(shear_y_with_x: S) -> Matrix2x2<S> {
-        Matrix2x2::new(
+    pub fn from_shear_y(shear_y_with_x: S) -> Self {
+        Self::new(
             S::one(),  shear_y_with_x,
             S::zero(), S::one(),
         )
@@ -781,10 +781,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix2x2<S> {
+    pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Self {
         let one = S::one();
 
-        Matrix2x2::new(
+        Self::new(
             one,            shear_y_with_x,
             shear_x_with_y, one
         )
@@ -814,8 +814,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_scale(scale: S) -> Matrix2x2<S> {
-        Matrix2x2::from_nonuniform_scale(scale, scale)
+    pub fn from_scale(scale: S) -> Self {
+        Self::from_nonuniform_scale(scale, scale)
     }
         
     /// Construct two-dimensional general scaling matrix.
@@ -842,10 +842,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix2x2<S> {
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Self {
         let zero = S::zero();
 
-        Matrix2x2::new(
+        Self::new(
             scale_x,   zero,
             zero,      scale_y,
         )
@@ -899,8 +899,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn transpose(&self) -> Matrix2x2<S> {
-        Matrix2x2::new(
+    pub fn transpose(&self) -> Self {
+        Self::new(
             self.data[0][0], self.data[1][0], 
             self.data[0][1], self.data[1][1]
         )
@@ -922,8 +922,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix2x2<S> {
-        Matrix2x2::new(S::zero(), S::zero(), S::zero(), S::zero())
+    pub fn zero() -> Self {
+        Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether a matrix is a zero matrix.
@@ -966,8 +966,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn identity() -> Matrix2x2<S> {
-        Matrix2x2::new(S::one(), S::zero(), S::zero(), S::one())
+    pub fn identity() -> Self {
+        Self::new(S::one(), S::zero(), S::zero(), S::one())
     }
     
     /// Determine whether a matrix is an identity matrix.
@@ -1013,7 +1013,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal_value(value: S) -> Self {
-        Matrix2x2::new(
+        Self::new(
             value,     S::zero(),
             S::zero(), value
         )
@@ -1041,7 +1041,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal(diagonal: &Vector2<S>) -> Self {
-        Matrix2x2::new(
+        Self::new(
             diagonal.x, S::zero(),
             S::zero(),  diagonal.y
         )
@@ -1141,11 +1141,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_reflection(normal: &Unit<Vector2<S>>) -> Matrix2x2<S> {
+    pub fn from_reflection(normal: &Unit<Vector2<S>>) -> Self {
         let one = S::one();
         let two = one + one;
 
-        Matrix2x2::new(
+        Self::new(
              one - two * normal.x * normal.x, -two * normal.x * normal.y,
             -two * normal.x * normal.y,        one - two * normal.y * normal.y,
         )
@@ -1236,10 +1236,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Matrix2x2<S> {
+    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
-        Matrix2x2::new(
+        Self::new(
              cos_angle, sin_angle, 
             -sin_angle, cos_angle
         )
@@ -1287,7 +1287,7 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     #[inline]
-    pub fn rotation_between(v1: &Vector2<S>, v2: &Vector2<S>) -> Matrix2x2<S> {
+    pub fn rotation_between(v1: &Vector2<S>, v2: &Vector2<S>) -> Self {
         if let (Some(unit_v1), Some(unit_v2)) = (
             Unit::try_from_value(*v1, S::zero()),
             Unit::try_from_value(*v2, S::zero()),
@@ -1347,7 +1347,7 @@ where
     /// ```
     #[inline]
     pub fn rotation_between_axis(
-        v1: &Unit<Vector2<S>>, v2: &Unit<Vector2<S>>) -> Matrix2x2<S>
+        v1: &Unit<Vector2<S>>, v2: &Unit<Vector2<S>>) -> Self 
     {
         let cos_angle = v1.as_ref().dot(v2.as_ref());
         let sin_angle = S::sqrt(S::one() - cos_angle * cos_angle);
@@ -1501,7 +1501,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn lerp(&self, other: &Matrix2x2<S>, amount: S) -> Matrix2x2<S> {
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
 }
@@ -1525,8 +1525,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [[S; 2]; 2]) -> Matrix2x2<S> {
-        Matrix2x2::new(array[0][0], array[0][1], array[1][0], array[1][1])
+    fn from(array: [[S; 2]; 2]) -> Self {
+        Self::new(array[0][0], array[0][1], array[1][0], array[1][1])
     }
 }
 
@@ -1547,8 +1547,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 4]) -> Matrix2x2<S> {
-        Matrix2x2::new(array[0], array[1], array[2], array[3])
+    fn from(array: [S; 4]) -> Self {
+        Self::new(array[0], array[1], array[2], array[3])
     }
 }
 
@@ -1579,9 +1579,9 @@ impl<S> Matrix3x3<S> {
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S,
         c1r0: S, c1r1: S, c1r2: S,
-        c2r0: S, c2r1: S, c2r2: S) -> Matrix3x3<S> {
+        c2r0: S, c2r1: S, c2r2: S) -> Self {
 
-        Matrix3x3 {
+        Self {
             data: [
                 [c0r0, c0r1, c0r2],
                 [c1r0, c1r1, c1r2],
@@ -1618,8 +1618,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Matrix3x3<S> {
-        Matrix3x3::new(
+    pub fn from_fill(value: S) -> Self {
+        Self::new(
             value, value, value,
             value, value, value,
             value, value, value
@@ -1780,9 +1780,9 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_columns(
-        c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Matrix3x3<S> 
+        c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>) -> Self
     {
-        Matrix3x3::new(
+        Self::new(
             c0[0], c0[1], c0[2], 
             c1[0], c1[1], c1[2],
             c2[0], c2[1], c2[2],
@@ -1953,11 +1953,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_translation(distance: &Vector2<S>) -> Matrix3x3<S> {
+    pub fn from_affine_translation(distance: &Vector2<S>) -> Self {
         let one = S::one();
         let zero = S::zero();
         
-        Matrix3x3::new(
+        Self::new(
             one,        zero,       zero,
             zero,       one,        zero,
             distance.x, distance.y, one
@@ -1988,8 +1988,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_scale(scale: S) -> Matrix3x3<S> {
-        Matrix3x3::from_nonuniform_scale(scale, scale, scale)
+    pub fn from_scale(scale: S) -> Self {
+        Self::from_nonuniform_scale(scale, scale, scale)
     }
     
     /// Construct a three-dimensional general scaling matrix.
@@ -2017,10 +2017,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Matrix3x3<S> {
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Self {
         let zero = S::zero();
 
-        Matrix3x3::new(
+        Self::new(
             scale_x,   zero,      zero,
             zero,      scale_y,   zero,
             zero,      zero,      scale_z,
@@ -2052,8 +2052,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_affine_scale(scale: S) -> Matrix3x3<S> {
-        Matrix3x3::from_affine_nonuniform_scale(scale, scale)
+    pub fn from_affine_scale(scale: S) -> Self {
+        Self::from_affine_nonuniform_scale(scale, scale)
     }
     
     /// Construct a two-dimensional affine scaling matrix.
@@ -2081,11 +2081,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S) -> Matrix3x3<S> {
+    pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S) -> Self {
         let zero = S::zero();
         let one = S::one();
 
-        Matrix3x3::new(
+        Self::new(
             scale_x,   zero,      zero,
             zero,      scale_y,   zero,
             zero,      zero,      one,
@@ -2118,11 +2118,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix3x3<S> {
+    pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
-        Matrix3x3::new(
+        Self::new(
             one,            zero, zero,
             shear_x_with_y, one,  zero, 
             shear_x_with_z, zero, one
@@ -2155,11 +2155,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix3x3<S> {
+    pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
-        Matrix3x3::new(
+        Self::new(
             one,  shear_y_with_x, zero,
             zero, one,            zero,
             zero, shear_y_with_z, one
@@ -2192,11 +2192,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix3x3<S> {
+    pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
-        Matrix3x3::new(
+        Self::new(
             one,  zero, shear_z_with_x,
             zero, one,  shear_z_with_y,
             zero, zero, one   
@@ -2261,11 +2261,11 @@ where
     pub fn from_shear(
         shear_x_with_y: S, shear_x_with_z: S, 
         shear_y_with_x: S, shear_y_with_z: S, 
-        shear_z_with_x: S, shear_z_with_y: S) -> Matrix3x3<S> 
+        shear_z_with_x: S, shear_z_with_y: S) -> Self 
     {
         let one = S::one();
 
-        Matrix3x3::new(
+        Self::new(
             one,            shear_y_with_x, shear_z_with_x,
             shear_x_with_y, one,            shear_z_with_y,
             shear_x_with_z, shear_y_with_z, one
@@ -2296,11 +2296,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_x(shear_x_with_y: S) -> Matrix3x3<S> {
+    pub fn from_affine_shear_x(shear_x_with_y: S) -> Self {
         let zero = S::zero();
         let one = S::one();
 
-        Matrix3x3::new(
+        Self::new(
             one,            zero, zero,
             shear_x_with_y, one,  zero,
             zero,           zero, one
@@ -2331,11 +2331,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_y(shear_y_with_x: S) -> Matrix3x3<S> {
+    pub fn from_affine_shear_y(shear_y_with_x: S) -> Self {
         let zero = S::zero();
         let one = S::one();
 
-        Matrix3x3::new(
+        Self::new(
             one,  shear_y_with_x, zero,
             zero, one,            zero,
             zero, zero,           one
@@ -2371,11 +2371,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear(shear_x_with_y: S, shear_y_with_x: S) -> Matrix3x3<S> {
+    pub fn from_affine_shear(shear_x_with_y: S, shear_y_with_x: S) -> Self {
         let zero = S::zero();
         let one = S::one();
 
-        Matrix3x3::new(
+        Self::new(
             one,            shear_y_with_x, zero,
             shear_x_with_y, one,            zero,
             zero,           zero,           one
@@ -2437,8 +2437,8 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn transpose(&self) -> Matrix3x3<S> {
-        Matrix3x3::new(
+    pub fn transpose(&self) -> Self {
+        Self::new(
             self.data[0][0], self.data[1][0], self.data[2][0],
             self.data[0][1], self.data[1][1], self.data[2][1],
             self.data[0][2], self.data[1][2], self.data[2][2]
@@ -2462,10 +2462,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn zero() -> Matrix3x3<S> {
+    pub fn zero() -> Self {
         let zero = S::zero();
         
-        Matrix3x3::new(
+        Self::new(
             zero, zero, zero, 
             zero, zero, zero, 
             zero, zero, zero
@@ -2521,11 +2521,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn identity() -> Matrix3x3<S> {
+    pub fn identity() -> Self {
         let zero = S::zero();
         let one = S::one();
 
-        Matrix3x3::new(
+        Self::new(
             one,  zero, zero, 
             zero, one,  zero, 
             zero, zero, one
@@ -2795,7 +2795,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_reflection(
-        normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Matrix3x3<S> 
+        normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Self
     {
         let zero = S::zero();
         let one = S::one();
@@ -2813,7 +2813,7 @@ where
         let c2r1 = two * normal.y * (normal.x * bias.x + normal.y * bias.y);
         let c2r2 = one;
 
-        Matrix3x3::new(
+        Self::new(
             c0r0, c0r1, c0r2,
             c1r0, c1r1, c1r2,
             c2r0, c2r1, c2r2
@@ -2844,7 +2844,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_reflection(normal: &Unit<Vector3<S>>) -> Matrix3x3<S> {
+    pub fn from_reflection(normal: &Unit<Vector3<S>>) -> Self {
         let one = S::one();
         let two = one + one;
 
@@ -2860,7 +2860,7 @@ where
         let c2r1 = -two * normal.y * normal.z;
         let c2r2 =  one - two * normal.z * normal.z;
     
-        Matrix3x3::new(
+        Self::new(
             c0r0, c0r1, c0r2,
             c1r0, c1r1, c1r2,
             c2r0, c2r1, c2r2
@@ -2968,12 +2968,12 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_angle<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
+    pub fn from_affine_angle<A: Into<Radians<S>>>(angle: A) -> Self {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let zero = S::zero();
         let one =  S::one();
 
-        Matrix3x3::new(
+        Self::new(
              cos_angle, sin_angle, zero,
             -sin_angle, cos_angle, zero,
              zero,      zero,      one
@@ -3006,10 +3006,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
+    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
-        Matrix3x3::new(
+        Self::new(
             S::one(),   S::zero(), S::zero(),
             S::zero(),  cos_angle, sin_angle,
             S::zero(), -sin_angle, cos_angle,
@@ -3042,10 +3042,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
+    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
-        Matrix3x3::new(
+        Self::new(
             cos_angle, S::zero(), -sin_angle,
             S::zero(), S::one(),   S::zero(),
             sin_angle, S::zero(),  cos_angle,
@@ -3078,10 +3078,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix3x3<S> {
+    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
-        Matrix3x3::new(
+        Self::new(
              cos_angle, sin_angle, S::zero(),
             -sin_angle, cos_angle, S::zero(),
              S::zero(), S::zero(), S::one(),
@@ -3117,13 +3117,13 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(
-        axis: &Unit<Vector3<S>>, angle: A) -> Matrix3x3<S> 
+        axis: &Unit<Vector3<S>>, angle: A) -> Self
     {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();
 
-        Matrix3x3::new(
+        Self::new(
             one_minus_cos_angle * _axis.x * _axis.x + cos_angle,
             one_minus_cos_angle * _axis.x * _axis.y + sin_angle * _axis.z,
             one_minus_cos_angle * _axis.x * _axis.z - sin_angle * _axis.y,
@@ -3174,12 +3174,12 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
+    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let z_axis = direction.normalize();
         let x_axis = up.cross(&z_axis).normalize();
         let y_axis = z_axis.cross(&x_axis).normalize();
 
-        Matrix3x3::new(
+        Self::new(
             x_axis.x, x_axis.y, x_axis.z,
             y_axis.x, y_axis.y, y_axis.z,
             z_axis.x, z_axis.y, z_axis.z
@@ -3219,7 +3219,7 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
+    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         // The inverse of a rotation matrix is its transpose.
         Self::face_towards(&(-direction), up).transpose()
     }
@@ -3233,7 +3233,7 @@ where
     /// the new the coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **left-handed** coordinate transformation. 
     #[inline]
-    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Matrix3x3<S> {
+    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         // The inverse of a rotation matrix is its transpose.
         Self::face_towards(direction, up).transpose()
     }
@@ -3263,7 +3263,7 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
     /// ```
     #[inline]
-    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Matrix3x3<S>> {
+    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
         if let (Some(unit_v1), Some(unit_v2)) = (
             v1.try_normalize(S::zero()), 
             v2.try_normalize(S::zero()))
@@ -3272,7 +3272,7 @@ where
 
             if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
                 return Some(
-                    Matrix3x3::from_axis_angle(&axis, Radians::acos(unit_v1.dot(&unit_v2)))
+                    Self::from_axis_angle(&axis, Radians::acos(unit_v1.dot(&unit_v2)))
                 );
             }
 
@@ -3312,14 +3312,14 @@ where
     /// ```
     #[inline]
     pub fn rotation_between_axis(
-        unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Matrix3x3<S>> 
+        unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Self> 
     {
         let cross = unit_v1.as_ref().cross(unit_v2.as_ref());
         let cos_angle = unit_v1.as_ref().dot(unit_v2.as_ref());
 
         if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
             return Some(
-                Matrix3x3::from_axis_angle(&axis, Radians::acos(cos_angle))
+                Self::from_axis_angle(&axis, Radians::acos(cos_angle))
             );
         }
 
@@ -3425,7 +3425,7 @@ where
         } else {
             let inv_det = S::one() / det;
     
-            Some(Matrix3x3::new(
+            Some(Self::new(
                 inv_det * (self.data[1][1] * self.data[2][2] - self.data[1][2] * self.data[2][1]), 
                 inv_det * (self.data[0][2] * self.data[2][1] - self.data[0][1] * self.data[2][2]), 
                 inv_det * (self.data[0][1] * self.data[1][2] - self.data[0][2] * self.data[1][1]),
@@ -3528,7 +3528,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn lerp(&self, other: &Matrix3x3<S>, amount: S) -> Matrix3x3<S> {
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
 }
@@ -3554,8 +3554,8 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(array: [[S; 3]; 3]) -> Matrix3x3<S> {
-        Matrix3x3::new(
+    fn from(array: [[S; 3]; 3]) -> Self {
+        Self::new(
             array[0][0], array[0][1], array[0][2], 
             array[1][0], array[1][1], array[1][2], 
             array[2][0], array[2][1], array[2][2],
@@ -3581,8 +3581,8 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(array: [S; 9]) -> Matrix3x3<S> {
-        Matrix3x3::new(
+    fn from(array: [S; 9]) -> Self {
+        Self::new(
             array[0], array[1], array[2], 
             array[3], array[4], array[5], 
             array[6], array[7], array[8]
@@ -3608,8 +3608,8 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(matrix: Matrix2x2<S>) -> Matrix3x3<S> {
-        Matrix3x3::new(
+    fn from(matrix: Matrix2x2<S>) -> Self {
+        Self::new(
             matrix[0][0], matrix[0][1], S::zero(),
             matrix[1][0], matrix[1][1], S::zero(),
             S::zero(),    S::zero(),    S::one()
@@ -3623,8 +3623,8 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(matrix: &Matrix2x2<S>) -> Matrix3x3<S> {
-        Matrix3x3::new(
+    fn from(matrix: &Matrix2x2<S>) -> Self {
+        Self::new(
             matrix[0][0], matrix[0][1], S::zero(),
             matrix[1][0], matrix[1][1], S::zero(),
             S::zero(),    S::zero(),    S::one()
@@ -3648,9 +3648,9 @@ impl<S> Matrix4x4<S> {
         c0r0: S, c0r1: S, c0r2: S, c0r3: S,
         c1r0: S, c1r1: S, c1r2: S, c1r3: S,
         c2r0: S, c2r1: S, c2r2: S, c2r3: S,
-        c3r0: S, c3r1: S, c3r2: S, c3r3: S) -> Matrix4x4<S> {
+        c3r0: S, c3r1: S, c3r2: S, c3r3: S) -> Self {
 
-        Matrix4x4 {
+        Self {
             data: [
                 [c0r0, c0r1, c0r2, c0r3],
                 [c1r0, c1r1, c1r2, c1r3],
@@ -3689,8 +3689,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Matrix4x4<S> {
-        Matrix4x4::new(
+    pub fn from_fill(value: S) -> Self {
+        Self::new(
             value, value, value, value,
             value, value, value, value,
             value, value, value, value,
@@ -3874,9 +3874,9 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_columns(
-        c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Matrix4x4<S> 
+        c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>, c3: Vector4<S>) -> Self 
     {
-        Matrix4x4::new(
+        Self::new(
             c0[0], c0[1], c0[2], c0[3],
             c1[0], c1[1], c1[2], c1[3],
             c2[0], c2[1], c2[2], c2[3],
@@ -4090,11 +4090,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_translation(distance: &Vector3<S>) -> Matrix4x4<S> {
+    pub fn from_affine_translation(distance: &Vector3<S>) -> Self {
         let one = S::one();
         let zero = S::zero();
 
-        Matrix4x4::new(
+        Self::new(
             one,        zero,       zero,       zero,
             zero,       one,        zero,       zero,
             zero,       zero,       one,        zero,
@@ -4127,8 +4127,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_affine_scale(scale: S) -> Matrix4x4<S> {
-        Matrix4x4::from_affine_nonuniform_scale(scale, scale, scale)
+    pub fn from_affine_scale(scale: S) -> Self {
+        Self::from_affine_nonuniform_scale(scale, scale, scale)
     }
 
     /// Construct a three-dimensional affine scaling matrix.
@@ -4161,11 +4161,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Matrix4x4<S> {
+    pub fn from_affine_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
-        Matrix4x4::new(
+        Self::new(
             scale_x, zero,    zero,    zero,
             zero,    scale_y, zero,    zero,
             zero,    zero,    scale_z, zero,
@@ -4207,11 +4207,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Matrix4x4<S> {
+    pub fn from_affine_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Self {
         let one = S::one();
         let zero = S::zero();
         
-        Matrix4x4::new(
+        Self::new(
             one,            zero, zero, zero,
             shear_x_with_y, one,  zero, zero,
             shear_x_with_z, zero, one,  zero,
@@ -4252,11 +4252,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Matrix4x4<S> {
+    pub fn from_affine_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
-        Matrix4x4::new(
+        Self::new(
             one,  shear_y_with_x, zero, zero,
             zero, one,            zero, zero,
             zero, shear_y_with_z, one,  zero,
@@ -4297,11 +4297,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Matrix4x4<S> {
+    pub fn from_affine_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
-        Matrix4x4::new(
+        Self::new(
             one,  zero, shear_z_with_x, zero,
             zero, one,  shear_z_with_y, zero,
             zero, zero, one,            zero,
@@ -4373,12 +4373,12 @@ where
     pub fn from_affine_shear(
         shear_x_with_y: S, shear_x_with_z: S, 
         shear_y_with_x: S, shear_y_with_z: S, 
-        shear_z_with_x: S, shear_z_with_y: S) -> Matrix4x4<S> 
+        shear_z_with_x: S, shear_z_with_y: S) -> Self
     {
         let zero = S::zero();
         let one = S::one();
 
-        Matrix4x4::new(
+        Self::new(
             one,            shear_y_with_x, shear_z_with_x, zero,
             shear_x_with_y, one,            shear_z_with_y, zero,
             shear_x_with_z, shear_y_with_z, one,            zero,
@@ -4448,8 +4448,8 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn transpose(&self) -> Matrix4x4<S> {
-        Matrix4x4::new(
+    pub fn transpose(&self) -> Self {
+        Self::new(
             self.data[0][0], self.data[1][0], self.data[2][0], self.data[3][0],
             self.data[0][1], self.data[1][1], self.data[2][1], self.data[3][1], 
             self.data[0][2], self.data[1][2], self.data[2][2], self.data[3][2], 
@@ -4474,9 +4474,9 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn zero() -> Matrix4x4<S> {
+    pub fn zero() -> Self {
         let zero = S::zero();
-        Matrix4x4::new(
+        Self::new(
             zero, zero, zero, zero, 
             zero, zero, zero, zero, 
             zero, zero, zero, zero, 
@@ -4535,11 +4535,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn identity() -> Matrix4x4<S> {
+    pub fn identity() -> Self {
         let one = S::one();
         let zero = S::zero();
 
-        Matrix4x4::new(
+        Self::new(
             one,  zero, zero, zero, 
             zero, one,  zero, zero, 
             zero, zero, one,  zero, 
@@ -4598,7 +4598,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal_value(value: S) -> Self {
-        Matrix4x4::new(
+        Self::new(
             value,     S::zero(), S::zero(), S::zero(),
             S::zero(), value,     S::zero(), S::zero(),
             S::zero(), S::zero(), value,     S::zero(),
@@ -4632,7 +4632,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal(value: &Vector4<S>) -> Self {
-        Matrix4x4::new(
+        Self::new(
             value.x,   S::zero(), S::zero(), S::zero(),
             S::zero(), value.y,   S::zero(), S::zero(),
             S::zero(), S::zero(), value.z,   S::zero(),
@@ -4788,7 +4788,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_reflection(
-        normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Matrix4x4<S>
+        normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Self
     {
         let zero = S::zero();
         let one = S::one();
@@ -4814,7 +4814,7 @@ where
         let c3r2 = two * normal.z * (normal.x * bias.x + normal.y * bias.y + normal.z * bias.z);
         let c3r3 = one;
 
-        Matrix4x4::new(
+        Self::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
@@ -4948,12 +4948,12 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_angle_x<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
+    pub fn from_affine_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
 
-        Matrix4x4::new(
+        Self::new(
             one,   zero,      zero,      zero,
             zero,  cos_angle, sin_angle, zero,
             zero, -sin_angle, cos_angle, zero,
@@ -4988,12 +4988,12 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_angle_y<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
+    pub fn from_affine_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
 
-        Matrix4x4::new(
+        Self::new(
             cos_angle, zero, -sin_angle, zero,
             zero,      one,   zero,      zero,
             sin_angle, zero,  cos_angle, zero,
@@ -5028,12 +5028,12 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_angle_z<A: Into<Radians<S>>>(angle: A) -> Matrix4x4<S> {
+    pub fn from_affine_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
         
-        Matrix4x4::new(
+        Self::new(
              cos_angle, sin_angle, zero, zero,
             -sin_angle, cos_angle, zero, zero,
              zero,      zero,      one,  zero,
@@ -5071,13 +5071,13 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_axis_angle<A: Into<Radians<S>>>(
-        axis: &Unit<Vector3<S>>, angle: A) -> Matrix4x4<S>
+        axis: &Unit<Vector3<S>>, angle: A) -> Self
     {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();
 
-        Matrix4x4::new(
+        Self::new(
             one_minus_cos_angle * _axis.x * _axis.x + cos_angle,
             one_minus_cos_angle * _axis.x * _axis.y + sin_angle * _axis.z,
             one_minus_cos_angle * _axis.x * _axis.z - sin_angle * _axis.y,
@@ -5128,7 +5128,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_orthographic(
-        left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> 
+        left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self
     {
         let zero = S::zero();
         let one  = S::one();
@@ -5141,7 +5141,7 @@ where
         let tz = -(far + near) / (far - near);
 
         // We use the same orthographic projection matrix that OpenGL uses.
-        Matrix4x4::new(
+        Self::new(
             sx,   zero, zero, zero,
             zero, sy,   zero, zero,
             zero, zero, sz,   zero,
@@ -5179,7 +5179,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_orthographic_fov<A: Into<Radians<S>>>(
-        vfov: A, aspect: S, near: S, far: S) -> Matrix4x4<S> 
+        vfov: A, aspect: S, near: S, far: S) -> Self
     {
         let one_half = num_traits::cast(0.5).unwrap();
         let width = far * Angle::tan(vfov.into() * one_half);
@@ -5224,7 +5224,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_perspective(
-        left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4x4<S> 
+        left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self
     {
         let zero = S::zero();
         let one = S::one();
@@ -5251,7 +5251,7 @@ where
         let c3r3 = zero;
 
         // We use the same perspective projection matrix that OpenGL uses.
-        Matrix4x4::new(
+        Self::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
@@ -5291,7 +5291,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_perspective_fov<A: Into<Radians<S>>>(
-        vfov: A, aspect: S, near: S, far: S) -> Matrix4x4<S> 
+        vfov: A, aspect: S, near: S, far: S) -> Self
     {
         let zero = S::zero();
         let one = S::one();
@@ -5303,7 +5303,7 @@ where
         let pz = (two * far * near) / (near - far);
         
         // We use the same perspective projection matrix that OpenGL uses.
-        Matrix4x4::new(
+        Self::new(
             sx,    zero,  zero,  zero,
             zero,  sy,    zero,  zero,
             zero,  zero,  sz,   -one,
@@ -5321,7 +5321,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn face_towards(
-        eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Matrix4x4<S>
+        eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self
     {
         let zero = S::zero();
         let one = S::one();
@@ -5334,7 +5334,7 @@ where
         let eye_y = eye_vec.dot(&y_axis);
         let eye_z = eye_vec.dot(&z_axis);
         
-        Matrix4x4::new(
+        Self::new(
             x_axis.x,  x_axis.y,  x_axis.z, zero,
             y_axis.x,  y_axis.y,  y_axis.z, zero,
             z_axis.x,  z_axis.y,  z_axis.z, zero,
@@ -5382,7 +5382,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_rh(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         let direction = -(target - eye);
         
         let zero = S::zero();
@@ -5396,7 +5396,7 @@ where
         let neg_eye_y = -eye_vec.dot(&y_axis);
         let neg_eye_z = -eye_vec.dot(&z_axis);
         
-        Matrix4x4::new(
+        Self::new(
             x_axis.x,  y_axis.x,  z_axis.x,  zero,
             x_axis.y,  y_axis.y,  z_axis.y,  zero,
             x_axis.z,  y_axis.z,  z_axis.z,  zero,
@@ -5444,7 +5444,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Matrix4x4<S> {
+        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
 
         let direction = target - eye;
          
@@ -5459,7 +5459,7 @@ where
         let neg_eye_y = -eye_vec.dot(&y_axis);
         let neg_eye_z = -eye_vec.dot(&z_axis);
         
-        Matrix4x4::new(
+        Self::new(
             x_axis.x,  y_axis.x,  z_axis.x,  zero,
             x_axis.y,  y_axis.y,  z_axis.y,  zero,
             x_axis.z,  y_axis.z,  z_axis.z,  zero,
@@ -5615,7 +5615,7 @@ where
             let c3r2 = det_inv * _c3r2; 
             let c3r3 = det_inv * _c3r3;
     
-            Some(Matrix4x4::new(
+            Some(Self::new(
                 c0r0, c0r1, c0r2, c0r3,
                 c1r0, c1r1, c1r2, c1r3,
                 c2r0, c2r1, c2r2, c2r3,
@@ -5712,7 +5712,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn lerp(&self, other: &Matrix4x4<S>, amount: S) -> Matrix4x4<S> {
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
 }
@@ -5740,8 +5740,8 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(array: [[S; 4]; 4]) -> Matrix4x4<S> {
-        Matrix4x4::new(
+    fn from(array: [[S; 4]; 4]) -> Self {
+        Self::new(
             array[0][0], array[0][1], array[0][2], array[0][3], 
             array[1][0], array[1][1], array[1][2], array[1][3],
             array[2][0], array[2][1], array[2][2], array[2][3], 
@@ -5768,8 +5768,8 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(array: [S; 16]) -> Matrix4x4<S> {
-        Matrix4x4::new(
+    fn from(array: [S; 16]) -> Self {
+        Self::new(
             array[0],  array[1],  array[2],  array[3], 
             array[4],  array[5],  array[6],  array[7],
             array[8],  array[9],  array[10], array[11], 
@@ -5796,10 +5796,10 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(matrix: Matrix2x2<S>) -> Matrix4x4<S> {
+    fn from(matrix: Matrix2x2<S>) -> Self {
         let one = S::one();
         let zero = S::zero();
-        Matrix4x4::new(
+        Self::new(
             matrix[0][0], matrix[0][1], zero, zero,
             matrix[1][0], matrix[1][1], zero, zero,
             zero,         zero,         one,  zero,
@@ -5814,10 +5814,10 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(matrix: &Matrix2x2<S>) -> Matrix4x4<S> {
+    fn from(matrix: &Matrix2x2<S>) -> Self {
         let one = S::one();
         let zero = S::zero();
-        Matrix4x4::new(
+        Self::new(
             matrix[0][0], matrix[0][1], zero, zero,
             matrix[1][0], matrix[1][1], zero, zero,
             zero,         zero,         one,  zero,
@@ -5832,10 +5832,10 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(matrix: Matrix3x3<S>) -> Matrix4x4<S> {
+    fn from(matrix: Matrix3x3<S>) -> Self {
         let one = S::one();
         let zero = S::zero();
-        Matrix4x4::new(
+        Self::new(
             matrix[0][0], matrix[0][1], matrix[0][2], zero,
             matrix[1][0], matrix[1][1], matrix[1][2], zero,
             matrix[2][0], matrix[2][1], matrix[2][2], zero,
@@ -5850,10 +5850,10 @@ where
 {
     #[rustfmt::skip]
     #[inline]
-    fn from(matrix: &Matrix3x3<S>) -> Matrix4x4<S> {
+    fn from(matrix: &Matrix3x3<S>) -> Self {
         let one = S::one();
         let zero = S::zero();
-        Matrix4x4::new(
+        Self::new(
             matrix[0][0], matrix[0][1], matrix[0][2], zero,
             matrix[1][0], matrix[1][1], matrix[1][2], zero,
             matrix[2][0], matrix[2][1], matrix[2][2], zero,
@@ -5873,8 +5873,8 @@ pub struct Matrix1x2<S> {
 impl<S> Matrix1x2<S> {
     /// Construct a new matrix from its elements.
     #[inline]
-    pub const fn new(c0r0: S, c1r0: S) -> Matrix1x2<S> {
-        Matrix1x2 {
+    pub const fn new(c0r0: S, c1r0: S) -> Self {
+        Self {
             data: [
                 [c0r0],
                 [c1r0],    
@@ -6017,8 +6017,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix1x2<S> {
-        Matrix1x2::new(S::zero(), S::zero())
+    pub fn zero() -> Self {
+        Self::new(S::zero(), S::zero())
     }
     
     /// Determine whether a matrix is a zero matrix.
@@ -6058,8 +6058,8 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(array: [[S; 1]; 2]) -> Matrix1x2<S> {
-        Matrix1x2::new(array[0][0], array[1][0])
+    fn from(array: [[S; 1]; 2]) -> Self {
+        Self::new(array[0][0], array[1][0])
     }
 }
 
@@ -6080,8 +6080,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 2]) -> Matrix1x2<S> {
-        Matrix1x2::new(array[0], array[1])
+    fn from(array: [S; 2]) -> Self {
+        Self::new(array[0], array[1])
     }
 }
 
@@ -6108,8 +6108,8 @@ pub struct Matrix1x3<S> {
 impl<S> Matrix1x3<S> {
     /// Construct a new matrix from its elements.
     #[inline]
-    pub const fn new(c0r0: S, c1r0: S, c2r0: S) -> Matrix1x3<S> {
-        Matrix1x3 {
+    pub const fn new(c0r0: S, c1r0: S, c2r0: S) -> Self {
+        Self {
             data: [
                 [c0r0],
                 [c1r0],
@@ -6258,8 +6258,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix1x3<S> {
-        Matrix1x3::new(S::zero(), S::zero(), S::zero())
+    pub fn zero() -> Self {
+        Self::new(S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether a matrix is a zero matrix.
@@ -6301,8 +6301,8 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(array: [[S; 1]; 3]) -> Matrix1x3<S> {
-        Matrix1x3::new(array[0][0], array[1][0], array[2][0])
+    fn from(array: [[S; 1]; 3]) -> Self {
+        Self::new(array[0][0], array[1][0], array[2][0])
     }
 }
 
@@ -6323,8 +6323,8 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(array: [S; 3]) -> Matrix1x3<S> {
-        Matrix1x3::new(array[0], array[1], array[2])
+    fn from(array: [S; 3]) -> Self {
+        Self::new(array[0], array[1], array[2])
     }
 }
 
@@ -6351,8 +6351,8 @@ pub struct Matrix1x4<S> {
 impl<S> Matrix1x4<S> {
     /// Construct a new matrix from its elements.
     #[inline]
-    pub const fn new(c0r0: S, c1r0: S, c2r0: S, c3r0: S) -> Matrix1x4<S> {
-        Matrix1x4 {
+    pub const fn new(c0r0: S, c1r0: S, c2r0: S, c3r0: S) -> Self {
+        Self {
             data: [
                 [c0r0],
                 [c1r0],
@@ -6512,8 +6512,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix1x4<S> {
-        Matrix1x4::new(S::zero(), S::zero(), S::zero(), S::zero())
+    pub fn zero() -> Self {
+        Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether a matrix is a zero matrix.
@@ -6556,8 +6556,8 @@ where
     S: Scalar 
 {
     #[inline]
-    fn from(array: [[S; 1]; 4]) -> Matrix1x4<S> {
-        Matrix1x4::new(array[0][0], array[1][0], array[2][0], array[3][0])
+    fn from(array: [[S; 1]; 4]) -> Self {
+        Self::new(array[0][0], array[1][0], array[2][0], array[3][0])
     }
 }
 
@@ -6578,8 +6578,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 4]) -> Matrix1x4<S> {
-        Matrix1x4::new(array[0], array[1], array[2], array[3])
+    fn from(array: [S; 4]) -> Self {
+        Self::new(array[0], array[1], array[2], array[3])
     }
 }
 
@@ -6607,9 +6607,9 @@ impl<S> Matrix2x3<S> {
     /// Construct a new matrix from its elements.
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, c1r0: S, c1r1: S, c2r0: S, c2r1: S) -> Matrix2x3<S> 
+        c0r0: S, c0r1: S, c1r0: S, c1r1: S, c2r0: S, c2r1: S) -> Self 
     {
-        Matrix2x3 {
+        Self {
             data: [
                 [c0r0, c0r1],
                 [c1r0, c1r1],
@@ -6646,8 +6646,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Matrix2x3<S> {
-        Matrix2x3::new(
+    pub fn from_fill(value: S) -> Self {
+        Self::new(
             value, value, 
             value, value, 
             value, value
@@ -6807,8 +6807,8 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>, c2: Vector2<S>) -> Matrix2x3<S> {
-        Matrix2x3::new(
+    pub fn from_columns(c0: Vector2<S>, c1: Vector2<S>, c2: Vector2<S>) -> Self {
+        Self::new(
             c0[0], c0[1], 
             c1[0], c1[1],
             c2[0], c2[1]
@@ -6952,8 +6952,8 @@ impl<S> Matrix2x3<S> where S: Scalar {
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix2x3<S> {
-        Matrix2x3::new(
+    pub fn zero() -> Self {
+        Self::new(
             S::zero(), S::zero(), 
             S::zero(), S::zero(), 
             S::zero(), S::zero()
@@ -7001,8 +7001,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [[S; 2]; 3]) -> Matrix2x3<S> {
-        Matrix2x3::new(
+    fn from(array: [[S; 2]; 3]) -> Self {
+        Self::new(
             array[0][0], array[0][1], 
             array[1][0], array[1][1], 
             array[2][0], array[2][1]
@@ -7027,8 +7027,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 6]) -> Matrix2x3<S> {
-        Matrix2x3::new(
+    fn from(array: [S; 6]) -> Self {
+        Self::new(
             array[0], array[1], 
             array[2], array[3],
             array[4], array[5]
@@ -7060,9 +7060,9 @@ impl<S> Matrix3x2<S> {
     /// Construct a new matrix from its elements.
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, c0r2: S, c1r0: S, c1r1: S, c1r2: S) -> Matrix3x2<S> 
+        c0r0: S, c0r1: S, c0r2: S, c1r0: S, c1r1: S, c1r2: S) -> Self
     {
-        Matrix3x2 {
+        Self {
             data: [
                 [c0r0, c0r1, c0r2],
                 [c1r0, c1r1, c1r2],
@@ -7097,8 +7097,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Matrix3x2<S> {
-        Matrix3x2::new(
+    pub fn from_fill(value: S) -> Self {
+        Self::new(
             value, value, value, 
             value, value, value
         )
@@ -7247,8 +7247,8 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector3<S>, c1: Vector3<S>) -> Matrix3x2<S> {
-        Matrix3x2::new(
+    pub fn from_columns(c0: Vector3<S>, c1: Vector3<S>) -> Self {
+        Self::new(
             c0[0], c0[1], c0[2], 
             c1[0], c1[1], c1[2]
         )
@@ -7392,8 +7392,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix3x2<S> {
-        Matrix3x2::new(
+    pub fn zero() -> Self {
+        Self::new(
             S::zero(), S::zero(), S::zero(), 
             S::zero(), S::zero(), S::zero()
         )
@@ -7444,8 +7444,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [[S; 3]; 2]) -> Matrix3x2<S> {
-        Matrix3x2::new(
+    fn from(array: [[S; 3]; 2]) -> Self {
+        Self::new(
             array[0][0], array[0][1], array[0][2], 
             array[1][0], array[1][1], array[1][2]
         )
@@ -7469,8 +7469,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 6]) -> Matrix3x2<S> {
-        Matrix3x2::new(
+    fn from(array: [S; 6]) -> Self {
+        Self::new(
             array[0], array[1], array[2], 
             array[3], array[4], array[5]
         )
@@ -7504,9 +7504,9 @@ impl<S> Matrix2x4<S> {
         c0r0: S, c0r1: S, 
         c1r0: S, c1r1: S, 
         c2r0: S, c2r1: S,
-        c3r0: S, c3r1: S) -> Matrix2x4<S> 
+        c3r0: S, c3r1: S) -> Self 
     {
-        Matrix2x4 {
+        Self {
             data: [
                 [c0r0, c0r1],
                 [c1r0, c1r1],
@@ -7545,8 +7545,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Matrix2x4<S> {
-        Matrix2x4::new(
+    pub fn from_fill(value: S) -> Self {
+        Self::new(
             value, value, 
             value, value,
             value, value,
@@ -7720,8 +7720,8 @@ where
     /// Construct a matrix from a set of column vectors.
     #[inline]
     pub fn from_columns(
-        c0: Vector2<S>, c1: Vector2<S>, c2: Vector2<S>, c3: Vector2<S>) -> Matrix2x4<S> {
-        Matrix2x4::new(
+        c0: Vector2<S>, c1: Vector2<S>, c2: Vector2<S>, c3: Vector2<S>) -> Self {
+        Self::new(
             c0[0], c0[1], 
             c1[0], c1[1],
             c2[0], c2[1],
@@ -7891,8 +7891,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix2x4<S> {
-        Matrix2x4::new(
+    pub fn zero() -> Self {
+        Self::new(
             S::zero(), S::zero(), 
             S::zero(), S::zero(), 
             S::zero(), S::zero(),
@@ -7942,8 +7942,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [[S; 2]; 4]) -> Matrix2x4<S> {
-        Matrix2x4::new(
+    fn from(array: [[S; 2]; 4]) -> Self {
+        Self::new(
             array[0][0], array[0][1], 
             array[1][0], array[1][1], 
             array[2][0], array[2][1],
@@ -7969,8 +7969,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 8]) -> Matrix2x4<S> {
-        Matrix2x4::new(
+    fn from(array: [S; 8]) -> Self {
+        Self::new(
             array[0], array[1], 
             array[2], array[3],
             array[4], array[5],
@@ -8004,9 +8004,9 @@ impl<S> Matrix4x2<S> {
     #[inline]
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S, c0r3: S, 
-        c1r0: S, c1r1: S, c1r2: S, c1r3: S) -> Matrix4x2<S> 
+        c1r0: S, c1r1: S, c1r2: S, c1r3: S) -> Self 
     {
-        Matrix4x2 {
+        Self {
             data: [
                 [c0r0, c0r1, c0r2, c0r3],
                 [c1r0, c1r1, c1r2, c1r3],
@@ -8041,8 +8041,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Matrix4x2<S> {
-        Matrix4x2::new(
+    pub fn from_fill(value: S) -> Self {
+        Self::new(
             value, value, value, value,
             value, value, value, value
         )
@@ -8199,8 +8199,8 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>) -> Matrix4x2<S> {
-        Matrix4x2::new(
+    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>) -> Self {
+        Self::new(
             c0[0], c0[1], c0[2], c0[3],
             c1[0], c1[1], c1[2], c1[3]
         )
@@ -8363,8 +8363,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix4x2<S> {
-        Matrix4x2::new(
+    pub fn zero() -> Self {
+        Self::new(
             S::zero(), S::zero(), S::zero(), S::zero(),
             S::zero(), S::zero(), S::zero(), S::zero()
         )
@@ -8418,8 +8418,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [[S; 4]; 2]) -> Matrix4x2<S> {
-        Matrix4x2::new(
+    fn from(array: [[S; 4]; 2]) -> Self {
+        Self::new(
             array[0][0], array[0][1], array[0][2], array[0][3],
             array[1][0], array[1][1], array[1][2], array[1][3]
         )
@@ -8443,8 +8443,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 8]) -> Matrix4x2<S> {
-        Matrix4x2::new(
+    fn from(array: [S; 8]) -> Self {
+        Self::new(
             array[0], array[1], array[2], array[3], 
             array[4], array[5], array[6], array[7]
         )
@@ -8478,9 +8478,9 @@ impl<S> Matrix3x4<S> {
         c0r0: S, c0r1: S, c0r2: S, 
         c1r0: S, c1r1: S, c1r2: S,
         c2r0: S, c2r1: S, c2r2: S,
-        c3r0: S, c3r1: S, c3r2: S) -> Matrix3x4<S> 
+        c3r0: S, c3r1: S, c3r2: S) -> Self
     {
-        Matrix3x4 {
+        Self {
             data: [
                 [c0r0, c0r1, c0r2],
                 [c1r0, c1r1, c1r2],
@@ -8519,8 +8519,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Matrix3x4<S> {
-        Matrix3x4::new(
+    pub fn from_fill(value: S) -> Self {
+        Self::new(
             value, value, value,
             value, value, value,
             value, value, value,
@@ -8697,8 +8697,8 @@ where
     /// Construct a matrix from a set of column vectors.
     #[inline]
     pub fn from_columns(
-        c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>, c3: Vector3<S>) -> Matrix3x4<S> {
-        Matrix3x4::new(
+        c0: Vector3<S>, c1: Vector3<S>, c2: Vector3<S>, c3: Vector3<S>) -> Self {
+        Self::new(
             c0[0], c0[1], c0[2],
             c1[0], c1[1], c1[2],
             c2[0], c2[1], c2[2],
@@ -8891,8 +8891,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix3x4<S> {
-        Matrix3x4::new(
+    pub fn zero() -> Self {
+        Self::new(
             S::zero(), S::zero(), S::zero(),
             S::zero(), S::zero(), S::zero(),
             S::zero(), S::zero(), S::zero(),
@@ -8951,8 +8951,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [[S; 3]; 4]) -> Matrix3x4<S> {
-        Matrix3x4::new(
+    fn from(array: [[S; 3]; 4]) -> Self {
+        Self::new(
             array[0][0], array[0][1], array[0][2],
             array[1][0], array[1][1], array[1][2],
             array[2][0], array[2][1], array[2][2],
@@ -8978,8 +8978,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 12]) -> Matrix3x4<S> {
-        Matrix3x4::new(
+    fn from(array: [S; 12]) -> Self {
+        Self::new(
             array[0], array[1],  array[2], 
             array[3], array[4],  array[5],
             array[6], array[7],  array[8],
@@ -9014,9 +9014,9 @@ impl<S> Matrix4x3<S> {
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S, c0r3: S, 
         c1r0: S, c1r1: S, c1r2: S, c1r3: S,
-        c2r0: S, c2r1: S, c2r2: S, c2r3: S) -> Matrix4x3<S> 
+        c2r0: S, c2r1: S, c2r2: S, c2r3: S) -> Self
     {
-        Matrix4x3 {
+        Self {
             data: [
                 [c0r0, c0r1, c0r2, c0r3],
                 [c1r0, c1r1, c1r2, c1r3],
@@ -9221,8 +9221,8 @@ where
 
     /// Construct a matrix from a set of column vectors.
     #[inline]
-    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>) -> Matrix4x3<S> {
-        Matrix4x3::new(
+    pub fn from_columns(c0: Vector4<S>, c1: Vector4<S>, c2: Vector4<S>) -> Self {
+        Self::new(
             c0[0], c0[1], c0[2], c0[3],
             c1[0], c1[1], c1[2], c1[3],
             c2[0], c2[1], c2[2], c2[3]
@@ -9409,8 +9409,8 @@ where
     /// assert!(matrix.is_zero());
     /// ```
     #[inline]
-    pub fn zero() -> Matrix4x3<S> {
-        Matrix4x3::new(
+    pub fn zero() -> Self {
+        Self::new(
             S::zero(), S::zero(), S::zero(), S::zero(),
             S::zero(), S::zero(), S::zero(), S::zero(),
             S::zero(), S::zero(), S::zero(), S::zero()
@@ -9469,8 +9469,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [[S; 4]; 3]) -> Matrix4x3<S> {
-        Matrix4x3::new(
+    fn from(array: [[S; 4]; 3]) -> Self {
+        Self::new(
             array[0][0], array[0][1], array[0][2], array[0][3],
             array[1][0], array[1][1], array[1][2], array[1][3],
             array[2][0], array[2][1], array[2][2], array[2][3]
@@ -9495,8 +9495,8 @@ where
     S: Scalar
 {
     #[inline]
-    fn from(array: [S; 12]) -> Matrix4x3<S> {
-        Matrix4x3::new(
+    fn from(array: [S; 12]) -> Self {
+        Self::new(
             array[0], array[1], array[2],  array[3], 
             array[4], array[5], array[6],  array[7],
             array[8], array[9], array[10], array[11]
