@@ -325,7 +325,7 @@ where
             && self.v.x.is_zero() && self.v.y.is_zero() && self.v.z.is_zero()
     }
     
-    /// Construct the multiplicate identity quaternion.
+    /// Construct the multiplicative identity quaternion.
     ///
     /// ## Example
     ///
