@@ -136,7 +136,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, op: F) -> Point1<T> 
+    pub fn map<T, F>(&self, op: F) -> Point1<T> 
     where 
         F: FnMut(S) -> T 
     {
@@ -477,7 +477,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, op: F) -> Point2<T> 
+    pub fn map<T, F>(&self, op: F) -> Point2<T> 
     where 
         F: FnMut(S) -> T 
     {
@@ -840,7 +840,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, op: F) -> Point3<T> 
+    pub fn map<T, F>(&self, op: F) -> Point3<T> 
     where 
         F: FnMut(S) -> T
     {

@@ -165,7 +165,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector1<T> 
+    pub fn map<T, F>(&self, mut op: F) -> Vector1<T> 
     where 
         F: FnMut(S) -> T
     {
@@ -611,7 +611,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector2<T> 
+    pub fn map<T, F>(&self, mut op: F) -> Vector2<T> 
     where 
         F: FnMut(S) -> T
     {
@@ -1097,7 +1097,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector3<T> 
+    pub fn map<T, F>(&self, mut op: F) -> Vector3<T> 
     where 
         F: FnMut(S) -> T
     {
@@ -1599,7 +1599,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Vector4<T> 
+    pub fn map<T, F>(&self, mut op: F) -> Vector4<T> 
     where 
         F: FnMut(S) -> T
     {

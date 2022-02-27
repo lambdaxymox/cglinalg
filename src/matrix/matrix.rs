@@ -1815,7 +1815,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Matrix3x3<T> 
+    pub fn map<T, F>(&self, mut op: F) -> Matrix3x3<T> 
     where 
         F: FnMut(S) -> T
     {
@@ -3912,7 +3912,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn map<T, F>(self, mut op: F) -> Matrix4x4<T> 
+    pub fn map<T, F>(&self, mut op: F) -> Matrix4x4<T> 
     where 
         F: FnMut(S) -> T
     {
