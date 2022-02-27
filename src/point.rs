@@ -20,7 +20,6 @@ use num_traits::{
 
 use core::fmt;
 use core::ops;
-//use core::ops::*;
 
 
 /// A point is a location in a one-dimensional Euclidean space.
