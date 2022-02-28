@@ -4,6 +4,10 @@ use crate::base::{
     ScalarSigned,
     ScalarFloat,
 };
+use crate::angle::{
+    Angle,
+    Radians,
+};
 use core::ops;
 
 
@@ -93,6 +97,27 @@ where
     #[inline]
     pub fn magnitude(&self) -> S {
         self.magnitude_squared().sqrt()
+    }
+
+    #[inline]
+    pub fn arg(&self) -> S {
+        self.im.atan2(self.re)
+    }
+}
+
+impl<S> Complex<S>
+where
+    S: ScalarFloat
+{
+    #[inline]
+    pub fn from_polar<A: Into<Radians<S>>>(r: S, angle: A) -> Self {
+        let theta: Radians<S> = angle.into();
+        Self::new(r * theta.cos(), r * theta.sin())
+    }
+
+    #[inline]
+    pub fn to_polar(&self) -> (S, Radians<S>) {
+        (self.magnitude(), Radians(self.arg()))
     }
 }
 
