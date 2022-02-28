@@ -76,8 +76,18 @@ where
     }
 
     #[inline]
+    pub fn is_zero(self) -> bool {
+        self.re.is_zero() && self.im.is_zero()
+    }
+
+    #[inline]
     pub fn identity() -> Self {
         Self::new(S::one(), S::zero())
+    }
+
+    #[inline]
+    pub fn is_identity(self) -> bool {
+        self.re.is_one() && self.im.is_zero()
     }
 
     #[inline]
