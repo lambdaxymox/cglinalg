@@ -1898,6 +1898,126 @@ impl<S> AsMut<(S, S, S, S)> for Quaternion<S> {
     }
 }
 
+impl<S> ops::Index<usize> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = S;
+
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        let v: &[S; 4] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::Range<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::Range<usize>) -> &Self::Output {
+        let v: &[S; 4] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeTo<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
+        let v: &[S; 4] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeFrom<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
+        let v: &[S; 4] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::Index<ops::RangeFull> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = [S];
+
+    #[inline]
+    fn index(&self, index: ops::RangeFull) -> &Self::Output {
+        let v: &[S; 4] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S> ops::IndexMut<usize> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut S {
+        let v: &mut [S; 4] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::Range<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
+        let v: &mut [S; 4] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeTo<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
+        let v: &mut [S; 4] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
+        let v: &mut [S; 4] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S> ops::IndexMut<ops::RangeFull> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
+        let v: &mut [S; 4] = self.as_mut();
+        &mut v[index]
+    }
+}
+
 impl<S> From<(S, S, S, S)> for Quaternion<S> 
 where 
     S: Scalar 
@@ -2019,126 +2139,6 @@ where
     #[inline]
     fn from(matrix: &Matrix3x3<S>) -> Quaternion<S> {
         Self::from_matrix(matrix)
-    }
-}
-
-impl<S> ops::Index<usize> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    type Output = S;
-
-    #[inline]
-    fn index(&self, index: usize) -> &Self::Output {
-        let v: &[S; 4] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::Range<usize>> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::Range<usize>) -> &Self::Output {
-        let v: &[S; 4] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeTo<usize>> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeTo<usize>) -> &Self::Output {
-        let v: &[S; 4] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeFrom<usize>> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
-        let v: &[S; 4] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::Index<ops::RangeFull> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    type Output = [S];
-
-    #[inline]
-    fn index(&self, index: ops::RangeFull) -> &Self::Output {
-        let v: &[S; 4] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S> ops::IndexMut<usize> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut S {
-        let v: &mut [S; 4] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::Range<usize>> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
-        let v: &mut [S; 4] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeTo<usize>> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
-        let v: &mut [S; 4] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
-        let v: &mut [S; 4] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S> ops::IndexMut<ops::RangeFull> for Quaternion<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
-        let v: &mut [S; 4] = self.as_mut();
-        &mut v[index]
     }
 }
 

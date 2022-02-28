@@ -118,9 +118,17 @@ where
     }
 
     /// Construct a matrix from a set of column vectors.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_columns(c0: &Vector1<S>) -> Self {
         Self::new(c0[0])
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(r0: &Vector1<S>) -> Self {
+        Self::new(r0[0])
     }
 
     /// Map an operation on the elements of a matrix, returning a matrix whose 
@@ -609,11 +617,22 @@ where
     }
 
     /// Construct a matrix from a set of column vectors.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_columns(c0: &Vector2<S>, c1: &Vector2<S>) -> Self {
         Self::new(
             c0[0], c0[1], 
-            c1[0], c1[1]
+            c1[0], c1[1],
+        )
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(r0: &Vector2<S>, r1: &Vector2<S>) -> Self {
+        Self::new(
+            r0[0], r1[0], 
+            r0[1], r1[1],
         )
     }
 
@@ -1786,6 +1805,19 @@ where
             c0[0], c0[1], c0[2], 
             c1[0], c1[1], c1[2],
             c2[0], c2[1], c2[2],
+        )
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(
+        r0: &Vector3<S>, r1: &Vector3<S>, r2: &Vector3<S>) -> Self 
+    {
+        Self::new(
+            r0[0], r1[0], r2[0],
+            r0[1], r1[1], r2[1],
+            r0[2], r1[2], r2[2],
         )
     }
 
@@ -3881,6 +3913,20 @@ where
             c1[0], c1[1], c1[2], c1[3],
             c2[0], c2[1], c2[2], c2[3],
             c3[0], c3[1], c3[2], c3[3],
+        )
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(
+        r0: &Vector4<S>, r1: &Vector4<S>, r2: &Vector4<S>, r3: &Vector4<S>) -> Self 
+    {
+        Self::new(
+            r0[0], r1[0], r2[0], r3[0],
+            r0[1], r1[1], r2[1], r3[1],
+            r0[2], r1[2], r2[2], r3[2],
+            r0[3], r1[3], r2[3], r3[3],
         )
     }
 
@@ -6807,12 +6853,24 @@ where
     }
 
     /// Construct a matrix from a set of column vectors.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_columns(c0: &Vector2<S>, c1: &Vector2<S>, c2: &Vector2<S>) -> Self {
         Self::new(
             c0[0], c0[1], 
             c1[0], c1[1],
-            c2[0], c2[1]
+            c2[0], c2[1],
+        )
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(r0: &Vector3<S>, r1: &Vector3<S>) -> Self {
+        Self::new(
+            r0[0], r1[0],
+            r0[1], r1[1],
+            r0[2], r1[2],
         )
     }
 
@@ -6905,7 +6963,10 @@ where
     }
 }
 
-impl<S> Matrix2x3<S> where S: Scalar {
+impl<S> Matrix2x3<S> 
+where 
+    S: Scalar 
+{
     /// Transpose a matrix.
     ///
     /// ## Example
@@ -7247,11 +7308,22 @@ where
     }
 
     /// Construct a matrix from a set of column vectors.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_columns(c0: &Vector3<S>, c1: &Vector3<S>) -> Self {
         Self::new(
             c0[0], c0[1], c0[2], 
-            c1[0], c1[1], c1[2]
+            c1[0], c1[1], c1[2],
+        )
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(r0: &Vector2<S>, r1: &Vector2<S>, r2: &Vector2<S>) -> Self {
+        Self::new(
+            r0[0], r1[0], r2[0], 
+            r1[1], r1[1], r2[1],
         )
     }
 
@@ -7719,6 +7791,7 @@ where
     }
 
     /// Construct a matrix from a set of column vectors.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_columns(
         c0: &Vector2<S>, c1: &Vector2<S>, c2: &Vector2<S>, c3: &Vector2<S>) -> Self {
@@ -7726,7 +7799,19 @@ where
             c0[0], c0[1], 
             c1[0], c1[1],
             c2[0], c2[1],
-            c3[0], c3[1]
+            c3[0], c3[1],
+        )
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(r0: &Vector4<S>, r1: &Vector4<S>) -> Self {
+        Self::new(
+            r0[0], r1[0], 
+            r0[1], r1[1],
+            r0[2], r1[2],
+            r0[3], r1[3],
         )
     }
 
@@ -8199,11 +8284,24 @@ where
     }
 
     /// Construct a matrix from a set of column vectors.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_columns(c0: &Vector4<S>, c1: &Vector4<S>) -> Self {
         Self::new(
             c0[0], c0[1], c0[2], c0[3],
-            c1[0], c1[1], c1[2], c1[3]
+            c1[0], c1[1], c1[2], c1[3],
+        )
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(
+        r0: &Vector2<S>, r1: &Vector2<S>, r2: &Vector2<S>, r3: &Vector2<S>) -> Self 
+    {
+        Self::new(
+            r0[0], r1[0], r2[0], r3[0],
+            r0[1], r1[1], r2[1], r3[1],
         )
     }
 
@@ -8696,6 +8794,7 @@ where
     }
 
     /// Construct a matrix from a set of column vectors.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_columns(
         c0: &Vector3<S>, c1: &Vector3<S>, c2: &Vector3<S>, c3: &Vector3<S>) -> Self 
@@ -8704,7 +8803,20 @@ where
             c0[0], c0[1], c0[2],
             c1[0], c1[1], c1[2],
             c2[0], c2[1], c2[2],
-            c3[0], c3[1], c3[2]
+            c3[0], c3[1], c3[2],
+        )
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(r0: &Vector4<S>, r1: &Vector4<S>, r2: &Vector4<S>) -> Self
+    {
+        Self::new(
+            r0[0], r1[0], r2[0],
+            r0[1], r1[1], r2[1],
+            r0[2], r1[2], r2[2],
+            r0[3], r1[3], r2[3],
         )
     }
 
@@ -9222,12 +9334,26 @@ where
     }
 
     /// Construct a matrix from a set of column vectors.
+    #[rustfmt::skip]
     #[inline]
     pub fn from_columns(c0: &Vector4<S>, c1: &Vector4<S>, c2: &Vector4<S>) -> Self {
         Self::new(
             c0[0], c0[1], c0[2], c0[3],
             c1[0], c1[1], c1[2], c1[3],
-            c2[0], c2[1], c2[2], c2[3]
+            c2[0], c2[1], c2[2], c2[3],
+        )
+    }
+
+    /// Construct a matrix from a set of row vectors.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_rows(
+        r0: &Vector3<S>, r1: &Vector3<S>, r2: &Vector3<S>, r3: &Vector3<S>) -> Self 
+    {
+        Self::new(
+            r0[0], r1[0], r2[0], r3[0],
+            r0[1], r1[1], r2[1], r3[1],
+            r0[2], r1[2], r2[2], r3[2],
         )
     }
 
