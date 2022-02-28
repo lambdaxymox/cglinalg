@@ -58,7 +58,7 @@ where
     }
 
     #[inline]
-    pub fn magnitude_squared(&self) -> S {
+    pub fn magnitude_squared(self) -> S {
         self.re.clone() * self.re.clone() + self.im.clone() * self.im.clone()
     }
 }
@@ -68,12 +68,12 @@ where
     S: ScalarSigned
 {
     #[inline]
-    pub fn conjugate(&self) -> Self {
+    pub fn conjugate(self) -> Self {
         Self::new(self.re.clone(), -self.im.clone())
     }
 
     #[inline]
-    pub fn scale(&self, scale: S) -> Self {
+    pub fn scale(self, scale: S) -> Self {
         Self::new(
             self.re.clone() * scale.clone(),
             self.im.clone() * scale
@@ -81,7 +81,7 @@ where
     }
 
     #[inline]
-    pub fn unscale(&self, scale: S) -> Self {
+    pub fn unscale(self, scale: S) -> Self {
         let one_over_scale = S::one() / scale;
 
         Self::new(
@@ -91,7 +91,7 @@ where
     }
 
     #[inline]
-    pub fn inverse(&self) -> Self {
+    pub fn inverse(self) -> Self {
         let magnitude_squared = self.magnitude_squared();
         Self::new(
              self.re.clone() / magnitude_squared.clone(),
@@ -100,12 +100,12 @@ where
     }
 
     #[inline]
-    pub fn powi(&self, power: i32) -> Self {
+    pub fn powi(self, power: i32) -> Self {
         unimplemented!()
     }
 
     #[inline]
-    pub fn powu(&self, power: u32) -> Self {
+    pub fn powu(self, power: u32) -> Self {
         unimplemented!()
     }
 }
@@ -115,12 +115,12 @@ where
     S: ScalarFloat
 {
     #[inline]
-    pub fn magnitude(&self) -> S {
+    pub fn magnitude(self) -> S {
         self.magnitude_squared().sqrt()
     }
 
     #[inline]
-    pub fn arg(&self) -> S {
+    pub fn arg(self) -> S {
         self.im.atan2(self.re)
     }
 
@@ -136,12 +136,12 @@ where
     }
 
     #[inline]
-    pub fn to_polar(&self) -> (S, Radians<S>) {
+    pub fn to_polar(self) -> (S, Radians<S>) {
         (self.magnitude(), Radians(self.arg()))
     }
 
     #[inline]
-    pub fn exp(&self) -> Self {
+    pub fn exp(self) -> Self {
         let exp_re = self.re.exp();
         let (sin_im, cos_im) = self.im.sin_cos();
 
@@ -150,7 +150,7 @@ where
 
     /// Calculate the principal value of the natural logarithm of a complex number.
     #[inline]
-    pub fn ln(&self) -> Self {
+    pub fn ln(self) -> Self {
         let magnitude_self = self.magnitude();
         let arg_self = self.arg();
 
@@ -159,7 +159,7 @@ where
 
     /// Calculate the principal value of the square root of a complex number.
     #[inline]
-    pub fn sqrt(&self) -> Self {
+    pub fn sqrt(self) -> Self {
         let two = S::one() + S::one();
         let magnitude = self.magnitude();
         let angle = self.arg();
