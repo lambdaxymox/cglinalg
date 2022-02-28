@@ -159,7 +159,7 @@ where
     }
 
     #[inline]
-    pub fn to_polar_decomposition(self) -> (S, Radians<S>) {
+    pub fn polar_decomposition(self) -> (S, Radians<S>) {
         (self.magnitude(), Radians(self.arg()))
     }
 

@@ -313,9 +313,7 @@ where
     /// ```
     #[inline]
     pub fn zero() -> Self {
-        let zero = S::zero();
-
-        Self::new(zero, zero, zero, zero)
+        Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether is a quaternion is the zero quaternion.
@@ -362,10 +360,7 @@ where
     /// ```
     #[inline]
     pub fn identity() -> Self {
-        let one = S::one();
-        let zero = S::zero();
-
-        Self::new(one, zero, zero, zero)
+        Self::new(S::one(), S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether a quaternion is equal to the identity quaternion.
