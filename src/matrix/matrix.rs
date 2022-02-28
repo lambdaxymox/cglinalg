@@ -1584,7 +1584,7 @@ where
 }
 
 
-/// A **(3 row, 3 column)** in column-major order.
+/// A **(3 row, 3 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Matrix3x3<S> {
@@ -3665,7 +3665,7 @@ where
 }
 
 
-/// A **(4 row, 4 column)** in column-major order.
+/// A **(4 row, 4 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Matrix4x4<S> {
@@ -5910,7 +5910,7 @@ where
 }
 
 
-/// A **(1 row, 2 column)** in column-major order.
+/// A **(1 row, 2 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x2<S> {
@@ -6145,7 +6145,7 @@ where
 }
 
 
-/// A **(1 row, 3 column)** in column-major order.
+/// A **(1 row, 3 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x3<S> {
@@ -6388,7 +6388,7 @@ where
 }
 
 
-/// A **(1 row, 4 column)** in column-major order.
+/// A **(1 row, 4 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x4<S> {
@@ -6643,7 +6643,7 @@ where
 }
 
 
-/// A **(2 row, 3 column)** in column-major order.
+/// A **(2 row, 3 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x3<S> {
@@ -7111,7 +7111,7 @@ where
 }
 
 
-/// A **(3 row, 2 column)** in column-major order.
+/// A **(3 row, 2 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix3x2<S> {
@@ -7563,7 +7563,7 @@ where
 }
 
 
-/// A **(2 row, 4 column)** in column-major order.
+/// A **(2 row, 4 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x4<S> {
@@ -8078,7 +8078,7 @@ where
 }
 
 
-/// A **(4 row, 2 column)** in column-major order.
+/// A **(4 row, 2 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix4x2<S> {
@@ -8563,7 +8563,7 @@ where
 }
 
 
-/// A **(3 row, 4 column)** in column-major order.
+/// A **(3 row, 4 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix3x4<S> {
@@ -9115,7 +9115,7 @@ where
 }
 
 
-/// A **(4 row, 3 column)** in column-major order.
+/// A **(4 row, 3 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix4x3<S> {
