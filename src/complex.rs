@@ -254,3 +254,100 @@ where
         Self::Output::new(self.re + *other, self.im)
     }
 }
+
+impl<S> ops::Sub<Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn sub(self, other: Complex<S>) -> Self::Output {
+        Self::Output::new(self.re - other.re, self.im - other.im)
+    }
+}
+
+impl<S> ops::Sub<&Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn sub(self, other: &Complex<S>) -> Self::Output {
+        Self::Output::new(self.re - other.re, self.im - other.im)
+    }
+}
+
+impl<S> ops::Sub<Complex<S>> for &Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn sub(self, other: Complex<S>) -> Self::Output {
+        Self::Output::new(self.re - other.re, self.im - other.im)
+    }
+}
+
+impl<'a, 'b, S> ops::Sub<&'b Complex<S>> for &'a Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn sub(self, other: &'b Complex<S>) -> Self::Output {
+        Self::Output::new(self.re - other.re, self.im - other.im)
+    }
+}
+
+impl<S> ops::Sub<S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn sub(self, other: S) -> Self::Output {
+        Self::Output::new(self.re - other, self.im)
+    }
+}
+
+impl<S> ops::Sub<&S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn sub(self, other: &S) -> Self::Output {
+        Self::Output::new(self.re - *other, self.im)
+    }
+}
+
+impl<S> ops::Sub<S> for &Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn sub(self, other: S) -> Self::Output {
+        Self::Output::new(self.re - other, self.im)
+    }
+}
+
+impl<'a, 'b, S> ops::Sub<&'b S> for &'a Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn sub(self, other: &'b S) -> Self::Output {
+        Self::Output::new(self.re - *other, self.im)
+    }
+}
+
