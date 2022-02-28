@@ -105,9 +105,9 @@ where
     }
 
     #[inline]
-    pub fn from_polar<A: Into<Radians<S>>>(r: S, angle: A) -> Self {
+    pub fn from_polar<A: Into<Radians<S>>>(radius: S, angle: A) -> Self {
         let theta: Radians<S> = angle.into();
-        Self::new(r * theta.cos(), r * theta.sin())
+        Self::new(radius * theta.cos(), radius * theta.sin())
     }
 
     #[inline]
@@ -118,6 +118,23 @@ where
     #[inline]
     pub fn to_polar(&self) -> (S, Radians<S>) {
         (self.magnitude(), Radians(self.arg()))
+    }
+
+    #[inline]
+    pub fn exp(&self) -> Self {
+        let exp_re = self.re.exp();
+        let (sin_im, cos_im) = self.im.sin_cos();
+
+        Self::new(exp_re * cos_im, exp_re * sin_im)
+    }
+
+    /// Calculate the principal value of the natural logarithm of a complex number.
+    #[inline]
+    pub fn ln(&self) -> Self {
+        let magnitude_self = self.magnitude();
+        let arg_self = self.arg();
+
+        Self::new(magnitude_self.ln(), arg_self)
     }
 }
 
