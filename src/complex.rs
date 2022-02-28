@@ -111,6 +111,11 @@ where
     }
 
     #[inline]
+    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
+        Self::from_polar(S::one(), angle)
+    }
+
+    #[inline]
     pub fn to_polar(&self) -> (S, Radians<S>) {
         (self.magnitude(), Radians(self.arg()))
     }
