@@ -2187,7 +2187,7 @@ where
     }
 }
 
-impl<'a, S> ops::Neg for &'a Quaternion<S> 
+impl<S> ops::Neg for &Quaternion<S> 
 where 
     S: ScalarSigned 
 {
@@ -2211,7 +2211,7 @@ where
     }
 }
 
-impl<'a, S> ops::Add<Quaternion<S>> for &'a Quaternion<S> 
+impl<S> ops::Add<Quaternion<S>> for &Quaternion<S> 
 where 
     S: Scalar 
 {
@@ -2223,26 +2223,26 @@ where
     }
 }
 
-impl<'a, S> ops::Add<&'a Quaternion<S>> for Quaternion<S> 
+impl<S> ops::Add<&Quaternion<S>> for Quaternion<S> 
 where 
     S: Scalar 
 {
     type Output = Quaternion<S>;
 
     #[inline]
-    fn add(self, other: &'a Quaternion<S>) -> Self::Output {
+    fn add(self, other: &Quaternion<S>) -> Self::Output {
         Quaternion::from_parts(self.s + other.s, self.v + other.v)
     }
 }
 
-impl<'a, 'b, S> ops::Add<&'a Quaternion<S>> for &'b Quaternion<S> 
+impl<'a, 'b, S> ops::Add<&'b Quaternion<S>> for &'a Quaternion<S> 
 where 
     S: Scalar 
 {
     type Output = Quaternion<S>;
 
     #[inline]
-    fn add(self, other: &'a Quaternion<S>) -> Self::Output {
+    fn add(self, other: &'b Quaternion<S>) -> Self::Output {
         Quaternion::from_parts(self.s + other.s, self.v + other.v)
     }
 }
@@ -2259,7 +2259,7 @@ where
     }
 }
 
-impl<'a, S> ops::Sub<Quaternion<S>> for &'a Quaternion<S> 
+impl<S> ops::Sub<Quaternion<S>> for &Quaternion<S> 
 where 
     S: Scalar 
 {
@@ -2271,26 +2271,26 @@ where
     }
 }
 
-impl<'a, S> ops::Sub<&'a Quaternion<S>> for Quaternion<S> 
+impl<S> ops::Sub<&Quaternion<S>> for Quaternion<S> 
 where 
     S: Scalar 
 {
     type Output = Quaternion<S>;
 
     #[inline]
-    fn sub(self, other: &'a Quaternion<S>) -> Self::Output {
+    fn sub(self, other: &Quaternion<S>) -> Self::Output {
         Quaternion::from_parts(self.s - other.s, self.v - other.v)
     }
 }
 
-impl<'a, 'b, S> ops::Sub<&'a Quaternion<S>> for &'b Quaternion<S> 
+impl<'a, 'b, S> ops::Sub<&'b Quaternion<S>> for &'a Quaternion<S> 
 where 
     S: Scalar 
 {
     type Output = Quaternion<S>;
 
     #[inline]
-    fn sub(self, other: &'a Quaternion<S>) -> Self::Output {
+    fn sub(self, other: &'b Quaternion<S>) -> Self::Output {
         Quaternion::from_parts(self.s - other.s, self.v - other.v)
     }
 }
@@ -2301,6 +2301,7 @@ where
 {
     type Output = Quaternion<S>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: S) -> Quaternion<S> {
         Quaternion::new(
@@ -2326,7 +2327,7 @@ where
     }
 }
 
-impl<'a, S> ops::Mul<Quaternion<S>> for Quaternion<S> 
+impl<S> ops::Mul<Quaternion<S>> for Quaternion<S> 
 where 
     S: Scalar 
 {
@@ -2344,7 +2345,7 @@ where
     }
 }
 
-impl<'a, S> ops::Mul<&'a Quaternion<S>> for Quaternion<S> 
+impl<S> ops::Mul<&Quaternion<S>> for Quaternion<S> 
 where 
     S: Scalar 
 {
@@ -2352,7 +2353,7 @@ where
 
     #[rustfmt::skip]
     #[inline]
-    fn mul(self, other: &'a Quaternion<S>) -> Self::Output {
+    fn mul(self, other: &Quaternion<S>) -> Self::Output {
         Quaternion::new(
             other.s * self.s   - other.v.x * self.v.x - other.v.y * self.v.y - other.v.z * self.v.z,
             other.s * self.v.x + other.v.x * self.s   - other.v.y * self.v.z + other.v.z * self.v.y,
@@ -2362,7 +2363,7 @@ where
     }
 }
 
-impl<'a, S> ops::Mul<Quaternion<S>> for &'a Quaternion<S> 
+impl<S> ops::Mul<Quaternion<S>> for &Quaternion<S> 
 where 
     S: Scalar 
 {
@@ -2380,7 +2381,7 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Quaternion<S>> for &'b Quaternion<S> 
+impl<'a, 'b, S> ops::Mul<&'b Quaternion<S>> for &'a Quaternion<S> 
 where 
     S: Scalar 
 {
@@ -2388,7 +2389,7 @@ where
 
     #[rustfmt::skip]
     #[inline]
-    fn mul(self, other: &'a Quaternion<S>) -> Self::Output {
+    fn mul(self, other: &'b Quaternion<S>) -> Self::Output {
         Quaternion::new(
             other.s * self.s   - other.v.x * self.v.x - other.v.y * self.v.y - other.v.z * self.v.z,
             other.s * self.v.x + other.v.x * self.s   - other.v.y * self.v.z + other.v.z * self.v.y,
@@ -2470,7 +2471,7 @@ where
     }
 }
 
-impl<'a, S> ops::Div<S> for &'a Quaternion<S> 
+impl<S> ops::Div<S> for &Quaternion<S> 
 where 
     S: Scalar 
 {
