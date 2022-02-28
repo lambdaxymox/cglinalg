@@ -106,8 +106,8 @@ where
 
     #[inline]
     pub fn from_polar<A: Into<Radians<S>>>(radius: S, angle: A) -> Self {
-        let theta: Radians<S> = angle.into();
-        Self::new(radius * theta.cos(), radius * theta.sin())
+        let _angle: Radians<S> = angle.into();
+        Self::new(radius * _angle.cos(), radius * _angle.sin())
     }
 
     #[inline]
@@ -135,6 +135,17 @@ where
         let arg_self = self.arg();
 
         Self::new(magnitude_self.ln(), arg_self)
+    }
+
+    /// Calculate the principal value of the square root of a complex number.
+    #[inline]
+    pub fn sqrt(&self) -> Self {
+        let two = S::one() + S::one();
+        let magnitude = self.magnitude();
+        let angle = self.arg();
+        let (sin_angle_over_two, cos_angle_over_two) = (angle / two).sin_cos();
+
+        Self::new(magnitude * cos_angle_over_two, magnitude * sin_angle_over_two)
     }
 }
 
