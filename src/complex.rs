@@ -30,7 +30,7 @@ impl<S> Complex<S> {
 
 impl<S> Complex<S>
 where
-    S: Clone + num_traits::Num
+    S: Scalar
 {
     #[inline]
     pub fn i() -> Self {
@@ -45,7 +45,7 @@ where
 
 impl<S> Complex<S>
 where
-    S: Clone + num_traits::Num + ops::Neg<Output = S>
+    S: ScalarSigned
 {
     #[inline]
     pub fn conjugate(&self) -> Self {
@@ -92,7 +92,7 @@ where
 
 impl<S> Complex<S>
 where
-    S: num_traits::Float
+    S: ScalarFloat
 {
     #[inline]
     pub fn magnitude(&self) -> S {
@@ -103,12 +103,7 @@ where
     pub fn arg(&self) -> S {
         self.im.atan2(self.re)
     }
-}
 
-impl<S> Complex<S>
-where
-    S: ScalarFloat
-{
     #[inline]
     pub fn from_polar<A: Into<Radians<S>>>(r: S, angle: A) -> Self {
         let theta: Radians<S> = angle.into();
