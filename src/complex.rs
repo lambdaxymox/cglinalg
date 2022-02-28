@@ -38,6 +38,16 @@ where
     }
 
     #[inline]
+    pub fn from_real(value: S) -> Self {
+        Self::new(value, S::zero())
+    }
+
+    #[inline]
+    pub fn from_imaginary(value: S) -> Self {
+        Self::new(S::zero(), value)
+    }
+
+    #[inline]
     pub fn magnitude_squared(&self) -> S {
         self.re.clone() * self.re.clone() + self.im.clone() * self.im.clone()
     }
