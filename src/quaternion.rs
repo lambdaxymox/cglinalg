@@ -342,8 +342,7 @@ where
     /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
-        self.s.is_zero() 
-            && self.v.x.is_zero() && self.v.y.is_zero() && self.v.z.is_zero()
+        self.s.is_zero() && self.v.is_zero()
     }
     
     /// Construct the multiplicative identity quaternion.
