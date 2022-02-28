@@ -57,7 +57,7 @@ where
 
     /// Construct a translation between two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -84,7 +84,7 @@ where
 
     /// Construct a translation between two points.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -114,7 +114,7 @@ where
     /// If `self` is a translation of a vector by a displacement `distance`, then its
     /// inverse will be a translation by a displacement `-distance`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -136,7 +136,7 @@ where
 
     /// Mutably invert a translation in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -157,7 +157,7 @@ where
     
     /// Apply the translation operation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -186,7 +186,7 @@ where
     /// be their difference. If we translate each point by a vector `a`, 
     /// then `(p2 + a) - (p1 + a) = p2 - p1 = v`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -209,7 +209,7 @@ where
 
     /// Apply the inverse translation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -234,7 +234,7 @@ where
 
     /// Apply the inverse translation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -256,7 +256,7 @@ where
     /// The identity transformation for translations, which displaces
     /// a vector or point zero distance.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -500,7 +500,7 @@ where
 
     /// Construct a translation between two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -527,7 +527,7 @@ where
 
     /// Construct a translation between two points.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -557,7 +557,7 @@ where
     /// If `self` is a translation of a vector by a displacement `distance`, then its
     /// inverse will be a translation by a displacement `-distance`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -579,7 +579,7 @@ where
 
     /// Mutably invert a translation in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -600,7 +600,7 @@ where
     
     /// Apply the translation transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -624,7 +624,7 @@ where
 
     /// Apply the translation transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -647,7 +647,7 @@ where
 
     /// Apply the inverse of the translation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -672,7 +672,7 @@ where
 
     /// Apply the inverse of the translation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -696,7 +696,7 @@ where
     /// The identity transformation for translations, which displaces
     /// a vector or point zero distance.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

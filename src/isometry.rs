@@ -78,7 +78,7 @@ where
 
     /// Construct a new isometry from a rotation angle and a displacement vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -110,7 +110,7 @@ where
 
     /// Construct an isometry that is a pure rotation by an angle `angle`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -140,7 +140,7 @@ where
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -172,7 +172,7 @@ where
     /// Construct a rotation that rotates the shortest angular distance 
     /// between vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -211,7 +211,7 @@ where
 
     /// Convert an isometry to an equivalent affine transformation matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -264,7 +264,7 @@ where
 
     /// Construct the inverse isometry of an isometry.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -299,7 +299,7 @@ where
 
     /// Mutably invert an isometry in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -332,7 +332,7 @@ where
     ///
     /// The isometry applies the rotation followed by the translation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -366,7 +366,7 @@ where
     ///
     /// The isometry applies the rotation and not the translation to vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -399,7 +399,7 @@ where
     /// The inverse isometry applies the inverse translation followed by the
     /// inverse rotation. This is the reverse of the isometry.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -432,7 +432,7 @@ where
     ///
     /// The inverse isometry applies the inverse rotation to the vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -462,7 +462,7 @@ where
 
     /// Construct the identity isometry.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -727,7 +727,7 @@ where
     /// Construct a new isometry from a rotation axis, rotation angle, and a 
     /// displacement vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -773,7 +773,7 @@ where
 
     /// Construct a new isometry from a rotation axis and a rotation angle.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -804,7 +804,7 @@ where
     /// Construct an isometry from a rotation angle in the **yz-plane** about 
     /// the **x-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -831,7 +831,7 @@ where
     /// Construct an isometry from a rotation angle in the **zx-plane** about 
     /// the **y-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -858,7 +858,7 @@ where
     /// Construct an isometry from a rotation angle in the **xy-plane** about 
     /// the **z-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -887,7 +887,7 @@ where
     ///
     /// The rotation uses the unit directional vectors of the input vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -924,7 +924,7 @@ where
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -963,7 +963,7 @@ where
     /// The resulting isometry maps the **z-axis** to the direction `direction` 
     /// and locates the origin of the coordinate system to the `eye` position.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1007,7 +1007,7 @@ where
     /// It is conventionally used in computer graphics for camera view 
     /// transformations.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1051,7 +1051,7 @@ where
     /// It is conventionally used in computer graphics for camera view 
     /// transformations.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1092,7 +1092,7 @@ where
 
     /// Convert an isometry to an equivalent affine transformation matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1149,7 +1149,7 @@ where
 
     /// Construct the inverse isometry of an isometry.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1186,7 +1186,7 @@ where
 
     /// Mutably invert an isometry in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1221,7 +1221,7 @@ where
     ///
     /// The isometry applies the rotation followed by the translation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1257,7 +1257,7 @@ where
     ///
     /// The isometry applies the rotation to the vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1291,7 +1291,7 @@ where
     /// The inverse isometry applies the inverse translation followed by the
     /// rotation. This is the reverse of the isometry.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1326,7 +1326,7 @@ where
     ///
     /// The inverse isometry applies the inverse rotation to vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1358,7 +1358,7 @@ where
 
     /// Construct the identity isometry.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

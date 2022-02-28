@@ -68,7 +68,7 @@ where
     /// The identity transformation for a generic two-dimensional 
     /// transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -95,7 +95,7 @@ where
 {
     /// Compute the inverse of the transformation if it exists.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -127,7 +127,7 @@ where
 
     /// Apply the transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -155,7 +155,7 @@ where
 
     /// Apply the transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -183,7 +183,7 @@ where
 
     /// Apply the inverse of the transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -213,7 +213,7 @@ where
 
     /// Apply the inverse of the transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -483,7 +483,7 @@ where
     /// The identity transformation for a generic three-dimensional 
     /// transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -510,7 +510,7 @@ where
 {
     /// Compute the inverse of the transformation if it exists.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -543,7 +543,7 @@ where
 
     /// Apply the transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -572,7 +572,7 @@ where
 
     /// Apply the inverse of the transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -601,7 +601,7 @@ where
 
     /// Apply the inverse of the transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -635,7 +635,7 @@ where
 
     /// Apply the inverse of the transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

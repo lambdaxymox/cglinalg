@@ -123,7 +123,7 @@ where
 
     /// Get the matrix that implements the perspective projection transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -158,7 +158,7 @@ where
 
     /// Apply the projective projection transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -195,7 +195,7 @@ where
 
     /// Apply the perspective projection transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -232,7 +232,7 @@ where
     /// 
     /// This is the inverse operation of `project_point`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -304,7 +304,7 @@ where
     ///
     /// This is the inverse operation of `project_vector`.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -577,7 +577,7 @@ where
 
     /// Get the matrix that implements the perspective projection transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -614,7 +614,7 @@ where
 
     /// Apply the perspective projection transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -652,7 +652,7 @@ where
 
     /// Apply the perspective projection transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -691,7 +691,7 @@ where
     /// 
     /// This is the inverse operation of `project_point`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -773,7 +773,7 @@ where
     ///
     /// This is the inverse operation of `project_vector`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1079,7 +1079,7 @@ where
 
     /// Get the underlying matrix implementing the orthographic transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1111,7 +1111,7 @@ where
 
     /// Apply the orthographic projection transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1143,7 +1143,7 @@ where
 
     /// Apply the orthographic projection transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1178,7 +1178,7 @@ where
     ///
     /// This is the inverse operation of `project_point`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1222,7 +1222,7 @@ where
     ///
     /// This is the inverse operation of `project_vector`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1464,7 +1464,7 @@ where
 
     /// Get the underlying matrix implementing the orthographic transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1498,7 +1498,7 @@ where
 
     /// Apply the orthographic projection transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1532,7 +1532,7 @@ where
 
     /// Apply the orthographic projection transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1569,7 +1569,7 @@ where
     ///
     /// This is the inverse operation of `project_point`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1623,7 +1623,7 @@ where
     ///
     /// This is the inverse operation of `project_vector`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

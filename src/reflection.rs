@@ -78,7 +78,7 @@ where
     /* FIXME: Can we calculate an inverse reflection?
     /// Calculate the inverse reflection transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -138,7 +138,7 @@ where
     /// Reflect a vector across a line described by the reflection 
     /// transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -170,7 +170,7 @@ where
     /// Reflect a point across a line described by the reflection 
     /// transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -205,7 +205,7 @@ where
     /// The identity reflection is a reflection that does not move a point 
     /// or vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -471,7 +471,7 @@ where
     /// Reflect a vector across the plane described by the reflection 
     /// transformation.
     /// 
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -497,7 +497,7 @@ where
     /// Reflect a point across the plane described by the reflection 
     /// transformation.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -526,7 +526,7 @@ where
     /// The identity reflection is a reflection that does not move a point 
     /// or vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

@@ -46,7 +46,7 @@ where
     /// Construct a new two-dimensional point from a one-dimensional point by
     /// supplying the y-coordinate.
     /// 
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -67,7 +67,7 @@ where
 
     /// Construct a new point from a fill value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -122,7 +122,7 @@ where
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -152,7 +152,7 @@ where
 {
     /// Cast a point of one type of scalars to a point of another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -191,7 +191,7 @@ where
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -217,7 +217,7 @@ where
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -238,7 +238,7 @@ where
 
     /// Compute the dot product (inner product) of two points.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -365,7 +365,7 @@ where
     /// Expand a two-dimensional point to a three-dimensional point using
     /// the supplied z-value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -387,7 +387,7 @@ where
     /// Contract a two-dimensional point to a one-dimensional point by
     /// removing its **y-component**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -408,7 +408,7 @@ where
 
     /// Construct a new point from a fill value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -463,7 +463,7 @@ where
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -493,7 +493,7 @@ where
 {
     /// Cast a point of one type of scalars to a point of another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -527,7 +527,7 @@ where
 {
     /// Convert a homogeneous vector into a point.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -557,7 +557,7 @@ where
 
     /// Convert a point to a vector in homogeneous coordinates.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -587,7 +587,7 @@ where
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -613,7 +613,7 @@ where
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -634,7 +634,7 @@ where
 
     /// Compute the dot product (inner product) of two points.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -750,7 +750,7 @@ where
 {
     /// Contract a three-dimensional point, removing its **z-component**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -771,7 +771,7 @@ where
 
     /// Construct a new point from a fill value.
     /// 
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -826,7 +826,7 @@ where
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -856,7 +856,7 @@ where
 {
     /// Cast a point from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -894,7 +894,7 @@ where
 {
     /// Convert a vector in homogeneous coordinates into a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -929,7 +929,7 @@ where
 
     /// Convert a point to a vector in homogeneous coordinates.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -959,7 +959,7 @@ where
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -985,7 +985,7 @@ where
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1006,7 +1006,7 @@ where
 
     /// Compute the dot product (inner product) of two points.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

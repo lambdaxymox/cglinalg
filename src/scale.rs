@@ -69,7 +69,7 @@ where
 
     /// Apply a scale transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -93,7 +93,7 @@ where
 
     /// Apply a scale transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -123,7 +123,7 @@ where
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -152,7 +152,7 @@ where
     /// Apply the inverse transformation of the scale transformation
     /// to a vector.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -179,7 +179,7 @@ where
 
     /// Apply the inverse transformation of the scale transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -209,7 +209,7 @@ where
     /// The identity is the scale transform with a scale factor of `1` for 
     /// each component.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -476,7 +476,7 @@ where
 
     /// Apply a scale transformation to a vector.
     /// 
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -501,7 +501,7 @@ where
 
     /// Apply a scale transformation operation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -529,7 +529,7 @@ where
     /// The identity is the scale transform with a scale factor of `1` for 
     /// each component.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -561,7 +561,7 @@ where
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     /// 
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -595,7 +595,7 @@ where
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     /// 
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -627,7 +627,7 @@ where
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     /// 
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

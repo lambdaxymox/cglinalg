@@ -10,7 +10,7 @@ use crate::base::scalar::{
 /// vectors, quaternions, complex numbers, points, and scalar numbers. In the 
 /// scalar case, the Euclidean magnitude is the absolute value of the scalar.
 ///
-/// ## Examples
+/// # Examples
 ///
 /// ```
 /// # use cglinalg::{

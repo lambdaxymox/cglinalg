@@ -201,7 +201,7 @@ where
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -248,7 +248,7 @@ where
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

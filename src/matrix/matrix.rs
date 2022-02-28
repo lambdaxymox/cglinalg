@@ -134,7 +134,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -166,7 +166,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -198,7 +198,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -216,7 +216,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -237,7 +237,7 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -259,7 +259,7 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -279,7 +279,7 @@ where
     ///
     /// The trace of a matrix is the sum of the diagonal elements.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -305,7 +305,7 @@ where
     /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -335,7 +335,7 @@ where
     /// ```
     /// Not every square matrix has an inverse.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -365,7 +365,7 @@ where
     ///
     /// A matrix is invertible is its determinant is not zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -466,7 +466,7 @@ where
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -498,7 +498,7 @@ where
     
     /// Swap two rows of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -529,7 +529,7 @@ where
     
     /// Swap two columns of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -562,7 +562,7 @@ where
     ///
     /// The element order for each element to swap is **(column, row)**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -639,7 +639,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -672,7 +672,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -717,7 +717,7 @@ where
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -747,7 +747,7 @@ where
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the **x-axis** to shearing along the **y-axis**.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -781,7 +781,7 @@ where
     /// The parameter `shear_x_with_y` denotes the factor scaling the 
     /// contribution of the **y-component** to the shearing of the **x-component**. 
     ///
-    /// ## Example 
+    /// # Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -816,7 +816,7 @@ where
     /// calling `from_scale(scale)` is equivalent to calling 
     /// `from_nonuniform_scale(scale, scale)`.
     ///
-    /// ## Example 
+    /// # Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -842,7 +842,7 @@ where
     /// This is the most general case for scaling matrices: the scale factor
     /// in each dimension need not be identical.
     ///
-    /// ## Example 
+    /// # Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -872,7 +872,7 @@ where
 
     /// Mutably transpose a square matrix in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -898,7 +898,7 @@ where
 
     /// Transpose a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -929,7 +929,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -947,7 +947,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -969,7 +969,7 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -994,7 +994,7 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1014,7 +1014,7 @@ where
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1041,7 +1041,7 @@ where
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1068,7 +1068,7 @@ where
 
     /// Get the diagonal part of a square matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1094,7 +1094,7 @@ where
     ///
     /// The trace of a matrix is the sum of the diagonal elements.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1121,7 +1121,7 @@ where
     /// Construct a two-dimensional reflection matrix for reflecting through a 
     /// line through the origin in the **xy-plane**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// Here is an example of reflecting a vector across the **x-axis**.
     /// ```
@@ -1172,7 +1172,7 @@ where
 
     /// Mutably negate the elements of a matrix in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1204,7 +1204,7 @@ where
     /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1231,7 +1231,7 @@ where
     /// Construct a rotation matrix in two-dimensions that rotates a vector
     /// in the **xy-plane** by an angle `angle`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1267,7 +1267,7 @@ where
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1320,7 +1320,7 @@ where
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two unit vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1381,7 +1381,7 @@ where
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ## Example (Finite Matrix)
+    /// # Example (Finite Matrix)
     ///
     /// ```
     /// # use cglinalg::{
@@ -1393,7 +1393,7 @@ where
     /// assert!(matrix.is_finite());
     /// ```
     ///
-    /// ## Example (Not A Finite Matrix)
+    /// # Example (Not A Finite Matrix)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1419,7 +1419,7 @@ where
     /// ```
     /// Not every square matrix has an inverse.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1460,7 +1460,7 @@ where
     ///
     /// A matrix is invertible is its determinant is not zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1501,7 +1501,7 @@ where
 
     /// Linearly interpolate between two matrices.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1619,7 +1619,7 @@ where
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1659,7 +1659,7 @@ where
     
     /// Swap two rows of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1695,7 +1695,7 @@ where
     
     /// Swap two columns of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1733,7 +1733,7 @@ where
     ///
     /// The element order for each element to swap is **(column, row)**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1824,7 +1824,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1871,7 +1871,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1950,7 +1950,7 @@ where
     /// transformation that displaces a vector along the length of the vector
     /// `distance`.
     ///
-    /// ## Example
+    /// # Example
     /// A homogeneous vector with a zero **z-component** should not translate.
     /// ```
     /// # use cglinalg::{
@@ -2003,7 +2003,7 @@ where
     /// calling `from_scale(scale)` is equivalent to calling 
     /// `from_nonuniform_scale(scale, scale, scale)`.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -2029,7 +2029,7 @@ where
     /// This is the most general case for scaling matrices: the scale factor
     /// in each dimension need not be identical.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -2067,7 +2067,7 @@ where
     /// `from_affine_nonuniform_scale(scale, scale)`. The **z-component** is 
     /// unaffected since this is an affine matrix.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -2094,7 +2094,7 @@ where
     /// in each dimension need not be identical. The **z-component** is unaffected 
     /// because this is an affine matrix.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -2131,7 +2131,7 @@ where
     /// multiplicative factors for the contributions of the **y-axis** and the 
     /// **z-axis**, respectively to shearing along the **x-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2168,7 +2168,7 @@ where
     /// multiplicative factors for the contributions of the **x-axis**, and the 
     /// **z-axis**, respectively to shearing along the **y-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2205,7 +2205,7 @@ where
     /// factors for the contributions of the **x-axis**, and the **y-axis**, 
     /// respectively to shearing along the **z-axis**. 
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2256,7 +2256,7 @@ where
     /// The parameter `shear_z_with_y` denotes the factor scaling the 
     /// contribution of the **y-component** to the shearing of the **z-component**. 
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2310,7 +2310,7 @@ where
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
-    /// ## Example 
+    /// # Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -2345,7 +2345,7 @@ where
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
-    /// ## Example 
+    /// # Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -2384,7 +2384,7 @@ where
     /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
     /// of the **y-axis** to the shearing along the **x-axis**.
     ///
-    /// ## Example 
+    /// # Example 
     /// 
     /// ```
     /// # use cglinalg::{
@@ -2416,7 +2416,7 @@ where
 
     /// Mutably transpose a square matrix in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2446,7 +2446,7 @@ where
 
     /// Transpose a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2481,7 +2481,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2506,7 +2506,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2535,7 +2535,7 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2569,7 +2569,7 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2590,7 +2590,7 @@ where
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2619,7 +2619,7 @@ where
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2648,7 +2648,7 @@ where
 
     /// Get the diagonal part of a square matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2675,7 +2675,7 @@ where
     ///
     /// The trace of a matrix is the sum of the diagonal elements.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2757,7 +2757,7 @@ where
     /// Here the terms `xr` and `yr` are the coordinates of the reflected point 
     /// across the line `L`.
     ///
-    /// ## Example (Line Through The Origin)
+    /// # Example (Line Through The Origin)
     ///
     /// Here is an example of reflecting a vector across the **x-axis** with 
     /// the line of reflection passing through the origin.
@@ -2800,7 +2800,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     ///
-    /// ## Example (Line That Does Not Cross The Origin)
+    /// # Example (Line That Does Not Cross The Origin)
     ///
     /// ```
     /// # use cglinalg::{
@@ -2855,7 +2855,7 @@ where
     /// Construct a three-dimensional reflection matrix for a plane that
     /// crosses the origin.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2901,7 +2901,7 @@ where
 
     /// Mutably negate the elements of a matrix in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2940,7 +2940,7 @@ where
     /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -2977,7 +2977,7 @@ where
     /// This is the affine matrix counterpart to the 2x2 matrix function 
     /// `from_angle`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3014,7 +3014,7 @@ where
 
     /// Construct a rotation matrix about the **x-axis** by an angle `angle`.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// In this example the rotation is in the **yz-plane**.
     /// ```
@@ -3050,7 +3050,7 @@ where
 
     /// Construct a rotation matrix about the **y-axis** by an angle `angle`.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// In this example the rotation is in the **zx-plane**.
     /// ```
@@ -3086,7 +3086,7 @@ where
 
     /// Construct a rotation matrix about the **z-axis** by an angle `angle`.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// In this example the rotation is in the **xy-plane**.
     /// ```
@@ -3123,7 +3123,7 @@ where
     /// Construct a rotation matrix about an arbitrary axis by an angle 
     /// `angle`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3177,7 +3177,7 @@ where
     ///
     /// The function maps the **positive z-axis** to the direction `direction`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3227,7 +3227,7 @@ where
     /// the new the coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **right-handed** coordinate transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3273,7 +3273,7 @@ where
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3319,7 +3319,7 @@ where
     /// Construct a rotation matrix that rotates the shortest angular distance 
     /// between two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3370,7 +3370,7 @@ where
     /// values. For example, when the vector elements are `f64`, the vector is 
     /// finite when the elements are neither `NaN` nor infinite.
     ///
-    /// ## Example (Finite Matrix)
+    /// # Example (Finite Matrix)
     ///
     /// ```
     /// # use cglinalg::{
@@ -3387,7 +3387,7 @@ where
     /// assert!(matrix.is_finite());
     /// ```
     ///
-    /// ## Example (Not A Finite Matrix)
+    /// # Example (Not A Finite Matrix)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -3424,7 +3424,7 @@ where
     /// ```
     /// Not every square matrix has an inverse.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3477,7 +3477,7 @@ where
     ///
     /// A matrix is invertible is its determinant is not zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3529,7 +3529,7 @@ where
 
     /// Linearly interpolate between two matrices.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3702,7 +3702,7 @@ where
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3754,7 +3754,7 @@ where
      
     /// Swap two rows of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3795,7 +3795,7 @@ where
      
     /// Swap two columns of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3838,7 +3838,7 @@ where
     ///
     /// The element order for each element to swap is **(column, row)**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3933,7 +3933,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -3989,7 +3989,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4096,7 +4096,7 @@ where
     /// Construct an affine translation matrix in three-dimensions.
     ///
     ///
-    /// ## Example
+    /// # Example
     /// A homogeneous vector with a zero **w-component** should not translate.
     /// ```
     /// # use cglinalg::{
@@ -4156,7 +4156,7 @@ where
     /// `from_nonuniform_scale(scale, scale, scale)`. Since this is an affine 
     /// matrix the `w` component is unaffected.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4183,7 +4183,7 @@ where
     /// factor in each dimension need not be identical. Since this is an 
     /// affine matrix, the `w` component is unaffected.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4229,7 +4229,7 @@ where
     /// affine transformation the `w` component of four-dimensional vectors is 
     /// unaffected.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4274,7 +4274,7 @@ where
     /// an affine transformation the `w` component of four-dimensional vectors 
     /// is unaffected.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4319,7 +4319,7 @@ where
     /// affine transformation the `w` component of four-dimensional vectors is 
     /// unaffected.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4381,7 +4381,7 @@ where
     /// Since this is an affine transformation the `w` component
     /// of four-dimensional vectors is unaffected.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4434,7 +4434,7 @@ where
 
     /// Mutably transpose a square matrix in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4469,7 +4469,7 @@ where
 
     /// Transpose a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4507,7 +4507,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4534,7 +4534,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4562,7 +4562,7 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4598,7 +4598,7 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4624,7 +4624,7 @@ where
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4655,7 +4655,7 @@ where
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4688,7 +4688,7 @@ where
     
     /// Get the diagonal part of a square matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4721,7 +4721,7 @@ where
     ///
     /// The trace of a matrix is the sum of the diagonal elements.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4809,7 +4809,7 @@ where
     /// Here the terms `xr`, `yr`, and `zr` are the coordinates of the 
     /// reflected point across the plane `P`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4870,7 +4870,7 @@ where
 
     /// Mutably negate the elements of a matrix in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4918,7 +4918,7 @@ where
     /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -4971,7 +4971,7 @@ where
     /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
     /// **x-axis** by an angle `angle` radians/degrees.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5010,7 +5010,7 @@ where
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the **y-axis** by an angle `angle` radians/degrees.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// In this example the rotation is in the **zx-plane**.
     /// ```
@@ -5050,7 +5050,7 @@ where
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the **z-axis** by an angle `angle` radians/degrees.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// In this example the rotation is in the **xy-plane**.
     /// ```
@@ -5090,7 +5090,7 @@ where
     /// Construct a three-dimensional affine rotation matrix rotating a vector 
     /// around the axis `axis` by an angle `angle` radians/degrees.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5148,7 +5148,7 @@ where
 
     /// Construct a new three-dimensional orthographic projection matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5197,7 +5197,7 @@ where
 
     /// Construct a new three-dimensional orthographic projection matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5244,7 +5244,7 @@ where
     /// Construct a new three-dimensional perspective projection matrix based
     /// on arbitrary `left`, `right`, `bottom`, `top`, `near` and `far` planes.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5309,7 +5309,7 @@ where
     /// plane, the `far` plane and the vertical field of view angle `vfov` and 
     /// the horizontal/vertical aspect ratio `aspect`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5399,7 +5399,7 @@ where
     /// coordinate transformation. It is conventionally used in computer graphics 
     /// for camera view transformations.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5462,7 +5462,7 @@ where
     /// coordinate transformation. It is conventionally used in computer graphics 
     /// for camera view transformations.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5521,7 +5521,7 @@ where
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ## Example (Finite Matrix)
+    /// # Example (Finite Matrix)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -5538,7 +5538,7 @@ where
     /// assert!(matrix.is_finite());
     /// ```
     ///
-    /// ## Example (Not A Finite Matrix)
+    /// # Example (Not A Finite Matrix)
     ///
     /// ```
     /// # use cglinalg::{
@@ -5575,7 +5575,7 @@ where
     /// ```
     /// Not every square matrix has an inverse.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5675,7 +5675,7 @@ where
     ///
     /// A matrix is invertible is its determinant is not zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5728,7 +5728,7 @@ where
 
     /// Linearly interpolate between two matrices.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -5983,7 +5983,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6016,7 +6016,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6052,7 +6052,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6070,7 +6070,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6219,7 +6219,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6253,7 +6253,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6293,7 +6293,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6311,7 +6311,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6468,7 +6468,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6503,7 +6503,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6547,7 +6547,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6565,7 +6565,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6675,7 +6675,7 @@ where
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6719,7 +6719,7 @@ where
 
     /// Swap two rows of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6755,7 +6755,7 @@ where
     
     /// Swap two columns of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6790,7 +6790,7 @@ where
     ///
     /// The element order for each element to swap is **(column, row)**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6877,7 +6877,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6911,7 +6911,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -6969,7 +6969,7 @@ where
 {
     /// Transpose a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7002,7 +7002,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7024,7 +7024,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7142,7 +7142,7 @@ where
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7180,7 +7180,7 @@ where
 
     /// Swap two rows of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7211,7 +7211,7 @@ where
     
     /// Swap two columns of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7247,7 +7247,7 @@ where
     ///
     /// The element order for each element to swap is **(column, row)**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7330,7 +7330,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7363,7 +7363,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7419,7 +7419,7 @@ where
 {
     /// Transpose a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7453,7 +7453,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7474,7 +7474,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7599,7 +7599,7 @@ where
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7646,7 +7646,7 @@ where
 
     /// Swap two rows of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7687,7 +7687,7 @@ where
     
     /// Swap two columns of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7726,7 +7726,7 @@ where
     ///
     /// The element order for each element to swap is **(column, row)**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7818,7 +7818,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7863,7 +7863,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7931,7 +7931,7 @@ where
 {
     /// Transpose a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7965,7 +7965,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -7988,7 +7988,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8110,7 +8110,7 @@ where
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8153,7 +8153,7 @@ where
 
     /// Swap two rows of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8184,7 +8184,7 @@ where
     
     /// Swap two columns of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8223,7 +8223,7 @@ where
     ///
     /// The element order for each element to swap is **(column, row)**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8308,7 +8308,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8347,7 +8347,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8414,7 +8414,7 @@ where
 {
     /// Transpose a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8450,7 +8450,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8471,7 +8471,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8599,7 +8599,7 @@ where
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8646,7 +8646,7 @@ where
 
     /// Swap two rows of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8687,7 +8687,7 @@ where
     
     /// Swap two columns of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8729,7 +8729,7 @@ where
     ///
     /// The element order for each element to swap is **(column, row)**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8823,7 +8823,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8868,7 +8868,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8957,7 +8957,7 @@ where
 {
     /// Transpose a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -8993,7 +8993,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9016,7 +9016,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9149,7 +9149,7 @@ where
     /// The resulting matrix is a matrix where each entry is the supplied fill
     /// value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9194,7 +9194,7 @@ where
 
     /// Swap two rows of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9230,7 +9230,7 @@ where
     
     /// Swap two columns of a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9271,7 +9271,7 @@ where
     ///
     /// The element order for each element to swap is **(column, row)**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9360,7 +9360,7 @@ where
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9402,7 +9402,7 @@ where
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9488,7 +9488,7 @@ where
 {
     /// Transpose a matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9525,7 +9525,7 @@ where
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -9547,7 +9547,7 @@ where
     
     /// Determine whether a matrix is a zero matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

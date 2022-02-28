@@ -84,7 +84,7 @@ where
 
     /// Construct a new normalized unit value along with its unnormalized magnitude.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -118,7 +118,7 @@ where
     /// The argument `threshold` argument exists to check for vectors that may be
     /// very close to zero length.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// Here is an example where the function returns `None` because the vector 
     /// magnitude is too small.
@@ -161,7 +161,7 @@ where
     /// The argument `threshold` argument exists to check for vectors that may be
     /// very close to zero length.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

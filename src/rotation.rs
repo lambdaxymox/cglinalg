@@ -642,7 +642,7 @@ where
     ///
     /// If the rotation angle is zero or `pi`, axis returns `None`.
     ///
-    /// ## Examples
+    /// # Examples
     ///
     /// ```
     /// # use cglinalg::{
@@ -771,7 +771,7 @@ where
     /// Construct a new three-dimensional rotation about the **x-axis** in the 
     /// **yz-plane** by an angle `angle`.
     ///
-    /// ## Examples
+    /// # Examples
     ///
     /// ```
     /// # use cglinalg::{
@@ -802,7 +802,7 @@ where
     /// Construct a new three-dimensional rotation about the **y-axis** in the 
     /// **zx-plane** by an angle `angle`.
     ///
-    /// ## Examples
+    /// # Examples
     ///
     /// ```
     /// # use cglinalg::{
@@ -833,7 +833,7 @@ where
     /// Construct a new three-dimensional rotation about the **z-axis** in the 
     /// **xy-plane** by an angle `angle`.
     ///
-    /// ## Examples
+    /// # Examples
     ///
     /// ```
     /// # use cglinalg::{

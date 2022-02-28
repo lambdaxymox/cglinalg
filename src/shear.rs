@@ -42,7 +42,7 @@ where
     /// The parameter `shear_x_with_y` denotes the factor scaling the
     /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -71,7 +71,7 @@ where
     /// The parameter `shear_y_with_x` denotes the factor scaling the
     /// contribution of the **x-axis** to shearing along the **y-axis**.
     ///
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -105,7 +105,7 @@ where
     /// The parameter `shear_x_with_y` denotes the factor scaling the 
     /// contribution of the **y-axis** to the shearing along the **x-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -134,7 +134,7 @@ where
 
     /// Apply a shearing transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -161,7 +161,7 @@ where
 
     /// Apply a shearing transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -194,7 +194,7 @@ where
     /// The identity shear is a shear transformation that does not shear
     /// any coordinates of a vector or a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -229,7 +229,7 @@ where
 {
     /// Compute the inverse of the shear transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -265,7 +265,7 @@ where
     
     /// Apply the inverse of the shear transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -292,7 +292,7 @@ where
     
     /// Apply the inverse of the shear transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -490,7 +490,7 @@ where
     /// multiplicative factors for the contributions from the **y-axis** and the 
     /// **z-axis** respectively for the shearing along the **x-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -524,7 +524,7 @@ where
     /// multiplicative factors for the contributions from the **x-axis** and the 
     /// **z-axis** respectively for the shearing along the **y-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -558,7 +558,7 @@ where
     /// multiplicative factors for the contributions from the **x-axis** and the 
     /// **y-axis** respectively for the shearing along the **z-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -600,7 +600,7 @@ where
     /// multiplicative factors for the contributions from the **x-axis** and the 
     /// **y-axis** respectively for the shearing along the **z-axis**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -649,7 +649,7 @@ where
 
     /// Apply a shear transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -731,7 +731,7 @@ where
     /// The identity shear is a shear transformation that does not shear
     /// any coordinates of a vector or a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -766,7 +766,7 @@ where
 {
     /// Calculate the inverse of a shear transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -816,7 +816,7 @@ where
 
     /// Apply the inverse of the shear transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -843,7 +843,7 @@ where
 
     /// Apply the inverse of the shear transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

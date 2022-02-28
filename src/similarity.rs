@@ -68,7 +68,7 @@ where
 
     /// Construct a similarity transformation from a rotation only.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -103,7 +103,7 @@ where
 
     /// Construct a similarity transformation from a scale only.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -131,7 +131,7 @@ where
 
     /// Construct a similarity transformation from a translation only.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -160,7 +160,7 @@ where
 
     /// Construct a similarity transformation from an isometry.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -196,7 +196,7 @@ where
     /// Construct a two-dimensional similarity transformation from a rotation
     /// angle.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -227,7 +227,7 @@ where
 
     /// Convert a similarity transformation to an affine matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -287,7 +287,7 @@ where
 
     /// Construct an identity transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -317,7 +317,7 @@ where
 
     /// Calculate the inverse of the similarity transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -356,7 +356,7 @@ where
 
     /// Mutably invert a similarity transformation in place..
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -395,7 +395,7 @@ where
 
     /// Apply the inverse of a similarity transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -431,7 +431,7 @@ where
     
     /// Apply the inverse of a similarity transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -470,7 +470,7 @@ where
     /// The transformation applies the scaling, followed by the rotation,
     /// and finally the translation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -510,7 +510,7 @@ where
     /// The transformation applies the scaling, followed by the rotation,
     /// and finally the translation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -814,7 +814,7 @@ where
 
     /// Construct a similarity transformation from a rotation only.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -851,7 +851,7 @@ where
 
     /// Construct a similarity transformation from a scale factor only.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -879,7 +879,7 @@ where
 
     /// Construct a similarity transformation from a translation only.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -908,7 +908,7 @@ where
 
     /// Construct a similarity transformation from an isometry.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -946,7 +946,7 @@ where
     /// Construct a similarity transformation from the axis and angle
     /// of a rotation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -988,7 +988,7 @@ where
     /// of `target - eye`, and locates the origin of the coordinate system to 
     /// the `eye` position.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1033,7 +1033,7 @@ where
     /// **left-handed** coordinate transformation. It is conventionally used in 
     /// computer graphics for camera view transformations.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1077,7 +1077,7 @@ where
     /// It is conventionally used in computer graphics for camera view 
     /// transformations.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1111,7 +1111,7 @@ where
 
     /// Convert a similarity transformation to an affine matrix.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1179,7 +1179,7 @@ where
 
     /// Construct an identity transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1209,7 +1209,7 @@ where
 
     /// Calculate the inverse of the similarity transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1250,7 +1250,7 @@ where
 
     /// Calculate the inverse of the similarity transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1291,7 +1291,7 @@ where
 
     /// Apply the inverse of a similarity transformation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1329,7 +1329,7 @@ where
     
     /// Apply the inverse of a similarity transformation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1369,7 +1369,7 @@ where
     /// The transformation applies the scaling, followed by the rotation,
     /// and finally the translation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1411,7 +1411,7 @@ where
     /// The transformation applies the scaling, followed by the rotation,
     /// and finally the translation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

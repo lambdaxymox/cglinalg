@@ -1180,7 +1180,7 @@ where
 
     /// Calculate the exponential of a quaternion.
     ///
-    /// ## Examples
+    /// # Examples
     ///
     /// Compute the exponential of a scalar quaternion.
     /// ```

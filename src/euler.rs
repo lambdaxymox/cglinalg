@@ -39,7 +39,7 @@ use core::fmt;
 /// other one rotates by the same amount; one degree of freedom is lost.
 /// Let's give a couple examples of Euler angles.
 ///
-/// ## Example (No Gimbal Lock)
+/// # Example (No Gimbal Lock)
 /// 
 /// The following example is a rotation without gimbal lock.
 /// ```
@@ -76,7 +76,7 @@ use core::fmt;
 /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
 /// ```
 /// 
-/// ## Example (Gimbal Lock)
+/// # Example (Gimbal Lock)
 /// 
 /// An Euler rotation can be represented as a product three rotations. We are using the ZYX
 /// rotation application order. 

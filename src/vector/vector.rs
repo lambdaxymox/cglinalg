@@ -41,7 +41,7 @@ where
 {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -72,7 +72,7 @@ where
     /// Extend a one-dimensional vector into a two-dimensional vector using 
     /// the supplied value for the **y-component**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -96,7 +96,7 @@ where
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -151,7 +151,7 @@ where
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -202,7 +202,7 @@ where
     ///
     /// The function appends a `0` to the vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -223,7 +223,7 @@ where
     
     /// Compute the Euclidean dot product (inner product) of two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -247,7 +247,7 @@ where
 {
     /// Compute the negation of a vector mutably in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -272,7 +272,7 @@ where
 {
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -299,7 +299,7 @@ where
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ## Example (Finite Vector)
+    /// # Example (Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -311,7 +311,7 @@ where
     /// assert!(v.is_finite()); 
     /// ```
     ///
-    /// ## Example (Infinite Vector)
+    /// # Example (Infinite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -330,7 +330,7 @@ where
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -461,7 +461,7 @@ where
 {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -496,7 +496,7 @@ where
     /// Extend a two-dimensional vector into a three-dimensional vector using the 
     /// supplied **z-component**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -518,7 +518,7 @@ where
     /// Contract a two-dimensional vector to a one-dimensional vector by removing
     /// the **y-component**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -542,7 +542,7 @@ where
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -597,7 +597,7 @@ where
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -655,7 +655,7 @@ where
     ///
     /// The function appends a `0` to the vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -679,7 +679,7 @@ where
     /// The function removes a `0` from the end of the vector, otherwise it
     /// returns `None`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -710,7 +710,7 @@ where
 
     /// Compute the Euclidean dot product (inner product) of two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -734,7 +734,7 @@ where
 {
     /// Compute the negation of a vector mutably in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -760,7 +760,7 @@ where
 {
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -787,7 +787,7 @@ where
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ## Example (Finite Vector)
+    /// # Example (Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -799,7 +799,7 @@ where
     /// assert!(v.is_finite());
     /// ```
     ///
-    /// ## Example (Not A Finite Vector)
+    /// # Example (Not A Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -820,7 +820,7 @@ where
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -943,7 +943,7 @@ where
 {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -982,7 +982,7 @@ where
     /// Extend a three-dimensional vector into a four-dimensional vector using the 
     /// supplied **w-component**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1004,7 +1004,7 @@ where
     /// Contract a three-dimensional vector to a two-dimensional vector
     /// by removing the **z-component**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1028,7 +1028,7 @@ where
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1083,7 +1083,7 @@ where
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1150,7 +1150,7 @@ where
     ///
     /// The function appends a `0` to the vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1174,7 +1174,7 @@ where
     /// The function removes a `0` from the end of the vector, otherwise it
     /// returns `None`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1205,7 +1205,7 @@ where
 
     /// Compute the Euclidean dot product (inner product) of two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1231,7 +1231,7 @@ where
 {
     /// Compute the negation of a vector mutably in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1260,7 +1260,7 @@ where
     /// the two vectors. The magnitude of this vector is the area of the 
     /// parallelogram swept out by the two vectors. 
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1297,7 +1297,7 @@ where
 {
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1324,7 +1324,7 @@ where
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ## Example (Finite Vector)
+    /// # Example (Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -1336,7 +1336,7 @@ where
     /// assert!(v.is_finite()); 
     /// ```
     ///
-    /// ## Example (Not A Finite Vector)
+    /// # Example (Not A Finite Vector)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1357,7 +1357,7 @@ where
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1506,7 +1506,7 @@ where
     /// Contract a four-dimensional vector to a three-dimensional vector
     /// by removing the **w-component**.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1530,7 +1530,7 @@ where
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1585,7 +1585,7 @@ where
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1618,7 +1618,7 @@ where
 {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1708,7 +1708,7 @@ where
     /// The function removes a `0` from the end of the vector, otherwise it
     /// returns `None`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1739,7 +1739,7 @@ where
     
     /// Compute the Euclidean dot product (inner product) of two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1766,7 +1766,7 @@ where
 {
     /// Compute the negation of a vector mutably in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1794,7 +1794,7 @@ where
 {
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1821,7 +1821,7 @@ where
     /// for vector and matrix types working with fixed precision floating point 
     /// values.
     ///
-    /// ## Example (Finite Vector)
+    /// # Example (Finite Vector)
     ///
     /// ```
     /// # use cglinalg::{
@@ -1833,7 +1833,7 @@ where
     /// assert!(v.is_finite()); 
     /// ```
     ///
-    /// ## Example (Not A Finite Vector)
+    /// # Example (Not A Finite Vector)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1855,7 +1855,7 @@ where
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
