@@ -48,6 +48,16 @@ where
     }
 
     #[inline]
+    pub fn zero() -> Self {
+        Self::new(S::zero(), S::zero())
+    }
+
+    #[inline]
+    pub fn identity() -> Self {
+        Self::new(S::one(), S::zero())
+    }
+
+    #[inline]
     pub fn magnitude_squared(&self) -> S {
         self.re.clone() * self.re.clone() + self.im.clone() * self.im.clone()
     }
