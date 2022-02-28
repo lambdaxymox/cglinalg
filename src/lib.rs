@@ -111,6 +111,7 @@ mod euler;
 mod projection;
 mod point;
 mod quaternion;
+mod complex;
 
 mod isometry;
 mod reflection;
@@ -131,6 +132,7 @@ pub use projection::*;
 pub use quaternion::*;
 pub use vector::*;
 pub use point::*;
+pub use complex::*;
 
 pub use isometry::*;
 pub use reflection::*;
