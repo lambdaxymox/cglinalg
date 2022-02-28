@@ -78,7 +78,7 @@ where
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -132,7 +132,7 @@ where
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -165,7 +165,7 @@ where
 {
     /// Cast a quaternion from one type of scalars to another type of scalars.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -201,7 +201,7 @@ where
     ///
     /// A real quaternion is a quaternion with zero vector part.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -222,7 +222,7 @@ where
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -246,7 +246,7 @@ where
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -270,7 +270,7 @@ where
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -298,7 +298,7 @@ where
     /// q + zero = zero + q = q
     /// ```
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -347,7 +347,7 @@ where
     
     /// Construct the multiplicative identity quaternion.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -370,7 +370,7 @@ where
     
     /// Determine whether a quaternion is equal to the identity quaternion.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -398,7 +398,7 @@ where
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
     /// 
-    /// ## Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg::{
@@ -423,7 +423,7 @@ where
     ///
     /// A real quaternion is a quaternion with zero vector part.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -446,7 +446,7 @@ where
 
     /// Construct a real quaternion from a scalar value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -465,7 +465,7 @@ where
 
     /// Construct a pure quaternion from a vector value.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -486,7 +486,7 @@ where
     
     /// Compute the dot product of two quaternions.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -515,7 +515,7 @@ where
     /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
     /// the conjugate of `q` is the quaternion `q* := s - v`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -544,7 +544,7 @@ where
     /// Construct a quaternion corresponding to rotating about an axis `axis` 
     /// by an angle `angle` in radians from its unit polar decomposition.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// Construct a quaternion for performing a 30 degree rotation about the **z-axis**.
     /// ```
@@ -588,7 +588,7 @@ where
     /// q * p * q^-1
     /// ```
     /// 
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -627,7 +627,7 @@ where
     /// formula and working backwards to extract the components of the quaternion
     /// from the components of the matrix.
     ///
-    /// ## Example
+    /// # Example
     /// Here we extract a quaternion from a 60-degree rotation about 
     /// the **z-axis**.
     /// ```
@@ -697,7 +697,7 @@ where
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -724,7 +724,7 @@ where
     /// The following example shows the result of converting an unit 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -786,7 +786,7 @@ where
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -816,7 +816,7 @@ where
     /// The following example shows the result of converting an unit 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -874,7 +874,7 @@ where
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -902,7 +902,7 @@ where
     /// The following example shows the result of converting an unit 
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -975,7 +975,7 @@ where
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1007,7 +1007,7 @@ where
     /// The following example shows the result of converting an unit 
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1076,7 +1076,7 @@ where
     /// inverse. In this case the function return `None`. Otherwise it returns 
     /// the inverse of `self`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1115,7 +1115,7 @@ where
     /// inverse. In this case the function return `None`. Otherwise it returns 
     /// the inverse of `self`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1159,7 +1159,7 @@ where
     /// ```
     /// In the case of `theta = Arg(q)`, we have `n = 0`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1331,7 +1331,7 @@ where
     /// scalar. Returning the principal value allows us to define a unique 
     /// natural logarithm for each quaternion `q`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1352,7 +1352,7 @@ where
     /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     ///
-    /// ## Example
+    /// # Example
     /// ```
     /// # use cglinalg::{
     /// #     Quaternion,
@@ -1396,7 +1396,7 @@ where
 
     /// Calculate the power of a quaternion where the exponent is a real number.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1424,7 +1424,7 @@ where
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1464,7 +1464,7 @@ where
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two unit vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1558,7 +1558,7 @@ where
 
     /// Linearly interpolate between two quaternions.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1585,7 +1585,7 @@ where
     /// normal to the plane swept out by the quaternions to get from one to the 
     /// other. The vector normal to the quaternions is not unique in this case.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1623,7 +1623,7 @@ where
         let zero = S::zero();
         let one = S::one();
         // There are two possible routes along a great circle arc between two 
-        // quaternions on the three-sphere. By definition the slerp function 
+        // quaternions on the two-sphere. By definition the slerp function 
         // computes the shortest path between two points on a sphere, hence we 
         // must determine which of two directions around the great circle arc 
         // swept out by the slerp function is the shortest one. 
@@ -1682,7 +1682,7 @@ where
 
     /// Compute the normalized linear interpolation between two quaternions.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1708,7 +1708,7 @@ where
     ///
     /// A quaternion is finite when all of its elements are finite.
     ///
-    /// ## Example (Finite Quaternion)
+    /// # Example (Finite Quaternion)
     ///
     /// ```
     /// # use cglinalg::{
@@ -1720,7 +1720,7 @@ where
     /// assert!(quaternion.is_finite()); 
     /// ```
     ///
-    /// ## Example (Not A Finite Vector)
+    /// # Example (Not A Finite Vector)
     /// 
     /// ```
     /// # use cglinalg::{
@@ -1739,7 +1739,7 @@ where
     /// Compute the projection of the quaternion `self` onto the quaternion
     /// `other`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1785,7 +1785,7 @@ where
     /// by the axis of rotation, if there is one. There may not be one in the 
     /// case where the quaternion is a real quaternion.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1848,7 +1848,7 @@ where
     ///   =: s + v
     /// ```
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{

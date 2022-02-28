@@ -63,7 +63,7 @@ where
 
     /// Get the rotation angle of the rotation transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -89,7 +89,7 @@ where
 
     /// Rotate a two-dimensional vector in the **xy-plane** by an angle `angle`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -120,7 +120,7 @@ where
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -152,7 +152,7 @@ where
     /// Construct a rotation that rotates the shortest angular distance 
     /// between vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -189,7 +189,7 @@ where
     /// `axis` by an angle `theta`, construct a rotation that rotates a 
     /// vector about the same axis by an angle `-theta`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -215,7 +215,7 @@ where
 
     /// Mutably invert a rotation in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -240,7 +240,7 @@ where
 
     /// Apply the rotation operation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -268,7 +268,7 @@ where
 
     /// Apply the rotation operation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -299,7 +299,7 @@ where
 
     /// Apply the inverse rotation operation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -334,7 +334,7 @@ where
 
     /// Apply the inverse rotation operation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -375,7 +375,7 @@ where
     /// a vector or point by and angle of zero radians. The inverse operation
     /// will also rotate by zero radians.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -611,7 +611,7 @@ where
 
     /// Get the rotation angle of the rotation transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -697,7 +697,7 @@ where
 
     /// Compute the axis and angle of the rotation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -730,7 +730,7 @@ where
 
     /// Construct a three-dimensional rotation matrix from a quaternion.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -868,7 +868,7 @@ where
     ///
     /// The resulting transformation maps the **positive z-axis** to `direction`.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -905,7 +905,7 @@ where
     /// This transformation is a **right-handed** coordinate transformation. It is
     /// conventionally used in computer graphics for camera view transformations.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -940,7 +940,7 @@ where
     /// locates the `eye` position to the origin in the new the coordinate system.
     /// This transformation is a **left-handed** coordinate transformation.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -971,7 +971,7 @@ where
     ///
     /// The rotation uses the unit directional vectors of the input vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1001,7 +1001,7 @@ where
     /// Construct a rotation that rotates the shortest angular distance 
     /// between two unit vectors.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1036,7 +1036,7 @@ where
     /// `axis` by an angle `theta`, construct a rotation that rotates a 
     /// vector about the same axis by an angle `-theta`.
     /// 
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1066,7 +1066,7 @@ where
 
     /// Mutably invert a rotation in place.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1092,7 +1092,7 @@ where
 
     /// Apply the rotation operation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1122,7 +1122,7 @@ where
 
     /// Apply the rotation operation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1156,7 +1156,7 @@ where
 
     /// Apply the inverse of the rotation to a vector.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1189,7 +1189,7 @@ where
 
     /// Apply the inverse of the rotation to a point.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
@@ -1229,7 +1229,7 @@ where
     /// a vector or point by and angle of zero radians. The inverse operation
     /// will also rotate by zero radians.
     ///
-    /// ## Example
+    /// # Example
     ///
     /// ```
     /// # use cglinalg::{
