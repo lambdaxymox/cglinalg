@@ -319,6 +319,27 @@ where
     }
     
     /// Determine whether is a quaternion is the zero quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let zero_quat: Quaternion<i32> = Quaternion::zero();
+    /// let real_quat = Quaternion::from_real(1);
+    /// let pure_quat = Quaternion::from_pure(Vector3::new(2, 3, 4));
+    /// 
+    /// assert!(zero_quat.is_zero());
+    /// assert!(!real_quat.is_zero());
+    /// assert!(!pure_quat.is_zero());
+    /// 
+    /// let quat = real_quat + pure_quat;
+    /// 
+    /// assert!(!quat.is_zero());
+    /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.s.is_zero() 
