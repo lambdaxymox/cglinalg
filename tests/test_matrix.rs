@@ -201,6 +201,19 @@ mod matrix2x2_tests {
     }
 
     #[test]
+    fn test_construction_from_rows() {
+        let r0 = Vector2::new(1, 2);
+        let r1 = Vector2::new(3, 4);
+        let expected = Matrix2x2::new(
+            1, 3,
+            2, 4
+        );
+        let result = Matrix2x2::from_rows(&r0, &r1);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169;
         let id = Matrix2x2::identity();
@@ -850,6 +863,21 @@ mod matrix3x3_tests {
             7.0, 8.0, 9.0
         );
         let result = Matrix3x3::from_columns(&c0, &c1, &c2);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_construction_from_rows() {
+        let r0 = Vector3::new(1, 2, 3);
+        let r1 = Vector3::new(4, 5, 6);
+        let r2 = Vector3::new(7, 8, 9);
+        let expected = Matrix3x3::new(
+            1, 4, 7,
+            2, 5, 8,
+            3, 6, 9
+        );
+        let result = Matrix3x3::from_rows(&r0, &r1, &r2);
 
         assert_eq!(result, expected);
     }
@@ -1857,6 +1885,23 @@ mod matrix4x4_tests {
             13, 14 ,15, 16
         );
         let result = Matrix4x4::from_columns(&c0, &c1, &c2, &c3);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_construction_from_rows() {
+        let r0 = Vector4::new(1,  2,  3,  4);
+        let r1 = Vector4::new(5,  6,  7,  8);
+        let r2 = Vector4::new(9,  10, 11, 12);
+        let r3 = Vector4::new(13, 14, 15, 16);
+        let expected = Matrix4x4::new(
+            1, 5, 9,  13,
+            2, 6, 10, 14,
+            3, 7, 11, 15,
+            4, 8, 12, 16
+        );
+        let result = Matrix4x4::from_rows(&r0, &r1, &r2, &r3);
 
         assert_eq!(result, expected);
     }
