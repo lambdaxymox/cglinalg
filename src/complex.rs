@@ -149,3 +149,98 @@ where
     }
 }
 
+impl<S> ops::Add<Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn add(self, other: Complex<S>) -> Self::Output {
+        Self::Output::new(self.re + other.re, self.im + other.im)
+    }
+}
+
+impl<S> ops::Add<&Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn add(self, other: &Complex<S>) -> Self::Output {
+        Self::Output::new(self.re + other.re, self.im + other.im)
+    }
+}
+
+impl<S> ops::Add<Complex<S>> for &Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn add(self, other: Complex<S>) -> Self::Output {
+        Self::Output::new(self.re + other.re, self.im + other.im)
+    }
+}
+
+impl<'a, 'b, S> ops::Add<&'b Complex<S>> for &'a Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn add(self, other: &'b Complex<S>) -> Self::Output {
+        Self::Output::new(self.re + other.re, self.im + other.im)
+    }
+}
+
+impl<S> ops::Add<S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn add(self, other: S) -> Self::Output {
+        Self::Output::new(self.re + other, self.im)
+    }
+}
+
+impl<S> ops::Add<&S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn add(self, other: &S) -> Self::Output {
+        Self::Output::new(self.re + *other, self.im)
+    }
+}
+
+impl<S> ops::Add<S> for &Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn add(self, other: S) -> Self::Output {
+        Self::Output::new(self.re + other, self.im)
+    }
+}
+
+impl<'a, 'b, S> ops::Add<&'b S> for &'a Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn add(self, other: &'b S) -> Self::Output {
+        Self::Output::new(self.re + *other, self.im)
+    }
+}
