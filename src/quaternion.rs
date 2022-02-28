@@ -24,10 +24,10 @@ use core::ops;
 
 /// A quaternion is a generalization of vectors in three dimensions that 
 /// enables one to perform rotations about an arbitrary axis. They are a
-/// three-dimensional analogue of complex numbers. In geometric algebra terms,
-/// a complex number is a **scalar + bivector** form whereas a quaternion is
-/// a **scalar + vector** form. 
-///
+/// three-dimensional analogue of complex numbers. One major difference 
+/// between complex numbers and quaternions is that the quaternion product is 
+/// noncommutative, whereas the complex product is commutative.
+/// 
 /// Analogous to the complex numbers, quaternions can be written in polar form.
 /// polar form reveals the fact that it encodes rotations. A quaternion `q` can
 /// be written in polar form as
@@ -37,7 +37,7 @@ use core::ops;
 /// where `v` is a unit vector in the direction of the axis of rotation, `theta`
 /// is the angle of rotation, and `|q|` denotes the length of the quaternion.
 ///
-/// Quaternions are stored in [s, x, y, z] storage order, where `s` is the scalar
+/// Quaternions are stored in `[s, x, y, z]` storage order, where `s` is the scalar
 /// part and `(x, y, z)` are the vector components.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -59,7 +59,7 @@ impl<S> Quaternion<S> {
         }
     }
 
-    /// Construct a quaternion from its scalar and vector parts.
+    /// Construct a new quaternion from its scalar and vector parts.
     #[inline]
     pub fn from_parts(qs: S, qv: Vector3<S>) -> Self {
         Self { 
