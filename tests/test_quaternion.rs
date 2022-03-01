@@ -769,3 +769,109 @@ mod inverse_tests {
         assert!(!quaternion.is_invertible());
     }
 }
+
+#[cfg(test)]
+mod division_tests {
+    use cglinalg::{
+        Quaternion,
+        Vector3,
+    };
+    use approx::{
+        relative_eq,
+    };
+
+
+    #[test]
+    fn test_div_left() {
+        let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
+        let expected = Quaternion::new(
+             104_f64 / 364_f64, 
+            -2_f64 / 364_f64, 6_f64 / 364_f64, 8_f64 / 364_f64
+        );
+        let result = q.div_left(&p);
+     
+        assert!(result.is_some());
+     
+        let result = result.unwrap();
+     
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_div_right() {
+        let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
+        let expected = Quaternion::new(
+            104_f64 / 364_f64, 
+            8_f64 / 364_f64, 2_f64 / 364_f64, 6_f64 / 364_f64);
+        let result = q.div_right(&p);
+     
+        assert!(result.is_some());
+     
+        let result = result.unwrap();
+     
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_div_left_scalar() {
+        let scalar_part = 3_f64;
+        let scalar = Quaternion::from_real(scalar_part);
+        let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let expected = Quaternion::new(
+            1_f64 / scalar_part,
+            2_f64 / scalar_part, 3_f64 / scalar_part, 4_f64 / scalar_part
+        );
+        let result = q.div_left(&scalar).unwrap();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_div_right_scalar() {
+        let scalar_part = 3_f64;
+        let scalar = Quaternion::from_real(scalar_part);
+        let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let expected = Quaternion::new(
+            1_f64 / scalar_part,
+            2_f64 / scalar_part, 3_f64 / scalar_part, 4_f64 / scalar_part
+        );
+        let result = q.div_right(&scalar).unwrap();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_div_left_vector() {
+        let v = Quaternion::from_pure(Vector3::new(2_f64, 5_f64, 3_f64));
+        let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let expected = Quaternion::new(
+            31_f64 / 38_f64, 
+            -13_f64 / 38_f64, -3_f64 / 38_f64, 1_f64 / 38_f64
+        );
+        let result = q.div_left(&v).unwrap();
+
+        eprintln!("result = {}", result);
+        eprintln!("expedted = {}", expected);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_div_right_vector() {
+        let v = Quaternion::from_pure(Vector3::new(2_f64, 5_f64, 3_f64));
+        let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let expected = Quaternion::new(
+            31_f64 / 38_f64, 
+            9_f64 / 38_f64, -7_f64 / 38_f64, -7_f64 / 38_f64
+        );
+        let result = q.div_right(&v).unwrap();
+
+        eprintln!("result = {}", result);
+        eprintln!("expected = {}", expected);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+}
+
