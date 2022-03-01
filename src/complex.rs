@@ -14,8 +14,8 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Complex<S> {
-    pub re: S,
-    pub im: S,
+    re: S,
+    im: S,
 }
 
 impl<S> Complex<S> {
@@ -48,6 +48,21 @@ impl<S> Complex<S> {
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 2]>>::as_ref(self)
+    }
+}
+
+impl<S> Complex<S>
+where
+    S: Copy
+{
+    #[inline]
+    pub fn real(self) -> S {
+        self.re
+    }
+
+    #[inline]
+    pub fn imaginary(self) -> S {
+        self.im
     }
 }
 
