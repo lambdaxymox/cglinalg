@@ -791,3 +791,162 @@ where
     }
 }
 
+impl<S> ops::Div<Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn div(self, other: Complex<S>) -> Self::Output {
+        let denominator = self.im * self.im + other.im * other.im;
+        let re = (self.re * other.re + self.im * other.im) / denominator;
+        let im = (self.im * other.re - self.re * other.im) / denominator;
+
+        Self::Output::new(re, im)
+    }
+}
+
+impl<S> ops::Div<&Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn div(self, other: &Complex<S>) -> Self::Output {
+        let denominator = self.im * self.im + other.im * other.im;
+        let re = (self.re * other.re + self.im * other.im) / denominator;
+        let im = (self.im * other.re - self.re * other.im) / denominator;
+
+        Self::Output::new(re, im)
+    }
+}
+
+impl<S> ops::Div<Complex<S>> for &Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn div(self, other: Complex<S>) -> Self::Output {
+        let denominator = self.im * self.im + other.im * other.im;
+        let re = (self.re * other.re + self.im * other.im) / denominator;
+        let im = (self.im * other.re - self.re * other.im) / denominator;
+
+        Self::Output::new(re, im)
+    }
+}
+
+impl<'a, 'b, S> ops::Div<&'b Complex<S>> for &'a Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn div(self, other: &'b Complex<S>) -> Self::Output {
+        let denominator = self.im * self.im + other.im * other.im;
+        let re = (self.re * other.re + self.im * other.im) / denominator;
+        let im = (self.im * other.re - self.re * other.im) / denominator;
+
+        Self::Output::new(re, im)
+    }
+}
+
+impl<S> ops::Div<S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Self::Output::new(self.re / other, self.im / other)
+    }
+}
+
+impl<S> ops::Div<&S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn div(self, other: &S) -> Self::Output {
+        Self::Output::new(self.re / *other, self.im / *other)
+    }
+}
+
+impl<S> ops::Div<S> for &Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Self::Output::new(self.re / other, self.im / other)
+    }
+}
+
+impl<'a, 'b, S> ops::Div<&'b S> for &'a Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn div(self, other: &'b S) -> Self::Output {
+        Self::Output::new(self.re / *other, self.im / *other)
+    }
+}
+
+impl<S> ops::Rem<S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        Self::Output::new(self.re % other, self.im % other)
+    }
+}
+
+impl<S> ops::Rem<&S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn rem(self, other: &S) -> Self::Output {
+        Self::Output::new(self.re % *other, self.im % *other)
+    }
+}
+
+impl<S> ops::Rem<S> for &Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        Self::Output::new(self.re % other, self.im % other)
+    }
+}
+
+impl<'a, 'b, S> ops::Rem<&'b S> for &'a Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn rem(self, other: &'b S) -> Self::Output {
+        Self::Output::new(self.re % *other, self.im % *other)
+    }
+}
