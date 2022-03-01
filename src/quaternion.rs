@@ -530,6 +530,36 @@ where
     pub fn conjugate(&self) -> Self {
         Self::from_parts(self.s, -self.v)
     }
+
+    /// Compute the conjugate of a quaternion, replacing the original value
+    /// with the conjugated one.
+    ///
+    /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
+    /// the conjugate of `q` is the quaternion `q* := s - v`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let scalar = 1_f64;
+    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let mut quaternion = Quaternion::from_parts(scalar, vector);
+    /// let expected = Quaternion::from_parts(scalar, -vector);
+    /// 
+    /// assert_ne!(quaternion, expected);
+    /// 
+    /// quaternion.conjugate_mut();
+    ///
+    /// assert_eq!(quaternion, expected);
+    /// ```
+    #[inline]
+    pub fn conjugate_mut(&mut self) {
+        self.v = -self.v;
+    }
 }
 
 impl<S> Quaternion<S> 
