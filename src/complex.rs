@@ -91,6 +91,16 @@ where
     }
 
     #[inline]
+    pub fn is_real(self) -> bool {
+        self.im.is_zero()
+    }
+
+    #[inline]
+    pub fn is_imaginary(self) -> bool {
+        self.re.is_zero()
+    }
+
+    #[inline]
     pub fn magnitude_squared(self) -> S {
         self.re.clone() * self.re.clone() + self.im.clone() * self.im.clone()
     }
