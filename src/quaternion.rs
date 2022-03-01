@@ -1447,6 +1447,77 @@ where
         (self.ln() * exponent).exp()
     }
 
+    /// Compute the left quaternionic quotient of two quaternions.
+    /// 
+    /// Given quaternions `q = self` and `p = left`, the left quotient of
+    /// `q` by `p` is given by
+    /// ```text
+    /// div_left(q, p) := p_inv * q
+    /// ```
+    /// where `p_inv` denotes the inverse of `p`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
+    /// let expected = Quaternion::new(104_f64, -2_f64, 6_f64, 8_f64) / 364_f64;
+    /// let result = q.div_left(&p);
+    /// 
+    /// assert!(result.is_some());
+    /// 
+    /// let result = result.unwrap();
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
+    #[inline]
+    pub fn div_left(&self, left: &Self) -> Option<Self> {
+        left.inverse().map(|left_inv| left_inv * self)
+    }
+
+    /// Compute the right quaternionic quotient of two quaternions.
+    /// 
+    /// Given quaternions `q = self` and `p = right`, the right quotient of
+    /// `q` by `p` is given by
+    /// ```text
+    /// div_right(q, p) := q * p_inv
+    /// ```
+    /// where `p_inv` denotes the inverse of `p`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
+    /// let expected = Quaternion::new(104_f64, 8_f64, 2_f64, 6_f64) / 364_f64;
+    /// let result = q.div_right(&p);
+    /// 
+    /// assert!(result.is_some());
+    /// 
+    /// let result = result.unwrap();
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
+    #[inline]
+    pub fn div_right(&self, right: &Self) -> Option<Self> {
+        right.inverse().map(|right_inv| self * right_inv)
+    }
+
+
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two vectors.
     ///
@@ -1473,7 +1544,7 @@ where
     /// );
     /// let result = Quaternion::rotation_between(&v1, &v2).unwrap();
     /// 
-    /// assert!(relative_eq!(result, expected));
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
