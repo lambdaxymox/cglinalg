@@ -1454,7 +1454,10 @@ where
     /// ```text
     /// div_left(q, p) := p_inv * q
     /// ```
-    /// where `p_inv` denotes the inverse of `p`.
+    /// where `p_inv` denotes the inverse of `p`. We have two definitions of 
+    /// quaternion division because in general quaternion multiplication is not
+    /// commutative, i.e. in general `p_inv * q != q * p_inv`, so having exactly
+    /// one notion of the quotient of two quaternions does not make sense.
     /// 
     /// # Example
     /// 
@@ -1489,7 +1492,10 @@ where
     /// ```text
     /// div_right(q, p) := q * p_inv
     /// ```
-    /// where `p_inv` denotes the inverse of `p`.
+    /// where `p_inv` denotes the inverse of `p`. We have two definitions of 
+    /// quaternion division because in general quaternion multiplication is not
+    /// commutative, i.e. in general `p_inv * q != q * p_inv`, so having exactly 
+    /// one notion of the quotient of two quaternions does not make sense.
     /// 
     /// # Example
     /// 
