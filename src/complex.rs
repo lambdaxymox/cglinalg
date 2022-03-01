@@ -148,6 +148,11 @@ where
     S: ScalarFloat
 {
     #[inline]
+    pub fn is_finite(self) -> bool {
+        self.re.is_finite() && self.im.is_finite()
+    }
+
+    #[inline]
     pub fn magnitude(self) -> S {
         self.magnitude_squared().sqrt()
     }
