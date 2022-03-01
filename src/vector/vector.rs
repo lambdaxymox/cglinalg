@@ -363,6 +363,15 @@ where
     }
 }
 
+impl<S> Default for Vector1<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<S> for Vector1<S> 
 where 
     S: Scalar
@@ -853,6 +862,15 @@ where
             "Vector2 [{}, {}]", 
             self.data[0], self.data[1]
         )
+    }
+}
+
+impl<S> Default for Vector2<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 
@@ -1396,6 +1414,15 @@ where
     }
 }
 
+impl<S> Default for Vector3<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<(S, S, S)> for Vector3<S> 
 where 
     S: Scalar
@@ -1894,6 +1921,15 @@ where
             "Vector4 [{}, {}, {}, {}]", 
             self.data[0], self.data[1], self.data[2], self.data[3]
         )
+    }
+}
+
+impl<S> Default for Vector4<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 

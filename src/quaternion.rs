@@ -2064,6 +2064,15 @@ where
     }
 }
 
+impl<S> Default for Quaternion<S>
+where
+    S: Scalar + Default
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<(S, S, S, S)> for Quaternion<S> 
 where 
     S: Scalar 

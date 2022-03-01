@@ -392,6 +392,15 @@ where
     }
 }
 
+impl<S> Default for Matrix1x1<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<[[S; 1]; 1]> for Matrix1x1<S> 
 where 
     S: Scalar 
@@ -1536,6 +1545,15 @@ where
             self.data[0][0], self.data[1][0],
             self.data[0][1], self.data[1][1],
         )
+    }
+}
+
+impl<S> Default for Matrix2x2<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 
@@ -3577,6 +3595,15 @@ where
             self.data[0][1], self.data[1][1], self.data[2][1],
             self.data[0][2], self.data[1][2], self.data[2][2],
         )
+    }
+}
+
+impl<S> Default for Matrix3x3<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 
@@ -5781,6 +5808,15 @@ where
     }
 }
 
+impl<S> Default for Matrix4x4<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<[[S; 4]; 4]> for Matrix4x4<S> 
 where 
     S: Scalar
@@ -6100,6 +6136,15 @@ where
     }
 }
 
+impl<S> Default for Matrix1x2<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<[[S; 1]; 2]> for Matrix1x2<S> 
 where 
     S: Scalar 
@@ -6340,6 +6385,15 @@ where
             "Matrix1x3 [[{}, {}, {}]]", 
             self.data[0][0], self.data[1][0], self.data[2][0]
         )
+    }
+}
+
+impl<S> Default for Matrix1x3<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 
@@ -6595,6 +6649,15 @@ where
             "Matrix1x4 [[{}, {}, {}, {}]]", 
             self.data[0][0], self.data[1][0], self.data[2][0], self.data[3][0]
         )
+    }
+}
+
+impl<S> Default for Matrix1x4<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 
@@ -7058,6 +7121,15 @@ where
     }
 }
 
+impl<S> Default for Matrix2x3<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<[[S; 2]; 3]> for Matrix2x3<S> 
 where 
     S: Scalar
@@ -7509,6 +7581,15 @@ where
             self.data[0][1], self.data[1][1], 
             self.data[0][2], self.data[1][2]
         )
+    }
+}
+
+impl<S> Default for Matrix3x2<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 
@@ -8023,6 +8104,15 @@ where
     }
 }
 
+impl<S> Default for Matrix2x4<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<[[S; 2]; 4]> for Matrix2x4<S> 
 where 
     S: Scalar
@@ -8509,6 +8599,15 @@ where
             self.data[0][2], self.data[1][2],
             self.data[0][3], self.data[1][3]
         )
+    }
+}
+
+impl<S> Default for Matrix4x2<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 
@@ -9060,6 +9159,15 @@ where
     }
 }
 
+impl<S> Default for Matrix3x4<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<[[S; 3]; 4]> for Matrix3x4<S> 
 where 
     S: Scalar
@@ -9589,6 +9697,15 @@ where
             self.data[0][2], self.data[1][2], self.data[2][2],
             self.data[0][3], self.data[1][3], self.data[2][3]
         )
+    }
+}
+
+impl<S> Default for Matrix4x3<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 

@@ -265,6 +265,15 @@ where
     }
 }
 
+impl<S> Default for Point1<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::origin()
+    }
+}
+
 impl<S> From<S> for Point1<S> 
 where 
     S: Scalar
@@ -661,6 +670,15 @@ where
     }
 }
 
+impl<S> Default for Point2<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::origin()
+    }
+}
+
 impl<S> From<(S, S)> for Point2<S> 
 where 
     S: Scalar
@@ -1034,6 +1052,15 @@ where
             "Point3 [{}, {}, {}]", 
             self.data[0], self.data[1], self.data[2]
         )
+    }
+}
+
+impl<S> Default for Point3<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::origin()
     }
 }
 

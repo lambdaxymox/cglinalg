@@ -408,6 +408,15 @@ where
     }
 }
 
+impl<S> Default for Complex<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<S> for Complex<S>
 where
     S: Scalar

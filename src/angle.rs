@@ -265,6 +265,24 @@ where
     }
 }
 
+impl<S> Default for Radians<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
+impl<S> Default for Degrees<S>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 impl<S> From<Degrees<S>> for Radians<S> 
 where 
     S: ScalarFloat
