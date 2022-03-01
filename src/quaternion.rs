@@ -560,6 +560,31 @@ where
     pub fn conjugate_mut(&mut self) {
         self.v = -self.v;
     }
+
+    /// Compute the square of a quaterion.
+    /// 
+    /// Given a quaternion `q`, the square of `q` is the product of
+    /// `q` with itself, i.e.
+    /// ```text
+    /// q.squared() := q * q
+    /// ```
+    /// 
+    ///  # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let quaternion = Quaternion::new(24, 7, 23, 9);
+    /// let expected = Quaternion::new(-83, 336, 1104, 432);
+    /// let result = quaternion.squared();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    pub fn squared(&self) -> Self {
+        self * self
+    }
 }
 
 impl<S> Quaternion<S> 
@@ -1447,7 +1472,7 @@ where
         (self.ln() * exponent).exp()
     }
 
-    /// Compute the left quaternionic quotient of two quaternions.
+    /// Compute the left quotient of two quaternions.
     /// 
     /// Given quaternions `q = self` and `p = left`, the left quotient of
     /// `q` by `p` is given by
@@ -1485,7 +1510,7 @@ where
         left.inverse().map(|left_inv| left_inv * self)
     }
 
-    /// Compute the right quaternionic quotient of two quaternions.
+    /// Compute the right quotient of two quaternions.
     /// 
     /// Given quaternions `q = self` and `p = right`, the right quotient of
     /// `q` by `p` is given by
