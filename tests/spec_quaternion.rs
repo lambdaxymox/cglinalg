@@ -26,7 +26,7 @@ where
     S: Scalar + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
+        let modulus: S = num_traits::cast(100_000_000).unwrap();
         let quaternion = Quaternion::new(x, y, z, w);
 
         quaternion % modulus

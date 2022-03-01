@@ -2362,6 +2362,38 @@ where
     }
 }
 
+impl<S> ops::Mul<&S> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = Quaternion<S>;
+
+    #[rustfmt::skip]
+    #[inline]
+    fn mul(self, other: &S) -> Quaternion<S> {
+        Quaternion::new(
+            self.s * *other,
+            self.v.x * *other, self.v.y * *other, self.v.z * *other,
+        )
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'b S> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = Quaternion<S>;
+
+    #[rustfmt::skip]
+    #[inline]
+    fn mul(self, other: &'b S) -> Quaternion<S> {
+        Quaternion::new(
+            self.s * *other,
+            self.v.x * *other, self.v.y * *other, self.v.z * *other,
+        )
+    }
+}
+
 impl<S> ops::Mul<Quaternion<S>> for Quaternion<S> 
 where 
     S: Scalar 
@@ -2522,6 +2554,38 @@ where
     }
 }
 
+impl<S> ops::Div<&S> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = Quaternion<S>;
+
+    #[rustfmt::skip]
+    #[inline]
+    fn div(self, other: &S) -> Quaternion<S> {
+        Quaternion::new(
+            self.s / *other, 
+            self.v.x / *other, self.v.y / *other, self.v.z / *other,
+        )
+    }
+}
+
+impl<'a, 'b, S> ops::Div<&'b S> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = Quaternion<S>;
+
+    #[rustfmt::skip]
+    #[inline]
+    fn div(self, other: &'b S) -> Quaternion<S> {
+        Quaternion::new(
+            self.s / *other, 
+            self.v.x / *other, self.v.y / *other, self.v.z / *other,
+        )
+    }
+}
+
 impl<S> ops::Rem<S> for Quaternion<S> 
 where 
     S: Scalar 
@@ -2550,6 +2614,38 @@ where
         Quaternion::new(
             self.s % other,
             self.v.x % other, self.v.y % other, self.v.z % other,
+        )
+    }
+}
+
+impl<S> ops::Rem<&S> for Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = Quaternion<S>;
+
+    #[rustfmt::skip]
+    #[inline]
+    fn rem(self, other: &S) -> Self::Output {
+        Quaternion::new(
+            self.s % *other,
+            self.v.x % *other, self.v.y % *other, self.v.z % *other,
+        )
+    }
+}
+
+impl<'a, 'b, S> ops::Rem<&'b S> for &'a Quaternion<S> 
+where 
+    S: Scalar 
+{
+    type Output = Quaternion<S>;
+
+    #[rustfmt::skip]
+    #[inline]
+    fn rem(self, other: &'b S) -> Self::Output {
+        Quaternion::new(
+            self.s % *other,
+            self.v.x % *other, self.v.y % *other, self.v.z % *other,
         )
     }
 }
