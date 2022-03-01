@@ -377,6 +377,7 @@ impl<S> From<S> for Complex<S>
 where
     S: Scalar
 {
+    #[inline]
     fn from(re: S) -> Self {
         Self::new(re, S::zero())
     }
@@ -386,6 +387,7 @@ impl<S> From<&S> for Complex<S>
 where
     S: Scalar
 {
+    #[inline]
     fn from(re: &S) -> Self {
         Self::new(*re, S::zero())
     }
@@ -395,6 +397,7 @@ impl<S> From<(S, S)> for Complex<S>
 where
     S: Scalar
 {
+    #[inline]
     fn from(v: (S, S)) -> Self {
         Self::new(v.0, v.1)
     }
@@ -404,6 +407,7 @@ impl<S> From<[S; 2]> for Complex<S>
 where
     S: Scalar
 {
+    #[inline]
     fn from(v: [S; 2]) -> Self {
         Self::new(v[0], v[1])
     }
@@ -413,6 +417,7 @@ impl<S> From<&(S, S)> for Complex<S>
 where
     S: Scalar
 {
+    #[inline]
     fn from(v: &(S, S)) -> Self {
         Self::new(v.0, v.1)
     }
@@ -422,6 +427,7 @@ impl<S> From<&[S; 2]> for Complex<S>
 where
     S: Scalar
 {
+    #[inline]
     fn from(v: &[S; 2]) -> Self {
         Self::new(v[0], v[1])
     }
@@ -431,6 +437,7 @@ impl<'a, S> From<&'a (S, S)> for &'a Complex<S>
 where
     S: Scalar
 {
+    #[inline]
     fn from(v: &'a (S, S)) -> &'a Complex<S> {
         unsafe {
             &*(v as *const (S, S) as *const Complex<S>)
@@ -442,6 +449,7 @@ impl<'a, S> From<&'a [S; 2]> for &'a Complex<S>
 where
     S: Scalar
 {
+    #[inline]
     fn from(v: &'a [S; 2]) -> &'a Complex<S> {
         unsafe {
             &*(v as *const [S; 2] as *const Complex<S>)
