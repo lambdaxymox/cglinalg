@@ -8,6 +8,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
+use core::fmt;
 use core::ops;
 
 
@@ -491,6 +492,15 @@ where
     }
 }
 
+impl<S> fmt::Display for Complex<S>
+where
+    S: fmt::Display
+{
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "{} + i{}", self.re, self.im)
+    }
+}
+
 impl<S> ops::Add<Complex<S>> for Complex<S>
 where
     S: Scalar
@@ -950,3 +960,4 @@ where
         Self::Output::new(self.re % *other, self.im % *other)
     }
 }
+
