@@ -1403,6 +1403,7 @@ where
     /// ```
     ///
     /// # Example
+    /// 
     /// ```
     /// # use cglinalg::{
     /// #     Quaternion,
@@ -1470,6 +1471,17 @@ where
     #[inline]
     pub fn powf(&self, exponent: S) -> Self {
         (self.ln() * exponent).exp()
+    }
+
+    /// Calculate the square root of a quaternion.
+    /// 
+    /// Given a quaternion `q`, the square root of `q` is a quaternion
+    /// `p` such that `p * p == q`.
+    #[inline]
+    pub fn sqrt(&self) -> Self {
+        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
+        
+        (self.ln() * one_half).exp()
     }
 
     /// Compute the left quotient of two quaternions.

@@ -875,3 +875,33 @@ mod division_tests {
     }
 }
 
+#[cfg(test)]
+mod square_root_tests {
+    use cglinalg::{
+        Quaternion,
+        Vector3,
+    };
+    use approx::{
+        relative_eq,
+    };
+
+
+    #[test]
+    fn test_square_root_zero() {
+        let zero: Quaternion<f64> = Quaternion::zero();
+        
+        assert_eq!(zero.sqrt(), zero);
+    }
+
+    #[test]
+    fn test_square_root_scalar() {
+        let scalar_part = 2_f64;
+        let scalar = Quaternion::from_real(scalar_part);
+        let expected = Quaternion::from_real(f64::sqrt(scalar_part));
+        let result = scalar.sqrt();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+
+}
