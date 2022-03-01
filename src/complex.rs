@@ -240,6 +240,15 @@ where
 
         Self::new(magnitude * cos_angle_over_two, magnitude * sin_angle_over_two)
     }
+
+    /*
+    /// Calculate the power of a complex number where the exponent is a floating 
+    /// point number.
+    #[inline]
+    pub fn powf(self, exponent: S) -> Self {
+        (self.ln() * exponent).exp()
+    }
+    */
 }
 
 impl<S> AsRef<[S; 2]> for Complex<S> {
@@ -671,6 +680,114 @@ where
     #[inline]
     fn sub(self, other: &'b S) -> Self::Output {
         Self::Output::new(self.re - *other, self.im)
+    }
+}
+
+impl<S> ops::Mul<Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn mul(self, other: Complex<S>) -> Self::Output {
+        let real_part = self.re * other.re - self.im * other.im;
+        let imaginary_part = self.re * other.im + self.im * other.re;
+
+        Self::Output::new(real_part, imaginary_part)
+    }
+}
+
+impl<S> ops::Mul<&Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn mul(self, other: &Complex<S>) -> Self::Output {
+        let real_part = self.re * other.re - self.im * other.im;
+        let imaginary_part = self.re * other.im + self.im * other.re;
+
+        Self::Output::new(real_part, imaginary_part)
+    }
+}
+
+impl<S> ops::Mul<Complex<S>> for &Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn mul(self, other: Complex<S>) -> Self::Output {
+        let real_part = self.re * other.re - self.im * other.im;
+        let imaginary_part = self.re * other.im + self.im * other.re;
+
+        Self::Output::new(real_part, imaginary_part)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'b Complex<S>> for &'a Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn mul(self, other: &'b Complex<S>) -> Self::Output {
+        let real_part = self.re * other.re - self.im * other.im;
+        let imaginary_part = self.re * other.im + self.im * other.re;
+
+        Self::Output::new(real_part, imaginary_part)
+    }
+}
+
+impl<S> ops::Mul<S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Self::Output::new(self.re * other, self.im * other)
+    }
+}
+
+impl<S> ops::Mul<&S> for Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn mul(self, other: &S) -> Self::Output {
+        Self::Output::new(self.re * *other, self.im * *other)
+    }
+}
+
+impl<S> ops::Mul<S> for &Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Self::Output::new(self.re * other, self.im * other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'b S> for &'b Complex<S>
+where
+    S: Scalar
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn mul(self, other: &'b S) -> Self::Output {
+        Self::Output::new(self.re * *other, self.im * *other)
     }
 }
 

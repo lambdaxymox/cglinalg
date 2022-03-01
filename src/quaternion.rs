@@ -1389,7 +1389,8 @@ where
         }
     }
 
-    /// Calculate the power of a quaternion where the exponent is a real number.
+    /// Calculate the power of a quaternion where the exponent is a floating 
+    /// point number.
     ///
     /// # Example
     ///
