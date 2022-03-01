@@ -961,3 +961,205 @@ where
     }
 }
 
+impl<S> ops::AddAssign<Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    fn add_assign(&mut self, other: Complex<S>) {
+        self.re += other.re;
+        self.im += other.im;
+    }
+}
+
+impl<S> ops::AddAssign<&Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    fn add_assign(&mut self, other: &Complex<S>) {
+        self.re += other.re;
+        self.im += other.im;
+    }
+}
+
+impl<S> ops::AddAssign<S> for Complex<S>
+where
+    S: Scalar
+{
+    fn add_assign(&mut self, other: S) {
+        self.re += other;
+    }
+}
+
+impl<S> ops::AddAssign<&S> for Complex<S>
+where
+    S: Scalar
+{
+    fn add_assign(&mut self, other: &S) {
+        self.re += *other;
+    }
+}
+
+impl<S> ops::SubAssign<Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    fn sub_assign(&mut self, other: Complex<S>) {
+        self.re -= other.re;
+        self.im -= other.im;
+    }
+}
+
+impl<S> ops::SubAssign<&Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    fn sub_assign(&mut self, other: &Complex<S>) {
+        self.re -= other.re;
+        self.im -= other.im;
+    }
+}
+
+impl<S> ops::SubAssign<S> for Complex<S>
+where
+    S: Scalar
+{
+    fn sub_assign(&mut self, other: S) {
+        self.re -= other;
+    }
+}
+
+impl<S> ops::SubAssign<&S> for Complex<S>
+where
+    S: Scalar
+{
+    fn sub_assign(&mut self, other: &S) {
+        self.re -= *other;
+    }
+}
+
+impl<S> ops::MulAssign<Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    fn mul_assign(&mut self, other: Complex<S>) {
+        let a = self.re;
+
+        self.re *= other.re;
+        self.re -= self.im * other.im;
+
+        self.im *= other.re;
+        self.im += a * other.im;
+    }
+}
+
+impl<S> ops::MulAssign<&Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    fn mul_assign(&mut self, other: &Complex<S>) {
+        let a = self.re;
+
+        self.re *= other.re;
+        self.re -= self.im * other.im;
+
+        self.im *= other.re;
+        self.im += a * other.im;
+    }
+}
+
+impl<S> ops::MulAssign<S> for Complex<S>
+where
+    S: Scalar
+{
+    fn mul_assign(&mut self, other: S) {
+        self.re *= other;
+        self.im *= other;
+    }
+}
+
+impl<S> ops::MulAssign<&S> for Complex<S>
+where
+    S: Scalar
+{
+    fn mul_assign(&mut self, other: &S) {
+        self.re *= *other;
+        self.im *= *other;
+    }
+}
+
+impl<S> ops::DivAssign<Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    fn div_assign(&mut self, other: Complex<S>) {
+        let a = self.re;
+        let magnitude_squared = other.magnitude_squared();
+
+        self.re *= other.re;
+        self.re += self.im * other.im;
+        self.re /= magnitude_squared;
+
+        self.im *= other.re;
+        self.im -= a * other.im;
+        self.im /= magnitude_squared;
+    }
+}
+
+impl<S> ops::DivAssign<&Complex<S>> for Complex<S>
+where
+    S: Scalar
+{
+    fn div_assign(&mut self, other: &Complex<S>) {
+        let a = self.re;
+        let magnitude_squared = other.magnitude_squared();
+
+        self.re *= other.re;
+        self.re += self.im * other.im;
+        self.re /= magnitude_squared;
+
+        self.im *= other.re;
+        self.im -= a * other.im;
+        self.im /= magnitude_squared;
+    }
+}
+
+impl<S> ops::DivAssign<S> for Complex<S>
+where
+    S: Scalar
+{
+    fn div_assign(&mut self, other: S) {
+        self.re /= other;
+        self.im /= other;
+    }
+}
+
+impl<S> ops::DivAssign<&S> for Complex<S>
+where
+    S: Scalar
+{
+    fn div_assign(&mut self, other: &S) {
+        self.re /= *other;
+        self.im /= *other;
+    }
+}
+
+impl<S> ops::RemAssign<S> for Complex<S>
+where
+    S: Scalar
+{
+    fn rem_assign(&mut self, other: S) {
+        self.re %= other;
+        self.im %= other;
+    }
+}
+
+impl<S> ops::RemAssign<&S> for Complex<S>
+where
+    S: Scalar
+{
+    fn rem_assign(&mut self, other: &S) {
+        self.re %= *other;
+        self.im %= *other;
+    }
+}
+
