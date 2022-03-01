@@ -501,6 +501,30 @@ where
     }
 }
 
+impl<S> ops::Neg for Complex<S>
+where
+    S: ScalarSigned
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Self::Output::new(-self.re, -self.im)
+    }
+}
+
+impl<S> ops::Neg for &Complex<S>
+where
+    S: ScalarSigned
+{
+    type Output = Complex<S>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Self::Output::new(-self.re, -self.im)
+    }
+}
+
 impl<S> ops::Add<Complex<S>> for Complex<S>
 where
     S: Scalar
