@@ -171,51 +171,229 @@ impl<S> Complex<S>
 where
     S: Scalar
 {
-    #[inline]
-    pub fn i() -> Self {
-        Self::new(S::zero(), S::one())
-    }
-
+    /// Construct a new complex number from its real part.
+    /// 
+    /// The resulting complex number has a zero imaginary part.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::from_real(1_i32);
+    /// 
+    /// assert_eq!(z.real(), 1_i32);
+    /// assert_eq!(z.imaginary(), 0_i32);
+    /// ```
     #[inline]
     pub fn from_real(value: S) -> Self {
         Self::new(value, S::zero())
     }
 
+    /// Construct a new compplex number from its imaginary part.
+    /// 
+    /// The resulting complex number has a zero real part.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::from_imaginary(1_i32);
+    /// 
+    /// assert_eq!(z.real(), 0_i32);
+    /// assert_eq!(z.imaginary(), 1_i32);
+    /// ```
     #[inline]
     pub fn from_imaginary(value: S) -> Self {
         Self::new(S::zero(), value)
     }
 
+    /// Construct a new additive unit (zero) complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let zero: Complex<i32> = Complex::zero();
+    /// let other = Complex::new(92_i32, 137_i32);
+    /// 
+    /// assert_eq!(other + zero, other);
+    /// assert_eq!(zero + other, other);
+    /// assert_eq!(zero * other, zero);
+    /// assert_eq!(other * zero, zero);
+    /// ```
     #[inline]
     pub fn zero() -> Self {
         Self::new(S::zero(), S::zero())
     }
 
+    /// Determine whether a complex number is equal to the zero complex number.
+    ///  
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let zero: Complex<i32> = Complex::zero();
+    /// let non_zero = Complex::new(92_i32, 137_i32);
+    /// 
+    /// assert!(zero.is_zero());
+    /// assert!(!non_zero.is_zero());
+    /// ```
     #[inline]
     pub fn is_zero(self) -> bool {
         self.re.is_zero() && self.im.is_zero()
     }
 
+    /// Get the multiplicative unit complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let unit_complex: Complex<i32> = Complex::identity();
+    /// let z = Complex::new(3_i32, 7_i32);
+    /// 
+    /// assert_eq!(z * unit_complex, z);
+    /// assert_eq!(unit_complex * z, z);
+    /// assert_eq!(unit_complex * unit_complex, unit_complex);
+    /// ```
     #[inline]
     pub fn identity() -> Self {
         Self::new(S::one(), S::zero())
     }
 
+    /// Determine whether a complex number is the identity complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let unit_complex: Complex<i32> = Complex::identity();
+    /// 
+    /// assert!(unit_complex.is_identity());
+    /// 
+    /// let z = Complex::new(5_i32, 6_i32);
+    /// 
+    /// assert!(!z.is_identity());
+    /// ```
     #[inline]
     pub fn is_identity(self) -> bool {
         self.re.is_one() && self.im.is_zero()
     }
 
+    /// Get the multiplicative unit real complex number.
+    /// 
+    /// This is a synonym for the identity complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let unit_re: Complex<i32> = Complex::unit_re();
+    /// let identity: Complex<i32> = Complex::identity();
+    /// 
+    /// assert_eq!(unit_re, identity);
+    #[inline]
+    pub fn unit_re() -> Self {
+        Self::identity()
+    }
+
+    /// Get the unit imaginary complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let i: Complex<i32> = Complex::unit_im();
+    /// 
+    /// assert_eq!(i.real(), 0);
+    /// assert_eq!(i.imaginary(), 1);
+    /// ```
+    #[inline]
+    pub fn unit_im() -> Self {
+        Self::new(S::zero(), S::one())
+    }
+
+    /// Determine whether a complex number is real.
+    /// 
+    /// A complex number is real if its imaginary part is zero, i.e.
+    /// it lies on the real line in the complex plane.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::from_real(2_i32);
+    /// 
+    /// assert!(z.is_real());
+    /// assert!(!z.is_imaginary());
+    /// ```
     #[inline]
     pub fn is_real(self) -> bool {
         self.im.is_zero()
     }
 
+    /// Determine whether a complex number is imaginary.
+    /// 
+    /// A complex number is an imaginary number if its real part is zero, i.e.
+    /// it lies on the imaginary line in the complex plane.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::from_imaginary(2_i32);
+    /// 
+    /// assert!(!z.is_real());
+    /// assert!(z.is_imaginary());
+    /// ```
     #[inline]
     pub fn is_imaginary(self) -> bool {
         self.re.is_zero()
     }
 
+    /// Calculate the squared modulus of a complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(2_i32, 5_i32);
+    /// 
+    /// assert_eq!(z.magnitude_squared(), 29);
+    /// ```
     #[inline]
     pub fn magnitude_squared(self) -> S {
         self.re.clone() * self.re.clone() + self.im.clone() * self.im.clone()
