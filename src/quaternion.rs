@@ -1939,7 +1939,7 @@ where
     /// assert!(quaternion.is_finite()); 
     /// ```
     ///
-    /// # Example (Not A Finite Vector)
+    /// # Example (Not A Finite Quaternion)
     /// 
     /// ```
     /// # use cglinalg::{

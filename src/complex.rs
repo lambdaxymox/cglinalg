@@ -460,26 +460,99 @@ impl<S> Complex<S>
 where
     S: ScalarFloat
 {
+    /// Returns `true` if all of the elements of a complex number are finite.
+    /// Otherwise, it returns `false`.
+    /// 
+    /// # Example (Finite Complex Number)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(1_f64, 2_f64);
+    /// 
+    /// assert!(z.is_finite());
+    /// ```
+    /// 
+    /// # Example (Not A Finite Complex Number)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(1_f64, f64::NAN);
+    /// assert!(!z.is_finite());
+    /// ```
     #[inline]
     pub fn is_finite(self) -> bool {
         self.re.is_finite() && self.im.is_finite()
     }
 
+    /// Returns `true` if at least one of the elements of a complex number is `NaN`.
+    /// Otherwise, it returns `false`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z1 = Complex::new(1_f64, 2_f64);
+    /// let z2 = Complex::new(1_f64, f64::NAN);
+    /// 
+    /// assert!(!z1.is_nan());
+    /// assert!(z2.is_nan());
+    /// 
+    /// ```
     #[inline]
     pub fn is_nan(self) -> bool {
         self.re.is_nan() || self.im.is_nan()
     }
 
+    /// Returns `true` is at least one of the elements of a complex number is infinite.
+    /// Otherwise, it returns false.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z1 = Complex::new(1_f64, 2_f64);
+    /// let z2 = Complex::new(1_f64, f64::NEG_INFINITY);
+    /// 
+    /// assert!(!z1.is_infinite());
+    /// assert!(z2.is_infinite());
+    /// ```
     #[inline]
     pub fn is_infinite(self) -> bool {
         !self.is_nan() && (self.re.is_infinite() || self.im.is_infinite())
     }
 
+    /// Compute the magnitude (modulus, length) of a complex number in Euclidean
+    /// space.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(7_f64, 3_f64);
+    /// 
+    /// assert_eq!(z.magnitude(), f64::sqrt(58_f64));
+    /// ```
     #[inline]
     pub fn magnitude(self) -> S {
         self.magnitude_squared().sqrt()
     }
 
+    /// Calculate the principal argument of a complex number.
     #[inline]
     pub fn arg(self) -> S {
         self.im.atan2(self.re)
