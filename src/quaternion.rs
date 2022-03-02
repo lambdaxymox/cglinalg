@@ -1477,6 +1477,40 @@ where
     /// 
     /// Given a quaternion `q`, the square root of `q` is a quaternion
     /// `p` such that `p * p == q`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Magnitude,
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let q = Quaternion::from_parts(1_f64, Vector3::unit_z() * 4_f64);
+    /// # // Internal test to ensure the square root is correct.
+    /// # let mag_q: f64 = q.magnitude();
+    /// # let cos_angle_over_two_squared = (1_f64 / 2_f64) * (1_f64 + (1_f64 / mag_q));
+    /// # let cos_angle_over_two = f64::sqrt(cos_angle_over_two_squared);
+    /// # let sin_angle_over_two_squared = 1_f64 - cos_angle_over_two_squared;
+    /// # let sin_angle_over_two = f64::sqrt(sin_angle_over_two_squared);
+    /// # let sqrt_mag_q = f64::sqrt(mag_q);
+    /// # let expected = Quaternion::from_parts(
+    /// #     sqrt_mag_q * cos_angle_over_two,
+    /// #     sqrt_mag_q * sin_angle_over_two * Vector3::unit_z()
+    /// # );
+    /// # let result = q.sqrt();
+    /// # eprintln!("result = {}", result);
+    /// # eprintln!("expected = {}", expected);
+    /// # assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// #
+    /// let sqrt_q = q.sqrt();
+    /// 
+    /// assert!(relative_eq!(sqrt_q * sqrt_q, q, epsilon = 1e-10);
+    /// ```
     #[inline]
     pub fn sqrt(&self) -> Self {
         let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
