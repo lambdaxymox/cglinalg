@@ -553,6 +553,61 @@ where
     }
 
     /// Calculate the principal argument of a complex number.
+    /// 
+    /// In polar form, a complex number `z` can be written as 
+    /// ```text
+    /// z := |z| * exp(i * angle) := |z| * (cos(angle) + i * sin(angle))
+    /// ```
+    /// Consequently there is an ambiguity in choosing the angle for `z` in its 
+    /// polar form; two complex numbers in polar form are equal if they have identical 
+    /// magnitudes and they differ by a factor of `2 * pi` in their arguments. Let `z1` be 
+    /// another complex number. Then `z == z1` if and only if `|z| == |z1|` and 
+    /// `angle1 == angle + 2 * pi * n1` where `n1` is an integer. In order to resolve this 
+    /// ambiguity and make equality of complex numbers in polar form well-defined, we restrict 
+    /// our choice of angle to be `-pi < angle <= pi` (notice the open lower bound). This angle 
+    /// is called the principal argument of `z`, which is the value returned by the function. 
+    /// Indeed, let `angle` be the principal argument of `z`, and let `angle1` be the argument 
+    /// of `z1` that we defined earlier, such that `angle1 == angle + 2 * pi * n1` for some 
+    /// integer `n1`. We have
+    /// ```text
+    /// z1 = |z1| * exp(i * angle1) 
+    ///    = |z1| * ( cos(angle1) + i * sin(angle1) )
+    ///    = |z1| * ( cos(angle + 2 * pi * n1) + i * sin(angle + 2 * pi * n1) )
+    ///    = |z1| * ( cos(angle) + i * sin(angle) )
+    ///    = |z| * ( cos(angle) + i * sin(angle) )
+    ///    = |z| * exp(i * angle)
+    ///    = z
+    /// ```
+    /// as desired. Incidentally, the principal argument is given by 
+    /// ```text
+    /// Arg(z) = Arg(a + ib) := atan(b / a)`
+    /// ```
+    /// where `a + ib` is the complex number `z` written out in cartesian form. This can be obtained
+    /// from polar form by writing
+    /// ```text
+    /// z = |z| * (cos(angle) + i * sin(angle)) = |z| * cos(angle) + i * |z| * sin(angle)
+    /// ```
+    /// and reading off the resulting components.
+    ///  
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let pi = core::f64::consts::PI;
+    /// let angle = pi / 4_f64;
+    /// let z1 = Complex::from_polar_decomposition(2_f64, Radians(angle));
+    /// let z2 = Complex::from_polar_decomposition(2_f64, Radians(angle + 2_f64 * pi));
+    /// 
+    /// assert!(relative_eq!(z1, z2, epsilon = 1e-10));
+    /// assert!(relative_eq!(z1.arg(), z2.arg(), epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn arg(self) -> S {
         self.im.atan2(self.re)
