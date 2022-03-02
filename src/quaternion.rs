@@ -42,9 +42,9 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Quaternion<S> {
-    /// The scalar component of a quaternion.
+    /// The scalar (real) component of a quaternion.
     pub s: S,
-    /// The vector component of a quaternion.
+    /// The vector (pure) component of a quaternion.
     pub v: Vector3<S>,
 }
 
