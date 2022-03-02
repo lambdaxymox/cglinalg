@@ -8,6 +8,9 @@ use crate::angle::{
     Angle,
     Radians,
 };
+use num_traits::{
+    NumCast,
+};
 
 use core::fmt;
 use core::ops;
@@ -65,6 +68,64 @@ where
     #[inline]
     pub fn imaginary(self) -> S {
         self.im
+    }
+
+    /// Map an operation on that acts on the components of a complex number, returning 
+    /// a complex number whose coordinates are of the new scalar type.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,  
+    /// # };
+    /// #
+    /// let z: Complex<f32> = Complex::new(1_f32, 2_f32);
+    /// let expected: Complex<f64> = Complex::new(-2_f64, -3_f64);
+    /// let result: Complex<f64> = z.map(|comp| -(comp + 1_f32) as f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(self, mut op: F) -> Complex<T> 
+    where 
+        F: FnMut(S) -> T 
+    {
+        Complex::new(op(self.re), op(self.im),)
+    }
+}
+
+impl<S> Complex<S> 
+where 
+    S: NumCast + Copy 
+{
+    /// Cast a complex number from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,   
+    /// # };
+    /// #
+    /// let z: Complex<u32> = Complex::new(1_u32, 2_u32);
+    /// let expected: Option<Complex<i32>> = Some(Complex::new(1_i32, 2_i32));
+    /// let result = z.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(self) -> Option<Complex<T>> {
+        let re = match num_traits::cast(self.re) {
+            Some(value) => value,
+            None => return None,
+        };
+        let im = match num_traits::cast(self.im) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Complex::new(re, im))
     }
 }
 

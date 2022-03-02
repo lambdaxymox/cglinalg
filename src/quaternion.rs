@@ -129,8 +129,8 @@ where
         <Self as AsRef<[S; 4]>>::as_ref(self)
     }
 
-    /// Map an operation on that acts on the coordinates of a vector, returning 
-    /// a vector whose coordinates are of the new scalar type.
+    /// Map an operation on that acts on the components of a quaternion, returning 
+    /// a quaternion whose coordinates are of the new scalar type.
     ///
     /// # Example
     ///
