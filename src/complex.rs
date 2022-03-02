@@ -106,11 +106,37 @@ impl<S> Complex<S>
 where
     S: Copy
 {
+    /// Get the real part of a complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(1_i32, 2_i32);
+    /// 
+    /// assert_eq!(z.real(), 1_i32);
+    /// ```
     #[inline]
     pub fn real(self) -> S {
         self.re
     }
 
+    /// Get the imaginary part of a complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(1_i32, 2_i32);
+    /// 
+    /// assert_eq!(z.imaginary(), 2_i32);
+    /// ```
     #[inline]
     pub fn imaginary(self) -> S {
         self.im
