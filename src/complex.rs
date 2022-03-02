@@ -559,16 +559,17 @@ where
     /// z := |z| * exp(i * angle) := |z| * (cos(angle) + i * sin(angle))
     /// ```
     /// Consequently there is an ambiguity in choosing the angle for `z` in its 
-    /// polar form; two complex numbers in polar form are equal if they have identical 
-    /// magnitudes and they differ by a factor of `2 * pi` in their arguments. Let `z1` be 
-    /// another complex number. Then `z == z1` if and only if `|z| == |z1|` and 
-    /// `angle1 == angle + 2 * pi * n1` where `n1` is an integer. In order to resolve this 
-    /// ambiguity and make equality of complex numbers in polar form well-defined, we restrict 
-    /// our choice of angle to be `-pi < angle <= pi` (notice the open lower bound). This angle 
-    /// is called the principal argument of `z`, which is the value returned by the function. 
-    /// Indeed, let `angle` be the principal argument of `z`, and let `angle1` be the argument 
-    /// of `z1` that we defined earlier, such that `angle1 == angle + 2 * pi * n1` for some 
-    /// integer `n1`. We have
+    /// polar form; two complex numbers in polar form are equal if they have 
+    /// identical magnitudes and they differ by a factor of `2 * pi` in their 
+    /// arguments. Let `z1` be another complex number. Then `z == z1` if and only 
+    /// if `|z| == |z1|` and `angle1 == angle + 2 * pi * n1` where `n1` is an integer. 
+    /// In order to resolve this ambiguity and make equality of complex numbers in polar 
+    /// form well-defined, we restrict our choice of angle to be `-pi < angle <= pi` 
+    /// (notice the open lower bound). This angle is called the principal argument of `z`, 
+    /// the value returned by the function. Indeed, let `angle` be the principal 
+    /// argument of `z`, and let `angle1` be the argument of `z1` that we defined 
+    /// earlier, such that `angle1 == angle + 2 * pi * n1` for some integer `n1`. 
+    /// We have
     /// ```text
     /// z1 = |z1| * exp(i * angle1) 
     ///    = |z1| * ( cos(angle1) + i * sin(angle1) )
@@ -582,8 +583,8 @@ where
     /// ```text
     /// Arg(z) = Arg(a + ib) := atan(b / a)`
     /// ```
-    /// where `a + ib` is the complex number `z` written out in cartesian form. This can be obtained
-    /// from polar form by writing
+    /// where `a + ib` is the complex number `z` written out in cartesian form. 
+    /// This can be obtained from polar form by writing
     /// ```text
     /// z = |z| * (cos(angle) + i * sin(angle)) = |z| * cos(angle) + i * |z| * sin(angle)
     /// ```
@@ -683,6 +684,32 @@ where
         (self.magnitude(), Radians(self.arg()))
     }
 
+    /// Compute the exponential of a complex number.
+    /// 
+    /// Given a complex number `z = a + ib`, the exponential of z is given by
+    /// ```text
+    /// exp(z) := exp(a + ib) 
+    ///         = exp(a) * exp(ib) 
+    ///         = exp(a) * (cos(b) + i * sin(b))
+    ///         = exp(a) * cos(b) + i * exp(a) * sin(b)
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let z = Complex::new(2_f64, 5_f64);
+    /// let expected = Complex::new(2.09599580151, -7.08554526009);
+    /// let result = z.exp();
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn exp(self) -> Self {
         let exp_re = self.re.exp();
