@@ -719,6 +719,40 @@ where
     }
 
     /// Calculate the principal value of the natural logarithm of a complex number.
+    /// 
+    /// Given a complex number `z`, the principal value of the natural logarithm 
+    /// of `z` is the logarithm whose imaginary part lies in `-pi < Im(z) <= pi` 
+    /// (notice the open lower bound). The natural logarithm of zero is undefined 
+    /// since there is no complex number `w` satisfying `exp(w) = 0`. 
+    /// 
+    /// We need the notion of the principal value because given the polar form of
+    /// a complex number `z`, the are infinitely many angles that have the same
+    /// natural logarithm, since they haven identical cosines and sines. We need a
+    /// way to choose a single canonical value in order to make the natural logarithm
+    /// well-defined. That canonical value is the principal value. The principal value
+    /// has the form
+    /// ```text
+    /// Log(z) := ln(|z|) + i * Arg(z)
+    /// ```
+    /// where `Arg(z)` is the principal argument of `z`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// #
+    /// let pi = core::f64::consts::PI;
+    /// let z = Complex::from_polar_decomposition(
+    ///     3_f64, Radians(pi / 6_f64) + Radians((2_f64 * pi))
+    /// );
+    /// let expected = Complex::new(z.magnitude().ln(), pi / 6_f64);
+    /// let result = z.ln();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn ln(self) -> Self {
         let magnitude_self = self.magnitude();
