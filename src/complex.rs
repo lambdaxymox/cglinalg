@@ -613,17 +613,71 @@ where
         self.im.atan2(self.re)
     }
 
+    /// Construct a complex number from its polar form.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let pi_over_four = core::f64::consts::FRAC_PI_4;
+    /// let expected = Complex::new(2_f64 / f64::sqrt(2_f64), 2_f64 / f64::sqrt(2_f64));
+    /// let result = Complex::from_polar_decomposition(2_f64, Radians(pi_over_four));
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ``` 
     #[inline]
     pub fn from_polar_decomposition<A: Into<Radians<S>>>(radius: S, angle: A) -> Self {
         let _angle: Radians<S> = angle.into();
         Self::new(radius * _angle.cos(), radius * _angle.sin())
     }
 
+    /// Construct a unit complex number from its polar form.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let pi_over_four = core::f64::consts::FRAC_PI_4;
+    /// let expected = Complex::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
+    /// let result = Complex::from_angle(Radians(pi_over_four));
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
         Self::from_polar_decomposition(S::one(), angle)
     }
 
+    /// Convert a complex number to its polar form.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// #
+    /// let z = Complex::from_polar_decomposition(3_f64, Radians(2_f64));
+    /// let (radius, angle) = z.polar_decomposition();
+    /// 
+    /// assert_eq!(radius, 3_f64);
+    /// assert_eq!(angle, Radians(2_f64));
+    /// ```
     #[inline]
     pub fn polar_decomposition(self) -> (S, Radians<S>) {
         (self.magnitude(), Radians(self.arg()))
