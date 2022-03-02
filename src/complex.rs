@@ -404,35 +404,54 @@ impl<S> Complex<S>
 where
     S: ScalarSigned
 {
+    /// Calculate the complex conjugate of a complex number.
+    /// 
+    /// Given a complex number `z`, the complex conjugate of `z`
+    /// is `z` with the sign of the imaginary part flipped, i.e.
+    /// let `z := a + ib`, then `z* := a - ib`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(1_i32, 2_i32);
+    /// let expected = Complex::new(1_i32, -2_i32);
+    /// let result = z.conjugate();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn conjugate(self) -> Self {
-        Self::new(self.re.clone(), -self.im.clone())
+        Self::new(self.re, -self.im)
     }
 
-    #[inline]
-    pub fn scale(self, scale: S) -> Self {
-        Self::new(
-            self.re.clone() * scale.clone(),
-            self.im.clone() * scale
-        )
-    }
-
-    #[inline]
-    pub fn unscale(self, scale: S) -> Self {
-        let one_over_scale = S::one() / scale;
-
-        Self::new(
-            self.re.clone() * one_over_scale.clone(), 
-            self.im.clone() * one_over_scale
-        )
-    }
-
+    /// Calculate the multiplicative inverse of a complex number.
+    /// 
+    /// The mulitplicative inverse of a complex number `z` is a complex 
+    /// number `w` such that `w * z = z * w = 1`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(2_f64, 3_f64);
+    /// let expected = Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64);
+    /// let result = z.inverse();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn inverse(self) -> Self {
         let magnitude_squared = self.magnitude_squared();
         Self::new(
-             self.re.clone() / magnitude_squared.clone(),
-            -self.im.clone() / magnitude_squared
+             self.re / magnitude_squared,
+            -self.im / magnitude_squared
         )
     }
 }
