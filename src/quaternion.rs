@@ -1476,7 +1476,17 @@ where
     /// Calculate the square root of a quaternion.
     /// 
     /// Given a quaternion `q`, the square root of `q` is a quaternion
-    /// `p` such that `p * p == q`.
+    /// `p` such that `p * p == q`. The formula for `sqrt(q)` is given by
+    /// the following formula. Let `q := s + v` where `s` is the scalar part of 
+    /// `q` and `v` is the vector part of `q`.
+    /// ```text
+    ///                              t + 2 * pi * n      v         t + 2 * pi * n
+    /// sqrt(q) = sqrt(|q|) * ( cos(----------------) + --- * sin(----------------) )
+    ///                                    2            |v|               2
+    /// ```
+    /// where `|q|` is the magnitude of `q`, and `t` is the principal argument of `q`, and `n`
+    /// is the nth angle satisfying the above equation. In the case of the square root, there
+    /// are two solutions, `n = 0` and `n = 1`.
     /// 
     /// # Example
     /// 
@@ -1503,13 +1513,12 @@ where
     /// #     sqrt_mag_q * sin_angle_over_two * Vector3::unit_z()
     /// # );
     /// # let result = q.sqrt();
-    /// # eprintln!("result = {}", result);
-    /// # eprintln!("expected = {}", expected);
+    /// #
     /// # assert!(relative_eq!(result, expected, epsilon = 1e-10));
     /// #
     /// let sqrt_q = q.sqrt();
     /// 
-    /// assert!(relative_eq!(sqrt_q * sqrt_q, q, epsilon = 1e-10);
+    /// assert!(relative_eq!(sqrt_q * sqrt_q, q, epsilon = 1e-10));
     /// ```
     #[inline]
     pub fn sqrt(&self) -> Self {
