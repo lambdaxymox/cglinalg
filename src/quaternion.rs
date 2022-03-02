@@ -1986,6 +1986,47 @@ where
         other * (self.dot(other) / other.magnitude_squared())
     }
 
+    /// Compute the rejection of the quaternion `self` from the quaternion
+    /// `other`.
+    /// 
+    /// Given quaternions `q` and `p`, the projection of `q` onto `p` is the
+    /// component of the quaternion `q` that is parallel to the quaternion `p`.
+    /// We can decompose the quaternion `q` as follows
+    /// ```text
+    /// q := q_parallel + q_perpendicular
+    /// ```
+    /// The component `q_parallel` is the component of `q` parallel to `p`, or 
+    /// projected onto `p`. The component `q_perpendicular` is the component 
+    /// perpendicular to `p`, or  rejected by `p`. This leads to the decomposition
+    /// ```text
+    /// q = q.project(p) + q.reject(p)
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// #     relative_ne,
+    /// # };
+    /// #
+    /// let q = Quaternion::new(0_f64, 5_f64, 2_f64, 8_f64);
+    /// let p = Quaternion::new(0_f64, 1_f64, 2_f64, 3_f64);
+    /// let q_proj = q.project(&p);
+    /// let q_rej = q.reject(&p);
+    /// 
+    /// assert!(relative_eq!(q_proj + q_rej, q, epsilon = 1e-10));
+    /// assert!(relative_ne!(q_proj.dot(&p), 0_f64));
+    /// assert!(relative_eq!(q_rej.dot(&p), 0_f64, epsilon = 1e-10));
+    /// ```
+    #[inline]
+    pub fn reject(&self, other: &Self) -> Self {
+        self - self.project(other)
+    }
+
     /// Compute the polar decomposition of a quaternion.
     ///
     /// Every quaternion `q` can be decomposed into a polar form. A
