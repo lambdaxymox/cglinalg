@@ -8,6 +8,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
+
 use core::fmt;
 use core::ops;
 
@@ -232,14 +233,32 @@ where
         Self::new(magnitude * cos_angle_over_two, magnitude * sin_angle_over_two)
     }
 
-    /*
     /// Calculate the power of a complex number where the exponent is a floating 
     /// point number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let pi_over_four = core::f64::consts::FRAC_PI_4;
+    /// let z = Complex::from_polar_decomposition(2_f64, Radians(pi_over_four));
+    /// let exponent = 5_f64;
+    /// let expected = Complex::from_polar_decomposition(32_f64, Radians(exponent * pi_over_four));
+    /// let result = z.powf(exponent);
+    /// 
+    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn powf(self, exponent: S) -> Self {
         (self.ln() * exponent).exp()
     }
-    */
 }
 
 impl<S> AsRef<[S; 2]> for Complex<S> {
@@ -1183,6 +1202,56 @@ where
     fn rem_assign(&mut self, other: &S) {
         self.re %= *other;
         self.im %= *other;
+    }
+}
+
+impl<S> approx::AbsDiffEq for Complex<S> 
+where 
+    S: ScalarFloat 
+{
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        S::abs_diff_eq(&self.re, &other.re, epsilon) &&
+        S::abs_diff_eq(&self.im, &other.im, epsilon)
+    }
+}
+
+impl<S> approx::RelativeEq for Complex<S> 
+where 
+    S: ScalarFloat 
+{
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        S::relative_eq(&self.re, &other.re, epsilon, max_relative) &&
+        S::relative_eq(&self.im, &other.im, epsilon, max_relative)
+    }
+}
+
+impl<S> approx::UlpsEq for Complex<S> 
+where 
+    S: ScalarFloat
+{
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        S::ulps_eq(&self.re, &other.re, epsilon, max_ulps) &&
+        S::ulps_eq(&self.im, &other.im, epsilon, max_ulps)
     }
 }
 
