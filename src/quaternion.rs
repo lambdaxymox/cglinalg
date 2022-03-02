@@ -67,37 +67,10 @@ impl<S> Quaternion<S> {
             v: qv 
         }
     }
-}
-
-impl<S> Quaternion<S> 
-where 
-    S: Copy 
-{
-    /// Construct a new quaternion from a fill value. 
-    ///
-    /// Every component of the resulting vector will have the same value
-    /// supplied by the `value` argument.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Quaternion, 
-    /// # };
-    /// #
-    /// let result = Quaternion::from_fill(1_f64);
-    /// let expected = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn from_fill(value: S) -> Self {
-        Self::new(value, value, value, value)
-    }
 
     /// The length of the the underlying array storing the quaternion components.
     #[inline]
-    pub fn len(&self) -> usize {
+    pub const fn len(&self) -> usize {
         4
     }
 
@@ -107,13 +80,13 @@ where
     /// array as though it represents a matrix. The order of the descriptions 
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
-    pub fn shape(&self) -> (usize, usize) {
+    pub const fn shape(&self) -> (usize, usize) {
         (4, 1)
     }
 
     /// Get a pointer to the underlying array.
     #[inline]
-    pub fn as_ptr(&self) -> *const S {
+    pub const fn as_ptr(&self) -> *const S {
         &self.s
     }
 
@@ -127,35 +100,6 @@ where
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 4]>>::as_ref(self)
-    }
-
-    /// Map an operation on that acts on the components of a quaternion, returning 
-    /// a quaternion whose coordinates are of the new scalar type.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Quaternion,  
-    /// # };
-    /// #
-    /// let vector: Quaternion<f32> = Quaternion::new(1_f32, 2_f32, 3_f32, 4_f32);
-    /// let expected: Quaternion<f64> = Quaternion::new(-2_f64, -3_f64, -4_f64, -5_f64);
-    /// let result: Quaternion<f64> = vector.map(|comp| -(comp + 1_f32) as f64);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Quaternion<T> 
-    where 
-        F: FnMut(S) -> T 
-    {
-        Quaternion::new(
-            op(self.s),
-            op(self.v.x),
-            op(self.v.y),
-            op(self.v.z),
-        )
     }
 }
 
@@ -190,6 +134,62 @@ where
         };
 
         Some(Quaternion::from_parts(s, v))
+    }
+}
+
+impl<S> Quaternion<S> 
+where 
+    S: Copy 
+{
+    /// Construct a new quaternion from a fill value. 
+    ///
+    /// Every component of the resulting vector will have the same value
+    /// supplied by the `value` argument.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion, 
+    /// # };
+    /// #
+    /// let result = Quaternion::from_fill(1_f64);
+    /// let expected = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_fill(value: S) -> Self {
+        Self::new(value, value, value, value)
+    }
+
+    /// Map an operation on that acts on the components of a quaternion, returning 
+    /// a quaternion whose coordinates are of the new scalar type.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,  
+    /// # };
+    /// #
+    /// let vector: Quaternion<f32> = Quaternion::new(1_f32, 2_f32, 3_f32, 4_f32);
+    /// let expected: Quaternion<f64> = Quaternion::new(-2_f64, -3_f64, -4_f64, -5_f64);
+    /// let result: Quaternion<f64> = vector.map(|comp| -(comp + 1_f32) as f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Quaternion<T> 
+    where 
+        F: FnMut(S) -> T 
+    {
+        Quaternion::new(
+            op(self.s),
+            op(self.v.x),
+            op(self.v.y),
+            op(self.v.z),
+        )
     }
 }
 

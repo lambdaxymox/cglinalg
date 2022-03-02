@@ -65,6 +65,70 @@ impl<S> Matrix1x1<S> {
             data: [[c0r0]]
         }
     }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        1
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (1, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 1]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix1x1<S>
+where 
+    S: NumCast + Copy
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x1,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix1x1<u32> = Matrix1x1::new(1_u32);
+    /// let expected: Option<Matrix1x1<i32>> = Some(Matrix1x1::new(1_i32));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix1x1<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix1x1::new(c0r0))
+    }
 }
 
 impl<S> Matrix1x1<S> 
@@ -81,40 +145,6 @@ where
     #[inline]
     pub fn column(&self, c: usize) -> Vector1<S> {
         Vector1::new(self.data[c][0])
-    }
-
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        1
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (1, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 1]>>::as_ref(self)
     }
 
     /// Construct a matrix from a set of column vectors.
@@ -157,36 +187,6 @@ where
                 [op(self.data[0][0])]
             ],
         }
-    }
-}
-
-impl<S> Matrix1x1<S>
-where 
-    S: NumCast + Copy
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix1x1,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix1x1<u32> = Matrix1x1::new(1_u32);
-    /// let expected: Option<Matrix1x1<i32>> = Some(Matrix1x1::new(1_i32));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix1x1<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix1x1::new(c0r0))
     }
 }
 
@@ -464,6 +464,82 @@ impl<S> Matrix2x2<S> {
             ]
         }
     }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        4
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (2, 2)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 4]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix2x2<S> 
+where 
+    S: NumCast + Copy 
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix2x2<u32> = Matrix2x2::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Option<Matrix2x2<i32>> = Some(Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix2x2<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix2x2::new(c0r0, c0r1, c1r0, c1r1))
+    }
 }
 
 impl<S> Matrix2x2<S> 
@@ -591,40 +667,6 @@ where
         self.data[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        4
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (2, 2)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 4]>>::as_ref(self)
-    }
-
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -672,48 +714,6 @@ where
                 [op(self.data[1][0]), op(self.data[1][1])]
             ],
         }
-    }
-}
-
-impl<S> Matrix2x2<S> 
-where 
-    S: NumCast + Copy 
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix2x2,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix2x2<u32> = Matrix2x2::new(1_u32, 2_u32, 3_u32, 4_u32);
-    /// let expected: Option<Matrix2x2<i32>> = Some(Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix2x2<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.data[0][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.data[1][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.data[1][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix2x2::new(c0r0, c0r1, c1r0, c1r1))
     }
 }
 
@@ -1626,6 +1626,115 @@ impl<S> Matrix3x3<S> {
             ]
         }
     }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        9
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (3, 3)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 9]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix3x3<S>
+where 
+    S: NumCast + Copy
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix3x3<u32> = Matrix3x3::new(
+    ///     1_u32, 2_u32, 3_u32, 
+    ///     4_u32, 5_u32, 6_u32,
+    ///     7_u32, 8_u32, 9_u32
+    /// );
+    /// let expected: Option<Matrix3x3<i32>> = Some(Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32, 
+    ///     4_i32, 5_i32, 6_i32,
+    ///     7_i32, 8_i32, 9_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix3x3<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match num_traits::cast(self.data[0][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match num_traits::cast(self.data[1][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match num_traits::cast(self.data[2][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match num_traits::cast(self.data[2][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r2 = match num_traits::cast(self.data[2][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix3x3::new(
+            c0r0, c0r1, c0r2,
+            c1r0, c1r1, c1r2, 
+            c2r0, c2r1, c2r2,
+        ))
+    }
 }
 
 impl<S> Matrix3x3<S> 
@@ -1779,40 +1888,6 @@ where
         self.data[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        9
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (3, 3)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 9]>>::as_ref(self)
-    }
-
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -1880,81 +1955,6 @@ where
             op(self.data[2][1]), 
             op(self.data[2][2]),
         )
-    }
-}
-
-impl<S> Matrix3x3<S>
-where 
-    S: NumCast + Copy
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix3x3,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix3x3<u32> = Matrix3x3::new(
-    ///     1_u32, 2_u32, 3_u32, 
-    ///     4_u32, 5_u32, 6_u32,
-    ///     7_u32, 8_u32, 9_u32
-    /// );
-    /// let expected: Option<Matrix3x3<i32>> = Some(Matrix3x3::new(
-    ///     1_i32, 2_i32, 3_i32, 
-    ///     4_i32, 5_i32, 6_i32,
-    ///     7_i32, 8_i32, 9_i32
-    /// ));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[rustfmt::skip]
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix3x3<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.data[0][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r2 = match num_traits::cast(self.data[0][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.data[1][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.data[1][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r2 = match num_traits::cast(self.data[1][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r0 = match num_traits::cast(self.data[2][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r1 = match num_traits::cast(self.data[2][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r2 = match num_traits::cast(self.data[2][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix3x3::new(
-            c0r0, c0r1, c0r2,
-            c1r0, c1r1, c1r2, 
-            c2r0, c2r1, c2r2,
-        ))
     }
 }
 
@@ -3718,6 +3718,146 @@ impl<S> Matrix4x4<S> {
             ]
         }
     }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        16
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (4, 4)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 16]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix4x4<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix4x4<u32> = Matrix4x4::new(
+    ///     1_u32,  2_u32,  3_u32,  4_u32,
+    ///     5_u32,  6_u32,  7_u32,  8_u32,
+    ///     9_u32,  10_u32, 11_u32, 12_u32,
+    ///     13_u32, 14_u32, 15_u32, 16_u32
+    /// );
+    /// let expected: Option<Matrix4x4<i32>> = Some(Matrix4x4::new(
+    ///     1_i32,  2_i32,  3_i32,  4_i32, 
+    ///     5_i32,  6_i32,  7_i32,  8_i32, 
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix4x4<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match num_traits::cast(self.data[0][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r3 = match num_traits::cast(self.data[0][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match num_traits::cast(self.data[1][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r3 = match num_traits::cast(self.data[1][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match num_traits::cast(self.data[2][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match num_traits::cast(self.data[2][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r2 = match num_traits::cast(self.data[2][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r3 = match num_traits::cast(self.data[2][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r0 = match num_traits::cast(self.data[3][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r1 = match num_traits::cast(self.data[3][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r2 = match num_traits::cast(self.data[3][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r3 = match num_traits::cast(self.data[3][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        ))
+    }
 }
 
 impl<S> Matrix4x4<S> 
@@ -3895,40 +4035,6 @@ where
         self.data[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        16
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (4, 4)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 16]>>::as_ref(self)
-    }
-
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -4007,112 +4113,6 @@ where
             op(self.data[3][2]), 
             op(self.data[3][3]),
         )
-    }
-}
-
-impl<S> Matrix4x4<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix4x4,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix4x4<u32> = Matrix4x4::new(
-    ///     1_u32,  2_u32,  3_u32,  4_u32,
-    ///     5_u32,  6_u32,  7_u32,  8_u32,
-    ///     9_u32,  10_u32, 11_u32, 12_u32,
-    ///     13_u32, 14_u32, 15_u32, 16_u32
-    /// );
-    /// let expected: Option<Matrix4x4<i32>> = Some(Matrix4x4::new(
-    ///     1_i32,  2_i32,  3_i32,  4_i32, 
-    ///     5_i32,  6_i32,  7_i32,  8_i32, 
-    ///     9_i32,  10_i32, 11_i32, 12_i32,
-    ///     13_i32, 14_i32, 15_i32, 16_i32
-    /// ));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[rustfmt::skip]
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix4x4<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.data[0][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r2 = match num_traits::cast(self.data[0][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r3 = match num_traits::cast(self.data[0][3]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.data[1][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.data[1][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r2 = match num_traits::cast(self.data[1][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r3 = match num_traits::cast(self.data[1][3]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r0 = match num_traits::cast(self.data[2][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r1 = match num_traits::cast(self.data[2][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r2 = match num_traits::cast(self.data[2][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r3 = match num_traits::cast(self.data[2][3]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c3r0 = match num_traits::cast(self.data[3][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c3r1 = match num_traits::cast(self.data[3][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c3r2 = match num_traits::cast(self.data[3][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c3r3 = match num_traits::cast(self.data[3][3]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
-        ))
     }
 }
 
@@ -5964,27 +5964,10 @@ impl<S> Matrix1x2<S> {
             ]
         }
     }
-}
-
-impl<S> Matrix1x2<S> 
-where 
-    S: Copy
-{
-    /// Get the row of the matrix by value.
-    #[inline]
-    pub fn row(&self, r: usize) -> Vector2<S> {
-        Vector2::new(self.data[0][r], self.data[1][r])
-    }
-
-    /// Get the column of the matrix by value.
-    #[inline]
-    pub fn column(&self, c: usize) -> Vector1<S> {
-        Vector1::new(self.data[c][0])
-    }
 
     /// The length of the the underlying array storing the matrix components.
     #[inline]
-    pub fn len(&self) -> usize {
+    pub const fn len(&self) -> usize {
         2
     }
 
@@ -5994,13 +5977,13 @@ where
     /// array as though it represents a matrix. The order of the descriptions 
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
-    pub fn shape(&self) -> (usize, usize) {
+    pub const fn shape(&self) -> (usize, usize) {
         (1, 2)
     }
 
     /// Get a pointer to the underlying array.
     #[inline]
-    pub fn as_ptr(&self) -> *const S {
+    pub const fn as_ptr(&self) -> *const S {
         &self.data[0][0]
     }
 
@@ -6014,35 +5997,6 @@ where
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 2]>>::as_ref(self)
-    }
-
-    /// Map an operation on the elements of a matrix, returning a matrix whose 
-    /// elements are elements of the new underlying type.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix1x2, 
-    /// # };
-    /// #
-    /// let matrix = Matrix1x2::new(1_u32, 2_u32);
-    /// let expected = Matrix1x2::new(2_i32, 4_i32);
-    /// let result = matrix.map(|comp| (2 * comp) as i32);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix1x2<T> 
-    where 
-        F: FnMut(S) -> T
-    {
-        Matrix1x2 {
-            data: [
-                [op(self.data[0][0])],
-                [op(self.data[1][0])],
-            ],
-        }
     }
 }
 
@@ -6077,6 +6031,52 @@ where
         };
 
         Some(Matrix1x2::new(c0r0, c1r0))
+    }
+}
+
+impl<S> Matrix1x2<S> 
+where 
+    S: Copy
+{
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector2<S> {
+        Vector2::new(self.data[0][r], self.data[1][r])
+    }
+
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector1<S> {
+        Vector1::new(self.data[c][0])
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix1x2::new(1_u32, 2_u32);
+    /// let expected = Matrix1x2::new(2_i32, 4_i32);
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix1x2<T> 
+    where 
+        F: FnMut(S) -> T
+    {
+        Matrix1x2 {
+            data: [
+                [op(self.data[0][0])],
+                [op(self.data[1][0])],
+            ],
+        }
     }
 }
 
@@ -6209,27 +6209,10 @@ impl<S> Matrix1x3<S> {
             ]
         }
     }
-}
-
-impl<S> Matrix1x3<S> 
-where 
-    S: Copy 
-{
-    /// Get the row of the matrix by value.
-    #[inline]
-    pub fn row(&self, r: usize) -> Vector3<S> {
-        Vector3::new(self.data[0][r], self.data[1][r], self.data[2][r])
-    }
-
-    /// Get the column of the matrix by value.
-    #[inline]
-    pub fn column(&self, c: usize) -> Vector1<S> {
-        Vector1::new(self.data[c][0])
-    }
 
     /// The length of the the underlying array storing the matrix components.
     #[inline]
-    pub fn len(&self) -> usize {
+    pub const fn len(&self) -> usize {
         3
     }
 
@@ -6239,13 +6222,13 @@ where
     /// array as though it represents a matrix. The order of the descriptions 
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
-    pub fn shape(&self) -> (usize, usize) {
+    pub const fn shape(&self) -> (usize, usize) {
         (1, 3)
     }
 
     /// Get a pointer to the underlying array.
     #[inline]
-    pub fn as_ptr(&self) -> *const S {
+    pub const fn as_ptr(&self) -> *const S {
         &self.data[0][0]
     }
 
@@ -6259,36 +6242,6 @@ where
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 3]>>::as_ref(self)
-    }
-
-    /// Map an operation on the elements of a matrix, returning a matrix whose 
-    /// elements are elements of the new underlying type.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix1x3, 
-    /// # };
-    /// #
-    /// let matrix = Matrix1x3::new(1_u32, 2_u32, 3_u32);
-    /// let expected = Matrix1x3::new(2_i32, 4_i32, 6_i32);
-    /// let result = matrix.map(|comp| (2 * comp) as i32);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix1x3<T> 
-    where 
-        F: FnMut(S) -> T 
-    {
-        Matrix1x3 {
-            data: [
-                [op(self.data[0][0])],
-                [op(self.data[1][0])],
-                [op(self.data[2][0])],
-            ],
-        }
     }
 }
 
@@ -6327,6 +6280,53 @@ where
         };
 
         Some(Matrix1x3::new(c0r0, c1r0, c2r0))
+    }
+}
+
+impl<S> Matrix1x3<S> 
+where 
+    S: Copy 
+{
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector3<S> {
+        Vector3::new(self.data[0][r], self.data[1][r], self.data[2][r])
+    }
+
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector1<S> {
+        Vector1::new(self.data[c][0])
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x3, 
+    /// # };
+    /// #
+    /// let matrix = Matrix1x3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Matrix1x3::new(2_i32, 4_i32, 6_i32);
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix1x3<T> 
+    where 
+        F: FnMut(S) -> T 
+    {
+        Matrix1x3 {
+            data: [
+                [op(self.data[0][0])],
+                [op(self.data[1][0])],
+                [op(self.data[2][0])],
+            ],
+        }
     }
 }
 
@@ -6462,32 +6462,10 @@ impl<S> Matrix1x4<S> {
             ]
         }
     }
-}
-
-impl<S> Matrix1x4<S> 
-where 
-    S: Copy
-{
-    /// Get the row of the matrix by value.
-    #[inline]
-    pub fn row(&self, r: usize) -> Vector4<S> {
-        Vector4::new(
-            self.data[0][r], 
-            self.data[1][r], 
-            self.data[2][r],
-            self.data[3][r],
-        )
-    }
-
-    /// Get the column of the matrix by value.
-    #[inline]
-    pub fn column(&self, c: usize) -> Vector1<S> {
-        Vector1::new(self.data[c][0])
-    }
 
     /// The length of the the underlying array storing the matrix components.
     #[inline]
-    pub fn len(&self) -> usize {
+    pub const fn len(&self) -> usize {
         4
     }
 
@@ -6497,13 +6475,13 @@ where
     /// array as though it represents a matrix. The order of the descriptions 
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
-    pub fn shape(&self) -> (usize, usize) {
+    pub const fn shape(&self) -> (usize, usize) {
         (1, 4)
     }
 
     /// Get a pointer to the underlying array.
     #[inline]
-    pub fn as_ptr(&self) -> *const S {
+    pub const fn as_ptr(&self) -> *const S {
         &self.data[0][0]
     }
 
@@ -6517,37 +6495,6 @@ where
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 4]>>::as_ref(self)
-    }
-
-    /// Map an operation on the elements of a matrix, returning a matrix whose 
-    /// elements are elements of the new underlying type.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix1x4, 
-    /// # };
-    /// #
-    /// let matrix = Matrix1x4::new(1_u32, 2_u32, 3_u32, 4_u32);
-    /// let expected = Matrix1x4::new(2_i32, 4_i32, 6_i32, 8_i32);
-    /// let result = matrix.map(|comp| (2 * comp) as i32);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix1x4<T> 
-    where 
-        F: FnMut(S) -> T
-    {
-        Matrix1x4 {
-            data: [
-                [op(self.data[0][0])],
-                [op(self.data[1][0])],
-                [op(self.data[2][0])],
-                [op(self.data[3][0])],
-            ],
-        }
     }
 }
 
@@ -6590,6 +6537,59 @@ where
         };
 
         Some(Matrix1x4::new(c0r0, c1r0, c2r0, c3r0))
+    }
+}
+
+impl<S> Matrix1x4<S> 
+where 
+    S: Copy
+{
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector4<S> {
+        Vector4::new(
+            self.data[0][r], 
+            self.data[1][r], 
+            self.data[2][r],
+            self.data[3][r],
+        )
+    }
+
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector1<S> {
+        Vector1::new(self.data[c][0])
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix1x4, 
+    /// # };
+    /// #
+    /// let matrix = Matrix1x4::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected = Matrix1x4::new(2_i32, 4_i32, 6_i32, 8_i32);
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix1x4<T> 
+    where 
+        F: FnMut(S) -> T
+    {
+        Matrix1x4 {
+            data: [
+                [op(self.data[0][0])],
+                [op(self.data[1][0])],
+                [op(self.data[2][0])],
+                [op(self.data[3][0])],
+            ],
+        }
     }
 }
 
@@ -6726,6 +6726,98 @@ impl<S> Matrix2x3<S> {
                 [c2r0, c2r1],
             ]
         }
+    }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        6
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (2, 3)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 6]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix2x3<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x3,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix2x3<u32> = Matrix2x3::new(
+    ///     1_u32, 2_u32, 
+    ///     3_u32, 4_u32,
+    ///     5_u32, 6_u32
+    /// );
+    /// let expected: Option<Matrix2x3<i32>> = Some(Matrix2x3::new(
+    ///     1_i32, 2_i32,
+    ///     3_i32, 4_i32,
+    ///     5_i32, 6_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix2x3<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match num_traits::cast(self.data[2][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match num_traits::cast(self.data[2][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix2x3::new(c0r0, c0r1, c1r0, c1r1, c2r0, c2r1))
     }
 }
 
@@ -6881,40 +6973,6 @@ where
         self.data[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        6
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (2, 3)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 6]>>::as_ref(self)
-    }
-
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -6965,64 +7023,6 @@ where
                 [op(self.data[2][0]), op(self.data[2][1])],
             ],
         }
-    }
-}
-
-impl<S> Matrix2x3<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix2x3,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix2x3<u32> = Matrix2x3::new(
-    ///     1_u32, 2_u32, 
-    ///     3_u32, 4_u32,
-    ///     5_u32, 6_u32
-    /// );
-    /// let expected: Option<Matrix2x3<i32>> = Some(Matrix2x3::new(
-    ///     1_i32, 2_i32,
-    ///     3_i32, 4_i32,
-    ///     5_i32, 6_i32
-    /// ));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix2x3<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.data[0][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.data[1][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.data[1][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r0 = match num_traits::cast(self.data[2][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r1 = match num_traits::cast(self.data[2][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix2x3::new(c0r0, c0r1, c1r0, c1r1, c2r0, c2r1))
     }
 }
 
@@ -7203,6 +7203,96 @@ impl<S> Matrix3x2<S> {
             ]
         }
     }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        6
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (3, 2)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 6]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix3x2<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x2,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix3x2<u32> = Matrix3x2::new(
+    ///     1_u32, 2_u32, 3_u32, 
+    ///     4_u32, 5_u32, 6_u32
+    /// );
+    /// let expected: Option<Matrix3x2<i32>> = Some(Matrix3x2::new(
+    ///     1_i32, 2_i32, 3_i32,
+    ///     4_i32, 5_i32, 6_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix3x2<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match num_traits::cast(self.data[0][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match num_traits::cast(self.data[1][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix3x2::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2))
+    }
 }
 
 impl<S> Matrix3x2<S> 
@@ -7345,40 +7435,6 @@ where
         self.data[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        6
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (3, 2)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 6]>>::as_ref(self)
-    }
-
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -7426,62 +7482,6 @@ where
                 [op(self.data[1][0]), op(self.data[1][1]), op(self.data[1][2])],
             ],
         }
-    }
-}
-
-impl<S> Matrix3x2<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix3x2,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix3x2<u32> = Matrix3x2::new(
-    ///     1_u32, 2_u32, 3_u32, 
-    ///     4_u32, 5_u32, 6_u32
-    /// );
-    /// let expected: Option<Matrix3x2<i32>> = Some(Matrix3x2::new(
-    ///     1_i32, 2_i32, 3_i32,
-    ///     4_i32, 5_i32, 6_i32
-    /// ));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix3x2<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.data[0][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r2 = match num_traits::cast(self.data[0][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.data[1][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.data[1][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r2 = match num_traits::cast(self.data[1][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix3x2::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2))
     }
 }
 
@@ -7669,6 +7669,108 @@ impl<S> Matrix2x4<S> {
             ]
         }
     }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        8
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (2, 4)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 8]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix2x4<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix2x4<u32> = Matrix2x4::new(
+    ///     1_u32, 2_u32, 
+    ///     3_u32, 4_u32, 
+    ///     5_u32, 6_u32, 
+    ///     7_u32, 8_u32
+    /// );
+    /// let expected: Option<Matrix2x4<i32>> = Some(Matrix2x4::new(
+    ///     1_i32, 2_i32,
+    ///     3_i32, 4_i32,
+    ///     5_i32, 6_i32,
+    ///     7_i32, 8_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix2x4<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match num_traits::cast(self.data[2][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match num_traits::cast(self.data[2][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r0 = match num_traits::cast(self.data[3][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r1 = match num_traits::cast(self.data[3][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix2x4::new(c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, c3r0, c3r1))
+    }
 }
 
 impl<S> Matrix2x4<S> 
@@ -7837,40 +7939,6 @@ where
         self.data[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        8
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (2, 4)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 8]>>::as_ref(self)
-    }
-
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -7935,74 +8003,6 @@ where
                 [op(self.data[3][0]), op(self.data[3][1])]
             ],
         }
-    }
-}
-
-impl<S> Matrix2x4<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix2x4,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix2x4<u32> = Matrix2x4::new(
-    ///     1_u32, 2_u32, 
-    ///     3_u32, 4_u32, 
-    ///     5_u32, 6_u32, 
-    ///     7_u32, 8_u32
-    /// );
-    /// let expected: Option<Matrix2x4<i32>> = Some(Matrix2x4::new(
-    ///     1_i32, 2_i32,
-    ///     3_i32, 4_i32,
-    ///     5_i32, 6_i32,
-    ///     7_i32, 8_i32
-    /// ));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix2x4<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.data[0][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.data[1][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.data[1][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r0 = match num_traits::cast(self.data[2][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r1 = match num_traits::cast(self.data[2][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c3r0 = match num_traits::cast(self.data[3][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c3r1 = match num_traits::cast(self.data[3][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix2x4::new(c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, c3r0, c3r1))
     }
 }
 
@@ -8189,6 +8189,107 @@ impl<S> Matrix4x2<S> {
             ]
         }
     }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        8
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (4, 2)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 8]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix4x2<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x2,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix4x2<u32> = Matrix4x2::new(
+    ///     1_u32, 2_u32, 3_u32, 4_u32,
+    ///     5_u32, 6_u32, 7_u32, 8_u32
+    /// );
+    /// let expected: Option<Matrix4x2<i32>> = Some(Matrix4x2::new(
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
+    ///     5_i32, 6_i32, 7_i32, 8_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix4x2<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match num_traits::cast(self.data[0][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r3 = match num_traits::cast(self.data[0][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match num_traits::cast(self.data[1][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r3 = match num_traits::cast(self.data[1][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix4x2::new(
+            c0r0, c0r1, c0r2, c0r3, 
+            c1r0, c1r1, c1r2, c1r3
+        ))
+    }
 }
 
 impl<S> Matrix4x2<S> 
@@ -8339,40 +8440,6 @@ where
         self.data[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        8
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (4, 2)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 8]>>::as_ref(self)
-    }
-
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -8428,73 +8495,6 @@ where
                 [op(self.data[1][0]), op(self.data[1][1]), op(self.data[1][2]), op(self.data[1][3])],
             ],
         }
-    }
-}
-
-impl<S> Matrix4x2<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix4x2,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix4x2<u32> = Matrix4x2::new(
-    ///     1_u32, 2_u32, 3_u32, 4_u32,
-    ///     5_u32, 6_u32, 7_u32, 8_u32
-    /// );
-    /// let expected: Option<Matrix4x2<i32>> = Some(Matrix4x2::new(
-    ///     1_i32, 2_i32, 3_i32, 4_i32,
-    ///     5_i32, 6_i32, 7_i32, 8_i32
-    /// ));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix4x2<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.data[0][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r2 = match num_traits::cast(self.data[0][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r3 = match num_traits::cast(self.data[0][3]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.data[1][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.data[1][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r2 = match num_traits::cast(self.data[1][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r3 = match num_traits::cast(self.data[1][3]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix4x2::new(
-            c0r0, c0r1, c0r2, c0r3, 
-            c1r0, c1r1, c1r2, c1r3
-        ))
     }
 }
 
@@ -8687,6 +8687,129 @@ impl<S> Matrix3x4<S> {
             ]
         }
     }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        12
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (3, 4)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 12]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix3x4<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x4,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix3x4<u32> = Matrix3x4::new(
+    ///     1_u32,  2_u32,  3_u32, 
+    ///     4_u32,  5_u32,  6_u32, 
+    ///     7_u32,  8_u32,  9_u32,
+    ///     10_u32, 11_u32, 12_u32
+    /// );
+    /// let expected: Option<Matrix3x4<i32>> = Some(Matrix3x4::new(
+    ///     1_i32,  2_i32,  3_i32, 
+    ///     4_i32,  5_i32,  6_i32,
+    ///     7_i32,  8_i32,  9_i32,
+    ///     10_i32, 11_i32, 12_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix3x4<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match num_traits::cast(self.data[0][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match num_traits::cast(self.data[1][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match num_traits::cast(self.data[2][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match num_traits::cast(self.data[2][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r2 = match num_traits::cast(self.data[2][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r0 = match num_traits::cast(self.data[3][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r1 = match num_traits::cast(self.data[3][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c3r2 = match num_traits::cast(self.data[3][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix3x4::new(
+            c0r0, c0r1, c0r2, 
+            c1r0, c1r1, c1r2,
+            c2r0, c2r1, c2r2,
+            c3r0, c3r1, c3r2
+        ))
+    }
 }
 
 impl<S> Matrix3x4<S> 
@@ -8858,40 +8981,6 @@ where
         self.data[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        12
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (3, 4)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 12]>>::as_ref(self)
-    }
-
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -8958,95 +9047,6 @@ where
                 [op(self.data[3][0]), op(self.data[3][1]), op(self.data[3][2])]
             ],
         }
-    }
-}
-
-impl<S> Matrix3x4<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix3x4,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix3x4<u32> = Matrix3x4::new(
-    ///     1_u32,  2_u32,  3_u32, 
-    ///     4_u32,  5_u32,  6_u32, 
-    ///     7_u32,  8_u32,  9_u32,
-    ///     10_u32, 11_u32, 12_u32
-    /// );
-    /// let expected: Option<Matrix3x4<i32>> = Some(Matrix3x4::new(
-    ///     1_i32,  2_i32,  3_i32, 
-    ///     4_i32,  5_i32,  6_i32,
-    ///     7_i32,  8_i32,  9_i32,
-    ///     10_i32, 11_i32, 12_i32
-    /// ));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix3x4<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.data[0][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r2 = match num_traits::cast(self.data[0][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.data[1][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.data[1][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r2 = match num_traits::cast(self.data[1][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r0 = match num_traits::cast(self.data[2][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r1 = match num_traits::cast(self.data[2][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r2 = match num_traits::cast(self.data[2][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c3r0 = match num_traits::cast(self.data[3][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c3r1 = match num_traits::cast(self.data[3][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c3r2 = match num_traits::cast(self.data[3][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix3x4::new(
-            c0r0, c0r1, c0r2, 
-            c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2,
-            c3r0, c3r1, c3r2
-        ))
     }
 }
 
@@ -9246,6 +9246,126 @@ impl<S> Matrix4x3<S> {
             ]
         }
     }
+
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        12
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (4, 3)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 12]>>::as_ref(self)
+    }
+}
+
+impl<S> Matrix4x3<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x3,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix4x3<u32> = Matrix4x3::new(
+    ///     1_u32, 2_u32,  3_u32,  4_u32,
+    ///     5_u32, 6_u32,  7_u32,  8_u32,
+    ///     9_u32, 10_u32, 11_u32, 12_u32
+    /// );
+    /// let expected: Option<Matrix4x3<i32>> = Some(Matrix4x3::new(
+    ///     1_i32, 2_i32,  3_i32,  4_i32,
+    ///     5_i32, 6_i32,  7_i32,  8_i32,
+    ///     9_i32, 10_i32, 11_i32, 12_i32
+    /// ));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix4x3<T>> {
+        let c0r0 = match num_traits::cast(self.data[0][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r1 = match num_traits::cast(self.data[0][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r2 = match num_traits::cast(self.data[0][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c0r3 = match num_traits::cast(self.data[0][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r0 = match num_traits::cast(self.data[1][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r1 = match num_traits::cast(self.data[1][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r2 = match num_traits::cast(self.data[1][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c1r3 = match num_traits::cast(self.data[1][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r0 = match num_traits::cast(self.data[2][0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r1 = match num_traits::cast(self.data[2][1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r2 = match num_traits::cast(self.data[2][2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let c2r3 = match num_traits::cast(self.data[2][3]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Matrix4x3::new(
+            c0r0, c0r1, c0r2, c0r3, 
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3
+        ))
+    }
 }
 
 impl<S> Matrix4x3<S> 
@@ -9407,40 +9527,6 @@ where
         self.data[b.0][b.1] = element_a;
     }
 
-    /// The length of the the underlying array storing the matrix components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        12
-    }
-
-    /// The shape of the underlying array storing the matrix components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (4, 3)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0][0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0][0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 12]>>::as_ref(self)
-    }
-
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -9501,92 +9587,6 @@ where
                 [op(self.data[2][0]), op(self.data[2][1]), op(self.data[2][2]), op(self.data[2][3])],
             ],
         }
-    }
-}
-
-impl<S> Matrix4x3<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a matrix from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix4x3,   
-    /// # };
-    /// # 
-    /// let matrix: Matrix4x3<u32> = Matrix4x3::new(
-    ///     1_u32, 2_u32,  3_u32,  4_u32,
-    ///     5_u32, 6_u32,  7_u32,  8_u32,
-    ///     9_u32, 10_u32, 11_u32, 12_u32
-    /// );
-    /// let expected: Option<Matrix4x3<i32>> = Some(Matrix4x3::new(
-    ///     1_i32, 2_i32,  3_i32,  4_i32,
-    ///     5_i32, 6_i32,  7_i32,  8_i32,
-    ///     9_i32, 10_i32, 11_i32, 12_i32
-    /// ));
-    /// let result = matrix.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix4x3<T>> {
-        let c0r0 = match num_traits::cast(self.data[0][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r1 = match num_traits::cast(self.data[0][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r2 = match num_traits::cast(self.data[0][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c0r3 = match num_traits::cast(self.data[0][3]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r0 = match num_traits::cast(self.data[1][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r1 = match num_traits::cast(self.data[1][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r2 = match num_traits::cast(self.data[1][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c1r3 = match num_traits::cast(self.data[1][3]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r0 = match num_traits::cast(self.data[2][0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r1 = match num_traits::cast(self.data[2][1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r2 = match num_traits::cast(self.data[2][2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let c2r3 = match num_traits::cast(self.data[2][3]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Matrix4x3::new(
-            c0r0, c0r1, c0r2, c0r3, 
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3
-        ))
     }
 }
 

@@ -33,6 +33,40 @@ impl<S> Vector1<S> {
             data: [x], 
         }
     }
+
+    /// The length of the the underlying array storing the vector components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        1
+    }
+
+    /// The shape of the underlying array storing the vector components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (1, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 1]>>::as_ref(self)
+    }
 }
 
 impl<S> Vector1<S> 
@@ -112,40 +146,6 @@ where
     #[inline]
     pub fn from_fill(value: S) -> Self {
         Self::new(value)
-    }
-
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        1
-    }
-
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (1, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 1]>>::as_ref(self)
     }
 
     /// Map an operation on that acts on the coordinates of a vector, returning 
@@ -462,6 +462,40 @@ impl<S> Vector2<S> {
             data: [x, y],
         }
     }
+
+    /// The length of the the underlying array storing the vector components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        2
+    }
+
+    /// The shape of the underlying array storing the vector components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (2, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 2]>>::as_ref(self)
+    }
 }
 
 impl<S> Vector2<S> 
@@ -567,40 +601,6 @@ where
     #[inline]
     pub fn from_fill(value: S) -> Self {
         Self::new(value, value)
-    }
-
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        2
-    }
-
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (2, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 2]>>::as_ref(self)
     }
 
     /// Map an operation on that acts on the coordinates of a vector, returning 
@@ -953,6 +953,40 @@ impl<S> Vector3<S> {
             data: [x, y, z],
         }
     }
+
+    /// The length of the the underlying array storing the vector components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        3
+    }
+
+    /// The shape of the underlying array storing the vector components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (3, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 3]>>::as_ref(self)
+    }
 }
 
 impl<S> Vector3<S> 
@@ -1062,40 +1096,6 @@ where
     #[inline]
     pub fn from_fill(value: S) -> Self {
         Self::new(value, value, value)
-    }
-
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        3
-    }
-
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (3, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 3]>>::as_ref(self)
     }
 
     /// Map an operation on that acts on the coordinates of a vector, returning 
@@ -1524,6 +1524,82 @@ impl<S> Vector4<S> {
             data: [x, y, z, w],
         }
     }
+
+    /// The length of the the underlying array storing the vector components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        4
+    }
+
+    /// The shape of the underlying array storing the vector components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (4, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 4]>>::as_ref(self)
+    }
+}
+
+impl<S> Vector4<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a vector from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,   
+    /// # };
+    /// #
+    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Option<Vector4<i32>> = Some(Vector4::new(1_i32, 2_i32, 3_i32, 4_i32));
+    /// let result = vector.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Vector4<T>> {
+        let x = match num_traits::cast(self.data[0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let y = match num_traits::cast(self.data[1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let z = match num_traits::cast(self.data[2]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let w = match num_traits::cast(self.data[3]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Vector4::new(x, y, z, w))
+    }
 }
 
 impl<S> Vector4<S> 
@@ -1575,40 +1651,6 @@ where
         Self::new(value, value, value, value)
     }
 
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        4
-    }
-
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (4, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 4]>>::as_ref(self)
-    }
-
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
@@ -1636,48 +1678,6 @@ where
             op(self.data[2]),
             op(self.data[3]),
         )
-    }
-}
-
-impl<S> Vector4<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a vector from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4,   
-    /// # };
-    /// #
-    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
-    /// let expected: Option<Vector4<i32>> = Some(Vector4::new(1_i32, 2_i32, 3_i32, 4_i32));
-    /// let result = vector.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Vector4<T>> {
-        let x = match num_traits::cast(self.data[0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let y = match num_traits::cast(self.data[1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let z = match num_traits::cast(self.data[2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let w = match num_traits::cast(self.data[3]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Vector4::new(x, y, z, w))
     }
 }
 

@@ -37,6 +37,70 @@ impl<S> Point1<S> {
             data: Vector1::new(x), 
         }
     }
+
+    /// The length of the the underlying array storing the point components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        1
+    }
+
+    /// The shape of the underlying array storing the point components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (1, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        self.data.as_ptr()
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        self.data.as_mut_ptr()
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 1]>>::as_ref(self)
+    }
+}
+
+impl<S> Point1<S> 
+where 
+    S: NumCast + Copy 
+{
+    /// Cast a point of one type of scalars to a point of another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1,   
+    /// # };
+    /// #
+    /// let point: Point1<u32> = Point1::new(1_u32);
+    /// let expected: Option<Point1<i32>> = Some(Point1::new(1_i32));
+    /// let result = point.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Point1<T>> {
+        let x = match num_traits::cast(self.data[0]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Point1::new(x))
+    }
 }
 
 impl<S> Point1<S> 
@@ -85,40 +149,6 @@ where
         Self::new(value)
     }
 
-    /// The length of the the underlying array storing the point components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        1
-    }
-
-    /// The shape of the underlying array storing the point components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (1, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        self.data.as_ptr()
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        self.data.as_mut_ptr()
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 1]>>::as_ref(self)
-    }
-
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     ///
@@ -143,36 +173,6 @@ where
         Point1 { 
             data: self.data.map(op),
         }
-    }
-}
-
-impl<S> Point1<S> 
-where 
-    S: NumCast + Copy 
-{
-    /// Cast a point of one type of scalars to a point of another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point1,   
-    /// # };
-    /// #
-    /// let point: Point1<u32> = Point1::new(1_u32);
-    /// let expected: Option<Point1<i32>> = Some(Point1::new(1_i32));
-    /// let result = point.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Point1<T>> {
-        let x = match num_traits::cast(self.data[0]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Point1::new(x))
     }
 }
 
@@ -365,6 +365,74 @@ impl<S> Point2<S> {
             data: Vector2::new(x, y) 
         }
     }
+
+    /// The length of the the underlying array storing the point components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        2
+    }
+
+    /// The shape of the underlying array storing the point components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (2, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        self.data.as_ptr()
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        self.data.as_mut_ptr()
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 2]>>::as_ref(self)
+    }
+}
+
+impl<S> Point2<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a point of one type of scalars to a point of another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,   
+    /// # };
+    /// #
+    /// let point: Point2<u32> = Point2::new(1_u32, 2_u32);
+    /// let expected: Option<Point2<i32>> = Some(Point2::new(1_i32, 2_i32));
+    /// let result = point.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Point2<T>> {
+        let x = match num_traits::cast(self.data[0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let y = match num_traits::cast(self.data[1]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Point2::new(x, y))
+    }
 }
 
 impl<S> Point2<S> 
@@ -435,40 +503,6 @@ where
         Self::new(value, value)
     }
 
-    /// The length of the the underlying array storing the point components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        2
-    }
-
-    /// The shape of the underlying array storing the point components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (2, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        self.data.as_ptr()
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        self.data.as_mut_ptr()
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 2]>>::as_ref(self)
-    }
-
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     ///
@@ -493,40 +527,6 @@ where
         Point2 {
             data: self.data.map(op),
         }
-    }
-}
-
-impl<S> Point2<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a point of one type of scalars to a point of another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point2,   
-    /// # };
-    /// #
-    /// let point: Point2<u32> = Point2::new(1_u32, 2_u32);
-    /// let expected: Option<Point2<i32>> = Some(Point2::new(1_i32, 2_i32));
-    /// let result = point.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Point2<T>> {
-        let x = match num_traits::cast(self.data[0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let y = match num_traits::cast(self.data[1]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Point2::new(x, y))
     }
 }
 
@@ -760,6 +760,78 @@ impl<S> Point3<S> {
             data: Vector3::new(x, y, z),
         }
     }
+
+    /// The length of the the underlying array storing the point components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        3
+    }
+
+    /// The shape of the underlying array storing the point components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (3, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        self.data.as_ptr()
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        self.data.as_mut_ptr()
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; 3]>>::as_ref(self)
+    }
+}
+
+impl<S> Point3<S> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a point from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,   
+    /// # };
+    /// #
+    /// let point: Point3<u32> = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected: Option<Point3<i32>> = Some(Point3::new(1_i32, 2_i32, 3_i32));
+    /// let result = point.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Point3<T>> {
+        let x = match num_traits::cast(self.data[0]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let y = match num_traits::cast(self.data[1]) {
+            Some(value) => value,
+            None => return None,
+        };
+        let z = match num_traits::cast(self.data[2]) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Point3::new(x, y, z))
+    }
 }
 
 impl<S> Point3<S> 
@@ -807,40 +879,6 @@ where
         Self::new(value, value, value)
     }
 
-    /// The length of the the underlying array storing the point components.
-    #[inline]
-    pub fn len(&self) -> usize {
-        3
-    }
-
-    /// The shape of the underlying array storing the point components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub fn shape(&self) -> (usize, usize) {
-        (3, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub fn as_ptr(&self) -> *const S {
-        self.data.as_ptr()
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        self.data.as_mut_ptr()
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 3]>>::as_ref(self)
-    }
-
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     ///
@@ -865,44 +903,6 @@ where
         Point3 {
             data: self.data.map(op),
         }
-    }
-}
-
-impl<S> Point3<S> 
-where 
-    S: NumCast + Copy
-{
-    /// Cast a point from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point3,   
-    /// # };
-    /// #
-    /// let point: Point3<u32> = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let expected: Option<Point3<i32>> = Some(Point3::new(1_i32, 2_i32, 3_i32));
-    /// let result = point.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Point3<T>> {
-        let x = match num_traits::cast(self.data[0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let y = match num_traits::cast(self.data[1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let z = match num_traits::cast(self.data[2]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Point3::new(x, y, z))
     }
 }
 

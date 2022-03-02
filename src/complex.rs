@@ -24,22 +24,34 @@ pub struct Complex<S> {
 }
 
 impl<S> Complex<S> {
+    /// Construct a new complex number from its real and imaginary components.
     #[inline]
     pub const fn new(re: S, im: S) -> Self {
         Self {
             re: re,
             im: im,
-        }   
+        }
     }
 
+    /// The shape of the underlying array storing the complex number components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
     #[inline]
-    pub fn shape(&self) -> (usize, usize) {
+    pub const fn shape(&self) -> (usize, usize) {
         (2, 1)
+    }
+
+    /// The length of the the underlying array storing the complex number components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        2
     }
 
     /// Get a pointer to the underlying array.
     #[inline]
-    pub fn as_ptr(&self) -> *const S {
+    pub const fn as_ptr(&self) -> *const S {
         &self.re
     }
 
@@ -53,6 +65,40 @@ impl<S> Complex<S> {
     #[inline]
     pub fn as_slice(&self) -> &[S] {
         <Self as AsRef<[S; 2]>>::as_ref(self)
+    }
+}
+
+impl<S> Complex<S> 
+where 
+    S: NumCast + Copy 
+{
+    /// Cast a complex number from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,   
+    /// # };
+    /// #
+    /// let z: Complex<u32> = Complex::new(1_u32, 2_u32);
+    /// let expected: Option<Complex<i32>> = Some(Complex::new(1_i32, 2_i32));
+    /// let result = z.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(self) -> Option<Complex<T>> {
+        let re = match num_traits::cast(self.re) {
+            Some(value) => value,
+            None => return None,
+        };
+        let im = match num_traits::cast(self.im) {
+            Some(value) => value,
+            None => return None,
+        };
+
+        Some(Complex::new(re, im))
     }
 }
 
@@ -92,40 +138,6 @@ where
         F: FnMut(S) -> T 
     {
         Complex::new(op(self.re), op(self.im),)
-    }
-}
-
-impl<S> Complex<S> 
-where 
-    S: NumCast + Copy 
-{
-    /// Cast a complex number from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Complex,   
-    /// # };
-    /// #
-    /// let z: Complex<u32> = Complex::new(1_u32, 2_u32);
-    /// let expected: Option<Complex<i32>> = Some(Complex::new(1_i32, 2_i32));
-    /// let result = z.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(self) -> Option<Complex<T>> {
-        let re = match num_traits::cast(self.re) {
-            Some(value) => value,
-            None => return None,
-        };
-        let im = match num_traits::cast(self.im) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Complex::new(re, im))
     }
 }
 
