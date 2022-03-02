@@ -1473,7 +1473,7 @@ where
         (self.ln() * exponent).exp()
     }
 
-    /// Calculate the square root of a quaternion.
+    /// Calculate the positive square root of a quaternion.
     /// 
     /// Given a quaternion `q`, the square root of `q` is a quaternion
     /// `p` such that `p * p == q`. The formula for `sqrt(q)` is given by
@@ -1486,7 +1486,39 @@ where
     /// ```
     /// where `|q|` is the magnitude of `q`, and `t` is the principal argument of `q`, and `n`
     /// is the nth angle satisfying the above equation. In the case of the square root, there
-    /// are two solutions, `n = 0` and `n = 1`.
+    /// are two solutions, `n = 0` and `n = 1`. The `n = 0` case corresponds to the solution
+    /// `p` returned by the function, and the `n = 1` case corresponds to the solution `-p`,
+    /// which differs only by a sign. Indeed, let 
+    /// ```text
+    ///                              t      v         t
+    /// p0 := p = sqrt(|q|) * ( cos(---) + --- * sin(---) )
+    ///                              2     |v|        2
+    /// ```
+    /// which is the `n = 0` solution. Let 
+    /// ```text
+    ///                         t + 2 * pi      v         t + 2 * pi
+    /// p1 = sqrt(|q|) * ( cos(------------) + --- * sin(------------) )
+    ///                             2          |v|             2
+    /// ```
+    /// Observe that
+    /// ```text
+    /// cos((t + 2 * pi) / 2) = cos((t / 2) + pi) = -cos(t / 2)
+    /// sin((t + 2 * pi) / 2) = sin((t / 2) + pi) = -sin(t / 2)
+    /// ```
+    /// so that
+    /// ```text
+    ///                          t      v            t
+    /// p1 = sqrt(|q|) * ( -cos(---) + --- * ( -sin(---) )
+    ///                          2     |v|           2
+    ///
+    ///                          t      v         t
+    ///    = -sqrt(|q|) * ( cos(---) + --- * sin(---) )
+    ///                          2     |v|        2
+    /// 
+    ///    = -p
+    /// ```
+    /// Thus the quaternion square root is indeed a proper square root with two 
+    /// solutions given by `p` and `-p`. We illustate this function with an example.
     /// 
     /// # Example
     /// 
@@ -1519,6 +1551,10 @@ where
     /// let sqrt_q = q.sqrt();
     /// 
     /// assert!(relative_eq!(sqrt_q * sqrt_q, q, epsilon = 1e-10));
+    /// 
+    /// let minus_sqrt_q = -sqrt_q;
+    /// 
+    /// assert!(relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = 1e-10));
     /// ```
     #[inline]
     pub fn sqrt(&self) -> Self {
