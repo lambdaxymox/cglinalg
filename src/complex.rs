@@ -157,16 +157,6 @@ where
             -self.im.clone() / magnitude_squared
         )
     }
-
-    #[inline]
-    pub fn powi(self, power: i32) -> Self {
-        unimplemented!()
-    }
-
-    #[inline]
-    pub fn powu(self, power: u32) -> Self {
-        unimplemented!()
-    }
 }
 
 impl<S> Complex<S>
