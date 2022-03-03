@@ -477,6 +477,8 @@ mod arg_tests {
         let minus_i: Complex<f64> = -Complex::unit_im();
         let expected = -core::f64::consts::FRAC_PI_2;
         let result = minus_i.arg();
+
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -578,5 +580,43 @@ mod inverse_tests {
         let result = z.inverse();
 
         assert_eq!(result, expected);
+    }
+}
+
+#[cfg(test)]
+mod exp_tests {
+    use cglinalg::{
+        Complex,
+    };
+    use approx::{
+        relative_eq,
+    };
+
+
+    #[test]
+    fn test_exp_zero() {
+        let zero: Complex<f64> = Complex::zero();
+        let expected: Complex<f64> = Complex::unit_re();
+        let result = zero.exp();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_exp_one() {
+        let one: Complex<f64> = Complex::unit_re();
+        let expected: Complex<f64> = Complex::from_real(f64::exp(1_f64));
+        let result = one.exp();
+        
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_exp_i_pi() {
+        let i: Complex<f64> = Complex::unit_im();
+        let expected: Complex<f64> = Complex::from_real(-1_f64);
+        let result = (i * core::f64::consts::PI).exp();
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 }
