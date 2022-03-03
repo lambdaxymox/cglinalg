@@ -453,18 +453,22 @@ where
     /// # };
     /// #
     /// let z = Complex::new(2_f64, 3_f64);
-    /// let expected = Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64);
+    /// let expected = Some(Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64));
     /// let result = z.inverse();
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(self) -> Self {
+    pub fn inverse(self) -> Option<Self> {
         let magnitude_squared = self.magnitude_squared();
-        Self::new(
-             self.re / magnitude_squared,
-            -self.im / magnitude_squared
-        )
+        if magnitude_squared.is_zero() {
+            None
+        } else {
+            Some(Self::new(
+                 self.re / magnitude_squared,
+                -self.im / magnitude_squared
+            ))
+        }
     }
 }
 
