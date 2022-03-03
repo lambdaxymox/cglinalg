@@ -7,10 +7,10 @@ mod storage_tests {
 
     #[test]
     fn test_as_ref() {
-        let v: Quaternion<i32> = Quaternion::new(1, 2, 3, 4);
-        let v_ref: &[i32; 4] = v.as_ref();
+        let q: Quaternion<i32> = Quaternion::new(1, 2, 3, 4);
+        let q_ref: &[i32; 4] = q.as_ref();
 
-        assert_eq!(v_ref, &[1, 2, 3, 4]);
+        assert_eq!(q_ref, &[1, 2, 3, 4]);
     }
 
     #[test]
