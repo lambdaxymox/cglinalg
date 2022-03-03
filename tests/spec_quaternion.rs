@@ -287,13 +287,13 @@ macro_rules! approx_add_props {
             fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
                 
-                prop_assert_eq!(q1 + q2, &q1 + q2);
-                prop_assert_eq!(q1 + q2, q1 + &q2);
-                prop_assert_eq!(q1 + q2, &q1 + &q2);
-                prop_assert_eq!(q1 + &q2, &q1 + q2);
-                prop_assert_eq!(&q1 + q2, q1 + &q2);
-                prop_assert_eq!(&q1 + q2, &q1 + &q2);
-                prop_assert_eq!(q1 + &q2, &q1 + &q2);
+                prop_assert_eq!( q1 +  q2, &q1 +  q2);
+                prop_assert_eq!( q1 +  q2,  q1 + &q2);
+                prop_assert_eq!( q1 +  q2, &q1 + &q2);
+                prop_assert_eq!( q1 + &q2, &q1 +  q2);
+                prop_assert_eq!(&q1 +  q2,  q1 + &q2);
+                prop_assert_eq!(&q1 +  q2, &q1 + &q2);
+                prop_assert_eq!( q1 + &q2, &q1 + &q2);
             }
 
             /// Quaternion addition over floating point scalars should be 

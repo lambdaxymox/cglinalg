@@ -286,13 +286,13 @@ macro_rules! approx_add_props {
             fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex(
                 z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
                 
-                prop_assert_eq!(z1 + z2, &z1 + z2);
-                prop_assert_eq!(z1 + z2, z1 + &z2);
-                prop_assert_eq!(z1 + z2, &z1 + &z2);
-                prop_assert_eq!(z1 + &z2, &z1 + z2);
-                prop_assert_eq!(&z1 + z2, z1 + &z2);
-                prop_assert_eq!(&z1 + z2, &z1 + &z2);
-                prop_assert_eq!(z1 + &z2, &z1 + &z2);
+                prop_assert_eq!( z1 +  z2, &z1 +  z2);
+                prop_assert_eq!( z1 +  z2,  z1 + &z2);
+                prop_assert_eq!( z1 +  z2, &z1 + &z2);
+                prop_assert_eq!( z1 + &z2, &z1 +  z2);
+                prop_assert_eq!(&z1 +  z2,  z1 + &z2);
+                prop_assert_eq!(&z1 +  z2, &z1 + &z2);
+                prop_assert_eq!( z1 + &z2, &z1 + &z2);
             }
 
             /// Complex number addition over floating point scalars should be 
