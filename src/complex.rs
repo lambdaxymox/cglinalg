@@ -258,6 +258,8 @@ where
 
     /// Get the multiplicative unit complex number.
     /// 
+    /// This is the unit real complex number `1`.
+    /// 
     /// # Example
     /// 
     /// ```
@@ -275,6 +277,14 @@ where
     #[inline]
     pub fn identity() -> Self {
         Self::new(S::one(), S::zero())
+    }
+
+    /// Get the multiplicative unit complex number.
+    /// 
+    /// This is a synonym for `identity`.
+    #[inline]
+    pub fn one() -> Self {
+        Self::identity()
     }
 
     /// Determine whether a complex number is the identity complex number.
@@ -299,7 +309,7 @@ where
         self.re.is_one() && self.im.is_zero()
     }
 
-    /// Get the multiplicative unit real complex number.
+    /// Get the multiplicative unit complex number.
     /// 
     /// This is a synonym for the identity complex number.
     /// 
