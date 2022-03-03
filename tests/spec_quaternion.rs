@@ -197,10 +197,10 @@ macro_rules! exact_arithmetic_props {
             /// q * 1 = q.
             /// ```
             #[test]
-            fn prop_quaternion_times_one_equals_quaternion(v in $Generator()) {
+            fn prop_quaternion_times_one_equals_quaternion(q in $Generator()) {
                 let one: $ScalarType = num_traits::one();
 
-                prop_assert_eq!(one * v, v);
+                prop_assert_eq!(one * q, q);
             }
         }
     }
