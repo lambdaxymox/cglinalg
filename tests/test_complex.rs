@@ -265,5 +265,22 @@ mod arithmetic_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_division_zero_complex() {
+        let zero: Complex<i32> = Complex::zero();
+        let z = Complex::new(1_i32, 2_i32);
+
+        assert_eq!(zero / z, zero);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_division_complex_zero() {
+        let zero: Complex<i32> = Complex::zero();
+        let z = Complex::new(1_i32, 2_i32);
+
+        assert_eq!(z / zero, z / zero);
+    }
 }
 
