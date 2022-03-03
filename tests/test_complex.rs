@@ -20,9 +20,8 @@ mod storage_tests {
     fn test_indices_match_components() {
         let z = Complex::new(1_i32, 2_i32);
 
-        // assert_eq!(z[0], z.re);
-        // assert_eq!(z[1], z.im);
-        assert!(false);
+        assert_eq!(z[0], z.re);
+        assert_eq!(z[1], z.im);
     }
 }
 
