@@ -1,6 +1,4 @@
 extern crate cglinalg;
-extern crate num_traits;
-extern crate proptest;
 
 
 #[cfg(test)]

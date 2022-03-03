@@ -1,5 +1,4 @@
 extern crate cglinalg;
-extern crate proptest;
 
 
 use cglinalg::{
