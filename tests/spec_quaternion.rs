@@ -281,7 +281,7 @@ macro_rules! approx_add_props {
             ///  q1 + &q2 = &q1 +  q2
             /// &q1 +  q2 =  q1 + &q2
             /// &q1 +  q2 = &q1 + &q2
-            ///  q1 + &q2 = &q1 + &vq
+            ///  q1 + &q2 = &q1 + &q2
             /// ```
             #[test]
             fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
