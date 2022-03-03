@@ -314,6 +314,7 @@ where
     /// let identity: Complex<i32> = Complex::identity();
     /// 
     /// assert_eq!(unit_re, identity);
+    /// ```
     #[inline]
     pub fn unit_re() -> Self {
         Self::identity()
