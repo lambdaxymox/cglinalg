@@ -20,8 +20,8 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Complex<S> {
-    re: S,
-    im: S,
+    pub re: S,
+    pub im: S,
 }
 
 impl<S> Complex<S> {
