@@ -2,7 +2,7 @@ extern crate cglinalg;
 
 
 #[cfg(test)]
-mod storage_tests {
+mod index_tests {
     use cglinalg::{
         Complex,
     };
@@ -22,6 +22,14 @@ mod storage_tests {
 
         assert_eq!(z[0], z.re);
         assert_eq!(z[1], z.im);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_index_out_of_bounds() {
+        let z = Complex::new(1_i32, 2_i32);
+
+        assert_eq!(z[2], z[2]);
     }
 }
 

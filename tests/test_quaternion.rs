@@ -23,6 +23,13 @@ mod storage_tests {
         assert_eq!(q[3], q.v.z);
     }
 
+    #[test]
+    #[should_panic]
+    fn test_index_out_of_bounds() {
+        let q = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(q[4], q[4]);
+    }
 }
 
 #[cfg(test)]
