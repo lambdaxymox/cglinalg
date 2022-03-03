@@ -98,6 +98,56 @@ mod constructor_tests {
 
         assert_eq!(z.magnitude(), radius);
     }
+
+    #[test]
+    fn test_from_polar_decomposition1() {
+        let angle = Radians(0_f64);
+        let radius = 5_f64;
+        let expected = Complex::new(5_f64, 0_f64);
+        let result = Complex::from_polar_decomposition(radius, angle);
+        
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_from_polar_decomposition2() {
+        let angle = Radians(core::f64::consts::FRAC_PI_2);
+        let radius = 5_f64;
+        let expected = Complex::new(0_f64, 5_f64);
+        let result = Complex::from_polar_decomposition(radius, angle);
+        
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_from_polar_decomposition3() {
+        let angle = Radians(core::f64::consts::PI);
+        let radius = 5_f64;
+        let expected = Complex::new(-5_f64, 0_f64);
+        let result = Complex::from_polar_decomposition(radius, angle);
+        
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_from_polar_decomposition4() {
+        let angle = Radians(3_f64 * core::f64::consts::FRAC_PI_2);
+        let radius = 5_f64;
+        let expected = Complex::new(0_f64, -5_f64);
+        let result = Complex::from_polar_decomposition(radius, angle);
+        
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_from_polar_decomposition5() {
+        let angle = Radians(2_f64 * core::f64::consts::PI);
+        let radius = 5_f64;
+        let expected = Complex::new(5_f64, 0_f64);
+        let result = Complex::from_polar_decomposition(radius, angle);
+        
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
 }
 
 #[cfg(test)]
