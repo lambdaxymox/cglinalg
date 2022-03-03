@@ -1484,9 +1484,9 @@ where
     /// sqrt(q) = sqrt(|q|) * ( cos(----------------) + --- * sin(----------------) )
     ///                                    2            |v|               2
     /// ```
-    /// where `|q|` is the magnitude of `q`, and `t` is the principal argument of `q`, and `n`
+    /// where `|q|` is the magnitude of `q`, `t` is the principal argument of `q`, and `n`
     /// is the nth angle satisfying the above equation. In the case of the square root, there
-    /// are two solutions, `n = 0` and `n = 1`. The `n = 0` case corresponds to the solution
+    /// are two solutions: `n = 0` and `n = 1`. The `n = 0` case corresponds to the solution
     /// `p` returned by the function, and the `n = 1` case corresponds to the solution `-p`,
     /// which differs only by a sign. Indeed, let 
     /// ```text
@@ -1518,7 +1518,7 @@ where
     ///    = -p
     /// ```
     /// Thus the quaternion square root is indeed a proper square root with two 
-    /// solutions given by `p` and `-p`. We illustate this function with an example.
+    /// solutions given by `p` and `-p`. We illustrate this with an example.
     /// 
     /// # Example
     /// 

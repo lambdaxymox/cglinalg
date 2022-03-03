@@ -16,6 +16,7 @@ use core::fmt;
 use core::ops;
 
 
+/// A complex number in cartesian form.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Complex<S> {
@@ -761,15 +762,80 @@ where
         Self::new(magnitude_self.ln(), arg_self)
     }
 
-    /// Calculate the principal value of the square root of a complex number.
+    /// Calculate the positive square root of a complex number.
+    /// 
+    /// Given a complex number `z`, the square root of `z` is a complex number 
+    /// `w` such that `w * w = z`. The formula for `sqrt(z)` is given by the following
+    /// formula. Let `z := a + ib` where `a` is the real parts of `z`, and `b` is the 
+    /// imaginary part of `z`.
+    /// ```text
+    ///                              t + 2 * pi * n              t + 2 * pi * n
+    /// sqrt(z) = sqrt(|z|) * ( cos(----------------) + i * sin(----------------) )
+    ///                                     2                           2
+    /// ```
+    /// where `|z|` is the magnitude of `z`, `t` is the principal argument of `z`, and `n`
+    /// is the nth angle satisfying the above equation. In the case of the square root, there
+    /// are two solutions: `n = 0` and `n = 1`. The `n = 0` solution corresponds 
+    /// to the solution returned by the function, and the `n = 1` case corresponds to the
+    /// solution `-w` which differs only by a sign. Indeed, let
+    /// ```text
+    ///                                        t               t
+    /// w0 := w = sqrt(z) = sqrt(|z|) * ( cos(---) + i * sin (---) )
+    ///                                        2               2
+    /// ```
+    /// which is the `n = 0` solution. Let
+    /// ```text
+    ///                         t + 2 * pi              t + 2 * pi
+    /// w1 = sqrt(|z|) * ( cos(------------) + i * sin(------------) )
+    ///                              2                       2
+    /// ```
+    /// Observe that
+    /// ```text
+    /// cos((t + 2 * pi) / 2) = cos((t / 2) + pi) = -cos(t / 2)
+    /// sin((t + 2 * pi) / 2) = sin((t / 2) + pi) = -sin(t / 2)
+    /// ```
+    /// so that
+    /// ```text
+    ///                          t                 t
+    /// w1 = sqrt(|z|) * ( -cos(---) + i * ( -sin(---) )
+    ///                          2                 2
+    ///
+    ///                          t              t
+    ///    = -sqrt(|z|) * ( cos(---) + i * sin(---) )
+    ///                          2              2
+    /// 
+    ///    = -w
+    /// ```
+    /// Thus the complex number square root is indeed a proper square root with two 
+    /// solutions given by `p` and `-p`. We illustate this with an example.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// # use approx::{
+    /// #     relative_eq,
+    /// # };
+    /// #
+    /// let z = Complex::new(1_f64, 4_f64);
+    /// let sqrt_z = z.sqrt();
+    ///
+    /// assert!(relative_eq!(sqrt_z * sqrt_z, z, epsilon = 1e-10));
+    /// 
+    /// let minus_sqrt_z = -sqrt_z;
+    /// 
+    /// assert!(relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = 1e-10));
+    /// ```
     #[inline]
     pub fn sqrt(self) -> Self {
         let two = S::one() + S::one();
-        let magnitude = self.magnitude();
+        let sqrt_magnitude = self.magnitude().sqrt();
         let angle = self.arg();
         let (sin_angle_over_two, cos_angle_over_two) = (angle / two).sin_cos();
 
-        Self::new(magnitude * cos_angle_over_two, magnitude * sin_angle_over_two)
+        Self::new(sqrt_magnitude * cos_angle_over_two, sqrt_magnitude * sin_angle_over_two)
     }
 
     /// Calculate the power of a complex number where the exponent is a floating 
