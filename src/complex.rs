@@ -16,7 +16,7 @@ use core::fmt;
 use core::ops;
 
 
-/// A complex number in cartesian form.
+/// A complex number in Cartesian form.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Complex<S> {
@@ -193,7 +193,7 @@ where
         Self::new(value, S::zero())
     }
 
-    /// Construct a new compplex number from its imaginary part.
+    /// Construct a new complex number from its imaginary part.
     /// 
     /// The resulting complex number has a zero real part.
     /// 
@@ -431,7 +431,7 @@ where
 
     /// Calculate the multiplicative inverse of a complex number.
     /// 
-    /// The mulitplicative inverse of a complex number `z` is a complex 
+    /// The multiplicative inverse of a complex number `z` is a complex 
     /// number `w` such that `w * z = z * w = 1`.
     /// 
     /// # Example
