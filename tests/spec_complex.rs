@@ -1091,3 +1091,76 @@ exact_conjugation_props!(complex_i32_conjugation_props, i32, any_complex);
 exact_conjugation_props!(complex_i64_conjugation_props, i64, any_complex);
 
 
+/// Generate property tests for complex number magnitudes.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! magnitude_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use approx::{
+            relative_ne,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The magnitude of a complex number is nonnegative. 
+            ///
+            /// Given a complex number `z`
+            /// ```text
+            /// magnitude(z) >= 0
+            /// ```
+            #[test]
+            fn prop_magnitude_nonnegative(z in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assert!(z.magnitude() >= zero);
+            }
+
+            /// The magnitude function is point separating. In particular, if 
+            /// the distance between two complex numbers `z1` and `z2` is 
+            /// zero, then `z1 = z2`.
+            ///
+            /// Given complex numbers `z1` and `z2`
+            /// ```text
+            /// magnitude(z1 - z2) = 0 => z1 = z2 
+            /// ```
+            /// Equivalently, if `z1` is not equal to `z2`, then their distance is 
+            /// nonzero
+            /// ```text
+            /// z1 != z2 => magnitude(z1 - z2) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the 
+            /// magnitude function.
+            #[test]
+            fn prop_magnitude_approx_point_separating(
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+                
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(relative_ne!(z1, z2, epsilon = $tolerance));
+                prop_assert!(relative_ne!((z1 - z2).magnitude(), zero, epsilon = $tolerance),
+                    "\n|z1 - z2| = {}\n", (z1 - z2).magnitude()
+                );
+            }
+        }
+    }
+    }
+}
+
+magnitude_props!(complex_f64_magnitude_props, f64, any_complex, any_scalar, 1e-7);
+
