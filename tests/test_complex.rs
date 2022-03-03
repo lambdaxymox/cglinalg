@@ -27,6 +27,80 @@ mod storage_tests {
 }
 
 #[cfg(test)]
+mod constructor_tests {
+    use cglinalg::{
+        Complex,
+        Radians,
+    };
+    use approx::{
+        relative_eq,
+    };
+
+
+    #[test]
+    fn test_from_angle1() {
+        let angle = Radians(0_f64);
+        let expected = Complex::new(1_f64, 0_f64);
+        let result = Complex::from_angle(angle);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_from_angle2() {
+        let angle = Radians(core::f64::consts::FRAC_PI_2);
+        let expected = Complex::new(0_f64, 1_f64);
+        let result = Complex::from_angle(angle);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_from_angle3() {
+        let angle = Radians(core::f64::consts::PI);
+        let expected = Complex::new(-1_f64, 0_f64);
+        let result = Complex::from_angle(angle);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_from_angle4() {
+        let angle = Radians(3_f64 * core::f64::consts::FRAC_PI_2);
+        let expected = Complex::new(0_f64, -1_f64);
+        let result = Complex::from_angle(angle);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_from_angle5() {
+        let angle = Radians(2_f64 * core::f64::consts::PI);
+        let expected = Complex::new(1_f64, 0_f64);
+        let result = Complex::from_angle(angle);
+
+        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    }
+
+    #[test]
+    fn test_from_angle_magnitude() {
+        let angle = Radians(493_f64);
+        let z = Complex::from_angle(angle);
+
+        assert!(relative_eq!(z.magnitude(), 1_f64));
+    }
+
+    #[test]
+    fn test_from_polar_decomposition_magnitude() {
+        let angle = Radians(493_f64);
+        let radius = 5_f64;
+        let z = Complex::from_polar_decomposition(radius, angle);
+
+        assert_eq!(z.magnitude(), radius);
+    }
+}
+
+#[cfg(test)]
 mod arithmetic_tests {
     use cglinalg::{
         Complex,
