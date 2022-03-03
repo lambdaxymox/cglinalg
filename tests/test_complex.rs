@@ -400,7 +400,7 @@ mod arg_tests {
         assert_eq!(result, expected);
     }
 }
-/*
+
 #[cfg(test)]
 mod inverse_tests {
     use cglinalg::{
@@ -419,23 +419,40 @@ mod inverse_tests {
     fn test_inverse_unit_re() {
         let one: Complex<f64> = Complex::unit_re();
 
-        assert_eq!(one.inverse(), one);
+        assert_eq!(one.inverse(), Some(one));
     }
 
     #[test]
     fn test_inverse_unit_im() {
         let i: Complex<f64> = Complex::unit_im();
 
-        assert_eq!(i.inverse().unwrap(), -i);
+        assert_eq!(i.inverse(), Some(-i));
     }
 
     #[test]
     fn test_inverse_real() {
         let z = Complex::from_real(2_f64);
-        let expected = Complex::from_real(1_f64 / 2_f64);
-        let result = z.inverse().unwrap();
+        let expected = Some(Complex::from_real(1_f64 / 2_f64));
+        let result = z.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_inverse_imaginary() {
+        let z = Complex::from_imaginary(4_f64);
+        let expected = Some(Complex::from_imaginary(-1_f64 / 4_f64));
+        let result = z.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_inverse_complex() {
+        let z = Complex::new(1_f64, 2_f64);
+        let expected = Some(Complex::new(1_f64 / 5_f64, -2_f64 / 5_f64));
+        let result = z.inverse();
 
         assert_eq!(result, expected);
     }
 }
-*/
