@@ -245,5 +245,25 @@ mod arithmetic_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_division_unit_re_complex() {
+        let one: Complex<f64> = Complex::unit_re();
+        let z = Complex::new(57_f64, 92_f64);
+        let expected = Complex::new(57_f64 / 11713_f64, -92_f64 / 11713_f64);
+        let result = one / z;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_division_complex_unit_re() {
+        let one: Complex<f64> = Complex::unit_re();
+        let z = Complex::new(57_f64, 92_f64);
+        let expected = z;
+        let result = z / one;
+
+        assert_eq!(result, expected);
+    }
 }
 
