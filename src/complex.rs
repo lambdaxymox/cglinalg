@@ -470,6 +470,27 @@ where
             ))
         }
     }
+
+    /// Determine whether a complex number is invertible.
+    /// 
+    /// Returns `false` if the magnitude of the complex number is sufficiently
+    /// close to zero.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z: Complex<f64> = Complex::unit_im();
+    /// 
+    /// assert!(z.is_invertible());
+    /// ```
+    #[inline]
+    pub fn is_invertible(self) -> bool {
+        self.magnitude_squared().is_zero()
+    }
 }
 
 impl<S> Complex<S>
