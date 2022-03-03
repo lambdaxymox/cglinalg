@@ -969,3 +969,125 @@ exact_distributive_props!(complex_i32_distributive_props, i32, any_complex);
 exact_distributive_props!(complex_u32_distributive_props, u32, any_complex);
 
 
+/// Generate property tests for complex number conjugation over floating point scalars.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! approx_conjugation_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+    
+        proptest! {
+            /// Conjugating a complex number twice should give the original complex number.
+            ///
+            /// Given a complex number `z`
+            /// ```text
+            /// z** = conjugate(conjugate(z)) = z
+            /// ```
+            #[test]
+            fn prop_complex_conjugate_conjugate_equals_complex(z in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(z.conjugate().conjugate(), z);
+            }
+
+            /// Quaternion conjugation is linear.
+            ///
+            /// Given complex numbers `z1` and `z2`, complex number conjugation satisfies
+            /// ```text
+            /// conjugate(z1 + z2) = conjugate(z1) + conjugate(z2)
+            /// ```
+            #[test]
+            fn prop_complex_conjugation_linear(
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((z1 + z2).conjugate(), z1.conjugate() + z2.conjugate());
+            }
+        }
+    }
+    }
+}
+
+approx_conjugation_props!(complex_f64_conjugation_props, f64, any_complex, 1e-7);
+
+
+/// Generate property tests for complex number conjugation over exact scalars.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_conjugation_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+    
+        proptest! {
+            /// Conjugating a complex number twice should give the original complex number.
+            ///
+            /// Given a complex number `z`
+            /// ```text
+            /// z** = conjugate(conjugate(z)) = z
+            /// ```
+            #[test]
+            fn prop_complex_conjugate_conjugate_equals_complex(z in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(z.conjugate().conjugate(), z);
+            }
+
+            /// Quaternion conjugation is linear.
+            ///
+            /// Given complex numbers `z1` and `z2`, complex number conjugation satisfies
+            /// ```text
+            /// conjugate(z1 + z2) = conjugate(z1) + conjugate(z2)
+            /// ```
+            #[test]
+            fn prop_complex_conjugation_linear(
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((z1 + z2).conjugate(), z1.conjugate() + z2.conjugate());
+            }
+
+            /// Quaternion multiplication transposes under conjugation.
+            ///
+            /// Given complex numbers `z1` and `z2`
+            /// ```text
+            /// conjugate(z1 * z2) = conjugate(z2) * conjugate(z1)
+            /// ```
+            #[test]
+            fn prop_complex_conjugation_transposes_products(
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+
+                prop_assert_eq!((z1 * z2).conjugate(), z2.conjugate() * z1.conjugate());
+            }
+        }
+    }
+    }
+}
+
+exact_conjugation_props!(complex_i32_conjugation_props, i32, any_complex);
+exact_conjugation_props!(complex_i64_conjugation_props, i64, any_complex);
+
+
