@@ -850,3 +850,122 @@ exact_mul_props!(complex_i32_mul_props, i32, any_complex);
 exact_mul_props!(complex_u32_mul_props, u32, any_complex);
 
 
+/// Generate property tests for complex number distribution over exact scalars.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_distributive_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// Scalar multiplication should distribute over complex number addition.
+            ///
+            /// Given a scalar `a` and complex numbers `z1` and `z2`
+            /// ```text
+            /// a * (z1 + z2) = a * z1 + a * z2
+            /// ```
+            #[test]
+            fn prop_distribution_over_complex_addition(
+                a in any::<$ScalarType>(), 
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!(a * (z1 + z2), a * z1 + a * z2);
+                prop_assert_eq!((z1 + z2) * a,  z1 * a + z2 * a);
+            }
+
+            /// Multiplication of a sum of scalars should distribute over a 
+            /// complex number.
+            ///
+            /// Given scalars `a` and `b` and a complex number `z`, we have
+            /// ```text
+            /// (a + b) * z = a * z + b * z
+            /// ```
+            #[test]
+            fn prop_distribution_over_scalar_addition(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
+                z in $Generator::<$ScalarType>()) {
+    
+                prop_assert_eq!((a + b) * z, a * z + b * z);
+                prop_assert_eq!(z * (a + b), z * a + z * b);
+            }
+
+            /// Multiplication of two complex numbers by a scalar on the right 
+            /// should distribute.
+            ///
+            /// Given complex numbers `z1` and `z2`, and a scalar `a`
+            /// ```text
+            /// (z1 + z2) * a = z1 * a + z2 * a
+            /// ```
+            #[test]
+            fn prop_distribution_over_complex_addition1(
+                a in any::<$ScalarType>(), 
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+                    
+                prop_assert_eq!((z1 + z2) * a,  z1 * a + z2 * a);
+            }
+
+            /// Multiplication of a complex number on the right by the sum of two 
+            /// scalars should distribute over the two scalars. 
+            ///
+            /// Given a complex number `z` and scalars `a` and `b`
+            /// ```text
+            /// z * (a + b) = z * a + z * b
+            /// ```
+            #[test]
+            fn prop_distribution_over_scalar_addition1(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), 
+                z in $Generator::<$ScalarType>()) {
+    
+                prop_assert_eq!(z * (a + b), z * a + z * b);
+            }
+
+            /// Complex number multiplication should be distributive on the right.
+            ///
+            /// Given three complex numbers `z1`, `z2`, and `z3`
+            /// ```text
+            /// (z1 + z2) * z3 = z1 * z3 + z2 * z3
+            /// ```
+            #[test]
+            fn prop_complex_multiplication_right_distributive(
+                z1 in $Generator::<$ScalarType>(), 
+                z2 in $Generator::<$ScalarType>(), z3 in $Generator::<$ScalarType>()
+            ) {
+                prop_assert_eq!((z1 + z2) * z3, z1 * z3 + z2 * z3);
+            }
+
+            /// Complex Number multiplication should be distributive on the left.
+            ///
+            /// Given three complex numbers `z1`, `z2`, and `z3`
+            /// ```text
+            /// z1 * (z2 + z3) = z1 * z2 + z1 * z3
+            /// ```
+            #[test]
+            fn prop_complex_multiplication_left_distributive(
+                z1 in $Generator::<$ScalarType>(), 
+                z2 in $Generator::<$ScalarType>(), z3 in $Generator::<$ScalarType>()
+            ) {
+                prop_assert_eq!((z1 + z2) * z3, z1 * z3 + z2 * z3);
+            }
+        }
+    }
+    }    
+}
+
+exact_distributive_props!(complex_i32_distributive_props, i32, any_complex);
+exact_distributive_props!(complex_u32_distributive_props, u32, any_complex);
+
+
