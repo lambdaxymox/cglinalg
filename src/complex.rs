@@ -1,5 +1,4 @@
 use crate::base::{
-    Magnitude,
     Scalar,
     ScalarSigned,
     ScalarFloat,
