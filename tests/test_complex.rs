@@ -747,3 +747,4 @@ mod square_root_tests {
         assert!(relative_eq!(result, expected));
     }
 }
+
