@@ -620,3 +620,73 @@ mod exp_tests {
         assert!(relative_eq!(result, expected, epsilon = 1e-10));
     }
 }
+
+#[cfg(test)]
+mod logarithm_tests {
+    use cglinalg::{
+        Complex,
+    };
+    use approx::{
+        relative_eq,
+    };
+
+
+    #[test]
+    fn test_natural_logarithm1() {
+        let one: Complex<f64> = Complex::one();
+        let zero: Complex<f64> = Complex::zero();
+        let expected = zero;
+        let result = one.ln();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_natural_logarithm2() {
+        let i: Complex<f64> = Complex::unit_im();
+        let pi_over_two = core::f64::consts::FRAC_PI_2;
+        let expected = -i * pi_over_two;
+        let result = (-i).ln();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_natural_logarithm3() {
+        let i: Complex<f64> = Complex::unit_im();
+        let pi_over_two = core::f64::consts::FRAC_PI_2;
+        let expected = i * pi_over_two;
+        let result = (i).ln();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_natural_logarithm4() {
+        let z = Complex::from_real(7_f64);
+        let expected = Complex::new(f64::ln(7_f64), 0_f64);
+        let result = z.ln();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_natural_logarithm5() {
+        let z = Complex::from_imaginary(7_f64);
+        let pi_over_two = core::f64::consts::FRAC_PI_2;
+        let expected = Complex::new(f64::ln(7_f64), pi_over_two);
+        let result = z.ln();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_natural_logarithm6() {
+        let z = Complex::new(1_f64, 3_f64);
+        let expected = Complex::new(1.151292546497023, 1.2490457723982544);
+        let result = z.ln();
+        
+        assert_eq!(result, expected);
+    }
+}
+
