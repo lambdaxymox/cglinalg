@@ -626,9 +626,6 @@ mod logarithm_tests {
     use cglinalg::{
         Complex,
     };
-    use approx::{
-        relative_eq,
-    };
 
 
     #[test]
@@ -690,3 +687,63 @@ mod logarithm_tests {
     }
 }
 
+#[cfg(test)]
+mod square_root_tests {
+    use cglinalg::{
+        Complex,
+    };
+    use approx::{
+        relative_eq,
+    };
+
+
+    #[test]
+    fn test_square_root_zero() {
+        let zero: Complex<f64> = Complex::zero();
+
+        assert_eq!(zero.sqrt(), zero);
+    }
+
+    #[test]
+    fn test_square_root_one() {
+        let one: Complex<f64> = Complex::one();
+        
+        assert_eq!(one.sqrt(), one);
+    }
+
+    #[test]
+    fn test_square_root_real() {
+        let z = Complex::from_real(2_f64);
+        let expected = Complex::from_real(f64::sqrt(2_f64));
+        let result = z.sqrt();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_square_root_i() {
+        let i: Complex<f64> = Complex::unit_im();
+        let expected = (1_f64 / f64::sqrt(2_f64)) * Complex::new(1_f64, 1_f64);
+        let result = i.sqrt();
+
+        assert!(relative_eq!(result, expected));
+    }
+
+    #[test]
+    fn test_square_root_minus_i() {
+        let i: Complex<f64> = Complex::unit_im();
+        let expected = (1_f64 / f64::sqrt(2_f64)) * Complex::new(1_f64, -1_f64);
+        let result = (-i).sqrt();
+
+        assert!(relative_eq!(result, expected));
+    }
+
+    #[test]
+    fn test_square_root_complex() {
+        let z = Complex::new(2_f64, 5_f64);
+        let expected = Complex::new(1.9216093264675973, 1.3009928530039094);
+        let result = z.sqrt();
+
+        assert!(relative_eq!(result, expected));
+    }
+}
