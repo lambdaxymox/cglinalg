@@ -718,6 +718,24 @@ macro_rules! approx_mul_props {
                 prop_assert!(relative_eq!(z * z_inv, one, epsilon = $tolerance));
                 prop_assert!(relative_eq!(z_inv * z, one, epsilon = $tolerance));
             }
+
+            /// Complex multiplication over floating point scalars is approximately
+            /// commutative.
+            /// 
+            /// Given a complex number `z1`, and another complex number `z2`, we
+            /// have
+            /// ```text
+            /// z1 * z2 ~= z2 * z1
+            /// ```
+            /// Note that floating point complex number multiplication cannot be
+            /// exactly commutative because multiplication of floating point numbers
+            /// is not commutative.
+            #[test]
+            fn prop_complex_multiplication_commutative(
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+
+                prop_assert!(relative_eq!(z1 * z2, z2 * z1, epsilon = $tolerance));
+            }
         }
     }
     }
