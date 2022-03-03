@@ -1456,7 +1456,7 @@ where
 
     #[inline]
     fn div(self, other: Complex<S>) -> Self::Output {
-        let denominator = self.im * self.im + other.im * other.im;
+        let denominator = other.re * other.re + other.im * other.im;
         let re = (self.re * other.re + self.im * other.im) / denominator;
         let im = (self.im * other.re - self.re * other.im) / denominator;
 
@@ -1472,7 +1472,7 @@ where
 
     #[inline]
     fn div(self, other: &Complex<S>) -> Self::Output {
-        let denominator = self.im * self.im + other.im * other.im;
+        let denominator = other.re * other.re + other.im * other.im;
         let re = (self.re * other.re + self.im * other.im) / denominator;
         let im = (self.im * other.re - self.re * other.im) / denominator;
 
@@ -1488,7 +1488,7 @@ where
 
     #[inline]
     fn div(self, other: Complex<S>) -> Self::Output {
-        let denominator = self.im * self.im + other.im * other.im;
+        let denominator = other.re * other.re + other.im * other.im;
         let re = (self.re * other.re + self.im * other.im) / denominator;
         let im = (self.im * other.re - self.re * other.im) / denominator;
 
@@ -1504,7 +1504,7 @@ where
 
     #[inline]
     fn div(self, other: &'b Complex<S>) -> Self::Output {
-        let denominator = self.im * self.im + other.im * other.im;
+        let denominator = other.re * other.re + other.im * other.im;
         let re = (self.re * other.re + self.im * other.im) / denominator;
         let im = (self.im * other.re - self.re * other.im) / denominator;
 
@@ -1809,6 +1809,174 @@ where
         self.im %= *other;
     }
 }
+
+macro_rules! impl_scalar_complex_add_ops {
+    ($Lhs:ty) => {
+        impl ops::Add<Complex<$Lhs>> for $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn add(self, other: Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self + other.re, other.im)
+            }
+        }
+
+        impl ops::Add<&Complex<$Lhs>> for $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn add(self, other: &Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self + other.re, other.im)
+            }
+        }
+
+        impl ops::Add<Complex<$Lhs>> for &$Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn add(self, other: Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self + other.re, other.im)
+            }
+        }
+
+        impl<'a, 'b> ops::Add<&'a Complex<$Lhs>> for &'b $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn add(self, other: &'a Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self + other.re, other.im)
+            }
+        }
+    }
+}
+
+impl_scalar_complex_add_ops!(u8);
+impl_scalar_complex_add_ops!(u16);
+impl_scalar_complex_add_ops!(u32);
+impl_scalar_complex_add_ops!(u64);
+impl_scalar_complex_add_ops!(u128);
+impl_scalar_complex_add_ops!(usize);
+impl_scalar_complex_add_ops!(i8);
+impl_scalar_complex_add_ops!(i16);
+impl_scalar_complex_add_ops!(i32);
+impl_scalar_complex_add_ops!(i64);
+impl_scalar_complex_add_ops!(i128);
+impl_scalar_complex_add_ops!(isize);
+impl_scalar_complex_add_ops!(f32);
+impl_scalar_complex_add_ops!(f64);
+
+
+macro_rules! impl_scalar_complex_sub_ops {
+    ($Lhs:ty) => {
+        impl ops::Sub<Complex<$Lhs>> for $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn sub(self, other: Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self - other.re, other.im)
+            }
+        }
+
+        impl ops::Sub<&Complex<$Lhs>> for $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn sub(self, other: &Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self - other.re, other.im)
+            }
+        }
+
+        impl ops::Sub<Complex<$Lhs>> for &$Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn sub(self, other: Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self - other.re, other.im)
+            }
+        }
+
+        impl<'a, 'b> ops::Sub<&'a Complex<$Lhs>> for &'b $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn sub(self, other: &'a Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self - other.re, other.im)
+            }
+        }
+    }
+}
+
+impl_scalar_complex_sub_ops!(u8);
+impl_scalar_complex_sub_ops!(u16);
+impl_scalar_complex_sub_ops!(u32);
+impl_scalar_complex_sub_ops!(u64);
+impl_scalar_complex_sub_ops!(u128);
+impl_scalar_complex_sub_ops!(usize);
+impl_scalar_complex_sub_ops!(i8);
+impl_scalar_complex_sub_ops!(i16);
+impl_scalar_complex_sub_ops!(i32);
+impl_scalar_complex_sub_ops!(i64);
+impl_scalar_complex_sub_ops!(i128);
+impl_scalar_complex_sub_ops!(isize);
+impl_scalar_complex_sub_ops!(f32);
+impl_scalar_complex_sub_ops!(f64);
+
+
+macro_rules! impl_scalar_complex_mul_ops {
+    ($Lhs:ty) => {
+        impl ops::Mul<Complex<$Lhs>> for $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn mul(self, other: Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self * other.re, self * other.im)
+            }
+        }
+
+        impl ops::Mul<&Complex<$Lhs>> for $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn mul(self, other: &Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self * other.re, self * other.im)
+            }
+        }
+
+        impl ops::Mul<Complex<$Lhs>> for &$Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn mul(self, other: Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self * other.re, self * other.im)
+            }
+        }
+
+        impl<'a, 'b> ops::Mul<&'a Complex<$Lhs>> for &'b $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn mul(self, other: &'a Complex<$Lhs>) -> Self::Output {
+                Self::Output::new(self * other.re, self * other.im)
+            }
+        }
+    }
+}
+
+impl_scalar_complex_mul_ops!(u8);
+impl_scalar_complex_mul_ops!(u16);
+impl_scalar_complex_mul_ops!(u32);
+impl_scalar_complex_mul_ops!(u64);
+impl_scalar_complex_mul_ops!(u128);
+impl_scalar_complex_mul_ops!(usize);
+impl_scalar_complex_mul_ops!(i8);
+impl_scalar_complex_mul_ops!(i16);
+impl_scalar_complex_mul_ops!(i32);
+impl_scalar_complex_mul_ops!(i64);
+impl_scalar_complex_mul_ops!(i128);
+impl_scalar_complex_mul_ops!(isize);
+impl_scalar_complex_mul_ops!(f32);
+impl_scalar_complex_mul_ops!(f64);
+
 
 impl<S> approx::AbsDiffEq for Complex<S> 
 where 
