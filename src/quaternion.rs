@@ -1639,6 +1639,112 @@ where
         right.inverse().map(|right_inv| self * right_inv)
     }
 
+    /// Calculate the inner product of two quaternions.
+    /// 
+    /// # Example (Generic Quaternion)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let q = Quaternion::new(4_f64, 2_f64, 6_f64, 11_f64);
+    /// let p = Quaternion::new(1_f64, 5_f64, 12_f64, 14_f64);
+    /// let expected = Quaternion::new(-232_f64, 22_f64, 54_f64, 67_f64);
+    /// let result = q.inner(&p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Pure Quaternion)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let q = Quaternion::new(0_f64, 7_f64, 11_f64, 4_f64);
+    /// let p = Quaternion::new(0_f64, 2_f64, 3_f64, 4_f64);
+    /// let expected = Quaternion::new(-63_f64, 0_f64, 0_f64, 0_f64);
+    /// let result = q.inner(&p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Real Quaternion)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let q = Quaternion::from_real(3_f64);
+    /// let p = Quaternion::from_real(10_f64);
+    /// let expected = Quaternion::from_real(30_f64);
+    /// let result = q.inner(&p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inner(&self, other: &Self) -> Self {
+        let one = S::one();
+        let one_half: S = one / (one + one);
+
+        (self * other + other * self) * one_half
+    }
+
+    /// Calculate the outer product of two quaternions.
+    /// 
+    /// # Example (Generic Quaternion)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let q = Quaternion::new(4_f64, 2_f64, 6_f64, 11_f64);
+    /// let p = Quaternion::new(1_f64, 5_f64, 12_f64, 14_f64);
+    /// let expected = Quaternion::new(0_f64, -48_f64, 27_f64, 19_f64);
+    /// let result = q.outer(&p);
+    /// ```
+    /// 
+    /// # Example (Pure Quaternion)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let q = Quaternion::new(0_f64, 7_f64, 11_f64, 4_f64);
+    /// let p = Quaternion::new(0_f64, 2_f64, 3_f64, 4_f64);
+    /// let expected = Quaternion::new(0_f64, 32_f64, -20_f64, -1_f64);
+    /// let result = q.outer(&p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Real Quaternion)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let q = Quaternion::from_real(3_f64);
+    /// let p = Quaternion::from_real(10_f64);
+    /// let expected: Quaternion<f64> = Quaternion::zero();
+    /// let result = q.outer(&p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn outer(&self, other: &Self) -> Self {
+        let one = S::one();
+        let one_half: S = one / (one + one);
+
+        (self * other - other * self) * one_half
+    }
+
 
     /// Construct a quaternion that rotates the shortest angular distance 
     /// between two vectors.
