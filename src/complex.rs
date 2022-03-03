@@ -439,58 +439,6 @@ where
     pub fn conjugate(self) -> Self {
         Self::new(self.re, -self.im)
     }
-
-    /// Calculate the multiplicative inverse of a complex number.
-    /// 
-    /// The multiplicative inverse of a complex number `z` is a complex 
-    /// number `w` such that `w * z = z * w = 1`.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg::{
-    /// #     Complex,
-    /// # };
-    /// #
-    /// let z = Complex::new(2_f64, 3_f64);
-    /// let expected = Some(Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64));
-    /// let result = z.inverse();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn inverse(self) -> Option<Self> {
-        let magnitude_squared = self.magnitude_squared();
-        if magnitude_squared.is_zero() {
-            None
-        } else {
-            Some(Self::new(
-                 self.re / magnitude_squared,
-                -self.im / magnitude_squared
-            ))
-        }
-    }
-
-    /// Determine whether a complex number is invertible.
-    /// 
-    /// Returns `false` if the magnitude of the complex number is sufficiently
-    /// close to zero.
-    ///
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg::{
-    /// #     Complex,
-    /// # };
-    /// #
-    /// let z: Complex<f64> = Complex::unit_im();
-    /// 
-    /// assert!(z.is_invertible());
-    /// ```
-    #[inline]
-    pub fn is_invertible(self) -> bool {
-        self.magnitude_squared().is_zero()
-    }
 }
 
 impl<S> Complex<S>
@@ -899,6 +847,63 @@ where
     #[inline]
     pub fn powf(self, exponent: S) -> Self {
         (self.ln() * exponent).exp()
+    }
+
+    /// Calculate the multiplicative inverse of a complex number.
+    /// 
+    /// The multiplicative inverse of a complex number `z` is a complex 
+    /// number `w` such that `w * z = z * w = 1`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(2_f64, 3_f64);
+    /// let expected = Some(Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64));
+    /// let result = z.inverse();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inverse(self) -> Option<Self> {
+        let magnitude_squared = self.magnitude_squared();
+        if magnitude_squared.is_zero() {
+            None
+        } else {
+            Some(Self::new(
+                 self.re / magnitude_squared,
+                -self.im / magnitude_squared
+            ))
+        }
+    }
+
+    /// Determine whether a complex number is invertible.
+    /// 
+    /// Returns `false` if the magnitude of the complex number is sufficiently
+    /// close to zero.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z: Complex<f64> = Complex::unit_im();
+    /// 
+    /// assert!(z.is_invertible());
+    /// ```
+    #[inline]
+    pub fn is_invertible(&self) -> bool {
+        self.is_invertible_eps(S::default_epsilon())
+    }
+
+    #[inline]
+    fn is_invertible_eps(&self, epsilon: S) -> bool {
+        self.magnitude_squared() >= epsilon * epsilon
     }
 }
 

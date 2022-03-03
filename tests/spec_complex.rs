@@ -631,3 +631,97 @@ macro_rules! exact_sub_props {
 exact_sub_props!(complex_i32_sub_props, i32, any_complex);
 exact_sub_props!(complex_u32_sub_props, u32, any_complex);
 
+
+/// Generate property tests for complex number multiplication over floating point 
+/// scalars.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! approx_mul_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use approx::relative_eq;
+        use cglinalg::{
+            Complex,
+        };
+        use super::{
+            $Generator,
+            $ScalarGen,
+        };
+
+
+        proptest! {
+            /// Multiplication of a scalar and a complex number should be approximately 
+            /// commutative.
+            ///
+            /// Given a constant `c` and a complex number `z`
+            /// ```text
+            /// c * z ~= z * c
+            /// ```
+            /// Note that floating point complex number multiplication cannot be commutative 
+            /// because multiplication in the underlying floating point scalars is not 
+            /// commutative.
+            #[test]
+            fn prop_scalar_times_complex_equals_complex_times_scalar(
+                c in $ScalarGen::<$ScalarType>(), z in $Generator::<$ScalarType>()) {
+                
+                prop_assume!(c.is_finite());
+                prop_assume!(z.is_finite());
+                prop_assert_eq!(c * z, z * c);
+            }
+
+            /// Complexs have a multiplicative unit element.
+            ///
+            /// Given a complex number `z`, and the unit complex number `1`, we have
+            /// ```text
+            /// z * 1 = 1 * z = z
+            /// ```
+            #[test]
+            fn prop_complex_multiplicative_unit(z in $Generator::<$ScalarType>()) {
+                let one = Complex::identity();
+
+                prop_assert_eq!(z * one, z);
+                prop_assert_eq!(one * z, z);
+                prop_assert_eq!(z * one, one * z);
+            }
+
+            /// Every nonzero complex number over floating point scalars has an 
+            /// approximate multiplicative inverse.
+            ///
+            /// Given a complex number `z` and its inverse `z_inv`, we have
+            /// ```text
+            /// z * z_inv ~= z_inv * z ~= 1
+            /// ```
+            /// Note that complex number algebra over floating point scalars is not 
+            /// commutative because multiplication of the underlying scalars is 
+            /// not commutative.
+            #[test]
+            fn prop_complex_multiplicative_inverse(z in $Generator::<$ScalarType>()) {
+                prop_assume!(z.is_finite());
+                prop_assume!(z.is_invertible());
+
+                let one = Complex::identity();
+                let z_inv = z.inverse().unwrap();
+
+                prop_assert!(relative_eq!(z * z_inv, one, epsilon = $tolerance));
+                prop_assert!(relative_eq!(z_inv * z, one, epsilon = $tolerance));
+            }
+        }
+    }
+    }
+}
+
+approx_mul_props!(complex_f64_mul_props, f64, any_complex, any_scalar, 1e-7);
+
