@@ -743,3 +743,110 @@ macro_rules! approx_mul_props {
 
 approx_mul_props!(complex_f64_mul_props, f64, any_complex, any_scalar, 1e-7);
 
+
+/// Generate property tests for complex number multiplication over exact scalars.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_mul_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg::{
+            Complex,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// Multiplication of an integer scalar and a complex number over integer 
+            /// scalars should be commutative.
+            ///
+            /// Given a constant `c` and a complex number `z`
+            /// ```text
+            /// c * z = z * c
+            /// ```
+            #[test]
+            fn prop_scalar_times_complex_equals_complex_times_scalar(
+                c in any::<$ScalarType>(), z in $Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!(c * z, z * c);
+            }
+
+            /// Exact multiplication of two scalars and a complex number should be 
+            /// compatible with multiplication of all scalars. 
+            ///
+            /// In other words, scalar multiplication of two scalars with a 
+            /// complex number should act associatively just like the multiplication 
+            /// of three scalars. 
+            ///
+            /// Given scalars `a` and `b`, and a complex number `z`, we have
+            /// ```text
+            /// (a * b) * z = a * (b * z)
+            /// ```
+            #[test]
+            fn prop_scalar_multiplication_compatibility(
+                a in any::<$ScalarType>(), b in any::<$ScalarType>(), z in $Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(a * (b * z), (a * b) * z);
+            }
+
+            /// Complex number multiplication over integer scalars is exactly associative.
+            ///
+            /// Given complex numbers `z1`, `z2`, and `z3`, we have
+            /// ```text
+            /// (z1 * z2) * z3 = z1 * (z2 * z3)
+            /// ```
+            #[test]
+            fn prop_complex_multiplication_associative(
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>(), 
+                z3 in $Generator::<$ScalarType>()
+            ) {
+                prop_assert_eq!(z1 * (z2 * z3), (z1 * z2) * z3);
+            }
+
+            /// Complex numbers have a multiplicative unit element.
+            ///
+            /// Given a complex number `z`, and the unit complex number `1`, we have
+            /// ```text
+            /// z * 1 = 1 * z = z
+            /// ```
+            #[test]
+            fn prop_complex_multiplicative_unit(z in $Generator::<$ScalarType>()) {
+                let one = Complex::identity();
+                prop_assert_eq!(z * one, z);
+                prop_assert_eq!(one * z, z);
+                prop_assert_eq!(z * one, one * z);
+            }
+
+            /// Multiplication of complex numbers over integer scalars is commutative.
+            /// 
+            /// Given a complex number `z1` and another complex number `z2`, we have
+            /// ```text
+            /// z1 * z2 = z2 * z1
+            /// ```
+            #[test]
+            fn prop_complex_multiplication_commutative(
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+
+                prop_assert_eq!(z1 * z2, z2 * z1);
+            }
+        }
+    }
+    }
+}
+
+exact_mul_props!(complex_i32_mul_props, i32, any_complex);
+exact_mul_props!(complex_u32_mul_props, u32, any_complex);
+
+
