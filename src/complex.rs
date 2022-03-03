@@ -1977,6 +1977,71 @@ impl_scalar_complex_mul_ops!(isize);
 impl_scalar_complex_mul_ops!(f32);
 impl_scalar_complex_mul_ops!(f64);
 
+macro_rules! impl_scalar_complex_div_ops {
+    ($Lhs:ty) => {
+        impl ops::Div<Complex<$Lhs>> for $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn div(self, other: Complex<$Lhs>) -> Self::Output {
+                let denominator = other.re * other.re + other.im * other.im;
+                let re = (self * other.re) / denominator;
+                let im = -(self * other.im) / denominator;
+
+                Self::Output::new(re, im)
+            }
+        }
+
+        impl ops::Div<&Complex<$Lhs>> for $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn div(self, other: &Complex<$Lhs>) -> Self::Output {
+                let denominator = other.re * other.re + other.im * other.im;
+                let re = (self * other.re) / denominator;
+                let im = -(self * other.im) / denominator;
+                
+                Self::Output::new(re, im)
+            }
+        }
+
+        impl ops::Div<Complex<$Lhs>> for &$Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn div(self, other: Complex<$Lhs>) -> Self::Output {
+                let denominator = other.re * other.re + other.im * other.im;
+                let re = (self * other.re) / denominator;
+                let im = -(self * other.im) / denominator;
+                
+                Self::Output::new(re, im)
+            }
+        }
+
+        impl<'a, 'b> ops::Div<&'a Complex<$Lhs>> for &'b $Lhs {
+            type Output = Complex<$Lhs>;
+
+            #[inline]
+            fn div(self, other: &'a Complex<$Lhs>) -> Self::Output {
+                let denominator = other.re * other.re + other.im * other.im;
+                let re = (self * other.re) / denominator;
+                let im = -(self * other.im) / denominator;
+                
+                Self::Output::new(re, im)
+            }
+        }
+    }
+}
+
+impl_scalar_complex_div_ops!(i8);
+impl_scalar_complex_div_ops!(i16);
+impl_scalar_complex_div_ops!(i32);
+impl_scalar_complex_div_ops!(i64);
+impl_scalar_complex_div_ops!(i128);
+impl_scalar_complex_div_ops!(isize);
+impl_scalar_complex_div_ops!(f32);
+impl_scalar_complex_div_ops!(f64);
+
 
 impl<S> approx::AbsDiffEq for Complex<S> 
 where 
