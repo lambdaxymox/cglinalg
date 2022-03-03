@@ -544,3 +544,90 @@ macro_rules! approx_sub_props {
 
 approx_sub_props!(complex_f64_sub_props, f64, any_complex, 1e-7);
 
+
+/// Generate property tests for complex number arithmetic over exact scalars.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_sub_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg::{
+            Complex,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The zero complex number should act as an additive unit. 
+            ///
+            /// Given a complex number `z`, we have
+            /// ```text
+            /// z - 0 = z
+            /// ```
+            #[test]
+            fn prop_complex_minus_zero_equals_complex(z in $Generator()) {
+                let zero_complex = Complex::<$ScalarType>::zero();
+
+                prop_assert_eq!(z - zero_complex, z);
+            }
+
+            /// Every complex number should have an additive inverse. 
+            ///
+            /// Given a complex number `z`, there is a complex number `-z` such that
+            /// ```text
+            /// z - z = z + (-z) = (-z) + z = 0
+            /// ```
+            #[test]
+            fn prop_complex_minus_complex_equals_zero(z in $Generator::<$ScalarType>()) {
+                let zero_quat = Complex::<$ScalarType>::zero();
+
+                prop_assert_eq!(z - z, zero_quat);
+            }
+
+            /// Given complex numbers `z1` and `z2`, we should be able to use `z1` 
+            /// and `z2` interchangeably with their references `&z1` and `&z2` 
+            /// in arithmetic expressions involving complex numbers.
+            ///
+            /// Given complex numbers `z1` and `z2`, and their references `&z1` 
+            /// and `&z2`, they should satisfy
+            /// ```text
+            ///  z1 -  z2 = &z1 -  z2
+            ///  z1 -  z2 =  z1 - &z2
+            ///  z1 -  z2 = &z1 - &z2
+            ///  z1 - &z2 = &z1 -  z2
+            /// &z1 -  z2 =  z1 - &z2
+            /// &z1 -  z2 = &z1 - &z2
+            ///  z1 - &z2 = &z1 - &z2
+            /// ```
+            #[test]
+            fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+                
+                prop_assert_eq!( z1 -  z2, &z1 -  z2);
+                prop_assert_eq!( z1 -  z2,  z1 - &z2);
+                prop_assert_eq!( z1 -  z2, &z1 - &z2);
+                prop_assert_eq!( z1 - &z2, &z1 -  z2);
+                prop_assert_eq!(&z1 -  z2,  z1 - &z2);
+                prop_assert_eq!(&z1 -  z2, &z1 - &z2);
+                prop_assert_eq!( z1 - &z2, &z1 - &z2);
+            }
+        }
+    }
+    }
+}
+
+exact_sub_props!(complex_i32_sub_props, i32, any_complex);
+exact_sub_props!(complex_u32_sub_props, u32, any_complex);
+
