@@ -72,7 +72,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -80,7 +80,7 @@ where
     /// let expected = angle.into();
     /// let result = rotation.angle();
     ///
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn angle(&self) -> Radians<S> {
@@ -98,7 +98,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -106,9 +106,9 @@ where
     /// let unit_x = Vector2::unit_x();
     /// let unit_y = Vector2::unit_y();
     ///
-    /// assert!(relative_eq!(
+    /// assert_relative_eq!(
     ///     rotation.rotate_vector(&unit_x), unit_y, epsilon = 1e-8
-    /// ));
+    /// );
     /// ```
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {  
@@ -249,7 +249,7 @@ where
     /// #     Vector2, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -259,7 +259,7 @@ where
     /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.rotate_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
@@ -277,7 +277,7 @@ where
     /// #     Point2, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -287,7 +287,7 @@ where
     /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.rotate_point(&point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotate_point(&self, point: &Point2<S>) -> Point2<S> {
@@ -308,7 +308,7 @@ where
     /// #     Vector2, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -318,12 +318,12 @@ where
     /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.rotate_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     ///
     /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.inverse_rotate_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_rotate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
@@ -343,7 +343,7 @@ where
     /// #     Point2, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -353,12 +353,12 @@ where
     /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.rotate_point(&point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     ///
     /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.inverse_rotate_point(&point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_rotate_point(&self, point: &Point2<S>) -> Point2<S> {
@@ -741,7 +741,7 @@ where
     /// #     Rotation3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -751,7 +751,7 @@ where
     /// let expected = Rotation3::from_axis_angle(&axis, angle);
     /// let result = Rotation3::from_quaternion(&quaternion);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn from_quaternion(quaternion: &Quaternion<S>) -> Self {
@@ -779,9 +779,6 @@ where
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     relative_eq, 
     /// # };
     /// # use core::f64;
     /// # 
@@ -811,9 +808,6 @@ where
     /// #     Radians,
     /// #     Unit,
     /// # };
-    /// # use approx::{
-    /// #     relative_eq, 
-    /// # };
     /// # use core::f64;
     /// # 
     /// let angle = Radians(f64::consts::FRAC_PI_2);
@@ -841,9 +835,6 @@ where
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     relative_eq, 
     /// # };
     /// # use core::f64;
     /// # 
@@ -876,7 +867,7 @@ where
     /// #     Vector3,    
     /// # };
     /// # use approx::{
-    /// #     relative_eq,    
+    /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
@@ -885,7 +876,7 @@ where
     /// let rotation = Rotation3::face_towards(&direction, &up);
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_eq!(rotation.rotate_vector(&unit_z), direction);
+    /// assert_relative_eq!(rotation.rotate_vector(&unit_z), direction, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -913,7 +904,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// # 
     /// let direction: Vector3<f64> = Vector3::unit_y();
@@ -922,7 +913,7 @@ where
     /// let result = rotation.rotate_vector(&direction);
     /// let expected = -Vector3::unit_z();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -948,7 +939,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// # 
     /// let direction: Vector3<f64> = Vector3::unit_y();
@@ -957,7 +948,7 @@ where
     /// let result = rotation.rotate_vector(&direction);
     /// let expected = Vector3::unit_z();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -979,7 +970,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
@@ -989,7 +980,7 @@ where
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
     /// let result = rotation.rotate_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotation_between(
@@ -1010,7 +1001,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
@@ -1020,7 +1011,7 @@ where
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
     /// let result = rotation.rotate_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotation_between_axis(
@@ -1102,7 +1093,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1113,7 +1104,7 @@ where
     /// let expected = -Vector3::unit_y();
     /// let result = rotation.rotate_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -1133,7 +1124,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1144,7 +1135,7 @@ where
     /// let expected = Point3::new(0_f64, -1_f64, 0_f64);
     /// let result = rotation.rotate_point(&point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotate_point(&self, point: &Point3<S>) -> Point3<S> { 
@@ -1166,7 +1157,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1178,7 +1169,7 @@ where
     /// let rotated_vector = rotation.rotate_vector(&vector);
     /// let result = rotation.inverse_rotate_vector(&rotated_vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```   
     #[inline]
     pub fn inverse_rotate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -1200,7 +1191,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1212,7 +1203,7 @@ where
     /// let rotated_point = rotation.rotate_point(&point);
     /// let result = rotation.inverse_rotate_point(&rotated_point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_rotate_point(&self, point: &Point3<S>) -> Point3<S> {

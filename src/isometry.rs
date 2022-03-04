@@ -119,7 +119,7 @@ where
     /// #     Point2, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let isometry = Isometry2::from_angle(Degrees(45_f64));
@@ -127,7 +127,7 @@ where
     /// let expected = Point2::new(0_f64, 4_f64);
     /// let result = isometry.transform_point(&point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
@@ -221,7 +221,7 @@ where
     /// #     Degrees, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,    
+    /// #     assert_relative_eq,    
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -234,7 +234,7 @@ where
     /// );
     /// let result = isometry.to_affine_matrix();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
@@ -274,7 +274,7 @@ where
     /// #     Vector2,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -285,7 +285,7 @@ where
     /// let expected = point;
     /// let result = isometry_inv * (isometry * point);
     ///
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse(&self) -> Self {
@@ -342,7 +342,7 @@ where
     /// #     Radians,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -353,7 +353,7 @@ where
     /// let expected = Point2::new(1_f64, 4_f64);
     /// let result = isometry.transform_point(&point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
@@ -375,7 +375,7 @@ where
     /// #     Radians,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -386,7 +386,7 @@ where
     /// let expected = Vector2::new(0_f64, 2_f64);
     /// let result = isometry.transform_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     #[inline]
     pub fn transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         let rotated_vector = self.rotation.rotate_vector(vector);
@@ -409,7 +409,7 @@ where
     /// #     Radians,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -421,7 +421,7 @@ where
     /// let expected = point;
     /// let result = isometry.inverse_transform_point(&transformed_point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point2<S>) -> Point2<S> {
@@ -441,7 +441,7 @@ where
     /// #     Radians,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -453,7 +453,7 @@ where
     /// let expected = vector;
     /// let result = isometry.inverse_transform_vector(&transformed_vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_transform_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
@@ -895,7 +895,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
@@ -905,7 +905,7 @@ where
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
     /// let result = isometry.transform_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotation_between(
@@ -933,7 +933,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
@@ -943,7 +943,7 @@ where
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
     /// let result = isometry.transform_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotation_between_axis(
@@ -973,7 +973,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -984,7 +984,7 @@ where
     /// let unit_z = Vector3::unit_z();
     /// let direction = (target - eye).normalize();
     ///
-    /// assert_eq!(isometry.transform_vector(&unit_z), direction);
+    /// assert_relative_eq!(isometry.transform_vector(&unit_z), direction, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -1017,7 +1017,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// # 
     /// let target = Point3::new(0_f64, 6_f64, 0_f64);
@@ -1027,8 +1027,8 @@ where
     /// let result = isometry.transform_vector(&(target - eye).normalize());
     /// let expected = Vector3::unit_z();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
-    /// assert_eq!(isometry.transform_point(&eye), Point3::origin());
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(isometry.transform_point(&eye), Point3::origin(), epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -1061,7 +1061,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// # 
     /// let target = Point3::new(0_f64, 6_f64, 0_f64);
@@ -1071,8 +1071,8 @@ where
     /// let result = isometry.transform_vector(&(target - eye).normalize());
     /// let expected = -Vector3::unit_z();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
-    /// assert_eq!(isometry.transform_point(&eye), Point3::origin());
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(isometry.transform_point(&eye), Point3::origin(), epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S>{
@@ -1103,7 +1103,7 @@ where
     /// #     Unit, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,    
+    /// #     assert_relative_eq,    
     /// # };
     /// #
     /// let axis = Unit::from_value(Vector3::unit_z());
@@ -1118,7 +1118,7 @@ where
     /// );
     /// let result = isometry.to_affine_matrix();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
@@ -1160,7 +1160,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -1172,7 +1172,7 @@ where
     /// let expected = point;
     /// let result = isometry_inv * (isometry * point);
     ///
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse(&self) -> Self {
@@ -1232,7 +1232,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1244,7 +1244,7 @@ where
     /// let expected = Point3::new(1_f64, 4_f64, f64::sqrt(2_f64) + 3_f64);
     /// let result = isometry.transform_point(&point);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -1267,7 +1267,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1279,7 +1279,7 @@ where
     /// let expected = Vector3::new(0_f64, 2_f64, f64::sqrt(2_f64));
     /// let result = isometry.transform_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -1302,7 +1302,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1315,7 +1315,7 @@ where
     /// let transformed_point = isometry.transform_point(&point);
     /// let result = isometry.inverse_transform_point(&transformed_point);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -1336,7 +1336,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1349,7 +1349,7 @@ where
     /// let transformed_vector = isometry.transform_vector(&vector);
     /// let result = isometry.inverse_transform_vector(&transformed_vector);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_transform_vector(&self, vector: &Vector3<S>) -> Vector3<S> {

@@ -147,7 +147,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
@@ -160,7 +160,7 @@ where
     /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
     /// let result = reflection.reflect_vector(&vector);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn reflect_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
@@ -180,7 +180,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
@@ -193,7 +193,7 @@ where
     /// let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
     /// let result = reflection.reflect_point(&point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn reflect_point(&self, point: &Point2<S>) -> Point2<S> {

@@ -131,7 +131,7 @@ where
     /// #     Matrix4x4, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let left = -3_f64;
@@ -149,7 +149,7 @@ where
     ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
     /// );
     ///
-    /// assert_eq!(result, &expected);
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// 
     #[inline]
     pub fn matrix(&self) -> &Matrix4x4<S> {
@@ -166,7 +166,7 @@ where
     /// #     Point3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let left = -3_f64;
@@ -180,7 +180,7 @@ where
     /// let expected = Point3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
     /// let result = perspective.project_point(&point);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -203,7 +203,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let left = -3_f64;
@@ -217,7 +217,7 @@ where
     /// let expected = Vector3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
     /// let result = perspective.project_vector(&vector);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -240,7 +240,7 @@ where
     /// #     Point3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let left = -3_f64;
@@ -255,7 +255,7 @@ where
     /// let projected_point = perspective.project_point(&point);
     /// let result = perspective.unproject_point(&projected_point);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -312,7 +312,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let left = -3_f64;
@@ -327,7 +327,7 @@ where
     /// let projected_vector = perspective.project_vector(&vector);
     /// let result = perspective.unproject_vector(&projected_vector);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -625,7 +625,7 @@ where
     /// #     Point3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -638,7 +638,7 @@ where
     /// let expected = Point3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_point(&point);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         let inverse_w = -S::one() / point.z;
@@ -663,7 +663,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -676,7 +676,7 @@ where
     /// let expected = Vector3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_vector(&vector);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -702,7 +702,7 @@ where
     /// #     Point3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -716,7 +716,7 @@ where
     /// let projected_point = perspective.project_point(&point);
     /// let result = perspective.unproject_point(&projected_point);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -784,7 +784,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -798,7 +798,7 @@ where
     /// let projected_vector = perspective.project_vector(&vector);
     /// let result = perspective.unproject_vector(&projected_vector); 
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -1473,7 +1473,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1489,7 +1489,7 @@ where
     /// );
     /// let result = orthographic.matrix();
     ///
-    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn matrix(&self) -> &Matrix4x4<S> {
@@ -1507,7 +1507,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1519,7 +1519,7 @@ where
     /// let expected = Point3::new(4_f64 / 101_f64, 8_f64 / 101_f64, -101_f64 / 50_f64);
     /// let result = orthographic.project_point(&point);
     /// 
-    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -1541,7 +1541,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1553,7 +1553,7 @@ where
     /// let expected = Vector3::new(4_f64 / 101_f64, 8_f64 / 101_f64, -1_f64);
     /// let result = orthographic.project_vector(&vector);
     /// 
-    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -1578,7 +1578,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1591,7 +1591,7 @@ where
     /// let projected_point = orthographic.project_point(&point);
     /// let result = orthographic.unproject_point(&projected_point);
     /// 
-    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -1632,7 +1632,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1645,7 +1645,7 @@ where
     /// let projected_vector = orthographic.project_vector(&vector);
     /// let result = orthographic.unproject_vector(&projected_vector);
     /// 
-    /// assert!(relative_eq!(result, &expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {

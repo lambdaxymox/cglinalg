@@ -342,14 +342,14 @@ where
     /// #     Matrix1x1,  
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let matrix = Matrix1x1::new(5_f64);
     /// let expected = Matrix1x1::new(1_f64 / 5_f64);
     /// let result = matrix.inverse().unwrap();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -1250,7 +1250,7 @@ where
     /// #     Vector2, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -1260,7 +1260,7 @@ where
     /// let expected = unit_y;
     /// let result = matrix * unit_x;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -1284,7 +1284,7 @@ where
     /// #     Vector2, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -1294,7 +1294,7 @@ where
     /// let expected = -Vector2::unit_x();
     /// let result = matrix * vector;
     ///
-    /// assert!(relative_eq!(result, expected));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     /// The matrix returned by `rotation_between` should make `v1` and `v2` collinear.
     /// ```
@@ -1303,7 +1303,7 @@ where
     /// #     Vector2, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -1312,7 +1312,7 @@ where
     /// let result = matrix * v1;
     /// let expected = v2;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector2<S>, v2: &Vector2<S>) -> Self {
@@ -1338,7 +1338,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -1350,7 +1350,7 @@ where
     /// let expected = -Vector2::unit_x();
     /// let result = matrix * vector;
     ///
-    /// assert!(relative_eq!(result, expected));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     /// The matrix returned by `rotation_between` should make `v1` and `v2` collinear.
     /// ```
@@ -1360,7 +1360,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -1371,7 +1371,7 @@ where
     /// let result = matrix * v1;
     /// let expected = v2;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn rotation_between_axis(
@@ -1435,7 +1435,7 @@ where
     /// #     Matrix2x2,  
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let matrix = Matrix2x2::new(
@@ -1448,7 +1448,7 @@ where
     /// );
     /// let result = matrix.inverse().unwrap();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -1517,7 +1517,7 @@ where
     /// #     Matrix2x2,    
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let matrix0 = Matrix2x2::new(0_f64, 0_f64, 1_f64, 1_f64);
@@ -1526,7 +1526,7 @@ where
     /// let expected = Matrix2x2::new(1_f64, 1_f64, 2_f64, 2_f64);
     /// let result = matrix0.lerp(&matrix1, amount);
     ///
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
@@ -2828,7 +2828,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// #
     /// let bias = Vector2::new(0.0, 2.0);
@@ -2840,7 +2840,7 @@ where
     /// let expected = Vector3::new(-1.0, 4.0, 1.0);
     /// let result = matrix * vector;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3005,7 +3005,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -3014,7 +3014,7 @@ where
     /// let expected = Vector3::unit_y();
     /// let result = matrix * unit_x;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3043,7 +3043,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -3052,7 +3052,7 @@ where
     /// let expected = Vector3::new(0_f64, -1_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3079,7 +3079,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -3088,7 +3088,7 @@ where
     /// let expected = Vector3::new(1_f64, 0_f64, -1_f64);
     /// let result = matrix * vector;
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3115,7 +3115,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -3124,7 +3124,7 @@ where
     /// let expected = Vector3::new(-1_f64, 1_f64, 0_f64);
     /// let result = matrix * vector;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3152,7 +3152,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -3162,7 +3162,7 @@ where
     /// let expected = Vector3::unit_y();
     /// let result = matrix * unit_x;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3203,7 +3203,7 @@ where
     /// #     Vector3,    
     /// # };
     /// # use approx::{
-    /// #     relative_eq,    
+    /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
@@ -3216,7 +3216,7 @@ where
     /// );
     /// let result = Matrix3x3::face_towards(&direction, &up);
     ///
-    /// assert!(relative_eq!(result, expected));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     ///
     /// let transformed_z = result * Vector3::unit_z();
     ///
@@ -3253,7 +3253,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -3266,7 +3266,7 @@ where
     /// );
     /// let result = Matrix3x3::look_at_rh(&direction, &up);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -3301,7 +3301,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,   
+    /// #     assert_relative_eq,   
     /// # };
     /// #
     /// let v1: Vector3<f64> = Vector3::unit_x() * 2_f64;
@@ -3310,7 +3310,7 @@ where
     /// let expected = Vector3::new(0_f64, 2_f64, 0_f64);
     /// let result = matrix * v1;
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
@@ -3348,7 +3348,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,   
+    /// #     assert_relative_eq,   
     /// # };
     /// #
     /// let unit_v1: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x() * 2_f64);
@@ -3358,7 +3358,7 @@ where
     /// let expected = Vector3::unit_y() * 2_f64;
     /// let result = matrix * vector;
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotation_between_axis(
@@ -3449,7 +3449,7 @@ where
     /// #     Matrix3x3,  
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
@@ -3464,7 +3464,7 @@ where
     /// );
     /// let result = matrix.inverse().unwrap();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3554,7 +3554,7 @@ where
     /// #     Matrix3x3,    
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let matrix0 = Matrix3x3::new(
@@ -3575,7 +3575,7 @@ where
     /// );
     /// let result = matrix0.lerp(&matrix1, amount);
     ///
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
@@ -5008,7 +5008,7 @@ where
     /// #     Angle, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,   
+    /// #     assert_relative_eq,   
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -5017,7 +5017,7 @@ where
     /// let expected = Vector4::new(0_f64, -1_f64, 1_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -5048,7 +5048,7 @@ where
     /// #     Vector4, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -5057,7 +5057,7 @@ where
     /// let expected = Vector4::new(1_f64, 0_f64, -1_f64, 1_f64);
     /// let result = matrix * vector;
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -5088,7 +5088,7 @@ where
     /// #     Vector4, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -5097,7 +5097,7 @@ where
     /// let expected = Vector4::new(-1_f64, 1_f64, 0_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -5129,7 +5129,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -5139,7 +5139,7 @@ where
     /// let expected = Vector4::new(0_f64, 1_f64, 0_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -5232,7 +5232,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let vfov = Degrees(90.0);
@@ -5247,7 +5247,7 @@ where
     /// );
     /// let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -5344,7 +5344,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vfov = Degrees(72.0);
@@ -5359,7 +5359,7 @@ where
     /// );
     /// let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -5435,7 +5435,7 @@ where
     /// #     Point3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -5450,7 +5450,7 @@ where
     /// );
     /// let result = Matrix4x4::look_at_rh(&eye, &target, &up);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -5498,7 +5498,7 @@ where
     /// #     Point3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -5513,7 +5513,7 @@ where
     /// );
     /// let result = Matrix4x4::look_at_lh(&eye, &target, &up);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -5609,7 +5609,7 @@ where
     /// #     Matrix4x4,  
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
@@ -5626,7 +5626,7 @@ where
     /// );
     /// let result = matrix.inverse().unwrap();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]

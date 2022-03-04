@@ -582,7 +582,7 @@ where
     /// #     Radians,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let pi = core::f64::consts::PI;
@@ -590,8 +590,8 @@ where
     /// let z1 = Complex::from_polar_decomposition(2_f64, Radians(angle));
     /// let z2 = Complex::from_polar_decomposition(2_f64, Radians(angle + 2_f64 * pi));
     /// 
-    /// assert!(relative_eq!(z1, z2, epsilon = 1e-10));
-    /// assert!(relative_eq!(z1.arg(), z2.arg(), epsilon = 1e-10));
+    /// assert_relative_eq!(z1, z2, epsilon = 1e-10);
+    /// assert_relative_eq!(z1.arg(), z2.arg(), epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn arg(self) -> S {
@@ -608,14 +608,14 @@ where
     /// #     Radians,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let pi_over_four = core::f64::consts::FRAC_PI_4;
     /// let expected = Complex::new(2_f64 / f64::sqrt(2_f64), 2_f64 / f64::sqrt(2_f64));
     /// let result = Complex::from_polar_decomposition(2_f64, Radians(pi_over_four));
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ``` 
     #[inline]
     pub fn from_polar_decomposition<A: Into<Radians<S>>>(radius: S, angle: A) -> Self {
@@ -633,14 +633,14 @@ where
     /// #     Radians,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let pi_over_four = core::f64::consts::FRAC_PI_4;
     /// let expected = Complex::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let result = Complex::from_angle(Radians(pi_over_four));
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
@@ -685,14 +685,14 @@ where
     /// #     Complex,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let z = Complex::new(2_f64, 5_f64);
     /// let expected = Complex::new(2.09599580151, -7.08554526009);
     /// let result = z.exp();
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn exp(self) -> Self {
@@ -799,17 +799,17 @@ where
     /// #     Complex,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let z = Complex::new(1_f64, 4_f64);
     /// let sqrt_z = z.sqrt();
     ///
-    /// assert!(relative_eq!(sqrt_z * sqrt_z, z, epsilon = 1e-10));
+    /// assert_relative_eq!(sqrt_z * sqrt_z, z, epsilon = 1e-10);
     /// 
     /// let minus_sqrt_z = -sqrt_z;
     /// 
-    /// assert!(relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = 1e-10));
+    /// assert_relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn sqrt(self) -> Self {
@@ -832,7 +832,7 @@ where
     /// #     Radians,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let pi_over_four = core::f64::consts::FRAC_PI_4;
@@ -841,7 +841,7 @@ where
     /// let expected = Complex::from_polar_decomposition(32_f64, Radians(exponent * pi_over_four));
     /// let result = z.powf(exponent);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn powf(self, exponent: S) -> Self {

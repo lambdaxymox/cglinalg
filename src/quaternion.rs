@@ -607,7 +607,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -616,11 +616,11 @@ where
     /// let sin_pi_over_12 = (f64::sqrt(3_f64) - 1_f64) / (2_f64 * f64::sqrt(2_f64));
     /// let expected = Quaternion::new(cos_pi_over_12, 0_f64, 0_f64, sin_pi_over_12);
     ///
-    /// assert!(relative_eq!(expected.magnitude_squared(), 1_f64, epsilon = 1e-10));
+    /// assert_relative_eq!(expected.magnitude_squared(), 1_f64, epsilon = 1e-10);
     /// 
     /// let result = Quaternion::from_axis_angle(&axis, pi_over_6);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
     /// A quaternion constructed from an axis and an angle will have the 
@@ -649,7 +649,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -660,7 +660,7 @@ where
     /// let q_inv = q.inverse().unwrap();
     /// let result = q * p * q_inv;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
@@ -756,7 +756,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -768,7 +768,7 @@ where
     /// );
     /// let result = quaternion.to_matrix3x3();
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     ///
     /// The following example shows the result of converting an unit 
@@ -783,7 +783,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
@@ -798,7 +798,7 @@ where
     /// );
     /// let result = quaternion.to_matrix3x3();
     /// 
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -845,7 +845,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -861,7 +861,7 @@ where
     ///
     /// quaternion.to_matrix3x3_mut(&mut result);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// The following example shows the result of converting an unit 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
@@ -875,7 +875,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
@@ -894,7 +894,7 @@ where
     ///
     /// quaternion.to_matrix3x3_mut(&mut result);
     /// 
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn to_matrix3x3_mut(&self, matrix: &mut Matrix3x3<S>) {
@@ -933,7 +933,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -946,7 +946,7 @@ where
     /// );
     /// let result = quaternion.to_matrix4x4();
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     ///
     /// The following example shows the result of converting an unit 
@@ -961,7 +961,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
@@ -977,7 +977,7 @@ where
     /// );
     /// let result = quaternion.to_matrix4x4();
     /// 
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -1034,7 +1034,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1051,7 +1051,7 @@ where
     ///
     /// quaternion.to_matrix4x4_mut(&mut result);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     ///
     /// The following example shows the result of converting an unit 
@@ -1066,7 +1066,7 @@ where
     /// #     Magnitude,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
@@ -1086,7 +1086,7 @@ where
     ///
     /// quaternion.to_matrix4x4_mut(&mut result);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn to_matrix4x4_mut(&self, matrix: &mut Matrix4x4<S>) {
@@ -1217,7 +1217,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,  
+    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -1232,7 +1232,7 @@ where
     /// let expected = pi_over_three;
     /// let result = quaternion.arg();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn arg(&self) -> S {
@@ -1276,7 +1276,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1286,7 +1286,7 @@ where
     /// let result = (unit_x * pi).exp();
     /// let expected = Quaternion::from_parts(-1_f64, zero_vec);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
     /// A computation involving the unit **y-axis** pure quaternion. 
@@ -1296,7 +1296,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1306,7 +1306,7 @@ where
     /// let result = (unit_y * pi).exp();
     /// let expected = Quaternion::from_parts(-1_f64, zero_vec);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
     /// A computation involving the unit **z-axis** pure quaternion. 
@@ -1316,7 +1316,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1326,7 +1326,7 @@ where
     /// let result = (unit_z * pi).exp();
     /// let expected = Quaternion::from_parts(-1_f64, zero_vec);
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
     /// A computation involving the unit **z-axis** pure quaternion again.
@@ -1336,7 +1336,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1345,7 +1345,7 @@ where
     /// let result = (unit_z * pi_over_two).exp();
     /// let expected = unit_z;
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn exp(&self) -> Self {
@@ -1389,7 +1389,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1399,7 +1399,7 @@ where
     /// let expected = Quaternion::new(f64::ln(f64::sqrt(2_f64)), 0_f64, 0_f64, pi / 4_f64);
     /// let result = quaternion.ln(); 
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
     /// # Example
@@ -1410,7 +1410,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -1421,7 +1421,7 @@ where
     /// let expected = Quaternion::from_parts(scalar, vector);
     /// let result = quaternion.ln();
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn ln(&self) -> Self {
@@ -1456,7 +1456,7 @@ where
     /// #     Vector3, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let scalar = 1_f64;
@@ -1466,7 +1466,7 @@ where
     /// let expected = 2_f64 * Quaternion::unit_z();
     /// let result = quaternion.powf(exponent);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn powf(&self, exponent: S) -> Self {
@@ -1529,7 +1529,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let q = Quaternion::from_parts(1_f64, Vector3::unit_z() * 4_f64);
@@ -1546,15 +1546,15 @@ where
     /// # );
     /// # let result = q.sqrt();
     /// #
-    /// # assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// # assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// #
     /// let sqrt_q = q.sqrt();
     /// 
-    /// assert!(relative_eq!(sqrt_q * sqrt_q, q, epsilon = 1e-10));
+    /// assert_relative_eq!(sqrt_q * sqrt_q, q, epsilon = 1e-10);
     /// 
     /// let minus_sqrt_q = -sqrt_q;
     /// 
-    /// assert!(relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = 1e-10));
+    /// assert_relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn sqrt(&self) -> Self {
@@ -1582,7 +1582,7 @@ where
     /// #     Quaternion,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1594,7 +1594,7 @@ where
     /// 
     /// let result = result.unwrap();
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn div_left(&self, left: &Self) -> Option<Self> {
@@ -1620,7 +1620,7 @@ where
     /// #     Quaternion,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1632,7 +1632,7 @@ where
     /// 
     /// let result = result.unwrap();
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn div_right(&self, right: &Self) -> Option<Self> {
@@ -1760,7 +1760,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,   
+    /// #     assert_relative_eq,   
     /// # };
     /// #
     /// let v1: Vector3<f64> = Vector3::unit_x() * 2_f64;
@@ -1772,7 +1772,7 @@ where
     /// );
     /// let result = Quaternion::rotation_between(&v1, &v2).unwrap();
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
@@ -1800,7 +1800,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,   
+    /// #     assert_relative_eq,   
     /// # };
     /// #
     /// let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
@@ -1812,7 +1812,7 @@ where
     /// );
     /// let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
     /// 
-    /// assert!(relative_eq!(result, expected));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn rotation_between_axis(
@@ -1920,7 +1920,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,   
+    /// #     assert_relative_eq,   
     /// # };
     /// #
     /// let angle1 = Degrees(30_f64);
@@ -1941,7 +1941,7 @@ where
     /// );
     /// let result = q1.slerp(&q2, 0.5);
     ///
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-7));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-7);
     /// ```
     #[inline]
     pub fn slerp(&self, other: &Self, amount: S) -> Self {
@@ -2115,8 +2115,8 @@ where
     /// #     Quaternion,
     /// # };
     /// # use approx::{
-    /// #     relative_eq,
-    /// #     relative_ne,
+    /// #     assert_relative_eq,
+    /// #     assert_relative_ne,
     /// # };
     /// #
     /// let q = Quaternion::new(0_f64, 5_f64, 2_f64, 8_f64);
@@ -2124,9 +2124,9 @@ where
     /// let q_proj = q.project(&p);
     /// let q_rej = q.reject(&p);
     /// 
-    /// assert!(relative_eq!(q_proj + q_rej, q, epsilon = 1e-10));
-    /// assert!(relative_ne!(q_proj.dot(&p), 0_f64));
-    /// assert!(relative_eq!(q_rej.dot(&p), 0_f64, epsilon = 1e-10));
+    /// assert_relative_eq!(q_proj + q_rej, q, epsilon = 1e-10);
+    /// assert_relative_ne!(q_proj.dot(&p), 0_f64);
+    /// assert_relative_eq!(q_rej.dot(&p), 0_f64, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn reject(&self, other: &Self) -> Self {
@@ -2161,7 +2161,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// # use core::f64;
     /// #
@@ -2174,14 +2174,14 @@ where
     /// let expected = (magnitude, angle_over_two, Some(axis));
     /// let result = quaternion.polar_decomposition();
     ///
-    /// assert!(relative_eq!(result.0, expected.0, epsilon = 1e-8));
-    /// assert!(relative_eq!(result.1, expected.1, epsilon = 1e-8));
+    /// assert_relative_eq!(result.0, expected.0, epsilon = 1e-8);
+    /// assert_relative_eq!(result.1, expected.1, epsilon = 1e-8);
     /// assert!(result.2.is_some());
-    /// assert!(relative_eq!(
+    /// assert_relative_eq!(
     ///     result.2.unwrap().as_ref(), 
     ///     expected.2.unwrap().as_ref(), 
     ///     epsilon = 1e-8
-    /// ));
+    /// );
     /// ```
     #[inline]
     pub fn polar_decomposition(&self) -> (S, Radians<S>, Option<Unit<Vector3<S>>>) {

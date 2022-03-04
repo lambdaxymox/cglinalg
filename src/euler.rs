@@ -49,7 +49,7 @@ use core::fmt;
 /// #     Matrix3x3,
 /// # };
 /// # use approx::{
-/// #     relative_eq,
+/// #     assert_relative_eq,
 /// # };
 ///
 /// let roll = Degrees(45.0);
@@ -73,7 +73,7 @@ use core::fmt;
 /// );
 /// let result = Matrix3x3::from(euler); 
 ///
-/// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+/// assert_relative_eq!(result, expected, epsilon = 1e-8);
 /// ```
 /// 
 /// # Example (Gimbal Lock)
@@ -127,7 +127,7 @@ use core::fmt;
 /// #    Matrix3x3,
 /// # };
 /// # use approx::{
-/// #    ulps_eq,
+/// #    assert_ulps_eq,
 /// # };
 ///
 /// // Gimbal lock the x-axis.
@@ -137,11 +137,11 @@ use core::fmt;
 /// let euler = EulerAngles::new(roll, yaw, pitch);
 /// let matrix_z_locked = Matrix3x3::from(euler);
 /// 
-/// assert!(ulps_eq!(matrix_z_locked.c0r0, 0.0));
-/// assert!(ulps_eq!(matrix_z_locked.c1r0, 0.0));
-/// assert!(ulps_eq!(matrix_z_locked.c2r0, 1.0));
-/// assert!(ulps_eq!(matrix_z_locked.c2r1, 0.0));
-/// assert!(ulps_eq!(matrix_z_locked.c2r2, 0.0));
+/// assert_ulps_eq!(matrix_z_locked.c0r0, 0.0);
+/// assert_ulps_eq!(matrix_z_locked.c1r0, 0.0);
+/// assert_ulps_eq!(matrix_z_locked.c2r0, 1.0);
+/// assert_ulps_eq!(matrix_z_locked.c2r1, 0.0);
+/// assert_ulps_eq!(matrix_z_locked.c2r2, 0.0);
 /// 
 /// // Attempt to roll in the gimbal locked state.
 /// let euler_roll = EulerAngles::new(Degrees(15.0), Degrees(0.0), Degrees(0.0));
@@ -149,11 +149,11 @@ use core::fmt;
 /// let matrix = matrix_roll * matrix_z_locked;
 ///
 /// // But the matrix is still gimbal locked.
-/// assert!(ulps_eq!(matrix.c0r0, 0.0));
-/// assert!(ulps_eq!(matrix.c1r0, 0.0));
-/// assert!(ulps_eq!(matrix.c2r0, 1.0));
-/// assert!(ulps_eq!(matrix.c2r1, 0.0));
-/// assert!(ulps_eq!(matrix.c2r2, 0.0));
+/// assert_ulps_eq!(matrix.c0r0, 0.0);
+/// assert_ulps_eq!(matrix.c1r0, 0.0);
+/// assert_ulps_eq!(matrix.c2r0, 1.0);
+/// assert_ulps_eq!(matrix.c2r1, 0.0);
+/// assert_ulps_eq!(matrix.c2r2, 0.0);
 /// ```
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]

@@ -610,7 +610,7 @@ where
     /// #     Matrix4x4, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
@@ -625,7 +625,7 @@ where
     /// let transformed_vector = transform.transform_vector(&vector);
     /// let result = transform.inverse_transform_vector(&transformed_vector).unwrap();
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_transform_vector(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
@@ -644,7 +644,7 @@ where
     /// #     Matrix4x4, 
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     assert_relative_eq, 
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
@@ -659,7 +659,7 @@ where
     /// let transformed_point = transform.transform_point(&point);
     /// let result = transform.inverse_transform_point(&transformed_point).unwrap();
     /// 
-    /// assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_transform_point(&self, point: &Point3<S>) -> Option<Point3<S>> {
