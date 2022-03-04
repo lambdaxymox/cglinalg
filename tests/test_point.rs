@@ -25,6 +25,14 @@ mod point1_tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_point_components_out_of_bounds() {
+        let point = Point1::new(1_i32);
+
+        assert_eq!(point[1], point[1]);
+    }
+
+    #[test]
     fn test_addition() {
         let p = Point1::new(27.6189);
         let v = Vector1::new(258.083);
@@ -159,6 +167,14 @@ mod point2_tests {
 
         assert_eq!(point.x, point[0]);
         assert_eq!(point.y, point[1]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_point_components_out_of_bounds() {
+        let point = Point2::new(1_i32, 2_i32);
+
+        assert_eq!(point[2], point[2]);
     }
 
     #[test]
@@ -300,6 +316,14 @@ mod point3_tests {
         assert_eq!(point.x, point[0]);
         assert_eq!(point.y, point[1]);
         assert_eq!(point.z, point[2]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_point_components_out_of_bounds() {
+        let point = Point3::new(1_i32, 2_i32, 3_i32);
+
+        assert_eq!(point[3], point[3]);
     }
 
     #[test]

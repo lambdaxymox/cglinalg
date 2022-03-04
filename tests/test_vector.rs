@@ -66,6 +66,14 @@ mod vector1_tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_vector_components_out_of_bounds() {
+        let v = Vector1::new(1_f32);
+
+        assert_eq!(v[1], v[1]);
+    }
+
+    #[test]
     fn test_addition() {
         test_cases().iter().for_each(|test| {
             let expected = Vector1::from(test.v1.x + test.v2.x);
@@ -103,14 +111,6 @@ mod vector1_tests {
 
             assert_eq!(result, expected);
         });
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_out_of_bounds_array_access() {
-        let v = Vector1::new(1_f32);
-
-        assert_eq!(v[1], v[1]);
     }
 
     #[test]
@@ -266,6 +266,14 @@ mod vector2_tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_vector_components_out_of_bounds() {
+        let v = Vector2::new(1_f32, 2_f32);
+
+        assert_eq!(v[2], v[2]);
+    }
+
+    #[test]
     fn test_addition() {
         test_cases().iter().for_each(|test| {
             let expected = Vector2::from((test.v1.x + test.v2.x, test.v1.y + test.v2.y));
@@ -303,14 +311,6 @@ mod vector2_tests {
 
             assert_eq!(result, expected);
         });
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_out_of_bounds_array_access() {
-        let v = Vector2::new(1_f32, 2_f32);
-
-        assert_eq!(v[2], v[2]);
     }
 
     #[test]
@@ -498,6 +498,14 @@ mod vector3_tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_vector_components_out_of_bounds() {
+        let v = Vector3::new(1_f32, 2_f32, 3_f32);
+
+        assert_eq!(v[3], v[3]);
+    }
+
+    #[test]
     fn test_addition() {
         test_cases().iter().for_each(|test| {
             let expected = Vector3::from((test.x.x + test.y.x, test.x.y + test.y.y, test.x.z + test.y.z));
@@ -535,14 +543,6 @@ mod vector3_tests {
 
             assert_eq!(result, expected);
         });
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_out_of_bounds_array_access() {
-        let v = Vector3::new(1_f32, 2_f32, 3_f32);
-
-        assert_eq!(v[3], v[3]);
     }
 
     #[test]
@@ -747,6 +747,14 @@ mod vector4_tests {
     }
 
     #[test]
+    #[should_panic]
+    fn  test_vector_components_out_of_bounds() {
+        let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
+
+        assert_eq!(v[4], v[4]);
+    }
+
+    #[test]
     fn test_addition() {
         test_cases().iter().for_each(|test| {
             let expected = Vector4::from((
@@ -794,14 +802,6 @@ mod vector4_tests {
 
             assert_eq!(result, expected);
         });
-    }
-
-    #[test]
-    #[should_panic]
-    fn  test_out_of_bounds_array_access() {
-        let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
-
-        assert_eq!(v[4], v[4]);
     }
 
     #[test]
