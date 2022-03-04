@@ -859,7 +859,7 @@ exact_mul_props!(complex_u32_mul_props, u32, any_complex);
 ///    tests in to separate them from each other for each scalar type to prevent 
 ///    namespace collisions.
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of quaternions.
+///    set of complex numbers.
 /// * `$Generator` is the name of a function or closure for generating examples.
 macro_rules! exact_distributive_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
