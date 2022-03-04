@@ -5761,6 +5761,9 @@ where
     /// # use cglinalg::{
     /// #    Matrix4x4,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// #
     /// let matrix0 = Matrix4x4::new(
     ///     0_f64, 0_f64, 0_f64, 0_f64,
@@ -5783,7 +5786,7 @@ where
     /// );
     /// let result = matrix0.lerp(&matrix1, amount);
     /// 
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
