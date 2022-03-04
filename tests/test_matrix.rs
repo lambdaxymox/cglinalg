@@ -330,9 +330,8 @@ mod matrix2x2_tests {
             -1_f64,  5_f64
         );
         let result = matrix.inverse().unwrap();
-        let epsilon = 1e-7;
 
-        assert_relative_eq!(result, expected, epsilon = epsilon);
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -430,9 +429,8 @@ mod matrix2x2_tests {
         );
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
-        let epsilon = 1e-7;
 
-        assert_relative_eq!(result, expected, epsilon = epsilon);
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -1056,9 +1054,8 @@ mod matrix3x3_tests {
             -1_f64, -1_f64,  6_f64,
         );
         let result = matrix.inverse().unwrap();
-        let epsilon = 1e-7;
 
-        assert_relative_eq!(result, expected, epsilon = epsilon);
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -1178,9 +1175,8 @@ mod matrix3x3_tests {
         );
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
-        let epsilon = 1e-7;
 
-        assert_relative_eq!(result, expected, epsilon = epsilon);
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -1996,9 +1992,8 @@ mod matrix4x4_tests {
         test_cases().iter().for_each(|test| {
             let result = test.a_mat * test.b_mat;
             let expected = test.expected;
-            let epsilon = 1e-7;
 
-            assert_relative_eq!(result, expected, epsilon = epsilon);
+            assert_relative_eq!(result, expected, epsilon = 1e-7);
         })
     }
 
@@ -2172,9 +2167,8 @@ mod matrix4x4_tests {
             -1_f64, -1_f64, -1_f64,  7_f64
         );
         let result = matrix.inverse().unwrap();
-        let epsilon = 1e-7;
 
-        assert_relative_eq!(result, expected, epsilon = epsilon);
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -2251,9 +2245,8 @@ mod matrix4x4_tests {
              0.001453087396607042, -0.0009538600348427,  -0.0005129477357421059, -0.0002621470728476185,
             -0.0007967195911958656, 0.01365031989418242,  0.0001408581712825875, -0.002040325515611523
         );
-        let epsilon = 1e-7;
 
-        assert_relative_eq!(result, expected, epsilon = epsilon);
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -2266,9 +2259,8 @@ mod matrix4x4_tests {
         );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4x4::identity();
-        let epsilon = 1e-7;
 
-        assert_relative_eq!(matrix * matrix_inv, one, epsilon = epsilon);
+        assert_relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7);
     }
 
     #[test]
@@ -2305,9 +2297,8 @@ mod matrix4x4_tests {
         );
         let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
         let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
-        let epsilon = 1e-7;
 
-        assert_relative_eq!(matrix_transpose_inverse, matrix_inverse_transpose, epsilon = epsilon);
+        assert_relative_eq!(matrix_transpose_inverse, matrix_inverse_transpose, epsilon = 1e-7);
     }
 
     #[test]
@@ -2320,9 +2311,8 @@ mod matrix4x4_tests {
         );
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix4x4::identity();
-        let epsilon = 1e-7;
         
-        assert_relative_eq!(matrix_inv * matrix, one, epsilon = epsilon);
+        assert_relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7);
     }
 
     #[test]
@@ -2335,9 +2325,8 @@ mod matrix4x4_tests {
         );
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
-        let epsilon = 1e-7;
 
-        assert_relative_eq!(result, expected, epsilon = epsilon);
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
