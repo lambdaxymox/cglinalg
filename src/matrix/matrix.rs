@@ -358,7 +358,9 @@ where
         if det.is_zero() {
             None
         } else {
-            Some(Self::new(S::one() / self.data[0][0]))
+            let det_inv = S::one() / det;
+
+            Some(Self::new(det_inv))
         }
     }
 
@@ -1459,6 +1461,7 @@ where
             None
         } else {
             let det_inv = S::one() / det;
+
             Some(Matrix2x2::new(
                 det_inv *  self.data[1][1], det_inv * -self.data[0][1],
                 det_inv * -self.data[1][0], det_inv *  self.data[0][0]
@@ -3475,7 +3478,7 @@ where
             None
         } else {
             let det_inv = S::one() / det;
-    
+
             Some(Self::new(
                 det_inv * (self.data[1][1] * self.data[2][2] - self.data[1][2] * self.data[2][1]), 
                 det_inv * (self.data[0][2] * self.data[2][1] - self.data[0][1] * self.data[2][2]), 
@@ -5689,7 +5692,7 @@ where
             let c3r1 = det_inv * _c3r1; 
             let c3r2 = det_inv * _c3r2; 
             let c3r3 = det_inv * _c3r3;
-    
+
             Some(Self::new(
                 c0r0, c0r1, c0r2, c0r3,
                 c1r0, c1r1, c1r2, c1r3,
