@@ -1256,3 +1256,65 @@ macro_rules! magnitude_props {
 
 magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, any_scalar, 1e-7);
 
+
+/// Generate property tests for quaternion square roots.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! sqrt_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use approx::{
+            relative_eq,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The square of the positive square root of a quaternion is the original
+            /// quaternion.
+            /// 
+            /// Given a quaternion `q`
+            /// ```text
+            /// q.sqrt() * q.sqrt() == q
+            /// ```
+            #[test]
+            fn prop_positive_square_root_squared(q in $Generator::<$ScalarType>()) {
+                let sqrt_q = q.sqrt();
+
+                prop_assert!(relative_eq!(sqrt_q * sqrt_q, q, epsilon = $tolerance));
+            }
+
+            /// The square of the negative square root of a quaternion is the original
+            /// quaternion.
+            /// 
+            /// Given a quaternion `q`
+            /// ```text
+            /// -q.sqrt() * -q.sqrt() == q
+            /// ```
+            #[test]
+            fn prop_negative_square_root_squared(q in $Generator::<$ScalarType>()) {
+                let minus_sqrt_q = -q.sqrt();
+
+                prop_assert!(relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = $tolerance));
+            }
+        }
+    }
+    }
+}
+
+sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion, any_scalar, 1e-7);
+
