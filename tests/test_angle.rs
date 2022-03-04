@@ -211,7 +211,7 @@ mod degrees_arithmetic_tests {
 #[cfg(test)]
 mod radians_arithmetic_tests {
     use cglinalg::Radians;
-    use approx::relative_eq;
+    use approx::assert_relative_eq;
     use core::f64;
 
     const PI: Radians<f64> = Radians(f64::consts::PI);
@@ -224,16 +224,16 @@ mod radians_arithmetic_tests {
         let expected = PI * 10_f64 / 24_f64;
 
         let result = angle1 + angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = &angle1 + angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = angle1 + &angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = &angle1 + &angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -243,16 +243,16 @@ mod radians_arithmetic_tests {
         let expected = -PI / 12_f64;
 
         let result = angle1 - angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = &angle1 - angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = angle1 - &angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = &angle1 - &angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -262,10 +262,10 @@ mod radians_arithmetic_tests {
         let expected = Radians(f64::consts::PI * 4_f64 / 6_f64);
 
         let result = angle * c;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = &angle * c;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -275,16 +275,16 @@ mod radians_arithmetic_tests {
         let expected = 4_f64 / 6_f64;
 
         let result = angle1 / angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = &angle1 / angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = angle1 / &angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = &angle1 / &angle2;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -293,10 +293,10 @@ mod radians_arithmetic_tests {
         let expected = -PI / 6_f64;
         
         let result = -angle;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
 
         let result = -&angle;
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     /// The remainder of an angle by a modulus smaller than the modulus should be
@@ -357,7 +357,7 @@ mod radian_angle_tests {
         Radians,
         Angle
     };
-    use approx::relative_eq;
+    use approx::assert_relative_eq;
     use core::f64;
 
 
@@ -374,7 +374,7 @@ mod radian_angle_tests {
         let expected = 1_f64 / 2_f64;
         let result = Radians(f64::consts::PI / 6_f64).sin();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -382,7 +382,7 @@ mod radian_angle_tests {
         let expected = f64::sqrt(3_f64) / 2_f64;
         let result = Radians(f64::consts::PI / 6_f64).cos();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -390,7 +390,7 @@ mod radian_angle_tests {
         let expected = f64::sqrt(3_f64) / 3_f64;
         let result = Radians(f64::consts::PI / 6_f64).tan();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -398,7 +398,7 @@ mod radian_angle_tests {
         let expected = Radians(f64::consts::PI / 6_f64);
         let result = Radians::asin(1_f64 / 2_f64);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -406,7 +406,7 @@ mod radian_angle_tests {
         let expected = Radians(f64::consts::PI / 6_f64);
         let result = Radians::acos(f64::sqrt(3_f64) / 2_f64);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -414,7 +414,7 @@ mod radian_angle_tests {
         let expected = Radians(f64::consts::PI / 6_f64);
         let result = Radians::atan(f64::sqrt(3_f64) / 3_f64);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -422,7 +422,7 @@ mod radian_angle_tests {
         let expected = Radians(f64::consts::FRAC_PI_2);
         let result = Radians::atan(f64::INFINITY);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -508,7 +508,7 @@ mod radian_angle_tests {
         let expected = 2_f64;
         let result = Radians(f64::consts::PI / 6_f64).csc();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -516,7 +516,7 @@ mod radian_angle_tests {
         let expected = 3_f64 / f64::sqrt(3_f64);
         let result = Radians(f64::consts::PI / 6_f64).cot();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -524,7 +524,7 @@ mod radian_angle_tests {
         let expected = 2_f64 / f64::sqrt(3_f64);
         let result = Radians(f64::consts::PI / 6_f64).sec();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 
@@ -534,7 +534,7 @@ mod degree_angle_tests {
         Degrees,
         Angle,
     };
-    use approx::relative_eq;
+    use approx::assert_relative_eq;
     use core::f64;
 
 
@@ -551,7 +551,7 @@ mod degree_angle_tests {
         let expected = 1_f64 / 2_f64;
         let result = Degrees(30_f64).sin();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -559,7 +559,7 @@ mod degree_angle_tests {
         let expected = f64::sqrt(3_f64) / 2_f64;
         let result = Degrees(30_f64).cos();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -567,7 +567,7 @@ mod degree_angle_tests {
         let expected = f64::sqrt(3_f64) / 3_f64;
         let result = Degrees(30_f64).tan();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -575,7 +575,7 @@ mod degree_angle_tests {
         let expected = Degrees(30_f64);
         let result = Degrees::asin(1_f64 / 2_f64);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -583,7 +583,7 @@ mod degree_angle_tests {
         let expected = Degrees(30_f64);
         let result = Degrees::acos(f64::sqrt(3_f64) / 2_f64);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -591,7 +591,7 @@ mod degree_angle_tests {
         let expected = Degrees(30_f64);
         let result = Degrees::atan(f64::sqrt(3_f64) / 3_f64);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -599,7 +599,7 @@ mod degree_angle_tests {
         let expected = Degrees(90_f64);
         let result = Degrees::atan(f64::INFINITY);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -685,7 +685,7 @@ mod degree_angle_tests {
         let expected = 2_f64;
         let result = Degrees(30_f64).csc();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -693,7 +693,7 @@ mod degree_angle_tests {
         let expected = 3_f64 / f64::sqrt(3_f64);
         let result = Degrees(30_f64).cot();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -701,6 +701,6 @@ mod degree_angle_tests {
         let expected = 2_f64 / f64::sqrt(3_f64);
         let result = Degrees(30_f64).sec();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }

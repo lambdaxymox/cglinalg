@@ -10,7 +10,7 @@ mod reflection2_tests {
         Unit,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -78,7 +78,7 @@ mod reflection2_tests {
         let expected = Point2::new(1_f64, 2_f64);
         let result = reflection.reflect_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the line `y = x`.
@@ -97,7 +97,7 @@ mod reflection2_tests {
         let expected = Vector2::new(1_f64, 2_f64);
         let result = reflection.reflect_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the line `y = x`.
@@ -116,7 +116,7 @@ mod reflection2_tests {
         let expected = Point2::new(1_f64, 2_f64);
         let result = reflection.reflect_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the line `y = x`.
@@ -135,7 +135,7 @@ mod reflection2_tests {
         let expected = Vector2::new(1_f64, 2_f64);
         let result = reflection.reflect_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the line `y = x`.
@@ -154,7 +154,7 @@ mod reflection2_tests {
         let expected = Point2::new(2_f64, 2_f64);
         let result = reflection.reflect_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the line `y = x`.
@@ -173,7 +173,7 @@ mod reflection2_tests {
         let expected = Vector2::new(2_f64, 2_f64);
         let result = reflection.reflect_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the line `y = (1/2)*x + 1`.
@@ -189,7 +189,7 @@ mod reflection2_tests {
         let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
         let result = reflection.reflect_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the line `y = (1/2)*x + 1.
@@ -205,7 +205,7 @@ mod reflection2_tests {
         let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
         let result = reflection.reflect_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 }
 
@@ -218,7 +218,7 @@ mod reflection3_tests {
         Unit,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -317,7 +317,7 @@ mod reflection3_tests {
         let expected = Point3::new(1_f64, 2_f64, 1_f64);
         let result = reflection.reflect_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the plane `y = x`.
@@ -337,7 +337,7 @@ mod reflection3_tests {
         let expected = Vector3::new(1_f64, 2_f64, 1_f64);
         let result = reflection.reflect_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8)); 
+        assert_relative_eq!(result, expected, epsilon = 1e-8); 
     }
 
     /// Test the reflection through the plane `y = x`.
@@ -357,7 +357,7 @@ mod reflection3_tests {
         let expected = Point3::new(1_f64, 2_f64, 1_f64);
         let result = reflection.reflect_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the plane `y = x`.
@@ -377,7 +377,7 @@ mod reflection3_tests {
         let expected = Vector3::new(1_f64, 2_f64, 1_f64);
         let result = reflection.reflect_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the plane `y = x`.
@@ -397,7 +397,7 @@ mod reflection3_tests {
         let expected = Point3::new(2_f64, 2_f64, 1_f64);
         let result = reflection.reflect_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the plane `y = x`.
@@ -417,7 +417,7 @@ mod reflection3_tests {
         let expected = Vector3::new(2_f64, 2_f64, 1_f64);
         let result = reflection.reflect_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the plane `y = (1/2)*x + 1`.
@@ -434,7 +434,7 @@ mod reflection3_tests {
         let expected = Point3::new(3_f64 / 5_f64, 9_f64 / 5_f64, 20_f64);
         let result = reflection.reflect_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the plane `y = (1/2)*x + 1.
@@ -451,7 +451,7 @@ mod reflection3_tests {
         let expected = Vector3::new(7_f64 / 5_f64, 1_f64 / 5_f64, 20_f64);
         let result = reflection.reflect_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the plane `(z - 2) + (y - 0) + (x - 0) == 0`.
@@ -469,7 +469,7 @@ mod reflection3_tests {
         let expected = Point3::new(-1_f64, -1_f64, 3_f64);
         let result = reflection.reflect_point(&point);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Test the reflection through the plane `(z - 2) + (y - 0) + (x - 0) == 0`.
@@ -487,7 +487,7 @@ mod reflection3_tests {
         let expected = Vector3::new(1_f64 / 3_f64, 1_f64 / 3_f64, 5_f64 / 3_f64);
         let result = reflection.reflect_vector(&vector);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 }
 

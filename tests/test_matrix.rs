@@ -11,7 +11,7 @@ mod matrix2x2_tests {
         Unit,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
     use core::slice::Iter;
 
@@ -332,7 +332,7 @@ mod matrix2x2_tests {
         let result = matrix.inverse().unwrap();
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(result, expected, epsilon = epsilon));
+        assert_relative_eq!(result, expected, epsilon = epsilon);
     }
 
     #[test]
@@ -385,7 +385,7 @@ mod matrix2x2_tests {
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix2x2::identity();
 
-        assert!(relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7));
+        assert_relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7);
     }
 
     #[test]
@@ -394,7 +394,7 @@ mod matrix2x2_tests {
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix2x2::identity();
 
-        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));        
+        assert_relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7);        
     }
 
     #[test]
@@ -432,7 +432,7 @@ mod matrix2x2_tests {
         let expected = matrix;
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(result, expected, epsilon = epsilon));
+        assert_relative_eq!(result, expected, epsilon = epsilon);
     }
 
     #[test]
@@ -587,7 +587,7 @@ mod matrix2x2_tests {
         let expected = Matrix2x2::new(0.0, 1.0, 1.0, 0.0);
         let result = Matrix2x2::from_reflection(&normal);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     /// Construct a reflection matrix test case for reflection about the 
@@ -601,7 +601,7 @@ mod matrix2x2_tests {
         let expected = Matrix2x2::new(0.0, 1.0, 1.0, 0.0);
         let result = Matrix2x2::from_reflection(&normal);
             
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -612,12 +612,12 @@ mod matrix2x2_tests {
         let expected = unit_y;
         let result = matrix * unit_x;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
 
         let expected = -unit_x;
         let result = matrix * unit_y;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -630,7 +630,7 @@ mod matrix2x2_tests {
         );
         let result = Matrix2x2::rotation_between(&unit_x, &unit_y);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -643,7 +643,7 @@ mod matrix2x2_tests {
         );
         let result = Matrix2x2::rotation_between_axis(&unit_x, &unit_y);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 }
 
@@ -659,7 +659,7 @@ mod matrix3x3_tests {
         Radians,
         Unit,
     };
-    use approx::relative_eq;
+    use approx::assert_relative_eq;
     use core::slice::Iter;
 
 
@@ -1058,7 +1058,7 @@ mod matrix3x3_tests {
         let result = matrix.inverse().unwrap();
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(result, expected, epsilon = epsilon));
+        assert_relative_eq!(result, expected, epsilon = epsilon);
     }
 
     #[test]
@@ -1126,7 +1126,7 @@ mod matrix3x3_tests {
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix3x3::identity();
 
-        assert!(relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7));
+        assert_relative_eq!(matrix * matrix_inv, one, epsilon = 1e-7);
     }
 
     #[test]
@@ -1166,7 +1166,7 @@ mod matrix3x3_tests {
         let matrix_inv = matrix.inverse().unwrap();
         let one = Matrix3x3::identity();
 
-        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7));
+        assert_relative_eq!(matrix_inv * matrix, one, epsilon = 1e-7);
     }
 
     #[test]
@@ -1180,7 +1180,7 @@ mod matrix3x3_tests {
         let expected = matrix;
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(result, expected, epsilon = epsilon));
+        assert_relative_eq!(result, expected, epsilon = epsilon);
     }
 
     #[test]
@@ -1446,7 +1446,7 @@ mod matrix3x3_tests {
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Construct a reflection matrix test case for reflection about the 
@@ -1466,7 +1466,7 @@ mod matrix3x3_tests {
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
             
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Construct an affine reflection matrix about the line `y = (1/2)x + 2`.
@@ -1483,7 +1483,7 @@ mod matrix3x3_tests {
         let expected = Vector3::new(-1.0, 4.0, 1.0);
         let result = matrix * vector;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// Construct an affine reflection matrix about the line `y = (1/2)x + 2`.
@@ -1500,7 +1500,7 @@ mod matrix3x3_tests {
         let expected = Vector3::new(-1.0, 4.0, 1.0);
         let result = matrix * vector;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));        
+        assert_relative_eq!(result, expected, epsilon = 1e-8);        
     }
 
     #[test]
@@ -1551,7 +1551,7 @@ mod matrix3x3_tests {
         let expected = unit_z;
         let result = matrix * unit_y;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -1563,7 +1563,7 @@ mod matrix3x3_tests {
         let expected = unit_x;
         let result = matrix * unit_z;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -1575,7 +1575,7 @@ mod matrix3x3_tests {
         let expected = unit_y;
         let result = matrix * unit_x;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -1589,7 +1589,7 @@ mod matrix3x3_tests {
         let expected = Vector3::new(1.0, 1.0, 1.0);
         let result = matrix * vector;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -1600,12 +1600,12 @@ mod matrix3x3_tests {
         let expected = unit_y.extend(0.0);
         let result = matrix * unit_x.extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
 
         let expected = -unit_x.extend(0.0);
         let result = matrix * unit_y.extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// An affine translation should only displace points and not vectors. We 
@@ -1645,7 +1645,7 @@ mod matrix3x3_tests {
         let expected = direction.normalize();
         let result = look_at * unit_z;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -1657,7 +1657,7 @@ mod matrix3x3_tests {
         let expected = minus_unit_z;
         let result = look_at * direction;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -1669,7 +1669,7 @@ mod matrix3x3_tests {
         let expected = unit_z;
         let result = look_at * direction;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -1683,7 +1683,7 @@ mod matrix3x3_tests {
         );
         let result = Matrix3x3::rotation_between(&unit_x, &unit_y).unwrap();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 }
 
@@ -1701,7 +1701,7 @@ mod matrix4x4_tests {
         Point3,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
     use core::slice::Iter;
 
@@ -1998,7 +1998,7 @@ mod matrix4x4_tests {
             let expected = test.expected;
             let epsilon = 1e-7;
 
-            assert!(relative_eq!(result, expected, epsilon = epsilon));
+            assert_relative_eq!(result, expected, epsilon = epsilon);
         })
     }
 
@@ -2174,10 +2174,7 @@ mod matrix4x4_tests {
         let result = matrix.inverse().unwrap();
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(result, expected, epsilon = epsilon),
-            "\nmatrix = {:?}\nmatrix_inv = {:?}\nmatrix * matrix_inv = {:?}\nexpected = {:?}\nepsilon = {:?}\n",
-            matrix, result, matrix * result, expected, epsilon
-        );
+        assert_relative_eq!(result, expected, epsilon = epsilon);
     }
 
     #[test]
@@ -2256,7 +2253,7 @@ mod matrix4x4_tests {
         );
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(result, expected, epsilon = epsilon));
+        assert_relative_eq!(result, expected, epsilon = epsilon);
     }
 
     #[test]
@@ -2271,10 +2268,7 @@ mod matrix4x4_tests {
         let one = Matrix4x4::identity();
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(matrix * matrix_inv, one, epsilon = epsilon),
-            "\nmatrix = {:?}\nmatrix_inv = {:?}\nmmatrix * matrix_inv = {:?}\nepsilon = {:?}\n",
-            matrix, matrix_inv, matrix * matrix_inv, epsilon
-        );
+        assert_relative_eq!(matrix * matrix_inv, one, epsilon = epsilon);
     }
 
     #[test]
@@ -2313,7 +2307,7 @@ mod matrix4x4_tests {
         let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(matrix_transpose_inverse, matrix_inverse_transpose, epsilon = epsilon));
+        assert_relative_eq!(matrix_transpose_inverse, matrix_inverse_transpose, epsilon = epsilon);
     }
 
     #[test]
@@ -2328,10 +2322,7 @@ mod matrix4x4_tests {
         let one = Matrix4x4::identity();
         let epsilon = 1e-7;
         
-        assert!(relative_eq!(matrix_inv * matrix, one, epsilon = epsilon),
-            "\nmatrix = {:?}\nmatrix_inv = {:?}\nmatrix_inv * matrix = {:?}\nepsilon = {:?}\n",
-            matrix, matrix_inv, matrix_inv * matrix, epsilon
-        );
+        assert_relative_eq!(matrix_inv * matrix, one, epsilon = epsilon);
     }
 
     #[test]
@@ -2346,7 +2337,7 @@ mod matrix4x4_tests {
         let expected = matrix;
         let epsilon = 1e-7;
 
-        assert!(relative_eq!(result, expected, epsilon = epsilon));
+        assert_relative_eq!(result, expected, epsilon = epsilon);
     }
 
     #[test]
@@ -2656,7 +2647,7 @@ mod matrix4x4_tests {
         let expected = unit_z.extend(0.0);
         let result = matrix * unit_y.extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -2668,7 +2659,7 @@ mod matrix4x4_tests {
         let expected = unit_x.extend(0.0);
         let result = matrix * unit_z.extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -2680,7 +2671,7 @@ mod matrix4x4_tests {
         let expected = unit_y.extend(0.0);
         let result = matrix * unit_x.extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -2692,7 +2683,7 @@ mod matrix4x4_tests {
         let expected = unit_z.extend(0.0);
         let result = matrix * unit_y.extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -2704,7 +2695,7 @@ mod matrix4x4_tests {
         let expected = unit_x.extend(0.0);
         let result = matrix * unit_z.extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -2716,7 +2707,7 @@ mod matrix4x4_tests {
         let expected = unit_y.extend(0.0);
         let result = matrix * unit_x.extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -2730,7 +2721,7 @@ mod matrix4x4_tests {
         let expected = Vector4::new(1.0, 1.0, 1.0,0.0);
         let result = matrix * vector;
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     /// An affine translation should only displace points and not vectors. We 
@@ -2794,7 +2785,7 @@ mod matrix4x4_tests {
         );
         let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -2831,7 +2822,7 @@ mod matrix4x4_tests {
         );
         let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -2845,7 +2836,7 @@ mod matrix4x4_tests {
         let expected = minus_unit_z.extend(0.0);
         let result = look_at * direction.normalize().extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -2859,7 +2850,7 @@ mod matrix4x4_tests {
         let expected = unit_z.extend(0.0);
         let result = look_at * direction.normalize().extend(0.0);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]

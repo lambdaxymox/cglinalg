@@ -11,7 +11,7 @@ mod rotation2_tests {
         Unit,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -23,7 +23,7 @@ mod rotation2_tests {
         let expected = Point2::new(0_f64, 3_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -34,7 +34,7 @@ mod rotation2_tests {
         let expected = 3_f64 * Vector2::unit_y();
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -45,7 +45,7 @@ mod rotation2_tests {
         let expected = 3_f64 * Point2::new(-1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -56,7 +56,7 @@ mod rotation2_tests {
         let expected = 3_f64 * Vector2::new(-1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -80,7 +80,7 @@ mod rotation2_tests {
         let expected = Point2::new(1_f64, 0_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -104,7 +104,7 @@ mod rotation2_tests {
         let expected = Vector2::unit_x();
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -116,7 +116,7 @@ mod rotation2_tests {
         let expected = 3_f64 * Point2::new(1_f64, 0_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -128,7 +128,7 @@ mod rotation2_tests {
         let expected = 3_f64 * Vector2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -139,7 +139,7 @@ mod rotation2_tests {
         let vector =  Vector2::new(f64::sqrt(2_f64), 0_f64);
         let result = rotation.rotate_vector(&vector);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -151,7 +151,7 @@ mod rotation2_tests {
         let rotation_inv = rotation.inverse();
         let result = rotation_inv.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -162,7 +162,7 @@ mod rotation2_tests {
         let expected =  Vector2::new(f64::sqrt(2_f64), 0_f64);
         let result = rotation.inverse_rotate_vector(&vector);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -173,7 +173,7 @@ mod rotation2_tests {
         let expected = Point2::new(f64::sqrt(2_f64), 0_f64);
         let result = rotation.inverse_rotate_point(&point);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 }
 
@@ -190,7 +190,7 @@ mod rotation3_tests {
         Unit,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
     #[test]
@@ -230,7 +230,7 @@ mod rotation3_tests {
         let expected = Point3::new(0_f64, 0_f64, 1_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -240,7 +240,7 @@ mod rotation3_tests {
         let expected = Vector3::unit_z();
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -250,7 +250,7 @@ mod rotation3_tests {
         let expected = Point3::new(0_f64, -1_f64, 1_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -260,7 +260,7 @@ mod rotation3_tests {
         let expected = Vector3::new(1_f64, -1_f64, 1_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -270,7 +270,7 @@ mod rotation3_tests {
         let expected = Point3::new(3_f64, -1_f64, 1_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -280,7 +280,7 @@ mod rotation3_tests {
         let expected = Vector3::new(3_f64, -1_f64, 1_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -290,7 +290,7 @@ mod rotation3_tests {
         let expected = Point3::new(1_f64, 0_f64, 0_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -300,7 +300,7 @@ mod rotation3_tests {
         let expected = Vector3::unit_x();
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -310,7 +310,7 @@ mod rotation3_tests {
         let expected = Point3::new(1_f64, 0_f64, 1_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -320,7 +320,7 @@ mod rotation3_tests {
         let expected = Vector3::new(1_f64, 0_f64, 1_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -330,7 +330,7 @@ mod rotation3_tests {
         let expected = Point3::new(1_f64, 1_f64, 1_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -340,7 +340,7 @@ mod rotation3_tests {
         let expected = Vector3::new(1_f64, 1_f64, 1_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -350,7 +350,7 @@ mod rotation3_tests {
         let expected = Point3::new(0_f64, 1_f64, 0_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -360,7 +360,7 @@ mod rotation3_tests {
         let expected = Vector3::unit_y();
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -370,7 +370,7 @@ mod rotation3_tests {
         let expected = Point3::new(-1_f64, 1_f64, 0_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -380,7 +380,7 @@ mod rotation3_tests {
         let expected = Vector3::new(-1_f64, 1_f64, 0_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -390,7 +390,7 @@ mod rotation3_tests {
         let expected = Point3::new(-1_f64, 1_f64, -1_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -400,7 +400,7 @@ mod rotation3_tests {
         let expected = Vector3::new(-1_f64, 1_f64, -1_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -410,7 +410,7 @@ mod rotation3_tests {
         let expected = Point3::new(0_f64, 1_f64, 0_f64);
         let result = rotation.inverse_rotate_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -420,7 +420,7 @@ mod rotation3_tests {
         let expected = Vector3::unit_y();
         let result = rotation.inverse_rotate_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -430,7 +430,7 @@ mod rotation3_tests {
         let expected = Point3::new(0_f64, 1_f64, 1_f64);
         let result = rotation.inverse_rotate_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -440,7 +440,7 @@ mod rotation3_tests {
         let expected = Vector3::new(1_f64, 1_f64, 1_f64);
         let result = rotation.inverse_rotate_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -450,7 +450,7 @@ mod rotation3_tests {
         let expected = Point3::new(3_f64, 1_f64, 1_f64);
         let result = rotation.inverse_rotate_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -460,7 +460,7 @@ mod rotation3_tests {
         let expected = Vector3::new(3_f64, 1_f64, 1_f64);
         let result = rotation.inverse_rotate_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -470,7 +470,7 @@ mod rotation3_tests {
         let expected = Point3::new(0_f64, 0_f64, 1_f64);
         let result = rotation.inverse_rotate_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -480,7 +480,7 @@ mod rotation3_tests {
         let expected = Vector3::unit_z();
         let result = rotation.inverse_rotate_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -490,7 +490,7 @@ mod rotation3_tests {
         let expected = Point3::new(-1_f64, 0_f64, 1_f64);
         let result = rotation.inverse_rotate_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -500,7 +500,7 @@ mod rotation3_tests {
         let expected = Vector3::new(-1_f64, 0_f64, 1_f64);
         let result = rotation.inverse_rotate_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -510,7 +510,7 @@ mod rotation3_tests {
         let expected = Point3::new(-1_f64, 1_f64, 1_f64);
         let result = rotation.inverse_rotate_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -520,7 +520,7 @@ mod rotation3_tests {
         let expected = Vector3::new(-1_f64, 1_f64, 1_f64);
         let result = rotation.inverse_rotate_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -530,7 +530,7 @@ mod rotation3_tests {
         let expected = Point3::new(1_f64, 0_f64, 0_f64);
         let result = rotation.inverse_rotate_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -540,7 +540,7 @@ mod rotation3_tests {
         let expected = Vector3::unit_x();
         let result = rotation.inverse_rotate_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -550,7 +550,7 @@ mod rotation3_tests {
         let expected = Point3::new(1_f64, 1_f64, 0_f64);
         let result = rotation.inverse_rotate_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -560,7 +560,7 @@ mod rotation3_tests {
         let expected = Vector3::new(1_f64, 1_f64, 0_f64);
         let result = rotation.inverse_rotate_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -570,7 +570,7 @@ mod rotation3_tests {
         let expected = Point3::new(1_f64, 1_f64, -1_f64);
         let result = rotation.inverse_rotate_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -580,7 +580,7 @@ mod rotation3_tests {
         let expected = Vector3::new(1_f64, 1_f64, -1_f64);
         let result = rotation.inverse_rotate_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -592,7 +592,7 @@ mod rotation3_tests {
         let expected = Point3::new(-2_f64 / 6_f64,  -8_f64 / 6_f64, 2_f64 / 6_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -604,7 +604,7 @@ mod rotation3_tests {
         let expected = Point3::new(-2_f64 / 6_f64,  -8_f64 / 6_f64, 2_f64 / 6_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -627,7 +627,7 @@ mod rotation3_tests {
         let expected = Point3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -639,7 +639,7 @@ mod rotation3_tests {
         let expected = Point3::new(1_f64, 0_f64, 0_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -651,7 +651,7 @@ mod rotation3_tests {
         let expected = Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -663,7 +663,7 @@ mod rotation3_tests {
         let expected = Vector3::unit_x();
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -675,7 +675,7 @@ mod rotation3_tests {
         let expected = 3_f64 * Point3::new(1_f64, 0_f64, 0_f64);
         let result = rotation.rotate_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -687,7 +687,7 @@ mod rotation3_tests {
         let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
         let result = rotation.rotate_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -698,7 +698,7 @@ mod rotation3_tests {
         let expected = Rotation3::from_angle_y(angle);
         let result = Rotation3::look_at_rh(&direction, &up);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -709,7 +709,7 @@ mod rotation3_tests {
         let result = rotation.rotate_vector(&direction);
         let expected = -Vector3::unit_z();
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -720,7 +720,7 @@ mod rotation3_tests {
         let expected = Rotation3::from_angle_y(angle);
         let result = Rotation3::look_at_lh(&direction, &up);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]

@@ -48,7 +48,7 @@ mod constructor_tests {
         Radians,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -58,7 +58,7 @@ mod constructor_tests {
         let expected = Complex::new(1_f64, 0_f64);
         let result = Complex::from_angle(angle);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -67,7 +67,7 @@ mod constructor_tests {
         let expected = Complex::new(0_f64, 1_f64);
         let result = Complex::from_angle(angle);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -76,7 +76,7 @@ mod constructor_tests {
         let expected = Complex::new(-1_f64, 0_f64);
         let result = Complex::from_angle(angle);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -85,7 +85,7 @@ mod constructor_tests {
         let expected = Complex::new(0_f64, -1_f64);
         let result = Complex::from_angle(angle);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -94,7 +94,7 @@ mod constructor_tests {
         let expected = Complex::new(1_f64, 0_f64);
         let result = Complex::from_angle(angle);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -102,7 +102,7 @@ mod constructor_tests {
         let angle = Radians(493_f64);
         let z = Complex::from_angle(angle);
 
-        assert!(relative_eq!(z.magnitude(), 1_f64));
+        assert_relative_eq!(z.magnitude(), 1_f64);
     }
 
     #[test]
@@ -121,7 +121,7 @@ mod constructor_tests {
         let expected = Complex::new(5_f64, 0_f64);
         let result = Complex::from_polar_decomposition(radius, angle);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -131,7 +131,7 @@ mod constructor_tests {
         let expected = Complex::new(0_f64, 5_f64);
         let result = Complex::from_polar_decomposition(radius, angle);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -141,7 +141,7 @@ mod constructor_tests {
         let expected = Complex::new(-5_f64, 0_f64);
         let result = Complex::from_polar_decomposition(radius, angle);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -151,7 +151,7 @@ mod constructor_tests {
         let expected = Complex::new(0_f64, -5_f64);
         let result = Complex::from_polar_decomposition(radius, angle);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -161,7 +161,7 @@ mod constructor_tests {
         let expected = Complex::new(5_f64, 0_f64);
         let result = Complex::from_polar_decomposition(radius, angle);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 
@@ -604,7 +604,7 @@ mod exp_tests {
         Complex,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -632,7 +632,7 @@ mod exp_tests {
         let expected: Complex<f64> = Complex::from_real(-1_f64);
         let result = (i * core::f64::consts::PI).exp();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 
@@ -708,7 +708,7 @@ mod square_root_tests {
         Complex,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -741,7 +741,7 @@ mod square_root_tests {
         let expected = (1_f64 / f64::sqrt(2_f64)) * Complex::new(1_f64, 1_f64);
         let result = i.sqrt();
 
-        assert!(relative_eq!(result, expected));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -750,7 +750,7 @@ mod square_root_tests {
         let expected = (1_f64 / f64::sqrt(2_f64)) * Complex::new(1_f64, -1_f64);
         let result = (-i).sqrt();
 
-        assert!(relative_eq!(result, expected));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -759,7 +759,7 @@ mod square_root_tests {
         let expected = Complex::new(1.9216093264675973, 1.3009928530039094);
         let result = z.sqrt();
 
-        assert!(relative_eq!(result, expected));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 

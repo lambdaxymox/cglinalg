@@ -14,7 +14,7 @@ use cglinalg::{
     Vector3,
 };
 use approx::{
-    relative_eq,
+    assert_relative_eq,
 };
 
 
@@ -70,7 +70,7 @@ fn test_perspective_projection_fov_matrix() {
     );
     let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
 
-    assert!(relative_eq!(result, expected));
+    assert_relative_eq!(result, expected);
 }
 
 #[test]
@@ -87,7 +87,7 @@ fn test_perspective_projection_fov_transformation() {
     );
     let result = PerspectiveFov3::new(vfov, aspect, near, far);
 
-    assert!(relative_eq!(result.matrix(), &expected, epsilon = 1e-10));
+    assert_relative_eq!(result.matrix(), &expected, epsilon = 1e-10);
 }
 
 #[test]
@@ -102,7 +102,7 @@ fn test_perspective_projection_unproject_point1() {
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
-    assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    assert_relative_eq!(result, expected, epsilon = 1e-8);
 }
 
 #[test]
@@ -117,7 +117,7 @@ fn test_perspective_projection_unproject_vector1() {
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
-    assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    assert_relative_eq!(result, expected, epsilon = 1e-8);
 }
 
 #[test]
@@ -133,7 +133,7 @@ fn test_perspective_projection_unproject_point2() {
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
-    assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    assert_relative_eq!(result, expected, epsilon = 1e-8);
 }
 
 #[test]
@@ -149,7 +149,7 @@ fn test_perspective_projection_unproject_vector2() {
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
-    assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    assert_relative_eq!(result, expected, epsilon = 1e-8);
 }
 
 #[test]
@@ -238,7 +238,7 @@ fn test_orthographic_fov_projection_matrix() {
     );
     let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
 
-    assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    assert_relative_eq!(result, expected, epsilon = 1e-10);
 }
 
 #[test]
@@ -256,7 +256,7 @@ fn test_orthographic_fov_projecton_transformation() {
     );
     let result = OrthographicFov3::new(vfov, aspect, near, far);
 
-    assert!(relative_eq!(result.matrix(), &expected, epsilon = 1e-10));
+    assert_relative_eq!(result.matrix(), &expected, epsilon = 1e-10);
 }
 
 #[test]

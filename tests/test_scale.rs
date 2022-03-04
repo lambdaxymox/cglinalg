@@ -8,6 +8,10 @@ mod scale2_tests {
         Point2,
         Vector2,
     };
+    use approx::{
+        assert_relative_eq,
+    };
+    
 
 
     #[test]
@@ -17,7 +21,7 @@ mod scale2_tests {
         let expected = Point2::new(10_f64, 40_f64);
         let result = scale.scale_point(&point);
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -27,7 +31,7 @@ mod scale2_tests {
         let expected = Vector2::new(10_f64, 40_f64);
         let result = scale.scale_vector(&vector);
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -37,7 +41,7 @@ mod scale2_tests {
         let expected = Point2::new(1_f64, 2_f64);
         let result = scale.inverse_scale_point(&point);
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -47,7 +51,7 @@ mod scale2_tests {
         let expected = Vector2::new(1_f64, 2_f64);
         let result = scale.inverse_scale_vector(&vector);
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 
@@ -58,6 +62,9 @@ mod scale3_tests {
         Point3,
         Vector3,
     };
+    use approx::{
+        assert_relative_eq,
+    };
 
 
     #[test]
@@ -67,7 +74,7 @@ mod scale3_tests {
         let expected = Point3::new(10_f64, 40_f64, 90_f64);
         let result = scale.scale_point(&point);
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -77,7 +84,7 @@ mod scale3_tests {
         let expected = Vector3::new(10_f64, 40_f64, 90_f64);
         let result = scale.scale_vector(&vector);
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -87,7 +94,7 @@ mod scale3_tests {
         let expected = Point3::new(1_f64, 2_f64, 3_f64);
         let result = scale.inverse_scale_point(&point);
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -97,7 +104,7 @@ mod scale3_tests {
         let expected = Vector3::new(1_f64, 2_f64, 3_f64);
         let result = scale.inverse_scale_vector(&vector);
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 
@@ -105,6 +112,9 @@ mod scale3_tests {
 mod scale2_composition_tests {
     use cglinalg::{
         Scale2,
+    };
+    use approx::{
+        assert_relative_eq,
     };
 
 
@@ -115,7 +125,7 @@ mod scale2_composition_tests {
         let expected = Scale2::from_nonuniform_scale(3_f64, 8_f64);
         let result = scale1 * scale2;
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 
@@ -123,6 +133,9 @@ mod scale2_composition_tests {
 mod scale3_composition_tests {
     use cglinalg::{
         Scale3,
+    };
+    use approx::{
+        assert_relative_eq,
     };
 
 
@@ -133,7 +146,7 @@ mod scale3_composition_tests {
         let expected = Scale3::from_nonuniform_scale(3_f64, 8_f64, 320_f64);
         let result = scale1 * scale2;
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 

@@ -9,7 +9,7 @@ use cglinalg::{
     Matrix4x4,
 };
 use approx::{
-    relative_eq,
+    assert_relative_eq,
 };
 
 
@@ -45,7 +45,7 @@ fn test_to_matrix() {
     );
     let result = euler.to_matrix();
 
-    assert!(relative_eq!(result, expected, epsilon = 1e-8));
+    assert_relative_eq!(result, expected, epsilon = 1e-8);
 }
 
 /// An Euler rotation that's all zeros should be the identity.
@@ -99,7 +99,7 @@ fn test_to_affine_matrix() {
     );
     let result = euler.to_affine_matrix();
 
-    assert!(relative_eq!(result, expected, epsilon = 1e-8));  
+    assert_relative_eq!(result, expected, epsilon = 1e-8);  
 }
 
 /// An Euler rotation that's all zeros should be the identity.
@@ -202,7 +202,7 @@ fn test_euler_angles_from_matrix_rotation_matrix1() {
     let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
     let result = EulerAngles::from_matrix(&matrix);
 
-    assert!(relative_eq!(result, expected, epsilon = 1e-10));
+    assert_relative_eq!(result, expected, epsilon = 1e-10);
 }
 
 #[test]

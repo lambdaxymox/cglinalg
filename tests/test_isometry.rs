@@ -15,7 +15,7 @@ mod isometry2_tests {
         Vector2,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -42,7 +42,7 @@ mod isometry2_tests {
         let expected = Vector2::new(-2_f64, 1_f64);
         let result = isometry.transform_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -52,7 +52,7 @@ mod isometry2_tests {
         let expected = Vector2::unit_y();
         let result = isometry.transform_vector(&vector);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -84,7 +84,7 @@ mod isometry2_tests {
         let expected = unit_y.into_inner();
         let result = isometry.transform_vector(&unit_x.into_inner());
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -96,7 +96,7 @@ mod isometry2_tests {
         let expected = Point2::new(0_f64, 203_f64);
         let result = isometry.transform_point(&point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -126,11 +126,11 @@ mod isometry2_tests {
         let expected = point;
         let result = isometry_inv * (isometry * point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
 
         let result = isometry * (isometry_inv * point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -194,7 +194,7 @@ mod isometry3_tests {
         Vector3,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
     #[test]
@@ -224,7 +224,7 @@ mod isometry3_tests {
         let expected = Vector3::new(-2_f64, 1_f64, 3_f64);
         let result = isometry.transform_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -236,7 +236,7 @@ mod isometry3_tests {
         let expected = Vector3::unit_y();
         let result = isometry.transform_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -269,7 +269,7 @@ mod isometry3_tests {
         let expected = unit_y.into_inner();
         let result = isometry.transform_vector(&unit_x.into_inner());
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -281,7 +281,7 @@ mod isometry3_tests {
         let expected = Point3::new(0_f64, 203_f64, 0_f64);
         let result = isometry.transform_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
     #[test]
@@ -314,11 +314,11 @@ mod isometry3_tests {
         let expected = point;
         let result = isometry_inv * (isometry * point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     
         let result = isometry * (isometry_inv * point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]

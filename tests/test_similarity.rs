@@ -16,7 +16,7 @@ mod similarity2_tests {
         Angle,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
     use core::f64;
 
@@ -41,7 +41,7 @@ mod similarity2_tests {
         let expected = Vector2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
         let result = similarity.transform_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -53,7 +53,7 @@ mod similarity2_tests {
         let expected = unit_y;
         let result = similarity.transform_vector(&unit_x);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -66,7 +66,7 @@ mod similarity2_tests {
         let expected = Point2::new(6_f64, f64::sqrt(3_f64) + 5_f64);
         let result = similarity.transform_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -108,7 +108,7 @@ mod similarity2_tests {
         let transformed_point = similarity.transform_point(&point);
         let result = similarity_inv.transform_point(&transformed_point);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -126,7 +126,7 @@ mod similarity2_tests {
         let transformed_point = similarity.transform_point(&point);
         let result = similarity_mut.transform_point(&transformed_point);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -142,7 +142,7 @@ mod similarity2_tests {
         let transformed_point = similarity.transform_point(&point);
         let result = similarity.inverse_transform_point(&transformed_point);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -158,7 +158,7 @@ mod similarity2_tests {
         let transformed_vector = similarity.transform_vector(&vector);
         let result = similarity.inverse_transform_vector(&transformed_vector);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -173,7 +173,7 @@ mod similarity2_tests {
         let expected = Point2::new(-22_f64, 14_f64);
         let result = similarity.transform_point(&point);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -188,7 +188,7 @@ mod similarity2_tests {
         let expected = scale * Vector2::unit_y();
         let result = similarity.transform_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -219,7 +219,7 @@ mod similarity3_tests {
         Unit,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
     use core::f64;
 
@@ -233,7 +233,7 @@ mod similarity3_tests {
         let expected = Vector3::new(f64::sqrt(2_f64), f64::sqrt(2_f64), 5_f64);
         let result = similarity.transform_vector(&vector);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -268,7 +268,7 @@ mod similarity3_tests {
         let expected = Point3::new(6_f64, f64::sqrt(3_f64) + 5_f64, 13_f64);
         let result = similarity.transform_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -280,7 +280,7 @@ mod similarity3_tests {
         let expected = Vector3::new(-1_f64 / f64::sqrt(2_f64), 3_f64 / f64::sqrt(2_f64), 3_f64);
         let result = similarity.transform_vector(&vector);
         
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -304,7 +304,7 @@ mod similarity3_tests {
         let result = similarity.transform_vector(&(target - eye).normalize());
         let expected = Vector3::unit_z();
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
         assert_eq!(similarity.transform_point(&eye), Point3::origin());
     }
 
@@ -317,7 +317,7 @@ mod similarity3_tests {
         let result = similarity.transform_vector(&(target - eye).normalize());
         let expected = -Vector3::unit_z();
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
         assert_eq!(similarity.transform_point(&eye), Point3::origin());
     }
 
@@ -338,7 +338,7 @@ mod similarity3_tests {
         );
         let result = similarity.to_affine_matrix();
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -364,7 +364,7 @@ mod similarity3_tests {
         let transformed_point = similarity.transform_point(&point);
         let result = similarity_inv.transform_point(&transformed_point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -383,7 +383,7 @@ mod similarity3_tests {
         let transformed_point = similarity.transform_point(&point);
         let result = similarity_mut.transform_point(&transformed_point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -400,7 +400,7 @@ mod similarity3_tests {
         let transformed_point = similarity.transform_point(&point);
         let result = similarity.inverse_transform_point(&transformed_point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -417,7 +417,7 @@ mod similarity3_tests {
         let transformed_vector = similarity.transform_vector(&vector);
         let result = similarity.inverse_transform_vector(&transformed_vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -433,7 +433,7 @@ mod similarity3_tests {
         let expected = Point3::new(-22_f64, 14_f64, 38_f64);
         let result = similarity.transform_point(&point);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -449,7 +449,7 @@ mod similarity3_tests {
         let expected = scale * Vector3::unit_y();
         let result = similarity.transform_vector(&vector);
     
-        assert!(relative_eq!(result, expected, epsilon = 1e-8));
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]

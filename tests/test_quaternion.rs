@@ -182,7 +182,7 @@ mod magnitude_tests {
         Vector3,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -223,7 +223,7 @@ mod magnitude_tests {
         let expected = magnitude;
         let tolerance = 1e-7;
 
-        assert!(relative_eq!(result, expected, epsilon = tolerance));
+        assert_relative_eq!(result, expected, epsilon = tolerance);
     }
 }
 
@@ -236,7 +236,7 @@ mod slerp_tests {
         Vector3,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -260,7 +260,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.5);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -283,7 +283,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.2);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -306,7 +306,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.5);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -329,7 +329,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.5);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -408,7 +408,7 @@ mod exp_tests {
         Vector3,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
     use core::f64;
@@ -431,7 +431,7 @@ mod exp_tests {
         let expected = -Quaternion::identity();
         let result = (sgn_qv * pi).exp();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -441,7 +441,7 @@ mod exp_tests {
         let result = (unit_x * pi_over_two).exp();
         let expected = unit_x;
      
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -451,7 +451,7 @@ mod exp_tests {
         let result = (unit_y * pi_over_two).exp();
         let expected = unit_y;
      
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -461,7 +461,7 @@ mod exp_tests {
         let result = (unit_z * pi_over_two).exp();
         let expected = unit_z;
      
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -482,7 +482,7 @@ mod exp_tests {
         let result = (unit_x * pi).exp();
         let expected = Quaternion::from_parts(-1_f64, zero_vec);
      
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -493,7 +493,7 @@ mod exp_tests {
         let result = (unit_y * pi).exp();
         let expected = Quaternion::from_parts(-1_f64, zero_vec);
      
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -504,7 +504,7 @@ mod exp_tests {
         let result = (unit_z * pi).exp();
         let expected = Quaternion::from_parts(-1_f64, zero_vec);
      
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -513,7 +513,7 @@ mod exp_tests {
         let expected = Quaternion::identity();
         let result = (-q).exp() * q.exp();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -532,7 +532,9 @@ mod logarithm_tests {
         Vector3,
         Quaternion,
     };
-    use approx::relative_eq;
+    use approx::{
+        assert_relative_eq,
+    };
 
 
     #[test]
@@ -553,9 +555,9 @@ mod logarithm_tests {
         let exp_j = j.exp();
         let exp_k = k.exp();
 
-        assert!(relative_eq!(exp_i.ln(), i, epsilon = 1e-7));
-        assert!(relative_eq!(exp_j.ln(), j, epsilon = 1e-7));
-        assert!(relative_eq!(exp_k.ln(), k, epsilon = 1e-7));
+        assert_relative_eq!(exp_i.ln(), i, epsilon = 1e-7);
+        assert_relative_eq!(exp_j.ln(), j, epsilon = 1e-7);
+        assert_relative_eq!(exp_k.ln(), k, epsilon = 1e-7);
     }
 
     #[test]
@@ -611,7 +613,7 @@ mod power_tests {
         Quaternion,
     };
     use approx::{
-        relative_eq
+        assert_relative_eq,
     };
     use core::f64;
 
@@ -633,7 +635,7 @@ mod power_tests {
         let expected = q;
         let result = q.powf(exponent);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -643,7 +645,7 @@ mod power_tests {
         let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
         let result = i.powf(exponent);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -653,7 +655,7 @@ mod power_tests {
         let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
         let result = j.powf(exponent);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 
     #[test]
@@ -663,7 +665,7 @@ mod power_tests {
         let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
         let result = k.powf(exponent);
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-7));
+        assert_relative_eq!(result, expected, epsilon = 1e-7);
     }
 }
 
@@ -677,7 +679,7 @@ mod rotation_tests {
         Quaternion,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
     
@@ -692,7 +694,7 @@ mod rotation_tests {
         );
         let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
 
-        assert!(relative_eq!(result, expected));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -724,7 +726,7 @@ mod rotation_tests {
         );
         let result = Quaternion::rotation_between(&unit_x, &unit_y).unwrap();
 
-        assert!(relative_eq!(result, expected));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -790,7 +792,7 @@ mod division_tests {
         Vector3,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -808,7 +810,7 @@ mod division_tests {
      
         let result = result.unwrap();
      
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -824,7 +826,7 @@ mod division_tests {
      
         let result = result.unwrap();
      
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -838,7 +840,7 @@ mod division_tests {
         );
         let result = q.div_left(&scalar).unwrap();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -852,7 +854,7 @@ mod division_tests {
         );
         let result = q.div_right(&scalar).unwrap();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -865,10 +867,7 @@ mod division_tests {
         );
         let result = q.div_left(&v).unwrap();
 
-        eprintln!("result = {}", result);
-        eprintln!("expedted = {}", expected);
-
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -881,10 +880,7 @@ mod division_tests {
         );
         let result = q.div_right(&v).unwrap();
 
-        eprintln!("result = {}", result);
-        eprintln!("expected = {}", expected);
-
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 
@@ -896,7 +892,7 @@ mod square_root_tests {
         Vector3,
     };
     use approx::{
-        relative_eq,
+        assert_relative_eq,
     };
 
 
@@ -914,7 +910,7 @@ mod square_root_tests {
         let expected = Quaternion::from_real(f64::sqrt(scalar_part));
         let result = scalar.sqrt();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -924,7 +920,7 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(3_f64, qv) * (1_f64 / f64::sqrt(6_f64));
         let result = q.sqrt();
 
-        assert!(relative_eq!(result, expected));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -940,7 +936,7 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -956,7 +952,7 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -972,7 +968,7 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -992,7 +988,7 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 
-        assert!(relative_eq!(result, expected, epsilon = 1e-10));
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 
