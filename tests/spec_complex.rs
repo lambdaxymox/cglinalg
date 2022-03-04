@@ -1164,3 +1164,65 @@ macro_rules! magnitude_props {
 
 magnitude_props!(complex_f64_magnitude_props, f64, any_complex, any_scalar, 1e-7);
 
+
+/// Generate property tests for complex number square roots.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! sqrt_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use approx::{
+            relative_eq,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The square of the positive square root of a complex number is the original
+            /// complex number.
+            /// 
+            /// Given a complex number `z`
+            /// ```text
+            /// z.sqrt() * z.sqrt() == z
+            /// ```
+            #[test]
+            fn prop_positive_square_root_squared(z in $Generator::<$ScalarType>()) {
+                let sqrt_z = z.sqrt();
+
+                prop_assert!(relative_eq!(sqrt_z * sqrt_z, z, epsilon = $tolerance));
+            }
+
+            /// The square of the negative square root of a complex number is the original
+            /// complex number.
+            /// 
+            /// Given a complex number `z`
+            /// ```text
+            /// -z.sqrt() * -z.sqrt() == z
+            /// ```
+            #[test]
+            fn prop_negative_square_root_squared(z in $Generator::<$ScalarType>()) {
+                let minus_sqrt_z = -z.sqrt();
+
+                prop_assert!(relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = $tolerance));
+            }
+        }
+    }
+    }
+}
+
+sqrt_props!(complex_f64_sqrt_props, f64, any_complex, any_scalar, 1e-7);
+
