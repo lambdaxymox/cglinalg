@@ -354,7 +354,8 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn inverse(&self) -> Option<Self> {
-        if self.data[0][0].is_zero() {
+        let det = self.determinant();
+        if det.is_zero() {
             None
         } else {
             Some(Self::new(S::one() / self.data[0][0]))
@@ -1457,10 +1458,10 @@ where
         if det.is_zero() {
             None
         } else {
-            let inv_det = S::one() / det;
+            let det_inv = S::one() / det;
             Some(Matrix2x2::new(
-                inv_det *  self.data[1][1], inv_det * -self.data[0][1],
-                inv_det * -self.data[1][0], inv_det *  self.data[0][0]
+                det_inv *  self.data[1][1], det_inv * -self.data[0][1],
+                det_inv * -self.data[1][0], det_inv *  self.data[0][0]
             ))
         }
     }
@@ -3473,20 +3474,20 @@ where
         if det.is_zero() {
             None
         } else {
-            let inv_det = S::one() / det;
+            let det_inv = S::one() / det;
     
             Some(Self::new(
-                inv_det * (self.data[1][1] * self.data[2][2] - self.data[1][2] * self.data[2][1]), 
-                inv_det * (self.data[0][2] * self.data[2][1] - self.data[0][1] * self.data[2][2]), 
-                inv_det * (self.data[0][1] * self.data[1][2] - self.data[0][2] * self.data[1][1]),
+                det_inv * (self.data[1][1] * self.data[2][2] - self.data[1][2] * self.data[2][1]), 
+                det_inv * (self.data[0][2] * self.data[2][1] - self.data[0][1] * self.data[2][2]), 
+                det_inv * (self.data[0][1] * self.data[1][2] - self.data[0][2] * self.data[1][1]),
         
-                inv_det * (self.data[1][2] * self.data[2][0] - self.data[1][0] * self.data[2][2]),
-                inv_det * (self.data[0][0] * self.data[2][2] - self.data[0][2] * self.data[2][0]),
-                inv_det * (self.data[0][2] * self.data[1][0] - self.data[0][0] * self.data[1][2]),
+                det_inv * (self.data[1][2] * self.data[2][0] - self.data[1][0] * self.data[2][2]),
+                det_inv * (self.data[0][0] * self.data[2][2] - self.data[0][2] * self.data[2][0]),
+                det_inv * (self.data[0][2] * self.data[1][0] - self.data[0][0] * self.data[1][2]),
     
-                inv_det * (self.data[1][0] * self.data[2][1] - self.data[1][1] * self.data[2][0]), 
-                inv_det * (self.data[0][1] * self.data[2][0] - self.data[0][0] * self.data[2][1]), 
-                inv_det * (self.data[0][0] * self.data[1][1] - self.data[0][1] * self.data[1][0])
+                det_inv * (self.data[1][0] * self.data[2][1] - self.data[1][1] * self.data[2][0]), 
+                det_inv * (self.data[0][1] * self.data[2][0] - self.data[0][0] * self.data[2][1]), 
+                det_inv * (self.data[0][0] * self.data[1][1] - self.data[0][1] * self.data[1][0])
             ))
         }
     }
