@@ -1941,7 +1941,7 @@ where
     /// );
     /// let result = q1.slerp(&q2, 0.5);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-7);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn slerp(&self, other: &Self, amount: S) -> Self {

@@ -221,9 +221,8 @@ mod magnitude_tests {
         let magnitude = 12_f64;
         let result = q.normalize_to(magnitude).magnitude();
         let expected = magnitude;
-        let tolerance = 1e-7;
 
-        assert_relative_eq!(result, expected, epsilon = tolerance);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 }
 
@@ -260,7 +259,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.5);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-7);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -283,7 +282,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.2);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-7);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -306,7 +305,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.5);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-7);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -329,7 +328,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.5);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-7);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -513,7 +512,7 @@ mod exp_tests {
         let expected = Quaternion::identity();
         let result = (-q).exp() * q.exp();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-7);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -555,9 +554,9 @@ mod logarithm_tests {
         let exp_j = j.exp();
         let exp_k = k.exp();
 
-        assert_relative_eq!(exp_i.ln(), i, epsilon = 1e-7);
-        assert_relative_eq!(exp_j.ln(), j, epsilon = 1e-7);
-        assert_relative_eq!(exp_k.ln(), k, epsilon = 1e-7);
+        assert_relative_eq!(exp_i.ln(), i, epsilon = 1e-8);
+        assert_relative_eq!(exp_j.ln(), j, epsilon = 1e-8);
+        assert_relative_eq!(exp_k.ln(), k, epsilon = 1e-8);
     }
 
     #[test]
@@ -635,7 +634,7 @@ mod power_tests {
         let expected = q;
         let result = q.powf(exponent);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-7);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -645,7 +644,7 @@ mod power_tests {
         let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
         let result = i.powf(exponent);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-7);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -655,7 +654,7 @@ mod power_tests {
         let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
         let result = j.powf(exponent);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-7);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -665,7 +664,7 @@ mod power_tests {
         let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
         let result = k.powf(exponent);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-7);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 }
 
