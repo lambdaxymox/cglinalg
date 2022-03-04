@@ -25,10 +25,18 @@ mod storage_tests {
 
     #[test]
     #[should_panic]
-    fn test_index_out_of_bounds() {
+    fn test_quaternion_components_out_of_bounds1() {
         let q = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
 
         assert_eq!(q[4], q[4]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_quaternion_components_out_of_bounds2() {
+        let q = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(q[usize::MAX], q[usize::MAX]);
     }
 }
 

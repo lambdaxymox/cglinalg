@@ -26,10 +26,18 @@ mod index_tests {
 
     #[test]
     #[should_panic]
-    fn test_index_out_of_bounds() {
+    fn test_complex_components_out_of_bounds1() {
         let z = Complex::new(1_i32, 2_i32);
 
         assert_eq!(z[2], z[2]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_complex_components_out_of_bounds2() {
+        let z = Complex::new(1_i32, 2_i32);
+
+        assert_eq!(z[usize::MAX], z[usize::MAX]);
     }
 }
 

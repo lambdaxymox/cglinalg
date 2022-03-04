@@ -67,10 +67,18 @@ mod vector1_tests {
 
     #[test]
     #[should_panic]
-    fn test_vector_components_out_of_bounds() {
+    fn test_vector_components_out_of_bounds1() {
         let v = Vector1::new(1_f32);
 
         assert_eq!(v[1], v[1]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_vector_components_out_of_bounds2() {
+        let v = Vector1::new(1_f32);
+
+        assert_eq!(v[usize::MAX], v[usize::MAX]);
     }
 
     #[test]
@@ -267,10 +275,18 @@ mod vector2_tests {
 
     #[test]
     #[should_panic]
-    fn test_vector_components_out_of_bounds() {
+    fn test_vector_components_out_of_bounds1() {
         let v = Vector2::new(1_f32, 2_f32);
 
         assert_eq!(v[2], v[2]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_vector_components_out_of_bounds2() {
+        let v = Vector2::new(1_f32, 2_f32);
+
+        assert_eq!(v[usize::MAX], v[usize::MAX]);
     }
 
     #[test]
@@ -499,10 +515,18 @@ mod vector3_tests {
 
     #[test]
     #[should_panic]
-    fn test_vector_components_out_of_bounds() {
+    fn test_vector_components_out_of_bounds1() {
         let v = Vector3::new(1_f32, 2_f32, 3_f32);
 
         assert_eq!(v[3], v[3]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_vector_components_out_of_bounds2() {
+        let v = Vector3::new(1_f32, 2_f32, 3_f32);
+
+        assert_eq!(v[usize::MAX], v[usize::MAX]);
     }
 
     #[test]
@@ -748,10 +772,18 @@ mod vector4_tests {
 
     #[test]
     #[should_panic]
-    fn  test_vector_components_out_of_bounds() {
+    fn  test_vector_components_out_of_bounds1() {
         let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
 
         assert_eq!(v[4], v[4]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn  test_vector_components_out_of_bounds2() {
+        let v = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
+
+        assert_eq!(v[usize::MAX], v[usize::MAX]);
     }
 
     #[test]

@@ -119,6 +119,30 @@ mod matrix2x2_tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
+    }
+
+    #[test]
     fn test_mat_times_identity_equals_mat() {
         test_cases().iter().for_each(|test| {
             let a_mat_times_identity = test.a_mat * Matrix2x2::identity();
@@ -793,6 +817,42 @@ mod matrix3x3_tests {
         );
 
         assert_eq!(matrix[3][3], matrix[3][3]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix3x3::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32
+        );
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix3x3::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix3x3::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
     #[test]
@@ -1825,6 +1885,45 @@ mod matrix4x4_tests {
         );
 
         assert_eq!(matrix[4][4], matrix[4][4]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix4x4::new(
+            1_i32,  2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,  8_i32,
+            9_i32,  10_i32, 11_i32, 12_i32,
+            13_i32, 14_i32, 15_i32, 16_i32
+        );
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix4x4::new(
+            1_i32,  2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,  8_i32,
+            9_i32,  10_i32, 11_i32, 12_i32,
+            13_i32, 14_i32, 15_i32, 16_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix4x4::new(
+            1_i32,  2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,  8_i32,
+            9_i32,  10_i32, 11_i32, 12_i32,
+            13_i32, 14_i32, 15_i32, 16_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
     #[test]
@@ -2865,6 +2964,30 @@ mod matrix1x2_tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix1x2::new(1_i32, 2_i32);
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix1x2::new(1_i32, 2_i32);
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix1x2::new(1_i32, 2_i32);
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
+    }
+
+    #[test]
     fn test_mat_times_identity_equals_mat() {
         let matrix = Matrix1x2::new(2_i32, 3_i32);
         let identity = Matrix2x2::identity();
@@ -3025,6 +3148,30 @@ mod matrix1x3_tests {
         let matrix = Matrix1x3::new(1_i32, 2_i32, 3_i32);
 
         assert_eq!(matrix[3][1], matrix[3][1]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix1x3::new(1_i32, 2_i32, 3_i32);
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix1x3::new(1_i32, 2_i32, 3_i32);
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix1x3::new(1_i32, 2_i32, 3_i32);
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
     #[test]
@@ -3194,6 +3341,30 @@ mod matrix1x4_tests {
         let matrix = Matrix1x4::new(1_i32, 2_i32, 3_i32, 4_i32);
 
         assert_eq!(matrix[4][1], matrix[4][1]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix1x4::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix1x4::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix1x4::new(1_i32, 2_i32, 3_i32, 4_i32);
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
     #[test]
@@ -3392,6 +3563,42 @@ mod matrix2x3_tests {
         );
 
         assert_eq!(matrix[3][2], matrix[3][2]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix2x3::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32,
+            5_i32, 6_i32
+        );
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix2x3::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32,
+            5_i32, 6_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix2x3::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32,
+            5_i32, 6_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
     #[test]
@@ -3728,6 +3935,39 @@ mod matrix3x2_tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix3x2::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 6_i32
+        );
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix3x2::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 6_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix3x2::new(
+            1_i32, 2_i32, 3_i32, 
+            4_i32, 5_i32, 6_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
+    }
+
+    #[test]
     fn test_mat_times_identity_equals_mat() {
         let matrix = Matrix3x2::new(
             2_i32, 3_i32, 4_i32, 
@@ -4050,6 +4290,45 @@ mod matrix2x4_tests {
         );
 
         assert_eq!(matrix[4][2], matrix[4][2]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix2x4::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32, 
+            5_i32, 6_i32, 
+            7_i32, 8_i32
+        );
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix2x4::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32, 
+            5_i32, 6_i32, 
+            7_i32, 8_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix2x4::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32, 
+            5_i32, 6_i32, 
+            7_i32, 8_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
     #[test]
@@ -4422,6 +4701,39 @@ mod matrix4x2_tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix4x2::new(
+            1_i32, 2_i32, 3_i32, 4_i32, 
+            5_i32, 6_i32, 7_i32, 8_i32
+        );
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix4x2::new(
+            1_i32, 2_i32, 3_i32, 4_i32, 
+            5_i32, 6_i32, 7_i32, 8_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix4x2::new(
+            1_i32, 2_i32, 3_i32, 4_i32, 
+            5_i32, 6_i32, 7_i32, 8_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
+    }
+
+    #[test]
     fn test_mat_times_identity_equals_mat() {
         let matrix = Matrix4x2::new(
             2_i32, 3_i32, 4_i32, 5_i32, 
@@ -4757,6 +5069,46 @@ mod matrix3x4_tests {
 
         assert_eq!(matrix[4][3], matrix[4][3]);
     }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix3x4::new(
+            1_i32,  2_i32,  3_i32,
+            4_i32,  5_i32,  6_i32,
+            7_i32,  8_i32,  9_i32,
+            10_i32, 11_i32, 12_i32
+        );
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix3x4::new(
+            1_i32,  2_i32,  3_i32,
+            4_i32,  5_i32,  6_i32,
+            7_i32,  8_i32,  9_i32,
+            10_i32, 11_i32, 12_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix3x4::new(
+            1_i32,  2_i32,  3_i32,
+            4_i32,  5_i32,  6_i32,
+            7_i32,  8_i32,  9_i32,
+            10_i32, 11_i32, 12_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
+    }
+
 
     #[test]
     fn test_mat_times_identity_equals_mat() {
@@ -5148,6 +5500,42 @@ mod matrix4x3_tests {
         );
 
         assert_eq!(matrix[3][4], matrix[3][4]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds4() {
+        let matrix = Matrix4x3::new(
+            1_i32,  2_i32,  3_i32,  4_i32, 
+            5_i32,  6_i32,  7_i32,  8_i32,
+            10_i32, 11_i32, 12_i32, 13_i32
+        );
+
+        assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds5() {
+        let matrix = Matrix4x3::new(
+            1_i32,  2_i32,  3_i32,  4_i32, 
+            5_i32,  6_i32,  7_i32,  8_i32,
+            10_i32, 11_i32, 12_i32, 13_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_components_out_of_bounds6() {
+        let matrix = Matrix4x3::new(
+            1_i32,  2_i32,  3_i32,  4_i32, 
+            5_i32,  6_i32,  7_i32,  8_i32,
+            10_i32, 11_i32, 12_i32, 13_i32
+        );
+
+        assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
     #[test]

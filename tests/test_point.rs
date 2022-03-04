@@ -26,10 +26,18 @@ mod point1_tests {
 
     #[test]
     #[should_panic]
-    fn test_point_components_out_of_bounds() {
+    fn test_point_components_out_of_bounds1() {
         let point = Point1::new(1_i32);
 
         assert_eq!(point[1], point[1]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_point_components_out_of_bounds2() {
+        let point = Point1::new(1_i32);
+
+        assert_eq!(point[usize::MAX], point[usize::MAX]);
     }
 
     #[test]
@@ -80,14 +88,6 @@ mod point1_tests {
         let result = p / c;
 
         assert_eq!(result, expected);
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_out_of_bounds_array_access() {
-        let p = Point1::new(1_f32);
-
-        assert_eq!(p[1], p[1]);
     }
 
     #[test]
@@ -171,10 +171,18 @@ mod point2_tests {
 
     #[test]
     #[should_panic]
-    fn test_point_components_out_of_bounds() {
+    fn test_point_components_out_of_bounds1() {
         let point = Point2::new(1_i32, 2_i32);
 
         assert_eq!(point[2], point[2]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_point_components_out_of_bounds2() {
+        let point = Point2::new(1_i32, 2_i32);
+
+        assert_eq!(point[usize::MAX], point[usize::MAX]);
     }
 
     #[test]
@@ -225,14 +233,6 @@ mod point2_tests {
         let result = p / c;
 
         assert_eq!(result, expected);
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_out_of_bounds_array_access() {
-        let p = Point2::new(1_f32, 2_f32);
-
-        assert_eq!(p[2], p[2]);
     }
 
     #[test]
@@ -320,10 +320,18 @@ mod point3_tests {
 
     #[test]
     #[should_panic]
-    fn test_point_components_out_of_bounds() {
+    fn test_point_components_out_of_bounds1() {
         let point = Point3::new(1_i32, 2_i32, 3_i32);
 
         assert_eq!(point[3], point[3]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_point_components_out_of_bounds2() {
+        let point = Point3::new(1_i32, 2_i32, 3_i32);
+
+        assert_eq!(point[usize::MAX], point[usize::MAX]);
     }
 
     #[test]
@@ -375,14 +383,6 @@ mod point3_tests {
         let result = p / c;
 
         assert_eq!(result, expected);
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_out_of_bounds_array_access() {
-        let p = Point3::new(1_f32, 2_f32, 3_f32);
-
-        assert_eq!(p[3], p[3]);
     }
 
     #[test]
