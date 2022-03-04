@@ -74,64 +74,6 @@ where
 }
 
 
-/// Generate property tests for vector indexing.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the tests in to separate them
-///    from each other for each scalar type to prevent namespace collisions.
-/// * `$VectorN` denotes the name of the vector type.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the
-///    set of vectors.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$UpperBound` denotes the upper bound on the range of acceptable indices.
-macro_rules! index_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
-        proptest! {
-            /// When a vector is treated like an array, it should accept all indices
-            /// below the length of the array.
-            ///
-            /// Given a vector `v`, it should return the entry at position `index` in the 
-            /// underlying storage of the vector when the given index is in bounds.
-            #[test]
-            fn prop_accepts_all_indices_in_of_bounds(
-                v in $Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
-
-                prop_assert_eq!(v[index], v[index]);
-            }
-    
-            /// When a vector is treated like an array, it should reject any input index outside
-            /// the length of the array.
-            ///
-            /// Given a vector `v`, when the element index `index` is out of bounds, it should 
-            /// generate a panic just like an array indexed out of bounds.
-            #[test]
-            #[should_panic]
-            fn prop_panics_when_index_out_of_bounds(
-                v in $Generator::<$ScalarType>(), index in $UpperBound..usize::MAX) {
-                
-                prop_assert_eq!(v[index], v[index]);
-            }
-        }
-    }
-    }
-}
-
-index_props!(vector1_f64_index_props, Vector1, f64, any_vector1, 1);
-index_props!(vector2_f64_index_props, Vector2, f64, any_vector2, 2);
-index_props!(vector3_f64_index_props, Vector3, f64, any_vector3, 3);
-index_props!(vector4_f64_index_props, Vector4, f64, any_vector4, 4);
-
-
 /// Generate property tests for vector arithmetic over exact scalars. We 
 /// define an exact scalar type as a type where scalar arithmetic is 
 /// exact (e.g. integers).

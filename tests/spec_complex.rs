@@ -34,62 +34,6 @@ where
     .no_shrink()
 }
 
-/// Generate property tests for complex number indexing.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$UpperBound` denotes the upper bound on the range of acceptable indices.
-macro_rules! index_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
-        proptest! {
-            /// When a complex number is treated like an array, it should accept all indices
-            /// below the length of the array.
-            ///
-            /// Given a complex number `z`, it should return the element at position 
-            /// `index` in the underlying storage of the complex number when the given 
-            /// index is in bounds.
-            #[test]
-            fn prop_accepts_all_indices_in_of_bounds(
-                z in $Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
-
-                prop_assert_eq!(z[index], z[index]);
-            }
-    
-            /// When a complex number is treated like an array, it should reject any 
-            /// input index outside the length of the array.
-            ///
-            /// Given a complex number `z`, when the element index `index` is out of 
-            /// bounds, it should generate a panic just like an array indexed 
-            /// out of bounds.
-            #[test]
-            #[should_panic]
-            fn prop_panics_when_index_out_of_bounds(
-                z in $Generator::<$ScalarType>(), index in $UpperBound..usize::MAX) {
-                
-                prop_assert_eq!(z[index], z[index]);
-            }
-        }
-    }
-    }
-}
-
-index_props!(complex_index_props, f64, any_complex, 2);
-
 
 /// Generate property tests for complex number arithmetic over exact scalars. We 
 /// define an exact scalar type as a type where scalar arithmetic is 

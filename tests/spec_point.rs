@@ -247,65 +247,6 @@ exact_mul_props!(point2_i32_mul_props, Point2, i32, any_point2, any_scalar);
 exact_mul_props!(point3_i32_mul_props, Point3, i32, any_point3, any_scalar);
 
 
-
-/// Generate property tests for point indexing.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the tests in 
-///    to separate them from each other for each scalar type to prevent 
-////   namespace collisions.
-/// * `$PointN` denotes the name of the vector type.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the
-///    set of points.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$UpperBound` denotes the upper bound on the range of acceptable indices.
-macro_rules! index_props {
-    ($TestModuleName:ident, $Point:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
-        proptest! {
-            /// When a point is treated like an array, it should accept all indices
-            /// below the length of the array.
-            ///
-            /// Given a point `p`, it should return the entry at position `index` in the 
-            /// underlying storage of the point when the given index is in bounds.
-            #[test]
-            fn prop_accepts_all_indices_in_of_bounds(
-                p in $Generator::<$ScalarType>(), index in 0..$UpperBound as usize) {
-
-                prop_assert_eq!(p[index], p[index]);
-            }
-    
-            /// When a point is treated like an array, it should reject any input index outside
-            /// the length of the array.
-            ///
-            /// Given a point `v`, when the element index `index` is out of bounds, it should 
-            /// generate a panic just like an array indexed out of bounds.
-            #[test]
-            #[should_panic]
-            fn prop_panics_when_index_out_of_bounds(
-                p in $Generator::<$ScalarType>(), index in $UpperBound..usize::MAX) {
-                
-                prop_assert_eq!(p[index], p[index]);
-            }
-        }
-    }
-    }
-}
-
-index_props!(vector1_f64_index_props, Vector1, f64, any_point1, 1);
-index_props!(vector2_f64_index_props, Vector2, f64, any_point2, 2);
-index_props!(vector3_f64_index_props, Vector3, f64, any_point3, 3);
-
-
 /// Generate property tests for point/vector arithmetic over floating point scalars.
 ///
 /// ### Macro Parameters
