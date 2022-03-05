@@ -950,6 +950,7 @@ mod square_root_tests {
         let scalar_part = -2_f64;
         let scalar = Quaternion::from_real(scalar_part);
         let sqrt_scalar = scalar.sqrt();
+        eprintln!("sqrt_scalar = {}", sqrt_scalar);
 
         assert_relative_eq!(sqrt_scalar * sqrt_scalar, scalar, epsilon = 1e-10);
     }

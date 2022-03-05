@@ -1609,9 +1609,7 @@ where
     ///     DOI:10.1007/978-3-0348-0622-0. p. 9_
     #[inline]
     pub fn sqrt(&self) -> Self {
-        let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();
-        
-        (self.ln() * one_half).exp()
+        self.powf(num_traits::cast(1_f64 / 2_f64).unwrap())
     }
 
     /// Compute the left quotient of two quaternions.
