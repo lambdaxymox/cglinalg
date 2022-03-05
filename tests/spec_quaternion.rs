@@ -1259,5 +1259,5 @@ macro_rules! sqrt_props {
     }
 }
 
-// sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion, any_scalar, 1e-8);
+sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion, any_scalar, 1e-7);
 

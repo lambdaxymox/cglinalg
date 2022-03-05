@@ -884,6 +884,25 @@ mod division_tests {
 }
 
 #[cfg(test)]
+mod square_tests {
+    use cglinalg::{
+        Quaternion,
+        Vector3,
+    };
+    
+    #[test]
+    fn test_square_pure_quaternion() {
+        let modulus = f64::sqrt(14_f64);
+        let vector = Vector3::new(2_f64, -1_f64, 3_f64) / modulus;
+        let q = Quaternion::from_pure(vector);
+        let expected = Quaternion::from_real(-1_f64);
+        let result = q.squared();
+
+        assert_eq!(result, expected);
+    }
+}
+
+#[cfg(test)]
 mod square_root_tests {
     use cglinalg::{
         Magnitude,
@@ -903,10 +922,22 @@ mod square_root_tests {
     }
 
     #[test]
-    fn test_square_root_real_quaternion() {
+    fn test_square_root_real_quaternion1() {
         let scalar_part = 2_f64;
         let scalar = Quaternion::from_real(scalar_part);
         let expected = Quaternion::from_real(f64::sqrt(scalar_part));
+        let result = scalar.sqrt();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_square_root_real_quaternion2() {
+        let scalar_part = -2_f64;
+        let scalar = Quaternion::from_real(scalar_part);
+        let expected = Quaternion::from_pure(Vector3::new(
+            f64::sqrt(scalar_part), 0_f64, 0_f64
+        ));
         let result = scalar.sqrt();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
