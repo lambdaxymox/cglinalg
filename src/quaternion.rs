@@ -1609,7 +1609,6 @@ where
     ///     DOI:10.1007/978-3-0348-0622-0. p. 9_
     #[inline]
     pub fn sqrt(&self) -> Self {
-        //self.powf(num_traits::cast(1_f64 / 2_f64).unwrap())
         self.sqrt_eps(S::default_epsilon())
         /*
         let one_half = num_traits::cast(1_f64 / 2_f64).unwrap();

@@ -919,6 +919,7 @@ mod square_tests {
     /// ```text
     /// q^2 + 1 = 0
     /// ```
+    /// whose solutions are the square roots of a quaternion `q` whose square is `-1`.
     /// In particular, the solution set is a unit two-sphere centered at the origin
     /// in the pure vector subspace of the space of quaternions. This solution set 
     /// includes the poles of the imaginary part of the complex plane `i` and `-i`.
