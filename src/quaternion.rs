@@ -1518,7 +1518,7 @@ where
     ///    = -p
     /// ```
     /// Thus the quaternion square root is indeed a proper square root with two 
-    /// solutions given by `p` and `-p`. We illustrate this with an example.
+    /// solutions given by `p` and `-p`. We illustrate this with an example. 
     /// 
     /// # Example
     /// 
@@ -1556,6 +1556,57 @@ where
     /// 
     /// assert_relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = 1e-10);
     /// ```
+    /// 
+    /// The noncommutativity of quaternion multiplication has some counterintuitive 
+    /// properties. Some quaternions can have more solutions than the degree of the 
+    /// corresponding polynomial equation. For example, consider the quaternion `q = -1`.
+    /// The square roots of `q` are those quaternions `p` such that
+    /// ```text
+    /// p * p + 1 == 0
+    /// ```
+    /// This polynomial has an infinite number of pure quaternion solutions
+    /// ```text
+    /// p = b * i + c * j + d * k
+    /// ```
+    /// To see this, let `p = a + b * i + c * j + d * k`, this yields solutions 
+    /// of the form
+    /// ```text
+    /// a * a - b * b  - c * c - d * d == -1
+    /// 2 * a * b = 0
+    /// 2 * a * c = 0
+    /// 2 * a * d = 0
+    /// ```
+    /// To satisfy this system of equations, either `a = 0`, or `b = c = d = 0`. 
+    /// If `a != 0` and `b = c = d = 0`, we have `a * a = -1` which is absurd, 
+    /// since `a` is a real number. This yields `a = 0` and 
+    /// `b * b + c * c + d * d != 1`. Therefore, a quaternion that squares to `-1`
+    /// has as solutions pure unit quaternions. These solutions form a two-sphere
+    /// centered at zero in the pure quaternion subspace[1]. 
+    /// 
+    /// In conclusion, not only can a quaternion have multiple square roots,
+    /// it can have infintitely many square roots.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let q = Quaternion::from_real(-1_f64);
+    /// let unit_scalar: Quaternion<f64> = Quaternion::unit_s();
+    /// let unit_x: Quaternion<f64>  = Quaternion::unit_x();
+    /// let unit_y: Quaternion<f64> = Quaternion::unit_y();
+    /// let unit_z: Quaternion<f64> = Quaternion::unit_z();
+    /// 
+    /// assert_eq!(unit_x * unit_x, q);
+    /// assert_eq!(unit_y * unit_y, q);
+    /// assert_eq!(unit_z * unit_z, q);
+    /// assert_ne!(unit_scalar * unit_scalar, q);
+    /// ```
+    /// [1] _Joao Pedro Morais, Svetlin Georgiev, Wolfgang Sproessig. 2014. 
+    ///     Real Quaternionic Calculus Handbook. Birkhaueser. 
+    ///     DOI:10.1007/978-3-0348-0622-0. p. 9_
     #[inline]
     pub fn sqrt(&self) -> Self {
         let one_half: S = num_traits::cast(1_f64 / 2_f64).unwrap();

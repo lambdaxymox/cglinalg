@@ -900,6 +900,20 @@ mod square_tests {
 
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_square_real_quaternion() {
+        let q = Quaternion::from_real(-1_f64);
+        let unit_scalar: Quaternion<f64> = Quaternion::unit_s();
+        let unit_x: Quaternion<f64>  = Quaternion::unit_x();
+        let unit_y: Quaternion<f64> = Quaternion::unit_y();
+        let unit_z: Quaternion<f64> = Quaternion::unit_z();
+     
+        assert_eq!(unit_x * unit_x, q);
+        assert_eq!(unit_y * unit_y, q);
+        assert_eq!(unit_z * unit_z, q);
+        assert_ne!(unit_scalar * unit_scalar, q);
+    }
 }
 
 #[cfg(test)]
@@ -928,23 +942,20 @@ mod square_root_tests {
         let expected = Quaternion::from_real(f64::sqrt(scalar_part));
         let result = scalar.sqrt();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
     fn test_square_root_real_quaternion2() {
         let scalar_part = -2_f64;
         let scalar = Quaternion::from_real(scalar_part);
-        let expected = Quaternion::from_pure(Vector3::new(
-            f64::sqrt(scalar_part), 0_f64, 0_f64
-        ));
-        let result = scalar.sqrt();
+        let sqrt_scalar = scalar.sqrt();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(sqrt_scalar * sqrt_scalar, scalar, epsilon = 1e-10);
     }
 
     #[test]
-    fn rest_square_root_pure_quaternion() {
+    fn test_square_root_pure_quaternion() {
         let qv = Vector3::new(2_f64, -2_f64, 1_f64);
         let q = Quaternion::from_parts(0_f64, qv);
         let expected = Quaternion::from_parts(3_f64, qv) * (1_f64 / f64::sqrt(6_f64));
