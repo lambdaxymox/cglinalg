@@ -1473,7 +1473,7 @@ where
         (self.ln() * exponent).exp()
     }
 
-    /// Calculate the positive square root of a quaternion.
+    /// Calculate the square root of a quaternion.
     /// 
     /// Given a quaternion `q`, the square root of `q` is a quaternion
     /// `p` such that `p * p == q`. The formula for `sqrt(q)` is given by
@@ -1609,7 +1609,36 @@ where
     ///     DOI:10.1007/978-3-0348-0622-0. p. 9_
     #[inline]
     pub fn sqrt(&self) -> Self {
-        self.powf(num_traits::cast(1_f64 / 2_f64).unwrap())
+        //self.powf(num_traits::cast(1_f64 / 2_f64).unwrap())
+        self.sqrt_eps(S::default_epsilon())
+        /*
+        let one_half = num_traits::cast(1_f64 / 2_f64).unwrap();
+        let sqrt_magnitude_q = self.magnitude().sqrt();
+        let one_over_magnitude_qv = S::one() / self.v.magnitude();
+        let arg_q_over_two = self.arg() * one_half;
+        let ps = sqrt_magnitude_q * arg_q_over_two.cos();
+        let pv = self.v * (sqrt_magnitude_q * one_over_magnitude_qv * arg_q_over_two.sin());
+        // calculate the magnitude of the vector part
+        // if the magnitude of the vector part is less than soem threshold
+        //     we have a real quaternion. Handle this ambiguity with multiple square roots.
+        // otherwise
+        //     proceed with the usual calculation
+
+        Self::from_parts(ps, pv)
+        */
+    }
+
+    #[inline]
+    fn sqrt_eps(&self, epsilon: S) -> Self {
+        unimplemented!()
+        /*
+        let magnitude_v_squared = self.v.magnitude_squared();
+        if magnitude_v_squared <= epsilon * epsilon {
+
+        } else {
+            
+        }
+        */
     }
 
     /// Compute the left quotient of two quaternions.

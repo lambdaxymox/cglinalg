@@ -914,6 +914,22 @@ mod square_tests {
         assert_eq!(unit_z * unit_z, q);
         assert_ne!(unit_scalar * unit_scalar, q);
     }
+
+    /// There are infinite solutions of the quaternion polynomial equation
+    /// ```text
+    /// q^2 + 1 = 0
+    /// ```
+    /// In particular, the solution set is a unit two-sphere centered at the origin
+    /// in the pure vector subspace of the space of quaternions. This solution set 
+    /// includes the poles of the imaginary part of the complex plane `i` and `-i`.
+    #[test]
+    fn test_square_unit_x() {
+        let i: Quaternion<f64> = Quaternion::unit_x();
+        let minus_one= Quaternion::from_real(-1_f64);
+        
+        assert_eq!(i.squared(), minus_one);
+        assert_eq!((-i).squared(), minus_one);
+    }
 }
 
 #[cfg(test)]
