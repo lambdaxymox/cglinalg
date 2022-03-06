@@ -1610,34 +1610,42 @@ where
     #[inline]
     pub fn sqrt(&self) -> Self {
         self.sqrt_eps(S::default_epsilon())
-        /*
-        let one_half = num_traits::cast(1_f64 / 2_f64).unwrap();
-        let sqrt_magnitude_q = self.magnitude().sqrt();
-        let one_over_magnitude_qv = S::one() / self.v.magnitude();
-        let arg_q_over_two = self.arg() * one_half;
-        let ps = sqrt_magnitude_q * arg_q_over_two.cos();
-        let pv = self.v * (sqrt_magnitude_q * one_over_magnitude_qv * arg_q_over_two.sin());
-        // calculate the magnitude of the vector part
-        // if the magnitude of the vector part is less than soem threshold
-        //     we have a real quaternion. Handle this ambiguity with multiple square roots.
-        // otherwise
-        //     proceed with the usual calculation
-
-        Self::from_parts(ps, pv)
-        */
     }
 
     #[inline]
     fn sqrt_eps(&self, epsilon: S) -> Self {
-        unimplemented!()
-        /*
-        let magnitude_v_squared = self.v.magnitude_squared();
-        if magnitude_v_squared <= epsilon * epsilon {
-
-        } else {
-            
+        let magnitude_self_squared = self.magnitude_squared();
+        if magnitude_self_squared <= epsilon * epsilon {
+            // We have a zero quaternion.
+            return Self::zero();
         }
-        */
+
+        let magnitude_v_squared = self.v.magnitude_squared();
+        let magnitude_self = S::sqrt(magnitude_self_squared);
+        if magnitude_v_squared <= epsilon * epsilon {
+            let sqrt_magnitude_self = S::sqrt(magnitude_self);
+            // We have a non-zero real quaternion.
+            if self.s > S::zero() {
+                // If the scalar part of a real quaternion is positive, it 
+                // acts like a scalar.
+                Self::from_real(sqrt_magnitude_self)
+            } else {
+                // If the scalar part of a real quaternion is negative, it has 
+                // infinitely many pure quaternion solutions that form a two-sphere
+                // centered at the origin in the vector subspace of the space of
+                // quaternions, so we choose a canonical one on the imaginary axis 
+                // in the complex plane.
+                Self::from_pure(
+                    Vector3::new(sqrt_magnitude_self, S::zero(), S::zero())
+                )
+            }
+        } else {
+            // Otherwise, we can treat the quaternion as normal.
+            let one_half: S = num_traits::cast(0.5).unwrap();
+            let c = S::sqrt(one_half / (magnitude_self + self.s));
+
+            Self::new((magnitude_self + self.s) * c, self.v.x * c, self.v.y * c, self.v.z * c)
+        }
     }
 
     /// Compute the left quotient of two quaternions.
