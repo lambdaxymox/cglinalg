@@ -1,7 +1,7 @@
-use crate::base::scalar::{
+use crate::common::scalar::{
     ScalarFloat,
 };
-use crate::base::magnitude::{
+use crate::common::magnitude::{
     Magnitude,
 };
 

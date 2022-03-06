@@ -1,4 +1,4 @@
-use crate::base::{
+use crate::common::{
     Magnitude,
     Scalar,
     ScalarSigned,

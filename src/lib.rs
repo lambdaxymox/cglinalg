@@ -101,7 +101,7 @@ extern crate approx;
 extern crate num_traits;
 
 
-mod base;
+mod common;
 
 mod angle;
 mod matrix;
@@ -123,7 +123,7 @@ mod transform;
 mod similarity;
 
 
-pub use base::*;
+pub use common::*;
 
 pub use angle::*;
 pub use euler::*;

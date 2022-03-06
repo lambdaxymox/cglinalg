@@ -1,9 +1,9 @@
-use crate::base::{
+use crate::common::{
     Scalar,
     ScalarSigned,
     ScalarFloat,   
 };
-use crate::base::{
+use crate::common::{
     Magnitude,
 };
 use crate::{

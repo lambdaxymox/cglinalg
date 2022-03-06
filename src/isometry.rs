@@ -6,7 +6,7 @@ use crate::translation::{
     Translation2,
     Translation3,
 };
-use crate::base::{
+use crate::common::{
     ScalarFloat,
     Unit,
 };

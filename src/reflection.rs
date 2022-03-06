@@ -1,4 +1,4 @@
-use crate::base::{
+use crate::common::{
     ScalarFloat,
     Unit,
 };

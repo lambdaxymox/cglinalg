@@ -2,7 +2,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::base::{
+use crate::common::{
     ScalarFloat,
     Unit,
 };
