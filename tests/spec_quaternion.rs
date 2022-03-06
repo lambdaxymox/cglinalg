@@ -1238,7 +1238,11 @@ macro_rules! sqrt_props {
             fn prop_positive_square_root_squared(q in $Generator::<$ScalarType>()) {
                 let sqrt_q = q.sqrt();
 
-                prop_assert!(relative_eq!(sqrt_q * sqrt_q, q, epsilon = $tolerance));
+                prop_assert!(
+                    relative_eq!(sqrt_q * sqrt_q, q, epsilon = $tolerance),
+                    "q = {:?}\nsqrt_q = {:?}\nsqrt_q * sqrt_q = {:?}",
+                    q, sqrt_q, sqrt_q * sqrt_q
+                );
             }
 
             /// The square of the negative square root of a quaternion is the original
@@ -1252,12 +1256,16 @@ macro_rules! sqrt_props {
             fn prop_negative_square_root_squared(q in $Generator::<$ScalarType>()) {
                 let minus_sqrt_q = -q.sqrt();
 
-                prop_assert!(relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = $tolerance));
+                prop_assert!(
+                    relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = $tolerance),
+                    "q = {:?}\nminus_sqrt_q = {:?}\nminus_sqrt_q * minus_sqrt_q = {:?}",
+                    q, minus_sqrt_q, minus_sqrt_q * minus_sqrt_q
+                );
             }
         }
     }
     }
 }
 
-// sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion, any_scalar, 1e-7);
+// sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion, any_scalar, 1e-8);
 
