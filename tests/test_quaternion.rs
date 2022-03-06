@@ -889,6 +889,10 @@ mod square_tests {
         Quaternion,
         Vector3,
     };
+    use approx::{
+        assert_relative_eq,
+    };
+
     
     #[test]
     fn test_square_pure_quaternion() {
@@ -931,6 +935,51 @@ mod square_tests {
         assert_eq!(i.squared(), minus_one);
         assert_eq!((-i).squared(), minus_one);
     }
+
+    #[test]
+    fn test_square_quaternions_one_unit_two_sphere_xy_plane() {
+        let q = Quaternion::from_real(-1_f64);
+        let pi_over_eight = core::f64::consts::FRAC_PI_8;
+        for i in 0..64 {
+            let angle = (i as f64) * pi_over_eight;
+            let cos_angle = angle.cos();
+            let sin_angle = angle.sin();
+            let vector = Vector3::new(cos_angle, sin_angle, 0_f64);
+            let sqrt_q = Quaternion::from_pure(vector);
+
+            assert_relative_eq!(sqrt_q.squared(), q, epsilon = 1e-10);
+        }
+    }
+
+    #[test]
+    fn test_square_quaternions_one_unit_two_sphere_yz_plane() {
+        let q = Quaternion::from_real(-1_f64);
+        let pi_over_eight = core::f64::consts::FRAC_PI_8;
+        for i in 0..64 {
+            let angle = (i as f64) * pi_over_eight;
+            let cos_angle = angle.cos();
+            let sin_angle = angle.sin();
+            let vector = Vector3::new(0_f64, cos_angle, sin_angle);
+            let sqrt_q = Quaternion::from_pure(vector);
+
+            assert_relative_eq!(sqrt_q.squared(), q, epsilon = 1e-10);
+        }
+    }
+
+    #[test]
+    fn test_square_quaternions_one_unit_two_sphere_zx_plane() {
+        let q = Quaternion::from_real(-1_f64);
+        let pi_over_eight = core::f64::consts::FRAC_PI_8;
+        for i in 0..64 {
+            let angle = (i as f64) * pi_over_eight;
+            let cos_angle = angle.cos();
+            let sin_angle = angle.sin();
+            let vector = Vector3::new(cos_angle, 0_f64, sin_angle);
+            let sqrt_q = Quaternion::from_pure(vector);
+
+            assert_relative_eq!(sqrt_q.squared(), q, epsilon = 1e-10);
+        }
+    }
 }
 
 #[cfg(test)]
@@ -959,7 +1008,7 @@ mod square_root_tests {
         let expected = Quaternion::from_real(f64::sqrt(scalar_part));
         let result = scalar.sqrt();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
