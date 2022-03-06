@@ -2875,7 +2875,7 @@ mod matrix4x4_tests {
         let look_at = Matrix4x4::look_at_lh(&eye, &target, &up);
         let expected = Vector4::unit_w();
         let result = look_at * eye.to_homogeneous();
-        eprintln!("{}", look_at);
+
         assert_eq!(result, expected);
     }
 
@@ -2887,7 +2887,7 @@ mod matrix4x4_tests {
         let look_at = Matrix4x4::look_at_rh(&eye, &target, &up);
         let expected = Vector4::unit_w();
         let result = look_at * eye.to_homogeneous();
-        eprintln!("{}", look_at);
+
         assert_eq!(result, expected);
     }
 }
