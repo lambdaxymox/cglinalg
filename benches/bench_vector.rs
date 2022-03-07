@@ -5,6 +5,7 @@ extern crate rand_isaac;
 
 
 use cglinalg::{
+    Magnitude,
     Vector1,
     Vector2,
     Vector3,
@@ -110,14 +111,13 @@ macro_rules! bench_binop_ref(
     }
 );
 
-macro_rules! bench_biop_fn(
-    ($name: ident, $scalar_type:ty, $type1:ty, $type2:ty, $generator_t1:ident, $generator_t2:ident, $binop:ident) => {
+macro_rules! bench_unop(
+    ($name:ident, $scalar_type:ty, $ty:ty, $generator:ident, $unop:ident) => {
         fn $name(bh: &mut criterion::Criterion) {
-            let a = $generator_t1::<$scalar_type>();
-            let b = $generator_t2::<$scalar_type>();
+            let v = $generator::<$scalar_type>();
 
             bh.bench_function(stringify!($name), move |bh| bh.iter(|| {
-                $binop(&a, &b)
+                v.$unop()
             }));
         }
     }
@@ -155,6 +155,16 @@ bench_binop_ref!(vector4_dot_vector4, f32, Vector4<f32>, Vector4<f32>, gen_vecto
 
 bench_binop_ref!(vector3_cross_vector3, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, cross);
 
+bench_unop!(vector1_magnitude, f32, Vector1<f32>, gen_vector1, magnitude);
+bench_unop!(vector2_magnitude, f32, Vector2<f32>, gen_vector2, magnitude);
+bench_unop!(vector3_magnitude, f32, Vector3<f32>, gen_vector3, magnitude);
+bench_unop!(vector4_magnitude, f32, Vector4<f32>, gen_vector4, magnitude);
+
+bench_unop!(vector1_normalize, f32, Vector1<f32>, gen_vector1, normalize);
+bench_unop!(vector2_normalize, f32, Vector2<f32>, gen_vector2, normalize);
+bench_unop!(vector3_normalize, f32, Vector3<f32>, gen_vector3, normalize);
+bench_unop!(vector4_normalize, f32, Vector4<f32>, gen_vector4, normalize);
+
 criterion_group!(
     vector_benches, 
     vector1_add_vector1,
@@ -182,6 +192,14 @@ criterion_group!(
     vector3_dot_vector3,
     vector4_dot_vector4,
     vector3_cross_vector3,
+    vector1_magnitude,
+    vector2_magnitude,
+    vector3_magnitude,
+    vector4_magnitude,
+    vector1_normalize,
+    vector2_normalize,
+    vector3_normalize,
+    vector4_normalize,
 );
 criterion_main!(vector_benches);
 
