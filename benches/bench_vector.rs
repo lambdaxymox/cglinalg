@@ -1,0 +1,55 @@
+extern crate cglinalg;
+extern crate criterion;
+extern crate rand;
+extern crate rand_isaac;
+
+
+use cglinalg::{
+    Vector1,
+};
+
+use core::ops::{
+    Add,
+};
+
+use rand::{
+    Rng, 
+    prelude::Distribution,
+    distributions::Standard,
+};
+
+use rand_isaac::{
+    IsaacRng,
+};
+
+use criterion::{
+    criterion_group,
+    criterion_main,
+};
+
+fn generate1<S>() -> Vector1<S> where Standard: Distribution<S> {
+    use rand::SeedableRng;
+    let mut rng = IsaacRng::seed_from_u64(0);
+    
+    Vector1::new(rng.gen::<S>())
+}
+
+
+macro_rules! benchmark_binary_op(
+    ($name: ident, $generator:ident, $scalar_type:ty, $type1:ty, $type2:ty, $binop:ident) => {
+        fn $name(bh: &mut criterion::Criterion) {
+            let a = $generator::<$scalar_type>();
+            let b = $generator::<$scalar_type>();
+
+            bh.bench_function(stringify!($name), move |bh| bh.iter(|| {
+                a.$binop(&b)
+            }));
+        }
+    }
+);
+
+benchmark_binary_op!(vector1_add_vector1, generate1, f32, Vector1<f32>, Vector1<f32>, add);
+
+criterion_group!(vector_benches, vector1_add_vector1);
+criterion_main!(vector_benches);
+

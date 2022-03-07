@@ -41,6 +41,9 @@ features = ["libm"]
 
 [dev-dependencies]
 proptest = "1.0.0"
+criterion = "0.3.4"
+rand = "0.8.5"
+rand_isaac = "0.3.0"
 
 [profile.release]
 opt-level = 2
@@ -49,3 +52,8 @@ opt-level = 2
 # Disable overflow checks during testing since overflowing in integer operations
 # is desireable behavior in debug mode.
 overflow-checks = false
+
+[[bench]]
+name = "bench_vector"
+harness = false
+
