@@ -13,6 +13,7 @@ use cglinalg::{
 
 use core::ops::{
     Add,
+    Sub,
 };
 
 use rand::{
@@ -76,6 +77,10 @@ benchmark_binary_op!(vector1_add_vector1, generate1, f32, Vector1<f32>, Vector1<
 benchmark_binary_op!(vector2_add_vector2, generate2, f32, Vector2<f32>, Vector2<f32>, add);
 benchmark_binary_op!(vector3_add_vector3, generate3, f32, Vector3<f32>, Vector3<f32>, add);
 benchmark_binary_op!(vector4_add_vector4, generate4, f32, Vector4<f32>, Vector4<f32>, add);
+benchmark_binary_op!(vector1_sub_vector1, generate1, f32, Vector1<f32>, Vector1<f32>, sub);
+benchmark_binary_op!(vector2_sub_vector2, generate2, f32, Vector2<f32>, Vector2<f32>, sub);
+benchmark_binary_op!(vector3_sub_vector3, generate3, f32, Vector3<f32>, Vector3<f32>, sub);
+benchmark_binary_op!(vector4_sub_vector4, generate4, f32, Vector4<f32>, Vector4<f32>, sub);
 
 criterion_group!(
     vector_benches, 
@@ -83,6 +88,10 @@ criterion_group!(
     vector2_add_vector2,
     vector3_add_vector3,
     vector4_add_vector4,
+    vector1_sub_vector1,
+    vector2_sub_vector2,
+    vector3_sub_vector3,
+    vector4_sub_vector4,
 );
 criterion_main!(vector_benches);
 
