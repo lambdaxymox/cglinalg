@@ -422,52 +422,6 @@ where
         self.normal
     }
 
-    /* FIXME: Can we calculate an inverse reflection?
-    /// Calculate the inverse reflection transformation.
-    #[inline]
-    pub fn inverse(&self) -> Reflection3<S> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-        let normal = self.normal;
-        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y - two * normal.z * normal.z);
-
-        let c0r0 = one - two * normal.y * normal.y - normal.z * normal.z;
-        let c0r1 = two * normal.x * normal.y;
-        let c0r2 = two * normal.x * normal.z;
-        let c0r3 = zero;
-
-        let c1r0 = two * normal.x * normal.y;
-        let c1r1 = one - two * normal.x * normal.x - two * normal.z * normal.z;
-        let c1r2 = two * normal.y * normal.z;
-        let c1r3 = zero;
-
-        let c2r0 = two * normal.x * normal.z;
-        let c2r1 = two * normal.y * normal.z;
-        let c2r2 = one - two * normal.x * normal.x - two * normal.y * normal.y;
-        let c2r3 = zero;
-
-        let c3r0 = zero;
-        let c3r1 = zero;
-        let c3r2 = zero;
-        let c3r3 = one;
-
-
-        let matrix = Matrix4x4::new(
-            c0r0, c0r1, c0r2, c0r3,
-            c1r0, c1r1, c1r2, c1r3,
-            c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
-        );
-
-        Reflection3 { 
-            bias: self.bias,
-            normal: normal, 
-            matrix: matrix * inverse_det,
-        }
-    }
-    */
-
     /// Reflect a vector across the plane described by the reflection 
     /// transformation.
     /// 
