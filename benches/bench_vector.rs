@@ -51,7 +51,7 @@ where
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
     
-    Vector1::new(rng.gen::<S>())
+    Vector1::new(rng.gen())
 }
 
 fn gen_vector2<S>() -> Vector2<S> 
@@ -166,7 +166,7 @@ bench_unop!(vector3_normalize, f32, Vector3<f32>, gen_vector3, normalize);
 bench_unop!(vector4_normalize, f32, Vector4<f32>, gen_vector4, normalize);
 
 criterion_group!(
-    vector_benches, 
+    vector_benchmarks, 
     vector1_add_vector1,
     vector2_add_vector2,
     vector3_add_vector3,
@@ -201,5 +201,5 @@ criterion_group!(
     vector3_normalize,
     vector4_normalize,
 );
-criterion_main!(vector_benches);
+criterion_main!(vector_benchmarks);
 
