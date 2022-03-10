@@ -5,7 +5,6 @@ extern crate rand_isaac;
 
 
 use cglinalg::{
-    Magnitude,
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
@@ -33,15 +32,6 @@ use criterion::{
     criterion_main,
 };
 
-fn gen_scalar<S>() -> S
-where
-    Standard: Distribution<S>
-{
-    use rand::SeedableRng;
-    let mut rng = IsaacRng::seed_from_u64(0);
-
-    rng.gen()
-}
 
 fn gen_matrix2x2<S>() -> Matrix2x2<S> 
 where 
@@ -141,6 +131,7 @@ bench_binop!(matrix4x4_mul_vector4_f32,   f32, Matrix4x4<f32>, Vector4<f32>,   g
 bench_binop!(matrix2x2_mul_matrix2x2_f32, f32, Matrix2x2<f32>, Matrix2x2<f32>, gen_matrix2x2, gen_vector2, mul);
 bench_binop!(matrix3x3_mul_matrix3x3_f32, f32, Matrix3x3<f32>, Matrix3x3<f32>, gen_matrix3x3, gen_vector3, mul);
 bench_binop!(matrix4x4_mul_matrix4x4_f32, f32, Matrix4x4<f32>, Matrix4x4<f32>, gen_matrix4x4, gen_vector4, mul);
+
 
 criterion_group!(
     matrix_mul_benchmarks,
