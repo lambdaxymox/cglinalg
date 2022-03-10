@@ -57,3 +57,7 @@ overflow-checks = false
 name = "bench_vector"
 harness = false
 
+[[bench]]
+name = "bench_matrix"
+harness = false
+
