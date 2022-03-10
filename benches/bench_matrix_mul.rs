@@ -118,13 +118,6 @@ macro_rules! bench_binop(
     }
 );
 
-bench_binop!(matrix2x2_mul_vector2_i32,   i32, Matrix2x2<i32>, Vector2<i32>,   gen_matrix2x2, gen_vector2, mul);
-bench_binop!(matrix3x3_mul_vector3_i32,   i32, Matrix3x3<i32>, Vector3<i32>,   gen_matrix3x3, gen_vector3, mul);
-bench_binop!(matrix4x4_mul_vector4_i32,   i32, Matrix4x4<i32>, Vector4<i32>,   gen_matrix4x4, gen_vector4, mul);
-bench_binop!(matrix2x2_mul_matrix2x2_i32, i32, Matrix2x2<i32>, Matrix2x2<i32>, gen_matrix2x2, gen_vector2, mul);
-bench_binop!(matrix3x3_mul_matrix3x3_i32, i32, Matrix3x3<i32>, Matrix3x3<i32>, gen_matrix3x3, gen_vector3, mul);
-bench_binop!(matrix4x4_mul_matrix4x4_i32, i32, Matrix4x4<i32>, Matrix4x4<i32>, gen_matrix4x4, gen_vector4, mul);
-
 bench_binop!(matrix2x2_mul_vector2_f32,   f32, Matrix2x2<f32>, Vector2<f32>,   gen_matrix2x2, gen_vector2, mul);
 bench_binop!(matrix3x3_mul_vector3_f32,   f32, Matrix3x3<f32>, Vector3<f32>,   gen_matrix3x3, gen_vector3, mul);
 bench_binop!(matrix4x4_mul_vector4_f32,   f32, Matrix4x4<f32>, Vector4<f32>,   gen_matrix4x4, gen_vector4, mul);
@@ -135,12 +128,6 @@ bench_binop!(matrix4x4_mul_matrix4x4_f32, f32, Matrix4x4<f32>, Matrix4x4<f32>, g
 
 criterion_group!(
     matrix_mul_benchmarks,
-    matrix2x2_mul_vector2_i32,
-    matrix3x3_mul_vector3_i32,
-    matrix4x4_mul_vector4_i32,
-    matrix2x2_mul_matrix2x2_i32,
-    matrix3x3_mul_matrix3x3_i32,
-    matrix4x4_mul_matrix4x4_i32,
     matrix2x2_mul_vector2_f32,
     matrix3x3_mul_vector3_f32,
     matrix4x4_mul_vector4_f32,
