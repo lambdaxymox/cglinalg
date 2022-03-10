@@ -61,3 +61,7 @@ harness = false
 name = "bench_matrix"
 harness = false
 
+[[bench]]
+name = "bench_matrix_mul"
+harness = false
+
