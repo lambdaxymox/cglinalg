@@ -123,44 +123,81 @@ macro_rules! bench_unop(
     }
 );
 
+bench_binop!(matrix2x2_add_matrix2x2_i32, i32, Matrix2x2<i32>, Matrix2x2<i32>, gen_matrix2x2, gen_matrix2x2, add);
+bench_binop!(matrix3x3_add_matrix3x3_i32, i32, Matrix3x3<i32>, Matrix3x3<i32>, gen_matrix3x3, gen_matrix3x3, add);
+bench_binop!(matrix4x4_add_matrix4x4_i32, i32, Matrix4x4<i32>, Matrix4x4<i32>, gen_matrix4x4, gen_matrix4x4, add);
 
-bench_binop!(matrix2x2_add_matrix2x2, f32, Matrix2x2<f32>, Matrix2x2<f32>, gen_matrix2x2, gen_matrix2x2, add);
-bench_binop!(matrix3x3_add_matrix3x3, f32, Matrix3x3<f32>, Matrix3x3<f32>, gen_matrix3x3, gen_matrix3x3, add);
-bench_binop!(matrix4x4_add_matrix4x4, f32, Matrix4x4<f32>, Matrix4x4<f32>, gen_matrix4x4, gen_matrix4x4, add);
+bench_binop!(matrix2x2_sub_matrix2x2_i32, i32, Matrix2x2<i32>, Matrix2x2<i32>, gen_matrix2x2, gen_matrix2x2, sub);
+bench_binop!(matrix3x3_sub_matrix3x3_i32, i32, Matrix3x3<i32>, Matrix3x3<i32>, gen_matrix3x3, gen_matrix3x3, sub);
+bench_binop!(matrix4x4_sub_matrix4x4_i32, i32, Matrix4x4<i32>, Matrix4x4<i32>, gen_matrix4x4, gen_matrix4x4, sub);
 
-bench_binop!(matrix2x2_sub_matrix2x2, f32, Matrix2x2<f32>, Matrix2x2<f32>, gen_matrix2x2, gen_matrix2x2, sub);
-bench_binop!(matrix3x3_sub_matrix3x3, f32, Matrix3x3<f32>, Matrix3x3<f32>, gen_matrix3x3, gen_matrix3x3, sub);
-bench_binop!(matrix4x4_sub_matrix4x4, f32, Matrix4x4<f32>, Matrix4x4<f32>, gen_matrix4x4, gen_matrix4x4, sub);
+bench_binop!(scalar_mul_matrix2x2_i32, i32, i32,            Matrix2x2<i32>, gen_scalar,  gen_matrix2x2, mul);
+bench_binop!(scalar_mul_matrix3x3_i32, i32, i32,            Matrix3x3<i32>, gen_scalar,  gen_matrix3x3, mul);
+bench_binop!(scalar_mul_matrix4x4_i32, i32, i32,            Matrix4x4<i32>, gen_scalar,  gen_matrix4x4, mul);
 
-bench_binop!(scalar_mul_matrix2x2, f32, f32,            Matrix2x2<f32>, gen_scalar,  gen_matrix2x2, mul);
-bench_binop!(scalar_mul_matrix3x3, f32, f32,            Matrix3x3<f32>, gen_scalar,  gen_matrix3x3, mul);
-bench_binop!(scalar_mul_matrix4x4, f32, f32,            Matrix4x4<f32>, gen_scalar,  gen_matrix4x4, mul);
+bench_binop!(matrix2x2_mul_scalar_i32, i32, Matrix2x2<i32>, i32,          gen_matrix2x2, gen_scalar,  mul);
+bench_binop!(matrix3x3_mul_scalar_i32, i32, Matrix3x3<i32>, i32,          gen_matrix3x3, gen_scalar,  mul);
+bench_binop!(matrix4x4_mul_scalar_i32, i32, Matrix4x4<i32>, i32,          gen_matrix4x4, gen_scalar,  mul);
 
-bench_binop!(matrix2x2_mul_scalar, f32, Matrix2x2<f32>, f32,          gen_matrix2x2, gen_scalar,  mul);
-bench_binop!(matrix3x3_mul_scalar, f32, Matrix3x3<f32>, f32,          gen_matrix3x3, gen_scalar,  mul);
-bench_binop!(matrix4x4_mul_scalar, f32, Matrix4x4<f32>, f32,          gen_matrix4x4, gen_scalar,  mul);
+bench_binop!(matrix2x2_div_scalar_i32, i32, Matrix2x2<i32>, i32,          gen_matrix2x2, gen_scalar,  div);
+bench_binop!(matrix3x3_div_scalar_i32, i32, Matrix3x3<i32>, i32,          gen_matrix3x3, gen_scalar,  div);
+bench_binop!(matrix4x4_div_scalar_i32, i32, Matrix4x4<i32>, i32,          gen_matrix4x4, gen_scalar,  div);
 
-bench_binop!(matrix2x2_div_scalar, f32, Matrix2x2<f32>, f32,          gen_matrix2x2, gen_scalar,  div);
-bench_binop!(matrix3x3_div_scalar, f32, Matrix3x3<f32>, f32,          gen_matrix3x3, gen_scalar,  div);
-bench_binop!(matrix4x4_div_scalar, f32, Matrix4x4<f32>, f32,          gen_matrix4x4, gen_scalar,  div);
+
+bench_binop!(matrix2x2_add_matrix2x2_f32, f32, Matrix2x2<f32>, Matrix2x2<f32>, gen_matrix2x2, gen_matrix2x2, add);
+bench_binop!(matrix3x3_add_matrix3x3_f32, f32, Matrix3x3<f32>, Matrix3x3<f32>, gen_matrix3x3, gen_matrix3x3, add);
+bench_binop!(matrix4x4_add_matrix4x4_f32, f32, Matrix4x4<f32>, Matrix4x4<f32>, gen_matrix4x4, gen_matrix4x4, add);
+
+bench_binop!(matrix2x2_sub_matrix2x2_f32, f32, Matrix2x2<f32>, Matrix2x2<f32>, gen_matrix2x2, gen_matrix2x2, sub);
+bench_binop!(matrix3x3_sub_matrix3x3_f32, f32, Matrix3x3<f32>, Matrix3x3<f32>, gen_matrix3x3, gen_matrix3x3, sub);
+bench_binop!(matrix4x4_sub_matrix4x4_f32, f32, Matrix4x4<f32>, Matrix4x4<f32>, gen_matrix4x4, gen_matrix4x4, sub);
+
+bench_binop!(scalar_mul_matrix2x2_f32, f32, f32,            Matrix2x2<f32>, gen_scalar,  gen_matrix2x2, mul);
+bench_binop!(scalar_mul_matrix3x3_f32, f32, f32,            Matrix3x3<f32>, gen_scalar,  gen_matrix3x3, mul);
+bench_binop!(scalar_mul_matrix4x4_f32, f32, f32,            Matrix4x4<f32>, gen_scalar,  gen_matrix4x4, mul);
+
+bench_binop!(matrix2x2_mul_scalar_f32, f32, Matrix2x2<f32>, f32,          gen_matrix2x2, gen_scalar,  mul);
+bench_binop!(matrix3x3_mul_scalar_f32, f32, Matrix3x3<f32>, f32,          gen_matrix3x3, gen_scalar,  mul);
+bench_binop!(matrix4x4_mul_scalar_f32, f32, Matrix4x4<f32>, f32,          gen_matrix4x4, gen_scalar,  mul);
+
+bench_binop!(matrix2x2_div_scalar_f32, f32, Matrix2x2<f32>, f32,          gen_matrix2x2, gen_scalar,  div);
+bench_binop!(matrix3x3_div_scalar_f32, f32, Matrix3x3<f32>, f32,          gen_matrix3x3, gen_scalar,  div);
+bench_binop!(matrix4x4_div_scalar_f32, f32, Matrix4x4<f32>, f32,          gen_matrix4x4, gen_scalar,  div);
+
+
 
 criterion_group!(
     matrix_benchmarks,
-    matrix2x2_add_matrix2x2,
-    matrix3x3_add_matrix3x3,
-    matrix4x4_add_matrix4x4,
-    matrix2x2_sub_matrix2x2,
-    matrix3x3_sub_matrix3x3,
-    matrix4x4_sub_matrix4x4,
-    scalar_mul_matrix2x2,
-    scalar_mul_matrix3x3,
-    scalar_mul_matrix4x4,
-    matrix2x2_mul_scalar,
-    matrix3x3_mul_scalar,
-    matrix4x4_mul_scalar,
-    matrix2x2_div_scalar,
-    matrix3x3_div_scalar,
-    matrix4x4_div_scalar
+    matrix2x2_add_matrix2x2_i32,
+    matrix3x3_add_matrix3x3_i32,
+    matrix4x4_add_matrix4x4_i32,
+    matrix2x2_sub_matrix2x2_i32,
+    matrix3x3_sub_matrix3x3_i32,
+    matrix4x4_sub_matrix4x4_i32,
+    scalar_mul_matrix2x2_i32,
+    scalar_mul_matrix3x3_i32,
+    scalar_mul_matrix4x4_i32,
+    matrix2x2_mul_scalar_i32,
+    matrix3x3_mul_scalar_i32,
+    matrix4x4_mul_scalar_i32,
+    matrix2x2_div_scalar_i32,
+    matrix3x3_div_scalar_i32,
+    matrix4x4_div_scalar_i32,
+    matrix2x2_add_matrix2x2_f32,
+    matrix3x3_add_matrix3x3_f32,
+    matrix4x4_add_matrix4x4_f32,
+    matrix2x2_sub_matrix2x2_f32,
+    matrix3x3_sub_matrix3x3_f32,
+    matrix4x4_sub_matrix4x4_f32,
+    scalar_mul_matrix2x2_f32,
+    scalar_mul_matrix3x3_f32,
+    scalar_mul_matrix4x4_f32,
+    matrix2x2_mul_scalar_f32,
+    matrix3x3_mul_scalar_f32,
+    matrix4x4_mul_scalar_f32,
+    matrix2x2_div_scalar_f32,
+    matrix3x3_div_scalar_f32,
+    matrix4x4_div_scalar_f32,
 );
 criterion_main!(matrix_benchmarks);
 

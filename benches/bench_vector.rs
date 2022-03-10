@@ -123,83 +123,141 @@ macro_rules! bench_unop(
     }
 );
 
-bench_binop!(vector1_add_vector1, f32, Vector1<f32>, Vector1<f32>, gen_vector1, gen_vector1, add);
-bench_binop!(vector2_add_vector2, f32, Vector2<f32>, Vector2<f32>, gen_vector2, gen_vector2, add);
-bench_binop!(vector3_add_vector3, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, add);
-bench_binop!(vector4_add_vector4, f32, Vector4<f32>, Vector4<f32>, gen_vector4, gen_vector4, add);
+bench_binop!(vector1_add_vector1_i32, i32, Vector1<i32>, Vector1<i32>, gen_vector1, gen_vector1, add);
+bench_binop!(vector2_add_vector2_i32, i32, Vector2<i32>, Vector2<i32>, gen_vector2, gen_vector2, add);
+bench_binop!(vector3_add_vector3_i32, i32, Vector3<i32>, Vector3<i32>, gen_vector3, gen_vector3, add);
+bench_binop!(vector4_add_vector4_i32, i32, Vector4<i32>, Vector4<i32>, gen_vector4, gen_vector4, add);
 
-bench_binop!(vector1_sub_vector1, f32, Vector1<f32>, Vector1<f32>, gen_vector1, gen_vector1, sub);
-bench_binop!(vector2_sub_vector2, f32, Vector2<f32>, Vector2<f32>, gen_vector2, gen_vector2, sub);
-bench_binop!(vector3_sub_vector3, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, sub);
-bench_binop!(vector4_sub_vector4, f32, Vector4<f32>, Vector4<f32>, gen_vector4, gen_vector4, sub);
+bench_binop!(vector1_sub_vector1_i32, i32, Vector1<i32>, Vector1<i32>, gen_vector1, gen_vector1, sub);
+bench_binop!(vector2_sub_vector2_i32, i32, Vector2<i32>, Vector2<i32>, gen_vector2, gen_vector2, sub);
+bench_binop!(vector3_sub_vector3_i32, i32, Vector3<i32>, Vector3<i32>, gen_vector3, gen_vector3, sub);
+bench_binop!(vector4_sub_vector4_i32, i32, Vector4<i32>, Vector4<i32>, gen_vector4, gen_vector4, sub);
 
-bench_binop!(scalar_mul_vector1,  f32, f32,          Vector1<f32>, gen_scalar,  gen_vector1, mul);
-bench_binop!(scalar_mul_vector2,  f32, f32,          Vector2<f32>, gen_scalar,  gen_vector2, mul);
-bench_binop!(scalar_mul_vector3,  f32, f32,          Vector3<f32>, gen_scalar,  gen_vector3, mul);
-bench_binop!(scalar_mul_vector4,  f32, f32,          Vector4<f32>, gen_scalar,  gen_vector4, mul);
+bench_binop!(scalar_mul_vector1_i32,  i32, i32,          Vector1<i32>, gen_scalar,  gen_vector1, mul);
+bench_binop!(scalar_mul_vector2_i32,  i32, i32,          Vector2<i32>, gen_scalar,  gen_vector2, mul);
+bench_binop!(scalar_mul_vector3_i32,  i32, i32,          Vector3<i32>, gen_scalar,  gen_vector3, mul);
+bench_binop!(scalar_mul_vector4_i32,  i32, i32,          Vector4<i32>, gen_scalar,  gen_vector4, mul);
 
-bench_binop!(vector1_mul_scalar,  f32, Vector1<f32>, f32,          gen_vector1, gen_scalar,  mul);
-bench_binop!(vector2_mul_scalar,  f32, Vector2<f32>, f32,          gen_vector2, gen_scalar,  mul);
-bench_binop!(vector3_mul_scalar,  f32, Vector3<f32>, f32,          gen_vector3, gen_scalar,  mul);
-bench_binop!(vector4_mul_scalar,  f32, Vector4<f32>, f32,          gen_vector4, gen_scalar,  mul);
+bench_binop!(vector1_mul_scalar_i32,  i32, Vector1<i32>, i32,          gen_vector1, gen_scalar,  mul);
+bench_binop!(vector2_mul_scalar_i32,  i32, Vector2<i32>, i32,          gen_vector2, gen_scalar,  mul);
+bench_binop!(vector3_mul_scalar_i32,  i32, Vector3<i32>, i32,          gen_vector3, gen_scalar,  mul);
+bench_binop!(vector4_mul_scalar_i32,  i32, Vector4<i32>, i32,          gen_vector4, gen_scalar,  mul);
 
-bench_binop!(vector1_div_scalar,  f32, Vector1<f32>, f32,          gen_vector1, gen_scalar,  div);
-bench_binop!(vector2_div_scalar,  f32, Vector2<f32>, f32,          gen_vector2, gen_scalar,  div);
-bench_binop!(vector3_div_scalar,  f32, Vector3<f32>, f32,          gen_vector3, gen_scalar,  div);
-bench_binop!(vector4_div_scalar,  f32, Vector4<f32>, f32,          gen_vector4, gen_scalar,  div);
+bench_binop!(vector1_div_scalar_i32,  i32, Vector1<i32>, i32,          gen_vector1, gen_scalar,  div);
+bench_binop!(vector2_div_scalar_i32,  i32, Vector2<i32>, i32,          gen_vector2, gen_scalar,  div);
+bench_binop!(vector3_div_scalar_i32,  i32, Vector3<i32>, i32,          gen_vector3, gen_scalar,  div);
+bench_binop!(vector4_div_scalar_i32,  i32, Vector4<i32>, i32,          gen_vector4, gen_scalar,  div);
 
-bench_binop_ref!(vector1_dot_vector1, f32, Vector1<f32>, Vector1<f32>, gen_vector1, gen_vector1, dot);
-bench_binop_ref!(vector2_dot_vector2, f32, Vector2<f32>, Vector2<f32>, gen_vector2, gen_vector2, dot);
-bench_binop_ref!(vector3_dot_vector3, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, dot);
-bench_binop_ref!(vector4_dot_vector4, f32, Vector4<f32>, Vector4<f32>, gen_vector4, gen_vector4, dot);
+bench_binop_ref!(vector1_dot_vector1_i32, i32, Vector1<i32>, Vector1<i32>, gen_vector1, gen_vector1, dot);
+bench_binop_ref!(vector2_dot_vector2_i32, i32, Vector2<i32>, Vector2<i32>, gen_vector2, gen_vector2, dot);
+bench_binop_ref!(vector3_dot_vector3_i32, i32, Vector3<i32>, Vector3<i32>, gen_vector3, gen_vector3, dot);
+bench_binop_ref!(vector4_dot_vector4_i32, i32, Vector4<i32>, Vector4<i32>, gen_vector4, gen_vector4, dot);
 
-bench_binop_ref!(vector3_cross_vector3, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, cross);
+bench_binop_ref!(vector3_cross_vector3_i32, i32, Vector3<i32>, Vector3<i32>, gen_vector3, gen_vector3, cross);
 
-bench_unop!(vector1_magnitude, f32, Vector1<f32>, gen_vector1, magnitude);
-bench_unop!(vector2_magnitude, f32, Vector2<f32>, gen_vector2, magnitude);
-bench_unop!(vector3_magnitude, f32, Vector3<f32>, gen_vector3, magnitude);
-bench_unop!(vector4_magnitude, f32, Vector4<f32>, gen_vector4, magnitude);
 
-bench_unop!(vector1_normalize, f32, Vector1<f32>, gen_vector1, normalize);
-bench_unop!(vector2_normalize, f32, Vector2<f32>, gen_vector2, normalize);
-bench_unop!(vector3_normalize, f32, Vector3<f32>, gen_vector3, normalize);
-bench_unop!(vector4_normalize, f32, Vector4<f32>, gen_vector4, normalize);
+bench_binop!(vector1_add_vector1_f32, f32, Vector1<f32>, Vector1<f32>, gen_vector1, gen_vector1, add);
+bench_binop!(vector2_add_vector2_f32, f32, Vector2<f32>, Vector2<f32>, gen_vector2, gen_vector2, add);
+bench_binop!(vector3_add_vector3_f32, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, add);
+bench_binop!(vector4_add_vector4_f32, f32, Vector4<f32>, Vector4<f32>, gen_vector4, gen_vector4, add);
+
+bench_binop!(vector1_sub_vector1_f32, f32, Vector1<f32>, Vector1<f32>, gen_vector1, gen_vector1, sub);
+bench_binop!(vector2_sub_vector2_f32, f32, Vector2<f32>, Vector2<f32>, gen_vector2, gen_vector2, sub);
+bench_binop!(vector3_sub_vector3_f32, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, sub);
+bench_binop!(vector4_sub_vector4_f32, f32, Vector4<f32>, Vector4<f32>, gen_vector4, gen_vector4, sub);
+
+bench_binop!(scalar_mul_vector1_f32,  f32, f32,          Vector1<f32>, gen_scalar,  gen_vector1, mul);
+bench_binop!(scalar_mul_vector2_f32,  f32, f32,          Vector2<f32>, gen_scalar,  gen_vector2, mul);
+bench_binop!(scalar_mul_vector3_f32,  f32, f32,          Vector3<f32>, gen_scalar,  gen_vector3, mul);
+bench_binop!(scalar_mul_vector4_f32,  f32, f32,          Vector4<f32>, gen_scalar,  gen_vector4, mul);
+
+bench_binop!(vector1_mul_scalar_f32,  f32, Vector1<f32>, f32,          gen_vector1, gen_scalar,  mul);
+bench_binop!(vector2_mul_scalar_f32,  f32, Vector2<f32>, f32,          gen_vector2, gen_scalar,  mul);
+bench_binop!(vector3_mul_scalar_f32,  f32, Vector3<f32>, f32,          gen_vector3, gen_scalar,  mul);
+bench_binop!(vector4_mul_scalar_f32,  f32, Vector4<f32>, f32,          gen_vector4, gen_scalar,  mul);
+
+bench_binop!(vector1_div_scalar_f32,  f32, Vector1<f32>, f32,          gen_vector1, gen_scalar,  div);
+bench_binop!(vector2_div_scalar_f32,  f32, Vector2<f32>, f32,          gen_vector2, gen_scalar,  div);
+bench_binop!(vector3_div_scalar_f32,  f32, Vector3<f32>, f32,          gen_vector3, gen_scalar,  div);
+bench_binop!(vector4_div_scalar_f32,  f32, Vector4<f32>, f32,          gen_vector4, gen_scalar,  div);
+
+bench_binop_ref!(vector1_dot_vector1_f32, f32, Vector1<f32>, Vector1<f32>, gen_vector1, gen_vector1, dot);
+bench_binop_ref!(vector2_dot_vector2_f32, f32, Vector2<f32>, Vector2<f32>, gen_vector2, gen_vector2, dot);
+bench_binop_ref!(vector3_dot_vector3_f32, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, dot);
+bench_binop_ref!(vector4_dot_vector4_f32, f32, Vector4<f32>, Vector4<f32>, gen_vector4, gen_vector4, dot);
+
+bench_binop_ref!(vector3_cross_vector3_f32, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, cross);
+
+bench_unop!(vector1_magnitude_f32, f32, Vector1<f32>, gen_vector1, magnitude);
+bench_unop!(vector2_magnitude_f32, f32, Vector2<f32>, gen_vector2, magnitude);
+bench_unop!(vector3_magnitude_f32, f32, Vector3<f32>, gen_vector3, magnitude);
+bench_unop!(vector4_magnitude_f32, f32, Vector4<f32>, gen_vector4, magnitude);
+
+bench_unop!(vector1_normalize_f32, f32, Vector1<f32>, gen_vector1, normalize);
+bench_unop!(vector2_normalize_f32, f32, Vector2<f32>, gen_vector2, normalize);
+bench_unop!(vector3_normalize_f32, f32, Vector3<f32>, gen_vector3, normalize);
+bench_unop!(vector4_normalize_f32, f32, Vector4<f32>, gen_vector4, normalize);
 
 criterion_group!(
     vector_benchmarks, 
-    vector1_add_vector1,
-    vector2_add_vector2,
-    vector3_add_vector3,
-    vector4_add_vector4,
-    vector1_sub_vector1,
-    vector2_sub_vector2,
-    vector3_sub_vector3,
-    vector4_sub_vector4,
-    scalar_mul_vector1,
-    scalar_mul_vector2,
-    scalar_mul_vector3,
-    scalar_mul_vector4,
-    vector1_mul_scalar,
-    vector2_mul_scalar,
-    vector3_mul_scalar,
-    vector4_mul_scalar,
-    vector1_div_scalar,
-    vector2_div_scalar,
-    vector3_div_scalar,
-    vector4_div_scalar,
-    vector1_dot_vector1,
-    vector2_dot_vector2,
-    vector3_dot_vector3,
-    vector4_dot_vector4,
-    vector3_cross_vector3,
-    vector1_magnitude,
-    vector2_magnitude,
-    vector3_magnitude,
-    vector4_magnitude,
-    vector1_normalize,
-    vector2_normalize,
-    vector3_normalize,
-    vector4_normalize,
+    vector1_add_vector1_i32,
+    vector2_add_vector2_i32,
+    vector3_add_vector3_i32,
+    vector4_add_vector4_i32,
+    vector1_sub_vector1_i32,
+    vector2_sub_vector2_i32,
+    vector3_sub_vector3_i32,
+    vector4_sub_vector4_i32,
+    scalar_mul_vector1_i32,
+    scalar_mul_vector2_i32,
+    scalar_mul_vector3_i32,
+    scalar_mul_vector4_i32,
+    vector1_mul_scalar_i32,
+    vector2_mul_scalar_i32,
+    vector3_mul_scalar_i32,
+    vector4_mul_scalar_i32,
+    vector1_div_scalar_i32,
+    vector2_div_scalar_i32,
+    vector3_div_scalar_i32,
+    vector4_div_scalar_i32,
+    vector1_dot_vector1_i32,
+    vector2_dot_vector2_i32,
+    vector3_dot_vector3_i32,
+    vector4_dot_vector4_i32,
+    vector3_cross_vector3_i32,
+    vector1_add_vector1_f32,
+    vector2_add_vector2_f32,
+    vector3_add_vector3_f32,
+    vector4_add_vector4_f32,
+    vector1_sub_vector1_f32,
+    vector2_sub_vector2_f32,
+    vector3_sub_vector3_f32,
+    vector4_sub_vector4_f32,
+    scalar_mul_vector1_f32,
+    scalar_mul_vector2_f32,
+    scalar_mul_vector3_f32,
+    scalar_mul_vector4_f32,
+    vector1_mul_scalar_f32,
+    vector2_mul_scalar_f32,
+    vector3_mul_scalar_f32,
+    vector4_mul_scalar_f32,
+    vector1_div_scalar_f32,
+    vector2_div_scalar_f32,
+    vector3_div_scalar_f32,
+    vector4_div_scalar_f32,
+    vector1_dot_vector1_f32,
+    vector2_dot_vector2_f32,
+    vector3_dot_vector3_f32,
+    vector4_dot_vector4_f32,
+    vector3_cross_vector3_f32,
+    vector1_magnitude_f32,
+    vector2_magnitude_f32,
+    vector3_magnitude_f32,
+    vector4_magnitude_f32,
+    vector1_normalize_f32,
+    vector2_normalize_f32,
+    vector3_normalize_f32,
+    vector4_normalize_f32,
 );
 criterion_main!(vector_benchmarks);
 
