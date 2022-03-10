@@ -75,66 +75,6 @@ where
         &self.matrix
     }
 
-    /* FIXME: Can we calculate an inverse reflection?
-    /// Calculate the inverse reflection transformation.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Reflection2,
-    /// #     Vector2,
-    /// #     Unit,
-    /// # };
-    /// #
-    /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
-    ///     -1_f64 / 2_f64, 
-    ///      1_f64
-    /// ));
-    /// let bias = Vector2::new(0_f64, 1_f64);
-    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
-    /// let reflection_inv = reflection.inverse();
-    /// let vector = Vector2::new(1_f64, 1_f64);
-    /// let expected = vector; // Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
-    /// let reflected_vector = reflection.reflect_vector(&vector);
-    /// let result = reflection_inv.reflect_vector(&reflected_vector);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn inverse(&self) -> Reflection2<S> {
-        let zero = S::zero();
-        let one = S::one();
-        let two = one + one;
-        let normal = self.normal;
-        let inverse_det = one / (one - two * normal.x * normal.x - two * normal.y * normal.y);
-
-        let c0r0 = one - two * normal.y * normal.y;
-        let c0r1 = two * normal.x * normal.y;
-        let c0r2 = zero;
-        
-        let c1r0 = two * normal.x * normal.y;
-        let c1r1 = one - two * normal.x * normal.x - two * normal.y * normal.y;
-        let c1r2 = zero;
-        
-        let c2r0 = zero;
-        let c2r1 = zero;
-        let c2r2 = one;
-
-        let matrix = Matrix3x3::new(
-            c0r0, c0r1, c0r2,                                   
-            c1r0, c1r1, c1r2, 
-            c2r0, c2r1, c2r2
-        );
-
-        Reflection2 {
-            bias: self.bias,
-            normal: normal, 
-            matrix: matrix * inverse_det 
-        }
-    }
-    */
-
     /// Reflect a vector across a line described by the reflection 
     /// transformation.
     ///
