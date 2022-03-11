@@ -15,6 +15,19 @@ where
 }
 
 #[inline(always)]
+pub fn sub_array_array<S, const M: usize, const N: usize>(
+    arr1: &[[S; M]; N], 
+    arr2: &[[S; M]; N],
+    c: usize,
+    r: usize
+) -> S
+where
+    S: Copy + ops::Sub<S, Output = S>
+{
+    arr1[c][r] - arr2[c][r]
+}
+
+#[inline(always)]
 pub fn dot_array1x1_col1<S>(arr: &[[S; 1]; 1], col: &[S; 1], r: usize) -> S
 where
     S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
@@ -31,7 +44,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
-
+/*
 #[inline(always)]
 pub fn sub_array1x1_array1x1<S>(arr1: &[[S; 1]; 1], arr2: &[[S; 1]; 1], c: usize, r: usize) -> S
 where
@@ -39,7 +52,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array1x1<S>(arr: &[[S; 1]; 1], c: usize, r: usize) -> S
 where
@@ -90,7 +103,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
-
+/*
 #[inline(always)]
 pub fn sub_array1x2_array1x2<S>(arr1: &[[S; 1]; 2], arr2: &[[S; 1]; 2], c: usize, r: usize) -> S
 where
@@ -98,7 +111,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array1x2<S>(arr: &[[S; 1]; 2], c: usize, r: usize) -> S
 where
@@ -147,6 +160,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn sub_array1x3_array1x3<S>(arr1: &[[S; 1]; 3], arr2: &[[S; 1]; 3], c: usize, r: usize) -> S
 where
@@ -154,7 +168,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array1x3<S>(arr: &[[S; 1]; 3], c: usize, r: usize) -> S
 where
@@ -203,6 +217,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn sub_array1x4_array1x4<S>(arr1: &[[S; 1]; 4], arr2: &[[S; 1]; 4], c: usize, r: usize) -> S
 where
@@ -210,7 +225,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array1x4<S>(arr: &[[S; 1]; 4], c: usize, r: usize) -> S
 where
@@ -259,7 +274,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
-
+/*
 #[inline(always)]
 pub fn sub_array2x2_array2x2<S>(arr1: &[[S; 2]; 2], arr2: &[[S; 2]; 2], c: usize, r: usize) -> S
 where
@@ -267,7 +282,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array2x2<S>(arr: &[[S; 2]; 2], c: usize, r: usize) -> S
 where
@@ -316,7 +331,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
-
+/*
 #[inline(always)]
 pub fn sub_array2x3_array2x3<S>(arr1: &[[S; 2]; 3], arr2: &[[S; 2]; 3], c: usize, r: usize) -> S
 where
@@ -324,7 +339,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array2x3<S>(arr: &[[S; 2]; 3], c: usize, r: usize) -> S
 where
@@ -373,7 +388,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
-
+/*
 #[inline(always)]
 pub fn sub_array3x2_array3x2<S>(arr1: &[[S; 3]; 2], arr2: &[[S; 3]; 2], c: usize, r: usize) -> S
 where
@@ -381,7 +396,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array3x2<S>(arr: &[[S; 3]; 2], c: usize, r: usize) -> S
 where
@@ -431,7 +446,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
-
+/*
 #[inline(always)]
 pub fn sub_array3x3_array3x3<S>(arr1: &[[S; 3]; 3], arr2: &[[S; 3]; 3], c: usize, r: usize) -> S
 where
@@ -439,7 +454,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array3x3<S>(arr: &[[S; 3]; 3], c: usize, r: usize) -> S
 where
@@ -488,6 +503,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn sub_array4x4_array4x4<S>(arr1: &[[S; 4]; 4], arr2: &[[S; 4]; 4], c: usize, r: usize) -> S
 where
@@ -495,7 +511,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array4x4<S>(arr: &[[S; 4]; 4], c: usize, r: usize) -> S
 where
@@ -544,7 +560,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
-
+/*
 #[inline(always)]
 pub fn sub_array4x2_array4x2<S>(arr1: &[[S; 4]; 2], arr2: &[[S; 4]; 2], c: usize, r: usize) -> S
 where
@@ -552,7 +568,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array4x2<S>(arr: &[[S; 4]; 2], c: usize, r: usize) -> S
 where
@@ -601,6 +617,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn sub_array2x4_array2x4<S>(arr1: &[[S; 2]; 4], arr2: &[[S; 2]; 4], c: usize, r: usize) -> S
 where
@@ -608,7 +625,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array2x4<S>(arr: &[[S; 2]; 4], c: usize, r: usize) -> S
 where
@@ -657,7 +674,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
-
+/*
 #[inline(always)]
 pub fn sub_array3x4_array3x4<S>(arr1: &[[S; 3]; 4], arr2: &[[S; 3]; 4], c: usize, r: usize) -> S
 where
@@ -665,7 +682,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array3x4<S>(arr: &[[S; 3]; 4], c: usize, r: usize) -> S
 where
@@ -714,6 +731,7 @@ where
     arr1[c][r] + arr2[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn sub_array4x3_array4x3<S>(arr1: &[[S; 4]; 3], arr2: &[[S; 4]; 3], c: usize, r: usize) -> S
 where
@@ -721,7 +739,7 @@ where
 {
     arr1[c][r] - arr2[c][r]
 }
-
+*/
 #[inline(always)]
 pub fn neg_array4x3<S>(arr: &[[S; 4]; 3], c: usize, r: usize) -> S
 where
