@@ -36,6 +36,20 @@ where
 }
 
 #[inline(always)]
+pub fn mul_array_scalar<S, const M: usize, const N: usize>(
+    arr: &[[S; M]; N], 
+    other: S, 
+    c: usize, 
+    r: usize
+) -> S
+where
+    S: Copy + ops::Mul<S, Output = S>
+{
+    arr[c][r] * other
+}
+
+
+#[inline(always)]
 pub fn dot_array1x1_col1<S>(arr: &[[S; 1]; 1], col: &[S; 1], r: usize) -> S
 where
     S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
@@ -70,6 +84,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array1x1_scalar<S>(arr: &[[S; 1]; 1], other: S, c: usize, r: usize) -> S
 where
@@ -77,6 +92,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array1x1_scalar<S>(arr: &[[S; 1]; 1], other: S, c: usize, r: usize) -> S
@@ -130,6 +146,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array1x2_scalar<S>(arr: &[[S; 1]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -137,6 +154,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array1x2_scalar<S>(arr: &[[S; 1]; 2], other: S, c: usize, r: usize) -> S
@@ -188,6 +206,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array1x3_scalar<S>(arr: &[[S; 1]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -195,6 +214,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array1x3_scalar<S>(arr: &[[S; 1]; 3], other: S, c: usize, r: usize) -> S
@@ -246,6 +266,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array1x4_scalar<S>(arr: &[[S; 1]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -253,6 +274,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array1x4_scalar<S>(arr: &[[S; 1]; 4], other: S, c: usize, r: usize) -> S
@@ -304,6 +326,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -311,6 +334,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
@@ -362,6 +386,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array2x3_scalar<S>(arr: &[[S; 2]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -369,6 +394,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array2x3_scalar<S>(arr: &[[S; 2]; 3], other: S, c: usize, r: usize) -> S
@@ -420,6 +446,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array3x2_scalar<S>(arr: &[[S; 3]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -427,6 +454,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array3x2_scalar<S>(arr: &[[S; 3]; 2], other: S, c: usize, r: usize) -> S
@@ -479,6 +507,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array3x3_scalar<S>(arr: &[[S; 3]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -486,6 +515,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array3x3_scalar<S>(arr: &[[S; 3]; 3], other: S, c: usize, r: usize) -> S
@@ -537,6 +567,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array4x4_scalar<S>(arr: &[[S; 4]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -544,6 +575,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array4x4_scalar<S>(arr: &[[S; 4]; 4], other: S, c: usize, r: usize) -> S
@@ -595,6 +627,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array4x2_scalar<S>(arr: &[[S; 4]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -602,6 +635,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array4x2_scalar<S>(arr: &[[S; 4]; 2], other: S, c: usize, r: usize) -> S
@@ -653,6 +687,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array2x4_scalar<S>(arr: &[[S; 2]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -660,6 +695,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array2x4_scalar<S>(arr: &[[S; 2]; 4], other: S, c: usize, r: usize) -> S
@@ -711,6 +747,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array3x4_scalar<S>(arr: &[[S; 3]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -718,6 +755,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array3x4_scalar<S>(arr: &[[S; 3]; 4], other: S, c: usize, r: usize) -> S
@@ -769,6 +807,7 @@ where
     -arr[c][r]
 }
 */
+/*
 #[inline(always)]
 pub fn mul_array4x3_scalar<S>(arr: &[[S; 4]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -776,6 +815,7 @@ where
 {
     arr[c][r] * other
 }
+*/
 
 #[inline(always)]
 pub fn div_array4x3_scalar<S>(arr: &[[S; 4]; 3], other: S, c: usize, r: usize) -> S
