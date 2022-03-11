@@ -1475,6 +1475,9 @@ where
 
     /// Calculate the square root of a quaternion.
     /// 
+    /// If the input quaternion is a negative real quaternion, the function 
+    /// returns a pure quaternion with non-zero real-part.
+    /// 
     /// Given a quaternion `q`, the square root of `q` is a quaternion
     /// `p` such that `p * p == q`. The formula for `sqrt(q)` is given by
     /// the following formula. Let `q := s + v` where `s` is the scalar part of 
