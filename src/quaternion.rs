@@ -2632,7 +2632,7 @@ where
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         writeln!(
             formatter, 
-            "Quaternion [s: {}, v: [{}, {}, {}]]", 
+            "{} + i{} + j{} + k{}", 
             self.s, self.v[0], self.v[1], self.v[2]
         )
     }
