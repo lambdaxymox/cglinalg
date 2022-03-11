@@ -2230,53 +2230,7 @@ impl_vector_index_ops!(ops::Range<usize>, [S]);
 impl_vector_index_ops!(ops::RangeTo<usize>, [S]);
 impl_vector_index_ops!(ops::RangeFrom<usize>, [S]);
 impl_vector_index_ops!(ops::RangeFull, [S]);
-/*
-macro_rules! impl_vector_index_ops {
-    ($T:ty, $n:expr, $IndexType:ty, $Output:ty) => {
-        impl<S> ops::Index<$IndexType> for $T {
-            type Output = $Output;
 
-            #[inline]
-            fn index(&self, index: $IndexType) -> &Self::Output {
-                let v: &[S; $n] = self.as_ref();
-                &v[index]
-            }
-        }
-
-        impl<S> ops::IndexMut<$IndexType> for $T {
-            #[inline]
-            fn index_mut(&mut self, index: $IndexType) -> &mut Self::Output {
-                let v: &mut [S; $n] = self.as_mut();
-                &mut v[index]
-            }
-        }
-    }
-}
-
-impl_vector_index_ops!(Vector1<S>, 1, usize, S);
-impl_vector_index_ops!(Vector1<S>, 1, ops::Range<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, ops::RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, ops::RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, ops::RangeFull, [S]);
-
-impl_vector_index_ops!(Vector2<S>, 2, usize, S);
-impl_vector_index_ops!(Vector2<S>, 2, ops::Range<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, ops::RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, ops::RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, ops::RangeFull, [S]);
-
-impl_vector_index_ops!(Vector3<S>, 3, usize, S);
-impl_vector_index_ops!(Vector3<S>, 3, ops::Range<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, ops::RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, ops::RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, ops::RangeFull, [S]);
-
-impl_vector_index_ops!(Vector4<S>, 4, usize, S);
-impl_vector_index_ops!(Vector4<S>, 4, ops::Range<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, ops::RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFull, [S]);
-*/
 
 macro_rules! impl_as_ref_ops {
     ($VecType:ty, $RefType:ty) => {
@@ -2302,20 +2256,9 @@ macro_rules! impl_as_ref_ops {
 
 impl_as_ref_ops!(Vector1<S>, S);
 impl_as_ref_ops!(Vector1<S>, (S,));
-// impl_as_ref_ops!(Vector1<S>, [S; 1]);
-// impl_as_ref_ops!(Vector1<S>, [[S; 1]; 1]);
-
 impl_as_ref_ops!(Vector2<S>, (S, S));
-// impl_as_ref_ops!(Vector2<S>, [S; 2]);
-// impl_as_ref_ops!(Vector2<S>, [[S; 2]; 1]);
-
 impl_as_ref_ops!(Vector3<S>, (S, S, S));
-// impl_as_ref_ops!(Vector3<S>, [S; 3]);
-// impl_as_ref_ops!(Vector3<S>, [[S; 3]; 1]);
-
 impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
-// impl_as_ref_ops!(Vector4<S>, [S; 4]);
-// impl_as_ref_ops!(Vector4<S>, [[S; 4]; 1]);
 
 
 macro_rules! impl_magnitude {
