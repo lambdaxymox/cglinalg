@@ -2204,6 +2204,34 @@ impl_coords_deref!(Vector4, XYZW);
 
 
 macro_rules! impl_vector_index_ops {
+    ($IndexType:ty, $Output:ty) => {
+        impl<S, const N: usize> ops::Index<$IndexType> for Vector<S, N> {
+            type Output = $Output;
+
+            #[inline]
+            fn index(&self, index: $IndexType) -> &Self::Output {
+                let v: &[S; N] = self.as_ref();
+                &v[index]
+            }
+        }
+
+        impl<S, const N: usize> ops::IndexMut<$IndexType> for Vector<S, N> {
+            #[inline]
+            fn index_mut(&mut self, index: $IndexType) -> &mut Self::Output {
+                let v: &mut [S; N] = self.as_mut();
+                &mut v[index]
+            }
+        }
+    }
+}
+
+impl_vector_index_ops!(usize, S);
+impl_vector_index_ops!(ops::Range<usize>, [S]);
+impl_vector_index_ops!(ops::RangeTo<usize>, [S]);
+impl_vector_index_ops!(ops::RangeFrom<usize>, [S]);
+impl_vector_index_ops!(ops::RangeFull, [S]);
+/*
+macro_rules! impl_vector_index_ops {
     ($T:ty, $n:expr, $IndexType:ty, $Output:ty) => {
         impl<S> ops::Index<$IndexType> for $T {
             type Output = $Output;
@@ -2248,7 +2276,7 @@ impl_vector_index_ops!(Vector4<S>, 4, ops::Range<usize>, [S]);
 impl_vector_index_ops!(Vector4<S>, 4, ops::RangeTo<usize>, [S]);
 impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFrom<usize>, [S]);
 impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFull, [S]);
-
+*/
 
 macro_rules! impl_as_ref_ops {
     ($VecType:ty, $RefType:ty) => {
