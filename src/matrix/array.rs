@@ -48,6 +48,32 @@ where
     arr[c][r] * other
 }
 
+#[inline(always)]
+pub fn div_array_scalar<S, const M: usize, const N: usize>(
+    arr: &[[S; M]; N], 
+    other: S, 
+    c: usize, 
+    r: usize
+) -> S
+where
+    S: Copy + ops::Div<S, Output = S>
+{
+    arr[c][r] / other
+}
+
+#[inline(always)]
+pub fn rem_array_scalar<S, const M: usize, const N: usize>(
+    arr: &[[S; M]; N], 
+    other: S, 
+    c: usize, 
+    r: usize
+) -> S
+where
+    S: Copy + ops::Rem<S, Output = S>
+{
+    arr[c][r] % other
+}
+
 
 #[inline(always)]
 pub fn dot_array1x1_col1<S>(arr: &[[S; 1]; 1], col: &[S; 1], r: usize) -> S
@@ -93,7 +119,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array1x1_scalar<S>(arr: &[[S; 1]; 1], other: S, c: usize, r: usize) -> S
 where
@@ -101,7 +127,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array1x1_scalar<S>(arr: &[[S; 1]; 1], other: S, c: usize, r: usize) -> S
 where
@@ -109,7 +136,7 @@ where
 {
     arr[c][r] % other
 }
-
+*/
 
 #[inline(always)]
 pub fn dot_array1x2_col2<S>(arr: &[[S; 1]; 2], col: &[S; 2], r: usize) -> S
@@ -155,7 +182,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array1x2_scalar<S>(arr: &[[S; 1]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -163,7 +190,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array1x2_scalar<S>(arr: &[[S; 1]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -171,6 +199,7 @@ where
 {
     arr[c][r] % other
 }
+*/
 
 #[inline(always)]
 pub fn dot_array1x3_col3<S>(arr: &[[S; 1]; 3], col: &[S; 3], r: usize) -> S
@@ -215,7 +244,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array1x3_scalar<S>(arr: &[[S; 1]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -223,7 +252,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array1x3_scalar<S>(arr: &[[S; 1]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -231,7 +261,7 @@ where
 {
     arr[c][r] % other
 }
-
+*/
 #[inline(always)]
 pub fn dot_array1x4_col4<S>(arr: &[[S; 1]; 4], col: &[S; 4], r: usize) -> S
 where
@@ -275,7 +305,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array1x4_scalar<S>(arr: &[[S; 1]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -283,7 +313,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array1x4_scalar<S>(arr: &[[S; 1]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -291,7 +322,7 @@ where
 {
     arr[c][r] % other
 }
-
+*/
 #[inline(always)]
 pub fn dot_array2x2_col2<S>(arr: &[[S; 2]; 2], col: &[S; 2], r: usize) -> S
 where
@@ -335,7 +366,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -343,7 +374,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array2x2_scalar<S>(arr: &[[S; 2]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -351,6 +383,7 @@ where
 {
     arr[c][r] % other
 }
+*/
 
 #[inline(always)]
 pub fn dot_array2x3_col3<S>(arr: &[[S; 2]; 3], col: &[S; 3], r: usize) -> S
@@ -395,7 +428,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array2x3_scalar<S>(arr: &[[S; 2]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -403,7 +436,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array2x3_scalar<S>(arr: &[[S; 2]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -411,6 +445,7 @@ where
 {
     arr[c][r] % other
 }
+*/
 
 #[inline(always)]
 pub fn dot_array3x2_col2<S>(arr: &[[S; 3]; 2], col: &[S; 2], r: usize) -> S
@@ -455,7 +490,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array3x2_scalar<S>(arr: &[[S; 3]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -463,7 +498,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array3x2_scalar<S>(arr: &[[S; 3]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -471,7 +507,7 @@ where
 {
     arr[c][r] % other
 }
-
+*/
 
 #[inline(always)]
 pub fn dot_array3x3_col3<S>(arr: &[[S; 3]; 3], col: &[S; 3], r: usize) -> S
@@ -516,7 +552,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array3x3_scalar<S>(arr: &[[S; 3]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -524,7 +560,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array3x3_scalar<S>(arr: &[[S; 3]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -532,7 +569,7 @@ where
 {
     arr[c][r] % other
 }
-
+*/
 #[inline(always)]
 pub fn dot_array4x4_col4<S>(arr: &[[S; 4]; 4], col: &[S; 4], r: usize) -> S
 where
@@ -576,7 +613,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array4x4_scalar<S>(arr: &[[S; 4]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -584,7 +621,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array4x4_scalar<S>(arr: &[[S; 4]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -592,6 +630,7 @@ where
 {
     arr[c][r] % other
 }
+*/
 
 #[inline(always)]
 pub fn dot_array4x2_col2<S>(arr: &[[S; 4]; 2], col: &[S; 2], r: usize) -> S
@@ -636,7 +675,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array4x2_scalar<S>(arr: &[[S; 4]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -644,7 +683,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array4x2_scalar<S>(arr: &[[S; 4]; 2], other: S, c: usize, r: usize) -> S
 where
@@ -652,6 +692,7 @@ where
 {
     arr[c][r] % other
 }
+*/
 
 #[inline(always)]
 pub fn dot_array2x4_col4<S>(arr: &[[S; 2]; 4], col: &[S; 4], r: usize) -> S
@@ -696,7 +737,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array2x4_scalar<S>(arr: &[[S; 2]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -704,7 +745,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array2x4_scalar<S>(arr: &[[S; 2]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -712,6 +754,7 @@ where
 {
     arr[c][r] % other
 }
+*/
 
 #[inline(always)]
 pub fn dot_array3x4_col4<S>(arr: &[[S; 3]; 4], col: &[S; 4], r: usize) -> S
@@ -756,7 +799,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array3x4_scalar<S>(arr: &[[S; 3]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -764,7 +807,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array3x4_scalar<S>(arr: &[[S; 3]; 4], other: S, c: usize, r: usize) -> S
 where
@@ -772,6 +816,7 @@ where
 {
     arr[c][r] % other
 }
+*/
 
 #[inline(always)]
 pub fn dot_array4x3_col3<S>(arr: &[[S; 4]; 3], col: &[S; 3], r: usize) -> S
@@ -816,7 +861,7 @@ where
     arr[c][r] * other
 }
 */
-
+/*
 #[inline(always)]
 pub fn div_array4x3_scalar<S>(arr: &[[S; 4]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -824,7 +869,8 @@ where
 {
     arr[c][r] / other
 }
-
+*/
+/*
 #[inline(always)]
 pub fn rem_array4x3_scalar<S>(arr: &[[S; 4]; 3], other: S, c: usize, r: usize) -> S
 where
@@ -832,3 +878,5 @@ where
 {
     arr[c][r] % other
 }
+*/
+
