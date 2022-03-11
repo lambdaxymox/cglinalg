@@ -18,26 +18,23 @@ use core::fmt;
 use core::ops;
 
 
-/// A representation of one-dimensional vectors.
+pub type Vector1<S> = Vector<S, 1>;
+pub type Vector2<S> = Vector<S, 2>;
+pub type Vector3<S> = Vector<S, 3>;
+pub type Vector4<S> = Vector<S, 4>;
+
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Vector1<S> {
-    data: [S; 1],
+
+pub struct Vector<S, const N: usize> {
+    data: [S; N],
 }
 
-impl<S> Vector1<S> {
-    /// Construct a new vector.
-    #[inline]
-    pub const fn new(x: S) -> Self {
-        Self { 
-            data: [x], 
-        }
-    }
-
+impl<S, const N: usize> Vector<S, N> {
     /// The length of the the underlying array storing the vector components.
     #[inline]
     pub const fn len(&self) -> usize {
-        1
+        N
     }
 
     /// The shape of the underlying array storing the vector components.
@@ -47,7 +44,7 @@ impl<S> Vector1<S> {
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub const fn shape(&self) -> (usize, usize) {
-        (1, 1)
+        (N, 1)
     }
 
     /// Get a pointer to the underlying array.
@@ -65,7 +62,54 @@ impl<S> Vector1<S> {
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 1]>>::as_ref(self)
+        <Self as AsRef<[S; N]>>::as_ref(self)
+    }
+}
+
+impl<S, const N: usize> AsRef<[S; N]> for Vector<S, N> {
+    #[inline]
+    fn as_ref(&self) -> &[S; N] {
+        unsafe {
+            &*(self as *const Vector<S, N> as *const [S; N])
+        }
+    }
+}
+
+impl<S, const N: usize> AsMut<[S; N]> for Vector<S, N> {
+    #[inline]
+    fn as_mut(&mut self) -> &mut [S; N] {
+        unsafe {
+            &mut *(self as *mut Vector<S, N> as *mut [S; N])
+        }
+    }
+}
+
+impl<S, const N: usize> AsRef<[[S; N]; 1]> for Vector<S, N> {
+    #[inline]
+    fn as_ref(&self) -> &[[S; N]; 1] {
+        unsafe {
+            &*(self as *const Vector<S, N> as *const [[S; N]; 1])
+        }
+    }
+}
+
+impl<S, const N: usize> AsMut<[[S; N]; 1]> for Vector<S, N> {
+    #[inline]
+    fn as_mut(&mut self) -> &mut [[S; N]; 1] {
+        unsafe {
+            &mut *(self as *mut Vector<S, N> as *mut [[S; N]; 1])
+        }
+    }
+}
+
+
+impl<S> Vector1<S> {
+    /// Construct a new vector.
+    #[inline]
+    pub const fn new(x: S) -> Self {
+        Self { 
+            data: [x], 
+        }
     }
 }
 
@@ -447,13 +491,6 @@ where
 }
 
 
-/// A representation of two-dimensional vectors in a Euclidean space.
-#[repr(C)]
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Vector2<S> {
-    data: [S; 2],
-}
-
 impl<S> Vector2<S> {
     /// Construct a new vector.
     #[inline]
@@ -461,40 +498,6 @@ impl<S> Vector2<S> {
         Self { 
             data: [x, y],
         }
-    }
-
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub const fn len(&self) -> usize {
-        2
-    }
-
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub const fn shape(&self) -> (usize, usize) {
-        (2, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub const fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 2]>>::as_ref(self)
     }
 }
 
@@ -938,13 +941,6 @@ where
     }
 }
 
-/// A representation of three-dimensional vectors in a Euclidean space.
-#[repr(C)]
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Vector3<S> {
-    data: [S; 3],
-}
-
 impl<S> Vector3<S> {
     /// Construct a new vector.
     #[inline]
@@ -952,40 +948,6 @@ impl<S> Vector3<S> {
         Self { 
             data: [x, y, z],
         }
-    }
-
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub const fn len(&self) -> usize {
-        3
-    }
-
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub const fn shape(&self) -> (usize, usize) {
-        (3, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub const fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 3]>>::as_ref(self)
     }
 }
 
@@ -1509,13 +1471,6 @@ where
 }
 
 
-/// A representation of four-dimensional vectors in a Euclidean space.
-#[repr(C)]
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Vector4<S> {
-    data: [S; 4],
-}
-
 impl<S> Vector4<S> {
     /// Construct a new four-dimensional vector.
     #[inline]
@@ -1523,40 +1478,6 @@ impl<S> Vector4<S> {
         Self { 
             data: [x, y, z, w],
         }
-    }
-
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub const fn len(&self) -> usize {
-        4
-    }
-
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub const fn shape(&self) -> (usize, usize) {
-        (4, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub const fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 4]>>::as_ref(self)
     }
 }
 
@@ -2353,20 +2274,20 @@ macro_rules! impl_as_ref_ops {
 
 impl_as_ref_ops!(Vector1<S>, S);
 impl_as_ref_ops!(Vector1<S>, (S,));
-impl_as_ref_ops!(Vector1<S>, [S; 1]);
-impl_as_ref_ops!(Vector1<S>, [[S; 1]; 1]);
+// impl_as_ref_ops!(Vector1<S>, [S; 1]);
+// impl_as_ref_ops!(Vector1<S>, [[S; 1]; 1]);
 
 impl_as_ref_ops!(Vector2<S>, (S, S));
-impl_as_ref_ops!(Vector2<S>, [S; 2]);
-impl_as_ref_ops!(Vector2<S>, [[S; 2]; 1]);
+// impl_as_ref_ops!(Vector2<S>, [S; 2]);
+// impl_as_ref_ops!(Vector2<S>, [[S; 2]; 1]);
 
 impl_as_ref_ops!(Vector3<S>, (S, S, S));
-impl_as_ref_ops!(Vector3<S>, [S; 3]);
-impl_as_ref_ops!(Vector3<S>, [[S; 3]; 1]);
+// impl_as_ref_ops!(Vector3<S>, [S; 3]);
+// impl_as_ref_ops!(Vector3<S>, [[S; 3]; 1]);
 
 impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
-impl_as_ref_ops!(Vector4<S>, [S; 4]);
-impl_as_ref_ops!(Vector4<S>, [[S; 4]; 1]);
+// impl_as_ref_ops!(Vector4<S>, [S; 4]);
+// impl_as_ref_ops!(Vector4<S>, [[S; 4]; 1]);
 
 
 macro_rules! impl_magnitude {
