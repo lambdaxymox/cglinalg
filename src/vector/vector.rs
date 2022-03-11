@@ -102,6 +102,18 @@ impl<S, const N: usize> AsMut<[[S; N]; 1]> for Vector<S, N> {
     }
 }
 
+impl<'a, S, const N: usize> From<&'a [S; N]> for &'a Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &'a [S; N]) -> &'a Vector<S, N> {
+        unsafe { 
+            &*(v as *const [S; N] as *const Vector<S, N>)
+        }
+    }
+}
+
 
 impl<S> Vector1<S> {
     /// Construct a new vector.
@@ -477,7 +489,7 @@ where
         }
     }
 }
-
+/*
 impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> 
 where 
     S: Scalar
@@ -489,7 +501,7 @@ where
         }
     }
 }
-
+*/
 
 impl<S> Vector2<S> {
     /// Construct a new vector.
@@ -928,7 +940,7 @@ where
         }
     }
 }
-
+/*
 impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> 
 where 
     S: Scalar
@@ -940,7 +952,7 @@ where
         }
     }
 }
-
+*/
 impl<S> Vector3<S> {
     /// Construct a new vector.
     #[inline]
@@ -1436,7 +1448,7 @@ where
         }
     }
 }
-
+/*
 impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> 
 where 
     S: Scalar
@@ -1448,7 +1460,7 @@ where
         }
     }
 }
-
+*/
 
 impl<S> From<Vector4<S>> for Vector3<S> 
 where 
@@ -1905,7 +1917,7 @@ where
         }
     }
 }
-
+/*
 impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> 
 where 
     S: Scalar
@@ -1917,7 +1929,7 @@ where
         }
     }
 }
-
+*/
 macro_rules! impl_scalar_vector_mul_ops {
     ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
