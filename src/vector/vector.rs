@@ -66,6 +66,19 @@ impl<S, const N: usize> Vector<S, N> {
     }
 }
 
+impl<S, const N: usize> Vector<S, N>
+where
+    S: Scalar
+{
+    /// Consruct the zero vector.
+    ///
+    /// The zero vector is the vector in which all of its elements are zero.
+    #[inline]
+    pub fn zero() -> Self {
+        Self { data: [S::zero(); N] }
+    }
+}
+
 impl<S, const N: usize> AsRef<[S; N]> for Vector<S, N> {
     #[inline]
     fn as_ref(&self) -> &[S; N] {
@@ -111,6 +124,15 @@ where
         unsafe { 
             &*(v as *const [S; N] as *const Vector<S, N>)
         }
+    }
+}
+
+impl<S, const N: usize> Default for Vector<S, N>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
     }
 }
 
@@ -238,14 +260,6 @@ where
     #[inline]
     pub fn unit_x() -> Self {
         Vector1::new(S::one())
-    }
-
-    /// Compute the zero vector.
-    ///
-    /// The zero vector is the vector in which all of its elements are zero.
-    #[inline]
-    pub fn zero() -> Self {
-        Vector1::new(S::zero())
     }
     
     /// Determine whether a vector is the zero vector.
@@ -419,15 +433,6 @@ where
     }
 }
 
-impl<S> Default for Vector1<S>
-where
-    S: Scalar
-{
-    fn default() -> Self {
-        Self::zero()
-    }
-}
-
 impl<S> From<S> for Vector1<S> 
 where 
     S: Scalar
@@ -489,19 +494,7 @@ where
         }
     }
 }
-/*
-impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a [S; 1]) -> &'a Vector1<S> {
-        unsafe { 
-            &*(v as *const [S; 1] as *const Vector1<S>)
-        }
-    }
-}
-*/
+
 
 impl<S> Vector2<S> {
     /// Construct a new vector.
@@ -659,14 +652,6 @@ where
     #[inline]
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one())
-    }
-
-    /// Compute the zero vector.
-    ///
-    /// The zero vector is the vector in which all of its elements are zero.
-    #[inline]
-    pub fn zero() -> Self {
-        Self::new(S::zero(), S::zero())
     }
     
     /// Determine whether a vector is the zero vector.
@@ -880,15 +865,6 @@ where
     }
 }
 
-impl<S> Default for Vector2<S>
-where
-    S: Scalar
-{
-    fn default() -> Self {
-        Self::zero()
-    }
-}
-
 impl<S> From<(S, S)> for Vector2<S> 
 where 
     S: Scalar
@@ -940,19 +916,8 @@ where
         }
     }
 }
-/*
-impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a [S; 2]) -> &'a Vector2<S> {
-        unsafe { 
-            &*(v as *const [S; 2] as *const Vector2<S>)
-        }
-    }
-}
-*/
+
+
 impl<S> Vector3<S> {
     /// Construct a new vector.
     #[inline]
@@ -1120,14 +1085,6 @@ where
     #[inline]
     pub fn unit_z() -> Self {
         Self::new(S::zero(), S::zero(), S::one())
-    }
-
-    /// Compute the zero vector.
-    ///
-    /// The zero vector is the vector in which all of its elements are zero.
-    #[inline]
-    pub fn zero() -> Self {
-        Self::new(S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether a vector is the zero vector.
@@ -1388,15 +1345,6 @@ where
     }
 }
 
-impl<S> Default for Vector3<S>
-where
-    S: Scalar
-{
-    fn default() -> Self {
-        Self::zero()
-    }
-}
-
 impl<S> From<(S, S, S)> for Vector3<S> 
 where 
     S: Scalar
@@ -1448,19 +1396,6 @@ where
         }
     }
 }
-/*
-impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
-        unsafe { 
-            &*(v as *const [S; 3] as *const Vector3<S>)
-        }
-    }
-}
-*/
 
 impl<S> From<Vector4<S>> for Vector3<S> 
 where 
@@ -1644,14 +1579,6 @@ where
     #[inline]
     pub fn unit_w() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::one())
-    }
-
-    /// Compute the zero vector.
-    ///
-    /// The zero vector is the vector in which all of its elements are zero.
-    #[inline]
-    pub fn zero() -> Self {
-        Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
     
     /// Determine whether a vector is the zero vector.
@@ -1857,15 +1784,6 @@ where
     }
 }
 
-impl<S> Default for Vector4<S>
-where
-    S: Scalar
-{
-    fn default() -> Self {
-        Self::zero()
-    }
-}
-
 impl<S> From<(S, S, S, S)> for Vector4<S> 
 where 
     S: Scalar
@@ -1917,19 +1835,7 @@ where
         }
     }
 }
-/*
-impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a [S; 4]) -> &'a Vector4<S> {
-        unsafe { 
-            &*(v as *const [S; 4] as *const Vector4<S>)    
-        }
-    }
-}
-*/
+
 macro_rules! impl_scalar_vector_mul_ops {
     ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
