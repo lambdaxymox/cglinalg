@@ -70,7 +70,7 @@ impl<S, const N: usize> Vector<S, N>
 where
     S: Scalar
 {
-    /// Consruct the zero vector.
+    /// Construct a new zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
     #[inline]
@@ -111,6 +111,30 @@ impl<S, const N: usize> AsMut<[[S; N]; 1]> for Vector<S, N> {
     fn as_mut(&mut self) -> &mut [[S; N]; 1] {
         unsafe {
             &mut *(self as *mut Vector<S, N> as *mut [[S; N]; 1])
+        }
+    }
+}
+
+impl<S, const N: usize> From<[S; N]> for Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: [S; N]) -> Self {
+        Self { 
+            data: v,
+        }
+    }
+}
+
+impl<S, const N: usize> From<&[S; N]> for Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(v: &[S; N]) -> Self {
+        Self { 
+            data: v.clone(),
         }
     }
 }
@@ -460,26 +484,6 @@ where
     #[inline]
     fn from(v: &(S,)) -> Self  {
         Self::new(v.0)
-    }
-}
-
-impl<S> From<[S; 1]> for Vector1<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: [S; 1]) -> Self {
-        Self::new(v[0])
-    }
-}
-
-impl<S> From<&[S; 1]> for Vector1<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &[S; 1]) -> Self {
-        Self::new(v[0])
     }
 }
 
@@ -875,16 +879,6 @@ where
     }
 }
 
-impl<S> From<[S; 2]> for Vector2<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: [S; 2]) -> Self {
-        Self::new(v[0], v[1])
-    }
-}
-
 impl<S> From<&(S, S)> for Vector2<S> 
 where 
     S: Scalar
@@ -892,16 +886,6 @@ where
     #[inline]
     fn from(v: &(S, S)) -> Self {
         Self::new(v.0, v.1)
-    }
-}
-
-impl<S> From<&[S; 2]> for Vector2<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &[S; 2]) -> Self {
-        Self::new(v[0], v[1])
     }
 }
 
@@ -1355,16 +1339,6 @@ where
     }
 }
 
-impl<S> From<[S; 3]> for Vector3<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: [S; 3]) -> Self {
-        Self::new(v[0], v[1], v[2])
-    }
-}
-
 impl<S> From<&(S, S, S)> for Vector3<S> 
 where 
     S: Scalar
@@ -1372,16 +1346,6 @@ where
     #[inline]
     fn from(v: &(S, S, S)) -> Self {
         Self::new(v.0, v.1, v.2)
-    }
-}
-
-impl<S> From<&[S; 3]> for Vector3<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &[S; 3]) -> Self {
-        Self::new(v[0], v[1], v[2])
     }
 }
 
@@ -1794,16 +1758,6 @@ where
     }
 }
 
-impl<S> From<[S; 4]> for Vector4<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn from(v: [S; 4]) -> Self {
-        Self::new(v[0], v[1], v[2], v[3])
-    }
-}
-
 impl<S> From<&(S, S, S, S)> for Vector4<S> 
 where 
     S: Scalar 
@@ -1811,16 +1765,6 @@ where
     #[inline]
     fn from(v: &(S, S, S, S)) -> Self {
         Self::new(v.0, v.1, v.2, v.3)
-    }
-}
-
-impl<S> From<&[S; 4]> for Vector4<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &[S; 4]) -> Self {
-        Self::new(v[0], v[1], v[2], v[3])
     }
 }
 
