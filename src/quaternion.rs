@@ -1729,6 +1729,10 @@ where
 
     /// Calculate the inner product of two quaternions.
     /// 
+    /// Note that `inner` is distinct from `dot`; the inner product produces a
+    /// scalar quaternion, whereas the dot product produces a scalar.
+    /// 
+    /// 
     /// # Example (Generic Quaternion)
     /// 
     /// ```
