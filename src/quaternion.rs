@@ -186,9 +186,7 @@ where
     {
         Quaternion::new(
             op(self.s),
-            op(self.v.x),
-            op(self.v.y),
-            op(self.v.z),
+            op(self.v.x), op(self.v.y), op(self.v.z),
         )
     }
 }
@@ -1647,7 +1645,10 @@ where
             let one_half: S = num_traits::cast(0.5).unwrap();
             let c = S::sqrt(one_half / (magnitude_self + self.s));
 
-            Self::new((magnitude_self + self.s) * c, self.v.x * c, self.v.y * c, self.v.z * c)
+            Self::new(
+                (magnitude_self + self.s) * c, 
+                self.v.x * c, self.v.y * c, self.v.z * c
+            )
         }
     }
 
