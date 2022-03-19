@@ -15,6 +15,7 @@ use crate::matrix::{
 };
 use crate::vector::{
     Vector3,
+    Vector4,
 };
 
 use num_traits::NumCast;
@@ -42,10 +43,13 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Quaternion<S> {
+    pub coords: Vector4<S>,
+    /*
     /// The scalar (real) component of a quaternion.
     pub s: S,
     /// The vector (pure) component of a quaternion.
     pub v: Vector3<S>,
+    */
 }
 
 impl<S> Quaternion<S> {
@@ -53,18 +57,12 @@ impl<S> Quaternion<S> {
     /// vector components.
     #[inline]
     pub const fn new(qs: S, qx: S, qy: S, qz: S) -> Self {
-        Self { 
+        Self {
+            coords: Vector4::new(qs, qx, qy, qz),
+            /*
             s: qs, 
             v: Vector3::new(qx, qy, qz)
-        }
-    }
-
-    /// Construct a new quaternion from its scalar and vector parts.
-    #[inline]
-    pub const fn from_parts(qs: S, qv: Vector3<S>) -> Self {
-        Self { 
-            s: qs, 
-            v: qv 
+            */
         }
     }
 
@@ -87,13 +85,19 @@ impl<S> Quaternion<S> {
     /// Get a pointer to the underlying array.
     #[inline]
     pub const fn as_ptr(&self) -> *const S {
+        self.coords.as_ptr()
+        /*
         &self.s
+        */
     }
 
     /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
+        self.coords.as_mut_ptr()
+        /*
         &mut self.s
+        */
     }
 
     /// Get a slice of the underlying elements of the data type.
@@ -124,6 +128,8 @@ where
     /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Quaternion<T>> {
+        self.coords.cast().map(|new_coords| Quaternion { coords: new_coords })
+        /*
         let s = match num_traits::cast(self.s) {
             Some(value) => value,
             None => return None,
@@ -134,6 +140,7 @@ where
         };
 
         Some(Quaternion::from_parts(s, v))
+        */
     }
 }
 
@@ -141,6 +148,18 @@ impl<S> Quaternion<S>
 where 
     S: Copy 
 {
+    /// Construct a new quaternion from its scalar and vector parts.
+    #[inline]
+    pub fn from_parts(qs: S, qv: Vector3<S>) -> Self {
+        Self::new(qs, qv[0], qv[1], qv[2])
+        /*
+        Self { 
+            s: qs, 
+            v: qv 
+        }
+        */
+    }
+
     /// Construct a new quaternion from a fill value. 
     ///
     /// Every component of the resulting vector will have the same value
@@ -184,10 +203,57 @@ where
     where 
         F: FnMut(S) -> T 
     {
+        Quaternion { 
+            coords: self.coords.map(op)
+        }
+        /*
         Quaternion::new(
             op(self.s),
             op(self.v.x), op(self.v.y), op(self.v.z),
         )
+        */
+    }
+
+    /// Get the scalar part of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let qs = 1_i32;
+    /// let qv = Vector3::new(2_i32, 3_i32, 4_i32);
+    /// let q = Quaternion::from_parts(qs, qv);
+    /// 
+    /// assert_eq!(q.scalar(), qs);
+    /// ```
+    #[inline]
+    pub fn scalar(&self) -> S {
+        self.coords[0]
+    }
+
+    /// Get the vector part of a quaternion.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let qs = 1_i32;
+    /// let qv = Vector3::new(2_i32, 3_i32, 4_i32);
+    /// let q = Quaternion::from_parts(qs, qv);
+    /// 
+    /// assert_eq!(q.vector(), qv);
+    /// ```
+    #[inline]
+    pub fn vector(&self) -> Vector3<S> {
+        Vector3::new(self.coords[1], self.coords[2], self.coords[3])
     }
 }
 
@@ -338,7 +404,10 @@ where
     /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
+        self.coords.is_zero()
+        /*
         self.s.is_zero() && self.v.is_zero()
+        */
     }
     
     /// Construct the multiplicative identity quaternion.
@@ -384,7 +453,10 @@ where
     /// ```
     #[inline]
     pub fn is_identity(&self) -> bool {
+        self.scalar().is_one() && self.vector().is_zero()
+        /*
         self.s.is_one() && self.v.is_zero()
+        */
     }
 
     /// Check whether a quaternion is a pure quaternion.
@@ -409,7 +481,10 @@ where
     /// ```
     #[inline]
     pub fn is_pure(&self) -> bool {
+        self.scalar().is_zero()
+        /*
         self.s.is_zero()
+        */
     }
 
     /// Check whether a quaternion is a real quaternion.
@@ -434,7 +509,10 @@ where
     /// ```
     #[inline]
     pub fn is_real(&self) -> bool {
+        self.vector().is_zero()
+        /*
         self.v.is_zero()
+        */
     }
 
     /// Construct a real quaternion from a scalar value.
@@ -495,7 +573,10 @@ where
     /// ```
     #[inline]
     pub fn dot(&self, other: &Self) -> S {
-        self.s * other.s + self.v.dot(&other.v)
+        self.coords.dot(&other.coords)
+        /*
+        self.coords[0] * other.coords[0] + self.v.dot(&other.v)
+        */
     }
 }
 
@@ -526,7 +607,10 @@ where
     /// ```
     #[inline]
     pub fn conjugate(&self) -> Self {
+        Self::from_parts(self.scalar(), -self.vector())
+        /*
         Self::from_parts(self.s, -self.v)
+        */
     }
 
     /// Compute the conjugate of a quaternion, replacing the original value
@@ -556,7 +640,12 @@ where
     /// ```
     #[inline]
     pub fn conjugate_mut(&mut self) {
+        self.coords[1] = -self.coords[1];
+        self.coords[2] = -self.coords[2];
+        self.coords[3] = -self.coords[3];
+        /*
         self.v = -self.v;
+        */
     }
 
     /// Compute the square of a quaterion.
@@ -801,10 +890,16 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn to_matrix3x3(&self) -> Matrix3x3<S> {
+        let qs = self.coords[0];
+        let qx = self.coords[1];
+        let qy = self.coords[2];
+        let qz = self.coords[3];
+        /*
         let qs = self.s;
         let qx = self.v.x;
         let qy = self.v.y;
         let qz = self.v.z;
+        */
         let one = S::one();
         let two = one + one;
         let s = two / self.magnitude_squared();
@@ -896,10 +991,16 @@ where
     /// ```
     #[inline]
     pub fn to_matrix3x3_mut(&self, matrix: &mut Matrix3x3<S>) {
+        let qs = self.coords[0];
+        let qx = self.coords[1];
+        let qy = self.coords[2];
+        let qz = self.coords[3];
+        /*
         let qs = self.s;
         let qx = self.v.x;
         let qy = self.v.y;
         let qz = self.v.z;
+        */
         let one = S::one();
         let two = one + one;
         let s = two / self.magnitude_squared();
@@ -980,10 +1081,16 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn to_matrix4x4(&self) -> Matrix4x4<S> {
+        let qs = self.coords[0];
+        let qx = self.coords[1];
+        let qy = self.coords[2];
+        let qz = self.coords[3];
+        /*
         let qs = self.s;
         let qx = self.v.x;
         let qy = self.v.y;
         let qz = self.v.z;
+        */
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -1088,10 +1195,16 @@ where
     /// ```
     #[inline]
     pub fn to_matrix4x4_mut(&self, matrix: &mut Matrix4x4<S>) {
+        let qs = self.coords[0];
+        let qx = self.coords[1];
+        let qy = self.coords[2];
+        let qz = self.coords[3];
+        /*
         let qs = self.s;
         let qx = self.v.x;
         let qy = self.v.y;
         let qz = self.v.z;
+        */
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -1239,10 +1352,10 @@ where
 
     #[inline]
     fn arg_eps(&self, epsilon: S) -> S {
-        if self.s * self.s <= epsilon * epsilon {
+        if self.scalar() * self.scalar() <= epsilon * epsilon {
             num_traits::cast(core::f64::consts::FRAC_PI_2).unwrap()
         } else {
-            S::atan(self.v.magnitude() / self.s)
+            S::atan(self.vector().magnitude() / self.scalar())
         }
     }
 
@@ -1352,6 +1465,18 @@ where
 
     #[inline]
     fn exp_eps(&self, epsilon: S) -> Self {
+        let magnitude_v_squared = self.vector().magnitude_squared();
+        if magnitude_v_squared <= epsilon * epsilon {
+            Self::from_parts(self.scalar().exp(), Vector3::zero())
+        } else {
+            let magnitude_v = magnitude_v_squared.sqrt();
+            let exp_s = self.scalar().exp();
+            let q_scalar = exp_s * S::cos(magnitude_v);
+            let q_vector = self.vector() * (exp_s * S::sin(magnitude_v) / magnitude_v);
+            
+            Self::from_parts(q_scalar, q_vector)
+        }
+        /*
         let magnitude_v_squared = self.v.magnitude_squared();
         if magnitude_v_squared <= epsilon * epsilon {
             Self::from_parts(self.s.exp(), Vector3::zero())
@@ -1363,6 +1488,7 @@ where
             
             Self::from_parts(q_scalar, q_vector)
         }
+        */
     }
 
     /// Calculate the principal value of the natural logarithm of a quaternion.
@@ -1428,6 +1554,20 @@ where
 
     #[inline]
     fn ln_eps(&self, epsilon: S) -> Self {
+        let magnitude_v_squared = self.vector().magnitude_squared();
+        if magnitude_v_squared <= epsilon * epsilon {
+            let magnitude = self.scalar().abs();
+            
+            Self::from_parts(magnitude.ln(), Vector3::zero())
+        } else {
+            let magnitude = self.magnitude();
+            let arccos_s_over_mag_q = S::acos(self.scalar() / magnitude);
+            let q_scalar = S::ln(magnitude);
+            let q_vector = self.vector() * (arccos_s_over_mag_q / magnitude_v_squared.sqrt());
+
+            Self::from_parts(q_scalar, q_vector)
+        }
+        /*
         let magnitude_v_squared = self.v.magnitude_squared();
         if magnitude_v_squared <= epsilon * epsilon {
             let magnitude = self.s.abs();
@@ -1435,12 +1575,13 @@ where
             Self::from_parts(magnitude.ln(), Vector3::zero())
         } else {
             let magnitude = self.magnitude();
-            let arccos_s_over_mag_q = S::acos(self.s / magnitude);
+            let arccos_s_over_mag_q = S::acos(self.coords[0] / magnitude);
             let q_scalar = S::ln(magnitude);
             let q_vector = self.v * (arccos_s_over_mag_q / magnitude_v_squared.sqrt());
 
             Self::from_parts(q_scalar, q_vector)
         }
+        */
     }
 
     /// Calculate the power of a quaternion where the exponent is a floating 
@@ -1621,12 +1762,12 @@ where
             return Self::zero();
         }
 
-        let magnitude_v_squared = self.v.magnitude_squared();
+        let magnitude_v_squared = self.vector().magnitude_squared();
         let magnitude_self = S::sqrt(magnitude_self_squared);
         if magnitude_v_squared <= epsilon * epsilon {
             let sqrt_magnitude_self = S::sqrt(magnitude_self);
             // We have a non-zero real quaternion.
-            if self.s > S::zero() {
+            if self.scalar() > S::zero() {
                 // If the scalar part of a real quaternion is positive, it 
                 // acts like a scalar.
                 Self::from_real(sqrt_magnitude_self)
@@ -1643,12 +1784,9 @@ where
         } else {
             // Otherwise, we can treat the quaternion as normal.
             let one_half: S = num_traits::cast(0.5).unwrap();
-            let c = S::sqrt(one_half / (magnitude_self + self.s));
+            let c = S::sqrt(one_half / (magnitude_self + self.scalar()));
 
-            Self::new(
-                (magnitude_self + self.s) * c, 
-                self.v.x * c, self.v.y * c, self.v.z * c
-            )
+            Self::from_parts((magnitude_self + self.scalar()) * c, self.vector() * c)
         }
     }
 
@@ -2090,12 +2228,19 @@ where
         let a = S::sin((one - amount) * half_theta) / sin_half_theta;
         let b = S::sin(amount * half_theta) / sin_half_theta;
         
-        let s   = result.s   * a + other.s   * b;
-        let v_x = result.v.x * a + other.v.x * b;
-        let v_y = result.v.y * a + other.v.y * b;
-        let v_z = result.v.z * a + other.v.z * b;
+        let qs = result.scalar() * a + other.scalar() * b;
+        let qv = result.vector() * a + other.vector() * b;
+
+        Self::from_parts(qs, qv)
+        /*
+        let s   = result.coords[0]   * a + other.coords[0]   * b;
+        let v_x = result.coords[1] * a + other.coords[1] * b;
+        let v_y = result.coords[2] * a + other.coords[2] * b;
+        let v_z = result.coords[3] * a + other.coords[3] * b;
 
         Self::new(s, v_x, v_y, v_z)
+        */
+
     }
 
     /// Compute the normalized linear interpolation between two quaternions.
@@ -2151,7 +2296,10 @@ where
     /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
+        self.scalar().is_finite() && self.vector().is_finite()
+        /*
         self.s.is_finite() && self.v.is_finite()
+        */
     }
 
     /// Compute the projection of the quaternion `self` onto the quaternion
@@ -2175,10 +2323,10 @@ where
     /// let projected_z = quaternion.project(&unit_z);
     /// let projected_s = quaternion.project(&unit_s);
     ///
-    /// assert_eq!(projected_x, quaternion.v.x * unit_x);
-    /// assert_eq!(projected_y, quaternion.v.y * unit_y);
-    /// assert_eq!(projected_z, quaternion.v.z * unit_z);
-    /// assert_eq!(projected_s, quaternion.s * unit_s);
+    /// assert_eq!(projected_x, quaternion.coords[1] * unit_x);
+    /// assert_eq!(projected_y, quaternion.coords[2] * unit_y);
+    /// assert_eq!(projected_z, quaternion.coords[3] * unit_z);
+    /// assert_eq!(projected_s, quaternion.coords[0] * unit_s);
     /// ```
     #[inline]
     pub fn project(&self, other: &Self) -> Self {
@@ -2280,9 +2428,9 @@ where
     pub fn polar_decomposition(&self) -> (S, Radians<S>, Option<Unit<Vector3<S>>>) {
         let pair = Unit::try_from_value_with_magnitude(*self, S::zero());
         if let Some((unit_q, magnitude_q)) = pair {
-            if let Some(axis) = Unit::try_from_value(self.v, S::zero()) {
-                let cos_angle_over_two = unit_q.s.abs();
-                let sin_angle_over_two = unit_q.v.magnitude();
+            if let Some(axis) = Unit::try_from_value(self.vector(), S::zero()) {
+                let cos_angle_over_two = unit_q.scalar().abs();
+                let sin_angle_over_two = unit_q.vector().magnitude();
                 let angle_over_two = Radians::atan2(
                     sin_angle_over_two, 
                     cos_angle_over_two
@@ -2497,6 +2645,39 @@ where
     }
 }
 
+#[repr(C)]
+#[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
+pub struct ViewSV<S> {
+    pub s: S,
+    pub v: Vector3<S>,
+}
+
+impl<S> ops::Deref for Quaternion<S>
+where
+    S: Copy
+{
+    type Target = ViewSV<S>;
+
+    #[inline]
+    fn deref(&self) -> &Self::Target {
+        unsafe { 
+            &*(self.as_ptr() as *const ViewSV<S>) 
+        }
+    }
+}
+
+impl<S> ops::DerefMut for Quaternion<S> 
+where 
+    S: Copy
+{ 
+    #[inline]
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        unsafe { 
+            &mut *(self.as_mut_ptr() as *mut ViewSV<S>) 
+        }
+    }
+}
+
 impl<S> Default for Quaternion<S>
 where
     S: Scalar + Default
@@ -2638,7 +2819,7 @@ where
         writeln!(
             formatter, 
             "{} + i{} + j{} + k{}", 
-            self.s, self.v[0], self.v[1], self.v[2]
+            self.coords[0], self.coords[1], self.coords[2], self.coords[3]
         )
     }
 }
@@ -2651,7 +2832,7 @@ where
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Quaternion::from_parts(-self.s, -self.v)
+        Quaternion::from_parts(-self.scalar(), -self.vector())
     }
 }
 
@@ -2663,7 +2844,7 @@ where
 
     #[inline]
     fn neg(self) -> Self::Output {
-        Quaternion::from_parts(-self.s, -self.v)
+        Quaternion::from_parts(-self.scalar(), -self.vector())
     }
 }
 
@@ -2675,7 +2856,9 @@ where
 
     #[inline]
     fn add(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(self.s + other.s, self.v + other.v)
+        Quaternion::from_parts(
+            self.scalar() + other.scalar(), self.vector() + other.vector()
+        )
     }
 }
 
@@ -2687,7 +2870,9 @@ where
 
     #[inline]
     fn add(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(self.s + other.s, self.v + other.v)
+        Quaternion::from_parts(
+            self.scalar() + other.scalar(), self.vector() + other.vector()
+        )
     }
 }
 
@@ -2699,7 +2884,9 @@ where
 
     #[inline]
     fn add(self, other: &Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(self.s + other.s, self.v + other.v)
+        Quaternion::from_parts(
+            self.scalar() + other.scalar(), self.vector() + other.vector()
+        )
     }
 }
 
@@ -2711,7 +2898,9 @@ where
 
     #[inline]
     fn add(self, other: &'b Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(self.s + other.s, self.v + other.v)
+        Quaternion::from_parts(
+            self.scalar() + other.scalar(), self.vector() + other.vector()
+        )
     }
 }
 
@@ -2723,7 +2912,9 @@ where
 
     #[inline]
     fn sub(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(self.s - other.s, self.v - other.v)
+        Quaternion::from_parts(
+            self.scalar() - other.scalar(), self.vector() - other.vector()
+        )
     }
 }
 
@@ -2735,7 +2926,9 @@ where
 
     #[inline]
     fn sub(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(self.s - other.s, self.v - other.v)
+        Quaternion::from_parts(
+            self.scalar() - other.scalar(), self.vector() - other.vector()
+        )
     }
 }
 
@@ -2747,7 +2940,9 @@ where
 
     #[inline]
     fn sub(self, other: &Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(self.s - other.s, self.v - other.v)
+        Quaternion::from_parts(
+            self.scalar() - other.scalar(), self.vector() - other.vector()
+        )
     }
 }
 
@@ -2759,7 +2954,9 @@ where
 
     #[inline]
     fn sub(self, other: &'b Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(self.s - other.s, self.v - other.v)
+        Quaternion::from_parts(
+            self.scalar() - other.scalar(), self.vector() - other.vector()
+        )
     }
 }
 
@@ -2772,10 +2969,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: S) -> Quaternion<S> {
-        Quaternion::new(
-            self.s * other,
-            self.v.x * other, self.v.y * other, self.v.z * other,
-        )
+        Quaternion::from_parts(self.scalar() * other, self.vector() * other)
     }
 }
 
@@ -2788,10 +2982,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: S) -> Quaternion<S> {
-        Quaternion::new(
-            self.s * other,
-            self.v.x * other, self.v.y * other, self.v.z * other,
-        )
+        Quaternion::from_parts(self.scalar() * other, self.vector() * other)
     }
 }
 
@@ -2804,10 +2995,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &S) -> Quaternion<S> {
-        Quaternion::new(
-            self.s * *other,
-            self.v.x * *other, self.v.y * *other, self.v.z * *other,
-        )
+        Quaternion::from_parts(self.scalar() * *other, self.vector() * *other)
     }
 }
 
@@ -2820,10 +3008,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'b S) -> Quaternion<S> {
-        Quaternion::new(
-            self.s * *other,
-            self.v.x * *other, self.v.y * *other, self.v.z * *other,
-        )
+        Quaternion::from_parts(self.scalar() * *other, self.vector() * *other)
     }
 }
 
@@ -2837,10 +3022,10 @@ where
     #[inline]
     fn mul(self, other: Quaternion<S>) -> Self::Output {
         Quaternion::new(
-            other.s * self.s   - other.v.x * self.v.x - other.v.y * self.v.y - other.v.z * self.v.z,
-            other.s * self.v.x + other.v.x * self.s   - other.v.y * self.v.z + other.v.z * self.v.y,
-            other.s * self.v.y + other.v.x * self.v.z + other.v.y * self.s   - other.v.z * self.v.x,
-            other.s * self.v.z - other.v.x * self.v.y + other.v.y * self.v.x + other.v.z * self.s,
+            other.coords[0] * self.coords[0] - other.coords[1] * self.coords[1] - other.coords[2] * self.coords[2] - other.coords[3] * self.coords[3],
+            other.coords[0] * self.coords[1] + other.coords[1] * self.coords[0] - other.coords[2] * self.coords[3] + other.coords[3] * self.coords[2],
+            other.coords[0] * self.coords[2] + other.coords[1] * self.coords[3] + other.coords[2] * self.coords[0] - other.coords[3] * self.coords[1],
+            other.coords[0] * self.coords[3] - other.coords[1] * self.coords[2] + other.coords[2] * self.coords[1] + other.coords[3] * self.coords[0],
         )
     }
 }
@@ -2855,10 +3040,10 @@ where
     #[inline]
     fn mul(self, other: &Quaternion<S>) -> Self::Output {
         Quaternion::new(
-            other.s * self.s   - other.v.x * self.v.x - other.v.y * self.v.y - other.v.z * self.v.z,
-            other.s * self.v.x + other.v.x * self.s   - other.v.y * self.v.z + other.v.z * self.v.y,
-            other.s * self.v.y + other.v.x * self.v.z + other.v.y * self.s   - other.v.z * self.v.x,
-            other.s * self.v.z - other.v.x * self.v.y + other.v.y * self.v.x + other.v.z * self.s,
+            other.coords[0] * self.coords[0] - other.coords[1] * self.coords[1] - other.coords[2] * self.coords[2] - other.coords[3] * self.coords[3],
+            other.coords[0] * self.coords[1] + other.coords[1] * self.coords[0] - other.coords[2] * self.coords[3] + other.coords[3] * self.coords[2],
+            other.coords[0] * self.coords[2] + other.coords[1] * self.coords[3] + other.coords[2] * self.coords[0] - other.coords[3] * self.coords[1],
+            other.coords[0] * self.coords[3] - other.coords[1] * self.coords[2] + other.coords[2] * self.coords[1] + other.coords[3] * self.coords[0],
         )
     }
 }
@@ -2873,10 +3058,10 @@ where
     #[inline]
     fn mul(self, other: Quaternion<S>) -> Self::Output {
         Quaternion::new(
-            other.s * self.s   - other.v.x * self.v.x - other.v.y * self.v.y - other.v.z * self.v.z,
-            other.s * self.v.x + other.v.x * self.s   - other.v.y * self.v.z + other.v.z * self.v.y,
-            other.s * self.v.y + other.v.x * self.v.z + other.v.y * self.s   - other.v.z * self.v.x,
-            other.s * self.v.z - other.v.x * self.v.y + other.v.y * self.v.x + other.v.z * self.s,
+            other.coords[0] * self.coords[0] - other.coords[1] * self.coords[1] - other.coords[2] * self.coords[2] - other.coords[3] * self.coords[3],
+            other.coords[0] * self.coords[1] + other.coords[1] * self.coords[0] - other.coords[2] * self.coords[3] + other.coords[3] * self.coords[2],
+            other.coords[0] * self.coords[2] + other.coords[1] * self.coords[3] + other.coords[2] * self.coords[0] - other.coords[3] * self.coords[1],
+            other.coords[0] * self.coords[3] - other.coords[1] * self.coords[2] + other.coords[2] * self.coords[1] + other.coords[3] * self.coords[0],
         )
     }
 }
@@ -2891,10 +3076,10 @@ where
     #[inline]
     fn mul(self, other: &'b Quaternion<S>) -> Self::Output {
         Quaternion::new(
-            other.s * self.s   - other.v.x * self.v.x - other.v.y * self.v.y - other.v.z * self.v.z,
-            other.s * self.v.x + other.v.x * self.s   - other.v.y * self.v.z + other.v.z * self.v.y,
-            other.s * self.v.y + other.v.x * self.v.z + other.v.y * self.s   - other.v.z * self.v.x,
-            other.s * self.v.z - other.v.x * self.v.y + other.v.y * self.v.x + other.v.z * self.s,
+            other.coords[0] * self.coords[0] - other.coords[1] * self.coords[1] - other.coords[2] * self.coords[2] - other.coords[3] * self.coords[3],
+            other.coords[0] * self.coords[1] + other.coords[1] * self.coords[0] - other.coords[2] * self.coords[3] + other.coords[3] * self.coords[2],
+            other.coords[0] * self.coords[2] + other.coords[1] * self.coords[3] + other.coords[2] * self.coords[0] - other.coords[3] * self.coords[1],
+            other.coords[0] * self.coords[3] - other.coords[1] * self.coords[2] + other.coords[2] * self.coords[1] + other.coords[3] * self.coords[0],
         )
     }
 }
@@ -2906,10 +3091,7 @@ macro_rules! impl_scalar_quaternion_mul_ops {
 
             #[inline]
             fn mul(self, other: Quaternion<$Lhs>) -> Self::Output {
-                Self::Output::new(
-                    self * other.s, 
-                    self * other.v.x, self * other.v.y, self * other.v.z
-                )
+                Self::Output::from_parts(self * other.scalar(), self * other.vector())
             }
         }
 
@@ -2918,10 +3100,7 @@ macro_rules! impl_scalar_quaternion_mul_ops {
 
             #[inline]
             fn mul(self, other: &Quaternion<$Lhs>) -> Self::Output {
-                Self::Output::new(
-                    self * other.s, 
-                    self * other.v.x, self * other.v.y, self * other.v.z
-                )
+                Self::Output::from_parts(self * other.scalar(), self * other.vector())
             }
         }
 
@@ -2930,10 +3109,7 @@ macro_rules! impl_scalar_quaternion_mul_ops {
 
             #[inline]
             fn mul(self, other: Quaternion<$Lhs>) -> Self::Output {
-                Self::Output::new(
-                    self * other.s, 
-                    self * other.v.x, self * other.v.y, self * other.v.z
-                )
+                Self::Output::from_parts(self * other.scalar(), self * other.vector())
             }
         }
 
@@ -2942,10 +3118,7 @@ macro_rules! impl_scalar_quaternion_mul_ops {
 
             #[inline]
             fn mul(self, other: &'a Quaternion<$Lhs>) -> Self::Output {
-                Self::Output::new(
-                    self * other.s, 
-                    self * other.v.x, self * other.v.y, self * other.v.z
-                )
+                Self::Output::from_parts(self * other.scalar(), self * other.vector())
             }
         }
     }
@@ -2976,10 +3149,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn div(self, other: S) -> Quaternion<S> {
-        Quaternion::new(
-            self.s / other, 
-            self.v.x / other, self.v.y / other, self.v.z / other,
-        )
+        Quaternion::from_parts(self.scalar() / other, self.vector() / other)
     }
 }
 
@@ -2992,10 +3162,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn div(self, other: S) -> Quaternion<S> {
-        Quaternion::new(
-            self.s / other, 
-            self.v.x / other, self.v.y / other, self.v.z / other,
-        )
+        Quaternion::from_parts(self.scalar() / other, self.vector() / other)
     }
 }
 
@@ -3008,10 +3175,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn div(self, other: &S) -> Quaternion<S> {
-        Quaternion::new(
-            self.s / *other, 
-            self.v.x / *other, self.v.y / *other, self.v.z / *other,
-        )
+        Quaternion::from_parts(self.scalar() / *other, self.vector() / *other)
     }
 }
 
@@ -3024,10 +3188,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn div(self, other: &'b S) -> Quaternion<S> {
-        Quaternion::new(
-            self.s / *other, 
-            self.v.x / *other, self.v.y / *other, self.v.z / *other,
-        )
+        Quaternion::from_parts(self.scalar() / *other, self.vector() / *other)
     }
 }
 
@@ -3040,10 +3201,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn rem(self, other: S) -> Self::Output {
-        Quaternion::new(
-            self.s % other,
-            self.v.x % other, self.v.y % other, self.v.z % other,
-        )
+        Quaternion::from_parts(self.scalar() % other, self.vector() % other)
     }
 }
 
@@ -3056,10 +3214,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn rem(self, other: S) -> Self::Output {
-        Quaternion::new(
-            self.s % other,
-            self.v.x % other, self.v.y % other, self.v.z % other,
-        )
+        Quaternion::from_parts(self.scalar() % other, self.vector() % other)
     }
 }
 
@@ -3072,10 +3227,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn rem(self, other: &S) -> Self::Output {
-        Quaternion::new(
-            self.s % *other,
-            self.v.x % *other, self.v.y % *other, self.v.z % *other,
-        )
+        Quaternion::from_parts(self.scalar() % *other, self.vector() % *other)
     }
 }
 
@@ -3088,10 +3240,7 @@ where
     #[rustfmt::skip]
     #[inline]
     fn rem(self, other: &'b S) -> Self::Output {
-        Quaternion::new(
-            self.s % *other,
-            self.v.x % *other, self.v.y % *other, self.v.z % *other,
-        )
+        Quaternion::from_parts(self.scalar() % *other, self.vector() % *other)
     }
 }
 
@@ -3101,8 +3250,7 @@ where
 {
     #[inline]
     fn add_assign(&mut self, other: Quaternion<S>) {
-        self.s += other.s;
-        self.v += other.v;
+        self.coords += other.coords;
     }
 }
 
@@ -3112,8 +3260,7 @@ where
 {
     #[inline]
     fn add_assign(&mut self, other: &Quaternion<S>) {
-        self.s += other.s;
-        self.v += other.v;
+        self.coords += other.coords;
     }
 }
 
@@ -3123,8 +3270,7 @@ where
 {
     #[inline]
     fn sub_assign(&mut self, other: Quaternion<S>) {
-        self.s -= other.s;
-        self.v -= other.v;
+        self.coords -= other.coords;
     }
 }
 
@@ -3134,8 +3280,7 @@ where
 {
     #[inline]
     fn sub_assign(&mut self, other: &Quaternion<S>) {
-        self.s -= other.s;
-        self.v -= other.v;
+        self.coords -= other.coords;
     }
 }
 
@@ -3145,8 +3290,7 @@ where
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
-        self.s *= other;
-        self.v *= other;
+        self.coords *= other;
     }
 }
 
@@ -3156,8 +3300,7 @@ where
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
-        self.s /= other;
-        self.v /= other;
+        self.coords /= other;
     }
 }
 
@@ -3167,8 +3310,7 @@ where
 {
     #[inline]
     fn rem_assign(&mut self, other: S) {
-        self.s %= other;
-        self.v %= other;
+        self.coords %= other;
     }
 }
 
@@ -3233,8 +3375,8 @@ where
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.s, &other.s, epsilon) &&
-        Vector3::abs_diff_eq(&self.v, &other.v, epsilon)
+        S::abs_diff_eq(&self.scalar(), &other.scalar(), epsilon) &&
+        Vector3::abs_diff_eq(&self.vector(), &other.vector(), epsilon)
     }
 }
 
@@ -3249,8 +3391,8 @@ where
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.s, &other.s, epsilon, max_relative) &&
-        Vector3::relative_eq(&self.v, &other.v, epsilon, max_relative)
+        S::relative_eq(&self.scalar(), &other.scalar(), epsilon, max_relative) &&
+        Vector3::relative_eq(&self.vector(), &other.vector(), epsilon, max_relative)
     }
 }
 
@@ -3265,8 +3407,8 @@ where
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.s, &other.s, epsilon, max_ulps) &&
-        Vector3::ulps_eq(&self.v, &other.v, epsilon, max_ulps)
+        S::ulps_eq(&self.scalar(), &other.scalar(), epsilon, max_ulps) &&
+        Vector3::ulps_eq(&self.vector(), &other.vector(), epsilon, max_ulps)
     }
 }
 
