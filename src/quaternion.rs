@@ -165,7 +165,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Quaternion<T> 
+    pub fn map<T, F>(&self, op: F) -> Quaternion<T> 
     where 
         F: FnMut(S) -> T 
     {
