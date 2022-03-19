@@ -2887,12 +2887,18 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Quaternion<S>) -> Self::Output {
+        Quaternion::from_parts(
+            self.scalar() * other.scalar() - self.vector().dot(&other.vector()),
+            other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector())
+        )
+        /*
         Quaternion::new(
             other.coords[0] * self.coords[0] - other.coords[1] * self.coords[1] - other.coords[2] * self.coords[2] - other.coords[3] * self.coords[3],
             other.coords[0] * self.coords[1] + other.coords[1] * self.coords[0] - other.coords[2] * self.coords[3] + other.coords[3] * self.coords[2],
             other.coords[0] * self.coords[2] + other.coords[1] * self.coords[3] + other.coords[2] * self.coords[0] - other.coords[3] * self.coords[1],
             other.coords[0] * self.coords[3] - other.coords[1] * self.coords[2] + other.coords[2] * self.coords[1] + other.coords[3] * self.coords[0],
         )
+        */
     }
 }
 
@@ -2905,12 +2911,18 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &Quaternion<S>) -> Self::Output {
+        Quaternion::from_parts(
+            self.scalar() * other.scalar() - self.vector().dot(&other.vector()),
+            other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector())
+        )
+        /*
         Quaternion::new(
             other.coords[0] * self.coords[0] - other.coords[1] * self.coords[1] - other.coords[2] * self.coords[2] - other.coords[3] * self.coords[3],
             other.coords[0] * self.coords[1] + other.coords[1] * self.coords[0] - other.coords[2] * self.coords[3] + other.coords[3] * self.coords[2],
             other.coords[0] * self.coords[2] + other.coords[1] * self.coords[3] + other.coords[2] * self.coords[0] - other.coords[3] * self.coords[1],
             other.coords[0] * self.coords[3] - other.coords[1] * self.coords[2] + other.coords[2] * self.coords[1] + other.coords[3] * self.coords[0],
         )
+        */
     }
 }
 
@@ -2923,12 +2935,18 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Quaternion<S>) -> Self::Output {
+        Quaternion::from_parts(
+            self.scalar() * other.scalar() - self.vector().dot(&other.vector()),
+            other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector())
+        )
+        /*
         Quaternion::new(
             other.coords[0] * self.coords[0] - other.coords[1] * self.coords[1] - other.coords[2] * self.coords[2] - other.coords[3] * self.coords[3],
             other.coords[0] * self.coords[1] + other.coords[1] * self.coords[0] - other.coords[2] * self.coords[3] + other.coords[3] * self.coords[2],
             other.coords[0] * self.coords[2] + other.coords[1] * self.coords[3] + other.coords[2] * self.coords[0] - other.coords[3] * self.coords[1],
             other.coords[0] * self.coords[3] - other.coords[1] * self.coords[2] + other.coords[2] * self.coords[1] + other.coords[3] * self.coords[0],
         )
+        */
     }
 }
 
@@ -2941,12 +2959,18 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'b Quaternion<S>) -> Self::Output {
+        Quaternion::from_parts(
+            self.scalar() * other.scalar() - self.vector().dot(&other.vector()),
+            other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector())
+        )
+        /*
         Quaternion::new(
             other.coords[0] * self.coords[0] - other.coords[1] * self.coords[1] - other.coords[2] * self.coords[2] - other.coords[3] * self.coords[3],
             other.coords[0] * self.coords[1] + other.coords[1] * self.coords[0] - other.coords[2] * self.coords[3] + other.coords[3] * self.coords[2],
             other.coords[0] * self.coords[2] + other.coords[1] * self.coords[3] + other.coords[2] * self.coords[0] - other.coords[3] * self.coords[1],
             other.coords[0] * self.coords[3] - other.coords[1] * self.coords[2] + other.coords[2] * self.coords[1] + other.coords[3] * self.coords[0],
         )
+        */
     }
 }
 
