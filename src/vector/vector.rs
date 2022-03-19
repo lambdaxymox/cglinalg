@@ -1241,33 +1241,6 @@ where
         self.data[1] * other.data[1] + 
         self.data[2] * other.data[2]
     }
-}
-
-impl<S> Vector3<S> 
-where 
-    S: ScalarSigned
-{
-    /// Compute the negation of a vector mutably in place.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3, 
-    /// # };
-    /// #
-    /// let mut result = Vector3::new(1_i32, 2_i32, 3_i32);
-    /// let expected = -result;
-    /// result.neg_mut();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn neg_mut(&mut self) {
-        self.data[0] = -self.data[0];
-        self.data[1] = -self.data[1];
-        self.data[2] = -self.data[2];
-    }
 
     /// Compute the cross product of two three-dimensional vectors. 
     ///
@@ -1306,6 +1279,33 @@ where
         let z = self.data[0] * other.data[1] - self.data[1] * other.data[0];
     
         Vector3::new(x, y, z)
+    }
+}
+
+impl<S> Vector3<S> 
+where 
+    S: ScalarSigned
+{
+    /// Compute the negation of a vector mutably in place.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let mut result = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let expected = -result;
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        self.data[0] = -self.data[0];
+        self.data[1] = -self.data[1];
+        self.data[2] = -self.data[2];
     }
 }
 
