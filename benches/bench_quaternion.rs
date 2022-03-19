@@ -98,6 +98,10 @@ bench_binop!(
     f32, Quaternion<f32>, Quaternion<f32>, gen_quaternion, gen_quaternion, sub
 );
 bench_binop!(
+    quaternion_mul_quaternion_f32,
+    f32, Quaternion<f32>, Quaternion<f32>, gen_quaternion, gen_quaternion, mul
+);
+bench_binop!(
     scalar_mul_quaternion_f32,
     f32, f32,             Quaternion<f32>, gen_scalar,     gen_quaternion, mul
 );
@@ -126,6 +130,7 @@ criterion_group!(
     quaternion_benches,
     quaternion_add_quaternion_f32,
     quaternion_sub_quaternion_f32,
+    quaternion_mul_quaternion_f32,
     scalar_mul_quaternion_f32,
     quaternion_mul_scalar_f32,
     quaternion_div_scalar_f32,
