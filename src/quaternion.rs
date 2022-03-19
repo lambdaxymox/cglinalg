@@ -260,10 +260,7 @@ where
     /// ```
     #[inline]
     pub fn unit_x() -> Self {
-        Self::from_parts(
-            S::zero(), 
-            Vector3::new(S::one(), S::zero(), S::zero())
-        )
+        Self::from_parts(S::zero(), Vector3::unit_x())
     }
 
     /// Returns the **y-axis** unit pure quaternion.
@@ -284,10 +281,7 @@ where
     /// ```
     #[inline]
     pub fn unit_y() -> Self {
-        Self::from_parts(
-            S::zero(), 
-            Vector3::new(S::zero(), S::one(), S::zero())
-        )
+        Self::from_parts(S::zero(), Vector3::unit_y())
     }
 
     /// Returns the **z-axis** unit pure quaternion.
@@ -308,10 +302,7 @@ where
     /// ```
     #[inline]
     pub fn unit_z() -> Self {
-        Self::from_parts(
-            S::zero(), 
-            Vector3::new(S::zero(), S::zero(), S::one())
-        )
+        Self::from_parts(S::zero(), Vector3::unit_z())
     }
 
     /// Construct a zero quaternion.
@@ -384,7 +375,7 @@ where
     /// ```
     #[inline]
     pub fn identity() -> Self {
-        Self::new(S::one(), S::zero(), S::zero(), S::zero())
+        Self::from_parts(S::one(), Vector3::zero())
     }
     
     /// Determine whether a quaternion is equal to the identity quaternion.
