@@ -61,7 +61,7 @@ impl<S> Quaternion<S> {
 
     /// Construct a new quaternion from its scalar and vector parts.
     #[inline]
-    pub fn from_parts(qs: S, qv: Vector3<S>) -> Self {
+    pub const fn from_parts(qs: S, qv: Vector3<S>) -> Self {
         Self { 
             s: qs, 
             v: qv 
