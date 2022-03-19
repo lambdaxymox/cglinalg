@@ -44,12 +44,6 @@ use core::ops;
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Quaternion<S> {
     pub coords: Vector4<S>,
-    /*
-    /// The scalar (real) component of a quaternion.
-    pub s: S,
-    /// The vector (pure) component of a quaternion.
-    pub v: Vector3<S>,
-    */
 }
 
 impl<S> Quaternion<S> {
@@ -59,10 +53,6 @@ impl<S> Quaternion<S> {
     pub const fn new(qs: S, qx: S, qy: S, qz: S) -> Self {
         Self {
             coords: Vector4::new(qs, qx, qy, qz),
-            /*
-            s: qs, 
-            v: Vector3::new(qx, qy, qz)
-            */
         }
     }
 
@@ -86,18 +76,12 @@ impl<S> Quaternion<S> {
     #[inline]
     pub const fn as_ptr(&self) -> *const S {
         self.coords.as_ptr()
-        /*
-        &self.s
-        */
     }
 
     /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
         self.coords.as_mut_ptr()
-        /*
-        &mut self.s
-        */
     }
 
     /// Get a slice of the underlying elements of the data type.
@@ -129,18 +113,6 @@ where
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Quaternion<T>> {
         self.coords.cast().map(|new_coords| Quaternion { coords: new_coords })
-        /*
-        let s = match num_traits::cast(self.s) {
-            Some(value) => value,
-            None => return None,
-        };
-        let v = match self.v.cast() {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Quaternion::from_parts(s, v))
-        */
     }
 }
 
@@ -152,12 +124,6 @@ where
     #[inline]
     pub fn from_parts(qs: S, qv: Vector3<S>) -> Self {
         Self::new(qs, qv[0], qv[1], qv[2])
-        /*
-        Self { 
-            s: qs, 
-            v: qv 
-        }
-        */
     }
 
     /// Construct a new quaternion from a fill value. 
@@ -206,12 +172,6 @@ where
         Quaternion { 
             coords: self.coords.map(op)
         }
-        /*
-        Quaternion::new(
-            op(self.s),
-            op(self.v.x), op(self.v.y), op(self.v.z),
-        )
-        */
     }
 
     /// Get the scalar part of a quaternion.
@@ -405,9 +365,6 @@ where
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.coords.is_zero()
-        /*
-        self.s.is_zero() && self.v.is_zero()
-        */
     }
     
     /// Construct the multiplicative identity quaternion.
@@ -454,9 +411,6 @@ where
     #[inline]
     pub fn is_identity(&self) -> bool {
         self.scalar().is_one() && self.vector().is_zero()
-        /*
-        self.s.is_one() && self.v.is_zero()
-        */
     }
 
     /// Check whether a quaternion is a pure quaternion.
@@ -482,9 +436,6 @@ where
     #[inline]
     pub fn is_pure(&self) -> bool {
         self.scalar().is_zero()
-        /*
-        self.s.is_zero()
-        */
     }
 
     /// Check whether a quaternion is a real quaternion.
@@ -510,9 +461,6 @@ where
     #[inline]
     pub fn is_real(&self) -> bool {
         self.vector().is_zero()
-        /*
-        self.v.is_zero()
-        */
     }
 
     /// Construct a real quaternion from a scalar value.
@@ -574,9 +522,6 @@ where
     #[inline]
     pub fn dot(&self, other: &Self) -> S {
         self.coords.dot(&other.coords)
-        /*
-        self.coords[0] * other.coords[0] + self.v.dot(&other.v)
-        */
     }
 }
 
@@ -608,9 +553,6 @@ where
     #[inline]
     pub fn conjugate(&self) -> Self {
         Self::from_parts(self.scalar(), -self.vector())
-        /*
-        Self::from_parts(self.s, -self.v)
-        */
     }
 
     /// Compute the conjugate of a quaternion, replacing the original value
@@ -643,9 +585,6 @@ where
         self.coords[1] = -self.coords[1];
         self.coords[2] = -self.coords[2];
         self.coords[3] = -self.coords[3];
-        /*
-        self.v = -self.v;
-        */
     }
 
     /// Compute the square of a quaterion.
@@ -894,12 +833,6 @@ where
         let qx = self.coords[1];
         let qy = self.coords[2];
         let qz = self.coords[3];
-        /*
-        let qs = self.s;
-        let qx = self.v.x;
-        let qy = self.v.y;
-        let qz = self.v.z;
-        */
         let one = S::one();
         let two = one + one;
         let s = two / self.magnitude_squared();
@@ -995,12 +928,6 @@ where
         let qx = self.coords[1];
         let qy = self.coords[2];
         let qz = self.coords[3];
-        /*
-        let qs = self.s;
-        let qx = self.v.x;
-        let qy = self.v.y;
-        let qz = self.v.z;
-        */
         let one = S::one();
         let two = one + one;
         let s = two / self.magnitude_squared();
@@ -1085,12 +1012,6 @@ where
         let qx = self.coords[1];
         let qy = self.coords[2];
         let qz = self.coords[3];
-        /*
-        let qs = self.s;
-        let qx = self.v.x;
-        let qy = self.v.y;
-        let qz = self.v.z;
-        */
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -1199,12 +1120,6 @@ where
         let qx = self.coords[1];
         let qy = self.coords[2];
         let qz = self.coords[3];
-        /*
-        let qs = self.s;
-        let qx = self.v.x;
-        let qy = self.v.y;
-        let qz = self.v.z;
-        */
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -1476,19 +1391,6 @@ where
             
             Self::from_parts(q_scalar, q_vector)
         }
-        /*
-        let magnitude_v_squared = self.v.magnitude_squared();
-        if magnitude_v_squared <= epsilon * epsilon {
-            Self::from_parts(self.s.exp(), Vector3::zero())
-        } else {
-            let magnitude_v = magnitude_v_squared.sqrt();
-            let exp_s = self.s.exp();
-            let q_scalar = exp_s * S::cos(magnitude_v);
-            let q_vector = self.v * (exp_s * S::sin(magnitude_v) / magnitude_v);
-            
-            Self::from_parts(q_scalar, q_vector)
-        }
-        */
     }
 
     /// Calculate the principal value of the natural logarithm of a quaternion.
@@ -1567,21 +1469,6 @@ where
 
             Self::from_parts(q_scalar, q_vector)
         }
-        /*
-        let magnitude_v_squared = self.v.magnitude_squared();
-        if magnitude_v_squared <= epsilon * epsilon {
-            let magnitude = self.s.abs();
-            
-            Self::from_parts(magnitude.ln(), Vector3::zero())
-        } else {
-            let magnitude = self.magnitude();
-            let arccos_s_over_mag_q = S::acos(self.coords[0] / magnitude);
-            let q_scalar = S::ln(magnitude);
-            let q_vector = self.v * (arccos_s_over_mag_q / magnitude_v_squared.sqrt());
-
-            Self::from_parts(q_scalar, q_vector)
-        }
-        */
     }
 
     /// Calculate the power of a quaternion where the exponent is a floating 
@@ -2232,15 +2119,6 @@ where
         let qv = result.vector() * a + other.vector() * b;
 
         Self::from_parts(qs, qv)
-        /*
-        let s   = result.coords[0]   * a + other.coords[0]   * b;
-        let v_x = result.coords[1] * a + other.coords[1] * b;
-        let v_y = result.coords[2] * a + other.coords[2] * b;
-        let v_z = result.coords[3] * a + other.coords[3] * b;
-
-        Self::new(s, v_x, v_y, v_z)
-        */
-
     }
 
     /// Compute the normalized linear interpolation between two quaternions.
@@ -2297,9 +2175,6 @@ where
     #[inline]
     pub fn is_finite(&self) -> bool {
         self.scalar().is_finite() && self.vector().is_finite()
-        /*
-        self.s.is_finite() && self.v.is_finite()
-        */
     }
 
     /// Compute the projection of the quaternion `self` onto the quaternion
