@@ -1280,6 +1280,60 @@ where
     
         Vector3::new(x, y, z)
     }
+
+    /// Compute the scalar triple product of three three-dimensional vectors.
+    /// 
+    /// The scalar triple product of three vectors `u`, `v`, and `w` is the 
+    /// signed volume of the parallelepiped formed by the three vectors. In
+    /// symbols, the triple product is given by
+    /// ```text
+    /// triple(u, v, w) = dot(cross(u, v), w)
+    /// ```
+    /// The order of the dot product and the cross product can be interchanged
+    /// in the triple product without affecting the end result
+    /// ```text
+    /// dot(cross(u, v), w) = dot(u, cross(v, w))
+    /// ```
+    /// The scalar triple product also remains constant under cyclic permutations
+    /// of its three arguments. Given that
+    /// ```text
+    /// dot(cross(u, v), w) = dot(cross(v, w), u) = dot(cross(w, v), u)
+    /// ```
+    /// it follows that
+    /// ```text
+    /// triple(u, v, w) = triple(v, w, u) = triple(w, u, v)
+    /// ```
+    /// Under noncyclic permutations, the scalar triple product changes sign
+    /// due to the cross product
+    /// ```text
+    /// triple(u, v, w) = -triple(u, w, v) = -triple(v, u, w) = -triple(w, v, u)
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let u = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let v = Vector3::new(6_f64, 87_f64, 222_f64);
+    /// let w = Vector3::new(52_f64, 85_f64, 108_f64);
+    /// let expected = 276_f64;
+    /// let result = u.triple(&v, &w);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// assert_eq!(u.triple(&v, &w), v.triple(&w, &u));
+    /// assert_eq!(u.triple(&v, &w), w.triple(&u, &v));
+    /// assert_eq!(u.triple(&v, &w), -u.triple(&w, &v));
+    /// assert_eq!(u.triple(&v, &w), -v.triple(&u, &w));
+    /// assert_eq!(u.triple(&v, &w), -w.triple(&v, &u));
+    /// ```
+    #[inline]
+    pub fn triple(&self, other1: &Vector3<S>, other2: &Vector3<S>) -> S {
+        self.cross(other1).dot(other2)
+    }
 }
 
 impl<S> Vector3<S> 
