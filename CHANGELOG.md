@@ -17,3 +17,9 @@
 * Various breaking interface renames.
 * Include examples for how to use different functions in the documentation.
 
+# Version 0.15.2 (March 20, 2022)
+* Refactor the internals of quaternions to keep all coordinates in a
+  `Vector4` type. This paves the way for future performance optimizations.
+* General documentation and code improvements.
+* Add complex number module.
+

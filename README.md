@@ -13,8 +13,9 @@ The library is designed with the following goals in mind:
   fixed-sized array so they can be sent to across FFI boundaries.
 * **Few Dependencies** -- The library should be relatively self-contained. To 
   support portability and maintainability, **cglinalg** is designed with few 
-  external dependencies. The biggest dependency---`proptest`---is a development 
-  dependency only. Moreover the library should compile fast.
+  external dependencies. The biggest dependencies---`proptest` and 
+  `criterion`---are development dependencies only. Also, the library only uses
+  stable Rust.
 * **Type Safety** -- Leverage Rust's type system and zero-cost abstractions 
   to ensure code correctness, abstraction, and intelligibility do not come 
   at the cost of performance.
@@ -23,7 +24,7 @@ The library is designed with the following goals in mind:
   generic over their scalars so they can operate on multiple scalar types.
 * **Speed And Efficiency** -- Operations should be fast and efficient. SIMD 
   instructions and architecture specific optimizations should be used where 
-  possible.
+  possible. Moreover the library should compile fast.
 
 ## Getting Started
 To use the library in your project, add **cglinalg** as a dependency in your 
@@ -61,17 +62,16 @@ Specific features of the library include:
   trigonometry is done in the right units.
 * The library makes heavy use of property testing via the `proptest` crate
   in addition to Rust's type system to ensure code correctness.
+* The library makes heavy use of statistical microbenchmarking using the 
+  `criterion` crate.
 
 ## Limitations On The Design
 The library has design limitations for a number of reasons. 
-* **cglinalg** is a computer graphics library; it can only do linear algebra up to 
-  dimensional four. If one needs high-dimensional transformations, there are other 
-  libraries fit to the task rather than this one. This library is not a replacement
-  for `numpy`, `BLAS`, or `LAPACK`. It is a Rust counterpart to `DirectXMath` or `glm`.
-* The library is designed specifically with graphics applications in mind, which 
+* **cglinalg** is designed specifically with graphics applications in mind, which 
   tend to be mathematically simpler than other modeling and simulation applications. 
   As a consequence this library does not support most of the operations commonly used 
-  in modeling and simulation tasks.
+  in modeling and simulation tasks. Moreover it can only do linear algebra up to 
+  dimension four. It is a Rust counterpart to `DirectXMath` or `glm`.
 * In keeping with simplicity as one of the project goals, the underlying storage of 
   all data types in this library are statically allocated arrays. This is advantageous 
   in the low-dimensional case when the data types have small sizes, but this is a 
@@ -79,8 +79,10 @@ The library has design limitations for a number of reasons.
   or using the heap may be desirable.
 
 ## Limitations On The Implementation
-The limitations on the implementation are addressed in the project roadmap. 
-The biggest one is that it presently does not leverage SIMD instructions yet.
+The main implementation limitation is that it presently does not leverage SIMD 
+intrinsics yet. In keeping with the goal of simplicity, the library only uses 
+stable Rust. Rust's hardware architecture specific compiler intrinsics in the 
+core library are still experimental as of this writing.
 
 ## Project Roadmap
 Major outstanding project goals include:
