@@ -44,13 +44,20 @@ pub type RowVector2<S> = Matrix1x2<S>;
 pub type RowVector3<S> = Matrix1x3<S>;
 pub type RowVector4<S> = Matrix1x4<S>;
 
+/// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
 pub type Matrix1<S> = Matrix1x1<S>;
+
+/// A stack-allocated **(2 row, 2 column)** matrix in column-major order.
 pub type Matrix2<S> = Matrix2x2<S>;
+
+/// A stack-allocated **(3 row, 3 column)** matrix in column-major order.
 pub type Matrix3<S> = Matrix3x3<S>;
+
+/// A stack-allocated **(4 row, 4 column)** matrix in column-major order.
 pub type Matrix4<S> = Matrix4x4<S>;
 
 
-/// A **(1 row, 1 column)** matrix in column-major order.
+/// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x1<S> {
@@ -449,7 +456,7 @@ where
 }
 
 
-/// A **(2 row, 2 column)** matrix in column-major order.
+/// A stack-allocated **(2 row, 2 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x2<S> {
@@ -1606,7 +1613,7 @@ where
 }
 
 
-/// A **(3 row, 3 column)** matrix in column-major order.
+/// A stack-allocated **(3 row, 3 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Matrix3x3<S> {
@@ -3728,7 +3735,7 @@ where
 }
 
 
-/// A **(4 row, 4 column)** matrix in column-major order.
+/// A stack-allocated **(4 row, 4 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Matrix4x4<S> {
@@ -5985,7 +5992,7 @@ where
 }
 
 
-/// A **(1 row, 2 column)** matrix in column-major order.
+/// A stack-allocated **(1 row, 2 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x2<S> {
@@ -6229,7 +6236,7 @@ where
 }
 
 
-/// A **(1 row, 3 column)** matrix in column-major order.
+/// A stack-allocated **(1 row, 3 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x3<S> {
@@ -6481,7 +6488,7 @@ where
 }
 
 
-/// A **(1 row, 4 column)** matrix in column-major order.
+/// A stack-allocated **(1 row, 4 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix1x4<S> {
@@ -6745,7 +6752,7 @@ where
 }
 
 
-/// A **(2 row, 3 column)** matrix in column-major order.
+/// A stack-allocated **(2 row, 3 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x3<S> {
@@ -7222,7 +7229,7 @@ where
 }
 
 
-/// A **(3 row, 2 column)** matrix in column-major order.
+/// A stack-allocated **(3 row, 2 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix3x2<S> {
@@ -7683,7 +7690,7 @@ where
 }
 
 
-/// A **(2 row, 4 column)** matrix in column-major order.
+/// A stack-allocated **(2 row, 4 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix2x4<S> {
@@ -8207,7 +8214,7 @@ where
 }
 
 
-/// A **(4 row, 2 column)** matrix in column-major order.
+/// A stack-allocated **(4 row, 2 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix4x2<S> {
@@ -8701,7 +8708,7 @@ where
 }
 
 
-/// A **(3 row, 4 column)** matrix in column-major order.
+/// A stack-allocated **(3 row, 4 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix3x4<S> {
@@ -9262,7 +9269,7 @@ where
 }
 
 
-/// A **(4 row, 3 column)** matrix in column-major order.
+/// A stack-allocated **(4 row, 3 column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Matrix4x3<S> {
