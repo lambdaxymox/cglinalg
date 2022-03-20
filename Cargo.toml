@@ -41,7 +41,7 @@ features = ["libm"]
 
 [dev-dependencies]
 proptest = "1.0.0"
-criterion = "0.3.4"
+criterion = "0.3.5"
 rand = "0.8.5"
 rand_isaac = "0.3.0"
 
