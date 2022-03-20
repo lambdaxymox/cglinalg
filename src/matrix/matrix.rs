@@ -2987,6 +2987,38 @@ where
         self.data[2][0] * self.data[0][1] * self.data[1][2] - 
         self.data[2][0] * self.data[0][2] * self.data[1][1]
     }
+
+    /// Compute the cross product matrix for a given vector.
+    /// 
+    /// The cross matrix for a vector `a` is the matrix `A` such that for any
+    /// vector `v`, `A` satisfies
+    /// ```text
+    /// A * v = cross(a, v)
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let a = Vector3::new(2_i32, 3_i32, 4_i32);
+    /// let v = Vector3::new(43_i32, 5_i32, 89_i32);
+    /// let cross_a = Matrix3x3::cross_matrix(&a);
+    /// 
+    /// assert_eq!(cross_a * v, a.cross(&v));
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn cross_matrix(vector: &Vector3<S>) -> Self {
+        Matrix3x3::new(
+             S::zero(),  vector[2], -vector[1],
+            -vector[2],  S::zero(),  vector[0], 
+             vector[1], -vector[0],  S::zero()
+        )
+    }
 }
 
 impl<S> Matrix3x3<S> 
