@@ -18,7 +18,7 @@ use core::fmt;
 use core::ops;
 
 
-/// A representation of one-dimensional vectors.
+/// A stack-allocated one-dimensional vector in Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector1<S> {
@@ -447,7 +447,7 @@ where
 }
 
 
-/// A representation of two-dimensional vectors in a Euclidean space.
+/// A stack-allocated two-dimensional vector in Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector2<S> {
@@ -938,7 +938,7 @@ where
     }
 }
 
-/// A representation of three-dimensional vectors in a Euclidean space.
+/// A stack-allocated three-dimensional vector in Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector3<S> {
@@ -1509,7 +1509,7 @@ where
 }
 
 
-/// A representation of four-dimensional vectors in a Euclidean space.
+/// A stack-allocated four-dimensional vector in Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector4<S> {

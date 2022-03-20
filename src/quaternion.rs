@@ -23,6 +23,8 @@ use core::fmt;
 use core::ops;
 
 
+/// A stack-allocated quaternion in Euclidean space.
+/// 
 /// A quaternion is a generalization of vectors in three dimensions that 
 /// enables one to perform rotations about an arbitrary axis. They are a
 /// three-dimensional analogue of complex numbers. One major difference 

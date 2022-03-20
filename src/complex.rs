@@ -19,7 +19,9 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Complex<S> {
+    /// The real part of a complex number.
     pub re: S,
+    /// The imaginary part of a complex number.
     pub im: S,
 }
 
