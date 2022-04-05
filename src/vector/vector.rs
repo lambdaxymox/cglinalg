@@ -19,11 +19,262 @@ use core::ops;
 
 
 /// A stack-allocated one-dimensional vector in Euclidean space.
+pub type Vector1<S> = Vector<S, 1>;
+
+/// A stack-allocated two-dimensional vector in Euclidean space.
+pub type Vector2<S> = Vector<S, 2>;
+
+/// A stack-allocated three-dimensional vector in Euclidean space.
+pub type Vector3<S> = Vector<S, 3>;
+
+/// A stack-allocated four-dimensional vector in Euclidean space.
+pub type Vector4<S> = Vector<S, 4>;
+
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+/// A stack-allocated vector in Euclidean space.
+pub struct Vector<S, const N: usize> {
+    data: [S; N],
+}
+
+impl<S, const N: usize> Vector<S, N> {
+    /// The length of the the underlying array storing the vector components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        N
+    }
+
+    /// The shape of the underlying array storing the vector components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (N, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; N]>>::as_ref(self)
+    }
+}
+
+impl<S, const N: usize> Vector<S, N>
+where
+    S: Scalar
+{
+    /// Construct the zero vector.
+    ///
+    /// The zero vector is the vector in which all of its elements are zero.
+    #[inline]
+    pub fn zero() -> Self {
+        Self {
+            data: [S::zero(); N],
+        }
+    }
+}
+
+impl<S, const N: usize> Vector<S, N>
+where
+    S: Copy
+{
+    /// Construct a vector from a fill value.
+    ///
+    /// Every component of the resulting vector will have the same value
+    /// supplied by the `value` argument.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,   
+    /// # };
+    /// #
+    /// let fill_value = 3_f64;
+    /// let result = Vector3::from_fill(fill_value);
+    /// let expected = Vector3::new(3_f64, 3_f64, 3_f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_fill(value: S) -> Self {
+        Self { 
+            data: [value; N],
+        }
+    }
+
+    /// Map an operation on that acts on the components of a vector, returning 
+    /// a vector whose components are of the new scalar type.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,  
+    /// # };
+    /// #
+    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Vector4<i32> = Vector4::new(2_i32, 3_i32, 4_i32, 5_i32);
+    /// let result: Vector4<i32> = vector.map(|comp| (comp + 1) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, op: F) -> Vector<T, N> 
+    where 
+        F: FnMut(S) -> T
+    {
+        Vector {
+            data: self.data.map(op),
+        }
+    }
+}
+
+impl<S, const N: usize> AsRef<[S; N]> for Vector<S, N> {
+    #[inline]
+    fn as_ref(&self) -> &[S; N] {
+        unsafe {
+            &*(self as *const Vector<S, N> as *const [S; N])
+        }
+    }
+}
+
+impl<S, const N: usize> AsMut<[S; N]> for Vector<S, N> {
+    #[inline]
+    fn as_mut(&mut self) -> &mut [S; N] {
+        unsafe {
+            &mut *(self as *mut Vector<S, N> as *mut [S; N])
+        }
+    }
+}
+
+impl<S, const N: usize> AsRef<[[S; N]; 1]> for Vector<S, N> {
+    #[inline]
+    fn as_ref(&self) -> &[[S; N]; 1] {
+        unsafe {
+            &*(self as *const Vector<S, N> as *const [[S; N]; 1])
+        }
+    }
+}
+
+impl<S, const N: usize> AsMut<[[S; N]; 1]> for Vector<S, N> {
+    #[inline]
+    fn as_mut(&mut self) -> &mut [[S; N]; 1] {
+        unsafe {
+            &mut *(self as *mut Vector<S, N> as *mut [[S; N]; 1])
+        }
+    }
+}
+
+impl<S, const N: usize> Default for Vector<S, N>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
+impl<S, const N: usize> From<[S; N]> for Vector<S, N>
+where
+    S: Scalar
+{
+    #[inline]
+    fn from(data: [S; N]) -> Self {
+        Self {
+            data: data
+        }
+    }
+}
+
+impl<S, const N: usize> From<&[S; N]> for Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(data: &[S; N]) -> Self {
+        Self {
+            data: *data
+        }
+    }
+}
+
+impl<'a, S, const N: usize> From<&'a [S; N]> for &'a Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(data: &'a [S; N]) -> &'a Vector<S, N> {
+        unsafe { 
+            &*(data as *const [S; N] as *const Vector<S, N>)    
+        }
+    }
+}
+
+macro_rules! impl_vector_index_ops {
+    ($IndexType:ty, $Output:ty) => {
+        impl<S, const N: usize> ops::Index<$IndexType> for Vector<S, N> {
+            type Output = $Output;
+
+            #[inline]
+            fn index(&self, index: $IndexType) -> &Self::Output {
+                let v: &[S; N] = self.as_ref();
+                &v[index]
+            }
+        }
+
+        impl<S, const N: usize> ops::IndexMut<$IndexType> for Vector<S, N> {
+            #[inline]
+            fn index_mut(&mut self, index: $IndexType) -> &mut Self::Output {
+                let v: &mut [S; N] = self.as_mut();
+                &mut v[index]
+            }
+        }
+    }
+}
+
+impl_vector_index_ops!(usize, S);
+impl_vector_index_ops!(ops::Range<usize>, [S]);
+impl_vector_index_ops!(ops::RangeTo<usize>, [S]);
+impl_vector_index_ops!(ops::RangeFrom<usize>, [S]);
+impl_vector_index_ops!(ops::RangeFull, [S]);
+
+impl<S, const N: usize> fmt::Display for Vector<S, N> 
+where 
+    S: fmt::Display 
+{
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Vector{} [", N).unwrap();
+        for i in 0..(N - 1) {
+            write!(formatter, "{}, ", self.data[i]).unwrap();
+        }
+        write!(formatter, "{}]", self.data[N - 1])
+    }
+}
+
+/*
+/// A stack-allocated one-dimensional vector in Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector1<S> {
     data: [S; 1],
 }
+*/
 
 impl<S> Vector1<S> {
     /// Construct a new vector.
@@ -33,7 +284,8 @@ impl<S> Vector1<S> {
             data: [x], 
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the vector components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -68,7 +320,7 @@ impl<S> Vector1<S> {
         <Self as AsRef<[S; 1]>>::as_ref(self)
     }
 }
-
+*/
 impl<S> Vector1<S> 
 where 
     S: NumCast + Copy
@@ -124,7 +376,7 @@ where
     pub fn extend(&self, y: S) -> Vector2<S> {
         Vector2::new(self.data[0], y)
     }
-
+    /*
     /// Construct a vector from a fill value.
     ///
     /// Every component of the resulting vector will have the same value
@@ -147,7 +399,8 @@ where
     pub fn from_fill(value: S) -> Self {
         Self::new(value)
     }
-
+    */
+    /*
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
@@ -171,6 +424,7 @@ where
     {
         Vector1::new(op(self.data[0]))
     }
+    */
 }
 
 impl<S> Vector1<S> 
@@ -183,7 +437,7 @@ where
     pub fn unit_x() -> Self {
         Vector1::new(S::one())
     }
-
+    /*
     /// Compute the zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
@@ -191,7 +445,7 @@ where
     pub fn zero() -> Self {
         Vector1::new(S::zero())
     }
-    
+    */
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -349,7 +603,7 @@ where
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
-
+/*
 impl<S> fmt::Display for Vector1<S> 
 where 
     S: fmt::Display
@@ -371,7 +625,7 @@ where
         Self::zero()
     }
 }
-
+*/
 impl<S> From<S> for Vector1<S> 
 where 
     S: Scalar
@@ -401,7 +655,7 @@ where
         Self::new(v.0)
     }
 }
-
+/*
 impl<S> From<[S; 1]> for Vector1<S> 
 where 
     S: Scalar
@@ -421,7 +675,7 @@ where
         Self::new(v[0])
     }
 }
-
+*/
 impl<'a, S> From<&'a (S,)> for &'a Vector1<S> 
 where 
     S: Scalar
@@ -433,7 +687,7 @@ where
         }
     }
 }
-
+/*
 impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> 
 where 
     S: Scalar
@@ -445,14 +699,15 @@ where
         }
     }
 }
-
-
+*/
+/*
 /// A stack-allocated two-dimensional vector in Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector2<S> {
     data: [S; 2],
 }
+*/
 
 impl<S> Vector2<S> {
     /// Construct a new vector.
@@ -462,7 +717,8 @@ impl<S> Vector2<S> {
             data: [x, y],
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the vector components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -497,7 +753,7 @@ impl<S> Vector2<S> {
         <Self as AsRef<[S; 2]>>::as_ref(self)
     }
 }
-
+*/
 impl<S> Vector2<S> 
 where 
     S: NumCast + Copy
@@ -579,7 +835,7 @@ where
     pub fn contract(&self) -> Vector1<S> {
         Vector1::new(self.data[0])
     }
-
+    /*
     /// Construct a vector from a fill value.
     ///
     /// Every component of the resulting vector will have the same value
@@ -602,7 +858,8 @@ where
     pub fn from_fill(value: S) -> Self {
         Self::new(value, value)
     }
-
+    */
+    /*
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
@@ -626,6 +883,7 @@ where
     {
         Vector2::new(op(self.data[0]), op(self.data[1]))
     }
+    */
 }
 
 impl<S> Vector2<S> 
@@ -645,7 +903,7 @@ where
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one())
     }
-
+    /*
     /// Compute the zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
@@ -653,7 +911,7 @@ where
     pub fn zero() -> Self {
         Self::new(S::zero(), S::zero())
     }
-    
+    */
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -851,7 +1109,7 @@ where
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
-
+/*
 impl<S> fmt::Display for Vector2<S> 
 where 
     S: fmt::Display 
@@ -873,7 +1131,7 @@ where
         Self::zero()
     }
 }
-
+*/
 impl<S> From<(S, S)> for Vector2<S> 
 where 
     S: Scalar
@@ -883,7 +1141,7 @@ where
         Self::new(v.0, v.1)
     }
 }
-
+/*
 impl<S> From<[S; 2]> for Vector2<S> 
 where 
     S: Scalar
@@ -893,7 +1151,7 @@ where
         Self::new(v[0], v[1])
     }
 }
-
+*/
 impl<S> From<&(S, S)> for Vector2<S> 
 where 
     S: Scalar
@@ -903,7 +1161,7 @@ where
         Self::new(v.0, v.1)
     }
 }
-
+/*
 impl<S> From<&[S; 2]> for Vector2<S> 
 where 
     S: Scalar
@@ -913,7 +1171,7 @@ where
         Self::new(v[0], v[1])
     }
 }
-
+*/
 impl<'a, S> From<&'a (S, S)> for &'a Vector2<S> 
 where
     S: Scalar
@@ -925,7 +1183,7 @@ where
         }
     }
 }
-
+/*
 impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> 
 where 
     S: Scalar
@@ -937,13 +1195,15 @@ where
         }
     }
 }
-
+*/
+/*
 /// A stack-allocated three-dimensional vector in Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector3<S> {
     data: [S; 3],
 }
+*/
 
 impl<S> Vector3<S> {
     /// Construct a new vector.
@@ -953,7 +1213,8 @@ impl<S> Vector3<S> {
             data: [x, y, z],
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the vector components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -988,7 +1249,7 @@ impl<S> Vector3<S> {
         <Self as AsRef<[S; 3]>>::as_ref(self)
     }
 }
-
+*/
 impl<S> Vector3<S> 
 where 
     S: NumCast + Copy
@@ -1074,7 +1335,7 @@ where
     pub fn contract(&self) -> Vector2<S> {
         Vector2::new(self.data[0], self.data[1])
     }
-
+    /*
     /// Construct a vector from a fill value.
     ///
     /// Every component of the resulting vector will have the same value
@@ -1097,7 +1358,8 @@ where
     pub fn from_fill(value: S) -> Self {
         Self::new(value, value, value)
     }
-
+    */
+    /*
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
@@ -1121,6 +1383,7 @@ where
     {
         Vector3::new(op(self.data[0]), op(self.data[1]), op(self.data[2]))
     }
+    */
 }
 
 impl<S> Vector3<S> 
@@ -1147,7 +1410,7 @@ where
     pub fn unit_z() -> Self {
         Self::new(S::zero(), S::zero(), S::one())
     }
-
+    /*
     /// Compute the zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
@@ -1155,7 +1418,7 @@ where
     pub fn zero() -> Self {
         Self::new(S::zero(), S::zero(), S::zero())
     }
-    
+    */
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -1454,7 +1717,7 @@ where
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
-
+/*
 impl<S> fmt::Display for Vector3<S> 
 where 
     S: fmt::Display
@@ -1476,7 +1739,7 @@ where
         Self::zero()
     }
 }
-
+*/
 impl<S> From<(S, S, S)> for Vector3<S> 
 where 
     S: Scalar
@@ -1486,7 +1749,7 @@ where
         Self::new(v.0, v.1, v.2)
     }
 }
-
+/*
 impl<S> From<[S; 3]> for Vector3<S> 
 where 
     S: Scalar
@@ -1496,7 +1759,7 @@ where
         Self::new(v[0], v[1], v[2])
     }
 }
-
+*/
 impl<S> From<&(S, S, S)> for Vector3<S> 
 where 
     S: Scalar
@@ -1506,7 +1769,7 @@ where
         Self::new(v.0, v.1, v.2)
     }
 }
-
+/*
 impl<S> From<&[S; 3]> for Vector3<S> 
 where 
     S: Scalar
@@ -1516,7 +1779,7 @@ where
         Self::new(v[0], v[1], v[2])
     }
 }
-
+*/
 impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> 
 where 
     S: Scalar
@@ -1528,7 +1791,7 @@ where
         }
     }
 }
-
+/*
 impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> 
 where 
     S: Scalar
@@ -1540,7 +1803,7 @@ where
         }
     }
 }
-
+*/
 
 impl<S> From<Vector4<S>> for Vector3<S> 
 where 
@@ -1562,13 +1825,14 @@ where
     }
 }
 
-
+/*
 /// A stack-allocated four-dimensional vector in Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Vector4<S> {
     data: [S; 4],
 }
+*/
 
 impl<S> Vector4<S> {
     /// Construct a new four-dimensional vector.
@@ -1578,7 +1842,8 @@ impl<S> Vector4<S> {
             data: [x, y, z, w],
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the vector components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -1613,7 +1878,7 @@ impl<S> Vector4<S> {
         <Self as AsRef<[S; 4]>>::as_ref(self)
     }
 }
-
+*/
 impl<S> Vector4<S> 
 where 
     S: NumCast + Copy
@@ -1681,7 +1946,7 @@ where
     pub fn contract(&self) -> Vector3<S> {
         Vector3::new(self.data[0], self.data[1], self.data[2])
     }
-
+    /*
     /// Construct a vector from a fill value.
     ///
     /// Every component of the resulting vector will have the same value
@@ -1704,7 +1969,8 @@ where
     pub fn from_fill(value: S) -> Self {
         Self::new(value, value, value, value)
     }
-
+    */
+    /*
     /// Map an operation on that acts on the coordinates of a vector, returning 
     /// a vector whose coordinates are of the new scalar type.
     ///
@@ -1733,6 +1999,7 @@ where
             op(self.data[3]),
         )
     }
+    */
 }
 
 impl<S> Vector4<S> 
@@ -1766,7 +2033,7 @@ where
     pub fn unit_w() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::one())
     }
-
+    /*
     /// Compute the zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
@@ -1774,7 +2041,7 @@ where
     pub fn zero() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
-    
+    */
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -1964,7 +2231,7 @@ where
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
-
+/*
 impl<S> fmt::Display for Vector4<S> 
 where 
     S: fmt::Display
@@ -1986,7 +2253,7 @@ where
         Self::zero()
     }
 }
-
+*/
 impl<S> From<(S, S, S, S)> for Vector4<S> 
 where 
     S: Scalar
@@ -1996,7 +2263,7 @@ where
         Self::new(v.0, v.1, v.2, v.3)
     }
 }
-
+/*
 impl<S> From<[S; 4]> for Vector4<S> 
 where 
     S: Scalar 
@@ -2006,7 +2273,7 @@ where
         Self::new(v[0], v[1], v[2], v[3])
     }
 }
-
+*/
 impl<S> From<&(S, S, S, S)> for Vector4<S> 
 where 
     S: Scalar 
@@ -2016,7 +2283,7 @@ where
         Self::new(v.0, v.1, v.2, v.3)
     }
 }
-
+/*
 impl<S> From<&[S; 4]> for Vector4<S> 
 where 
     S: Scalar
@@ -2026,7 +2293,7 @@ where
         Self::new(v[0], v[1], v[2], v[3])
     }
 }
-
+*/
 impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> 
 where 
     S: Scalar 
@@ -2038,7 +2305,7 @@ where
         }
     }
 }
-
+/*
 impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> 
 where 
     S: Scalar
@@ -2050,7 +2317,7 @@ where
         }
     }
 }
-
+*/
 macro_rules! impl_scalar_vector_mul_ops {
     ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
@@ -2335,7 +2602,7 @@ impl_coords_deref!(Vector3, XYZ);
 impl_coords!(XYZW, { x, y, z, w });
 impl_coords_deref!(Vector4, XYZW);
 
-
+/*
 macro_rules! impl_vector_index_ops {
     ($T:ty, $n:expr, $IndexType:ty, $Output:ty) => {
         impl<S> ops::Index<$IndexType> for $T {
@@ -2381,7 +2648,7 @@ impl_vector_index_ops!(Vector4<S>, 4, ops::Range<usize>, [S]);
 impl_vector_index_ops!(Vector4<S>, 4, ops::RangeTo<usize>, [S]);
 impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFrom<usize>, [S]);
 impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFull, [S]);
-
+*/
 
 macro_rules! impl_as_ref_ops {
     ($VecType:ty, $RefType:ty) => {
@@ -2407,21 +2674,25 @@ macro_rules! impl_as_ref_ops {
 
 impl_as_ref_ops!(Vector1<S>, S);
 impl_as_ref_ops!(Vector1<S>, (S,));
+/*
 impl_as_ref_ops!(Vector1<S>, [S; 1]);
 impl_as_ref_ops!(Vector1<S>, [[S; 1]; 1]);
-
+*/
 impl_as_ref_ops!(Vector2<S>, (S, S));
+/*
 impl_as_ref_ops!(Vector2<S>, [S; 2]);
 impl_as_ref_ops!(Vector2<S>, [[S; 2]; 1]);
-
+*/
 impl_as_ref_ops!(Vector3<S>, (S, S, S));
+/*
 impl_as_ref_ops!(Vector3<S>, [S; 3]);
 impl_as_ref_ops!(Vector3<S>, [[S; 3]; 1]);
-
+*/
 impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
+/*
 impl_as_ref_ops!(Vector4<S>, [S; 4]);
 impl_as_ref_ops!(Vector4<S>, [[S; 4]; 1]);
-
+*/
 
 macro_rules! impl_magnitude {
     ($VectorN:ident) => {
