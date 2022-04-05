@@ -267,14 +267,6 @@ where
     }
 }
 
-/*
-/// A stack-allocated one-dimensional vector in Euclidean space.
-#[repr(C)]
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Vector1<S> {
-    data: [S; 1],
-}
-*/
 
 impl<S> Vector1<S> {
     /// Construct a new vector.
@@ -285,42 +277,7 @@ impl<S> Vector1<S> {
         }
     }
 }
-/*
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub const fn len(&self) -> usize {
-        1
-    }
 
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub const fn shape(&self) -> (usize, usize) {
-        (1, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub const fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 1]>>::as_ref(self)
-    }
-}
-*/
 impl<S> Vector1<S> 
 where 
     S: NumCast + Copy
@@ -376,55 +333,6 @@ where
     pub fn extend(&self, y: S) -> Vector2<S> {
         Vector2::new(self.data[0], y)
     }
-    /*
-    /// Construct a vector from a fill value.
-    ///
-    /// Every component of the resulting vector will have the same value
-    /// supplied by the `value` argument.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1, 
-    /// # };
-    /// #
-    /// let fill_value = 3_f64;
-    /// let result = Vector1::from_fill(fill_value);
-    /// let expected = Vector1::new(3_f64);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn from_fill(value: S) -> Self {
-        Self::new(value)
-    }
-    */
-    /*
-    /// Map an operation on that acts on the coordinates of a vector, returning 
-    /// a vector whose coordinates are of the new scalar type.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,  
-    /// # };
-    /// #
-    /// let vector: Vector1<u32> = Vector1::new(1_u32);
-    /// let expected: Vector1<i32> = Vector1::new(2_i32);
-    /// let result: Vector1<i32> = vector.map(|comp| (comp + 1) as i32);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Vector1<T> 
-    where 
-        F: FnMut(S) -> T
-    {
-        Vector1::new(op(self.data[0]))
-    }
-    */
 }
 
 impl<S> Vector1<S> 
@@ -437,15 +345,7 @@ where
     pub fn unit_x() -> Self {
         Vector1::new(S::one())
     }
-    /*
-    /// Compute the zero vector.
-    ///
-    /// The zero vector is the vector in which all of its elements are zero.
-    #[inline]
-    pub fn zero() -> Self {
-        Vector1::new(S::zero())
-    }
-    */
+
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -603,29 +503,7 @@ where
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
-/*
-impl<S> fmt::Display for Vector1<S> 
-where 
-    S: fmt::Display
-{
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter, 
-            "Vector1 [{}]", 
-            self.data[0]
-        )
-    }
-}
 
-impl<S> Default for Vector1<S>
-where
-    S: Scalar
-{
-    fn default() -> Self {
-        Self::zero()
-    }
-}
-*/
 impl<S> From<S> for Vector1<S> 
 where 
     S: Scalar
@@ -655,27 +533,7 @@ where
         Self::new(v.0)
     }
 }
-/*
-impl<S> From<[S; 1]> for Vector1<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: [S; 1]) -> Self {
-        Self::new(v[0])
-    }
-}
 
-impl<S> From<&[S; 1]> for Vector1<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &[S; 1]) -> Self {
-        Self::new(v[0])
-    }
-}
-*/
 impl<'a, S> From<&'a (S,)> for &'a Vector1<S> 
 where 
     S: Scalar
@@ -687,27 +545,7 @@ where
         }
     }
 }
-/*
-impl<'a, S> From<&'a [S; 1]> for &'a Vector1<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a [S; 1]) -> &'a Vector1<S> {
-        unsafe { 
-            &*(v as *const [S; 1] as *const Vector1<S>)
-        }
-    }
-}
-*/
-/*
-/// A stack-allocated two-dimensional vector in Euclidean space.
-#[repr(C)]
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Vector2<S> {
-    data: [S; 2],
-}
-*/
+
 
 impl<S> Vector2<S> {
     /// Construct a new vector.
@@ -718,42 +556,7 @@ impl<S> Vector2<S> {
         }
     }
 }
-/*
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub const fn len(&self) -> usize {
-        2
-    }
 
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub const fn shape(&self) -> (usize, usize) {
-        (2, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub const fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 2]>>::as_ref(self)
-    }
-}
-*/
 impl<S> Vector2<S> 
 where 
     S: NumCast + Copy
@@ -835,55 +638,6 @@ where
     pub fn contract(&self) -> Vector1<S> {
         Vector1::new(self.data[0])
     }
-    /*
-    /// Construct a vector from a fill value.
-    ///
-    /// Every component of the resulting vector will have the same value
-    /// supplied by the `value` argument.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2, 
-    /// # };
-    /// #
-    /// let fill_value = 3_f64;
-    /// let result = Vector2::from_fill(fill_value);
-    /// let expected = Vector2::new(3_f64, 3_f64);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn from_fill(value: S) -> Self {
-        Self::new(value, value)
-    }
-    */
-    /*
-    /// Map an operation on that acts on the coordinates of a vector, returning 
-    /// a vector whose coordinates are of the new scalar type.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2,  
-    /// # };
-    /// #
-    /// let vector: Vector2<u32> = Vector2::new(1_u32, 2_u32);
-    /// let expected: Vector2<i32> = Vector2::new(2_i32, 3_i32);
-    /// let result: Vector2<i32> = vector.map(|comp| (comp + 1) as i32);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Vector2<T> 
-    where 
-        F: FnMut(S) -> T
-    {
-        Vector2::new(op(self.data[0]), op(self.data[1]))
-    }
-    */
 }
 
 impl<S> Vector2<S> 
@@ -903,15 +657,7 @@ where
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one())
     }
-    /*
-    /// Compute the zero vector.
-    ///
-    /// The zero vector is the vector in which all of its elements are zero.
-    #[inline]
-    pub fn zero() -> Self {
-        Self::new(S::zero(), S::zero())
-    }
-    */
+
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -1109,29 +855,7 @@ where
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
-/*
-impl<S> fmt::Display for Vector2<S> 
-where 
-    S: fmt::Display 
-{
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter, 
-            "Vector2 [{}, {}]", 
-            self.data[0], self.data[1]
-        )
-    }
-}
 
-impl<S> Default for Vector2<S>
-where
-    S: Scalar
-{
-    fn default() -> Self {
-        Self::zero()
-    }
-}
-*/
 impl<S> From<(S, S)> for Vector2<S> 
 where 
     S: Scalar
@@ -1141,17 +865,7 @@ where
         Self::new(v.0, v.1)
     }
 }
-/*
-impl<S> From<[S; 2]> for Vector2<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: [S; 2]) -> Self {
-        Self::new(v[0], v[1])
-    }
-}
-*/
+
 impl<S> From<&(S, S)> for Vector2<S> 
 where 
     S: Scalar
@@ -1161,17 +875,7 @@ where
         Self::new(v.0, v.1)
     }
 }
-/*
-impl<S> From<&[S; 2]> for Vector2<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &[S; 2]) -> Self {
-        Self::new(v[0], v[1])
-    }
-}
-*/
+
 impl<'a, S> From<&'a (S, S)> for &'a Vector2<S> 
 where
     S: Scalar
@@ -1183,27 +887,7 @@ where
         }
     }
 }
-/*
-impl<'a, S> From<&'a [S; 2]> for &'a Vector2<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a [S; 2]) -> &'a Vector2<S> {
-        unsafe { 
-            &*(v as *const [S; 2] as *const Vector2<S>)
-        }
-    }
-}
-*/
-/*
-/// A stack-allocated three-dimensional vector in Euclidean space.
-#[repr(C)]
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Vector3<S> {
-    data: [S; 3],
-}
-*/
+
 
 impl<S> Vector3<S> {
     /// Construct a new vector.
@@ -1214,42 +898,7 @@ impl<S> Vector3<S> {
         }
     }
 }
-/*
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub const fn len(&self) -> usize {
-        3
-    }
 
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub const fn shape(&self) -> (usize, usize) {
-        (3, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub const fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 3]>>::as_ref(self)
-    }
-}
-*/
 impl<S> Vector3<S> 
 where 
     S: NumCast + Copy
@@ -1335,55 +984,6 @@ where
     pub fn contract(&self) -> Vector2<S> {
         Vector2::new(self.data[0], self.data[1])
     }
-    /*
-    /// Construct a vector from a fill value.
-    ///
-    /// Every component of the resulting vector will have the same value
-    /// supplied by the `value` argument.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,   
-    /// # };
-    /// #
-    /// let fill_value = 3_f64;
-    /// let result = Vector3::from_fill(fill_value);
-    /// let expected = Vector3::new(3_f64, 3_f64, 3_f64);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn from_fill(value: S) -> Self {
-        Self::new(value, value, value)
-    }
-    */
-    /*
-    /// Map an operation on that acts on the coordinates of a vector, returning 
-    /// a vector whose coordinates are of the new scalar type.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,  
-    /// # };
-    /// #
-    /// let vector: Vector3<u32> = Vector3::new(1_u32, 2_u32, 3_u32);
-    /// let expected: Vector3<i32> = Vector3::new(2_i32, 3_i32, 4_i32);
-    /// let result: Vector3<i32> = vector.map(|comp| (comp + 1) as i32);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Vector3<T> 
-    where 
-        F: FnMut(S) -> T
-    {
-        Vector3::new(op(self.data[0]), op(self.data[1]), op(self.data[2]))
-    }
-    */
 }
 
 impl<S> Vector3<S> 
@@ -1410,15 +1010,7 @@ where
     pub fn unit_z() -> Self {
         Self::new(S::zero(), S::zero(), S::one())
     }
-    /*
-    /// Compute the zero vector.
-    ///
-    /// The zero vector is the vector in which all of its elements are zero.
-    #[inline]
-    pub fn zero() -> Self {
-        Self::new(S::zero(), S::zero(), S::zero())
-    }
-    */
+
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -1717,29 +1309,7 @@ where
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
-/*
-impl<S> fmt::Display for Vector3<S> 
-where 
-    S: fmt::Display
-{
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter, 
-            "Vector3 [{}, {}, {}]", 
-            self.data[0], self.data[1], self.data[2]
-        )
-    }
-}
 
-impl<S> Default for Vector3<S>
-where
-    S: Scalar
-{
-    fn default() -> Self {
-        Self::zero()
-    }
-}
-*/
 impl<S> From<(S, S, S)> for Vector3<S> 
 where 
     S: Scalar
@@ -1749,17 +1319,7 @@ where
         Self::new(v.0, v.1, v.2)
     }
 }
-/*
-impl<S> From<[S; 3]> for Vector3<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: [S; 3]) -> Self {
-        Self::new(v[0], v[1], v[2])
-    }
-}
-*/
+
 impl<S> From<&(S, S, S)> for Vector3<S> 
 where 
     S: Scalar
@@ -1769,17 +1329,7 @@ where
         Self::new(v.0, v.1, v.2)
     }
 }
-/*
-impl<S> From<&[S; 3]> for Vector3<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &[S; 3]) -> Self {
-        Self::new(v[0], v[1], v[2])
-    }
-}
-*/
+
 impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> 
 where 
     S: Scalar
@@ -1791,19 +1341,6 @@ where
         }
     }
 }
-/*
-impl<'a, S> From<&'a [S; 3]> for &'a Vector3<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a [S; 3]) -> &'a Vector3<S> {
-        unsafe { 
-            &*(v as *const [S; 3] as *const Vector3<S>)
-        }
-    }
-}
-*/
 
 impl<S> From<Vector4<S>> for Vector3<S> 
 where 
@@ -1825,15 +1362,6 @@ where
     }
 }
 
-/*
-/// A stack-allocated four-dimensional vector in Euclidean space.
-#[repr(C)]
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Vector4<S> {
-    data: [S; 4],
-}
-*/
-
 impl<S> Vector4<S> {
     /// Construct a new four-dimensional vector.
     #[inline]
@@ -1843,42 +1371,7 @@ impl<S> Vector4<S> {
         }
     }
 }
-/*
-    /// The length of the the underlying array storing the vector components.
-    #[inline]
-    pub const fn len(&self) -> usize {
-        4
-    }
 
-    /// The shape of the underlying array storing the vector components.
-    ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
-    /// of the shape of the array is **(rows, columns)**.
-    #[inline]
-    pub const fn shape(&self) -> (usize, usize) {
-        (4, 1)
-    }
-
-    /// Get a pointer to the underlying array.
-    #[inline]
-    pub const fn as_ptr(&self) -> *const S {
-        &self.data[0]
-    }
-
-    /// Get a mutable pointer to the underlying array.
-    #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
-        &mut self.data[0]
-    }
-
-    /// Get a slice of the underlying elements of the data type.
-    #[inline]
-    pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 4]>>::as_ref(self)
-    }
-}
-*/
 impl<S> Vector4<S> 
 where 
     S: NumCast + Copy
@@ -1946,60 +1439,6 @@ where
     pub fn contract(&self) -> Vector3<S> {
         Vector3::new(self.data[0], self.data[1], self.data[2])
     }
-    /*
-    /// Construct a vector from a fill value.
-    ///
-    /// Every component of the resulting vector will have the same value
-    /// supplied by the `value` argument.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4,   
-    /// # };
-    /// #
-    /// let fill_value = 3_f64;
-    /// let result = Vector4::from_fill(fill_value);
-    /// let expected = Vector4::new(3_f64, 3_f64, 3_f64, 3_f64);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn from_fill(value: S) -> Self {
-        Self::new(value, value, value, value)
-    }
-    */
-    /*
-    /// Map an operation on that acts on the coordinates of a vector, returning 
-    /// a vector whose coordinates are of the new scalar type.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4,  
-    /// # };
-    /// #
-    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
-    /// let expected: Vector4<i32> = Vector4::new(2_i32, 3_i32, 4_i32, 5_i32);
-    /// let result: Vector4<i32> = vector.map(|comp| (comp + 1) as i32);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Vector4<T> 
-    where 
-        F: FnMut(S) -> T
-    {
-        Vector4::new(
-            op(self.data[0]),
-            op(self.data[1]),
-            op(self.data[2]),
-            op(self.data[3]),
-        )
-    }
-    */
 }
 
 impl<S> Vector4<S> 
@@ -2033,15 +1472,7 @@ where
     pub fn unit_w() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::one())
     }
-    /*
-    /// Compute the zero vector.
-    ///
-    /// The zero vector is the vector in which all of its elements are zero.
-    #[inline]
-    pub fn zero() -> Self {
-        Self::new(S::zero(), S::zero(), S::zero(), S::zero())
-    }
-    */
+
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -2231,29 +1662,7 @@ where
         other * (self.dot(other) / other.magnitude_squared())
     }
 }
-/*
-impl<S> fmt::Display for Vector4<S> 
-where 
-    S: fmt::Display
-{
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter, 
-            "Vector4 [{}, {}, {}, {}]", 
-            self.data[0], self.data[1], self.data[2], self.data[3]
-        )
-    }
-}
 
-impl<S> Default for Vector4<S>
-where
-    S: Scalar
-{
-    fn default() -> Self {
-        Self::zero()
-    }
-}
-*/
 impl<S> From<(S, S, S, S)> for Vector4<S> 
 where 
     S: Scalar
@@ -2263,17 +1672,7 @@ where
         Self::new(v.0, v.1, v.2, v.3)
     }
 }
-/*
-impl<S> From<[S; 4]> for Vector4<S> 
-where 
-    S: Scalar 
-{
-    #[inline]
-    fn from(v: [S; 4]) -> Self {
-        Self::new(v[0], v[1], v[2], v[3])
-    }
-}
-*/
+
 impl<S> From<&(S, S, S, S)> for Vector4<S> 
 where 
     S: Scalar 
@@ -2283,17 +1682,7 @@ where
         Self::new(v.0, v.1, v.2, v.3)
     }
 }
-/*
-impl<S> From<&[S; 4]> for Vector4<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &[S; 4]) -> Self {
-        Self::new(v[0], v[1], v[2], v[3])
-    }
-}
-*/
+
 impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> 
 where 
     S: Scalar 
@@ -2305,19 +1694,8 @@ where
         }
     }
 }
-/*
-impl<'a, S> From<&'a [S; 4]> for &'a Vector4<S> 
-where 
-    S: Scalar
-{
-    #[inline]
-    fn from(v: &'a [S; 4]) -> &'a Vector4<S> {
-        unsafe { 
-            &*(v as *const [S; 4] as *const Vector4<S>)    
-        }
-    }
-}
-*/
+
+
 macro_rules! impl_scalar_vector_mul_ops {
     ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
@@ -2602,53 +1980,6 @@ impl_coords_deref!(Vector3, XYZ);
 impl_coords!(XYZW, { x, y, z, w });
 impl_coords_deref!(Vector4, XYZW);
 
-/*
-macro_rules! impl_vector_index_ops {
-    ($T:ty, $n:expr, $IndexType:ty, $Output:ty) => {
-        impl<S> ops::Index<$IndexType> for $T {
-            type Output = $Output;
-
-            #[inline]
-            fn index(&self, index: $IndexType) -> &Self::Output {
-                let v: &[S; $n] = self.as_ref();
-                &v[index]
-            }
-        }
-
-        impl<S> ops::IndexMut<$IndexType> for $T {
-            #[inline]
-            fn index_mut(&mut self, index: $IndexType) -> &mut Self::Output {
-                let v: &mut [S; $n] = self.as_mut();
-                &mut v[index]
-            }
-        }
-    }
-}
-
-impl_vector_index_ops!(Vector1<S>, 1, usize, S);
-impl_vector_index_ops!(Vector1<S>, 1, ops::Range<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, ops::RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, ops::RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector1<S>, 1, ops::RangeFull, [S]);
-
-impl_vector_index_ops!(Vector2<S>, 2, usize, S);
-impl_vector_index_ops!(Vector2<S>, 2, ops::Range<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, ops::RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, ops::RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector2<S>, 2, ops::RangeFull, [S]);
-
-impl_vector_index_ops!(Vector3<S>, 3, usize, S);
-impl_vector_index_ops!(Vector3<S>, 3, ops::Range<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, ops::RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, ops::RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector3<S>, 3, ops::RangeFull, [S]);
-
-impl_vector_index_ops!(Vector4<S>, 4, usize, S);
-impl_vector_index_ops!(Vector4<S>, 4, ops::Range<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, ops::RangeTo<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFrom<usize>, [S]);
-impl_vector_index_ops!(Vector4<S>, 4, ops::RangeFull, [S]);
-*/
 
 macro_rules! impl_as_ref_ops {
     ($VecType:ty, $RefType:ty) => {
@@ -2674,25 +2005,10 @@ macro_rules! impl_as_ref_ops {
 
 impl_as_ref_ops!(Vector1<S>, S);
 impl_as_ref_ops!(Vector1<S>, (S,));
-/*
-impl_as_ref_ops!(Vector1<S>, [S; 1]);
-impl_as_ref_ops!(Vector1<S>, [[S; 1]; 1]);
-*/
 impl_as_ref_ops!(Vector2<S>, (S, S));
-/*
-impl_as_ref_ops!(Vector2<S>, [S; 2]);
-impl_as_ref_ops!(Vector2<S>, [[S; 2]; 1]);
-*/
 impl_as_ref_ops!(Vector3<S>, (S, S, S));
-/*
-impl_as_ref_ops!(Vector3<S>, [S; 3]);
-impl_as_ref_ops!(Vector3<S>, [[S; 3]; 1]);
-*/
 impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
-/*
-impl_as_ref_ops!(Vector4<S>, [S; 4]);
-impl_as_ref_ops!(Vector4<S>, [[S; 4]; 1]);
-*/
+
 
 macro_rules! impl_magnitude {
     ($VectorN:ident) => {
