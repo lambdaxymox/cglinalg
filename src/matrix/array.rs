@@ -75,7 +75,7 @@ where
 }
 
 #[inline(always)]
-pub fn dot_arrayMxN_colN<S, const M: usize, const N: usize>(arr: &[[S; M]; N], col: &[S; N], r: usize) -> S
+pub fn dot_array_col<S, const M: usize, const N: usize>(arr: &[[S; M]; N], col: &[S; N], r: usize) -> S
 where
     S: crate::Scalar + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
 {
