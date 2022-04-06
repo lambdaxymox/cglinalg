@@ -260,6 +260,15 @@ where
     }
 }
 
+impl<S, const R: usize, const C: usize, const RC: usize> Default for Matrix<S, R, C, RC>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::zero()
+    }
+}
+
 /*
 /// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
 #[repr(C)]
@@ -610,7 +619,7 @@ where
         write!(formatter, "Matrix1x1 [[{}]]", self.data[0][0])
     }
 }
-
+/*
 impl<S> Default for Matrix1x1<S>
 where
     S: Scalar
@@ -619,7 +628,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 1]; 1]> for Matrix1x1<S> 
 where 
     S: Scalar 
@@ -1774,7 +1783,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix2x2<S>
 where
     S: Scalar
@@ -1783,7 +1792,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 2]; 2]> for Matrix2x2<S>
 where
     S: Scalar
@@ -3863,7 +3872,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix3x3<S>
 where
     S: Scalar
@@ -3872,7 +3881,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 3]; 3]> for Matrix3x3<S> 
 where 
     S: Scalar 
@@ -6082,7 +6091,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix4x4<S>
 where
     S: Scalar
@@ -6091,7 +6100,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 4]; 4]> for Matrix4x4<S> 
 where 
     S: Scalar
@@ -6415,7 +6424,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix1x2<S>
 where
     S: Scalar
@@ -6424,7 +6433,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 1]; 2]> for Matrix1x2<S> 
 where 
     S: Scalar 
@@ -6672,7 +6681,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix1x3<S>
 where
     S: Scalar
@@ -6681,7 +6690,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 1]; 3]> for Matrix1x3<S> 
 where 
     S: Scalar 
@@ -6941,7 +6950,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix1x4<S>
 where
     S: Scalar
@@ -6950,7 +6959,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 1]; 4]> for Matrix1x4<S> 
 where 
     S: Scalar 
@@ -7417,7 +7426,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix2x3<S>
 where
     S: Scalar
@@ -7426,7 +7435,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 2]; 3]> for Matrix2x3<S> 
 where 
     S: Scalar
@@ -7887,7 +7896,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix3x2<S>
 where
     S: Scalar
@@ -7896,7 +7905,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 3]; 2]> for Matrix3x2<S> 
 where 
     S: Scalar
@@ -8414,7 +8423,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix2x4<S>
 where
     S: Scalar
@@ -8423,7 +8432,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 2]; 4]> for Matrix2x4<S> 
 where 
     S: Scalar
@@ -8919,7 +8928,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix4x2<S>
 where
     S: Scalar
@@ -8928,7 +8937,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 4]; 2]> for Matrix4x2<S> 
 where 
     S: Scalar
@@ -9483,7 +9492,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix3x4<S>
 where
     S: Scalar
@@ -9492,7 +9501,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 3]; 4]> for Matrix3x4<S> 
 where 
     S: Scalar
@@ -10031,7 +10040,7 @@ where
         )
     }
 }
-
+/*
 impl<S> Default for Matrix4x3<S>
 where
     S: Scalar
@@ -10040,7 +10049,7 @@ where
         Self::zero()
     }
 }
-/*
+
 impl<S> From<[[S; 4]; 3]> for Matrix4x3<S> 
 where 
     S: Scalar
