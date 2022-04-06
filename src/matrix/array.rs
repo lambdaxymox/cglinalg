@@ -73,39 +73,7 @@ where
 {
     arr[c][r] % other
 }
-/*
-#[inline(always)]
-pub fn dot_arrayMx1_col1<S, const M: usize>(arr: &[[S; M]; 1], col: &[S; 1], r: usize) -> S
-where
-    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
-{
-    arr[0][r] * col[0]
-}
 
-#[inline(always)]
-pub fn dot_arrayMx2_col2<S, const M: usize>(arr: &[[S; M]; 2], col: &[S; 2], r: usize) -> S
-where
-    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
-{
-    arr[0][r] * col[0] + arr[1][r] * col[1]
-}
-
-#[inline(always)]
-pub fn dot_arrayMx3_col3<S, const M: usize>(arr: &[[S; M]; 3], col: &[S; 3], r: usize) -> S
-where
-    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
-{
-    arr[0][r] * col[0] + arr[1][r] * col[1] + arr[2][r] * col[2]
-}
-
-#[inline(always)]
-pub fn dot_arrayMx4_col4<S, const M: usize>(arr: &[[S; M]; 4], col: &[S; 4], r: usize) -> S
-where
-    S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
-{
-    arr[0][r] * col[0] + arr[1][r] * col[1] + arr[2][r] * col[2] + arr[3][r] * col[3]
-}
-*/
 #[inline(always)]
 pub fn dot_arrayMxN_colN<S, const M: usize, const N: usize>(arr: &[[S; M]; N], col: &[S; N], r: usize) -> S
 where
