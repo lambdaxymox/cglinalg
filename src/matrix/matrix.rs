@@ -15,6 +15,7 @@ use crate::common::{
 };
 use crate::matrix::array::*;
 use crate::vector::{
+    Vector,
     Vector1,
     Vector2,
     Vector3,
@@ -203,6 +204,12 @@ impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
 where 
     S: Copy
 {
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector<S, R> {
+        Vector::from(&self.data[c])
+    }
+
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -229,6 +236,50 @@ where
     pub fn from_fill(value: S) -> Self {
         Self {
             data: [[value; R]; C],
+        }
+    }
+
+    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// elements are elements of the new underlying type.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_u32,  2_u32,  3_u32,  4_u32, 
+    ///     5_u32,  6_u32,  7_u32,  8_u32,
+    ///     9_u32,  10_u32, 11_u32, 12_u32,
+    ///     13_u32, 14_u32, 15_u32, 16_u32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     2_i32,  4_i32,  6_i32,  8_i32,
+    ///     10_i32, 12_i32, 14_i32, 16_i32,
+    ///     18_i32, 20_i32, 22_i32, 24_i32,
+    ///     26_i32, 28_i32, 30_i32, 32_i32
+    /// );
+    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, mut op: F) -> Matrix<T, R, C, RC> 
+    where 
+        F: FnMut(S) -> T
+    {
+        // SAFETY: Every location gets written into with a valid value of type `T`.
+        let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
+        for c in 0..C {
+            for r in 0..R {
+                data[c][r] = op(self.data[c][r]);
+            }
+        }
+
+        Matrix {
+            data: data,
         }
     }
 }
@@ -266,6 +317,23 @@ where
 {
     fn default() -> Self {
         Self::zero()
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> fmt::Display for Matrix<S, R, C, RC> 
+where 
+    S: fmt::Display 
+{
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Matrix{}x{} [", R, C).unwrap();
+        for c in 0..(C - 1) {
+            write!(formatter, "[").unwrap();
+            for r in 0..(R - 1) {
+                write!(formatter, "{}, ", self.data[c][r]).unwrap();
+            }
+            write!(formatter, "{}]", self.data[c][R - 1]).unwrap();
+        }
+        write!(formatter, "{}]", self.data[C - 1][R - 1])
     }
 }
 
@@ -364,11 +432,13 @@ where
         Vector1::new(self.data[0][r])
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector1<S> {
         Vector1::new(self.data[c][0])
     }
+    */
 
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
@@ -384,6 +454,7 @@ where
         Self::new(r0[0])
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -411,6 +482,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix1x1<S> 
@@ -610,7 +682,7 @@ where
         ulps_ne!(self.determinant(), S::zero())
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix1x1<S> 
 where 
     S: fmt::Display 
@@ -619,7 +691,7 @@ where
         write!(formatter, "Matrix1x1 [[{}]]", self.data[0][0])
     }
 }
-/*
+
 impl<S> Default for Matrix1x1<S>
 where
     S: Scalar
@@ -808,11 +880,13 @@ where
         Vector2::new(self.data[0][r], self.data[1][r])
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector2<S> {
         Vector2::new(self.data[c][0], self.data[c][1])
     }
+    */
     
     /// Swap two rows of a matrix.
     ///
@@ -920,6 +994,7 @@ where
         )
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -948,6 +1023,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix2x2<S> 
@@ -1769,7 +1845,7 @@ where
         self + ((other - self) * amount)
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix2x2<S> 
 where 
     S: fmt::Display
@@ -1783,7 +1859,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix2x2<S>
 where
     S: Scalar
@@ -2019,11 +2095,13 @@ where
         Vector3::new(self.data[0][r], self.data[1][r], self.data[2][r])
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector3<S> {
         Vector3::new(self.data[c][0], self.data[c][1], self.data[c][2])
     }
+    */
     
     /// Swap two rows of a matrix.
     ///
@@ -2155,6 +2233,7 @@ where
         )
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -2197,6 +2276,7 @@ where
             op(self.data[2][2]),
         )
     }
+    */
 }
 
 impl<S> Matrix3x3<S> 
@@ -3857,7 +3937,7 @@ where
         self + ((other - self) * amount)
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix3x3<S> 
 where 
     S: fmt::Display
@@ -3872,7 +3952,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix3x3<S>
 where
     S: Scalar
@@ -4187,6 +4267,7 @@ where
         )
     }
  
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector4<S> {
@@ -4197,6 +4278,7 @@ where
             self.data[c][3]
         )
     }
+    */
      
     /// Swap two rows of a matrix.
     ///
@@ -4342,6 +4424,7 @@ where
         )
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -4393,6 +4476,7 @@ where
             op(self.data[3][3]),
         )
     }
+    */
 }
 
 impl<S> Matrix4x4<S>
@@ -6074,7 +6158,7 @@ where
         self + ((other - self) * amount)
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix4x4<S> 
 where 
     S: fmt::Display
@@ -6091,7 +6175,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix4x4<S>
 where
     S: Scalar
@@ -6331,12 +6415,15 @@ where
         Vector2::new(self.data[0][r], self.data[1][r])
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector1<S> {
         Vector1::new(self.data[c][0])
     }
+    */
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -6365,6 +6452,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix1x2<S> 
@@ -6411,7 +6499,7 @@ where
         self.data[0][0].is_zero() && self.data[1][0].is_zero()
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix1x2<S> 
 where 
     S: fmt::Display
@@ -6424,7 +6512,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix1x2<S>
 where
     S: Scalar
@@ -6585,12 +6673,15 @@ where
         Vector3::new(self.data[0][r], self.data[1][r], self.data[2][r])
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector1<S> {
         Vector1::new(self.data[c][0])
     }
+    */
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -6620,6 +6711,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix1x3<S> 
@@ -6668,7 +6760,7 @@ where
         self.data[2][0].is_zero()
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix1x3<S> 
 where 
     S: fmt::Display 
@@ -6681,7 +6773,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix1x3<S>
 where
     S: Scalar
@@ -6852,12 +6944,15 @@ where
         )
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector1<S> {
         Vector1::new(self.data[c][0])
     }
+    */
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -6888,6 +6983,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix1x4<S> 
@@ -6937,7 +7033,7 @@ where
         self.data[3][0].is_zero()
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix1x4<S> 
 where 
     S: fmt::Display 
@@ -6950,7 +7046,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix1x4<S>
 where
     S: Scalar
@@ -7170,11 +7266,13 @@ where
         )
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector2<S> {
         Vector2::new(self.data[c][0], self.data[c][1])
     }
+    */
 
     /// Swap two rows of a matrix.
     ///
@@ -7299,6 +7397,7 @@ where
         )
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -7328,6 +7427,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix2x3<S> 
@@ -7411,7 +7511,7 @@ where
         self.data[2][0].is_zero() && self.data[2][1].is_zero()
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix2x3<S> 
 where 
     S: fmt::Display
@@ -7426,7 +7526,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix2x3<S>
 where
     S: Scalar
@@ -7645,11 +7745,13 @@ where
         Vector2::new(self.data[0][r], self.data[1][r])
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector3<S> {
         Vector3::new(self.data[c][0], self.data[c][1], self.data[c][2])
     }
+    */
 
     /// Swap two rows of a matrix.
     ///
@@ -7766,6 +7868,7 @@ where
         )
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -7794,6 +7897,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix3x2<S> 
@@ -7880,7 +7984,7 @@ where
         self.data[1][2].is_zero()
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix3x2<S> 
 where 
     S: fmt::Display
@@ -7896,7 +8000,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix3x2<S>
 where
     S: Scalar
@@ -8139,11 +8243,13 @@ where
         )
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector2<S> {
         Vector2::new(self.data[c][0], self.data[c][1])
     }
+    */
 
     /// Swap two rows of a matrix.
     ///
@@ -8282,6 +8388,7 @@ where
         )
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -8322,6 +8429,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix2x4<S> 
@@ -8408,7 +8516,7 @@ where
         self.data[3][0].is_zero() && self.data[3][1].is_zero()
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix2x4<S> 
 where 
     S: fmt::Display
@@ -8423,7 +8531,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix2x4<S>
 where
     S: Scalar
@@ -8656,6 +8764,7 @@ where
         Vector2::new(self.data[0][r], self.data[1][r])
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector4<S> {
@@ -8666,6 +8775,7 @@ where
             self.data[c][3]
         )
     }
+    */
 
     /// Swap two rows of a matrix.
     ///
@@ -8787,6 +8897,7 @@ where
         )
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -8821,6 +8932,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix4x2<S> 
@@ -8911,7 +9023,7 @@ where
         self.data[1][3].is_zero()
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix4x2<S> 
 where 
     S: fmt::Display
@@ -8928,7 +9040,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix4x2<S>
 where
     S: Scalar
@@ -9192,11 +9304,13 @@ where
         )
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector3<S> {
         Vector3::new(self.data[c][0], self.data[c][1], self.data[c][2])
     }
+    */
 
     /// Swap two rows of a matrix.
     ///
@@ -9340,6 +9454,7 @@ where
         )
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -9380,6 +9495,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix3x4<S> 
@@ -9476,7 +9592,7 @@ where
         self.data[3][2].is_zero()
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix3x4<S> 
 where 
     S: fmt::Display 
@@ -9492,7 +9608,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix3x4<S>
 where
     S: Scalar
@@ -9748,6 +9864,7 @@ where
         Vector3::new(self.data[0][r], self.data[1][r], self.data[2][r])
     }
 
+    /*
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector4<S> {
@@ -9758,6 +9875,7 @@ where
             self.data[c][3]
         )
     }
+    */
 
     /// Swap two rows of a matrix.
     ///
@@ -9890,6 +10008,7 @@ where
         )
     }
 
+    /*
     /// Map an operation on the elements of a matrix, returning a matrix whose 
     /// elements are elements of the new underlying type.
     ///
@@ -9927,6 +10046,7 @@ where
             ],
         }
     }
+    */
 }
 
 impl<S> Matrix4x3<S> 
@@ -10023,7 +10143,7 @@ where
         self.data[2][3].is_zero()
     }
 }
-
+/*
 impl<S> fmt::Display for Matrix4x3<S> 
 where 
     S: fmt::Display
@@ -10040,7 +10160,7 @@ where
         )
     }
 }
-/*
+
 impl<S> Default for Matrix4x3<S>
 where
     S: Scalar

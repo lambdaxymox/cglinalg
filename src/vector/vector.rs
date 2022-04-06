@@ -134,8 +134,9 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
+    #[allow(unused_mut)]
     #[inline]
-    pub fn map<T, F>(&self, op: F) -> Vector<T, N> 
+    pub fn map<T, F>(&self, mut op: F) -> Vector<T, N> 
     where 
         F: FnMut(S) -> T
     {
@@ -192,7 +193,7 @@ where
 
 impl<S, const N: usize> From<[S; N]> for Vector<S, N>
 where
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(data: [S; N]) -> Self {
@@ -204,7 +205,7 @@ where
 
 impl<S, const N: usize> From<&[S; N]> for Vector<S, N> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(data: &[S; N]) -> Self {
@@ -216,7 +217,7 @@ where
 
 impl<'a, S, const N: usize> From<&'a [S; N]> for &'a Vector<S, N> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(data: &'a [S; N]) -> &'a Vector<S, N> {
@@ -506,7 +507,7 @@ where
 
 impl<S> From<S> for Vector1<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: S) -> Self {
@@ -516,7 +517,7 @@ where
 
 impl<S> From<(S,)> for Vector1<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: (S,)) -> Self {
@@ -526,7 +527,7 @@ where
 
 impl<S> From<&(S,)> for Vector1<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &(S,)) -> Self  {
@@ -536,7 +537,7 @@ where
 
 impl<'a, S> From<&'a (S,)> for &'a Vector1<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &'a (S,)) -> &'a Vector1<S> {
@@ -858,7 +859,7 @@ where
 
 impl<S> From<(S, S)> for Vector2<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: (S, S)) -> Self {
@@ -868,7 +869,7 @@ where
 
 impl<S> From<&(S, S)> for Vector2<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &(S, S)) -> Self {
@@ -878,7 +879,7 @@ where
 
 impl<'a, S> From<&'a (S, S)> for &'a Vector2<S> 
 where
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &'a (S, S)) -> &'a Vector2<S> {
@@ -1312,7 +1313,7 @@ where
 
 impl<S> From<(S, S, S)> for Vector3<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: (S, S, S)) -> Self {
@@ -1322,7 +1323,7 @@ where
 
 impl<S> From<&(S, S, S)> for Vector3<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &(S, S, S)) -> Self {
@@ -1332,7 +1333,7 @@ where
 
 impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
@@ -1344,7 +1345,7 @@ where
 
 impl<S> From<Vector4<S>> for Vector3<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: Vector4<S>) -> Self {
@@ -1354,7 +1355,7 @@ where
 
 impl<S> From<&Vector4<S>> for Vector3<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &Vector4<S>) -> Self {
@@ -1665,7 +1666,7 @@ where
 
 impl<S> From<(S, S, S, S)> for Vector4<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: (S, S, S, S)) -> Self {
@@ -1675,7 +1676,7 @@ where
 
 impl<S> From<&(S, S, S, S)> for Vector4<S> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(v: &(S, S, S, S)) -> Self {
@@ -1685,7 +1686,7 @@ where
 
 impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
