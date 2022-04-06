@@ -198,6 +198,68 @@ where
     }    
 }
 
+
+impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> 
+where 
+    S: Copy
+{
+    /// Construct a new matrix from a fill value.
+    ///
+    /// The resulting matrix is a matrix where each entry is the supplied fill
+    /// value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,  
+    /// # };
+    /// #
+    /// let fill_value = 3_u32;
+    /// let expected = Matrix3x3::new(
+    ///     fill_value, fill_value, fill_value,
+    ///     fill_value, fill_value, fill_value,
+    ///     fill_value, fill_value, fill_value
+    /// );
+    /// let result = Matrix3x3::from_fill(fill_value);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_fill(value: S) -> Self {
+        Self {
+            data: [[value; R]; C],
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
+where
+    S: Scalar
+{
+    /// Construct a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix4x4<i32> = Matrix4x4::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn zero() -> Self {
+        Self { 
+            data: [[S::zero(); R]; C],
+        }
+    }
+}
+
 /*
 /// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
 #[repr(C)]
@@ -346,6 +408,7 @@ impl<S> Matrix1x1<S>
 where 
     S: Scalar 
 {
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -365,6 +428,7 @@ where
     pub fn zero() -> Self {
         Self::new(S::zero())
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -704,6 +768,7 @@ impl<S> Matrix2x2<S>
 where 
     S: Copy 
 {
+    /*
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -726,6 +791,7 @@ where
     pub fn from_fill(value: S) -> Self {
         Self::new(value, value, value, value)
     }
+    */
 
     /// Get the row of the matrix by value.
     #[inline]
@@ -1092,6 +1158,7 @@ where
         )
     }
 
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -1111,6 +1178,7 @@ where
     pub fn zero() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -1903,6 +1971,7 @@ impl<S> Matrix3x3<S>
 where 
     S: Copy
 {
+    /*
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -1933,6 +2002,7 @@ where
             value, value, value
         )
     }
+    */
 
     /// Get the row of the matrix by value.
     #[inline]
@@ -2657,6 +2727,7 @@ where
         )
     }
 
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -2683,6 +2754,7 @@ where
             zero, zero, zero
         )
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -4060,6 +4132,7 @@ impl<S> Matrix4x4<S>
 where 
     S: Copy
 {
+    /*
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -4092,6 +4165,7 @@ where
             value, value, value, value
         )
     }
+    */
 
     /// Get the row of the matrix by value.
     #[inline]
@@ -4726,6 +4800,7 @@ where
         )
     }
 
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -4752,6 +4827,7 @@ where
             zero, zero, zero, zero
         )
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -6286,6 +6362,7 @@ impl<S> Matrix1x2<S>
 where 
     S: Scalar
 {
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -6305,6 +6382,7 @@ where
     pub fn zero() -> Self {
         Self::new(S::zero(), S::zero())
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -6539,6 +6617,7 @@ impl<S> Matrix1x3<S>
 where 
     S: Scalar
 {
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -6558,6 +6637,7 @@ where
     pub fn zero() -> Self {
         Self::new(S::zero(), S::zero(), S::zero())
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -6805,6 +6885,7 @@ impl<S> Matrix1x4<S>
 where 
     S: Scalar
 {
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -6824,6 +6905,7 @@ where
     pub fn zero() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -7036,6 +7118,7 @@ impl<S> Matrix2x3<S>
 where 
     S: Copy 
 {
+    /*
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -7066,6 +7149,7 @@ where
             value, value
         )
     }
+    */
 
     /// Get the row of the matrix by value.
     #[inline]
@@ -7272,6 +7356,7 @@ where
         )
     }
 
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -7295,6 +7380,7 @@ where
             S::zero(), S::zero()
         )
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -7513,6 +7599,7 @@ impl<S> Matrix3x2<S>
 where 
     S: Copy
 {
+    /*
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -7541,6 +7628,7 @@ where
             value, value, value
         )
     }
+    */
 
     /// Get the row of the matrix by value.
     #[inline]
@@ -7735,6 +7823,7 @@ where
         )
     }
 
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -7757,6 +7846,7 @@ where
             S::zero(), S::zero(), S::zero()
         )
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -7994,6 +8084,7 @@ impl<S> Matrix2x4<S>
 where 
     S: Copy
 {
+    /*
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -8026,6 +8117,7 @@ where
             value, value
         )
     }
+    */
 
     /// Get the row of the matrix by value.
     #[inline]
@@ -8259,6 +8351,7 @@ where
         )
     }
 
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -8283,6 +8376,7 @@ where
             S::zero(), S::zero()
         )
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -8516,6 +8610,7 @@ impl<S> Matrix4x2<S>
 where 
     S: Copy
 {
+    /*
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -8544,6 +8639,7 @@ where
             value, value, value, value
         )
     }
+    */
 
     /// Get the row of the matrix by value.
     #[inline]
@@ -8756,6 +8852,7 @@ where
         )
     }
 
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -8778,6 +8875,7 @@ where
             S::zero(), S::zero(), S::zero(), S::zero()
         )
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -9039,6 +9137,7 @@ impl<S> Matrix3x4<S>
 where 
     S: Copy
 {
+    /*
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -9071,6 +9170,7 @@ where
             value, value, value
         )
     }
+    */
 
     /// Get the row of the matrix by value.
     #[inline]
@@ -9311,6 +9411,7 @@ where
         )
     }
 
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -9335,6 +9436,7 @@ where
             S::zero(), S::zero(), S::zero()
         )
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
@@ -9598,6 +9700,7 @@ impl<S> Matrix4x3<S>
 where 
     S: Copy 
 {
+    /*
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -9628,6 +9731,7 @@ where
             value, value, value, value
         )
     }
+    */
 
     /// Get the row of the matrix by value.
     #[inline]
@@ -9855,6 +9959,7 @@ where
         )
     }
 
+    /*
     /// Compute a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -9878,6 +9983,7 @@ where
             S::zero(), S::zero(), S::zero(), S::zero()
         )
     }
+    */
     
     /// Determine whether a matrix is a zero matrix.
     ///
