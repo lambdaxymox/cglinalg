@@ -40,43 +40,43 @@ use core::ops;
 
 
 /// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
-pub type Matrix1x1<S> = Matrix<S, 1, 1>;
+pub type Matrix1x1<S> = Matrix<S, 1, 1, 1>;
 
 /// A stack-allocated **(2 row, 2 column)** matrix in column-major order.
-pub type Matrix2x2<S> = Matrix<S, 2, 2>;
+pub type Matrix2x2<S> = Matrix<S, 2, 2, 4>;
 
 /// A stack-allocated **(3 row, 3 column)** matrix in column-major order.
-pub type Matrix3x3<S> = Matrix<S, 3, 3>;
+pub type Matrix3x3<S> = Matrix<S, 3, 3, 9>;
 
 /// A stack-allocated **(4 row, 4 column)** matrix in column-major order.
-pub type Matrix4x4<S> = Matrix<S, 4, 4>;
+pub type Matrix4x4<S> = Matrix<S, 4, 4, 16>;
 
 /// A stack-allocated **(1 row, 2 column)** matrix in column-major order.
-pub type Matrix1x2<S> = Matrix<S, 1, 2>;
+pub type Matrix1x2<S> = Matrix<S, 1, 2, 2>;
 
 /// A stack-allocated **(1 row, 3 column)** matrix in column-major order.
-pub type Matrix1x3<S> = Matrix<S, 1, 3>;
+pub type Matrix1x3<S> = Matrix<S, 1, 3, 3>;
 
 /// A stack-allocated **(1 row, 4 column)** matrix in column-major order.
-pub type Matrix1x4<S> = Matrix<S, 1, 4>;
+pub type Matrix1x4<S> = Matrix<S, 1, 4, 4>;
 
 /// A stack-allocated **(2 row, 3 column)** matrix in column-major order.
-pub type Matrix2x3<S> = Matrix<S, 2, 3>;
+pub type Matrix2x3<S> = Matrix<S, 2, 3, 6>;
 
 /// A stack-allocated **(3 row, 2 column)** matrix in column-major order.
-pub type Matrix3x2<S> = Matrix<S, 3, 2>;
+pub type Matrix3x2<S> = Matrix<S, 3, 2, 6>;
 
 /// A stack-allocated **(2 row, 4 column)** matrix in column-major order.
-pub type Matrix2x4<S> = Matrix<S, 2, 4>;
+pub type Matrix2x4<S> = Matrix<S, 2, 4, 8>;
 
 /// A stack-allocated **(4 row, 2 column)** matrix in column-major order.
-pub type Matrix4x2<S> = Matrix<S, 4, 2>;
+pub type Matrix4x2<S> = Matrix<S, 4, 2, 8>;
 
 /// A stack-allocated **(3 row, 4 column)** matrix in column-major order.
-pub type Matrix3x4<S> = Matrix<S, 3, 4>;
+pub type Matrix3x4<S> = Matrix<S, 3, 4, 12>;
 
 /// A stack-allocated **(4 row, 3 column)** matrix in column-major order.
-pub type Matrix4x3<S> = Matrix<S, 4, 3>;
+pub type Matrix4x3<S> = Matrix<S, 4, 3, 12>;
 
 
 pub type RowVector1<S> = Matrix1x1<S>;
@@ -97,10 +97,105 @@ pub type Matrix3<S> = Matrix3x3<S>;
 pub type Matrix4<S> = Matrix4x4<S>;
 
 
+/// A stack-allocated **(`R` row, `C` column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
-pub struct Matrix<S, const R: usize, const C: usize> {
+pub struct Matrix<S, const R: usize, const C: usize, const RC: usize> {
     data: [[S; R]; C],
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> {
+    /// The length of the the underlying array storing the matrix components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        R * C
+    }
+
+    /// The shape of the underlying array storing the matrix components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (R, C)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        &self.data[0][0]
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        &mut self.data[0][0]
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; RC]>>::as_ref(self)
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[[S; R]; C]> for Matrix<S, R, C, RC> {
+    #[inline]
+    fn as_ref(&self) -> &[[S; R]; C] {
+        unsafe {
+            &*(self as *const Matrix<S, R, C, RC> as *const [[S; R]; C])
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[[S; R]; C]> for Matrix<S, R, C, RC> {
+    #[inline]
+    fn as_mut(&mut self) -> &mut [[S; R]; C] {
+        unsafe {
+            &mut *(self as *mut Matrix<S, R, C, RC> as *mut [[S; R]; C])
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[S; RC]> for Matrix<S, R, C, RC> {
+    #[inline]
+    fn as_ref(&self) -> &[S; RC] {
+        unsafe {
+            &*(self as *const Matrix<S, R, C, RC> as *const [S; RC])
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[S; RC]> for Matrix<S, R, C, RC> {
+    #[inline]
+    fn as_mut(&mut self) -> &mut [S; RC] {
+        unsafe {
+            &mut *(self as *mut Matrix<S, R, C, RC> as *mut [S; RC])
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> From<[[S; R]; C]> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn from(data: [[S; R]; C]) -> Self {
+        Self { data }
+    }
+}
+
+impl<'a, S, const R: usize, const C: usize, const RC: usize> From<&'a [[S; R]; C]> for &'a Matrix<S, R, C, RC>
+where
+    S: Scalar
+{
+    #[inline]
+    fn from(data: &'a [[S; R]; C]) -> &'a Matrix<S, R, C, RC> {
+        unsafe { 
+            &*(data as *const [[S; R]; C] as *const Matrix<S, R, C, RC>)
+        }
+    }    
 }
 
 /*
@@ -120,7 +215,8 @@ impl<S> Matrix1x1<S> {
             data: [[c0r0]]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -155,6 +251,7 @@ impl<S> Matrix1x1<S> {
         <Self as AsRef<[S; 1]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix1x1<S>
 where 
@@ -458,7 +555,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 1]; 1]> for Matrix1x1<S> 
 where 
     S: Scalar 
@@ -480,7 +577,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 1]> for Matrix1x1<S> 
 where 
     S: Scalar
@@ -523,7 +620,8 @@ impl<S> Matrix2x2<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -558,6 +656,7 @@ impl<S> Matrix2x2<S> {
         <Self as AsRef<[S; 4]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix2x2<S> 
 where 
@@ -1616,7 +1715,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 2]; 2]> for Matrix2x2<S>
 where
     S: Scalar
@@ -1638,7 +1737,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 4]> for Matrix2x2<S> 
 where 
     S: Scalar
@@ -1687,7 +1786,8 @@ impl<S> Matrix3x3<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -1722,6 +1822,7 @@ impl<S> Matrix3x3<S> {
         <Self as AsRef<[S; 9]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix3x3<S>
 where 
@@ -3699,7 +3800,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 3]; 3]> for Matrix3x3<S> 
 where 
     S: Scalar 
@@ -3726,7 +3827,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 9]> for Matrix3x3<S> 
 where 
     S: Scalar
@@ -3812,7 +3913,8 @@ impl<S> Matrix4x4<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -3847,7 +3949,7 @@ impl<S> Matrix4x4<S> {
         <Self as AsRef<[S; 16]>>::as_ref(self)
     }
 }
-
+*/
 impl<S> Matrix4x4<S> 
 where 
     S: NumCast + Copy
@@ -5913,7 +6015,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 4]; 4]> for Matrix4x4<S> 
 where 
     S: Scalar
@@ -5941,7 +6043,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 16]> for Matrix4x4<S> 
 where 
     S: Scalar
@@ -6062,7 +6164,8 @@ impl<S> Matrix1x2<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -6097,6 +6200,7 @@ impl<S> Matrix1x2<S> {
         <Self as AsRef<[S; 2]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix1x2<S> 
 where 
@@ -6242,7 +6346,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 1]; 2]> for Matrix1x2<S> 
 where 
     S: Scalar 
@@ -6264,7 +6368,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 2]> for Matrix1x2<S> 
 where 
     S: Scalar
@@ -6308,7 +6412,8 @@ impl<S> Matrix1x3<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -6343,6 +6448,7 @@ impl<S> Matrix1x3<S> {
         <Self as AsRef<[S; 3]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix1x3<S> 
 where 
@@ -6495,7 +6601,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 1]; 3]> for Matrix1x3<S> 
 where 
     S: Scalar 
@@ -6517,7 +6623,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 3]> for Matrix1x3<S> 
 where 
     S: Scalar 
@@ -6562,7 +6668,8 @@ impl<S> Matrix1x4<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -6597,6 +6704,7 @@ impl<S> Matrix1x4<S> {
         <Self as AsRef<[S; 4]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix1x4<S> 
 where 
@@ -6760,7 +6868,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 1]; 4]> for Matrix1x4<S> 
 where 
     S: Scalar 
@@ -6782,7 +6890,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 4]> for Matrix1x4<S> 
 where 
     S: Scalar
@@ -6828,7 +6936,8 @@ impl<S> Matrix2x3<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -6863,6 +6972,7 @@ impl<S> Matrix2x3<S> {
         <Self as AsRef<[S; 6]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix2x3<S> 
 where 
@@ -7230,7 +7340,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 2]; 3]> for Matrix2x3<S> 
 where 
     S: Scalar
@@ -7256,7 +7366,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 6]> for Matrix2x3<S> 
 where 
     S: Scalar
@@ -7305,7 +7415,8 @@ impl<S> Matrix3x2<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -7340,6 +7451,7 @@ impl<S> Matrix3x2<S> {
         <Self as AsRef<[S; 6]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix3x2<S> 
 where 
@@ -7694,7 +7806,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 3]; 2]> for Matrix3x2<S> 
 where 
     S: Scalar
@@ -7719,7 +7831,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 6]> for Matrix3x2<S> 
 where 
     S: Scalar
@@ -7772,7 +7884,8 @@ impl<S> Matrix2x4<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -7807,6 +7920,7 @@ impl<S> Matrix2x4<S> {
         <Self as AsRef<[S; 8]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix2x4<S> 
 where 
@@ -8215,7 +8329,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 2]; 4]> for Matrix2x4<S> 
 where 
     S: Scalar
@@ -8242,7 +8356,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 8]> for Matrix2x4<S> 
 where 
     S: Scalar
@@ -8293,7 +8407,8 @@ impl<S> Matrix4x2<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -8328,6 +8443,7 @@ impl<S> Matrix4x2<S> {
         <Self as AsRef<[S; 8]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix4x2<S> 
 where 
@@ -8714,7 +8830,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 4]; 2]> for Matrix4x2<S> 
 where 
     S: Scalar
@@ -8739,7 +8855,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 8]> for Matrix4x2<S>
 where 
     S: Scalar
@@ -8792,7 +8908,8 @@ impl<S> Matrix3x4<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -8827,6 +8944,7 @@ impl<S> Matrix3x4<S> {
         <Self as AsRef<[S; 12]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix3x4<S> 
 where 
@@ -9272,7 +9390,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 3]; 4]> for Matrix3x4<S> 
 where 
     S: Scalar
@@ -9299,7 +9417,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 12]> for Matrix3x4<S> 
 where 
     S: Scalar
@@ -9352,7 +9470,8 @@ impl<S> Matrix4x3<S> {
             ]
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -9387,6 +9506,7 @@ impl<S> Matrix4x3<S> {
         <Self as AsRef<[S; 12]>>::as_ref(self)
     }
 }
+*/
 
 impl<S> Matrix4x3<S> 
 where 
@@ -9814,7 +9934,7 @@ where
         Self::zero()
     }
 }
-
+/*
 impl<S> From<[[S; 4]; 3]> for Matrix4x3<S> 
 where 
     S: Scalar
@@ -9840,7 +9960,7 @@ where
         }
     }    
 }
-
+*/
 impl<S> From<[S; 12]> for Matrix4x3<S> 
 where 
     S: Scalar
@@ -9866,7 +9986,6 @@ where
         }
     }
 }
-
 
 
 impl_coords!(View1x1, { c0r0 });
@@ -9933,57 +10052,82 @@ macro_rules! impl_as_ref_ops {
         }
     }
 }
-
+/*
 impl_as_ref_ops!(Matrix1x1<S>, [S; 1]);
 impl_as_ref_ops!(Matrix1x1<S>, [[S; 1]; 1]);
+*/
 impl_as_ref_ops!(Matrix1x1<S>, [Vector1<S>; 1]);
 
+/*
 impl_as_ref_ops!(Matrix2x2<S>, [S; 4]);
 impl_as_ref_ops!(Matrix2x2<S>, [[S; 2]; 2]);
+*/
 impl_as_ref_ops!(Matrix2x2<S>, [Vector2<S>; 2]);
 
+/*
 impl_as_ref_ops!(Matrix3x3<S>, [S; 9]);
 impl_as_ref_ops!(Matrix3x3<S>, [[S; 3]; 3]);
+*/
 impl_as_ref_ops!(Matrix3x3<S>, [Vector3<S>; 3]);
 
+/*
 impl_as_ref_ops!(Matrix4x4<S>, [S; 16]);
 impl_as_ref_ops!(Matrix4x4<S>, [[S; 4]; 4]);
+*/
 impl_as_ref_ops!(Matrix4x4<S>, [Vector4<S>; 4]);
 
+/*
 impl_as_ref_ops!(Matrix1x2<S>, [S; 2]);
 impl_as_ref_ops!(Matrix1x2<S>, [[S; 1]; 2]);
+*/
 impl_as_ref_ops!(Matrix1x2<S>, [Vector1<S>; 2]);
 
+/*
 impl_as_ref_ops!(Matrix1x3<S>, [S; 3]);
 impl_as_ref_ops!(Matrix1x3<S>, [[S; 1]; 3]);
+*/
 impl_as_ref_ops!(Matrix1x3<S>, [Vector1<S>; 3]);
 
+/*
 impl_as_ref_ops!(Matrix1x4<S>, [S; 4]);
 impl_as_ref_ops!(Matrix1x4<S>, [[S; 1]; 4]);
+*/
 impl_as_ref_ops!(Matrix1x4<S>, [Vector1<S>; 4]);
 
+/*
 impl_as_ref_ops!(Matrix2x3<S>, [S; 6]);
 impl_as_ref_ops!(Matrix2x3<S>, [[S; 2]; 3]);
+*/
 impl_as_ref_ops!(Matrix2x3<S>, [Vector2<S>; 3]);
 
+/*
 impl_as_ref_ops!(Matrix2x4<S>, [S; 8]);
 impl_as_ref_ops!(Matrix2x4<S>, [[S; 2]; 4]);
+*/
 impl_as_ref_ops!(Matrix2x4<S>, [Vector2<S>; 4]);
 
+/*
 impl_as_ref_ops!(Matrix3x2<S>, [S; 6]);
 impl_as_ref_ops!(Matrix3x2<S>, [[S; 3]; 2]);
+*/
 impl_as_ref_ops!(Matrix3x2<S>, [Vector3<S>; 2]);
 
+/*
 impl_as_ref_ops!(Matrix3x4<S>, [S; 12]);
 impl_as_ref_ops!(Matrix3x4<S>, [[S; 3]; 4]);
+*/
 impl_as_ref_ops!(Matrix3x4<S>, [Vector3<S>; 4]);
 
+/*
 impl_as_ref_ops!(Matrix4x2<S>, [S; 8]);
 impl_as_ref_ops!(Matrix4x2<S>, [[S; 4]; 2]);
+*/
 impl_as_ref_ops!(Matrix4x2<S>, [Vector4<S>; 2]);
 
+/*
 impl_as_ref_ops!(Matrix4x3<S>, [S; 12]);
 impl_as_ref_ops!(Matrix4x3<S>, [[S; 4]; 3]);
+*/
 impl_as_ref_ops!(Matrix4x3<S>, [Vector4<S>; 3]);
 
 
