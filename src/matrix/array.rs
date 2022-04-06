@@ -73,7 +73,7 @@ where
 {
     arr[c][r] % other
 }
-
+/*
 #[inline(always)]
 pub fn dot_arrayMx1_col1<S, const M: usize>(arr: &[[S; M]; 1], col: &[S; 1], r: usize) -> S
 where
@@ -104,5 +104,19 @@ where
     S: Copy + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
 {
     arr[0][r] * col[0] + arr[1][r] * col[1] + arr[2][r] * col[2] + arr[3][r] * col[3]
+}
+*/
+#[inline(always)]
+pub fn dot_arrayMxN_colN<S, const M: usize, const N: usize>(arr: &[[S; M]; N], col: &[S; N], r: usize) -> S
+where
+    S: crate::Scalar + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
+{
+    // PERFORMANCE: The Rust compiler should optmize out this loop.
+    let mut acc = S::zero();
+    for i in 0..N {
+        acc += arr[i][r] * col[i];
+    }
+
+    acc
 }
 
