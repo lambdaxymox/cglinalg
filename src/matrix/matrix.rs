@@ -736,7 +736,6 @@ where
     /// 
     /// assert_eq!(result, expected);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal_value(value: S) -> Self {
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -771,7 +770,6 @@ where
     /// 
     /// assert_eq!(result, expected);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal(diagonal: &Vector<S, N>) -> Self {
         // PERFORMANCE: The const loop should get unrolled during optimization.
