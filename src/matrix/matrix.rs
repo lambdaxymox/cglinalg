@@ -233,7 +233,7 @@ impl<S, const R: usize, const C: usize, const RC: usize> ops::IndexMut<(usize, u
 
 impl<S, const R: usize, const C: usize, const RC: usize> From<[[S; R]; C]> for Matrix<S, R, C, RC> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(data: [[S; R]; C]) -> Self {
@@ -243,7 +243,7 @@ where
 
 impl<'a, S, const R: usize, const C: usize, const RC: usize> From<&'a [[S; R]; C]> for &'a Matrix<S, R, C, RC>
 where
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(data: &'a [[S; R]; C]) -> &'a Matrix<S, R, C, RC> {
@@ -252,6 +252,47 @@ where
         }
     }    
 }
+
+macro_rules! impl_matrix_array_conversion_ops {
+    ((R:$R:expr, C:$C:expr, RC:$RC:expr)) => {
+        impl<S> From<[S; $RC]> for Matrix<S, $R, $C, $RC> 
+        where 
+            S: Copy
+        {
+            #[inline]
+            fn from(array: [S; $RC]) -> Self {
+                let data: &[[S; $R]; $C] = unsafe { core::mem::transmute::<&[S; $RC], &[[S; $R]; $C]>(&array) };
+                Self { data: *data }
+            }
+        }
+
+        impl<'a, S> From<&'a [S; $RC]> for &'a Matrix<S, $R, $C, $RC> 
+        where 
+            S: Copy
+        {
+            #[inline]
+            fn from(array: &'a [S; $RC]) -> &'a Matrix<S, $R, $C, $RC> {
+                unsafe { 
+                    &*(array as *const [S; $RC] as *const Matrix<S, $R, $C, $RC>)
+                }
+            }
+        }
+    }
+}
+
+impl_matrix_array_conversion_ops!((R:1, C:1, RC:1));
+impl_matrix_array_conversion_ops!((R:2, C:2, RC:4));
+impl_matrix_array_conversion_ops!((R:3, C:3, RC:9));
+impl_matrix_array_conversion_ops!((R:4, C:4, RC:16));
+impl_matrix_array_conversion_ops!((R:1, C:2, RC:2));
+impl_matrix_array_conversion_ops!((R:1, C:3, RC:3));
+impl_matrix_array_conversion_ops!((R:1, C:4, RC:4));
+impl_matrix_array_conversion_ops!((R:2, C:3, RC:6));
+impl_matrix_array_conversion_ops!((R:3, C:2, RC:6));
+impl_matrix_array_conversion_ops!((R:2, C:4, RC:8));
+impl_matrix_array_conversion_ops!((R:4, C:2, RC:8));
+impl_matrix_array_conversion_ops!((R:3, C:4, RC:12));
+impl_matrix_array_conversion_ops!((R:4, C:3, RC:12));
 
 
 impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> 
@@ -1264,6 +1305,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 1]> for Matrix1x1<S> 
 where 
     S: Scalar
@@ -1285,7 +1327,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(2 row, 2 column)** matrix in column-major order.
 #[repr(C)]
@@ -2448,6 +2490,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 4]> for Matrix2x2<S> 
 where 
     S: Scalar
@@ -2469,7 +2512,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(3 row, 3 column)** matrix in column-major order.
 #[repr(C)]
@@ -4563,6 +4606,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 9]> for Matrix3x3<S> 
 where 
     S: Scalar
@@ -4589,7 +4633,7 @@ where
         }
     }
 }
-
+*/
 impl<S> From<Matrix2x2<S>> for Matrix3x3<S> 
 where 
     S: Scalar
@@ -6805,6 +6849,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 16]> for Matrix4x4<S> 
 where 
     S: Scalar
@@ -6832,7 +6877,7 @@ where
         }
     }
 }
-
+*/
 impl<S> From<Matrix2x2<S>> for Matrix4x4<S> 
 where 
     S: Scalar 
@@ -7141,6 +7186,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 2]> for Matrix1x2<S> 
 where 
     S: Scalar
@@ -7162,7 +7208,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(1 row, 3 column)** matrix in column-major order.
 #[repr(C)]
@@ -7406,6 +7452,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 3]> for Matrix1x3<S> 
 where 
     S: Scalar 
@@ -7427,7 +7474,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(1 row, 4 column)** matrix in column-major order.
 #[repr(C)]
@@ -7683,6 +7730,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 4]> for Matrix1x4<S> 
 where 
     S: Scalar
@@ -7704,7 +7752,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(2 row, 3 column)** matrix in column-major order.
 #[repr(C)]
@@ -8175,6 +8223,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 6]> for Matrix2x3<S> 
 where 
     S: Scalar
@@ -8200,7 +8249,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(3 row, 2 column)** matrix in column-major order.
 #[repr(C)]
@@ -8656,6 +8705,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 6]> for Matrix3x2<S> 
 where 
     S: Scalar
@@ -8680,7 +8730,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(2 row, 4 column)** matrix in column-major order.
 #[repr(C)]
@@ -9197,6 +9247,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 8]> for Matrix2x4<S> 
 where 
     S: Scalar
@@ -9223,7 +9274,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(4 row, 2 column)** matrix in column-major order.
 #[repr(C)]
@@ -9710,6 +9761,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 8]> for Matrix4x2<S>
 where 
     S: Scalar
@@ -9734,7 +9786,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(3 row, 4 column)** matrix in column-major order.
 #[repr(C)]
@@ -10288,6 +10340,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 12]> for Matrix3x4<S> 
 where 
     S: Scalar
@@ -10314,7 +10367,7 @@ where
         }
     }
 }
-
+*/
 /*
 /// A stack-allocated **(4 row, 3 column)** matrix in column-major order.
 #[repr(C)]
@@ -10847,6 +10900,7 @@ where
     }    
 }
 */
+/*
 impl<S> From<[S; 12]> for Matrix4x3<S> 
 where 
     S: Scalar
@@ -10872,7 +10926,7 @@ where
         }
     }
 }
-
+*/
 
 impl_coords!(View1x1, { c0r0 });
 impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1 });

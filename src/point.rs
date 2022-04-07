@@ -288,7 +288,7 @@ where
 
 impl<S, const N: usize> From<[S; N]> for Point<S, N> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(data: [S; N]) -> Self {
@@ -300,7 +300,7 @@ where
 
 impl<S, const N: usize> From<&[S; N]> for Point<S, N> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(data: &[S; N]) -> Self {
@@ -312,7 +312,7 @@ where
 
 impl<'a, S, const N: usize> From<&'a [S; N]> for &'a Point<S, N> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(data: &'a [S; N]) -> &'a Point<S, N> {
