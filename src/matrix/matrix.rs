@@ -13162,7 +13162,104 @@ impl_matrix_matrix_mul_ops!(
 });
 
 
+impl<S, const R: usize, const C: usize, const RC: usize> ops::AddAssign<Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn add_assign(&mut self, other: Matrix<S, R, C, RC>) {
+        for c in 0..C {
+            for r in 0..R {
+                self.data[c][r] += other.data[c][r];
+            }
+        }
+    }
+}
 
+impl<S, const R: usize, const C: usize, const RC: usize> ops::AddAssign<&Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn add_assign(&mut self, other: &Matrix<S, R, C, RC>) {
+        for c in 0..C {
+            for r in 0..R {
+                self.data[c][r] += other.data[c][r];
+            }
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::SubAssign<Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn sub_assign(&mut self, other: Matrix<S, R, C, RC>) {
+        for c in 0..C {
+            for r in 0..R {
+                self.data[c][r] -= other.data[c][r];
+            }
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::SubAssign<&Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn sub_assign(&mut self, other: &Matrix<S, R, C, RC>) {
+        for c in 0..C {
+            for r in 0..R {
+                self.data[c][r] -= other.data[c][r];
+            }
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::MulAssign<S> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn mul_assign(&mut self, other: S) {
+        for c in 0..C {
+            for r in 0..R {
+                self.data[c][r] *= other;
+            }
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::DivAssign<S> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn div_assign(&mut self, other: S) {
+        for c in 0..C {
+            for r in 0..R {
+                self.data[c][r] /= other;
+            }
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::RemAssign<S> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn rem_assign(&mut self, other: S) {
+        for c in 0..C {
+            for r in 0..R {
+                self.data[c][r] %= other;
+            }
+        }
+    }
+}
+/*
 macro_rules! impl_matrix_binary_assign_ops {
     ($T:ty, { $( ($col:expr, $row:expr) ),* }) => {
         impl<S> ops::AddAssign<$T> for $T where S: Scalar {
@@ -13292,7 +13389,7 @@ impl_matrix_binary_assign_ops!(
     (1, 0), (1, 1), (1, 2), (1, 3),
     (2, 0), (2, 1), (2, 2), (2, 3)
 });
-
+*/
 
 impl<S, const R: usize, const C: usize, const RC: usize> approx::AbsDiffEq for Matrix<S, R, C, RC>
 where 
