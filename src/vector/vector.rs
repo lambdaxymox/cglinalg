@@ -74,6 +74,41 @@ impl<S, const N: usize> Vector<S, N> {
     }
 }
 
+impl<S, const N: usize> Vector<S, N> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a vector from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,   
+    /// # };
+    /// #
+    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Option<Vector4<i32>> = Some(Vector4::new(1_i32, 2_i32, 3_i32, 4_i32));
+    /// let result = vector.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Vector<T, N>> {
+        // SAFETY: Every location gets written into with a valid value of type `T`.
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut data: [T; N] = unsafe { core::mem::zeroed() };
+        for i in 0..N {
+            data[i] = match num_traits::cast(self.data[i]) {
+                Some(value) => value,
+                None => return None,
+            };
+        }
+
+        Some(Vector { data })
+    }
+}
+
 impl<S, const N: usize> Vector<S, N>
 where
     S: Scalar
@@ -283,6 +318,7 @@ impl<S> Vector1<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -307,6 +343,7 @@ where
 
         Some(Vector1::new(x))
     }
+    */
 }
 
 impl<S> Vector1<S> 
@@ -562,6 +599,7 @@ impl<S> Vector2<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -590,6 +628,7 @@ where
 
         Some(Vector2::new(x, y))
     }
+    */
 }
 
 impl<S> Vector2<S> 
@@ -904,6 +943,7 @@ impl<S> Vector3<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -936,6 +976,7 @@ where
 
         Some(Vector3::new(x, y, z))
     }
+    */
 }
 
 impl<S> Vector3<S> 
@@ -1377,6 +1418,7 @@ impl<S> Vector4<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -1413,6 +1455,7 @@ where
 
         Some(Vector4::new(x, y, z, w))
     }
+    */
 }
 
 impl<S> Vector4<S> 
