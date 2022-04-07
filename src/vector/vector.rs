@@ -208,6 +208,7 @@ where
     /// ```
     #[inline]
     pub fn dot(&self, other: &Self) -> S {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = S::zero();
         for i in 0..N {
             result += self.data[i] * other.data[i];
@@ -238,6 +239,7 @@ where
     /// ```
     #[inline]
     pub fn neg_mut(&mut self) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             self.data[i] = -self.data[i];
         }

@@ -37,7 +37,7 @@ pub type Point3<S> = Point<S, 3>;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Point<S, const N: usize> {
-    data: Vector<S, N>,
+    coords: Vector<S, N>,
 }
 
 impl<S, const N: usize> Point<S, N> {
@@ -60,13 +60,13 @@ impl<S, const N: usize> Point<S, N> {
     /// Get a pointer to the underlying array.
     #[inline]
     pub const fn as_ptr(&self) -> *const S {
-        self.data.as_ptr()
+        self.coords.as_ptr()
     }
 
     /// Get a mutable pointer to the underlying array.
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut S {
-        self.data.as_mut_ptr()
+        self.coords.as_mut_ptr()
     }
 
     /// Get a slice of the underlying elements of the data type.
@@ -99,15 +99,15 @@ where
     pub fn cast<T: NumCast>(&self) -> Option<Point<T, N>> {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut data: Vector<T, N> = unsafe { core::mem::zeroed() };
+        let mut coords: Vector<T, N> = unsafe { core::mem::zeroed() };
         for i in 0..N {
-            data[i] = match num_traits::cast(self.data[i]) {
+            coords[i] = match num_traits::cast(self.coords[i]) {
                 Some(value) => value,
                 None => return None,
             };
         }
 
-        Some(Point { data })
+        Some(Point { coords })
     }
 }
 
@@ -133,7 +133,7 @@ where
     #[inline]
     pub fn from_fill(value: S) -> Self {
         Self {
-            data: Vector::from_fill(value),
+            coords: Vector::from_fill(value),
         }
     }
 
@@ -159,7 +159,7 @@ where
         F: FnMut(S) -> T
     {
         Point {
-            data: self.data.map(op),
+            coords: self.coords.map(op),
         }
     }
 }
@@ -190,7 +190,7 @@ where
     #[inline]
     pub fn origin() -> Self {
         Self {
-            data: Vector::zero(),
+            coords: Vector::zero(),
         }
     }
 
@@ -216,7 +216,7 @@ where
     #[inline]
     pub fn from_vector(vector: &Vector<S, N>) -> Self {
         Self {
-            data: *vector,
+            coords: *vector,
         }
     }
 
@@ -241,7 +241,7 @@ where
     /// ```
     #[inline]
     pub fn to_vector(&self) -> Vector<S, N> {
-        self.data
+        self.coords
     }
 
     /// Compute the dot product (inner product) of two points.
@@ -260,7 +260,7 @@ where
     /// ```
     #[inline]
     pub fn dot(&self, other: &Self) -> S {
-        self.data.dot(&other.data)
+        self.coords.dot(&other.coords)
     }
 }
 
@@ -271,9 +271,9 @@ where
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Point{} [", N).unwrap();
         for i in 0..(N - 1) {
-            write!(formatter, "{}, ", self.data[i]).unwrap();
+            write!(formatter, "{}, ", self.coords[i]).unwrap();
         }
-        write!(formatter, "{}]", self.data[N - 1])
+        write!(formatter, "{}]", self.coords[N - 1])
     }
 }
 
@@ -293,7 +293,7 @@ where
     #[inline]
     fn from(data: [S; N]) -> Self {
         Self { 
-            data: data.into(),
+            coords: data.into(),
         }
     }
 }
@@ -305,7 +305,7 @@ where
     #[inline]
     fn from(data: &[S; N]) -> Self {
         Self {
-            data: data.into(),
+            coords: data.into(),
         }
     }
 }
@@ -364,7 +364,7 @@ impl<S> Point1<S> {
     #[inline]
     pub const fn new(x: S) -> Self {
         Point1 { 
-            data: Vector1::new(x), 
+            coords: Vector1::new(x), 
         }
     }
 }
@@ -458,7 +458,7 @@ where
     /// ```
     #[inline]
     pub fn extend(&self, y: S) -> Point2<S> {
-        Point2::new(self.data[0], y)
+        Point2::new(self.coords[0], y)
     }
     /*
     /// Construct a new point from a fill value.
@@ -703,7 +703,7 @@ impl<S> Point2<S> {
     #[inline]
     pub const fn new(x: S, y: S) -> Self {
         Self { 
-            data: Vector2::new(x, y) 
+            coords: Vector2::new(x, y) 
         }
     }
 }
@@ -801,7 +801,7 @@ where
     /// ```
     #[inline]
     pub fn extend(&self, z: S) -> Point3<S> {
-        Point3::new(self.data[0], self.data[1], z)
+        Point3::new(self.coords[0], self.coords[1], z)
     }
 
     /// Contract a two-dimensional point to a one-dimensional point by
@@ -823,7 +823,7 @@ where
     /// ```
     #[inline]
     pub fn contract(&self) -> Point1<S> {
-        Point1::new(self.data[0])
+        Point1::new(self.coords[0])
     }
 
     /*
@@ -928,7 +928,7 @@ where
     /// ```
     #[inline]
     pub fn to_homogeneous(&self) -> Vector3<S> {
-        self.data.extend(S::one())
+        self.coords.extend(S::one())
     }
 
     /*
@@ -1111,7 +1111,7 @@ impl<S> Point3<S> {
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Self {
         Self { 
-            data: Vector3::new(x, y, z),
+            coords: Vector3::new(x, y, z),
         }
     }
 }
@@ -1212,7 +1212,7 @@ where
     /// ```
     #[inline]
     pub fn contract(&self) -> Point2<S> {
-        Point2::new(self.data[0], self.data[1])
+        Point2::new(self.coords[0], self.coords[1])
     }
 
     /*
@@ -1322,7 +1322,7 @@ where
     /// ```
     #[inline]
     pub fn to_homogeneous(&self) -> Vector4<S> {
-        self.data.extend(S::one())
+        self.coords.extend(S::one())
     }
 
     /*
@@ -1905,7 +1905,7 @@ macro_rules! impl_approx_eq_ops {
         
             #[inline]
             fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-                $VectorN::abs_diff_eq(&self.data, &other.data, epsilon)
+                $VectorN::abs_diff_eq(&self.coords, &other.coords, epsilon)
             }
         }
         
@@ -1917,7 +1917,7 @@ macro_rules! impl_approx_eq_ops {
         
             #[inline]
             fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-                $VectorN::relative_eq(&self.data, &other.data, epsilon, max_relative)
+                $VectorN::relative_eq(&self.coords, &other.coords, epsilon, max_relative)
             }
         }
         
@@ -1929,7 +1929,7 @@ macro_rules! impl_approx_eq_ops {
         
             #[inline]
             fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-                $VectorN::ulps_eq(&self.data, &other.data, epsilon, max_ulps)
+                $VectorN::ulps_eq(&self.coords, &other.coords, epsilon, max_ulps)
             }
         }
     }
@@ -1947,7 +1947,7 @@ macro_rules! impl_swizzle {
             #[inline]
             pub fn $name(&self) -> $Output<S> {
                 $Output::new(
-                    $(self.data[$i]),*
+                    $(self.coords[$i]),*
                 )
             }
         }
