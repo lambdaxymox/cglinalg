@@ -13285,8 +13285,142 @@ impl_matrix_vector_mul_ops!(
     (0, 0), (0, 1), (0, 2), (0, 3)
 });
 */
+macro_rules! impl_matrix_matrix_mul_ops {
+    ((R1:$R1:expr, C1:$C1:expr, R1C1:$R1C1:expr) => (R2:$R2:expr, C2:$C2:expr, R2C2:$R2C2:expr) => (R1, C2, R1C2:$R1C2:expr)) => {
+        impl<S> ops::Mul<Matrix<S, $R2, $C2, $R2C2>> for Matrix<S, $R1, $C1, $R1C1>
+        where 
+            S: Scalar
+        {
+            type Output = Matrix<S, $R1, $C2, $R1C2>;
 
+            #[inline]
+            fn mul(self, other: Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
+                let mut result = Self::Output::zero();
+                for c in 0..$C2 {
+                    for r in 0..$R1 {
+                        result[c][r] = dot_array_col(
+                            self.as_ref(), 
+                            &<Matrix<S,$R2,$C2,$R2C2> as AsRef<[[S; $R2]; $C2]>>::as_ref(&other)[c], 
+                            r
+                        );
+                    }
+                }
 
+                result
+            }
+        }
+
+        impl<S> ops::Mul<&Matrix<S, $R2, $C2, $R2C2>> for Matrix<S, $R1, $C1, $R1C1>
+        where 
+            S: Scalar
+        {
+            type Output = Matrix<S, $R1, $C2, $R1C2>;
+
+            #[inline]
+            fn mul(self, other: &Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
+                let mut result = Self::Output::zero();
+                for c in 0..$C2 {
+                    for r in 0..$R1 {
+                        result[c][r] = dot_array_col(
+                            self.as_ref(), 
+                            &<Matrix<S,$R2,$C2,$R2C2> as AsRef<[[S; $R2]; $C2]>>::as_ref(&other)[c], 
+                            r
+                        );
+                    }
+                }
+
+                result
+            }
+        }
+
+        impl<S> ops::Mul<Matrix<S, $R2, $C2, $R2C2>> for &Matrix<S, $R1, $C1, $R1C1>
+        where 
+            S: Scalar
+        {
+            type Output = Matrix<S, $R1, $C2, $R1C2>;
+
+            #[inline]
+            fn mul(self, other: Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
+                let mut result = Self::Output::zero();
+                for c in 0..$C2 {
+                    for r in 0..$R1 {
+                        result[c][r] = dot_array_col(
+                            self.as_ref(), 
+                            &<Matrix<S,$R2,$C2,$R2C2> as AsRef<[[S; $R2]; $C2]>>::as_ref(&other)[c], 
+                            r
+                        );
+                    }
+                }
+
+                result
+            }
+        }
+
+        impl<'a, 'b, S> ops::Mul<&'a Matrix<S, $R2, $C2, $R2C2>> for &'b Matrix<S, $R1, $C1, $R1C1>
+        where 
+            S: Scalar
+        {
+            type Output = Matrix<S, $R1, $C2, $R1C2>;
+
+            #[inline]
+            fn mul(self, other: &'a Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
+                let mut result = Self::Output::zero();
+                for c in 0..$C2 {
+                    for r in 0..$R1 {
+                        result[c][r] = dot_array_col(
+                            self.as_ref(), 
+                            &<Matrix<S,$R2,$C2,$R2C2> as AsRef<[[S; $R2]; $C2]>>::as_ref(&other)[c], 
+                            r
+                        );
+                    }
+                }
+
+                result
+            }
+        }
+    }
+}
+
+impl_matrix_matrix_mul_ops!((R1:1, C1:1, R1C1:1)  => (R2:1, C2:1, R2C2:1)  => (R1, C2, R1C2:1));
+impl_matrix_matrix_mul_ops!((R1:1, C1:1, R1C1:1)  => (R2:1, C2:2, R2C2:2)  => (R1, C2, R1C2:2));
+impl_matrix_matrix_mul_ops!((R1:1, C1:1, R1C1:1)  => (R2:1, C2:3, R2C2:3)  => (R1, C2, R1C2:3));
+impl_matrix_matrix_mul_ops!((R1:1, C1:1, R1C1:1)  => (R2:1, C2:4, R2C2:4)  => (R1, C2, R1C2:4));
+impl_matrix_matrix_mul_ops!((R1:2, C1:2, R1C1:4)  => (R2:2, C2:2, R2C2:4)  => (R1, C2, R1C2:4));
+impl_matrix_matrix_mul_ops!((R1:3, C1:3, R1C1:9)  => (R2:3, C2:3, R2C2:9)  => (R1, C2, R1C2:9));
+impl_matrix_matrix_mul_ops!((R1:4, C1:4, R1C1:16) => (R2:4, C2:4, R2C2:16) => (R1, C2, R1C2:16));
+impl_matrix_matrix_mul_ops!((R1:1, C1:2, R1C1:2)  => (R2:2, C2:2, R2C2:4)  => (R1, C2, R1C2:2));
+impl_matrix_matrix_mul_ops!((R1:1, C1:3, R1C1:3)  => (R2:3, C2:3, R2C2:9)  => (R1, C2, R1C2:3));
+impl_matrix_matrix_mul_ops!((R1:1, C1:4, R1C1:4)  => (R2:4, C2:4, R2C2:16) => (R1, C2, R1C2:4));
+impl_matrix_matrix_mul_ops!((R1:2, C1:3, R1C1:6)  => (R2:3, C2:3, R2C2:9)  => (R1, C2, R1C2:6));
+impl_matrix_matrix_mul_ops!((R1:2, C1:3, R1C1:6)  => (R2:3, C2:2, R2C2:6)  => (R1, C2, R1C2:4));
+impl_matrix_matrix_mul_ops!((R1:2, C1:2, R1C1:4)  => (R2:2, C2:3, R2C2:6)  => (R1, C2, R1C2:6));
+impl_matrix_matrix_mul_ops!((R1:1, C1:2, R1C1:2)  => (R2:2, C2:3, R2C2:6)  => (R1, C2, R1C2:3));
+impl_matrix_matrix_mul_ops!((R1:3, C1:2, R1C1:6)  => (R2:2, C2:2, R2C2:4)  => (R1, C2, R1C2:6));
+impl_matrix_matrix_mul_ops!((R1:3, C1:2, R1C1:6)  => (R2:2, C2:3, R2C2:6)  => (R1, C2, R1C2:9));
+impl_matrix_matrix_mul_ops!((R1:3, C1:3, R1C1:9)  => (R2:3, C2:2, R2C2:6)  => (R1, C2, R1C2:6));
+impl_matrix_matrix_mul_ops!((R1:1, C1:3, R1C1:3)  => (R2:3, C2:2, R2C2:6)  => (R1, C2, R1C2:2));
+impl_matrix_matrix_mul_ops!((R1:2, C1:4, R1C1:8)  => (R2:4, C2:4, R2C2:16) => (R1, C2, R1C2:8));
+impl_matrix_matrix_mul_ops!((R1:2, C1:2, R1C1:4)  => (R2:2, C2:4, R2C2:8)  => (R1, C2, R1C2:8));
+impl_matrix_matrix_mul_ops!((R1:2, C1:4, R1C1:8)  => (R2:4, C2:2, R2C2:8)  => (R1, C2, R1C2:4));
+impl_matrix_matrix_mul_ops!((R1:1, C1:2, R1C1:2)  => (R2:2, C2:4, R2C2:8)  => (R1, C2, R1C2:4));
+impl_matrix_matrix_mul_ops!((R1:4, C1:2, R1C1:8)  => (R2:2, C2:2, R2C2:4)  => (R1, C2, R1C2:8));
+impl_matrix_matrix_mul_ops!((R1:4, C1:2, R1C1:8)  => (R2:2, C2:4, R2C2:8)  => (R1, C2, R1C2:16));
+impl_matrix_matrix_mul_ops!((R1:4, C1:2, R1C1:8)  => (R2:2, C2:3, R2C2:6)  => (R1, C2, R1C2:12));
+impl_matrix_matrix_mul_ops!((R1:4, C1:4, R1C1:16) => (R2:4, C2:2, R2C2:8)  => (R1, C2, R1C2:8));
+impl_matrix_matrix_mul_ops!((R1:1, C1:4, R1C1:4)  => (R2:4, C2:2, R2C2:8)  => (R1, C2, R1C2:2));
+impl_matrix_matrix_mul_ops!((R1:3, C1:4, R1C1:12) => (R2:4, C2:2, R2C2:8)  => (R1, C2, R1C2:6));
+impl_matrix_matrix_mul_ops!((R1:3, C1:4, R1C1:12) => (R2:4, C2:4, R2C2:16) => (R1, C2, R1C2:12));
+impl_matrix_matrix_mul_ops!((R1:3, C1:4, R1C1:12) => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:9));
+impl_matrix_matrix_mul_ops!((R1:3, C1:3, R1C1:9)  => (R2:3, C2:4, R2C2:12) => (R1, C2, R1C2:12));
+impl_matrix_matrix_mul_ops!((R1:1, C1:3, R1C1:3)  => (R2:3, C2:4, R2C2:12) => (R1, C2, R1C2:4));
+impl_matrix_matrix_mul_ops!((R1:4, C1:3, R1C1:12) => (R2:3, C2:3, R2C2:9)  => (R1, C2, R1C2:12));
+impl_matrix_matrix_mul_ops!((R1:4, C1:3, R1C1:12) => (R2:3, C2:4, R2C2:12) => (R1, C2, R1C2:16));
+impl_matrix_matrix_mul_ops!((R1:4, C1:4, R1C1:16) => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:12));
+impl_matrix_matrix_mul_ops!((R1:1, C1:4, R1C1:4)  => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:3));
+impl_matrix_matrix_mul_ops!((R1:2, C1:4, R1C1:8)  => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:6));
+impl_matrix_matrix_mul_ops!((R1:4, C1:3, R1C1:12) => (R2:3, C2:2, R2C2:6)  => (R1, C2, R1C2:8));
+
+/*
 macro_rules! impl_matrix_matrix_mul_ops {
     ($MatrixNxM:ident, $MatrixMxP:ident => $Output:ident, [$rows:expr; $cols:expr], $dot_arr_col:ident, { $( ($col:expr, $row:expr) ),* }) => {
         impl<S> ops::Mul<$MatrixMxP<S>> for $MatrixNxM<S> where S: Scalar {
@@ -13327,7 +13461,7 @@ macro_rules! impl_matrix_matrix_mul_ops {
                 Self::Output::new(
                     $( $dot_arr_col(
                         self.as_ref(), 
-                        &<$MatrixMxP<S> as AsRef<[[S; $rows]; $cols]>>::as_ref(&other)[$col], 
+                        ≈, 
                         $row
                     ) ),*
                 )
@@ -13578,7 +13712,7 @@ impl_matrix_matrix_mul_ops!(
     (0, 0), (0, 1), (0, 2), (0, 3), 
     (1, 0), (1, 1), (1, 2), (1, 3)
 });
-
+*/
 
 impl<S, const R: usize, const C: usize, const RC: usize> ops::AddAssign<Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
 where 
