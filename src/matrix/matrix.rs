@@ -491,6 +491,64 @@ where
     }
 }
 
+impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
+where
+    S: ScalarFloat
+{
+    /// Returns `true` if the elements of a matrix are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A matrix is finite when all of its elements are finite. This is useful 
+    /// for vector and matrix types working with fixed precision floating point 
+    /// values.
+    ///
+    /// # Example (Finite Matrix)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,  
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_f64,  2_f64,  3_f64,  4_f64,
+    ///     5_f64,  6_f64,  7_f64,  8_f64,
+    ///     9_f64,  10_f64, 11_f64, 12_f64,
+    ///     13_f64, 14_f64, 15_f64, 16_f64
+    /// );
+    /// 
+    /// assert!(matrix.is_finite());
+    /// ```
+    ///
+    /// # Example (Not A Finite Matrix)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,    
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_f64,             2_f64,             3_f64,             4_f64,
+    ///     f64::NAN,          f64::NAN,          f64::NAN,          f64::NAN,
+    ///     f64::INFINITY,     f64::INFINITY,     f64::INFINITY,     f64::INFINITY,
+    ///     f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY
+    /// );
+    ///
+    /// assert!(!matrix.is_finite());
+    /// ```
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        let mut result = true;
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        for c in 0..C {
+            for r in 0..R {
+                result &= self.data[c][r].is_finite();
+            }
+        }
+
+        result
+    }
+}
+
 impl<S, const R: usize, const C: usize, const RC: usize> Default for Matrix<S, R, C, RC>
 where
     S: Scalar
@@ -1886,7 +1944,7 @@ where
 
         Self::from_angle(Radians::atan2(sin_angle, cos_angle))
     }
-
+    /*
     /// Returns `true` if the elements of a matrix are all finite. 
     /// Otherwise, it returns `false`. 
     ///
@@ -1922,6 +1980,7 @@ where
         self.data[0][0].is_finite() && self.data[0][1].is_finite() &&
         self.data[1][0].is_finite() && self.data[1][1].is_finite()
     }
+    */
 
     /// Compute the inverse of a square matrix, if the inverse exists. 
     ///
@@ -3934,7 +3993,7 @@ where
 
         Some(Self::identity())
     }
-
+    /*
     /// Returns `true` if the elements of a matrix are all finite. 
     /// Otherwise, it returns `false`. 
     ///
@@ -3987,6 +4046,7 @@ where
         self.data[2][1].is_finite() && 
         self.data[2][2].is_finite()
     }
+    */
 
     /// Compute the inverse of a square matrix, if the inverse exists. 
     ///
@@ -6112,7 +6172,7 @@ where
             neg_eye_x, neg_eye_y, neg_eye_z, one
         )
     }
-
+    /*
     /// Returns `true` if the elements of a matrix are all finite. 
     /// Otherwise, it returns `false`. 
     ///
@@ -6164,6 +6224,7 @@ where
         self.data[3][0].is_finite() && self.data[3][1].is_finite() &&
         self.data[3][2].is_finite() && self.data[3][3].is_finite()
     }
+    */
 
     /// Compute the inverse of a square matrix, if the inverse exists. 
     ///

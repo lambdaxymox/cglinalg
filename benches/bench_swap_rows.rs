@@ -21,6 +21,7 @@ use rand_isaac::{
 };
 
 use criterion::{
+    black_box,
     criterion_group,
     criterion_main,
 };
@@ -105,24 +106,24 @@ macro_rules! bench_unop(
 fn swap_rows2x2(bh: &mut criterion::Criterion) {
     let mut m: Matrix2x2<f32> = gen_matrix2x2();
 
-    bh.bench_function(stringify!("swap2"), move |bh| bh.iter(|| {
-        m.swap_rows(0, 1);
+    bh.bench_function(stringify!("finite2"), move |bh| bh.iter(|| {
+        black_box(m.is_finite())
     }));
 }
 
 fn swap_rows3x3(bh: &mut criterion::Criterion) {
     let mut m: Matrix3x3<f32> = gen_matrix3x3();
 
-    bh.bench_function(stringify!("swap3"), move |bh| bh.iter(|| {
-        m.swap_rows(0, 2);
+    bh.bench_function(stringify!("finite3"), move |bh| bh.iter(|| {
+        black_box(m.is_finite())
     }));
 }
 
 fn swap_rows4x4(bh: &mut criterion::Criterion) {
     let mut m: Matrix4x4<f32> = gen_matrix4x4();
 
-    bh.bench_function(stringify!("swap4"), move |bh| bh.iter(|| {
-        m.swap_rows(0, 3);
+    bh.bench_function(stringify!("finite4"), move |bh| bh.iter(|| {
+        black_box(m.is_finite())
     }));
 }
 
