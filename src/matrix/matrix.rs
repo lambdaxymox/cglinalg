@@ -419,9 +419,12 @@ where
     pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
+            self.data[c].swap(row_a, row_b);
+            /*
             let col_c_row_a = self.data[c][row_a];
             self.data[c][row_a] = self.data[c][row_b];
             self.data[c][row_b] = col_c_row_a;
+            */
         }
     }
 
@@ -454,9 +457,12 @@ where
     /// ```
     #[inline]
     pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        self.data.swap(col_a, col_b);
+        /*
         let temp = self.data[col_a];
         self.data[col_a] = self.data[col_b];
         self.data[col_b] = temp;
+        */
     }
 
     /// Swap two elements of a matrix.
