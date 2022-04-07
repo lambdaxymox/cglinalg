@@ -111,21 +111,6 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: Scalar
-{
-    /// Construct the zero vector.
-    ///
-    /// The zero vector is the vector in which all of its elements are zero.
-    #[inline]
-    pub fn zero() -> Self {
-        Self {
-            data: [S::zero(); N],
-        }
-    }
-}
-
-impl<S, const N: usize> Vector<S, N>
-where
     S: Copy
 {
     /// Construct a vector from a fill value.
@@ -178,6 +163,130 @@ where
         Vector {
             data: self.data.map(op),
         }
+    }
+}
+
+impl<S, const N: usize> Vector<S, N>
+where
+    S: Scalar
+{
+    /// Construct the zero vector.
+    ///
+    /// The zero vector is the vector in which all of its elements are zero.
+    #[inline]
+    pub fn zero() -> Self {
+        Self {
+            data: [S::zero(); N],
+        }
+    }
+
+    /// Determine whether a vector is the zero vector.
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for i in 0..N {
+            result &= self.data[i].is_zero();
+        }
+
+        result
+    }
+
+    /// Compute the Euclidean dot product (inner product) of two vectors.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let vector2 = Vector3::new(4_f64, 5_f64, 6_f64);
+    /// 
+    /// assert_eq!(vector1.dot(&vector2), 32_f64);
+    /// ```
+    #[inline]
+    pub fn dot(&self, other: &Self) -> S {
+        let mut result = S::zero();
+        for i in 0..N {
+            result += self.data[i] * other.data[i];
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> Vector<S, N> 
+where 
+    S: ScalarSigned
+{
+    /// Compute the negation of a vector mutably in place.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let mut result = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let expected = -result;
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        for i in 0..N {
+            self.data[i] = -self.data[i];
+        }
+    }
+}
+
+impl<S, const N: usize> Vector<S, N>
+where
+    S: ScalarFloat
+{
+    /// Returns `true` if the elements of a vector are all finite. 
+    /// Otherwise, it returns `false`. 
+    ///
+    /// A vector is finite when all of its elements are finite. This is useful 
+    /// for vector and matrix types working with fixed precision floating point 
+    /// values.
+    ///
+    /// # Example (Finite Vector)
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
+    ///
+    /// assert!(v.is_finite()); 
+    /// ```
+    ///
+    /// # Example (Not A Finite Vector)
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let w = Vector4::new(1_f64, f64::NAN, f64::NEG_INFINITY, 4_f64);
+    ///
+    /// assert!(!w.is_finite()); 
+    /// ```
+    #[inline]
+    pub fn is_finite(&self) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for i in 0..N {
+            result &= self.data[i].is_finite();
+        }
+
+        result
     }
 }
 
@@ -384,11 +493,13 @@ where
         Vector1::new(S::one())
     }
 
+    /*
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.data[0].is_zero()
     }
+    */
 
     /// Compute the coordinates of a vector in projective space.
     ///
@@ -412,7 +523,7 @@ where
     pub fn to_homogeneous(&self) -> Vector2<S> {
         self.extend(S::zero())
     }
-    
+    /*
     /// Compute the Euclidean dot product (inner product) of two vectors.
     ///
     /// # Example
@@ -431,12 +542,14 @@ where
     pub fn dot(&self, other: &Self) -> S {
         self.data[0] * other.data[0]
     }
+    */
 }
 
 impl<S> Vector1<S> 
 where 
     S: ScalarSigned
 {
+    /*
     /// Compute the negation of a vector mutably in place.
     ///
     /// # Example
@@ -456,6 +569,7 @@ where
     pub fn neg_mut(&mut self) {
         self.data[0] = -self.data[0];
     }
+    */
 }
 
 impl<S> Vector1<S> 
@@ -484,6 +598,7 @@ where
         self + ((other - self) * amount)
     }
 
+    /*
     /// Returns `true` if the elements of this vector are all finite. 
     /// Otherwise, it returns `false`. 
     ///
@@ -518,6 +633,7 @@ where
     pub fn is_finite(&self) -> bool {
         self.data[0].is_finite()
     }
+    */
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
@@ -698,11 +814,13 @@ where
         Self::new(S::zero(), S::one())
     }
 
+    /*
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.data[0].is_zero() && self.data[1].is_zero()
     }
+    */
 
     /// Compute the coordinates of a vector in projective space.
     ///
@@ -760,7 +878,7 @@ where
             None
         }
     }
-
+    /*
     /// Compute the Euclidean dot product (inner product) of two vectors.
     ///
     /// # Example
@@ -779,12 +897,14 @@ where
     pub fn dot(&self, other: &Self) -> S {
         self.data[0] * other.data[0] + self.data[1] * other.data[1]
     }
+    */
 }
 
 impl<S> Vector2<S> 
 where 
     S: ScalarSigned 
 {
+    /*
     /// Compute the negation of a vector mutably in place.
     ///
     /// # Example
@@ -805,6 +925,7 @@ where
         self.data[0] = -self.data[0];
         self.data[1] = -self.data[1];
     }
+    */
 }
 
 impl<S> Vector2<S> 
@@ -833,6 +954,7 @@ where
         self + ((other - self) * amount)
     }
 
+    /*
     /// Returns `true` if the elements of a vector are all finite. 
     /// Otherwise, it returns `false`. 
     ///
@@ -869,6 +991,7 @@ where
     pub fn is_finite(&self) -> bool {
         self.data[0].is_finite() && self.data[1].is_finite()
     }
+    */
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
@@ -1053,6 +1176,7 @@ where
         Self::new(S::zero(), S::zero(), S::one())
     }
 
+    /*
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -1060,6 +1184,7 @@ where
         self.data[1].is_zero() && 
         self.data[2].is_zero()
     }
+    */
 
     /// Compute the coordinates of a vector in projective space.
     ///
@@ -1117,7 +1242,7 @@ where
             None
         }
     }
-
+    /*
     /// Compute the Euclidean dot product (inner product) of two vectors.
     ///
     /// # Example
@@ -1138,6 +1263,7 @@ where
         self.data[1] * other.data[1] + 
         self.data[2] * other.data[2]
     }
+    */
 
     /// Compute the cross product of two three-dimensional vectors. 
     ///
@@ -1237,6 +1363,7 @@ impl<S> Vector3<S>
 where 
     S: ScalarSigned
 {
+    /*
     /// Compute the negation of a vector mutably in place.
     ///
     /// # Example
@@ -1258,6 +1385,7 @@ where
         self.data[1] = -self.data[1];
         self.data[2] = -self.data[2];
     }
+    */
 }
 
 impl<S> Vector3<S> 
@@ -1286,6 +1414,7 @@ where
         self + ((other - self) * amount)
     }
 
+    /*
     /// Returns `true` if the elements of a vector are all finite. 
     /// Otherwise, it returns `false`. 
     ///
@@ -1322,6 +1451,7 @@ where
         self.data[1].is_finite() && 
         self.data[2].is_finite()
     }
+    */
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
@@ -1517,6 +1647,7 @@ where
         Self::new(S::zero(), S::zero(), S::zero(), S::one())
     }
 
+    /*
     /// Determine whether a vector is the zero vector.
     #[inline]
     pub fn is_zero(&self) -> bool {
@@ -1525,6 +1656,7 @@ where
         self.data[2].is_zero() && 
         self.data[3].is_zero()
     }
+    */
 
     /// Compute the coordinates of a projective vector in Euclidean space.
     ///
@@ -1559,7 +1691,7 @@ where
             None
         }
     }
-    
+    /*
     /// Compute the Euclidean dot product (inner product) of two vectors.
     ///
     /// # Example
@@ -1581,12 +1713,14 @@ where
         self.data[2] * other.data[2] + 
         self.data[3] * other.data[3]
     }
+    */
 }
 
 impl<S> Vector4<S> 
 where 
     S: ScalarSigned
 {
+    /*
     /// Compute the negation of a vector mutably in place.
     ///
     /// # Example
@@ -1609,6 +1743,7 @@ where
         self.data[2] = -self.data[2];
         self.data[3] = -self.data[3];
     }
+    */
 }
 
 impl<S> Vector4<S> 
@@ -1637,6 +1772,7 @@ where
         self + ((other - self) * amount)
     }
 
+    /*
     /// Returns `true` if the elements of a vector are all finite. 
     /// Otherwise, it returns `false`. 
     ///
@@ -1674,6 +1810,7 @@ where
         self.data[2].is_finite() && 
         self.data[3].is_finite()
     }
+    */
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.

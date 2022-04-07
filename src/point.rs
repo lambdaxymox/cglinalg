@@ -5,6 +5,7 @@ use crate::common::{
     ScalarFloat,
 };
 use crate::vector::{
+    Vector,
     Vector1,
     Vector2,
     Vector3,
@@ -23,11 +24,340 @@ use core::ops;
 
 
 /// A point is a location in a one-dimensional Euclidean space.
+pub type Point1<S> = Point<S, 1>;
+
+/// A point is a location in a two-dimensional Euclidean space.
+pub type Point2<S> = Point<S, 2>;
+
+/// A point is a location in a three-dimensional Euclidean space.
+pub type Point3<S> = Point<S, 3>;
+
+
+/// A point is a location in a one-dimensional Euclidean space.
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub struct Point<S, const N: usize> {
+    data: Vector<S, N>,
+}
+
+impl<S, const N: usize> Point<S, N> {
+    /// The length of the the underlying array storing the point components.
+    #[inline]
+    pub const fn len(&self) -> usize {
+        N
+    }
+
+    /// The shape of the underlying array storing the point components.
+    ///
+    /// The shape is the equivalent number of columns and rows of the 
+    /// array as though it represents a matrix. The order of the descriptions 
+    /// of the shape of the array is **(rows, columns)**.
+    #[inline]
+    pub const fn shape(&self) -> (usize, usize) {
+        (N, 1)
+    }
+
+    /// Get a pointer to the underlying array.
+    #[inline]
+    pub const fn as_ptr(&self) -> *const S {
+        self.data.as_ptr()
+    }
+
+    /// Get a mutable pointer to the underlying array.
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut S {
+        self.data.as_mut_ptr()
+    }
+
+    /// Get a slice of the underlying elements of the data type.
+    #[inline]
+    pub fn as_slice(&self) -> &[S] {
+        <Self as AsRef<[S; N]>>::as_ref(self)
+    }
+}
+
+impl<S, const N: usize> Point<S, N> 
+where 
+    S: NumCast + Copy
+{
+    /// Cast a point from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,   
+    /// # };
+    /// #
+    /// let point: Point3<u32> = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected: Option<Point3<i32>> = Some(Point3::new(1_i32, 2_i32, 3_i32));
+    /// let result = point.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Point<T, N>> {
+        // SAFETY: Every location gets written into with a valid value of type `T`.
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut data: Vector<T, N> = unsafe { core::mem::zeroed() };
+        for i in 0..N {
+            data[i] = match num_traits::cast(self.data[i]) {
+                Some(value) => value,
+                None => return None,
+            };
+        }
+
+        Some(Point { data })
+    }
+}
+
+impl<S, const N: usize> Point<S, N>
+where
+    S: Copy
+{
+    /// Construct a new point from a fill value.
+    /// 
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let fill_value = 3_u32;
+    /// let expected = Point3::new(3_u32, 3_u32, 3_u32);
+    /// let result = Point3::from_fill(fill_value);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_fill(value: S) -> Self {
+        Self {
+            data: Vector::from_fill(value),
+        }
+    }
+
+    /// Map an operation on that acts on the coordinates of a point, returning 
+    /// a point whose coordinates are of the new scalar type.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,  
+    /// # };
+    /// #
+    /// let vector: Point3<u32> = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected: Point3<i32> = Point3::new(2_i32, 3_i32, 4_i32);
+    /// let result: Point3<i32> = vector.map(|comp| (comp + 1) as i32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn map<T, F>(&self, op: F) -> Point<T, N> 
+    where 
+        F: FnMut(S) -> T
+    {
+        Point {
+            data: self.data.map(op),
+        }
+    }
+}
+
+impl<S, const N: usize> AsRef<[S; N]> for Point<S, N> {
+    #[inline]
+    fn as_ref(&self) -> &[S; N] {
+        unsafe {
+            &*(self as *const Point<S, N> as *const [S; N])
+        }
+    }
+}
+
+impl<S, const N: usize> AsMut<[S; N]> for Point<S, N> {
+    #[inline]
+    fn as_mut(&mut self) -> &mut [S; N] {
+        unsafe {
+            &mut *(self as *mut Point<S, N> as *mut [S; N])
+        }
+    }
+}
+
+impl<S, const N: usize> Point<S, N>
+where
+    S: Scalar
+{
+    /// Compute the origin of the Euclidean vector space.
+    #[inline]
+    pub fn origin() -> Self {
+        Self {
+            data: Vector::zero(),
+        }
+    }
+
+    /// Convert a vector to a point. 
+    /// 
+    /// Points are locations in Euclidean space, whereas vectors
+    /// are displacements relative to the origin in Euclidean space.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let result = Point3::from_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_vector(vector: &Vector<S, N>) -> Self {
+        Self {
+            data: *vector,
+        }
+    }
+
+    /// Convert a point to a vector.
+    /// 
+    /// Points are locations in Euclidean space, whereas vectors
+    /// are displacements relative to the origin in Euclidean space.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Vector3::new(1_u32, 2_u32, 3_u32);
+    /// let result = point.to_vector();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_vector(&self) -> Vector<S, N> {
+        self.data
+    }
+
+    /// Compute the dot product (inner product) of two points.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let point1 = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let point2 = Point3::new(4_f64, 5_f64, 6_f64);
+    /// 
+    /// assert_eq!(point1.dot(&point2), 32_f64);
+    /// ```
+    #[inline]
+    pub fn dot(&self, other: &Self) -> S {
+        self.data.dot(&other.data)
+    }
+}
+
+impl<S, const N: usize> fmt::Display for Point<S, N> 
+where 
+    S: fmt::Display 
+{
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "Point{} [", N).unwrap();
+        for i in 0..(N - 1) {
+            write!(formatter, "{}, ", self.data[i]).unwrap();
+        }
+        write!(formatter, "{}]", self.data[N - 1])
+    }
+}
+
+impl<S, const N: usize> Default for Point<S, N>
+where
+    S: Scalar
+{
+    fn default() -> Self {
+        Self::origin()
+    }
+}
+
+impl<S, const N: usize> From<[S; N]> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(data: [S; N]) -> Self {
+        Self { 
+            data: data.into(),
+        }
+    }
+}
+
+impl<S, const N: usize> From<&[S; N]> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(data: &[S; N]) -> Self {
+        Self {
+            data: data.into(),
+        }
+    }
+}
+
+impl<'a, S, const N: usize> From<&'a [S; N]> for &'a Point<S, N> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn from(data: &'a [S; N]) -> &'a Point<S, N> {
+        unsafe { 
+            &*(data as *const [S; N] as *const Point<S, N>)
+        }
+    }
+}
+
+macro_rules! impl_point_index_ops {
+    ($IndexType:ty, $Output:ty) => {
+        impl<S, const N: usize> ops::Index<$IndexType> for Point<S, N> {
+            type Output = $Output;
+
+            #[inline]
+            fn index(&self, index: $IndexType) -> &Self::Output {
+                let v: &[S; N] = self.as_ref();
+                &v[index]
+            }
+        }
+
+        impl<S, const N: usize> ops::IndexMut<$IndexType> for Point<S, N> {
+            #[inline]
+            fn index_mut(&mut self, index: $IndexType) -> &mut Self::Output {
+                let v: &mut [S; N] = self.as_mut();
+                &mut v[index]
+            }
+        }
+    }
+}
+
+impl_point_index_ops!(usize, S);
+impl_point_index_ops!(ops::Range<usize>, [S]);
+impl_point_index_ops!(ops::RangeTo<usize>, [S]);
+impl_point_index_ops!(ops::RangeFrom<usize>, [S]);
+impl_point_index_ops!(ops::RangeFull, [S]);
+
+/*
+/// A point is a location in a one-dimensional Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Point1<S> {
     data: Vector1<S>,
 }
+*/
 
 impl<S> Point1<S> {
     /// Construct a new point in one-dimensional Euclidean space.
@@ -37,7 +367,8 @@ impl<S> Point1<S> {
             data: Vector1::new(x), 
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the point components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -72,7 +403,8 @@ impl<S> Point1<S> {
         <Self as AsRef<[S; 1]>>::as_ref(self)
     }
 }
-
+*/
+/*
 impl<S> Point1<S> 
 where 
     S: NumCast + Copy 
@@ -102,7 +434,7 @@ where
         Some(Point1::new(x))
     }
 }
-
+*/
 impl<S> Point1<S> 
 where 
     S: Copy
@@ -128,7 +460,7 @@ where
     pub fn extend(&self, y: S) -> Point2<S> {
         Point2::new(self.data[0], y)
     }
-
+    /*
     /// Construct a new point from a fill value.
     ///
     /// # Example
@@ -148,7 +480,8 @@ where
     pub fn from_fill(value: S) -> Self {
         Self::new(value)
     }
-
+    */
+    /*
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     ///
@@ -174,12 +507,14 @@ where
             data: self.data.map(op),
         }
     }
+    */
 }
 
 impl<S> Point1<S> 
 where 
     S: Scalar
 {
+    /*
     /// Compute the origin of the Euclidean vector space.
     #[inline]
     pub fn origin() -> Self {
@@ -254,8 +589,9 @@ where
     pub fn dot(&self, other: &Self) -> S {
         self.data.dot(&other.data)
     }
+    */
 }
-
+/*
 impl<S> fmt::Display for Point1<S> 
 where
     S: fmt::Display
@@ -273,7 +609,7 @@ where
         Self::origin()
     }
 }
-
+*/
 impl<S> From<S> for Point1<S> 
 where 
     S: Scalar
@@ -294,6 +630,7 @@ where
     }
 }
 
+/*
 impl<S> From<[S; 1]> for Point1<S>
 where 
     S: Scalar
@@ -303,6 +640,7 @@ where
         Self::new(v[0])
     }
 }
+*/
 
 impl<S> From<&(S,)> for Point1<S>
 where
@@ -314,6 +652,7 @@ where
     }
 }
 
+/*
 impl<S> From<&[S; 1]> for Point1<S> 
 where 
     S: Scalar
@@ -323,6 +662,7 @@ where
         Self::new(v[0])
     }
 }
+*/
 
 impl<'a, S> From<&'a (S,)> for &'a Point1<S>
 where
@@ -336,7 +676,7 @@ where
     }
 }
 
-
+/*
 impl<'a, S> From<&'a [S; 1]> for &'a Point1<S> 
 where 
     S: Scalar
@@ -348,14 +688,15 @@ where
         }
     }
 }
-
-
+*/
+/*
 /// A point is a location in a two-dimensional Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Point2<S> {
     data: Vector2<S>,
 }
+*/
 
 impl<S> Point2<S> {
     /// Construct a new two-dimensional point.
@@ -365,7 +706,8 @@ impl<S> Point2<S> {
             data: Vector2::new(x, y) 
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the point components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -400,7 +742,8 @@ impl<S> Point2<S> {
         <Self as AsRef<[S; 2]>>::as_ref(self)
     }
 }
-
+*/
+/*
 impl<S> Point2<S> 
 where 
     S: NumCast + Copy
@@ -434,7 +777,7 @@ where
         Some(Point2::new(x, y))
     }
 }
-
+*/
 impl<S> Point2<S> 
 where 
     S: Copy
@@ -483,6 +826,7 @@ where
         Point1::new(self.data[0])
     }
 
+    /*
     /// Construct a new point from a fill value.
     ///
     /// # Example
@@ -502,7 +846,8 @@ where
     pub fn from_fill(value: S) -> Self {
         Self::new(value, value)
     }
-
+    */
+    /*
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     ///
@@ -528,6 +873,7 @@ where
             data: self.data.map(op),
         }
     }
+    */
 }
 
 impl<S> Point2<S> 
@@ -585,6 +931,7 @@ where
         self.data.extend(S::one())
     }
 
+    /*
     /// Compute the origin of the Euclidean vector space.
     #[inline]
     pub fn origin() -> Self {
@@ -659,8 +1006,9 @@ where
     pub fn dot(&self, other: &Self) -> S {
         self.data.dot(&other.data)
     }
+    */
 }
-
+/*
 impl<S> fmt::Display for Point2<S> 
 where 
     S: fmt::Display 
@@ -678,7 +1026,7 @@ where
         Self::origin()
     }
 }
-
+*/
 impl<S> From<(S, S)> for Point2<S> 
 where 
     S: Scalar
@@ -689,6 +1037,7 @@ where
     }
 }
 
+/*
 impl<S> From<[S; 2]> for Point2<S> 
 where 
     S: Scalar
@@ -698,6 +1047,7 @@ where
         Self::new(v[0], v[1])
     }
 }
+*/
 
 impl<S> From<&(S, S)> for Point2<S> 
 where 
@@ -709,6 +1059,7 @@ where
     }
 }
 
+/*
 impl<S> From<&[S; 2]> for Point2<S> 
 where 
     S: Scalar
@@ -718,6 +1069,7 @@ where
         Self::new(v[0], v[1])
     }
 }
+*/
 
 impl<'a, S> From<&'a (S, S)> for &'a Point2<S> 
 where 
@@ -731,7 +1083,7 @@ where
     }
 }
 
-
+/*
 impl<'a, S> From<&'a [S; 2]> for &'a Point2<S> 
 where 
     S: Scalar 
@@ -743,14 +1095,16 @@ where
         }
     }
 }
+*/
 
-
+/*
 /// A representation of three-dimensional points in a Euclidean space.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Point3<S> {
     data: Vector3<S>,
 }
+*/
 
 impl<S> Point3<S> {
     /// Construct a new point in three-dimensional Euclidean space.
@@ -760,7 +1114,8 @@ impl<S> Point3<S> {
             data: Vector3::new(x, y, z),
         }
     }
-
+}
+/*
     /// The length of the the underlying array storing the point components.
     #[inline]
     pub const fn len(&self) -> usize {
@@ -795,7 +1150,8 @@ impl<S> Point3<S> {
         <Self as AsRef<[S; 3]>>::as_ref(self)
     }
 }
-
+*/
+/*
 impl<S> Point3<S> 
 where 
     S: NumCast + Copy
@@ -833,7 +1189,7 @@ where
         Some(Point3::new(x, y, z))
     }
 }
-
+*/
 impl<S> Point3<S> 
 where 
     S: Copy
@@ -859,6 +1215,7 @@ where
         Point2::new(self.data[0], self.data[1])
     }
 
+    /*
     /// Construct a new point from a fill value.
     /// 
     /// # Example
@@ -878,7 +1235,8 @@ where
     pub fn from_fill(value: S) -> Self {
         Self::new(value, value, value)
     }
-
+    */
+    /*
     /// Map an operation on that acts on the coordinates of a point, returning 
     /// a point whose coordinates are of the new scalar type.
     ///
@@ -904,6 +1262,7 @@ where
             data: self.data.map(op),
         }
     }
+    */
 }
 
 impl<S> Point3<S> 
@@ -966,6 +1325,7 @@ where
         self.data.extend(S::one())
     }
 
+    /*
     /// Compute the origin of the Euclidean vector space.
     #[inline]
     pub fn origin() -> Self {
@@ -1040,8 +1400,9 @@ where
     pub fn dot(&self, other: &Self) -> S {
         self.data.dot(&other.data)
     }
+    */
 }
-
+/*
 impl<S> fmt::Display for Point3<S> 
 where 
     S: fmt::Display
@@ -1063,7 +1424,7 @@ where
         Self::origin()
     }
 }
-
+*/
 impl<S> From<(S, S, S)> for Point3<S> 
 where 
     S: Scalar
@@ -1073,7 +1434,7 @@ where
         Self::new(v.0, v.1, v.2)
     }
 }
-
+/*
 impl<S> From<[S; 3]> for Point3<S> 
 where 
     S: Scalar 
@@ -1083,6 +1444,7 @@ where
         Point3::new(v[0], v[1], v[2])
     }
 }
+*/
 
 impl<S> From<&(S, S, S)> for Point3<S> 
 where 
@@ -1094,6 +1456,7 @@ where
     }
 }
 
+/*
 impl<S> From<&[S; 3]> for Point3<S> 
 where 
     S: Scalar 
@@ -1103,6 +1466,7 @@ where
         Point3::new(v[0], v[1], v[2])
     }
 }
+*/
 
 impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> 
 where 
@@ -1116,6 +1480,7 @@ where
     }
 }
 
+/*
 impl<'a, S> From<&'a [S; 3]> for &'a Point3<S> 
 where 
     S: Scalar 
@@ -1127,7 +1492,7 @@ where
         }
     }
 }
-
+*/
 
 impl_coords!(X, { x });
 impl_coords_deref!(Point1, X);
@@ -1163,15 +1528,19 @@ macro_rules! impl_as_ref_ops {
 
 impl_as_ref_ops!(Point1<S>, S);
 impl_as_ref_ops!(Point1<S>, (S,));
+/*
 impl_as_ref_ops!(Point1<S>, [S; 1]);
-
+*/
 impl_as_ref_ops!(Point2<S>, (S, S));
+/*
 impl_as_ref_ops!(Point2<S>, [S; 2]);
-
+*/
 impl_as_ref_ops!(Point3<S>, (S, S, S));
+/*
 impl_as_ref_ops!(Point3<S>, [S; 3]);
+*/
 
-
+/*
 macro_rules! impl_point_index_ops {
     ($T:ty, $n:expr, $IndexType:ty, $Output:ty) => {
         impl<S> ops::Index<$IndexType> for $T {
@@ -1211,7 +1580,7 @@ impl_point_index_ops!(Point3<S>, 3, ops::Range<usize>, [S]);
 impl_point_index_ops!(Point3<S>, 3, ops::RangeTo<usize>, [S]);
 impl_point_index_ops!(Point3<S>, 3, ops::RangeFrom<usize>, [S]);
 impl_point_index_ops!(Point3<S>, 3, ops::RangeFull, [S]);
-
+*/
 
 macro_rules! impl_point_vector_binary_ops {
     ($OpType:ident, $op:ident, $T1:ty, $T2:ty, $Output:ty, { $($index:expr),* }) => {

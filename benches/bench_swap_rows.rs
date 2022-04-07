@@ -234,27 +234,27 @@ macro_rules! bench_unop(
     }
 );
 
-fn transpose2x2(bh: &mut criterion::Criterion) {
-    let mut m = gen_matrix2x2::<f32>();
+fn zero2(bh: &mut criterion::Criterion) {
+    let mut m = gen_vector2::<f32>();
 
-    bh.bench_function(stringify!("transpose2x2"), move |bh| bh.iter(|| {
-        black_box( m.diagonal())
+    bh.bench_function(stringify!("zero2"), move |bh| bh.iter(|| {
+        black_box( m.is_zero())
     }));
 }
 
-fn transpose3x3(bh: &mut criterion::Criterion) {
-    let mut m = gen_matrix3x3::<f32>();
+fn zero3(bh: &mut criterion::Criterion) {
+    let mut m = gen_vector3::<f32>();
 
-    bh.bench_function(stringify!("transpose3x3"), move |bh| bh.iter(|| {
-        black_box( black_box( m.diagonal()))
+    bh.bench_function(stringify!("zero3"), move |bh| bh.iter(|| {
+        black_box( black_box( m.is_zero()))
     }));
 }
 
-fn transpose4x4(bh: &mut criterion::Criterion) {
-    let mut m = gen_matrix4x4::<f32>();
+fn zero4(bh: &mut criterion::Criterion) {
+    let mut m = gen_vector4::<f32>();
 
-    bh.bench_function(stringify!("transpose4x4"), move |bh| bh.iter(|| {
-        black_box( black_box( m.diagonal()))
+    bh.bench_function(stringify!("zero4"), move |bh| bh.iter(|| {
+        black_box( black_box( m.is_zero()))
     }));
 }
 /*
@@ -314,10 +314,10 @@ fn transpose4x3(bh: &mut criterion::Criterion) {
 
 
 criterion_group!(
-    matrix_swap_rows_benchmarks,
-    transpose2x2,
-    transpose3x3,
-    transpose4x4,
+    matrix_is_zero_benchmarks,
+    zero2,
+    zero3,
+    zero4,
 );
-criterion_main!(matrix_swap_rows_benchmarks);
+criterion_main!(matrix_is_zero_benchmarks);
 
