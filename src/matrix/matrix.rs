@@ -707,6 +707,40 @@ where
 
         result
     }
+
+    /// Construct a new diagonal matrix from a vector of values
+    /// representing the elements along the diagonal.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let result = Matrix4x4::from_diagonal(
+    ///     &Vector4::new(2_i32, 3_i32, 4_i32, 5_i32)
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     2_i32, 0_i32, 0_i32, 0_i32,
+    ///     0_i32, 3_i32, 0_i32, 0_i32,
+    ///     0_i32, 0_i32, 4_i32, 0_i32,
+    ///     0_i32, 0_i32, 0_i32, 5_i32 
+    /// );
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_diagonal(diagonal: &Vector<S, N>) -> Self {
+        let mut result = Self::zero();
+        for i in 0..N {
+            result[i][i] = diagonal[i];
+        }
+
+        result
+    }
 }
 
 impl<S, const R: usize, const C: usize, const RC: usize> Default for Matrix<S, R, C, RC>
@@ -1772,7 +1806,7 @@ where
         )
     }
     */
-    
+    /*
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
     ///
@@ -1800,6 +1834,7 @@ where
             S::zero(),  diagonal.y
         )
     }
+    */
 
     /// Get the diagonal part of a square matrix.
     ///
@@ -3383,7 +3418,7 @@ where
         )
     }
     */
-    
+    /*
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
     ///
@@ -3413,6 +3448,7 @@ where
             S::zero(),  S::zero(),  diagonal.z
         )
     }
+    */
 
     /// Get the diagonal part of a square matrix.
     ///
@@ -5483,7 +5519,7 @@ where
         )
     }
     */
-    
+    /*
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
     ///
@@ -5517,6 +5553,7 @@ where
             S::zero(), S::zero(), S::zero(), value.w,
         )
     }
+    */
     
     /// Get the diagonal part of a square matrix.
     ///

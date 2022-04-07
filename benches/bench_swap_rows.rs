@@ -13,7 +13,11 @@ use cglinalg::{
     Matrix2x4,
     Matrix4x2,
     Matrix3x4,
-    Matrix4x3
+    Matrix4x3,
+    Vector1,
+    Vector2,
+    Vector3,
+    Vector4,
 };
 
 use rand::{
@@ -165,6 +169,46 @@ where
     )
 }
 
+fn gen_vector1<S>() -> Vector1<S> 
+where 
+    Standard: Distribution<S> 
+{
+    use rand::SeedableRng;
+    let mut rng = IsaacRng::seed_from_u64(0);
+    
+    Vector1::new(rng.gen())
+}
+
+fn gen_vector2<S>() -> Vector2<S> 
+where 
+    Standard: Distribution<S> 
+{
+    use rand::SeedableRng;
+    let mut rng = IsaacRng::seed_from_u64(0);
+    
+    Vector2::new(rng.gen(), rng.gen())
+}
+
+fn gen_vector3<S>() -> Vector3<S> 
+where 
+    Standard: Distribution<S> 
+{
+    use rand::SeedableRng;
+    let mut rng = IsaacRng::seed_from_u64(0);
+    
+    Vector3::new(rng.gen(), rng.gen(), rng.gen())
+}
+
+fn gen_vector4<S>() -> Vector4<S> 
+where 
+    Standard: Distribution<S> 
+{
+    use rand::SeedableRng;
+    let mut rng = IsaacRng::seed_from_u64(0);
+    
+    Vector4::new(rng.gen(), rng.gen(), rng.gen(), rng.gen())
+}
+
 macro_rules! bench_binop(
     ($name: ident, $scalar_type:ty, $type1:ty, $type2:ty, $generator_t1:ident, $generator_t2:ident, $binop:ident) => {
         fn $name(bh: &mut criterion::Criterion) {
@@ -189,28 +233,28 @@ macro_rules! bench_unop(
         }
     }
 );
-
+/*
 fn transpose2x2(bh: &mut criterion::Criterion) {
-    let m = gen_scalar::<f32>();
+    let m = gen_vector2::<f32>();
 
     bh.bench_function(stringify!("transpose2x2"), move |bh| bh.iter(|| {
-        black_box( Matrix2x2::<f32>::from_diagonal_value(m))
+        black_box( Matrix2x2::<f32>::from_diagonal(&m))
     }));
 }
-
+*/
 fn transpose3x3(bh: &mut criterion::Criterion) {
-    let m = gen_scalar::<f32>();
+    let m = gen_vector3::<f32>();
 
     bh.bench_function(stringify!("transpose3x3"), move |bh| bh.iter(|| {
-        black_box( Matrix3x3::<f32>::from_diagonal_value(m))
+        black_box( Matrix3x3::<f32>::from_diagonal(&m))
     }));
 }
 
 fn transpose4x4(bh: &mut criterion::Criterion) {
-    let m = gen_scalar::<f32>();
+    let m = gen_vector4::<f32>();
 
     bh.bench_function(stringify!("transpose4x4"), move |bh| bh.iter(|| {
-        black_box( Matrix4x4::<f32>::from_diagonal_value(m))
+        black_box( Matrix4x4::<f32>::from_diagonal(&m))
     }));
 }
 /*
@@ -271,7 +315,7 @@ fn transpose4x3(bh: &mut criterion::Criterion) {
 
 criterion_group!(
     matrix_swap_rows_benchmarks,
-    transpose2x2,
+    // transpose2x2,
     transpose3x3,
     transpose4x4,
 );
