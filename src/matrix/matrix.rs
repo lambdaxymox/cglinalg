@@ -741,6 +741,37 @@ where
 
         result
     }
+
+    /// Get the diagonal part of a square matrix.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_i32,  2_i32,  3_i32,  4_i32,
+    ///     5_i32,  6_i32,  7_i32,  8_i32,
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32
+    /// );
+    /// let expected = Vector4::new(1_i32, 6_i32, 11_i32, 16_i32);
+    /// let result = matrix.diagonal();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn diagonal(&self) -> Vector4<S> {
+        let mut result = Vector::zero();
+        for i in 0..N {
+            result[i] = self.data[i][i];
+        }
+
+        result
+    }
 }
 
 impl<S, const R: usize, const C: usize, const RC: usize> Default for Matrix<S, R, C, RC>
@@ -1835,7 +1866,7 @@ where
         )
     }
     */
-
+    /*
     /// Get the diagonal part of a square matrix.
     ///
     /// # Example
@@ -1859,6 +1890,7 @@ where
     pub fn diagonal(&self) -> Vector2<S> {
         Vector2::new(self.data[0][0], self.data[1][1])
     }
+    */
 
     /// Compute the trace of a square matrix.
     ///
@@ -3449,7 +3481,7 @@ where
         )
     }
     */
-
+    /*
     /// Get the diagonal part of a square matrix.
     ///
     /// # Example
@@ -3474,6 +3506,7 @@ where
     pub fn diagonal(&self) -> Vector3<S> {
         Vector3::new(self.data[0][0], self.data[1][1], self.data[2][2])
     }
+    */
 
     /// Compute the trace of a square matrix.
     ///
@@ -5554,7 +5587,7 @@ where
         )
     }
     */
-    
+    /*
     /// Get the diagonal part of a square matrix.
     ///
     /// # Example
@@ -5585,6 +5618,7 @@ where
             self.data[3][3]
         )
     }
+    */
 
     /// Compute the trace of a square matrix.
     ///
