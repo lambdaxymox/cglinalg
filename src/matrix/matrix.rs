@@ -494,6 +494,43 @@ impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
 where
     S: Scalar
 {
+    /// Transpose a matrix.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x4,
+    /// #     Matrix4x2, 
+    /// # };
+    /// #
+    /// let matrix = Matrix2x4::new(
+    ///     1_i32, 1_i32, 
+    ///     2_i32, 2_i32, 
+    ///     3_i32, 3_i32,
+    ///     4_i32, 4_i32
+    /// );
+    /// let expected = Matrix4x2::new(
+    ///     1_i32, 2_i32, 3_i32, 4_i32, 
+    ///     1_i32, 2_i32, 3_i32, 4_i32
+    /// );
+    /// let result = matrix.transpose();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn transpose(&self) -> Matrix<S, C, R, RC> {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result.data[r][c] = self.data[c][r];
+            }
+        }
+
+        result
+    }
+
     /// Construct a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -1517,7 +1554,7 @@ where
     pub fn transpose_mut(&mut self) {
         self.swap((0, 1), (1, 0));
     }
-
+    /*
     /// Transpose a matrix.
     ///
     /// # Example
@@ -1546,6 +1583,7 @@ where
             self.data[0][1], self.data[1][1]
         )
     }
+    */
 
     /*
     /// Compute a zero matrix.
@@ -3094,7 +3132,7 @@ where
         self.swap((0, 2), (2, 0));
         self.swap((1, 2), (2, 1));
     }
-
+    /*
     /// Transpose a matrix.
     ///
     /// # Example
@@ -3127,6 +3165,7 @@ where
             self.data[0][2], self.data[1][2], self.data[2][2]
         )
     }
+    */
 
     /*
     /// Compute a zero matrix.
@@ -5177,6 +5216,7 @@ where
         self.swap((2, 3), (3, 2));
     }
 
+    /*
     /// Transpose a matrix.
     ///
     /// # Example
@@ -5212,6 +5252,7 @@ where
             self.data[0][3], self.data[1][3], self.data[2][3], self.data[3][3]
         )
     }
+    */
 
     /*
     /// Compute a zero matrix.
@@ -7774,6 +7815,7 @@ impl<S> Matrix2x3<S>
 where 
     S: Scalar 
 {
+    /*
     /// Transpose a matrix.
     ///
     /// # Example
@@ -7804,6 +7846,7 @@ where
             self.data[0][1], self.data[1][1], self.data[2][1]
         )
     }
+    */
 
     /*
     /// Compute a zero matrix.
@@ -8250,6 +8293,7 @@ impl<S> Matrix3x2<S>
 where 
     S: Scalar
 {
+    /*
     /// Transpose a matrix.
     ///
     /// # Example
@@ -8281,6 +8325,7 @@ where
             self.data[0][2], self.data[1][2]
         )
     }
+    */
 
     /*
     /// Compute a zero matrix.
@@ -8788,6 +8833,7 @@ impl<S> Matrix2x4<S>
 where 
     S: Scalar
 {
+    /*
     /// Transpose a matrix.
     ///
     /// # Example
@@ -8819,6 +8865,7 @@ where
             self.data[0][1], self.data[1][1], self.data[2][1], self.data[3][1]
         )
     }
+    */
 
     /*
     /// Compute a zero matrix.
@@ -9296,6 +9343,7 @@ impl<S> Matrix4x2<S>
 where 
     S: Scalar
 {
+    /*
     /// Transpose a matrix.
     ///
     /// # Example
@@ -9329,7 +9377,7 @@ where
             self.data[0][3], self.data[1][3]
         )
     }
-
+    */
     /*
     /// Compute a zero matrix.
     ///
@@ -9865,6 +9913,7 @@ impl<S> Matrix3x4<S>
 where 
     S: Scalar
 {
+    /*
     /// Transpose a matrix.
     ///
     /// # Example
@@ -9898,6 +9947,7 @@ where
             self.data[0][2], self.data[1][2], self.data[2][2], self.data[3][2]
         )
     }
+    */
 
     /*
     /// Compute a zero matrix.
@@ -10422,6 +10472,7 @@ impl<S> Matrix4x3<S>
 where 
     S: Scalar
 {
+    /*
     /// Transpose a matrix.
     ///
     /// # Example
@@ -10456,6 +10507,7 @@ where
             self.data[0][3], self.data[1][3], self.data[2][3]
         )
     }
+    */
 
     /*
     /// Compute a zero matrix.
