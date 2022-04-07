@@ -284,6 +284,42 @@ where
     }
 }
 
+impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> 
+where 
+    S: NumCast + Copy 
+{
+    /// Cast a matrix from one type of scalars to another type of scalars.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix2x2,   
+    /// # };
+    /// # 
+    /// let matrix: Matrix2x2<u32> = Matrix2x2::new(1_u32, 2_u32, 3_u32, 4_u32);
+    /// let expected: Option<Matrix2x2<i32>> = Some(Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32));
+    /// let result = matrix.cast::<i32>();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix<T, R, C, RC>> {
+        // SAFETY: Every location gets written into with a valid value of type `T`.
+        let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
+        for c in 0..C {
+            for r in 0..R {
+                data[c][r] = match num_traits::cast(self.data[c][r]) {
+                    Some(value) => value,
+                    None => return None,
+                };
+            }
+        }
+
+        Some(Matrix { data })
+    }
+}
+
 impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
 where
     S: Scalar
@@ -396,6 +432,7 @@ impl<S> Matrix1x1<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -420,6 +457,7 @@ where
 
         Some(Matrix1x1::new(c0r0))
     }
+    */
 }
 
 impl<S> Matrix1x1<S> 
@@ -807,6 +845,7 @@ impl<S> Matrix2x2<S>
 where 
     S: NumCast + Copy 
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -843,6 +882,7 @@ where
 
         Some(Matrix2x2::new(c0r0, c0r1, c1r0, c1r1))
     }
+    */
 }
 
 impl<S> Matrix2x2<S> 
@@ -1981,6 +2021,7 @@ impl<S> Matrix3x3<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -2050,6 +2091,7 @@ where
             c2r0, c2r1, c2r2,
         ))
     }
+    */
 }
 
 impl<S> Matrix3x3<S> 
@@ -4115,6 +4157,7 @@ impl<S> Matrix4x4<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -4215,6 +4258,7 @@ where
             c3r0, c3r1, c3r2, c3r3
         ))
     }
+    */
 }
 
 impl<S> Matrix4x4<S> 
@@ -6375,6 +6419,7 @@ impl<S> Matrix1x2<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -6403,6 +6448,7 @@ where
 
         Some(Matrix1x2::new(c0r0, c1r0))
     }
+    */
 }
 
 impl<S> Matrix1x2<S> 
@@ -6629,6 +6675,7 @@ impl<S> Matrix1x3<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -6661,6 +6708,7 @@ where
 
         Some(Matrix1x3::new(c0r0, c1r0, c2r0))
     }
+    */
 }
 
 impl<S> Matrix1x3<S> 
@@ -6891,6 +6939,7 @@ impl<S> Matrix1x4<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -6927,6 +6976,7 @@ where
 
         Some(Matrix1x4::new(c0r0, c1r0, c2r0, c3r0))
     }
+    */
 }
 
 impl<S> Matrix1x4<S> 
@@ -7165,6 +7215,7 @@ impl<S> Matrix2x3<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -7217,6 +7268,7 @@ where
 
         Some(Matrix2x3::new(c0r0, c0r1, c1r0, c1r1, c2r0, c2r1))
     }
+    */
 }
 
 impl<S> Matrix2x3<S> 
@@ -7652,6 +7704,7 @@ impl<S> Matrix3x2<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -7702,6 +7755,7 @@ where
 
         Some(Matrix3x2::new(c0r0, c0r1, c0r2, c1r0, c1r1, c1r2))
     }
+    */
 }
 
 impl<S> Matrix3x2<S> 
@@ -8129,6 +8183,7 @@ impl<S> Matrix2x4<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -8191,6 +8246,7 @@ where
 
         Some(Matrix2x4::new(c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, c3r0, c3r1))
     }
+    */
 }
 
 impl<S> Matrix2x4<S> 
@@ -8660,6 +8716,7 @@ impl<S> Matrix4x2<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -8721,6 +8778,7 @@ where
             c1r0, c1r1, c1r2, c1r3
         ))
     }
+    */
 }
 
 impl<S> Matrix4x2<S> 
@@ -9169,6 +9227,7 @@ impl<S> Matrix3x4<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -9252,6 +9311,7 @@ where
             c3r0, c3r1, c3r2
         ))
     }
+    */
 }
 
 impl<S> Matrix3x4<S> 
@@ -9739,6 +9799,7 @@ impl<S> Matrix4x3<S>
 where 
     S: NumCast + Copy
 {
+    /*
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
     /// # Example
@@ -9819,6 +9880,7 @@ where
             c2r0, c2r1, c2r2, c2r3
         ))
     }
+    */
 }
 
 impl<S> Matrix4x3<S> 
