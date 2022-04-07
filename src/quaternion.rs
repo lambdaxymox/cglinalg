@@ -2434,7 +2434,7 @@ where
 
 impl<S> ops::Index<ops::RangeFrom<usize>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: Scalar
 {
     type Output = [S];
 
@@ -2557,7 +2557,7 @@ where
 
 impl<S> From<(S, S, S, S)> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(v: (S, S, S, S)) -> Quaternion<S> {
@@ -2567,7 +2567,7 @@ where
 
 impl<S> From<[S; 4]> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(v: [S; 4]) -> Quaternion<S> {
@@ -2577,7 +2577,7 @@ where
 
 impl<S> From<&(S, S, S, S)> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(v: &(S, S, S, S)) -> Quaternion<S> {
@@ -2587,7 +2587,7 @@ where
 
 impl<S> From<&[S; 4]> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(v: &[S; 4]) -> Quaternion<S> {
@@ -2597,7 +2597,7 @@ where
 
 impl<'a, S> From<&'a [S; 4]> for &'a Quaternion<S> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(v: &'a [S; 4]) -> &'a Quaternion<S> {
@@ -2609,7 +2609,7 @@ where
 
 impl<'a, S> From<&'a (S, S, S, S)> for &'a Quaternion<S> 
 where 
-    S: Scalar 
+    S: Copy
 {
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Quaternion<S> {

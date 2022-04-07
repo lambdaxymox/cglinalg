@@ -612,7 +612,7 @@ where
 */
 impl<S> From<S> for Point1<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: S) -> Self {
@@ -622,7 +622,7 @@ where
 
 impl<S> From<(S,)> for Point1<S>
 where
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: (S,)) -> Self {
@@ -644,7 +644,7 @@ where
 
 impl<S> From<&(S,)> for Point1<S>
 where
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &(S,)) -> Self {
@@ -666,7 +666,7 @@ where
 
 impl<'a, S> From<&'a (S,)> for &'a Point1<S>
 where
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &'a (S,)) -> &'a Point1<S> {
@@ -1029,7 +1029,7 @@ where
 */
 impl<S> From<(S, S)> for Point2<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: (S, S)) -> Self {
@@ -1051,7 +1051,7 @@ where
 
 impl<S> From<&(S, S)> for Point2<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &(S, S)) -> Self {
@@ -1073,7 +1073,7 @@ where
 
 impl<'a, S> From<&'a (S, S)> for &'a Point2<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &'a (S, S)) -> &'a Point2<S> {
@@ -1427,7 +1427,7 @@ where
 */
 impl<S> From<(S, S, S)> for Point3<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: (S, S, S)) -> Self {
@@ -1448,7 +1448,7 @@ where
 
 impl<S> From<&(S, S, S)> for Point3<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &(S, S, S)) -> Self {
@@ -1470,7 +1470,7 @@ where
 
 impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> 
 where 
-    S: Scalar
+    S: Copy
 {
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Point3<S> {
