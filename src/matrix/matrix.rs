@@ -195,6 +195,42 @@ impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[S; RC]> for Matr
     }
 }
 
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Index<usize> for Matrix<S, R, C, RC> {
+    type Output = Vector<S, R>;
+
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        let v: &[Vector<S, R>; C] = self.as_ref();
+        &v[index]
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::IndexMut<usize> for Matrix<S, R, C, RC> {
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        let v: &mut [Vector<S, R>; C] = self.as_mut();
+        &mut v[index]
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Index<(usize, usize)> for Matrix<S, R, C, RC> {
+    type Output = S;
+
+    #[inline]
+    fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
+        let v: &[[S; R]; C] = self.as_ref();
+        &v[column][row]
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::IndexMut<(usize, usize)> for Matrix<S, R, C, RC> {
+    #[inline]
+    fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut Self::Output {
+        let v: &mut [[S; R]; C] = self.as_mut();
+        &mut v[column][row]
+    }
+}
+
 impl<S, const R: usize, const C: usize, const RC: usize> From<[[S; R]; C]> for Matrix<S, R, C, RC> 
 where 
     S: Scalar
@@ -10756,43 +10792,6 @@ impl_index_ops!(Matrix4x2, Vector4, (4, 2));
 impl_index_ops!(Matrix3x4, Vector3, (3, 4));
 impl_index_ops!(Matrix4x3, Vector4, (4, 3));
 */
-
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Index<usize> for Matrix<S, R, C, RC> {
-    type Output = Vector<S, R>;
-
-    #[inline]
-    fn index(&self, index: usize) -> &Self::Output {
-        let v: &[Vector<S, R>; C] = self.as_ref();
-        &v[index]
-    }
-}
-
-impl<S, const R: usize, const C: usize, const RC: usize> ops::IndexMut<usize> for Matrix<S, R, C, RC> {
-    #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        let v: &mut [Vector<S, R>; C] = self.as_mut();
-        &mut v[index]
-    }
-}
-
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Index<(usize, usize)> for Matrix<S, R, C, RC> {
-    type Output = S;
-
-    #[inline]
-    fn index(&self, (column, row): (usize, usize)) -> &Self::Output {
-        let v: &[[S; R]; C] = self.as_ref();
-        &v[column][row]
-    }
-}
-
-impl<S, const R: usize, const C: usize, const RC: usize> ops::IndexMut<(usize, usize)> for Matrix<S, R, C, RC> {
-    #[inline]
-    fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut Self::Output {
-        let v: &mut [[S; R]; C] = self.as_mut();
-        &mut v[column][row]
-    }
-}
-
 
 
 macro_rules! impl_matrix_matrix_binary_ops {
