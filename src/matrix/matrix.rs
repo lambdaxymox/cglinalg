@@ -204,12 +204,6 @@ impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
 where 
     S: Copy
 {
-    /// Get the column of the matrix by value.
-    #[inline]
-    pub fn column(&self, c: usize) -> Vector<S, R> {
-        Vector::from(&self.data[c])
-    }
-
     /// Construct a new matrix from a fill value.
     ///
     /// The resulting matrix is a matrix where each entry is the supplied fill
@@ -281,6 +275,46 @@ where
         Matrix {
             data: data,
         }
+    }
+
+    /// Get the column of the matrix by value.
+    #[inline]
+    pub fn column(&self, c: usize) -> Vector<S, R> {
+        Vector::from(&self.data[c])
+    }
+
+    /// Swap two columns of a matrix.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x4, 
+    /// # };
+    /// #
+    /// let mut result = Matrix3x4::new(
+    ///     1_i32, 1_i32, 1_i32,
+    ///     2_i32, 2_i32, 2_i32,
+    ///     3_i32, 3_i32, 3_i32,
+    ///     4_i32, 4_i32, 4_i32
+    ///
+    /// );
+    /// let expected = Matrix3x4::new(
+    ///     2_i32, 2_i32, 2_i32,
+    ///     4_i32, 4_i32, 4_i32,
+    ///     3_i32, 3_i32, 3_i32,
+    ///     1_i32, 1_i32, 1_i32
+    /// );
+    /// result.swap_columns(0, 1);
+    /// result.swap_columns(1, 3);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn swap_columns(&mut self, col_a: usize, col_b: usize) {
+        let temp = self.data[col_a];
+        self.data[col_a] = self.data[col_b];
+        self.data[col_b] = temp;
     }
 }
 
@@ -959,6 +993,7 @@ where
         self.data[1][row_b] = c1ra;
     }
     
+    /*
     /// Swap two columns of a matrix.
     ///
     /// # Example
@@ -989,6 +1024,7 @@ where
         self.data[col_b][0] = car0;
         self.data[col_b][1] = car1;
     }
+    */
     
     /// Swap two elements of a matrix.
     ///
@@ -2181,6 +2217,7 @@ where
         self.data[2][row_b] = c2ra;
     }
     
+    /*
     /// Swap two columns of a matrix.
     ///
     /// # Example
@@ -2216,6 +2253,7 @@ where
         self.data[col_b][1] = car1;
         self.data[col_b][2] = car2;
     }
+    */
     
     /// Swap two elements of a matrix.
     ///
@@ -4364,7 +4402,8 @@ where
         self.data[2][row_b] = c2ra;
         self.data[3][row_b] = c3ra;
     }
-     
+    
+    /*
     /// Swap two columns of a matrix.
     ///
     /// # Example
@@ -4405,6 +4444,7 @@ where
         self.data[col_b][2] = car2;
         self.data[col_b][3] = car3;
     }
+    */
      
     /// Swap two elements of a matrix.
     ///
@@ -7362,6 +7402,7 @@ where
         self.data[2][row_b] = c2ra;
     }
     
+    /*
     /// Swap two columns of a matrix.
     ///
     /// # Example
@@ -7394,6 +7435,7 @@ where
         self.data[col_b][0] = car0;
         self.data[col_b][1] = car1;
     }
+    */
     
     /// Swap two elements of a matrix.
     ///
@@ -7838,6 +7880,7 @@ where
         self.data[1][row_b] = c1ra;
     }
     
+    /*
     /// Swap two columns of a matrix.
     ///
     /// # Example
@@ -7871,6 +7914,7 @@ where
         self.data[col_b][1] = car1;
         self.data[col_b][2] = car2;
     }
+    */
     
     /// Swap two elements of a matrix.
     ///
@@ -8348,6 +8392,7 @@ where
         self.data[3][row_b] = c3ra;
     }
     
+    /*
     /// Swap two columns of a matrix.
     ///
     /// # Example
@@ -8384,6 +8429,7 @@ where
         self.data[col_b][0] = car0;
         self.data[col_b][1] = car1;
     }
+    */
     
     /// Swap two elements of a matrix.
     ///
@@ -8866,6 +8912,7 @@ where
         self.data[1][row_b] = c1ra;
     }
     
+    /*
     /// Swap two columns of a matrix.
     ///
     /// # Example
@@ -8902,6 +8949,7 @@ where
         self.data[col_b][2] = car2;
         self.data[col_b][3] = car3;
     }
+    */
     
     /// Swap two elements of a matrix.
     ///
@@ -9413,6 +9461,7 @@ where
         self.data[3][row_b] = c3ra;
     }
     
+    /*
     /// Swap two columns of a matrix.
     ///
     /// # Example
@@ -9452,6 +9501,7 @@ where
         self.data[col_b][1] = car1;
         self.data[col_b][2] = car2;
     }
+    */
     
     /// Swap two elements of a matrix.
     ///
@@ -9975,6 +10025,7 @@ where
         self.data[2][row_b] = c2ra;
     }
     
+    /*
     /// Swap two columns of a matrix.
     ///
     /// # Example
@@ -10013,6 +10064,7 @@ where
         self.data[col_b][2] = car2;
         self.data[col_b][3] = car3;
     }
+    */
     
     /// Swap two elements of a matrix.
     ///
