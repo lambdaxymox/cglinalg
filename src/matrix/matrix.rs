@@ -277,6 +277,18 @@ where
         }
     }
 
+    /// Get the row of the matrix by value.
+    #[inline]
+    pub fn row(&self, r: usize) -> Vector<S, C> {
+        // SAFETY: Every location gets written into with a value value of type `S`.
+        let mut data: [S; C] = unsafe { core::mem::zeroed() };
+        for c in 0..C {
+            data[c] = self.data[c][r];
+        }
+
+        Vector::from(data)
+    }
+
     /// Get the column of the matrix by value.
     #[inline]
     pub fn column(&self, c: usize) -> Vector<S, R> {
@@ -561,11 +573,13 @@ impl<S> Matrix1x1<S>
 where 
     S: Copy
 {
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector1<S> {
         Vector1::new(self.data[0][r])
     }
+    */
 
     /*
     /// Get the column of the matrix by value.
@@ -1011,12 +1025,13 @@ where
         Self::new(value, value, value, value)
     }
     */
-
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector2<S> {
         Vector2::new(self.data[0][r], self.data[1][r])
     }
+    */
 
     /*
     /// Get the column of the matrix by value.
@@ -2232,12 +2247,13 @@ where
         )
     }
     */
-
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector3<S> {
         Vector3::new(self.data[0][r], self.data[1][r], self.data[2][r])
     }
+    */
 
     /*
     /// Get the column of the matrix by value.
@@ -4405,7 +4421,7 @@ where
         )
     }
     */
-
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector4<S> {
@@ -4416,6 +4432,7 @@ where
             self.data[3][r]
         )
     }
+    */
  
     /*
     /// Get the column of the matrix by value.
@@ -6565,11 +6582,13 @@ impl<S> Matrix1x2<S>
 where 
     S: Copy
 {
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector2<S> {
         Vector2::new(self.data[0][r], self.data[1][r])
     }
+    */
 
     /*
     /// Get the column of the matrix by value.
@@ -6826,12 +6845,13 @@ impl<S> Matrix1x3<S>
 where 
     S: Copy 
 {
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector3<S> {
         Vector3::new(self.data[0][r], self.data[1][r], self.data[2][r])
     }
-
+    */
     /*
     /// Get the column of the matrix by value.
     #[inline]
@@ -7095,6 +7115,7 @@ impl<S> Matrix1x4<S>
 where 
     S: Copy
 {
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector4<S> {
@@ -7105,7 +7126,7 @@ where
             self.data[3][r],
         )
     }
-
+    */
     /*
     /// Get the column of the matrix by value.
     #[inline]
@@ -7420,7 +7441,7 @@ where
         )
     }
     */
-
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector3<S> {
@@ -7430,7 +7451,7 @@ where
             self.data[2][r],
         )
     }
-
+    */
     /*
     /// Get the column of the matrix by value.
     #[inline]
@@ -7909,13 +7930,13 @@ where
         )
     }
     */
-
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector2<S> {
         Vector2::new(self.data[0][r], self.data[1][r])
     }
-
+    */
     /*
     /// Get the column of the matrix by value.
     #[inline]
@@ -8408,7 +8429,7 @@ where
         )
     }
     */
-
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector4<S> {
@@ -8419,7 +8440,7 @@ where
             self.data[3][r]
         )
     }
-
+    */
     /*
     /// Get the column of the matrix by value.
     #[inline]
@@ -8940,13 +8961,13 @@ where
         )
     }
     */
-
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector2<S> {
         Vector2::new(self.data[0][r], self.data[1][r])
     }
-
+    */
     /*
     /// Get the column of the matrix by value.
     #[inline]
@@ -9480,7 +9501,7 @@ where
         )
     }
     */
-
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector4<S> {
@@ -9491,7 +9512,7 @@ where
             self.data[3][r]
         )
     }
-
+    */
     /*
     /// Get the column of the matrix by value.
     #[inline]
@@ -10051,13 +10072,13 @@ where
         )
     }
     */
-
+    /*
     /// Get the row of the matrix by value.
     #[inline]
     pub fn row(&self, r: usize) -> Vector3<S> {
         Vector3::new(self.data[0][r], self.data[1][r], self.data[2][r])
     }
-
+    */
     /*
     /// Get the column of the matrix by value.
     #[inline]
