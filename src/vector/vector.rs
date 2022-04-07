@@ -1878,7 +1878,53 @@ where
     }
 }
 
+macro_rules! impl_scalar_vector_mul_ops {
+    ($Lhs:ty) => {
+        impl<const N: usize> ops::Mul<Vector<$Lhs, N>> for $Lhs {
+            type Output = Vector<$Lhs, N>;
 
+            #[inline]
+            fn mul(self, other: Vector<$Lhs, N>) -> Self::Output {
+                let mut result = Vector::zero();
+                for i in 0..N {
+                    result[i] = self * other.data[i];
+                }
+
+                result
+            }
+        }
+
+        impl<'a, const N: usize> ops::Mul<Vector<$Lhs, N>> for &'a $Lhs {
+            type Output = Vector<$Lhs, N>;
+
+            #[inline]
+            fn mul(self, other: Vector<$Lhs, N>) -> Self::Output {
+                let mut result = Vector::zero();
+                for i in 0..N {
+                    result[i] = self * other.data[i];
+                }
+
+                result
+            }
+        }
+    }
+}
+
+impl_scalar_vector_mul_ops!(u8);
+impl_scalar_vector_mul_ops!(u16);
+impl_scalar_vector_mul_ops!(u32);
+impl_scalar_vector_mul_ops!(u64);
+impl_scalar_vector_mul_ops!(u128);
+impl_scalar_vector_mul_ops!(usize);
+impl_scalar_vector_mul_ops!(i8);
+impl_scalar_vector_mul_ops!(i16);
+impl_scalar_vector_mul_ops!(i32);
+impl_scalar_vector_mul_ops!(i64);
+impl_scalar_vector_mul_ops!(i128);
+impl_scalar_vector_mul_ops!(isize);
+impl_scalar_vector_mul_ops!(f32);
+impl_scalar_vector_mul_ops!(f64);
+/*
 macro_rules! impl_scalar_vector_mul_ops {
     ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
@@ -1960,34 +2006,50 @@ impl_scalar_vector_mul_ops!(i128  => Vector4<i128>  => Vector4<i128>,  { 0, 1, 2
 impl_scalar_vector_mul_ops!(isize => Vector4<isize> => Vector4<isize>, { 0, 1, 2, 3 });
 impl_scalar_vector_mul_ops!(f32   => Vector4<f32>   => Vector4<f32>,   { 0, 1, 2, 3 });
 impl_scalar_vector_mul_ops!(f64   => Vector4<f64>   => Vector4<f64>,   { 0, 1, 2, 3 });
-
+*/
 
 macro_rules! impl_vector_scalar_binary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> ops::$OpType<S> for $T where S: Scalar {
-            type Output = $Output;
+    ($OpType:ident, $op:ident) => {
+        impl<S, const N: usize> ops::$OpType<S> for Vector<S, N> 
+        where 
+            S: Scalar 
+        {
+            type Output = Vector<S, N>;
 
             #[inline]
             fn $op(self, other: S) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other) ),* 
-                )
+                let mut result = Vector::zero();
+                for i in 0..N {
+                    result[i] = self.data[i].$op(other);
+                }
+
+                result
             }
         }
 
-        impl<S> ops::$OpType<S> for &$T where S: Scalar {
-            type Output = $Output;
+        impl<S, const N: usize> ops::$OpType<S> for &Vector<S, N> 
+        where 
+            S: Scalar 
+        {
+            type Output = Vector<S, N>;
 
             #[inline]
             fn $op(self, other: S) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other) ),* 
-                )
+                let mut result = Vector::zero();
+                for i in 0..N {
+                    result[i] = self.data[i].$op(other);
+                }
+
+                result
             }
         }
     }
 }
 
+impl_vector_scalar_binary_ops!(Mul, mul);
+impl_vector_scalar_binary_ops!(Div, div);
+impl_vector_scalar_binary_ops!(Rem, rem);
+/*
 impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { 0 });
 impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { 0 });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { 0 });
@@ -2000,8 +2062,145 @@ impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+*/
 
+impl<S, const N: usize> ops::Add<Vector<S, N>> for Vector<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
 
+    #[inline]
+    fn add(self, other: Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result[i] = self.data[i] + other.data[i];
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> ops::Add<&Vector<S, N>> for Vector<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn add(self, other: &Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result[i] = self.data[i] + other.data[i];
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> ops::Add<Vector<S, N>> for &Vector<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn add(self, other: Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result[i] = self.data[i] + other.data[i];
+        }
+
+        result
+    }
+}
+
+impl<'a, 'b, S, const N: usize> ops::Add<&'a Vector<S, N>> for &'b Vector<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn add(self, other: &'a Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result[i] = self.data[i] + other.data[i];
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> ops::Sub<Vector<S, N>> for Vector<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn sub(self, other: Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result[i] = self.data[i] - other.data[i];
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> ops::Sub<&Vector<S, N>> for Vector<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn sub(self, other: &Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result[i] = self.data[i] - other.data[i];
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> ops::Sub<Vector<S, N>> for &Vector<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn sub(self, other: Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result[i] = self.data[i] - other.data[i];
+        }
+
+        result
+    }
+}
+
+impl<'a, 'b, S, const N: usize> ops::Sub<&'a Vector<S, N>> for &'b Vector<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn sub(self, other: &'a Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result[i] = self.data[i] - other.data[i];
+        }
+
+        result
+    }
+}
+
+/*
 macro_rules! impl_vector_vector_binary_ops {
     ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
         impl<S> ops::$OpType<$T> for $T where S: Scalar {
@@ -2058,8 +2257,93 @@ impl_vector_vector_binary_ops!(Add, add, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 impl_vector_vector_binary_ops!(Sub, sub, Vector3<S>, Vector3<S>, { 0, 1, 2 });
 impl_vector_vector_binary_ops!(Add, add, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
 impl_vector_vector_binary_ops!(Sub, sub, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
+*/
 
 
+impl<S, const N: usize> ops::AddAssign<Vector<S, N>> for Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn add_assign(&mut self, other: Vector<S, N>) {
+        for i in 0..N {
+            self.data[i] += other.data[i];
+        }
+    }
+}
+
+impl<S, const N: usize> ops::AddAssign<&Vector<S, N>> for Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn add_assign(&mut self, other: &Vector<S, N>) {
+        for i in 0..N {
+            self.data[i] += other.data[i];
+        }
+    }
+}
+
+impl<S, const N: usize> ops::SubAssign<Vector<S, N>> for Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn sub_assign(&mut self, other: Vector<S, N>) {
+        for i in 0..N {
+            self.data[i] -= other.data[i];
+        }
+    }
+}
+
+impl<S, const N: usize> ops::SubAssign<&Vector<S, N>> for Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn sub_assign(&mut self, other: &Vector<S, N>) {
+        for i in 0..N {
+            self.data[i] -= other.data[i];
+        }
+    }
+}
+
+impl<S, const N: usize> ops::MulAssign<S> for Vector<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn mul_assign(&mut self, other: S) {
+        for i in 0..N {
+            self.data[i] *= other;
+        }
+    }
+}
+
+impl<S, const N: usize> ops::DivAssign<S> for Vector<S, N> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn div_assign(&mut self, other: S) {
+        for i in 0..N {
+            self.data[i] /= other;
+        }
+    }
+}
+
+impl<S, const N: usize> ops::RemAssign<S> for Vector<S, N> 
+where 
+    S: Scalar 
+{
+    #[inline]
+    fn rem_assign(&mut self, other: S) {
+        for i in 0..N {
+            self.data[i] %= other;
+        }
+    }
+}
+/*
 macro_rules! impl_vector_binary_assign_ops {
     ($T:ty, { $($index:expr),* }) => {
         impl<S> ops::AddAssign<$T> for $T where S: Scalar {
@@ -2117,7 +2401,7 @@ impl_vector_binary_assign_ops!(Vector1<S>, { 0 });
 impl_vector_binary_assign_ops!(Vector2<S>, { 0, 1 });
 impl_vector_binary_assign_ops!(Vector3<S>, { 0, 1, 2 });
 impl_vector_binary_assign_ops!(Vector4<S>, { 0, 1, 2, 3 });
-
+*/
 
 impl<S, const N: usize> ops::Neg for Vector<S, N> 
 where 
@@ -2227,6 +2511,55 @@ impl_as_ref_ops!(Vector3<S>, (S, S, S));
 impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
 
 
+impl<S, const N: usize> Magnitude for Vector<S, N> 
+where 
+    S: ScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
+    }
+
+    #[inline]
+    fn magnitude(&self) -> Self::Output {
+        self.magnitude_squared().sqrt()
+    }
+    
+    #[inline]
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+    
+    #[inline]
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+
+    #[inline]
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
+
+    #[inline]
+    fn distance_squared(&self, other: &Vector<S, N>) -> Self::Output {
+        (self - other).magnitude_squared()
+    }
+
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.distance_squared(other).sqrt()
+    }
+}
+
+/*
 macro_rules! impl_magnitude {
     ($VectorN:ident) => {
         impl<S> Magnitude for $VectorN<S> where S: ScalarFloat {
@@ -2280,8 +2613,70 @@ impl_magnitude!(Vector1);
 impl_magnitude!(Vector2);
 impl_magnitude!(Vector3);
 impl_magnitude!(Vector4);
+*/
 
+impl<S, const N: usize> approx::AbsDiffEq for Vector<S, N> 
+where 
+    S: ScalarFloat
+{
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        let mut result = true;
+        for i in 0..N {
+            result &= S::abs_diff_eq(&self.data[i], &other.data[i], epsilon);
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> approx::RelativeEq for Vector<S, N> 
+where 
+    S: ScalarFloat
+{
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        let mut result = true;
+        for i in 0..N {
+            result &= S::relative_eq(&self.data[i], &other.data[i], epsilon, max_relative);
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> approx::UlpsEq for Vector<S, N> 
+where 
+    S: ScalarFloat
+{
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        let mut result = true;
+        for i in 0..N {
+            result &= S::ulps_eq(&self.data[i], &other.data[i], epsilon, max_ulps);
+        }
+
+        result
+    }
+}
+/*
 macro_rules! impl_approx_eq_ops {
     ($T:ident, { $($index:expr),* }) => {
         impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
@@ -2328,7 +2723,7 @@ impl_approx_eq_ops!(Vector1, { 0 });
 impl_approx_eq_ops!(Vector2, { 0, 1 });
 impl_approx_eq_ops!(Vector3, { 0, 1, 2 });
 impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
-
+*/
 
 macro_rules! impl_swizzle {
     ($name:ident() => $VectorN:ident => $Output:ident { $($i:expr),+ }) => {

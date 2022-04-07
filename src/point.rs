@@ -1582,6 +1582,166 @@ impl_point_index_ops!(Point3<S>, 3, ops::RangeFrom<usize>, [S]);
 impl_point_index_ops!(Point3<S>, 3, ops::RangeFull, [S]);
 */
 
+impl<S, const N: usize> ops::Add<Vector<S, N>> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn add(self, other: Vector<S, N>) -> Self::Output {
+        Self::Output {
+            coords: self.coords + other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Add<&Vector<S, N>> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn add(self, other: &Vector<S, N>) -> Self::Output {
+        Self::Output {
+            coords: self.coords + other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Add<Vector<S, N>> for &Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn add(self, other: Vector<S, N>) -> Self::Output {
+        Self::Output {
+            coords: self.coords + other,
+        }
+    }
+}
+
+impl<'a, 'b, S, const N: usize> ops::Add<&'a Vector<S, N>> for &'b Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn add(self, other: &'a Vector<S, N>) -> Self::Output {
+        Self::Output {
+            coords: self.coords + other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Sub<Vector<S, N>> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn sub(self, other: Vector<S, N>) -> Self::Output {
+        Self::Output {
+            coords: self.coords - other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Sub<&Vector<S, N>> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn sub(self, other: &Vector<S, N>) -> Self::Output {
+        Self::Output {
+            coords: self.coords - other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Sub<Vector<S, N>> for &Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn sub(self, other: Vector<S, N>) -> Self::Output {
+        Self::Output {
+            coords: self.coords - other,
+        }
+    }
+}
+
+impl<'a, 'b, S, const N: usize> ops::Sub<&'a Vector<S, N>> for &'b Point<S, N>
+where 
+    S: Scalar
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn sub(self, other: &'a Vector<S, N>) -> Self::Output {
+        Self::Output {
+            coords: self.coords - other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Sub<Point<S, N>> for Point<S, N> 
+where 
+    S: Scalar
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn sub(self, other: Point<S, N>) -> Self::Output {
+        self.coords - other.coords
+    }
+}
+
+impl<S, const N: usize> ops::Sub<&Point<S, N>> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn sub(self, other: &Point<S, N>) -> Self::Output {
+        self.coords - other.coords
+    }
+}
+
+impl<S, const N: usize> ops::Sub<Point<S, N>> for &Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn sub(self, other: Point<S, N>) -> Self::Output {
+        self.coords - other.coords
+    }
+}
+
+impl<'a, 'b, S, const N: usize> ops::Sub<&'a Point<S, N>> for &'b Point<S, N> 
+where 
+    S: Scalar
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn sub(self, other: &'a Point<S, N>) -> Self::Output {
+        self.coords - other.coords
+    }
+}
+/*
 macro_rules! impl_point_vector_binary_ops {
     ($OpType:ident, $op:ident, $T1:ty, $T2:ty, $Output:ty, { $($index:expr),* }) => {
         impl<S> ops::$OpType<$T2> for $T1 where S: Scalar {
@@ -1641,8 +1801,93 @@ impl_point_vector_binary_ops!(Sub, sub, Point2<S>, Point2<S>, Vector2<S>, { 0, 1
 impl_point_vector_binary_ops!(Add, add, Point3<S>, Vector3<S>, Point3<S>, { 0, 1, 2 });
 impl_point_vector_binary_ops!(Sub, sub, Point3<S>, Vector3<S>, Point3<S>, { 0, 1, 2 });
 impl_point_vector_binary_ops!(Sub, sub, Point3<S>, Point3<S>, Vector3<S>, { 0, 1, 2 });
+*/
 
+impl<S, const N: usize> ops::Mul<S> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
 
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Self::Output { 
+            coords: self.coords * other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Mul<S> for &Point<S, N> 
+where 
+    S: Scalar
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        Self::Output {
+            coords: self.coords * other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Div<S> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Self::Output { 
+            coords: self.coords / other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Div<S> for &Point<S, N> 
+where 
+    S: Scalar
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        Self::Output {
+            coords: self.coords / other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Rem<S> for Point<S, N> 
+where 
+    S: Scalar 
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        Self::Output { 
+            coords: self.coords % other,
+        }
+    }
+}
+
+impl<S, const N: usize> ops::Rem<S> for &Point<S, N> 
+where 
+    S: Scalar
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        Self::Output {
+            coords: self.coords % other,
+        }
+    }
+}
+
+/*
 macro_rules! impl_point_scalar_binary_ops {
     ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
         impl<S> ops::$OpType<S> for $T where S: Scalar {
@@ -1680,8 +1925,49 @@ impl_point_scalar_binary_ops!(Rem, rem, Point2<S>, Point2<S>, { 0, 1 });
 impl_point_scalar_binary_ops!(Mul, mul, Point3<S>, Point3<S>, { 0, 1, 2 });
 impl_point_scalar_binary_ops!(Div, div, Point3<S>, Point3<S>, { 0, 1, 2 });
 impl_point_scalar_binary_ops!(Rem, rem, Point3<S>, Point3<S>, { 0, 1, 2 });
+*/
 
+macro_rules! impl_scalar_point_mul_ops {
+    ($Lhs:ty) => {
+        impl<const N: usize> ops::Mul<Point<$Lhs, N>> for $Lhs {
+            type Output = Point<$Lhs, N>;
 
+            #[inline]
+            fn mul(self, other: Point<$Lhs, N>) -> Self::Output {
+                Self::Output {
+                    coords: self * other.coords,
+                }
+            }
+        }
+
+        impl<'a, const N: usize> ops::Mul<Point<$Lhs, N>> for &'a $Lhs {
+            type Output = Point<$Lhs, N>;
+
+            #[inline]
+            fn mul(self, other: Point<$Lhs, N>) -> Self::Output {
+                Self::Output {
+                    coords: self * other.coords,
+                }
+            }
+        }
+    }
+}
+
+impl_scalar_point_mul_ops!(u8);
+impl_scalar_point_mul_ops!(u16);
+impl_scalar_point_mul_ops!(u32);
+impl_scalar_point_mul_ops!(u64);
+impl_scalar_point_mul_ops!(u128);
+impl_scalar_point_mul_ops!(usize);
+impl_scalar_point_mul_ops!(i8);
+impl_scalar_point_mul_ops!(i16);
+impl_scalar_point_mul_ops!(i32);
+impl_scalar_point_mul_ops!(i64);
+impl_scalar_point_mul_ops!(i128);
+impl_scalar_point_mul_ops!(isize);
+impl_scalar_point_mul_ops!(f32);
+impl_scalar_point_mul_ops!(f64);
+/*
 macro_rules! impl_scalar_point_mul_ops {
     ($Lhs:ty, $Rhs:ty, $Output:ty, { $($index:expr),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
@@ -1748,7 +2034,7 @@ impl_scalar_point_mul_ops!(i128,  Point3<i128>,  Point3<i128>,  { 0, 1, 2 });
 impl_scalar_point_mul_ops!(isize, Point3<isize>, Point3<isize>, { 0, 1, 2 });
 impl_scalar_point_mul_ops!(f32,   Point3<f32>,   Point3<f32>,   { 0, 1, 2 });
 impl_scalar_point_mul_ops!(f64,   Point3<f64>,   Point3<f64>,   { 0, 1, 2 });
-
+*/
 
 impl<S, const N: usize> ops::Neg for Point<S, N> 
 where 
@@ -1806,6 +2092,77 @@ impl_point_unary_ops!(Neg, neg, Point2<S>, Point2<S>, { 0, 1 });
 impl_point_unary_ops!(Neg, neg, Point3<S>, Point3<S>, { 0, 1, 2 });
 */
 
+impl<S, const N: usize> ops::AddAssign<Vector<S, N>> for Point<S, N> 
+where
+    S: Scalar
+{
+    #[inline]
+    fn add_assign(&mut self, other: Vector<S, N>) {
+        self.coords += other;
+    }
+}
+
+impl<S, const N: usize> ops::AddAssign<&Vector<S, N>> for Point<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn add_assign(&mut self, other: &Vector<S, N>) {
+        self.coords += other;
+    }
+}
+
+impl<S, const N: usize> ops::SubAssign<Vector<S, N>> for Point<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn sub_assign(&mut self, other: Vector<S, N>) {
+        self.coords -= other;
+    }
+}
+
+impl<S, const N: usize> ops::SubAssign<&Vector<S, N>> for Point<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn sub_assign(&mut self, other: &Vector<S, N>) {
+        self.coords -= other;
+    }
+}
+
+impl<S, const N: usize> ops::MulAssign<S> for Point<S, N> 
+where
+    S: Scalar
+{
+    #[inline]
+    fn mul_assign(&mut self, other: S) {
+        self.coords *= other;
+    }
+}
+
+impl<S, const N: usize> ops::DivAssign<S> for Point<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn div_assign(&mut self, other: S) {
+        self.coords /= other;
+    }
+}
+
+impl<S, const N: usize> ops::RemAssign<S> for Point<S, N> 
+where 
+    S: Scalar
+{
+    #[inline]
+    fn rem_assign(&mut self, other: S) {
+        self.coords %= other;
+    }
+}
+
+/*
 macro_rules! impl_point_binary_assign_ops {
     ($PointType:ty, $VectorType:ty, { $($index:expr),* }) => {
         impl<S> ops::AddAssign<$VectorType> for $PointType where S: Scalar {
@@ -1862,8 +2219,56 @@ macro_rules! impl_point_binary_assign_ops {
 impl_point_binary_assign_ops!(Point1<S>, Vector1<S>, { 0 });
 impl_point_binary_assign_ops!(Point2<S>, Vector2<S>, { 0, 1 });
 impl_point_binary_assign_ops!(Point3<S>, Vector3<S>, { 0, 1, 2 });
+*/
 
+impl<S, const N: usize> Magnitude for Point<S, N> 
+where 
+    S: ScalarFloat
+{
+    type Output = S;
 
+    #[inline]
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
+    }
+
+    #[inline]
+    fn magnitude(&self) -> Self::Output {
+        self.magnitude_squared().sqrt()
+    }
+    
+    #[inline]
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
+    }
+    
+    #[inline]
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
+    }
+
+    #[inline]
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
+
+        if magnitude <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
+
+    #[inline]
+    fn distance_squared(&self, other: &Point<S, N>) -> Self::Output {
+        (self - other).magnitude_squared()
+    }
+
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.distance_squared(other).sqrt()
+    }
+}
+/*
 macro_rules! impl_magnitude {
     ($PointN:ident) => {
         impl<S> Magnitude for $PointN<S> where S: ScalarFloat {
@@ -1916,8 +2321,56 @@ macro_rules! impl_magnitude {
 impl_magnitude!(Point1);
 impl_magnitude!(Point2);
 impl_magnitude!(Point3);
+*/
 
+impl<S, const N: usize> approx::AbsDiffEq for Point<S, N> 
+where 
+    S: ScalarFloat
+{
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        Vector::abs_diff_eq(&self.coords, &other.coords, epsilon)
+    }
+}
+
+impl<S, const N: usize> approx::RelativeEq for Point<S, N> 
+where 
+    S: ScalarFloat
+{
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        Vector::relative_eq(&self.coords, &other.coords, epsilon, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx::UlpsEq for Point<S, N> 
+where 
+    S: ScalarFloat
+{
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        Vector::ulps_eq(&self.coords, &other.coords, epsilon, max_ulps)
+    }
+}
+
+/*
 macro_rules! impl_approx_eq_ops {
     ($PointN:ident, $VectorN:ident) => {
         impl<S> approx::AbsDiffEq for $PointN<S> where S: ScalarFloat {
@@ -1963,7 +2416,7 @@ macro_rules! impl_approx_eq_ops {
 impl_approx_eq_ops!(Point1, Vector1);
 impl_approx_eq_ops!(Point2, Vector2);
 impl_approx_eq_ops!(Point3, Vector3);
-
+*/
 
 macro_rules! impl_swizzle {
     ($name:ident() => $PointN:ident => $Output:ident { $($i:expr),+ }) => {
