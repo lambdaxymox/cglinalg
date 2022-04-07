@@ -265,8 +265,8 @@ where
         F: FnMut(S) -> T
     {
         // SAFETY: Every location gets written into with a valid value of type `T`.
-        let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
         // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
         for c in 0..C {
             for r in 0..R {
                 data[c][r] = op(self.data[c][r]);
@@ -282,8 +282,8 @@ where
     #[inline]
     pub fn row(&self, r: usize) -> Vector<S, C> {
         // SAFETY: Every location gets written into with a value value of type `S`.
-        let mut data: [S; C] = unsafe { core::mem::zeroed() };
         // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut data: [S; C] = unsafe { core::mem::zeroed() };
         for c in 0..C {
             data[c] = self.data[c][r];
         }
@@ -421,8 +421,8 @@ where
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix<T, R, C, RC>> {
         // SAFETY: Every location gets written into with a valid value of type `T`.
-        let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
         // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
         for c in 0..C {
             for r in 0..R {
                 data[c][r] = match num_traits::cast(self.data[c][r]) {
@@ -479,8 +479,8 @@ where
     /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
-        let mut result = true;
         // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
         for c in 0..C {
             for r in 0..R {
                 result &= self.data[c][r].is_zero();
@@ -537,8 +537,8 @@ where
     /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
-        let mut result = true;
         // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
         for c in 0..C {
             for r in 0..R {
                 result &= self.data[c][r].is_finite();
