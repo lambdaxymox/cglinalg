@@ -1750,6 +1750,31 @@ impl_scalar_point_mul_ops!(f32,   Point3<f32>,   Point3<f32>,   { 0, 1, 2 });
 impl_scalar_point_mul_ops!(f64,   Point3<f64>,   Point3<f64>,   { 0, 1, 2 });
 
 
+impl<S, const N: usize> ops::Neg for Point<S, N> 
+where 
+    S: ScalarSigned
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Self::Output { coords: -self.coords }
+    }
+}
+
+impl<S, const N: usize> ops::Neg for &Point<S, N>
+where 
+    S: ScalarSigned
+{
+    type Output = Point<S, N>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Self::Output { coords: -self.coords }
+    }
+}
+
+/*
 macro_rules! impl_point_unary_ops {
     ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
         impl<S> ops::$OpType for $T where S: ScalarSigned {
@@ -1779,7 +1804,7 @@ macro_rules! impl_point_unary_ops {
 impl_point_unary_ops!(Neg, neg, Point1<S>, Point1<S>, { 0 });
 impl_point_unary_ops!(Neg, neg, Point2<S>, Point2<S>, { 0, 1 });
 impl_point_unary_ops!(Neg, neg, Point3<S>, Point3<S>, { 0, 1, 2 });
-
+*/
 
 macro_rules! impl_point_binary_assign_ops {
     ($PointType:ty, $VectorType:ty, { $($index:expr),* }) => {
