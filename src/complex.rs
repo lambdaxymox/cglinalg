@@ -409,7 +409,7 @@ where
     /// ```
     #[inline]
     pub fn magnitude_squared(self) -> S {
-        self.re.clone() * self.re.clone() + self.im.clone() * self.im.clone()
+        self.re * self.re + self.im * self.im
     }
 }
 
