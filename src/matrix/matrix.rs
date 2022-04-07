@@ -734,6 +734,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_diagonal(diagonal: &Vector<S, N>) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::zero();
         for i in 0..N {
             result[i][i] = diagonal[i];
@@ -765,9 +766,40 @@ where
     /// ```
     #[inline]
     pub fn diagonal(&self) -> Vector4<S> {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Vector::zero();
         for i in 0..N {
             result[i] = self.data[i][i];
+        }
+
+        result
+    }
+    
+    /// Compute the trace of a square matrix.
+    ///
+    /// The trace of a matrix is the sum of the diagonal elements.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32,
+    ///     4_i32, 5_i32, 6_i32,
+    ///     7_i32, 8_i32, 9_i32 
+    /// );
+    ///
+    /// assert_eq!(matrix.trace(), 15_i32);
+    /// ```
+    #[inline]
+    pub fn trace(&self) -> S {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = S::zero();
+        for i in 0..N {
+            result += self.data[i][i];
         }
 
         result
@@ -1041,6 +1073,7 @@ where
         self.data[0][0].is_one()
     }
 
+    /*
     /// Compute the trace of a square matrix.
     ///
     /// The trace of a matrix is the sum of the diagonal elements.
@@ -1060,6 +1093,7 @@ where
     pub fn trace(&self) -> S {
         self.data[0][0]
     }
+    */
 }
 
 impl<S> Matrix1x1<S> 
@@ -1891,7 +1925,7 @@ where
         Vector2::new(self.data[0][0], self.data[1][1])
     }
     */
-
+    /*
     /// Compute the trace of a square matrix.
     ///
     /// The trace of a matrix is the sum of the diagonal elements.
@@ -1914,6 +1948,7 @@ where
     pub fn trace(&self) -> S {
         self.data[0][0] + self.data[1][1]
     }
+    */
 }
 
 impl<S> Matrix2x2<S> 
@@ -3507,7 +3542,7 @@ where
         Vector3::new(self.data[0][0], self.data[1][1], self.data[2][2])
     }
     */
-
+    /*
     /// Compute the trace of a square matrix.
     ///
     /// The trace of a matrix is the sum of the diagonal elements.
@@ -3531,6 +3566,7 @@ where
     pub fn trace(&self) -> S {
         self.data[0][0] + self.data[1][1] + self.data[2][2]
     }
+    */
 }
 
 impl<S> Matrix3x3<S> 
@@ -5619,7 +5655,7 @@ where
         )
     }
     */
-
+    /*
     /// Compute the trace of a square matrix.
     ///
     /// The trace of a matrix is the sum of the diagonal elements.
@@ -5644,6 +5680,7 @@ where
     pub fn trace(&self) -> S {
         self.data[0][0] + self.data[1][1] + self.data[2][2] + self.data[3][3]
     }
+    */
 }
 
 impl<S> Matrix4x4<S> 
