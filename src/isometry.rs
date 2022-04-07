@@ -357,7 +357,7 @@ where
     /// ```
     #[inline]
     pub fn transform_point(&self, point: &Point2<S>) -> Point2<S> {
-        let rotated_point = self.rotation.rotate_point(&point);
+        let rotated_point = self.rotation.rotate_point(point);
 
         self.translation.translate_point(&rotated_point)
     }
@@ -638,7 +638,7 @@ where
 
         Isometry2::from_parts(
             &Translation2::from_vector(&(self.translation.vector + shift)),
-            &(&self.rotation * &other.rotation)
+            &(self.rotation * other.rotation)
         )
     }
 }
@@ -655,7 +655,7 @@ where
 
         Isometry2::from_parts(
             &Translation2::from_vector(&(self.translation.vector + shift)),
-            &(&self.rotation * &other.rotation)
+            &(self.rotation * other.rotation)
         )
     }
 }
@@ -672,7 +672,7 @@ where
 
         Isometry2::from_parts(
             &Translation2::from_vector(&(self.translation.vector + shift)),
-            &(&self.rotation * &other.rotation)
+            &(self.rotation * other.rotation)
         )
     }
 }
@@ -689,7 +689,7 @@ where
 
         Isometry2::from_parts(
             &Translation2::from_vector(&(self.translation.vector + shift)),
-            &(&self.rotation * &other.rotation)
+            &(self.rotation * other.rotation)
         )
     }
 }
@@ -1033,7 +1033,7 @@ where
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         let rotation = Rotation3::look_at_lh(&(target - eye), up);
-        let vector = &rotation * (-eye) - Point3::origin();
+        let vector = rotation * (-eye) - Point3::origin();
         let translation = Translation3::from_vector(&vector);
 
         Self::from_parts(&translation, &rotation)
@@ -1077,7 +1077,7 @@ where
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S>{
         let rotation = Rotation3::look_at_rh(&(target - eye), up);
-        let vector = &rotation * (-eye) - Point3::origin();
+        let vector = rotation * (-eye) - Point3::origin();
         let translation = Translation3::from_vector(&vector);
     
         Self::from_parts(&translation, &rotation)  
@@ -1248,7 +1248,7 @@ where
     /// ```
     #[inline]
     pub fn transform_point(&self, point: &Point3<S>) -> Point3<S> {
-        let rotated_point = self.rotation.rotate_point(&point);
+        let rotated_point = self.rotation.rotate_point(point);
 
         self.translation.translate_point(&rotated_point)
     }
@@ -1534,7 +1534,7 @@ where
 
         Isometry3::from_parts(
             &Translation3::from_vector(&(self.translation.vector + shift)),
-            &(&self.rotation * &other.rotation)
+            &(self.rotation * other.rotation)
         )
     }
 }
@@ -1551,7 +1551,7 @@ where
 
         Isometry3::from_parts(
             &Translation3::from_vector(&(self.translation.vector + shift)),
-            &(&self.rotation * &other.rotation)
+            &(self.rotation * other.rotation)
         )
     }
 }
@@ -1568,7 +1568,7 @@ where
 
         Isometry3::from_parts(
             &Translation3::from_vector(&(self.translation.vector + shift)),
-            &(&self.rotation * &other.rotation)
+            &(self.rotation * other.rotation)
         )
     }
 }
@@ -1585,7 +1585,7 @@ where
 
         Isometry3::from_parts(
             &Translation3::from_vector(&(self.translation.vector + shift)),
-            &(&self.rotation * &other.rotation)
+            &(self.rotation * other.rotation)
         )
     }
 }

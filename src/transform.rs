@@ -386,7 +386,7 @@ where
     #[inline]
     fn mul(self, other: Transform2<S>) -> Self::Output {
         Transform2 {
-            matrix: &self.matrix * &other.matrix
+            matrix: self.matrix * other.matrix
         }
     }
 }
@@ -400,7 +400,7 @@ where
     #[inline]
     fn mul(self, other: &Transform2<S>) -> Self::Output {
         Transform2 {
-            matrix: &self.matrix * &other.matrix
+            matrix: self.matrix * other.matrix
         }
     }
 }
@@ -414,7 +414,7 @@ where
     #[inline]
     fn mul(self, other: Transform2<S>) -> Self::Output {
         Transform2 {
-            matrix: &self.matrix * &other.matrix
+            matrix: self.matrix * other.matrix
         }
     }
 }
@@ -428,7 +428,7 @@ where
     #[inline]
     fn mul(self, other: &'a Transform2<S>) -> Self::Output {
         Transform2 {
-            matrix: &self.matrix * &other.matrix
+            matrix: self.matrix * other.matrix
         }
     }
 }
@@ -812,7 +812,7 @@ where
     #[inline]
     fn mul(self, other: Transform3<S>) -> Self::Output {
         Transform3 {
-            matrix: &self.matrix * &other.matrix
+            matrix: self.matrix * other.matrix
         }
     }
 }
@@ -826,7 +826,7 @@ where
     #[inline]
     fn mul(self, other: &Transform3<S>) -> Self::Output {
         Transform3 {
-            matrix: &self.matrix * &other.matrix
+            matrix: self.matrix * other.matrix
         }
     }
 }
@@ -840,7 +840,7 @@ where
     #[inline]
     fn mul(self, other: Transform3<S>) -> Self::Output {
         Transform3 {
-            matrix: &self.matrix * &other.matrix
+            matrix: self.matrix * other.matrix
         }
     }
 }
@@ -854,7 +854,7 @@ where
     #[inline]
     fn mul(self, other: &'a Transform3<S>) -> Self::Output {
         Transform3 {
-            matrix: &self.matrix * &other.matrix
+            matrix: self.matrix * other.matrix
         }
     }
 }

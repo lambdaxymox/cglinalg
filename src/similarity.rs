@@ -668,7 +668,7 @@ where
     fn mul(self, other: Isometry2<S>) -> Self::Output {
         let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
         let translation = Translation2::from_vector(&(self.isometry.translation.vector + shift));
-        let rotation = &self.isometry.rotation * &other.rotation;
+        let rotation = self.isometry.rotation * other.rotation;
 
         Similarity2::from_parts(&translation, &rotation, self.scale())
     }
@@ -684,7 +684,7 @@ where
     fn mul(self, other: &Isometry2<S>) -> Self::Output {
         let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
         let translation = Translation2::from_vector(&(self.isometry.translation.vector + shift));
-        let rotation = &self.isometry.rotation * &other.rotation;
+        let rotation = self.isometry.rotation * other.rotation;
 
         Similarity2::from_parts(&translation, &rotation, self.scale())
     }
@@ -700,7 +700,7 @@ where
     fn mul(self, other: Isometry2<S>) -> Self::Output {
         let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
         let translation = Translation2::from_vector(&(self.isometry.translation.vector + shift));
-        let rotation = &self.isometry.rotation * &other.rotation;
+        let rotation = self.isometry.rotation * other.rotation;
 
         Similarity2::from_parts(&translation, &rotation, self.scale())
     }
@@ -716,7 +716,7 @@ where
     fn mul(self, other: &'a Isometry2<S>) -> Self::Output {
         let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
         let translation = Translation2::from_vector(&(self.isometry.translation.vector + shift));
-        let rotation = &self.isometry.rotation * &other.rotation;
+        let rotation = self.isometry.rotation * other.rotation;
 
         Similarity2::from_parts(&translation, &rotation, self.scale())
     }
@@ -730,7 +730,7 @@ where
 
     #[inline]
     fn mul(self, other: Similarity2<S>) -> Self::Output {
-        let mut result = self * &other.isometry;
+        let mut result = self * other.isometry;
         result.scale *= other.scale();
 
         result
@@ -745,7 +745,7 @@ where
 
     #[inline]
     fn mul(self, other: &Similarity2<S>) -> Self::Output {
-        let mut result = self * &other.isometry;
+        let mut result = self * other.isometry;
         result.scale *= other.scale();
 
         result
@@ -760,7 +760,7 @@ where
 
     #[inline]
     fn mul(self, other: Similarity2<S>) -> Self::Output {
-        let mut result = self * &other.isometry;
+        let mut result = self * other.isometry;
         result.scale *= other.scale();
 
         result
@@ -775,7 +775,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Similarity2<S>) -> Self::Output {
-        let mut result = self * &other.isometry;
+        let mut result = self * other.isometry;
         result.scale *= other.scale();
 
         result
@@ -1567,7 +1567,7 @@ where
     fn mul(self, other: Isometry3<S>) -> Self::Output {
         let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
         let translation = Translation3::from_vector(&(self.isometry.translation.vector + shift));
-        let rotation = &self.isometry.rotation * &other.rotation;
+        let rotation = self.isometry.rotation * other.rotation;
 
         Similarity3::from_parts(&translation, &rotation, self.scale())
     }
@@ -1583,7 +1583,7 @@ where
     fn mul(self, other: &Isometry3<S>) -> Self::Output {
         let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
         let translation = Translation3::from_vector(&(self.isometry.translation.vector + shift));
-        let rotation = &self.isometry.rotation * &other.rotation;
+        let rotation = self.isometry.rotation * other.rotation;
 
         Similarity3::from_parts(&translation, &rotation, self.scale())
     }
@@ -1599,7 +1599,7 @@ where
     fn mul(self, other: Isometry3<S>) -> Self::Output {
         let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
         let translation = Translation3::from_vector(&(self.isometry.translation.vector + shift));
-        let rotation = &self.isometry.rotation * &other.rotation;
+        let rotation = self.isometry.rotation * other.rotation;
 
         Similarity3::from_parts(&translation, &rotation, self.scale())
     }
@@ -1615,7 +1615,7 @@ where
     fn mul(self, other: &'a Isometry3<S>) -> Self::Output {
         let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
         let translation = Translation3::from_vector(&(self.isometry.translation.vector + shift));
-        let rotation = &self.isometry.rotation * &other.rotation;
+        let rotation = self.isometry.rotation * other.rotation;
 
         Similarity3::from_parts(&translation, &rotation, self.scale())
     }
@@ -1629,7 +1629,7 @@ where
 
     #[inline]
     fn mul(self, other: Similarity3<S>) -> Self::Output {
-        let mut result = self * &other.isometry;
+        let mut result = self * other.isometry;
         result.scale *= other.scale();
 
         result
@@ -1644,7 +1644,7 @@ where
 
     #[inline]
     fn mul(self, other: &Similarity3<S>) -> Self::Output {
-        let mut result = self * &other.isometry;
+        let mut result = self * other.isometry;
         result.scale *= other.scale();
 
         result
@@ -1659,7 +1659,7 @@ where
 
     #[inline]
     fn mul(self, other: Similarity3<S>) -> Self::Output {
-        let mut result = self * &other.isometry;
+        let mut result = self * other.isometry;
         result.scale *= other.scale();
 
         result
@@ -1674,7 +1674,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Similarity3<S>) -> Self::Output {
-        let mut result = self * &other.isometry;
+        let mut result = self * other.isometry;
         result.scale *= other.scale();
 
         result

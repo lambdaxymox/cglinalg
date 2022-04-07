@@ -92,7 +92,7 @@ Major outstanding project goals include:
 */
 
 #![allow(clippy::redundant_field_names)]
-#![no_std]
+//#![no_std]
 extern crate core;
 
 extern crate approx;
