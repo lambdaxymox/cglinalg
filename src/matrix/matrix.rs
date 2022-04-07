@@ -584,6 +584,46 @@ where
 
 impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
 where
+    S: ScalarSigned
+{
+    /// Mutably negate the elements of a matrix in place.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// # 
+    /// let mut result = Matrix4x4::new(
+    ///     1_i32,  2_i32,  3_i32,  4_i32,
+    ///     5_i32,  6_i32,  7_i32,  8_i32,
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     -1_i32,  -2_i32,  -3_i32,  -4_i32,
+    ///     -5_i32,  -6_i32,  -7_i32,  -8_i32, 
+    ///     -9_i32,  -10_i32, -11_i32, -12_i32,
+    ///     -13_i32, -14_i32, -15_i32, -16_i32   
+    /// );
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        for c in 0..C {
+            for r in 0..R {
+                self.data[c][r] = -self.data[c][r];
+            }
+        }
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
+where
     S: ScalarFloat
 {
     /// Returns `true` if the elements of a matrix are all finite. 
@@ -2006,7 +2046,7 @@ where
             -two * normal.x * normal.y,        one - two * normal.y * normal.y,
         )
     }
-
+    /*
     /// Mutably negate the elements of a matrix in place.
     ///
     /// # Example
@@ -2035,6 +2075,7 @@ where
         self.data[1][0] = -self.data[1][0];
         self.data[1][1] = -self.data[1][1];
     }
+    */
 
     /// Compute the determinant of a matrix.
     /// 
@@ -3772,6 +3813,7 @@ where
        )
     }
 
+    /*
     /// Mutably negate the elements of a matrix in place.
     ///
     /// # Example
@@ -3807,6 +3849,7 @@ where
         self.data[2][1] = -self.data[2][1];
         self.data[2][2] = -self.data[2][2];
     }
+    */
 
     /// Compute the determinant of a matrix.
     /// 
@@ -5808,6 +5851,7 @@ where
         )
     }
 
+    /*
     /// Mutably negate the elements of a matrix in place.
     ///
     /// # Example
@@ -5852,6 +5896,7 @@ where
         self.data[3][2] = -self.data[3][2];
         self.data[3][3] = -self.data[3][3];
     }
+    */
 
     /// Compute the determinant of a matrix.
     /// 
