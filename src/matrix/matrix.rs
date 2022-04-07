@@ -266,6 +266,7 @@ where
     {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
                 data[c][r] = op(self.data[c][r]);
@@ -282,6 +283,7 @@ where
     pub fn row(&self, r: usize) -> Vector<S, C> {
         // SAFETY: Every location gets written into with a value value of type `S`.
         let mut data: [S; C] = unsafe { core::mem::zeroed() };
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             data[c] = self.data[c][r];
         }
@@ -293,6 +295,39 @@ where
     #[inline]
     pub fn column(&self, c: usize) -> Vector<S, R> {
         Vector::from(&self.data[c])
+    }
+
+    /// Swap two rows of a matrix.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let mut result = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32,
+    ///     1_i32, 2_i32, 3_i32,
+    ///     1_i32, 2_i32, 3_i32
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     3_i32, 2_i32, 1_i32,
+    ///     3_i32, 2_i32, 1_i32,
+    ///     3_i32, 2_i32, 1_i32
+    /// );
+    /// result.swap_rows(0, 2);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn swap_rows(&mut self, row_a: usize, row_b: usize) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        for c in 0..C {
+            let col_c_row_a = self.data[c][row_a];
+            self.data[c][row_a] = self.data[c][row_b];
+            self.data[c][row_b] = col_c_row_a;
+        }
     }
 
     /// Swap two columns of a matrix.
@@ -747,7 +782,7 @@ impl<S> Matrix1x1<S>
 where 
     S: ScalarSigned 
 {
-     /// Compute the determinant of a matrix.
+    /// Compute the determinant of a matrix.
     /// 
     /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
@@ -1040,7 +1075,7 @@ where
         Vector2::new(self.data[c][0], self.data[c][1])
     }
     */
-    
+    /*
     /// Swap two rows of a matrix.
     ///
     /// # Example
@@ -1071,6 +1106,7 @@ where
         self.data[0][row_b] = c0ra;
         self.data[1][row_b] = c1ra;
     }
+    */
     
     /*
     /// Swap two columns of a matrix.
@@ -2262,7 +2298,7 @@ where
         Vector3::new(self.data[c][0], self.data[c][1], self.data[c][2])
     }
     */
-    
+    /*
     /// Swap two rows of a matrix.
     ///
     /// # Example
@@ -2298,7 +2334,7 @@ where
         self.data[1][row_b] = c1ra;
         self.data[2][row_b] = c2ra;
     }
-    
+    */
     /*
     /// Swap two columns of a matrix.
     ///
@@ -4446,7 +4482,7 @@ where
         )
     }
     */
-     
+    /*
     /// Swap two rows of a matrix.
     ///
     /// # Example
@@ -4487,7 +4523,7 @@ where
         self.data[2][row_b] = c2ra;
         self.data[3][row_b] = c3ra;
     }
-    
+    */
     /*
     /// Swap two columns of a matrix.
     ///
@@ -7459,7 +7495,7 @@ where
         Vector2::new(self.data[c][0], self.data[c][1])
     }
     */
-
+    /*
     /// Swap two rows of a matrix.
     ///
     /// # Example
@@ -7495,7 +7531,7 @@ where
         self.data[1][row_b] = c1ra;
         self.data[2][row_b] = c2ra;
     }
-    
+    */
     /*
     /// Swap two columns of a matrix.
     ///
@@ -7944,7 +7980,7 @@ where
         Vector3::new(self.data[c][0], self.data[c][1], self.data[c][2])
     }
     */
-
+    /*
     /// Swap two rows of a matrix.
     ///
     /// # Example
@@ -7975,7 +8011,7 @@ where
         self.data[0][row_b] = c0ra;
         self.data[1][row_b] = c1ra;
     }
-    
+    */
     /*
     /// Swap two columns of a matrix.
     ///
@@ -8448,7 +8484,7 @@ where
         Vector2::new(self.data[c][0], self.data[c][1])
     }
     */
-
+    /*
     /// Swap two rows of a matrix.
     ///
     /// # Example
@@ -8489,7 +8525,7 @@ where
         self.data[2][row_b] = c2ra;
         self.data[3][row_b] = c3ra;
     }
-    
+    */
     /*
     /// Swap two columns of a matrix.
     ///
@@ -8980,7 +9016,7 @@ where
         )
     }
     */
-
+    /*
     /// Swap two rows of a matrix.
     ///
     /// # Example
@@ -9011,7 +9047,7 @@ where
         self.data[0][row_b] = c0ra;
         self.data[1][row_b] = c1ra;
     }
-    
+    */
     /*
     /// Swap two columns of a matrix.
     ///
@@ -9520,7 +9556,7 @@ where
         Vector3::new(self.data[c][0], self.data[c][1], self.data[c][2])
     }
     */
-
+    /*
     /// Swap two rows of a matrix.
     ///
     /// # Example
@@ -9561,7 +9597,7 @@ where
         self.data[2][row_b] = c2ra;
         self.data[3][row_b] = c3ra;
     }
-    
+    */
     /*
     /// Swap two columns of a matrix.
     ///
@@ -10091,7 +10127,7 @@ where
         )
     }
     */
-
+    /*
     /// Swap two rows of a matrix.
     ///
     /// # Example
@@ -10127,7 +10163,7 @@ where
         self.data[1][row_b] = c1ra;
         self.data[2][row_b] = c2ra;
     }
-    
+    */
     /*
     /// Swap two columns of a matrix.
     ///

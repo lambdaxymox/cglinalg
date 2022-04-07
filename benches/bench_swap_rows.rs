@@ -102,27 +102,27 @@ macro_rules! bench_unop(
     }
 );
 
-fn row2x2(bh: &mut criterion::Criterion) {
-    let m: Matrix2x2<f32> = gen_matrix2x2();
+fn swap_rows2x2(bh: &mut criterion::Criterion) {
+    let mut m: Matrix2x2<f32> = gen_matrix2x2();
 
     bh.bench_function(stringify!("swap2"), move |bh| bh.iter(|| {
-        m.row(0)
+        m.swap_rows(0, 1);
     }));
 }
 
-fn row3x3(bh: &mut criterion::Criterion) {
-    let m: Matrix3x3<f32> = gen_matrix3x3();
+fn swap_rows3x3(bh: &mut criterion::Criterion) {
+    let mut m: Matrix3x3<f32> = gen_matrix3x3();
 
     bh.bench_function(stringify!("swap3"), move |bh| bh.iter(|| {
-        m.row(1)
+        m.swap_rows(0, 2);
     }));
 }
 
-fn row4x4(bh: &mut criterion::Criterion) {
-    let m: Matrix4x4<f32> = gen_matrix4x4();
+fn swap_rows4x4(bh: &mut criterion::Criterion) {
+    let mut m: Matrix4x4<f32> = gen_matrix4x4();
 
     bh.bench_function(stringify!("swap4"), move |bh| bh.iter(|| {
-        m.row(2)
+        m.swap_rows(0, 3);
     }));
 }
 
@@ -134,10 +134,10 @@ fn row4x4(bh: &mut criterion::Criterion) {
 
 
 criterion_group!(
-    matrix_cast_benchmarks,
-    row2x2,
-    row3x3,
-    row4x4
+    matrix_swap_rows_benchmarks,
+    swap_rows2x2,
+    swap_rows3x3,
+    swap_rows4x4
 );
-criterion_main!(matrix_cast_benchmarks);
+criterion_main!(matrix_swap_rows_benchmarks);
 
