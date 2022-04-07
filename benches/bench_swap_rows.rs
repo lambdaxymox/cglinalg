@@ -191,26 +191,26 @@ macro_rules! bench_unop(
 );
 
 fn transpose2x2(bh: &mut criterion::Criterion) {
-    let mut m: Matrix2x2<f32> = gen_matrix2x2();
+    let m = gen_scalar::<f32>();
 
     bh.bench_function(stringify!("transpose2x2"), move |bh| bh.iter(|| {
-        black_box(m.transpose_mut())
+        black_box( Matrix2x2::<f32>::from_diagonal_value(m))
     }));
 }
 
 fn transpose3x3(bh: &mut criterion::Criterion) {
-    let mut m: Matrix3x3<f32> = gen_matrix3x3();
+    let m = gen_scalar::<f32>();
 
     bh.bench_function(stringify!("transpose3x3"), move |bh| bh.iter(|| {
-        black_box(m.transpose_mut())
+        black_box( Matrix3x3::<f32>::from_diagonal_value(m))
     }));
 }
 
 fn transpose4x4(bh: &mut criterion::Criterion) {
-    let mut m: Matrix4x4<f32> = gen_matrix4x4();
+    let m = gen_scalar::<f32>();
 
     bh.bench_function(stringify!("transpose4x4"), move |bh| bh.iter(|| {
-        black_box(m.transpose_mut())
+        black_box( Matrix4x4::<f32>::from_diagonal_value(m))
     }));
 }
 /*

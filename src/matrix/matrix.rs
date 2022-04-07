@@ -640,6 +640,75 @@ where
     }
 }
 
+impl<S, const N: usize, const NN: usize> Matrix<S, N, N, NN>
+where
+    S: Scalar
+{
+    /// Compute an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3, 
+    /// # };
+    /// #
+    /// let result = Matrix3x3::identity();
+    /// let expected = Matrix3x3::new(
+    ///     1_i32, 0_i32, 0_i32,
+    ///     0_i32, 1_i32, 0_i32,
+    ///     0_i32, 0_i32, 1_i32
+    /// );
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn identity() -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::zero();
+        for i in 0..N {
+            result[i][i] = S::one();
+        }
+
+        result
+    }
+
+    /// Construct a new diagonal matrix from a given value where
+    /// each element along the diagonal is equal to `value`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let result = Matrix4x4::from_diagonal_value(4_i32);
+    /// let expected = Matrix4x4::new(
+    ///     4_i32, 0_i32, 0_i32, 0_i32,
+    ///     0_i32, 4_i32, 0_i32, 0_i32,
+    ///     0_i32, 0_i32, 4_i32, 0_i32,
+    ///     0_i32, 0_i32, 0_i32, 4_i32 
+    /// );
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_diagonal_value(value: S) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::zero();
+        for i in 0..N {
+            result[i][i] = value;
+        }
+
+        result
+    }
+}
+
 impl<S, const R: usize, const C: usize, const RC: usize> Default for Matrix<S, R, C, RC>
 where
     S: Scalar
@@ -862,7 +931,7 @@ where
         self.data[0][0].is_zero()
     }
     */
-
+    /*
     /// Compute an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -884,7 +953,8 @@ where
     pub fn identity() -> Self {
         Self::new(S::one())
     }
-    
+    */
+
     /// Determine whether a matrix is an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -1626,7 +1696,7 @@ where
         self.data[1][0].is_zero() && self.data[1][1].is_zero()
     }
     */
-
+    /*
     /// Compute an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -1651,6 +1721,7 @@ where
     pub fn identity() -> Self {
         Self::new(S::one(), S::zero(), S::zero(), S::one())
     }
+    */
     
     /// Determine whether a matrix is an identity matrix.
     ///
@@ -1673,7 +1744,7 @@ where
         self.data[0][0].is_one()  && self.data[0][1].is_zero() &&
         self.data[1][0].is_zero() && self.data[1][1].is_one()
     }
-
+    /*
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
     ///
@@ -1700,6 +1771,7 @@ where
             S::zero(), value
         )
     }
+    */
     
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
@@ -3222,7 +3294,7 @@ where
         self.data[2][2].is_zero()
     }
     */
-    
+    /*
     /// Compute an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -3256,6 +3328,7 @@ where
             zero, zero, one
         )
     }
+    */
     
     /// Determine whether a matrix is an identity matrix.
     ///
@@ -3280,6 +3353,7 @@ where
         self.data[2][0].is_zero() && self.data[2][1].is_zero() && self.data[2][2].is_one()
     }
 
+    /*
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
     ///
@@ -3308,6 +3382,7 @@ where
             S::zero(), S::zero(), value,
         )
     }
+    */
     
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
@@ -5310,7 +5385,7 @@ where
         self.data[3][2].is_zero() && self.data[3][3].is_zero()
     }
     */
-    
+    /*
     /// Compute an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -5346,6 +5421,7 @@ where
             zero, zero, zero, one
         )
     }
+    */
     
     /// Determine whether a matrix is an identity matrix.
     ///
@@ -5375,6 +5451,7 @@ where
         self.data[3][2].is_zero() && self.data[3][3].is_one()
     }
 
+    /*
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
     ///
@@ -5405,6 +5482,7 @@ where
             S::zero(), S::zero(), S::zero(), value
         )
     }
+    */
     
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
