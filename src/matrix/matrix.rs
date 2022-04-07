@@ -100,7 +100,7 @@ pub type Matrix4<S> = Matrix4x4<S>;
 
 /// A stack-allocated **(`R` row, `C` column)** matrix in column-major order.
 #[repr(C)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Matrix<S, const R: usize, const C: usize, const RC: usize> {
     data: [[S; R]; C],
 }
