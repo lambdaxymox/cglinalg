@@ -13294,7 +13294,76 @@ impl_matrix_binary_assign_ops!(
 });
 
 
+impl<S, const R: usize, const C: usize, const RC: usize> approx::AbsDiffEq for Matrix<S, R, C, RC>
+where 
+    S: ScalarFloat
+{
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        let mut result = true;
+        for c in 0..C {
+            for r in 0..R {
+                result &= S::abs_diff_eq(&self.data[c][r], &other.data[c][r], epsilon);
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> approx::RelativeEq for Matrix<S, R, C, RC>
+where 
+    S: ScalarFloat
+{
+    #[inline]
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        let mut result = true;
+        for c in 0..C {
+            for r in 0..R {
+                result &= S::relative_eq(&self.data[c][r], &other.data[c][r], epsilon, max_relative);
+            }
+        }
+        
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> approx::UlpsEq for Matrix<S, R, C, RC>
+where 
+    S: ScalarFloat
+{
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        let mut result = true;
+        for c in 0..C {
+            for r in 0..R {
+                result &= S::ulps_eq(&self.data[c][r], &other.data[c][r], epsilon, max_ulps);
+            }
+        }
+        
+        result
+    }
+}
+
+
+/*
 macro_rules! impl_approx_eq_ops {
     ($T:ident, { $( ($col:expr, $row:expr) ),* }) => {
         impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
@@ -13398,4 +13467,4 @@ impl_approx_eq_ops!(
     (1, 0), (1, 1), (1, 2), (1, 3),
     (2, 0), (2, 1), (2, 2), (2, 3)
 });
-
+*/
