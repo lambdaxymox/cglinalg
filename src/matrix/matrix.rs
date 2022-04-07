@@ -316,6 +316,40 @@ where
         self.data[col_a] = self.data[col_b];
         self.data[col_b] = temp;
     }
+
+    /// Swap two elements of a matrix.
+    ///
+    /// The element order for each element to swap is **(column, row)**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let mut result = Matrix4x4::new(
+    ///     1_i32,  2_i32,  3_i32,  4_i32, 
+    ///     5_i32,  6_i32,  7_i32,  8_i32,
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     1_i32, 2_i32,  3_i32,  13_i32, 
+    ///     5_i32, 6_i32,  7_i32,  8_i32,
+    ///     9_i32, 10_i32, 11_i32, 12_i32,
+    ///     4_i32, 14_i32, 15_i32, 16_i32
+    /// );
+    /// result.swap((0, 3), (3, 0));
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn swap(&mut self, a: (usize, usize), b: (usize, usize)) {
+        let element_a = self.data[a.0][a.1];
+        self.data[a.0][a.1] = self.data[b.0][b.1];
+        self.data[b.0][b.1] = element_a;
+    }
 }
 
 impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> 
@@ -341,6 +375,7 @@ where
     pub fn cast<T: NumCast>(&self) -> Option<Matrix<T, R, C, RC>> {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
                 data[c][r] = match num_traits::cast(self.data[c][r]) {
@@ -1025,7 +1060,7 @@ where
         self.data[col_b][1] = car1;
     }
     */
-    
+    /*
     /// Swap two elements of a matrix.
     ///
     /// The element order for each element to swap is **(column, row)**.
@@ -1049,6 +1084,7 @@ where
         self.data[a.0][a.1] = self.data[b.0][b.1];
         self.data[b.0][b.1] = element_a;
     }
+    */
 
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
@@ -2254,7 +2290,7 @@ where
         self.data[col_b][2] = car2;
     }
     */
-    
+    /*
     /// Swap two elements of a matrix.
     ///
     /// The element order for each element to swap is **(column, row)**.
@@ -2286,6 +2322,7 @@ where
         self.data[a.0][a.1] = self.data[b.0][b.1];
         self.data[b.0][b.1] = element_a;
     }
+    */
 
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
@@ -4445,7 +4482,7 @@ where
         self.data[col_b][3] = car3;
     }
     */
-     
+    /*
     /// Swap two elements of a matrix.
     ///
     /// The element order for each element to swap is **(column, row)**.
@@ -4479,6 +4516,7 @@ where
         self.data[a.0][a.1] = self.data[b.0][b.1];
         self.data[b.0][b.1] = element_a;
     }
+    */
 
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
@@ -7436,7 +7474,7 @@ where
         self.data[col_b][1] = car1;
     }
     */
-    
+    /*
     /// Swap two elements of a matrix.
     ///
     /// The element order for each element to swap is **(column, row)**.
@@ -7468,6 +7506,7 @@ where
         self.data[a.0][a.1] = self.data[b.0][b.1];
         self.data[b.0][b.1] = element_a;
     }
+    */
 
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
@@ -7915,7 +7954,7 @@ where
         self.data[col_b][2] = car2;
     }
     */
-    
+    /*
     /// Swap two elements of a matrix.
     ///
     /// The element order for each element to swap is **(column, row)**.
@@ -7945,6 +7984,7 @@ where
         self.data[a.0][a.1] = self.data[b.0][b.1];
         self.data[b.0][b.1] = element_a;
     }
+    */
 
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
@@ -8430,7 +8470,7 @@ where
         self.data[col_b][1] = car1;
     }
     */
-    
+    /*
     /// Swap two elements of a matrix.
     ///
     /// The element order for each element to swap is **(column, row)**.
@@ -8464,6 +8504,7 @@ where
         self.data[a.0][a.1] = self.data[b.0][b.1];
         self.data[b.0][b.1] = element_a;
     }
+    */
 
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
@@ -8950,7 +8991,7 @@ where
         self.data[col_b][3] = car3;
     }
     */
-    
+    /*
     /// Swap two elements of a matrix.
     ///
     /// The element order for each element to swap is **(column, row)**.
@@ -8980,7 +9021,7 @@ where
         self.data[a.0][a.1] = self.data[b.0][b.1];
         self.data[b.0][b.1] = element_a;
     }
-
+    */
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
     #[inline]
@@ -9502,7 +9543,7 @@ where
         self.data[col_b][2] = car2;
     }
     */
-    
+    /*
     /// Swap two elements of a matrix.
     ///
     /// The element order for each element to swap is **(column, row)**.
@@ -9536,6 +9577,7 @@ where
         self.data[a.0][a.1] = self.data[b.0][b.1];
         self.data[b.0][b.1] = element_a;
     }
+    */
 
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
@@ -10065,7 +10107,7 @@ where
         self.data[col_b][3] = car3;
     }
     */
-    
+    /*
     /// Swap two elements of a matrix.
     ///
     /// The element order for each element to swap is **(column, row)**.
@@ -10097,6 +10139,7 @@ where
         self.data[a.0][a.1] = self.data[b.0][b.1];
         self.data[b.0][b.1] = element_a;
     }
+    */
 
     /// Construct a matrix from a set of column vectors.
     #[rustfmt::skip]
