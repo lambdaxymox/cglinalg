@@ -102,27 +102,27 @@ macro_rules! bench_unop(
     }
 );
 
-fn swap2(bh: &mut criterion::Criterion) {
-    let mut m: Matrix2x2<f32> = gen_matrix2x2();
+fn zero2(bh: &mut criterion::Criterion) {
+    let m: Matrix2x2<f32> = gen_matrix2x2();
 
     bh.bench_function(stringify!("swap2"), move |bh| bh.iter(|| {
-        m.swap_columns(0, 1);
+        m.is_zero()
     }));
 }
 
-fn swap3(bh: &mut criterion::Criterion) {
-    let mut m: Matrix3x3<f32> = gen_matrix3x3();
+fn zero3(bh: &mut criterion::Criterion) {
+    let m: Matrix3x3<f32> = gen_matrix3x3();
 
     bh.bench_function(stringify!("swap3"), move |bh| bh.iter(|| {
-        m.swap_columns(0, 2);
+        m.is_zero()
     }));
 }
 
-fn swap4(bh: &mut criterion::Criterion) {
-    let mut m: Matrix4x4<f32> = gen_matrix4x4();
+fn zero4(bh: &mut criterion::Criterion) {
+    let m: Matrix4x4<f32> = gen_matrix4x4();
 
     bh.bench_function(stringify!("swap4"), move |bh| bh.iter(|| {
-        m.swap_columns(0, 3);
+        m.is_zero()
     }));
 }
 
@@ -135,9 +135,9 @@ fn swap4(bh: &mut criterion::Criterion) {
 
 criterion_group!(
     matrix_cast_benchmarks,
-    swap2,
-    swap3,
-    swap4
+    zero2,
+    zero3,
+    zero4
 );
 criterion_main!(matrix_cast_benchmarks);
 

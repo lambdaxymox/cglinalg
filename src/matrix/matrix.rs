@@ -414,6 +414,34 @@ where
             data: [[S::zero(); R]; C],
         }
     }
+
+    /// Determine whether a matrix is a zero matrix.
+    ///
+    /// A zero matrix is a matrix in which all of its elements are zero.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix4x4<i32> = Matrix4x4::zero();
+    ///
+    /// assert!(matrix.is_zero());
+    /// ```
+    #[inline]
+    pub fn is_zero(&self) -> bool {
+        let mut result = true;
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        for c in 0..C {
+            for r in 0..R {
+                result &= self.data[c][r].is_zero();
+            }
+        }
+
+        result
+    }
 }
 
 impl<S, const R: usize, const C: usize, const RC: usize> Default for Matrix<S, R, C, RC>
@@ -617,7 +645,7 @@ where
         Self::new(S::zero())
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -635,6 +663,7 @@ where
     pub fn is_zero(&self) -> bool {
         self.data[0][0].is_zero()
     }
+    */
 
     /// Compute an identity matrix.
     ///
@@ -1376,7 +1405,7 @@ where
         Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -1395,6 +1424,7 @@ where
         self.data[0][0].is_zero() && self.data[0][1].is_zero() &&
         self.data[1][0].is_zero() && self.data[1][1].is_zero()
     }
+    */
 
     /// Compute an identity matrix.
     ///
@@ -2961,7 +2991,7 @@ where
         )
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -2987,6 +3017,7 @@ where
         self.data[2][1].is_zero() && 
         self.data[2][2].is_zero()
     }
+    */
     
     /// Compute an identity matrix.
     ///
@@ -5043,7 +5074,7 @@ where
         )
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero.
@@ -5070,6 +5101,7 @@ where
         self.data[3][0].is_zero() && self.data[3][1].is_zero() && 
         self.data[3][2].is_zero() && self.data[3][3].is_zero()
     }
+    */
     
     /// Compute an identity matrix.
     ///
@@ -6604,7 +6636,7 @@ where
         Self::new(S::zero(), S::zero())
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -6622,6 +6654,7 @@ where
     pub fn is_zero(&self) -> bool {
         self.data[0][0].is_zero() && self.data[1][0].is_zero()
     }
+    */
 }
 /*
 impl<S> fmt::Display for Matrix1x2<S> 
@@ -6865,7 +6898,7 @@ where
         Self::new(S::zero(), S::zero(), S::zero())
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -6885,6 +6918,7 @@ where
         self.data[1][0].is_zero() && 
         self.data[2][0].is_zero()
     }
+    */
 }
 /*
 impl<S> fmt::Display for Matrix1x3<S> 
@@ -7139,7 +7173,7 @@ where
         Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -7160,6 +7194,7 @@ where
         self.data[2][0].is_zero() &&
         self.data[3][0].is_zero()
     }
+    */
 }
 /*
 impl<S> fmt::Display for Matrix1x4<S> 
@@ -7623,7 +7658,7 @@ where
         )
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -7643,6 +7678,7 @@ where
         self.data[1][0].is_zero() && self.data[1][1].is_zero() &&
         self.data[2][0].is_zero() && self.data[2][1].is_zero()
     }
+    */
 }
 /*
 impl<S> fmt::Display for Matrix2x3<S> 
@@ -8098,7 +8134,7 @@ where
         )
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -8121,6 +8157,7 @@ where
         self.data[1][1].is_zero() && 
         self.data[1][2].is_zero()
     }
+    */
 }
 /*
 impl<S> fmt::Display for Matrix3x2<S> 
@@ -8637,7 +8674,7 @@ where
         )
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -8658,6 +8695,7 @@ where
         self.data[2][0].is_zero() && self.data[2][1].is_zero() &&
         self.data[3][0].is_zero() && self.data[3][1].is_zero()
     }
+    */
 }
 /*
 impl<S> fmt::Display for Matrix2x4<S> 
@@ -9144,7 +9182,7 @@ where
         )
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -9169,6 +9207,7 @@ where
         self.data[1][2].is_zero() &&
         self.data[1][3].is_zero()
     }
+    */
 }
 /*
 impl<S> fmt::Display for Matrix4x2<S> 
@@ -9714,7 +9753,7 @@ where
         )
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -9743,6 +9782,7 @@ where
         self.data[3][1].is_zero() &&
         self.data[3][2].is_zero()
     }
+    */
 }
 /*
 impl<S> fmt::Display for Matrix3x4<S> 
@@ -10270,7 +10310,7 @@ where
         )
     }
     */
-    
+    /*
     /// Determine whether a matrix is a zero matrix.
     ///
     /// # Example
@@ -10299,6 +10339,7 @@ where
         self.data[2][2].is_zero() &&
         self.data[2][3].is_zero()
     }
+    */
 }
 /*
 impl<S> fmt::Display for Matrix4x3<S> 
