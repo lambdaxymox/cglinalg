@@ -11074,7 +11074,158 @@ impl_index_ops!(Matrix3x4, Vector3, (3, 4));
 impl_index_ops!(Matrix4x3, Vector4, (4, 3));
 */
 
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Add<Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
 
+    #[inline]
+    fn add(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] + other.data[c][r];
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Add<&Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar 
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn add(self, other: &Matrix<S, R, C, RC>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] + other.data[c][r];
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Add<Matrix<S, R, C, RC>> for &Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn add(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] + other.data[c][r];
+            }
+        }
+
+        result
+    }
+}
+
+impl<'a, 'b, S, const R: usize, const C: usize, const RC: usize> ops::Add<&'a Matrix<S, R, C, RC>> for &'b Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn add(self, other: &'a Matrix<S, R, C, RC>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] + other.data[c][r];
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Sub<Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn sub(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] - other.data[c][r];
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Sub<&Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar 
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn sub(self, other: &Matrix<S, R, C, RC>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] - other.data[c][r];
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Sub<Matrix<S, R, C, RC>> for &Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn sub(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] - other.data[c][r];
+            }
+        }
+
+        result
+    }
+}
+
+impl<'a, 'b, S, const R: usize, const C: usize, const RC: usize> ops::Sub<&'a Matrix<S, R, C, RC>> for &'b Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn sub(self, other: &'a Matrix<S, R, C, RC>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] - other.data[c][r];
+            }
+        }
+
+        result
+    }
+}
+/*
 macro_rules! impl_matrix_matrix_binary_ops {
     ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
         impl<S> ops::$OpType<$T> for $T where S: Scalar {
@@ -11287,9 +11438,46 @@ impl_matrix_matrix_binary_ops!(
     (1, 0), (1, 1), (1, 2), (1, 3),
     (2, 0), (2, 1), (2, 2), (2, 3)
 });
+*/
 
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Neg for Matrix<S, R, C, RC> 
+where 
+    S: ScalarSigned
+{
+    type Output = Matrix<S, R, C, RC>;
 
+    #[inline]
+    fn neg(self) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = -self.data[c][r];
+            }
+        }
 
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Neg for &Matrix<S, R, C, RC> 
+where 
+    S: ScalarSigned 
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = -self.data[c][r];
+            }
+        }
+
+        result
+    }
+}
+/*
 macro_rules! impl_matrix_unary_ops {
     ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
         impl<S> ops::$OpType for $T where S: ScalarSigned {
@@ -11392,9 +11580,122 @@ impl_matrix_unary_ops!(
     (1, 0), (1, 1), (1, 2), (1, 3),
     (2, 0), (2, 1), (2, 2), (2, 3)
 });
+*/
 
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<S> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
 
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] * other;
+            }
+        }
 
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<S> for &Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn mul(self, other: S) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] * other;
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Div<S> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] / other;
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Div<S> for &Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn div(self, other: S) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] / other;
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Rem<S> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] % other;
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Rem<S> for &Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Matrix<S, R, C, RC>;
+
+    #[inline]
+    fn rem(self, other: S) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] % other;
+            }
+        }
+
+        result
+    }
+}
+/*
 macro_rules! impl_matrix_scalar_binary_ops {
     ($OpType:ident, $op:ident, $op_impl:ident, $T:ty, $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
         impl<S> ops::$OpType<S> for $T where S: Scalar {
@@ -11661,9 +11962,59 @@ impl_matrix_scalar_binary_ops!(
     (1, 0), (1, 1), (1, 2), (1, 3),
     (2, 0), (2, 1), (2, 2), (2, 3)
 });
+*/
 
+macro_rules! impl_scalar_matrix_mul_ops {
+    ($Lhs:ty) => {
+        impl<const R: usize, const C: usize, const RC: usize> ops::Mul<Matrix<$Lhs, R, C, RC>> for $Lhs {
+            type Output = Matrix<$Lhs, R, C, RC>;
 
+            #[inline]
+            fn mul(self, other: Matrix<$Lhs, R, C, RC>) -> Self::Output {
+                let mut result = Self::Output::zero();
+                for c in 0..C {
+                    for r in 0..R {
+                        result[c][r] = self * other.data[c][r];
+                    }
+                }
 
+                result
+            }
+        }
+
+        impl<'a, const R: usize, const C: usize, const RC: usize> ops::Mul<Matrix<$Lhs, R, C, RC>> for &'a $Lhs {
+            type Output = Matrix<$Lhs, R, C, RC>;
+
+            #[inline]
+            fn mul(self, other: Matrix<$Lhs, R, C, RC>) -> Self::Output {
+                let mut result = Self::Output::zero();
+                for c in 0..C {
+                    for r in 0..R {
+                        result[c][r] = self * other.data[c][r];
+                    }
+                }
+
+                result
+            }
+        }
+    }
+}
+
+impl_scalar_matrix_mul_ops!(u8);
+impl_scalar_matrix_mul_ops!(u16);
+impl_scalar_matrix_mul_ops!(u32);
+impl_scalar_matrix_mul_ops!(u64);
+impl_scalar_matrix_mul_ops!(u128);
+impl_scalar_matrix_mul_ops!(usize);
+impl_scalar_matrix_mul_ops!(i8);
+impl_scalar_matrix_mul_ops!(i16);
+impl_scalar_matrix_mul_ops!(i32);
+impl_scalar_matrix_mul_ops!(i64);
+impl_scalar_matrix_mul_ops!(i128);
+impl_scalar_matrix_mul_ops!(isize);
+impl_scalar_matrix_mul_ops!(f32);
+impl_scalar_matrix_mul_ops!(f64);
+/*
 macro_rules! impl_scalar_matrix_mul_ops {
     ($Lhs:ty => $Rhs:ty => $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
         impl ops::Mul<$Rhs> for $Lhs {
@@ -12763,9 +13114,76 @@ impl_scalar_matrix_mul_ops!(
     (1, 0), (1, 1), (1, 2), (1, 3),
     (2, 0), (2, 1), (2, 2), (2, 3)
 });
+*/
 
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<Vector<S, C>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Vector<S, R>;
 
+    #[inline]
+    fn mul(self, other: Vector<S, C>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for r in 0..R {
+            result[r] = dot_array_col(self.as_ref(), other.as_ref(), r);
+        }
 
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<&Vector<S, C>> for Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Vector<S, R>;
+
+    #[inline]
+    fn mul(self, other: &Vector<S, C>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for r in 0..R {
+            result[r] = dot_array_col(self.as_ref(), other.as_ref(), r);
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<Vector<S, C>> for &Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Vector<S, R>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, C>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for r in 0..R {
+            result[r] = dot_array_col(self.as_ref(), other.as_ref(), r);
+        }
+
+        result
+    }
+}
+
+impl<'a, 'b, S, const R: usize, const C: usize, const RC: usize> ops::Mul<&'a Vector<S, C>> for &'b Matrix<S, R, C, RC> 
+where 
+    S: Scalar
+{
+    type Output = Vector<S, R>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector<S, C>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for r in 0..R {
+            result[r] = dot_array_col(self.as_ref(), other.as_ref(), r);
+        }
+
+        result
+    }
+}
+/*
 macro_rules! impl_matrix_vector_mul_ops {
     ($MatrixMxN:ident => $VectorM:ident => $Output:ident, $dot_arr_col:ident, { $( ($col:expr, $row:expr) ),* }) => {
         impl<S> ops::Mul<$VectorM<S>> for $MatrixMxN<S> where S: Scalar {
@@ -12866,7 +13284,7 @@ impl_matrix_vector_mul_ops!(
     Matrix4x3 => Vector3 => Vector4, dot_array_col, {
     (0, 0), (0, 1), (0, 2), (0, 3)
 });
-
+*/
 
 
 macro_rules! impl_matrix_matrix_mul_ops {
