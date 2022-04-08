@@ -79,16 +79,6 @@ The library has design limitations for a number of reasons.
   limitation in the higher-dimensional case where dynamic storage allocation of storage 
   or using the heap may be desirable.
 
-## Limitations On The Implementation
-The main implementation limitation is that it presently does not leverage SIMD 
-intrinsics yet. In keeping with the goal of simplicity, the library only uses 
-stable Rust. Rust's hardware architecture specific compiler intrinsics in the 
-core library are still experimental as of this writing.
-
-## Project Roadmap
-Major outstanding project goals include:
-* Improve performance with SIMD optimizations.
-
 */
 
 #![allow(clippy::redundant_field_names)]
