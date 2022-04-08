@@ -1199,7 +1199,7 @@ macro_rules! magnitude_props {
 
 magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, any_scalar, 1e-7);
 
-
+/*
 /// Generate property tests for quaternion square roots.
 ///
 /// ### Macro Parameters
@@ -1267,5 +1267,6 @@ macro_rules! sqrt_props {
     }
 }
 
-// sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion, any_scalar, 1e-8);
+sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion, any_scalar, 1e-8);
+*/
 
