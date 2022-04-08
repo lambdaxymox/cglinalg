@@ -1080,34 +1080,6 @@ where
 
 impl<S> Matrix1x1<S> 
 where 
-    S: Scalar 
-{
-    /*
-    /// Determine whether a matrix is an identity matrix.
-    ///
-    /// An identity matrix is a matrix where the diagonal elements are one
-    /// and the off-diagonal elements are zero.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix1x1, 
-    /// # };
-    /// #
-    /// let matrix: Matrix1x1<i32> = Matrix1x1::identity();
-    /// 
-    /// assert!(matrix.is_identity());
-    /// ```
-    #[inline]
-    pub fn is_identity(&self) -> bool {
-        self.data[0][0].is_one()
-    }
-    */
-}
-
-impl<S> Matrix1x1<S> 
-where 
     S: ScalarSigned 
 {
     /// Compute the determinant of a matrix.
@@ -1396,30 +1368,6 @@ where
             zero,      scale_y,
         )
     }
-    
-    /*
-    /// Determine whether a matrix is an identity matrix.
-    ///
-    /// An identity matrix is a matrix where the diagonal elements are one
-    /// and the off-diagonal elements are zero.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix2x2, 
-    /// # };
-    /// #
-    /// let matrix: Matrix2x2<i32> = Matrix2x2::identity();
-    /// 
-    /// assert!(matrix.is_identity());
-    /// ```
-    #[inline]
-    pub fn is_identity(&self) -> bool {
-        self.data[0][0].is_one()  && self.data[0][1].is_zero() &&
-        self.data[1][0].is_zero() && self.data[1][1].is_one()
-    }
-    */
 }
 
 impl<S> Matrix2x2<S> 
@@ -1723,30 +1671,7 @@ where
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero())
     }
-
-    /*
-    /// Determine whether a square matrix is a diagonal matrix. 
-    ///
-    /// A square matrix is a diagonal matrix if every off-diagonal 
-    /// element is zero.
-    #[inline]
-    pub fn is_diagonal(&self) -> bool {
-        ulps_eq!(self.data[0][1], S::zero()) && ulps_eq!(self.data[1][0], S::zero())
-    }
-    */
-    /*
-    /// Determine whether a matrix is symmetric. 
-    ///
-    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
-    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
-    /// Note that every diagonal matrix is a symmetric matrix.
-    #[inline]
-    pub fn is_symmetric(&self) -> bool {
-        ulps_eq!(self.data[0][1], self.data[1][0]) && ulps_eq!(self.data[1][0], self.data[0][1])
-    }
-    */
 }
-
 
 impl<S> Matrix3x3<S> {
     /// Construct a new matrix from its elements.
@@ -2271,31 +2196,6 @@ where
             zero,           zero,           one
         )
     }
-    
-    /*
-    /// Determine whether a matrix is an identity matrix.
-    ///
-    /// An identity matrix is a matrix where the diagonal elements are one
-    /// and the off-diagonal elements are zero.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix3x3, 
-    /// # };
-    /// #
-    /// let matrix: Matrix3x3<i32> = Matrix3x3::identity();
-    /// 
-    /// assert!(matrix.is_identity());
-    /// ```
-    #[inline]
-    pub fn is_identity(&self) -> bool {
-        self.data[0][0].is_one()  && self.data[0][1].is_zero() && self.data[0][2].is_zero() &&
-        self.data[1][0].is_zero() && self.data[1][1].is_one()  && self.data[1][2].is_zero() &&
-        self.data[2][0].is_zero() && self.data[2][1].is_zero() && self.data[2][2].is_one()
-    }
-    */
 }
 
 impl<S> Matrix3x3<S> 
@@ -3042,38 +2942,6 @@ where
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero())
     }
-    
-    /*
-    /// Determine whether a square matrix is a diagonal matrix. 
-    ///
-    /// A square matrix is a diagonal matrix if every off-diagonal 
-    /// element is zero.
-    #[inline]
-    pub fn is_diagonal(&self) -> bool {
-        ulps_eq!(self.data[0][1], S::zero()) &&
-        ulps_eq!(self.data[0][2], S::zero()) && 
-        ulps_eq!(self.data[1][0], S::zero()) &&
-        ulps_eq!(self.data[1][2], S::zero()) &&
-        ulps_eq!(self.data[2][0], S::zero()) &&
-        ulps_eq!(self.data[2][1], S::zero())
-    }
-    */
-    /*
-    /// Determine whether a matrix is symmetric. 
-    ///
-    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
-    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
-    /// Note that every diagonal matrix is a symmetric matrix.
-    #[inline]
-    pub fn is_symmetric(&self) -> bool {
-        ulps_eq!(self.data[0][1], self.data[1][0]) && 
-        ulps_eq!(self.data[1][0], self.data[0][1]) &&
-        ulps_eq!(self.data[0][2], self.data[2][0]) && 
-        ulps_eq!(self.data[2][0], self.data[0][2]) &&
-        ulps_eq!(self.data[1][2], self.data[2][1]) && 
-        ulps_eq!(self.data[2][1], self.data[1][2])
-    }
-    */
 }
 
 impl<S> From<Matrix2x2<S>> for Matrix3x3<S> 
@@ -3502,36 +3370,6 @@ where
             zero,           zero,           zero,           one
         )
     }
-    
-    /*
-    /// Determine whether a matrix is an identity matrix.
-    ///
-    /// An identity matrix is a matrix where the diagonal elements are one
-    /// and the off-diagonal elements are zero.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix4x4, 
-    /// # };
-    /// #
-    /// let matrix: Matrix4x4<i32> = Matrix4x4::identity();
-    /// 
-    /// assert!(matrix.is_identity());
-    /// ```
-    #[inline]
-    pub fn is_identity(&self) -> bool {
-        self.data[0][0].is_one()  && self.data[0][1].is_zero() && 
-        self.data[0][2].is_zero() && self.data[0][3].is_zero() &&
-        self.data[1][0].is_zero() && self.data[1][1].is_one()  && 
-        self.data[1][2].is_zero() && self.data[1][3].is_zero() &&
-        self.data[2][0].is_zero() && self.data[2][1].is_zero() && 
-        self.data[2][2].is_one()  && self.data[2][3].is_zero() &&
-        self.data[3][0].is_zero() && self.data[3][1].is_zero() && 
-        self.data[3][2].is_zero() && self.data[3][3].is_one()
-    }
-    */
 }
 
 impl<S> Matrix4x4<S> 
@@ -4390,38 +4228,6 @@ where
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero())
     }
-
-    /*
-    /// Determine whether a square matrix is a diagonal matrix. 
-    ///
-    /// A square matrix is a diagonal matrix if every off-diagonal 
-    /// element is zero.
-    #[inline]
-    pub fn is_diagonal(&self) -> bool {
-        ulps_eq!(self.data[0][1], S::zero()) &&
-        ulps_eq!(self.data[0][2], S::zero()) && 
-        ulps_eq!(self.data[1][0], S::zero()) &&
-        ulps_eq!(self.data[1][2], S::zero()) &&
-        ulps_eq!(self.data[2][0], S::zero()) &&
-        ulps_eq!(self.data[2][1], S::zero())
-    }
-    */
-    /*
-    /// Determine whether a matrix is symmetric. 
-    ///
-    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
-    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
-    /// Note that every diagonal matrix is a symmetric matrix.
-    #[inline]
-    pub fn is_symmetric(&self) -> bool {
-        ulps_eq!(self.data[0][1], self.data[1][0]) && ulps_eq!(self.data[1][0], self.data[0][1]) &&
-        ulps_eq!(self.data[0][2], self.data[2][0]) && ulps_eq!(self.data[2][0], self.data[0][2]) &&
-        ulps_eq!(self.data[1][2], self.data[2][1]) && ulps_eq!(self.data[2][1], self.data[1][2]) &&
-        ulps_eq!(self.data[0][3], self.data[3][0]) && ulps_eq!(self.data[3][0], self.data[0][3]) &&
-        ulps_eq!(self.data[1][3], self.data[3][1]) && ulps_eq!(self.data[3][1], self.data[1][3]) &&
-        ulps_eq!(self.data[2][3], self.data[3][2]) && ulps_eq!(self.data[3][2], self.data[2][3])
-    }
-    */
 }
 
 impl<S> From<Matrix2x2<S>> for Matrix4x4<S> 
