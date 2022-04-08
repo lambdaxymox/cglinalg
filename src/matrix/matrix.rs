@@ -663,6 +663,43 @@ impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
 where
     S: ScalarFloat
 {
+    /// Linearly interpolate between two matrices.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,    
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let matrix0 = Matrix3x3::new(
+    ///     0_f64, 0_f64, 0_f64, 
+    ///     1_f64, 1_f64, 1_f64,
+    ///     2_f64, 2_f64, 2_f64
+    /// );
+    /// let matrix1 = Matrix3x3::new(
+    ///     3_f64, 3_f64, 3_f64, 
+    ///     4_f64, 4_f64, 4_f64,
+    ///     5_f64, 5_f64, 5_f64
+    /// );
+    /// let amount = 0.5;
+    /// let expected = Matrix3x3::new(
+    ///     1.5_f64, 1.5_f64, 1.5_f64, 
+    ///     2.5_f64, 2.5_f64, 2.5_f64,
+    ///     3.5_f64, 3.5_f64, 3.5_f64
+    /// );
+    /// let result = matrix0.lerp(&matrix1, amount);
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
+        self + ((other - self) * amount)
+    }
+
     /// Returns `true` if the elements of a matrix are all finite. 
     /// Otherwise, it returns `false`. 
     ///
@@ -715,43 +752,6 @@ where
 
         result
     }
-
-    /// Linearly interpolate between two matrices.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix3x3,    
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let matrix0 = Matrix3x3::new(
-    ///     0_f64, 0_f64, 0_f64, 
-    ///     1_f64, 1_f64, 1_f64,
-    ///     2_f64, 2_f64, 2_f64
-    /// );
-    /// let matrix1 = Matrix3x3::new(
-    ///     3_f64, 3_f64, 3_f64, 
-    ///     4_f64, 4_f64, 4_f64,
-    ///     5_f64, 5_f64, 5_f64
-    /// );
-    /// let amount = 0.5;
-    /// let expected = Matrix3x3::new(
-    ///     1.5_f64, 1.5_f64, 1.5_f64, 
-    ///     2.5_f64, 2.5_f64, 2.5_f64,
-    ///     3.5_f64, 3.5_f64, 3.5_f64
-    /// );
-    /// let result = matrix0.lerp(&matrix1, amount);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// ```
-    #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
-    }
 }
 
 impl<S, const N: usize, const NN: usize> Matrix<S, N, N, NN>
@@ -791,12 +791,7 @@ where
             }
         }
     }
-}
 
-impl<S, const N: usize, const NN: usize> Matrix<S, N, N, NN>
-where
-    S: Scalar
-{
     /// Compute an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -955,6 +950,46 @@ where
 
         result
     }
+}
+
+impl<S, const N: usize, const NN: usize> Matrix<S, N, N, NN>
+where
+    S: ScalarFloat
+{
+    /// Determine whether a square matrix is a diagonal matrix. 
+    ///
+    /// A square matrix is a diagonal matrix if every off-diagonal 
+    /// element is zero.
+    #[inline]
+    pub fn is_diagonal(&self) -> bool {
+        let mut result = true;
+        for i in 0..N {
+            for j in 0..i {
+                result &= ulps_eq!(self.data[i][j], S::zero()) && ulps_eq!(self.data[j][i], S::zero());
+            }
+        }
+
+        result
+    }
+
+    /*
+    /// Determine whether a matrix is symmetric. 
+    ///
+    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
+    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
+    /// Note that every diagonal matrix is a symmetric matrix.
+    #[inline]
+    pub fn is_symmetric(&self) -> bool {
+        let mut result = true;
+        for i in 0..N {
+            for j in 0..i {
+                result &= ulps_eq!(self.data[i][j], self.data[j][i]);
+            }
+        }
+
+        result
+    }
+    */
 }
 
 impl<S, const R: usize, const C: usize, const RC: usize> Default for Matrix<S, R, C, RC>
@@ -1655,6 +1690,7 @@ where
         ulps_ne!(self.determinant(), S::zero())
     }
 
+    /*
     /// Determine whether a square matrix is a diagonal matrix. 
     ///
     /// A square matrix is a diagonal matrix if every off-diagonal 
@@ -1663,6 +1699,7 @@ where
     pub fn is_diagonal(&self) -> bool {
         ulps_eq!(self.data[0][1], S::zero()) && ulps_eq!(self.data[1][0], S::zero())
     }
+    */
     
     /// Determine whether a matrix is symmetric. 
     ///
@@ -2969,6 +3006,7 @@ where
         ulps_ne!(self.determinant(), S::zero())
     }
     
+    /*
     /// Determine whether a square matrix is a diagonal matrix. 
     ///
     /// A square matrix is a diagonal matrix if every off-diagonal 
@@ -2982,6 +3020,7 @@ where
         ulps_eq!(self.data[2][0], S::zero()) &&
         ulps_eq!(self.data[2][1], S::zero())
     }
+    */
     
     /// Determine whether a matrix is symmetric. 
     ///
@@ -4312,6 +4351,7 @@ where
         ulps_ne!(self.determinant(), S::zero())
     }
 
+    /*
     /// Determine whether a square matrix is a diagonal matrix. 
     ///
     /// A square matrix is a diagonal matrix if every off-diagonal 
@@ -4325,6 +4365,7 @@ where
         ulps_eq!(self.data[2][0], S::zero()) &&
         ulps_eq!(self.data[2][1], S::zero())
     }
+    */
     
     /// Determine whether a matrix is symmetric. 
     ///

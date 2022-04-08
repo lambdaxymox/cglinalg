@@ -104,16 +104,16 @@ macro_rules! bench_unop(
     }
 );
 
-bench_unop!(matrix2x2_transpose_mut, f32, Matrix2x2<f32>, gen_matrix2x2, transpose_mut);
-bench_unop!(matrix3x3_transpose_mut, f32, Matrix3x3<f32>, gen_matrix3x3, transpose_mut);
-bench_unop!(matrix4x4_transpose_mut, f32, Matrix4x4<f32>, gen_matrix4x4, transpose_mut);
+bench_unop!(matrix2x2_is_diagonal, f32, Matrix2x2<f32>, gen_matrix2x2, is_diagonal);
+bench_unop!(matrix3x3_is_diagonal, f32, Matrix3x3<f32>, gen_matrix3x3, is_diagonal);
+bench_unop!(matrix4x4_is_diagonal, f32, Matrix4x4<f32>, gen_matrix4x4, is_diagonal);
 
 
 criterion_group!(
     matrix_transpose_benchmarks,
-    matrix2x2_transpose_mut,
-    matrix3x3_transpose_mut,
-    matrix4x4_transpose_mut
+    matrix2x2_is_diagonal,
+    matrix3x3_is_diagonal,
+    matrix4x4_is_diagonal
 );
 criterion_main!(matrix_transpose_benchmarks);
 
