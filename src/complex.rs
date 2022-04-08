@@ -1893,21 +1893,7 @@ macro_rules! impl_scalar_complex_add_ops {
 }
 
 impl_scalar_complex_add_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
-/*
-impl_scalar_complex_add_ops!(u16);
-impl_scalar_complex_add_ops!(u32);
-impl_scalar_complex_add_ops!(u64);
-impl_scalar_complex_add_ops!(u128);
-impl_scalar_complex_add_ops!(usize);
-impl_scalar_complex_add_ops!(i8);
-impl_scalar_complex_add_ops!(i16);
-impl_scalar_complex_add_ops!(i32);
-impl_scalar_complex_add_ops!(i64);
-impl_scalar_complex_add_ops!(i128);
-impl_scalar_complex_add_ops!(isize);
-impl_scalar_complex_add_ops!(f32);
-impl_scalar_complex_add_ops!(f64);
-*/
+
 
 macro_rules! impl_scalar_complex_sub_ops {
     ($($Lhs:ty),* $(,)*) => {$(
@@ -1950,21 +1936,7 @@ macro_rules! impl_scalar_complex_sub_ops {
 }
 
 impl_scalar_complex_sub_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
-/*
-impl_scalar_complex_sub_ops!(u16);
-impl_scalar_complex_sub_ops!(u32);
-impl_scalar_complex_sub_ops!(u64);
-impl_scalar_complex_sub_ops!(u128);
-impl_scalar_complex_sub_ops!(usize);
-impl_scalar_complex_sub_ops!(i8);
-impl_scalar_complex_sub_ops!(i16);
-impl_scalar_complex_sub_ops!(i32);
-impl_scalar_complex_sub_ops!(i64);
-impl_scalar_complex_sub_ops!(i128);
-impl_scalar_complex_sub_ops!(isize);
-impl_scalar_complex_sub_ops!(f32);
-impl_scalar_complex_sub_ops!(f64);
-*/
+
 
 macro_rules! impl_scalar_complex_mul_ops {
     ($($Lhs:ty),* $(,)*) => {$(
@@ -2007,21 +1979,7 @@ macro_rules! impl_scalar_complex_mul_ops {
 }
 
 impl_scalar_complex_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
-/*
-impl_scalar_complex_mul_ops!(u16);
-impl_scalar_complex_mul_ops!(u32);
-impl_scalar_complex_mul_ops!(u64);
-impl_scalar_complex_mul_ops!(u128);
-impl_scalar_complex_mul_ops!(usize);
-impl_scalar_complex_mul_ops!(i8);
-impl_scalar_complex_mul_ops!(i16);
-impl_scalar_complex_mul_ops!(i32);
-impl_scalar_complex_mul_ops!(i64);
-impl_scalar_complex_mul_ops!(i128);
-impl_scalar_complex_mul_ops!(isize);
-impl_scalar_complex_mul_ops!(f32);
-impl_scalar_complex_mul_ops!(f64);
-*/
+
 
 macro_rules! impl_scalar_complex_div_ops {
     ($($Lhs:ty),* $(,)*) => {$(
@@ -2080,15 +2038,7 @@ macro_rules! impl_scalar_complex_div_ops {
 }
 
 impl_scalar_complex_div_ops!(i8, i16, i32, i64, i128, isize, f32, f64);
-/*
-impl_scalar_complex_div_ops!(i16);
-impl_scalar_complex_div_ops!(i32);
-impl_scalar_complex_div_ops!(i64);
-impl_scalar_complex_div_ops!(i128);
-impl_scalar_complex_div_ops!(isize);
-impl_scalar_complex_div_ops!(f32);
-impl_scalar_complex_div_ops!(f64);
-*/
+
 
 impl<S> approx::AbsDiffEq for Complex<S> 
 where 

@@ -427,38 +427,6 @@ impl<S> Vector1<S> {
 
 impl<S> Vector1<S> 
 where 
-    S: NumCast + Copy
-{
-    /*
-    /// Cast a vector from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,   
-    /// # };
-    /// #
-    /// let vector: Vector1<u32> = Vector1::new(1_u32);
-    /// let expected: Option<Vector1<i32>> = Some(Vector1::new(1_i32));
-    /// let result = vector.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Vector1<T>> {
-        let x = match num_traits::cast(self.data[0]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Vector1::new(x))
-    }
-    */
-}
-
-impl<S> Vector1<S> 
-where 
     S: Copy
 {
     /// Extend a one-dimensional vector into a two-dimensional vector using 
@@ -495,14 +463,6 @@ where
         Vector1::new(S::one())
     }
 
-    /*
-    /// Determine whether a vector is the zero vector.
-    #[inline]
-    pub fn is_zero(&self) -> bool {
-        self.data[0].is_zero()
-    }
-    */
-
     /// Compute the coordinates of a vector in projective space.
     ///
     /// The function appends a `0` to the vector.
@@ -525,53 +485,6 @@ where
     pub fn to_homogeneous(&self) -> Vector2<S> {
         self.extend(S::zero())
     }
-    /*
-    /// Compute the Euclidean dot product (inner product) of two vectors.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1, 
-    /// # };
-    /// #
-    /// let vector1 = Vector1::new(1_f64);
-    /// let vector2 = Vector1::new(2_f64);
-    /// 
-    /// assert_eq!(vector1.dot(&vector2), 2_f64);
-    /// ```
-    #[inline]
-    pub fn dot(&self, other: &Self) -> S {
-        self.data[0] * other.data[0]
-    }
-    */
-}
-
-impl<S> Vector1<S> 
-where 
-    S: ScalarSigned
-{
-    /*
-    /// Compute the negation of a vector mutably in place.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1, 
-    /// # };
-    /// #
-    /// let mut result = Vector1::new(1_i32);
-    /// let expected = -result;
-    /// result.neg_mut();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn neg_mut(&mut self) {
-        self.data[0] = -self.data[0];
-    }
-    */
 }
 
 impl<S> Vector1<S> 
@@ -599,43 +512,6 @@ where
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
-
-    /*
-    /// Returns `true` if the elements of this vector are all finite. 
-    /// Otherwise, it returns `false`. 
-    ///
-    /// A vector is finite when all of its elements are finite. This is useful 
-    /// for vector and matrix types working with fixed precision floating point 
-    /// values.
-    ///
-    /// # Example (Finite Vector)
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,  
-    /// # };
-    /// #
-    /// let v: Vector1<f64> = Vector1::new(2_f64);
-    ///
-    /// assert!(v.is_finite()); 
-    /// ```
-    ///
-    /// # Example (Infinite Vector)
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,  
-    /// # };
-    /// #
-    /// let w: Vector1<f64> = Vector1::new(f64::INFINITY);
-    ///
-    /// assert!(!w.is_finite()); 
-    /// ```
-    #[inline]
-    pub fn is_finite(&self) -> bool {
-        self.data[0].is_finite()
-    }
-    */
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
@@ -715,42 +591,6 @@ impl<S> Vector2<S> {
 
 impl<S> Vector2<S> 
 where 
-    S: NumCast + Copy
-{
-    /*
-    /// Cast a vector from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2,   
-    /// # };
-    /// #
-    /// let vector: Vector2<u32> = Vector2::new(1_u32, 2_u32);
-    /// let expected: Option<Vector2<i32>> = Some(Vector2::new(1_i32, 2_i32));
-    /// let result = vector.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Vector2<T>> {
-        let x = match num_traits::cast(self.data[0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let y = match num_traits::cast(self.data[1]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Vector2::new(x, y))
-    }
-    */
-}
-
-impl<S> Vector2<S> 
-where 
     S: Copy 
 {
     /// Extend a two-dimensional vector into a three-dimensional vector using the 
@@ -816,14 +656,6 @@ where
         Self::new(S::zero(), S::one())
     }
 
-    /*
-    /// Determine whether a vector is the zero vector.
-    #[inline]
-    pub fn is_zero(&self) -> bool {
-        self.data[0].is_zero() && self.data[1].is_zero()
-    }
-    */
-
     /// Compute the coordinates of a vector in projective space.
     ///
     /// The function appends a `0` to the vector.
@@ -880,54 +712,6 @@ where
             None
         }
     }
-    /*
-    /// Compute the Euclidean dot product (inner product) of two vectors.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2, 
-    /// # };
-    /// #
-    /// let vector1 = Vector2::new(1_f64, 2_f64);
-    /// let vector2 = Vector2::new(3_f64, 4_f64);
-    /// 
-    /// assert_eq!(vector1.dot(&vector2), 11_f64);
-    /// ```
-    #[inline]
-    pub fn dot(&self, other: &Self) -> S {
-        self.data[0] * other.data[0] + self.data[1] * other.data[1]
-    }
-    */
-}
-
-impl<S> Vector2<S> 
-where 
-    S: ScalarSigned 
-{
-    /*
-    /// Compute the negation of a vector mutably in place.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2, 
-    /// # };
-    /// #
-    /// let mut result = Vector2::new(1_i32, 2_i32);
-    /// let expected = -result;
-    /// result.neg_mut();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn neg_mut(&mut self) {
-        self.data[0] = -self.data[0];
-        self.data[1] = -self.data[1];
-    }
-    */
 }
 
 impl<S> Vector2<S> 
@@ -955,45 +739,6 @@ where
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
-
-    /*
-    /// Returns `true` if the elements of a vector are all finite. 
-    /// Otherwise, it returns `false`. 
-    ///
-    /// A vector is finite when all of its elements are finite. This is useful 
-    /// for vector and matrix types working with fixed precision floating point 
-    /// values.
-    ///
-    /// # Example (Finite Vector)
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #    Vector2,
-    /// # };
-    /// #
-    /// let v = Vector2::new(1_f64, 2_f64);
-    ///
-    /// assert!(v.is_finite());
-    /// ```
-    ///
-    /// # Example (Not A Finite Vector)
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2,
-    /// # };
-    /// #
-    /// let w1 = Vector2::new(f64::INFINITY, f64::NAN);
-    /// let w2 = Vector2::new(f64::INFINITY, 2_f64);
-    ///
-    /// assert!(!w1.is_finite());
-    /// assert!(!w2.is_finite());
-    /// ```
-    #[inline]
-    pub fn is_finite(&self) -> bool {
-        self.data[0].is_finite() && self.data[1].is_finite()
-    }
-    */
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
@@ -1062,46 +807,6 @@ impl<S> Vector3<S> {
             data: [x, y, z],
         }
     }
-}
-
-impl<S> Vector3<S> 
-where 
-    S: NumCast + Copy
-{
-    /*
-    /// Cast a vector from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,   
-    /// # };
-    /// #
-    /// let vector: Vector3<u32> = Vector3::new(1_u32, 2_u32, 3_u32);
-    /// let expected: Option<Vector3<i32>> = Some(Vector3::new(1_i32, 2_i32, 3_i32));
-    /// let result = vector.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Vector3<T>> {
-        let x = match num_traits::cast(self.data[0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let y = match num_traits::cast(self.data[1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let z = match num_traits::cast(self.data[2]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Vector3::new(x, y, z))
-    }
-    */
 }
 
 impl<S> Vector3<S> 
@@ -1178,16 +883,6 @@ where
         Self::new(S::zero(), S::zero(), S::one())
     }
 
-    /*
-    /// Determine whether a vector is the zero vector.
-    #[inline]
-    pub fn is_zero(&self) -> bool {
-        self.data[0].is_zero() && 
-        self.data[1].is_zero() && 
-        self.data[2].is_zero()
-    }
-    */
-
     /// Compute the coordinates of a vector in projective space.
     ///
     /// The function appends a `0` to the vector.
@@ -1244,28 +939,6 @@ where
             None
         }
     }
-    /*
-    /// Compute the Euclidean dot product (inner product) of two vectors.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3, 
-    /// # };
-    /// #
-    /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let vector2 = Vector3::new(4_f64, 5_f64, 6_f64);
-    /// 
-    /// assert_eq!(vector1.dot(&vector2), 32_f64);
-    /// ```
-    #[inline]
-    pub fn dot(&self, other: &Self) -> S {
-        self.data[0] * other.data[0] + 
-        self.data[1] * other.data[1] + 
-        self.data[2] * other.data[2]
-    }
-    */
 
     /// Compute the cross product of two three-dimensional vectors. 
     ///
@@ -1363,35 +1036,6 @@ where
 
 impl<S> Vector3<S> 
 where 
-    S: ScalarSigned
-{
-    /*
-    /// Compute the negation of a vector mutably in place.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3, 
-    /// # };
-    /// #
-    /// let mut result = Vector3::new(1_i32, 2_i32, 3_i32);
-    /// let expected = -result;
-    /// result.neg_mut();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn neg_mut(&mut self) {
-        self.data[0] = -self.data[0];
-        self.data[1] = -self.data[1];
-        self.data[2] = -self.data[2];
-    }
-    */
-}
-
-impl<S> Vector3<S> 
-where 
     S: ScalarFloat
 {
     /// Linearly interpolate between the two vectors `self` and `other`.
@@ -1415,45 +1059,6 @@ where
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
-
-    /*
-    /// Returns `true` if the elements of a vector are all finite. 
-    /// Otherwise, it returns `false`. 
-    ///
-    /// A vector is finite when all of its elements are finite. This is useful 
-    /// for vector and matrix types working with fixed precision floating point 
-    /// values.
-    ///
-    /// # Example (Finite Vector)
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
-    ///
-    /// assert!(v.is_finite()); 
-    /// ```
-    ///
-    /// # Example (Not A Finite Vector)
-    /// 
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let w = Vector3::new(1_f64, f64::NAN, f64::NEG_INFINITY);
-    ///
-    /// assert!(!w.is_finite()); 
-    /// ```
-    #[inline]
-    pub fn is_finite(&self) -> bool {
-        self.data[0].is_finite() && 
-        self.data[1].is_finite() && 
-        self.data[2].is_finite()
-    }
-    */
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
@@ -1548,50 +1153,6 @@ impl<S> Vector4<S> {
 
 impl<S> Vector4<S> 
 where 
-    S: NumCast + Copy
-{
-    /*
-    /// Cast a vector from one type of scalars to another type of scalars.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4,   
-    /// # };
-    /// #
-    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
-    /// let expected: Option<Vector4<i32>> = Some(Vector4::new(1_i32, 2_i32, 3_i32, 4_i32));
-    /// let result = vector.cast::<i32>();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Vector4<T>> {
-        let x = match num_traits::cast(self.data[0]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let y = match num_traits::cast(self.data[1]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let z = match num_traits::cast(self.data[2]) {
-            Some(value) => value,
-            None => return None,
-        };
-        let w = match num_traits::cast(self.data[3]) {
-            Some(value) => value,
-            None => return None,
-        };
-
-        Some(Vector4::new(x, y, z, w))
-    }
-    */
-}
-
-impl<S> Vector4<S> 
-where 
     S: Copy
 {
     /// Contract a four-dimensional vector to a three-dimensional vector
@@ -1649,17 +1210,6 @@ where
         Self::new(S::zero(), S::zero(), S::zero(), S::one())
     }
 
-    /*
-    /// Determine whether a vector is the zero vector.
-    #[inline]
-    pub fn is_zero(&self) -> bool {
-        self.data[0].is_zero() && 
-        self.data[1].is_zero() && 
-        self.data[2].is_zero() && 
-        self.data[3].is_zero()
-    }
-    */
-
     /// Compute the coordinates of a projective vector in Euclidean space.
     ///
     /// The function removes a `0` from the end of the vector, otherwise it
@@ -1693,59 +1243,6 @@ where
             None
         }
     }
-    /*
-    /// Compute the Euclidean dot product (inner product) of two vectors.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let vector1 = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let vector2 = Vector4::new(5_f64, 6_f64, 7_f64, 8_f64);
-    /// 
-    /// assert_eq!(vector1.dot(&vector2), 70_f64);
-    /// ```
-    #[inline]
-    pub fn dot(&self, other: &Self) -> S {
-        self.data[0] * other.data[0] + 
-        self.data[1] * other.data[1] + 
-        self.data[2] * other.data[2] + 
-        self.data[3] * other.data[3]
-    }
-    */
-}
-
-impl<S> Vector4<S> 
-where 
-    S: ScalarSigned
-{
-    /*
-    /// Compute the negation of a vector mutably in place.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let mut result = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
-    /// let expected = -result;
-    /// result.neg_mut();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn neg_mut(&mut self) {
-        self.data[0] = -self.data[0];
-        self.data[1] = -self.data[1];
-        self.data[2] = -self.data[2];
-        self.data[3] = -self.data[3];
-    }
-    */
 }
 
 impl<S> Vector4<S> 
@@ -1773,46 +1270,6 @@ where
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
-
-    /*
-    /// Returns `true` if the elements of a vector are all finite. 
-    /// Otherwise, it returns `false`. 
-    ///
-    /// A vector is finite when all of its elements are finite. This is useful 
-    /// for vector and matrix types working with fixed precision floating point 
-    /// values.
-    ///
-    /// # Example (Finite Vector)
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4,
-    /// # };
-    /// #
-    /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
-    ///
-    /// assert!(v.is_finite()); 
-    /// ```
-    ///
-    /// # Example (Not A Finite Vector)
-    /// 
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4,
-    /// # };
-    /// #
-    /// let w = Vector4::new(1_f64, f64::NAN, f64::NEG_INFINITY, 4_f64);
-    ///
-    /// assert!(!w.is_finite()); 
-    /// ```
-    #[inline]
-    pub fn is_finite(&self) -> bool {
-        self.data[0].is_finite() && 
-        self.data[1].is_finite() && 
-        self.data[2].is_finite() && 
-        self.data[3].is_finite()
-    }
-    */
 
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
@@ -1911,104 +1368,7 @@ macro_rules! impl_scalar_vector_mul_ops {
 }
 
 impl_scalar_vector_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
-/*
-impl_scalar_vector_mul_ops!(u16);
-impl_scalar_vector_mul_ops!(u32);
-impl_scalar_vector_mul_ops!(u64);
-impl_scalar_vector_mul_ops!(u128);
-impl_scalar_vector_mul_ops!(usize);
-impl_scalar_vector_mul_ops!(i8);
-impl_scalar_vector_mul_ops!(i16);
-impl_scalar_vector_mul_ops!(i32);
-impl_scalar_vector_mul_ops!(i64);
-impl_scalar_vector_mul_ops!(i128);
-impl_scalar_vector_mul_ops!(isize);
-impl_scalar_vector_mul_ops!(f32);
-impl_scalar_vector_mul_ops!(f64);
-*/
-/*
-macro_rules! impl_scalar_vector_mul_ops {
-    ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {
-        impl ops::Mul<$Rhs> for $Lhs {
-            type Output = $Output;
 
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                Self::Output::new( $(self * other.data[$index]),* )
-            }
-        }
-
-        impl<'a> ops::Mul<$Rhs> for &'a $Lhs {
-            type Output = $Output;
-
-            #[inline]
-            fn mul(self, other: $Rhs) -> $Output {
-                Self::Output::new( $(self * other.data[$index]),* )
-            }
-        }
-    }
-}
-
-impl_scalar_vector_mul_ops!(u8    => Vector1<u8>    => Vector1<u8>,    { 0 });
-impl_scalar_vector_mul_ops!(u16   => Vector1<u16>   => Vector1<u16>,   { 0 });
-impl_scalar_vector_mul_ops!(u32   => Vector1<u32>   => Vector1<u32>,   { 0 });
-impl_scalar_vector_mul_ops!(u64   => Vector1<u64>   => Vector1<u64>,   { 0 });
-impl_scalar_vector_mul_ops!(u128  => Vector1<u128>  => Vector1<u128>,  { 0 });
-impl_scalar_vector_mul_ops!(usize => Vector1<usize> => Vector1<usize>, { 0 });
-impl_scalar_vector_mul_ops!(i8    => Vector1<i8>    => Vector1<i8>,    { 0 });
-impl_scalar_vector_mul_ops!(i16   => Vector1<i16>   => Vector1<i16>,   { 0 });
-impl_scalar_vector_mul_ops!(i32   => Vector1<i32>   => Vector1<i32>,   { 0 });
-impl_scalar_vector_mul_ops!(i64   => Vector1<i64>   => Vector1<i64>,   { 0 });
-impl_scalar_vector_mul_ops!(i128  => Vector1<i128>  => Vector1<i128>,  { 0 });
-impl_scalar_vector_mul_ops!(isize => Vector1<isize> => Vector1<isize>, { 0 });
-impl_scalar_vector_mul_ops!(f32   => Vector1<f32>   => Vector1<f32>,   { 0 });
-impl_scalar_vector_mul_ops!(f64   => Vector1<f64>   => Vector1<f64>,   { 0 });
-
-impl_scalar_vector_mul_ops!(u8    => Vector2<u8>    => Vector2<u8>,    { 0, 1 });
-impl_scalar_vector_mul_ops!(u16   => Vector2<u16>   => Vector2<u16>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(u32   => Vector2<u32>   => Vector2<u32>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(u64   => Vector2<u64>   => Vector2<u64>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(u128  => Vector2<u128>  => Vector2<u128>,  { 0, 1 });
-impl_scalar_vector_mul_ops!(usize => Vector2<usize> => Vector2<usize>, { 0, 1 });
-impl_scalar_vector_mul_ops!(i8    => Vector2<i8>    => Vector2<i8>,    { 0, 1 });
-impl_scalar_vector_mul_ops!(i16   => Vector2<i16>   => Vector2<i16>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(i32   => Vector2<i32>   => Vector2<i32>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(i64   => Vector2<i64>   => Vector2<i64>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(i128  => Vector2<i128>  => Vector2<i128>,  { 0, 1 });
-impl_scalar_vector_mul_ops!(isize => Vector2<isize> => Vector2<isize>, { 0, 1 });
-impl_scalar_vector_mul_ops!(f32   => Vector2<f32>   => Vector2<f32>,   { 0, 1 });
-impl_scalar_vector_mul_ops!(f64   => Vector2<f64>   => Vector2<f64>,   { 0, 1 });
-
-impl_scalar_vector_mul_ops!(u8    => Vector3<u8>    => Vector3<u8>,    { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u16   => Vector3<u16>   => Vector3<u16>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u32   => Vector3<u32>   => Vector3<u32>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u64   => Vector3<u64>   => Vector3<u64>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(u128  => Vector3<u128>  => Vector3<u128>,  { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(usize => Vector3<usize> => Vector3<usize>, { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i8    => Vector3<i8>    => Vector3<i8>,    { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i16   => Vector3<i16>   => Vector3<i16>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i32   => Vector3<i32>   => Vector3<i32>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i64   => Vector3<i64>   => Vector3<i64>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(i128  => Vector3<i128>  => Vector3<i128>,  { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(isize => Vector3<isize> => Vector3<isize>, { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(f32   => Vector3<f32>   => Vector3<f32>,   { 0, 1, 2 });
-impl_scalar_vector_mul_ops!(f64   => Vector3<f64>   => Vector3<f64>,   { 0, 1, 2 });
-
-impl_scalar_vector_mul_ops!(u8    => Vector4<u8>    => Vector4<u8>,    { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(u16   => Vector4<u16>   => Vector4<u16>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(u32   => Vector4<u32>   => Vector4<u32>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(u64   => Vector4<u64>   => Vector4<u64>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(u128  => Vector4<u128>  => Vector4<u128>,  { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(usize => Vector4<usize> => Vector4<usize>, { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i8    => Vector4<i8>    => Vector4<i8>,    { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i16   => Vector4<i16>   => Vector4<i16>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i32   => Vector4<i32>   => Vector4<i32>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i64   => Vector4<i64>   => Vector4<i64>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(i128  => Vector4<i128>  => Vector4<i128>,  { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(isize => Vector4<isize> => Vector4<isize>, { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(f32   => Vector4<f32>   => Vector4<f32>,   { 0, 1, 2, 3 });
-impl_scalar_vector_mul_ops!(f64   => Vector4<f64>   => Vector4<f64>,   { 0, 1, 2, 3 });
-*/
 
 macro_rules! impl_vector_scalar_binary_ops {
     ($OpType:ident, $op:ident) => {
@@ -2051,20 +1411,7 @@ macro_rules! impl_vector_scalar_binary_ops {
 impl_vector_scalar_binary_ops!(Mul, mul);
 impl_vector_scalar_binary_ops!(Div, div);
 impl_vector_scalar_binary_ops!(Rem, rem);
-/*
-impl_vector_scalar_binary_ops!(Mul, mul, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_scalar_binary_ops!(Div, div, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_scalar_binary_ops!(Mul, mul, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_scalar_binary_ops!(Div, div, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_scalar_binary_ops!(Mul, mul, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_scalar_binary_ops!(Div, div, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_scalar_binary_ops!(Mul, mul, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-impl_vector_scalar_binary_ops!(Div, div, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-impl_vector_scalar_binary_ops!(Rem, rem, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-*/
+
 
 impl<S, const N: usize> ops::Add<Vector<S, N>> for Vector<S, N> 
 where 
@@ -2202,66 +1549,6 @@ where
     }
 }
 
-/*
-macro_rules! impl_vector_vector_binary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> ops::$OpType<$T> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: $T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other.data[$index]) ),* 
-                )
-            }
-        }
-
-        impl<S> ops::$OpType<&$T> for $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: &$T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other.data[$index]) ),* 
-                )
-            }
-        }
-
-        impl<S> ops::$OpType<$T> for &$T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: $T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other.data[$index]) ),* 
-                )
-            }
-        }
-
-        impl<'a, 'b, S> ops::$OpType<&'a $T> for &'b $T where S: Scalar {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self, other: &'a $T) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op(other.data[$index]) ),* 
-                )
-            }
-        }
-    }
-}
-
-impl_vector_vector_binary_ops!(Add, add, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_vector_binary_ops!(Sub, sub, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_vector_binary_ops!(Add, add, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_vector_binary_ops!(Sub, sub, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_vector_binary_ops!(Add, add, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_vector_binary_ops!(Sub, sub, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_vector_binary_ops!(Add, add, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-impl_vector_vector_binary_ops!(Sub, sub, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-*/
-
-
 impl<S, const N: usize> ops::AddAssign<Vector<S, N>> for Vector<S, N> 
 where 
     S: Scalar
@@ -2345,65 +1632,6 @@ where
         }
     }
 }
-/*
-macro_rules! impl_vector_binary_assign_ops {
-    ($T:ty, { $($index:expr),* }) => {
-        impl<S> ops::AddAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: $T) {
-                $(self.data[$index] += other.data[$index]);*
-            }
-        }
-
-        impl<S> ops::AddAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn add_assign(&mut self, other: &$T) {
-                $(self.data[$index] += other.data[$index]);*
-            }
-        }
-
-        impl<S> ops::SubAssign<$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: $T) {
-                $(self.data[$index] -= other.data[$index]);*
-            }
-        }
-
-        impl<S> ops::SubAssign<&$T> for $T where S: Scalar {
-            #[inline]
-            fn sub_assign(&mut self, other: &$T) {
-                $(self.data[$index] -= other.data[$index]);*
-            }
-        }
-
-        impl<S> ops::MulAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn mul_assign(&mut self, other: S) {
-                $(self.data[$index] *= other);*
-            }
-        }
-        
-        impl<S> ops::DivAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn div_assign(&mut self, other: S) {
-                $(self.data[$index] /= other);*
-            }
-        }
-        
-        impl<S> ops::RemAssign<S> for $T where S: Scalar {
-            #[inline]
-            fn rem_assign(&mut self, other: S) {
-                $(self.data[$index] %= other);*
-            }
-        }
-    }
-}
-
-impl_vector_binary_assign_ops!(Vector1<S>, { 0 });
-impl_vector_binary_assign_ops!(Vector2<S>, { 0, 1 });
-impl_vector_binary_assign_ops!(Vector3<S>, { 0, 1, 2 });
-impl_vector_binary_assign_ops!(Vector4<S>, { 0, 1, 2, 3 });
-*/
 
 impl<S, const N: usize> ops::Neg for Vector<S, N> 
 where 
@@ -2438,38 +1666,6 @@ where
         result
     }
 }
-/*
-macro_rules! impl_vector_unary_ops {
-    ($OpType:ident, $op:ident, $T:ty, $Output:ty, { $($index:expr),* }) => {
-        impl<S> ops::$OpType for $T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op() ),* 
-                )
-            }
-        }
-
-        impl<S> ops::$OpType for &$T where S: ScalarSigned {
-            type Output = $Output;
-
-            #[inline]
-            fn $op(self) -> Self::Output {
-                Self::Output::new( 
-                    $( self.data[$index].$op() ),* 
-                )
-            }
-        }
-    }
-}
-
-impl_vector_unary_ops!(Neg, neg, Vector1<S>, Vector1<S>, { 0 });
-impl_vector_unary_ops!(Neg, neg, Vector2<S>, Vector2<S>, { 0, 1 });
-impl_vector_unary_ops!(Neg, neg, Vector3<S>, Vector3<S>, { 0, 1, 2 });
-impl_vector_unary_ops!(Neg, neg, Vector4<S>, Vector4<S>, { 0, 1, 2, 3 });
-*/
 
 impl_coords!(X, { x });
 impl_coords_deref!(Vector1, X);
@@ -2561,62 +1757,6 @@ where
     }
 }
 
-/*
-macro_rules! impl_magnitude {
-    ($VectorN:ident) => {
-        impl<S> Magnitude for $VectorN<S> where S: ScalarFloat {
-            type Output = S;
-
-            #[inline]
-            fn magnitude_squared(&self) -> Self::Output {
-                self.dot(self)
-            }
-        
-            #[inline]
-            fn magnitude(&self) -> Self::Output {
-                self.magnitude_squared().sqrt()
-            }
-            
-            #[inline]
-            fn normalize(&self) -> Self {
-                self / self.magnitude()
-            }
-            
-            #[inline]
-            fn normalize_to(&self, magnitude: Self::Output) -> Self {
-                self * (magnitude / self.magnitude())
-            }
-        
-            #[inline]
-            fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-                let magnitude = self.magnitude();
-        
-                if magnitude <= threshold {
-                    None
-                } else {
-                    Some(self.normalize())
-                }
-            }
-        
-            #[inline]
-            fn distance_squared(&self, other: &$VectorN<S>) -> Self::Output {
-                (self - other).magnitude_squared()
-            }
-        
-            #[inline]
-            fn distance(&self, other: &Self) -> Self::Output {
-                self.distance_squared(other).sqrt()
-            }
-        }
-    }
-}
-
-impl_magnitude!(Vector1);
-impl_magnitude!(Vector2);
-impl_magnitude!(Vector3);
-impl_magnitude!(Vector4);
-*/
-
 impl<S, const N: usize> approx::AbsDiffEq for Vector<S, N> 
 where 
     S: ScalarFloat
@@ -2678,54 +1818,6 @@ where
         result
     }
 }
-/*
-macro_rules! impl_approx_eq_ops {
-    ($T:ident, { $($index:expr),* }) => {
-        impl<S> approx::AbsDiffEq for $T<S> where S: ScalarFloat {
-            type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-        
-            #[inline]
-            fn default_epsilon() -> Self::Epsilon {
-                S::default_epsilon()
-            }
-        
-            #[inline]
-            fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-                $(S::abs_diff_eq(&self.data[$index], &other.data[$index], epsilon)) &&*
-            }
-        }
-        
-        impl<S> approx::RelativeEq for $T<S> where S: ScalarFloat {
-            #[inline]
-            fn default_max_relative() -> S::Epsilon {
-                S::default_max_relative()
-            }
-        
-            #[inline]
-            fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-                $(S::relative_eq(&self.data[$index], &other.data[$index], epsilon, max_relative)) &&*
-            }
-        }
-        
-        impl<S> approx::UlpsEq for $T<S> where S: ScalarFloat {
-            #[inline]
-            fn default_max_ulps() -> u32 {
-                S::default_max_ulps()
-            }
-        
-            #[inline]
-            fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-                $(S::ulps_eq(&self.data[$index], &other.data[$index], epsilon, max_ulps)) &&*
-            }
-        }
-    }
-}
-
-impl_approx_eq_ops!(Vector1, { 0 });
-impl_approx_eq_ops!(Vector2, { 0, 1 });
-impl_approx_eq_ops!(Vector3, { 0, 1, 2 });
-impl_approx_eq_ops!(Vector4, { 0, 1, 2, 3 });
-*/
 
 macro_rules! impl_swizzle {
     ($name:ident() => $VectorN:ident => $Output:ident { $($i:expr),+ }) => {

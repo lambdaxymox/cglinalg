@@ -2945,7 +2945,7 @@ where
 }
 
 macro_rules! impl_scalar_quaternion_mul_ops {
-    ($Lhs:ty) => {
+    ($($Lhs:ty),* $(,)*) => {$(
         impl ops::Mul<Quaternion<$Lhs>> for $Lhs {
             type Output = Quaternion<$Lhs>;
 
@@ -2981,10 +2981,11 @@ macro_rules! impl_scalar_quaternion_mul_ops {
                 Self::Output::from_parts(self * other.scalar(), self * other.vector())
             }
         }
-    }
+    )*}
 }
 
-impl_scalar_quaternion_mul_ops!(u8);
+impl_scalar_quaternion_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
+/*
 impl_scalar_quaternion_mul_ops!(u16);
 impl_scalar_quaternion_mul_ops!(u32);
 impl_scalar_quaternion_mul_ops!(u64);
@@ -2998,7 +2999,7 @@ impl_scalar_quaternion_mul_ops!(i128);
 impl_scalar_quaternion_mul_ops!(isize);
 impl_scalar_quaternion_mul_ops!(f32);
 impl_scalar_quaternion_mul_ops!(f64);
-
+*/
 
 impl<S> ops::Div<S> for Quaternion<S> 
 where 

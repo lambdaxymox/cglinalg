@@ -69,7 +69,3 @@ harness = false
 name = "bench_quaternion"
 harness = false
 
-[[bench]]
-name = "bench_swap_rows"
-harness = false
-
