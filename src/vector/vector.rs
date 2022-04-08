@@ -1879,7 +1879,7 @@ where
 }
 
 macro_rules! impl_scalar_vector_mul_ops {
-    ($Lhs:ty) => {
+    ($($Lhs:ty),* $(,)*) => {$(
         impl<const N: usize> ops::Mul<Vector<$Lhs, N>> for $Lhs {
             type Output = Vector<$Lhs, N>;
 
@@ -1907,10 +1907,11 @@ macro_rules! impl_scalar_vector_mul_ops {
                 result
             }
         }
-    }
+    )*}
 }
 
-impl_scalar_vector_mul_ops!(u8);
+impl_scalar_vector_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
+/*
 impl_scalar_vector_mul_ops!(u16);
 impl_scalar_vector_mul_ops!(u32);
 impl_scalar_vector_mul_ops!(u64);
@@ -1924,6 +1925,7 @@ impl_scalar_vector_mul_ops!(i128);
 impl_scalar_vector_mul_ops!(isize);
 impl_scalar_vector_mul_ops!(f32);
 impl_scalar_vector_mul_ops!(f64);
+*/
 /*
 macro_rules! impl_scalar_vector_mul_ops {
     ($Lhs:ty => $Rhs:ty => $Output:ty, { $($index:expr),* }) => {

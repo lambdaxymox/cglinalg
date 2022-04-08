@@ -12025,7 +12025,7 @@ impl_matrix_scalar_binary_ops!(
 */
 
 macro_rules! impl_scalar_matrix_mul_ops {
-    ($Lhs:ty) => {
+    ($($Lhs:ty),* $(,)*) => {$(
         impl<const R: usize, const C: usize, const RC: usize> ops::Mul<Matrix<$Lhs, R, C, RC>> for $Lhs {
             type Output = Matrix<$Lhs, R, C, RC>;
 
@@ -12057,10 +12057,11 @@ macro_rules! impl_scalar_matrix_mul_ops {
                 result
             }
         }
-    }
+    )*}
 }
 
-impl_scalar_matrix_mul_ops!(u8);
+impl_scalar_matrix_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
+/*
 impl_scalar_matrix_mul_ops!(u16);
 impl_scalar_matrix_mul_ops!(u32);
 impl_scalar_matrix_mul_ops!(u64);
@@ -12074,6 +12075,7 @@ impl_scalar_matrix_mul_ops!(i128);
 impl_scalar_matrix_mul_ops!(isize);
 impl_scalar_matrix_mul_ops!(f32);
 impl_scalar_matrix_mul_ops!(f64);
+*/
 /*
 macro_rules! impl_scalar_matrix_mul_ops {
     ($Lhs:ty => $Rhs:ty => $Output:ty, { $( ($col:expr, $row:expr) ),* }) => {
