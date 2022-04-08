@@ -290,6 +290,56 @@ where
 
         result
     }
+
+    /// Linearly interpolate between the two vectors `self` and `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let v0 = Vector3::new(0_f64, 0_f64, 0_f64);
+    /// let v1 = Vector3::new(10_f64, 20_f64, 30_f64);
+    /// let amount = 0.7;
+    /// let expected = Vector3::new(7_f64, 14_f64, 21_f64);
+    /// let result = v0.lerp(&v1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
+        self + ((other - self) * amount)
+    }
+
+    /// Compute the projection of the vector `self` onto the vector
+    /// `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let vector = Vector3::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64);
+    /// let unit_x = Vector3::unit_x();
+    /// let unit_y = Vector3::unit_y();
+    /// let unit_z = Vector3::unit_z();
+    /// let projected_x = vector.project(&unit_x);
+    /// let projected_y = vector.project(&unit_y);
+    /// let projected_z = vector.project(&unit_z);
+    ///
+    /// assert_eq!(projected_x, vector.x * unit_x);
+    /// assert_eq!(projected_y, vector.y * unit_y);
+    /// assert_eq!(projected_z, vector.z * unit_z);
+    /// ```
+    #[inline]
+    pub fn project(&self, other: &Self) -> Self {
+        other * (self.dot(other) / other.magnitude_squared())
+    }
 }
 
 impl<S, const N: usize> AsRef<[S; N]> for Vector<S, N> {
@@ -933,6 +983,7 @@ impl<S> Vector1<S>
 where 
     S: ScalarFloat
 {
+    /*
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
     /// # Example
@@ -954,7 +1005,8 @@ where
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
-
+    */
+    /*
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
@@ -976,6 +1028,7 @@ where
     pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
+    */
 }
 
 
@@ -1118,6 +1171,7 @@ impl<S> Vector2<S>
 where 
     S: ScalarFloat
 {
+    /*
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
     /// # Example
@@ -1139,7 +1193,8 @@ where
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
-
+    */
+    /*
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
@@ -1164,6 +1219,7 @@ where
     pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
+    */
 }
 
 
@@ -1406,6 +1462,7 @@ impl<S> Vector3<S>
 where 
     S: ScalarFloat
 {
+    /*
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
     /// # Example
@@ -1427,7 +1484,8 @@ where
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
-
+    */
+    /*
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
@@ -1455,6 +1513,7 @@ where
     pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
+    */
 }
 
 impl<S> Vector4<S> {
@@ -1565,6 +1624,7 @@ impl<S> Vector4<S>
 where 
     S: ScalarFloat
 {
+    /*
     /// Linearly interpolate between the two vectors `self` and `other`.
     ///
     /// # Example
@@ -1586,7 +1646,8 @@ where
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
         self + ((other - self) * amount)
     }
-
+    */
+    /*
     /// Compute the projection of the vector `self` onto the vector
     /// `other`.
     ///
@@ -1617,6 +1678,7 @@ where
     pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
+    */
 }
 
 impl<S> From<S> for Vector1<S> 
