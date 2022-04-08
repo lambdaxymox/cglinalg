@@ -1329,34 +1329,6 @@ where
             zero,      scale_y,
         )
     }
-
-    /*
-    /// Mutably transpose a square matrix in place.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix2x2,    
-    /// # };
-    /// #
-    /// let mut result = Matrix2x2::new(
-    ///     1_i32, 1_i32,
-    ///     2_i32, 2_i32 
-    /// );
-    /// let expected = Matrix2x2::new(
-    ///     1_i32, 2_i32,
-    ///     1_i32, 2_i32 
-    /// );
-    /// result.transpose_mut();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn transpose_mut(&mut self) {
-        self.swap((0, 1), (1, 0));
-    }
-    */
     
     /// Determine whether a matrix is an identity matrix.
     ///
@@ -2227,38 +2199,6 @@ where
             zero,           zero,           one
         )
     }
-
-    /* 
-    /// Mutably transpose a square matrix in place.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix3x3, 
-    /// # };
-    /// #
-    /// let mut result = Matrix3x3::new(
-    ///     1_i32, 1_i32, 1_i32,
-    ///     2_i32, 2_i32, 2_i32,
-    ///     3_i32, 3_i32, 3_i32,   
-    /// );
-    /// let expected = Matrix3x3::new(
-    ///     1_i32, 2_i32, 3_i32,
-    ///     1_i32, 2_i32, 3_i32,
-    ///     1_i32, 2_i32, 3_i32
-    /// );
-    /// result.transpose_mut();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn transpose_mut(&mut self) {
-        self.swap((0, 1), (1, 0));
-        self.swap((0, 2), (2, 0));
-        self.swap((1, 2), (2, 1));
-    }
-    */
     
     /// Determine whether a matrix is an identity matrix.
     ///
@@ -3485,43 +3425,6 @@ where
             zero,           zero,           zero,           one
         )
     }
-
-    /*
-    /// Mutably transpose a square matrix in place.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix4x4, 
-    /// # };
-    /// #
-    /// let mut result = Matrix4x4::new(
-    ///     1_i32, 1_i32, 1_i32, 1_i32,
-    ///     2_i32, 2_i32, 2_i32, 2_i32,
-    ///     3_i32, 3_i32, 3_i32, 3_i32,
-    ///     4_i32, 4_i32, 4_i32, 4_i32
-    /// );
-    /// let expected = Matrix4x4::new(
-    ///     1_i32, 2_i32, 3_i32, 4_i32,
-    ///     1_i32, 2_i32, 3_i32, 4_i32,
-    ///     1_i32, 2_i32, 3_i32, 4_i32,
-    ///     1_i32, 2_i32, 3_i32, 4_i32 
-    /// );
-    /// result.transpose_mut();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn transpose_mut(&mut self) {
-        self.swap((0, 1), (1, 0));
-        self.swap((0, 2), (2, 0));
-        self.swap((1, 2), (2, 1));
-        self.swap((0, 3), (3, 0));
-        self.swap((1, 3), (3, 1));
-        self.swap((2, 3), (3, 2));
-    }
-    */
     
     /// Determine whether a matrix is an identity matrix.
     ///
