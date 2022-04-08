@@ -414,924 +414,113 @@ where
     }
 }
 
-
-impl<S> Vector1<S> {
-    /// Construct a new vector.
-    #[inline]
-    pub const fn new(x: S) -> Self {
-        Self { 
-            data: [x], 
-        }
-    }
-}
-
-impl<S> Vector1<S> 
-where 
-    S: Copy
-{
-    /// Extend a one-dimensional vector into a two-dimensional vector using 
-    /// the supplied value for the **y-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,
-    /// #     Vector2,   
-    /// # };
-    /// #
-    /// let vector = Vector1::new(1_f64);
-    /// let expected = Vector2::new(1_f64, 2_f64);
-    /// let result = vector.extend(2_f64);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn extend(&self, y: S) -> Vector2<S> {
-        Vector2::new(self.data[0], y)
-    }
-}
-
-impl<S> Vector1<S> 
-where 
-    S: Scalar
-{
-    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_x() -> Self {
-        Vector1::new(S::one())
-    }
-
-    /// Compute the coordinates of a vector in projective space.
-    ///
-    /// The function appends a `0` to the vector.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,
-    /// #     Vector2, 
-    /// # };
-    /// #
-    /// let vector = Vector1::new(1_i32);
-    /// let expected = Vector2::new(1_i32, 0_i32);
-    /// let result = vector.to_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn to_homogeneous(&self) -> Vector2<S> {
-        self.extend(S::zero())
-    }
-}
-
-impl<S> Vector1<S> 
+impl<S, const N: usize> approx::AbsDiffEq for Vector<S, N> 
 where 
     S: ScalarFloat
 {
-    /// Linearly interpolate between the two vectors `self` and `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,
-    /// # };
-    /// #
-    /// let v0 = Vector1::new(0_f64);
-    /// let v1 = Vector1::new(10_f64);
-    /// let amount = 0.6;
-    /// let result = v0.lerp(&v1, amount);
-    /// let expected = Vector1::new(6_f64);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
+    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
+
     #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
+    fn default_epsilon() -> Self::Epsilon {
+        S::default_epsilon()
     }
 
-    /// Compute the projection of the vector `self` onto the vector
-    /// `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1, 
-    /// #     Magnitude,
-    /// # };
-    /// # 
-    /// let vector = Vector1::new(1_f64);
-    /// let unit_x = Vector1::unit_x();
-    /// let projected_x = vector.project(&unit_x);
-    ///
-    /// assert_eq!(projected_x, vector.x * unit_x);
-    /// ```
     #[inline]
-    pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
-    }
-}
-
-impl<S> From<S> for Vector1<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: S) -> Self {
-        Self::new(v)
-    }
-}
-
-impl<S> From<(S,)> for Vector1<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: (S,)) -> Self {
-        Self::new(v.0)
-    }
-}
-
-impl<S> From<&(S,)> for Vector1<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &(S,)) -> Self  {
-        Self::new(v.0)
-    }
-}
-
-impl<'a, S> From<&'a (S,)> for &'a Vector1<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &'a (S,)) -> &'a Vector1<S> {
-        unsafe { 
-            &*(v as *const (S,) as *const Vector1<S>)
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        let mut result = true;
+        for i in 0..N {
+            result &= S::abs_diff_eq(&self.data[i], &other.data[i], epsilon);
         }
+
+        result
     }
 }
 
-
-impl<S> Vector2<S> {
-    /// Construct a new vector.
-    #[inline]
-    pub const fn new(x: S, y: S) -> Self {
-        Self { 
-            data: [x, y],
-        }
-    }
-}
-
-impl<S> Vector2<S> 
-where 
-    S: Copy 
-{
-    /// Extend a two-dimensional vector into a three-dimensional vector using the 
-    /// supplied **z-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2,
-    /// #     Vector3,   
-    /// # };
-    /// #
-    /// let v = Vector2::new(1_f64, 2_f64);
-    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let result = v.extend(3_f64);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn extend(&self, z: S) -> Vector3<S> {
-        Vector3::new(self.data[0], self.data[1], z)
-    }
-
-    /// Contract a two-dimensional vector to a one-dimensional vector by removing
-    /// the **y-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,
-    /// #     Vector2,   
-    /// # };
-    /// #
-    /// let v = Vector2::new(1_f64, 2_f64);
-    /// let expected = Vector1::new(1_f64);
-    /// let result = v.contract();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn contract(&self) -> Vector1<S> {
-        Vector1::new(self.data[0])
-    }
-}
-
-impl<S> Vector2<S> 
-where 
-    S: Scalar 
-{
-    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_x() -> Self {
-        Self::new(S::one(), S::zero())
-    }
-
-    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_y() -> Self {
-        Self::new(S::zero(), S::one())
-    }
-
-    /// Compute the coordinates of a vector in projective space.
-    ///
-    /// The function appends a `0` to the vector.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2,
-    /// #     Vector3, 
-    /// # };
-    /// #
-    /// let vector = Vector2::new(1_i32, 2_i32);
-    /// let expected = Vector3::new(1_i32, 2_i32, 0_i32);
-    /// let result = vector.to_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn to_homogeneous(&self) -> Vector3<S> {
-        self.extend(S::zero())
-    }
-
-    /// Compute the coordinates of a projective vector in Euclidean space.
-    ///
-    /// The function removes a `0` from the end of the vector, otherwise it
-    /// returns `None`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,
-    /// #     Vector2, 
-    /// # };
-    /// #
-    /// let vector = Vector2::new(1_i32, 0_i32);
-    /// let expected = Some(Vector1::new(1_i32));
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    ///
-    /// let vector = Vector2::new(1_i32, 1_i32);
-    /// let expected: Option<Vector1<i32>> = None;
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert!(result.is_none());
-    /// ```
-    #[inline]
-    pub fn from_homogeneous(&self) -> Option<Vector1<S>> {
-        if self.data[1].is_zero() {
-            Some(self.contract())
-        } else {
-            None
-        }
-    }
-}
-
-impl<S> Vector2<S> 
+impl<S, const N: usize> approx::RelativeEq for Vector<S, N> 
 where 
     S: ScalarFloat
 {
-    /// Linearly interpolate between the two vectors `self` and `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2,  
-    /// # };
-    /// #
-    /// let v0 = Vector2::new(0_f64, 0_f64);
-    /// let v1 = Vector2::new(10_f64, 20_f64);
-    /// let amount = 0.7;
-    /// let expected = Vector2::new(7_f64, 14_f64);
-    /// let result = v0.lerp(&v1, amount);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
     #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
+    fn default_max_relative() -> S::Epsilon {
+        S::default_max_relative()
     }
 
-    /// Compute the projection of the vector `self` onto the vector
-    /// `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2, 
-    /// #     Magnitude,
-    /// # };
-    /// # 
-    /// let vector = 3_f64 * Vector2::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64);
-    /// let unit_x = Vector2::unit_x();
-    /// let unit_y = Vector2::unit_y();
-    /// let projected_x = vector.project(&unit_x);
-    /// let projected_y = vector.project(&unit_y);
-    ///
-    /// assert_eq!(projected_x, vector.x * unit_x);
-    /// assert_eq!(projected_y, vector.y * unit_y);
-    /// ```
     #[inline]
-    pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
-    }
-}
-
-impl<S> From<(S, S)> for Vector2<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: (S, S)) -> Self {
-        Self::new(v.0, v.1)
-    }
-}
-
-impl<S> From<&(S, S)> for Vector2<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &(S, S)) -> Self {
-        Self::new(v.0, v.1)
-    }
-}
-
-impl<'a, S> From<&'a (S, S)> for &'a Vector2<S> 
-where
-    S: Copy
-{
-    #[inline]
-    fn from(v: &'a (S, S)) -> &'a Vector2<S> {
-        unsafe {
-            &*(v as *const (S, S) as *const Vector2<S>)
+    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        let mut result = true;
+        for i in 0..N {
+            result &= S::relative_eq(&self.data[i], &other.data[i], epsilon, max_relative);
         }
+
+        result
     }
 }
 
-
-impl<S> Vector3<S> {
-    /// Construct a new vector.
+impl<S, const N: usize> approx::UlpsEq for Vector<S, N> 
+where 
+    S: ScalarFloat
+{
     #[inline]
-    pub const fn new(x: S, y: S, z: S) -> Self {
-        Self { 
-            data: [x, y, z],
+    fn default_max_ulps() -> u32 {
+        S::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        let mut result = true;
+        for i in 0..N {
+            result &= S::ulps_eq(&self.data[i], &other.data[i], epsilon, max_ulps);
         }
+
+        result
     }
 }
 
-impl<S> Vector3<S> 
+impl<S, const N: usize> Magnitude for Vector<S, N> 
 where 
-    S: Copy
+    S: ScalarFloat
 {
-    /// Extend a three-dimensional vector into a four-dimensional vector using the 
-    /// supplied **w-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let expected = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let result = v.extend(4_f64);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
+    type Output = S;
+
     #[inline]
-    pub fn extend(&self, w: S) -> Vector4<S> {
-        Vector4::new(self.data[0], self.data[1], self.data[2], w)
+    fn magnitude_squared(&self) -> Self::Output {
+        self.dot(self)
     }
 
-    /// Contract a three-dimensional vector to a two-dimensional vector
-    /// by removing the **z-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2,
-    /// #     Vector3, 
-    /// # };
-    /// #
-    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let expected = Vector2::new(1_f64, 2_f64);
-    /// let result = v.contract();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
     #[inline]
-    pub fn contract(&self) -> Vector2<S> {
-        Vector2::new(self.data[0], self.data[1])
-    }
-}
-
-impl<S> Vector3<S> 
-where 
-    S: Scalar
-{
-    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_x() -> Self {
-        Self::new(S::one(), S::zero(), S::zero())
-    }
-
-    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_y() -> Self {
-        Self::new(S::zero(), S::one(), S::zero())
+    fn magnitude(&self) -> Self::Output {
+        self.magnitude_squared().sqrt()
     }
     
-    /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
-    /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_z() -> Self {
-        Self::new(S::zero(), S::zero(), S::one())
-    }
-
-    /// Compute the coordinates of a vector in projective space.
-    ///
-    /// The function appends a `0` to the vector.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
-    /// let expected = Vector4::new(1_i32, 2_i32, 3_i32, 0_i32);
-    /// let result = vector.to_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn to_homogeneous(&self) -> Vector4<S> {
-        self.extend(S::zero())
-    }
-
-    /// Compute the coordinates of a projective vector in Euclidean space.
-    ///
-    /// The function removes a `0` from the end of the vector, otherwise it
-    /// returns `None`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2,
-    /// #     Vector3, 
-    /// # };
-    /// #
-    /// let vector = Vector3::new(1_i32, 2_i32, 0_i32);
-    /// let expected = Some(Vector2::new(1_i32, 2_i32));
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    ///
-    /// let vector = Vector3::new(1_i32, 2_i32, 1_i32);
-    /// let expected: Option<Vector2<i32>> = None;
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert!(result.is_none());
-    /// ```
-    #[inline]
-    pub fn from_homogeneous(&self) -> Option<Vector2<S>> {
-        if self.data[2].is_zero() {
-            Some(self.contract())
-        } else {
-            None
-        }
-    }
-
-    /// Compute the cross product of two three-dimensional vectors. 
-    ///
-    /// For the vector dimensions used in computer graphics 
-    /// (up to four dimensions), the cross product is well-defined only in 
-    /// three dimensions. The cross product is a form of vector 
-    /// multiplication that computes a vector normal to the plane swept out by 
-    /// the two vectors. The magnitude of this vector is the area of the 
-    /// parallelogram swept out by the two vectors. 
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,  
-    /// # };
-    /// #
-    /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let vector2 = Vector3::new(4_f64, 5_f64, 6_f64);
-    /// let cross = vector1.cross(&vector2);
-    ///
-    /// assert_eq!(cross, Vector3::new(-3_f64, 6_f64, -3_f64));
-    /// // The cross product is perpendicular to the two input vectors.
-    /// assert_eq!(cross.dot(&vector1), 0_f64);
-    /// assert_eq!(cross.dot(&vector2), 0_f64);
-    ///
-    /// // The cross product of a vector with itself is zero.
-    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
-    ///
-    /// assert_eq!(vector.cross(&vector), Vector3::zero());
-    /// ```
-    #[inline]
-    pub fn cross(&self, other: &Self) -> Self {
-        let x = self.data[1] * other.data[2] - self.data[2] * other.data[1];
-        let y = self.data[2] * other.data[0] - self.data[0] * other.data[2];
-        let z = self.data[0] * other.data[1] - self.data[1] * other.data[0];
-    
-        Vector3::new(x, y, z)
-    }
-
-    /// Compute the scalar triple product of three three-dimensional vectors.
-    /// 
-    /// The scalar triple product of three vectors `u`, `v`, and `w` is the 
-    /// signed volume of the parallelepiped formed by the three vectors. In
-    /// symbols, the triple product is given by
-    /// ```text
-    /// triple(u, v, w) = dot(cross(u, v), w)
-    /// ```
-    /// The order of the dot product and the cross product can be interchanged
-    /// in the triple product without affecting the end result
-    /// ```text
-    /// dot(cross(u, v), w) = dot(u, cross(v, w))
-    /// ```
-    /// The scalar triple product also remains constant under cyclic permutations
-    /// of its three arguments. Given that
-    /// ```text
-    /// dot(cross(u, v), w) = dot(cross(v, w), u) = dot(cross(w, v), u)
-    /// ```
-    /// it follows that
-    /// ```text
-    /// triple(u, v, w) = triple(v, w, u) = triple(w, u, v)
-    /// ```
-    /// Under noncyclic permutations, the scalar triple product changes sign
-    /// due to the cross product
-    /// ```text
-    /// triple(u, v, w) = -triple(u, w, v) = -triple(v, u, w) = -triple(w, v, u)
-    /// ```
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let u = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let v = Vector3::new(6_f64, 87_f64, 222_f64);
-    /// let w = Vector3::new(52_f64, 85_f64, 108_f64);
-    /// let expected = 276_f64;
-    /// let result = u.triple(&v, &w);
-    /// 
-    /// assert_eq!(result, expected);
-    /// 
-    /// assert_eq!(u.triple(&v, &w), v.triple(&w, &u));
-    /// assert_eq!(u.triple(&v, &w), w.triple(&u, &v));
-    /// assert_eq!(u.triple(&v, &w), -u.triple(&w, &v));
-    /// assert_eq!(u.triple(&v, &w), -v.triple(&u, &w));
-    /// assert_eq!(u.triple(&v, &w), -w.triple(&v, &u));
-    /// ```
-    #[inline]
-    pub fn triple(&self, other1: &Vector3<S>, other2: &Vector3<S>) -> S {
-        self.cross(other1).dot(other2)
-    }
-}
-
-impl<S> Vector3<S> 
-where 
-    S: ScalarFloat
-{
-    /// Linearly interpolate between the two vectors `self` and `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,  
-    /// # };
-    /// #
-    /// let v0 = Vector3::new(0_f64, 0_f64, 0_f64);
-    /// let v1 = Vector3::new(10_f64, 20_f64, 30_f64);
-    /// let amount = 0.7;
-    /// let expected = Vector3::new(7_f64, 14_f64, 21_f64);
-    /// let result = v0.lerp(&v1, amount);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
-    }
-
-    /// Compute the projection of the vector `self` onto the vector
-    /// `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3, 
-    /// #     Magnitude,
-    /// # };
-    /// # 
-    /// let vector = Vector3::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64);
-    /// let unit_x = Vector3::unit_x();
-    /// let unit_y = Vector3::unit_y();
-    /// let unit_z = Vector3::unit_z();
-    /// let projected_x = vector.project(&unit_x);
-    /// let projected_y = vector.project(&unit_y);
-    /// let projected_z = vector.project(&unit_z);
-    ///
-    /// assert_eq!(projected_x, vector.x * unit_x);
-    /// assert_eq!(projected_y, vector.y * unit_y);
-    /// assert_eq!(projected_z, vector.z * unit_z);
-    /// ```
-    #[inline]
-    pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
-    }
-}
-
-impl<S> From<(S, S, S)> for Vector3<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: (S, S, S)) -> Self {
-        Self::new(v.0, v.1, v.2)
-    }
-}
-
-impl<S> From<&(S, S, S)> for Vector3<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &(S, S, S)) -> Self {
-        Self::new(v.0, v.1, v.2)
-    }
-}
-
-impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
-        unsafe { 
-            &*(v as *const (S, S, S) as *const Vector3<S>)
-        }
-    }
-}
-
-impl<S> From<Vector4<S>> for Vector3<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: Vector4<S>) -> Self {
-        Self::new(v.data[0], v.data[1], v.data[2])
-    }
-}
-
-impl<S> From<&Vector4<S>> for Vector3<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &Vector4<S>) -> Self {
-        Self::new(v.data[0], v.data[1], v.data[2])
-    }
-}
-
-impl<S> Vector4<S> {
-    /// Construct a new four-dimensional vector.
-    #[inline]
-    pub const fn new(x: S, y: S, z: S, w: S) -> Self {
-        Self { 
-            data: [x, y, z, w],
-        }
-    }
-}
-
-impl<S> Vector4<S> 
-where 
-    S: Copy
-{
-    /// Contract a four-dimensional vector to a three-dimensional vector
-    /// by removing the **w-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let result = v.contract();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn contract(&self) -> Vector3<S> {
-        Vector3::new(self.data[0], self.data[1], self.data[2])
-    }
-}
-
-impl<S> Vector4<S> 
-where 
-    S: Scalar
-{
-    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_x() -> Self {
-        Self::new(S::one(), S::zero(), S::zero(), S::zero())
-    }
-
-    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_y() -> Self {
-        Self::new(S::zero(), S::one(), S::zero(), S::zero())
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
     }
     
-    /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
-    /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_z() -> Self {
-        Self::new(S::zero(), S::zero(), S::one(), S::zero())
+    fn normalize_to(&self, magnitude: Self::Output) -> Self {
+        self * (magnitude / self.magnitude())
     }
 
-    /// Returns the **w-axis** unit vector, a unit vector with the **w-component**
-    /// component as a `1` and the rest of the components are zero.
     #[inline]
-    pub fn unit_w() -> Self {
-        Self::new(S::zero(), S::zero(), S::zero(), S::one())
-    }
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let magnitude = self.magnitude();
 
-    /// Compute the coordinates of a projective vector in Euclidean space.
-    ///
-    /// The function removes a `0` from the end of the vector, otherwise it
-    /// returns `None`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let vector = Vector4::new(1_i32, 2_i32, 3_i32, 0_i32);
-    /// let expected = Some(Vector3::new(1_i32, 2_i32, 3_i32));
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    ///
-    /// let vector = Vector4::new(1_i32, 2_i32, 3_i32, 1_i32);
-    /// let expected: Option<Vector3<i32>> = None;
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert!(result.is_none());
-    /// ```
-    #[inline]
-    pub fn from_homogeneous(&self) -> Option<Vector3<S>> {
-        if self.data[3].is_zero() {
-            Some(self.contract())
-        } else {
+        if magnitude <= threshold {
             None
+        } else {
+            Some(self.normalize())
         }
     }
-}
 
-impl<S> Vector4<S> 
-where 
-    S: ScalarFloat
-{
-    /// Linearly interpolate between the two vectors `self` and `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4,  
-    /// # };
-    /// #
-    /// let v0 = Vector4::new(0_f64, 0_f64, 0_f64, 0_f64);
-    /// let v1 = Vector4::new(10_f64, 20_f64, 30_f64, 40_f64);
-    /// let amount = 0.7;
-    /// let expected = Vector4::new(7_f64, 14_f64, 21_f64, 28_f64);
-    /// let result = v0.lerp(&v1, amount);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
     #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
+    fn distance_squared(&self, other: &Vector<S, N>) -> Self::Output {
+        (self - other).magnitude_squared()
     }
 
-    /// Compute the projection of the vector `self` onto the vector
-    /// `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4, 
-    /// #     Magnitude,
-    /// # };
-    /// # 
-    /// let vector = Vector4::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64, 1_f64);
-    /// let unit_x = Vector4::unit_x();
-    /// let unit_y = Vector4::unit_y();
-    /// let unit_z = Vector4::unit_z();
-    /// let unit_w = Vector4::unit_w();
-    /// let projected_x = vector.project(&unit_x);
-    /// let projected_y = vector.project(&unit_y);
-    /// let projected_z = vector.project(&unit_z);
-    /// let projected_w = vector.project(&unit_w);
-    ///
-    /// assert_eq!(projected_x, vector.x * unit_x);
-    /// assert_eq!(projected_y, vector.y * unit_y);
-    /// assert_eq!(projected_z, vector.z * unit_z);
-    /// assert_eq!(projected_w, vector.w * unit_w);
-    /// ```
     #[inline]
-    pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
-    }
-}
-
-impl<S> From<(S, S, S, S)> for Vector4<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: (S, S, S, S)) -> Self {
-        Self::new(v.0, v.1, v.2, v.3)
-    }
-}
-
-impl<S> From<&(S, S, S, S)> for Vector4<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &(S, S, S, S)) -> Self {
-        Self::new(v.0, v.1, v.2, v.3)
-    }
-}
-
-impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
-        unsafe { 
-            &*(v as *const (S, S, S, S) as *const Vector4<S>)
-        }
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.distance_squared(other).sqrt()
     }
 }
 
@@ -1667,6 +856,927 @@ where
     }
 }
 
+
+impl<S> Vector1<S> {
+    /// Construct a new vector.
+    #[inline]
+    pub const fn new(x: S) -> Self {
+        Self { 
+            data: [x], 
+        }
+    }
+}
+
+impl<S> Vector1<S> 
+where 
+    S: Copy
+{
+    /// Extend a one-dimensional vector into a two-dimensional vector using 
+    /// the supplied value for the **y-component**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// #     Vector2,   
+    /// # };
+    /// #
+    /// let vector = Vector1::new(1_f64);
+    /// let expected = Vector2::new(1_f64, 2_f64);
+    /// let result = vector.extend(2_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn extend(&self, y: S) -> Vector2<S> {
+        Vector2::new(self.data[0], y)
+    }
+}
+
+impl<S> Vector1<S> 
+where 
+    S: Scalar
+{
+    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_x() -> Self {
+        Vector1::new(S::one())
+    }
+
+    /// Compute the coordinates of a vector in projective space.
+    ///
+    /// The function appends a `0` to the vector.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let vector = Vector1::new(1_i32);
+    /// let expected = Vector2::new(1_i32, 0_i32);
+    /// let result = vector.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector2<S> {
+        self.extend(S::zero())
+    }
+}
+
+impl<S> Vector1<S> 
+where 
+    S: ScalarFloat
+{
+    /// Linearly interpolate between the two vectors `self` and `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// # };
+    /// #
+    /// let v0 = Vector1::new(0_f64);
+    /// let v1 = Vector1::new(10_f64);
+    /// let amount = 0.6;
+    /// let result = v0.lerp(&v1, amount);
+    /// let expected = Vector1::new(6_f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
+        self + ((other - self) * amount)
+    }
+
+    /// Compute the projection of the vector `self` onto the vector
+    /// `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let vector = Vector1::new(1_f64);
+    /// let unit_x = Vector1::unit_x();
+    /// let projected_x = vector.project(&unit_x);
+    ///
+    /// assert_eq!(projected_x, vector.x * unit_x);
+    /// ```
+    #[inline]
+    pub fn project(&self, other: &Self) -> Self {
+        other * (self.dot(other) / other.magnitude_squared())
+    }
+}
+
+
+impl<S> Vector2<S> {
+    /// Construct a new vector.
+    #[inline]
+    pub const fn new(x: S, y: S) -> Self {
+        Self { 
+            data: [x, y],
+        }
+    }
+}
+
+impl<S> Vector2<S> 
+where 
+    S: Copy 
+{
+    /// Extend a two-dimensional vector into a three-dimensional vector using the 
+    /// supplied **z-component**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// #     Vector3,   
+    /// # };
+    /// #
+    /// let v = Vector2::new(1_f64, 2_f64);
+    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let result = v.extend(3_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn extend(&self, z: S) -> Vector3<S> {
+        Vector3::new(self.data[0], self.data[1], z)
+    }
+
+    /// Contract a two-dimensional vector to a one-dimensional vector by removing
+    /// the **y-component**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// #     Vector2,   
+    /// # };
+    /// #
+    /// let v = Vector2::new(1_f64, 2_f64);
+    /// let expected = Vector1::new(1_f64);
+    /// let result = v.contract();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn contract(&self) -> Vector1<S> {
+        Vector1::new(self.data[0])
+    }
+}
+
+impl<S> Vector2<S> 
+where 
+    S: Scalar 
+{
+    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_x() -> Self {
+        Self::new(S::one(), S::zero())
+    }
+
+    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_y() -> Self {
+        Self::new(S::zero(), S::one())
+    }
+
+    /// Compute the coordinates of a vector in projective space.
+    ///
+    /// The function appends a `0` to the vector.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let vector = Vector2::new(1_i32, 2_i32);
+    /// let expected = Vector3::new(1_i32, 2_i32, 0_i32);
+    /// let result = vector.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector3<S> {
+        self.extend(S::zero())
+    }
+
+    /// Compute the coordinates of a projective vector in Euclidean space.
+    ///
+    /// The function removes a `0` from the end of the vector, otherwise it
+    /// returns `None`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector1,
+    /// #     Vector2, 
+    /// # };
+    /// #
+    /// let vector = Vector2::new(1_i32, 0_i32);
+    /// let expected = Some(Vector1::new(1_i32));
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector = Vector2::new(1_i32, 1_i32);
+    /// let expected: Option<Vector1<i32>> = None;
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(&self) -> Option<Vector1<S>> {
+        if self.data[1].is_zero() {
+            Some(self.contract())
+        } else {
+            None
+        }
+    }
+}
+
+impl<S> Vector2<S> 
+where 
+    S: ScalarFloat
+{
+    /// Linearly interpolate between the two vectors `self` and `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,  
+    /// # };
+    /// #
+    /// let v0 = Vector2::new(0_f64, 0_f64);
+    /// let v1 = Vector2::new(10_f64, 20_f64);
+    /// let amount = 0.7;
+    /// let expected = Vector2::new(7_f64, 14_f64);
+    /// let result = v0.lerp(&v1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
+        self + ((other - self) * amount)
+    }
+
+    /// Compute the projection of the vector `self` onto the vector
+    /// `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let vector = 3_f64 * Vector2::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64);
+    /// let unit_x = Vector2::unit_x();
+    /// let unit_y = Vector2::unit_y();
+    /// let projected_x = vector.project(&unit_x);
+    /// let projected_y = vector.project(&unit_y);
+    ///
+    /// assert_eq!(projected_x, vector.x * unit_x);
+    /// assert_eq!(projected_y, vector.y * unit_y);
+    /// ```
+    #[inline]
+    pub fn project(&self, other: &Self) -> Self {
+        other * (self.dot(other) / other.magnitude_squared())
+    }
+}
+
+
+impl<S> Vector3<S> {
+    /// Construct a new vector.
+    #[inline]
+    pub const fn new(x: S, y: S, z: S) -> Self {
+        Self { 
+            data: [x, y, z],
+        }
+    }
+}
+
+impl<S> Vector3<S> 
+where 
+    S: Copy
+{
+    /// Extend a three-dimensional vector into a four-dimensional vector using the 
+    /// supplied **w-component**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let result = v.extend(4_f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn extend(&self, w: S) -> Vector4<S> {
+        Vector4::new(self.data[0], self.data[1], self.data[2], w)
+    }
+
+    /// Contract a three-dimensional vector to a two-dimensional vector
+    /// by removing the **z-component**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector2::new(1_f64, 2_f64);
+    /// let result = v.contract();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn contract(&self) -> Vector2<S> {
+        Vector2::new(self.data[0], self.data[1])
+    }
+}
+
+impl<S> Vector3<S> 
+where 
+    S: Scalar
+{
+    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_x() -> Self {
+        Self::new(S::one(), S::zero(), S::zero())
+    }
+
+    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_y() -> Self {
+        Self::new(S::zero(), S::one(), S::zero())
+    }
+    
+    /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_z() -> Self {
+        Self::new(S::zero(), S::zero(), S::one())
+    }
+
+    /// Compute the coordinates of a vector in projective space.
+    ///
+    /// The function appends a `0` to the vector.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let expected = Vector4::new(1_i32, 2_i32, 3_i32, 0_i32);
+    /// let result = vector.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector4<S> {
+        self.extend(S::zero())
+    }
+
+    /// Compute the coordinates of a projective vector in Euclidean space.
+    ///
+    /// The function removes a `0` from the end of the vector, otherwise it
+    /// returns `None`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_i32, 2_i32, 0_i32);
+    /// let expected = Some(Vector2::new(1_i32, 2_i32));
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector = Vector3::new(1_i32, 2_i32, 1_i32);
+    /// let expected: Option<Vector2<i32>> = None;
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(&self) -> Option<Vector2<S>> {
+        if self.data[2].is_zero() {
+            Some(self.contract())
+        } else {
+            None
+        }
+    }
+
+    /// Compute the cross product of two three-dimensional vectors. 
+    ///
+    /// For the vector dimensions used in computer graphics 
+    /// (up to four dimensions), the cross product is well-defined only in 
+    /// three dimensions. The cross product is a form of vector 
+    /// multiplication that computes a vector normal to the plane swept out by 
+    /// the two vectors. The magnitude of this vector is the area of the 
+    /// parallelogram swept out by the two vectors. 
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let vector2 = Vector3::new(4_f64, 5_f64, 6_f64);
+    /// let cross = vector1.cross(&vector2);
+    ///
+    /// assert_eq!(cross, Vector3::new(-3_f64, 6_f64, -3_f64));
+    /// // The cross product is perpendicular to the two input vectors.
+    /// assert_eq!(cross.dot(&vector1), 0_f64);
+    /// assert_eq!(cross.dot(&vector2), 0_f64);
+    ///
+    /// // The cross product of a vector with itself is zero.
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    ///
+    /// assert_eq!(vector.cross(&vector), Vector3::zero());
+    /// ```
+    #[inline]
+    pub fn cross(&self, other: &Self) -> Self {
+        let x = self.data[1] * other.data[2] - self.data[2] * other.data[1];
+        let y = self.data[2] * other.data[0] - self.data[0] * other.data[2];
+        let z = self.data[0] * other.data[1] - self.data[1] * other.data[0];
+    
+        Vector3::new(x, y, z)
+    }
+
+    /// Compute the scalar triple product of three three-dimensional vectors.
+    /// 
+    /// The scalar triple product of three vectors `u`, `v`, and `w` is the 
+    /// signed volume of the parallelepiped formed by the three vectors. In
+    /// symbols, the triple product is given by
+    /// ```text
+    /// triple(u, v, w) = dot(cross(u, v), w)
+    /// ```
+    /// The order of the dot product and the cross product can be interchanged
+    /// in the triple product without affecting the end result
+    /// ```text
+    /// dot(cross(u, v), w) = dot(u, cross(v, w))
+    /// ```
+    /// The scalar triple product also remains constant under cyclic permutations
+    /// of its three arguments. Given that
+    /// ```text
+    /// dot(cross(u, v), w) = dot(cross(v, w), u) = dot(cross(w, v), u)
+    /// ```
+    /// it follows that
+    /// ```text
+    /// triple(u, v, w) = triple(v, w, u) = triple(w, u, v)
+    /// ```
+    /// Under noncyclic permutations, the scalar triple product changes sign
+    /// due to the cross product
+    /// ```text
+    /// triple(u, v, w) = -triple(u, w, v) = -triple(v, u, w) = -triple(w, v, u)
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let u = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let v = Vector3::new(6_f64, 87_f64, 222_f64);
+    /// let w = Vector3::new(52_f64, 85_f64, 108_f64);
+    /// let expected = 276_f64;
+    /// let result = u.triple(&v, &w);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// assert_eq!(u.triple(&v, &w), v.triple(&w, &u));
+    /// assert_eq!(u.triple(&v, &w), w.triple(&u, &v));
+    /// assert_eq!(u.triple(&v, &w), -u.triple(&w, &v));
+    /// assert_eq!(u.triple(&v, &w), -v.triple(&u, &w));
+    /// assert_eq!(u.triple(&v, &w), -w.triple(&v, &u));
+    /// ```
+    #[inline]
+    pub fn triple(&self, other1: &Vector3<S>, other2: &Vector3<S>) -> S {
+        self.cross(other1).dot(other2)
+    }
+}
+
+impl<S> Vector3<S> 
+where 
+    S: ScalarFloat
+{
+    /// Linearly interpolate between the two vectors `self` and `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let v0 = Vector3::new(0_f64, 0_f64, 0_f64);
+    /// let v1 = Vector3::new(10_f64, 20_f64, 30_f64);
+    /// let amount = 0.7;
+    /// let expected = Vector3::new(7_f64, 14_f64, 21_f64);
+    /// let result = v0.lerp(&v1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
+        self + ((other - self) * amount)
+    }
+
+    /// Compute the projection of the vector `self` onto the vector
+    /// `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let vector = Vector3::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64);
+    /// let unit_x = Vector3::unit_x();
+    /// let unit_y = Vector3::unit_y();
+    /// let unit_z = Vector3::unit_z();
+    /// let projected_x = vector.project(&unit_x);
+    /// let projected_y = vector.project(&unit_y);
+    /// let projected_z = vector.project(&unit_z);
+    ///
+    /// assert_eq!(projected_x, vector.x * unit_x);
+    /// assert_eq!(projected_y, vector.y * unit_y);
+    /// assert_eq!(projected_z, vector.z * unit_z);
+    /// ```
+    #[inline]
+    pub fn project(&self, other: &Self) -> Self {
+        other * (self.dot(other) / other.magnitude_squared())
+    }
+}
+
+impl<S> Vector4<S> {
+    /// Construct a new four-dimensional vector.
+    #[inline]
+    pub const fn new(x: S, y: S, z: S, w: S) -> Self {
+        Self { 
+            data: [x, y, z, w],
+        }
+    }
+}
+
+impl<S> Vector4<S> 
+where 
+    S: Copy
+{
+    /// Contract a four-dimensional vector to a three-dimensional vector
+    /// by removing the **w-component**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let result = v.contract();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn contract(&self) -> Vector3<S> {
+        Vector3::new(self.data[0], self.data[1], self.data[2])
+    }
+}
+
+impl<S> Vector4<S> 
+where 
+    S: Scalar
+{
+    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_x() -> Self {
+        Self::new(S::one(), S::zero(), S::zero(), S::zero())
+    }
+
+    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_y() -> Self {
+        Self::new(S::zero(), S::one(), S::zero(), S::zero())
+    }
+    
+    /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_z() -> Self {
+        Self::new(S::zero(), S::zero(), S::one(), S::zero())
+    }
+
+    /// Returns the **w-axis** unit vector, a unit vector with the **w-component**
+    /// component as a `1` and the rest of the components are zero.
+    #[inline]
+    pub fn unit_w() -> Self {
+        Self::new(S::zero(), S::zero(), S::zero(), S::one())
+    }
+
+    /// Compute the coordinates of a projective vector in Euclidean space.
+    ///
+    /// The function removes a `0` from the end of the vector, otherwise it
+    /// returns `None`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let vector = Vector4::new(1_i32, 2_i32, 3_i32, 0_i32);
+    /// let expected = Some(Vector3::new(1_i32, 2_i32, 3_i32));
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector = Vector4::new(1_i32, 2_i32, 3_i32, 1_i32);
+    /// let expected: Option<Vector3<i32>> = None;
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(&self) -> Option<Vector3<S>> {
+        if self.data[3].is_zero() {
+            Some(self.contract())
+        } else {
+            None
+        }
+    }
+}
+
+impl<S> Vector4<S> 
+where 
+    S: ScalarFloat
+{
+    /// Linearly interpolate between the two vectors `self` and `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,  
+    /// # };
+    /// #
+    /// let v0 = Vector4::new(0_f64, 0_f64, 0_f64, 0_f64);
+    /// let v1 = Vector4::new(10_f64, 20_f64, 30_f64, 40_f64);
+    /// let amount = 0.7;
+    /// let expected = Vector4::new(7_f64, 14_f64, 21_f64, 28_f64);
+    /// let result = v0.lerp(&v1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn lerp(&self, other: &Self, amount: S) -> Self {
+        self + ((other - self) * amount)
+    }
+
+    /// Compute the projection of the vector `self` onto the vector
+    /// `other`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4, 
+    /// #     Magnitude,
+    /// # };
+    /// # 
+    /// let vector = Vector4::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64, 1_f64);
+    /// let unit_x = Vector4::unit_x();
+    /// let unit_y = Vector4::unit_y();
+    /// let unit_z = Vector4::unit_z();
+    /// let unit_w = Vector4::unit_w();
+    /// let projected_x = vector.project(&unit_x);
+    /// let projected_y = vector.project(&unit_y);
+    /// let projected_z = vector.project(&unit_z);
+    /// let projected_w = vector.project(&unit_w);
+    ///
+    /// assert_eq!(projected_x, vector.x * unit_x);
+    /// assert_eq!(projected_y, vector.y * unit_y);
+    /// assert_eq!(projected_z, vector.z * unit_z);
+    /// assert_eq!(projected_w, vector.w * unit_w);
+    /// ```
+    #[inline]
+    pub fn project(&self, other: &Self) -> Self {
+        other * (self.dot(other) / other.magnitude_squared())
+    }
+}
+
+impl<S> From<S> for Vector1<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: S) -> Self {
+        Self::new(v)
+    }
+}
+
+impl<S> From<(S,)> for Vector1<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: (S,)) -> Self {
+        Self::new(v.0)
+    }
+}
+
+impl<S> From<&(S,)> for Vector1<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &(S,)) -> Self  {
+        Self::new(v.0)
+    }
+}
+
+impl<'a, S> From<&'a (S,)> for &'a Vector1<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &'a (S,)) -> &'a Vector1<S> {
+        unsafe { 
+            &*(v as *const (S,) as *const Vector1<S>)
+        }
+    }
+}
+
+impl<S> From<(S, S)> for Vector2<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: (S, S)) -> Self {
+        Self::new(v.0, v.1)
+    }
+}
+
+impl<S> From<&(S, S)> for Vector2<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &(S, S)) -> Self {
+        Self::new(v.0, v.1)
+    }
+}
+
+impl<'a, S> From<&'a (S, S)> for &'a Vector2<S> 
+where
+    S: Copy
+{
+    #[inline]
+    fn from(v: &'a (S, S)) -> &'a Vector2<S> {
+        unsafe {
+            &*(v as *const (S, S) as *const Vector2<S>)
+        }
+    }
+}
+
+impl<S> From<(S, S, S)> for Vector3<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: (S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2)
+    }
+}
+
+impl<S> From<&(S, S, S)> for Vector3<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &(S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2)
+    }
+}
+
+impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
+        unsafe { 
+            &*(v as *const (S, S, S) as *const Vector3<S>)
+        }
+    }
+}
+
+impl<S> From<Vector4<S>> for Vector3<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: Vector4<S>) -> Self {
+        Self::new(v.data[0], v.data[1], v.data[2])
+    }
+}
+
+impl<S> From<&Vector4<S>> for Vector3<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &Vector4<S>) -> Self {
+        Self::new(v.data[0], v.data[1], v.data[2])
+    }
+}
+
+impl<S> From<(S, S, S, S)> for Vector4<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: (S, S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2, v.3)
+    }
+}
+
+impl<S> From<&(S, S, S, S)> for Vector4<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &(S, S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2, v.3)
+    }
+}
+
+impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
+        unsafe { 
+            &*(v as *const (S, S, S, S) as *const Vector4<S>)
+        }
+    }
+}
+
 impl_coords!(X, { x });
 impl_coords_deref!(Vector1, X);
 
@@ -1708,116 +1818,6 @@ impl_as_ref_ops!(Vector2<S>, (S, S));
 impl_as_ref_ops!(Vector3<S>, (S, S, S));
 impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
 
-
-impl<S, const N: usize> Magnitude for Vector<S, N> 
-where 
-    S: ScalarFloat
-{
-    type Output = S;
-
-    #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
-        self.dot(self)
-    }
-
-    #[inline]
-    fn magnitude(&self) -> Self::Output {
-        self.magnitude_squared().sqrt()
-    }
-    
-    #[inline]
-    fn normalize(&self) -> Self {
-        self / self.magnitude()
-    }
-    
-    #[inline]
-    fn normalize_to(&self, magnitude: Self::Output) -> Self {
-        self * (magnitude / self.magnitude())
-    }
-
-    #[inline]
-    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let magnitude = self.magnitude();
-
-        if magnitude <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
-    }
-
-    #[inline]
-    fn distance_squared(&self, other: &Vector<S, N>) -> Self::Output {
-        (self - other).magnitude_squared()
-    }
-
-    #[inline]
-    fn distance(&self, other: &Self) -> Self::Output {
-        self.distance_squared(other).sqrt()
-    }
-}
-
-impl<S, const N: usize> approx::AbsDiffEq for Vector<S, N> 
-where 
-    S: ScalarFloat
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        let mut result = true;
-        for i in 0..N {
-            result &= S::abs_diff_eq(&self.data[i], &other.data[i], epsilon);
-        }
-
-        result
-    }
-}
-
-impl<S, const N: usize> approx::RelativeEq for Vector<S, N> 
-where 
-    S: ScalarFloat
-{
-    #[inline]
-    fn default_max_relative() -> S::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        let mut result = true;
-        for i in 0..N {
-            result &= S::relative_eq(&self.data[i], &other.data[i], epsilon, max_relative);
-        }
-
-        result
-    }
-}
-
-impl<S, const N: usize> approx::UlpsEq for Vector<S, N> 
-where 
-    S: ScalarFloat
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        let mut result = true;
-        for i in 0..N {
-            result &= S::ulps_eq(&self.data[i], &other.data[i], epsilon, max_ulps);
-        }
-
-        result
-    }
-}
 
 macro_rules! impl_swizzle {
     ($name:ident() => $VectorN:ident => $Output:ident { $($i:expr),+ }) => {
