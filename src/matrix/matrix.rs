@@ -1660,33 +1660,6 @@ where
     pub fn is_symmetric(&self) -> bool {
         ulps_eq!(self.data[0][1], self.data[1][0]) && ulps_eq!(self.data[1][0], self.data[0][1])
     }
-
-    /*
-    /// Linearly interpolate between two matrices.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix2x2,    
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let matrix0 = Matrix2x2::new(0_f64, 0_f64, 1_f64, 1_f64);
-    /// let matrix1 = Matrix2x2::new(2_f64, 2_f64, 3_f64, 3_f64);
-    /// let amount = 0.5;
-    /// let expected = Matrix2x2::new(1_f64, 1_f64, 2_f64, 2_f64);
-    /// let result = matrix0.lerp(&matrix1, amount);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// ```
-    #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
-    }
-    */
 }
 
 
@@ -3041,45 +3014,6 @@ where
         ulps_eq!(self.data[1][2], self.data[2][1]) && 
         ulps_eq!(self.data[2][1], self.data[1][2])
     }
-
-    /*
-    /// Linearly interpolate between two matrices.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Matrix3x3,    
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let matrix0 = Matrix3x3::new(
-    ///     0_f64, 0_f64, 0_f64, 
-    ///     1_f64, 1_f64, 1_f64,
-    ///     2_f64, 2_f64, 2_f64
-    /// );
-    /// let matrix1 = Matrix3x3::new(
-    ///     3_f64, 3_f64, 3_f64, 
-    ///     4_f64, 4_f64, 4_f64,
-    ///     5_f64, 5_f64, 5_f64
-    /// );
-    /// let amount = 0.5;
-    /// let expected = Matrix3x3::new(
-    ///     1.5_f64, 1.5_f64, 1.5_f64, 
-    ///     2.5_f64, 2.5_f64, 2.5_f64,
-    ///     3.5_f64, 3.5_f64, 3.5_f64
-    /// );
-    /// let result = matrix0.lerp(&matrix1, amount);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// ```
-    #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
-    }
-    */
 }
 
 impl<S> From<Matrix2x2<S>> for Matrix3x3<S> 
@@ -4458,48 +4392,6 @@ where
         ulps_eq!(self.data[1][3], self.data[3][1]) && ulps_eq!(self.data[3][1], self.data[1][3]) &&
         ulps_eq!(self.data[2][3], self.data[3][2]) && ulps_eq!(self.data[3][2], self.data[2][3])
     }
-
-    /*
-    /// Linearly interpolate between two matrices.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #    Matrix4x4,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// #
-    /// let matrix0 = Matrix4x4::new(
-    ///     0_f64, 0_f64, 0_f64, 0_f64,
-    ///     1_f64, 1_f64, 1_f64, 1_f64,
-    ///     2_f64, 2_f64, 2_f64, 2_f64,
-    ///     3_f64, 3_f64, 3_f64, 3_f64
-    /// );
-    /// let matrix1 = Matrix4x4::new(
-    ///     4_f64, 4_f64, 4_f64, 4_f64,
-    ///     5_f64, 5_f64, 5_f64, 5_f64,
-    ///     6_f64, 6_f64, 6_f64, 6_f64,
-    ///     7_f64, 7_f64, 7_f64, 7_f64
-    /// );
-    /// let amount = 0.5;
-    /// let expected = Matrix4x4::new(
-    ///     2_f64, 2_f64, 2_f64, 2_f64,
-    ///     3_f64, 3_f64, 3_f64, 3_f64,
-    ///     4_f64, 4_f64, 4_f64, 4_f64,
-    ///     5_f64, 5_f64, 5_f64, 5_f64
-    /// );
-    /// let result = matrix0.lerp(&matrix1, amount);
-    /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// ```
-    #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
-    }
-    */
 }
 
 impl<S> From<Matrix2x2<S>> for Matrix4x4<S> 

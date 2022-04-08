@@ -979,58 +979,6 @@ where
     }
 }
 
-impl<S> Vector1<S> 
-where 
-    S: ScalarFloat
-{
-    /*
-    /// Linearly interpolate between the two vectors `self` and `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1,
-    /// # };
-    /// #
-    /// let v0 = Vector1::new(0_f64);
-    /// let v1 = Vector1::new(10_f64);
-    /// let amount = 0.6;
-    /// let result = v0.lerp(&v1, amount);
-    /// let expected = Vector1::new(6_f64);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
-    }
-    */
-    /*
-    /// Compute the projection of the vector `self` onto the vector
-    /// `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector1, 
-    /// #     Magnitude,
-    /// # };
-    /// # 
-    /// let vector = Vector1::new(1_f64);
-    /// let unit_x = Vector1::unit_x();
-    /// let projected_x = vector.project(&unit_x);
-    ///
-    /// assert_eq!(projected_x, vector.x * unit_x);
-    /// ```
-    #[inline]
-    pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
-    }
-    */
-}
-
 
 impl<S> Vector2<S> {
     /// Construct a new vector.
@@ -1165,61 +1113,6 @@ where
             None
         }
     }
-}
-
-impl<S> Vector2<S> 
-where 
-    S: ScalarFloat
-{
-    /*
-    /// Linearly interpolate between the two vectors `self` and `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2,  
-    /// # };
-    /// #
-    /// let v0 = Vector2::new(0_f64, 0_f64);
-    /// let v1 = Vector2::new(10_f64, 20_f64);
-    /// let amount = 0.7;
-    /// let expected = Vector2::new(7_f64, 14_f64);
-    /// let result = v0.lerp(&v1, amount);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
-    }
-    */
-    /*
-    /// Compute the projection of the vector `self` onto the vector
-    /// `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector2, 
-    /// #     Magnitude,
-    /// # };
-    /// # 
-    /// let vector = 3_f64 * Vector2::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64);
-    /// let unit_x = Vector2::unit_x();
-    /// let unit_y = Vector2::unit_y();
-    /// let projected_x = vector.project(&unit_x);
-    /// let projected_y = vector.project(&unit_y);
-    ///
-    /// assert_eq!(projected_x, vector.x * unit_x);
-    /// assert_eq!(projected_y, vector.y * unit_y);
-    /// ```
-    #[inline]
-    pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
-    }
-    */
 }
 
 
@@ -1458,63 +1351,6 @@ where
     }
 }
 
-impl<S> Vector3<S> 
-where 
-    S: ScalarFloat
-{
-    /*
-    /// Linearly interpolate between the two vectors `self` and `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,  
-    /// # };
-    /// #
-    /// let v0 = Vector3::new(0_f64, 0_f64, 0_f64);
-    /// let v1 = Vector3::new(10_f64, 20_f64, 30_f64);
-    /// let amount = 0.7;
-    /// let expected = Vector3::new(7_f64, 14_f64, 21_f64);
-    /// let result = v0.lerp(&v1, amount);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
-    }
-    */
-    /*
-    /// Compute the projection of the vector `self` onto the vector
-    /// `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3, 
-    /// #     Magnitude,
-    /// # };
-    /// # 
-    /// let vector = Vector3::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64);
-    /// let unit_x = Vector3::unit_x();
-    /// let unit_y = Vector3::unit_y();
-    /// let unit_z = Vector3::unit_z();
-    /// let projected_x = vector.project(&unit_x);
-    /// let projected_y = vector.project(&unit_y);
-    /// let projected_z = vector.project(&unit_z);
-    ///
-    /// assert_eq!(projected_x, vector.x * unit_x);
-    /// assert_eq!(projected_y, vector.y * unit_y);
-    /// assert_eq!(projected_z, vector.z * unit_z);
-    /// ```
-    #[inline]
-    pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
-    }
-    */
-}
 
 impl<S> Vector4<S> {
     /// Construct a new four-dimensional vector.
@@ -1618,67 +1454,6 @@ where
             None
         }
     }
-}
-
-impl<S> Vector4<S> 
-where 
-    S: ScalarFloat
-{
-    /*
-    /// Linearly interpolate between the two vectors `self` and `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4,  
-    /// # };
-    /// #
-    /// let v0 = Vector4::new(0_f64, 0_f64, 0_f64, 0_f64);
-    /// let v1 = Vector4::new(10_f64, 20_f64, 30_f64, 40_f64);
-    /// let amount = 0.7;
-    /// let expected = Vector4::new(7_f64, 14_f64, 21_f64, 28_f64);
-    /// let result = v0.lerp(&v1, amount);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn lerp(&self, other: &Self, amount: S) -> Self {
-        self + ((other - self) * amount)
-    }
-    */
-    /*
-    /// Compute the projection of the vector `self` onto the vector
-    /// `other`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector4, 
-    /// #     Magnitude,
-    /// # };
-    /// # 
-    /// let vector = Vector4::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64, 1_f64);
-    /// let unit_x = Vector4::unit_x();
-    /// let unit_y = Vector4::unit_y();
-    /// let unit_z = Vector4::unit_z();
-    /// let unit_w = Vector4::unit_w();
-    /// let projected_x = vector.project(&unit_x);
-    /// let projected_y = vector.project(&unit_y);
-    /// let projected_z = vector.project(&unit_z);
-    /// let projected_w = vector.project(&unit_w);
-    ///
-    /// assert_eq!(projected_x, vector.x * unit_x);
-    /// assert_eq!(projected_y, vector.y * unit_y);
-    /// assert_eq!(projected_z, vector.z * unit_z);
-    /// assert_eq!(projected_w, vector.w * unit_w);
-    /// ```
-    #[inline]
-    pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
-    }
-    */
 }
 
 impl<S> From<S> for Vector1<S> 
