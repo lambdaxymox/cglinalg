@@ -393,9 +393,7 @@ where
 {
     #[inline]
     fn from(data: [S; N]) -> Self {
-        Self {
-            data: data
-        }
+        Self { data }
     }
 }
 
@@ -451,6 +449,7 @@ impl_vector_index_ops!(ops::RangeTo<usize>, [S]);
 impl_vector_index_ops!(ops::RangeFrom<usize>, [S]);
 impl_vector_index_ops!(ops::RangeFull, [S]);
 
+
 impl<S, const N: usize> fmt::Display for Vector<S, N> 
 where 
     S: fmt::Display 
@@ -463,6 +462,7 @@ where
         write!(formatter, "{}]", self.data[N - 1])
     }
 }
+
 
 impl<S, const N: usize> approx::AbsDiffEq for Vector<S, N> 
 where 

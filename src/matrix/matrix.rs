@@ -368,9 +368,7 @@ where
             }
         }
 
-        Matrix {
-            data: data,
-        }
+        Matrix { data }
     }
 
     /// Get the row of the matrix by value.
