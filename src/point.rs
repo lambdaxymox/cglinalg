@@ -350,400 +350,6 @@ impl_point_index_ops!(ops::RangeTo<usize>, [S]);
 impl_point_index_ops!(ops::RangeFrom<usize>, [S]);
 impl_point_index_ops!(ops::RangeFull, [S]);
 
-
-impl<S> Point1<S> {
-    /// Construct a new point in one-dimensional Euclidean space.
-    #[inline]
-    pub const fn new(x: S) -> Self {
-        Point1 { 
-            coords: Vector1::new(x), 
-        }
-    }
-}
-
-impl<S> Point1<S> 
-where 
-    S: Copy
-{
-    /// Construct a new two-dimensional point from a one-dimensional point by
-    /// supplying the y-coordinate.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point1,
-    /// #     Point2, 
-    /// # };
-    /// #
-    /// let point = Point1::new(1_u32);
-    /// let expected = Point2::new(1_u32, 2_u32);
-    /// let result = point.extend(2_u32);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn extend(&self, y: S) -> Point2<S> {
-        Point2::new(self.coords[0], y)
-    }
-}
-
-impl<S> From<S> for Point1<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: S) -> Self {
-        Self::new(v)
-    }
-}
-
-impl<S> From<(S,)> for Point1<S>
-where
-    S: Copy
-{
-    #[inline]
-    fn from(v: (S,)) -> Self {
-        Self::new(v.0)
-    }
-}
-
-impl<S> From<&(S,)> for Point1<S>
-where
-    S: Copy
-{
-    #[inline]
-    fn from(v: &(S,)) -> Self {
-        Self::new(v.0)
-    }
-}
-
-impl<'a, S> From<&'a (S,)> for &'a Point1<S>
-where
-    S: Copy
-{
-    #[inline]
-    fn from(v: &'a (S,)) -> &'a Point1<S> {
-        unsafe {
-            &*(v as *const (S,) as *const Point1<S>)
-        }
-    }
-}
-
-impl<S> Point2<S> {
-    /// Construct a new two-dimensional point.
-    #[inline]
-    pub const fn new(x: S, y: S) -> Self {
-        Self { 
-            coords: Vector2::new(x, y) 
-        }
-    }
-}
-
-impl<S> Point2<S> 
-where 
-    S: Copy
-{
-    /// Expand a two-dimensional point to a three-dimensional point using
-    /// the supplied z-value.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point2,
-    /// #     Point3,    
-    /// # };
-    /// #
-    /// let point = Point2::new(1_u32, 2_u32);
-    /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let result = point.extend(3_u32);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn extend(&self, z: S) -> Point3<S> {
-        Point3::new(self.coords[0], self.coords[1], z)
-    }
-
-    /// Contract a two-dimensional point to a one-dimensional point by
-    /// removing its **y-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point1,
-    /// #     Point2, 
-    /// # };
-    /// #
-    /// let point = Point2::new(1_u32, 2_u32);
-    /// let expected = Point1::new(1_u32);
-    /// let result = point.contract();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn contract(&self) -> Point1<S> {
-        Point1::new(self.coords[0])
-    }
-}
-
-impl<S> Point2<S> 
-where 
-    S: Scalar
-{
-    /// Convert a homogeneous vector into a point.
-    ///
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point2, 
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let vector = Vector3::new(3_f64, 6_f64, 3_f64);
-    /// let expected = Some(Point2::new(1_f64, 2_f64));
-    /// let result = Point2::from_homogeneous(&vector);
-    ///
-    /// assert_eq!(result, expected);
-    ///
-    /// let vector_z_zero = Vector3::new(3_f64, 6_f64, 0_f64);
-    /// let result = Point2::from_homogeneous(&vector_z_zero);
-    ///
-    /// assert!(result.is_none());
-    /// ```
-    #[inline]
-    pub fn from_homogeneous(vector: &Vector3<S>) -> Option<Self> {
-        if !vector.z.is_zero() {
-            Some(Point2::new(vector.x / vector.z, vector.y / vector.z))
-        } else {
-            None
-        }
-    }
-
-    /// Convert a point to a vector in homogeneous coordinates.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point2,
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let point = Point2::new(1_f64, 2_f64);
-    /// let expected = Vector3::new(1_f64, 2_f64, 1_f64);
-    /// let result = point.to_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn to_homogeneous(&self) -> Vector3<S> {
-        self.coords.extend(S::one())
-    }
-}
-
-impl<S> From<(S, S)> for Point2<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: (S, S)) -> Self {
-        Self::new(v.0, v.1)
-    }
-}
-
-impl<S> From<&(S, S)> for Point2<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &(S, S)) -> Self {
-        Self::new(v.0, v.1)
-    }
-}
-
-impl<'a, S> From<&'a (S, S)> for &'a Point2<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &'a (S, S)) -> &'a Point2<S> {
-        unsafe { 
-            &*(v as *const (S, S) as *const Point2<S>)
-        }
-    }
-}
-
-impl<S> Point3<S> {
-    /// Construct a new point in three-dimensional Euclidean space.
-    #[inline]
-    pub const fn new(x: S, y: S, z: S) -> Self {
-        Self { 
-            coords: Vector3::new(x, y, z),
-        }
-    }
-}
-
-impl<S> Point3<S> 
-where 
-    S: Copy
-{
-    /// Contract a three-dimensional point, removing its **z-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point2,
-    /// #     Point3, 
-    /// # };
-    /// #
-    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let expected = Point2::new(1_u32, 2_u32);
-    /// let result = point.contract();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn contract(&self) -> Point2<S> {
-        Point2::new(self.coords[0], self.coords[1])
-    }
-}
-
-impl<S> Point3<S> 
-where 
-    S: Scalar
-{
-    /// Convert a vector in homogeneous coordinates into a point.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let vector = Vector4::new(5_f64, 10_f64, 15_f64, 5_f64);
-    /// let expected = Some(Point3::new(1_f64, 2_f64, 3_f64));
-    /// let result = Point3::from_homogeneous(&vector);
-    ///
-    /// assert!(result.is_some());
-    /// assert_eq!(result, expected);
-    ///
-    /// let vector_w_zero = Vector4::new(5_f64, 10_f64, 15_f64, 0_f64);
-    /// let result = Point3::from_homogeneous(&vector_w_zero);
-    ///
-    /// assert!(result.is_none());
-    /// ```
-    #[inline]
-    pub fn from_homogeneous(vector: &Vector4<S>) -> Option<Self> {
-        if !vector.w.is_zero() {
-            Some(Self::new(
-                vector.x / vector.w, 
-                vector.y / vector.w, 
-                vector.z / vector.w
-            ))
-        } else {
-            None
-        }
-    }
-
-    /// Convert a point to a vector in homogeneous coordinates.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Point3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let expected = Vector4::new(1_u32, 2_u32, 3_u32, 1_u32);
-    /// let result = point.to_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn to_homogeneous(&self) -> Vector4<S> {
-        self.coords.extend(S::one())
-    }
-}
-
-impl<S> From<(S, S, S)> for Point3<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: (S, S, S)) -> Self {
-        Self::new(v.0, v.1, v.2)
-    }
-}
-
-impl<S> From<&(S, S, S)> for Point3<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &(S, S, S)) -> Self {
-        Self::new(v.0, v.1, v.2)
-    }
-}
-
-impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> 
-where 
-    S: Copy
-{
-    #[inline]
-    fn from(v: &'a (S, S, S)) -> &'a Point3<S> {
-        unsafe { 
-            &*(v as *const (S, S, S) as *const Point3<S>)
-        }
-    }
-}
-
-impl_coords!(X, { x });
-impl_coords_deref!(Point1, X);
-
-impl_coords!(XY, { x, y });
-impl_coords_deref!(Point2, XY);
-
-impl_coords!(XYZ, { x, y, z });
-impl_coords_deref!(Point3, XYZ);
-
-
-macro_rules! impl_as_ref_ops {
-    ($PointType:ty, $RefType:ty) => {
-        impl<S> AsRef<$RefType> for $PointType {
-            #[inline]
-            fn as_ref(&self) -> &$RefType {
-                unsafe {
-                    &*(self as *const $PointType as *const $RefType)
-                }
-            }
-        }
-
-        impl<S> AsMut<$RefType> for $PointType {
-            #[inline]
-            fn as_mut(&mut self) -> &mut $RefType {
-                unsafe {
-                    &mut *(self as *mut $PointType as *mut $RefType)
-                }
-            }
-        }
-    }
-}
-
-impl_as_ref_ops!(Point1<S>, S);
-impl_as_ref_ops!(Point1<S>, (S,));
-impl_as_ref_ops!(Point2<S>, (S, S));
-impl_as_ref_ops!(Point3<S>, (S, S, S));
-
-
 impl<S, const N: usize> ops::Add<Vector<S, N>> for Point<S, N> 
 where 
     S: Scalar 
@@ -1206,6 +812,399 @@ where
         Vector::ulps_eq(&self.coords, &other.coords, epsilon, max_ulps)
     }
 }
+
+
+impl<S> Point1<S> {
+    /// Construct a new point in one-dimensional Euclidean space.
+    #[inline]
+    pub const fn new(x: S) -> Self {
+        Point1 { 
+            coords: Vector1::new(x), 
+        }
+    }
+}
+
+impl<S> Point1<S> 
+where 
+    S: Copy
+{
+    /// Construct a new two-dimensional point from a one-dimensional point by
+    /// supplying the y-coordinate.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let point = Point1::new(1_u32);
+    /// let expected = Point2::new(1_u32, 2_u32);
+    /// let result = point.extend(2_u32);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn extend(&self, y: S) -> Point2<S> {
+        Point2::new(self.coords[0], y)
+    }
+}
+
+impl<S> Point2<S> {
+    /// Construct a new two-dimensional point.
+    #[inline]
+    pub const fn new(x: S, y: S) -> Self {
+        Self { 
+            coords: Vector2::new(x, y) 
+        }
+    }
+}
+
+impl<S> Point2<S> 
+where 
+    S: Copy
+{
+    /// Expand a two-dimensional point to a three-dimensional point using
+    /// the supplied z-value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,
+    /// #     Point3,    
+    /// # };
+    /// #
+    /// let point = Point2::new(1_u32, 2_u32);
+    /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let result = point.extend(3_u32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn extend(&self, z: S) -> Point3<S> {
+        Point3::new(self.coords[0], self.coords[1], z)
+    }
+
+    /// Contract a two-dimensional point to a one-dimensional point by
+    /// removing its **y-component**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point1,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let point = Point2::new(1_u32, 2_u32);
+    /// let expected = Point1::new(1_u32);
+    /// let result = point.contract();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn contract(&self) -> Point1<S> {
+        Point1::new(self.coords[0])
+    }
+}
+
+impl<S> Point2<S> 
+where 
+    S: Scalar
+{
+    /// Convert a homogeneous vector into a point.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2, 
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(3_f64, 6_f64, 3_f64);
+    /// let expected = Some(Point2::new(1_f64, 2_f64));
+    /// let result = Point2::from_homogeneous(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector_z_zero = Vector3::new(3_f64, 6_f64, 0_f64);
+    /// let result = Point2::from_homogeneous(&vector_z_zero);
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(vector: &Vector3<S>) -> Option<Self> {
+        if !vector.z.is_zero() {
+            Some(Point2::new(vector.x / vector.z, vector.y / vector.z))
+        } else {
+            None
+        }
+    }
+
+    /// Convert a point to a vector in homogeneous coordinates.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = Vector3::new(1_f64, 2_f64, 1_f64);
+    /// let result = point.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector3<S> {
+        self.coords.extend(S::one())
+    }
+}
+
+impl<S> Point3<S> {
+    /// Construct a new point in three-dimensional Euclidean space.
+    #[inline]
+    pub const fn new(x: S, y: S, z: S) -> Self {
+        Self { 
+            coords: Vector3::new(x, y, z),
+        }
+    }
+}
+
+impl<S> Point3<S> 
+where 
+    S: Copy
+{
+    /// Contract a three-dimensional point, removing its **z-component**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Point2::new(1_u32, 2_u32);
+    /// let result = point.contract();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn contract(&self) -> Point2<S> {
+        Point2::new(self.coords[0], self.coords[1])
+    }
+}
+
+impl<S> Point3<S> 
+where 
+    S: Scalar
+{
+    /// Convert a vector in homogeneous coordinates into a point.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let vector = Vector4::new(5_f64, 10_f64, 15_f64, 5_f64);
+    /// let expected = Some(Point3::new(1_f64, 2_f64, 3_f64));
+    /// let result = Point3::from_homogeneous(&vector);
+    ///
+    /// assert!(result.is_some());
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector_w_zero = Vector4::new(5_f64, 10_f64, 15_f64, 0_f64);
+    /// let result = Point3::from_homogeneous(&vector_w_zero);
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(vector: &Vector4<S>) -> Option<Self> {
+        if !vector.w.is_zero() {
+            Some(Self::new(
+                vector.x / vector.w, 
+                vector.y / vector.w, 
+                vector.z / vector.w
+            ))
+        } else {
+            None
+        }
+    }
+
+    /// Convert a point to a vector in homogeneous coordinates.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let expected = Vector4::new(1_u32, 2_u32, 3_u32, 1_u32);
+    /// let result = point.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector4<S> {
+        self.coords.extend(S::one())
+    }
+}
+
+impl<S> From<S> for Point1<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: S) -> Self {
+        Self::new(v)
+    }
+}
+
+impl<S> From<(S,)> for Point1<S>
+where
+    S: Copy
+{
+    #[inline]
+    fn from(v: (S,)) -> Self {
+        Self::new(v.0)
+    }
+}
+
+impl<S> From<&(S,)> for Point1<S>
+where
+    S: Copy
+{
+    #[inline]
+    fn from(v: &(S,)) -> Self {
+        Self::new(v.0)
+    }
+}
+
+impl<'a, S> From<&'a (S,)> for &'a Point1<S>
+where
+    S: Copy
+{
+    #[inline]
+    fn from(v: &'a (S,)) -> &'a Point1<S> {
+        unsafe {
+            &*(v as *const (S,) as *const Point1<S>)
+        }
+    }
+}
+
+impl<S> From<(S, S)> for Point2<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: (S, S)) -> Self {
+        Self::new(v.0, v.1)
+    }
+}
+
+impl<S> From<&(S, S)> for Point2<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &(S, S)) -> Self {
+        Self::new(v.0, v.1)
+    }
+}
+
+impl<'a, S> From<&'a (S, S)> for &'a Point2<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &'a (S, S)) -> &'a Point2<S> {
+        unsafe { 
+            &*(v as *const (S, S) as *const Point2<S>)
+        }
+    }
+}
+
+impl<S> From<(S, S, S)> for Point3<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: (S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2)
+    }
+}
+
+impl<S> From<&(S, S, S)> for Point3<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &(S, S, S)) -> Self {
+        Self::new(v.0, v.1, v.2)
+    }
+}
+
+impl<'a, S> From<&'a (S, S, S)> for &'a Point3<S> 
+where 
+    S: Copy
+{
+    #[inline]
+    fn from(v: &'a (S, S, S)) -> &'a Point3<S> {
+        unsafe { 
+            &*(v as *const (S, S, S) as *const Point3<S>)
+        }
+    }
+}
+
+impl_coords!(X, { x });
+impl_coords_deref!(Point1, X);
+
+impl_coords!(XY, { x, y });
+impl_coords_deref!(Point2, XY);
+
+impl_coords!(XYZ, { x, y, z });
+impl_coords_deref!(Point3, XYZ);
+
+
+macro_rules! impl_as_ref_ops {
+    ($PointType:ty, $RefType:ty) => {
+        impl<S> AsRef<$RefType> for $PointType {
+            #[inline]
+            fn as_ref(&self) -> &$RefType {
+                unsafe {
+                    &*(self as *const $PointType as *const $RefType)
+                }
+            }
+        }
+
+        impl<S> AsMut<$RefType> for $PointType {
+            #[inline]
+            fn as_mut(&mut self) -> &mut $RefType {
+                unsafe {
+                    &mut *(self as *mut $PointType as *mut $RefType)
+                }
+            }
+        }
+    }
+}
+
+impl_as_ref_ops!(Point1<S>, S);
+impl_as_ref_ops!(Point1<S>, (S,));
+impl_as_ref_ops!(Point2<S>, (S, S));
+impl_as_ref_ops!(Point3<S>, (S, S, S));
 
 
 macro_rules! impl_swizzle {
