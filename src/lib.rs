@@ -32,7 +32,7 @@ To use the library in your project, add **cglinalg** as a dependency in your
 `Cargo.toml` file:
 ```ignore
 [dependencies]
-cglinalg = "0.15.2"
+cglinalg = "0.15.3"
 ```
 After that, place the crate declaration in either your `lib.rs` file or 
 your `main.rs` file
