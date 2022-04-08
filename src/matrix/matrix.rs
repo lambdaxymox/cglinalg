@@ -972,7 +972,6 @@ where
         result
     }
 
-    /*
     /// Determine whether a matrix is symmetric. 
     ///
     /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
@@ -989,7 +988,6 @@ where
 
         result
     }
-    */
 }
 
 impl<S, const R: usize, const C: usize, const RC: usize> Default for Matrix<S, R, C, RC>
@@ -1700,7 +1698,7 @@ where
         ulps_eq!(self.data[0][1], S::zero()) && ulps_eq!(self.data[1][0], S::zero())
     }
     */
-    
+    /*
     /// Determine whether a matrix is symmetric. 
     ///
     /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
@@ -1710,6 +1708,7 @@ where
     pub fn is_symmetric(&self) -> bool {
         ulps_eq!(self.data[0][1], self.data[1][0]) && ulps_eq!(self.data[1][0], self.data[0][1])
     }
+    */
 }
 
 
@@ -3021,7 +3020,7 @@ where
         ulps_eq!(self.data[2][1], S::zero())
     }
     */
-    
+    /*
     /// Determine whether a matrix is symmetric. 
     ///
     /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
@@ -3036,6 +3035,7 @@ where
         ulps_eq!(self.data[1][2], self.data[2][1]) && 
         ulps_eq!(self.data[2][1], self.data[1][2])
     }
+    */
 }
 
 impl<S> From<Matrix2x2<S>> for Matrix3x3<S> 
@@ -4366,7 +4366,7 @@ where
         ulps_eq!(self.data[2][1], S::zero())
     }
     */
-    
+    /*
     /// Determine whether a matrix is symmetric. 
     ///
     /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
@@ -4381,6 +4381,7 @@ where
         ulps_eq!(self.data[1][3], self.data[3][1]) && ulps_eq!(self.data[3][1], self.data[1][3]) &&
         ulps_eq!(self.data[2][3], self.data[3][2]) && ulps_eq!(self.data[3][2], self.data[2][3])
     }
+    */
 }
 
 impl<S> From<Matrix2x2<S>> for Matrix4x4<S> 
