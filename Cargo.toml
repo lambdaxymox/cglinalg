@@ -69,3 +69,7 @@ harness = false
 name = "bench_quaternion"
 harness = false
 
+[[bench]]
+name = "bench_transpose_mut"
+harness = false
+
