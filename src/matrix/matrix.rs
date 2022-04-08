@@ -824,6 +824,38 @@ where
         result
     }
 
+    /// Determine whether a matrix is an identity matrix.
+    ///
+    /// An identity matrix is a matrix where the diagonal elements are one
+    /// and the off-diagonal elements are zero.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// #
+    /// let matrix: Matrix4x4<i32> = Matrix4x4::identity();
+    /// 
+    /// assert!(matrix.is_identity());
+    /// ```
+    #[inline]
+    pub fn is_identity(&self) -> bool {
+        let mut result = true;
+        for i in 0..N {
+            for j in 0..i {
+                result &= self.data[i][j].is_zero() && self.data[j][i].is_zero();
+            }
+        }
+
+        for i in 0..N {
+            result &= self.data[i][i].is_one();
+        }
+        
+        result
+    }
+
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`.
     ///
@@ -1050,6 +1082,7 @@ impl<S> Matrix1x1<S>
 where 
     S: Scalar 
 {
+    /*
     /// Determine whether a matrix is an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -1070,6 +1103,7 @@ where
     pub fn is_identity(&self) -> bool {
         self.data[0][0].is_one()
     }
+    */
 }
 
 impl<S> Matrix1x1<S> 
@@ -1363,6 +1397,7 @@ where
         )
     }
     
+    /*
     /// Determine whether a matrix is an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -1384,6 +1419,7 @@ where
         self.data[0][0].is_one()  && self.data[0][1].is_zero() &&
         self.data[1][0].is_zero() && self.data[1][1].is_one()
     }
+    */
 }
 
 impl<S> Matrix2x2<S> 
@@ -2236,6 +2272,7 @@ where
         )
     }
     
+    /*
     /// Determine whether a matrix is an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -2258,6 +2295,7 @@ where
         self.data[1][0].is_zero() && self.data[1][1].is_one()  && self.data[1][2].is_zero() &&
         self.data[2][0].is_zero() && self.data[2][1].is_zero() && self.data[2][2].is_one()
     }
+    */
 }
 
 impl<S> Matrix3x3<S> 
@@ -3465,6 +3503,7 @@ where
         )
     }
     
+    /*
     /// Determine whether a matrix is an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
@@ -3492,6 +3531,7 @@ where
         self.data[3][0].is_zero() && self.data[3][1].is_zero() && 
         self.data[3][2].is_zero() && self.data[3][3].is_one()
     }
+    */
 }
 
 impl<S> Matrix4x4<S> 
