@@ -18,6 +18,7 @@
 #[macro_export]
 macro_rules! impl_coords {
     ($T:ident, { $($comps: ident),* }) => {
+        #[allow(clippy::upper_case_acronyms)]
         #[repr(C)]
         #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
         pub struct $T<S: Copy> {
