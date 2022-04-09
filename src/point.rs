@@ -105,17 +105,7 @@ where
     /// ```
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Point<T, N>> {
-        // SAFETY: Every location gets written into with a valid value of type `T`.
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut coords: Vector<T, N> = unsafe { core::mem::zeroed() };
-        for i in 0..N {
-            coords[i] = match num_traits::cast(self.coords[i]) {
-                Some(value) => value,
-                None => return None,
-            };
-        }
-
-        Some(Point { coords })
+        self.coords.cast::<T>().map(|coords| Point { coords })
     }
 }
 
