@@ -64,6 +64,14 @@ impl<S> Quaternion<S> {
         4
     }
 
+    /// Tests whether the number of elements in the matrix is zero.
+    /// 
+    /// Returns `false` when the matrix is a 0x0 matrix, 0xC matrix, or 
+    /// Rx0 matrix. Returns `true` otherwise.
+    pub const fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     /// The shape of the underlying array storing the quaternion components.
     ///
     /// The shape is the equivalent number of columns and rows of the 
