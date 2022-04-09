@@ -116,13 +116,7 @@ where
     /// ```
     #[inline]
     pub fn inverse(&self) -> Option<Self> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Self {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
+        self.matrix.inverse().map(|matrix| Self { matrix })
     }
 
     /// Apply the transformation to a vector.
@@ -532,13 +526,7 @@ where
     /// ```
     #[inline]
     pub fn inverse(&self) -> Option<Self> {
-        if let Some(matrix) = self.matrix.inverse() {
-            Some(Self {
-                matrix: matrix
-            })
-        } else {
-            None
-        }
+        self.matrix.inverse().map(|matrix| Self { matrix })
     }
 
     /// Apply the transformation to a vector.
