@@ -13,7 +13,7 @@ use crate::angle::{
 use crate::common::{
     Magnitude,
 };
-use crate::matrix::array::*;
+// use crate::matrix::array::*;
 use crate::vector::{
     Vector,
     Vector1,
@@ -96,6 +96,21 @@ pub type Matrix3<S> = Matrix3x3<S>;
 
 /// A stack-allocated **(4 row, 4 column)** matrix in column-major order.
 pub type Matrix4<S> = Matrix4x4<S>;
+
+
+#[inline(always)]
+fn dot_array_col<S, const M: usize, const N: usize>(arr: &[[S; M]; N], col: &[S; N], r: usize) -> S
+where
+    S: crate::Scalar + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
+{
+    // PERFORMANCE: The Rust compiler should optmize out this loop.
+    let mut result = S::zero();
+    for i in 0..N {
+        result += arr[i][r] * col[i];
+    }
+
+    result
+}
 
 
 /// A stack-allocated **(`R` row, `C` column)** matrix in column-major order.

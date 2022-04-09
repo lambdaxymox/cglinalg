@@ -1,6 +1,6 @@
-use core::ops;
+// use core::ops;
 
-
+/*
 #[inline(always)]
 pub fn dot_array_col<S, const M: usize, const N: usize>(arr: &[[S; M]; N], col: &[S; N], r: usize) -> S
 where
@@ -14,4 +14,4 @@ where
 
     result
 }
-
+*/
