@@ -81,7 +81,6 @@ The library has design limitations for a number of reasons.
 
 */
 
-// #![allow(clippy::redundant_field_names)]
 // #![no_std]
 extern crate core;
 
