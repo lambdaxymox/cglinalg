@@ -29,10 +29,7 @@ impl<S> Complex<S> {
     /// Construct a new complex number from its real and imaginary components.
     #[inline]
     pub const fn new(re: S, im: S) -> Self {
-        Self {
-            re: re,
-            im: im,
-        }
+        Self { re, im }
     }
 
     /// The shape of the underlying array storing the complex number components.

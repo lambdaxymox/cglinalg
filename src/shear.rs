@@ -258,9 +258,7 @@ where
              shear_x_with_y * det_inverse, -S::one() * det_inverse
         );
             
-        Self {
-            matrix: matrix,
-        }
+        Self { matrix }
     }
     
     /// Apply the inverse of the shear transformation to a vector.
@@ -809,9 +807,7 @@ where
             c2r0, c2r1, c2r2
         );
         
-        Self {
-            matrix: matrix,
-        }
+        Self { matrix }
     }
 
     /// Apply the inverse of the shear transformation to a vector.

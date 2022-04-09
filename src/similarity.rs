@@ -60,10 +60,7 @@ where
     pub fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>, scale: S) -> Self {
         let isometry = Isometry2::from_parts(translation, rotation);
         
-        Self  {
-            isometry: isometry,
-            scale: scale,
-        }
+        Self { isometry, scale }
     }
 
     /// Construct a similarity transformation from a rotation only.
@@ -96,7 +93,7 @@ where
         let isometry = Isometry2::from_rotation(rotation);
 
         Self {
-            isometry: isometry,
+            isometry,
             scale: S::one(),
         }
     }
@@ -123,10 +120,7 @@ where
     pub fn from_scale(scale: S) -> Self {
         let isometry = Isometry2::identity();
 
-        Self {
-            isometry: isometry,
-            scale: scale,
-        }
+        Self { isometry, scale }
     }
 
     /// Construct a similarity transformation from a translation only.
@@ -153,7 +147,7 @@ where
         let isometry = Isometry2::from_translation(translation);
 
         Self {
-            isometry: isometry,
+            isometry,
             scale: S::one(),
         }
     }
@@ -188,7 +182,7 @@ where
     #[inline]
     pub fn from_isometry(isometry: Isometry2<S>) -> Self {
         Self {
-            isometry: isometry,
+            isometry,
             scale: S::one(),
         }
     }
@@ -806,10 +800,7 @@ where
     pub fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>, scale: S) -> Self {
         let isometry = Isometry3::from_parts(translation, rotation);
         
-        Self {
-            isometry: isometry,
-            scale: scale,
-        }
+        Self { isometry, scale }
     }
 
     /// Construct a similarity transformation from a rotation only.
@@ -844,7 +835,7 @@ where
         let isometry = Isometry3::from_rotation(rotation);
 
         Self {
-            isometry: isometry,
+            isometry,
             scale: S::one(),
         }
     }
@@ -871,10 +862,7 @@ where
     pub fn from_scale(scale: S) -> Self {
         let isometry = Isometry3::identity();
 
-        Self {
-            isometry: isometry,
-            scale: scale,
-        }
+        Self { isometry, scale }
     }
 
     /// Construct a similarity transformation from a translation only.
@@ -901,7 +889,7 @@ where
         let isometry = Isometry3::from_translation(translation);
 
         Self {
-            isometry: isometry,
+            isometry,
             scale: S::one(),
         }
     }

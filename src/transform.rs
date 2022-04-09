@@ -46,9 +46,7 @@ where
     /// matrix is not checked that it is a valid homogeneous matrix.
     #[inline]
     pub fn from_matrix_unchecked(matrix: Matrix3x3<S>) -> Self {
-        Self {
-            matrix: matrix,
-        }
+        Self { matrix }
     }
 
     /// Get a reference to the underlying matrix that represents the 
@@ -455,9 +453,7 @@ where
     /// matrix is not checked that it is a valid homogeneous matrix.
     #[inline]
     pub fn from_matrix_unchecked(matrix: Matrix4x4<S>) -> Self {
-        Self {
-            matrix: matrix,
-        }
+        Self { matrix }
     }
 
     /// Get a reference to the underlying matrix that represents the 

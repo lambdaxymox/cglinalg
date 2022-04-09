@@ -39,9 +39,7 @@ impl<T> Unit<T> {
     /// checking.
     #[inline]
     pub(crate) fn from_value_unchecked(value: T) -> Self {
-        Self {
-            value: value,
-        }
+        Self { value }
     }
 }
 

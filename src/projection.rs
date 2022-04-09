@@ -75,12 +75,12 @@ where
     /// coordinate system where the **negative z-axis** is the depth direction.
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         Self {
-            left: left,
-            right: right,
-            bottom: bottom,
-            top: top,
-            near: near,
-            far: far,
+            left,
+            right,
+            bottom,
+            top,
+            near,
+            far,
             matrix: Matrix4x4::from_perspective(left, right, bottom, top, near, far),
         }
     }
@@ -542,9 +542,9 @@ where
 
         Self {
             vfov: spec_vfov,
-            aspect: aspect,
-            near: near,
-            far: far,
+            aspect,
+            near,
+            far,
             matrix: Matrix4x4::from_perspective_fov(spec_vfov, aspect, near, far),
         }
     }
@@ -1031,12 +1031,12 @@ where
     /// Construct a new orthographic projection.
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         Self {
-            left: left,
-            right: right,
-            bottom: bottom,
-            top: top,
-            near: near,
-            far: far,
+            left,
+            right,
+            bottom,
+            top,
+            near,
+            far,
             matrix: Matrix4x4::from_orthographic(left, right, bottom, top, near, far),
         }
     }
@@ -1431,9 +1431,9 @@ where
         let vfov_rad = vfov.into();
         Self {
             vfov: vfov_rad,
-            aspect: aspect,
-            near: near,
-            far: far,
+            aspect,
+            near,
+            far,
             matrix: Matrix4x4::from_orthographic_fov(vfov_rad, aspect, near, far),
         }
     }

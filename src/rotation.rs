@@ -721,11 +721,7 @@ where
     /// ```
     #[inline]
     pub fn axis_angle(&self) -> Option<(Unit<Vector3<S>>, Radians<S>)> {
-        if let Some(axis) = self.axis() {
-            Some((axis, self.angle()))
-        } else {
-            None
-        }
+        self.axis().map(|axis| (axis, self.angle()))
     }
 
     /// Construct a three-dimensional rotation matrix from a quaternion.

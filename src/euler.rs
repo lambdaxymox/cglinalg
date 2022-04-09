@@ -173,11 +173,7 @@ impl<A> EulerAngles<A> {
     /// Construct a new set of Euler angles.
     #[inline]
     pub const fn new(x: A, y: A, z: A) -> Self {
-        Self { 
-            x: x,
-            y: y, 
-            z: z,
-        }
+        Self { x, y, z }
     }
 }
 
