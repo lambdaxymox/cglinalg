@@ -41,10 +41,18 @@ pub struct Point<S, const N: usize> {
 }
 
 impl<S, const N: usize> Point<S, N> {
-    /// The length of the the underlying array storing the point components.
+    /// Returns the length of the the underlying array storing the point components.
     #[inline]
     pub const fn len(&self) -> usize {
         N
+    }
+
+    /// Tests whether the number of elements in the point is zero.
+    /// 
+    /// Returns `false` when the point is zero-dimensional. Returns `true` 
+    /// otherwise.
+    pub const fn is_empty(&self) -> bool {
+        self.len() == 0
     }
 
     /// The shape of the underlying array storing the point components.

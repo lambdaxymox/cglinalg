@@ -51,6 +51,13 @@ impl<S> Complex<S> {
         2
     }
 
+    /// Tests whether the number of elements in the compolex number is zero.
+    /// 
+    /// Always returns `true`
+    pub const fn is_empty(&self) -> bool {
+        true
+    }
+
     /// Get a pointer to the underlying array.
     #[inline]
     pub const fn as_ptr(&self) -> *const S {

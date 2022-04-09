@@ -106,10 +106,18 @@ pub struct Matrix<S, const R: usize, const C: usize, const RC: usize> {
 }
 
 impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> {
-    /// The length of the the underlying array storing the matrix components.
+    /// Returns the length of the the underlying array storing the matrix 
+    /// components.
     #[inline]
     pub const fn len(&self) -> usize {
         R * C
+    }
+
+    /// Tests whether the number of elements in the quaternion is zero.
+    /// 
+    /// Always returns `true`
+    pub const fn is_empty(&self) -> bool {
+        true
     }
 
     /// The shape of the underlying array storing the matrix components.

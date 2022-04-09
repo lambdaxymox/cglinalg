@@ -39,10 +39,18 @@ pub struct Vector<S, const N: usize> {
 }
 
 impl<S, const N: usize> Vector<S, N> {
-    /// The length of the the underlying array storing the vector components.
+    /// Returns the length of the the underlying array storing the vector components.
     #[inline]
     pub const fn len(&self) -> usize {
         N
+    }
+
+    /// Tests whether the number of elements in the vector is zero.
+    /// 
+    /// Returns `false` when the vector is zero-dimensional. Returns `true` 
+    /// otherwise.
+    pub const fn is_empty(&self) -> bool {
+        self.len() == 0
     }
 
     /// The shape of the underlying array storing the vector components.
