@@ -424,6 +424,7 @@ where
 {
     type Output = Translation2<S>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: Translation2<S>) -> Self::Output {
         Translation2::from_vector(&(self.vector + other.vector))
@@ -436,6 +437,7 @@ where
 {
     type Output = Translation2<S>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: &Translation2<S>) -> Self::Output {
         Translation2::from_vector(&(self.vector + other.vector))
@@ -448,6 +450,7 @@ where
 {
     type Output = Translation2<S>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: Translation2<S>) -> Self::Output {
         Translation2::from_vector(&(self.vector + other.vector))
@@ -460,6 +463,7 @@ where
 {
     type Output = Translation2<S>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: &'a Translation2<S>) -> Self::Output {
         Translation2::from_vector(&(self.vector + other.vector))
@@ -865,6 +869,7 @@ where
 {
     type Output = Translation3<S>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: Translation3<S>) -> Self::Output {
         Translation3::from_vector(&(self.vector + other.vector))
@@ -877,6 +882,7 @@ where
 {
     type Output = Translation3<S>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: &Translation3<S>) -> Self::Output {
         Translation3::from_vector(&(self.vector + other.vector))
@@ -889,6 +895,7 @@ where
 {
     type Output = Translation3<S>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: Translation3<S>) -> Self::Output {
         Translation3::from_vector(&(self.vector + other.vector))
@@ -901,6 +908,7 @@ where
 {
     type Output = Translation3<S>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: &'a Translation3<S>) -> Self::Output {
         Translation3::from_vector(&(self.vector + other.vector))
