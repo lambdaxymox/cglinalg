@@ -102,7 +102,7 @@ fn dot_array_col<S, const M: usize, const N: usize>(arr: &[[S; M]; N], col: &[S;
 where
     S: crate::Scalar + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
 {
-    // PERFORMANCE: The Rust compiler should optmize out this loop.
+    // PERFORMANCE: The const loop should get unrolled during optimization.
     let mut result = S::zero();
     for i in 0..N {
         result += arr[i][r] * col[i];
@@ -805,6 +805,7 @@ where
     /// ```
     #[inline]
     pub fn transpose_mut(&mut self) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             for j in 0..i {
                 self.swap((i, j), (j, i));
@@ -862,6 +863,7 @@ where
     /// ```
     #[inline]
     pub fn is_identity(&self) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
             for j in 0..i {
@@ -869,6 +871,7 @@ where
             }
         }
 
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             result &= self.data[i][i].is_one();
         }
@@ -1014,6 +1017,7 @@ where
     /// element is zero.
     #[inline]
     pub fn is_diagonal(&self) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
             for j in 0..i {
@@ -1031,6 +1035,7 @@ where
     /// Note that every diagonal matrix is a symmetric matrix.
     #[inline]
     pub fn is_symmetric(&self) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
             for j in 0..i {
@@ -4690,6 +4695,7 @@ where
 
     #[inline]
     fn add(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4709,6 +4715,7 @@ where
 
     #[inline]
     fn add(self, other: &Matrix<S, R, C, RC>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4728,6 +4735,7 @@ where
 
     #[inline]
     fn add(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4747,6 +4755,7 @@ where
 
     #[inline]
     fn add(self, other: &'a Matrix<S, R, C, RC>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4766,6 +4775,7 @@ where
 
     #[inline]
     fn sub(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4785,6 +4795,7 @@ where
 
     #[inline]
     fn sub(self, other: &Matrix<S, R, C, RC>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4804,6 +4815,7 @@ where
 
     #[inline]
     fn sub(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4823,6 +4835,7 @@ where
 
     #[inline]
     fn sub(self, other: &'a Matrix<S, R, C, RC>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4842,6 +4855,7 @@ where
 
     #[inline]
     fn neg(self) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4861,6 +4875,7 @@ where
 
     #[inline]
     fn neg(self) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4880,6 +4895,7 @@ where
 
     #[inline]
     fn mul(self, other: S) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4899,6 +4915,7 @@ where
 
     #[inline]
     fn mul(self, other: S) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4918,6 +4935,7 @@ where
 
     #[inline]
     fn div(self, other: S) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4937,6 +4955,7 @@ where
 
     #[inline]
     fn div(self, other: S) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4956,6 +4975,7 @@ where
 
     #[inline]
     fn rem(self, other: S) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4975,6 +4995,7 @@ where
 
     #[inline]
     fn rem(self, other: S) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
             for r in 0..R {
@@ -4994,6 +5015,7 @@ macro_rules! impl_scalar_matrix_mul_ops {
 
             #[inline]
             fn mul(self, other: Matrix<$Lhs, R, C, RC>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Self::Output::zero();
                 for c in 0..C {
                     for r in 0..R {
@@ -5010,6 +5032,7 @@ macro_rules! impl_scalar_matrix_mul_ops {
 
             #[inline]
             fn mul(self, other: Matrix<$Lhs, R, C, RC>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Self::Output::zero();
                 for c in 0..C {
                     for r in 0..R {
@@ -5034,6 +5057,7 @@ where
 
     #[inline]
     fn mul(self, other: Vector<S, C>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for r in 0..R {
             result[r] = dot_array_col(self.as_ref(), other.as_ref(), r);
@@ -5051,6 +5075,7 @@ where
 
     #[inline]
     fn mul(self, other: &Vector<S, C>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for r in 0..R {
             result[r] = dot_array_col(self.as_ref(), other.as_ref(), r);
@@ -5068,6 +5093,7 @@ where
 
     #[inline]
     fn mul(self, other: Vector<S, C>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for r in 0..R {
             result[r] = dot_array_col(self.as_ref(), other.as_ref(), r);
@@ -5085,6 +5111,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Vector<S, C>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for r in 0..R {
             result[r] = dot_array_col(self.as_ref(), other.as_ref(), r);
@@ -5105,6 +5132,7 @@ macro_rules! impl_matrix_matrix_mul_ops {
 
             #[inline]
             fn mul(self, other: Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Self::Output::zero();
                 for c in 0..$C2 {
                     for r in 0..$R1 {
@@ -5128,6 +5156,7 @@ macro_rules! impl_matrix_matrix_mul_ops {
 
             #[inline]
             fn mul(self, other: &Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Self::Output::zero();
                 for c in 0..$C2 {
                     for r in 0..$R1 {
@@ -5151,6 +5180,7 @@ macro_rules! impl_matrix_matrix_mul_ops {
 
             #[inline]
             fn mul(self, other: Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Self::Output::zero();
                 for c in 0..$C2 {
                     for r in 0..$R1 {
@@ -5174,6 +5204,7 @@ macro_rules! impl_matrix_matrix_mul_ops {
 
             #[inline]
             fn mul(self, other: &'a Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Self::Output::zero();
                 for c in 0..$C2 {
                     for r in 0..$R1 {
@@ -5237,6 +5268,7 @@ where
 {
     #[inline]
     fn add_assign(&mut self, other: Matrix<S, R, C, RC>) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
                 self.data[c][r] += other.data[c][r];
@@ -5251,6 +5283,7 @@ where
 {
     #[inline]
     fn add_assign(&mut self, other: &Matrix<S, R, C, RC>) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
                 self.data[c][r] += other.data[c][r];
@@ -5265,6 +5298,7 @@ where
 {
     #[inline]
     fn sub_assign(&mut self, other: Matrix<S, R, C, RC>) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
                 self.data[c][r] -= other.data[c][r];
@@ -5279,6 +5313,7 @@ where
 {
     #[inline]
     fn sub_assign(&mut self, other: &Matrix<S, R, C, RC>) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
                 self.data[c][r] -= other.data[c][r];
@@ -5293,6 +5328,7 @@ where
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
                 self.data[c][r] *= other;
@@ -5307,6 +5343,7 @@ where
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
                 self.data[c][r] /= other;
@@ -5321,6 +5358,7 @@ where
 {
     #[inline]
     fn rem_assign(&mut self, other: S) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
                 self.data[c][r] %= other;
@@ -5342,6 +5380,7 @@ where
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for c in 0..C {
             for r in 0..R {
@@ -5364,6 +5403,7 @@ where
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for c in 0..C {
             for r in 0..R {
@@ -5386,6 +5426,7 @@ where
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for c in 0..C {
             for r in 0..R {

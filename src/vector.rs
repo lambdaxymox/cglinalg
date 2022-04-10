@@ -485,6 +485,7 @@ where
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
             result &= S::abs_diff_eq(&self.data[i], &other.data[i], epsilon);
@@ -505,6 +506,7 @@ where
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
             result &= S::relative_eq(&self.data[i], &other.data[i], epsilon, max_relative);
@@ -525,6 +527,7 @@ where
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
             result &= S::ulps_eq(&self.data[i], &other.data[i], epsilon, max_ulps);
@@ -589,6 +592,7 @@ macro_rules! impl_scalar_vector_mul_ops {
 
             #[inline]
             fn mul(self, other: Vector<$Lhs, N>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Vector::zero();
                 for i in 0..N {
                     result[i] = self * other.data[i];
@@ -603,6 +607,7 @@ macro_rules! impl_scalar_vector_mul_ops {
 
             #[inline]
             fn mul(self, other: Vector<$Lhs, N>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Vector::zero();
                 for i in 0..N {
                     result[i] = self * other.data[i];
@@ -627,6 +632,7 @@ macro_rules! impl_vector_scalar_binary_ops {
 
             #[inline]
             fn $op(self, other: S) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Vector::zero();
                 for i in 0..N {
                     result[i] = self.data[i].$op(other);
@@ -644,6 +650,7 @@ macro_rules! impl_vector_scalar_binary_ops {
 
             #[inline]
             fn $op(self, other: S) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Vector::zero();
                 for i in 0..N {
                     result[i] = self.data[i].$op(other);
@@ -668,6 +675,7 @@ where
 
     #[inline]
     fn add(self, other: Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = self.data[i] + other.data[i];
@@ -685,6 +693,7 @@ where
 
     #[inline]
     fn add(self, other: &Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = self.data[i] + other.data[i];
@@ -702,6 +711,7 @@ where
 
     #[inline]
     fn add(self, other: Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = self.data[i] + other.data[i];
@@ -719,6 +729,7 @@ where
 
     #[inline]
     fn add(self, other: &'a Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = self.data[i] + other.data[i];
@@ -736,6 +747,7 @@ where
 
     #[inline]
     fn sub(self, other: Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = self.data[i] - other.data[i];
@@ -753,6 +765,7 @@ where
 
     #[inline]
     fn sub(self, other: &Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = self.data[i] - other.data[i];
@@ -770,6 +783,7 @@ where
 
     #[inline]
     fn sub(self, other: Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = self.data[i] - other.data[i];
@@ -787,6 +801,7 @@ where
 
     #[inline]
     fn sub(self, other: &'a Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = self.data[i] - other.data[i];
@@ -802,6 +817,7 @@ where
 {
     #[inline]
     fn add_assign(&mut self, other: Vector<S, N>) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             self.data[i] += other.data[i];
         }
@@ -814,6 +830,7 @@ where
 {
     #[inline]
     fn add_assign(&mut self, other: &Vector<S, N>) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             self.data[i] += other.data[i];
         }
@@ -826,6 +843,7 @@ where
 {
     #[inline]
     fn sub_assign(&mut self, other: Vector<S, N>) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             self.data[i] -= other.data[i];
         }
@@ -838,6 +856,7 @@ where
 {
     #[inline]
     fn sub_assign(&mut self, other: &Vector<S, N>) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             self.data[i] -= other.data[i];
         }
@@ -850,6 +869,7 @@ where
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             self.data[i] *= other;
         }
@@ -862,6 +882,7 @@ where
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             self.data[i] /= other;
         }
@@ -874,6 +895,7 @@ where
 {
     #[inline]
     fn rem_assign(&mut self, other: S) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         for i in 0..N {
             self.data[i] %= other;
         }
@@ -888,6 +910,7 @@ where
 
     #[inline]
     fn neg(self) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = -self.data[i];
@@ -905,6 +928,7 @@ where
 
     #[inline]
     fn neg(self) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result[i] = -self.data[i];
