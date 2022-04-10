@@ -566,7 +566,6 @@ where
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
-
         if magnitude <= threshold {
             None
         } else {
