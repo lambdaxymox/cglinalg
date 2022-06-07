@@ -405,6 +405,35 @@ where
     pub fn project(&self, other: &Self) -> Self {
         other * (self.dot(other) / other.magnitude_squared())
     }
+
+    /// Reflect a vector about a normal vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector2,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let vector = Vector2::new(1_f64, 1_f64);
+    /// let normal = Vector2::new(-1_f64 / 2_f64, 1_f64);
+    /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
+    /// let result = vector.reflect(&normal);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result.magnitude(), expected.magnitude(), epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn reflect(&self, normal: &Self) -> Self {
+        let two = S::one() + S::one();
+        let unit_normal = normal.normalize();
+
+        self - unit_normal * (two * self.dot(&unit_normal))
+    }
 }
 
 impl<S, const N: usize> AsRef<[S; N]> for Vector<S, N> {
@@ -1202,7 +1231,6 @@ where
         }
     }
 }
-
 
 impl<S> Vector3<S> {
     /// Construct a new vector.
