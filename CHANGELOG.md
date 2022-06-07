@@ -23,3 +23,7 @@
 * General documentation and code improvements.
 * Add complex number module.
 
+# Version 0.15.6 (June 7, 2022)
+* Add reflection for vectors and componentwise multiplication for matrices and 
+  vectors.
+
