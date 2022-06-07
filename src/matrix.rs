@@ -637,6 +637,92 @@ where
 
         result
     }
+
+    /// Compute the product of two matrices component-wise.
+    /// 
+    /// Given two matrices `m1` and `m2` with `rows` rows and `columns` columns, 
+    /// the component product of `m1` and `m2` is a matrix `m3` with `rows` rows 
+    /// and `columns` such that
+    /// ```text
+    /// for all c in 0..C. for all r in 0..R. m3[c][r] = m1[c][r] * m2[c][r]
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let m1 = Matrix3x3::new(
+    ///     0_f64, 1_f64, 2_f64,
+    ///     3_f64, 4_f64, 5_f64,
+    ///     6_f64, 7_f64, 8_f64
+    /// );
+    /// let m2 = Matrix3x3::new(
+    ///     9_f64,  10_f64, 11_f64,
+    ///     12_f64, 13_f64, 14_f64,
+    ///     15_f64, 16_f64, 17_f64
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     0_f64,  10_f64,  22_f64,
+    ///     36_f64, 52_f64,  70_f64,
+    ///     90_f64, 112_f64, 136_f64
+    /// );
+    /// let result = m1.component_mul(&m2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn component_mul(&self, other: &Self) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::zero();
+        for c in 0..C {
+            for r in 0..R {
+                result[c][r] = self.data[c][r] * other.data[c][r];
+            }
+        }
+
+        result
+    }
+
+    /// Compute the product of two matrices component-wise mutably in place.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let mut result = Matrix3x3::new(
+    ///     0_f64, 1_f64, 2_f64,
+    ///     3_f64, 4_f64, 5_f64,
+    ///     6_f64, 7_f64, 8_f64
+    /// );
+    /// let other = Matrix3x3::new(
+    ///     9_f64,  10_f64, 11_f64,
+    ///     12_f64, 13_f64, 14_f64,
+    ///     15_f64, 16_f64, 17_f64
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     0_f64,  10_f64,  22_f64,
+    ///     36_f64, 52_f64,  70_f64,
+    ///     90_f64, 112_f64, 136_f64
+    /// );
+    /// result.component_mul_assign(&other);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn component_mul_assign(&mut self, other: &Self) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        for c in 0..C {
+            for r in 0..R {
+                self.data[c][r] *= other.data[c][r];
+            }
+        }
+    }
 }
 
 impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>

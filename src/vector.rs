@@ -224,6 +224,63 @@ where
 
         result
     }
+
+    /// Compute the product of two vectors component-wise.
+    /// 
+    /// Given `N`-dimensional vectors `v1` and `v2`, the component product of `v1` and `v2` is a 
+    /// `N`-dimensional vector `v3` such that
+    /// ```text
+    /// for all i in 0..N. v3[i] = v1[i] * v2[i]
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let v1 = Vector3::new(0_f64, 1_f64, 4_f64);
+    /// let v2 = Vector3::new(5_f64, 8_f64, 3_f64);
+    /// let expected = Vector3::new(0_f64, 8_f64, 12_f64);
+    /// let result = v1.component_mul(&v2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn component_mul(&self, other: &Self) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Self::zero();
+        for i in 0..N {
+            result[i] = self.data[i] * other.data[i];
+        }
+ 
+        result
+    }
+
+    /// Compute the product of two vectors component-wise mutably in place.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let mut result = Vector3::new(0_f64, 1_f64, 4_f64);
+    /// let other = Vector3::new(5_f64, 8_f64, 3_f64);
+    /// let expected = Vector3::new(0_f64, 8_f64, 12_f64);
+    /// result.component_mul_assign(&other);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn component_mul_assign(&mut self, other: &Self) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        for i in 0..N {
+            self.data[i] *= other.data[i];
+        }
+    }
 }
 
 impl<S, const N: usize> Vector<S, N> 
