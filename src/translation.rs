@@ -1,6 +1,6 @@
 use crate::common::{
-    ScalarSigned,
-    ScalarFloat,
+    SimdScalarSigned,
+    SimdScalarFloat,
 };
 use crate::matrix::{
     Matrix3x3,
@@ -37,7 +37,7 @@ pub struct Translation2<S> {
 
 impl<S> Translation2<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     /// Construct a translation from the components of the translation.
     #[inline]
@@ -305,7 +305,7 @@ where
 
 impl<S> From<Translation2<S>> for Matrix3x3<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(transform: Translation2<S>) -> Matrix3x3<S> {
@@ -315,7 +315,7 @@ where
 
 impl<S> From<&Translation2<S>> for Matrix3x3<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(transform: &Translation2<S>) -> Matrix3x3<S> {
@@ -325,7 +325,7 @@ where
 
 impl<S> approx::AbsDiffEq for Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -342,7 +342,7 @@ where
 
 impl<S> approx::RelativeEq for Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -357,7 +357,7 @@ where
 
 impl<S> approx::UlpsEq for Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -372,7 +372,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -384,7 +384,7 @@ where
 
 impl<S> ops::Mul<&Point2<S>> for Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -396,7 +396,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for &Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -408,7 +408,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -420,7 +420,7 @@ where
 
 impl<S> ops::Mul<Translation2<S>> for Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Translation2<S>;
 
@@ -433,7 +433,7 @@ where
 
 impl<S> ops::Mul<&Translation2<S>> for Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Translation2<S>;
 
@@ -446,7 +446,7 @@ where
 
 impl<S> ops::Mul<Translation2<S>> for &Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Translation2<S>;
 
@@ -459,7 +459,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Translation2<S>> for &'b Translation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Translation2<S>;
 
@@ -485,7 +485,7 @@ pub struct Translation3<S> {
 
 impl<S> Translation3<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     /// Construct a translation from the components of the translation.
     #[inline]
@@ -750,7 +750,7 @@ where
 
 impl<S> From<Translation3<S>> for Matrix4x4<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(transform: Translation3<S>) -> Matrix4x4<S> {
@@ -760,7 +760,7 @@ where
 
 impl<S> From<&Translation3<S>> for Matrix4x4<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(transform: &Translation3<S>) -> Matrix4x4<S> {
@@ -770,7 +770,7 @@ where
 
 impl<S> approx::AbsDiffEq for Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -787,7 +787,7 @@ where
 
 impl<S> approx::RelativeEq for Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -802,7 +802,7 @@ where
 
 impl<S> approx::UlpsEq for Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -817,7 +817,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -829,7 +829,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -841,7 +841,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -853,7 +853,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -865,7 +865,7 @@ where
 
 impl<S> ops::Mul<Translation3<S>> for Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Translation3<S>;
 
@@ -878,7 +878,7 @@ where
 
 impl<S> ops::Mul<&Translation3<S>> for Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Translation3<S>;
 
@@ -891,7 +891,7 @@ where
 
 impl<S> ops::Mul<Translation3<S>> for &Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Translation3<S>;
 
@@ -904,7 +904,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Translation3<S>> for &'b Translation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Translation3<S>;
 

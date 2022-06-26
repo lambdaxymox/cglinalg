@@ -3,7 +3,7 @@ use crate::angle::{
     Radians,
 };
 use crate::common::{
-    ScalarFloat,
+    SimdScalarFloat,
     Unit,
 };
 use crate::matrix::{
@@ -52,7 +52,7 @@ pub struct Rotation2<S> {
 
 impl<S> Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Get a reference to the underlying matrix that represents the 
     /// rotation.
@@ -415,7 +415,7 @@ where
 
 impl<S> From<Rotation2<S>> for Matrix2x2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(rotation: Rotation2<S>) -> Matrix2x2<S> {
@@ -425,7 +425,7 @@ where
 
 impl<S> From<Rotation2<S>> for Matrix3x3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(rotation: Rotation2<S>) -> Matrix3x3<S> {
@@ -435,7 +435,7 @@ where
 
 impl<S> approx::AbsDiffEq for Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -452,7 +452,7 @@ where
 
 impl<S> approx::RelativeEq for Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -467,7 +467,7 @@ where
 
 impl<S> approx::UlpsEq for Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -482,7 +482,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -494,7 +494,7 @@ where
 
 impl<S> ops::Mul<&Point2<S>> for Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -506,7 +506,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for &Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -518,7 +518,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -530,7 +530,7 @@ where
 
 impl<S> ops::Mul<Rotation2<S>> for Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Rotation2<S>;
 
@@ -544,7 +544,7 @@ where
 
 impl<S> ops::Mul<&Rotation2<S>> for Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Rotation2<S>;
 
@@ -558,7 +558,7 @@ where
 
 impl<S> ops::Mul<Rotation2<S>> for &Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Rotation2<S>;
 
@@ -572,7 +572,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Rotation2<S>> for &'b Rotation2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Rotation2<S>;
 
@@ -600,7 +600,7 @@ pub struct Rotation3<S> {
 
 impl<S> Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Get a reference to the underlying matrix that represents the 
     /// rotation.
@@ -1255,7 +1255,7 @@ where
 
 impl<S> From<Rotation3<S>> for Matrix4x4<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(rotation: Rotation3<S>) -> Matrix4x4<S> {
@@ -1265,7 +1265,7 @@ where
 
 impl<S> From<Quaternion<S>> for Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Rotation3<S> {
@@ -1275,7 +1275,7 @@ where
 
 impl<S> From<Rotation3<S>> for Quaternion<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(rotation: Rotation3<S>) -> Quaternion<S> {
@@ -1297,7 +1297,7 @@ impl<S> AsRef<Matrix3x3<S>> for Rotation3<S> {
 
 impl<S> approx::AbsDiffEq for Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1314,7 +1314,7 @@ where
 
 impl<S> approx::RelativeEq for Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -1329,7 +1329,7 @@ where
 
 impl<S> approx::UlpsEq for Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1344,7 +1344,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Rotation3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1356,7 +1356,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -1368,7 +1368,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Rotation3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1380,7 +1380,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -1392,7 +1392,7 @@ where
 
 impl<S> ops::Mul<Rotation3<S>> for Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Rotation3<S>;
 
@@ -1406,7 +1406,7 @@ where
 
 impl<S> ops::Mul<&Rotation3<S>> for Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Rotation3<S>;
 
@@ -1420,7 +1420,7 @@ where
 
 impl<S> ops::Mul<Rotation3<S>> for &Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Rotation3<S>;
 
@@ -1434,7 +1434,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Rotation3<S>> for &'b Rotation3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Rotation3<S>;
 

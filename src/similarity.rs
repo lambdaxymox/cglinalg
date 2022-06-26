@@ -7,7 +7,7 @@ use crate::translation::{
     Translation3,
 };
 use crate::common::{
-    ScalarFloat,
+    SimdScalarFloat,
     Unit,
 };
 use crate::matrix::{
@@ -52,7 +52,7 @@ pub struct Similarity2<S> {
 
 impl<S> Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Construct a similarity transformation directly from the scale, rotation,
     /// and translation parts.
@@ -543,7 +543,7 @@ where
 
 impl<S> approx::AbsDiffEq for Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -561,7 +561,7 @@ where
 
 impl<S> approx::RelativeEq for Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -577,7 +577,7 @@ where
 
 impl<S> approx::UlpsEq for Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -606,7 +606,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -618,7 +618,7 @@ where
 
 impl<S> ops::Mul<&Point2<S>> for Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -630,7 +630,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for &Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -642,7 +642,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -654,7 +654,7 @@ where
 
 impl<S> ops::Mul<Isometry2<S>> for Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity2<S>;
 
@@ -670,7 +670,7 @@ where
 
 impl<S> ops::Mul<&Isometry2<S>> for Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity2<S>;
 
@@ -686,7 +686,7 @@ where
 
 impl<S> ops::Mul<Isometry2<S>> for &Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity2<S>;
 
@@ -702,7 +702,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Isometry2<S>> for &'b Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity2<S>;
 
@@ -718,7 +718,7 @@ where
 
 impl<S> ops::Mul<Similarity2<S>> for Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity2<S>;
 
@@ -733,7 +733,7 @@ where
 
 impl<S> ops::Mul<&Similarity2<S>> for Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity2<S>;
 
@@ -748,7 +748,7 @@ where
 
 impl<S> ops::Mul<Similarity2<S>> for &Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity2<S>;
 
@@ -763,7 +763,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Similarity2<S>> for &'b Similarity2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity2<S>;
 
@@ -792,7 +792,7 @@ pub struct Similarity3<S> {
 
 impl<S> Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Construct a similarity transformation directly from the scale, rotation,
     /// and translation parts.
@@ -1449,7 +1449,7 @@ where
 
 impl<S> approx::AbsDiffEq for Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1467,7 +1467,7 @@ where
 
 impl<S> approx::RelativeEq for Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -1483,7 +1483,7 @@ where
 
 impl<S> approx::UlpsEq for Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1499,7 +1499,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -1511,7 +1511,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -1523,7 +1523,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -1535,7 +1535,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -1547,7 +1547,7 @@ where
 
 impl<S> ops::Mul<Isometry3<S>> for Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity3<S>;
 
@@ -1563,7 +1563,7 @@ where
 
 impl<S> ops::Mul<&Isometry3<S>> for Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity3<S>;
 
@@ -1579,7 +1579,7 @@ where
 
 impl<S> ops::Mul<Isometry3<S>> for &Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity3<S>;
 
@@ -1595,7 +1595,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Isometry3<S>> for &'b Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity3<S>;
 
@@ -1611,7 +1611,7 @@ where
 
 impl<S> ops::Mul<Similarity3<S>> for Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity3<S>;
 
@@ -1626,7 +1626,7 @@ where
 
 impl<S> ops::Mul<&Similarity3<S>> for Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity3<S>;
 
@@ -1641,7 +1641,7 @@ where
 
 impl<S> ops::Mul<Similarity3<S>> for &Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity3<S>;
 
@@ -1656,7 +1656,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Similarity3<S>> for &'b Similarity3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Similarity3<S>;
 

@@ -1,7 +1,7 @@
 use crate::common::{
-    Scalar,
-    ScalarSigned,
-    ScalarFloat,
+    SimdScalar,
+    SimdScalarSigned,
+    SimdScalarFloat,
 };
 use crate::angle::{
     Angle,
@@ -175,7 +175,7 @@ where
 
 impl<S> Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     /// Construct a new complex number from its real part.
     /// 
@@ -419,7 +419,7 @@ where
 
 impl<S> Complex<S>
 where
-    S: ScalarSigned
+    S: SimdScalarSigned
 {
     /// Calculate the complex conjugate of a complex number.
     /// 
@@ -448,7 +448,7 @@ where
 
 impl<S> Complex<S>
 where
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     /// Returns `true` if all of the elements of a complex number are finite.
     /// Otherwise, it returns `false`.
@@ -950,7 +950,7 @@ impl<S> AsMut<(S, S)> for Complex<S> {
 
 impl<S> ops::Index<usize> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = S;
 
@@ -963,7 +963,7 @@ where
 
 impl<S> ops::Index<ops::Range<usize>> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = [S];
 
@@ -976,7 +976,7 @@ where
 
 impl<S> ops::Index<ops::RangeTo<usize>> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = [S];
 
@@ -989,7 +989,7 @@ where
 
 impl<S> ops::Index<ops::RangeFrom<usize>> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = [S];
 
@@ -1002,7 +1002,7 @@ where
 
 impl<S> ops::Index<ops::RangeFull> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = [S];
 
@@ -1015,7 +1015,7 @@ where
 
 impl<S> ops::IndexMut<usize> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: usize) -> &mut S {
@@ -1026,7 +1026,7 @@ where
 
 impl<S> ops::IndexMut<ops::Range<usize>> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
@@ -1037,7 +1037,7 @@ where
 
 impl<S> ops::IndexMut<ops::RangeTo<usize>> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
@@ -1048,7 +1048,7 @@ where
 
 impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
@@ -1059,7 +1059,7 @@ where
 
 impl<S> ops::IndexMut<ops::RangeFull> for Complex<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
@@ -1070,7 +1070,7 @@ where
 
 impl<S> Default for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn default() -> Self {
         Self::zero()
@@ -1079,7 +1079,7 @@ where
 
 impl<S> From<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn from(re: S) -> Self {
@@ -1089,7 +1089,7 @@ where
 
 impl<S> From<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn from(re: &S) -> Self {
@@ -1099,7 +1099,7 @@ where
 
 impl<S> From<(S, S)> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn from(v: (S, S)) -> Self {
@@ -1109,7 +1109,7 @@ where
 
 impl<S> From<[S; 2]> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn from(v: [S; 2]) -> Self {
@@ -1119,7 +1119,7 @@ where
 
 impl<S> From<&(S, S)> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn from(v: &(S, S)) -> Self {
@@ -1129,7 +1129,7 @@ where
 
 impl<S> From<&[S; 2]> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn from(v: &[S; 2]) -> Self {
@@ -1139,7 +1139,7 @@ where
 
 impl<'a, S> From<&'a (S, S)> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn from(v: &'a (S, S)) -> &'a Complex<S> {
@@ -1151,7 +1151,7 @@ where
 
 impl<'a, S> From<&'a [S; 2]> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn from(v: &'a [S; 2]) -> &'a Complex<S> {
@@ -1172,7 +1172,7 @@ where
 
 impl<S> ops::Neg for Complex<S>
 where
-    S: ScalarSigned
+    S: SimdScalarSigned
 {
     type Output = Complex<S>;
 
@@ -1184,7 +1184,7 @@ where
 
 impl<S> ops::Neg for &Complex<S>
 where
-    S: ScalarSigned
+    S: SimdScalarSigned
 {
     type Output = Complex<S>;
 
@@ -1196,7 +1196,7 @@ where
 
 impl<S> ops::Add<Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1208,7 +1208,7 @@ where
 
 impl<S> ops::Add<&Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1220,7 +1220,7 @@ where
 
 impl<S> ops::Add<Complex<S>> for &Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1232,7 +1232,7 @@ where
 
 impl<'a, 'b, S> ops::Add<&'b Complex<S>> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1244,7 +1244,7 @@ where
 
 impl<S> ops::Add<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1256,7 +1256,7 @@ where
 
 impl<S> ops::Add<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1268,7 +1268,7 @@ where
 
 impl<S> ops::Add<S> for &Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1280,7 +1280,7 @@ where
 
 impl<'a, 'b, S> ops::Add<&'b S> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1292,7 +1292,7 @@ where
 
 impl<S> ops::Sub<Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1304,7 +1304,7 @@ where
 
 impl<S> ops::Sub<&Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1316,7 +1316,7 @@ where
 
 impl<S> ops::Sub<Complex<S>> for &Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1328,7 +1328,7 @@ where
 
 impl<'a, 'b, S> ops::Sub<&'b Complex<S>> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1340,7 +1340,7 @@ where
 
 impl<S> ops::Sub<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1352,7 +1352,7 @@ where
 
 impl<S> ops::Sub<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1364,7 +1364,7 @@ where
 
 impl<S> ops::Sub<S> for &Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1376,7 +1376,7 @@ where
 
 impl<'a, 'b, S> ops::Sub<&'b S> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1388,7 +1388,7 @@ where
 
 impl<S> ops::Mul<Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1403,7 +1403,7 @@ where
 
 impl<S> ops::Mul<&Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1418,7 +1418,7 @@ where
 
 impl<S> ops::Mul<Complex<S>> for &Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1433,7 +1433,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'b Complex<S>> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1448,7 +1448,7 @@ where
 
 impl<S> ops::Mul<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1460,7 +1460,7 @@ where
 
 impl<S> ops::Mul<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1472,7 +1472,7 @@ where
 
 impl<S> ops::Mul<S> for &Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1484,7 +1484,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'b S> for &'b Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1496,7 +1496,7 @@ where
 
 impl<S> ops::Div<Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1512,7 +1512,7 @@ where
 
 impl<S> ops::Div<&Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1528,7 +1528,7 @@ where
 
 impl<S> ops::Div<Complex<S>> for &Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1544,7 +1544,7 @@ where
 
 impl<'a, 'b, S> ops::Div<&'b Complex<S>> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1560,7 +1560,7 @@ where
 
 impl<S> ops::Div<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1572,7 +1572,7 @@ where
 
 impl<S> ops::Div<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1584,7 +1584,7 @@ where
 
 impl<S> ops::Div<S> for &Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1596,7 +1596,7 @@ where
 
 impl<'a, 'b, S> ops::Div<&'b S> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1608,7 +1608,7 @@ where
 
 impl<S> ops::Rem<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1620,7 +1620,7 @@ where
 
 impl<S> ops::Rem<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1632,7 +1632,7 @@ where
 
 impl<S> ops::Rem<S> for &Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1644,7 +1644,7 @@ where
 
 impl<'a, 'b, S> ops::Rem<&'b S> for &'a Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Complex<S>;
 
@@ -1656,7 +1656,7 @@ where
 
 impl<S> ops::AddAssign<Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn add_assign(&mut self, other: Complex<S>) {
         self.re += other.re;
@@ -1666,7 +1666,7 @@ where
 
 impl<S> ops::AddAssign<&Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn add_assign(&mut self, other: &Complex<S>) {
         self.re += other.re;
@@ -1676,7 +1676,7 @@ where
 
 impl<S> ops::AddAssign<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn add_assign(&mut self, other: S) {
         self.re += other;
@@ -1685,7 +1685,7 @@ where
 
 impl<S> ops::AddAssign<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn add_assign(&mut self, other: &S) {
         self.re += *other;
@@ -1694,7 +1694,7 @@ where
 
 impl<S> ops::SubAssign<Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn sub_assign(&mut self, other: Complex<S>) {
         self.re -= other.re;
@@ -1704,7 +1704,7 @@ where
 
 impl<S> ops::SubAssign<&Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn sub_assign(&mut self, other: &Complex<S>) {
         self.re -= other.re;
@@ -1714,7 +1714,7 @@ where
 
 impl<S> ops::SubAssign<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn sub_assign(&mut self, other: S) {
         self.re -= other;
@@ -1723,7 +1723,7 @@ where
 
 impl<S> ops::SubAssign<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn sub_assign(&mut self, other: &S) {
         self.re -= *other;
@@ -1732,7 +1732,7 @@ where
 
 impl<S> ops::MulAssign<Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn mul_assign(&mut self, other: Complex<S>) {
         let a = self.re;
@@ -1747,7 +1747,7 @@ where
 
 impl<S> ops::MulAssign<&Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn mul_assign(&mut self, other: &Complex<S>) {
         let a = self.re;
@@ -1762,7 +1762,7 @@ where
 
 impl<S> ops::MulAssign<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn mul_assign(&mut self, other: S) {
         self.re *= other;
@@ -1772,7 +1772,7 @@ where
 
 impl<S> ops::MulAssign<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn mul_assign(&mut self, other: &S) {
         self.re *= *other;
@@ -1782,7 +1782,7 @@ where
 
 impl<S> ops::DivAssign<Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn div_assign(&mut self, other: Complex<S>) {
         let a = self.re;
@@ -1800,7 +1800,7 @@ where
 
 impl<S> ops::DivAssign<&Complex<S>> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn div_assign(&mut self, other: &Complex<S>) {
         let a = self.re;
@@ -1818,7 +1818,7 @@ where
 
 impl<S> ops::DivAssign<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn div_assign(&mut self, other: S) {
         self.re /= other;
@@ -1828,7 +1828,7 @@ where
 
 impl<S> ops::DivAssign<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn div_assign(&mut self, other: &S) {
         self.re /= *other;
@@ -1838,7 +1838,7 @@ where
 
 impl<S> ops::RemAssign<S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn rem_assign(&mut self, other: S) {
         self.re %= other;
@@ -1848,7 +1848,7 @@ where
 
 impl<S> ops::RemAssign<&S> for Complex<S>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn rem_assign(&mut self, other: &S) {
         self.re %= *other;
@@ -2046,7 +2046,7 @@ impl_scalar_complex_div_ops!(i8, i16, i32, i64, i128, isize, f32, f64);
 
 impl<S> approx::AbsDiffEq for Complex<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -2064,7 +2064,7 @@ where
 
 impl<S> approx::RelativeEq for Complex<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -2080,7 +2080,7 @@ where
 
 impl<S> approx::UlpsEq for Complex<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_ulps() -> u32 {

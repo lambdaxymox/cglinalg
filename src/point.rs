@@ -1,8 +1,8 @@
 use crate::common::{
     Magnitude,
-    Scalar,
-    ScalarSigned,
-    ScalarFloat,
+    SimdScalar,
+    SimdScalarSigned,
+    SimdScalarFloat,
 };
 use crate::vector::{
     Vector,
@@ -182,7 +182,7 @@ impl<S, const N: usize> AsMut<[S; N]> for Point<S, N> {
 
 impl<S, const N: usize> Point<S, N>
 where
-    S: Scalar
+    S: SimdScalar
 {
     /// Compute the origin of the Euclidean vector space.
     #[inline]
@@ -277,7 +277,7 @@ where
 
 impl<S, const N: usize> Default for Point<S, N>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn default() -> Self {
         Self::origin()
@@ -350,7 +350,7 @@ impl_point_index_ops!(ops::RangeFull, [S]);
 
 impl<S, const N: usize> ops::Add<Vector<S, N>> for Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -364,7 +364,7 @@ where
 
 impl<S, const N: usize> ops::Add<&Vector<S, N>> for Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -378,7 +378,7 @@ where
 
 impl<S, const N: usize> ops::Add<Vector<S, N>> for &Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -392,7 +392,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Add<&'a Vector<S, N>> for &'b Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -406,7 +406,7 @@ where
 
 impl<S, const N: usize> ops::Sub<Vector<S, N>> for Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -420,7 +420,7 @@ where
 
 impl<S, const N: usize> ops::Sub<&Vector<S, N>> for Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -434,7 +434,7 @@ where
 
 impl<S, const N: usize> ops::Sub<Vector<S, N>> for &Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -448,7 +448,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Sub<&'a Vector<S, N>> for &'b Point<S, N>
 where 
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Point<S, N>;
 
@@ -462,7 +462,7 @@ where
 
 impl<S, const N: usize> ops::Sub<Point<S, N>> for Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Vector<S, N>;
 
@@ -474,7 +474,7 @@ where
 
 impl<S, const N: usize> ops::Sub<&Point<S, N>> for Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -486,7 +486,7 @@ where
 
 impl<S, const N: usize> ops::Sub<Point<S, N>> for &Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -498,7 +498,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Sub<&'a Point<S, N>> for &'b Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Vector<S, N>;
 
@@ -510,7 +510,7 @@ where
 
 impl<S, const N: usize> ops::Mul<S> for Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -524,7 +524,7 @@ where
 
 impl<S, const N: usize> ops::Mul<S> for &Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Point<S, N>;
 
@@ -538,7 +538,7 @@ where
 
 impl<S, const N: usize> ops::Div<S> for Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -552,7 +552,7 @@ where
 
 impl<S, const N: usize> ops::Div<S> for &Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Point<S, N>;
 
@@ -566,7 +566,7 @@ where
 
 impl<S, const N: usize> ops::Rem<S> for Point<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Point<S, N>;
 
@@ -580,7 +580,7 @@ where
 
 impl<S, const N: usize> ops::Rem<S> for &Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     type Output = Point<S, N>;
 
@@ -624,7 +624,7 @@ impl_scalar_point_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i1
 
 impl<S, const N: usize> ops::Neg for Point<S, N> 
 where 
-    S: ScalarSigned
+    S: SimdScalarSigned
 {
     type Output = Point<S, N>;
 
@@ -636,7 +636,7 @@ where
 
 impl<S, const N: usize> ops::Neg for &Point<S, N>
 where 
-    S: ScalarSigned
+    S: SimdScalarSigned
 {
     type Output = Point<S, N>;
 
@@ -648,7 +648,7 @@ where
 
 impl<S, const N: usize> ops::AddAssign<Vector<S, N>> for Point<S, N> 
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn add_assign(&mut self, other: Vector<S, N>) {
@@ -658,7 +658,7 @@ where
 
 impl<S, const N: usize> ops::AddAssign<&Vector<S, N>> for Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn add_assign(&mut self, other: &Vector<S, N>) {
@@ -668,7 +668,7 @@ where
 
 impl<S, const N: usize> ops::SubAssign<Vector<S, N>> for Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn sub_assign(&mut self, other: Vector<S, N>) {
@@ -678,7 +678,7 @@ where
 
 impl<S, const N: usize> ops::SubAssign<&Vector<S, N>> for Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn sub_assign(&mut self, other: &Vector<S, N>) {
@@ -688,7 +688,7 @@ where
 
 impl<S, const N: usize> ops::MulAssign<S> for Point<S, N> 
 where
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -698,7 +698,7 @@ where
 
 impl<S, const N: usize> ops::DivAssign<S> for Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
@@ -708,7 +708,7 @@ where
 
 impl<S, const N: usize> ops::RemAssign<S> for Point<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn rem_assign(&mut self, other: S) {
@@ -718,7 +718,7 @@ where
 
 impl<S, const N: usize> Magnitude for Point<S, N> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = S;
 
@@ -765,7 +765,7 @@ where
 
 impl<S, const N: usize> approx::AbsDiffEq for Point<S, N> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -782,7 +782,7 @@ where
 
 impl<S, const N: usize> approx::RelativeEq for Point<S, N> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -797,7 +797,7 @@ where
 
 impl<S, const N: usize> approx::UlpsEq for Point<S, N> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -909,7 +909,7 @@ where
 
 impl<S> Point2<S> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     /// Convert a homogeneous vector into a point.
     ///
@@ -1001,7 +1001,7 @@ where
 
 impl<S> Point3<S> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     /// Convert a vector in homogeneous coordinates into a point.
     ///

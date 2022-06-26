@@ -10,7 +10,7 @@ use crate::quaternion::{
     Quaternion,
 };
 use crate::common::{
-    ScalarFloat,
+    SimdScalarFloat,
 };
 
 use core::fmt;
@@ -198,7 +198,7 @@ where
 
 impl<S> EulerAngles<Radians<S>> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     /// Construct an rotation matrix about an axis and an angle from a set 
     /// of Euler angles.
@@ -534,7 +534,7 @@ where
 impl<A, S> From<EulerAngles<A>> for Matrix3x3<S> 
 where 
     A: Angle + Into<Radians<S>>,
-    S: ScalarFloat,
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix3x3<S> {
@@ -550,7 +550,7 @@ where
 impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> 
 where 
     A: Angle + Into<Radians<S>>,
-    S: ScalarFloat,
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix4x4<S> {
@@ -565,7 +565,7 @@ where
 
 impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(src: Quaternion<S>) -> EulerAngles<Radians<S>> {

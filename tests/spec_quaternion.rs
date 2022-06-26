@@ -6,13 +6,13 @@ extern crate proptest;
 use proptest::prelude::*;
 use cglinalg::{
     Quaternion, 
-    Scalar,
+    SimdScalar,
 };
 
 
 fn any_scalar<S>() -> impl Strategy<Value = S>
 where
-    S: Scalar + Arbitrary
+    S: SimdScalar + Arbitrary
 {
     any::<S>().prop_map(|scalar| {
         let modulus = num_traits::cast(100_000_000).unwrap();
@@ -23,7 +23,7 @@ where
 
 fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
 where 
-    S: Scalar + Arbitrary
+    S: SimdScalar + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
         let modulus: S = num_traits::cast(100_000_000).unwrap();

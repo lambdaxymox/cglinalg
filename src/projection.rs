@@ -1,5 +1,5 @@
 use crate::common::{
-    ScalarFloat,
+    SimdScalarFloat,
 };
 use crate::angle::{
     Angle,
@@ -67,7 +67,7 @@ pub struct Perspective3<S> {
 
 impl<S> Perspective3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Construct a new perspective projection transformation.
     ///
@@ -394,7 +394,7 @@ where
 
 impl<S> approx::AbsDiffEq for Perspective3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -417,7 +417,7 @@ where
 
 impl<S> approx::RelativeEq for Perspective3<S> 
 where 
-    S: ScalarFloat,
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -438,7 +438,7 @@ where
 
 impl<S> approx::UlpsEq for Perspective3<S> 
 where 
-    S: ScalarFloat   
+    S: SimdScalarFloat   
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -459,7 +459,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Perspective3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -471,7 +471,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Perspective3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -483,7 +483,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Perspective3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -495,7 +495,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Perspective3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -534,7 +534,7 @@ pub struct PerspectiveFov3<S> {
 
 impl<S> PerspectiveFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     /// Construct a new perspective projection transformation.
     pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
@@ -873,7 +873,7 @@ where
 
 impl<S> approx::AbsDiffEq for PerspectiveFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -894,7 +894,7 @@ where
 
 impl<S> approx::RelativeEq for PerspectiveFov3<S> 
 where 
-    S: ScalarFloat  
+    S: SimdScalarFloat  
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -913,7 +913,7 @@ where
 
 impl<S> approx::UlpsEq for PerspectiveFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -932,7 +932,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -944,7 +944,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for PerspectiveFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -956,7 +956,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &PerspectiveFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -968,7 +968,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b PerspectiveFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1026,7 +1026,7 @@ pub struct Orthographic3<S> {
 
 impl<S> Orthographic3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     /// Construct a new orthographic projection.
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
@@ -1277,7 +1277,7 @@ where
 
 impl<S> approx::AbsDiffEq for Orthographic3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1300,7 +1300,7 @@ where
 
 impl<S> approx::RelativeEq for Orthographic3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -1321,7 +1321,7 @@ where
 
 impl<S> approx::UlpsEq for Orthographic3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1342,7 +1342,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Orthographic3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1354,7 +1354,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Orthographic3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1366,7 +1366,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Orthographic3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1378,7 +1378,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1424,7 +1424,7 @@ pub struct OrthographicFov3<S> {
 
 impl<S> OrthographicFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     /// Construct a new orthographic projection.
     pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
@@ -1688,7 +1688,7 @@ where
 
 impl<S> approx::AbsDiffEq for OrthographicFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1709,7 +1709,7 @@ where
 
 impl<S> approx::RelativeEq for OrthographicFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -1728,7 +1728,7 @@ where
 
 impl<S> approx::UlpsEq for OrthographicFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1747,7 +1747,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for OrthographicFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1759,7 +1759,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for OrthographicFov3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -1771,7 +1771,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &OrthographicFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1783,7 +1783,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b OrthographicFov3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 

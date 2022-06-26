@@ -7,7 +7,7 @@ use crate::translation::{
     Translation3,
 };
 use crate::common::{
-    ScalarFloat,
+    SimdScalarFloat,
     Unit,
 };
 use crate::matrix::{
@@ -53,7 +53,7 @@ pub struct Isometry2<S> {
 
 impl<S> Isometry2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
@@ -502,7 +502,7 @@ where
 
 impl<S> approx::AbsDiffEq for Isometry2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -528,7 +528,7 @@ where
 
 impl<S> approx::RelativeEq for Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -554,7 +554,7 @@ where
 
 impl<S> approx::UlpsEq for Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -580,7 +580,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point2<S>;
 
@@ -592,7 +592,7 @@ where
 
 impl<S> ops::Mul<&Point2<S>> for Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point2<S>;
 
@@ -604,7 +604,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for &Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point2<S>;
 
@@ -616,7 +616,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point2<S>;
 
@@ -628,7 +628,7 @@ where
 
 impl<S> ops::Mul<Isometry2<S>> for Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Isometry2<S>;
 
@@ -645,7 +645,7 @@ where
 
 impl<S> ops::Mul<&Isometry2<S>> for Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Isometry2<S>;
 
@@ -662,7 +662,7 @@ where
 
 impl<S> ops::Mul<Isometry2<S>> for &Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Isometry2<S>;
 
@@ -679,7 +679,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Isometry2<S>> for &'b Isometry2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Isometry2<S>;
 
@@ -713,7 +713,7 @@ pub struct Isometry3<S> {
 
 impl<S> Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
@@ -1398,7 +1398,7 @@ where
 
 impl<S> approx::AbsDiffEq for Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1424,7 +1424,7 @@ where
 
 impl<S> approx::RelativeEq for Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -1450,7 +1450,7 @@ where
 
 impl<S> approx::UlpsEq for Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1476,7 +1476,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1488,7 +1488,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1500,7 +1500,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1512,7 +1512,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -1524,7 +1524,7 @@ where
 
 impl<S> ops::Mul<Isometry3<S>> for Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Isometry3<S>;
 
@@ -1541,7 +1541,7 @@ where
 
 impl<S> ops::Mul<&Isometry3<S>> for Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Isometry3<S>;
 
@@ -1558,7 +1558,7 @@ where
 
 impl<S> ops::Mul<Isometry3<S>> for &Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Isometry3<S>;
 
@@ -1575,7 +1575,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Isometry3<S>> for &'b Isometry3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Isometry3<S>;
 

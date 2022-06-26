@@ -1,6 +1,6 @@
 use crate::common::{
-    Scalar,
-    ScalarFloat,
+    SimdScalar,
+    SimdScalarFloat,
 };
 use crate::matrix::{
     Matrix3x3,
@@ -45,7 +45,7 @@ pub struct Scale2<S> {
 
 impl<S> Scale2<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     /// Construct a two-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
@@ -118,7 +118,7 @@ where
 
 impl<S> Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
@@ -249,7 +249,7 @@ where
 
 impl<S> From<Scale2<S>> for Matrix3x3<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn from(scale: Scale2<S>) -> Matrix3x3<S> {
@@ -259,7 +259,7 @@ where
 
 impl<S> From<&Scale2<S>> for Matrix3x3<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn from(scale: &Scale2<S>) -> Matrix3x3<S> {
@@ -269,7 +269,7 @@ where
 
 impl<S> approx::AbsDiffEq for Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -287,7 +287,7 @@ where
 
 impl<S> approx::RelativeEq for Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -303,7 +303,7 @@ where
 
 impl<S> approx::UlpsEq for Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -319,7 +319,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -331,7 +331,7 @@ where
 
 impl<S> ops::Mul<&Point2<S>> for Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -343,7 +343,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for &Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -355,7 +355,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -367,7 +367,7 @@ where
 
 impl<S> ops::Mul<Scale2<S>> for Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Scale2<S>;
 
@@ -382,7 +382,7 @@ where
 
 impl<S> ops::Mul<&Scale2<S>> for Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Scale2<S>;
 
@@ -397,7 +397,7 @@ where
 
 impl<S> ops::Mul<Scale2<S>> for &Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Scale2<S>;
 
@@ -412,7 +412,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Scale2<S>> for &'b Scale2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Scale2<S>;
 
@@ -450,7 +450,7 @@ pub struct Scale3<S> {
 
 impl<S> Scale3<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     /// Construct a three-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
@@ -556,7 +556,7 @@ where
 
 impl<S> Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
@@ -670,7 +670,7 @@ where
 
 impl<S> From<Scale3<S>> for Matrix4x4<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn from(scale: Scale3<S>) -> Matrix4x4<S> {
@@ -684,7 +684,7 @@ where
 
 impl<S> From<&Scale3<S>> for Matrix4x4<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn from(scale: &Scale3<S>) -> Matrix4x4<S> {
@@ -698,7 +698,7 @@ where
 
 impl<S> approx::AbsDiffEq for Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -717,7 +717,7 @@ where
 
 impl<S> approx::RelativeEq for Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -734,7 +734,7 @@ where
 
 impl<S> approx::UlpsEq for Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -751,7 +751,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -763,7 +763,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -775,7 +775,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -787,7 +787,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -799,7 +799,7 @@ where
 
 impl<S> ops::Mul<Scale3<S>> for Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Scale3<S>;
 
@@ -815,7 +815,7 @@ where
 
 impl<S> ops::Mul<&Scale3<S>> for Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Scale3<S>;
 
@@ -831,7 +831,7 @@ where
 
 impl<S> ops::Mul<Scale3<S>> for &Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Scale3<S>;
 
@@ -847,7 +847,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Scale3<S>> for &'b Scale3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Scale3<S>;
 

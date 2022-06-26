@@ -1,5 +1,5 @@
 use crate::common::{
-    ScalarFloat,
+    SimdScalarFloat,
     Unit,
 };
 use crate::matrix::{
@@ -37,7 +37,7 @@ pub struct Reflection2<S> {
 
 impl<S> Reflection2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
@@ -219,7 +219,7 @@ where
 
 impl<S> approx::AbsDiffEq for Reflection2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -238,7 +238,7 @@ where
 
 impl<S> approx::RelativeEq for Reflection2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -255,7 +255,7 @@ where
 
 impl<S> approx::UlpsEq for Reflection2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -272,7 +272,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for Reflection2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -284,7 +284,7 @@ where
 
 impl<S> ops::Mul<&Point2<S>> for Reflection2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -296,7 +296,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for &Reflection2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -308,7 +308,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Reflection2<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point2<S>;
 
@@ -334,7 +334,7 @@ pub struct Reflection3<S> {
 
 impl<S> Reflection3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
@@ -493,7 +493,7 @@ where
 
 impl<S> approx::AbsDiffEq for Reflection3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -512,7 +512,7 @@ where
 
 impl<S> approx::RelativeEq for Reflection3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -529,7 +529,7 @@ where
 
 impl<S> approx::UlpsEq for Reflection3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -546,7 +546,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Reflection3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -558,7 +558,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Reflection3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 
@@ -570,7 +570,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Reflection3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -582,7 +582,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Reflection3<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = Point3<S>;
 

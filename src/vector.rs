@@ -1,7 +1,7 @@
 use crate::common::{
-    Scalar,
-    ScalarSigned,
-    ScalarFloat,   
+    SimdScalar,
+    SimdScalarSigned,
+    SimdScalarFloat,   
 };
 use crate::common::{
     Magnitude,
@@ -176,7 +176,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: Scalar
+    S: SimdScalar
 {
     /// Construct the zero vector.
     ///
@@ -285,7 +285,7 @@ where
 
 impl<S, const N: usize> Vector<S, N> 
 where 
-    S: ScalarSigned
+    S: SimdScalarSigned
 {
     /// Compute the negation of a vector mutably in place.
     ///
@@ -313,7 +313,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     /// Returns `true` if the elements of a vector are all finite. 
     /// Otherwise, it returns `false`. 
@@ -474,7 +474,7 @@ impl<S, const N: usize> AsMut<[[S; N]; 1]> for Vector<S, N> {
 
 impl<S, const N: usize> Default for Vector<S, N>
 where
-    S: Scalar
+    S: SimdScalar
 {
     fn default() -> Self {
         Self::zero()
@@ -560,7 +560,7 @@ where
 
 impl<S, const N: usize> approx::AbsDiffEq for Vector<S, N> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -583,7 +583,7 @@ where
 
 impl<S, const N: usize> approx::RelativeEq for Vector<S, N> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -604,7 +604,7 @@ where
 
 impl<S, const N: usize> approx::UlpsEq for Vector<S, N> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -625,7 +625,7 @@ where
 
 impl<S, const N: usize> Magnitude for Vector<S, N> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     type Output = S;
 
@@ -711,7 +711,7 @@ macro_rules! impl_vector_scalar_binary_ops {
     ($OpType:ident, $op:ident) => {
         impl<S, const N: usize> ops::$OpType<S> for Vector<S, N> 
         where 
-            S: Scalar 
+            S: SimdScalar 
         {
             type Output = Vector<S, N>;
 
@@ -729,7 +729,7 @@ macro_rules! impl_vector_scalar_binary_ops {
 
         impl<S, const N: usize> ops::$OpType<S> for &Vector<S, N> 
         where 
-            S: Scalar 
+            S: SimdScalar 
         {
             type Output = Vector<S, N>;
 
@@ -754,7 +754,7 @@ impl_vector_scalar_binary_ops!(Rem, rem);
 
 impl<S, const N: usize> ops::Add<Vector<S, N>> for Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -772,7 +772,7 @@ where
 
 impl<S, const N: usize> ops::Add<&Vector<S, N>> for Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -790,7 +790,7 @@ where
 
 impl<S, const N: usize> ops::Add<Vector<S, N>> for &Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -808,7 +808,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Add<&'a Vector<S, N>> for &'b Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -826,7 +826,7 @@ where
 
 impl<S, const N: usize> ops::Sub<Vector<S, N>> for Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -844,7 +844,7 @@ where
 
 impl<S, const N: usize> ops::Sub<&Vector<S, N>> for Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -862,7 +862,7 @@ where
 
 impl<S, const N: usize> ops::Sub<Vector<S, N>> for &Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -880,7 +880,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Sub<&'a Vector<S, N>> for &'b Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
@@ -898,7 +898,7 @@ where
 
 impl<S, const N: usize> ops::AddAssign<Vector<S, N>> for Vector<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn add_assign(&mut self, other: Vector<S, N>) {
@@ -911,7 +911,7 @@ where
 
 impl<S, const N: usize> ops::AddAssign<&Vector<S, N>> for Vector<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn add_assign(&mut self, other: &Vector<S, N>) {
@@ -924,7 +924,7 @@ where
 
 impl<S, const N: usize> ops::SubAssign<Vector<S, N>> for Vector<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn sub_assign(&mut self, other: Vector<S, N>) {
@@ -937,7 +937,7 @@ where
 
 impl<S, const N: usize> ops::SubAssign<&Vector<S, N>> for Vector<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn sub_assign(&mut self, other: &Vector<S, N>) {
@@ -950,7 +950,7 @@ where
 
 impl<S, const N: usize> ops::MulAssign<S> for Vector<S, N> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -963,7 +963,7 @@ where
 
 impl<S, const N: usize> ops::DivAssign<S> for Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
@@ -976,7 +976,7 @@ where
 
 impl<S, const N: usize> ops::RemAssign<S> for Vector<S, N> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn rem_assign(&mut self, other: S) {
@@ -989,7 +989,7 @@ where
 
 impl<S, const N: usize> ops::Neg for Vector<S, N> 
 where 
-    S: ScalarSigned
+    S: SimdScalarSigned
 {
     type Output = Vector<S, N>;
 
@@ -1007,7 +1007,7 @@ where
 
 impl<S, const N: usize> ops::Neg for &Vector<S, N>
 where 
-    S: ScalarSigned
+    S: SimdScalarSigned
 {
     type Output =  Vector<S, N>;
 
@@ -1063,7 +1063,7 @@ where
 
 impl<S> Vector1<S> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
@@ -1158,7 +1158,7 @@ where
 
 impl<S> Vector2<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
@@ -1293,7 +1293,7 @@ where
 
 impl<S> Vector3<S> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
@@ -1507,7 +1507,7 @@ where
 
 impl<S> Vector4<S> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.

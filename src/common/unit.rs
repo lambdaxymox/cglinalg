@@ -1,5 +1,5 @@
 use crate::common::scalar::{
-    ScalarFloat,
+    SimdScalarFloat,
 };
 use crate::common::magnitude::{
     Magnitude,
@@ -136,7 +136,7 @@ where
     #[inline]
     pub fn try_from_value_with_magnitude(value: T, threshold: T::Output) -> Option<(Self, T::Output)>
     where 
-        T::Output: ScalarFloat, 
+        T::Output: SimdScalarFloat, 
     {
         let magnitude_squared = value.magnitude_squared();
 
@@ -178,7 +178,7 @@ where
     #[inline]
     pub fn try_from_value(value: T, threshold: T::Output) -> Option<Self>
     where
-        T::Output: ScalarFloat,
+        T::Output: SimdScalarFloat,
     {
         Self::try_from_value_with_magnitude(value, threshold).map(|(unit, _)| unit)
     }

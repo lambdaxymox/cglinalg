@@ -1,5 +1,5 @@
 use crate::common::scalar::{
-    ScalarFloat,   
+    SimdScalarFloat,   
 };
 
 
@@ -50,7 +50,7 @@ pub trait Magnitude
 where 
     Self: Sized
 {
-    type Output: ScalarFloat;
+    type Output: SimdScalarFloat;
 
     /// Compute the Euclidean squared magnitude of a vector.
     fn magnitude_squared(&self) -> Self::Output;

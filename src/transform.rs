@@ -1,6 +1,6 @@
 use crate::common::{
-    Scalar,
-    ScalarFloat,
+    SimdScalar,
+    SimdScalarFloat,
 };
 use crate::matrix::{
     Matrix3x3,
@@ -29,7 +29,7 @@ pub struct Transform2<S> {
 
 impl<S> Transform2<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     /// Convert a 3x3 matrix to a two-dimensional transformation. This 
     /// function is for internal use in implementing type conversions.
@@ -89,7 +89,7 @@ where
 
 impl<S> Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Compute the inverse of the transformation if it exists.
     ///
@@ -276,7 +276,7 @@ where
 
 impl<S> approx::AbsDiffEq for Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -293,7 +293,7 @@ where
 
 impl<S> approx::RelativeEq for Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -308,7 +308,7 @@ where
 
 impl<S> approx::UlpsEq for Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -323,7 +323,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -335,7 +335,7 @@ where
 
 impl<S> ops::Mul<&Point2<S>> for Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -347,7 +347,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for &Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -359,7 +359,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -371,7 +371,7 @@ where
 
 impl<S> ops::Mul<Transform2<S>> for Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Transform2<S>;
 
@@ -385,7 +385,7 @@ where
 
 impl<S> ops::Mul<&Transform2<S>> for Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Transform2<S>;
 
@@ -399,7 +399,7 @@ where
 
 impl<S> ops::Mul<Transform2<S>> for &Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Transform2<S>;
 
@@ -413,7 +413,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Transform2<S>> for &'b Transform2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Transform2<S>;
 
@@ -436,7 +436,7 @@ pub struct Transform3<S> {
 
 impl<S> Transform3<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     /// Convert a 4x4 matrix to a three-dimensional transformation. 
     /// This function is for internal use in implementing type conversions.
@@ -496,7 +496,7 @@ where
 
 impl<S> Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Compute the inverse of the transformation if it exists.
     ///
@@ -694,7 +694,7 @@ where
 
 impl<S> approx::AbsDiffEq for Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -711,7 +711,7 @@ where
 
 impl<S> approx::RelativeEq for Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -726,7 +726,7 @@ where
 
 impl<S> approx::UlpsEq for Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -741,7 +741,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -753,7 +753,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -765,7 +765,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -777,7 +777,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -789,7 +789,7 @@ where
 
 impl<S> ops::Mul<Transform3<S>> for Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Transform3<S>;
 
@@ -803,7 +803,7 @@ where
 
 impl<S> ops::Mul<&Transform3<S>> for Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Transform3<S>;
 
@@ -817,7 +817,7 @@ where
 
 impl<S> ops::Mul<Transform3<S>> for &Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Transform3<S>;
 
@@ -831,7 +831,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Transform3<S>> for &'b Transform3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Transform3<S>;
 

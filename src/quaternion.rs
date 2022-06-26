@@ -1,8 +1,8 @@
 use crate::common::{
     Magnitude,
-    Scalar,
-    ScalarSigned,
-    ScalarFloat,
+    SimdScalar,
+    SimdScalarSigned,
+    SimdScalarFloat,
     Unit,
 };
 use crate::angle::{
@@ -229,7 +229,7 @@ where
 
 impl<S> Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     /// Returns the unit real quaternion. 
     ///
@@ -528,7 +528,7 @@ where
 
 impl<S> Quaternion<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     /// Compute the conjugate of a quaternion.
     ///
@@ -616,7 +616,7 @@ where
 
 impl<S> Quaternion<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Construct a quaternion corresponding to rotating about an axis `axis` 
     /// by an angle `angle` in radians from its unit polar decomposition.
@@ -2403,7 +2403,7 @@ impl<S> AsMut<(S, S, S, S)> for Quaternion<S> {
 
 impl<S> ops::Index<usize> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = S;
 
@@ -2416,7 +2416,7 @@ where
 
 impl<S> ops::Index<ops::Range<usize>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = [S];
 
@@ -2429,7 +2429,7 @@ where
 
 impl<S> ops::Index<ops::RangeTo<usize>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = [S];
 
@@ -2442,7 +2442,7 @@ where
 
 impl<S> ops::Index<ops::RangeFrom<usize>> for Quaternion<S> 
 where 
-    S: Scalar
+    S: SimdScalar
 {
     type Output = [S];
 
@@ -2455,7 +2455,7 @@ where
 
 impl<S> ops::Index<ops::RangeFull> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = [S];
 
@@ -2468,7 +2468,7 @@ where
 
 impl<S> ops::IndexMut<usize> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: usize) -> &mut S {
@@ -2479,7 +2479,7 @@ where
 
 impl<S> ops::IndexMut<ops::Range<usize>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: ops::Range<usize>) -> &mut [S] {
@@ -2490,7 +2490,7 @@ where
 
 impl<S> ops::IndexMut<ops::RangeTo<usize>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: ops::RangeTo<usize>) -> &mut [S] {
@@ -2501,7 +2501,7 @@ where
 
 impl<S> ops::IndexMut<ops::RangeFrom<usize>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: ops::RangeFrom<usize>) -> &mut [S] {
@@ -2512,7 +2512,7 @@ where
 
 impl<S> ops::IndexMut<ops::RangeFull> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn index_mut(&mut self, index: ops::RangeFull) -> &mut [S] {
@@ -2556,7 +2556,7 @@ where
 
 impl<S> Default for Quaternion<S>
 where
-    S: Scalar + Default
+    S: SimdScalar + Default
 {
     fn default() -> Self {
         Self::zero()
@@ -2629,7 +2629,7 @@ where
 
 impl<S> From<Quaternion<S>> for Matrix3x3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix3x3<S> {
@@ -2639,7 +2639,7 @@ where
 
 impl<S> From<&Quaternion<S>> for Matrix3x3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix3x3<S> {
@@ -2649,7 +2649,7 @@ where
 
 impl<S> From<Quaternion<S>> for Matrix4x4<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix4x4<S> {
@@ -2659,7 +2659,7 @@ where
 
 impl<S> From<&Quaternion<S>> for Matrix4x4<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix4x4<S> {
@@ -2669,7 +2669,7 @@ where
 
 impl<S> From<Matrix3x3<S>> for Quaternion<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(matrix: Matrix3x3<S>) -> Quaternion<S> {
@@ -2679,7 +2679,7 @@ where
 
 impl<S> From<&Matrix3x3<S>> for Quaternion<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn from(matrix: &Matrix3x3<S>) -> Quaternion<S> {
@@ -2702,7 +2702,7 @@ where
 
 impl<S> ops::Neg for Quaternion<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     type Output = Quaternion<S>;
 
@@ -2714,7 +2714,7 @@ where
 
 impl<S> ops::Neg for &Quaternion<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     type Output = Quaternion<S>;
 
@@ -2726,7 +2726,7 @@ where
 
 impl<S> ops::Add<Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2740,7 +2740,7 @@ where
 
 impl<S> ops::Add<Quaternion<S>> for &Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2754,7 +2754,7 @@ where
 
 impl<S> ops::Add<&Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2768,7 +2768,7 @@ where
 
 impl<'a, 'b, S> ops::Add<&'b Quaternion<S>> for &'a Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2782,7 +2782,7 @@ where
 
 impl<S> ops::Sub<Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2796,7 +2796,7 @@ where
 
 impl<S> ops::Sub<Quaternion<S>> for &Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2810,7 +2810,7 @@ where
 
 impl<S> ops::Sub<&Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2824,7 +2824,7 @@ where
 
 impl<'a, 'b, S> ops::Sub<&'b Quaternion<S>> for &'a Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2838,7 +2838,7 @@ where
 
 impl<S> ops::Mul<S> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2851,7 +2851,7 @@ where
 
 impl<S> ops::Mul<S> for &Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2864,7 +2864,7 @@ where
 
 impl<S> ops::Mul<&S> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2877,7 +2877,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'b S> for &'a Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2890,7 +2890,7 @@ where
 
 impl<S> ops::Mul<Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2906,7 +2906,7 @@ where
 
 impl<S> ops::Mul<&Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2922,7 +2922,7 @@ where
 
 impl<S> ops::Mul<Quaternion<S>> for &Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2938,7 +2938,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'b Quaternion<S>> for &'a Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -2997,7 +2997,7 @@ impl_scalar_quaternion_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i6
 
 impl<S> ops::Div<S> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -3010,7 +3010,7 @@ where
 
 impl<S> ops::Div<S> for &Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -3023,7 +3023,7 @@ where
 
 impl<S> ops::Div<&S> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -3036,7 +3036,7 @@ where
 
 impl<'a, 'b, S> ops::Div<&'b S> for &'a Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -3049,7 +3049,7 @@ where
 
 impl<S> ops::Rem<S> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -3062,7 +3062,7 @@ where
 
 impl<S> ops::Rem<S> for &Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -3075,7 +3075,7 @@ where
 
 impl<S> ops::Rem<&S> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -3088,7 +3088,7 @@ where
 
 impl<'a, 'b, S> ops::Rem<&'b S> for &'a Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     type Output = Quaternion<S>;
 
@@ -3101,7 +3101,7 @@ where
 
 impl<S> ops::AddAssign<Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn add_assign(&mut self, other: Quaternion<S>) {
@@ -3111,7 +3111,7 @@ where
 
 impl<S> ops::AddAssign<&Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn add_assign(&mut self, other: &Quaternion<S>) {
@@ -3121,7 +3121,7 @@ where
 
 impl<S> ops::SubAssign<Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn sub_assign(&mut self, other: Quaternion<S>) {
@@ -3131,7 +3131,7 @@ where
 
 impl<S> ops::SubAssign<&Quaternion<S>> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn sub_assign(&mut self, other: &Quaternion<S>) {
@@ -3141,7 +3141,7 @@ where
 
 impl<S> ops::MulAssign<S> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -3151,7 +3151,7 @@ where
 
 impl<S> ops::DivAssign<S> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
@@ -3161,7 +3161,7 @@ where
 
 impl<S> ops::RemAssign<S> for Quaternion<S> 
 where 
-    S: Scalar 
+    S: SimdScalar 
 {
     #[inline]
     fn rem_assign(&mut self, other: S) {
@@ -3171,7 +3171,7 @@ where
 
 impl<S> Magnitude for Quaternion<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = S;
 
@@ -3218,7 +3218,7 @@ where
 
 impl<S> approx::AbsDiffEq for Quaternion<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -3236,7 +3236,7 @@ where
 
 impl<S> approx::RelativeEq for Quaternion<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -3252,7 +3252,7 @@ where
 
 impl<S> approx::UlpsEq for Quaternion<S> 
 where 
-    S: ScalarFloat
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_ulps() -> u32 {

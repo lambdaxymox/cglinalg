@@ -1,6 +1,6 @@
 use crate::common::{
-    ScalarSigned,
-    ScalarFloat,
+    SimdScalarSigned,
+    SimdScalarFloat,
 };
 use crate::matrix::{
     Matrix2x2,
@@ -34,7 +34,7 @@ pub struct Shear2<S> {
 
 impl<S> Shear2<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     /// Construct a shearing transformation along the **x-axis**, holding the 
     /// **y-axis** constant.
@@ -225,7 +225,7 @@ where
 
 impl<S> Shear2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Compute the inverse of the shear transformation.
     ///
@@ -336,7 +336,7 @@ where
 
 impl<S> From<Shear2<S>> for Matrix2x2<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(shear: Shear2<S>) -> Matrix2x2<S> {
@@ -346,7 +346,7 @@ where
 
 impl<S> From<&Shear2<S>> for Matrix2x2<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(shear: &Shear2<S>) -> Matrix2x2<S> {
@@ -356,7 +356,7 @@ where
 
 impl<S> From<Shear2<S>> for Matrix3x3<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(shear: Shear2<S>) -> Matrix3x3<S> {
@@ -366,7 +366,7 @@ where
 
 impl<S> From<&Shear2<S>> for Matrix3x3<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(shear: &Shear2<S>) -> Matrix3x3<S> {
@@ -376,7 +376,7 @@ where
 
 impl<S> approx::AbsDiffEq for Shear2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -393,7 +393,7 @@ where
 
 impl<S> approx::RelativeEq for Shear2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -408,7 +408,7 @@ where
 
 impl<S> approx::UlpsEq for Shear2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -423,7 +423,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for Shear2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -435,7 +435,7 @@ where
 
 impl<S> ops::Mul<&Point2<S>> for Shear2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -447,7 +447,7 @@ where
 
 impl<S> ops::Mul<Point2<S>> for &Shear2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -459,7 +459,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point2<S>> for &'b Shear2<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point2<S>;
 
@@ -480,7 +480,7 @@ pub struct Shear3<S> {
 
 impl<S> Shear3<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     /// Construct a shearing transformation along the **x-axis**.
     ///
@@ -760,7 +760,7 @@ where
 
 impl<S> Shear3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     /// Calculate the inverse of a shear transformation.
     ///
@@ -885,7 +885,7 @@ where
 
 impl<S> From<Shear3<S>> for Matrix3x3<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     fn from(shear: Shear3<S>) -> Matrix3x3<S> {
         shear.matrix
@@ -894,7 +894,7 @@ where
 
 impl<S> From<&Shear3<S>> for Matrix3x3<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(shear: &Shear3<S>) -> Matrix3x3<S> {
@@ -904,7 +904,7 @@ where
 
 impl<S> From<Shear3<S>> for Matrix4x4<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(shear: Shear3<S>) -> Matrix4x4<S> {
@@ -914,7 +914,7 @@ where
 
 impl<S> From<&Shear3<S>> for Matrix4x4<S> 
 where 
-    S: ScalarSigned 
+    S: SimdScalarSigned 
 {
     #[inline]
     fn from(shear: &Shear3<S>) -> Matrix4x4<S> {
@@ -924,7 +924,7 @@ where
 
 impl<S> approx::AbsDiffEq for Shear3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -941,7 +941,7 @@ where
 
 impl<S> approx::RelativeEq for Shear3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_relative() -> S::Epsilon {
@@ -956,7 +956,7 @@ where
 
 impl<S> approx::UlpsEq for Shear3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -971,7 +971,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Shear3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -983,7 +983,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Shear3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -995,7 +995,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Shear3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 
@@ -1007,7 +1007,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Shear3<S> 
 where 
-    S: ScalarFloat 
+    S: SimdScalarFloat 
 {
     type Output = Point3<S>;
 

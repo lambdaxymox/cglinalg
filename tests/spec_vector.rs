@@ -8,7 +8,7 @@ use cglinalg::{
     Vector2, 
     Vector3, 
     Vector4, 
-    Scalar,
+    SimdScalar,
 };
 
 use proptest::prelude::*;
@@ -16,7 +16,7 @@ use proptest::prelude::*;
 
 fn any_scalar<S>() -> impl Strategy<Value = S>
 where 
-    S: Scalar + Arbitrary
+    S: SimdScalar + Arbitrary
 {
     any::<S>().prop_map(|scalar| {
         let modulus = num_traits::cast(100_000_000).unwrap();
@@ -27,7 +27,7 @@ where
 
 fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
 where 
-    S: Scalar + Arbitrary 
+    S: SimdScalar + Arbitrary 
 {
     any::<S>().prop_map(|x| {
         let modulus = num_traits::cast(100_000_000).unwrap();
@@ -39,7 +39,7 @@ where
 
 fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>> 
 where 
-    S: Scalar + Arbitrary
+    S: SimdScalar + Arbitrary
 {
     any::<(S, S)>().prop_map(|(x, y)| {
         let modulus = num_traits::cast(100_000_000).unwrap();
@@ -51,7 +51,7 @@ where
 
 fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
 where 
-    S: Scalar + Arbitrary
+    S: SimdScalar + Arbitrary
 {
     any::<(S, S, S)>().prop_map(|(x, y, z)| {
         let modulus = num_traits::cast(100_000_000).unwrap();
@@ -63,7 +63,7 @@ where
 
 fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
 where 
-    S: Scalar + Arbitrary
+    S: SimdScalar + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
         let modulus = num_traits::cast(100_000_000).unwrap();
