@@ -1,4 +1,4 @@
-use crate::common::scalar::{
+use crate::common::simd::{
     SimdScalarFloat,
 };
 use crate::common::magnitude::{
