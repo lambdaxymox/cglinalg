@@ -434,6 +434,72 @@ where
 
         self - unit_normal * (two * self.dot(&unit_normal))
     }
+
+    /// Compute the component-wise minimum of two vectors.
+    /// 
+    /// Given two vectors `v1` and `v2`, the minimum of `v1` and `v2` is a vector `v3`
+    /// such that
+    /// ```text
+    /// for all i in 0..N. v3[i] = min(v1[i], v2[i])
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let v1 = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let v2 = Vector3::new(-1_f64, 5_f64, 0_f64);
+    /// let expected = Vector3::new(-1_f64, 2_f64, 0_f64);
+    /// let result = v1.component_min(&v2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn component_min(&self, other: &Self) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Self::zero();
+        for i in 0..N {
+            result[i] = S::min(self.data[i], other.data[i]);
+        }
+
+        result
+    }
+
+    /// Compute the component-wise maximum of two vectors.
+    /// 
+    /// Given two vectors `v1` and `v2`, the minimum of `v1` and `v2` is a vector `v3`
+    /// such that
+    /// ```text
+    /// for all i in 0..N. v3[i] = max(v1[i], v2[i])
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let v1 = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let v2 = Vector3::new(-1_f64, 5_f64, 0_f64);
+    /// let expected = Vector3::new(1_f64, 5_f64, 3_f64);
+    /// let result = v1.component_max(&v2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn component_max(&self, other: &Self) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Self::zero();
+        for i in 0..N {
+            result[i] = S::max(self.data[i], other.data[i]);
+        }
+
+        result
+    }
 }
 
 impl<S, const N: usize> AsRef<[S; N]> for Vector<S, N> {
