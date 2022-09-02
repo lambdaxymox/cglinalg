@@ -29,7 +29,7 @@ The library is designed with the following goals in mind:
 ## Getting Started
 To use the library in your project, add **cglinalg** as a dependency in your 
 `Cargo.toml` file:
-```
+```toml
 [dependencies]
 cglinalg = "0.16.1"
 ```
