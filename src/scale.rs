@@ -232,6 +232,13 @@ where
     pub fn to_transform(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
     }
+
+    /// Convert a scaling transformation into a vector with the scaling factors
+    /// in each component.
+    #[inline]
+    pub const fn to_vector(&self) -> Vector2<S> {
+        Vector2::new(self.x, self.y)
+    }
 }
 
 impl<S> fmt::Display for Scale2<S> 
@@ -551,6 +558,13 @@ where
     #[inline]
     pub fn to_transform(&self) -> Transform3<S> {
         Transform3::from_specialized(self)
+    }
+
+    /// Convert a scaling transformation into a vector with the scaling factors
+    /// in each component.
+    #[inline]
+    pub const fn to_vector(&self) -> Vector3<S> {
+        Vector3::new(self.x, self.y, self.z)
     }
 }
 

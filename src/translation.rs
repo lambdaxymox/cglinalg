@@ -298,6 +298,29 @@ where
     pub fn to_transform(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
     }
+
+    /// Convert a translation into its equivalent shift vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point2,
+    /// #     Translation2,
+    /// # };
+    /// #
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let shift = translation.to_vector();
+    /// let point = Point2::origin();
+    /// let expected = translation.translate_point(&point);
+    /// let result = point + shift;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub const fn to_vector(&self) -> Vector2<S> {
+        self.vector
+    }
 }
 
 impl<S> AsRef<Vector2<S>> for Translation2<S> {
@@ -759,6 +782,29 @@ where
     #[inline]
     pub fn to_transform(&self) -> Transform3<S> {
         Transform3::from_specialized(self)
+    }
+
+    /// Convert a translation into its equivalent shift vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Point3,
+    /// #     Translation3,
+    /// # };
+    /// #
+    /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
+    /// let shift = translation.to_vector();
+    /// let point = Point3::origin();
+    /// let expected = translation.translate_point(&point);
+    /// let result = point + shift;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub const fn to_vector(&self) -> Vector3<S> {
+        self.vector
     }
 }
 
