@@ -1133,7 +1133,7 @@ where
             rotation_matrix.c0r0, rotation_matrix.c0r1, rotation_matrix.c0r2, zero,
             rotation_matrix.c1r0, rotation_matrix.c1r1, rotation_matrix.c1r2, zero,
             rotation_matrix.c2r0, rotation_matrix.c2r1, rotation_matrix.c2r2, zero,
-            translation[0], translation[1], translation[2],  one
+            translation[0],       translation[1],       translation[2],       one
         )
     }
     
