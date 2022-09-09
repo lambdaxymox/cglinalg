@@ -129,7 +129,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Self {
+    pub const fn from_fill(value: S) -> Self {
         Self {
             coords: Vector::from_fill(value),
         }
@@ -212,7 +212,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_vector(vector: &Vector<S, N>) -> Self {
+    pub const fn from_vector(vector: &Vector<S, N>) -> Self {
         Self {
             coords: *vector,
         }
@@ -238,7 +238,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_vector(&self) -> Vector<S, N> {
+    pub const fn to_vector(&self) -> Vector<S, N> {
         self.coords
     }
 

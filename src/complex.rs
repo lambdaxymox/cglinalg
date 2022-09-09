@@ -126,7 +126,7 @@ where
     /// assert_eq!(z.real(), 1_i32);
     /// ```
     #[inline]
-    pub fn real(self) -> S {
+    pub const fn real(self) -> S {
         self.re
     }
 
@@ -144,7 +144,7 @@ where
     /// assert_eq!(z.imaginary(), 2_i32);
     /// ```
     #[inline]
-    pub fn imaginary(self) -> S {
+    pub const fn imaginary(self) -> S {
         self.im
     }
 

@@ -87,37 +87,37 @@ where
 
     /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn near_z(&self) -> S {
+    pub const fn near_z(&self) -> S {
         self.near
     }
 
     /// Get the far plane along the **negative z-axis**.
     #[inline]
-    pub fn far_z(&self) -> S {
+    pub const fn far_z(&self) -> S {
         self.far
     }
 
     /// Get the left plane along the **negative x-axis**.
     #[inline]
-    pub fn left_x(&self)-> S {
-        self.near
+    pub const fn left_x(&self)-> S {
+        self.left
     }
 
     /// Get the right plane along the **positive x-axis**.
     #[inline]
-    pub fn right_x(&self) -> S {
-        self.far
+    pub const fn right_x(&self) -> S {
+        self.right
     }
 
     /// Get the bottom plane along the **negative y-axis**.
     #[inline]
-    pub fn bottom_y(&self) -> S {
+    pub const fn bottom_y(&self) -> S {
         self.bottom
     }
 
     /// Get the top plane along the **positive y-axis**.
     #[inline]
-    pub fn top_y(&self) -> S {
+    pub const fn top_y(&self) -> S {
         self.top
     }
 
@@ -152,7 +152,7 @@ where
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// 
     #[inline]
-    pub fn matrix(&self) -> &Matrix4x4<S> {
+    pub const fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
@@ -551,19 +551,19 @@ where
 
     /// Get the vertical field of view angle.
     #[inline]
-    pub fn vfov(&self) -> Radians<S> {
+    pub const fn vfov(&self) -> Radians<S> {
         self.vfov
     }
 
     /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn near_z(&self) -> S {
+    pub const fn near_z(&self) -> S {
         self.near
     }
 
     /// Get the far plane along the **negative z-axis**.
     #[inline]
-    pub fn far_z(&self) -> S {
+    pub const fn far_z(&self) -> S {
         self.far
     }
 
@@ -571,7 +571,7 @@ where
     /// width of the viewing plane of the viewing frustum to the height of the 
     /// viewing plane of the viewing frustum.
     #[inline]
-    pub fn aspect(&self) -> S {
+    pub const fn aspect(&self) -> S {
         self.aspect
     }
 
@@ -608,7 +608,7 @@ where
     /// assert_eq!(result, &expected);
     /// ```
     #[inline]
-    pub fn matrix(&self) -> &Matrix4x4<S> {
+    pub const fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
@@ -1043,37 +1043,37 @@ where
 
     /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn near_z(&self) -> S {
+    pub const fn near_z(&self) -> S {
         self.near
     }
 
     /// Get the far plane along the **negative z-axis**.
     #[inline]
-    pub fn far_z(&self) -> S {
+    pub const fn far_z(&self) -> S {
         self.far
     }
 
     /// Get the left plane along the **negative x-axis**.
     #[inline]
-    pub fn left_x(&self)-> S {
-        self.near
+    pub const fn left_x(&self)-> S {
+        self.left
     }
 
     /// Get the right plane along the **positive x-axis**.
     #[inline]
-    pub fn right_x(&self) -> S {
-        self.far
+    pub const fn right_x(&self) -> S {
+        self.right
     }
 
     /// Get the bottom plane along the **negative y-axis**.
     #[inline]
-    pub fn bottom_y(&self) -> S {
+    pub const fn bottom_y(&self) -> S {
         self.bottom
     }
 
     /// Get the top plane along the **positive y-axis**.
     #[inline]
-    pub fn top_y(&self) -> S {
+    pub const fn top_y(&self) -> S {
         self.top
     }
 
@@ -1105,7 +1105,7 @@ where
     /// assert_eq!(result, &expected);
     /// ```
     #[inline]
-    pub fn matrix(&self) -> &Matrix4x4<S> {
+    pub const fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 
@@ -1440,25 +1440,25 @@ where
 
     /// Get the vertical field of view angle.
     #[inline]
-    pub fn vfov(&self) -> Radians<S> {
+    pub const fn vfov(&self) -> Radians<S> {
         self.vfov
     }
 
     /// Get the near plane along the **negative z-axis**.
     #[inline]
-    pub fn near_z(&self) -> S {
+    pub const fn near_z(&self) -> S {
         self.near
     }
 
     /// Get the far plane along the **negative z-axis**.
     #[inline]
-    pub fn far_z(&self) -> S {
+    pub const fn far_z(&self) -> S {
         self.far
     }
 
     /// Get the aspect ratio.
     #[inline]
-    pub fn aspect(&self) -> S {
+    pub const fn aspect(&self) -> S {
         self.aspect
     }
 
@@ -1492,7 +1492,7 @@ where
     /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn matrix(&self) -> &Matrix4x4<S> {
+    pub const fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 

@@ -66,10 +66,10 @@ impl<S> Quaternion<S> {
 
     /// Tests whether the number of elements in the quaternion is zero.
     /// 
-    /// This functions always returns `true`, since a quaternion has four scalar 
+    /// This functions always returns `false`, since a quaternion has four scalar 
     /// elements.
     pub const fn is_empty(&self) -> bool {
-        true
+        false
     }
 
     /// The shape of the underlying array storing the quaternion components.
@@ -154,7 +154,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Self {
+    pub const fn from_fill(value: S) -> Self {
         Self::new(value, value, value, value)
     }
 

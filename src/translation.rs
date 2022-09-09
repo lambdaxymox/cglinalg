@@ -58,7 +58,7 @@ where
 {
     /// Construct a translation from the components of the translation.
     #[inline]
-    pub fn new(x: S, y: S) -> Self {
+    pub const fn new(x: S, y: S) -> Self {
         Self {
             vector: Vector2::new(x, y)
         }
@@ -66,7 +66,7 @@ where
 
     /// Construct a translation operator from a vector of displacements.
     #[inline]
-    pub fn from_vector(vector: &Vector2<S>) -> Self {
+    pub const fn from_vector(vector: &Vector2<S>) -> Self {
         Self {
             vector: *vector,
         }
@@ -524,14 +524,14 @@ where
 {
     /// Construct a translation from the components of the translation.
     #[inline]
-    pub fn new(x: S, y: S, z: S) -> Self {
+    pub const fn new(x: S, y: S, z: S) -> Self {
         Self {
             vector: Vector3::new(x, y, z)
         }
     }
 
     /// Construct a translation operator from a vector of displacements.
-    pub fn from_vector(vector: &Vector3<S>) -> Self {
+    pub const fn from_vector(vector: &Vector3<S>) -> Self {
         Self {
             vector: *vector,
         }

@@ -38,7 +38,7 @@ impl<T> Unit<T> {
     /// Wraps an object into a unit type, assuming that it is normalized without
     /// checking.
     #[inline]
-    pub(crate) fn from_value_unchecked(value: T) -> Self {
+    pub(crate) const fn from_value_unchecked(value: T) -> Self {
         Self { value }
     }
 }

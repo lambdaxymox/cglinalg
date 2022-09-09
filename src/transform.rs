@@ -45,14 +45,14 @@ where
     /// Construct a new transformation from a given homogeneous matrix. The input
     /// matrix is not checked that it is a valid homogeneous matrix.
     #[inline]
-    pub fn from_matrix_unchecked(matrix: Matrix3x3<S>) -> Self {
+    pub const fn from_matrix_unchecked(matrix: Matrix3x3<S>) -> Self {
         Self { matrix }
     }
 
     /// Get a reference to the underlying matrix that represents the 
     /// transformation.
     #[inline]
-    pub fn matrix(&self) -> &Matrix3x3<S> {
+    pub const fn matrix(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 
@@ -452,14 +452,14 @@ where
     /// Construct a new transformation from a given homogeneous matrix. The input
     /// matrix is not checked that it is a valid homogeneous matrix.
     #[inline]
-    pub fn from_matrix_unchecked(matrix: Matrix4x4<S>) -> Self {
+    pub const fn from_matrix_unchecked(matrix: Matrix4x4<S>) -> Self {
         Self { matrix }
     }
 
     /// Get a reference to the underlying matrix that represents the 
     /// transformation.
     #[inline]
-    pub fn matrix(&self) -> &Matrix4x4<S> {
+    pub const fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
     }
 

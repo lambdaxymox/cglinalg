@@ -55,7 +55,7 @@ where
     /// The `bias` is the coordinates of a known point in the plane of 
     /// reflection.
     #[inline]
-    pub fn bias(&self) -> Vector2<S> {
+    pub const fn bias(&self) -> Vector2<S> {
         self.bias
     }
 
@@ -65,13 +65,13 @@ where
     /// two dimensions. One can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection transformation.
     #[inline]
-    pub fn normal(&self) -> Vector2<S> {
+    pub const fn normal(&self) -> Vector2<S> {
         self.normal
     }
 
     /// The underlying matrix of the reflection transformation.
     #[inline]
-    pub fn matrix(&self) -> &Matrix3x3<S> {
+    pub const fn matrix(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 
@@ -352,13 +352,13 @@ where
     /// The `bias` is the coordinates of a known point in the plane of 
     /// reflection.
     #[inline]
-    pub fn bias(&self) -> Vector3<S> {
+    pub const fn bias(&self) -> Vector3<S> {
         self.bias
     }
 
     /// Return the normal vector to the reflection plane.
     #[inline]
-    pub fn normal(&self) -> Vector3<S> {
+    pub const fn normal(&self) -> Vector3<S> {
         self.normal
     }
 

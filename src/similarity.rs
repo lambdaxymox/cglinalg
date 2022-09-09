@@ -57,7 +57,7 @@ where
     /// Construct a similarity transformation directly from the scale, rotation,
     /// and translation parts.
     #[inline]
-    pub fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>, scale: S) -> Self {
+    pub const fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>, scale: S) -> Self {
         let isometry = Isometry2::from_parts(translation, rotation);
         
         Self { isometry, scale }
@@ -263,19 +263,19 @@ where
     
     /// Get the uniform scale factor of the similarity transformation.
     #[inline]
-    pub fn scale(&self) -> S {
+    pub const fn scale(&self) -> S {
         self.scale
     }
 
     /// Get the rotation part of the similarity transformation.
     #[inline]
-    pub fn rotation(&self) -> &Rotation2<S> {
+    pub const fn rotation(&self) -> &Rotation2<S> {
         self.isometry.rotation()
     }
 
     /// Get the translation part of the similarity transformation.
     #[inline]
-    pub fn translation(&self) -> &Translation2<S> {
+    pub const fn translation(&self) -> &Translation2<S> {
         self.isometry.translation()
     }
 
@@ -797,7 +797,7 @@ where
     /// Construct a similarity transformation directly from the scale, rotation,
     /// and translation parts.
     #[inline]
-    pub fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>, scale: S) -> Self {
+    pub const fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>, scale: S) -> Self {
         let isometry = Isometry3::from_parts(translation, rotation);
         
         Self { isometry, scale }
@@ -1146,19 +1146,19 @@ where
     
     /// Get the uniform scale factor of the similarity transformation.
     #[inline]
-    pub fn scale(&self) -> S {
+    pub const fn scale(&self) -> S {
         self.scale
     }
 
     /// Get the rotation part of the similarity transformation.
     #[inline]
-    pub fn rotation(&self) -> &Rotation3<S> {
+    pub const fn rotation(&self) -> &Rotation3<S> {
         self.isometry.rotation()
     }
 
     /// Get the translation part of the similarity transformation.
     #[inline]
-    pub fn translation(&self) -> &Translation3<S> {
+    pub const fn translation(&self) -> &Translation3<S> {
         self.isometry.translation()
     }
 

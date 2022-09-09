@@ -344,7 +344,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_fill(value: S) -> Self {
+    pub const fn from_fill(value: S) -> Self {
         Self {
             data: [[value; R]; C],
         }
@@ -1162,6 +1162,7 @@ where
 
 impl<S> Matrix1x1<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S) -> Self {
         Self {
@@ -1282,6 +1283,7 @@ where
 
 impl<S> Matrix2x2<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Self {
         Self {
@@ -4415,6 +4417,7 @@ where
 
 impl<S> Matrix1x2<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S, c1r0: S) -> Self {
         Self {
@@ -4428,6 +4431,7 @@ impl<S> Matrix1x2<S> {
 
 impl<S> Matrix1x3<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S, c1r0: S, c2r0: S) -> Self {
         Self {
@@ -4442,6 +4446,7 @@ impl<S> Matrix1x3<S> {
 
 impl<S> Matrix1x4<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S, c1r0: S, c2r0: S, c3r0: S) -> Self {
         Self {
@@ -4457,6 +4462,7 @@ impl<S> Matrix1x4<S> {
 
 impl<S> Matrix2x3<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(
         c0r0: S, c0r1: S, c1r0: S, c1r1: S, c2r0: S, c2r1: S) -> Self 
@@ -4500,6 +4506,7 @@ where
 
 impl<S> Matrix3x2<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S, c1r0: S, c1r1: S, c1r2: S) -> Self
@@ -4540,6 +4547,7 @@ where
 
 impl<S> Matrix2x4<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(
         c0r0: S, c0r1: S, 
@@ -4590,6 +4598,7 @@ where
 
 impl<S> Matrix4x2<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S, c0r3: S, 
@@ -4633,6 +4642,7 @@ where
 
 impl<S> Matrix3x4<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S, 
@@ -4685,6 +4695,7 @@ where
 
 impl<S> Matrix4x3<S> {
     /// Construct a new matrix from its elements.
+    #[rustfmt::skip]
     #[inline]
     pub const fn new(
         c0r0: S, c0r1: S, c0r2: S, c0r3: S, 

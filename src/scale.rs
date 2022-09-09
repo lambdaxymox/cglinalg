@@ -50,7 +50,7 @@ where
     /// Construct a two-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
     #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Self {
+    pub const fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Self {
         Self {
             x: scale_x,
             y: scale_y,
@@ -60,7 +60,7 @@ where
     /// Construct a two-dimensional scale transformation from a uniform scale 
     /// factor.
     #[inline]
-    pub fn from_scale(scale: S) -> Self {
+    pub const fn from_scale(scale: S) -> Self {
         Self {
             x: scale,
             y: scale,
@@ -455,7 +455,7 @@ where
     /// Construct a three-dimensional scale transformation from a nonuniform scale 
     /// across coordinates.
     #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Self {
+    pub const fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Self {
         Self {
             x: scale_x,
             y: scale_y,
@@ -466,7 +466,7 @@ where
     /// Construct a three-dimensional scale transformation from a uniform scale 
     /// factor.
     #[inline]
-    pub fn from_scale(scale: S) -> Self {
+    pub const fn from_scale(scale: S) -> Self {
         Self {
             x: scale,
             y: scale,

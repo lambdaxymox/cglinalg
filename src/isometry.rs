@@ -57,7 +57,7 @@ where
 {
     /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
-    pub fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>) -> Self {
+    pub const fn from_parts(translation: &Translation2<S>, rotation: &Rotation2<S>) -> Self {
         Self {
             rotation: *rotation,
             translation: *translation,
@@ -252,13 +252,13 @@ where
     
     /// Get the rotation part of the isometry.
     #[inline]
-    pub fn rotation(&self) -> &Rotation2<S> {
+    pub const fn rotation(&self) -> &Rotation2<S> {
         &self.rotation
     }
 
     /// Get the translation part of the isometry.
     #[inline]
-    pub fn translation(&self) -> &Translation2<S> {
+    pub const fn translation(&self) -> &Translation2<S> {
         &self.translation
     }
 
@@ -717,7 +717,7 @@ where
 {
     /// Construct a new isometry directly from a translation and a rotation.
     #[inline]
-    pub fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>) -> Self {
+    pub const fn from_parts(translation: &Translation3<S>, rotation: &Rotation3<S>) -> Self {
         Self {
             rotation: *rotation,
             translation: *translation,
@@ -1137,13 +1137,13 @@ where
     
     /// Get the rotation component of the isometry.
     #[inline]
-    pub fn rotation(&self) -> &Rotation3<S> {
+    pub const fn rotation(&self) -> &Rotation3<S> {
         &self.rotation
     }
 
     /// Get the translation part of the isometry.
     #[inline]
-    pub fn translation(&self) -> &Translation3<S> {
+    pub const fn translation(&self) -> &Translation3<S> {
         &self.translation
     }
 
