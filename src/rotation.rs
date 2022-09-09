@@ -46,7 +46,6 @@ use core::ops;
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Rotation2<S> {
-    /// The underlying rotation matrix.
     matrix: Matrix2x2<S>,
 }
 
@@ -57,7 +56,7 @@ where
     /// Get a reference to the underlying matrix that represents the 
     /// rotation.
     #[inline]
-    pub fn matrix(&self) -> &Matrix2x2<S> {
+    pub const fn matrix(&self) -> &Matrix2x2<S> {
         &self.matrix
     }
 
@@ -401,6 +400,20 @@ where
     pub fn to_transform(&self) -> Transform2<S> {
         Transform2::from_specialized(self.matrix)
     }
+
+    /// Convert a rotation into a generic affine matrix.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
+        let zero = S::zero();
+        let one = S::one();
+
+        Matrix3x3::new(
+            self.matrix.c0r0, self.matrix.c0r1, zero,
+            self.matrix.c1r0, self.matrix.c1r1, zero,
+            zero,            zero,            one
+        )
+    }
 }
 
 
@@ -594,7 +607,6 @@ where
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Rotation3<S> {
-    /// The underlying matrix representing the rotation.
     matrix: Matrix3x3<S>,
 }
 
@@ -605,7 +617,7 @@ where
     /// Get a reference to the underlying matrix that represents the 
     /// rotation.
     #[inline]
-    pub fn matrix(&self) -> &Matrix3x3<S> {
+    pub const fn matrix(&self) -> &Matrix3x3<S> {
         &self.matrix
     }
 
@@ -1241,6 +1253,21 @@ where
     #[inline]
     pub fn to_transform(&self) -> Transform3<S> {
         Transform3::from_specialized(self.matrix)
+    }
+
+    /// Convert a rotation into a generic affine matrix.
+    #[rustfmt::skip]
+    #[inline]
+    pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
+        let zero = S::zero();
+        let one = S::one();
+
+        Matrix4x4::new(
+            self.matrix.c0r0, self.matrix.c0r1, self.matrix.c0r2, zero,
+            self.matrix.c1r0, self.matrix.c1r1, self.matrix.c1r2, zero,
+            self.matrix.c2r0, self.matrix.c2r1, self.matrix.c2r2, zero,
+            zero,            zero,            zero,           one
+        )
     }
 }
 
