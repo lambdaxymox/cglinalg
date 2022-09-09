@@ -236,6 +236,7 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
         let zero = S::zero();
@@ -246,7 +247,7 @@ where
         Matrix3x3::new(
             rotation_matrix.c0r0, rotation_matrix.c0r1, zero,
             rotation_matrix.c1r0, rotation_matrix.c1r1, zero,
-            translation[0], translation[1], one
+            translation[0],       translation[1],  one
         )
     }
     
@@ -1120,6 +1121,7 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
         let zero = S::zero();
