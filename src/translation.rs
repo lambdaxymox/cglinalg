@@ -27,11 +27,28 @@ use core::ops;
 ///
 /// A translation is an operation that creates displacement motions. 
 /// In a Euclidean setting, translations preserve differences between two points 
-/// and acts as the identity on vectors.
+/// and acts as the identity on vectors. That is, a translation `T` that acts as
+/// follows.
+/// Let `p` be a **point** in Euclidean space. Then
+/// ```text
+/// T(p) := p + t
+/// ```
+/// where `t` is the vector corresponding to the translation `T` displacing the 
+/// point `p` by an amount `t`. Let `v` be a **vector** in Euclidean space. Then
+/// ```text
+/// T(v) == v
+/// ```
+/// Because `v` is a vector and not a point, `v` describes the **difference** 
+/// between two points, rather than an arbitary position in Euclidean space. Indeed, 
+/// let `p` and `q` be Euclidean points, and `v := p - q` be the difference between 
+/// them. Then in homogeneous coordinates
+/// ```text
+/// T(v) := T(p - q) = T(p) - T(q) = (p + t) - (q + t) = (p - q) + (t - t) = p - q = v
+/// ```
+/// as desired.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation2<S> {
-    /// The vector along which a vector or point is displaced.
     pub(crate) vector: Vector2<S>,
 }
 
@@ -476,7 +493,25 @@ where
 ///
 /// A translation is an operation that creates displacement motions. 
 /// In a Euclidean setting, translations preserve differences between two points 
-/// and acts as the identity on vectors.
+/// and acts as the identity on vectors. That is, a translation `T` that acts as
+/// follows.
+/// Let `p` be a **point** in Euclidean space. Then
+/// ```text
+/// T(p) := p + t
+/// ```
+/// where `t` is the vector corresponding to the translation `T` displacing the 
+/// point `p` by an amount `t`. Let `v` be a **vector** in Euclidean space. Then
+/// ```text
+/// T(v) == v
+/// ```
+/// Because `v` is a vector and not a point, `v` describes the **difference** 
+/// between two points, rather than an arbitary position in Euclidean space. Indeed, 
+/// let `p` and `q` be Euclidean points, and `v := p - q` be the difference between 
+/// them. Then in homogeneous coordinates
+/// ```text
+/// T(v) := T(p - q) = T(p) - T(q) = (p + t) - (q + t) = (p - q) + (t - t) = p - q = v
+/// ```
+/// as desired.
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation3<S> {
