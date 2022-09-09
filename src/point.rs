@@ -49,7 +49,7 @@ impl<S, const N: usize> Point<S, N> {
 
     /// Tests whether the number of elements in the point is zero.
     /// 
-    /// Returns `false` when the point is zero-dimensional. Returns `true` 
+    /// Returns `true` when the point is zero-dimensional. Returns `false` 
     /// otherwise.
     pub const fn is_empty(&self) -> bool {
         self.len() == 0

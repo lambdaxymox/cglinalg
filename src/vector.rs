@@ -47,7 +47,7 @@ impl<S, const N: usize> Vector<S, N> {
 
     /// Tests whether the number of elements in the vector is zero.
     /// 
-    /// Returns `false` when the vector is zero-dimensional. Returns `true` 
+    /// Returns `true` when the vector is zero-dimensional. Returns `false` 
     /// otherwise.
     pub const fn is_empty(&self) -> bool {
         self.len() == 0

@@ -50,9 +50,9 @@ impl<S> Complex<S> {
 
     /// Tests whether the number of elements in the compolex number is zero.
     /// 
-    /// Always returns `true`
+    /// Always returns `false` since a complex number has two components.
     pub const fn is_empty(&self) -> bool {
-        true
+        false
     }
 
     /// Get a pointer to the underlying array.

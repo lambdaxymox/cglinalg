@@ -127,11 +127,12 @@ impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> {
         R * C
     }
 
-    /// Tests whether the number of elements in the quaternion is zero.
+    /// Tests whether the number of elements in the matrix is zero.
     /// 
-    /// Always returns `true`
+    /// Returns `true` when the matrix is zero-dimensional, i.e. the number of rows is zero, or the
+    /// number of columns is zero. It returns `false` otherwise.
     pub const fn is_empty(&self) -> bool {
-        true
+        self.len() == 0
     }
 
     /// The shape of the underlying array storing the matrix components.
