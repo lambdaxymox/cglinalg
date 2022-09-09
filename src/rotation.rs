@@ -411,7 +411,7 @@ where
         Matrix3x3::new(
             self.matrix.c0r0, self.matrix.c0r1, zero,
             self.matrix.c1r0, self.matrix.c1r1, zero,
-            zero,            zero,            one
+            zero,             zero,             one
         )
     }
 }
@@ -1266,7 +1266,7 @@ where
             self.matrix.c0r0, self.matrix.c0r1, self.matrix.c0r2, zero,
             self.matrix.c1r0, self.matrix.c1r1, self.matrix.c1r2, zero,
             self.matrix.c2r0, self.matrix.c2r1, self.matrix.c2r2, zero,
-            zero,            zero,            zero,           one
+            zero,             zero,             zero,            one
         )
     }
 }
