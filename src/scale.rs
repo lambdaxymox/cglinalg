@@ -34,7 +34,7 @@ use core::ops;
 /// Sv == [sx * vx, sy * vy]^T
 /// ```
 /// where `[.]^T` denotes the transpose of a row vector, i.e. a column vector.
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Scale2<S> {
     vector: Vector2<S>,
@@ -445,7 +445,7 @@ where
 /// Sv == [sx * vx, sy * vy, sz * vz]^T
 /// ```
 /// where `[.]^T` denotes the transpose of a row vector, i.e. a column vector.
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Scale3<S> {
     vector: Vector3<S>,

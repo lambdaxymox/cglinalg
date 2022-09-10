@@ -46,7 +46,7 @@ use core::ops;
 /// T(v) := T(p - q) = T(p) - T(q) = (p + t) - (q + t) = (p - q) + (t - t) = p - q = v
 /// ```
 /// as desired.
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation2<S> {
     pub(crate) vector: Vector2<S>,
