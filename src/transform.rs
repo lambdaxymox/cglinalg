@@ -23,7 +23,6 @@ use core::ops;
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Transform2<S> {
-    /// The underlying matrix that implements the transformation.
     matrix: Matrix3x3<S>,
 }
 
@@ -430,7 +429,6 @@ where
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Transform3<S> {
-    /// The underlying matrix implementing the transformation.
     matrix: Matrix4x4<S>,
 }
 

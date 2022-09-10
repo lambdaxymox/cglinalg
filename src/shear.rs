@@ -28,7 +28,6 @@ use core::ops;
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear2<S> {
-    /// The matrix representing the shear transformation.
     matrix: Matrix2x2<S>,
 }
 
@@ -474,7 +473,6 @@ where
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear3<S> {
-    /// The matrix representing the shear transformation.
     matrix: Matrix3x3<S>,
 }
 

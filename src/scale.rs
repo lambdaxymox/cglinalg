@@ -37,10 +37,7 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Scale2<S> {
-    /// The scale factor for the **x-component**.
-    x: S,
-    /// The scale factor for the **y-component**.
-    y: S,
+    vector: Vector2<S>,
 }
 
 impl<S> Scale2<S> 
@@ -52,8 +49,7 @@ where
     #[inline]
     pub const fn from_nonuniform_scale(scale_x: S, scale_y: S) -> Self {
         Self {
-            x: scale_x,
-            y: scale_y,
+            vector: Vector2::new(scale_x, scale_y),
         }
     }
 
@@ -62,8 +58,7 @@ where
     #[inline]
     pub const fn from_scale(scale: S) -> Self {
         Self {
-            x: scale,
-            y: scale,
+            vector: Vector2::from_fill(scale),
         }
     }
 
@@ -88,7 +83,10 @@ where
     /// ```
     #[inline]
     pub fn scale_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        Vector2::new(self.x * vector.x, self.y * vector.y)
+        Vector2::new(
+            self.vector.x * vector.x, 
+            self.vector.y * vector.y,
+        )
     }
 
     /// Apply a scale transformation to a point.
@@ -112,7 +110,10 @@ where
     /// ```
     #[inline]
     pub fn scale_point(&self, point: &Point2<S>) -> Point2<S> {
-        Point2::new(self.x * point.x, self.y * point.y)
+        Point2::new(
+            self.vector.x * point.x, 
+            self.vector.y * point.y,
+        )
     }
 }
 
@@ -144,8 +145,8 @@ where
     #[inline]
     pub fn inverse(&self) -> Self {
         Scale2::from_nonuniform_scale(
-            S::one() / self.x, 
-            S::one() / self.y
+            S::one() / self.vector.x, 
+            S::one() / self.vector.y,
         )
     }
 
@@ -172,8 +173,8 @@ where
     #[inline]
     pub fn inverse_scale_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         Vector2::new(
-            vector.x / self.x,
-            vector.y / self.y
+            vector.x / self.vector.x,
+            vector.y / self.vector.y,
         )
     }
 
@@ -199,8 +200,8 @@ where
     #[inline]
     pub fn inverse_scale_point(&self, point: &Point2<S>) -> Point2<S> {
         Point2::new(
-            point.x / self.x,
-            point.y / self.y
+            point.x / self.vector.x,
+            point.y / self.vector.y,
         )
     }
 
@@ -237,7 +238,7 @@ where
     /// in each component.
     #[inline]
     pub const fn to_vector(&self) -> Vector2<S> {
-        Vector2::new(self.x, self.y)
+        self.vector
     }
 }
 
@@ -249,7 +250,7 @@ where
         write!(
             formatter, 
             "Scale2 [scale_x={}, scale_y={}]", 
-            self.x, self.y
+            self.vector[0], self.vector[1],
         )
     }
 }
@@ -260,7 +261,7 @@ where
 {
     #[inline]
     fn from(scale: Scale2<S>) -> Matrix3x3<S> {
-        Matrix3x3::from_affine_nonuniform_scale(scale.x, scale.y)
+        Matrix3x3::from_affine_nonuniform_scale(scale.vector.x, scale.vector.y)
     }
 }
 
@@ -270,7 +271,7 @@ where
 {
     #[inline]
     fn from(scale: &Scale2<S>) -> Matrix3x3<S> {
-        Matrix3x3::from_affine_nonuniform_scale(scale.x, scale.y)
+        Matrix3x3::from_affine_nonuniform_scale(scale.vector.x, scale.vector.y)
     }
 }
 
@@ -287,8 +288,8 @@ where
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.x, &other.x, epsilon)
-            && S::abs_diff_eq(&self.y, &other.y, epsilon)
+        S::abs_diff_eq(&self.vector.x, &other.vector.x, epsilon)
+            && S::abs_diff_eq(&self.vector.y, &other.vector.y, epsilon)
     }
 }
 
@@ -303,8 +304,8 @@ where
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.x, &other.x, epsilon, max_relative)
-            && S::relative_eq(&self.y, &other.y, epsilon, max_relative)
+        S::relative_eq(&self.vector.x, &other.vector.x, epsilon, max_relative)
+            && S::relative_eq(&self.vector.y, &other.vector.y, epsilon, max_relative)
     }
 }
 
@@ -319,8 +320,8 @@ where
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
-            && S::ulps_eq(&self.y, &other.y, epsilon, max_ulps) 
+        S::ulps_eq(&self.vector.x, &other.vector.x, epsilon, max_ulps)
+            && S::ulps_eq(&self.vector.y, &other.vector.y, epsilon, max_ulps) 
     }
 }
 
@@ -381,8 +382,8 @@ where
     #[inline]
     fn mul(self, other: Scale2<S>) -> Self::Output {
         Scale2::from_nonuniform_scale(
-            self.x * other.x, 
-            self.y * other.y
+            self.vector.x * other.vector.x,
+            self.vector.y * other.vector.y,
         )
     }
 }
@@ -396,8 +397,8 @@ where
     #[inline]
     fn mul(self, other: &Scale2<S>) -> Self::Output {
         Scale2::from_nonuniform_scale(
-            self.x * other.x, 
-            self.y * other.y
+            self.vector.x * other.vector.x,
+            self.vector.y * other.vector.y,
         )
     }
 }
@@ -411,8 +412,8 @@ where
     #[inline]
     fn mul(self, other: Scale2<S>) -> Self::Output {
         Scale2::from_nonuniform_scale(
-            self.x * other.x, 
-            self.y * other.y
+            self.vector.x * other.vector.x,
+            self.vector.y * other.vector.y,
         )
     }
 }
@@ -426,8 +427,8 @@ where
     #[inline]
     fn mul(self, other: &'a Scale2<S>) -> Self::Output {
         Scale2::from_nonuniform_scale(
-            self.x * other.x, 
-            self.y * other.y
+            self.vector.x * other.vector.x,
+            self.vector.y * other.vector.y,
         )
     }
 }
@@ -447,12 +448,7 @@ where
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Scale3<S> {
-    /// The scale factor for the **x-component**.
-    x: S,
-    /// The scale factor for the **y-component**.
-    y: S,
-    /// The scale factor for the **z-component**.
-    z: S,
+    vector: Vector3<S>,
 }
 
 impl<S> Scale3<S> 
@@ -464,9 +460,7 @@ where
     #[inline]
     pub const fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Self {
         Self {
-            x: scale_x,
-            y: scale_y,
-            z: scale_z,
+            vector: Vector3::new(scale_x, scale_y, scale_z),
         }
     }
 
@@ -475,9 +469,7 @@ where
     #[inline]
     pub const fn from_scale(scale: S) -> Self {
         Self {
-            x: scale,
-            y: scale,
-            z: scale,
+            vector: Vector3::from_fill(scale),
         }
     }
 
@@ -503,7 +495,11 @@ where
     /// ```
     #[inline]
     pub fn scale_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        Vector3::new(self.x * vector.x, self.y * vector.y, self.z * vector.z)
+        Vector3::new(
+            self.vector.x * vector.x, 
+            self.vector.y * vector.y, 
+            self.vector.z * vector.z,
+        )
     }
 
     /// Apply a scale transformation operation to a point.
@@ -528,7 +524,11 @@ where
     /// ```
     #[inline]
     pub fn scale_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::new(self.x * point.x, self.y * point.y, self.z * point.z)
+        Point3::new(
+            self.vector.x * point.x, 
+            self.vector.y * point.y, 
+            self.vector.z * point.z,
+        )
     }
 
     /// Construct the identity scaling transformation. 
@@ -564,7 +564,7 @@ where
     /// in each component.
     #[inline]
     pub const fn to_vector(&self) -> Vector3<S> {
-        Vector3::new(self.x, self.y, self.z)
+        self.vector
     }
 }
 
@@ -589,7 +589,7 @@ where
     /// let expected = Scale3::from_nonuniform_scale(
     ///     1_f64 / scale_x,
     ///     1_f64 / scale_y,
-    ///     1_f64 / scale_z  
+    ///     1_f64 / scale_z,
     /// );
     /// let result = scale.inverse();
     ///
@@ -598,9 +598,9 @@ where
     #[inline]
     pub fn inverse(&self) -> Self {
         Self::from_nonuniform_scale(
-            S::one() / self.x, 
-            S::one() / self.y,
-            S::one() / self.z
+            S::one() / self.vector.x, 
+            S::one() / self.vector.y,
+            S::one() / self.vector.z,
         )
     }
 
@@ -630,9 +630,9 @@ where
     #[inline]
     pub fn inverse_scale_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         Vector3::new(
-            vector.x / self.x,
-            vector.y / self.y,
-            vector.z / self.z
+            vector.x / self.vector.x,
+            vector.y / self.vector.y,
+            vector.z / self.vector.z,
         )
     }
 
@@ -662,9 +662,9 @@ where
     #[inline]
     pub fn inverse_scale_point(&self, point: &Point3<S>) -> Point3<S> {
         Point3::new(
-            point.x / self.x,
-            point.y / self.y,
-            point.z / self.z
+            point.x / self.vector.x,
+            point.y / self.vector.y,
+            point.z / self.vector.z,
         )
     }
 }
@@ -677,7 +677,7 @@ where
         write!(
             formatter, 
             "Scale3 [scale_x={}, scale_y={}, scale_z={}]", 
-            self.x, self.y, self.z
+            self.vector[0], self.vector[1], self.vector[2],
         )
     }
 }
@@ -689,9 +689,9 @@ where
     #[inline]
     fn from(scale: Scale3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_nonuniform_scale(
-            scale.x, 
-            scale.y, 
-            scale.z
+            scale.vector.x, 
+            scale.vector.y, 
+            scale.vector.z,
         )
     }
 }
@@ -703,9 +703,9 @@ where
     #[inline]
     fn from(scale: &Scale3<S>) -> Matrix4x4<S> {
         Matrix4x4::from_affine_nonuniform_scale(
-            scale.x, 
-            scale.y, 
-            scale.z
+            scale.vector.x, 
+            scale.vector.y, 
+            scale.vector.z,
         )
     }
 }
@@ -723,9 +723,9 @@ where
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.x, &other.x, epsilon)
-            && S::abs_diff_eq(&self.y, &other.y, epsilon)
-            && S::abs_diff_eq(&self.z, &other.z, epsilon)
+        S::abs_diff_eq(&self.vector.x, &other.vector.x, epsilon)
+            && S::abs_diff_eq(&self.vector.y, &other.vector.y, epsilon)
+            && S::abs_diff_eq(&self.vector.z, &other.vector.z, epsilon)
     }
 }
 
@@ -740,9 +740,9 @@ where
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        S::relative_eq(&self.x, &other.x, epsilon, max_relative)
-            && S::relative_eq(&self.y, &other.y, epsilon, max_relative)
-            && S::relative_eq(&self.z, &other.z, epsilon, max_relative)
+        S::relative_eq(&self.vector.x, &other.vector.x, epsilon, max_relative)
+            && S::relative_eq(&self.vector.y, &other.vector.y, epsilon, max_relative)
+            && S::relative_eq(&self.vector.z, &other.vector.z, epsilon, max_relative)
     }
 }
 
@@ -757,9 +757,9 @@ where
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
-            && S::ulps_eq(&self.y, &other.y, epsilon, max_ulps)
-            && S::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
+        S::ulps_eq(&self.vector.x, &other.vector.x, epsilon, max_ulps)
+            && S::ulps_eq(&self.vector.y, &other.vector.y, epsilon, max_ulps)
+            && S::ulps_eq(&self.vector.z, &other.vector.z, epsilon, max_ulps)
     }
 }
 
@@ -820,9 +820,9 @@ where
     #[inline]
     fn mul(self, other: Scale3<S>) -> Self::Output {
         Scale3::from_nonuniform_scale(
-            self.x * other.x, 
-            self.y * other.y,
-            self.z * other.z
+            self.vector.x * other.vector.x, 
+            self.vector.y * other.vector.y,
+            self.vector.z * other.vector.z,
         )
     }
 }
@@ -836,9 +836,9 @@ where
     #[inline]
     fn mul(self, other: &Scale3<S>) -> Self::Output {
         Scale3::from_nonuniform_scale(
-            self.x * other.x, 
-            self.y * other.y,
-            self.z * other.z
+            self.vector.x * other.vector.x, 
+            self.vector.y * other.vector.y,
+            self.vector.z * other.vector.z,
         )
     }
 }
@@ -852,9 +852,9 @@ where
     #[inline]
     fn mul(self, other: Scale3<S>) -> Self::Output {
         Scale3::from_nonuniform_scale(
-            self.x * other.x, 
-            self.y * other.y,
-            self.z * other.z
+            self.vector.x * other.vector.x, 
+            self.vector.y * other.vector.y,
+            self.vector.z * other.vector.z,
         )
     }
 }
@@ -868,9 +868,9 @@ where
     #[inline]
     fn mul(self, other: &'a Scale3<S>) -> Self::Output {
         Scale3::from_nonuniform_scale(
-            self.x * other.x, 
-            self.y * other.y,
-            self.z * other.z
+            self.vector.x * other.vector.x, 
+            self.vector.y * other.vector.y,
+            self.vector.z * other.vector.z,
         )
     }
 }
