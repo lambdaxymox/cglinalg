@@ -40,10 +40,19 @@ use core::ops;
 /// ```
 /// Because `v` is a vector and not a point, `v` describes the **difference** 
 /// between two points, rather than an arbitary position in Euclidean space. Indeed, 
-/// let `p` and `q` be Euclidean points, and `v := p - q` be the difference between 
-/// them. Then in homogeneous coordinates
+/// let `E^2` be two-dimensional Euclidean space with origin `O`. Let `p` and `q` be 
+/// points in `E^2`, and `v := p - q` be the difference between them. Then in 
+/// homogeneous coordinates, and by the linearity of `T`
 /// ```text
-/// T(v) := T(p - q) = T(p) - T(q) = (p + t) - (q + t) = (p - q) + (t - t) = p - q = v
+/// T(v) := T(p - q) 
+///       = T((p - O) - (q - O)) 
+///       = T(p - O) - T(q - O) 
+///       = ((p - O) + t) - ((q - O) + t) 
+///       = (p + (t - O)) - (q + (t - O))
+///       = (p + t) - (q + t)
+///       = (p - q) + (t - t) 
+///       = p - q 
+///       = v
 /// ```
 /// as desired.
 #[repr(transparent)]
@@ -529,10 +538,19 @@ where
 /// ```
 /// Because `v` is a vector and not a point, `v` describes the **difference** 
 /// between two points, rather than an arbitary position in Euclidean space. Indeed, 
-/// let `p` and `q` be Euclidean points, and `v := p - q` be the difference between 
-/// them. Then in homogeneous coordinates
+/// let `E^3` be three-dimensional Euclidean space with origin `O`. Let `p` and `q` be 
+/// points in `E^3`, and `v := p - q` be the difference between them. Then in 
+/// homogeneous coordinates, and by the linearity of `T`
 /// ```text
-/// T(v) := T(p - q) = T(p) - T(q) = (p + t) - (q + t) = (p - q) + (t - t) = p - q = v
+/// T(v) := T(p - q) 
+///       = T((p - O) - (q - O)) 
+///       = T(p - O) - T(q - O) 
+///       = ((p - O) + t) - ((q - O) + t) 
+///       = (p + (t - O)) - (q + (t - O))
+///       = (p + t) - (q + t)
+///       = (p - q) + (t - t) 
+///       = p - q 
+///       = v
 /// ```
 /// as desired.
 #[repr(transparent)]
