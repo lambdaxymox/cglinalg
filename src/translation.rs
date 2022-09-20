@@ -572,6 +572,7 @@ where
     }
 
     /// Construct a translation operator from a vector of displacements.
+    #[inline]
     pub const fn from_vector(vector: &Vector3<S>) -> Self {
         Self {
             vector: *vector,
