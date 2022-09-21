@@ -211,7 +211,7 @@ where
     /// # use core::f64;
     /// #
     /// let angle: Radians<f64> = Radians(f64::consts::PI / 4_f64);
-    /// assert!(angle.is_finite()); 
+    /// assert!(angle.is_finite());
     /// ```
     #[inline]
     pub fn is_finite(self) -> bool {

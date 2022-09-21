@@ -189,6 +189,20 @@ where
     }
 
     /// Determine whether a vector is the zero vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let zero: Vector4<i32> = Vector4::zero();
+    /// let non_zero = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// 
+    /// assert!(zero.is_zero());
+    /// assert!(!non_zero.is_zero());
+    /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
         // PERFORMANCE: The const loop should get unrolled during optimization.

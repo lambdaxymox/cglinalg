@@ -30,6 +30,26 @@ pub struct Unit<T> {
 
 impl<T> Unit<T> {
     /// Unwraps the underlying value.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let vector = Vector3::new(3_f64, 5_f64, 7_f64);
+    /// let expected = Vector3::new(
+    ///     3_f64 / f64::sqrt(83_f64), 
+    ///     5_f64 / f64::sqrt(83_f64), 
+    ///     7_f64 / f64::sqrt(83_f64),
+    /// );
+    /// let result = Unit::from_value(vector).into_inner();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn into_inner(self) -> T {
         self.value

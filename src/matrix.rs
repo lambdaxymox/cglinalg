@@ -395,6 +395,28 @@ where
     }
 
     /// Get the row of the matrix by value.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32, 
+    ///     4_i32, 5_i32, 6_i32, 
+    ///     7_i32, 8_i32, 9_i32
+    /// );
+    /// let expected_0 = Vector3::new(1_i32, 4_i32, 7_i32);
+    /// let expected_1 = Vector3::new(2_i32, 5_i32, 8_i32);
+    /// let expected_2 = Vector3::new(3_i32, 6_i32, 9_i32);
+    /// 
+    /// assert_eq!(matrix.row(0), expected_0);
+    /// assert_eq!(matrix.row(1), expected_1);
+    /// assert_eq!(matrix.row(2), expected_2);
+    /// ```
     #[inline]
     pub fn row(&self, r: usize) -> Vector<S, C> {
         // SAFETY: Every location gets written into with a value value of type `S`.
@@ -408,6 +430,28 @@ where
     }
 
     /// Get the column of the matrix by value.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_i32, 2_i32, 3_i32, 
+    ///     4_i32, 5_i32, 6_i32, 
+    ///     7_i32, 8_i32, 9_i32
+    /// );
+    /// let expected_0 = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let expected_1 = Vector3::new(4_i32, 5_i32, 6_i32);
+    /// let expected_2 = Vector3::new(7_i32, 8_i32, 9_i32);
+    /// 
+    /// assert_eq!(matrix.column(0), expected_0);
+    /// assert_eq!(matrix.column(1), expected_1);
+    /// assert_eq!(matrix.column(2), expected_2);
+    /// ```
     #[inline]
     pub fn column(&self, c: usize) -> Vector<S, R> {
         Vector::from(&self.data[c])
@@ -1102,6 +1146,32 @@ where
     ///
     /// A square matrix is a diagonal matrix if every off-diagonal 
     /// element is zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let diagonal_matrix = Matrix3x3::new(
+    ///     1_f32, 0_f32, 0_f32,
+    ///     0_f32, 2_f32, 0_f32,
+    ///     0_f32, 0_f32, 3_f32,    
+    /// );
+    /// let zero: Matrix3x3<f32> = Matrix3x3::zero();
+    /// let identity: Matrix3x3<f32> = Matrix3x3::identity();
+    /// let nondiagonal_matrix = Matrix3x3::new(
+    ///     0_f32, 1_f32, 1_f32,
+    ///     1_f32, 0_f32, 1_f32,
+    ///     1_f32, 1_f32, 0_f32,
+    /// );
+    /// 
+    /// assert!(diagonal_matrix.is_diagonal());
+    /// assert!(zero.is_diagonal());
+    /// assert!(identity.is_diagonal());
+    /// assert!(!nondiagonal_matrix.is_diagonal());
+    /// ```
     #[inline]
     pub fn is_diagonal(&self) -> bool {
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -1119,7 +1189,33 @@ where
     ///
     /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
     /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
-    /// Note that every diagonal matrix is a symmetric matrix.
+    /// Every diagonal matrix is a symmetric matrix.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let symmetric_matrix = Matrix3x3::new(
+    ///     1_f32, 2_f32, 3_f32,
+    ///     2_f32, 1_f32, 2_f32,
+    ///     3_f32, 2_f32, 1_f32,
+    /// );
+    /// let asymmetric_matrix = Matrix3x3::new(
+    ///     1_f32, 2_f32, 3_f32,
+    ///     4_f32, 5_f32, 6_f32,
+    ///     7_f32, 8_f32, 9_f32,
+    /// );
+    /// let zero: Matrix3x3<f32> = Matrix3x3::zero();
+    /// let identity: Matrix3x3<f32> = Matrix3x3::identity();
+    /// 
+    /// assert!(symmetric_matrix.is_symmetric());
+    /// assert!(!asymmetric_matrix.is_symmetric());
+    /// assert!(zero.is_symmetric());
+    /// assert!(identity.is_symmetric());
+    /// ```
     #[inline]
     pub fn is_symmetric(&self) -> bool {
         // PERFORMANCE: The const loop should get unrolled during optimization.

@@ -48,7 +48,7 @@ impl<S> Complex<S> {
         2
     }
 
-    /// Tests whether the number of elements in the compolex number is zero.
+    /// Tests whether the number of elements in the complex number is zero.
     /// 
     /// Always returns `false` since a complex number has two components.
     pub const fn is_empty(&self) -> bool {
