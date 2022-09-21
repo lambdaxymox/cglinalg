@@ -45,7 +45,7 @@ use core::ops;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Quaternion<S> {
-    pub coords: Vector4<S>,
+    coords: Vector4<S>,
 }
 
 impl<S> Quaternion<S> {
@@ -2199,10 +2199,10 @@ where
     /// let projected_z = quaternion.project(&unit_z);
     /// let projected_s = quaternion.project(&unit_s);
     ///
-    /// assert_eq!(projected_x, quaternion.coords[1] * unit_x);
-    /// assert_eq!(projected_y, quaternion.coords[2] * unit_y);
-    /// assert_eq!(projected_z, quaternion.coords[3] * unit_z);
-    /// assert_eq!(projected_s, quaternion.coords[0] * unit_s);
+    /// assert_eq!(projected_x, quaternion[1] * unit_x);
+    /// assert_eq!(projected_y, quaternion[2] * unit_y);
+    /// assert_eq!(projected_z, quaternion[3] * unit_z);
+    /// assert_eq!(projected_s, quaternion[0] * unit_s);
     /// ```
     #[inline]
     pub fn project(&self, other: &Self) -> Self {
