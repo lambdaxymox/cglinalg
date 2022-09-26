@@ -1,12 +1,12 @@
-use crate::angle::{
+use crate::core2::{
     Angle,
     Radians,
 };
-use crate::matrix::{
+use crate::core2::{
     Matrix3x3,
     Matrix4x4,
 };
-use crate::quaternion::{
+use crate::core2::{
     Quaternion,
 };
 use crate::common::{

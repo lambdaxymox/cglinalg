@@ -1,8 +1,8 @@
-use crate::rotation::{
+use super::rotation::{
     Rotation2,
     Rotation3,
 };
-use crate::translation::{
+use super::translation::{
     Translation2,
     Translation3,
 };
@@ -10,19 +10,19 @@ use crate::common::{
     SimdScalarFloat,
     Unit,
 };
-use crate::matrix::{
+use crate::core2::{
     Matrix3x3,
     Matrix4x4,
 };
-use crate::point::{
+use crate::core2::{
     Point2,
     Point3,
 };
-use crate::vector::{
+use crate::core2::{
     Vector2,
     Vector3,
 };
-use crate::angle::{
+use crate::core2::{
     Radians,
     Angle,
 };

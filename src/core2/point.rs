@@ -4,7 +4,7 @@ use crate::common::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::vector::{
+use crate::core2::{
     Vector,
     Vector1,
     Vector2,
@@ -472,7 +472,7 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Sub<&Point<S, N>> for Point<S, N> 
+impl<'a, S, const N: usize> ops::Sub<&Point<S, N>> for Point<S, N> 
 where 
     S: SimdScalar 
 {

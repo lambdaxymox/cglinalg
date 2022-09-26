@@ -1,4 +1,4 @@
-use crate::point::{
+use crate::core2::{
     Point3,
 };
 use crate::common::{
@@ -6,14 +6,14 @@ use crate::common::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::angle::{
+use crate::core2::{
     Angle,
     Radians,
 };
 use crate::common::{
     Magnitude,
 };
-use crate::vector::{
+use crate::core2::{
     Vector,
     Vector1,
     Vector2,

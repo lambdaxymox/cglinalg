@@ -1,4 +1,4 @@
-use crate::angle::{
+use crate::core2::{
     Angle,
     Radians,
 };
@@ -6,20 +6,20 @@ use crate::common::{
     SimdScalarFloat,
     Unit,
 };
-use crate::matrix::{
+use crate::core2::{
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
 };
-use crate::point::{
+use crate::core2::{
     Point2,
     Point3,
 };
-use crate::vector::{
+use crate::core2::{
     Vector2,
     Vector3,
 };
-use crate::quaternion::{
+use crate::core2::{
     Quaternion,
 };
 use crate::transform::{
