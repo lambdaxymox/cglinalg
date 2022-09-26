@@ -2,7 +2,7 @@ use crate::core2::{
     Angle,
     Radians,
 };
-use crate::common::{
+use crate::base::{
     SimdScalarFloat,
     Unit,
 };

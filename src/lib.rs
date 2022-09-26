@@ -6,14 +6,14 @@ extern crate approx;
 extern crate num_traits;
 
 
-mod common;
+mod base;
 mod core2;
 mod euler;
 mod complex;
 mod transform;
 
 
-pub use common::*;
+pub use base::*;
 pub use core2::*;
 pub use euler::*;
 pub use complex::*;

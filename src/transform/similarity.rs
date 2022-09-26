@@ -6,7 +6,7 @@ use super::translation::{
     Translation2,
     Translation3,
 };
-use crate::common::{
+use crate::base::{
     SimdScalarFloat,
     Unit,
 };

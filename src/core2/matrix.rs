@@ -1,7 +1,7 @@
 use crate::core2::{
     Point3,
 };
-use crate::common::{
+use crate::base::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
@@ -10,7 +10,7 @@ use crate::core2::{
     Angle,
     Radians,
 };
-use crate::common::{
+use crate::base::{
     Magnitude,
 };
 use crate::core2::{
@@ -20,7 +20,7 @@ use crate::core2::{
     Vector3,
     Vector4,
 };
-use crate::common::{
+use crate::base::{
     Unit,
 };
 use crate::{

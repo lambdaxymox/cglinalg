@@ -1,4 +1,4 @@
-use crate::common::{
+use crate::base::{
     SimdScalarFloat,
 };
 use crate::core2::{

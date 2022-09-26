@@ -9,7 +9,7 @@ use crate::core2::{
 use crate::core2::{
     Quaternion,
 };
-use crate::common::{
+use crate::base::{
     SimdScalarFloat,
 };
 
