@@ -9,28 +9,25 @@ use cglinalg::{
     Matrix3x3,
     Matrix4x4,
 };
-
 use core::ops::{
     Add,
     Sub,
     Mul,
     Div,
 };
-
 use rand::{
     Rng, 
     prelude::Distribution,
     distributions::Standard,
 };
-
 use rand_isaac::{
     IsaacRng,
 };
-
 use criterion::{
     criterion_group,
     criterion_main,
 };
+
 
 fn gen_scalar<S>() -> S
 where

@@ -8,28 +8,25 @@ use cglinalg::{
     Magnitude,
     Quaternion,
 };
-
 use core::ops::{
     Add,
     Sub,
     Mul,
     Div,
 };
-
 use rand::{
     Rng, 
     prelude::Distribution,
     distributions::Standard,
 };
-
 use rand_isaac::{
     IsaacRng,
 };
-
 use criterion::{
     criterion_group,
     criterion_main,
 };
+
 
 fn gen_scalar<S>() -> S
 where

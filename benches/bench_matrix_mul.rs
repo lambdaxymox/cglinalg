@@ -12,21 +12,17 @@ use cglinalg::{
     Vector3,
     Vector4,
 };
-
 use core::ops::{
     Mul,
 };
-
 use rand::{
     Rng, 
     prelude::Distribution,
     distributions::Standard,
 };
-
 use rand_isaac::{
     IsaacRng,
 };
-
 use criterion::{
     criterion_group,
     criterion_main,
