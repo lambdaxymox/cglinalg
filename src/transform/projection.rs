@@ -1,17 +1,11 @@
 use crate::base::{
     SimdScalarFloat,
 };
-use crate::core2::{
+use crate::linalg::{
     Angle,
     Radians,
-};
-use crate::core2::{
     Matrix4x4,
-};
-use crate::core2::{
     Point3,
-};
-use crate::core2::{
     Vector3,
 };
 

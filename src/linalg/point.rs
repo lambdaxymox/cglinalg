@@ -1,15 +1,15 @@
 use crate::base::{
-    Magnitude,
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::core2::{
+use crate::linalg::{
     Vector,
     Vector1,
     Vector2,
     Vector3,
     Vector4,
+    Magnitude,
 };
 use crate::{
     impl_coords,

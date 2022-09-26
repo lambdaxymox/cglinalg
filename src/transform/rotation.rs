@@ -1,28 +1,20 @@
-use crate::core2::{
-    Angle,
-    Radians,
-};
 use crate::base::{
     SimdScalarFloat,
-    Unit,
 };
-use crate::core2::{
+use crate::linalg::{
+    Angle,
+    Radians,
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
-};
-use crate::core2::{
     Point2,
     Point3,
-};
-use crate::core2::{
     Vector2,
     Vector3,
-};
-use crate::core2::{
     Quaternion,
+    Unit,
 };
-use crate::transform::{
+use super::transform::{
     Transform2,
     Transform3,
 };

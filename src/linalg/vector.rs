@@ -1,9 +1,9 @@
 use crate::base::{
     SimdScalar,
     SimdScalarSigned,
-    SimdScalarFloat,   
+    SimdScalarFloat,
 };
-use crate::base::{
+use super::magnitude::{
     Magnitude,
 };
 use crate::{

@@ -1,26 +1,18 @@
-use crate::core2::{
-    Point3,
-};
 use crate::base::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::core2::{
+use crate::linalg::{
+    Point3,
     Angle,
     Radians,
-};
-use crate::base::{
-    Magnitude,
-};
-use crate::core2::{
     Vector,
     Vector1,
     Vector2,
     Vector3,
     Vector4,
-};
-use crate::base::{
+    Magnitude,
     Unit,
 };
 use crate::{

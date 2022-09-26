@@ -2,20 +2,16 @@ use crate::base::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::core2::{
+use crate::linalg::{
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
-};
-use crate::core2::{
     Vector2,
     Vector3,
-};
-use crate::core2::{
     Point2,
     Point3,
 };
-use crate::transform::{
+use super::transform::{
     Transform2,
     Transform3,
 };

@@ -1,21 +1,17 @@
 use crate::base::{
-    Magnitude,
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
-    Unit,
 };
-use crate::core2::{
+use crate::linalg::{
     Angle,
     Radians,
-};
-use crate::core2::{
     Matrix3x3, 
     Matrix4x4,
-};
-use crate::core2::{
     Vector3,
     Vector4,
+    Unit,
+    Magnitude,
 };
 
 use num_traits::NumCast;

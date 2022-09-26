@@ -3,7 +3,7 @@ use crate::base::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::core2::{
+use crate::linalg::{
     Angle,
     Radians,
 };

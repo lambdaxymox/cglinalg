@@ -1,16 +1,12 @@
-use crate::core2::{
-    Angle,
-    Radians,
-};
-use crate::core2::{
-    Matrix3x3,
-    Matrix4x4,
-};
-use crate::core2::{
-    Quaternion,
-};
 use crate::base::{
     SimdScalarFloat,
+};
+use crate::linalg::{
+    Angle,
+    Radians,
+    Matrix3x3,
+    Matrix4x4,
+    Quaternion,
 };
 
 use core::fmt;

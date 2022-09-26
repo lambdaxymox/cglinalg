@@ -7,15 +7,11 @@ extern crate num_traits;
 
 
 mod base;
-mod core2;
-mod euler;
-mod complex;
+mod linalg;
 mod transform;
 
 
 pub use base::*;
-pub use core2::*;
-pub use euler::*;
-pub use complex::*;
+pub use linalg::*;
 pub use transform::*;
 
