@@ -229,7 +229,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+    pub const fn translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         *vector
     }
 
@@ -275,7 +275,7 @@ where
     /// assert_eq!(translation.inverse_translate_vector(&vector), vector);
     /// ```
     #[inline]
-    pub fn inverse_translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+    pub const fn inverse_translate_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         *vector
     }
 
@@ -722,7 +722,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn translate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+    pub const fn translate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         *vector
     }
 
@@ -770,7 +770,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_translate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+    pub const fn inverse_translate_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         *vector
     }
 

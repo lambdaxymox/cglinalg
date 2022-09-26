@@ -248,6 +248,7 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
         let distance = self.isometry.translation().as_ref();
@@ -996,7 +997,6 @@ where
     ///
     /// assert_eq!(isometry.transform_vector(&unit_z), direction);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn face_towards(
         eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self
@@ -1130,6 +1130,7 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
         let distance = self.isometry.translation().as_ref();

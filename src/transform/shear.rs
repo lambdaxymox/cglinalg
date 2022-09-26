@@ -247,6 +247,7 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn inverse(&self) -> Self {
         let shear_y_with_x = self.matrix.c0r1;
@@ -628,6 +629,7 @@ where
     /// 
     /// assert_eq!(result, expected);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn from_shear(
         shear_x_with_y: S, shear_x_with_z: S, 
@@ -781,6 +783,7 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn inverse(&self) -> Self {
         let shear_x_with_y = self.matrix.c1r0;

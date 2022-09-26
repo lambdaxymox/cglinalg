@@ -2856,9 +2856,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(
-        axis: &Unit<Vector3<S>>, angle: A) -> Self
-    {
+    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();

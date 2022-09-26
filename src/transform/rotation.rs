@@ -770,6 +770,7 @@ where
 
     /// Construct a new three-dimensional rotation about an axis `axis` by 
     /// an angle `angle`.
+    #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
         Self {
             matrix: Matrix3x3::from_axis_angle(axis, angle.into()),
@@ -886,7 +887,6 @@ where
     ///
     /// assert_relative_eq!(rotation.rotate_vector(&unit_z), direction, epsilon = 1e-10);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self {
