@@ -1,8 +1,8 @@
-use crate::base::{
+use crate::base_numeric::{
     SimdScalar,
     SimdScalarFloat,
 };
-use crate::linalg::{
+use crate::base::{
     Matrix3x3,
     Matrix4x4,
     Vector2,

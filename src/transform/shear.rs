@@ -1,8 +1,8 @@
-use crate::base::{
+use crate::base_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::linalg::{
+use crate::base::{
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,

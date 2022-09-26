@@ -1,7 +1,7 @@
-use crate::base::{
+use crate::base_numeric::{
     SimdScalarFloat,
 };
-use crate::linalg::{
+use crate::base::{
     Angle,
     Radians,
     Matrix2x2,

@@ -1,4 +1,4 @@
-use crate::base::{
+use crate::base_numeric::{
     SimdScalarFloat,
 };
 use super::magnitude::{

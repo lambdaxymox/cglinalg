@@ -6,12 +6,12 @@ extern crate approx;
 extern crate num_traits;
 
 
+mod base_numeric;
 mod base;
-mod linalg;
 mod transform;
 
 
+pub use base_numeric::*;
 pub use base::*;
-pub use linalg::*;
 pub use transform::*;
 

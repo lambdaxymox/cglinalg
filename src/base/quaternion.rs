@@ -1,9 +1,9 @@
-use crate::base::{
+use crate::base_numeric::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::linalg::{
+use crate::base::{
     Angle,
     Radians,
     Matrix3x3, 

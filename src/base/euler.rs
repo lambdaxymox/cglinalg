@@ -1,7 +1,7 @@
-use crate::base::{
+use crate::base_numeric::{
     SimdScalarFloat,
 };
-use crate::linalg::{
+use crate::base::{
     Angle,
     Radians,
     Matrix3x3,
@@ -240,6 +240,7 @@ where
     /// m[2, 2] :=  cos(yaw) * cos(roll)
     /// ```
     /// This yields the entries in the rotation matrix.
+    #[rustfmt::skip]
     #[inline]
     pub fn to_matrix(&self) -> Matrix3x3<S> {
         let (sin_roll, cos_roll) = Radians::sin_cos(self.x);
@@ -317,6 +318,7 @@ where
     ///                        | 0         0         0         1 |
     /// ```
     /// as desired.
+    #[rustfmt::skip]
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
         let (sin_roll, cos_roll) = Radians::sin_cos(self.x);
