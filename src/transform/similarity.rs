@@ -963,11 +963,12 @@ where
     }
 
     /// Construct a similarity transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **z-axis** into a coordinate 
-    /// system of an observer located at the position `eye` facing the direction 
-    /// `direction`.
+    /// of an observer located at the origin facing the **positive z-axis** into a 
+    /// coordinate system of an observer located at the position `eye` facing the 
+    /// direction `direction`. The resulting coordinate transformation is a 
+    /// left-handed coordinate transformation.
     ///
-    /// The similarity transformation maps the **z-axis** to the direction 
+    /// The similarity transformation maps the **positive z-axis** to the direction 
     /// of `target - eye`, and locates the origin of the coordinate system to 
     /// the `eye` position.
     ///
@@ -985,17 +986,15 @@ where
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
     /// let target = Point3::new(1_f64, -1_f64, 1_f64);
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
-    /// let isometry = Similarity3::face_towards(&eye, &target, &up);
+    /// let isometry = Similarity3::look_to_lh(&eye, &target, &up);
     /// let unit_z = Vector3::unit_z();
     /// let direction = (target - eye).normalize();
     ///
     /// assert_eq!(isometry.transform_vector(&unit_z), direction);
     /// ```
     #[inline]
-    pub fn face_towards(
-        eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self
-    {
-        let isometry = Isometry3::face_towards(eye, target, up);
+    pub fn look_to_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        let isometry = Isometry3::look_to_lh(eye, target, up);
     
         Self::from_isometry(&isometry)
     }

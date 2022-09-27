@@ -284,11 +284,11 @@ mod similarity3_tests {
     }
 
     #[test]
-    fn test_face_towards() {
+    fn test_look_to_lh() {
         let eye = Point3::new(1_f64, 2_f64, 3_f64);
         let target = Point3::new(1_f64, -1_f64, 1_f64);
         let up = Vector3::new(2_f64, 2_f64, 0_f64);
-        let isometry = Similarity3::face_towards(&eye, &target, &up);
+        let isometry = Similarity3::look_to_lh(&eye, &target, &up);
         let unit_z = Vector3::unit_z();
         let direction = (target - eye).normalize();
     
