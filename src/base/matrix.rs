@@ -4144,10 +4144,33 @@ where
     /// Construct an affine coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the origin facing the **positive z-axis**
     /// into a coordinate system of an observer located at the position `eye` facing
-    /// the direction `direction`.
+    /// the direction `direction`. The resulting coordinate transformation is a left-handed
+    /// coordinate transformation.
     ///
     /// The function maps the **positive z-axis** to the direction `direction`, and locates the 
     /// origin of the coordinate system to the `eye` position.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Vector4,
+    /// #     Matrix4x4,
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
+    /// let direction: Vector3<f64> = -Vector3::unit_x();
+    /// let up = Vector3::unit_z();
+    /// let rotation = Matrix4x4::look_to_lh(&eye, &direction, &up);
+    /// let direction = direction.to_homogeneous();
+    /// let unit_z = Vector3::unit_z().to_homogeneous();
+    /// let minus_unit_z = -unit_z;
+    /// 
+    /// assert_eq!(rotation * unit_z, direction);
+    /// assert_eq!(rotation * minus_unit_z, -direction);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn look_to_lh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {

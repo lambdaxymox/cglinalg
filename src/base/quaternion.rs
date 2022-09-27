@@ -1966,11 +1966,33 @@ where
 
     /// Construct a quaternion corresponding to a rotation of an observer 
     /// standing at the origin facing the **positive z-axis** to an observer 
-    /// standing at the origin facing the direction `direction`. 
+    /// standing at the origin facing the direction `direction`. The resulting
+    /// coordinate transformation is a left-handed coordinate transformation.
     ///
-    /// This rotation maps the **z-axis** to the direction `direction`.
+    /// This rotation maps the **positive z-axis** to the direction `direction`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     Vector4,
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let direction: Vector3<f64> = -Vector3::unit_x();
+    /// let up = Vector3::unit_z();
+    /// let quaternion = Quaternion::look_to_lh(&direction, &up);
+    /// let rotation = Matrix3x3::from(quaternion);
+    /// let unit_z = Vector3::unit_z();
+    /// let minus_unit_z = -unit_z;
+    /// 
+    /// assert_eq!(rotation * unit_z, direction);
+    /// assert_eq!(rotation * minus_unit_z, -direction);
+    /// ```
     #[inline]
-    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+    pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self::from(&Matrix3x3::look_to_lh(direction, up))
     }
 
