@@ -2894,7 +2894,7 @@ where
     ///      1_f64 / f64::sqrt(2_f64),  1_f64 / f64::sqrt(2_f64),  0_f64,
     ///      1_f64 / f64::sqrt(3_f64), -1_f64 / f64::sqrt(3_f64),  1_f64 / f64::sqrt(3_f64)
     /// );
-    /// let result = Matrix3x3::face_towards(&direction, &up);
+    /// let result = Matrix3x3::look_to_lh(&direction, &up);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     ///
@@ -2904,7 +2904,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+    pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let z_axis = direction.normalize();
         let x_axis = up.cross(&z_axis).normalize();
         let y_axis = z_axis.cross(&x_axis).normalize();
@@ -2951,7 +2951,7 @@ where
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         // The inverse of a rotation matrix is its transpose.
-        Self::face_towards(&(-direction), up).transpose()
+        Self::look_to_lh(&(-direction), up).transpose()
     }
 
     /// Construct a coordinate transformation matrix that transforms
@@ -2965,7 +2965,7 @@ where
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         // The inverse of a rotation matrix is its transpose.
-        Self::face_towards(direction, up).transpose()
+        Self::look_to_lh(direction, up).transpose()
     }
 
     /// Construct a rotation matrix that rotates the shortest angular distance 
@@ -4142,17 +4142,15 @@ where
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing the **z-axis**
+    /// a coordinate system of an observer located at the origin facing the **positive z-axis**
     /// into a coordinate system of an observer located at the position `eye` facing
     /// the direction `direction`.
     ///
-    /// The function maps the **z-axis** to the direction `direction`, and locates the 
+    /// The function maps the **positive z-axis** to the direction `direction`, and locates the 
     /// origin of the coordinate system to the `eye` position.
     #[rustfmt::skip]
     #[inline]
-    pub fn face_towards(
-        eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self
-    {
+    pub fn look_to_lh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let zero = S::zero();
         let one = S::one();
         let z_axis = direction.normalize();

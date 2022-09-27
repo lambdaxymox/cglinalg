@@ -1971,7 +1971,7 @@ where
     /// This rotation maps the **z-axis** to the direction `direction`.
     #[inline]
     pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::from(&Matrix3x3::face_towards(direction, up))
+        Self::from(&Matrix3x3::look_to_lh(direction, up))
     }
 
     /// Construct a quaternion corresponding to a right-handed viewing 
@@ -1982,7 +1982,7 @@ where
     /// camera view transformations.
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::from(&Matrix3x3::face_towards(direction, up).transpose())
+        Self::from(&Matrix3x3::look_to_lh(direction, up).transpose())
     }
 
     /// Construct a quaternion corresponding to a left-handed viewing 
@@ -1993,7 +1993,7 @@ where
     /// camera view transformations.
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::from(&Matrix3x3::face_towards(direction, up).transpose())
+        Self::from(&Matrix3x3::look_to_lh(direction, up).transpose())
     }
 
     /// Linearly interpolate between two quaternions.

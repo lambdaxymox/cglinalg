@@ -882,7 +882,7 @@ where
     #[inline]
     pub fn face_towards(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self {
-            matrix: Matrix3x3::face_towards(direction, up),
+            matrix: Matrix3x3::look_to_lh(direction, up),
         }
     }
 
