@@ -857,7 +857,7 @@ where
     /// of an observer located at the origin facing the **positive z-axis** into a 
     /// coordinate system of an observer located at the position origin facing 
     /// the direction `direction`. The resulting coordinate transformation is a 
-    /// left-handed coordinate transformation.
+    /// **left-handed** coordinate transformation.
     ///
     /// The resulting transformation maps the **positive z-axis** to `direction`.
     ///
@@ -884,42 +884,6 @@ where
     pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self {
             matrix: Matrix3x3::look_to_lh(direction, up),
-        }
-    }
-
-    /// Construct a coordinate transformation that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
-    /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the **negative z-axis**.
-    ///
-    /// The function maps the direction `direction` to the **negative z-axis** and 
-    /// locates the `eye` position to the origin in the new the coordinate system.
-    /// This transformation is a **right-handed** coordinate transformation. It is
-    /// conventionally used in computer graphics for camera view transformations.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg::{
-    /// #     Vector3,
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// # 
-    /// let direction: Vector3<f64> = Vector3::unit_y();
-    /// let up: Vector3<f64> = Vector3::unit_x();
-    /// let rotation = Rotation3::look_at_rh(&direction, &up);
-    /// let result = rotation.rotate_vector(&direction);
-    /// let expected = -Vector3::unit_z();
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
-    /// ```
-    #[inline]
-    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self {
-            matrix: Matrix3x3::look_at_rh(direction, up),
         }
     }
 
@@ -955,6 +919,41 @@ where
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self {
             matrix: Matrix3x3::look_at_lh(direction, up),
+        }
+    }
+
+    /// Construct a coordinate transformation that transforms
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the direction `direction` into the coordinate system of an observer located
+    /// at the origin facing the **negative z-axis**.
+    ///
+    /// The function maps the direction `direction` to the **negative z-axis** and 
+    /// locates the `eye` position to the origin in the new the coordinate system.
+    /// This transformation is a **right-handed** coordinate transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Vector3,
+    /// #     Rotation3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # 
+    /// let direction: Vector3<f64> = Vector3::unit_y();
+    /// let up: Vector3<f64> = Vector3::unit_x();
+    /// let rotation = Rotation3::look_at_rh(&direction, &up);
+    /// let result = rotation.rotate_vector(&direction);
+    /// let expected = -Vector3::unit_z();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// ```
+    #[inline]
+    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        Self {
+            matrix: Matrix3x3::look_at_rh(direction, up),
         }
     }
 

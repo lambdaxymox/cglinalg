@@ -966,7 +966,7 @@ where
     /// of an observer located at the origin facing the **positive z-axis** into a 
     /// coordinate system of an observer located at the position `eye` facing the 
     /// direction `direction`. The resulting coordinate transformation is a 
-    /// left-handed coordinate transformation.
+    /// **left-handed** coordinate transformation.
     ///
     /// The similarity transformation maps the **positive z-axis** to the direction 
     /// of `target - eye`, and locates the origin of the coordinate system to 
@@ -1008,8 +1008,7 @@ where
     /// the eye position `eye` and the position of the target `target` to 
     /// the **positive z-axis** and locates the `eye` position at the origin 
     /// in the new the coordinate system. This transformation is a 
-    /// **left-handed** coordinate transformation. It is conventionally used in 
-    /// computer graphics for camera view transformations.
+    /// **left-handed** coordinate transformation.
     ///
     /// # Example
     ///
@@ -1052,8 +1051,6 @@ where
     /// `eye` and position of the target `target` to the **negative z-axis** and 
     /// locates the `eye` position to the origin in the new the coordinate system. 
     /// This transformation is a **right-handed** coordinate transformation. 
-    /// It is conventionally used in computer graphics for camera view 
-    /// transformations.
     ///
     /// # Example
     ///
