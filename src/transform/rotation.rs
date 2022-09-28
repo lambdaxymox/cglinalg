@@ -887,6 +887,40 @@ where
         }
     }
 
+    /// Construct a coordinate transformation that maps the coordinate system 
+    /// of an observer located at the origin facing the **negative z-axis** into a 
+    /// coordinate system of an observer located at the position origin facing 
+    /// the direction `direction`. The resulting coordinate transformation is a 
+    /// **right-handed** coordinate transformation.
+    ///
+    /// The resulting transformation maps the **negative z-axis** to `direction`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Rotation3,
+    /// #     Vector3,    
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,    
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let rotation = Rotation3::look_to_rh(&direction, &up);
+    /// let minus_unit_z = -Vector3::unit_z();
+    ///
+    /// assert_relative_eq!(rotation.rotate_vector(&minus_unit_z), direction, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn look_to_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        Self {
+            matrix: Matrix3x3::look_to_rh(direction, up),
+        }
+    }
+
     /// Construct a coordinate transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
     /// the direction `direction` into the coordinate system of an observer located

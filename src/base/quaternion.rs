@@ -1999,7 +1999,7 @@ where
         Self::from(&Matrix3x3::look_to_lh(direction, up))
     }
 
-    /// Construct a rotation matrix that transforms the coordinate system of
+    /// Construct a quaternion that transforms the coordinate system of
     /// an observer located at the origin facing the **negative z-axis** into a
     /// coordinate system of an observer located at the origin facing the 
     /// direction `direction`. The resulting coordinate transformation is a 
@@ -2051,24 +2051,72 @@ where
         Self::from(&Matrix3x3::look_to_rh(direction, up))
     }
 
-    /// Construct a quaternion corresponding to a left-handed viewing 
+    /// Construct a quaternion corresponding to a **left-handed** viewing 
     /// transformation without translation. 
     ///
     /// This transformation maps the viewing direction `direction` to the 
-    /// **negative z-axis**.
+    /// **positive z-axis**.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let direction = Vector3::new(3_f64, -1_f64, 2_f64).normalize();
+    /// let up = Vector3::new(-1_f64, 1_f64, 1_f64);
+    /// let quaternion = Quaternion::look_at_lh(&direction, &up);
+    /// let rotation = Matrix3x3::from(quaternion);
+    /// let unit_z = Vector3::unit_z();
+    /// let minus_unit_z = -unit_z;
+    /// 
+    /// assert_relative_eq!(rotation * direction, unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(rotation * (-direction), minus_unit_z, epsilon = 1e-10);
+    /// ```
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self::from(&Matrix3x3::look_to_lh(direction, up).transpose())
     }
 
-    /// Construct a quaternion corresponding to a right-handed viewing 
+    /// Construct a quaternion corresponding to a **right-handed** viewing 
     /// transformation without translation. 
     ///
     /// This transformation maps the viewing direction `direction` to the 
     /// **negative z-axis**.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let direction = Vector3::new(3_f64, -1_f64, 2_f64).normalize();
+    /// let up = Vector3::new(-1_f64, 1_f64, 1_f64);
+    /// let quaternion = Quaternion::look_at_rh(&direction, &up);
+    /// let rotation = Matrix3x3::from(quaternion);
+    /// let unit_z = Vector3::unit_z();
+    /// let minus_unit_z = -unit_z;
+    /// 
+    /// assert_relative_eq!(rotation * direction, minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(rotation * (-direction), unit_z, epsilon = 1e-10);
+    /// ```
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::from(&Matrix3x3::look_to_lh(direction, up).transpose())
+        Self::from(&Matrix3x3::look_to_rh(direction, up).transpose())
     }
 
     /// Linearly interpolate between two quaternions.
