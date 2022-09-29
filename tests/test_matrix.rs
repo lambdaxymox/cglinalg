@@ -1637,21 +1637,21 @@ mod matrix3x3_tests {
         let direction = Vector3::new(1.0, 1.0, 1.0);
         let up = Vector3::unit_y();
         let unit_z = Vector3::unit_z();
-        let look_at = Matrix3x3::look_to_lh(&direction, &up);
-        let expected = direction.normalize();
-        let result = look_at * unit_z;
+        let look_to = Matrix3x3::look_to_lh(&direction, &up);
+        let expected = unit_z;
+        let result = look_to * direction.normalize();
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
-    fn test_look_at_rh() {
+    fn test_look_to_rh() {
         let direction = Vector3::new(1.0, 1.0, 1.0).normalize();
         let up = Vector3::unit_y();
         let minus_unit_z = -Vector3::unit_z();
-        let look_at = Matrix3x3::look_at_rh(&direction, &up);
+        let look_to = Matrix3x3::look_to_rh(&direction, &up);
         let expected = minus_unit_z;
-        let result = look_at * direction;
+        let result = look_to * direction;
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -1663,6 +1663,18 @@ mod matrix3x3_tests {
         let unit_z = Vector3::unit_z();
         let look_at = Matrix3x3::look_at_lh(&direction, &up);
         let expected = unit_z;
+        let result = look_at * direction;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_look_at_rh() {
+        let direction = Vector3::new(1.0, 1.0, 1.0).normalize();
+        let up = Vector3::unit_y();
+        let minus_unit_z = -Vector3::unit_z();
+        let look_at = Matrix3x3::look_at_rh(&direction, &up);
+        let expected = minus_unit_z;
         let result = look_at * direction;
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
@@ -2896,10 +2908,10 @@ mod matrix4x4_tests {
         let eye = Point3::new(1.0, 1.0, 1.0);
         let direction = (eye - Point3::origin()).normalize();
         let up = Vector3::unit_y();
-        let unit_z = Vector3::unit_z().extend(0.0);
+        let unit_z = Vector3::unit_z().to_homogeneous();
         let look_to = Matrix4x4::look_to_lh(&eye, &direction, &up);
-        let expected = direction.normalize().extend(0.0);
-        let result = look_to * unit_z;
+        let expected = unit_z;
+        let result = look_to * direction.normalize().to_homogeneous();
     
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -2909,10 +2921,10 @@ mod matrix4x4_tests {
         let eye = Point3::new(1.0, 1.0, 1.0);
         let direction = (eye - Point3::origin()).normalize();
         let up = Vector3::unit_y();
-        let unit_z = (-Vector3::unit_z()).extend(0.0);
+        let minus_unit_z = (-Vector3::unit_z()).to_homogeneous();
         let look_to = Matrix4x4::look_to_lh(&eye, &direction, &up);
-        let expected = (-direction).normalize().extend(0.0);
-        let result = look_to * unit_z;
+        let expected = minus_unit_z;
+        let result = look_to * (-direction).normalize().to_homogeneous();
     
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }

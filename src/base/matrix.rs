@@ -2868,6 +2868,57 @@ where
         )
     }
 
+    /// Construct a coordinate transformation matrix that transforms
+    /// a coordinate system of an observer located at the origin facing 
+    /// the direction `direction` into the coordinate system of an observer located
+    /// at the origin facing the **positive z-axis**.
+    ///
+    /// The function maps the direction `direction` to the **positive z-axis** in 
+    /// the new coordinate system. This corresponds to a rotation matrix.
+    /// This transformation is a **left-handed** coordinate transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64).normalize();
+    /// let up = Vector3::unit_z();
+    /// let expected = Matrix3x3::new(
+    ///     -1_f64 / f64::sqrt(2_f64), 0_f64,  1_f64 / f64::sqrt(2_f64),
+    ///      1_f64 / f64::sqrt(2_f64), 0_f64,  1_f64 / f64::sqrt(2_f64),
+    ///      0_f64,                    1_f64,  0_f64,
+    /// );
+    /// let result = Matrix3x3::look_to_lh(&direction, &up);
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// 
+    /// let unit_z = Vector3::unit_z();
+    /// 
+    /// assert_relative_eq!(result * direction, unit_z, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        let z_axis = direction.normalize();
+        let x_axis = up.cross(&z_axis).normalize();
+        let y_axis = z_axis.cross(&x_axis).normalize();
+
+        Self::new(
+            x_axis.x, y_axis.x, z_axis.x,
+            x_axis.y, y_axis.y, z_axis.y,
+            x_axis.z, y_axis.z, z_axis.z,
+        )
+    }
+
+    /*
     /// Construct a rotation matrix that transforms the coordinate system of
     /// an observer located at the origin facing the **positive z-axis** into a
     /// coordinate system of an observer located at the origin facing the 
@@ -2884,7 +2935,7 @@ where
     /// #     Vector3,    
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,    
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -2893,9 +2944,9 @@ where
     /// let expected = Matrix3x3::new(
     ///      1_f64 / f64::sqrt(6_f64), -1_f64 / f64::sqrt(6_f64), -2_f64 / f64::sqrt(6_f64),
     ///      1_f64 / f64::sqrt(2_f64),  1_f64 / f64::sqrt(2_f64),  0_f64,
-    ///      1_f64 / f64::sqrt(3_f64), -1_f64 / f64::sqrt(3_f64),  1_f64 / f64::sqrt(3_f64)
+    ///      1_f64 / f64::sqrt(3_f64), -1_f64 / f64::sqrt(3_f64),  1_f64 / f64::sqrt(3_f64),
     /// );
-    /// let result = Matrix3x3::look_to_lh(&direction, &up);
+    /// let result = Matrix3x3::face_towards_lh(&direction, &up);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     ///
@@ -2916,7 +2967,59 @@ where
             z_axis.x, z_axis.y, z_axis.z,
         )
     }
+    */
 
+    /// Construct a coordinate transformation matrix that transforms
+    /// a coordinate system of an observer located at the origin facing 
+    /// the direction `direction` into the coordinate system of an observer located
+    /// at the origin facing the **negative z-axis**.
+    ///
+    /// The function maps the direction `direction` to the **negative z-axis** in 
+    /// the new coordinate system. This corresponds to a rotation matrix.
+    /// This transformation is a **right-handed** coordinate transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64).normalize();
+    /// let up = Vector3::unit_z();
+    /// let expected = Matrix3x3::new(
+    ///      1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
+    ///     -1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
+    ///      0_f64,                    1_f64,  0_f64,
+    /// );
+    /// let result = Matrix3x3::look_at_rh(&direction, &up);
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// 
+    /// let minus_unit_z = -Vector3::unit_z();
+    /// 
+    /// assert_relative_eq!(result * direction, minus_unit_z, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn look_to_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        let z_axis = -direction.normalize();
+        let x_axis = up.cross(&z_axis).normalize();
+        let y_axis = z_axis.cross(&x_axis).normalize();
+
+        Self::new(
+            x_axis.x, y_axis.x, z_axis.x,
+            x_axis.y, y_axis.y, z_axis.y,
+            x_axis.z, y_axis.z, z_axis.z,
+        )
+    }
+
+    /*
     /// Construct a rotation matrix that transforms the coordinate system of
     /// an observer located at the origin facing the **negative z-axis** into a
     /// coordinate system of an observer located at the origin facing the 
@@ -2942,15 +3045,15 @@ where
     /// let expected = Matrix3x3::new(
     ///     -1_f64 / f64::sqrt(6_f64),  1_f64 / f64::sqrt(6_f64),  2_f64 / f64::sqrt(6_f64),
     ///      1_f64 / f64::sqrt(2_f64),  1_f64 / f64::sqrt(2_f64),  0_f64,
-    ///     -1_f64 / f64::sqrt(3_f64),  1_f64 / f64::sqrt(3_f64), -1_f64 / f64::sqrt(3_f64)
+    ///     -1_f64 / f64::sqrt(3_f64),  1_f64 / f64::sqrt(3_f64), -1_f64 / f64::sqrt(3_f64),
     /// );
     /// let result = Matrix3x3::look_to_rh(&direction, &up);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     ///
-    /// let minus_z_axis = -Vector3::unit_z();
+    /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_eq!(result * minus_z_axis, direction);
+    /// assert_eq!(result * minus_unit_z, direction);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -2965,6 +3068,7 @@ where
             z_axis.x, z_axis.y, z_axis.z,
         )
     }
+    */
 
     /// Construct a coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the origin facing 
@@ -3005,8 +3109,7 @@ where
     /// ```
     #[inline]
     pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        // The inverse of a rotation matrix is its transpose.
-        Self::look_to_lh(direction, up).transpose()
+        Self::look_to_lh(direction, up)
     }
 
     /// Construct a coordinate transformation matrix that transforms
@@ -3036,7 +3139,7 @@ where
     /// let expected = Matrix3x3::new(
     ///      1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
     ///     -1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
-    ///      0_f64,                    1_f64,  0_f64
+    ///      0_f64,                    1_f64,  0_f64,
     /// );
     /// let result = Matrix3x3::look_at_rh(&direction, &up);
     ///
@@ -3048,8 +3151,7 @@ where
     /// ```
     #[inline]
     pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        // The inverse of a rotation matrix is its transpose.
-        Self::look_to_lh(&(-direction), up).transpose()
+        Self::look_to_rh(direction, up)
     }
 
     /// Construct a rotation matrix that rotates the shortest angular distance 
@@ -4226,13 +4328,74 @@ where
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing the **positive z-axis**
-    /// into a coordinate system of an observer located at the position `eye` facing
-    /// the direction `direction`. The resulting coordinate transformation is a **left-handed**
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the position `target` into the coordinate system of an observer located
+    /// at the origin facing the **positive z-axis**.
+    ///
+    /// The function maps the direction of the target `target` to the 
+    /// **positive z-axis** and locates the `eye` position to the origin in the
+    /// new the coordinate system. This transformation is a **left-handed** 
     /// coordinate transformation.
     ///
-    /// The function maps the **positive z-axis** to the direction `direction`, and locates the 
-    /// origin of the coordinate system to the `eye` position.
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Point3, 
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let target = Point3::new(4_f64, 5_f64, 3_f64);
+    /// let direction = target - eye;
+    /// let up = Vector3::unit_z();
+    /// let expected = Matrix4x4::new(
+    ///      -1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64,
+    ///       1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64, 
+    ///       0_f64,                     1_f64,  0_f64,                     0_f64,
+    ///      -1_f64 / f64::sqrt(2_f64), -3_f64, -3_f64 / f64::sqrt(2_f64),  1_f64
+    /// );
+    /// let result = Matrix4x4::look_to_lh(&eye, &direction, &up);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn look_to_lh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        let zero = S::zero();
+        let one = S::one();
+        let z_axis = direction.normalize();
+        let x_axis = up.cross(&z_axis).normalize();
+        let y_axis = z_axis.cross(&x_axis).normalize();
+
+        let eye_vec = eye - Point3::origin();
+        let neg_eye_x = -eye_vec.dot(&x_axis);
+        let neg_eye_y = -eye_vec.dot(&y_axis);
+        let neg_eye_z = -eye_vec.dot(&z_axis);
+        
+        Self::new(
+            x_axis.x,  y_axis.x,  z_axis.x,  zero,
+            x_axis.y,  y_axis.y,  z_axis.y,  zero,
+            x_axis.z,  y_axis.z,  z_axis.z,  zero,
+            neg_eye_x, neg_eye_y, neg_eye_z, one
+        )
+    }
+
+    /*
+    /// Construct an affine coordinate transformation matrix that transforms
+    /// a coordinate system of an observer located at the origin facing the 
+    /// **positive z-axis** into a coordinate system where the observer is 
+    /// located at the position `eye` facing the direction `direction`. The 
+    /// resulting coordinate transformation is a **left-handed** coordinate 
+    /// transformation.
+    ///
+    /// The function maps the **positive z-axis** to the direction `direction`, 
+    /// and locates the origin of the coordinate system to the `eye` position.
     /// 
     /// # Example
     /// 
@@ -4285,15 +4448,76 @@ where
             eye_x,     eye_y,     eye_z,    one
         )
     }
+    */
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing the **negative z-axis**
-    /// into a coordinate system of an observer located at the position `eye` facing
-    /// the direction `direction`. The resulting coordinate transformation is a **right-handed**
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the position `target` into the coordinate system of an observer located
+    /// at the origin facing the **negative z-axis**.
+    ///
+    /// The function maps the direction of the target `target` to the 
+    /// **negative z-axis** and locates the `eye` position to the origin in the
+    /// new the coordinate system. This transformation is a **right-handed** 
     /// coordinate transformation.
     ///
-    /// The function maps the **negative z-axis** to the direction `direction`, and locates the 
-    /// origin of the coordinate system to the `eye` position.
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Point3, 
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let target = Point3::new(4_f64, 5_f64, 3_f64);
+    /// let direction = target - eye;
+    /// let up = Vector3::unit_z();
+    /// let expected = Matrix4x4::new(
+    ///      1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
+    ///     -1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64, 
+    ///      0_f64,                     1_f64,  0_f64,                     0_f64,
+    ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64
+    /// );
+    /// let result = Matrix4x4::look_to_rh(&eye, &direction, &up);
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn look_to_rh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        let zero = S::zero();
+        let one = S::one();
+        let z_axis = (-direction).normalize();
+        let x_axis = up.cross(&z_axis).normalize();
+        let y_axis = z_axis.cross(&x_axis).normalize();
+
+        let eye_vec = eye - Point3::origin();
+        let neg_eye_x = -eye_vec.dot(&x_axis);
+        let neg_eye_y = -eye_vec.dot(&y_axis);
+        let neg_eye_z = -eye_vec.dot(&z_axis);
+        
+        Self::new(
+            x_axis.x,  y_axis.x,  z_axis.x,  zero,
+            x_axis.y,  y_axis.y,  z_axis.y,  zero,
+            x_axis.z,  y_axis.z,  z_axis.z,  zero,
+            neg_eye_x, neg_eye_y, neg_eye_z, one
+        )
+    }
+    /*
+    /// Construct an affine coordinate transformation matrix that transforms
+    /// a coordinate system of an observer located at the origin facing the 
+    /// **negative z-axis** into a coordinate system where the observer is 
+    /// located at the position `eye` facing the direction `direction`. The 
+    /// resulting coordinate transformation is a **right-handed** coordinate 
+    /// transformation.
+    ///
+    /// The function maps the **negative z-axis** to the direction `direction`, 
+    /// and locates the origin of the coordinate system to the `eye` position.
     /// 
     /// # Example
     /// 
@@ -4346,6 +4570,7 @@ where
             eye_x,     eye_y,     eye_z,    one,
         )
     }
+    */
 
     /// Construct an affine coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
@@ -4355,8 +4580,7 @@ where
     /// The function maps the direction of the target `target` to the 
     /// **positive z-axis** and locates the `eye` position to the origin in the
     /// new the coordinate system. This transformation is a **left-handed** 
-    /// coordinate transformation. It is conventionally used in computer graphics 
-    /// for camera view transformations.
+    /// coordinate transformation.
     ///
     /// # Example
     ///
@@ -4415,8 +4639,7 @@ where
     /// The function maps the direction of the target `target` to the 
     /// **negative z-axis** and locates the `eye` position to the origin in the
     /// new the coordinate system. This transformation is a **right-handed** 
-    /// coordinate transformation. It is conventionally used in computer graphics 
-    /// for camera view transformations.
+    /// coordinate transformation.
     ///
     /// # Example
     ///

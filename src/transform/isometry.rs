@@ -951,13 +951,57 @@ where
     }
 
     /// Construct a coordinate transformation that maps the coordinate system 
+    /// of an observer located at the position `eye` facing the direction 
+    /// `direction` into a coordinate system of an observer located at the 
+    /// origin facing the **positive z-axis**. The resulting coordinate 
+    /// transformation is a **left-handed** coordinate transformation.
+    ///
+    /// The resulting isometry maps the direction `direction` to the 
+    /// **positive z-axis** and locates position `eye` to the the origin.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Magnitude,
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let target = Point3::new(1_f64, -1_f64, 1_f64);
+    /// let direction = (target - eye).normalize();
+    /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let isometry = Isometry3::look_to_lh(&eye, &direction, &up);
+    /// let origin: Point3<f64> = Point3::origin();
+    /// let unit_z = Vector3::unit_z();
+    ///
+    /// assert_relative_eq!(isometry.transform_point(&eye), origin, epsilon = 1e-8);
+    /// assert_relative_eq!(isometry.transform_vector(&direction), unit_z, epsilon = 1e-8);
+    /// ```
+    #[inline]
+    pub fn look_to_lh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        let rotation = Rotation3::look_to_lh(direction, up);
+        let vector = rotation * (-eye) - Point3::origin();
+        let translation = Translation3::from_vector(&vector);
+
+        Self::from_parts(&translation, &rotation)
+    }
+    /*
+    /// Construct a coordinate transformation that maps the coordinate system 
     /// of an observer located at the origin facing the **positive z-axis** into a 
     /// coordinate system of an observer located at the position `eye` facing the 
     /// direction `direction`. The resulting coordinate transformation is a 
     /// **left-handed** coordinate transformation.
     ///
-    /// The resulting isometry maps the **positive z-axis** to the direction `direction` 
-    /// and locates the origin of the coordinate system to the `eye` position.
+    /// The resulting isometry maps the **positive z-axis** to the direction 
+    /// `direction` and locates the origin of the coordinate system to the `eye` 
+    /// position.
     ///
     /// # Example
     ///
@@ -989,15 +1033,60 @@ where
 
         Self::from_parts(&translation, &rotation)
     }
+    */
 
+    /// Construct a coordinate transformation that maps the coordinate system 
+    /// of an observer located at the position `eye` facing the direction 
+    /// `direction` into a coordinate system of an observer located at the 
+    /// origin facing the **negative z-axis** The resulting coordinate 
+    /// transformation is a **right-handed** coordinate transformation.
+    ///
+    /// The resulting isometry maps the direction `direction` to the 
+    /// **negative z-axis** and locates the position `eye` to the origin.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Magnitude,
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let target = Point3::new(1_f64, -1_f64, 1_f64);
+    /// let direction = (target - eye).normalize();
+    /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let isometry = Isometry3::look_to_rh(&eye, &direction, &up);
+    /// let origin = Point3::origin();
+    /// let minus_unit_z = -Vector3::unit_z();
+    ///
+    /// assert_relative_eq!(isometry.transform_point(&eye), origin, epsilon = 1e-8);
+    /// assert_relative_eq!(isometry.transform_vector(&direction), minus_unit_z, epsilon = 1e-8);
+    /// ```
+    #[inline]
+    pub fn look_to_rh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+        let rotation = Rotation3::look_to_rh(direction, up);
+        let vector = rotation * (-eye) - Point3::origin();
+        let translation = Translation3::from_vector(&vector);
+
+        Self::from_parts(&translation, &rotation)
+    }
+    /*
     /// Construct a coordinate transformation that maps the coordinate system 
     /// of an observer located at the origin facing the **negative z-axis** into a 
     /// coordinate system of an observer located at the position `eye` facing the 
     /// direction `direction`. The resulting coordinate transformation is a 
     /// **right-handed** coordinate transformation.
     ///
-    /// The resulting isometry maps the **negative z-axis** to the direction `direction` 
-    /// and locates the origin of the coordinate system to the `eye` position.
+    /// The resulting isometry maps the **negative z-axis** to the direction 
+    /// `direction` and locates the origin of the coordinate system to the `eye` 
+    /// position.
     ///
     /// # Example
     ///
@@ -1029,6 +1118,7 @@ where
 
         Self::from_parts(&translation, &rotation)
     }
+    */
 
     /// Construct an coordinate transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing 
