@@ -656,6 +656,7 @@ mod matrix3x3_tests {
         Angle,
         Radians,
         Unit,
+        Point3,
     };
     use approx::assert_relative_eq;
     use core::slice::Iter;
@@ -1658,24 +1659,28 @@ mod matrix3x3_tests {
 
     #[test]
     fn test_look_at_lh() {
-        let direction = Vector3::new(1.0, 1.0, 1.0).normalize();
+        let eye = Point3::new(-1.0, -1.0, -1.0);
+        let target = Point3::origin();
+        let direction = target - eye;
         let up = Vector3::unit_y();
         let unit_z = Vector3::unit_z();
-        let look_at = Matrix3x3::look_at_lh(&direction, &up);
+        let look_at = Matrix3x3::look_at_lh(&eye, &target, &up);
         let expected = unit_z;
-        let result = look_at * direction;
+        let result = look_at * direction.normalize();
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
     fn test_look_at_rh() {
-        let direction = Vector3::new(1.0, 1.0, 1.0).normalize();
+        let eye = Point3::new(-1.0, -1.0, -1.0);
+        let target = Point3::origin();
+        let direction = target - eye;
         let up = Vector3::unit_y();
         let minus_unit_z = -Vector3::unit_z();
-        let look_at = Matrix3x3::look_at_rh(&direction, &up);
+        let look_at = Matrix3x3::look_at_rh(&eye, &target, &up);
         let expected = minus_unit_z;
-        let result = look_at * direction;
+        let result = look_at * direction.normalize();
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }

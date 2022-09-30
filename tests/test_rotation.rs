@@ -692,20 +692,23 @@ mod rotation3_tests {
 
     #[test]
     fn test_rotation_look_at_rh_x_axis() {
-        let direction: Vector3<f64> = Vector3::unit_x();
+        let eye = Point3::new(-1.0, 0.0, 0.0);
+        let target = Point3::origin();
         let up: Vector3<f64> = Vector3::unit_y();
         let angle = Degrees(90_f64);
         let expected = Rotation3::from_angle_y(angle);
-        let result = Rotation3::look_at_rh(&direction, &up);
+        let result = Rotation3::look_at_rh(&eye, &target, &up);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
     fn test_rotation_look_at_rh_y_axis() {
+        let eye = Point3::new(0.0, -1.0, 0.0);
+        let target = Point3::origin();
         let direction: Vector3<f64> = Vector3::unit_y();
         let up: Vector3<f64> = Vector3::unit_x();
-        let rotation = Rotation3::look_at_rh(&direction, &up);
+        let rotation = Rotation3::look_at_rh(&eye, &target, &up);
         let result = rotation.rotate_vector(&direction);
         let expected = -Vector3::unit_z();
         
@@ -714,20 +717,23 @@ mod rotation3_tests {
 
     #[test]
     fn test_rotation_look_at_lh_x_axis() {
-        let direction: Vector3<f64> = Vector3::unit_x();
+        let eye = Point3::new(-1.0, 0.0, 0.0);
+        let target = Point3::origin();
         let up: Vector3<f64> = Vector3::unit_y();
         let angle = Degrees(-90_f64);
         let expected = Rotation3::from_angle_y(angle);
-        let result = Rotation3::look_at_lh(&direction, &up);
+        let result = Rotation3::look_at_lh(&eye, &target, &up);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
     fn test_rotation_look_at_lh_y_axis() {
+        let eye = Point3::new(0.0, -1.0, 0.0);
+        let target = Point3::origin();
         let direction: Vector3<f64> = Vector3::unit_y();
         let up: Vector3<f64> = Vector3::unit_x();
-        let rotation = Rotation3::look_at_lh(&direction, &up);
+        let rotation = Rotation3::look_at_lh(&eye, &target, &up);
         let result = rotation.rotate_vector(&direction);
         let expected = Vector3::unit_z();
 

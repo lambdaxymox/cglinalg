@@ -2870,12 +2870,13 @@ where
 
     /// Construct a coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the origin facing 
-    /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the **positive z-axis**.
+    /// the direction `direction` into the coordinate system of an observer 
+    /// located at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `direction` to the **positive z-axis** in 
-    /// the new coordinate system. This corresponds to a rotation matrix.
+    /// The function maps the direction `direction` to the **positive z-axis** 
+    /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **left-handed** coordinate transformation.
+    /// 
     ///
     /// # Example
     ///
@@ -2890,7 +2891,7 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64).normalize();
+    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64);
     /// let up = Vector3::unit_z();
     /// let expected = Matrix3x3::new(
     ///     -1_f64 / f64::sqrt(2_f64), 0_f64,  1_f64 / f64::sqrt(2_f64),
@@ -2898,17 +2899,15 @@ where
     ///      0_f64,                    1_f64,  0_f64,
     /// );
     /// let result = Matrix3x3::look_to_lh(&direction, &up);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// 
     /// let unit_z = Vector3::unit_z();
     /// 
-    /// assert_relative_eq!(result * direction, unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result * direction.normalize(), unit_z, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let z_axis = direction.normalize();
-        let x_axis = up.cross(&z_axis).normalize();
+        let x_axis = (up.cross(&z_axis)).normalize();
         let y_axis = z_axis.cross(&x_axis).normalize();
 
         Self::new(
@@ -2920,11 +2919,11 @@ where
 
     /// Construct a coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the origin facing 
-    /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the **negative z-axis**.
+    /// the direction `direction` into the coordinate system of an observer 
+    /// located at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `direction` to the **negative z-axis** in 
-    /// the new coordinate system. This corresponds to a rotation matrix.
+    /// The function maps the direction `direction` to the **negative z-axis** 
+    /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **right-handed** coordinate transformation.
     ///
     /// # Example
@@ -2940,20 +2939,18 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64).normalize();
+    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64);
     /// let up = Vector3::unit_z();
     /// let expected = Matrix3x3::new(
     ///      1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
     ///     -1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
     ///      0_f64,                    1_f64,  0_f64,
     /// );
-    /// let result = Matrix3x3::look_at_rh(&direction, &up);
+    /// let result = Matrix3x3::look_to_rh(&direction, &up);
+    /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// 
-    /// let minus_unit_z = -Vector3::unit_z();
-    /// 
-    /// assert_relative_eq!(result * direction, minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result * direction.normalize(), minus_unit_z, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn look_to_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -2969,12 +2966,12 @@ where
     }
 
     /// Construct a coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing 
-    /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the **positive z-axis**.
+    /// a coordinate system of an observer located at the position `eye` facing 
+    /// the position `target` into the coordinate system of an observer 
+    /// located at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `direction` to the **positive z-axis** in 
-    /// the new coordinate system. This corresponds to a rotation matrix.
+    /// The function maps the direction `target - eye` to the **positive z-axis** 
+    /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **left-handed** coordinate transformation.
     ///
     /// # Example
@@ -2983,6 +2980,7 @@ where
     /// # use cglinalg::{
     /// #     Matrix3x3,
     /// #     Vector3,
+    /// #     Point3,
     /// #     Magnitude,
     /// # };
     /// # use approx::{
@@ -2990,33 +2988,33 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64).normalize();
+    /// let eye = Point3::new(-1_f64, -1_f64, 0_f64);
+    /// let target = Point3::origin();
     /// let up = Vector3::unit_z();
     /// let expected = Matrix3x3::new(
     ///     -1_f64 / f64::sqrt(2_f64), 0_f64,  1_f64 / f64::sqrt(2_f64),
     ///      1_f64 / f64::sqrt(2_f64), 0_f64,  1_f64 / f64::sqrt(2_f64),
     ///      0_f64,                    1_f64,  0_f64,
     /// );
-    /// let result = Matrix3x3::look_at_lh(&direction, &up);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// 
+    /// let result = Matrix3x3::look_at_lh(&eye, &target, &up);
+    /// let direction = (target - eye).normalize();
     /// let unit_z = Vector3::unit_z();
     /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * direction, unit_z, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::look_to_lh(direction, up)
+    pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        Self::look_to_lh(&(target - eye), up)
     }
 
     /// Construct a coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the origin facing 
-    /// the direction `direction` into the coordinate system of an observer located
-    /// at the origin facing the **negative z-axis**.
+    /// the direction `direction` into the coordinate system of an observer 
+    /// located at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `direction` to the **negative z-axis** in 
-    /// the new coordinate system. This corresponds to a rotation matrix.
+    /// The function maps the direction `target - eye` to the **negative z-axis** 
+    /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **right-handed** coordinate transformation.
     ///
     /// # Example
@@ -3025,6 +3023,7 @@ where
     /// # use cglinalg::{
     /// #     Matrix3x3,
     /// #     Vector3,
+    /// #     Point3,
     /// #     Magnitude,
     /// # };
     /// # use approx::{
@@ -3032,24 +3031,24 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64).normalize();
+    /// let eye = Point3::new(-1_f64, -1_f64, 0_f64);
+    /// let target = Point3::origin();
     /// let up = Vector3::unit_z();
     /// let expected = Matrix3x3::new(
     ///      1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
     ///     -1_f64 / f64::sqrt(2_f64), 0_f64, -1_f64 / f64::sqrt(2_f64),
     ///      0_f64,                    1_f64,  0_f64,
     /// );
-    /// let result = Matrix3x3::look_at_rh(&direction, &up);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// 
+    /// let result = Matrix3x3::look_at_rh(&eye, &target, &up);
+    /// let direction = (target - eye).normalize();
     /// let minus_unit_z = -Vector3::unit_z();
     /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * direction, minus_unit_z, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::look_to_rh(direction, up)
+    pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        Self::look_to_rh(&(target - eye), up)
     }
 
     /// Construct a rotation matrix that transforms the coordinate system of
@@ -3066,14 +3065,15 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Matrix3x3,
-    /// #     Vector3,    
+    /// #     Vector3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let expected = Matrix3x3::new(
     ///      1_f64 / f64::sqrt(6_f64), -1_f64 / f64::sqrt(6_f64), -2_f64 / f64::sqrt(6_f64),
@@ -3081,12 +3081,10 @@ where
     ///      1_f64 / f64::sqrt(3_f64), -1_f64 / f64::sqrt(3_f64),  1_f64 / f64::sqrt(3_f64),
     /// );
     /// let result = Matrix3x3::look_to_lh_inv(&direction, &up);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    ///
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_eq!(result * unit_z, direction);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result * unit_z, direction.normalize(), epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn look_to_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -3107,14 +3105,15 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Matrix3x3,
-    /// #     Vector3,    
+    /// #     Vector3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let expected = Matrix3x3::new(
     ///     -1_f64 / f64::sqrt(6_f64),  1_f64 / f64::sqrt(6_f64),  2_f64 / f64::sqrt(6_f64),
@@ -3122,12 +3121,10 @@ where
     ///     -1_f64 / f64::sqrt(3_f64),  1_f64 / f64::sqrt(3_f64), -1_f64 / f64::sqrt(3_f64),
     /// );
     /// let result = Matrix3x3::look_to_rh_inv(&direction, &up);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    ///
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_eq!(result * minus_unit_z, direction);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result * minus_unit_z, direction.normalize(), epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn look_to_rh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -3150,6 +3147,7 @@ where
     /// # use cglinalg::{
     /// #     Matrix3x3,
     /// #     Vector3,
+    /// #     Point3,
     /// #     Magnitude,
     /// # };
     /// # use approx::{
@@ -3157,24 +3155,24 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64).normalize();
+    /// let eye = Point3::new(-1_f64, -1_f64, 0_f64);
+    /// let target = Point3::origin();
     /// let up = Vector3::unit_z();
     /// let expected = Matrix3x3::new(
     ///     -1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64), 0_f64,
     ///      0_f64,                    0_f64,                    1_f64,
     ///      1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64), 0_f64,
     /// );
-    /// let result = Matrix3x3::look_at_lh_inv(&direction, &up);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// 
+    /// let result = Matrix3x3::look_at_lh_inv(&eye, &target, &up);
+    /// let direction = (target - eye).normalize();
     /// let unit_z = Vector3::unit_z();
     /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn look_at_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::look_to_lh(direction, up).transpose()
+    pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        Self::look_to_lh(&(target - eye), up).transpose()
     }
 
     /// Construct a coordinate transformation matrix that transforms
@@ -3193,6 +3191,7 @@ where
     /// # use cglinalg::{
     /// #     Matrix3x3,
     /// #     Vector3,
+    /// #     Point3,
     /// #     Magnitude,
     /// # };
     /// # use approx::{
@@ -3200,24 +3199,24 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, 1_f64, 0_f64).normalize();
+    /// let eye = Point3::new(-1_f64, -1_f64, 0_f64);
+    /// let target = Point3::origin();
     /// let up = Vector3::unit_z();
     /// let expected = Matrix3x3::new(
     ///      1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,
     ///      0_f64,                     0_f64,                    1_f64,
     ///     -1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64
     /// );
-    /// let result = Matrix3x3::look_at_rh_inv(&direction, &up);
+    /// let result = Matrix3x3::look_at_rh_inv(&eye, &target, &up);
+    /// let direction = (target - eye).normalize();
+    /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// 
-    /// let minus_unit_z = -Vector3::unit_z();
-    /// 
     /// assert_relative_eq!(result * minus_unit_z, direction, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn look_at_rh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::look_to_rh(direction, up).transpose()
+    pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        Self::look_at_rh(eye, target, up).transpose()
     }
 
     /// Construct a rotation matrix that rotates the shortest angular distance 
@@ -4409,7 +4408,9 @@ where
     /// # use cglinalg::{
     /// #     Matrix4x4,
     /// #     Vector3,
-    /// #     Point3, 
+    /// #     Vector4,
+    /// #     Point3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -4427,8 +4428,14 @@ where
     ///      -1_f64 / f64::sqrt(2_f64), -3_f64, -3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
     /// let result = Matrix4x4::look_to_lh(&eye, &direction, &up);
+    /// let unit_z = Vector4::unit_z();
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     (result * direction.to_homogeneous()).normalize(), 
+    ///     unit_z, 
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4468,7 +4475,9 @@ where
     /// # use cglinalg::{
     /// #     Matrix4x4,
     /// #     Vector3,
-    /// #     Point3, 
+    /// #     Vector4,
+    /// #     Point3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -4486,8 +4495,14 @@ where
     ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
     /// let result = Matrix4x4::look_to_rh(&eye, &direction, &up);
+    /// let minus_unit_z = -Vector4::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     (result * direction.to_homogeneous()).normalize(), 
+    ///     minus_unit_z, 
+    ///     epsilon = 1e-10
+    /// );
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4527,7 +4542,9 @@ where
     /// # use cglinalg::{
     /// #     Matrix4x4,
     /// #     Vector3,
-    /// #     Point3, 
+    /// #     Vector4,
+    /// #     Point3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -4544,8 +4561,11 @@ where
     ///      -1_f64 / f64::sqrt(2_f64), -3_f64, -3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
     /// let result = Matrix4x4::look_at_lh(&eye, &target, &up);
+    /// let direction = (target - eye).to_homogeneous();
+    /// let unit_z = Vector4::unit_z();
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!((result * direction).normalize(), unit_z, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4586,7 +4606,9 @@ where
     /// # use cglinalg::{
     /// #     Matrix4x4,
     /// #     Vector3,
+    /// #     Vector4,
     /// #     Point3, 
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -4603,8 +4625,11 @@ where
     ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
     /// let result = Matrix4x4::look_at_rh(&eye, &target, &up);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// let direction = (target - eye).to_homogeneous();
+    /// let minus_unit_z = -Vector4::unit_z();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!((result * direction).normalize(), minus_unit_z, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4649,6 +4674,9 @@ where
     /// #     Matrix4x4,
     /// #     Point3,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,  
+    /// # };
     /// #
     /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
     /// let direction: Vector3<f64> = -Vector3::unit_x();
@@ -4660,15 +4688,13 @@ where
     ///     -3_f64, -4_f64, 2_f64, 1_f64,
     /// );
     /// let result = Matrix4x4::look_to_lh_inv(&eye, &direction, &up);
-    /// 
-    /// assert_eq!(result, expected);
-    /// 
     /// let direction = direction.to_homogeneous();
-    /// let unit_z = Vector3::unit_z().to_homogeneous();
+    /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
     /// 
-    /// assert_eq!(result * unit_z, direction);
-    /// assert_eq!(result * minus_unit_z, -direction);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result * minus_unit_z, -direction, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4711,6 +4737,10 @@ where
     /// #     Vector4,
     /// #     Matrix4x4,
     /// #     Point3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
@@ -4723,15 +4753,13 @@ where
     ///     3_f64, -4_f64, -2_f64, 1_f64,
     /// );
     /// let result = Matrix4x4::look_to_rh_inv(&eye, &direction, &up);
-    /// 
-    /// assert_eq!(result, expected);
-    /// 
-    /// let direction = direction.to_homogeneous();
-    /// let unit_z = Vector3::unit_z().to_homogeneous();
+    /// let direction = direction.to_homogeneous().normalize();
+    /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
     /// 
-    /// assert_eq!(result * unit_z, -direction);
-    /// assert_eq!(result * minus_unit_z, direction);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result * unit_z, -direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result * minus_unit_z, direction, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4774,10 +4802,14 @@ where
     /// #     Vector4,
     /// #     Matrix4x4,
     /// #     Point3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
-    /// let direction: Vector3<f64> = -Vector3::unit_x();
+    /// let target = Point3::new(-4_f64, 3_f64, -4_f64);
     /// let up = Vector3::unit_z();
     /// let expected = Matrix4x4::new(
     ///      0_f64, -1_f64, 0_f64, 0_f64,
@@ -4785,16 +4817,14 @@ where
     ///     -1_f64,  0_f64, 0_f64, 0_f64,
     ///     -3_f64, -4_f64, 2_f64, 1_f64,
     /// );
-    /// let result = Matrix4x4::look_to_lh_inv(&eye, &direction, &up);
-    /// 
-    /// assert_eq!(result, expected);
-    /// 
-    /// let direction = direction.to_homogeneous();
-    /// let unit_z = Vector3::unit_z().to_homogeneous();
+    /// let result = Matrix4x4::look_at_lh_inv(&eye, &target, &up);
+    /// let direction = (target - eye).to_homogeneous().normalize();
+    /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
     /// 
-    /// assert_eq!(result * unit_z, direction);
-    /// assert_eq!(result * minus_unit_z, -direction);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result * minus_unit_z, -direction, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4828,7 +4858,7 @@ where
     ///
     /// The function maps the **negative z-axis** to the direction `direction`, 
     /// and locates the origin of the coordinate system to the `eye` position.
-    /// This function is the inverse of `look_at_rh_inv`.
+    /// This function is the inverse of `look_at_rh`.
     /// 
     /// # Example
     /// 
@@ -4838,10 +4868,14 @@ where
     /// #     Vector4,
     /// #     Matrix4x4,
     /// #     Point3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
-    /// let direction: Vector3<f64> = -Vector3::unit_x();
+    /// let target = Point3::new(-4_f64, 3_f64, -4_f64);
     /// let up = Vector3::unit_z();
     /// let expected = Matrix4x4::new(
     ///     0_f64,  1_f64,  0_f64, 0_f64,
@@ -4849,16 +4883,14 @@ where
     ///     1_f64,  0_f64,  0_f64, 0_f64,
     ///     3_f64, -4_f64, -2_f64, 1_f64,
     /// );
-    /// let result = Matrix4x4::look_to_rh_inv(&eye, &direction, &up);
-    /// 
-    /// assert_eq!(result, expected);
-    /// 
-    /// let direction = direction.to_homogeneous();
-    /// let unit_z = Vector3::unit_z().to_homogeneous();
+    /// let result = Matrix4x4::look_at_rh_inv(&eye, &target, &up);
+    /// let direction = (target - eye).to_homogeneous().normalize();
+    /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
     /// 
-    /// assert_eq!(result * unit_z, -direction);
-    /// assert_eq!(result * minus_unit_z, direction);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result * unit_z, -direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result * minus_unit_z, direction, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]

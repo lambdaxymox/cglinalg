@@ -866,19 +866,24 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Rotation3,
-    /// #     Vector3,    
+    /// #     Vector3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let rotation = Rotation3::look_to_lh(&direction, &up);
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(rotation.rotate_vector(&direction), unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     rotation.rotate_vector(&direction).normalize(), 
+    ///     unit_z, 
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -900,19 +905,24 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Rotation3,
-    /// #     Vector3,    
+    /// #     Vector3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let rotation = Rotation3::look_to_rh(&direction, &up);
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(rotation.rotate_vector(&direction), minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     rotation.rotate_vector(&direction).normalize(), 
+    ///     minus_unit_z, 
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -935,24 +945,28 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Vector3,
+    /// #     Point3,
     /// #     Rotation3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
     /// # 
-    /// let direction: Vector3<f64> = Vector3::unit_y();
+    /// let eye = Point3::new(0_f64, -5_f64, 0_f64);
+    /// let target = Point3::origin();
     /// let up: Vector3<f64> = Vector3::unit_x();
-    /// let rotation = Rotation3::look_at_lh(&direction, &up);
-    /// let result = rotation.rotate_vector(&direction);
+    /// let direction = target - eye;
+    /// let rotation = Rotation3::look_at_lh(&eye, &target, &up);
+    /// let result = rotation.rotate_vector(&direction).normalize();
     /// let expected = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+    pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         Self {
-            matrix: Matrix3x3::look_at_lh(direction, up),
+            matrix: Matrix3x3::look_at_lh(eye, target, up),
         }
     }
 
@@ -970,24 +984,28 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Vector3,
+    /// #     Point3,
     /// #     Rotation3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
     /// # 
-    /// let direction: Vector3<f64> = Vector3::unit_y();
+    /// let eye = Point3::new(0_f64, -5_f64, 0_f64);
+    /// let target = Point3::origin();
     /// let up: Vector3<f64> = Vector3::unit_x();
-    /// let rotation = Rotation3::look_at_rh(&direction, &up);
-    /// let result = rotation.rotate_vector(&direction);
+    /// let direction = target - eye;
+    /// let rotation = Rotation3::look_at_rh(&eye, &target, &up);
+    /// let result = rotation.rotate_vector(&direction).normalize();
     /// let expected = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+    pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         Self {
-            matrix: Matrix3x3::look_at_rh(direction, up),
+            matrix: Matrix3x3::look_at_rh(eye, target, up),
         }
     }
 
@@ -1005,19 +1023,24 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Rotation3,
-    /// #     Vector3,    
+    /// #     Vector3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let rotation = Rotation3::look_to_lh_inv(&direction, &up);
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(rotation.rotate_vector(&unit_z), direction, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     rotation.rotate_vector(&unit_z), 
+    ///     direction.normalize(), 
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -1040,19 +1063,24 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Rotation3,
-    /// #     Vector3,    
+    /// #     Vector3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let rotation = Rotation3::look_to_rh_inv(&direction, &up);
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(rotation.rotate_vector(&minus_unit_z), direction, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     rotation.rotate_vector(&minus_unit_z), 
+    ///     direction.normalize(), 
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_rh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -1064,10 +1092,10 @@ where
     /// Construct a coordinate transformation that maps the coordinate system 
     /// of an observer located at the origin facing the **positive z-axis** into a 
     /// coordinate system of an observer located at the position origin facing 
-    /// the direction `direction`. The resulting coordinate transformation is a 
+    /// the direction `target - eye`. The resulting coordinate transformation is a 
     /// **left-handed** coordinate transformation.
     ///
-    /// The resulting transformation maps the **positive z-axis** to `direction`.
+    /// The resulting transformation maps the **positive z-axis** to `target - eye`.
     /// This function is the inverse of `look_at_lh`.
     ///
     /// # Example
@@ -1075,34 +1103,42 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Rotation3,
-    /// #     Vector3,    
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let eye = Point3::new(-1_f64, 1_f64, -1_f64);
+    /// let target = Point3::origin();
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
-    /// let rotation = Rotation3::look_at_lh_inv(&direction, &up);
+    /// let rotation = Rotation3::look_at_lh_inv(&eye, &target, &up);
+    /// let direction = target - eye;
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(rotation.rotate_vector(&unit_z), direction, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     rotation.rotate_vector(&unit_z), 
+    ///     direction.normalize(), 
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
-    pub fn look_at_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+    pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         Self {
-            matrix: Matrix3x3::look_at_lh_inv(direction, up),
+            matrix: Matrix3x3::look_at_lh_inv(eye, target, up),
         }
     }
 
     /// Construct a coordinate transformation that maps the coordinate system 
     /// of an observer located at the origin facing the **negative z-axis** into a 
     /// coordinate system of an observer located at the position origin facing 
-    /// the direction `direction`. The resulting coordinate transformation is a 
+    /// the direction `target - eye`. The resulting coordinate transformation is a 
     /// **right-handed** coordinate transformation.
     ///
-    /// The resulting transformation maps the **negative z-axis** to `direction`.
+    /// The resulting transformation maps the **negative z-axis** to `target - eye`.
     /// This function is the inverse of `look_at_rh`.
     ///
     /// # Example
@@ -1110,24 +1146,32 @@ where
     /// ```
     /// # use cglinalg::{
     /// #     Rotation3,
-    /// #     Vector3,    
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let eye = Point3::new(-1_f64, 1_f64, -1_f64);
+    /// let target = Point3::origin();
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
-    /// let rotation = Rotation3::look_at_rh_inv(&direction, &up);
+    /// let rotation = Rotation3::look_at_rh_inv(&eye, &target, &up);
+    /// let direction = target - eye;
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(rotation.rotate_vector(&minus_unit_z), direction, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     rotation.rotate_vector(&minus_unit_z), 
+    ///     direction.normalize(), 
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
-    pub fn look_at_rh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
+    pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         Self {
-            matrix: Matrix3x3::look_at_rh_inv(direction, up),
+            matrix: Matrix3x3::look_at_rh_inv(eye, target, up),
         }
     }
 

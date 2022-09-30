@@ -981,18 +981,29 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// # use core::f64;
     /// #
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
     /// let target = Point3::new(1_f64, -1_f64, 1_f64);
-    /// let direction = (target - eye).normalize();
+    /// let direction = target - eye;
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let isometry = Similarity3::look_to_lh(&eye, &direction, &up);
     /// let origin = Point3::origin();
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_eq!(isometry.transform_point(&eye), origin);
-    /// assert_eq!(isometry.transform_vector(&direction), unit_z);
+    /// assert_relative_eq!(
+    ///     isometry.transform_point(&eye), 
+    ///     origin,
+    ///     epsilon = 1e-10,
+    /// );
+    /// assert_relative_eq!(
+    ///     isometry.transform_vector(&direction).normalize(), 
+    ///     unit_z,
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_lh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -1020,18 +1031,29 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// # use core::f64;
     /// #
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
     /// let target = Point3::new(1_f64, -1_f64, 1_f64);
-    /// let direction = (target - eye).normalize();
+    /// let direction = target - eye;
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let isometry = Similarity3::look_to_rh(&eye, &direction, &up);
     /// let origin = Point3::origin();
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_eq!(isometry.transform_point(&eye), origin);
-    /// assert_eq!(isometry.transform_vector(&direction), minus_unit_z);
+    /// assert_relative_eq!(
+    ///     isometry.transform_point(&eye), 
+    ///     origin,
+    ///     epsilon = 1e-10,
+    /// );
+    /// assert_relative_eq!(
+    ///     isometry.transform_vector(&direction).normalize(),
+    ///     minus_unit_z,
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_rh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -1068,11 +1090,20 @@ where
     /// let up: Vector3<f64> = Vector3::unit_x();
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
     /// let similarity = Similarity3::look_at_lh(&eye, &target, &up);
-    /// let result = similarity.transform_vector(&(target - eye).normalize());
-    /// let expected = Vector3::unit_z();
+    /// let direction = target - eye;
+    /// let unit_z = Vector3::unit_z();
+    /// let origin = Point3::origin();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
-    /// assert_eq!(similarity.transform_point(&eye), Point3::origin());
+    /// assert_relative_eq!(
+    ///     similarity.transform_vector(&direction).normalize(),
+    ///     unit_z, 
+    ///     epsilon = 1e-10,
+    /// );
+    /// assert_relative_eq!(
+    ///     similarity.transform_point(&eye), 
+    ///     origin,
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {      
@@ -1108,11 +1139,20 @@ where
     /// let up: Vector3<f64> = Vector3::unit_x();
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
     /// let similarity = Similarity3::look_at_rh(&eye, &target, &up);
-    /// let result = similarity.transform_vector(&(target - eye).normalize());
-    /// let expected = -Vector3::unit_z();
+    /// let direction = target - eye;
+    /// let minus_unit_z = -Vector3::unit_z();
+    /// let origin = Point3::origin();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
-    /// assert_eq!(similarity.transform_point(&eye), Point3::origin());
+    /// assert_relative_eq!(
+    ///     similarity.transform_vector(&direction).normalize(), 
+    ///     minus_unit_z, 
+    ///     epsilon = 1e-10,
+    /// );
+    /// assert_relative_eq!(
+    ///     similarity.transform_point(&eye),
+    ///     origin,
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -1140,16 +1180,23 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// # use core::f64;
     /// #
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
     /// let target = Point3::new(1_f64, -1_f64, 1_f64);
-    /// let direction = (target - eye).normalize();
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let direction = target - eye;
     /// let isometry = Similarity3::look_to_lh_inv(&eye, &direction, &up);
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_eq!(isometry.transform_vector(&unit_z), direction);
+    /// assert_relative_eq!(
+    ///     isometry.transform_vector(&unit_z), 
+    ///     direction.normalize(),
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_lh_inv(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -1177,16 +1224,23 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// # use core::f64;
     /// #
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
     /// let target = Point3::new(1_f64, -1_f64, 1_f64);
-    /// let direction = (target - eye).normalize();
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
+    /// let direction = target - eye;
     /// let isometry = Similarity3::look_to_rh_inv(&eye, &direction, &up);
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_eq!(isometry.transform_vector(&minus_unit_z), direction);
+    /// assert_relative_eq!(
+    ///     isometry.transform_vector(&minus_unit_z), 
+    ///     direction.normalize(),
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_rh_inv(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -1214,6 +1268,9 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// # use core::f64;
     /// #
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
@@ -1221,9 +1278,13 @@ where
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let isometry = Similarity3::look_at_lh_inv(&eye, &target, &up);
     /// let unit_z = Vector3::unit_z();
-    /// let direction = (target - eye).normalize();
+    /// let direction = target - eye;
     ///
-    /// assert_eq!(isometry.transform_vector(&unit_z), direction);
+    /// assert_relative_eq!(
+    ///     isometry.transform_vector(&unit_z), 
+    ///     direction.normalize(),
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -1251,6 +1312,9 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// # use core::f64;
     /// #
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
@@ -1258,9 +1322,13 @@ where
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let isometry = Similarity3::look_at_rh_inv(&eye, &target, &up);
     /// let minus_unit_z = -Vector3::unit_z();
-    /// let direction = (target - eye).normalize();
+    /// let direction = target - eye;
     ///
-    /// assert_eq!(isometry.transform_vector(&minus_unit_z), direction);
+    /// assert_relative_eq!(
+    ///     isometry.transform_vector(&minus_unit_z), 
+    ///     direction.normalize(),
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {

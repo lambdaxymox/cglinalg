@@ -12,6 +12,7 @@ use crate::base::{
     Vector4,
     Unit,
     Magnitude,
+    Point3,
 };
 
 use num_traits::NumCast;
@@ -1991,15 +1992,13 @@ where
     ///     -1_f64 / 2_f64, 1_f64 / 2_f64, 1_f64 / 2_f64,
     /// );
     /// let result = Quaternion::look_to_lh(&direction, &up);
-    /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// 
     /// let rotation = Matrix3x3::from(result);
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = - unit_z;
     /// 
-    /// assert_eq!(rotation * direction, unit_z);
-    /// assert_eq!(rotation * (-direction), minus_unit_z);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(rotation * direction, unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(rotation * (-direction), minus_unit_z, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -2020,14 +2019,15 @@ where
     /// # use cglinalg::{
     /// #     Matrix3x3,
     /// #     Quaternion,
-    /// #     Vector3,    
+    /// #     Vector3,
+    /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
-    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64) / f64::sqrt(3_f64);
+    /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
     /// let up = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let s = {
     ///     let numerator = f64::sqrt(6_f64) + f64::sqrt(3_f64) + f64::sqrt(2_f64) + 1_f64;
@@ -2043,15 +2043,13 @@ where
     ///     Quaternion::new(qs, qx, qy, qz) 
     /// };
     /// let result = Quaternion::look_to_rh(&direction, &up);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    ///
     /// let rotation = Matrix3x3::from(result);
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
     ///
-    /// assert_relative_eq!(rotation * (-direction), unit_z, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * direction, minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!((rotation * (-direction)).normalize(), unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!((rotation * direction).normalize(), minus_unit_z, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn look_to_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -2061,7 +2059,7 @@ where
     /// Construct a quaternion corresponding to a **left-handed** viewing 
     /// transformation without translation. 
     ///
-    /// This transformation maps the viewing direction `direction` to the 
+    /// This transformation maps the viewing direction `target - eye` to the 
     /// **positive z-axis**.
     /// 
     /// # Example
@@ -2072,30 +2070,41 @@ where
     /// #     Quaternion,
     /// #     Vector3,
     /// #     Magnitude,
+    /// #     Point3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
     /// #
-    /// let direction = Vector3::new(3_f64, -1_f64, 2_f64).normalize();
+    /// let eye = Point3::new(-3_f64, 1_f64, -2_f64);
+    /// let target = Point3::origin();
     /// let up = Vector3::new(-1_f64, 1_f64, 1_f64);
-    /// let quaternion = Quaternion::look_at_lh(&direction, &up);
+    /// let quaternion = Quaternion::look_at_lh(&eye, &target, &up);
     /// let rotation = Matrix3x3::from(quaternion);
+    /// let direction = target - eye;
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
     /// 
-    /// assert_relative_eq!(rotation * direction, unit_z, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * (-direction), minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     (rotation * direction).normalize(), 
+    ///     unit_z, 
+    ///     epsilon = 1e-10,
+    /// );
+    /// assert_relative_eq!(
+    ///     (rotation * (-direction)).normalize(), 
+    ///     minus_unit_z, 
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
-    pub fn look_at_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::from(&Matrix3x3::look_to_lh(direction, up))
+    pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        Self::from(&Matrix3x3::look_at_lh(eye, target, up))
     }
 
     /// Construct a quaternion corresponding to a **right-handed** viewing 
     /// transformation without translation. 
     ///
-    /// This transformation maps the viewing direction `direction` to the 
+    /// This transformation maps the viewing direction `target - eye` to the 
     /// **negative z-axis**.
     /// 
     /// # Example
@@ -2105,25 +2114,36 @@ where
     /// #     Matrix3x3,
     /// #     Quaternion,
     /// #     Vector3,
+    /// #     Point3,
     /// #     Magnitude,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
     /// #
-    /// let direction = Vector3::new(3_f64, -1_f64, 2_f64).normalize();
+    /// let eye = Point3::new(-3_f64, 1_f64, -2_f64);
+    /// let target = Point3::origin();
     /// let up = Vector3::new(-1_f64, 1_f64, 1_f64);
-    /// let quaternion = Quaternion::look_at_rh(&direction, &up);
+    /// let quaternion = Quaternion::look_at_rh(&eye, &target, &up);
     /// let rotation = Matrix3x3::from(quaternion);
+    /// let direction = target - eye;
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
     /// 
-    /// assert_relative_eq!(rotation * direction, minus_unit_z, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * (-direction), unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     (rotation * direction).normalize(), 
+    ///     minus_unit_z, 
+    ///     epsilon = 1e-10,
+    /// );
+    /// assert_relative_eq!(
+    ///     (rotation * (-direction)).normalize(), 
+    ///     unit_z, 
+    ///     epsilon = 1e-10,
+    /// );
     /// ```
     #[inline]
-    pub fn look_at_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::from(&Matrix3x3::look_to_rh(direction, up))
+    pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        Self::from(&Matrix3x3::look_at_rh(eye, target, up))
     }
 
     /// Construct a quaternion corresponding to a rotation of an observer 
@@ -2142,20 +2162,24 @@ where
     /// #     Quaternion,
     /// #     Vector3,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// #
     /// let direction: Vector3<f64> = -Vector3::unit_x();
     /// let up = Vector3::unit_z();
     /// let expected = Quaternion::new(
-    ///      f64::sqrt(2_f64) / 2_f64,
-    ///      1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64),
+    ///      1_f64 / 2_f64,
+    ///      1_f64 / 2_f64, -1_f64 / 2_f64, -1_f64 / 2_f64,
     /// );
     /// let result = Quaternion::look_to_lh_inv(&direction, &up);
     /// let rotation = Matrix3x3::from(result);
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
     /// 
-    /// assert_eq!(rotation * unit_z, direction);
-    /// assert_eq!(rotation * minus_unit_z, -direction);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(rotation * unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(rotation * minus_unit_z, -direction, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn look_to_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -2200,13 +2224,11 @@ where
     ///     Quaternion::new(qs, qx, qy, qz) 
     /// };
     /// let result = Quaternion::look_to_rh_inv(&direction, &up);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    ///
     /// let rotation = Matrix3x3::from(result);
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
-    ///
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(rotation * unit_z, -direction, epsilon = 1e-10);
     /// assert_relative_eq!(rotation * minus_unit_z, direction, epsilon = 1e-10);
     /// ```
@@ -2221,7 +2243,7 @@ where
     /// coordinate transformation is a **left-handed** coordinate transformation.
     ///
     /// This rotation maps the **positive z-axis** to the direction `direction`.
-    /// This function is a synonym for `look_to_lh_inv`.
+    /// This function is the inverse of `look_at_lh`.
     #[inline]
     pub fn look_at_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self::look_to_lh_inv(direction, up)
@@ -2234,7 +2256,7 @@ where
     /// **right-handed** coordinate transformation.
     ///
     /// The function maps the **negative z-axis** to the direction `direction`.
-    /// This function is a synonym for `look_to_rh_inv`.
+    /// This function is the inverse of `look_at_rh`.
     #[inline]
     pub fn look_at_rh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         Self::look_to_rh_inv(direction, up)
