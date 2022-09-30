@@ -3172,7 +3172,7 @@ where
     /// ```
     #[inline]
     pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
-        Self::look_to_lh(&(target - eye), up).transpose()
+        Self::look_at_lh(eye, target, up).transpose()
     }
 
     /// Construct a coordinate transformation matrix that transforms
@@ -4570,24 +4570,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
-        let direction = target - eye;
-        let zero = S::zero();
-        let one = S::one();
-        let z_axis = direction.normalize();
-        let x_axis = up.cross(&z_axis).normalize();
-        let y_axis = z_axis.cross(&x_axis).normalize();
-
-        let eye_vec = eye - Point3::origin();
-        let neg_eye_x = -eye_vec.dot(&x_axis);
-        let neg_eye_y = -eye_vec.dot(&y_axis);
-        let neg_eye_z = -eye_vec.dot(&z_axis);
-        
-        Self::new(
-            x_axis.x,  y_axis.x,  z_axis.x,  zero,
-            x_axis.y,  y_axis.y,  z_axis.y,  zero,
-            x_axis.z,  y_axis.z,  z_axis.z,  zero,
-            neg_eye_x, neg_eye_y, neg_eye_z, one
-        )
+        Self::look_to_lh(eye, &(target - eye), up)
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
@@ -4634,24 +4617,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
-        let direction = -(target - eye);
-        let zero = S::zero();
-        let one = S::one();
-        let z_axis = direction.normalize();
-        let x_axis = up.cross(&z_axis).normalize();
-        let y_axis = z_axis.cross(&x_axis).normalize();
-
-        let eye_vec = eye - Point3::origin();
-        let neg_eye_x = -eye_vec.dot(&x_axis);
-        let neg_eye_y = -eye_vec.dot(&y_axis);
-        let neg_eye_z = -eye_vec.dot(&z_axis);
-        
-        Self::new(
-            x_axis.x,  y_axis.x,  z_axis.x,  zero,
-            x_axis.y,  y_axis.y,  z_axis.y,  zero,
-            x_axis.z,  y_axis.z,  z_axis.z,  zero,
-            neg_eye_x, neg_eye_y, neg_eye_z, one
-        )
+        Self::look_to_rh(eye, &(target - eye), up)
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
@@ -4829,24 +4795,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
-        let direction = target - eye;
-        let zero = S::zero();
-        let one = S::one();
-        let z_axis = direction.normalize();
-        let x_axis = up.cross(&z_axis).normalize();
-        let y_axis = z_axis.cross(&x_axis).normalize();
-
-        let eye_vec = eye - Point3::origin();
-        let eye_x = eye_vec.dot(&x_axis);
-        let eye_y = eye_vec.dot(&y_axis);
-        let eye_z = eye_vec.dot(&z_axis);
-        
-        Self::new(
-            x_axis.x,  x_axis.y,  x_axis.z, zero,
-            y_axis.x,  y_axis.y,  y_axis.z, zero,
-            z_axis.x,  z_axis.y,  z_axis.z, zero,
-            eye_x,     eye_y,     eye_z,    one
-        )
+        Self::look_to_lh_inv(eye, &(target - eye), up)
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
@@ -4895,24 +4844,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
-        let direction = -(target - eye);
-        let zero = S::zero();
-        let one = S::one();
-        let z_axis = direction.normalize();
-        let x_axis = up.cross(&z_axis).normalize();
-        let y_axis = z_axis.cross(&x_axis).normalize();
-
-        let eye_vec = eye - Point3::origin();
-        let eye_x = eye_vec.dot(&x_axis);
-        let eye_y = eye_vec.dot(&y_axis);
-        let eye_z = eye_vec.dot(&z_axis);
-        
-        Self::new(
-            x_axis.x,  x_axis.y,  x_axis.z, zero,
-            y_axis.x,  y_axis.y,  y_axis.z, zero,
-            z_axis.x,  z_axis.y,  z_axis.z, zero,
-            eye_x,     eye_y,     eye_z,    one,
-        )
+        Self::look_to_rh_inv(eye, &(target - eye), up)
     }
 
 

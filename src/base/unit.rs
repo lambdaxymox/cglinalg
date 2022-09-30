@@ -24,7 +24,6 @@ use core::ops;
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Unit<T> {
-    /// The underlying normalized value.
     value: T,
 }
 
