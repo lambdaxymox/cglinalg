@@ -2907,7 +2907,7 @@ where
     #[inline]
     pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let z_axis = direction.normalize();
-        let x_axis = (up.cross(&z_axis)).normalize();
+        let x_axis = up.cross(&z_axis).normalize();
         let y_axis = z_axis.cross(&x_axis).normalize();
 
         Self::new(
@@ -3133,10 +3133,10 @@ where
 
     /// Construct a coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the origin facing 
-    /// the direction `direction` into the coordinate system of an observer 
+    /// the direction `target - eye` into the coordinate system of an observer 
     /// located at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `direction` to the **positive z-axis** 
+    /// The function maps the direction `target - eyey` to the **positive z-axis** 
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **left-handed** coordinate transformation.
     /// This function is the inverse of `look_at_lh`.
@@ -3177,10 +3177,10 @@ where
 
     /// Construct a coordinate transformation matrix that transforms
     /// a coordinate system of an observer located at the origin facing 
-    /// the direction `direction` into the coordinate system of an observer 
+    /// the direction `target - eye` into the coordinate system of an observer 
     /// located at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `direction` to the **negative z-axis** 
+    /// The function maps the direction `target - eye` to the **negative z-axis** 
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **right-handed** coordinate transformation.
     /// This function is the inverse of `look_at_rh`.

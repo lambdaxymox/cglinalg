@@ -2239,27 +2239,99 @@ where
 
     /// Construct a quaternion corresponding to a rotation of an observer 
     /// standing at the origin facing the **positive z-axis** to an observer 
-    /// standing at the origin facing the direction `direction`. The resulting
+    /// standing at the origin facing the direction `target - eye`. The resulting
     /// coordinate transformation is a **left-handed** coordinate transformation.
     ///
-    /// This rotation maps the **positive z-axis** to the direction `direction`.
+    /// This rotation maps the **positive z-axis** to the direction `target - eye`.
     /// This function is the inverse of `look_at_lh`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(-1_f64, -1_f64, 0_f64);
+    /// let target = Point3::origin();
+    /// let up = Vector3::unit_z();
+    /// let expected = {
+    ///     let s = f64::sqrt((f64::sqrt(2_f64) + 1_f64) / f64::sqrt(2_f64));
+    ///     let one_over_two_s = 1_f64 / (2_f64 * s);
+    ///     let qs = (1_f64 / f64::sqrt(2_f64)) * one_over_two_s;
+    ///     let qx = (1_f64 / f64::sqrt(2_f64)) * one_over_two_s;
+    ///     let qy = ((1_f64 / f64::sqrt(2_f64)) + 1_f64) * one_over_two_s;
+    ///     let qz = s / 2_f64;
+    ///     Quaternion::new(qs, qx, qy, qz)
+    /// };
+    /// let result = Quaternion::look_at_lh_inv(&eye, &target, &up);
+    /// let rotation = Matrix3x3::from(result);
+    /// let direction = (target - eye).normalize();
+    /// let unit_z = Vector3::unit_z();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(rotation * unit_z, direction, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub fn look_at_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::look_to_lh_inv(direction, up)
+    pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        Self::look_to_lh_inv(&(target - eye), up)
     }
 
     /// Construct a quaternion that transforms the coordinate system of
     /// an observer located at the origin facing the **negative z-axis** into a
     /// coordinate system of an observer located at the origin facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// direction `target - eye`. The resulting coordinate transformation is a 
     /// **right-handed** coordinate transformation.
     ///
-    /// The function maps the **negative z-axis** to the direction `direction`.
+    /// The function maps the **negative z-axis** to the direction `target - eye`.
     /// This function is the inverse of `look_at_rh`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg::{
+    /// #     Quaternion,
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Magnitude,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,  
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let eye = Point3::new(-1_f64, -1_f64, 0_f64);
+    /// let target = Point3::origin();
+    /// let up = Vector3::unit_z();
+    /// let expected = {
+    ///     let s = f64::sqrt((f64::sqrt(2_f64) + 1_f64) / f64::sqrt(2_f64));
+    ///     let one_over_two_s = 1_f64 / (2_f64 * s);
+    ///     let qs = s / 2_f64;
+    ///     let qx = (1_f64 + 1_f64 / f64::sqrt(2_f64)) * one_over_two_s;
+    ///     let qy = (-1_f64 / f64::sqrt(2_f64)) * one_over_two_s;
+    ///     let qz = (-1_f64 / f64::sqrt(2_f64)) * one_over_two_s;
+    ///     Quaternion::new(qs, qx, qy, qz)
+    /// };
+    /// let result = Quaternion::look_at_rh_inv(&eye, &target, &up);
+    /// let rotation = Matrix3x3::from(result);
+    /// let direction = (target - eye).normalize();
+    /// let minus_unit_z = -Vector3::unit_z();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(rotation * minus_unit_z, direction, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub fn look_at_rh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
-        Self::look_to_rh_inv(direction, up)
+    pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
+        Self::look_to_rh_inv(&(target - eye), up)
     }
 
     /// Linearly interpolate between two quaternions.
