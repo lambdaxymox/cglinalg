@@ -28,7 +28,17 @@ path = "src/lib.rs"
 crate-type = ["rlib", "cdylib"]
 
 [features]
-default = []
+default = ["std"]
+# Option: "core" is a platform-agnostic option that works in environments that cannot
+# allocate memory. The environment needs to supply its own implementations of 
+# `eh_personality`.
+core = []
+# Option: "alloc" enables support for environments that can allocate memory 
+# but don't use the full standard library.
+alloc = []
+# Option: "std" enables support for environments that use the full standard library.
+std = []
+
 
 [dependencies.approx]
 version = "0.5.1"
