@@ -2152,7 +2152,7 @@ where
     /// coordinate transformation is a **left-handed** coordinate transformation.
     ///
     /// This rotation maps the **positive z-axis** to the direction `direction`.
-    /// This function is the inverse of `look_to_lh`.
+    /// This function is the inverse of [`look_to_lh`].
     /// 
     /// # Example
     /// 
@@ -2193,7 +2193,7 @@ where
     /// **right-handed** coordinate transformation.
     ///
     /// The function maps the **negative z-axis** to the direction `direction`.
-    /// This function is the inverse of `look_to_rh`.
+    /// This function is the inverse of [`look_to_rh`].
     /// 
     /// # Example
     ///
@@ -2243,7 +2243,7 @@ where
     /// coordinate transformation is a **left-handed** coordinate transformation.
     ///
     /// This rotation maps the **positive z-axis** to the direction `target - eye`.
-    /// This function is the inverse of `look_at_lh`.
+    /// This function is the inverse of [`look_at_lh`].
     ///
     /// # Example
     ///
@@ -2292,7 +2292,7 @@ where
     /// **right-handed** coordinate transformation.
     ///
     /// The function maps the **negative z-axis** to the direction `target - eye`.
-    /// This function is the inverse of `look_at_rh`.
+    /// This function is the inverse of [`look_at_rh`].
     ///
     /// # Example
     ///
