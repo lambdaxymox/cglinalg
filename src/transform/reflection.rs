@@ -1,7 +1,7 @@
 use crate::base_numeric::{
     SimdScalarFloat,
 };
-use crate::base::{
+use crate::cglinalg_core::{
     Matrix3x3,
     Matrix4x4,
     Vector2,

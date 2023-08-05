@@ -15,11 +15,11 @@ extern crate num_traits;
 
 
 mod base_numeric;
-mod base;
+mod cglinalg_core;
 mod transform;
 
 
 pub use base_numeric::*;
-pub use base::*;
+pub use cglinalg_core::*;
 pub use transform::*;
 

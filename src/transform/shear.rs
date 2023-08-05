@@ -2,7 +2,7 @@ use crate::base_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::base::{
+use crate::cglinalg_core::{
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
