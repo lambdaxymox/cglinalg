@@ -1,4 +1,4 @@
-use crate::base_numeric::{
+use crate::core_numeric::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
