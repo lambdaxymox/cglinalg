@@ -3,10 +3,12 @@ extern crate cglinalg;
 
 #[cfg(test)]
 mod shear2_tests {
-    use cglinalg::{
-        Shear2,
+    use cglinalg::cglinalg_core::{
         Point2,
         Vector2,
+    };
+    use cglinalg::{
+        Shear2,
     };
     use approx::{
         assert_relative_eq,
@@ -184,10 +186,12 @@ mod shear2_tests {
 
 #[cfg(test)]
 mod shear3_tests {
-    use cglinalg::{
-        Shear3,
+    use cglinalg::cglinalg_core::{
         Point3,
         Vector3,
+    };
+    use cglinalg::{
+        Shear3,
     };
     use approx::{
         assert_relative_eq,

@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use crate::cglinalg_core::{
     SimdScalarFloat,
 };
 use crate::cglinalg_core::{
@@ -75,13 +75,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// #     Angle,
+    /// #     Degrees, 
+    /// # };
     /// # use cglinalg::{
     /// #     Isometry2,
     /// #     Translation2,
     /// #     Rotation2,
-    /// #     Vector2,
-    /// #     Angle,
-    /// #     Degrees, 
     /// # };
     /// #
     /// let angle = Degrees(72_f64);
@@ -107,10 +109,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Degrees,
     /// #     Point2, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -137,11 +141,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
     /// #     Unit, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// #
     /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
@@ -169,10 +175,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// #
     /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
@@ -208,11 +216,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector2,
     /// #     Degrees, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -262,11 +272,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Degrees,
     /// #     Point2,
     /// #     Vector2,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -297,11 +309,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
     /// #     Degrees, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -330,11 +344,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -364,10 +380,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -397,11 +415,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -430,10 +450,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -460,11 +482,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry2,
     /// # };
     /// # use core::f64;
     /// # 
@@ -725,13 +749,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// #     Degrees,
+    /// #     Unit, 
+    /// # };
     /// # use cglinalg::{
     /// #     Isometry3,
     /// #     Translation3,
     /// #     Rotation3,
-    /// #     Vector3,
-    /// #     Degrees,
-    /// #     Unit, 
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -771,12 +797,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Degrees,
     /// #     Unit, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
+    /// #     Rotation3,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -802,10 +830,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg::{
     /// #     Isometry3,
     /// #     Rotation3,
-    /// #     Degrees,
     /// # };
     /// #
     /// let angle = Degrees(72_f64);
@@ -829,10 +859,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg::{
     /// #     Isometry3,
     /// #     Rotation3,
-    /// #     Degrees,
     /// # };
     /// #
     /// let angle = Degrees(72_f64);
@@ -856,10 +888,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg::{
     /// #     Isometry3,
     /// #     Rotation3,
-    /// #     Degrees,
     /// # };
     /// #
     /// let angle = Degrees(72_f64);
@@ -885,9 +919,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Isometry3,
-    /// #     Vector3, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -922,10 +958,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -962,11 +1000,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1013,11 +1053,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1065,11 +1107,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
-    /// #     Isometry3,
     /// #     Point3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1116,11 +1160,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
-    /// #     Isometry3,
     /// #     Point3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1167,11 +1213,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1214,11 +1262,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1260,11 +1310,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1306,11 +1358,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1351,12 +1405,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
     /// #     Degrees,
     /// #     Unit, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -1409,12 +1465,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Degrees,
     /// #     Point3,
     /// #     Vector3,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1446,12 +1504,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
     /// #     Degrees,
     /// #     Unit, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -1481,12 +1541,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1517,11 +1579,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1551,12 +1615,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1586,11 +1652,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1618,11 +1686,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Isometry3,
     /// # };
     /// # use core::f64;
     /// # 

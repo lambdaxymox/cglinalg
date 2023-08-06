@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use crate::cglinalg_core::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
@@ -40,9 +40,11 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Shear2,
-    /// #     Point2, 
     /// # };
     /// #
     /// let shear_x_with_y = 3_f64;
@@ -69,9 +71,11 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Shear2,
-    /// #     Point2, 
     /// # };
     /// #
     /// let shear_y_with_x = 3_f64;
@@ -103,9 +107,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Shear2,
-    /// #     Point2, 
     /// # };
     /// #
     /// let shear_x_with_y = 5_f64;
@@ -132,9 +138,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Shear2,
-    /// #     Vector2, 
     /// # };
     /// #
     /// let shear_x_with_y = 5_f64;
@@ -159,9 +167,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Shear2,
-    /// #     Point2, 
     /// # };
     /// #
     /// let shear_x_with_y = 5_f64;
@@ -192,9 +202,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,    
+    /// # };
     /// # use cglinalg::{
     /// #     Shear2,
-    /// #     Vector2,    
     /// # };
     /// #
     /// let shear = Shear2::identity();
@@ -227,9 +239,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Shear2,
-    /// #     Point2, 
     /// # };
     /// #
     /// let shear_x_with_y = 3_f64;
@@ -262,9 +276,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Shear2,
-    /// #     Vector2, 
     /// # };
     /// #
     /// let shear_x_with_y = 3_f64;
@@ -289,9 +305,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Shear2,
-    /// #     Point2, 
     /// # };
     /// #
     /// let shear_x_with_y = 3_f64;
@@ -486,10 +504,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Shear3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3, 
     /// # }; 
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// # };
     /// #
     /// let shear_x_with_y = 3_f64;
     /// let shear_x_with_z = 7_f64;
@@ -520,10 +540,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Shear3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3, 
     /// # }; 
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// # };
     /// #
     /// let shear_y_with_x = 3_f64;
     /// let shear_y_with_z = 7_f64;
@@ -554,10 +576,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Shear3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3, 
     /// # }; 
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// # };
     /// #
     /// let shear_z_with_x = 3_f64;
     /// let shear_z_with_y = 7_f64;
@@ -596,10 +620,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Shear3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3, 
     /// # }; 
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// # };
     /// #
     /// let shear_x_with_y = 1_f64;
     /// let shear_x_with_z = 2_f64;
@@ -646,10 +672,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Shear3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3, 
     /// # }; 
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// # };
     /// #
     /// let shear_x_with_y = 1_f64;
     /// let shear_x_with_z = 2_f64;
@@ -683,10 +711,12 @@ where
     /// Apply a shear transformation to a point.
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Shear3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3, 
     /// # }; 
+    /// # use cglinalg::{
+    /// #     Shear3,
+    /// # };
     /// #
     /// let shear_x_with_y = 1_f64;
     /// let shear_x_with_z = 2_f64;
@@ -728,9 +758,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,    
+    /// # };
     /// # use cglinalg::{
     /// #     Shear3,
-    /// #     Vector3,    
     /// # };
     /// #
     /// let shear = Shear3::identity();
@@ -763,9 +795,11 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Shear3, 
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Shear3,
     /// # };
     /// #
     /// let shear_x_with_y = 5_f64;
@@ -812,9 +846,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg::{
     /// #     Shear3, 
-    /// #     Vector3,
     /// # };
     /// #
     /// let shear_x_with_y = 5_f64;
@@ -839,9 +875,11 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Shear3, 
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Shear3,
     /// # };
     /// #
     /// let shear_x_with_y = 5_f64;

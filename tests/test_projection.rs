@@ -1,17 +1,19 @@
 extern crate cglinalg;
 
 
-use cglinalg::{
-    Orthographic3,
-    OrthographicFov3,
-    Perspective3,
-    PerspectiveFov3,
+use cglinalg::cglinalg_core::{
     Matrix4x4,
     Angle,
     Degrees,
     Radians,
     Point3,
     Vector3,
+};
+use cglinalg::{
+    Orthographic3,
+    OrthographicFov3,
+    Perspective3,
+    PerspectiveFov3,
 };
 use approx::{
     assert_relative_eq,

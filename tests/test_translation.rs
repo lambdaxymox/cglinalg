@@ -3,10 +3,12 @@ extern crate cglinalg;
 
 #[cfg(test)]
 mod translation2_tests {
-    use cglinalg::{
-        Translation2,
+    use cglinalg::cglinalg_core::{
         Point2,
         Vector2,
+    };
+    use cglinalg::{
+        Translation2,
     };
 
 
@@ -112,10 +114,12 @@ mod translation2_tests {
 
 #[cfg(test)]
 mod translation3_tests {
-    use cglinalg::{
-        Translation3,
+    use cglinalg::cglinalg_core::{
         Point3,
         Vector3,
+    };
+    use cglinalg::{
+        Translation3,
     };
 
 

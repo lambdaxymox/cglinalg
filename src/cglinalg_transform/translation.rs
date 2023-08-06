@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use crate::cglinalg_core::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
@@ -82,10 +82,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Translation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Point2,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Translation2,
     /// # };
     /// #
     /// let vector1 = Vector2::new(1_f64, 2_f64);
@@ -109,9 +111,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2,
+    /// # };
     /// # use cglinalg::{
     /// #     Translation2,
-    /// #     Point2,
     /// # };
     /// #
     /// let point1 = Point2::new(1_f64, 2_f64);
@@ -139,9 +143,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Translation2,
-    /// #     Vector2, 
     /// # };
     /// #
     /// let distance = Vector2::new(1_f64, 2_f64);
@@ -161,9 +167,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Translation2,
-    /// #     Vector2, 
     /// # };
     /// #
     /// let mut result = Translation2::new(1_f64, 2_f64);
@@ -182,10 +190,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Translation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Point2,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Translation2,
     /// # };
     /// #
     /// let distance = Vector2::new(4_f64, 8_f64);
@@ -211,9 +221,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// # };
     /// # use cglinalg::{
     /// #     Translation2,
-    /// #     Vector2,
     /// # };
     /// #
     /// let distance = Vector2::new(4_f64, 8_f64);
@@ -234,10 +246,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Translation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Translation2,
     /// # };
     /// #
     /// let distance = Vector2::new(13_f64, 30_f64);
@@ -259,9 +273,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Translation2,
-    /// #     Vector2, 
     /// # };
     /// #
     /// let distance = Vector2::new(13_f64, 30_f64);
@@ -281,9 +297,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Translation2,
-    /// #     Point2, 
     /// # };
     /// #
     /// let translation = Translation2::identity();
@@ -309,8 +327,10 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
+    /// # };
+    /// # use cglinalg::{
     /// #     Translation2,
     /// # };
     /// #
@@ -580,10 +600,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Translation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Translation3,
     /// # };
     /// #
     /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -607,9 +629,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3,
+    /// # };
     /// # use cglinalg::{
     /// #     Translation3,
-    /// #     Point3,
     /// # };
     /// #
     /// let point1 = Point3::new(1_f64, 2_f64, 3_f64);
@@ -637,9 +661,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Translation3,
-    /// #     Vector3, 
     /// # };
     /// #
     /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -659,9 +685,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Translation3,
-    /// #     Vector3, 
     /// # };
     /// #
     /// let mut result = Translation3::new(1_f64, 2_f64, 3_f64);
@@ -680,10 +708,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Translation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Translation3,
     /// # };
     /// #
     /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -704,9 +734,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg::{
     /// #     Translation3,
-    /// #     Vector3,
     /// # };
     /// #
     /// let distance = Vector3::new(100_f64, 200_f64, 300_f64);
@@ -727,10 +759,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Translation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Translation3,
     /// # };
     /// #
     /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -752,9 +786,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg::{
     /// #     Translation3,
-    /// #     Vector3,
     /// # };
     /// #
     /// let distance = Vector3::new(100_f64, 200_f64, 300_f64);
@@ -776,9 +812,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Translation3,
-    /// #     Point3, 
     /// # };
     /// #
     /// let translation = Translation3::identity();
@@ -804,8 +842,10 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
+    /// # };
+    /// # use cglinalg::{
     /// #     Translation3,
     /// # };
     /// #

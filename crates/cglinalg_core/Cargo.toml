@@ -1,5 +1,5 @@
 [package]
-name = "cglinalg"
+name = "cglinalg_core"
 version = "0.16.10"
 edition = "2021"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
@@ -23,14 +23,10 @@ readme = "README.md"
 repository = "https://github.com/lambdaxymox/cglinalg"
 
 [lib]
-name = "cglinalg"
+name = "cglinalg_core"
 path = "src/lib.rs"
 crate-type = ["rlib", "cdylib"]
 
-[workspace]
-members = [
-    "crates/*"
-]
 
 [features]
 default = ["std"]
@@ -44,11 +40,6 @@ alloc = []
 # Option: "std" enables support for environments that use the full standard library.
 std = []
 
-[dependencies]
-
-[dependencies.cglinalg_internal]
-path = "crates/cglinalg_internal"
-default-features = false
 
 [dependencies.approx]
 version = "0.5.1"
@@ -72,4 +63,20 @@ opt-level = 2
 # Disable overflow checks during testing since overflowing in integer operations
 # is desireable behavior in debug mode.
 overflow-checks = false
+
+[[bench]]
+name = "bench_vector"
+harness = false
+
+[[bench]]
+name = "bench_matrix"
+harness = false
+
+[[bench]]
+name = "bench_matrix_mul"
+harness = false
+
+[[bench]]
+name = "bench_quaternion"
+harness = false
 

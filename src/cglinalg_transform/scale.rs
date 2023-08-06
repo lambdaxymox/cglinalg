@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use crate::cglinalg_core::{
     SimdScalar,
     SimdScalarFloat,
 };
@@ -63,9 +63,11 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// # };
     /// # use cglinalg::{
     /// #     Scale2,
-    /// #     Vector2,
     /// # };
     /// #
     /// let scale_x = 2_f64;
@@ -90,9 +92,11 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2,
+    /// # };
     /// # use cglinalg::{
     /// #     Scale2,
-    /// #     Point2,
     /// # };
     /// #
     /// let scale_x = 2_f64;
@@ -152,9 +156,11 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// # };
     /// # use cglinalg::{
     /// #     Scale2,
-    /// #     Vector2,
     /// # };
     /// #
     /// let scale_x = 2_f64;
@@ -179,9 +185,11 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2,
+    /// # };
     /// # use cglinalg::{
     /// #     Scale2,
-    /// #     Point2,
     /// # };
     /// #
     /// let scale_x = 2_f64;
@@ -209,9 +217,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2,  
+    /// # };
     /// # use cglinalg::{
     /// #     Scale2,
-    /// #     Point2,  
     /// # };
     /// #
     /// let scale = Scale2::identity();
@@ -474,9 +484,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Scale3,
-    /// #     Vector3, 
     /// # };
     /// #
     /// let scale_x = 2_f64;
@@ -503,9 +515,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Scale3,
-    /// #     Point3, 
     /// # };
     /// #
     /// let scale_x = 2_f64;
@@ -535,9 +549,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3,  
+    /// # };
     /// # use cglinalg::{
     /// #     Scale3,
-    /// #     Point3,  
     /// # };
     /// #
     /// let scale = Scale3::identity();
@@ -608,9 +624,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg::{
     /// #     Scale3,
-    /// #     Vector3,
     /// # };
     /// #
     /// let scale_x = 2_f64;
@@ -640,9 +658,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3,
+    /// # };
     /// # use cglinalg::{
     /// #     Scale3,
-    /// #     Point3,
     /// # };
     /// #
     /// let scale_x = 2_f64;

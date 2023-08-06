@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use crate::cglinalg_core::{
     SimdScalarFloat,
 };
 use crate::cglinalg_core::{
@@ -57,10 +57,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -83,10 +85,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -114,11 +118,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
     /// #     Unit, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation2,
     /// # };
     /// #
     /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
@@ -146,10 +152,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation2,
     /// # };
     /// #
     /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
@@ -183,9 +191,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Radians,    
+    /// # };
     /// # use cglinalg::{
     /// #     Rotation2,
-    /// #     Radians,    
     /// # };
     /// # use core::f64;
     /// #
@@ -209,11 +219,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Radians,
     /// #     Vector2,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation2,
     /// # };
     /// # use core::f64;
     /// #
@@ -234,10 +246,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Radians,
     /// #     Vector2, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -262,10 +276,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Radians,
     /// #     Point2, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -293,10 +309,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Radians,
     /// #     Vector2, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -328,10 +346,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Radians,
     /// #     Point2, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -369,9 +389,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2,
+    /// # };
     /// # use cglinalg::{
     /// #     Rotation2,
-    /// #     Point2,
     /// # };
     /// #
     /// let rotation = Rotation2::identity();
@@ -618,10 +640,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     relative_eq, 
@@ -649,11 +673,13 @@ where
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Degrees,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     relative_eq, 
@@ -670,11 +696,13 @@ where
     ///
     /// If the rotation angle is zero, the function returns `None`.
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Degrees,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     relative_eq, 
@@ -704,11 +732,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     relative_eq, 
@@ -733,12 +763,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg::cglinalg_core::{
     /// #     Radians,
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
-    /// #     Rotation3, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -775,11 +807,13 @@ where
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use core::f64;
     /// # 
@@ -794,7 +828,7 @@ where
     /// ```
     #[inline]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_x()), angle)
+        Self::from_axis_angle(&Vector3::unit_unit_x(), angle)
     }
 
     /// Construct a new three-dimensional rotation about the **y-axis** in the 
@@ -803,11 +837,13 @@ where
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use core::f64;
     /// # 
@@ -822,7 +858,7 @@ where
     /// ```
     #[inline]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_y()), angle)
+        Self::from_axis_angle(&Vector3::unit_unit_y(), angle)
     }
 
     /// Construct a new three-dimensional rotation about the **z-axis** in the 
@@ -831,11 +867,13 @@ where
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use core::f64;
     /// # 
@@ -850,7 +888,7 @@ where
     /// ```
     #[inline]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_z()), angle)
+        Self::from_axis_angle(&Vector3::unit_unit_z(), angle)
     }
 
     /// Construct a coordinate transformation that maps the coordinate system 
@@ -864,10 +902,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -903,10 +943,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -943,11 +985,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Rotation3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -982,11 +1026,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Rotation3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1021,10 +1067,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -1061,10 +1109,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -1101,11 +1151,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -1144,11 +1196,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -1183,9 +1237,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Rotation3,
-    /// #     Vector3, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1201,9 +1257,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn rotation_between(
-        v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Rotation3<S>> {
-        
+    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Rotation3<S>> {
         Quaternion::rotation_between(v1, v2).map(|q| q.into())
     }
 
@@ -1213,10 +1267,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1232,9 +1288,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn rotation_between_axis(
-        v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> {
-            
+    pub fn rotation_between_axis(v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> {
         Quaternion::rotation_between_axis(v1, v2).map(|q| q.into())
     }
 
@@ -1248,11 +1302,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Radians,
     /// #     Vector3,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use core::f64;
     /// # 
@@ -1278,11 +1334,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Radians,
     /// #     Vector3,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use core::f64;
     /// #
@@ -1304,11 +1362,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1334,12 +1394,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1368,11 +1430,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1401,12 +1465,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1441,9 +1507,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3,
+    /// # };
     /// # use cglinalg::{
     /// #     Rotation3,
-    /// #     Point3,
     /// # };
     /// #
     /// let rotation = Rotation3::identity();

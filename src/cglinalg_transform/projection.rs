@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use crate::cglinalg_core::{
     SimdScalarFloat,
 };
 use crate::cglinalg_core::{
@@ -120,9 +120,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Matrix4x4, 
+    /// # };
     /// # use cglinalg::{
     /// #     Perspective3,
-    /// #     Matrix4x4, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -155,9 +157,11 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Perspective3,
-    /// #     Point3, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -192,9 +196,11 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Perspective3,
-    /// #     Vector3, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -229,9 +235,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Perspective3,
-    /// #     Point3, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -301,9 +309,11 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Perspective3,
-    /// #     Vector3, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -574,11 +584,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     PerspectiveFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Degrees,
     /// #     Angle,
+    /// # };
+    /// # use cglinalg::{
+    /// #     PerspectiveFov3,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -611,12 +623,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     PerspectiveFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Degrees,
     /// #     Angle,
     /// #     Point3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     PerspectiveFov3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -649,12 +663,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     PerspectiveFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Degrees,
     /// #     Angle,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     PerspectiveFov3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -688,12 +704,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     PerspectiveFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Degrees,
     /// #     Angle,
     /// #     Point3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     PerspectiveFov3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -770,12 +788,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     PerspectiveFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Degrees,
     /// #     Angle,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     PerspectiveFov3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1076,9 +1096,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
     /// # use cglinalg::{
     /// #     Orthographic3,
-    /// #     Matrix4x4,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -1108,9 +1130,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3,
+    /// # };
     /// # use cglinalg::{
     /// #     Orthographic3,
-    /// #     Point3,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -1140,9 +1164,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg::{
     /// #     Orthographic3,
-    /// #     Vector3,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -1175,9 +1201,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3,
+    /// # };
     /// # use cglinalg::{
     /// #     Orthographic3,
-    /// #     Point3,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -1219,9 +1247,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg::{
     /// #     Orthographic3,
-    /// #     Vector3,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -1461,10 +1491,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     OrthographicFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1495,10 +1527,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     OrthographicFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1529,10 +1563,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     OrthographicFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1566,10 +1602,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     OrthographicFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1620,10 +1658,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     OrthographicFov3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg::{
+    /// #     OrthographicFov3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 

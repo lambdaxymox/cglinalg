@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use crate::cglinalg_core::{
     SimdScalarFloat,
 };
 use crate::cglinalg_core::{
@@ -77,10 +77,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Reflection2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Reflection2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -109,11 +111,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Reflection2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Reflection2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -144,9 +148,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Reflection2,
-    /// #     Vector2, 
     /// # };
     /// #
     /// let reflection = Reflection2::identity();
@@ -364,10 +370,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Reflection3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Reflection3,
     /// # };
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -390,11 +398,13 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg::{
-    /// #     Reflection3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Reflection3,
     /// # };
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -419,9 +429,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Reflection3,
-    /// #     Vector3, 
     /// # };
     /// #
     /// let reflection = Reflection3::identity();

@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use crate::cglinalg_core::{
     SimdScalarFloat,
 };
 use crate::cglinalg_core::{
@@ -62,11 +62,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// #     Radians, 
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
     /// #     Rotation2,
-    /// #     Vector2,
-    /// #     Radians, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -97,9 +99,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
-    /// #     Vector2,
     /// # };
     /// #
     /// let scale = 10_f64;
@@ -122,10 +126,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2,
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
     /// #     Translation2,
-    /// #     Point2,
     /// # };
     /// #
     /// let translation = Translation2::new(1_f64, 2_f64);
@@ -151,12 +157,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity2,
-    /// #     Isometry2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Point2,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Isometry2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -187,10 +195,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Degrees, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -218,14 +228,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity2,
-    /// #     Rotation2,
-    /// #     Translation2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector2,
     /// #     Angle,
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity2,
+    /// #     Rotation2,
+    /// #     Translation2,
     /// # };
     /// #
     /// let scale = 2_f64;
@@ -279,9 +291,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2, 
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
-    /// #     Point2, 
     /// # };
     /// #
     /// let similarity = Similarity2::identity();
@@ -309,13 +323,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Degrees,
+    /// #     Vector2,
+    /// #     Point2,
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
-    /// #     Degrees,
-    /// #     Vector2,
-    /// #     Point2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -348,13 +364,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Degrees,
+    /// #     Vector2,
+    /// #     Point2,
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
-    /// #     Degrees,
-    /// #     Vector2,
-    /// #     Point2,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -387,13 +405,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// #     Point2,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
-    /// #     Vector2,
-    /// #     Point2,
-    /// #     Radians,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -423,13 +443,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
-    /// #     Vector2,
-    /// #     Radians,
-    /// #     Unit, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -462,13 +484,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// #     Point2,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
-    /// #     Vector2,
-    /// #     Point2,
-    /// #     Radians,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -502,13 +526,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector2,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
-    /// #     Vector2,
-    /// #     Radians,
-    /// #     Unit, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -803,12 +829,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
-    /// #     Rotation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -840,10 +868,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3, 
     /// # }; 
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// # };
     /// #
     /// let scale = 15_f64;
     /// let similarity = Similarity3::from_scale(scale);
@@ -865,11 +895,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// #     Point3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity3,
     /// #     Translation3,
-    /// #     Vector3,
-    /// #     Point3, 
     /// # };
     /// # 
     /// let distance = Vector3::new(5_f64, 5_f64, 5_f64);
@@ -894,13 +926,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
-    /// #     Isometry3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Radians,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Isometry3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -932,11 +966,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Unit,
     /// #     Radians, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -975,11 +1011,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1025,11 +1063,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1076,11 +1116,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
-    /// #     Similarity3,
     /// #     Point3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1125,11 +1167,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
-    /// #     Similarity3,
     /// #     Point3,
     /// #     Magnitude,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1174,11 +1218,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1218,11 +1264,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1262,11 +1310,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1306,11 +1356,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1342,15 +1394,17 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
-    /// #     Rotation3,
-    /// #     Translation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
     /// #     Angle,
     /// #     Degrees,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1411,9 +1465,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3, 
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity3,
-    /// #     Point3, 
     /// # };
     /// #
     /// let similarity = Similarity3::identity();
@@ -1441,14 +1497,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
-    /// #     Rotation3,
-    /// #     Translation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Degrees,
     /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1482,14 +1540,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
-    /// #     Rotation3,
-    /// #     Translation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Degrees,
     /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1523,14 +1583,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
-    /// #     Rotation3,
-    /// #     Translation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Radians,
     /// #     Unit, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1561,13 +1623,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// #     Translation3,
-    /// #     Vector3,
-    /// #     Radians,
-    /// #     Unit, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -1601,14 +1665,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Similarity3,
-    /// #     Rotation3,
-    /// #     Translation3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Radians,
     /// #     Unit, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -1643,13 +1709,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit, 
+    /// # };
     /// # use cglinalg::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// #     Translation3,
-    /// #     Vector3,
-    /// #     Radians,
-    /// #     Unit, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,

@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use crate::cglinalg_core::{
     SimdScalar,
     SimdScalarFloat,
 };
@@ -64,9 +64,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point2,
+    /// # };
     /// # use cglinalg::{
     /// #     Transform2,
-    /// #     Point2,
     /// # };
     /// #
     /// let transform = Transform2::identity();
@@ -91,10 +93,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Matrix3x3,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform2,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
@@ -117,10 +121,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Matrix3x3, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform2,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
@@ -145,10 +151,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Matrix3x3, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform2,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
@@ -173,10 +181,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector2,
     /// #     Matrix3x3, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform2,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
@@ -203,10 +213,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform2,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point2,
     /// #     Matrix3x3, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform2,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
@@ -470,9 +482,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg::cglinalg_core::{
+    /// #     Point3,
+    /// # };
     /// # use cglinalg::{
     /// #     Transform3,
-    /// #     Point3,
     /// # };
     /// #
     /// let transform = Transform3::identity();
@@ -497,10 +511,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform3,
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
@@ -524,10 +540,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform3,
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
@@ -553,10 +571,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform3,
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
@@ -582,10 +602,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Vector3,
     /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -616,10 +638,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
-    /// #     Transform3,
+    /// # use cglinalg::cglinalg_core::{
     /// #     Point3,
     /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg::{
+    /// #     Transform3,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 

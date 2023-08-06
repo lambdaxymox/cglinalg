@@ -3,12 +3,14 @@ extern crate cglinalg;
 
 #[cfg(test)]
 mod rotation2_tests {
-    use cglinalg::{
-        Rotation2,
+    use cglinalg::cglinalg_core::{
         Degrees,
         Point2,
         Vector2,
         Unit,
+    };
+    use cglinalg::{
+        Rotation2,
     };
     use approx::{
         assert_relative_eq,
@@ -180,14 +182,16 @@ mod rotation2_tests {
 
 #[cfg(test)]
 mod rotation3_tests {
-    use cglinalg::{
-        Rotation3,
+    use cglinalg::cglinalg_core::{
         Angle,
         Degrees,
         Radians,
         Point3,
         Vector3,
         Unit,
+    };
+    use cglinalg::{
+        Rotation3,
     };
     use approx::{
         assert_relative_eq,

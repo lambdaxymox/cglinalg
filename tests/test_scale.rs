@@ -3,10 +3,12 @@ extern crate cglinalg;
 
 #[cfg(test)]
 mod scale2_tests {
-    use cglinalg::{
-        Scale2,
+    use cglinalg::cglinalg_core::{
         Point2,
         Vector2,
+    };
+    use cglinalg::{
+        Scale2,
     };
     use approx::{
         assert_relative_eq,
@@ -57,10 +59,12 @@ mod scale2_tests {
 
 #[cfg(test)]
 mod scale3_tests {
-    use cglinalg::{
-        Scale3,
+    use cglinalg::cglinalg_core::{
         Point3,
         Vector3,
+    };
+    use cglinalg::{
+        Scale3,
     };
     use approx::{
         assert_relative_eq,
