@@ -13,14 +13,10 @@ extern crate std;
 extern crate approx;
 extern crate num_traits;
 
-extern crate cglinalg_internal;
-
-// mod core_numeric;
-// mod cglinalg_core;
-mod cglinalg_transform;
+extern crate cglinalg_core;
+extern crate cglinalg_transform;
 
 
-// pub use core_numeric::*;
-pub use cglinalg_internal::*;
+pub use cglinalg_core::*;
 pub use cglinalg_transform::*;
 

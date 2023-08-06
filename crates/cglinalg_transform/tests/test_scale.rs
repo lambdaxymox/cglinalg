@@ -1,13 +1,13 @@
-extern crate cglinalg;
+extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod scale2_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Point2,
         Vector2,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Scale2,
     };
     use approx::{
@@ -59,11 +59,11 @@ mod scale2_tests {
 
 #[cfg(test)]
 mod scale3_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Point3,
         Vector3,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Scale3,
     };
     use approx::{
@@ -114,7 +114,7 @@ mod scale3_tests {
 
 #[cfg(test)]
 mod scale2_composition_tests {
-    use cglinalg::{
+    use cglinalg_transform::{
         Scale2,
     };
     use approx::{
@@ -135,7 +135,7 @@ mod scale2_composition_tests {
 
 #[cfg(test)]
 mod scale3_composition_tests {
-    use cglinalg::{
+    use cglinalg_transform::{
         Scale3,
     };
     use approx::{

@@ -1,9 +1,9 @@
-extern crate cglinalg;
+extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod similarity2_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Vector2,
         Point2,
         Degrees,
@@ -11,7 +11,7 @@ mod similarity2_tests {
         Matrix3x3,
         Angle,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Similarity2,
         Isometry2,
         Rotation2,
@@ -207,7 +207,7 @@ mod similarity2_tests {
 
 #[cfg(test)]
 mod similarity3_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Vector3,
         Point3,
         Degrees,
@@ -216,7 +216,7 @@ mod similarity3_tests {
         Matrix4x4,
         Unit,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Similarity3,
         Isometry3,
         Rotation3,
@@ -226,6 +226,7 @@ mod similarity3_tests {
         assert_relative_eq,
     };
     use core::f64;
+
 
     #[test]
     fn test_from_rotation() {

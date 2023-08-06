@@ -1,7 +1,7 @@
-extern crate cglinalg;
+extern crate cglinalg_transform;
 
 
-use cglinalg::cglinalg_core::{
+use cglinalg_core::{
     Matrix4x4,
     Angle,
     Degrees,
@@ -9,7 +9,7 @@ use cglinalg::cglinalg_core::{
     Point3,
     Vector3,
 };
-use cglinalg::{
+use cglinalg_transform::{
     Orthographic3,
     OrthographicFov3,
     Perspective3,

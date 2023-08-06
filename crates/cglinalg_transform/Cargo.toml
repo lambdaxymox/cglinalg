@@ -1,5 +1,5 @@
 [package]
-name = "cglinalg"
+name = "cglinalg_transform"
 version = "0.16.10"
 edition = "2021"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
@@ -23,14 +23,10 @@ readme = "README.md"
 repository = "https://github.com/lambdaxymox/cglinalg"
 
 [lib]
-name = "cglinalg"
+name = "cglinalg_transform"
 path = "src/lib.rs"
 crate-type = ["rlib", "cdylib"]
 
-[workspace]
-members = [
-    "crates/*"
-]
 
 [features]
 default = ["std"]
@@ -46,14 +42,6 @@ std = []
 
 [dependencies]
 
-[dependencies.cglinalg_core]
-path = "crates/cglinalg_core"
-version = "0.16.10"
-
-[dependencies.cglinalg_transform]
-path = "crates/cglinalg_transform"
-version = "0.16.10"
-
 [dependencies.approx]
 version = "0.5.1"
 default-features = false
@@ -63,11 +51,15 @@ version = "0.2.16"
 default-features = false
 features = ["libm"]
 
-[dev-dependencies]
-proptest = "1.2.0"
-criterion = "0.5.1"
-rand = "0.8.5"
-rand_isaac = "0.3.0"
+[dependencies.cglinalg_core]
+path = "../cglinalg_core"
+version = "0.16.10"
+
+# [dev-dependencies]
+# proptest = "1.2.0"
+# criterion = "0.5.1"
+# rand = "0.8.5"
+# rand_isaac = "0.3.0"
 
 [profile.release]
 opt-level = 2

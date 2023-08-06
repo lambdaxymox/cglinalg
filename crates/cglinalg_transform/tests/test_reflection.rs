@@ -1,14 +1,14 @@
-extern crate cglinalg;
+extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod reflection2_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Point2,
         Vector2,
         Unit,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Reflection2,
     };
     use approx::{
@@ -213,12 +213,12 @@ mod reflection2_tests {
 
 #[cfg(test)]
 mod reflection3_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Point3,
         Vector3,
         Unit,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Reflection3,
     };
     use approx::{

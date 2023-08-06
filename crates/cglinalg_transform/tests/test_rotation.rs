@@ -1,15 +1,15 @@
-extern crate cglinalg;
+extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod rotation2_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Degrees,
         Point2,
         Vector2,
         Unit,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Rotation2,
     };
     use approx::{
@@ -182,7 +182,7 @@ mod rotation2_tests {
 
 #[cfg(test)]
 mod rotation3_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Angle,
         Degrees,
         Radians,
@@ -190,7 +190,7 @@ mod rotation3_tests {
         Vector3,
         Unit,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Rotation3,
     };
     use approx::{

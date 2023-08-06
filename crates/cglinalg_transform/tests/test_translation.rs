@@ -1,13 +1,13 @@
-extern crate cglinalg;
+extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod translation2_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Point2,
         Vector2,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Translation2,
     };
 
@@ -114,11 +114,11 @@ mod translation2_tests {
 
 #[cfg(test)]
 mod translation3_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Point3,
         Vector3,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Translation3,
     };
 

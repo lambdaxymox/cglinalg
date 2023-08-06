@@ -1,9 +1,9 @@
-extern crate cglinalg;
+extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod isometry2_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Angle,
         Degrees,
         Matrix3x3,
@@ -11,7 +11,7 @@ mod isometry2_tests {
         Unit,
         Vector2,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Isometry2,
         Rotation2,
         Translation2,
@@ -184,7 +184,7 @@ mod isometry2_tests {
 
 #[cfg(test)]
 mod isometry3_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Angle,
         Degrees,
         Matrix4x4,
@@ -192,7 +192,7 @@ mod isometry3_tests {
         Unit,
         Vector3,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Isometry3,
         Rotation3,
         Translation3,

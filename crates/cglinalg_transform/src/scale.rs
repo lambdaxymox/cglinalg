@@ -1,8 +1,6 @@
-use crate::cglinalg_core::{
+use cglinalg_core::{
     SimdScalar,
     SimdScalarFloat,
-};
-use crate::cglinalg_core::{
     Matrix3x3,
     Matrix4x4,
     Vector2,
@@ -10,7 +8,7 @@ use crate::cglinalg_core::{
     Point2,
     Point3,
 };
-use super::transform::{
+use crate::transform::{
     Transform2,
     Transform3,
 };
@@ -63,10 +61,10 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale2,
     /// # };
     /// #
@@ -92,10 +90,10 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Point2,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale2,
     /// # };
     /// #
@@ -127,7 +125,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale2, 
     /// # };
     /// #
@@ -156,10 +154,10 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale2,
     /// # };
     /// #
@@ -185,10 +183,10 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Point2,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale2,
     /// # };
     /// #
@@ -217,10 +215,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Point2,  
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale2,
     /// # };
     /// #
@@ -484,10 +482,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale3,
     /// # };
     /// #
@@ -515,10 +513,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Point3, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale3,
     /// # };
     /// #
@@ -549,10 +547,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Point3,  
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale3,
     /// # };
     /// #
@@ -590,7 +588,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale3, 
     /// # };
     /// #
@@ -624,10 +622,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale3,
     /// # };
     /// #
@@ -658,10 +656,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Point3,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Scale3,
     /// # };
     /// #

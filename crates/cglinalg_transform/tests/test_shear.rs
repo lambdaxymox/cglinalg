@@ -1,13 +1,13 @@
-extern crate cglinalg;
+extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod shear2_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Point2,
         Vector2,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Shear2,
     };
     use approx::{
@@ -186,11 +186,11 @@ mod shear2_tests {
 
 #[cfg(test)]
 mod shear3_tests {
-    use cglinalg::cglinalg_core::{
+    use cglinalg_core::{
         Point3,
         Vector3,
     };
-    use cglinalg::{
+    use cglinalg_transform::{
         Shear3,
     };
     use approx::{

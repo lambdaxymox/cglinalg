@@ -1,7 +1,5 @@
-use crate::cglinalg_core::{
+use cglinalg_core::{
     SimdScalarFloat,
-};
-use crate::cglinalg_core::{
     Matrix3x3,
     Matrix4x4,
     Point2,
@@ -11,19 +9,19 @@ use crate::cglinalg_core::{
     Radians,
     Unit,
 };
-use super::rotation::{
+use crate::rotation::{
     Rotation2,
     Rotation3,
 };
-use super::translation::{
+use crate::translation::{
     Translation2,
     Translation3,
 };
-use super::transform::{
+use crate::transform::{
     Transform2,
     Transform3,
 };
-use super::isometry::{
+use crate::isometry::{
     Isometry2,
     Isometry3,
 };
@@ -62,11 +60,11 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// #     Radians, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// # };
@@ -99,10 +97,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// # };
     /// #
@@ -126,10 +124,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Point2,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Translation2,
     /// # };
@@ -157,12 +155,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// #     Point2,
     /// #     Radians,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Isometry2,
     /// # };
@@ -195,11 +193,11 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// #     Degrees, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// # };
     /// # use approx::{
@@ -228,13 +226,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector2,
     /// #     Angle,
     /// #     Degrees,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
@@ -291,10 +289,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Point2, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// # };
     /// #
@@ -323,12 +321,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Degrees,
     /// #     Vector2,
     /// #     Point2,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
@@ -364,12 +362,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Degrees,
     /// #     Vector2,
     /// #     Point2,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
@@ -405,12 +403,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// #     Point2,
     /// #     Radians,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
@@ -443,12 +441,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// #     Radians,
     /// #     Unit, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
@@ -484,12 +482,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// #     Point2,
     /// #     Radians,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
@@ -526,12 +524,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector2,
     /// #     Radians,
     /// #     Unit, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity2,
     /// #     Rotation2,
     /// #     Translation2,
@@ -829,12 +827,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// # };
@@ -868,10 +866,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3, 
     /// # }; 
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// #
@@ -895,11 +893,11 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Translation3,
     /// # };
@@ -926,13 +924,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Radians,
     /// #     Unit,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Isometry3,
     /// # };
@@ -966,12 +964,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Unit,
     /// #     Radians, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
@@ -1011,12 +1009,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
@@ -1063,12 +1061,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
@@ -1116,12 +1114,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Magnitude,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
@@ -1167,12 +1165,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Magnitude,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
@@ -1218,12 +1216,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
@@ -1264,12 +1262,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
@@ -1310,12 +1308,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
@@ -1356,12 +1354,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Magnitude,
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
@@ -1394,14 +1392,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
     /// #     Angle,
     /// #     Degrees,
     /// #     Unit,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// #     Translation3,
@@ -1465,10 +1463,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Point3, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// #
@@ -1497,13 +1495,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Degrees,
     /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// #     Translation3,
@@ -1540,13 +1538,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Degrees,
     /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// #     Translation3,
@@ -1583,13 +1581,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Radians,
     /// #     Unit, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// #     Translation3,
@@ -1623,12 +1621,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// #     Translation3,
@@ -1665,13 +1663,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
     /// #     Radians,
     /// #     Unit, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// #     Translation3,
@@ -1709,12 +1707,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg::cglinalg_core::{
+    /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Radians,
     /// #     Unit, 
     /// # };
-    /// # use cglinalg::{
+    /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// #     Translation3,
