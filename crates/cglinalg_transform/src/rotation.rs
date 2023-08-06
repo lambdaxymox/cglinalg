@@ -792,6 +792,37 @@ where
 
     /// Construct a new three-dimensional rotation about an axis `axis` by 
     /// an angle `angle`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Rotation3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// 
+    /// let expected_axis_angle = Some((axis, angle));
+    /// assert_eq!(rotation.axis_angle(), expected_axis_angle);
+    /// 
+    /// // Rotate a vector ninety degrees.
+    /// let unit_x = Vector3::unit_x();
+    /// let expected = Vector3::unit_y();
+    /// let result = rotation.rotate_vector(&unit_x);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// ```
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
         Self {
