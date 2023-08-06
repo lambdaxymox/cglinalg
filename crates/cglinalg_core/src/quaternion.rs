@@ -7,9 +7,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::magnitude::{
-    Magnitude,
-};
+use crate::magnitude::Magnitude;
 use crate::matrix::{
     Matrix3x3, 
     Matrix4x4,

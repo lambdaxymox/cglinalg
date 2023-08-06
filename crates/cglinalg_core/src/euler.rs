@@ -1,11 +1,15 @@
 use crate::core_numeric::{
     SimdScalarFloat,
 };
-use crate::{
+use crate::angle::{
     Angle,
     Radians,
+};
+use crate::matrix::{
     Matrix3x3,
     Matrix4x4,
+};
+use crate::quaternion::{
     Quaternion,
 };
 

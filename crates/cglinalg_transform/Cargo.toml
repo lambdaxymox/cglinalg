@@ -55,17 +55,13 @@ features = ["libm"]
 path = "../cglinalg_core"
 version = "0.16.10"
 
-# [dev-dependencies]
-# proptest = "1.2.0"
-# criterion = "0.5.1"
-# rand = "0.8.5"
-# rand_isaac = "0.3.0"
+[dev-dependencies]
 
-[profile.release]
-opt-level = 2
+# [profile.release]
+# opt-level = 2
 
-[profile.test]
-# Disable overflow checks during testing since overflowing in integer operations
-# is desireable behavior in debug mode.
-overflow-checks = false
+# [profile.test]
+# # Disable overflow checks during testing since overflowing in integer operations
+# # is desireable behavior in debug mode.
+# overflow-checks = false
 

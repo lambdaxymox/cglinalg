@@ -377,6 +377,7 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
+    #[allow(clippy::needless_range_loop)]
     #[inline]
     pub fn map<T, F>(&self, mut op: F) -> Matrix<T, R, C, RC> 
     where 
@@ -417,6 +418,7 @@ where
     /// assert_eq!(matrix.row(1), expected_1);
     /// assert_eq!(matrix.row(2), expected_2);
     /// ```
+    #[allow(clippy::needless_range_loop)]
     #[inline]
     pub fn row(&self, r: usize) -> Vector<S, C> {
         // SAFETY: Every location gets written into with a value value of type `S`.
@@ -574,6 +576,7 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
+    #[allow(clippy::needless_range_loop)]
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Matrix<T, R, C, RC>> {
         // SAFETY: Every location gets written into with a valid value of type `T`.

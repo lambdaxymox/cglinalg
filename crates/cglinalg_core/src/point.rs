@@ -474,7 +474,7 @@ where
     }
 }
 
-impl<'a, S, const N: usize> ops::Sub<&Point<S, N>> for Point<S, N> 
+impl<S, const N: usize> ops::Sub<&Point<S, N>> for Point<S, N> 
 where 
     S: SimdScalar 
 {

@@ -1,7 +1,7 @@
 use num_traits::{
     Num, 
     NumCast, 
-    Float
+    Float,
 };
 use core::fmt::{
     Debug,

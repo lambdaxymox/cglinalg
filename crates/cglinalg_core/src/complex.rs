@@ -1482,7 +1482,7 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'b S> for &'b Complex<S>
+impl<'a, 'b, S> ops::Mul<&'b S> for &'a Complex<S>
 where
     S: SimdScalar
 {

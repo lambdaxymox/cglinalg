@@ -104,6 +104,7 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
+    #[allow(clippy::needless_range_loop)]
     #[inline]
     pub fn cast<T: NumCast>(&self) -> Option<Vector<T, N>> {
         // SAFETY: Every location gets written into with a valid value of type `T`.
