@@ -3,13 +3,15 @@ use crate::core_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::{
+use crate::magnitude::{
+    Magnitude,
+};
+use crate::vector::{
     Vector,
     Vector1,
     Vector2,
     Vector3,
     Vector4,
-    Magnitude,
 };
 use crate::{
     impl_coords,
@@ -1166,14 +1168,14 @@ where
     }
 }
 
-impl_coords!(X, { x });
-impl_coords_deref!(Point1, X);
+impl_coords!(PointCoordsX, { x });
+impl_coords_deref!(Point1, PointCoordsX);
 
-impl_coords!(XY, { x, y });
-impl_coords_deref!(Point2, XY);
+impl_coords!(PointCoordsXY, { x, y });
+impl_coords_deref!(Point2, PointCoordsXY);
 
-impl_coords!(XYZ, { x, y, z });
-impl_coords_deref!(Point3, XYZ);
+impl_coords!(PointCoordsXYZ, { x, y, z });
+impl_coords_deref!(Point3, PointCoordsXYZ);
 
 
 macro_rules! impl_as_ref_ops {

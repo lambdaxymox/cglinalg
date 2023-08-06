@@ -3,17 +3,25 @@ use crate::core_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::{
-    Point3,
+use crate::angle::{
     Angle,
     Radians,
+};
+use crate::magnitude::{
+    Magnitude,
+};
+use crate::unit::{
+    Unit,
+};
+use crate::point::{
+    Point3,
+};
+use crate::vector::{
     Vector,
     Vector1,
     Vector2,
     Vector3,
     Vector4,
-    Magnitude,
-    Unit,
 };
 use crate::{
     impl_coords,

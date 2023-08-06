@@ -3,16 +3,26 @@ use crate::core_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::{
+use crate::angle::{
     Angle,
     Radians,
+};
+use crate::magnitude::{
+    Magnitude,
+};
+use crate::matrix::{
     Matrix3x3, 
     Matrix4x4,
+};
+use crate::vector::{
     Vector3,
     Vector4,
-    Unit,
-    Magnitude,
+};
+use crate::point::{
     Point3,
+};
+use crate::unit::{
+    Unit,
 };
 
 use num_traits::NumCast;

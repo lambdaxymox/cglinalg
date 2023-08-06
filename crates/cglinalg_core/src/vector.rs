@@ -6,7 +6,7 @@ use crate::core_numeric::{
 use crate::unit::{
     Unit,
 };
-use super::magnitude::{
+use crate::magnitude::{
     Magnitude,
 };
 use crate::{
@@ -1883,17 +1883,17 @@ where
     }
 }
 
-impl_coords!(X, { x });
-impl_coords_deref!(Vector1, X);
+impl_coords!(VectorCoordsX, { x });
+impl_coords_deref!(Vector1, VectorCoordsX);
 
-impl_coords!(XY, { x, y });
-impl_coords_deref!(Vector2, XY);
+impl_coords!(VectorCoordsXY, { x, y });
+impl_coords_deref!(Vector2, VectorCoordsXY);
 
-impl_coords!(XYZ, { x, y, z });
-impl_coords_deref!(Vector3, XYZ);
+impl_coords!(VectorCoordsXYZ, { x, y, z });
+impl_coords_deref!(Vector3, VectorCoordsXYZ);
 
-impl_coords!(XYZW, { x, y, z, w });
-impl_coords_deref!(Vector4, XYZW);
+impl_coords!(VectorCoordsXYZW, { x, y, z, w });
+impl_coords_deref!(Vector4, VectorCoordsXYZW);
 
 
 macro_rules! impl_as_ref_ops {
