@@ -3,12 +3,12 @@ use crate::core_numeric::{
 };
 
 
-/// A type with this trait acts as a vector with a notion of magnitude (length)
+/// A type with this trait acts as a vector with a notion of norm (magnitude, length)
 /// in a Euclidean vector space.
 ///
 /// Examples of types that can be made into Euclidean normed spaces include 
 /// vectors, quaternions, complex numbers, points, and scalar numbers. In the 
-/// scalar case, the Euclidean magnitude is the absolute value of the scalar.
+/// scalar case, the Euclidean norm is the absolute value of the scalar.
 ///
 /// # Examples
 ///
@@ -18,7 +18,7 @@ use crate::core_numeric::{
 /// #     Normed,  
 /// # };
 /// #
-/// // The magnitude of the vector.
+/// // The norm of the vector.
 /// let vector = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
 /// assert_eq!(vector.magnitude_squared(), 30_f64);
 /// assert_eq!(vector.magnitude(), 30_f64.sqrt());
@@ -29,13 +29,13 @@ use crate::core_numeric::{
 /// let result = vector.normalize();
 /// assert_eq!(result, expected);
 ///
-/// // Normalize a vector to a specific magnitude.
-/// let magnitude = 5_f64;
+/// // Scale a vector to a specific magnitude.
+/// let norm = 5_f64;
 /// let expected = (5_f64 / 2_f64) * vector;
-/// let result = vector.normalize_to(magnitude);
+/// let result = vector.scale(norm);
 /// assert_eq!(result, expected);
 ///
-/// // Normalize a vector whose magnitude is close to zero.
+/// // Normalize a vector whose norm is close to zero.
 /// let vector = Vector4::new(1e-11_f64, 1e-11_f64, 1e-11_f64, 1e-11_f64);
 /// let threshold = 1e-10;
 /// assert!(vector.try_normalize(threshold).is_none());
@@ -58,11 +58,11 @@ where
     /// Compute the Euclidean magnitude of a vector.
     fn magnitude(&self) -> Self::Output;
 
+    /// Normalize a vector to a specified magnitude.
+    fn scale(&self, norm: Self::Output) -> Self;
+
     /// Normalize a vector to a unit vector.
     fn normalize(&self) -> Self;
-
-    /// Normalize a vector to a specified magnitude.
-    fn normalize_to(&self, magnitude: Self::Output) -> Self;
 
     /// Normalize a vector mutably in place and return its magnitude.
     fn normalize_mut(&mut self) -> Self::Output;

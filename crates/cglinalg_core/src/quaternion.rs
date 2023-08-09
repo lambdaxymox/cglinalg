@@ -1267,11 +1267,11 @@ where
 
     #[inline]
     fn inverse_eps(&self, epsilon: S) -> Option<Self> {
-        let magnitude_squared = self.magnitude_squared();
-        if magnitude_squared <= epsilon * epsilon {
+        let norm_squared = self.magnitude_squared();
+        if norm_squared <= epsilon * epsilon {
             None
         } else {
-            Some(self.conjugate() / magnitude_squared)
+            Some(self.conjugate() / norm_squared)
         }
     }
 
@@ -1470,14 +1470,14 @@ where
 
     #[inline]
     fn exp_eps(&self, epsilon: S) -> Self {
-        let magnitude_v_squared = self.vector().magnitude_squared();
-        if magnitude_v_squared <= epsilon * epsilon {
+        let norm_v_squared = self.vector().magnitude_squared();
+        if norm_v_squared <= epsilon * epsilon {
             Self::from_parts(self.scalar().exp(), Vector3::zero())
         } else {
-            let magnitude_v = magnitude_v_squared.sqrt();
+            let norm_v = norm_v_squared.sqrt();
             let exp_s = self.scalar().exp();
-            let q_scalar = exp_s * S::cos(magnitude_v);
-            let q_vector = self.vector() * (exp_s * S::sin(magnitude_v) / magnitude_v);
+            let q_scalar = exp_s * S::cos(norm_v);
+            let q_vector = self.vector() * (exp_s * S::sin(norm_v) / norm_v);
             
             Self::from_parts(q_scalar, q_vector)
         }
@@ -1546,16 +1546,16 @@ where
 
     #[inline]
     fn ln_eps(&self, epsilon: S) -> Self {
-        let magnitude_v_squared = self.vector().magnitude_squared();
-        if magnitude_v_squared <= epsilon * epsilon {
-            let magnitude = self.scalar().abs();
+        let norm_v_squared = self.vector().magnitude_squared();
+        if norm_v_squared <= epsilon * epsilon {
+            let norm = self.scalar().abs();
             
-            Self::from_parts(magnitude.ln(), Vector3::zero())
+            Self::from_parts(norm.ln(), Vector3::zero())
         } else {
-            let magnitude = self.magnitude();
-            let arccos_s_over_mag_q = S::acos(self.scalar() / magnitude);
-            let q_scalar = S::ln(magnitude);
-            let q_vector = self.vector() * (arccos_s_over_mag_q / magnitude_v_squared.sqrt());
+            let norm = self.magnitude();
+            let arccos_s_over_norm_q = S::acos(self.scalar() / norm);
+            let q_scalar = S::ln(norm);
+            let q_vector = self.vector() * (arccos_s_over_norm_q / norm_v_squared.sqrt());
 
             Self::from_parts(q_scalar, q_vector)
         }
@@ -1653,15 +1653,15 @@ where
     /// #
     /// let q = Quaternion::from_parts(1_f64, Vector3::unit_z() * 4_f64);
     /// # // Internal test to ensure the square root is correct.
-    /// # let mag_q: f64 = q.magnitude();
-    /// # let cos_angle_over_two_squared = (1_f64 / 2_f64) * (1_f64 + (1_f64 / mag_q));
+    /// # let norm_q: f64 = q.magnitude();
+    /// # let cos_angle_over_two_squared = (1_f64 / 2_f64) * (1_f64 + (1_f64 / norm_q));
     /// # let cos_angle_over_two = f64::sqrt(cos_angle_over_two_squared);
     /// # let sin_angle_over_two_squared = 1_f64 - cos_angle_over_two_squared;
     /// # let sin_angle_over_two = f64::sqrt(sin_angle_over_two_squared);
-    /// # let sqrt_mag_q = f64::sqrt(mag_q);
+    /// # let sqrt_norm_q = f64::sqrt(norm_q);
     /// # let expected = Quaternion::from_parts(
-    /// #     sqrt_mag_q * cos_angle_over_two,
-    /// #     sqrt_mag_q * sin_angle_over_two * Vector3::unit_z()
+    /// #     sqrt_norm_q * cos_angle_over_two,
+    /// #     sqrt_norm_q * sin_angle_over_two * Vector3::unit_z()
     /// # );
     /// # let result = q.sqrt();
     /// #
@@ -1733,21 +1733,21 @@ where
 
     #[inline]
     fn sqrt_eps(&self, epsilon: S) -> Self {
-        let magnitude_self_squared = self.magnitude_squared();
-        if magnitude_self_squared <= epsilon * epsilon {
+        let norm_self_squared = self.magnitude_squared();
+        if norm_self_squared <= epsilon * epsilon {
             // We have a zero quaternion.
             return Self::zero();
         }
 
-        let magnitude_v_squared = self.vector().magnitude_squared();
-        let magnitude_self = S::sqrt(magnitude_self_squared);
-        if magnitude_v_squared <= epsilon * epsilon {
-            let sqrt_magnitude_self = S::sqrt(magnitude_self);
+        let norm_v_squared = self.vector().magnitude_squared();
+        let norm_self = S::sqrt(norm_self_squared);
+        if norm_v_squared <= epsilon * epsilon {
+            let sqrt_norm_self = S::sqrt(norm_self);
             // We have a non-zero real quaternion.
             if self.scalar() > S::zero() {
                 // If the scalar part of a real quaternion is positive, it 
                 // acts like a scalar.
-                Self::from_real(sqrt_magnitude_self)
+                Self::from_real(sqrt_norm_self)
             } else {
                 // If the scalar part of a real quaternion is negative, it has 
                 // infinitely many pure quaternion solutions that form a two-sphere
@@ -1755,15 +1755,15 @@ where
                 // quaternions, so we choose a canonical one on the imaginary axis 
                 // in the complex plane.
                 Self::from_pure(
-                    Vector3::new(sqrt_magnitude_self, S::zero(), S::zero())
+                    Vector3::new(sqrt_norm_self, S::zero(), S::zero())
                 )
             }
         } else {
             // Otherwise, we can treat the quaternion as normal.
             let one_half: S = num_traits::cast(0.5).unwrap();
-            let c = S::sqrt(one_half / (magnitude_self + self.scalar()));
+            let c = S::sqrt(one_half / (norm_self + self.scalar()));
 
-            Self::from_parts((magnitude_self + self.scalar()) * c, self.vector() * c)
+            Self::from_parts((norm_self + self.scalar()) * c, self.vector() * c)
         }
     }
 
@@ -2711,10 +2711,10 @@ where
     /// let scalar = 3_f64 * (f64::sqrt(3_f64) / 2_f64);
     /// let vector = (3_f64  / 2_f64) * Vector3::unit_z();
     /// let quaternion = Quaternion::from_parts(scalar, vector);
-    /// let magnitude = 3_f64;
+    /// let norm = 3_f64;
     /// let angle_over_two = Radians(f64::consts::FRAC_PI_6);
     /// let axis = Unit::from_value(Vector3::unit_z());
-    /// let expected = (magnitude, angle_over_two, Some(axis));
+    /// let expected = (norm, angle_over_two, Some(axis));
     /// let result = quaternion.polar_decomposition();
     ///
     /// assert_relative_eq!(result.0, expected.0, epsilon = 1e-8);
@@ -2729,7 +2729,7 @@ where
     #[inline]
     pub fn polar_decomposition(&self) -> (S, Radians<S>, Option<Unit<Vector3<S>>>) {
         let pair = Unit::try_from_value_with_magnitude(*self, S::zero());
-        if let Some((unit_q, magnitude_q)) = pair {
+        if let Some((unit_q, norm_q)) = pair {
             if let Some(axis) = Unit::try_from_value(self.vector(), S::zero()) {
                 let cos_angle_over_two = unit_q.scalar().abs();
                 let sin_angle_over_two = unit_q.vector().magnitude();
@@ -2738,9 +2738,9 @@ where
                     cos_angle_over_two
                 );
 
-                (magnitude_q, angle_over_two, Some(axis))
+                (norm_q, angle_over_two, Some(axis))
             } else {
-                (magnitude_q, Radians::zero(), None)
+                (norm_q, Radians::zero(), None)
             }
         } else {
             (S::zero(), Radians::zero(), None)
@@ -3612,13 +3612,13 @@ where
     }
 
     #[inline]
-    fn normalize(&self) -> Self {
-        self / self.magnitude()
+    fn scale(&self, norm: Self::Output) -> Self {
+        self * (norm / self.magnitude())
     }
 
     #[inline]
-    fn normalize_to(&self, magnitude: Self::Output) -> Self {
-        self * (magnitude / self.magnitude())
+    fn normalize(&self) -> Self {
+        self / self.magnitude()
     }
 
     #[inline]
@@ -3628,8 +3628,8 @@ where
 
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let magnitude = self.magnitude();
-        if magnitude <= threshold {
+        let norm = self.magnitude();
+        if norm <= threshold {
             None
         } else {
             Some(self.normalize())

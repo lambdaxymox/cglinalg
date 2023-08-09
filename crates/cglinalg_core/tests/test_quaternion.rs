@@ -175,7 +175,7 @@ mod arithmetic_tests {
 }
 
 #[cfg(test)]
-mod magnitude_tests {
+mod norm_tests {
     use cglinalg_core::{
         Quaternion,
         Normed,
@@ -198,7 +198,7 @@ mod magnitude_tests {
     }
 
     #[test]
-    fn test_quaternion_magnitude() {
+    fn test_quaternion_norm() {
         let q = Quaternion::from_parts(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
         let result = q.magnitude_squared();
         let expected = 6875.23713677;
@@ -218,9 +218,9 @@ mod magnitude_tests {
     #[test]
     fn test_quaternion_normalized_to() {
         let q = Quaternion::from_parts(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
-        let magnitude = 12_f64;
-        let result = q.normalize_to(magnitude).magnitude();
-        let expected = magnitude;
+        let norm = 12_f64;
+        let result = q.scale(norm).magnitude();
+        let expected = norm;
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -753,8 +753,8 @@ mod inverse_tests {
     #[test]
     fn test_inverse() {
         let quaternion = Quaternion::new(1.0, 2.0, 3.0, 4.0);
-        let magnitude = 30_f64;
-        let expected = Quaternion::new(1.0, -2.0, -3.0, -4.0) / magnitude;
+        let norm = 30_f64;
+        let expected = Quaternion::new(1.0, -2.0, -3.0, -4.0) / norm;
         let result = quaternion.inverse().unwrap();
 
         assert_eq!(result, expected);
@@ -1037,9 +1037,9 @@ mod square_root_tests {
         let cos_angle_over_two = f64::sqrt(cos_angle_over_two_squared);
         let sin_angle_over_two_squared = 1_f64 - cos_angle_over_two_squared;
         let sin_angle_over_two = f64::sqrt(sin_angle_over_two_squared);
-        let sqrt_mag_q = f64::sqrt(q.magnitude());
-        let expected_s = sqrt_mag_q * cos_angle_over_two;
-        let expected_v = sqrt_mag_q * sin_angle_over_two * Vector3::unit_x();
+        let sqrt_norm_q = f64::sqrt(q.magnitude());
+        let expected_s = sqrt_norm_q * cos_angle_over_two;
+        let expected_v = sqrt_norm_q * sin_angle_over_two * Vector3::unit_x();
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 
@@ -1053,9 +1053,9 @@ mod square_root_tests {
         let cos_angle_over_two = f64::sqrt(cos_angle_over_two_squared);
         let sin_angle_over_two_squared = 1_f64 - cos_angle_over_two_squared;
         let sin_angle_over_two = f64::sqrt(sin_angle_over_two_squared);
-        let sqrt_mag_q = f64::sqrt(q.magnitude());
-        let expected_s = sqrt_mag_q * cos_angle_over_two;
-        let expected_v = sqrt_mag_q * sin_angle_over_two * Vector3::unit_y();
+        let sqrt_norm_q = f64::sqrt(q.magnitude());
+        let expected_s = sqrt_norm_q * cos_angle_over_two;
+        let expected_v = sqrt_norm_q * sin_angle_over_two * Vector3::unit_y();
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 
@@ -1069,9 +1069,9 @@ mod square_root_tests {
         let cos_angle_over_two = f64::sqrt(cos_angle_over_two_squared);
         let sin_angle_over_two_squared = 1_f64 - cos_angle_over_two_squared;
         let sin_angle_over_two = f64::sqrt(sin_angle_over_two_squared);
-        let sqrt_mag_q = f64::sqrt(q.magnitude());
-        let expected_s = sqrt_mag_q * cos_angle_over_two;
-        let expected_v = sqrt_mag_q * sin_angle_over_two * Vector3::unit_z();
+        let sqrt_norm_q = f64::sqrt(q.magnitude());
+        let expected_s = sqrt_norm_q * cos_angle_over_two;
+        let expected_v = sqrt_norm_q * sin_angle_over_two * Vector3::unit_z();
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 
@@ -1083,15 +1083,15 @@ mod square_root_tests {
         let qs = 1_f64;
         let qv = Vector3::new(2_f64, 3_f64, 4_f64);
         let q = Quaternion::from_parts(qs, qv);
-        let mag_q = q.magnitude();
-        let mag_qv = qv.magnitude();
-        let cos_angle_over_two_squared = (1_f64 / 2_f64) * (1_f64 + (1_f64 / mag_q));
+        let norm_q = q.magnitude();
+        let norm_qv = qv.magnitude();
+        let cos_angle_over_two_squared = (1_f64 / 2_f64) * (1_f64 + (1_f64 / norm_q));
         let cos_angle_over_two = f64::sqrt(cos_angle_over_two_squared);
         let sin_angle_over_two_squared = 1_f64 - cos_angle_over_two_squared;
         let sin_angle_over_two = f64::sqrt(sin_angle_over_two_squared);
-        let sqrt_mag_q = f64::sqrt(mag_q);
-        let expected_s = sqrt_mag_q * cos_angle_over_two;
-        let expected_v = sqrt_mag_q * sin_angle_over_two * (1_f64 / mag_qv) * qv;
+        let sqrt_norm_q = f64::sqrt(norm_q);
+        let expected_s = sqrt_norm_q * cos_angle_over_two;
+        let expected_v = sqrt_norm_q * sin_angle_over_two * (1_f64 / norm_qv) * qv;
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 

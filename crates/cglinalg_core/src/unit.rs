@@ -120,13 +120,13 @@ where
     /// ```
     #[inline]
     pub fn from_value_with_magnitude(value: T) -> (Self, T::Output) {
-        let magnitude = value.magnitude();
+        let norm = value.magnitude();
         let normalized_value = value.normalize();
         let unit = Unit {
             value: normalized_value,
         };
         
-        (unit, magnitude)
+        (unit, norm)
     }
 
     /// Construct a new normalized unit value along with its unnormalized magnitude, 
@@ -157,16 +157,16 @@ where
     where 
         T::Output: SimdScalarFloat, 
     {
-        let magnitude_squared = value.magnitude_squared();
+        let norm_squared = value.magnitude_squared();
 
-        if magnitude_squared > threshold * threshold {
-            let magnitude = magnitude_squared.sqrt();
+        if norm_squared > threshold * threshold {
+            let norm = norm_squared.sqrt();
             let normalized_value = value.normalize();
             let unit = Unit {
                 value: normalized_value,
             };
 
-            Some((unit, magnitude))
+            Some((unit, norm))
         } else {
             None
         }

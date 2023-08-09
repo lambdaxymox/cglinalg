@@ -98,7 +98,7 @@ mod constructor_tests {
     }
 
     #[test]
-    fn test_from_angle_magnitude() {
+    fn test_from_angle_norm() {
         let angle = Radians(493_f64);
         let z = Complex::from_angle(angle);
 
@@ -106,7 +106,7 @@ mod constructor_tests {
     }
 
     #[test]
-    fn test_from_polar_decomposition_magnitude() {
+    fn test_from_polar_decomposition_norm() {
         let angle = Radians(493_f64);
         let radius = 5_f64;
         let z = Complex::from_polar_decomposition(radius, angle);
@@ -424,7 +424,7 @@ mod arithmetic_tests {
 }
 
 #[cfg(test)]
-mod magnitude_tests {
+mod norm_tests {
     use cglinalg_core::{
         Complex,
     };

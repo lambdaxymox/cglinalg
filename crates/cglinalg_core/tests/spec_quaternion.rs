@@ -1125,7 +1125,7 @@ exact_conjugation_props!(quaternion_i32_conjugation_props, i32, any_quaternion);
 exact_conjugation_props!(quaternion_i64_conjugation_props, i64, any_quaternion);
 
 
-/// Generate property tests for quaternion magnitudes.
+/// Generate property tests for quaternion norms.
 ///
 /// ### Macro Parameters
 ///
@@ -1139,7 +1139,7 @@ exact_conjugation_props!(quaternion_i64_conjugation_props, i64, any_quaternion);
 /// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-macro_rules! magnitude_props {
+macro_rules! norm_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1155,36 +1155,36 @@ macro_rules! magnitude_props {
 
 
         proptest! {
-            /// The magnitude of a quaternion is nonnegative. 
+            /// The norm of a quaternion is nonnegative. 
             ///
             /// Given a quaternion `q`
             /// ```text
-            /// magnitude(q) >= 0
+            /// norm(q) >= 0
             /// ```
             #[test]
-            fn prop_magnitude_nonnegative(q in $Generator::<$ScalarType>()) {
+            fn prop_norm_nonnegative(q in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
 
                 prop_assert!(q.magnitude() >= zero);
             }
 
-            /// The magnitude function is point separating. In particular, if 
+            /// The norm function is point separating. In particular, if 
             /// the distance between two quaternions `q1` and `q2` is 
             /// zero, then `q1 = q2`.
             ///
             /// Given quaternions `q1` and `q2`
             /// ```text
-            /// magnitude(q1 - q2) = 0 => q1 = q2 
+            /// norm(q1 - q2) = 0 => q1 = q2 
             /// ```
             /// Equivalently, if `q1` is not equal to `q2`, then their distance is 
             /// nonzero
             /// ```text
-            /// q1 != q2 => magnitude(q1 - q2) != 0
+            /// q1 != q2 => norm(q1 - q2) != 0
             /// ```
             /// For the sake of testability, we use the second form to test the 
-            /// magnitude function.
+            /// norm function.
             #[test]
-            fn prop_magnitude_approx_point_separating(
+            fn prop_norm_approx_point_separating(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
                 
                 let zero: $ScalarType = num_traits::zero();
@@ -1199,7 +1199,7 @@ macro_rules! magnitude_props {
     }
 }
 
-magnitude_props!(quaternion_f64_magnitude_props, f64, any_quaternion, any_scalar, 1e-7);
+norm_props!(quaternion_f64_norm_props, f64, any_quaternion, any_scalar, 1e-7);
 
 /*
 /// Generate property tests for quaternion square roots.

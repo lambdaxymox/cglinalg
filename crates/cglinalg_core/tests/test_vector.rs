@@ -175,7 +175,7 @@ mod vector1_tests {
     }
 
     #[test]
-    fn test_zero_vector_zero_magnitude() {
+    fn test_zero_vector_zero_norm() {
         let zero: Vector1<f32> = Vector1::zero();
 
         assert_eq!(zero.magnitude(), 0_f32);
@@ -189,7 +189,7 @@ mod vector1_tests {
     }
 
     #[test]
-    fn test_magnitude() {
+    fn test_norm() {
         let vector = Vector1::new(4.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -198,7 +198,7 @@ mod vector1_tests {
     }
 
     #[test]
-    fn test_magnitude_unit_vectors() {
+    fn test_norm_unit_vectors() {
         let unit_x: Vector1<f64> = Vector1::unit_x();
 
         assert_eq!(unit_x.magnitude_squared(), 1.0);
@@ -384,7 +384,7 @@ mod vector2_tests {
     }
 
     #[test]
-    fn test_zero_vector_zero_magnitude() {
+    fn test_zero_vector_zero_norm() {
         let zero: Vector2<f32> = Vector2::zero();
 
         assert_eq!(zero.magnitude(), 0_f32);
@@ -399,7 +399,7 @@ mod vector2_tests {
     }
 
     #[test]
-    fn test_magnitude1() {
+    fn test_norm1() {
         let vector = Vector2::new(4.0, 0.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -408,7 +408,7 @@ mod vector2_tests {
     }
 
     #[test]
-    fn test_magnitude2() {
+    fn test_norm2() {
         let vector = Vector2::new(0.0, 4.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -417,7 +417,7 @@ mod vector2_tests {
     }
 
     #[test]
-    fn test_magnitude_unit_vectors() {
+    fn test_norm_unit_vectors() {
         let unit_x: Vector2<f64> = Vector2::unit_x();
         let unit_y: Vector2<f64> = Vector2::unit_y();
 
@@ -625,7 +625,7 @@ mod vector3_tests {
     }
 
     #[test]
-    fn test_zero_vector_zero_magnitude() {
+    fn test_zero_vector_zero_norm() {
         let zero: Vector3<f32> = Vector3::zero();
 
         assert_eq!(zero.magnitude(), 0_f32);
@@ -641,7 +641,7 @@ mod vector3_tests {
     }
 
     #[test]
-    fn test_magnitude1() {
+    fn test_norm1() {
         let vector = Vector3::new(4.0, 0.0, 0.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -650,7 +650,7 @@ mod vector3_tests {
     }
 
     #[test]
-    fn test_magnitude2() {
+    fn test_norm2() {
         let vector = Vector3::new(0.0, 4.0, 0.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -659,7 +659,7 @@ mod vector3_tests {
     }
 
     #[test]
-    fn test_magnitude3() {
+    fn test_norm3() {
         let vector = Vector3::new(0.0, 0.0, 4.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -668,7 +668,7 @@ mod vector3_tests {
     }
 
     #[test]
-    fn test_magnitude_unit_vectors() {
+    fn test_norm_unit_vectors() {
         let unit_x: Vector3<f64> = Vector3::unit_x();
         let unit_y: Vector3<f64> = Vector3::unit_y();
         let unit_z: Vector3<f64> = Vector3::unit_z();
@@ -875,7 +875,7 @@ mod vector4_tests {
     }
 
     #[test]
-    fn test_zero_vector_zero_magnitude() {
+    fn test_zero_vector_zero_norm() {
         let zero: Vector4<f32> = Vector4::zero();
 
         assert_eq!(zero.magnitude(), 0_f32);
@@ -900,7 +900,7 @@ mod vector4_tests {
     }
 
     #[test]
-    fn test_magnitude1() {
+    fn test_norm1() {
         let vector = Vector4::new(4.0, 0.0, 0.0, 0.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -909,7 +909,7 @@ mod vector4_tests {
     }
 
     #[test]
-    fn test_magnitude2() {
+    fn test_norm2() {
         let vector = Vector4::new(0.0, 4.0, 0.0, 0.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -918,7 +918,7 @@ mod vector4_tests {
     }
 
     #[test]
-    fn test_magnitude3() {
+    fn test_norm3() {
         let vector = Vector4::new(0.0, 0.0, 4.0, 0.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -927,7 +927,7 @@ mod vector4_tests {
     }
 
     #[test]
-    fn test_magnitude4() {
+    fn test_norm4() {
         let vector = Vector4::new(0.0, 0.0, 0.0, 4.0);
         let expected = 4.0;
         let result = vector.magnitude();
@@ -936,7 +936,7 @@ mod vector4_tests {
     }
 
     #[test]
-    fn test_magnitude_unit_vectors() {
+    fn test_norm_unit_vectors() {
         let unit_x: Vector4<f64> = Vector4::unit_x();
         let unit_y: Vector4<f64> = Vector4::unit_y();
         let unit_z: Vector4<f64> = Vector4::unit_z();

@@ -117,7 +117,7 @@ bench_binop_ref!(
 );
 
 bench_unop!(quaternion_conjugate_f32, f32, Quaternion<f32>, gen_quaternion, conjugate);
-bench_unop!(quaternion_magnitude_f32, f32, Quaternion<f32>, gen_quaternion, magnitude);
+bench_unop!(quaternion_norm_f32,      f32, Quaternion<f32>, gen_quaternion, magnitude);
 bench_unop!(quaternion_normalize_f32, f32, Quaternion<f32>, gen_quaternion, normalize);
 bench_unop!(quaternion_inverse_f32,   f32, Quaternion<f32>, gen_quaternion, inverse);
 bench_unop!(quaternion_sqrt_f32,      f32, Quaternion<f32>, gen_quaternion, sqrt);
@@ -133,7 +133,7 @@ criterion_group!(
     quaternion_div_scalar_f32,
     quaternion_dot_quaternion_f32,
     quaternion_conjugate_f32,
-    quaternion_magnitude_f32,
+    quaternion_norm_f32,
     quaternion_normalize_f32,
     quaternion_inverse_f32,
     quaternion_sqrt_f32,

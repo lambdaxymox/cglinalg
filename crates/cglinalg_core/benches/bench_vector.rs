@@ -152,10 +152,10 @@ bench_binop_ref!(vector4_dot_vector4_f32, f32, Vector4<f32>, Vector4<f32>, gen_v
 
 bench_binop_ref!(vector3_cross_vector3_f32, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, cross);
 
-bench_unop!(vector1_magnitude_f32, f32, Vector1<f32>, gen_vector1, magnitude);
-bench_unop!(vector2_magnitude_f32, f32, Vector2<f32>, gen_vector2, magnitude);
-bench_unop!(vector3_magnitude_f32, f32, Vector3<f32>, gen_vector3, magnitude);
-bench_unop!(vector4_magnitude_f32, f32, Vector4<f32>, gen_vector4, magnitude);
+bench_unop!(vector1_norm_f32, f32, Vector1<f32>, gen_vector1, magnitude);
+bench_unop!(vector2_norm_f32, f32, Vector2<f32>, gen_vector2, magnitude);
+bench_unop!(vector3_norm_f32, f32, Vector3<f32>, gen_vector3, magnitude);
+bench_unop!(vector4_norm_f32, f32, Vector4<f32>, gen_vector4, magnitude);
 
 bench_unop!(vector1_normalize_f32, f32, Vector1<f32>, gen_vector1, normalize);
 bench_unop!(vector2_normalize_f32, f32, Vector2<f32>, gen_vector2, normalize);
@@ -189,10 +189,10 @@ criterion_group!(
     vector3_dot_vector3_f32,
     vector4_dot_vector4_f32,
     vector3_cross_vector3_f32,
-    vector1_magnitude_f32,
-    vector2_magnitude_f32,
-    vector3_magnitude_f32,
-    vector4_magnitude_f32,
+    vector1_norm_f32,
+    vector2_norm_f32,
+    vector3_norm_f32,
+    vector4_norm_f32,
     vector1_normalize_f32,
     vector2_normalize_f32,
     vector3_normalize_f32,

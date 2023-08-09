@@ -523,7 +523,7 @@ where
         !self.is_nan() && (self.re.is_infinite() || self.im.is_infinite())
     }
 
-    /// Compute the magnitude (modulus, length) of a complex number in Euclidean
+    /// Compute the norm (modulus, magnitude) of a complex number in Euclidean
     /// space.
     /// 
     /// # Example
@@ -745,10 +745,10 @@ where
     /// ```
     #[inline]
     pub fn ln(self) -> Self {
-        let magnitude_self = self.magnitude();
+        let norm_self = self.magnitude();
         let arg_self = self.arg();
 
-        Self::new(magnitude_self.ln(), arg_self)
+        Self::new(norm_self.ln(), arg_self)
     }
 
     /// Calculate the positive square root of a complex number.
@@ -820,11 +820,11 @@ where
     #[inline]
     pub fn sqrt(self) -> Self {
         let two = S::one() + S::one();
-        let sqrt_magnitude = self.magnitude().sqrt();
+        let sqrt_norm = self.magnitude().sqrt();
         let angle = self.arg();
         let (sin_angle_over_two, cos_angle_over_two) = (angle / two).sin_cos();
 
-        Self::new(sqrt_magnitude * cos_angle_over_two, sqrt_magnitude * sin_angle_over_two)
+        Self::new(sqrt_norm * cos_angle_over_two, sqrt_norm * sin_angle_over_two)
     }
 
     /// Calculate the power of a complex number where the exponent is a floating 
@@ -874,13 +874,13 @@ where
     /// ```
     #[inline]
     pub fn inverse(self) -> Option<Self> {
-        let magnitude_squared = self.magnitude_squared();
-        if magnitude_squared.is_zero() {
+        let norm_squared = self.magnitude_squared();
+        if norm_squared.is_zero() {
             None
         } else {
             Some(Self::new(
-                 self.re / magnitude_squared,
-                -self.im / magnitude_squared
+                 self.re / norm_squared,
+                -self.im / norm_squared
             ))
         }
     }
@@ -1786,15 +1786,15 @@ where
 {
     fn div_assign(&mut self, other: Complex<S>) {
         let a = self.re;
-        let magnitude_squared = other.magnitude_squared();
+        let norm_squared = other.magnitude_squared();
 
         self.re *= other.re;
         self.re += self.im * other.im;
-        self.re /= magnitude_squared;
+        self.re /= norm_squared;
 
         self.im *= other.re;
         self.im -= a * other.im;
-        self.im /= magnitude_squared;
+        self.im /= norm_squared;
     }
 }
 
@@ -1804,15 +1804,15 @@ where
 {
     fn div_assign(&mut self, other: &Complex<S>) {
         let a = self.re;
-        let magnitude_squared = other.magnitude_squared();
+        let norm_squared = other.magnitude_squared();
 
         self.re *= other.re;
         self.re += self.im * other.im;
-        self.re /= magnitude_squared;
+        self.re /= norm_squared;
 
         self.im *= other.re;
         self.im -= a * other.im;
-        self.im /= magnitude_squared;
+        self.im /= norm_squared;
     }
 }
 

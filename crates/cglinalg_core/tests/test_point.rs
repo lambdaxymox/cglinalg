@@ -129,7 +129,7 @@ mod point1_tests {
     }
 
     #[test]
-    fn test_zero_point_zero_magnitude() {
+    fn test_zero_point_zero_norm() {
         let zero: Point1<f32> = Point1::new(0_f32);
 
         assert_eq!(zero.magnitude(), 0_f32);
@@ -275,7 +275,7 @@ mod point2_tests {
     }
 
     #[test]
-    fn test_zero_point_zero_magnitude() {
+    fn test_zero_point_zero_norm() {
         let zero: Point2<f32> = Point2::new(0_f32, 0_f32);
 
         assert_eq!(zero.magnitude(), 0_f32);
@@ -426,7 +426,7 @@ mod point3_tests {
     }
 
     #[test]
-    fn test_zero_point_zero_magnitude() {
+    fn test_zero_point_zero_norm() {
         let zero: Point3<f32> = Point3::new(0_f32, 0_f32, 0_f32);
 
         assert_eq!(zero.magnitude(), 0_f32);

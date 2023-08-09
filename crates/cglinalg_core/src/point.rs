@@ -733,15 +733,15 @@ where
     fn magnitude(&self) -> Self::Output {
         self.magnitude_squared().sqrt()
     }
+
+    #[inline]
+    fn scale(&self, norm: Self::Output) -> Self {
+        self * (norm / self.magnitude())
+    }
     
     #[inline]
     fn normalize(&self) -> Self {
         self / self.magnitude()
-    }
-    
-    #[inline]
-    fn normalize_to(&self, magnitude: Self::Output) -> Self {
-        self * (magnitude / self.magnitude())
     }
 
     #[inline]
@@ -751,8 +751,8 @@ where
 
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let magnitude = self.magnitude();
-        if magnitude <= threshold {
+        let norm = self.magnitude();
+        if norm <= threshold {
             None
         } else {
             Some(self.normalize())

@@ -644,7 +644,7 @@ exact_sub_props!(vector3_u32_sub_props, Vector3, u32, any_vector3);
 exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 
 
-/// Generate properties for vector magnitudes.
+/// Generate properties for vector norms.
 ///
 /// ### Macro Parameters
 ///
@@ -659,7 +659,7 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 /// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-macro_rules! magnitude_props {
+macro_rules! norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -675,33 +675,33 @@ macro_rules! magnitude_props {
 
 
         proptest! {
-            /// The magnitude of a vector is nonnegative.
+            /// The norm of a vector is nonnegative.
             ///
             /// Given a vector `v`
             /// ```text
-            /// magnitude(v) >= 0
+            /// norm(v) >= 0
             /// ```
             #[test]
-            fn prop_magnitude_nonnegative(v in $Generator::<$ScalarType>()) {
+            fn prop_norm_nonnegative(v in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
                 prop_assert!(v.magnitude() >= zero);
             }
 
-            /// The magnitude function is point separating. In particular, if the 
+            /// The norm function is point separating. In particular, if the 
             /// distance between two vectors `v` and `w` is zero, then `v = w`.
             ///
             /// Given vectors `v` and `w`
             /// ```text
-            /// magnitude(v - w) = 0 => v = w 
+            /// norm(v - w) = 0 => v = w 
             /// ```
             /// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
             /// ```text
-            /// v != w => magnitude(v - w) != 0
+            /// v != w => norm(v - w) != 0
             /// ```
-            /// For the sake of testability, we use the second form to test the magnitude 
+            /// For the sake of testability, we use the second form to test the norm
             /// function.
             #[test]
-            fn prop_magnitude_approx_point_separating(
+            fn prop_norm_approx_point_separating(
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
                 
                 let zero: $ScalarType = num_traits::zero();
@@ -716,10 +716,10 @@ macro_rules! magnitude_props {
     }
 }
 
-magnitude_props!(vector1_f64_magnitude_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
-magnitude_props!(vector2_f64_magnitude_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
-magnitude_props!(vector3_f64_magnitude_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
-magnitude_props!(vector4_f64_magnitude_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
+norm_props!(vector1_f64_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
+norm_props!(vector2_f64_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
+norm_props!(vector3_f64_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
+norm_props!(vector4_f64_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
 
 
 /// Generate property tests for vector multiplication over floating point scalars.
