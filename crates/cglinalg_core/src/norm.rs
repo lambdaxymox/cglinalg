@@ -64,12 +64,21 @@ where
     /// Normalize a vector to a specified magnitude.
     fn normalize_to(&self, magnitude: Self::Output) -> Self;
 
+    /// Normalize a vector mutably in place and return its magnitude.
+    fn normalize_mut(&mut self) -> Self::Output;
+
     /// Attempt to normalize a vector, but give up if the norm
     /// is too small.
     ///
     /// If the magnitude of the vector is smaller than the threshold
     /// `threshold`, the function returns `None`.
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self>;
+
+    /// Attempt to normalize a vector in place, but give up if the norm is too small.
+    /// 
+    /// If the magnitude of the vector is smaller than the threshold 
+    /// `threshold`, the function does not mutate `self` and returns `None`.
+    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output>;
 
     /// Compute the squared Euclidean distance between two vectors.
     fn distance_squared(&self, other: &Self) -> Self::Output;

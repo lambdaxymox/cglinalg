@@ -1,7 +1,7 @@
 use crate::core_numeric::{
     SimdScalarFloat,
 };
-use crate::magnitude::{
+use crate::norm::{
     Magnitude,
 };
 

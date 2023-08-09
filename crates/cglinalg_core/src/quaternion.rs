@@ -7,7 +7,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::magnitude::Magnitude;
+use crate::norm::Magnitude;
 use crate::matrix::{
     Matrix3x3, 
     Matrix4x4,
@@ -3622,6 +3622,11 @@ where
     }
 
     #[inline]
+    fn normalize_mut(&mut self) -> Self::Output {
+        self.coords.normalize_mut()
+    }
+
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
         if magnitude <= threshold {
@@ -3629,6 +3634,11 @@ where
         } else {
             Some(self.normalize())
         }
+    }
+
+    #[inline]
+    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
+        self.coords.try_normalize_mut(threshold)
     }
 
     #[inline]

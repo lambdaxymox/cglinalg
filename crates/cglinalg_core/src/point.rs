@@ -3,7 +3,7 @@ use crate::core_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::magnitude::{
+use crate::norm::{
     Magnitude,
 };
 use crate::vector::{
@@ -745,12 +745,27 @@ where
     }
 
     #[inline]
+    fn normalize_mut(&mut self) -> Self::Output {
+        self.coords.normalize_mut()
+    }
+
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
         if magnitude <= threshold {
             None
         } else {
             Some(self.normalize())
+        }
+    }
+
+    #[inline]
+    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
+        let norm = self.magnitude();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize_mut())
         }
     }
 

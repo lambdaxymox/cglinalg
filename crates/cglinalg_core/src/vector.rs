@@ -6,7 +6,7 @@ use crate::core_numeric::{
 use crate::unit::{
     Unit,
 };
-use crate::magnitude::{
+use crate::norm::{
     Magnitude,
 };
 use crate::{
@@ -734,12 +734,30 @@ where
     }
 
     #[inline]
+    fn normalize_mut(&mut self) -> Self::Output {
+        let norm = self.magnitude();
+        *self = self.normalize();
+
+        norm
+    }
+
+    #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let magnitude = self.magnitude();
         if magnitude <= threshold {
             None
         } else {
             Some(self.normalize())
+        }
+    }
+
+    #[inline]
+    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
+        let norm = self.magnitude();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize_mut())
         }
     }
 

@@ -7,7 +7,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::magnitude::{
+use crate::norm::{
     Magnitude,
 };
 use crate::unit::{
