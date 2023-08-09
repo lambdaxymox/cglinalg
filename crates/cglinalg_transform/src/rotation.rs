@@ -857,7 +857,7 @@ where
     /// ```
     #[inline]
     pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(&Vector3::unit_unit_x(), angle)
+        Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_x()), angle)
     }
 
     /// Construct a new three-dimensional rotation about the **y-axis** in the 
@@ -887,7 +887,7 @@ where
     /// ```
     #[inline]
     pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(&Vector3::unit_unit_y(), angle)
+        Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_y()), angle)
     }
 
     /// Construct a new three-dimensional rotation about the **z-axis** in the 
@@ -917,7 +917,7 @@ where
     /// ```
     #[inline]
     pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
-        Self::from_axis_angle(&Vector3::unit_unit_z(), angle)
+        Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_z()), angle)
     }
 
     /// Construct a coordinate transformation that maps the coordinate system 

@@ -1174,13 +1174,6 @@ where
         Vector1::new(S::one())
     }
 
-    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_x() -> Unit<Self> {
-        Unit::from_value_unchecked(Vector1::new(S::one()))
-    }
-
     /// Compute the coordinates of a vector in projective space.
     ///
     /// The function appends a `0` to the vector.
@@ -1281,20 +1274,6 @@ where
     #[inline]
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one())
-    }
-
-    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_x() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::new(S::one(), S::zero()))
-    }
-
-    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_y() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::new(S::zero(), S::one()))
     }
 
     /// Compute the coordinates of a vector in projective space.
@@ -1437,27 +1416,6 @@ where
     #[inline]
     pub fn unit_z() -> Self {
         Self::new(S::zero(), S::zero(), S::one())
-    }
-
-    /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_x() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::new(S::one(), S::zero(), S::zero()))
-    }
-
-    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_y() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::new(S::zero(), S::one(), S::zero()))
-    }
-    
-    /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_z() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::new(S::zero(), S::zero(), S::one()))
     }
 
     /// Compute the coordinates of a vector in projective space.
@@ -1679,34 +1637,6 @@ where
     #[inline]
     pub fn unit_w() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::one())
-    }
-
-        /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_x() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::new(S::one(), S::zero(), S::zero(), S::zero()))
-    }
-
-    /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_y() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::new(S::zero(), S::one(), S::zero(), S::zero()))
-    }
-    
-    /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_z() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::new(S::zero(), S::zero(), S::one(), S::zero()))
-    }
-
-    /// Returns the **w-axis** unit vector, a unit vector with the **w-component**
-    /// component as a `1` and the rest of the components are zero.
-    #[inline]
-    pub fn unit_unit_w() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::new(S::zero(), S::zero(), S::zero(), S::one()))
     }
 
     /// Compute the coordinates of a projective vector in Euclidean space.
