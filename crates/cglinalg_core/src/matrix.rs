@@ -79,10 +79,18 @@ pub type Matrix3x4<S> = Matrix<S, 3, 4, 12>;
 pub type Matrix4x3<S> = Matrix<S, 4, 3, 12>;
 
 
+/// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
 pub type RowVector1<S> = Matrix1x1<S>;
+
+/// A stack-allocated **(1 row, 2 column)** matrix in column-major order.
 pub type RowVector2<S> = Matrix1x2<S>;
+
+/// A stack-allocated **(1 row, 3 column)** matrix in column-major order.
 pub type RowVector3<S> = Matrix1x3<S>;
+
+/// A stack-allocated **(1 row, 4 column)** matrix in column-major order.
 pub type RowVector4<S> = Matrix1x4<S>;
+
 
 /// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
 pub type Matrix1<S> = Matrix1x1<S>;
