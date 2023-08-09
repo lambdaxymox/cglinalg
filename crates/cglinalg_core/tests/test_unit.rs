@@ -2,7 +2,7 @@ extern crate cglinalg_core;
 
 
 use cglinalg_core::{
-    Magnitude,
+    Normed,
     Unit,
     Vector3,
 };

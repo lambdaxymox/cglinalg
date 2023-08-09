@@ -44,7 +44,7 @@ mod storage_tests {
 mod lerp_tests {
     use cglinalg_core::{
         Quaternion,
-        Magnitude
+        Normed
     };
 
 
@@ -178,7 +178,7 @@ mod arithmetic_tests {
 mod magnitude_tests {
     use cglinalg_core::{
         Quaternion,
-        Magnitude,
+        Normed,
         Vector3,
     };
     use approx::{
@@ -402,7 +402,7 @@ mod arg_tests {
 #[cfg(test)]
 mod exp_tests {
     use cglinalg_core::{
-        Magnitude,
+        Normed,
         Quaternion,
         Vector3,
     };
@@ -985,7 +985,7 @@ mod square_tests {
 #[cfg(test)]
 mod square_root_tests {
     use cglinalg_core::{
-        Magnitude,
+        Normed,
         Quaternion,
         Vector3,
     };

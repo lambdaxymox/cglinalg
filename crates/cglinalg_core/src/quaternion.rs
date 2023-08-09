@@ -7,7 +7,7 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::norm::Magnitude;
+use crate::norm::Normed;
 use crate::matrix::{
     Matrix3x3, 
     Matrix4x4,
@@ -720,7 +720,7 @@ where
     /// #     Vector3,
     /// #     Angle,
     /// #     Radians,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -869,7 +869,7 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Matrix3x3,  
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -896,7 +896,7 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Matrix3x3,  
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -958,7 +958,7 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Matrix3x3,  
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -988,7 +988,7 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Matrix3x3,  
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -1046,7 +1046,7 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Matrix4x4,  
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -1074,7 +1074,7 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Matrix4x4,  
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -1147,7 +1147,7 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Matrix4x4,  
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -1179,7 +1179,7 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Matrix4x4,  
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -1643,7 +1643,7 @@ where
     /// 
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Quaternion,
     /// #     Vector3,
     /// # };
@@ -2112,7 +2112,7 @@ where
     /// #     Matrix3x3,
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -2161,7 +2161,7 @@ where
     /// #     Matrix3x3,
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Point3,
     /// # };
     /// # use approx::{
@@ -2207,7 +2207,7 @@ where
     /// #     Quaternion,
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -2345,7 +2345,7 @@ where
     /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -2394,7 +2394,7 @@ where
     /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -2555,7 +2555,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// #
     /// let v0 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
@@ -2612,7 +2612,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion, 
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # 
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -3595,7 +3595,7 @@ where
     }
 }
 
-impl<S> Magnitude for Quaternion<S> 
+impl<S> Normed for Quaternion<S> 
 where 
     S: SimdScalarFloat 
 {

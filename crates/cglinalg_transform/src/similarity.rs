@@ -1010,7 +1010,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Point3,
     /// #     Vector3,
     /// # };
@@ -1062,7 +1062,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Point3,
     /// #     Vector3,
     /// # };
@@ -1117,7 +1117,7 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -1168,7 +1168,7 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -1217,7 +1217,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Point3,
     /// #     Vector3,
     /// # };
@@ -1263,7 +1263,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Point3,
     /// #     Vector3,
     /// # };
@@ -1309,7 +1309,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Point3,
     /// #     Vector3,
     /// # };
@@ -1355,7 +1355,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Point3,
     /// #     Vector3,
     /// # };

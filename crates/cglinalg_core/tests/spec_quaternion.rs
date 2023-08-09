@@ -1143,7 +1143,9 @@ macro_rules! magnitude_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::Magnitude;
+        use cglinalg_core::{
+            Normed,
+        };
         use approx::{
             relative_ne,
         };

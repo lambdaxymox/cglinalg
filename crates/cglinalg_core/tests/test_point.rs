@@ -6,7 +6,7 @@ mod point1_tests {
     use cglinalg_core::{
         Point1,
         Vector1,
-        Magnitude,
+        Normed,
     };
 
 
@@ -149,7 +149,7 @@ mod point2_tests {
     use cglinalg_core::{
         Point2,
         Vector2,
-        Magnitude,   
+        Normed,   
     };
 
 
@@ -296,7 +296,7 @@ mod point3_tests {
     use cglinalg_core::{
         Point3,
         Vector3,
-        Magnitude,   
+        Normed,   
     };
 
 

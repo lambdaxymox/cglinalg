@@ -211,7 +211,7 @@ mod similarity3_tests {
         Vector3,
         Point3,
         Degrees,
-        Magnitude,
+        Normed,
         Radians,
         Matrix4x4,
         Unit,

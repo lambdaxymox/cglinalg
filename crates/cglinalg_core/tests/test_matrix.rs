@@ -651,7 +651,7 @@ mod matrix3x3_tests {
     use cglinalg_core::{
         Vector2,
         Vector3,
-        Magnitude,
+        Normed,
         Matrix3x3,
         Angle,
         Radians,
@@ -1705,7 +1705,7 @@ mod matrix4x4_tests {
     use cglinalg_core::{
         Vector3,
         Vector4,
-        Magnitude,
+        Normed,
         Matrix4x4,
         Radians,
         Degrees,

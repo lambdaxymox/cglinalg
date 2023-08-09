@@ -5,7 +5,7 @@ extern crate rand_isaac;
 
 
 use cglinalg_core::{
-    Magnitude,
+    Normed,
     Vector1,
     Vector2,
     Vector3,

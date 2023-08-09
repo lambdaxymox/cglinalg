@@ -2,7 +2,7 @@ use crate::core_numeric::{
     SimdScalarFloat,
 };
 use crate::norm::{
-    Magnitude,
+    Normed,
 };
 
 use num_traits::{
@@ -91,7 +91,7 @@ where
 
 impl<T> Unit<T> 
 where 
-    T: Magnitude
+    T: Normed
 {
     /// Construct a new unit value, normalizing the input value.
     #[inline]
@@ -105,7 +105,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Unit,
     /// #     Vector3,
     /// # };
@@ -141,7 +141,7 @@ where
     /// magnitude is too small.
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Unit,
     /// #     Vector3,
     /// # };
@@ -182,7 +182,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Magnitude,
+    /// #     Normed,
     /// #     Unit,
     /// #     Quaternion,
     /// # };

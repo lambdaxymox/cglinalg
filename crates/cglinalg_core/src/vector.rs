@@ -7,7 +7,7 @@ use crate::unit::{
     Unit,
 };
 use crate::norm::{
-    Magnitude,
+    Normed,
 };
 use crate::{
     impl_coords,
@@ -404,7 +404,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3, 
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # 
     /// let vector = Vector3::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64);
@@ -431,7 +431,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -707,7 +707,7 @@ where
     }
 }
 
-impl<S, const N: usize> Magnitude for Vector<S, N> 
+impl<S, const N: usize> Normed for Vector<S, N> 
 where 
     S: SimdScalarFloat
 {
@@ -727,7 +727,7 @@ where
     fn normalize(&self) -> Self {
         self / self.magnitude()
     }
-    
+
     #[inline]
     fn normalize_to(&self, magnitude: Self::Output) -> Self {
         self * (magnitude / self.magnitude())

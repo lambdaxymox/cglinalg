@@ -933,7 +933,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -974,7 +974,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -1017,7 +1017,7 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -1058,7 +1058,7 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -1098,7 +1098,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -1140,7 +1140,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -1183,7 +1183,7 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -1228,7 +1228,7 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,

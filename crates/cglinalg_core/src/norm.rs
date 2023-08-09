@@ -15,7 +15,7 @@ use crate::core_numeric::{
 /// ```
 /// # use cglinalg_core::{
 /// #     Vector4,
-/// #     Magnitude,  
+/// #     Normed,  
 /// # };
 /// #
 /// // The magnitude of the vector.
@@ -46,7 +46,7 @@ use crate::core_numeric::{
 /// assert_eq!(vector1.distance_squared(&vector2), 4_f64);
 /// assert_eq!(vector1.distance(&vector2), 2_f64);
 /// ```
-pub trait Magnitude 
+pub trait Normed 
 where 
     Self: Sized
 {

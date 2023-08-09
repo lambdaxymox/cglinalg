@@ -4,7 +4,7 @@ use crate::core_numeric::{
     SimdScalarFloat,
 };
 use crate::norm::{
-    Magnitude,
+    Normed,
 };
 use crate::vector::{
     Vector,
@@ -718,7 +718,7 @@ where
     }
 }
 
-impl<S, const N: usize> Magnitude for Point<S, N> 
+impl<S, const N: usize> Normed for Point<S, N> 
 where 
     S: SimdScalarFloat
 {

@@ -664,7 +664,7 @@ macro_rules! magnitude_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         use cglinalg_core::{
-            Magnitude,
+            Normed,
         };
         use approx::{
             relative_ne,

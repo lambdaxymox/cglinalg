@@ -5,7 +5,7 @@ extern crate rand_isaac;
 
 
 use cglinalg_core::{
-    Magnitude,
+    Normed,
     Quaternion,
 };
 use core::ops::{

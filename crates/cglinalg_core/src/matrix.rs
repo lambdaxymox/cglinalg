@@ -8,7 +8,7 @@ use crate::angle::{
     Radians,
 };
 use crate::norm::{
-    Magnitude,
+    Normed,
 };
 use crate::unit::{
     Unit,
@@ -2895,7 +2895,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -2943,7 +2943,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -2992,7 +2992,7 @@ where
     /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -3035,7 +3035,7 @@ where
     /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -3077,7 +3077,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -3117,7 +3117,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,    
@@ -3159,7 +3159,7 @@ where
     /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -3203,7 +3203,7 @@ where
     /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -4421,7 +4421,7 @@ where
     /// #     Vector3,
     /// #     Vector4,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -4488,7 +4488,7 @@ where
     /// #     Vector3,
     /// #     Vector4,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -4555,7 +4555,7 @@ where
     /// #     Vector3,
     /// #     Vector4,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -4602,7 +4602,7 @@ where
     /// #     Vector3,
     /// #     Vector4,
     /// #     Point3, 
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
@@ -4714,7 +4714,7 @@ where
     /// #     Vector4,
     /// #     Matrix4x4,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -4779,7 +4779,7 @@ where
     /// #     Vector4,
     /// #     Matrix4x4,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
@@ -4828,7 +4828,7 @@ where
     /// #     Vector4,
     /// #     Matrix4x4,
     /// #     Point3,
-    /// #     Magnitude,
+    /// #     Normed,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
