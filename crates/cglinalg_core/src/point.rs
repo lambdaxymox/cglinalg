@@ -164,29 +164,32 @@ where
     }
 }
 
-impl<S, const N: usize> AsRef<[S; N]> for Point<S, N> {
-    #[inline]
-    fn as_ref(&self) -> &[S; N] {
-        unsafe {
-            &*(self as *const Point<S, N> as *const [S; N])
-        }
-    }
-}
-
-impl<S, const N: usize> AsMut<[S; N]> for Point<S, N> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut [S; N] {
-        unsafe {
-            &mut *(self as *mut Point<S, N> as *mut [S; N])
-        }
-    }
-}
-
 impl<S, const N: usize> Point<S, N>
 where
     S: SimdScalar
 {
-    /// Compute the origin of the Euclidean vector space.
+    /// The preferred origin of the Euclidean vector space.
+    /// 
+    /// In theory, an Euclidean space does not have a clearly defined origin. In 
+    /// practice, it is useful to have a reference point in which to express the others
+    /// as translations of it. By default, we define the origin as `[0, 0, 0]`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let origin = Point3::origin();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// // We can express `point` as a vector representing a translation from the origin.
+    /// let result = point - origin;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn origin() -> Self {
         Self {
@@ -438,6 +441,24 @@ where
 {
     fn default() -> Self {
         Self::origin()
+    }
+}
+
+impl<S, const N: usize> AsRef<[S; N]> for Point<S, N> {
+    #[inline]
+    fn as_ref(&self) -> &[S; N] {
+        unsafe {
+            &*(self as *const Point<S, N> as *const [S; N])
+        }
+    }
+}
+
+impl<S, const N: usize> AsMut<[S; N]> for Point<S, N> {
+    #[inline]
+    fn as_mut(&mut self) -> &mut [S; N] {
+        unsafe {
+            &mut *(self as *mut Point<S, N> as *mut [S; N])
+        }
     }
 }
 
@@ -984,7 +1005,7 @@ where
 
 
 impl<S> Point1<S> {
-    /// Construct a new point in one-dimensional Euclidean space.
+    /// Construct a new point in Euclidean space.
     #[inline]
     pub const fn new(x: S) -> Self {
         Self { 
@@ -1021,7 +1042,7 @@ where
 }
 
 impl<S> Point2<S> {
-    /// Construct a new two-dimensional point.
+    /// Construct a new point in Euclidean space.
     #[inline]
     pub const fn new(x: S, y: S) -> Self {
         Self { 
@@ -1136,7 +1157,7 @@ where
 }
 
 impl<S> Point3<S> {
-    /// Construct a new point in three-dimensional Euclidean space.
+    /// Construct a new point in Euclidean space.
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Self {
         Self { 

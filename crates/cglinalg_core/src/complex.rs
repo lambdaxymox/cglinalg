@@ -287,6 +287,21 @@ where
     /// Get the multiplicative unit complex number.
     /// 
     /// This is a synonym for [`Complex::identity`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let unit_complex: Complex<i32> = Complex::one();
+    /// let z = Complex::new(3_i32, 7_i32);
+    /// 
+    /// assert_eq!(z * unit_complex, z);
+    /// assert_eq!(unit_complex * z, z);
+    /// assert_eq!(unit_complex * unit_complex, unit_complex);
+    /// ```
     #[inline]
     pub fn one() -> Self {
         Self::identity()
@@ -311,6 +326,30 @@ where
     /// ```
     #[inline]
     pub fn is_identity(self) -> bool {
+        self.re.is_one() && self.im.is_zero()
+    }
+
+    /// Determine whether a complex number is the identity complex number.
+    /// 
+    /// This is a synonym for [`Complex::is_identity`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let unit_complex: Complex<i32> = Complex::one();
+    /// 
+    /// assert!(unit_complex.is_one());
+    /// 
+    /// let z = Complex::new(5_i32, 6_i32);
+    /// 
+    /// assert!(!z.is_one());
+    /// ```
+    #[inline]
+    pub fn is_one(self) -> bool {
         self.re.is_one() && self.im.is_zero()
     }
 

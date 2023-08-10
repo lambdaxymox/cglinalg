@@ -143,6 +143,24 @@ where
     S: Copy 
 {
     /// Construct a new quaternion from its scalar and vector parts.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let scalar = 1_f64;
+    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let quaternion = Quaternion::from_parts(scalar, vector);
+    /// 
+    /// assert_eq!(quaternion.s,   1_f64);
+    /// assert_eq!(quaternion.v.x, 2_f64);
+    /// assert_eq!(quaternion.v.y, 3_f64);
+    /// assert_eq!(quaternion.v.z, 4_f64);
+    /// ```
     #[inline]
     pub fn from_parts(qs: S, qv: Vector3<S>) -> Self {
         Self::new(qs, qv[0], qv[1], qv[2])

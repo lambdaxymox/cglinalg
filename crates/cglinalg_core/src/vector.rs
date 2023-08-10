@@ -190,6 +190,20 @@ where
     /// Construct the zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector: Vector3<i32> = Vector3::zero();
+    /// 
+    /// assert_eq!(vector[0], 0);
+    /// assert_eq!(vector[1], 0);
+    /// assert_eq!(vector[2], 0);
+    /// ```
     #[inline]
     pub fn zero() -> Self {
         Self {
@@ -1944,7 +1958,7 @@ where
 
 
 impl<S> Vector4<S> {
-    /// Construct a new four-dimensional vector.
+    /// Construct a new vector.
     #[inline]
     pub const fn new(x: S, y: S, z: S, w: S) -> Self {
         Self { 
