@@ -102,7 +102,7 @@ mod constructor_tests {
         let angle = Radians(493_f64);
         let z = Complex::from_angle(angle);
 
-        assert_relative_eq!(z.magnitude(), 1_f64);
+        assert_relative_eq!(z.norm(), 1_f64);
     }
 
     #[test]
@@ -111,7 +111,7 @@ mod constructor_tests {
         let radius = 5_f64;
         let z = Complex::from_polar_decomposition(radius, angle);
 
-        assert_eq!(z.magnitude(), radius);
+        assert_eq!(z.norm(), radius);
     }
 
     #[test]
@@ -434,14 +434,14 @@ mod norm_tests {
     fn test_unit_re_should_have_unit_norm() {
         let one: Complex<f64> = Complex::unit_re();
 
-        assert_eq!(one.magnitude(), 1_f64);
+        assert_eq!(one.norm(), 1_f64);
     }
 
     #[test]
     fn test_unit_im_should_have_unit_norm() {
         let i: Complex<f64> = Complex::unit_im();
 
-        assert_eq!(i.magnitude(), 1_f64);
+        assert_eq!(i.norm(), 1_f64);
     }
 }
 

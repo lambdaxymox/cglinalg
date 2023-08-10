@@ -9,6 +9,15 @@ use cglinalg_core::{
     SimdScalar,
 };
 
+/*
+fn any_u32() -> impl Strategy<Value = u32> {
+    any::<u32>().prop_map(|i| {
+        let modulus = 100;
+
+        i % modulus
+    })
+}
+*/
 
 fn any_scalar<S>() -> impl Strategy<Value = S>
 where
@@ -1125,7 +1134,7 @@ exact_conjugation_props!(quaternion_i32_conjugation_props, i32, any_quaternion);
 exact_conjugation_props!(quaternion_i64_conjugation_props, i64, any_quaternion);
 
 
-/// Generate property tests for quaternion norms.
+/// Generate property tests for the quaternion **L2** norm.
 ///
 /// ### Macro Parameters
 ///
@@ -1165,7 +1174,7 @@ macro_rules! norm_props {
             fn prop_norm_nonnegative(q in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
 
-                prop_assert!(q.magnitude() >= zero);
+                prop_assert!(q.norm() >= zero);
             }
 
             /// The norm function is point separating. In particular, if 
@@ -1190,8 +1199,8 @@ macro_rules! norm_props {
                 let zero: $ScalarType = num_traits::zero();
 
                 prop_assume!(relative_ne!(q1, q2, epsilon = $tolerance));
-                prop_assert!(relative_ne!((q1 - q2).magnitude(), zero, epsilon = $tolerance),
-                    "\n|q1 - q2| = {}\n", (q1 - q2).magnitude()
+                prop_assert!(relative_ne!((q1 - q2).norm(), zero, epsilon = $tolerance),
+                    "\n|q1 - q2| = {}\n", (q1 - q2).norm()
                 );
             }
         }
@@ -1200,6 +1209,154 @@ macro_rules! norm_props {
 }
 
 norm_props!(quaternion_f64_norm_props, f64, any_quaternion, any_scalar, 1e-7);
+
+
+/// Generate property tests for the quaternion **L1** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! l1_norm_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Normed,
+        };
+        use approx::{
+            relative_ne,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The **L1** norm of a quaternion is nonnegative. 
+            ///
+            /// Given a quaternion `q`
+            /// ```text
+            /// l1_norm(q) >= 0
+            /// ```
+            #[test]
+            fn prop_l1_norm_nonnegative(q in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assert!(q.l1_norm() >= zero);
+            }
+
+            /// The **L1** norm function is point separating. In particular, if 
+            /// the distance between two quaternions `q1` and `q2` is 
+            /// zero, then `q1 = q2`.
+            ///
+            /// Given quaternions `q1` and `q2`
+            /// ```text
+            /// l1_norm(q1 - q2) = 0 => q1 = q2 
+            /// ```
+            /// Equivalently, if `q1` is not equal to `q2`, then their distance is 
+            /// nonzero
+            /// ```text
+            /// q1 != q2 => l1_norm(q1 - q2) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the 
+            /// norm function.
+            #[test]
+            fn prop_l1_norm_approx_point_separating(
+                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
+                
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(relative_ne!(q1, q2, epsilon = $tolerance));
+                prop_assert!(relative_ne!((q1 - q2).l1_norm(), zero, epsilon = $tolerance),
+                    "\n|q1 - q2| = {}\n", (q1 - q2).l1_norm()
+                );
+            }
+        }
+    }
+    }
+}
+
+l1_norm_props!(quaternion_f64_l1_norm_props, f64, any_quaternion, any_scalar, 1e-7);
+
+
+/// Generate property tests for quaternion norms.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    quaternions.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! norm_synonym_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Normed,
+        };
+        use approx::{
+            relative_ne,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The [`Quaternion::magnitude`] function and the [`Quaternion::norm`] function
+            /// are synonyms. In particular, given a quaternion `q`
+            /// ```text
+            /// q.magnitude() = q.norm()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_norm_synonyms(q in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(q.magnitude(), q.norm());
+            }
+
+            /// The [`Quaternion::l2_norm`] function and the [`Quaternion::norm`] function
+            /// are synonyms. In particular, given a quaternion `q`
+            /// ```text
+            /// q.l2_norm() = q.norm()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_l2_norm_norm_synonyms(q in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(q.l2_norm(), q.norm());
+            }
+
+            /// The [`Quaternion::magnitude_squared`] function and the [`Quaternion::norm_squared`] 
+            /// function are synonyms. In particular, given a quaternion `q`
+            /// ```text
+            /// q.magnitude_squared() = q.norm_squared()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_squared_norm_squared(q in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(q.magnitude_squared(), q.norm_squared());
+            }
+        }
+    }
+    }
+}
+
+norm_synonym_props!(quaternion_f64_norm_synonym_props, f64, any_quaternion, any_scalar, 1e-7);
+
 
 /*
 /// Generate property tests for quaternion square roots.

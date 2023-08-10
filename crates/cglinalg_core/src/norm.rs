@@ -20,8 +20,8 @@ use crate::core_numeric::{
 /// #
 /// // The norm of the vector.
 /// let vector = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
-/// assert_eq!(vector.magnitude_squared(), 30_f64);
-/// assert_eq!(vector.magnitude(), 30_f64.sqrt());
+/// assert_eq!(vector.norm_squared(), 30_f64);
+/// assert_eq!(vector.norm(), 30_f64.sqrt());
 /// 
 /// // Nomalizing a vector.
 /// let vector = Vector4::new(1_f64, 1_f64, 1_f64, 1_f64);
@@ -53,10 +53,10 @@ where
     type Output: SimdScalarFloat;
 
     /// Compute the Euclidean squared magnitude of a vector.
-    fn magnitude_squared(&self) -> Self::Output;
+    fn norm_squared(&self) -> Self::Output;
 
     /// Compute the Euclidean magnitude of a vector.
-    fn magnitude(&self) -> Self::Output;
+    fn norm(&self) -> Self::Output;
 
     /// Normalize a vector to a specified magnitude.
     fn scale(&self, norm: Self::Output) -> Self;
@@ -85,5 +85,76 @@ where
 
     /// Compute the Euclidean distance between two vectors.
     fn distance(&self, other: &Self) -> Self::Output;
+}
+
+pub trait Norm<V>
+where
+{
+    type Output: SimdScalarFloat;
+
+    fn norm(&self, rhs: &V) -> Self::Output;
+
+    fn metric_distance(&self, lhs: &V, rhs: &V) -> Self::Output;
+}
+
+pub type UniformNorm<V> = LinfNorm<V>;
+pub type EuclideanNorm<V> = L2Norm<V>;
+
+#[derive(Copy, Clone, Debug)]
+pub struct L1Norm<V> {
+    _marker: core::marker::PhantomData<V>,
+}
+
+impl<V> L1Norm<V> {
+    #[inline]
+    pub const fn new() -> Self {
+        Self { 
+            _marker: core::marker::PhantomData,
+        }
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
+pub struct L2Norm<V> {
+    _marker: core::marker::PhantomData<V>,
+}
+
+impl<V> L2Norm<V> {
+    #[inline]
+    pub const fn new() -> Self {
+        Self { 
+            _marker: core::marker::PhantomData,
+        }
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
+pub struct LpNorm<V> {
+    pub p: u32,
+    _marker: core::marker::PhantomData<V>,
+}
+
+impl<V> LpNorm<V> {
+    #[inline]
+    pub const fn new(p: u32) -> Self {
+        Self { 
+            p,
+            _marker: core::marker::PhantomData,
+        }
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
+pub struct LinfNorm<V> {
+    _marker: core::marker::PhantomData<V>,
+}
+
+impl<V> LinfNorm<V> {
+    #[inline]
+    pub const fn new() -> Self {
+        Self {
+            _marker: core::marker::PhantomData,
+        }
+    }
 }
 

@@ -1035,7 +1035,7 @@ exact_conjugation_props!(complex_i32_conjugation_props, i32, any_complex);
 exact_conjugation_props!(complex_i64_conjugation_props, i64, any_complex);
 
 
-/// Generate property tests for complex number norms.
+/// Generate property tests for the complex number modulus.
 ///
 /// ### Macro Parameters
 ///
@@ -1049,7 +1049,7 @@ exact_conjugation_props!(complex_i64_conjugation_props, i64, any_complex);
 /// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-macro_rules! norm_props {
+macro_rules! modulus_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1062,20 +1062,20 @@ macro_rules! norm_props {
 
 
         proptest! {
-            /// The norm of a complex number is nonnegative. 
+            /// The modulus of a complex number is nonnegative. 
             ///
             /// Given a complex number `z`
             /// ```text
-            /// norm(z) >= 0
+            /// modulus(z) >= 0
             /// ```
             #[test]
-            fn prop_norm_nonnegative(z in $Generator::<$ScalarType>()) {
+            fn prop_modulus_nonnegative(z in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
 
-                prop_assert!(z.magnitude() >= zero);
+                prop_assert!(z.modulus() >= zero);
             }
 
-            /// The norm function is point separating. In particular, if 
+            /// The modulus function is point separating. In particular, if 
             /// the distance between two complex numbers `z1` and `z2` is 
             /// zero, then `z1 = z2`.
             ///
@@ -1091,14 +1091,14 @@ macro_rules! norm_props {
             /// For the sake of testability, we use the second form to test the 
             /// norm function.
             #[test]
-            fn prop_norm_approx_point_separating(
+            fn prop_modulus_approx_point_separating(
                 z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
                 
                 let zero: $ScalarType = num_traits::zero();
 
                 prop_assume!(relative_ne!(z1, z2, epsilon = $tolerance));
-                prop_assert!(relative_ne!((z1 - z2).magnitude(), zero, epsilon = $tolerance),
-                    "\n|z1 - z2| = {}\n", (z1 - z2).magnitude()
+                prop_assert!(relative_ne!((z1 - z2).norm(), zero, epsilon = $tolerance),
+                    "\n|z1 - z2| = {}\n", (z1 - z2).norm()
                 );
             }
         }
@@ -1106,7 +1106,166 @@ macro_rules! norm_props {
     }
 }
 
-norm_props!(complex_f64_norm_props, f64, any_complex, any_scalar, 1e-7);
+modulus_props!(complex_f64_modulus_props, f64, any_complex, any_scalar, 1e-7);
+
+
+/// Generate property tests for complex number norms.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! modulus_synonym_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The [`Complex::magnitude`] function and the [`Complex::modulus`] function 
+            /// are synonyms. In particular, given a complex number `z`
+            /// ```text
+            /// z.magnitude() = z.norm()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_modulus_synonyms(z in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(z.magnitude(), z.modulus());
+            }
+
+            /// The [`Complex::norm`] function and the [`Complex::modulus`] function
+            /// are synonyms. In particular, given a complex number `z`
+            /// ```text
+            /// z.norm() = z.modulus()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_norm_modulus_synonyms(z in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(z.norm(), z.modulus());
+            }
+
+            /// The [`Complex::l2_norm`] function and the [`Complex::modulus`] function
+            /// are synonyms. In particular, given a complex number `z`
+            /// ```text
+            /// z.l2_norm() = z.modulus()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_l2_norm_modulus_synonyms(z in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(z.l2_norm(), z.modulus());
+            }
+
+            /// The [`Complex::magnitude_squared`] function and the [`Complex::modulus_squared`]
+            /// function are synonyms. In particular, given a complex number `z`
+            /// ```text
+            /// z.magnitude_squared() = z.modulus_squared()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_squared_modulus_squared_synonyms(z in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(z.magnitude_squared(), z.modulus_squared());
+            }
+
+            /// The [`Complex::norm_squared`] function and the [`Complex::modulus_squared`]
+            /// functions are synonyms. In particular, given a complex number `z`
+            /// ```text
+            /// z.norm_squared() = z.modulus_squared()
+            /// ```
+            #[test]
+            fn prop_norm_squared_modulus_squared_synonyms(z in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(z.norm_squared(), z.modulus_squared());
+            }
+        }
+    }
+    }
+}
+
+modulus_synonym_props!(complex_f64_norm_synonym_props, f64, any_complex, any_scalar, 1e-7);
+
+
+/// Generate property tests for the complex number **L1** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! l1_norm_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use approx::{
+            relative_ne,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The **L1** norm of a complex number is nonnegative. 
+            ///
+            /// Given a complex number `z`
+            /// ```text
+            /// l1_norm(z) >= 0
+            /// ```
+            #[test]
+            fn prop_l1_norm_nonnegative(z in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assert!(z.l1_norm() >= zero);
+            }
+
+            /// The **L1** norm function is point separating. In particular, if 
+            /// the distance between two complex numbers `z1` and `z2` is 
+            /// zero, then `z1 = z2`.
+            ///
+            /// Given complex numbers `z1` and `z2`
+            /// ```text
+            /// l1_norm(z1 - z2) = 0 => z1 = z2 
+            /// ```
+            /// Equivalently, if `z1` is not equal to `z2`, then their distance is 
+            /// nonzero
+            /// ```text
+            /// z1 != z2 => l1_norm(z1 - z2) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the 
+            /// norm function.
+            #[test]
+            fn prop_l1_norm_approx_point_separating(
+                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
+                
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(relative_ne!(z1, z2, epsilon = $tolerance));
+                prop_assert!(relative_ne!((z1 - z2).l1_norm(), zero, epsilon = $tolerance),
+                    "\n|z1 - z2| = {}\n", (z1 - z2).l1_norm()
+                );
+            }
+        }
+    }
+    }
+}
+
+l1_norm_props!(complex_f64_l1_norm_props, f64, any_complex, any_scalar, 1e-7);
 
 
 /// Generate property tests for complex number square roots.

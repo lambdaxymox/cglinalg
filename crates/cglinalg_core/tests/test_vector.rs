@@ -178,7 +178,7 @@ mod vector1_tests {
     fn test_zero_vector_zero_norm() {
         let zero: Vector1<f32> = Vector1::zero();
 
-        assert_eq!(zero.magnitude(), 0_f32);
+        assert_eq!(zero.norm(), 0_f32);
     }
 
     #[test]
@@ -192,7 +192,7 @@ mod vector1_tests {
     fn test_norm() {
         let vector = Vector1::new(4.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -201,8 +201,8 @@ mod vector1_tests {
     fn test_norm_unit_vectors() {
         let unit_x: Vector1<f64> = Vector1::unit_x();
 
-        assert_eq!(unit_x.magnitude_squared(), 1.0);
-        assert_eq!(unit_x.magnitude(), 1.0);
+        assert_eq!(unit_x.norm_squared(), 1.0);
+        assert_eq!(unit_x.norm(), 1.0);
     }
 }
 
@@ -387,7 +387,7 @@ mod vector2_tests {
     fn test_zero_vector_zero_norm() {
         let zero: Vector2<f32> = Vector2::zero();
 
-        assert_eq!(zero.magnitude(), 0_f32);
+        assert_eq!(zero.norm(), 0_f32);
     }
 
     #[test]
@@ -402,7 +402,7 @@ mod vector2_tests {
     fn test_norm1() {
         let vector = Vector2::new(4.0, 0.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -411,7 +411,7 @@ mod vector2_tests {
     fn test_norm2() {
         let vector = Vector2::new(0.0, 4.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -421,10 +421,10 @@ mod vector2_tests {
         let unit_x: Vector2<f64> = Vector2::unit_x();
         let unit_y: Vector2<f64> = Vector2::unit_y();
 
-        assert_eq!(unit_x.magnitude_squared(), 1.0);
-        assert_eq!(unit_x.magnitude(), 1.0);
-        assert_eq!(unit_y.magnitude_squared(), 1.0);
-        assert_eq!(unit_y.magnitude(), 1.0);
+        assert_eq!(unit_x.norm_squared(), 1.0);
+        assert_eq!(unit_x.norm(), 1.0);
+        assert_eq!(unit_y.norm_squared(), 1.0);
+        assert_eq!(unit_y.norm(), 1.0);
     }
 }
 
@@ -628,7 +628,7 @@ mod vector3_tests {
     fn test_zero_vector_zero_norm() {
         let zero: Vector3<f32> = Vector3::zero();
 
-        assert_eq!(zero.magnitude(), 0_f32);
+        assert_eq!(zero.norm(), 0_f32);
     }
 
     #[test]
@@ -644,7 +644,7 @@ mod vector3_tests {
     fn test_norm1() {
         let vector = Vector3::new(4.0, 0.0, 0.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -653,7 +653,7 @@ mod vector3_tests {
     fn test_norm2() {
         let vector = Vector3::new(0.0, 4.0, 0.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -662,7 +662,7 @@ mod vector3_tests {
     fn test_norm3() {
         let vector = Vector3::new(0.0, 0.0, 4.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -673,12 +673,12 @@ mod vector3_tests {
         let unit_y: Vector3<f64> = Vector3::unit_y();
         let unit_z: Vector3<f64> = Vector3::unit_z();
 
-        assert_eq!(unit_x.magnitude_squared(), 1.0);
-        assert_eq!(unit_x.magnitude(), 1.0);
-        assert_eq!(unit_y.magnitude_squared(), 1.0);
-        assert_eq!(unit_y.magnitude(), 1.0);
-        assert_eq!(unit_z.magnitude_squared(), 1.0);
-        assert_eq!(unit_z.magnitude(), 1.0);
+        assert_eq!(unit_x.norm_squared(), 1.0);
+        assert_eq!(unit_x.norm(), 1.0);
+        assert_eq!(unit_y.norm_squared(), 1.0);
+        assert_eq!(unit_y.norm(), 1.0);
+        assert_eq!(unit_z.norm_squared(), 1.0);
+        assert_eq!(unit_z.norm(), 1.0);
     }
 }
 
@@ -878,7 +878,7 @@ mod vector4_tests {
     fn test_zero_vector_zero_norm() {
         let zero: Vector4<f32> = Vector4::zero();
 
-        assert_eq!(zero.magnitude(), 0_f32);
+        assert_eq!(zero.norm(), 0_f32);
     }
 
     #[test]
@@ -903,7 +903,7 @@ mod vector4_tests {
     fn test_norm1() {
         let vector = Vector4::new(4.0, 0.0, 0.0, 0.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -912,7 +912,7 @@ mod vector4_tests {
     fn test_norm2() {
         let vector = Vector4::new(0.0, 4.0, 0.0, 0.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -921,7 +921,7 @@ mod vector4_tests {
     fn test_norm3() {
         let vector = Vector4::new(0.0, 0.0, 4.0, 0.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -930,7 +930,7 @@ mod vector4_tests {
     fn test_norm4() {
         let vector = Vector4::new(0.0, 0.0, 0.0, 4.0);
         let expected = 4.0;
-        let result = vector.magnitude();
+        let result = vector.norm();
 
         assert_eq!(result, expected);
     }
@@ -942,13 +942,13 @@ mod vector4_tests {
         let unit_z: Vector4<f64> = Vector4::unit_z();
         let unit_w: Vector4<f64> = Vector4::unit_w();
 
-        assert_eq!(unit_x.magnitude_squared(), 1.0);
-        assert_eq!(unit_x.magnitude(), 1.0);
-        assert_eq!(unit_y.magnitude_squared(), 1.0);
-        assert_eq!(unit_y.magnitude(), 1.0);
-        assert_eq!(unit_z.magnitude_squared(), 1.0);
-        assert_eq!(unit_z.magnitude(), 1.0);
-        assert_eq!(unit_w.magnitude_squared(), 1.0);
-        assert_eq!(unit_w.magnitude(), 1.0);
+        assert_eq!(unit_x.norm_squared(), 1.0);
+        assert_eq!(unit_x.norm(), 1.0);
+        assert_eq!(unit_y.norm_squared(), 1.0);
+        assert_eq!(unit_y.norm(), 1.0);
+        assert_eq!(unit_z.norm_squared(), 1.0);
+        assert_eq!(unit_z.norm(), 1.0);
+        assert_eq!(unit_w.norm_squared(), 1.0);
+        assert_eq!(unit_w.norm(), 1.0);
     }
 }

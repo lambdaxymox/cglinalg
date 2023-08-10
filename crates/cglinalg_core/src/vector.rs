@@ -8,6 +8,11 @@ use crate::unit::{
 };
 use crate::norm::{
     Normed,
+    Norm,
+    L1Norm,
+    L2Norm,
+    LpNorm,
+    LinfNorm,
 };
 use crate::{
     impl_coords,
@@ -333,6 +338,374 @@ impl<S, const N: usize> Vector<S, N>
 where
     S: SimdScalarFloat
 {
+    /// Calculate the norm of a vector with respect to the supplied [`Norm`] type.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     L1Norm,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let norm = L1Norm::new();
+    /// 
+    /// assert_eq!(vector.apply_norm(&norm), 6_f64);
+    /// ```
+    #[inline]
+    pub fn apply_norm(&self, norm: &impl Norm<Vector<S, N>, Output = S>) -> S {
+        norm.norm(self)
+    }
+
+    /// Calculate the metric distance between two vectors with respect to the 
+    /// supplied [`Norm`] type.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     L1Norm,
+    /// # };
+    /// #
+    /// let vector1 = Vector3::new(0_f64, -5_f64, 6_f64);
+    /// let vector2 = Vector3::new(-3_f64, 1_f64, 2_f64);
+    /// let norm = L1Norm::new();
+    /// let expected = 13_f64;
+    /// let result = vector1.apply_metric_distance(&vector2, &norm);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn apply_metric_distance(&self, other: &Self, norm: &impl Norm<Vector<S, N>, Output = S>) -> S {
+        norm.metric_distance(self, other)
+    }
+
+    /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let value = 1_f64 / f64::sqrt(3_f64);
+    /// let vector = Vector3::from_fill(value);
+    /// let expected = 1_f64;
+    /// let result = vector.norm_squared();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn norm_squared(&self) -> S {
+        self.dot(self)
+    }
+
+    /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let value = 1_f64 / f64::sqrt(3_f64);
+    /// let vector = Vector3::from_fill(value);
+    /// let expected = 1_f64;
+    /// let result = vector.norm();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn norm(&self) -> S {
+        self.norm_squared().sqrt()
+    }
+
+    /// Calculate the squared metric distance between two vectors with respect 
+    /// to the metric induced by the **L2** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector1 = Vector3::new(0_f64, -5_f64, 6_f64);
+    /// let vector2 = Vector3::new(-3_f64, 1_f64, 2_f64);
+    /// let expected = 61_f64;
+    /// let result = vector1.metric_distance_squared(&vector2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn metric_distance_squared(&self, other: &Self) -> S {
+        (self - other).norm_squared()
+    }
+
+    /// Calculate the metric distance between two vectors with respect 
+    /// to the metric induced by the **L2** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector1 = Vector3::new(1_f64, 4_f64, 6_f64);
+    /// let vector2 = Vector3::new(1_f64, 8_f64, -2_f64);
+    /// let expected = f64::sqrt(80_f64);
+    /// let result = vector1.metric_distance(&vector2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn metric_distance(&self, other: &Self) -> S {
+        self.apply_metric_distance(other, &L2Norm::new())
+    }
+
+    /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// This is a synonym for [`Vector::norm_squared`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let value = 1_f64 / f64::sqrt(3_f64);
+    /// let vector = Vector3::from_fill(value);
+    /// let expected = 1_f64;
+    /// let result = vector.magnitude_squared();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn magnitude_squared(&self) -> S {
+        self.norm_squared()
+    }
+
+    /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// This is a synonym for [`Vector::norm`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let value = 1_f64 / f64::sqrt(3_f64);
+    /// let vector = Vector3::from_fill(value);
+    /// let expected = 1_f64;
+    /// let result = vector.magnitude();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn magnitude(&self) -> S {
+        self.norm()
+    }
+
+    /// Calculate the norm of a vector with respect to the **L1** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(-2_f64, 7_f64, 8_f64);
+    /// let expected = 17_f64;
+    /// let result = vector.l1_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn l1_norm(&self) -> S {
+        self.apply_norm(&L1Norm::new())
+    }
+
+    /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// This is a synonym for [`Vector::norm`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let value = 1_f64 / f64::sqrt(3_f64);
+    /// let vector = Vector3::from_fill(value);
+    /// let expected = 1_f64;
+    /// let result = vector.l2_norm();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn l2_norm(&self) -> S {
+        self.norm()
+    }
+
+    /// Calculate the norm of a vector with respect to the **Lp** norm, where
+    /// `p` is an integer.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let value = 1_f64 / f64::sqrt(3_f64);
+    /// let vector = Vector3::from_fill(value);
+    /// let expected = 1_f64 / f64::powf(3_f64, 3_f64 / 10_f64);
+    /// let result = vector.lp_norm(5);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn lp_norm(&self, p: u32) -> S {
+        self.apply_norm(&LpNorm::new(p))
+    }
+
+    /// Calculate the norm of a vector with respect to the **L-infinity** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let vector = Vector4::new(1_f64, 100_f64, 3_f64, 4_f64);
+    /// let expected = 100_f64;
+    /// let result = vector.linf_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn linf_norm(&self) -> S {
+        self.apply_norm(&LinfNorm::new())
+    }
+}
+
+impl<S, const N: usize> Norm<Vector<S, N>> for L1Norm<Vector<S, N>> 
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm(&self, this: &Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result += S::abs(this[i]);
+        }
+
+        result
+    }
+
+    #[inline]
+    fn metric_distance(&self, this: &Vector<S, N>, that: &Vector<S, N>) -> Self::Output {
+        self.norm(&(that - this))
+    }
+}
+
+impl<S, const N: usize> Norm<Vector<S, N>> for L2Norm<Vector<S, N>>
+where 
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm(&self, this: &Vector<S, N>) -> Self::Output {
+        Self::Output::sqrt(Vector::dot(this, this))
+    }
+
+    #[inline]
+    fn metric_distance(&self, this: &Vector<S, N>, that: &Vector<S, N>) -> Self::Output {
+        self.norm(&(that - this))
+    }
+}
+
+impl<S, const N: usize> Norm<Vector<S, N>> for LpNorm<Vector<S, N>> 
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result += Self::Output::powi(Self::Output::abs(lhs[i]), self.p as i32);
+        }
+
+        result.powf(num_traits::cast(1_f64 / (self.p as f64)).unwrap())
+    }
+
+    #[inline]
+    fn metric_distance(&self, lhs: &Vector<S, N>, rhs: &Vector<S, N>) -> Self::Output {
+        self.norm(&(rhs - lhs))
+    }
+}
+
+impl<S, const N: usize> Norm<Vector<S, N>> for LinfNorm<Vector<S, N>> 
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
+        let mut result = Self::Output::zero();
+        for i in 0..N {
+            result = Self::Output::max(result, Self::Output::abs(lhs[i]));
+        }
+
+        result
+    }
+
+    #[inline]
+    fn metric_distance(&self, lhs: &Vector<S, N>, rhs: &Vector<S, N>) -> Self::Output {
+        self.norm(&(rhs - lhs))
+    }
+}
+
+impl<S, const N: usize> Vector<S, N>
+where
+    S: SimdScalarFloat
+{
     /// Returns `true` if the elements of a vector are all finite. 
     /// Otherwise, it returns `false`. 
     ///
@@ -421,7 +794,7 @@ where
     /// ```
     #[inline]
     pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
+        other * (self.dot(other) / other.norm_squared())
     }
 
     /// Reflect a vector about a normal vector.
@@ -443,7 +816,7 @@ where
     /// let result = vector.reflect(&normal);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result.magnitude(), expected.magnitude(), epsilon = 1e-10);
+    /// assert_relative_eq!(result.norm(), expected.norm(), epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn reflect(&self, normal: &Self) -> Self {
@@ -714,28 +1087,28 @@ where
     type Output = S;
 
     #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
+    fn norm_squared(&self) -> Self::Output {
         self.dot(self)
     }
 
     #[inline]
-    fn magnitude(&self) -> Self::Output {
-        self.magnitude_squared().sqrt()
+    fn norm(&self) -> Self::Output {
+        self.norm_squared().sqrt()
     }
 
     #[inline]
     fn scale(&self, norm: Self::Output) -> Self {
-        self * (norm / self.magnitude())
+        self * (norm / self.norm())
     }
     
     #[inline]
     fn normalize(&self) -> Self {
-        self / self.magnitude()
+        self / self.norm()
     }
 
     #[inline]
     fn normalize_mut(&mut self) -> Self::Output {
-        let norm = self.magnitude();
+        let norm = self.norm();
         *self = self.normalize();
 
         norm
@@ -743,7 +1116,7 @@ where
 
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let norm = self.magnitude();
+        let norm = self.norm();
         if norm <= threshold {
             None
         } else {
@@ -753,7 +1126,7 @@ where
 
     #[inline]
     fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
-        let norm = self.magnitude();
+        let norm = self.norm();
         if norm <= threshold {
             None
         } else {
@@ -763,7 +1136,7 @@ where
 
     #[inline]
     fn distance_squared(&self, other: &Vector<S, N>) -> Self::Output {
-        (self - other).magnitude_squared()
+        (self - other).norm_squared()
     }
 
     #[inline]

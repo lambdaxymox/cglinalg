@@ -13,6 +13,15 @@ use cglinalg_core::{
 
 use proptest::prelude::*;
 
+/*
+fn any_u32() -> impl Strategy<Value = u32> {
+    any::<u32>().prop_map(|i| {
+        let modulus = 100;
+
+        i % modulus
+    })
+}
+*/
 
 fn any_scalar<S>() -> impl Strategy<Value = S>
 where 
@@ -644,7 +653,7 @@ exact_sub_props!(vector3_u32_sub_props, Vector3, u32, any_vector3);
 exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 
 
-/// Generate properties for vector norms.
+/// Generate properties for the vector **L2** norm.
 ///
 /// ### Macro Parameters
 ///
@@ -675,7 +684,7 @@ macro_rules! norm_props {
 
 
         proptest! {
-            /// The norm of a vector is nonnegative.
+            /// The **L2** norm of a vector is nonnegative.
             ///
             /// Given a vector `v`
             /// ```text
@@ -684,10 +693,11 @@ macro_rules! norm_props {
             #[test]
             fn prop_norm_nonnegative(v in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
-                prop_assert!(v.magnitude() >= zero);
+                
+                prop_assert!(v.norm() >= zero);
             }
 
-            /// The norm function is point separating. In particular, if the 
+            /// The **L2** norm function is point separating. In particular, if the 
             /// distance between two vectors `v` and `w` is zero, then `v = w`.
             ///
             /// Given vectors `v` and `w`
@@ -707,8 +717,8 @@ macro_rules! norm_props {
                 let zero: $ScalarType = num_traits::zero();
 
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
-                prop_assert!(relative_ne!((v - w).magnitude(), zero, epsilon = $tolerance),
-                    "\n|v - w| = {}\n", (v - w).magnitude()
+                prop_assert!(relative_ne!((v - w).norm(), zero, epsilon = $tolerance),
+                    "\n|v - w| = {}\n", (v - w).norm()
                 );
             }
         }
@@ -720,6 +730,320 @@ norm_props!(vector1_f64_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-7)
 norm_props!(vector2_f64_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
 norm_props!(vector3_f64_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
 norm_props!(vector4_f64_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
+
+
+/// Generate properties for the vector **L1** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! l1_norm_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Normed,
+        };
+        use approx::{
+            relative_ne,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The **L1** norm of a vector is nonnegative.
+            ///
+            /// Given a vector `v`
+            /// ```text
+            /// l1_norm(v) >= 0
+            /// ```
+            #[test]
+            fn prop_l1_norm_nonnegative(v in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+                
+                prop_assert!(v.l1_norm() >= zero);
+            }
+
+            /// The **L1** norm function is point separating. In particular, if the 
+            /// distance between two vectors `v` and `w` is zero, then `v = w`.
+            ///
+            /// Given vectors `v` and `w`
+            /// ```text
+            /// l1_norm(v - w) = 0 => v = w 
+            /// ```
+            /// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+            /// ```text
+            /// v != w => l1_norm(v - w) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the norm
+            /// function.
+            #[test]
+            fn prop_l1_norm_approx_point_separating(
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
+                
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
+                prop_assert!(relative_ne!((v - w).l1_norm(), zero, epsilon = $tolerance),
+                    "\n|v - w| = {}\n", (v - w).l1_norm()
+                );
+            }
+        }
+    }
+    }
+}
+
+l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
+l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
+l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
+l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
+
+/*
+/// Generate properties for the vector **Lp** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$DegreeGen` is the name of a function or closure for generating integers for
+///    the degree of the Lp norm.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! lp_norm_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $DegreeGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Normed,
+        };
+        use approx::{
+            relative_ne,
+        };
+        use super::{
+            $Generator,
+            $DegreeGen,
+        };
+
+
+        proptest! {
+            /// The **Lp** norm of a vector is nonnegative.
+            ///
+            /// Given a vector `v`
+            /// ```text
+            /// lp_norm(v) >= 0
+            /// ```
+            #[test]
+            fn prop_lp_norm_nonnegative(v in $Generator::<$ScalarType>(), p in $DegreeGen()) {
+                let zero: $ScalarType = num_traits::zero();
+                
+                prop_assert!(v.lp_norm(p) >= zero);
+            }
+
+            /// The **Lp** norm function is point separating. In particular, if the 
+            /// distance between two vectors `v` and `w` is zero, then `v = w`.
+            ///
+            /// Given vectors `v` and `w`
+            /// ```text
+            /// lp_norm(v - w) = 0 => v = w 
+            /// ```
+            /// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+            /// ```text
+            /// v != w => lp_norm(v - w) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the norm
+            /// function.
+            #[test]
+            fn prop_lp_norm_approx_point_separating(
+                v in $Generator::<$ScalarType>(), 
+                w in $Generator::<$ScalarType>(),
+                p in $DegreeGen()
+            ) {
+                
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
+                prop_assert!(relative_ne!((v - w).lp_norm(p), zero, epsilon = $tolerance),
+                    "\n|v - w| = {}\n", (v - w).lp_norm(p)
+                );
+            }
+        }
+    }
+    }
+}
+
+lp_norm_props!(vector1_f64_lp_norm_props, Vector1, f64, any_vector1, any_scalar, any_u32, 1e-6);
+lp_norm_props!(vector2_f64_lp_norm_props, Vector2, f64, any_vector2, any_scalar, any_u32, 1e-6);
+lp_norm_props!(vector3_f64_lp_norm_props, Vector3, f64, any_vector3, any_scalar, any_u32, 1e-6);
+lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, any_vector4, any_scalar, any_u32, 1e-6);
+*/
+
+/// Generate properties for the vector **L-infinity** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! linf_norm_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Normed,
+        };
+        use approx::{
+            relative_ne,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The **L-infinity** norm of a vector is nonnegative.
+            ///
+            /// Given a vector `v`
+            /// ```text
+            /// linf_norm(v) >= 0
+            /// ```
+            #[test]
+            fn prop_linf_norm_nonnegative(v in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+                
+                prop_assert!(v.linf_norm() >= zero);
+            }
+
+            /// The **L-infinity** norm function is point separating. In particular, if the 
+            /// distance between two vectors `v` and `w` is zero, then `v = w`.
+            ///
+            /// Given vectors `v` and `w`
+            /// ```text
+            /// linf_norm(v - w) = 0 => v = w 
+            /// ```
+            /// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+            /// ```text
+            /// v != w => linf_norm(v - w) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the norm
+            /// function.
+            #[test]
+            fn prop_linf_norm_approx_point_separating(
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
+                
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
+                prop_assert!(relative_ne!((v - w).linf_norm(), zero, epsilon = $tolerance),
+                    "\n|v - w| = {}\n", (v - w).linf_norm()
+                );
+            }
+        }
+    }
+    }
+}
+
+linf_norm_props!(vector1_f64_linf_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
+linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
+linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
+linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
+
+
+/// Generate properties for vector norms.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! norm_synonym_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Normed,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The [`Vector::magnitude`] function and the [`Vector::norm`] function 
+            /// are synonyms. In particular, given a vector `v`
+            /// ```text
+            /// v.magnitude() = v.norm()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_norm_synonyms(v in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(v.magnitude(), v.norm());
+            }
+
+            /// The [`Vector::l2_norm`] function and the [`Vector::norm`] function
+            /// are synonyms. In particular, given a vector `v`
+            /// ```text
+            /// v.l2_norm() = v.norm()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_l2_norm_norm_synonyms(v in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(v.l2_norm(), v.norm());
+            }
+
+            /// The [`Vector::magnitude_squared`] function and the [`Vector::norm_squared`] 
+            /// function are synonyms. In particular, given a vector `v`
+            /// ```text
+            /// v.magnitude_squared() = v.norm_squared()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_squared_norm_squared_synonyms(v in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(v.magnitude_squared(), v.norm_squared());
+            }
+        }
+    }
+    }
+}
+
+norm_synonym_props!(vector1_f64_norm_synonym_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
+norm_synonym_props!(vector2_f64_norm_synonym_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
+norm_synonym_props!(vector3_f64_norm_synonym_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
+norm_synonym_props!(vector4_f64_norm_synonym_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
 
 
 /// Generate property tests for vector multiplication over floating point scalars.

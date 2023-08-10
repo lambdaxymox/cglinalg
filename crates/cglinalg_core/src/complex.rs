@@ -286,7 +286,7 @@ where
 
     /// Get the multiplicative unit complex number.
     /// 
-    /// This is a synonym for `identity`.
+    /// This is a synonym for [`Complex::identity`].
     #[inline]
     pub fn one() -> Self {
         Self::identity()
@@ -400,6 +400,20 @@ where
 
     /// Calculate the squared modulus of a complex number.
     /// 
+    /// The modulus of a complex number is its Euclidean norm, defined as follows.
+    /// Given a complex number `z`
+    /// ```text
+    /// modulus(z) = sqrt(re(z) * re(z) + im(z) * im(z))
+    /// ```
+    /// where `re(z)` is the real part of `z`, and `im(z)` is the imaginary part
+    /// of `z`. The squared modulus of `z` is then defined to be
+    /// ```text
+    /// modulus_squared(z) = modulus(z) * modulus(z)
+    ///                    = sqrt(re(z) * re(z) + im(z) * im(z)) * sqrt(re(z) * re(z) + im(z) * im(z))
+    ///                    = re(z) * re(z) + im(z) * im(z)
+    /// ```
+    /// 
+    /// 
     /// # Example
     /// 
     /// ```
@@ -407,13 +421,53 @@ where
     /// #     Complex,
     /// # };
     /// #
-    /// let z = Complex::new(2_i32, 5_i32);
+    /// let z = Complex::new(2_f32, 5_f32);
     /// 
-    /// assert_eq!(z.magnitude_squared(), 29);
+    /// assert_eq!(z.modulus_squared(), 29_f32);
+    /// ```
+    #[inline]
+    pub fn modulus_squared(self) -> S {
+        self.norm_squared()
+    }
+
+    /// Calculate the squared norm of a complex number.
+    /// 
+    /// This is a synonym for [`Complex::modulus_squared`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(2_f32, 5_f32);
+    /// 
+    /// assert_eq!(z.norm_squared(), 29_f32);
+    /// ```
+    #[inline]
+    pub fn norm_squared(self) -> S {
+        self.re * self.re + self.im * self.im
+    }
+
+    /// Calculate the squared norm of a complex number.
+    /// 
+    /// This is a synonym for [`Complex::modulus_squared`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(2_f32, 5_f32);
+    /// 
+    /// assert_eq!(z.magnitude_squared(), 29_f32);
     /// ```
     #[inline]
     pub fn magnitude_squared(self) -> S {
-        self.re * self.re + self.im * self.im
+        self.norm_squared()
     }
 }
 
@@ -523,8 +577,55 @@ where
         !self.is_nan() && (self.re.is_infinite() || self.im.is_infinite())
     }
 
-    /// Compute the norm (modulus, magnitude) of a complex number in Euclidean
-    /// space.
+    /// Calculate the modulus of a complex number.
+    /// 
+    /// The modulus of a complex number is its Euclidean norm, defined as follows.
+    /// Given a complex number `z`
+    /// ```text
+    /// modulus(z) = sqrt(re(z) * re(z) + im(z) * im(z))
+    /// ```
+    /// where `re(z)` is the real part of `z`, and `im(z)` is the imaginary part
+    /// of `z`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(7_f64, 3_f64);
+    /// 
+    /// assert_eq!(z.modulus(), f64::sqrt(58_f64));
+    /// ```
+    #[inline]
+    pub fn modulus(self) -> S {
+        self.norm()
+    }
+
+    /// Calculate the **L2** (Euclidean) norm of a complex number.
+    /// 
+    /// This is a synonym for [`Complex::modulus`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(7_f64, 3_f64);
+    /// 
+    /// assert_eq!(z.norm(), f64::sqrt(58_f64));
+    /// ```
+    #[inline]
+    pub fn norm(self) -> S {
+        self.norm_squared().sqrt()
+    }
+
+    /// Calculate the L2 (Euclidean) norm of a complex number.
+    /// 
+    /// This is a synonym for [`Complex::modulus`].
     /// 
     /// # Example
     /// 
@@ -539,7 +640,44 @@ where
     /// ```
     #[inline]
     pub fn magnitude(self) -> S {
-        self.magnitude_squared().sqrt()
+        self.norm()
+    }
+
+    /// Calculate the **L2** (Euclidean) norm of a complex number.
+    /// 
+    /// This is a synonuym for [`Complex::norm`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(7_f64, 3_f64);
+    /// 
+    /// assert_eq!(z.l2_norm(), f64::sqrt(58_f64));
+    /// ```
+    #[inline]
+    pub fn l2_norm(self) -> S {
+        self.norm()
+    }
+
+    /// Calculate the **L1** norm of a complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// let z = Complex::new(2_f32, -5_f32);
+    /// 
+    /// assert_eq!(z.l1_norm(), 7_f32);
+    /// ```
+    #[inline]
+    pub fn l1_norm(self) -> S { 
+        self.re.abs() + self.im.abs()
     }
 
     /// Calculate the principal argument of a complex number.
@@ -671,7 +809,7 @@ where
     /// ```
     #[inline]
     pub fn polar_decomposition(self) -> (S, Radians<S>) {
-        (self.magnitude(), Radians(self.arg()))
+        (self.norm(), Radians(self.arg()))
     }
 
     /// Compute the exponential of a complex number.
@@ -738,14 +876,14 @@ where
     /// let z = Complex::from_polar_decomposition(
     ///     3_f64, Radians(pi / 6_f64) + Radians((2_f64 * pi))
     /// );
-    /// let expected = Complex::new(z.magnitude().ln(), pi / 6_f64);
+    /// let expected = Complex::new(z.norm().ln(), pi / 6_f64);
     /// let result = z.ln();
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub fn ln(self) -> Self {
-        let norm_self = self.magnitude();
+        let norm_self = self.norm();
         let arg_self = self.arg();
 
         Self::new(norm_self.ln(), arg_self)
@@ -820,7 +958,7 @@ where
     #[inline]
     pub fn sqrt(self) -> Self {
         let two = S::one() + S::one();
-        let sqrt_norm = self.magnitude().sqrt();
+        let sqrt_norm = self.norm().sqrt();
         let angle = self.arg();
         let (sin_angle_over_two, cos_angle_over_two) = (angle / two).sin_cos();
 
@@ -874,7 +1012,7 @@ where
     /// ```
     #[inline]
     pub fn inverse(self) -> Option<Self> {
-        let norm_squared = self.magnitude_squared();
+        let norm_squared = self.norm_squared();
         if norm_squared.is_zero() {
             None
         } else {
@@ -908,7 +1046,7 @@ where
 
     #[inline]
     fn is_invertible_eps(&self, epsilon: S) -> bool {
-        self.magnitude_squared() >= epsilon * epsilon
+        self.norm_squared() >= epsilon * epsilon
     }
 }
 
@@ -1786,7 +1924,7 @@ where
 {
     fn div_assign(&mut self, other: Complex<S>) {
         let a = self.re;
-        let norm_squared = other.magnitude_squared();
+        let norm_squared = other.norm_squared();
 
         self.re *= other.re;
         self.re += self.im * other.im;
@@ -1804,7 +1942,7 @@ where
 {
     fn div_assign(&mut self, other: &Complex<S>) {
         let a = self.re;
-        let norm_squared = other.magnitude_squared();
+        let norm_squared = other.norm_squared();
 
         self.re *= other.re;
         self.re += self.im * other.im;

@@ -7,7 +7,14 @@ use crate::angle::{
     Angle,
     Radians,
 };
-use crate::norm::Normed;
+use crate::norm::{
+    Normed,
+    Norm,
+    L1Norm,
+    L2Norm,
+    LpNorm,
+    LinfNorm,
+};
 use crate::matrix::{
     Matrix3x3, 
     Matrix4x4,
@@ -320,90 +327,6 @@ where
         Self::from_parts(S::zero(), Vector3::unit_z())
     }
 
-    /// Returns the unit real quaternion. 
-    ///
-    /// A real quaternion is a quaternion with zero vector part.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion, 
-    /// # };
-    /// #
-    /// let unit_s: Quaternion<f64> = Quaternion::unit_s();
-    ///
-    /// assert!(unit_s.is_real());
-    /// assert!(!unit_s.is_pure());
-    /// ```
-    #[inline]
-    pub fn unit_unit_s() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::from_parts(S::one(), Vector3::zero()))
-    }
-
-    /// Return the **x-axis** unit pure quaternion.
-    ///
-    /// A pure quaternion is a quaternion with zero scalar part.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion, 
-    /// # };
-    /// #
-    /// let unit_x: Quaternion<f64> = Quaternion::unit_x();
-    ///
-    /// assert!(!unit_x.is_real());
-    /// assert!(unit_x.is_pure());
-    /// ```
-    #[inline]
-    pub fn unit_unit_x() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::from_parts(S::zero(), Vector3::unit_x()))
-    }
-
-    /// Returns the **y-axis** unit pure quaternion.
-    ///
-    /// A pure quaternion is a quaternion with zero scalar part.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion, 
-    /// # };
-    /// #
-    /// let unit_y: Quaternion<f64> = Quaternion::unit_y();
-    ///
-    /// assert!(!unit_y.is_real());
-    /// assert!(unit_y.is_pure());
-    /// ```
-    #[inline]
-    pub fn unit_unit_y() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::from_parts(S::zero(), Vector3::unit_y()))
-    }
-
-    /// Returns the **z-axis** unit pure quaternion.
-    ///
-    /// A pure quaternion is a quaternion with zero scalar part.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion, 
-    /// # };
-    /// #
-    /// let unit_z: Quaternion<f64> = Quaternion::unit_z();
-    ///
-    /// assert!(!unit_z.is_real());
-    /// assert!(unit_z.is_pure());
-    /// ```
-    #[inline]
-    pub fn unit_unit_z() -> Unit<Self> {
-        Unit::from_value_unchecked(Self::from_parts(S::zero(), Vector3::unit_z()))
-    }
-
     /// Construct a zero quaternion.
     ///
     /// A zero quaternion is a quaternion `zero` such that given another 
@@ -680,7 +603,7 @@ where
     /// Compute the square of a quaterion.
     /// 
     /// Given a quaternion `q`, the square of `q` is the product of
-    /// `q` with itself, i.e.
+    /// `q` with itself. In particular, given a quaternion `q`
     /// ```text
     /// q.squared() := q * q
     /// ```
@@ -700,6 +623,304 @@ where
     /// ```
     pub fn squared(&self) -> Self {
         self * self
+    }
+}
+
+impl<S> Quaternion<S>
+where
+    S: SimdScalarFloat
+{
+    /// Calculate the squared norm of a quaternion with respect to the **L2** (Euclidean) norm. 
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Unit,
+    /// #     Radians,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = 1_f64;
+    /// let result = quaternion.norm_squared();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn norm_squared(&self) -> S {
+        self.dot(self)
+    }
+
+    /// Calculate the norm of a quaternion with respect to the **L2** (Euclidean) norm. 
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Unit,
+    /// #     Radians,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = 1_f64;
+    /// let result = quaternion.norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn norm(&self) -> S {
+        self.norm_squared().sqrt()
+    }
+
+    /// Calculate the squared norm of a quaternion with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// This is a synonym for [`Quaternion::norm_squared`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Unit,
+    /// #     Radians,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = 1_f64;
+    /// let result = quaternion.magnitude_squared();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn magnitude_squared(&self) -> S {
+        self.norm_squared()
+    }
+
+    /// Calculate the squared metric distance between two quaternions with respect
+    /// to the metric induced by the **L2** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle1 = Radians(0_f64);
+    /// let angle2: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion1 = Quaternion::from_axis_angle(&axis, angle1);
+    /// let quaternion2 = Quaternion::from_axis_angle(&axis, angle2);
+    /// let expected = f64::sqrt(2_f64) * (f64::sqrt(2_f64) - 1_f64);
+    /// let result = quaternion1.metric_distance_squared(&quaternion2);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn metric_distance_squared(&self, other: &Self) -> S {
+        (self - other).norm_squared()
+    }
+
+    /// Calculate the metric distance between two quaternions with respect
+    /// to the metric induced by the **L2** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle1 = Radians(0_f64);
+    /// let angle2: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion1 = Quaternion::from_axis_angle(&axis, angle1);
+    /// let quaternion2 = Quaternion::from_axis_angle(&axis, angle2);
+    /// let expected = f64::sqrt(f64::sqrt(2_f64) * (f64::sqrt(2_f64) - 1_f64));
+    /// let result = quaternion1.metric_distance(&quaternion2);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn metric_distance(&self, other: &Self) -> S {
+        (self - other).norm()
+    }
+
+    /// Calculate the norm of a quaternion with respect to the **L2** (Euclidean) norm. 
+    /// 
+    /// This is a synonym for [`Quaternion::norm`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Unit,
+    /// #     Radians,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = 1_f64;
+    /// let result = quaternion.magnitude();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn magnitude(&self) -> S {
+        self.norm()
+    }
+
+    /// Calculate the norm of a quaternion with respect to the **L2** (Euclidean) norm. 
+    /// 
+    /// This is a synonym for [`Quaternion::norm`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Unit,
+    /// #     Radians,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = 1_f64;
+    /// let result = quaternion.l2_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn l2_norm(&self) -> S {
+        self.norm()
+    }
+
+    /// Calculate the norm of a quaternion qith respect to the **L1** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, -3_f64, 4_f64);
+    /// let expected = 10_f64;
+    /// let result = quaternion.l1_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn l1_norm(&self) -> S {
+        self.coords.l1_norm()
+    }
+}
+
+impl<S> Norm<Quaternion<S>> for L1Norm<Quaternion<S>> 
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm(&self, lhs: &Quaternion<S>) -> Self::Output {
+        L1Norm::new().norm(&lhs.coords)
+    }
+
+    #[inline]
+    fn metric_distance(&self, lhs: &Quaternion<S>, rhs: &Quaternion<S>) -> Self::Output {
+        L1Norm::new().metric_distance(&lhs.coords, &rhs.coords)
+    }
+}
+
+impl<S> Norm<Quaternion<S>> for L2Norm<Quaternion<S>>
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm(&self, lhs: &Quaternion<S>) -> Self::Output {
+        L2Norm::new().norm(&lhs.coords)
+    }
+
+    #[inline]
+    fn metric_distance(&self, lhs: &Quaternion<S>, rhs: &Quaternion<S>) -> Self::Output {
+        L2Norm::new().metric_distance(&lhs.coords, &rhs.coords)
+    }
+}
+
+impl<S> Norm<Quaternion<S>> for LpNorm<Quaternion<S>> 
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm(&self, lhs: &Quaternion<S>) -> Self::Output {
+        LpNorm::new(self.p).norm(&lhs.coords)
+    }
+
+    #[inline]
+    fn metric_distance(&self, lhs: &Quaternion<S>, rhs: &Quaternion<S>) -> Self::Output {
+        LpNorm::new(self.p).metric_distance(&lhs.coords, &rhs.coords)
+    }
+}
+
+impl<S> Norm<Quaternion<S>> for LinfNorm<Quaternion<S>> 
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm(&self, lhs: &Quaternion<S>) -> Self::Output {
+        LinfNorm::new().norm(&lhs.coords)
+    }
+
+    #[inline]
+    fn metric_distance(&self, lhs: &Quaternion<S>, rhs: &Quaternion<S>) -> Self::Output {
+        LinfNorm::new().metric_distance(&lhs.coords, &rhs.coords)
     }
 }
 
@@ -732,7 +953,7 @@ where
     /// let sin_pi_over_12 = (f64::sqrt(3_f64) - 1_f64) / (2_f64 * f64::sqrt(2_f64));
     /// let expected = Quaternion::new(cos_pi_over_12, 0_f64, 0_f64, sin_pi_over_12);
     ///
-    /// assert_relative_eq!(expected.magnitude_squared(), 1_f64, epsilon = 1e-10);
+    /// assert_relative_eq!(expected.norm_squared(), 1_f64, epsilon = 1e-10);
     /// 
     /// let result = Quaternion::from_axis_angle(&axis, pi_over_6);
     /// 
@@ -876,7 +1097,7 @@ where
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let scale = 2_f64 / quaternion.magnitude_squared();
+    /// let scale = 2_f64 / quaternion.norm_squared();
     /// let expected = Matrix3x3::new(
     ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,
     ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,
@@ -904,7 +1125,7 @@ where
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
-    /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
+    /// assert_eq!(quaternion.norm_squared(), 1_f64);
     /// 
     /// let scale = 2_f64;
     /// let expected = Matrix3x3::new(
@@ -925,7 +1146,7 @@ where
         let qz = self.coords[3];
         let one = S::one();
         let two = one + one;
-        let s = two / self.magnitude_squared();
+        let s = two / self.norm_squared();
 
         let c0r0 = one - s * qy * qy - s * qz * qz;
         let c0r1 = s * qx * qy + s * qs * qz;
@@ -965,7 +1186,7 @@ where
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let scale = 2_f64 / quaternion.magnitude_squared();
+    /// let scale = 2_f64 / quaternion.norm_squared();
     /// let expected = Matrix3x3::new(
     ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,
     ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,
@@ -996,7 +1217,7 @@ where
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
-    /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
+    /// assert_eq!(quaternion.norm_squared(), 1_f64);
     /// 
     /// let scale = 2_f64;
     /// let expected = Matrix3x3::new(
@@ -1020,7 +1241,7 @@ where
         let qz = self.coords[3];
         let one = S::one();
         let two = one + one;
-        let s = two / self.magnitude_squared();
+        let s = two / self.norm_squared();
     
         matrix.c0r0 = one - s * qy * qy - s * qz * qz;
         matrix.c0r1 = s * qx * qy + s * qs * qz;
@@ -1053,7 +1274,7 @@ where
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let scale = 2_f64 / quaternion.magnitude_squared();
+    /// let scale = 2_f64 / quaternion.norm_squared();
     /// let expected = Matrix4x4::new(
     ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,          0_f64,
     ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,         0_f64,
@@ -1082,7 +1303,7 @@ where
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
-    /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
+    /// assert_eq!(quaternion.norm_squared(), 1_f64);
     /// 
     /// let scale = 2_f64;
     /// let expected = Matrix4x4::new(
@@ -1105,7 +1326,7 @@ where
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
-        let s = two / self.magnitude_squared();
+        let s = two / self.norm_squared();
 
         let c0r0 = one - s * qy * qy - s * qz * qz;
         let c0r1 = s * qx * qy + s * qs * qz;
@@ -1154,7 +1375,7 @@ where
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let scale = 2_f64 / quaternion.magnitude_squared();
+    /// let scale = 2_f64 / quaternion.norm_squared();
     /// let expected = Matrix4x4::new(
     ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,          0_f64,
     ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,         0_f64,
@@ -1187,7 +1408,7 @@ where
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
-    /// assert_eq!(quaternion.magnitude_squared(), 1_f64);
+    /// assert_eq!(quaternion.norm_squared(), 1_f64);
     /// 
     /// let scale = 2_f64;
     /// let expected = Matrix4x4::new(
@@ -1213,7 +1434,7 @@ where
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
-        let s = two / self.magnitude_squared();
+        let s = two / self.norm_squared();
 
         matrix.c0r0 = one - s * qy * qy - s * qz * qz;
         matrix.c0r1 = s * qx * qy + s * qs * qz;
@@ -1267,7 +1488,7 @@ where
 
     #[inline]
     fn inverse_eps(&self, epsilon: S) -> Option<Self> {
-        let norm_squared = self.magnitude_squared();
+        let norm_squared = self.norm_squared();
         if norm_squared <= epsilon * epsilon {
             None
         } else {
@@ -1304,7 +1525,7 @@ where
 
     #[inline]
     fn is_invertible_eps(&self, epsilon: S) -> bool {
-        self.magnitude_squared() >= epsilon * epsilon
+        self.norm_squared() >= epsilon * epsilon
     }
 
     /// Compute the principal argument of a quaternion.
@@ -1360,7 +1581,7 @@ where
         if self.scalar() * self.scalar() <= epsilon * epsilon {
             num_traits::cast(core::f64::consts::FRAC_PI_2).unwrap()
         } else {
-            S::atan(self.vector().magnitude() / self.scalar())
+            S::atan(self.vector().norm() / self.scalar())
         }
     }
 
@@ -1470,7 +1691,7 @@ where
 
     #[inline]
     fn exp_eps(&self, epsilon: S) -> Self {
-        let norm_v_squared = self.vector().magnitude_squared();
+        let norm_v_squared = self.vector().norm_squared();
         if norm_v_squared <= epsilon * epsilon {
             Self::from_parts(self.scalar().exp(), Vector3::zero())
         } else {
@@ -1546,13 +1767,13 @@ where
 
     #[inline]
     fn ln_eps(&self, epsilon: S) -> Self {
-        let norm_v_squared = self.vector().magnitude_squared();
+        let norm_v_squared = self.vector().norm_squared();
         if norm_v_squared <= epsilon * epsilon {
             let norm = self.scalar().abs();
             
             Self::from_parts(norm.ln(), Vector3::zero())
         } else {
-            let norm = self.magnitude();
+            let norm = self.norm();
             let arccos_s_over_norm_q = S::acos(self.scalar() / norm);
             let q_scalar = S::ln(norm);
             let q_vector = self.vector() * (arccos_s_over_norm_q / norm_v_squared.sqrt());
@@ -1653,7 +1874,7 @@ where
     /// #
     /// let q = Quaternion::from_parts(1_f64, Vector3::unit_z() * 4_f64);
     /// # // Internal test to ensure the square root is correct.
-    /// # let norm_q: f64 = q.magnitude();
+    /// # let norm_q: f64 = q.norm();
     /// # let cos_angle_over_two_squared = (1_f64 / 2_f64) * (1_f64 + (1_f64 / norm_q));
     /// # let cos_angle_over_two = f64::sqrt(cos_angle_over_two_squared);
     /// # let sin_angle_over_two_squared = 1_f64 - cos_angle_over_two_squared;
@@ -1733,13 +1954,13 @@ where
 
     #[inline]
     fn sqrt_eps(&self, epsilon: S) -> Self {
-        let norm_self_squared = self.magnitude_squared();
+        let norm_self_squared = self.norm_squared();
         if norm_self_squared <= epsilon * epsilon {
             // We have a zero quaternion.
             return Self::zero();
         }
 
-        let norm_v_squared = self.vector().magnitude_squared();
+        let norm_v_squared = self.vector().norm_squared();
         let norm_self = S::sqrt(norm_self_squared);
         if norm_v_squared <= epsilon * epsilon {
             let sqrt_norm_self = S::sqrt(norm_self);
@@ -2632,7 +2853,7 @@ where
     /// ```
     #[inline]
     pub fn project(&self, other: &Self) -> Self {
-        other * (self.dot(other) / other.magnitude_squared())
+        other * (self.dot(other) / other.norm_squared())
     }
 
     /// Compute the rejection of the quaternion `self` from the quaternion
@@ -2728,11 +2949,11 @@ where
     /// ```
     #[inline]
     pub fn polar_decomposition(&self) -> (S, Radians<S>, Option<Unit<Vector3<S>>>) {
-        let pair = Unit::try_from_value_with_magnitude(*self, S::zero());
+        let pair = Unit::try_from_value_with_norm(*self, S::zero());
         if let Some((unit_q, norm_q)) = pair {
             if let Some(axis) = Unit::try_from_value(self.vector(), S::zero()) {
                 let cos_angle_over_two = unit_q.scalar().abs();
-                let sin_angle_over_two = unit_q.vector().magnitude();
+                let sin_angle_over_two = unit_q.vector().norm();
                 let angle_over_two = Radians::atan2(
                     sin_angle_over_two, 
                     cos_angle_over_two
@@ -3602,23 +3823,23 @@ where
     type Output = S;
 
     #[inline]
-    fn magnitude_squared(&self) -> Self::Output {
+    fn norm_squared(&self) -> Self::Output {
         self.dot(self)
     }
 
     #[inline]
-    fn magnitude(&self) -> Self::Output {
-        self.magnitude_squared().sqrt()
+    fn norm(&self) -> Self::Output {
+        self.norm_squared().sqrt()
     }
 
     #[inline]
     fn scale(&self, norm: Self::Output) -> Self {
-        self * (norm / self.magnitude())
+        self * (norm / self.norm())
     }
 
     #[inline]
     fn normalize(&self) -> Self {
-        self / self.magnitude()
+        self / self.norm()
     }
 
     #[inline]
@@ -3628,7 +3849,7 @@ where
 
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let norm = self.magnitude();
+        let norm = self.norm();
         if norm <= threshold {
             None
         } else {
@@ -3643,7 +3864,7 @@ where
 
     #[inline]
     fn distance_squared(&self, other: &Quaternion<S>) -> S {
-        (self - other).magnitude_squared()
+        (self - other).norm_squared()
     }
 
     #[inline]

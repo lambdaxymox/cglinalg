@@ -15,7 +15,7 @@ use core::ops;
 
 /// A type that represents unit normalized values. 
 ///
-/// This type enforces the requirement that values have a unit magnitude. This 
+/// This type enforces the requirement that values have a unit norm. This 
 /// is useful when one needs to know the direction a vector is pointing for 
 /// operations like constructing rotations. The unit type statically enforces the 
 /// requirement that an input argument be normalized. This reduces the chance of
@@ -96,7 +96,7 @@ where
     /// Construct a new unit value, normalizing the input value.
     #[inline]
     pub fn from_value(value: T) -> Self {
-        Self::from_value_with_magnitude(value).0
+        Self::from_value_with_norm(value).0
     }
 
     /// Construct a new normalized unit value along with its unnormalized magnitude.
@@ -111,16 +111,16 @@ where
     /// # };
     /// #
     /// let vector: Vector3<f64> = Vector3::new(0.0, 2.0, 0.0);
-    /// let (wrapped, norm) = Unit::from_value_with_magnitude(vector);
+    /// let (wrapped, norm) = Unit::from_value_with_norm(vector);
     /// let unit_vector: &Vector3<f64> = &wrapped;
     /// 
     /// assert_eq!(norm, 2.0);
-    /// assert_eq!(unit_vector.magnitude_squared(), 1.0, "unit_vector = {}", unit_vector);
-    /// assert_eq!(unit_vector.magnitude(), 1.0, "unit_vector = {}", unit_vector);
+    /// assert_eq!(unit_vector.norm_squared(), 1.0, "unit_vector = {}", unit_vector);
+    /// assert_eq!(unit_vector.norm(), 1.0, "unit_vector = {}", unit_vector);
     /// ```
     #[inline]
-    pub fn from_value_with_magnitude(value: T) -> (Self, T::Output) {
-        let norm = value.magnitude();
+    pub fn from_value_with_norm(value: T) -> (Self, T::Output) {
+        let norm = value.norm();
         let normalized_value = value.normalize();
         let unit = Unit {
             value: normalized_value,
@@ -148,16 +148,16 @@ where
     /// #
     /// let vector: Vector3<f64> = Vector3::new(0.0, 1e-20, 0.0);
     /// let threshold = 1e-10;
-    /// let result = Unit::try_from_value_with_magnitude(vector, threshold);
+    /// let result = Unit::try_from_value_with_norm(vector, threshold);
     /// 
     /// assert!(result.is_none());
     /// ```
     #[inline]
-    pub fn try_from_value_with_magnitude(value: T, threshold: T::Output) -> Option<(Self, T::Output)>
+    pub fn try_from_value_with_norm(value: T, threshold: T::Output) -> Option<(Self, T::Output)>
     where 
         T::Output: SimdScalarFloat, 
     {
-        let norm_squared = value.magnitude_squared();
+        let norm_squared = value.norm_squared();
 
         if norm_squared > threshold * threshold {
             let norm = norm_squared.sqrt();
@@ -172,7 +172,7 @@ where
         }
     }
 
-    /// Construct a new normalized unit value, provided that its magnitude is 
+    /// Construct a new normalized unit value, provided that its norm is 
     /// larger than `threshold`. 
     ///
     /// The argument `threshold` argument exists to check for vectors that may be
@@ -199,7 +199,7 @@ where
     where
         T::Output: SimdScalarFloat,
     {
-        Self::try_from_value_with_magnitude(value, threshold).map(|(unit, _)| unit)
+        Self::try_from_value_with_norm(value, threshold).map(|(unit, _)| unit)
     }
 }
 

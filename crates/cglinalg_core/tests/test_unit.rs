@@ -16,9 +16,9 @@ fn test_vector3_unit_vectors() {
     let unit_y: Vector3<f64> = Vector3::unit_y();
     let unit_z: Vector3<f64> = Vector3::unit_z();
 
-    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_magnitude(unit_x); 
-    let (unit_unit_y, norm_unit_y) = Unit::from_value_with_magnitude(unit_y);
-    let (unit_unit_z, norm_unit_z) = Unit::from_value_with_magnitude(unit_z);
+    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x); 
+    let (unit_unit_y, norm_unit_y) = Unit::from_value_with_norm(unit_y);
+    let (unit_unit_z, norm_unit_z) = Unit::from_value_with_norm(unit_z);
 
     assert_eq!(norm_unit_x, 1_f64);
     assert_eq!(norm_unit_y, 1_f64);
@@ -33,11 +33,11 @@ fn test_vector3_unit_vectors() {
 #[test]
 fn test_vector() {
     let vector = Vector3::new(2.0, 2.0, 2.0);
-    let (wrapped, norm) = Unit::from_value_with_magnitude(vector);
+    let (wrapped, norm) = Unit::from_value_with_norm(vector);
     let unit_vector = wrapped.as_ref();
 
-    assert_eq!(unit_vector.magnitude(), 1.0);
-    assert_eq!(vector.magnitude(), norm);
+    assert_eq!(unit_vector.norm(), 1.0);
+    assert_eq!(vector.norm(), norm);
 }
 
 

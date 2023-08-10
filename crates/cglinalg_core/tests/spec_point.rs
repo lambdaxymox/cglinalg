@@ -573,3 +573,151 @@ exact_arithmetic_props!(point1_i64_arithmetic_props, Point1, Vector1, i64, any_p
 exact_arithmetic_props!(point2_i64_arithmetic_props, Point2, Vector2, i64, any_point2, any_vector2);
 exact_arithmetic_props!(point3_i64_arithmetic_props, Point3, Vector3, i64, any_point3, any_vector3);
 
+
+/// Generate properties for the point **L2** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$PointN` denotes the name of the point type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of points.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! norm_props {
+    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Normed,
+        };
+        use approx::{
+            relative_ne,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The L2 norm of a point is nonnegative.
+            ///
+            /// Given a point `p`
+            /// ```text
+            /// norm(p) >= 0
+            /// ```
+            #[test]
+            fn prop_norm_nonnegative(p in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+                
+                prop_assert!(p.norm() >= zero);
+            }
+
+            /// The L2 norm function is point separating. In particular, if the 
+            /// distance between two points `p1` and `p2` is zero, then `p1 = p2`.
+            ///
+            /// Given vectors `p1` and `p2`
+            /// ```text
+            /// norm(p1 - p2) = 0 => p1 = p2 
+            /// ```
+            /// Equivalently, if `p1` is not equal to `p2`, then their distance is nonzero
+            /// ```text
+            /// p1 != p2 => norm(p1 - p2) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the norm
+            /// function.
+            #[test]
+            fn prop_norm_approx_point_separating(
+                p1 in $Generator::<$ScalarType>(), p2 in $Generator::<$ScalarType>()) {
+                
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(relative_ne!(p1, p2, epsilon = $tolerance));
+                prop_assert!(relative_ne!((p1 - p2).norm(), zero, epsilon = $tolerance),
+                    "\n|p1 - p2| = {}\n", (p1 - p2).norm()
+                );
+            }
+        }
+    }
+    }
+}
+
+norm_props!(vector1_f64_norm_props, Point1, f64, any_point1, any_scalar, 1e-7);
+norm_props!(vector2_f64_norm_props, Point2, f64, any_point2, any_scalar, 1e-7);
+norm_props!(vector3_f64_norm_props, Point3, f64, any_point3, any_scalar, 1e-7);
+
+
+/// Generate properties for point norms.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$PointN` denotes the name of the point type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! norm_synonym_props {
+    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Normed,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The [`Point::magnitude`] function and the [`Point::norm`] function 
+            /// are synonyms. In particular, given a point `p`
+            /// ```text
+            /// p.magnitude() = p.norm()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_norm_synonyms(v in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(v.magnitude(), v.norm());
+            }
+
+            /// The [`Point::l2_norm`] function and the [`Point::norm`] function
+            /// are synonyms. In particular, given a point `p`
+            /// ```text
+            /// p.l2_norm() = p.norm()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_l2_norm_norm_synonyms(v in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(v.l2_norm(), v.norm());
+            }
+
+            /// The [`Point::magnitude_squared`] function and the [`Point::norm_squared`] 
+            /// function are synonyms. In particular, given a point `p`
+            /// ```text
+            /// p.magnitude_squared() = p.norm_squared()
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_squared_norm_squared_synonyms(v in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(v.magnitude_squared(), v.norm_squared());
+            }
+        }
+    }
+    }
+}
+
+norm_synonym_props!(point1_f64_norm_synonym_props, Point1, f64, any_point1, any_scalar, 1e-7);
+norm_synonym_props!(point2_f64_norm_synonym_props, Point2, f64, any_point2, any_scalar, 1e-7);
+norm_synonym_props!(point3_f64_norm_synonym_props, Point3, f64, any_point3, any_scalar, 1e-7);
+
