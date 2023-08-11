@@ -102,7 +102,7 @@ where
         Self::from_value_with_norm(value).0
     }
 
-    /// Construct a new normalized unit value along with its unnormalized magnitude.
+    /// Construct a new normalized unit value and return its original norm.
     ///
     /// # Example
     ///
@@ -132,8 +132,8 @@ where
         (unit, norm)
     }
 
-    /// Construct a new normalized unit value along with its unnormalized magnitude, 
-    /// provided that its magnitude is larger than `threshold`. 
+    /// Construct a new normalized unit value and return its original norm, 
+    /// provided that its norm is larger than `threshold`. 
     ///
     /// The argument `threshold` argument exists to check for vectors that may be
     /// very close to zero length.
@@ -141,7 +141,7 @@ where
     /// # Example
     ///
     /// Here is an example where the function returns `None` because the vector 
-    /// magnitude is too small.
+    /// norm is too small.
     /// ```
     /// # use cglinalg_core::{
     /// #     Normed,

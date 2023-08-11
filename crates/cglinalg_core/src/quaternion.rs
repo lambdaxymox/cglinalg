@@ -1505,7 +1505,7 @@ where
 
     /// Compute the inverse of a quaternion.
     ///
-    /// If the quaternion `self` has zero magnitude, it does not have an 
+    /// If the quaternion `self` has zero norm, it does not have an 
     /// inverse. In this case the function return `None`. Otherwise it returns 
     /// the inverse of `self`.
     ///
@@ -1544,7 +1544,7 @@ where
 
     /// Determine whether a quaternion is invertible.
     ///
-    /// If the quaternion `self` has zero magnitude, it does not have an 
+    /// If the quaternion `self` has zero norm, it does not have an 
     /// inverse. In this case the function return `None`. Otherwise it returns 
     /// the inverse of `self`.
     ///
@@ -1759,7 +1759,7 @@ where
     /// Ln(q) = log(||q||, e) + sgn(Vec(q)) * Arg(q)
     /// ```
     /// where `Arg(q)` is the principal argument of `q`, `||q||` is the 
-    /// magnitude of `q`, `Vec(q)` is the vector part of `q`, `sgn(.)` is the 
+    /// norm of `q`, `Vec(q)` is the vector part of `q`, `sgn(.)` is the 
     /// signum function, and `log(., e)` denotes the natural logarithm of a 
     /// scalar. Returning the principal value allows us to define a unique 
     /// natural logarithm for each quaternion `q`.
@@ -1870,7 +1870,7 @@ where
     /// sqrt(q) = sqrt(|q|) * ( cos(----------------) + --- * sin(----------------) )
     ///                                    2            |v|               2
     /// ```
-    /// where `|q|` is the magnitude of `q`, `t` is the principal argument of `q`, and `n`
+    /// where `|q|` is the norm of `q`, `t` is the principal argument of `q`, and `n`
     /// is the nth angle satisfying the above equation. In the case of the square root, there
     /// are two solutions: `n = 0` and `n = 1`. The `n = 0` case corresponds to the solution
     /// `p` returned by the function, and the `n = 1` case corresponds to the solution `-p`,
@@ -2956,7 +2956,7 @@ where
     /// part, and `theta` is the angle of rotation about the axis `vhat` 
     /// encoded by the quaternion.
     ///
-    /// The output of the function is a triple containing the magnitude of 
+    /// The output of the function is a triple containing the norm of 
     /// the quaternion, followed by the angle of rotation, followed optionally
     /// by the axis of rotation, if there is one. There may not be one in the 
     /// case where the quaternion is a real quaternion.

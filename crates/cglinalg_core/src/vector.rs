@@ -1883,7 +1883,7 @@ where
     /// (up to four dimensions), the cross product is well-defined only in 
     /// three dimensions. The cross product is a form of vector 
     /// multiplication that computes a vector normal to the plane swept out by 
-    /// the two vectors. The magnitude of this vector is the area of the 
+    /// the two vectors. The norm of this vector is the area of the 
     /// parallelogram swept out by the two vectors. 
     ///
     /// # Example

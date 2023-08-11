@@ -3,8 +3,7 @@ use crate::core_numeric::{
 };
 
 
-/// A type with this trait acts as a vector with a notion of norm (magnitude, length)
-/// in a Euclidean vector space.
+/// A type with this trait acts as a vector with a notion of norm (magnitude, length).
 ///
 /// Examples of types that can be made into Euclidean normed spaces include 
 /// vectors, quaternions, complex numbers, points, and scalar numbers. In the 
@@ -29,7 +28,7 @@ use crate::core_numeric::{
 /// let result = vector.normalize();
 /// assert_eq!(result, expected);
 ///
-/// // Scale a vector to a specific magnitude.
+/// // Scale a vector to a specific norm.
 /// let norm = 5_f64;
 /// let expected = (5_f64 / 2_f64) * vector;
 /// let result = vector.scale(norm);
@@ -73,19 +72,20 @@ where
     /// Normalize a vector to a unit vector.
     fn normalize(&self) -> Self;
 
-    /// Normalize a vector mutably in place and return its magnitude.
+    /// Normalize a vector to a unit vector mutably in place and return its norm 
+    /// prior to normalization.
     fn normalize_mut(&mut self) -> Self::Output;
 
     /// Attempt to normalize a vector, but give up if the norm
     /// is too small.
     ///
-    /// If the magnitude of the vector is smaller than the threshold
+    /// If the norm of the vector is smaller than the threshold
     /// `threshold`, the function returns `None`.
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self>;
 
     /// Attempt to normalize a vector in place, but give up if the norm is too small.
     /// 
-    /// If the magnitude of the vector is smaller than the threshold 
+    /// If the norm of the vector is smaller than the threshold 
     /// `threshold`, the function does not mutate `self` and returns `None`.
     fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output>;
 

@@ -730,7 +730,7 @@ where
     /// ```
     /// Consequently there is an ambiguity in choosing the angle for `z` in its 
     /// polar form; two complex numbers in polar form are equal if they have 
-    /// identical magnitudes and they differ by a factor of `2 * pi` in their 
+    /// identical norms and they differ by a factor of `2 * pi` in their 
     /// arguments. Let `z1` be another complex number. Then `z == z1` if and only 
     /// if `|z| == |z1|` and `angle1 == angle + 2 * pi * n1` where `n1` is an integer. 
     /// In order to resolve this ambiguity and make equality of complex numbers in polar 
@@ -942,7 +942,7 @@ where
     /// sqrt(z) = sqrt(|z|) * ( cos(----------------) + i * sin(----------------) )
     ///                                     2                           2
     /// ```
-    /// where `|z|` is the magnitude of `z`, `t` is the principal argument of `z`, and `n`
+    /// where `|z|` is the modulus (norm) of `z`, `t` is the principal argument of `z`, and `n`
     /// is the nth angle satisfying the above equation. In the case of the square root, there
     /// are two solutions: `n = 0` and `n = 1`. The `n = 0` solution corresponds 
     /// to the solution returned by the function, and the `n = 1` case corresponds to the
@@ -1067,7 +1067,7 @@ where
 
     /// Determine whether a complex number is invertible.
     /// 
-    /// Returns `false` if the magnitude of the complex number is sufficiently
+    /// Returns `false` if the modulus of the complex number is sufficiently
     /// close to zero.
     ///
     /// # Example
