@@ -162,8 +162,8 @@ where
     /// assert_eq!(quaternion.v.z, 4_f64);
     /// ```
     #[inline]
-    pub fn from_parts(qs: S, qv: Vector3<S>) -> Self {
-        Self::new(qs, qv[0], qv[1], qv[2])
+    pub fn from_parts(scalar: S, vector: Vector3<S>) -> Self {
+        Self::new(scalar, vector[0], vector[1], vector[2])
     }
 
     /// Construct a new quaternion from a fill value. 
@@ -224,11 +224,11 @@ where
     /// #     Vector3,
     /// # };
     /// #
-    /// let qs = 1_i32;
-    /// let qv = Vector3::new(2_i32, 3_i32, 4_i32);
-    /// let q = Quaternion::from_parts(qs, qv);
+    /// let scalar = 1_i32;
+    /// let vector = Vector3::new(2_i32, 3_i32, 4_i32);
+    /// let quaternion = Quaternion::from_parts(scalar, vector);
     /// 
-    /// assert_eq!(q.scalar(), qs);
+    /// assert_eq!(quaternion.scalar(), scalar);
     /// ```
     #[inline]
     pub fn scalar(&self) -> S {
@@ -245,11 +245,11 @@ where
     /// #     Vector3,
     /// # };
     /// #
-    /// let qs = 1_i32;
-    /// let qv = Vector3::new(2_i32, 3_i32, 4_i32);
-    /// let q = Quaternion::from_parts(qs, qv);
+    /// let scalar = 1_i32;
+    /// let vector = Vector3::new(2_i32, 3_i32, 4_i32);
+    /// let quaternion = Quaternion::from_parts(scalar, vector);
     /// 
-    /// assert_eq!(q.vector(), qv);
+    /// assert_eq!(quaternion.vector(), vector);
     /// ```
     #[inline]
     pub fn vector(&self) -> Vector3<S> {
@@ -1615,11 +1615,11 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let zero_vec = Vector3::zero();
-    /// let s = 3_f64;
-    /// let qs = Quaternion::from_parts(s, zero_vec);
-    /// let result = qs.exp();
-    /// let expected = Quaternion::from_parts(s.exp(), zero_vec);
+    /// let zero_vector = Vector3::zero();
+    /// let scalar = 3_f64;
+    /// let scalar_quaternion = Quaternion::from_parts(scalar, zero_vector);
+    /// let result = scalar_quaternion.exp();
+    /// let expected = Quaternion::from_parts(scalar.exp(), zero_vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -1635,11 +1635,11 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let zero_vec = Vector3::zero();
+    /// let zero_vector = Vector3::zero();
     /// let unit_x = Quaternion::unit_x();
     /// let pi = f64::consts::PI;
     /// let result = (unit_x * pi).exp();
-    /// let expected = Quaternion::from_parts(-1_f64, zero_vec);
+    /// let expected = Quaternion::from_parts(-1_f64, zero_vector);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -1655,11 +1655,11 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let zero_vec = Vector3::zero();
+    /// let zero_vector = Vector3::zero();
     /// let unit_y = Quaternion::unit_y();
     /// let pi = f64::consts::PI;
     /// let result = (unit_y * pi).exp();
-    /// let expected = Quaternion::from_parts(-1_f64, zero_vec);
+    /// let expected = Quaternion::from_parts(-1_f64, zero_vector);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -1675,11 +1675,11 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let zero_vec = Vector3::zero();
+    /// let zero_vector = Vector3::zero();
     /// let unit_z = Quaternion::unit_z();
     /// let pi = f64::consts::PI;
     /// let result = (unit_z * pi).exp();
-    /// let expected = Quaternion::from_parts(-1_f64, zero_vec);
+    /// let expected = Quaternion::from_parts(-1_f64, zero_vector);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -2781,10 +2781,10 @@ where
         let a = S::sin((one - amount) * half_theta) / sin_half_theta;
         let b = S::sin(amount * half_theta) / sin_half_theta;
         
-        let qs = result.scalar() * a + other.scalar() * b;
-        let qv = result.vector() * a + other.vector() * b;
+        let q_scalar = result.scalar() * a + other.scalar() * b;
+        let q_vector = result.vector() * a + other.vector() * b;
 
-        Self::from_parts(qs, qv)
+        Self::from_parts(q_scalar, q_vector)
     }
 
     /// Compute the normalized linear interpolation between two quaternions.

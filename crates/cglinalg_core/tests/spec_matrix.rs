@@ -113,9 +113,9 @@ macro_rules! approx_addition_props {
             /// ```
             #[test]
             fn prop_matrix_additive_identity(m in $Generator::<$ScalarType>()) {
-                let zero_mat = $MatrixN::zero();
+                let zero_matrix = $MatrixN::zero();
 
-                prop_assert_eq!(zero_mat + m, m);
+                prop_assert_eq!(zero_matrix + m, m);
             }
         
             /// A zero matrix should act as the additive unit element for matrices 
@@ -127,9 +127,9 @@ macro_rules! approx_addition_props {
             /// ```
             #[test]
             fn prop_vector_times_zero_equals_zero(m in $Generator::<$ScalarType>()) {
-                let zero_mat = $MatrixN::zero();
+                let zero_matrix = $MatrixN::zero();
 
-                prop_assert_eq!(m + zero_mat, m);
+                prop_assert_eq!(m + zero_matrix, m);
             }
 
             /// Matrix addition over exact scalars is commutative.
@@ -217,9 +217,9 @@ macro_rules! exact_addition_props {
             /// ```
             #[test]
             fn prop_matrix_additive_identity(m in $Generator::<$ScalarType>()) {
-                let zero_mat = $MatrixN::zero();
+                let zero_matrix = $MatrixN::zero();
 
-                prop_assert_eq!(zero_mat + m, m);
+                prop_assert_eq!(zero_matrix + m, m);
             }
         
             /// A zero matrix should act as the additive unit element for matrices 
@@ -231,9 +231,9 @@ macro_rules! exact_addition_props {
             /// ```
             #[test]
             fn prop_vector_times_zero_equals_zero(m in $Generator::<$ScalarType>()) {
-                let zero_mat = $MatrixN::zero();
+                let zero_matrix = $MatrixN::zero();
 
-                prop_assert_eq!(m + zero_mat, m);
+                prop_assert_eq!(m + zero_matrix, m);
             }
 
             /// Matrix addition over exact scalars is commutative.
@@ -315,10 +315,10 @@ macro_rules! approx_scalar_multiplication_props {
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
-                let zero_mat = $MatrixN::zero();
+                let zero_matrix = $MatrixN::zero();
 
-                prop_assert_eq!(zero * m, zero_mat);
-                prop_assert_eq!(m * zero, zero_mat);
+                prop_assert_eq!(zero * m, zero_matrix);
+                prop_assert_eq!(m * zero, zero_matrix);
             }
 
             /// Multiplication of a matrix by a scalar one is the original matrix.
@@ -469,10 +469,10 @@ macro_rules! exact_scalar_multiplication_props {
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
-                let zero_mat = $MatrixN::zero();
+                let zero_matrix = $MatrixN::zero();
 
-                prop_assert_eq!(zero * m, zero_mat);
-                prop_assert_eq!(m * zero, zero_mat);
+                prop_assert_eq!(zero * m, zero_matrix);
+                prop_assert_eq!(m * zero, zero_matrix);
             }
 
             /// Multiplication of a matrix by a scalar one is the original matrix.
@@ -605,10 +605,10 @@ macro_rules! approx_multiplication_props {
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
-                let zero_mat = $MatrixN::zero();
+                let zero_matrix = $MatrixN::zero();
 
-                prop_assert_eq!(zero * m, zero_mat);
-                prop_assert_eq!(m * zero, zero_mat);
+                prop_assert_eq!(zero * m, zero_matrix);
+                prop_assert_eq!(m * zero, zero_matrix);
             }
         }
     }

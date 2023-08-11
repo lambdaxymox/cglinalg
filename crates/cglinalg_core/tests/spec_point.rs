@@ -286,9 +286,9 @@ macro_rules! approx_arithmetic_props {
             /// ```
             #[test]
             fn prop_point_plus_zero_equals_vector(p in $PointGen()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(p + zero_vec, p);
+                prop_assert_eq!(p + zero_vector, p);
             }
 
             /// Given a point `p` and a vector `v`, we should be able to use `p` and 
@@ -345,9 +345,9 @@ macro_rules! approx_arithmetic_props {
             /// ```
             #[test]
             fn prop_point_minus_zero_equals_vector(p in $PointGen()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(p - zero_vec, p);
+                prop_assert_eq!(p - zero_vector, p);
             }
 
             /// A point minus itself equals the zero vector.
@@ -358,9 +358,9 @@ macro_rules! approx_arithmetic_props {
             /// ```
             #[test]
             fn prop_point_minus_point_equals_zero_vector(p in $PointGen()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(p - p, zero_vec);
+                prop_assert_eq!(p - p, zero_vector);
             }
 
             /// Given a point `p` and a vector `v`, we should be able to use `p` and 
@@ -460,9 +460,9 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_point_plus_zero_equals_vector(p in $PointGen()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(p + zero_vec, p);
+                prop_assert_eq!(p + zero_vector, p);
             }
 
             /// Given a point `p` and a vector `v`, we should be able to use `p` and 
@@ -519,9 +519,9 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_point_minus_zero_equals_vector(p in $PointGen()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(p - zero_vec, p);
+                prop_assert_eq!(p - zero_vector, p);
             }
 
             /// A point minus itself equals the zero vector.
@@ -532,9 +532,9 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_point_minus_point_equals_zero_vector(p in $PointGen()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(p - p, zero_vec);
+                prop_assert_eq!(p - p, zero_vector);
             }
 
             /// Given a point `p` and a vector `v`, we should be able to use `p` and 

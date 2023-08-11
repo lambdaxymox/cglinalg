@@ -475,33 +475,33 @@ mod exp_tests {
 
     #[test]
     fn test_quaternion_exp_power_times_pi_unit_x() {
-        let zero_vec = Vector3::zero();
+        let zero_vector = Vector3::zero();
         let unit_x = Quaternion::unit_x();
         let pi = f64::consts::PI;
         let result = (unit_x * pi).exp();
-        let expected = Quaternion::from_parts(-1_f64, zero_vec);
+        let expected = Quaternion::from_parts(-1_f64, zero_vector);
      
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
     fn test_quaternion_exp_power_times_pi_unit_y() {
-        let zero_vec = Vector3::zero();
+        let zero_vector = Vector3::zero();
         let unit_y = Quaternion::unit_y();
         let pi = f64::consts::PI;
         let result = (unit_y * pi).exp();
-        let expected = Quaternion::from_parts(-1_f64, zero_vec);
+        let expected = Quaternion::from_parts(-1_f64, zero_vector);
      
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
     fn test_quaternion_exp_power_times_pi_unit_z() {
-        let zero_vec = Vector3::zero();
+        let zero_vector = Vector3::zero();
         let unit_z = Quaternion::unit_z();
         let pi = f64::consts::PI;
         let result = (unit_z * pi).exp();
-        let expected = Quaternion::from_parts(-1_f64, zero_vec);
+        let expected = Quaternion::from_parts(-1_f64, zero_vector);
      
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -1064,36 +1064,36 @@ mod square_root_tests {
 
     #[test]
     fn test_square_root_quaternion3() {
-        let q = Quaternion::new(2_f64, 0_f64, 0_f64, 3_f64);
+        let quaternion = Quaternion::new(2_f64, 0_f64, 0_f64, 3_f64);
         let cos_angle_over_two_squared = (2_f64 + f64::sqrt(13_f64)) / (2_f64 * f64::sqrt(13_f64));
         let cos_angle_over_two = f64::sqrt(cos_angle_over_two_squared);
         let sin_angle_over_two_squared = 1_f64 - cos_angle_over_two_squared;
         let sin_angle_over_two = f64::sqrt(sin_angle_over_two_squared);
-        let sqrt_norm_q = f64::sqrt(q.norm());
+        let sqrt_norm_q = f64::sqrt(quaternion.norm());
         let expected_s = sqrt_norm_q * cos_angle_over_two;
         let expected_v = sqrt_norm_q * sin_angle_over_two * Vector3::unit_z();
         let expected = Quaternion::from_parts(expected_s, expected_v);
-        let result = q.sqrt();
+        let result = quaternion.sqrt();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
     fn test_square_root_quaternion4() {
-        let qs = 1_f64;
-        let qv = Vector3::new(2_f64, 3_f64, 4_f64);
-        let q = Quaternion::from_parts(qs, qv);
-        let norm_q = q.norm();
-        let norm_qv = qv.norm();
+        let scalar = 1_f64;
+        let vector = Vector3::new(2_f64, 3_f64, 4_f64);
+        let quaternion = Quaternion::from_parts(scalar, vector);
+        let norm_q = quaternion.norm();
+        let norm_qv = vector.norm();
         let cos_angle_over_two_squared = (1_f64 / 2_f64) * (1_f64 + (1_f64 / norm_q));
         let cos_angle_over_two = f64::sqrt(cos_angle_over_two_squared);
         let sin_angle_over_two_squared = 1_f64 - cos_angle_over_two_squared;
         let sin_angle_over_two = f64::sqrt(sin_angle_over_two_squared);
         let sqrt_norm_q = f64::sqrt(norm_q);
         let expected_s = sqrt_norm_q * cos_angle_over_two;
-        let expected_v = sqrt_norm_q * sin_angle_over_two * (1_f64 / norm_qv) * qv;
+        let expected_v = sqrt_norm_q * sin_angle_over_two * (1_f64 / norm_qv) * vector;
         let expected = Quaternion::from_parts(expected_s, expected_v);
-        let result = q.sqrt();
+        let result = quaternion.sqrt();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }

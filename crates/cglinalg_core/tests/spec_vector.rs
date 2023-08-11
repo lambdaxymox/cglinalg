@@ -120,9 +120,9 @@ macro_rules! exact_arithmetic_props {
             #[test]
             fn prop_zero_times_vector_equals_zero(v in $Generator()) {
                 let zero: $ScalarType = num_traits::zero();
-                let zero_vec = $VectorN::zero();
+                let zero_vector = $VectorN::zero();
 
-                prop_assert_eq!(zero * v, zero_vec);
+                prop_assert_eq!(zero * v, zero_vector);
             }
         
             /// A vector times a scalar zero should be a zero vector.
@@ -136,9 +136,9 @@ macro_rules! exact_arithmetic_props {
             #[test]
             fn prop_vector_times_zero_equals_zero(v in $Generator()) {
                 let zero: $ScalarType = num_traits::zero();
-                let zero_vec = $VectorN::zero();
+                let zero_vector = $VectorN::zero();
 
-                prop_assert_eq!(v * zero, zero_vec);
+                prop_assert_eq!(v * zero, zero_vector);
             }
 
             /// A zero vector should act as the additive unit element of a vector space.
@@ -149,9 +149,9 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in $Generator()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(v + zero_vec, v);
+                prop_assert_eq!(v + zero_vector, v);
             }
 
             /// A zero vector should act as the additive unit element of a vector space.
@@ -162,9 +162,9 @@ macro_rules! exact_arithmetic_props {
             /// ```
             #[test]
             fn prop_zero_plus_vector_equals_vector(v in $Generator()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(zero_vec + v, v);
+                prop_assert_eq!(zero_vector + v, v);
             }
 
             /// Multiplying a vector by scalar one should give the original vector.
@@ -254,9 +254,9 @@ macro_rules! approx_add_props {
             /// ```
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in $Generator()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(v + zero_vec, v);
+                prop_assert_eq!(v + zero_vector, v);
             }
 
             /// A zero vector plus a vector equals the same vector.
@@ -267,9 +267,9 @@ macro_rules! approx_add_props {
             /// ```
             #[test]
             fn prop_zero_plus_vector_equals_vector(v in $Generator()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(zero_vec + v, v);
+                prop_assert_eq!(zero_vector + v, v);
             }
 
             /// Given vectors `v1` and `v2`, we should be able to use `v1` and 
@@ -380,9 +380,9 @@ macro_rules! exact_add_props {
             /// ```
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in $Generator()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(v + zero_vec, v);
+                prop_assert_eq!(v + zero_vector, v);
             }
 
             /// A zero vector plus a vector equals the same vector.
@@ -393,9 +393,9 @@ macro_rules! exact_add_props {
             /// ```
             #[test]
             fn prop_zero_plus_vector_equals_vector(v in $Generator()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(zero_vec + v, v);
+                prop_assert_eq!(zero_vector + v, v);
             }
 
             /// Given vectors `v1` and `v2`, we should be able to use `v1` and 
@@ -437,6 +437,7 @@ macro_rules! exact_add_props {
                 v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
                 let zero: $VectorN<$ScalarType> = $VectorN::zero();
+                
                 prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
             }
 
@@ -504,9 +505,9 @@ macro_rules! approx_sub_props {
             /// ```
             #[test]
             fn prop_vector_minus_zero_equals_vector(v in $Generator()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(v - zero_vec, v);
+                prop_assert_eq!(v - zero_vector, v);
             }
 
             /// Every vector of floating point scalars should have an additive inverse.
@@ -517,9 +518,9 @@ macro_rules! approx_sub_props {
             /// ```
             #[test]
             fn prop_vector_minus_vector_equals_zero(v in $Generator::<$ScalarType>()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
+                let zero_vector = $VectorN::<$ScalarType>::zero();
 
-                prop_assert_eq!(v - v, zero_vec);
+                prop_assert_eq!(v - v, zero_vector);
             }
 
             /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` 
@@ -594,8 +595,9 @@ macro_rules! exact_sub_props {
             /// ```
             #[test]
             fn prop_vector_minus_zero_equals_vector(v in $Generator()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
-                prop_assert_eq!(v - zero_vec, v);
+                let zero_vector = $VectorN::<$ScalarType>::zero();
+
+                prop_assert_eq!(v - zero_vector, v);
             }
 
             /// Every vector should have an additive inverse.
@@ -606,8 +608,9 @@ macro_rules! exact_sub_props {
             /// ```
             #[test]
             fn prop_vector_minus_vector_equals_zero(v in $Generator::<$ScalarType>()) {
-                let zero_vec = $VectorN::<$ScalarType>::zero();
-                prop_assert_eq!(v - v, zero_vec);
+                let zero_vector = $VectorN::<$ScalarType>::zero();
+
+                prop_assert_eq!(v - v, zero_vector);
             }
 
             /// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` 
@@ -1189,6 +1192,7 @@ macro_rules! exact_mul_props {
             #[test]
             fn prop_one_times_vector_equals_vector(v in $Generator::<$ScalarType>()) {
                 let one = num_traits::one();
+                
                 prop_assert_eq!(one * v, v);
                 prop_assert_eq!(v * one, v);
             }
