@@ -605,7 +605,7 @@ macro_rules! norm_props {
 
 
         proptest! {
-            /// The L2 norm of a point is nonnegative.
+            /// The **L2** norm of a point is nonnegative.
             ///
             /// Given a point `p`
             /// ```text
@@ -618,7 +618,7 @@ macro_rules! norm_props {
                 prop_assert!(p.norm() >= zero);
             }
 
-            /// The L2 norm function is point separating. In particular, if the 
+            /// The **L2** norm function is point separating. In particular, if the 
             /// distance between two points `p1` and `p2` is zero, then `p1 = p2`.
             ///
             /// Given vectors `p1` and `p2`
@@ -683,7 +683,7 @@ macro_rules! norm_synonym_props {
             /// The [`Point::magnitude`] function and the [`Point::norm`] function 
             /// are synonyms. In particular, given a point `p`
             /// ```text
-            /// p.magnitude() = p.norm()
+            /// magnitude(p) = norm(p)
             /// ```
             /// where equality is exact.
             #[test]
@@ -694,7 +694,7 @@ macro_rules! norm_synonym_props {
             /// The [`Point::l2_norm`] function and the [`Point::norm`] function
             /// are synonyms. In particular, given a point `p`
             /// ```text
-            /// p.l2_norm() = p.norm()
+            /// l2_norm(p) = norm(p)
             /// ```
             /// where equality is exact.
             #[test]
@@ -705,7 +705,7 @@ macro_rules! norm_synonym_props {
             /// The [`Point::magnitude_squared`] function and the [`Point::norm_squared`] 
             /// function are synonyms. In particular, given a point `p`
             /// ```text
-            /// p.magnitude_squared() = p.norm_squared()
+            /// magnitude_squared(p) = norm_squared(p)
             /// ```
             /// where equality is exact.
             #[test]

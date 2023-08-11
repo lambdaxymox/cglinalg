@@ -1321,7 +1321,7 @@ macro_rules! norm_synonym_props {
             /// The [`Quaternion::magnitude`] function and the [`Quaternion::norm`] function
             /// are synonyms. In particular, given a quaternion `q`
             /// ```text
-            /// q.magnitude() = q.norm()
+            /// magnitude(q) = norm(q)
             /// ```
             /// where equality is exact.
             #[test]
@@ -1332,7 +1332,7 @@ macro_rules! norm_synonym_props {
             /// The [`Quaternion::l2_norm`] function and the [`Quaternion::norm`] function
             /// are synonyms. In particular, given a quaternion `q`
             /// ```text
-            /// q.l2_norm() = q.norm()
+            /// l2_norm(q) = norm(q)
             /// ```
             /// where equality is exact.
             #[test]
@@ -1343,7 +1343,7 @@ macro_rules! norm_synonym_props {
             /// The [`Quaternion::magnitude_squared`] function and the [`Quaternion::norm_squared`] 
             /// function are synonyms. In particular, given a quaternion `q`
             /// ```text
-            /// q.magnitude_squared() = q.norm_squared()
+            /// magnitude_squared(q) = norm_squared(q)
             /// ```
             /// where equality is exact.
             #[test]
@@ -1391,7 +1391,7 @@ macro_rules! sqrt_props {
             /// 
             /// Given a quaternion `q`
             /// ```text
-            /// q.sqrt() * q.sqrt() == q
+            /// sqrt(q) * sqrt(q) == q
             /// ```
             #[test]
             fn prop_positive_square_root_squared(q in $Generator::<$ScalarType>()) {
@@ -1409,7 +1409,7 @@ macro_rules! sqrt_props {
             /// 
             /// Given a quaternion `q`
             /// ```text
-            /// -q.sqrt() * -q.sqrt() == q
+            /// -sqrt(q) * -sqrt(q) == q
             /// ```
             #[test]
             fn prop_negative_square_root_squared(q in $Generator::<$ScalarType>()) {

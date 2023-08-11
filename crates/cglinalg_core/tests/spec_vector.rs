@@ -1006,7 +1006,7 @@ macro_rules! norm_synonym_props {
             /// The [`Vector::magnitude`] function and the [`Vector::norm`] function 
             /// are synonyms. In particular, given a vector `v`
             /// ```text
-            /// v.magnitude() = v.norm()
+            /// magnitude(v) = norm(v)
             /// ```
             /// where equality is exact.
             #[test]
@@ -1017,7 +1017,7 @@ macro_rules! norm_synonym_props {
             /// The [`Vector::l2_norm`] function and the [`Vector::norm`] function
             /// are synonyms. In particular, given a vector `v`
             /// ```text
-            /// v.l2_norm() = v.norm()
+            /// l2_norm(v) = norm(v)
             /// ```
             /// where equality is exact.
             #[test]
@@ -1028,7 +1028,7 @@ macro_rules! norm_synonym_props {
             /// The [`Vector::magnitude_squared`] function and the [`Vector::norm_squared`] 
             /// function are synonyms. In particular, given a vector `v`
             /// ```text
-            /// v.magnitude_squared() = v.norm_squared()
+            /// magnitude_squared(v) = norm_squared(v)
             /// ```
             /// where equality is exact.
             #[test]

@@ -13,12 +13,6 @@ use approx::{
 };
 
 
-/// Test with the following Euler angles:
-/// ```text
-/// roll_yz = pi / 2
-/// yaw_zx = pi / 4
-/// pitch_xy = pi / 4
-/// ```
 #[test]
 fn test_to_matrix() {
     let roll_yz = Radians::full_turn_div_4();
@@ -48,9 +42,9 @@ fn test_to_matrix() {
     assert_relative_eq!(result, expected, epsilon = 1e-8);
 }
 
-/// An Euler rotation that's all zeros should be the identity.
+
 #[test]
-fn test_to_matrix_identity() {
+fn test_to_matrix_zero_euler_angles_is_identity() {
     let euler: EulerAngles<Radians<f64>> = EulerAngles::zero();
     let expected:Matrix4x4<f64> = Matrix4x4::identity();
     let result = euler.to_affine_matrix();
@@ -58,12 +52,7 @@ fn test_to_matrix_identity() {
     assert_eq!(result, expected);
 }
 
-/// Test with the following Euler angles:
-/// ```text
-/// roll_yz = pi / 2
-/// yaw_zx = pi / 4
-/// pitch_xy = pi / 4
-/// ```
+
 #[test]
 fn test_to_affine_matrix() {
     let roll_yz = Radians::full_turn_div_4();
@@ -102,9 +91,9 @@ fn test_to_affine_matrix() {
     assert_relative_eq!(result, expected, epsilon = 1e-8);  
 }
 
-/// An Euler rotation that's all zeros should be the identity.
+
 #[test]
-fn test_to_affine_matrix_identity() {
+fn test_to_affine_matrix_zero_euler_angles_is_identity() {
     let euler: EulerAngles<Radians<f64>> = EulerAngles::zero();
     let expected:Matrix4x4<f64> = Matrix4x4::identity();
     let result = euler.to_affine_matrix();
@@ -112,8 +101,6 @@ fn test_to_affine_matrix_identity() {
     assert_eq!(result, expected);
 }
 
-/// A set of Euler angles with only one nonzero entry should act like the 
-/// corresponding rotation matrix.
 #[test]
 fn test_euler_rotation_roll_yz() {
     let roll_yz: Radians<f64> = Radians::full_turn_div_6();
@@ -126,8 +113,6 @@ fn test_euler_rotation_roll_yz() {
     assert_eq!(result, expected);
 }
 
-/// A set of Euler angles with only one nonzero entry should act like the 
-/// corresponding rotation matrix.
 #[test]
 fn test_euler_rotation_yaw_zx() {
     let roll_yz: Radians<f64> = Radians::zero();
@@ -140,8 +125,6 @@ fn test_euler_rotation_yaw_zx() {
     assert_eq!(result, expected);
 }
 
-/// A set of Euler angles with only one nonzero entry should act like the 
-/// corresponding rotation matrix.
 #[test]
 fn test_euler_rotation_pitch_xy() {
     let roll_yz: Radians<f64> = Radians::zero();

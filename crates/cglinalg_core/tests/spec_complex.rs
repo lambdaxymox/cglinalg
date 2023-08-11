@@ -1136,7 +1136,7 @@ macro_rules! modulus_synonym_props {
             /// The [`Complex::magnitude`] function and the [`Complex::modulus`] function 
             /// are synonyms. In particular, given a complex number `z`
             /// ```text
-            /// z.magnitude() = z.norm()
+            /// magnitude(z) = norm(z)
             /// ```
             /// where equality is exact.
             #[test]
@@ -1147,7 +1147,7 @@ macro_rules! modulus_synonym_props {
             /// The [`Complex::norm`] function and the [`Complex::modulus`] function
             /// are synonyms. In particular, given a complex number `z`
             /// ```text
-            /// z.norm() = z.modulus()
+            /// norm(z) = modulus(z)
             /// ```
             /// where equality is exact.
             #[test]
@@ -1158,7 +1158,7 @@ macro_rules! modulus_synonym_props {
             /// The [`Complex::l2_norm`] function and the [`Complex::modulus`] function
             /// are synonyms. In particular, given a complex number `z`
             /// ```text
-            /// z.l2_norm() = z.modulus()
+            /// l2_norm(z) = modulus(z)
             /// ```
             /// where equality is exact.
             #[test]
@@ -1169,7 +1169,7 @@ macro_rules! modulus_synonym_props {
             /// The [`Complex::magnitude_squared`] function and the [`Complex::modulus_squared`]
             /// function are synonyms. In particular, given a complex number `z`
             /// ```text
-            /// z.magnitude_squared() = z.modulus_squared()
+            /// magnitude_squared(z) = modulus_squared(z)
             /// ```
             /// where equality is exact.
             #[test]
@@ -1180,7 +1180,7 @@ macro_rules! modulus_synonym_props {
             /// The [`Complex::norm_squared`] function and the [`Complex::modulus_squared`]
             /// functions are synonyms. In particular, given a complex number `z`
             /// ```text
-            /// z.norm_squared() = z.modulus_squared()
+            /// norm_squared(z) = modulus_squared(z)
             /// ```
             #[test]
             fn prop_norm_squared_modulus_squared_synonyms(z in $Generator::<$ScalarType>()) {
@@ -1300,7 +1300,7 @@ macro_rules! sqrt_props {
             /// 
             /// Given a complex number `z`
             /// ```text
-            /// z.sqrt() * z.sqrt() == z
+            /// sqrt(z) * sqrt(z) == z
             /// ```
             #[test]
             fn prop_positive_square_root_squared(z in $Generator::<$ScalarType>()) {
@@ -1314,7 +1314,7 @@ macro_rules! sqrt_props {
             /// 
             /// Given a complex number `z`
             /// ```text
-            /// -z.sqrt() * -z.sqrt() == z
+            /// -sqrt(z) * -sqrt(z) == z
             /// ```
             #[test]
             fn prop_negative_square_root_squared(z in $Generator::<$ScalarType>()) {

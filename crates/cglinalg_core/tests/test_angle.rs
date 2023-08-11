@@ -159,10 +159,12 @@ mod degrees_arithmetic_tests {
 
     /// The remainder of an angle by a modulus smaller than the modulus should be
     /// the same as the original angle. That is, angles satisfy
-    /// ```
+    /// ```text
     /// For each angle smaller than modulus angle is congruent to itself modulo modulus.
+    /// ```
     /// That is,
-    /// For all angle < modulus, angle = angle (mod modulus).
+    /// ```text
+    /// For each angle < modulus, angle = angle (mod modulus).
     /// ``` 
     #[test]
     fn test_remainder_less_than_modulus() {
@@ -185,8 +187,8 @@ mod degrees_arithmetic_tests {
 
     /// The remainder of an angle by a modulus larger than the modulus should be
     /// smaller then the modulus. That is, angles satisfy
-    /// ```
-    /// For each angle larger than modulus, angle mod modulus < modulus.
+    /// ```text
+    /// For each angle > modulus, angle (mod modulus) < modulus.
     /// ``` 
     #[test]
     fn test_remainder_greater_than_modulus() {
@@ -329,7 +331,7 @@ mod radians_arithmetic_tests {
     /// The remainder of an angle by a modulus larger than the modulus should be
     /// smaller then the modulus. That is, angles satisfy
     /// ```
-    /// For each angle larger than modulus, angle mod modulus < modulus.
+    /// For each angle > modulus, angle (mod modulus) < modulus.
     /// ``` 
     #[test]
     fn test_remainder_greater_than_modulus() {
