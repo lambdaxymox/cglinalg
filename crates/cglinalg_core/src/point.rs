@@ -288,7 +288,7 @@ where
     /// ```
     #[inline]
     pub fn norm_squared(&self) -> S {
-        self.dot(self)
+        self.coords.norm_squared()
     }
 
     /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
@@ -308,7 +308,7 @@ where
     /// ```
     #[inline]
     pub fn norm(&self) -> S {
-        self.norm_squared().sqrt()
+        self.coords.norm()
     }
 
     /// Calculate the squared metric distance between two [`Point`]s with respect 
@@ -330,7 +330,7 @@ where
     /// ```
     #[inline]
     pub fn metric_distance_squared(&self, other: &Self) -> S {
-        (self - other).norm_squared()
+        self.coords.metric_distance_squared(&other.coords)
     }
 
     /// Calculate the metric distance between two [`Point`]s with respect 
@@ -352,7 +352,7 @@ where
     /// ```
     #[inline]
     pub fn metric_distance(&self, other: &Self) -> S {
-        (self - other).norm()
+        self.coords.metric_distance(&other.coords)
     }
 
     /// Calculate the squared norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
@@ -894,68 +894,6 @@ where
     }
 }
 
-impl<S, const N: usize> Normed for Point<S, N> 
-where 
-    S: SimdScalarFloat
-{
-    type Output = S;
-
-    #[inline]
-    fn norm_squared(&self) -> Self::Output {
-        self.dot(self)
-    }
-
-    #[inline]
-    fn norm(&self) -> Self::Output {
-        self.norm_squared().sqrt()
-    }
-
-    #[inline]
-    fn scale(&self, norm: Self::Output) -> Self {
-        self * (norm / self.norm())
-    }
-    
-    #[inline]
-    fn normalize(&self) -> Self {
-        self / self.norm()
-    }
-
-    #[inline]
-    fn normalize_mut(&mut self) -> Self::Output {
-        self.coords.normalize_mut()
-    }
-
-    #[inline]
-    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let norm = self.norm();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
-    }
-
-    #[inline]
-    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
-        let norm = self.norm();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize_mut())
-        }
-    }
-
-    #[inline]
-    fn distance_squared(&self, other: &Point<S, N>) -> Self::Output {
-        (self - other).norm_squared()
-    }
-
-    #[inline]
-    fn distance(&self, other: &Self) -> Self::Output {
-        self.distance_squared(other).sqrt()
-    }
-}
-
 impl<S, const N: usize> approx::AbsDiffEq for Point<S, N> 
 where 
     S: SimdScalarFloat
@@ -1000,6 +938,67 @@ where
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Vector::ulps_eq(&self.coords, &other.coords, epsilon, max_ulps)
+    }
+}
+
+impl<S, const N: usize> Normed for Point<S, N> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm_squared(&self) -> Self::Output {
+        self.coords.norm_squared()
+    }
+
+    #[inline]
+    fn norm(&self) -> Self::Output {
+        self.coords.norm()
+    }
+
+    #[inline]
+    fn scale(&self, norm: Self::Output) -> Self {
+        let scaled_coords = self.coords.scale(norm);
+
+        Self::from_vector(&scaled_coords)
+    }
+    
+    #[inline]
+    fn normalize(&self) -> Self {
+        let normalized_coords = self.coords.normalize();
+
+        Self::from_vector(&normalized_coords)
+    }
+
+    #[inline]
+    fn normalize_mut(&mut self) -> Self::Output {
+        self.coords.normalize_mut()
+    }
+
+    #[inline]
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let norm = self.norm();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
+
+    #[inline]
+    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
+        self.coords.try_normalize_mut(threshold)
+    }
+
+    #[inline]
+    fn distance_squared(&self, other: &Point<S, N>) -> Self::Output {
+        self.coords.metric_distance_squared(&other.coords)
+    }
+
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.coords.distance_squared(&other.coords)
     }
 }
 

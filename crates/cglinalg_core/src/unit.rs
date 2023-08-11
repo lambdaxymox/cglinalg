@@ -37,6 +37,9 @@ impl<T> Unit<T> {
     /// #     Unit,
     /// #     Vector3,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// # use core::f64;
     /// #
     /// let vector = Vector3::new(3_f64, 5_f64, 7_f64);
@@ -47,7 +50,7 @@ impl<T> Unit<T> {
     /// );
     /// let result = Unit::from_value(vector).into_inner();
     /// 
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn into_inner(self) -> T {

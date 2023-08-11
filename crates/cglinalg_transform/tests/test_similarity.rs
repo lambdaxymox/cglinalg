@@ -71,6 +71,7 @@ mod similarity2_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_to_affine_matrix() {
         let scale = 2_f64;
@@ -295,9 +296,10 @@ mod similarity3_tests {
         let direction = (target - eye).normalize();
         let up = Vector3::new(2_f64, 2_f64, 0_f64);
         let isometry = Similarity3::look_to_lh(&eye, &direction, &up);
-        let unit_z = Vector3::unit_z();
+        let expected = Vector3::unit_z();
+        let result = isometry.transform_vector(&direction);
     
-        assert_eq!(isometry.transform_vector(&direction), unit_z);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -307,9 +309,10 @@ mod similarity3_tests {
         let direction = (target - eye).normalize();
         let up = Vector3::new(2_f64, 2_f64, 0_f64);
         let isometry = Similarity3::look_to_rh(&eye, &direction, &up);
-        let minus_unit_z = -Vector3::unit_z();
+        let expected = -Vector3::unit_z();
+        let result = isometry.transform_vector(&direction);
     
-        assert_eq!(isometry.transform_vector(&direction), minus_unit_z);
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[test]
@@ -318,8 +321,8 @@ mod similarity3_tests {
         let up: Vector3<f64> = Vector3::unit_x();
         let eye = Point3::new(1_f64, 2_f64, 3_f64);
         let similarity = Similarity3::look_at_lh(&eye, &target, &up);
-        let result = similarity.transform_vector(&(target - eye).normalize());
         let expected = Vector3::unit_z();
+        let result = similarity.transform_vector(&(target - eye).normalize());
     
         assert_relative_eq!(result, expected, epsilon = 1e-8);
         assert_eq!(similarity.transform_point(&eye), Point3::origin());
@@ -331,13 +334,14 @@ mod similarity3_tests {
         let up: Vector3<f64> = Vector3::unit_x();
         let eye = Point3::new(1_f64, 2_f64, 3_f64);
         let similarity = Similarity3::look_at_rh(&eye, &target, &up);
-        let result = similarity.transform_vector(&(target - eye).normalize());
         let expected = -Vector3::unit_z();
+        let result = similarity.transform_vector(&(target - eye).normalize());
     
         assert_relative_eq!(result, expected, epsilon = 1e-8);
         assert_eq!(similarity.transform_point(&eye), Point3::origin());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_to_affine_matrix() {
         let scale = 2_f64;

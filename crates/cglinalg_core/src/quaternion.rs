@@ -35,7 +35,7 @@ use core::fmt;
 use core::ops;
 
 
-/// A stack-allocated quaternion in Euclidean space.
+/// A stack-allocated quaternion.
 /// 
 /// A quaternion is a generalization of vectors in three dimensions that 
 /// enables one to perform rotations about an arbitrary axis. They are a
@@ -164,6 +164,34 @@ where
     #[inline]
     pub fn from_parts(scalar: S, vector: Vector3<S>) -> Self {
         Self::new(scalar, vector[0], vector[1], vector[2])
+    }
+
+    /// Construct a new quaternion from a [`Vector4`].
+    /// 
+    /// The `vector[0]` component of the vector corresponds to the scalar component
+    /// of the quaterion. The `(vector[1], vector[2], vector[3])` components 
+    /// correspond to the vector component.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Vector4,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
+    /// let expected_scalar = 1_f32;
+    /// let expected_vector = Vector3::new(2_f32, 3_f32, 4_f32);
+    /// let quaternion = Quaternion::from_vector(vector);
+    /// 
+    /// assert_eq!(quaternion.scalar(), expected_scalar);
+    /// assert_eq!(quaternion.vector(), expected_vector);
+    /// ```
+    #[inline]
+    pub const fn from_vector(vector: Vector4<S>) -> Self {
+        Self { coords: vector, }
     }
 
     /// Construct a new quaternion from a fill value. 
@@ -672,7 +700,7 @@ where
     /// ```
     #[inline]
     pub fn norm_squared(&self) -> S {
-        self.dot(self)
+        self.coords.norm_squared()
     }
 
     /// Calculate the norm of a quaternion with respect to the **L2** (Euclidean) norm. 
@@ -699,7 +727,7 @@ where
     /// ```
     #[inline]
     pub fn norm(&self) -> S {
-        self.norm_squared().sqrt()
+        self.coords.norm()
     }
 
     /// Calculate the squared norm of a quaternion with respect to the **L2** (Euclidean) norm.
@@ -761,7 +789,7 @@ where
     /// ```
     #[inline]
     pub fn metric_distance_squared(&self, other: &Self) -> S {
-        (self - other).norm_squared()
+        self.coords.metric_distance_squared(&other.coords)
     }
 
     /// Calculate the metric distance between two quaternions with respect
@@ -794,7 +822,7 @@ where
     /// ```
     #[inline]
     pub fn metric_distance(&self, other: &Self) -> S {
-        (self - other).norm()
+        self.coords.metric_distance(&other.coords)
     }
 
     /// Calculate the norm of a quaternion with respect to the **L2** (Euclidean) norm. 
@@ -3352,6 +3380,26 @@ where
     }
 }
 
+impl<S> From<Vector4<S>> for Quaternion<S>
+where
+    S: SimdScalarFloat
+{
+    #[inline]
+    fn from(vector: Vector4<S>) -> Quaternion<S> {
+        Self::from_vector(vector)
+    }
+}
+
+impl<S> From<&Vector4<S>> for Quaternion<S>
+where
+    S: SimdScalarFloat
+{
+    #[inline]
+    fn from(vector: &Vector4<S>) -> Quaternion<S> {
+        Self::from_vector(*vector)
+    }
+}
+
 impl<S> fmt::Display for Quaternion<S> 
 where 
     S: fmt::Display 
@@ -3834,63 +3882,6 @@ where
     }
 }
 
-impl<S> Normed for Quaternion<S> 
-where 
-    S: SimdScalarFloat 
-{
-    type Output = S;
-
-    #[inline]
-    fn norm_squared(&self) -> Self::Output {
-        self.dot(self)
-    }
-
-    #[inline]
-    fn norm(&self) -> Self::Output {
-        self.norm_squared().sqrt()
-    }
-
-    #[inline]
-    fn scale(&self, norm: Self::Output) -> Self {
-        self * (norm / self.norm())
-    }
-
-    #[inline]
-    fn normalize(&self) -> Self {
-        self / self.norm()
-    }
-
-    #[inline]
-    fn normalize_mut(&mut self) -> Self::Output {
-        self.coords.normalize_mut()
-    }
-
-    #[inline]
-    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let norm = self.norm();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
-    }
-
-    #[inline]
-    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
-        self.coords.try_normalize_mut(threshold)
-    }
-
-    #[inline]
-    fn distance_squared(&self, other: &Quaternion<S>) -> S {
-        (self - other).norm_squared()
-    }
-
-    #[inline]
-    fn distance(&self, other: &Self) -> Self::Output {
-        self.distance_squared(other).sqrt()
-    }
-}
-
 impl<S> approx::AbsDiffEq for Quaternion<S> 
 where 
     S: SimdScalarFloat 
@@ -3938,6 +3929,67 @@ where
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.scalar(), &other.scalar(), epsilon, max_ulps) &&
         Vector3::ulps_eq(&self.vector(), &other.vector(), epsilon, max_ulps)
+    }
+}
+
+impl<S> Normed for Quaternion<S> 
+where 
+    S: SimdScalarFloat 
+{
+    type Output = S;
+
+    #[inline]
+    fn norm_squared(&self) -> Self::Output {
+        self.coords.norm_squared()
+    }
+
+    #[inline]
+    fn norm(&self) -> Self::Output {
+        self.coords.norm()
+    }
+
+    #[inline]
+    fn scale(&self, norm: Self::Output) -> Self {
+        let scaled_coords = self.coords.scale(norm);
+
+        Self::from_vector(scaled_coords)
+    }
+
+    #[inline]
+    fn normalize(&self) -> Self {
+        let normalized_coords = self.coords.normalize();
+
+        Self::from_vector(normalized_coords)
+    }
+
+    #[inline]
+    fn normalize_mut(&mut self) -> Self::Output {
+        self.coords.normalize_mut()
+    }
+
+    #[inline]
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let norm = self.norm();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
+
+    #[inline]
+    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
+        self.coords.try_normalize_mut(threshold)
+    }
+
+    #[inline]
+    fn distance_squared(&self, other: &Quaternion<S>) -> S {
+        self.coords.metric_distance_squared(&other.coords)
+    }
+
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.coords.metric_distance(&other.coords)
     }
 }
 

@@ -1102,12 +1102,12 @@ where
 
     #[inline]
     fn norm_squared(&self) -> Self::Output {
-        self.dot(self)
+        self.norm_squared()
     }
 
     #[inline]
     fn norm(&self) -> Self::Output {
-        self.norm_squared().sqrt()
+        self.norm()
     }
 
     #[inline]
@@ -1117,7 +1117,7 @@ where
     
     #[inline]
     fn normalize(&self) -> Self {
-        self / self.norm()
+        self * (Self::Output::one() / self.norm())
     }
 
     #[inline]
@@ -1150,12 +1150,12 @@ where
 
     #[inline]
     fn distance_squared(&self, other: &Vector<S, N>) -> Self::Output {
-        (self - other).norm_squared()
+        self.metric_distance_squared(other)
     }
 
     #[inline]
     fn distance(&self, other: &Self) -> Self::Output {
-        self.distance_squared(other).sqrt()
+        self.metric_distance(other)
     }
 }
 
