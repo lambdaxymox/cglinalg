@@ -26,22 +26,22 @@ use core::fmt;
 use core::ops;
 
 
-/// A stack-allocated one-dimensional vector in Euclidean space.
+/// A stack-allocated one-dimensional vector.
 pub type Vector1<S> = Vector<S, 1>;
 
-/// A stack-allocated two-dimensional vector in Euclidean space.
+/// A stack-allocated two-dimensional vector.
 pub type Vector2<S> = Vector<S, 2>;
 
-/// A stack-allocated three-dimensional vector in Euclidean space.
+/// A stack-allocated three-dimensional vector.
 pub type Vector3<S> = Vector<S, 3>;
 
-/// A stack-allocated four-dimensional vector in Euclidean space.
+/// A stack-allocated four-dimensional vector.
 pub type Vector4<S> = Vector<S, 4>;
 
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-/// A stack-allocated vector in Euclidean space.
+/// A stack-allocated vector.
 pub struct Vector<S, const N: usize> {
     data: [S; N],
 }

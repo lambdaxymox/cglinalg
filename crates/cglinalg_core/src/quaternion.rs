@@ -3969,7 +3969,7 @@ where
 
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
-        let norm = self.norm();
+        let norm = self.coords.norm();
         if norm <= threshold {
             None
         } else {
