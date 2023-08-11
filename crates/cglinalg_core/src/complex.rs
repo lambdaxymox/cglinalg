@@ -7,6 +7,9 @@ use crate::angle::{
     Angle,
     Radians,
 };
+use crate::norm::{
+    Normed,
+};
 use num_traits::{
     NumCast,
 };
@@ -2268,6 +2271,62 @@ where
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.re, &other.re, epsilon, max_ulps) &&
         S::ulps_eq(&self.im, &other.im, epsilon, max_ulps)
+    }
+}
+
+impl<S> Normed for Complex<S>
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    fn norm_squared(&self) -> Self::Output {
+        self.modulus_squared()
+    }
+    
+    fn norm(&self) -> Self::Output {
+        self.modulus()
+    }
+
+    fn scale(&self, norm: Self::Output) -> Self {
+        self * (norm / self.modulus())
+    }
+
+    fn normalize(&self) -> Self {
+        self * (Self::Output::one() / self.modulus())
+    }
+
+    fn normalize_mut(&mut self) -> Self::Output {
+        let norm = self.modulus();
+        *self = self.normalize();
+
+        norm
+    }
+
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let norm = self.modulus();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
+        
+    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
+        let norm = self.modulus();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize_mut())
+        }
+    }
+
+    fn distance_squared(&self, other: &Self) -> Self::Output {
+        (self - other).modulus_squared()
+    }
+
+    fn distance(&self, other: &Self) -> Self::Output {
+        (self - other).modulus()
     }
 }
 
