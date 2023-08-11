@@ -963,6 +963,23 @@ where
 
         Self::from_vector(&scaled_coords)
     }
+
+    #[inline]
+    fn scale_mut(&mut self, norm: Self::Output) {
+        self.coords.scale_mut(norm);
+    }
+
+    #[inline]
+    fn unscale(&self, norm: Self::Output) -> Self {
+        let unscaled_coords = self.coords.unscale(norm);
+
+        Self::from_vector(&unscaled_coords)
+    }
+
+    #[inline]
+    fn unscale_mut(&mut self, norm: Self::Output) {
+        self.coords.unscale_mut(norm);
+    }
     
     #[inline]
     fn normalize(&self) -> Self {

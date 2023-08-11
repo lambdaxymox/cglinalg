@@ -52,14 +52,23 @@ where
 {
     type Output: SimdScalarFloat;
 
-    /// Compute the Euclidean squared magnitude of a vector.
+    /// Compute the squared norm of a vector.
     fn norm_squared(&self) -> Self::Output;
 
-    /// Compute the Euclidean magnitude of a vector.
+    /// Compute the norm of a vector.
     fn norm(&self) -> Self::Output;
 
-    /// Normalize a vector to a specified magnitude.
+    /// Scale a vector to a specified norm `norm`.
     fn scale(&self, norm: Self::Output) -> Self;
+
+    /// Scale a vector mutably in place to a specified norm `norm`.
+    fn scale_mut(&mut self, norm: Self::Output);
+
+    /// Scale a vector to a specified norm `1 / norm`.
+    fn unscale(&self, norm: Self::Output) -> Self;
+
+    /// Scale a vector mutably in place to a specified norm `1 / norm`.
+    fn unscale_mut(&mut self, norm: Self::Output);
 
     /// Normalize a vector to a unit vector.
     fn normalize(&self) -> Self;

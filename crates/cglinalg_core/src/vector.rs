@@ -1114,6 +1114,21 @@ where
     fn scale(&self, norm: Self::Output) -> Self {
         self * (norm / self.norm())
     }
+
+    #[inline]
+    fn scale_mut(&mut self, norm: Self::Output) {
+        *self = self.scale(norm);
+    }
+
+    #[inline]
+    fn unscale(&self, norm: Self::Output) -> Self {
+        self * (Self::Output::one() / norm)
+    }
+
+    #[inline]
+    fn unscale_mut(&mut self, norm: Self::Output) {
+        *self = self.unscale(norm);
+    }
     
     #[inline]
     fn normalize(&self) -> Self {

@@ -2292,6 +2292,21 @@ where
         self * (norm / self.modulus())
     }
 
+    #[inline]
+    fn scale_mut(&mut self, norm: Self::Output) {
+        *self = self.scale(norm);
+    }
+
+    #[inline]
+    fn unscale(&self, norm: Self::Output) -> Self {
+        self * (Self::Output::one() / norm)
+    }
+
+    #[inline]
+    fn unscale_mut(&mut self, norm: Self::Output) {
+        *self = self.unscale(norm);
+    }
+
     fn normalize(&self) -> Self {
         self * (Self::Output::one() / self.modulus())
     }
