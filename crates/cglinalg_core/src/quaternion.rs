@@ -9,11 +9,6 @@ use crate::angle::{
 };
 use crate::norm::{
     Normed,
-    Norm,
-    L1Norm,
-    L2Norm,
-    LpNorm,
-    LinfNorm,
 };
 use crate::matrix::{
     Matrix3x3, 
@@ -899,74 +894,6 @@ where
     #[inline]
     pub fn l1_norm(&self) -> S {
         self.coords.l1_norm()
-    }
-}
-
-impl<S> Norm<Quaternion<S>> for L1Norm<Quaternion<S>> 
-where
-    S: SimdScalarFloat
-{
-    type Output = S;
-
-    #[inline]
-    fn norm(&self, lhs: &Quaternion<S>) -> Self::Output {
-        L1Norm::new().norm(&lhs.coords)
-    }
-
-    #[inline]
-    fn metric_distance(&self, lhs: &Quaternion<S>, rhs: &Quaternion<S>) -> Self::Output {
-        L1Norm::new().metric_distance(&lhs.coords, &rhs.coords)
-    }
-}
-
-impl<S> Norm<Quaternion<S>> for L2Norm<Quaternion<S>>
-where
-    S: SimdScalarFloat
-{
-    type Output = S;
-
-    #[inline]
-    fn norm(&self, lhs: &Quaternion<S>) -> Self::Output {
-        L2Norm::new().norm(&lhs.coords)
-    }
-
-    #[inline]
-    fn metric_distance(&self, lhs: &Quaternion<S>, rhs: &Quaternion<S>) -> Self::Output {
-        L2Norm::new().metric_distance(&lhs.coords, &rhs.coords)
-    }
-}
-
-impl<S> Norm<Quaternion<S>> for LpNorm<Quaternion<S>> 
-where
-    S: SimdScalarFloat
-{
-    type Output = S;
-
-    #[inline]
-    fn norm(&self, lhs: &Quaternion<S>) -> Self::Output {
-        LpNorm::new(self.p).norm(&lhs.coords)
-    }
-
-    #[inline]
-    fn metric_distance(&self, lhs: &Quaternion<S>, rhs: &Quaternion<S>) -> Self::Output {
-        LpNorm::new(self.p).metric_distance(&lhs.coords, &rhs.coords)
-    }
-}
-
-impl<S> Norm<Quaternion<S>> for LinfNorm<Quaternion<S>> 
-where
-    S: SimdScalarFloat
-{
-    type Output = S;
-
-    #[inline]
-    fn norm(&self, lhs: &Quaternion<S>) -> Self::Output {
-        LinfNorm::new().norm(&lhs.coords)
-    }
-
-    #[inline]
-    fn metric_distance(&self, lhs: &Quaternion<S>, rhs: &Quaternion<S>) -> Self::Output {
-        LinfNorm::new().metric_distance(&lhs.coords, &rhs.coords)
     }
 }
 
