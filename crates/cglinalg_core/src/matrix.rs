@@ -18,7 +18,6 @@ use crate::point::{
 };
 use crate::vector::{
     Vector,
-    Vector1,
     Vector2,
     Vector3,
     Vector4,

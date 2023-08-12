@@ -402,7 +402,6 @@ mod arg_tests {
 #[cfg(test)]
 mod exp_tests {
     use cglinalg_core::{
-        Normed,
         Quaternion,
         Vector3,
     };
@@ -985,7 +984,6 @@ mod square_tests {
 #[cfg(test)]
 mod square_root_tests {
     use cglinalg_core::{
-        Normed,
         Quaternion,
         Vector3,
     };

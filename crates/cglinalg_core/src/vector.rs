@@ -3,9 +3,6 @@ use crate::core_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::unit::{
-    Unit,
-};
 use crate::norm::{
     Normed,
     Norm,

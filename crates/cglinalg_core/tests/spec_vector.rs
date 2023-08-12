@@ -675,9 +675,6 @@ macro_rules! norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Normed,
-        };
         use approx::{
             relative_ne,
         };
@@ -754,9 +751,6 @@ macro_rules! l1_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Normed,
-        };
         use approx::{
             relative_ne,
         };
@@ -918,9 +912,6 @@ macro_rules! linf_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Normed,
-        };
         use approx::{
             relative_ne,
         };
@@ -997,9 +988,6 @@ macro_rules! norm_synonym_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Normed,
-        };
         use super::{
             $Generator,
         };
