@@ -611,7 +611,10 @@ where
     }
 }
 
-impl<A: Angle> approx::AbsDiffEq for EulerAngles<A> {
+impl<A> approx::AbsDiffEq for EulerAngles<A> 
+where
+    A: Angle
+{
     type Epsilon = A::Epsilon;
 
     #[inline]
@@ -627,7 +630,10 @@ impl<A: Angle> approx::AbsDiffEq for EulerAngles<A> {
     }
 }
 
-impl<A: Angle> approx::RelativeEq for EulerAngles<A> {
+impl<A> approx::RelativeEq for EulerAngles<A> 
+where
+    A: Angle
+{
     #[inline]
     fn default_max_relative() -> A::Epsilon {
         A::default_max_relative()
@@ -641,7 +647,10 @@ impl<A: Angle> approx::RelativeEq for EulerAngles<A> {
     }
 }
 
-impl<A: Angle> approx::UlpsEq for EulerAngles<A> {
+impl<A> approx::UlpsEq for EulerAngles<A> 
+where
+    A: Angle
+{
     #[inline]
     fn default_max_ulps() -> u32 {
         A::default_max_ulps()

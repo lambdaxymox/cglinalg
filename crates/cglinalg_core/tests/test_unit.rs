@@ -199,9 +199,36 @@ fn test_unit_vector3_close_to_zero_returns_none3() {
 }
 
 #[test]
-fn test_unit_vector4_close_to_zero_returns_none() {
+fn test_unit_vector4_close_to_zero_returns_none1() {
     let threshold = 3_f64 * f64::EPSILON;
     let vector = Vector4::new(f64::EPSILON, 0_f64, 0_f64, 0_f64);
+    let result = Unit::try_from_value(vector, threshold);
+
+    assert!(result.is_none());
+}
+
+#[test]
+fn test_unit_vector4_close_to_zero_returns_none2() {
+    let threshold = 3_f64 * f64::EPSILON;
+    let vector = Vector4::new(0_f64, f64::EPSILON, 0_f64, 0_f64);
+    let result = Unit::try_from_value(vector, threshold);
+
+    assert!(result.is_none());
+}
+
+#[test]
+fn test_unit_vector4_close_to_zero_returns_none3() {
+    let threshold = 3_f64 * f64::EPSILON;
+    let vector = Vector4::new(0_f64, 0_f64, f64::EPSILON, 0_f64);
+    let result = Unit::try_from_value(vector, threshold);
+
+    assert!(result.is_none());
+}
+
+#[test]
+fn test_unit_vector4_close_to_zero_returns_none4() {
+    let threshold = 3_f64 * f64::EPSILON;
+    let vector = Vector4::new(0_f64, 0_f64, 0_f64, f64::EPSILON);
     let result = Unit::try_from_value(vector, threshold);
 
     assert!(result.is_none());
@@ -241,4 +268,40 @@ fn test_unit_quaternion_unit_z() {
 
     assert_eq!(norm_unit_z, 1_f64);
     assert_eq!(unit_unit_z.as_ref(), &unit_z);
+}
+
+#[test]
+fn test_unit_quaternion_close_to_zero_returns_none1() {
+    let threshold = 3_f64 * f64::EPSILON;
+    let vector = Quaternion::new(f64::EPSILON, 0_f64, 0_f64, 0_f64);
+    let result = Unit::try_from_value(vector, threshold);
+
+    assert!(result.is_none());
+}
+
+#[test]
+fn test_unit_quaternion_close_to_zero_returns_none2() {
+    let threshold = 3_f64 * f64::EPSILON;
+    let vector = Quaternion::new(0_f64, f64::EPSILON, 0_f64, 0_f64);
+    let result = Unit::try_from_value(vector, threshold);
+
+    assert!(result.is_none());
+}
+
+#[test]
+fn test_unit_quaternion_close_to_zero_returns_none3() {
+    let threshold = 3_f64 * f64::EPSILON;
+    let vector = Quaternion::new(0_f64, 0_f64, f64::EPSILON, 0_f64);
+    let result = Unit::try_from_value(vector, threshold);
+
+    assert!(result.is_none());
+}
+
+#[test]
+fn test_unit_quaternion_close_to_zero_returns_none4() {
+    let threshold = 3_f64 * f64::EPSILON;
+    let vector = Quaternion::new(0_f64, 0_f64, 0_f64, f64::EPSILON);
+    let result = Unit::try_from_value(vector, threshold);
+
+    assert!(result.is_none());
 }
