@@ -7,6 +7,7 @@ use cglinalg_core::{
     Vector2,
     Vector3,
     Vector4,
+    Quaternion,
 };
 use approx::{
     assert_relative_eq,
@@ -206,3 +207,38 @@ fn test_unit_vector4_close_to_zero_returns_none() {
     assert!(result.is_none());
 }
 
+#[test]
+fn test_unit_quaternion_unit_s() {
+    let unit_s: Quaternion<f64> = Quaternion::unit_s();
+    let (unit_unit_s, norm_unit_s) = Unit::from_value_with_norm(unit_s);
+
+    assert_eq!(norm_unit_s, 1_f64);
+    assert_eq!(unit_unit_s.as_ref(), &unit_s);
+}
+
+#[test]
+fn test_unit_quaternion_unit_x() {
+    let unit_x: Vector4<f64> = Vector4::unit_x();
+    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x); 
+    
+    assert_eq!(norm_unit_x, 1_f64);
+    assert_eq!(unit_unit_x.as_ref(), &unit_x);    
+}
+
+#[test]
+fn test_unit_quaternion_unit_y() {
+    let unit_y: Vector4<f64> = Vector4::unit_y();
+    let (unit_unit_y, norm_unit_y) = Unit::from_value_with_norm(unit_y);
+
+    assert_eq!(norm_unit_y, 1_f64);
+    assert_eq!(unit_unit_y.as_ref(), &unit_y);
+}
+
+#[test]
+fn test_unit_quaternion_unit_z() {
+    let unit_z: Vector4<f64> = Vector4::unit_z();
+    let (unit_unit_z, norm_unit_z) = Unit::from_value_with_norm(unit_z);
+
+    assert_eq!(norm_unit_z, 1_f64);
+    assert_eq!(unit_unit_z.as_ref(), &unit_z);
+}
