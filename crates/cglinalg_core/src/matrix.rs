@@ -1354,42 +1354,6 @@ impl<S> Matrix1x1<S> {
 
 impl<S> Matrix1x1<S> 
 where 
-    S: Copy
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix1x1,
-    /// #     Vector1,
-    /// # };
-    /// #
-    /// let c0 = Vector1::new(1_i32);
-    /// let matrix = Matrix1x1::from_columns(&c0);
-    /// 
-    /// assert_eq!(matrix[0][0], c0[0]);
-    /// ```
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(c0: &Vector1<S>) -> Self {
-        Self::new(c0[0])
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(r0: &Vector1<S>) -> Self {
-        Self::new(r0[0])
-    }
-    */
-}
-
-impl<S> Matrix1x1<S> 
-where 
     S: SimdScalarSigned 
 {
     /// Compute the determinant of a matrix.
@@ -1491,50 +1455,6 @@ impl<S> Matrix2x2<S> {
             ]
         }
     }
-}
-
-impl<S> Matrix2x2<S> 
-where 
-    S: Copy 
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix2x2,
-    /// #     Vector2,
-    /// # };
-    /// #
-    /// let c0 = Vector2::new(1_i32, 2_i32);
-    /// let c1 = Vector2::new(3_i32, 4_i32);
-    /// let matrix = Matrix2x2::from_columns(&c0, &c1);
-    /// 
-    /// assert_eq!(matrix[0][0], c0[0]); assert_eq!(matrix[0][1], c0[1]);
-    /// assert_eq!(matrix[1][0], c1[0]); assert_eq!(matrix[1][1], c1[1]);
-    /// ```
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(c0: &Vector2<S>, c1: &Vector2<S>) -> Self {
-        Self::new(
-            c0[0], c0[1], 
-            c1[0], c1[1],
-        )
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(r0: &Vector2<S>, r1: &Vector2<S>) -> Self {
-        Self::new(
-            r0[0], r1[0], 
-            r0[1], r1[1],
-        )
-    }
-    */
 }
 
 impl<S> Matrix2x2<S> 
@@ -2020,76 +1940,6 @@ impl<S> Matrix3x3<S> {
             ]
         }
     }
-}
-
-impl<S> Matrix3x3<S> 
-where 
-    S: Copy
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let c0 = Vector3::new(1_i32, 2_i32, 3_i32);
-    /// let c1 = Vector3::new(4_i32, 5_i32, 6_i32);
-    /// let c2 = Vector3::new(7_i32, 8_i32, 9_i32);
-    /// let matrix = Matrix3x3::from_columns(&c0, &c1, &c2);
-    /// 
-    /// assert_eq!(matrix[0][0], c0[0]); assert_eq!(matrix[0][1], c0[1]); assert_eq!(matrix[0][2], c0[2]);
-    /// assert_eq!(matrix[1][0], c1[0]); assert_eq!(matrix[1][1], c1[1]); assert_eq!(matrix[1][2], c1[2]);
-    /// assert_eq!(matrix[2][0], c2[0]); assert_eq!(matrix[2][1], c2[1]); assert_eq!(matrix[2][2], c2[2]);
-    /// ```
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(
-        c0: &Vector3<S>, c1: &Vector3<S>, c2: &Vector3<S>) -> Self
-    {
-        Self::new(
-            c0[0], c0[1], c0[2], 
-            c1[0], c1[1], c1[2],
-            c2[0], c2[1], c2[2],
-        )
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let r0 = Vector3::new(1_i32, 2_i32, 3_i32);
-    /// let r1 = Vector3::new(4_i32, 5_i32, 6_i32);
-    /// let r2 = Vector3::new(7_i32, 8_i32, 9_i32);
-    /// let matrix = Matrix3x3::from_rows(&r0, &r1, &r2);
-    /// 
-    /// assert_eq!(matrix[0][0], r0[0]); assert_eq!(matrix[0][1], r1[0]); assert_eq!(matrix[0][2], r2[0]);
-    /// assert_eq!(matrix[1][0], r0[1]); assert_eq!(matrix[1][1], r1[1]); assert_eq!(matrix[1][2], r2[1]);
-    /// assert_eq!(matrix[2][0], r0[2]); assert_eq!(matrix[2][1], r1[2]); assert_eq!(matrix[2][2], r2[2]);
-    /// ```
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(
-        r0: &Vector3<S>, r1: &Vector3<S>, r2: &Vector3<S>) -> Self 
-    {
-        Self::new(
-            r0[0], r1[0], r2[0],
-            r0[1], r1[1], r2[1],
-            r0[2], r1[2], r2[2],
-        )
-    }
-    */
 }
 
 impl<S> Matrix3x3<S> 
@@ -3611,42 +3461,6 @@ impl<S> Matrix4x4<S> {
             ]
         }
     }
-}
-
-impl<S> Matrix4x4<S> 
-where 
-    S: Copy
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(
-        c0: &Vector4<S>, c1: &Vector4<S>, c2: &Vector4<S>, c3: &Vector4<S>) -> Self 
-    {
-        Self::new(
-            c0[0], c0[1], c0[2], c0[3],
-            c1[0], c1[1], c1[2], c1[3],
-            c2[0], c2[1], c2[2], c2[3],
-            c3[0], c3[1], c3[2], c3[3],
-        )
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(
-        r0: &Vector4<S>, r1: &Vector4<S>, r2: &Vector4<S>, r3: &Vector4<S>) -> Self 
-    {
-        Self::new(
-            r0[0], r1[0], r2[0], r3[0],
-            r0[1], r1[1], r2[1], r3[1],
-            r0[2], r1[2], r2[2], r3[2],
-            r0[3], r1[3], r2[3], r3[3],
-        )
-    }
-    */
 }
 
 impl<S> Matrix4x4<S>
@@ -5272,7 +5086,9 @@ impl<S> Matrix2x3<S> {
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, c1r0: S, c1r1: S, c2r0: S, c2r1: S) -> Self 
+        c0r0: S, c0r1: S, 
+        c1r0: S, c1r1: S, 
+        c2r0: S, c2r1: S) -> Self 
     {
         Self {
             data: [
@@ -5284,42 +5100,13 @@ impl<S> Matrix2x3<S> {
     }
 }
 
-impl<S> Matrix2x3<S> 
-where 
-    S: Copy 
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(c0: &Vector2<S>, c1: &Vector2<S>, c2: &Vector2<S>) -> Self {
-        Self::new(
-            c0[0], c0[1], 
-            c1[0], c1[1],
-            c2[0], c2[1],
-        )
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(r0: &Vector3<S>, r1: &Vector3<S>) -> Self {
-        Self::new(
-            r0[0], r1[0],
-            r0[1], r1[1],
-            r0[2], r1[2],
-        )
-    }
-    */
-}
-
 impl<S> Matrix3x2<S> {
     /// Construct a new matrix from its elements.
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, c0r2: S, c1r0: S, c1r1: S, c1r2: S) -> Self
+        c0r0: S, c0r1: S, c0r2: S, 
+        c1r0: S, c1r1: S, c1r2: S) -> Self
     {
         Self {
             data: [
@@ -5328,34 +5115,6 @@ impl<S> Matrix3x2<S> {
             ]
         }
     }
-}
-
-impl<S> Matrix3x2<S> 
-where 
-    S: Copy
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(c0: &Vector3<S>, c1: &Vector3<S>) -> Self {
-        Self::new(
-            c0[0], c0[1], c0[2], 
-            c1[0], c1[1], c1[2],
-        )
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(r0: &Vector2<S>, r1: &Vector2<S>, r2: &Vector2<S>) -> Self {
-        Self::new(
-            r0[0], r1[0], r2[0], 
-            r0[1], r1[1], r2[1],
-        )
-    }
-    */
 }
 
 impl<S> Matrix2x4<S> {
@@ -5379,39 +5138,6 @@ impl<S> Matrix2x4<S> {
     }
 }
 
-impl<S> Matrix2x4<S> 
-where 
-    S: Copy
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(
-        c0: &Vector2<S>, c1: &Vector2<S>, c2: &Vector2<S>, c3: &Vector2<S>) -> Self {
-        Self::new(
-            c0[0], c0[1], 
-            c1[0], c1[1],
-            c2[0], c2[1],
-            c3[0], c3[1],
-        )
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(r0: &Vector4<S>, r1: &Vector4<S>) -> Self {
-        Self::new(
-            r0[0], r1[0], 
-            r0[1], r1[1],
-            r0[2], r1[2],
-            r0[3], r1[3],
-        )
-    }
-    */
-}
-
 impl<S> Matrix4x2<S> {
     /// Construct a new matrix from its elements.
     #[rustfmt::skip]
@@ -5427,36 +5153,6 @@ impl<S> Matrix4x2<S> {
             ]
         }
     }
-}
-
-impl<S> Matrix4x2<S> 
-where 
-    S: Copy
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(c0: &Vector4<S>, c1: &Vector4<S>) -> Self {
-        Self::new(
-            c0[0], c0[1], c0[2], c0[3],
-            c1[0], c1[1], c1[2], c1[3],
-        )
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(
-        r0: &Vector2<S>, r1: &Vector2<S>, r2: &Vector2<S>, r3: &Vector2<S>) -> Self 
-    {
-        Self::new(
-            r0[0], r1[0], r2[0], r3[0],
-            r0[1], r1[1], r2[1], r3[1],
-        )
-    }
-    */
 }
 
 impl<S> Matrix3x4<S> {
@@ -5480,41 +5176,6 @@ impl<S> Matrix3x4<S> {
     }
 }
 
-impl<S> Matrix3x4<S> 
-where 
-    S: Copy
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(
-        c0: &Vector3<S>, c1: &Vector3<S>, c2: &Vector3<S>, c3: &Vector3<S>) -> Self 
-    {
-        Self::new(
-            c0[0], c0[1], c0[2],
-            c1[0], c1[1], c1[2],
-            c2[0], c2[1], c2[2],
-            c3[0], c3[1], c3[2],
-        )
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(r0: &Vector4<S>, r1: &Vector4<S>, r2: &Vector4<S>) -> Self
-    {
-        Self::new(
-            r0[0], r1[0], r2[0],
-            r0[1], r1[1], r2[1],
-            r0[2], r1[2], r2[2],
-            r0[3], r1[3], r2[3],
-        )
-    }
-    */
-}
-
 impl<S> Matrix4x3<S> {
     /// Construct a new matrix from its elements.
     #[rustfmt::skip]
@@ -5532,38 +5193,6 @@ impl<S> Matrix4x3<S> {
             ]
         }
     }
-}
-
-impl<S> Matrix4x3<S> 
-where 
-    S: Copy 
-{
-    /*
-    /// Construct a matrix from a set of column vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_columns(c0: &Vector4<S>, c1: &Vector4<S>, c2: &Vector4<S>) -> Self {
-        Self::new(
-            c0[0], c0[1], c0[2], c0[3],
-            c1[0], c1[1], c1[2], c1[3],
-            c2[0], c2[1], c2[2], c2[3],
-        )
-    }
-    */
-    /*
-    /// Construct a matrix from a set of row vectors.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_rows(
-        r0: &Vector3<S>, r1: &Vector3<S>, r2: &Vector3<S>, r3: &Vector3<S>) -> Self 
-    {
-        Self::new(
-            r0[0], r1[0], r2[0], r3[0],
-            r0[1], r1[1], r2[1], r3[1],
-            r0[2], r1[2], r2[2], r3[2],
-        )
-    }
-    */
 }
 
 impl_coords!(View1x1, { c0r0 });
