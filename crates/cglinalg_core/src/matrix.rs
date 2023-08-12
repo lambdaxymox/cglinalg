@@ -417,6 +417,7 @@ where
     /// assert_eq!(matrix[1][0], r0[1]); assert_eq!(matrix[1][1], r1[1]); assert_eq!(matrix[1][2], r2[1]);
     /// assert_eq!(matrix[2][0], r0[2]); assert_eq!(matrix[2][1], r1[2]); assert_eq!(matrix[2][2], r2[2]);
     /// ```
+    #[allow(clippy::needless_range_loop)]
     #[inline]
     pub fn from_rows(rows: &[Vector<S, C>; R]) -> Self {
         // SAFETY: Every location gets written into with a valid value of type `S`.
