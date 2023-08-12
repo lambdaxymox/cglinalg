@@ -221,11 +221,12 @@ mod matrix2x2_tests {
     fn test_construction_from_cols() {
         let c0 = Vector2::new(1_i32, 2_i32);
         let c1 = Vector2::new(3_i32, 4_i32);
+        let columns = [c0, c1];
         let expected = Matrix2x2::new(
             1_i32, 2_i32, 
             3_i32, 4_i32
         );
-        let result = Matrix2x2::from_columns(&c0, &c1);
+        let result = Matrix2x2::from_columns(&columns);
 
         assert_eq!(result, expected);
     }
@@ -234,11 +235,12 @@ mod matrix2x2_tests {
     fn test_construction_from_rows() {
         let r0 = Vector2::new(1_i32, 2_i32);
         let r1 = Vector2::new(3_i32, 4_i32);
+        let rows = [r0, r1];
         let expected = Matrix2x2::new(
             1_i32, 3_i32,
             2_i32, 4_i32
         );
-        let result = Matrix2x2::from_rows(&r0, &r1);
+        let result = Matrix2x2::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
@@ -934,12 +936,13 @@ mod matrix3x3_tests {
         let c0 = Vector3::new(1_i32, 2_i32, 3_i32);
         let c1 = Vector3::new(4_i32, 5_i32, 6_i32);
         let c2 = Vector3::new(7_i32, 8_i32, 9_i32);
+        let columns = [c0, c1, c2];
         let expected = Matrix3x3::new(
             1_i32, 2_i32, 3_i32, 
             4_i32, 5_i32, 6_i32, 
             7_i32, 8_i32, 9_i32
         );
-        let result = Matrix3x3::from_columns(&c0, &c1, &c2);
+        let result = Matrix3x3::from_columns(&columns);
 
         assert_eq!(result, expected);
     }
@@ -949,12 +952,13 @@ mod matrix3x3_tests {
         let r0 = Vector3::new(1_i32, 2_i32, 3_i32);
         let r1 = Vector3::new(4_i32, 5_i32, 6_i32);
         let r2 = Vector3::new(7_i32, 8_i32, 9_i32);
+        let rows = [r0, r1, r2];
         let expected = Matrix3x3::new(
             1_i32, 4_i32, 7_i32,
             2_i32, 5_i32, 8_i32,
             3_i32, 6_i32, 9_i32
         );
-        let result = Matrix3x3::from_rows(&r0, &r1, &r2);
+        let result = Matrix3x3::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
@@ -2020,13 +2024,14 @@ mod matrix4x4_tests {
         let c1 = Vector4::new(5_i32,  6_i32,  7_i32,  8_i32);
         let c2 = Vector4::new(9_i32,  10_i32, 11_i32, 12_i32);
         let c3 = Vector4::new(13_i32, 14_i32, 15_i32, 16_i32);
+        let columns = [c0, c1, c2, c3];
         let expected = Matrix4x4::new(
             1_i32,  2_i32,  3_i32,  4_i32, 
             5_i32,  6_i32,  7_i32,  8_i32, 
             9_i32,  10_i32, 11_i32, 12_i32, 
             13_i32, 14_i32, 15_i32, 16_i32
         );
-        let result = Matrix4x4::from_columns(&c0, &c1, &c2, &c3);
+        let result = Matrix4x4::from_columns(&columns);
 
         assert_eq!(result, expected);
     }
@@ -2037,13 +2042,14 @@ mod matrix4x4_tests {
         let r1 = Vector4::new(5_i32,  6_i32,  7_i32,  8_i32);
         let r2 = Vector4::new(9_i32,  10_i32, 11_i32, 12_i32);
         let r3 = Vector4::new(13_i32, 14_i32, 15_i32, 16_i32);
+        let rows = [r0, r1, r2, r3];
         let expected = Matrix4x4::new(
             1_i32, 5_i32, 9_i32,  13_i32,
             2_i32, 6_i32, 10_i32, 14_i32,
             3_i32, 7_i32, 11_i32, 15_i32,
             4_i32, 8_i32, 12_i32, 16_i32
         );
-        let result = Matrix4x4::from_rows(&r0, &r1, &r2, &r3);
+        let result = Matrix4x4::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
@@ -3856,12 +3862,13 @@ mod matrix2x3_tests {
         let c0 = Vector2::new(1_i32, 2_i32);
         let c1 = Vector2::new(3_i32, 4_i32);
         let c2 = Vector2::new(5_i32, 6_i32);
+        let columns = [c0, c1, c2];
         let expected = Matrix2x3::new(
             1_i32, 2_i32,
             3_i32, 4_i32,
             5_i32, 6_i32
         );
-        let result = Matrix2x3::from_columns(&c0, &c1, &c2);
+        let result = Matrix2x3::from_columns(&columns);
 
         assert_eq!(result, expected);
     }
@@ -3870,12 +3877,13 @@ mod matrix2x3_tests {
     fn test_construction_from_rows() {
         let r0 = Vector3::new(1_i32, 2_i32, 3_i32);
         let r1 = Vector3::new(4_i32, 5_i32, 6_i32);
+        let rows = [r0, r1];
         let expected = Matrix2x3::new(
             1_i32, 4_i32,
             2_i32, 5_i32,
             3_i32, 6_i32
         );
-        let result = Matrix2x3::from_rows(&r0, &r1);
+        let result = Matrix2x3::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
@@ -4201,11 +4209,12 @@ mod matrix3x2_tests {
     fn test_construction_from_cols() {
         let c0 = Vector3::new(1_i32, 2_i32, 3_i32);
         let c1 = Vector3::new(4_i32, 5_i32, 6_i32);
+        let columns = [c0, c1];
         let expected = Matrix3x2::new(
             1_i32, 2_i32, 3_i32,
             4_i32, 5_i32, 6_i32
         );
-        let result = Matrix3x2::from_columns(&c0, &c1);
+        let result = Matrix3x2::from_columns(&columns);
 
         assert_eq!(result, expected);
     }
@@ -4215,11 +4224,12 @@ mod matrix3x2_tests {
         let r0 = Vector2::new(1_i32, 2_i32);
         let r1 = Vector2::new(3_i32, 4_i32);
         let r2 = Vector2::new(5_i32, 6_i32);
+        let rows = [r0, r1, r2];
         let expected = Matrix3x2::new(
             1_i32, 3_i32, 5_i32,
             2_i32, 4_i32, 6_i32
         );
-        let result = Matrix3x2::from_rows(&r0, &r1, &r2);
+        let result = Matrix3x2::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
@@ -4616,13 +4626,14 @@ mod matrix2x4_tests {
         let c1 = Vector2::new(3_i32, 4_i32);
         let c2 = Vector2::new(5_i32, 6_i32);
         let c3 = Vector2::new(7_i32, 8_i32);
+        let columns = [c0, c1, c2, c3];
         let expected = Matrix2x4::new(
             1_i32, 2_i32,
             3_i32, 4_i32,
             5_i32, 6_i32,
             7_i32, 8_i32
         );
-        let result = Matrix2x4::from_columns(&c0, &c1, &c2, &c3);
+        let result = Matrix2x4::from_columns(&columns);
 
         assert_eq!(result, expected);
     }
@@ -4631,13 +4642,14 @@ mod matrix2x4_tests {
     fn test_construction_from_rows() {
         let r0 = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
         let r1 = Vector4::new(5_i32, 6_i32, 7_i32, 8_i32);
+        let rows = [r0, r1];
         let expected = Matrix2x4::new(
             1_i32, 5_i32,
             2_i32, 6_i32,
             3_i32, 7_i32,
             4_i32, 8_i32
         );
-        let result = Matrix2x4::from_rows(&r0, &r1);
+        let result = Matrix2x4::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
@@ -4970,11 +4982,12 @@ mod matrix4x2_tests {
     fn test_construction_from_cols() {
         let c0 = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
         let c1 = Vector4::new(5_i32, 6_i32, 7_i32, 8_i32);
+        let columns = [c0, c1];
         let expected = Matrix4x2::new(
             1_i32, 2_i32, 3_i32, 4_i32,
             5_i32, 6_i32, 7_i32, 8_i32
         );
-        let result = Matrix4x2::from_columns(&c0, &c1);
+        let result = Matrix4x2::from_columns(&columns);
 
         assert_eq!(result, expected);
     }
@@ -4985,11 +4998,12 @@ mod matrix4x2_tests {
         let r1 = Vector2::new(3_i32, 4_i32);
         let r2 = Vector2::new(5_i32, 6_i32);
         let r3 = Vector2::new(7_i32, 8_i32);
+        let rows = [r0, r1, r2, r3];
         let expected = Matrix4x2::new(
             1_i32, 3_i32, 5_i32, 7_i32,
             2_i32, 4_i32, 6_i32, 8_i32
         );
-        let result = Matrix4x2::from_rows(&r0, &r1, &r2, &r3);
+        let result = Matrix4x2::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
@@ -5404,13 +5418,14 @@ mod matrix3x4_tests {
         let c1 = Vector3::new(4_i32,  5_i32,  6_i32);
         let c2 = Vector3::new(7_i32,  8_i32,  9_i32);
         let c3 = Vector3::new(10_i32, 11_i32, 12_i32);
+        let columns = [c0, c1, c2, c3];
         let expected = Matrix3x4::new(
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
             10_i32, 11_i32, 12_i32
         );
-        let result = Matrix3x4::from_columns(&c0, &c1, &c2, &c3);
+        let result = Matrix3x4::from_columns(&columns);
 
         assert_eq!(result, expected);
     }
@@ -5420,13 +5435,14 @@ mod matrix3x4_tests {
         let r0 = Vector4::new(1_i32, 2_i32,  3_i32,  4_i32);
         let r1 = Vector4::new(5_i32, 6_i32,  7_i32,  8_i32);
         let r2 = Vector4::new(9_i32, 10_i32, 11_i32, 12_i32);
+        let rows = [r0, r1, r2];
         let expected = Matrix3x4::new(
             1_i32, 5_i32, 9_i32,
             2_i32, 6_i32, 10_i32,
             3_i32, 7_i32, 11_i32,
             4_i32, 8_i32, 12_i32
         );
-        let result = Matrix3x4::from_rows(&r0, &r1, &r2);
+        let result = Matrix3x4::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
@@ -5798,12 +5814,13 @@ mod matrix4x3_tests {
         let c0 = Vector4::new(1_i32, 2_i32,  3_i32,  4_i32);
         let c1 = Vector4::new(5_i32, 6_i32,  7_i32,  8_i32);
         let c2 = Vector4::new(9_i32, 10_i32, 11_i32, 12_i32);
+        let columns = [c0, c1, c2];
         let expected = Matrix4x3::new(
             1_i32, 2_i32,  3_i32,  4_i32,
             5_i32, 6_i32,  7_i32,  8_i32,
             9_i32, 10_i32, 11_i32, 12_i32
         );
-        let result = Matrix4x3::from_columns(&c0, &c1, &c2);
+        let result = Matrix4x3::from_columns(&columns);
 
         assert_eq!(result, expected);
     }
@@ -5814,12 +5831,13 @@ mod matrix4x3_tests {
         let r1 = Vector3::new(4_i32,  5_i32,  6_i32);
         let r2 = Vector3::new(7_i32,  8_i32,  9_i32);
         let r3 = Vector3::new(10_i32, 11_i32, 12_i32);
+        let rows = [r0, r1, r2, r3];
         let expected = Matrix4x3::new(
             1_i32, 4_i32, 7_i32, 10_i32,
             2_i32, 5_i32, 8_i32, 11_i32,
             3_i32, 6_i32, 9_i32, 12_i32
         );
-        let result = Matrix4x3::from_rows(&r0, &r1, &r2, &r3);
+        let result = Matrix4x3::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
