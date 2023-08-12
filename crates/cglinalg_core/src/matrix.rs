@@ -390,17 +390,6 @@ where
     /// assert_eq!(matrix[1][0], c1[0]); assert_eq!(matrix[1][1], c1[1]); assert_eq!(matrix[1][2], c1[2]);
     /// assert_eq!(matrix[2][0], c2[0]); assert_eq!(matrix[2][1], c2[1]); assert_eq!(matrix[2][2], c2[2]);
     /// ```
-    /*
-    #[inline]
-    pub fn from_columns<Arr: AsRef<[Vector<S, R>; C]>>(columns: &Arr) -> Self {
-        let ptr = columns.as_ref();
-        let data_ptr = unsafe {
-            &*(ptr as *const [Vector<S, R>; C] as *const [[S; R]; C]) 
-        };
-    
-        Self { data: data_ptr.clone() }
-    }
-    */
     #[inline]
     pub fn from_columns(columns: &[Vector<S, R>; C]) -> Self {
         let data_ptr = unsafe {
@@ -429,22 +418,6 @@ where
     /// assert_eq!(matrix[1][0], r0[1]); assert_eq!(matrix[1][1], r1[1]); assert_eq!(matrix[1][2], r2[1]);
     /// assert_eq!(matrix[2][0], r0[2]); assert_eq!(matrix[2][1], r1[2]); assert_eq!(matrix[2][2], r2[2]);
     /// ```
-    /*
-    #[inline]
-    pub fn from_rows<Arr: AsRef<[Vector<S, C>; R]>>(rows: Arr) -> Self {
-        // SAFETY: Every location gets written into with a valid value of type `S`.
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let rows_ref = rows.as_ref();
-        let mut data: [[S; R]; C] = unsafe { core::mem::zeroed() };
-        for r in 0..R {
-            for c in 0..C {
-                data[c][r] = rows_ref[r][c];
-            }
-        }
-
-        Self { data }
-    }
-    */
     #[inline]
     pub fn from_rows(rows: &[Vector<S, C>; R]) -> Self {
         // SAFETY: Every location gets written into with a valid value of type `S`.
