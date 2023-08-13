@@ -13,6 +13,7 @@ use approx::{
 };
 
 
+#[rustfmt::skip]
 #[test]
 fn test_to_matrix() {
     let roll_yz = Radians::full_turn_div_4();
@@ -53,6 +54,7 @@ fn test_to_matrix_zero_euler_angles_is_identity() {
 }
 
 
+#[rustfmt::skip]
 #[test]
 fn test_to_affine_matrix() {
     let roll_yz = Radians::full_turn_div_4();

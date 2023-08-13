@@ -794,6 +794,7 @@ mod division_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_div_left() {
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -811,6 +812,7 @@ mod division_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_div_right() {
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -827,6 +829,7 @@ mod division_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_div_left_scalar() {
         let scalar_part = 3_f64;
@@ -841,6 +844,7 @@ mod division_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_div_right_scalar() {
         let scalar_part = 3_f64;
@@ -855,6 +859,7 @@ mod division_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_div_left_vector() {
         let v = Quaternion::from_pure(Vector3::new(2_f64, 5_f64, 3_f64));
@@ -868,6 +873,7 @@ mod division_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_div_right_vector() {
         let v = Quaternion::from_pure(Vector3::new(2_f64, 5_f64, 3_f64));

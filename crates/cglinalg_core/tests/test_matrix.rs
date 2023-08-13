@@ -92,6 +92,7 @@ mod matrix2x2_tests {
     }
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix2x2::new(
@@ -105,6 +106,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix[1][1], 4_i32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix2x2::new(
@@ -118,6 +120,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix.c1r1, matrix[1][1]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
@@ -129,6 +132,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix[2][0], matrix[2][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
@@ -140,6 +144,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix[0][2], matrix[0][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
@@ -151,6 +156,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix[2][2], matrix[2][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
@@ -162,6 +168,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
@@ -173,6 +180,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
@@ -259,6 +267,7 @@ mod matrix2x2_tests {
         })
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_cols() {
         let c0 = Vector2::new(1_i32, 2_i32);
@@ -273,6 +282,7 @@ mod matrix2x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_rows() {
         let r0 = Vector2::new(1_i32, 2_i32);
@@ -287,6 +297,7 @@ mod matrix2x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169_f64;
@@ -299,6 +310,7 @@ mod matrix2x2_tests {
         assert_eq!(id * c, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169_f64;
@@ -311,6 +323,7 @@ mod matrix2x2_tests {
         assert_eq!(id / c, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero = Matrix2x2::zero();
@@ -322,6 +335,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix + zero, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero = Matrix2x2::zero();
@@ -333,6 +347,7 @@ mod matrix2x2_tests {
         assert_eq!(zero + matrix, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_with_zero_determinant() {
         let matrix = Matrix2x2::new(
@@ -343,6 +358,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix.determinant(), 0_f64);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_lower_triangular_matrix_determinant() {
         let matrix = Matrix2x2::new(
@@ -353,6 +369,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix.determinant(), 2_f64 * 3_f64);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_upper_triangular_matrix_determinant() {
         let matrix = Matrix2x2::new(
@@ -363,6 +380,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix.determinant(), 2_f64 * 3_f64);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_inverse() {
         let matrix = Matrix2x2::new(
@@ -400,6 +418,7 @@ mod matrix2x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
         let matrix = Matrix2x2::new(
@@ -410,6 +429,7 @@ mod matrix2x2_tests {
         assert!(matrix.is_invertible());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_with_zero_determinant_is_not_invertible() {
         let matrix = Matrix2x2::new(
@@ -420,6 +440,7 @@ mod matrix2x2_tests {
         assert!(!matrix.is_invertible());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_noninvertible_matrix_returns_none() {
         let matrix = Matrix2x2::new(
@@ -430,7 +451,7 @@ mod matrix2x2_tests {
         assert!(matrix.inverse().is_none());
     }
 
-
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix = Matrix2x2::new(
@@ -443,6 +464,7 @@ mod matrix2x2_tests {
         assert_relative_eq!(matrix * matrix_inv, one, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_inverse_times_matrix_is_identity() {
         let matrix = Matrix2x2::new(
@@ -455,6 +477,7 @@ mod matrix2x2_tests {
         assert_relative_eq!(matrix_inv * matrix, one, epsilon = 1e-8);        
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
         let matrix = Matrix2x2::new(
@@ -468,6 +491,7 @@ mod matrix2x2_tests {
         assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
         let matrix = Matrix2x2::new(
@@ -480,6 +504,7 @@ mod matrix2x2_tests {
         assert_eq!(matrix_transpose_inverse, matrix_inverse_transpose);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_inverse_inverse_equals_matrix() {
         let matrix = Matrix2x2::new(
@@ -492,38 +517,64 @@ mod matrix2x2_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_elements_should_be_column_major_order() {
-        let matrix = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+        let matrix = Matrix2x2::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32
+        );
+
         assert_eq!(matrix.c0r0, matrix[0][0]);
         assert_eq!(matrix.c0r1, matrix[0][1]);
         assert_eq!(matrix.c1r0, matrix[1][0]);
         assert_eq!(matrix.c1r1, matrix[1][1]);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_swap_columns() {
-        let mut result = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+        let mut result = Matrix2x2::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32
+        );
         result.swap_columns(0, 1);
-        let expected = Matrix2x2::new(3_i32, 4_i32, 1_i32, 2_i32);
+        let expected = Matrix2x2::new(
+            3_i32, 4_i32, 
+            1_i32, 2_i32
+        );
         
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_swap_rows() {
-        let mut result = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+        let mut result = Matrix2x2::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32
+        );
         result.swap_rows(0, 1);
-        let expected = Matrix2x2::new(2_i32, 1_i32, 4_i32, 3_i32);
+        let expected = Matrix2x2::new(
+            2_i32, 1_i32, 
+            4_i32, 3_i32
+        );
         
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_swap_elements() {
-        let mut result = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+        let mut result = Matrix2x2::new(
+            1_i32, 2_i32, 
+            3_i32, 4_i32
+        );
         result.swap((0, 0), (1, 1));
-        let expected = Matrix2x2::new(4_i32, 2_i32, 3_i32, 1_i32);
+        let expected = Matrix2x2::new(
+            4_i32, 2_i32, 
+            3_i32, 1_i32
+        );
 
         assert_eq!(result, expected);
     }
@@ -584,11 +635,15 @@ mod matrix2x2_tests {
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_reflection_x_axis1() {
         // The y-axis is the normal vector to the plane of the x-axis.
         let normal = Unit::from_value(Vector2::unit_y());
-        let expected = Matrix2x2::new(1_f64, 0_f64, 0_f64, -1_f64);
+        let expected = Matrix2x2::new(
+            1_f64,  0_f64, 
+            0_f64, -1_f64
+        );
         let result = Matrix2x2::from_reflection(&normal);
 
         assert_eq!(result, expected);
@@ -597,11 +652,15 @@ mod matrix2x2_tests {
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_reflection_x_axis2() {
         // The y-axis is the normal vector to the plane of the x-axis.
         let normal = Unit::from_value(-Vector2::unit_y());
-        let expected = Matrix2x2::new(1_f64, 0_f64, 0_f64, -1_f64);
+        let expected = Matrix2x2::new(
+            1_f64,  0_f64, 
+            0_f64, -1_f64
+        );
         let result = Matrix2x2::from_reflection(&normal);
 
         assert_eq!(result, expected);
@@ -610,11 +669,15 @@ mod matrix2x2_tests {
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_reflection_y_axis1() {
         // The y-axis is the normal vector to the plane of the y-axis.
         let normal = Unit::from_value(Vector2::unit_x());
-        let expected = Matrix2x2::new(-1_f64, 0_f64, 0_f64, 1_f64);
+        let expected = Matrix2x2::new(
+            -1_f64, 0_f64, 
+             0_f64, 1_f64
+        );
         let result = Matrix2x2::from_reflection(&normal);
     
         assert_eq!(result, expected);
@@ -623,11 +686,15 @@ mod matrix2x2_tests {
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_reflection_y_axis2() {
         // The y-axis is the normal vector to the plane of the y-axis.
         let normal = Unit::from_value(-Vector2::unit_x());
-        let expected = Matrix2x2::new(-1_f64, 0_f64, 0_f64, 1_f64);
+        let expected = Matrix2x2::new(
+            -1_f64, 0_f64, 
+             0_f64, 1_f64
+        );
         let result = Matrix2x2::from_reflection(&normal);
     
         assert_eq!(result, expected);
@@ -636,12 +703,16 @@ mod matrix2x2_tests {
     /// Construct a reflection matrix test case for reflection about the 
     /// line `y - x = 0`. In two dimensions there is an ambiguity in the orientation 
     /// of the line segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_reflection_from_plane1() {
         let normal = Unit::from_value(
             Vector2::new(f64::sqrt(2_f64)/ 2_f64, -f64::sqrt(2_f64) / 2_f64)
         );
-        let expected = Matrix2x2::new(0_f64, 1_f64, 1_f64, 0_f64);
+        let expected = Matrix2x2::new(
+            0_f64, 1_f64, 
+            1_f64, 0_f64
+        );
         let result = Matrix2x2::from_reflection(&normal);
         
         assert_relative_eq!(result, expected, epsilon = 1e-8);
@@ -650,12 +721,16 @@ mod matrix2x2_tests {
     /// Construct a reflection matrix test case for reflection about the 
     /// line `y - x = 0`. In two dimensions there is an ambiguity in the orientation 
     /// of the line segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_reflection_from_plane2() {
         let normal = Unit::from_value(
             Vector2::new(-f64::sqrt(2_f64)/ 2_f64, f64::sqrt(2_f64) / 2_f64)
         );
-        let expected = Matrix2x2::new(0_f64, 1_f64, 1_f64, 0_f64);
+        let expected = Matrix2x2::new(
+            0_f64, 1_f64, 
+            1_f64, 0_f64
+        );
         let result = Matrix2x2::from_reflection(&normal);
             
         assert_relative_eq!(result, expected, epsilon = 1e-8);
@@ -677,6 +752,7 @@ mod matrix2x2_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_rotation_between() {
         let unit_x: Vector2<f64> = Vector2::unit_x();
@@ -690,6 +766,7 @@ mod matrix2x2_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_rotation_between_axis() {
         let unit_x: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
@@ -803,6 +880,7 @@ mod matrix3x3_tests {
     }
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix3x3::new(
@@ -822,6 +900,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix[2][2], 9_i32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix3x3::new(
@@ -841,6 +920,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix.c2r2, matrix[2][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
@@ -853,6 +933,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix[3][0], matrix[3][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
@@ -865,6 +946,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix[0][3], matrix[0][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
@@ -877,6 +959,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix[3][3], matrix[3][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
@@ -889,6 +972,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
@@ -901,6 +985,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
@@ -988,6 +1073,7 @@ mod matrix3x3_tests {
         })
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_cols() {
         let c0 = Vector3::new(1_i32, 2_i32, 3_i32);
@@ -1004,6 +1090,7 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_rows() {
         let r0 = Vector3::new(1_i32, 2_i32, 3_i32);
@@ -1020,6 +1107,7 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169_f64;
@@ -1033,6 +1121,7 @@ mod matrix3x3_tests {
         assert_eq!(id * c, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169;
@@ -1046,6 +1135,7 @@ mod matrix3x3_tests {
         assert_eq!(id / c, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero = Matrix3x3::zero();
@@ -1058,6 +1148,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix + zero, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero = Matrix3x3::zero();
@@ -1070,6 +1161,7 @@ mod matrix3x3_tests {
         assert_eq!(zero + matrix, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_with_zero_determinant() {
         let matrix = Matrix3x3::new(
@@ -1081,6 +1173,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix.determinant(), 0_f32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_lower_triangular_matrix_determinant() {
         let matrix = Matrix3x3::new(
@@ -1092,6 +1185,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_upper_triangular_matrix_determinant() {
         let matrix = Matrix3x3::new(
@@ -1103,6 +1197,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_inverse() {
         let matrix = Matrix3x3::new(
@@ -1142,6 +1237,7 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
         let matrix = Matrix3x3::new(
@@ -1153,6 +1249,7 @@ mod matrix3x3_tests {
         assert!(matrix.is_invertible());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_with_zero_determinant_is_not_invertible() {
         let matrix = Matrix3x3::new(
@@ -1164,6 +1261,7 @@ mod matrix3x3_tests {
         assert!(!matrix.is_invertible());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_noninvertible_matrix_returns_none() {
         let matrix = Matrix3x3::new(
@@ -1175,6 +1273,7 @@ mod matrix3x3_tests {
         assert!(matrix.inverse().is_none());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix = Matrix3x3::new(
@@ -1188,6 +1287,7 @@ mod matrix3x3_tests {
         assert_relative_eq!(matrix * matrix_inv, one, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
         let matrix = Matrix3x3::new(
@@ -1202,6 +1302,7 @@ mod matrix3x3_tests {
         assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
         let matrix = Matrix3x3::new(
@@ -1215,6 +1316,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix_transpose_inverse, matrix_inverse_transpose);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_inverse_times_matrix_is_identity() {
         let matrix = Matrix3x3::new(
@@ -1228,6 +1330,7 @@ mod matrix3x3_tests {
         assert_relative_eq!(matrix_inv * matrix, one, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_inverse_inverse_equals_matrix() {
         let matrix = Matrix3x3::new(
@@ -1241,6 +1344,7 @@ mod matrix3x3_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_elements_should_be_column_major_order() {
         let matrix = Matrix3x3::new(
@@ -1260,6 +1364,7 @@ mod matrix3x3_tests {
         assert_eq!(matrix.c2r2, matrix[2][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_swap_columns() {
         let mut result = Matrix3x3::new(
@@ -1277,6 +1382,7 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_swap_rows() {
         let mut result = Matrix3x3::new(
@@ -1294,6 +1400,7 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_swap_elements() {
         let mut result = Matrix3x3::new(
@@ -1442,6 +1549,7 @@ mod matrix3x3_tests {
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_reflection_x_axis1() {
         // The y-axis is the normal vector to the plane of the x-axis.
@@ -1460,6 +1568,7 @@ mod matrix3x3_tests {
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_reflection_x_axis2() {
         // The y-axis is the normal vector to the plane of the x-axis.
@@ -1478,6 +1587,7 @@ mod matrix3x3_tests {
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_reflection_y_axis1() {
         // The y-axis is the normal vector to the plane of the y-axis.
@@ -1496,6 +1606,7 @@ mod matrix3x3_tests {
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_reflection_y_axis2() {
         // The y-axis is the normal vector to the plane of the y-axis.
@@ -1515,6 +1626,7 @@ mod matrix3x3_tests {
     /// line `y - x = 0`. In two dimensions there is an ambiguity in the 
     /// orientation of the line segment; there are two possible normal vectors 
     /// for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_reflection_from_plane1() {
         let bias = Vector2::zero();
@@ -1535,6 +1647,7 @@ mod matrix3x3_tests {
     /// line `y - x = 0`. In two dimensions there is an ambiguity in the 
     /// orientation of the line segment; there are two possible normal vectors 
     /// for the line.
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_reflection_from_plane2() {
         let bias = Vector2::zero();
@@ -1585,6 +1698,7 @@ mod matrix3x3_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);        
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_reflection_xy_plane() {
         let normal = Unit::from_value(Vector3::unit_z());
@@ -1598,6 +1712,7 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_reflection_zx_plane() {
         let normal = Unit::from_value(-Vector3::unit_y());
@@ -1611,6 +1726,7 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_reflection_yz_plane() {
         let normal = Unit::from_value(Vector3::unit_x());
@@ -1770,6 +1886,7 @@ mod matrix3x3_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_rotation_between() {
         let unit_x: Vector3<f64> = Vector3::unit_x();
@@ -1892,6 +2009,7 @@ mod matrix4x4_tests {
     }
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix4x4::new(
@@ -1919,6 +2037,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix[3][3], 16_i32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix4x4::new(
@@ -1946,6 +2065,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix.c3r3, matrix[3][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
@@ -1959,6 +2079,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix[4][0], matrix[4][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
@@ -1972,6 +2093,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix[0][4], matrix[0][4]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
@@ -1985,6 +2107,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix[4][4], matrix[4][4]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
@@ -1998,6 +2121,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
@@ -2011,6 +2135,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
@@ -2099,6 +2224,7 @@ mod matrix4x4_tests {
         })
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_cols() {
         let c0 = Vector4::new(1_i32,  2_i32,  3_i32,  4_i32);
@@ -2117,6 +2243,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_rows() {
         let r0 = Vector4::new(1_i32,  2_i32,  3_i32,  4_i32);
@@ -2146,6 +2273,7 @@ mod matrix4x4_tests {
         assert_eq!(result, (zero_vec3 + vector).extend(1_f64));
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169_f64;
@@ -2160,6 +2288,7 @@ mod matrix4x4_tests {
         assert_eq!(id * c, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169_f64;
@@ -2174,6 +2303,7 @@ mod matrix4x4_tests {
         assert_eq!(id / c, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero = Matrix4x4::zero();
@@ -2187,6 +2317,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix + zero, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero = Matrix4x4::zero();
@@ -2200,6 +2331,7 @@ mod matrix4x4_tests {
         assert_eq!(zero + matrix, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_with_zero_determinant() {
         // This matrix should have a zero determinant since it has two repeating columns.
@@ -2214,6 +2346,7 @@ mod matrix4x4_tests {
         assert!(matrix.determinant().is_zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_lower_triangular_matrix_determinant() {
         let matrix = Matrix4x4::new(
@@ -2226,6 +2359,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64 * 4_f64);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_upper_triangular_matrix_determinant() {
         let matrix = Matrix4x4::new(
@@ -2238,6 +2372,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64 * 4_f64);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_multiplication() {
         let result = (1_f64 / 32_f64) * Matrix4x4::new(
@@ -2247,15 +2382,16 @@ mod matrix4x4_tests {
            -1_f64, -1_f64, -1_f64,  7_f64
        );
        let expected = Matrix4x4::new(
-        (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64,
-        (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64,
-        (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64,
-        (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64
+           (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64,
+           (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64,
+           (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64,
+           (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64
        );
 
        assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_inverse() {
         let matrix = Matrix4x4::new(
@@ -2297,6 +2433,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
         let matrix = Matrix4x4::new(
@@ -2309,6 +2446,7 @@ mod matrix4x4_tests {
         assert!(matrix.is_invertible());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_with_zero_determinant_is_not_invertible() {
         // This matrix should not be invertible since it has two identical columns.
@@ -2322,6 +2460,7 @@ mod matrix4x4_tests {
         assert!(!matrix.is_invertible());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_noninvertible_matrix_returns_none() {
         let matrix = Matrix4x4::new(
@@ -2334,6 +2473,7 @@ mod matrix4x4_tests {
         assert!(matrix.inverse().is_none());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_inversion2() {
         let matrix = Matrix4x4::new(
@@ -2353,6 +2493,7 @@ mod matrix4x4_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix = Matrix4x4::new(
@@ -2367,6 +2508,7 @@ mod matrix4x4_tests {
         assert_relative_eq!(matrix * matrix_inv, one, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
         let matrix = Matrix4x4::new(
@@ -2382,6 +2524,7 @@ mod matrix4x4_tests {
         assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
         let matrix = Matrix4x4::new(
@@ -2396,6 +2539,7 @@ mod matrix4x4_tests {
         assert_relative_eq!(matrix_transpose_inverse, matrix_inverse_transpose, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_inverse_times_matrix_is_identity() {
         let matrix = Matrix4x4::new(
@@ -2410,6 +2554,7 @@ mod matrix4x4_tests {
         assert_relative_eq!(matrix_inv * matrix, one, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_inverse_inverse_equals_matrix() {
         let matrix = Matrix4x4::new(
@@ -2424,6 +2569,7 @@ mod matrix4x4_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_elements_should_be_column_major_order() {
         let matrix = Matrix4x4::new(
@@ -2451,6 +2597,7 @@ mod matrix4x4_tests {
         assert_eq!(matrix.c3r3, matrix[3][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_swap_columns() {
         let mut result = Matrix4x4::new(
@@ -2470,6 +2617,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_swap_rows() {
         let mut result = Matrix4x4::new(
@@ -2489,6 +2637,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_swap_elements() {
         let mut result = Matrix4x4::new(
@@ -2639,6 +2788,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_reflection_xy_plane() {
         let bias = Vector3::zero();
@@ -2654,6 +2804,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_reflection_zx_plane() {
         let bias = Vector3::zero();
@@ -2669,6 +2820,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_reflection_yz_plane() {
         let bias = Vector3::zero();
@@ -2837,6 +2989,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_orthographic() {
         let left = -4_f64;
@@ -2856,6 +3009,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_perspective_fov() {
         let vfov = Degrees(72_f32);
@@ -2873,6 +3027,7 @@ mod matrix4x4_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_perspective() {
         let left = -4_f64;
@@ -2892,6 +3047,7 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_orthographic_fov() {
         let vfov = Degrees(90_f64);
@@ -3114,6 +3270,7 @@ mod matrix1x2_tests {
         assert_eq!(zero * matrix, zero_mat1x2);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let matrix1x2 = Matrix1x2::new(2_i32, 3_i32);
@@ -3304,6 +3461,7 @@ mod matrix1x3_tests {
         assert_eq!(zero * matrix, zero_mat1x3);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let matrix1x3 = Matrix1x3::new(2_i32, 3_i32, 4_i32);
@@ -3497,6 +3655,7 @@ mod matrix1x4_tests {
         assert_eq!(zero * matrix, zero_mat1x4);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let matrix1x4 = Matrix1x4::new(2_i32, 3_i32, 4_i32, 5_i32);
@@ -3601,6 +3760,7 @@ mod matrix2x3_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix2x3::new(
@@ -3617,6 +3777,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix[2][1], 6_i32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix2x3::new(
@@ -3633,6 +3794,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix.c2r1, matrix[2][1]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
@@ -3645,6 +3807,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix[3][0], matrix[3][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
@@ -3657,6 +3820,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix[0][2], matrix[0][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
@@ -3669,6 +3833,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix[3][2], matrix[3][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
@@ -3681,6 +3846,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
@@ -3693,6 +3859,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
@@ -3705,6 +3872,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_identity_equals_mat() {
         let matrix = Matrix2x3::new(
@@ -3717,6 +3885,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix * identity, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_zero_equals_zero() {
         let matrix = Matrix2x3::new(
@@ -3730,6 +3899,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix * zero_mat3x3, zero_mat2x3);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_mat_equals_zero() {
         let matrix = Matrix2x3::new(
@@ -3743,6 +3913,7 @@ mod matrix2x3_tests {
         assert_eq!(zero * matrix, zero_mat2x3);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let matrix2x3 = Matrix2x3::new(
@@ -3765,6 +3936,7 @@ mod matrix2x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication2() {
         let matrix2x3 = Matrix2x3::new(
@@ -3785,6 +3957,7 @@ mod matrix2x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication3() {
         let matrix2x3 = Matrix2x3::new(
@@ -3799,6 +3972,7 @@ mod matrix2x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix2x3 = Matrix2x3::new(
@@ -3817,6 +3991,7 @@ mod matrix2x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix2x3 = Matrix2x3::new(
@@ -3835,6 +4010,7 @@ mod matrix2x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_mat2x3 = Matrix2x3::zero();
@@ -3847,6 +4023,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix + zero_mat2x3, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_mat2x3 = Matrix2x3::zero();
@@ -3859,6 +4036,7 @@ mod matrix2x3_tests {
         assert_eq!(zero_mat2x3 + matrix, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition() {
         let matrix1 = Matrix2x3::new(
@@ -3881,6 +4059,7 @@ mod matrix2x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction() {
         let matrix1 = Matrix2x3::new(
@@ -3904,6 +4083,7 @@ mod matrix2x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix2x3::new(
@@ -3916,6 +4096,7 @@ mod matrix2x3_tests {
         assert_eq!(matrix - matrix, zero_mat2x3);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose() {
         let matrix = Matrix2x3::new(
@@ -3932,6 +4113,7 @@ mod matrix2x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_cols() {
         let c0 = Vector2::new(1_i32, 2_i32);
@@ -3948,6 +4130,7 @@ mod matrix2x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_rows() {
         let r0 = Vector3::new(1_i32, 2_i32, 3_i32);
@@ -3977,6 +4160,7 @@ mod matrix3x2_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix3x2::new(
@@ -3992,6 +4176,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix[1][2], 6_i32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix3x2::new(
@@ -4007,6 +4192,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix.c1r2, matrix[1][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
@@ -4018,6 +4204,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix[2][0], matrix[2][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
@@ -4029,6 +4216,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix[0][3], matrix[0][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
@@ -4040,6 +4228,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix[2][3], matrix[2][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
@@ -4051,6 +4240,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
@@ -4062,6 +4252,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
@@ -4073,6 +4264,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_identity_equals_mat() {
         let matrix = Matrix3x2::new(
@@ -4084,6 +4276,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix * identity, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_zero_equals_zero() {
         let matrix = Matrix3x2::new(
@@ -4096,6 +4289,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix * zero_mat2x2, zero_mat3x2);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_mat_equals_zero() {
         let matrix = Matrix3x2::new(
@@ -4108,6 +4302,7 @@ mod matrix3x2_tests {
         assert_eq!(zero * matrix, zero_mat3x2);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let matrix3x2 = Matrix3x2::new(
@@ -4127,6 +4322,7 @@ mod matrix3x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication2() {
         let matrix3x2 = Matrix3x2::new(
@@ -4148,6 +4344,7 @@ mod matrix3x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication3() {
         let matrix3x2 = Matrix3x2::new(
@@ -4161,6 +4358,7 @@ mod matrix3x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix3x2 = Matrix3x2::new(
@@ -4177,6 +4375,7 @@ mod matrix3x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix3x2 = Matrix3x2::new(
@@ -4193,6 +4392,7 @@ mod matrix3x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_mat3x2 = Matrix3x2::zero();
@@ -4204,6 +4404,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix + zero_mat3x2, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_mat3x2 = Matrix3x2::zero();
@@ -4215,6 +4416,7 @@ mod matrix3x2_tests {
         assert_eq!(zero_mat3x2 + matrix, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition() {
         let matrix1 = Matrix3x2::new(
@@ -4234,6 +4436,7 @@ mod matrix3x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction() {
         let matrix1 = Matrix3x2::new(
@@ -4253,6 +4456,7 @@ mod matrix3x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix3x2::new(
@@ -4264,6 +4468,7 @@ mod matrix3x2_tests {
         assert_eq!(matrix - matrix, zero_mat3x2);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose() {
         let matrix = Matrix3x2::new(
@@ -4280,6 +4485,7 @@ mod matrix3x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_cols() {
         let c0 = Vector3::new(1_i32, 2_i32, 3_i32);
@@ -4294,6 +4500,7 @@ mod matrix3x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_rows() {
         let r0 = Vector2::new(1_i32, 2_i32);
@@ -4323,6 +4530,7 @@ mod matrix2x4_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix2x4::new(
@@ -4342,6 +4550,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix[3][1], 8_i32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix2x4::new(
@@ -4361,6 +4570,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix.c3r1, matrix[3][1]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
@@ -4374,6 +4584,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix[4][0], matrix[4][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
@@ -4387,6 +4598,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix[0][2], matrix[0][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
@@ -4400,6 +4612,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix[4][2], matrix[4][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
@@ -4413,6 +4626,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
@@ -4426,6 +4640,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
@@ -4439,6 +4654,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_identity_equals_mat() {
         let matrix = Matrix2x4::new(
@@ -4452,6 +4668,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix * identity, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_zero_equals_zero() {
         let matrix = Matrix2x4::new(
@@ -4466,6 +4683,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix * zero_mat4x4, zero_mat2x4);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_mat_times_mat_equals_zero() {
         let matrix = Matrix2x4::new(
@@ -4480,6 +4698,7 @@ mod matrix2x4_tests {
         assert_eq!(zero_mat2x2 * matrix, zero_mat2x4);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_mat_equals_zero() {
         let matrix = Matrix2x4::new(
@@ -4494,6 +4713,7 @@ mod matrix2x4_tests {
         assert_eq!(zero * matrix, zero_mat2x4);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let matrix2x4 = Matrix2x4::new(
@@ -4519,6 +4739,7 @@ mod matrix2x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication2() {
         let matrix2x4 = Matrix2x4::new(
@@ -4534,6 +4755,7 @@ mod matrix2x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication3() {
         let matrix2x4 = Matrix2x4::new(
@@ -4549,6 +4771,7 @@ mod matrix2x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix2x4 = Matrix2x4::new(
@@ -4569,6 +4792,7 @@ mod matrix2x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix2x4 = Matrix2x4::new(
@@ -4589,6 +4813,7 @@ mod matrix2x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_mat2x4 = Matrix2x4::zero();
@@ -4602,6 +4827,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix + zero_mat2x4, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_mat2x4 = Matrix2x4::zero();
@@ -4615,6 +4841,7 @@ mod matrix2x4_tests {
         assert_eq!(zero_mat2x4 + matrix, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition() {
         let matrix1 = Matrix2x4::new(
@@ -4640,6 +4867,7 @@ mod matrix2x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction() {
         let matrix1 = Matrix2x4::new(
@@ -4665,6 +4893,7 @@ mod matrix2x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix2x4::new(
@@ -4678,6 +4907,7 @@ mod matrix2x4_tests {
         assert_eq!(matrix - matrix, zero_mat2x4);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose() {
         let matrix = Matrix2x4::new(
@@ -4695,6 +4925,7 @@ mod matrix2x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_cols() {
         let c0 = Vector2::new(1_i32, 2_i32);
@@ -4713,6 +4944,7 @@ mod matrix2x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_rows() {
         let r0 = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
@@ -4743,6 +4975,7 @@ mod matrix4x2_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix4x2::new(
@@ -4760,6 +4993,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix[1][3], 8_i32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix4x2::new(
@@ -4777,6 +5011,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix.c1r3, matrix[1][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
@@ -4788,6 +5023,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix[0][4], matrix[0][4]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
@@ -4799,6 +5035,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix[2][0], matrix[2][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
@@ -4810,6 +5047,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix[2][4], matrix[2][4]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
@@ -4821,6 +5059,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
@@ -4832,6 +5071,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
@@ -4843,6 +5083,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_identity_equals_mat() {
         let matrix = Matrix4x2::new(
@@ -4854,6 +5095,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix * identity, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_zero_equals_zero() {
         let matrix = Matrix4x2::new(
@@ -4866,6 +5108,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix * zero_mat2x2, zero_mat3x2);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_mat_equals_zero() {
         let matrix = Matrix4x2::new(
@@ -4878,6 +5121,7 @@ mod matrix4x2_tests {
         assert_eq!(zero * matrix, zero_mat3x2);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let matrix4x2 = Matrix4x2::new(
@@ -4897,6 +5141,7 @@ mod matrix4x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication2() {
         let matrix4x2 = Matrix4x2::new(
@@ -4920,6 +5165,7 @@ mod matrix4x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication3() {
         let matrix4x2 = Matrix4x2::new(
@@ -4933,6 +5179,7 @@ mod matrix4x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix4x2 = Matrix4x2::new(
@@ -4949,6 +5196,7 @@ mod matrix4x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix4x2 = Matrix4x2::new(
@@ -4965,6 +5213,7 @@ mod matrix4x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_mat4x2 = Matrix4x2::zero();
@@ -4976,6 +5225,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix + zero_mat4x2, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_mat4x2 = Matrix4x2::zero();
@@ -4987,6 +5237,7 @@ mod matrix4x2_tests {
         assert_eq!(zero_mat4x2 + matrix, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition() {
         let matrix1 = Matrix4x2::new(
@@ -5006,6 +5257,7 @@ mod matrix4x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction() {
         let matrix1 = Matrix4x2::new(
@@ -5025,6 +5277,7 @@ mod matrix4x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix4x2::new(
@@ -5036,6 +5289,7 @@ mod matrix4x2_tests {
         assert_eq!(matrix - matrix, zero_mat3x2);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_transpose() {
         let matrix = Matrix4x2::new(
@@ -5053,6 +5307,7 @@ mod matrix4x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_cols() {
         let c0 = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
@@ -5067,6 +5322,7 @@ mod matrix4x2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_rows() {
         let r0 = Vector2::new(1_i32, 2_i32);
@@ -5097,6 +5353,7 @@ mod matrix3x4_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix3x4::new(
@@ -5120,6 +5377,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix[3][2], 12_i32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix3x4::new(
@@ -5143,6 +5401,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix.c3r2, matrix[3][2]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
@@ -5156,6 +5415,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix[4][0], matrix[4][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
@@ -5169,6 +5429,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix[0][3], matrix[0][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
@@ -5182,6 +5443,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix[4][3], matrix[4][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
@@ -5195,6 +5457,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
@@ -5208,6 +5471,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
@@ -5221,7 +5485,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
-
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_identity_equals_mat() {
         let matrix = Matrix3x4::new(
@@ -5235,6 +5499,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix * identity, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_zero_equals_zero() {
         let matrix = Matrix3x4::new(
@@ -5249,6 +5514,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix * zero_mat4x4, zero_mat3x4);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_mat_times_mat_equals_zero() {
         let matrix = Matrix3x4::new(
@@ -5263,6 +5529,7 @@ mod matrix3x4_tests {
         assert_eq!(zero_mat3x3 * matrix, zero_mat3x4);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_mat_equals_zero() {
         let matrix = Matrix3x4::new(
@@ -5277,6 +5544,7 @@ mod matrix3x4_tests {
         assert_eq!(zero * matrix, zero_mat3x4);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let matrix3x4 = Matrix3x4::new(
@@ -5302,6 +5570,7 @@ mod matrix3x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication2() {
         let matrix3x4 = Matrix3x4::new(
@@ -5317,6 +5586,7 @@ mod matrix3x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication3() {
         let matrix3x4 = Matrix3x4::new(
@@ -5340,6 +5610,7 @@ mod matrix3x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix3x4 = Matrix3x4::new(
@@ -5360,6 +5631,7 @@ mod matrix3x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix3x4 = Matrix3x4::new(
@@ -5380,6 +5652,7 @@ mod matrix3x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_mat3x4 = Matrix3x4::zero();
@@ -5393,6 +5666,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix + zero_mat3x4, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_mat3x4 = Matrix3x4::zero();
@@ -5406,6 +5680,7 @@ mod matrix3x4_tests {
         assert_eq!(zero_mat3x4 + matrix, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition() {
         let matrix1 = Matrix3x4::new(
@@ -5431,6 +5706,7 @@ mod matrix3x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction() {
         let matrix1 = Matrix3x4::new(
@@ -5456,6 +5732,7 @@ mod matrix3x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix3x4::new(
@@ -5469,6 +5746,7 @@ mod matrix3x4_tests {
         assert_eq!(matrix - matrix, zero_mat3x4);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose() {
         let matrix = Matrix3x4::new(
@@ -5487,6 +5765,7 @@ mod matrix3x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_cols() {
         let c0 = Vector3::new(1_i32,  2_i32,  3_i32);
@@ -5505,6 +5784,7 @@ mod matrix3x4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_rows() {
         let r0 = Vector4::new(1_i32, 2_i32,  3_i32,  4_i32);
@@ -5536,6 +5816,7 @@ mod matrix4x3_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix4x3::new(
@@ -5558,6 +5839,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix[2][3], 12_i32);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix4x3::new(
@@ -5580,6 +5862,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix.c2r3, matrix[2][3]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
@@ -5592,6 +5875,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix[0][4], matrix[0][4]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
@@ -5604,6 +5888,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix[3][0], matrix[3][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
@@ -5616,6 +5901,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix[3][4], matrix[3][4]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
@@ -5628,6 +5914,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
@@ -5640,6 +5927,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
     }
 
+    #[rustfmt::skip]
     #[test]
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
@@ -5652,6 +5940,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_identity_equals_mat() {
         let matrix = Matrix4x3::new(
@@ -5664,6 +5953,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix * identity, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_mat_times_zero_equals_zero() {
         let matrix = Matrix4x3::new(
@@ -5677,6 +5967,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix * zero_mat3x3, zero_mat4x3);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_mat_equals_zero() {
         let matrix = Matrix4x3::new(
@@ -5690,6 +5981,7 @@ mod matrix4x3_tests {
         assert_eq!(zero * matrix, zero_mat4x3);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let matrix4x3 = Matrix4x3::new(
@@ -5712,6 +6004,7 @@ mod matrix4x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication2() {
         let matrix4x3 = Matrix4x3::new(
@@ -5736,6 +6029,7 @@ mod matrix4x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication3() {
         let matrix4x3 = Matrix4x3::new(
@@ -5750,6 +6044,7 @@ mod matrix4x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix4x3 = Matrix4x3::new(
@@ -5768,6 +6063,7 @@ mod matrix4x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix4x3 = Matrix4x3::new(
@@ -5786,6 +6082,7 @@ mod matrix4x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_mat4x3 = Matrix4x3::zero();
@@ -5798,6 +6095,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix + zero_mat4x3, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_mat4x3 = Matrix4x3::zero();
@@ -5810,6 +6108,7 @@ mod matrix4x3_tests {
         assert_eq!(zero_mat4x3 + matrix, matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition() {
         let matrix1 = Matrix4x3::new(
@@ -5832,6 +6131,7 @@ mod matrix4x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction() {
         let matrix1 = Matrix4x3::new(
@@ -5854,6 +6154,7 @@ mod matrix4x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix4x3::new(
@@ -5866,6 +6167,7 @@ mod matrix4x3_tests {
         assert_eq!(matrix - matrix, zero_mat4x3);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_transpose() {
         let matrix = Matrix4x3::new(
@@ -5884,6 +6186,7 @@ mod matrix4x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_cols() {
         let c0 = Vector4::new(1_i32, 2_i32,  3_i32,  4_i32);
@@ -5900,6 +6203,7 @@ mod matrix4x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_construction_from_rows() {
         let r0 = Vector3::new(1_i32,  2_i32,  3_i32);
