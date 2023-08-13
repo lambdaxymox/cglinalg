@@ -769,7 +769,7 @@ where
     /// #
     /// let v0 = Vector3::new(0_f64, 0_f64, 0_f64);
     /// let v1 = Vector3::new(10_f64, 20_f64, 30_f64);
-    /// let amount = 0.7;
+    /// let amount = 0.7_f64;
     /// let expected = Vector3::new(7_f64, 14_f64, 21_f64);
     /// let result = v0.lerp(&v1, amount);
     ///

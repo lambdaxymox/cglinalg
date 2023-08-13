@@ -256,7 +256,7 @@ where
     /// #     Degrees,  
     /// # };
     /// #
-    /// let angle: Degrees<f64> = Degrees(45.0);
+    /// let angle = Degrees(45_f64);
     /// assert!(angle.is_finite()); 
     /// ```
     #[inline]

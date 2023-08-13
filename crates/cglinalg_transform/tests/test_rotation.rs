@@ -135,7 +135,7 @@ mod rotation2_tests {
 
     #[test]
     fn test_rotation_vector3() {
-        let angle = Degrees(135.0);
+        let angle = Degrees(135_f64);
         let rotation = Rotation2::from_angle(angle);
         let expected = Vector2::new(-1_f64, 1_f64);
         let vector =  Vector2::new(f64::sqrt(2_f64), 0_f64);
@@ -146,7 +146,7 @@ mod rotation2_tests {
 
     #[test]
     fn test_rotation_inverse_vector() {
-        let angle = Degrees(135.0);
+        let angle = Degrees(135_f64);
         let rotation = Rotation2::from_angle(angle);
         let vector = Vector2::new(-1_f64, 1_f64);
         let expected = Vector2::new(f64::sqrt(2_f64), 0_f64);
@@ -158,7 +158,7 @@ mod rotation2_tests {
 
     #[test]
     fn test_rotation_inverse_rotate_vector() {
-        let angle = Degrees(135.0);
+        let angle = Degrees(135_f64);
         let rotation = Rotation2::from_angle(angle);
         let  vector = Vector2::new(-1_f64, 1_f64);
         let expected =  Vector2::new(f64::sqrt(2_f64), 0_f64);
@@ -169,7 +169,7 @@ mod rotation2_tests {
 
     #[test]
     fn test_rotation_inverse_rotate_point() {
-        let angle = Degrees(135.0);
+        let angle = Degrees(135_f64);
         let rotation = Rotation2::from_angle(angle);
         let point = Point2::new(-1_f64, 1_f64);
         let expected = Point2::new(f64::sqrt(2_f64), 0_f64);

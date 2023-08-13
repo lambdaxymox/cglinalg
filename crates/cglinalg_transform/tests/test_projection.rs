@@ -20,6 +20,7 @@ use approx::{
 };
 
 
+#[rustfmt::skip]
 #[test]
 fn test_perspective_projection_matrix() {
     let left = -4_f64;
@@ -39,6 +40,7 @@ fn test_perspective_projection_matrix() {
     assert_eq!(result, expected);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_perspective_projection_transformation() {
     let left = -4_f64;
@@ -58,6 +60,7 @@ fn test_perspective_projection_transformation() {
     assert_eq!(result.matrix(), &expected);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_perspective_projection_fov_matrix() {
     let vfov = Degrees(72_f32);
@@ -75,6 +78,7 @@ fn test_perspective_projection_fov_matrix() {
     assert_relative_eq!(result, expected);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_perspective_projection_fov_transformation() {
     let vfov = Degrees(72_f32);
@@ -154,6 +158,7 @@ fn test_perspective_projection_unproject_vector2() {
     assert_relative_eq!(result, expected, epsilon = 1e-8);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_orthographic_projection_matrix() {
     let left = -4_f64;
@@ -173,7 +178,7 @@ fn test_orthographic_projection_matrix() {
     assert_eq!(result, expected);
 }
 
-
+#[rustfmt::skip]
 #[test]
 fn test_orthographic_projection_transformation() {
     let left = -4_f64;
@@ -225,6 +230,7 @@ fn test_orthographic_projection_unproject_vector() {
     assert_eq!(result, expected);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_orthographic_fov_projection_matrix() {
     let aspect = 2_f64;
@@ -243,6 +249,7 @@ fn test_orthographic_fov_projection_matrix() {
     assert_relative_eq!(result, expected, epsilon = 1e-10);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_orthographic_fov_projecton_transformation() {
     let aspect = 2_f64;

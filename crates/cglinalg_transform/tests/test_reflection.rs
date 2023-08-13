@@ -68,6 +68,7 @@ mod reflection2_tests {
     /// Note that there is an ambiguity in the choice of normal to a line in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_line_through_origin_point1() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
@@ -87,6 +88,7 @@ mod reflection2_tests {
     /// Note that there is an ambiguity in the choice of normal to a line in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_line_through_origin_vector1() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
@@ -106,6 +108,7 @@ mod reflection2_tests {
     /// Note that there is an ambiguity in the choice of normal to a line in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_line_through_origin_point2() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(-Vector2::new(
@@ -125,6 +128,7 @@ mod reflection2_tests {
     /// Note that there is an ambiguity in the choice of normal to a line in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_line_through_origin_vector2() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(-Vector2::new(
@@ -144,6 +148,7 @@ mod reflection2_tests {
     /// Note that there is an ambiguity in the choice of normal to a line in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_line_through_origin_point3() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
@@ -163,6 +168,7 @@ mod reflection2_tests {
     /// Note that there is an ambiguity in the choice of normal to a line in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_line_through_origin_vector3() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
@@ -179,6 +185,7 @@ mod reflection2_tests {
     }
 
     /// Test the reflection through the line `y = (1/2)*x + 1`.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_arbitrary_line_point() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
@@ -195,6 +202,7 @@ mod reflection2_tests {
     }
 
     /// Test the reflection through the line `y = (1/2)*x + 1.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_arbitrary_line_vector() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
@@ -308,6 +316,7 @@ mod reflection3_tests {
     /// Note that there is an ambiguity in the choice of normal to a plane in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_plane_through_origin_point1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
@@ -328,6 +337,7 @@ mod reflection3_tests {
     /// Note that there is an ambiguity in the choice of normal to a plane in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_plane_through_origin_vector1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
@@ -348,6 +358,7 @@ mod reflection3_tests {
     /// Note that there is an ambiguity in the choice of normal to a plane in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_plane_through_origin_point2() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(-Vector3::new(
@@ -368,6 +379,7 @@ mod reflection3_tests {
     /// Note that there is an ambiguity in the choice of normal to a plane in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_plane_through_origin_vector2() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(-Vector3::new(
@@ -388,6 +400,7 @@ mod reflection3_tests {
     /// Note that there is an ambiguity in the choice of normal to a plane in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_plane_through_origin_point3() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
@@ -408,6 +421,7 @@ mod reflection3_tests {
     /// Note that there is an ambiguity in the choice of normal to a plane in
     /// two dimensions. We can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_plane_through_origin_vector3() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
@@ -425,6 +439,7 @@ mod reflection3_tests {
     }
 
     /// Test the reflection through the plane `y = (1/2)*x + 1`.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_arbitrary_plane_point1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
@@ -442,6 +457,7 @@ mod reflection3_tests {
     }
 
     /// Test the reflection through the plane `y = (1/2)*x + 1.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_arbitrary_plane_vector1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
@@ -460,6 +476,7 @@ mod reflection3_tests {
 
     /// Test the reflection through the plane `(z - 2) + (y - 0) + (x - 0) == 0`.
     /// Note that this equation has a bias of `[0   0   2]^T`.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_arbitrary_plane_point2() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
@@ -478,6 +495,7 @@ mod reflection3_tests {
 
     /// Test the reflection through the plane `(z - 2) + (y - 0) + (x - 0) == 0`.
     /// Note that this equation has a bias of `[0   0   2]^T`.
+    #[rustfmt::skip]
     #[test]
     fn test_reflection_arbitrary_plane_vector2() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(

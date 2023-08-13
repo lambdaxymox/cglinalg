@@ -101,6 +101,7 @@ mod isometry2_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_to_affine_matrix() {
         let angle = Degrees(60_f64);
@@ -135,6 +136,7 @@ mod isometry2_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_inverse_transform_point() {
         let angle = Degrees(72_f64);
@@ -153,6 +155,7 @@ mod isometry2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_inverse_transform_vector() {
         let angle = Degrees(72_f64);
@@ -200,6 +203,7 @@ mod isometry3_tests {
     use approx::{
         assert_relative_eq,
     };
+
 
     #[test]
     fn test_isometry_transform_point() {
@@ -288,6 +292,7 @@ mod isometry3_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
     
+    #[rustfmt::skip]
     #[test]
     fn test_to_affine_matrix() {
         let axis = Unit::from_value(Vector3::unit_z());
@@ -345,6 +350,7 @@ mod isometry3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_inverse_transform_vector() {
         let axis = Unit::from_value(Vector3::unit_z());
@@ -404,3 +410,4 @@ mod isometry3_tests {
         assert_eq!(result, expected);
     }
 }
+

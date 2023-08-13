@@ -2631,7 +2631,7 @@ where
     /// #
     /// let v0 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
     /// let v1 = Quaternion::new(10_f64, 20_f64, 30_f64, 40_f64);
-    /// let amount = 0.7;
+    /// let amount = 0.7_f64;
     /// let expected = Quaternion::new(7_f64, 14_f64, 21_f64, 28_f64);
     /// let result = v0.lerp(&v1, amount);
     ///
@@ -2754,7 +2754,7 @@ where
     /// #
     /// let v0 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
     /// let v1 = Quaternion::new(10_f64, 20_f64, 30_f64, 40_f64);
-    /// let amount = 0.7;
+    /// let amount = 0.7_f64;
     /// let expected = v0.lerp(&v1, amount).normalize();
     /// let result = v0.nlerp(&v1, amount);
     ///

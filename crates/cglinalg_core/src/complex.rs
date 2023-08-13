@@ -388,8 +388,8 @@ where
     /// #
     /// let i: Complex<i32> = Complex::unit_im();
     /// 
-    /// assert_eq!(i.real(), 0);
-    /// assert_eq!(i.imaginary(), 1);
+    /// assert_eq!(i.real(), 0_i32);
+    /// assert_eq!(i.imaginary(), 1_i32);
     /// ```
     #[inline]
     pub fn unit_im() -> Self {
