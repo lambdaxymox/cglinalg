@@ -265,12 +265,7 @@ where
     pub fn dot(&self, other: &Self) -> S {
         self.coords.dot(&other.coords)
     }
-}
 
-impl<S, const N: usize> Point<S, N>
-where
-    S: SimdScalarFloat
-{
     /// Calculate the squared norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
     /// 
     /// # Example
@@ -289,26 +284,6 @@ where
     #[inline]
     pub fn norm_squared(&self) -> S {
         self.coords.norm_squared()
-    }
-
-    /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// #
-    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
-    /// let expected = f64::sqrt(14_f64);
-    /// let result = point.norm();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn norm(&self) -> S {
-        self.coords.norm()
     }
 
     /// Calculate the squared metric distance between two [`Point`]s with respect 
@@ -333,28 +308,6 @@ where
         self.coords.metric_distance_squared(&other.coords)
     }
 
-    /// Calculate the metric distance between two [`Point`]s with respect 
-    /// to the metric induced by the **L2** norm.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// #
-    /// let point1 = Point3::origin();
-    /// let point2 = Point3::new(1_f64, 1_f64, 1_f64);
-    /// let expected = f64::sqrt(3_f64);
-    /// let result = point1.metric_distance(&point2);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn metric_distance(&self, other: &Self) -> S {
-        self.coords.metric_distance(&other.coords)
-    }
-
     /// Calculate the squared norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
     /// 
     /// This is a synonym for [`Point::norm_squared`].
@@ -375,6 +328,53 @@ where
     #[inline]
     pub fn magnitude_squared(&self) -> S {
         self.norm_squared()
+    }
+}
+
+impl<S, const N: usize> Point<S, N>
+where
+    S: SimdScalarFloat
+{
+    /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = f64::sqrt(14_f64);
+    /// let result = point.norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn norm(&self) -> S {
+        self.coords.norm()
+    }
+
+    /// Calculate the metric distance between two [`Point`]s with respect 
+    /// to the metric induced by the **L2** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let point1 = Point3::origin();
+    /// let point2 = Point3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = f64::sqrt(3_f64);
+    /// let result = point1.metric_distance(&point2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn metric_distance(&self, other: &Self) -> S {
+        self.coords.metric_distance(&other.coords)
     }
 
     /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.

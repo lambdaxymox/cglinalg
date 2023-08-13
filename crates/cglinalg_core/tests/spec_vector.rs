@@ -13,15 +13,14 @@ use cglinalg_core::{
 
 use proptest::prelude::*;
 
-/*
+
 fn any_u32() -> impl Strategy<Value = u32> {
     any::<u32>().prop_map(|i| {
-        let modulus = 100;
+        let modulus = 20;
 
         i % modulus
     })
 }
-*/
 
 fn any_scalar<S>() -> impl Strategy<Value = S>
 where 
@@ -340,10 +339,10 @@ macro_rules! approx_add_props {
     }
 }
 
-approx_add_props!(vector1_f64_add_props, Vector1, f64, any_vector1, 1e-7);
-approx_add_props!(vector2_f64_add_props, Vector2, f64, any_vector2, 1e-7);
-approx_add_props!(vector3_f64_add_props, Vector3, f64, any_vector3, 1e-7);
-approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4, 1e-7);
+approx_add_props!(vector1_f64_add_props, Vector1, f64, any_vector1, 1e-8);
+approx_add_props!(vector2_f64_add_props, Vector2, f64, any_vector2, 1e-8);
+approx_add_props!(vector3_f64_add_props, Vector3, f64, any_vector3, 1e-8);
+approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4, 1e-8);
 
 
 /// Generate property tests for vector arithmetic over exact scalars.
@@ -656,6 +655,252 @@ exact_sub_props!(vector3_u32_sub_props, Vector3, u32, any_vector3);
 exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 
 
+/// Generate properties for the vector squared **L2** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! approx_norm_squared_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use approx::{
+            relative_ne,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The squared **L2** norm of a vector is nonnegative.
+            ///
+            /// Given a vector `v`
+            /// ```text
+            /// norm_squared(v) >= 0
+            /// ```
+            #[test]
+            fn prop_norm_squared_nonnegative(v in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+                
+                prop_assert!(v.norm_squared() >= zero);
+            }
+
+            /// The squared **L2** norm function is point separating. In particular, 
+            /// if the squared distance between two vectors `v` and `w` is zero, then `v = w`.
+            ///
+            /// Given vectors `v` and `w`
+            /// ```text
+            /// norm_squared(v - w) = 0 => v = w 
+            /// ```
+            /// Equivalently, if `v` is not equal to `w`, then their squared distance is nonzero
+            /// ```text
+            /// v != w => norm_squared(v - w) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the norm
+            /// function.
+            #[test]
+            fn prop_norm_squared_approx_point_separating(
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
+                
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
+                prop_assert!(
+                    relative_ne!((v - w).norm_squared(), zero, epsilon = $tolerance),
+                    "\n|v - w|^2 = {}\n", 
+                    (v - w).norm_squared()
+                );
+            }
+        }
+    }
+    }
+}
+
+approx_norm_squared_props!(vector1_f64_norm_squared_props, Vector1, f64, any_vector1, 1e-8);
+approx_norm_squared_props!(vector2_f64_norm_squared_props, Vector2, f64, any_vector2, 1e-8);
+approx_norm_squared_props!(vector3_f64_norm_squared_props, Vector3, f64, any_vector3, 1e-8);
+approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, any_vector4, 1e-8);
+
+
+/// Generate properties for the vector squared **L2** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+macro_rules! approx_norm_squared_synonym_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The [`Vector::magnitude_squared`] function and the [`Vector::norm_squared`] 
+            /// function are synonyms. In particular, given a vector `v`
+            /// ```text
+            /// magnitude_squared(v) = norm_squared(v)
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_squared_norm_squared_synonyms(v in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(v.magnitude_squared(), v.norm_squared());
+            }
+        }
+    }
+    }
+}
+
+approx_norm_squared_synonym_props!(vector1_f64_norm_squared_synonym_props, Vector1, f64, any_vector1);
+approx_norm_squared_synonym_props!(vector2_f64_norm_squared_synonym_props, Vector2, f64, any_vector2);
+approx_norm_squared_synonym_props!(vector3_f64_norm_squared_synonym_props, Vector3, f64, any_vector3);
+approx_norm_squared_synonym_props!(vector4_f64_norm_squared_synonym_props, Vector4, f64, any_vector4);
+
+
+/// Generate properties for the vector squared **L2** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+macro_rules! exact_norm_squared_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The squared **L2** norm of a vector is nonnegative.
+            ///
+            /// Given a vector `v`
+            /// ```text
+            /// norm_squared(v) >= 0
+            /// ```
+            #[test]
+            fn prop_norm_squared_nonnegative(v in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+                
+                prop_assert!(v.norm_squared() >= zero);
+            }
+
+            /// The squared **L2** norm function is point separating. In particular, 
+            /// if the squared distance between two vectors `v` and `w` is zero, then `v = w`.
+            ///
+            /// Given vectors `v` and `w`
+            /// ```text
+            /// norm_squared(v - w) = 0 => v = w 
+            /// ```
+            /// Equivalently, if `v` is not equal to `w`, then their squared distance is nonzero
+            /// ```text
+            /// v != w => norm_squared(v - w) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the norm
+            /// function.
+            #[test]
+            fn prop_norm_squared_approx_point_separating(
+                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
+                
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(v != w);
+                prop_assert_ne!(
+                    (v - w).norm_squared(), zero,
+                    "\n|v - w|^2 = {}\n", 
+                    (v - w).norm_squared()
+                );
+            }
+        }
+    }
+    }
+}
+
+exact_norm_squared_props!(vector1_i32_norm_squared_props, Vector1, i32, any_vector1, any_scalar);
+exact_norm_squared_props!(vector2_i32_norm_squared_props, Vector2, i32, any_vector2, any_scalar);
+exact_norm_squared_props!(vector3_i32_norm_squared_props, Vector3, i32, any_vector3, any_scalar);
+exact_norm_squared_props!(vector4_i32_norm_squared_props, Vector4, i32, any_vector4, any_scalar);
+
+exact_norm_squared_props!(vector1_u32_norm_squared_props, Vector1, u32, any_vector1, any_scalar);
+exact_norm_squared_props!(vector2_u32_norm_squared_props, Vector2, u32, any_vector2, any_scalar);
+exact_norm_squared_props!(vector3_u32_norm_squared_props, Vector3, u32, any_vector3, any_scalar);
+exact_norm_squared_props!(vector4_u32_norm_squared_props, Vector4, u32, any_vector4, any_scalar);
+
+
+/// Generate properties for the vector squared **L2** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_norm_squared_synonym_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The [`Vector::magnitude_squared`] function and the [`Vector::norm_squared`] 
+            /// function are synonyms. In particular, given a vector `v`
+            /// ```text
+            /// magnitude_squared(v) = norm_squared(v)
+            /// ```
+            /// where equality is exact.
+            #[test]
+            fn prop_magnitude_squared_norm_squared_synonyms(v in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(v.magnitude_squared(), v.norm_squared());
+            }
+        }
+    }
+    }
+}
+
+exact_norm_squared_synonym_props!(vector1_i32_norm_squared_synonym_props, Vector1, i32, any_vector1);
+exact_norm_squared_synonym_props!(vector2_i32_norm_squared_synonym_props, Vector2, i32, any_vector2);
+exact_norm_squared_synonym_props!(vector3_i32_norm_squared_synonym_props, Vector3, i32, any_vector3);
+exact_norm_squared_synonym_props!(vector4_i32_norm_squared_synonym_props, Vector4, i32, any_vector4);
+
+exact_norm_squared_synonym_props!(vector1_u32_norm_squared_synonym_props, Vector1, u32, any_vector1);
+exact_norm_squared_synonym_props!(vector2_u32_norm_squared_synonym_props, Vector2, u32, any_vector2);
+exact_norm_squared_synonym_props!(vector3_u32_norm_squared_synonym_props, Vector3, u32, any_vector3);
+exact_norm_squared_synonym_props!(vector4_u32_norm_squared_synonym_props, Vector4, u32, any_vector4);
+
+
 /// Generate properties for the vector **L2** norm.
 ///
 /// ### Macro Parameters
@@ -717,8 +962,10 @@ macro_rules! norm_props {
                 let zero: $ScalarType = num_traits::zero();
 
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
-                prop_assert!(relative_ne!((v - w).norm(), zero, epsilon = $tolerance),
-                    "\n|v - w| = {}\n", (v - w).norm()
+                prop_assert!(
+                    relative_ne!((v - w).norm(), zero, epsilon = $tolerance),
+                    "\n|v - w| = {}\n",
+                    (v - w).norm()
                 );
             }
         }
@@ -726,10 +973,10 @@ macro_rules! norm_props {
     }
 }
 
-norm_props!(vector1_f64_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
-norm_props!(vector2_f64_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
-norm_props!(vector3_f64_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
-norm_props!(vector4_f64_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
+norm_props!(vector1_f64_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-8);
+norm_props!(vector2_f64_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
+norm_props!(vector3_f64_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
+norm_props!(vector4_f64_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
 
 
 /// Generate properties for the vector **L1** norm.
@@ -793,8 +1040,10 @@ macro_rules! l1_norm_props {
                 let zero: $ScalarType = num_traits::zero();
 
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
-                prop_assert!(relative_ne!((v - w).l1_norm(), zero, epsilon = $tolerance),
-                    "\n|v - w| = {}\n", (v - w).l1_norm()
+                prop_assert!(
+                    relative_ne!((v - w).l1_norm(), zero, epsilon = $tolerance),
+                    "\nl1_norm(v - w) = {}\n", 
+                    (v - w).l1_norm()
                 );
             }
         }
@@ -802,12 +1051,12 @@ macro_rules! l1_norm_props {
     }
 }
 
-l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
-l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
-l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
-l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
+l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-8);
+l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
+l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
+l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
 
-/*
+
 /// Generate properties for the vector **Lp** norm.
 ///
 /// ### Macro Parameters
@@ -829,9 +1078,6 @@ macro_rules! lp_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $DegreeGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Normed,
-        };
         use approx::{
             relative_ne,
         };
@@ -878,8 +1124,10 @@ macro_rules! lp_norm_props {
                 let zero: $ScalarType = num_traits::zero();
 
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
-                prop_assert!(relative_ne!((v - w).lp_norm(p), zero, epsilon = $tolerance),
-                    "\n|v - w| = {}\n", (v - w).lp_norm(p)
+                prop_assert!(
+                    relative_ne!((v - w).lp_norm(p), zero, epsilon = $tolerance),
+                    "\nlp_norm(v - w, p) = {}\n",
+                    (v - w).lp_norm(p)
                 );
             }
         }
@@ -891,7 +1139,7 @@ lp_norm_props!(vector1_f64_lp_norm_props, Vector1, f64, any_vector1, any_scalar,
 lp_norm_props!(vector2_f64_lp_norm_props, Vector2, f64, any_vector2, any_scalar, any_u32, 1e-6);
 lp_norm_props!(vector3_f64_lp_norm_props, Vector3, f64, any_vector3, any_scalar, any_u32, 1e-6);
 lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, any_vector4, any_scalar, any_u32, 1e-6);
-*/
+
 
 /// Generate properties for the vector **L-infinity** norm.
 ///
@@ -954,8 +1202,10 @@ macro_rules! linf_norm_props {
                 let zero: $ScalarType = num_traits::zero();
 
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
-                prop_assert!(relative_ne!((v - w).linf_norm(), zero, epsilon = $tolerance),
-                    "\n|v - w| = {}\n", (v - w).linf_norm()
+                prop_assert!(
+                    relative_ne!((v - w).linf_norm(), zero, epsilon = $tolerance),
+                    "\nlinf_norm(v - w) = {}\n", 
+                    (v - w).linf_norm()
                 );
             }
         }
@@ -963,10 +1213,10 @@ macro_rules! linf_norm_props {
     }
 }
 
-linf_norm_props!(vector1_f64_linf_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
-linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
-linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
-linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
+linf_norm_props!(vector1_f64_linf_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-8);
+linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
+linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
+linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
 
 
 /// Generate properties for vector norms.
@@ -981,11 +1231,8 @@ linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, any_vector4, any_sca
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
 macro_rules! norm_synonym_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         use super::{
@@ -1015,26 +1262,15 @@ macro_rules! norm_synonym_props {
             fn prop_l2_norm_norm_synonyms(v in $Generator::<$ScalarType>()) {
                 prop_assert_eq!(v.l2_norm(), v.norm());
             }
-
-            /// The [`Vector::magnitude_squared`] function and the [`Vector::norm_squared`] 
-            /// function are synonyms. In particular, given a vector `v`
-            /// ```text
-            /// magnitude_squared(v) = norm_squared(v)
-            /// ```
-            /// where equality is exact.
-            #[test]
-            fn prop_magnitude_squared_norm_squared_synonyms(v in $Generator::<$ScalarType>()) {
-                prop_assert_eq!(v.magnitude_squared(), v.norm_squared());
-            }
         }
     }
     }
 }
 
-norm_synonym_props!(vector1_f64_norm_synonym_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
-norm_synonym_props!(vector2_f64_norm_synonym_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
-norm_synonym_props!(vector3_f64_norm_synonym_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
-norm_synonym_props!(vector4_f64_norm_synonym_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
+norm_synonym_props!(vector1_f64_norm_synonym_props, Vector1, f64, any_vector1);
+norm_synonym_props!(vector2_f64_norm_synonym_props, Vector2, f64, any_vector2);
+norm_synonym_props!(vector3_f64_norm_synonym_props, Vector3, f64, any_vector3);
+norm_synonym_props!(vector4_f64_norm_synonym_props, Vector4, f64, any_vector4);
 
 
 /// Generate property tests for vector multiplication over floating point scalars.
@@ -1110,10 +1346,10 @@ macro_rules! approx_mul_props {
     }
 }
 
-approx_mul_props!(vector1_f64_mul_props, Vector1, f64, any_vector1, any_scalar, 1e-7);
-approx_mul_props!(vector2_f64_mul_props, Vector2, f64, any_vector2, any_scalar, 1e-7);
-approx_mul_props!(vector3_f64_mul_props, Vector3, f64, any_vector3, any_scalar, 1e-7);
-approx_mul_props!(vector4_f64_mul_props, Vector4, f64, any_vector4, any_scalar, 1e-7);
+approx_mul_props!(vector1_f64_mul_props, Vector1, f64, any_vector1, any_scalar, 1e-8);
+approx_mul_props!(vector2_f64_mul_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
+approx_mul_props!(vector3_f64_mul_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
+approx_mul_props!(vector4_f64_mul_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
 
 
 /// Generate property tests for vector multiplication over exact scalars.

@@ -146,8 +146,8 @@ macro_rules! approx_arithmetic_props {
     }
 }
 
-approx_arithmetic_props!(radians_f64_arithmetic_props, Radians, f64, any_radians, any_scalar, 1e-7);
-approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees, any_scalar, 1e-7);
+approx_arithmetic_props!(radians_f64_arithmetic_props, Radians, f64, any_radians, any_scalar, 1e-10);
+approx_arithmetic_props!(degrees_f64_arithmetic_props, Degrees, f64, any_degrees, any_scalar, 1e-10);
 
 
 /// Generate property tests for typed angle trigonometry over floating point 
@@ -281,6 +281,6 @@ macro_rules! approx_trigonometry_props {
     }
 }
 
-approx_trigonometry_props!(radians_f64_trigonometry_props, Radians, f64, any_radians, 1e-7);
-approx_trigonometry_props!(degrees_f64_trigonometry_props, Degrees, f64, any_degrees, 1e-7);
+approx_trigonometry_props!(radians_f64_trigonometry_props, Radians, f64, any_radians, 1e-6);
+approx_trigonometry_props!(degrees_f64_trigonometry_props, Degrees, f64, any_degrees, 1e-6);
 

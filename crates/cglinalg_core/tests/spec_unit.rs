@@ -21,12 +21,12 @@ where
     S: SimdScalar + Arbitrary 
 {
     any::<S>().prop_map(|x| {
-        let eps = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
-        let vector_eps = Vector1::from_fill(eps);
+        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let vector_offset = Vector1::from_fill(offset);
         let modulus = num_traits::cast(100_000_000).unwrap();
         let vector = Vector1::new(x);
 
-        vector_eps + vector % modulus
+        vector_offset + vector % modulus
     })
 }
 
@@ -35,12 +35,12 @@ where
     S: SimdScalar + Arbitrary
 {
     any::<(S, S)>().prop_map(|(x, y)| {
-        let eps = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
-        let vector_eps = Vector2::from_fill(eps);
+        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let vector_offset = Vector2::from_fill(offset);
         let modulus = num_traits::cast(100_000_000).unwrap();
         let vector = Vector2::new(x, y);
 
-        vector_eps + vector % modulus
+        vector_offset + vector % modulus
     })
 }
 
@@ -49,12 +49,12 @@ where
     S: SimdScalar + Arbitrary
 {
     any::<(S, S, S)>().prop_map(|(x, y, z)| {
-        let eps = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
-        let vector_eps = Vector3::from_fill(eps);
+        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let vector_offset = Vector3::from_fill(offset);
         let modulus = num_traits::cast(100_000_000).unwrap();
         let vector = Vector3::new(x, y, z);
 
-        vector_eps + vector % modulus
+        vector_offset + vector % modulus
     })
 }
 
@@ -63,12 +63,12 @@ where
     S: SimdScalar + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
-        let eps = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
-        let vector_eps = Vector4::from_fill(eps);
+        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let vector_offset = Vector4::from_fill(offset);
         let modulus = num_traits::cast(100_000_000).unwrap();
         let vector = Vector4::new(x, y, z, w);
 
-        vector_eps + vector % modulus
+        vector_offset + vector % modulus
     })
 }
 
@@ -77,12 +77,12 @@ where
     S: SimdScalar + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
-        let eps = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
-        let quaternion_eps = Quaternion::from_fill(eps);
+        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let quaternion_offset = Quaternion::from_fill(offset);
         let modulus: S = num_traits::cast(100_000_000).unwrap();
         let quaternion = Quaternion::new(x, y, z, w);
 
-        quaternion_eps + quaternion % modulus
+        quaternion_offset + quaternion % modulus
     })
     .no_shrink()
 }
@@ -92,12 +92,12 @@ where
     S: SimdScalar + Arbitrary
 {
     any::<(S, S)>().prop_map(|(x, y)| {
-        let eps = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
-        let complex_eps = Complex::new(eps, eps);
+        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let complex_offset = Complex::new(offset, offset);
         let modulus: S = num_traits::cast(100_000_000).unwrap();
         let complex = Complex::new(x, y);
 
-        complex_eps + complex % modulus
+        complex_offset + complex % modulus
     })
     .no_shrink()
 }

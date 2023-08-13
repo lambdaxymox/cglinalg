@@ -315,6 +315,78 @@ where
             self.data[i] *= other.data[i];
         }
     }
+
+    /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let value = 1_f64 / f64::sqrt(3_f64);
+    /// let vector = Vector3::from_fill(value);
+    /// let expected = 1_f64;
+    /// let result = vector.norm_squared();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn norm_squared(&self) -> S {
+        self.dot(self)
+    }
+
+    /// Calculate the squared metric distance between two vectors with respect 
+    /// to the metric induced by the **L2** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector1 = Vector3::new(0_f64, -5_f64, 6_f64);
+    /// let vector2 = Vector3::new(-3_f64, 1_f64, 2_f64);
+    /// let expected = 61_f64;
+    /// let result = vector1.metric_distance_squared(&vector2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn metric_distance_squared(&self, other: &Self) -> S {
+        (self - other).norm_squared()
+    }
+
+    /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// This is a synonym for [`Vector::norm_squared`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let value = 1_f64 / f64::sqrt(3_f64);
+    /// let vector = Vector3::from_fill(value);
+    /// let expected = 1_f64;
+    /// let result = vector.magnitude_squared();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn magnitude_squared(&self) -> S {
+        self.norm_squared()
+    }
 }
 
 impl<S, const N: usize> Vector<S, N> 
@@ -393,30 +465,6 @@ where
         norm.metric_distance(self, other)
     }
 
-    /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// #
-    /// let value = 1_f64 / f64::sqrt(3_f64);
-    /// let vector = Vector3::from_fill(value);
-    /// let expected = 1_f64;
-    /// let result = vector.norm_squared();
-    /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// ```
-    #[inline]
-    pub fn norm_squared(&self) -> S {
-        self.dot(self)
-    }
-
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
     /// 
     /// # Example
@@ -441,28 +489,6 @@ where
         self.norm_squared().sqrt()
     }
 
-    /// Calculate the squared metric distance between two vectors with respect 
-    /// to the metric induced by the **L2** norm.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let vector1 = Vector3::new(0_f64, -5_f64, 6_f64);
-    /// let vector2 = Vector3::new(-3_f64, 1_f64, 2_f64);
-    /// let expected = 61_f64;
-    /// let result = vector1.metric_distance_squared(&vector2);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn metric_distance_squared(&self, other: &Self) -> S {
-        (self - other).norm_squared()
-    }
-
     /// Calculate the metric distance between two vectors with respect 
     /// to the metric induced by the **L2** norm.
     /// 
@@ -483,32 +509,6 @@ where
     #[inline]
     pub fn metric_distance(&self, other: &Self) -> S {
         self.apply_metric_distance(other, &L2Norm::new())
-    }
-
-    /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
-    /// 
-    /// This is a synonym for [`Vector::norm_squared`].
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// #
-    /// let value = 1_f64 / f64::sqrt(3_f64);
-    /// let vector = Vector3::from_fill(value);
-    /// let expected = 1_f64;
-    /// let result = vector.magnitude_squared();
-    /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// ```
-    #[inline]
-    pub fn magnitude_squared(&self) -> S {
-        self.norm_squared()
     }
 
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.

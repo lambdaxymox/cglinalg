@@ -577,6 +577,95 @@ where
     pub fn dot(&self, other: &Self) -> S {
         self.coords.dot(&other.coords)
     }
+
+    /// Calculate the squared norm of a quaternion with respect to the **L2** (Euclidean) norm. 
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Unit,
+    /// #     Radians,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = 1_f64;
+    /// let result = quaternion.norm_squared();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn norm_squared(&self) -> S {
+        self.coords.norm_squared()
+    }
+
+    /// Calculate the squared norm of a quaternion with respect to the **L2** (Euclidean) norm.
+    /// 
+    /// This is a synonym for [`Quaternion::norm_squared`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Unit,
+    /// #     Radians,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = 1_f64;
+    /// let result = quaternion.magnitude_squared();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn magnitude_squared(&self) -> S {
+        self.norm_squared()
+    }
+
+    /// Calculate the squared metric distance between two quaternions with respect
+    /// to the metric induced by the **L2** norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle1 = Radians(0_f64);
+    /// let angle2: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion1 = Quaternion::from_axis_angle(&axis, angle1);
+    /// let quaternion2 = Quaternion::from_axis_angle(&axis, angle2);
+    /// let expected = f64::sqrt(2_f64) * (f64::sqrt(2_f64) - 1_f64);
+    /// let result = quaternion1.metric_distance_squared(&quaternion2);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn metric_distance_squared(&self, other: &Self) -> S {
+        self.coords.metric_distance_squared(&other.coords)
+    }
 }
 
 impl<S> Quaternion<S> 
@@ -671,33 +760,6 @@ impl<S> Quaternion<S>
 where
     S: SimdScalarFloat
 {
-    /// Calculate the squared norm of a quaternion with respect to the **L2** (Euclidean) norm. 
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// #     Angle,
-    /// #     Unit,
-    /// #     Radians,
-    /// #     Vector3,
-    /// # };
-    /// # use core::f64;
-    /// #
-    /// let axis = Unit::from_value(Vector3::unit_z());
-    /// let angle: Radians<f64> = Radians::full_turn_div_4();
-    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
-    /// let expected = 1_f64;
-    /// let result = quaternion.norm_squared();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn norm_squared(&self) -> S {
-        self.coords.norm_squared()
-    }
-
     /// Calculate the norm of a quaternion with respect to the **L2** (Euclidean) norm. 
     /// 
     /// # Example
@@ -723,68 +785,6 @@ where
     #[inline]
     pub fn norm(&self) -> S {
         self.coords.norm()
-    }
-
-    /// Calculate the squared norm of a quaternion with respect to the **L2** (Euclidean) norm.
-    /// 
-    /// This is a synonym for [`Quaternion::norm_squared`].
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// #     Angle,
-    /// #     Unit,
-    /// #     Radians,
-    /// #     Vector3,
-    /// # };
-    /// # use core::f64;
-    /// #
-    /// let axis = Unit::from_value(Vector3::unit_z());
-    /// let angle: Radians<f64> = Radians::full_turn_div_4();
-    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
-    /// let expected = 1_f64;
-    /// let result = quaternion.magnitude_squared();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn magnitude_squared(&self) -> S {
-        self.norm_squared()
-    }
-
-    /// Calculate the squared metric distance between two quaternions with respect
-    /// to the metric induced by the **L2** norm.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// #     Angle,
-    /// #     Radians,
-    /// #     Unit,
-    /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// # use core::f64;
-    /// #
-    /// let axis = Unit::from_value(Vector3::unit_z());
-    /// let angle1 = Radians(0_f64);
-    /// let angle2: Radians<f64> = Radians::full_turn_div_4();
-    /// let quaternion1 = Quaternion::from_axis_angle(&axis, angle1);
-    /// let quaternion2 = Quaternion::from_axis_angle(&axis, angle2);
-    /// let expected = f64::sqrt(2_f64) * (f64::sqrt(2_f64) - 1_f64);
-    /// let result = quaternion1.metric_distance_squared(&quaternion2);
-    /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// ```
-    #[inline]
-    pub fn metric_distance_squared(&self, other: &Self) -> S {
-        self.coords.metric_distance_squared(&other.coords)
     }
 
     /// Calculate the metric distance between two quaternions with respect
