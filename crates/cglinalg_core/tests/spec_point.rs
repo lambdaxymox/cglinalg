@@ -598,7 +598,7 @@ macro_rules! approx_norm_squared_props {
             /// norm_squared(p) >= 0
             /// ```
             #[test]
-            fn prop_norm_squared_onnegative(p in $Generator::<$ScalarType>()) {
+            fn prop_norm_squared_nonnegative(p in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
                 
                 prop_assert!(p.norm_squared() >= zero);
@@ -712,7 +712,7 @@ macro_rules! exact_norm_squared_props {
             /// norm_squared(p) >= 0
             /// ```
             #[test]
-            fn prop_norm_squared_onnegative(p in $Generator::<$ScalarType>()) {
+            fn prop_norm_squared_nonnegative(p in $Generator::<$ScalarType>()) {
                 let zero: $ScalarType = num_traits::zero();
                 
                 prop_assert!(p.norm_squared() >= zero);

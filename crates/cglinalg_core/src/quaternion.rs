@@ -2709,7 +2709,7 @@ where
         // If `result` == `other`, there is no curve to interpolate; the angle 
         // between `result` and  `other` is zero. In this case we can return 
         // `result`.
-        if S::abs(cos_half_theta) >= one {
+        if <S as num_traits::Float>::abs(cos_half_theta) >= one {
             return result;
         }
 
@@ -2728,7 +2728,7 @@ where
         // an inverse trigonometric function.
         let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
         let threshold = num_traits::cast(0.001).unwrap();
-        if S::abs(sin_half_theta) < threshold {
+        if <S as num_traits::Float>::abs(sin_half_theta) < threshold {
             return result.nlerp(other, amount);
         }
         

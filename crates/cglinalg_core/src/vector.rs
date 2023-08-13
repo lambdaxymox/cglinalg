@@ -640,7 +640,7 @@ where
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
-            result += S::abs(this[i]);
+            result += <S as num_traits::Float>::abs(this[i]);
         }
 
         result
@@ -679,7 +679,7 @@ where
     fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
         let mut result = Self::Output::zero();
         for i in 0..N {
-            result += Self::Output::powi(Self::Output::abs(lhs[i]), self.p as i32);
+            result += Self::Output::powi(<Self::Output as num_traits::Float>::abs(lhs[i]), self.p as i32);
         }
 
         result.powf(num_traits::cast(1_f64 / (self.p as f64)).unwrap())
@@ -701,7 +701,7 @@ where
     fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
         let mut result = Self::Output::zero();
         for i in 0..N {
-            result = Self::Output::max(result, Self::Output::abs(lhs[i]));
+            result = Self::Output::max(result, <Self::Output as num_traits::Float>::abs(lhs[i]));
         }
 
         result

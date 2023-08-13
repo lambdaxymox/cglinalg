@@ -540,6 +540,23 @@ where
     pub fn conjugate(self) -> Self {
         Self::new(self.re, -self.im)
     }
+
+    /// Calculate the **L1** norm of a complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// let z = Complex::new(2_f32, -5_f32);
+    /// 
+    /// assert_eq!(z.l1_norm(), 7_f32);
+    /// ```
+    #[inline]
+    pub fn l1_norm(self) -> S { 
+        self.re.abs() + self.im.abs()
+    }
 }
 
 impl<S> Complex<S>
@@ -703,23 +720,6 @@ where
     #[inline]
     pub fn l2_norm(self) -> S {
         self.norm()
-    }
-
-    /// Calculate the **L1** norm of a complex number.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Complex,
-    /// # };
-    /// let z = Complex::new(2_f32, -5_f32);
-    /// 
-    /// assert_eq!(z.l1_norm(), 7_f32);
-    /// ```
-    #[inline]
-    pub fn l1_norm(self) -> S { 
-        self.re.abs() + self.im.abs()
     }
 
     /// Calculate the principal argument of a complex number.

@@ -41,7 +41,7 @@ where
 {
     any::<(S, S, S, S)>().prop_map(|(s, x, y, z)| {
         let modulus: S = num_traits::cast(100_000_000).unwrap();
-        let quaternion = Quaternion::new(S::abs(s), S::abs(x), S::abs(y), S::abs(z));
+        let quaternion = Quaternion::new(s.abs(), x.abs(), y.abs(), z.abs());
 
         quaternion % modulus
     })

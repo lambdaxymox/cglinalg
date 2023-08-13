@@ -2,6 +2,7 @@ use num_traits::{
     Num, 
     NumCast, 
     Float,
+    Signed,
 };
 use core::fmt::{
     Debug,
@@ -55,34 +56,36 @@ where
 /// inverses. 
 pub trait SimdScalarSigned 
 where 
-    Self: SimdScalar + Neg<Output = Self> 
+    Self: SimdScalar + Signed
 {
 }
 
 impl<T> SimdScalarSigned for T 
 where 
-    T: SimdScalar + Neg<Output = T> 
+    T: SimdScalar + Signed
 {
 }
 
 /// Scalar numbers that have the properties of finite precision
 /// floating point arithmetic.
 pub trait SimdScalarFloat:
-      SimdScalar
+      SimdScalarSigned
     + Float
     + approx::AbsDiffEq<Epsilon = Self>
     + approx::RelativeEq<Epsilon = Self>
     + approx::UlpsEq<Epsilon = Self>
+    + Neg<Output = Self> 
 {
 }
 
 impl<T> SimdScalarFloat for T 
 where 
-    T: SimdScalar 
+    T: SimdScalarSigned
      + Float
      + approx::AbsDiffEq<Epsilon = Self>
      + approx::RelativeEq<Epsilon = Self>
      + approx::UlpsEq<Epsilon = Self>
+     + Neg<Output = Self> 
 {
 }
 
