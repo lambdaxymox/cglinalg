@@ -875,7 +875,7 @@ where
     /// # };
     /// #
     /// let z = Complex::new(2_f64, 5_f64);
-    /// let expected = Complex::new(2.09599580151, -7.08554526009);
+    /// let expected = Complex::new(2.09599580151_f64, -7.08554526009_f64);
     /// let result = z.exp();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);

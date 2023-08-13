@@ -696,7 +696,7 @@ mod rotation3_tests {
 
     #[test]
     fn test_rotation_look_at_rh_x_axis() {
-        let eye = Point3::new(-1.0, 0.0, 0.0);
+        let eye = Point3::new(-1_f64, 0_f64, 0_f64);
         let target = Point3::origin();
         let up: Vector3<f64> = Vector3::unit_y();
         let angle = Degrees(90_f64);
@@ -708,7 +708,7 @@ mod rotation3_tests {
 
     #[test]
     fn test_rotation_look_at_rh_y_axis() {
-        let eye = Point3::new(0.0, -1.0, 0.0);
+        let eye = Point3::new(0_f64, -1_f64, 0_f64);
         let target = Point3::origin();
         let direction: Vector3<f64> = Vector3::unit_y();
         let up: Vector3<f64> = Vector3::unit_x();
@@ -721,7 +721,7 @@ mod rotation3_tests {
 
     #[test]
     fn test_rotation_look_at_lh_x_axis() {
-        let eye = Point3::new(-1.0, 0.0, 0.0);
+        let eye = Point3::new(-1_f64, 0_f64, 0_f64);
         let target = Point3::origin();
         let up: Vector3<f64> = Vector3::unit_y();
         let angle = Degrees(-90_f64);
@@ -733,7 +733,7 @@ mod rotation3_tests {
 
     #[test]
     fn test_rotation_look_at_lh_y_axis() {
-        let eye = Point3::new(0.0, -1.0, 0.0);
+        let eye = Point3::new(0_f64, -1_f64, 0_f64);
         let target = Point3::origin();
         let direction: Vector3<f64> = Vector3::unit_y();
         let up: Vector3<f64> = Vector3::unit_x();

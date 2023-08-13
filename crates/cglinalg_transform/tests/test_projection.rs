@@ -22,17 +22,17 @@ use approx::{
 
 #[test]
 fn test_perspective_projection_matrix() {
-    let left = -4.0;
-    let right = 4.0;
-    let bottom = -2.0;
-    let top = 3.0;
-    let near = 1.0;
-    let far = 100.0;
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 3_f64;
+    let near = 1_f64;
+    let far = 100_f64;
     let expected = Matrix4x4::new(
-        1.0 / 4.0,  0.0,        0.0,           0.0,
-        0.0,        2.0 / 5.0,  0.0,           0.0,
-        0.0,        1.0 / 5.0, -101.0 / 99.0, -1.0,
-        0.0,        0.0,       -200.0 / 99.0,  0.0
+        1_f64 / 4_f64, 0_f64,          0_f64,             0_f64,
+        0_f64,         2_f64 / 5_f64,  0_f64,             0_f64,
+        0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
+        0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
     );
     let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
 
@@ -41,17 +41,17 @@ fn test_perspective_projection_matrix() {
 
 #[test]
 fn test_perspective_projection_transformation() {
-    let left = -4.0;
-    let right = 4.0;
-    let bottom = -2.0;
-    let top = 3.0;
-    let near = 1.0;
-    let far = 100.0;
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 3_f64;
+    let near = 1_f64;
+    let far = 100_f64;
     let expected = Matrix4x4::new(
-        1.0 / 4.0,  0.0,        0.0,           0.0,
-        0.0,        2.0 / 5.0,  0.0,           0.0,
-        0.0,        1.0 / 5.0, -101.0 / 99.0, -1.0,
-        0.0,        0.0,       -200.0 / 99.0,  0.0
+        1_f64 / 4_f64, 0_f64,          0_f64,             0_f64,
+        0_f64,         2_f64 / 5_f64,  0_f64,             0_f64,
+        0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
+        0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
     );
     let result = Perspective3::new(left, right, bottom, top, near, far);
 
@@ -60,15 +60,15 @@ fn test_perspective_projection_transformation() {
 
 #[test]
 fn test_perspective_projection_fov_matrix() {
-    let vfov = Degrees(72.0);
-    let aspect = 800 as f32 / 600 as f32;
-    let near = 0.1;
-    let far = 100.0;
+    let vfov = Degrees(72_f32);
+    let aspect = 800_f32 / 600_f32;
+    let near = 0.1_f32;
+    let far = 100_f32;
     let expected = Matrix4x4::new(
-        1.0322863, 0.0,        0.0,       0.0, 
-        0.0,       1.3763818,  0.0,       0.0, 
-        0.0,       0.0,       -1.002002, -1.0, 
-        0.0,       0.0,       -0.2002002, 0.0
+        1.0322863_f32, 0_f32,         0_f32,         0_f32, 
+        0_f32,         1.3763818_f32, 0_f32,         0_f32, 
+        0_f32,         0_f32,        -1.002002_f32, -1_f32, 
+        0_f32,         0_f32,        -0.2002002_f32, 0_f32
     );
     let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
 
@@ -77,15 +77,15 @@ fn test_perspective_projection_fov_matrix() {
 
 #[test]
 fn test_perspective_projection_fov_transformation() {
-    let vfov = Degrees(72.0);
-    let aspect = 800 as f32 / 600 as f32;
-    let near = 0.1;
-    let far = 100.0;
+    let vfov = Degrees(72_f32);
+    let aspect = 800_f32 / 600_f32;
+    let near = 0.1_f32;
+    let far = 100_f32;
     let expected = Matrix4x4::new(
-        1.0322863, 0.0,        0.0,       0.0, 
-        0.0,       1.3763818,  0.0,       0.0, 
-        0.0,       0.0,       -1.002002, -1.0, 
-        0.0,       0.0,       -0.2002002, 0.0
+        1.0322863_f32, 0_f32,         0_f32,         0_f32, 
+        0_f32,         1.3763818_f32, 0_f32,         0_f32, 
+        0_f32,         0_f32,        -1.002002_f32, -1_f32, 
+        0_f32,         0_f32,        -0.2002002_f32, 0_f32
     );
     let result = PerspectiveFov3::new(vfov, aspect, near, far);
 
@@ -94,11 +94,11 @@ fn test_perspective_projection_fov_transformation() {
 
 #[test]
 fn test_perspective_projection_unproject_point1() {
-    let vfov = Degrees(72.0);
-    let aspect = 800 as f64 / 600 as f64;
-    let near = 0.1;
-    let far = 100.0;
-    let point = Point3::new(-2.0, 2.0, -50.0);
+    let vfov = Degrees(72_f64);
+    let aspect = 800_f64 / 600_f64;
+    let near = 0.1_f64;
+    let far = 100_f64;
+    let point = Point3::new(-2_f64, 2_f64, -50_f64);
     let projection = PerspectiveFov3::new(vfov, aspect, near, far);
     let expected = point;
     let projected_point = projection.project_point(&expected);
@@ -109,11 +109,11 @@ fn test_perspective_projection_unproject_point1() {
 
 #[test]
 fn test_perspective_projection_unproject_vector1() {
-    let vfov = Degrees(72.0);
-    let aspect = 800 as f64 / 600 as f64;
-    let near = 0.1;
-    let far = 100.0;
-    let vector = Vector3::new(-2.0, 2.0, -50.0);
+    let vfov = Degrees(72_f64);
+    let aspect = 800_f64 / 600_f64;
+    let near = 0.1_f64;
+    let far = 100_f64;
+    let vector = Vector3::new(-2_f64, 2_f64, -50_f64);
     let projection = PerspectiveFov3::new(vfov, aspect, near, far);
     let expected = vector;
     let projected_vector = projection.project_vector(&expected);
@@ -124,14 +124,14 @@ fn test_perspective_projection_unproject_vector1() {
 
 #[test]
 fn test_perspective_projection_unproject_point2() {
-    let left = -4.0;
-    let right = 4.0;
-    let bottom = -2.0;
-    let top = 2.0;
-    let near = 1.0;
-    let far = 100.0;
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 2_f64;
+    let near = 1_f64;
+    let far = 100_f64;
     let projection = Perspective3::new(left, right, bottom, top, near, far);
-    let expected = Point3::new(-2.0, 2.0, -50.0);
+    let expected = Point3::new(-2_f64, 2_f64, -50_f64);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
@@ -140,14 +140,14 @@ fn test_perspective_projection_unproject_point2() {
 
 #[test]
 fn test_perspective_projection_unproject_vector2() {
-    let left = -4.0;
-    let right = 4.0;
-    let bottom = -2.0;
-    let top = 2.0;
-    let near = 1.0;
-    let far = 100.0;
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 2_f64;
+    let near = 1_f64;
+    let far = 100_f64;
     let projection = Perspective3::new(left, right, bottom, top, near, far);
-    let expected = Vector3::new(-2.0, 2.0, -50.0);
+    let expected = Vector3::new(-2_f64, 2_f64, -50_f64);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
@@ -156,17 +156,17 @@ fn test_perspective_projection_unproject_vector2() {
 
 #[test]
 fn test_orthographic_projection_matrix() {
-    let left = -4.0;
-    let right = 4.0;
-    let bottom = -2.0;
-    let top = 2.0;
-    let near = 1.0;
-    let far = 100.0;
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 2_f64;
+    let near = 1_f64;
+    let far = 100_f64;
     let expected = Matrix4x4::new(
-        1.0 / 4.0,  0.0,        0.0,          0.0,
-        0.0,        1.0 / 2.0,  0.0,          0.0,
-        0.0,        0.0,       -2.0 / 99.0,   0.0,
-        0.0,        0.0,       -101.0 / 99.0, 1.0
+        1_f64 / 4_f64, 0_f64,          0_f64,            0_f64,
+        0_f64,         1_f64 / 2_f64,  0_f64,            0_f64,
+        0_f64,         0_f64,         -2_f64 / 99_f64,   0_f64,
+        0_f64,         0_f64,         -101_f64 / 99_f64, 1_f64
     );
     let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
 
@@ -176,17 +176,17 @@ fn test_orthographic_projection_matrix() {
 
 #[test]
 fn test_orthographic_projection_transformation() {
-    let left = -4.0;
-    let right = 4.0;
-    let bottom = -2.0;
-    let top = 2.0;
-    let near = 1.0;
-    let far = 100.0;
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 2_f64;
+    let near = 1_f64;
+    let far = 100_f64;
     let expected = Matrix4x4::new(
-        1.0 / 4.0,  0.0,        0.0,          0.0,
-        0.0,        1.0 / 2.0,  0.0,          0.0,
-        0.0,        0.0,       -2.0 / 99.0,   0.0,
-        0.0,        0.0,       -101.0 / 99.0, 1.0
+        1_f64 / 4_f64, 0_f64,          0_f64,            0_f64,
+        0_f64,         1_f64 / 2_f64,  0_f64,            0_f64,
+        0_f64,         0_f64,         -2_f64 / 99_f64,   0_f64,
+        0_f64,         0_f64,         -101_f64 / 99_f64, 1_f64
     );
     let result = Orthographic3::new(left, right, bottom, top, near, far);
 
@@ -195,14 +195,14 @@ fn test_orthographic_projection_transformation() {
 
 #[test]
 fn test_orthographic_projection_unproject_point() {
-    let left = -4.0;
-    let right = 4.0;
-    let bottom = -2.0;
-    let top = 2.0;
-    let near = 1.0;
-    let far = 100.0;
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 2_f64;
+    let near = 1_f64;
+    let far = 100_f64;
     let projection = Orthographic3::new(left, right, bottom, top, near, far);
-    let expected = Point3::new(1.0, 1.0, 50.0);
+    let expected = Point3::new(1_f64, 1_f64, 50_f64);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
@@ -211,14 +211,14 @@ fn test_orthographic_projection_unproject_point() {
 
 #[test]
 fn test_orthographic_projection_unproject_vector() {
-    let left = -4.0;
-    let right = 4.0;
-    let bottom = -2.0;
-    let top = 2.0;
-    let near = 1.0;
-    let far = 100.0;
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 2_f64;
+    let near = 1_f64;
+    let far = 100_f64;
     let projection = Orthographic3::new(left, right, bottom, top, near, far);
-    let expected = Vector3::new(1.0, 1.0, 50.0);
+    let expected = Vector3::new(1_f64, 1_f64, 50_f64);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
@@ -227,16 +227,16 @@ fn test_orthographic_projection_unproject_vector() {
 
 #[test]
 fn test_orthographic_fov_projection_matrix() {
-    let aspect = 2.0;
+    let aspect = 2_f64;
     // 9.1478425198 Degrees.
-    let vfov = Degrees::from(Radians::atan2(8.0, 100.0) * 2.0);
-    let near = 1.0;
-    let far = 100.0;
+    let vfov = Degrees::from(Radians::atan2(8_f64, 100_f64) * 2_f64);
+    let near = 1_f64;
+    let far = 100_f64;
     let expected = Matrix4x4::new(
-        1.0 / 4.0,  0.0,        0.0,          0.0,
-        0.0,        1.0 / 2.0,  0.0,          0.0,
-        0.0,        0.0,       -2.0 / 99.0,   0.0,
-        0.0,        0.0,       -101.0 / 99.0, 1.0
+        1_f64 / 4_f64,  0_f64,          0_f64,            0_f64,
+        0_f64,          1_f64 / 2_f64,  0_f64,            0_f64,
+        0_f64,          0_f64,         -2_f64 / 99_f64,   0_f64,
+        0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64
     );
     let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
 
@@ -245,16 +245,16 @@ fn test_orthographic_fov_projection_matrix() {
 
 #[test]
 fn test_orthographic_fov_projecton_transformation() {
-    let aspect = 2.0;
+    let aspect = 2_f64;
     // 9.1478425198 Degrees.
-    let vfov = Degrees::from(Radians::atan2(8.0, 100.0) * 2.0);
-    let near = 1.0;
-    let far = 100.0;
+    let vfov = Degrees::from(Radians::atan2(8_f64, 100_f64) * 2_f64);
+    let near = 1_f64;
+    let far = 100_f64;
     let expected = Matrix4x4::new(
-        1.0 / 4.0,  0.0,        0.0,          0.0,
-        0.0,        1.0 / 2.0,  0.0,          0.0,
-        0.0,        0.0,       -2.0 / 99.0,   0.0,
-        0.0,        0.0,       -101.0 / 99.0, 1.0
+        1_f64 / 4_f64,  0_f64,          0_f64,            0_f64,
+        0_f64,          1_f64 / 2_f64,  0_f64,            0_f64,
+        0_f64,          0_f64,         -2_f64 / 99_f64,   0_f64,
+        0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64
     );
     let result = OrthographicFov3::new(vfov, aspect, near, far);
 
@@ -263,13 +263,13 @@ fn test_orthographic_fov_projecton_transformation() {
 
 #[test]
 fn test_orthographic_fov_projection_unproject_point() {
-    let aspect = 2.0;
+    let aspect = 2_f64;
     // 9.1478425198 Degrees.
-    let vfov = Degrees::from(Radians::atan2(8.0, 100.0) * 2.0);
-    let near = 1.0;
-    let far = 100.0;
+    let vfov = Degrees::from(Radians::atan2(8_f64, 100_f64) * 2_f64);
+    let near = 1_f64;
+    let far = 100_f64;
     let projection = OrthographicFov3::new(vfov, aspect, near, far);
-    let expected = Point3::new(1.0, 1.0, 50.0);
+    let expected = Point3::new(1_f64, 1_f64, 50_f64);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
@@ -278,13 +278,13 @@ fn test_orthographic_fov_projection_unproject_point() {
 
 #[test]
 fn test_orthographic_fov_projection_unproject_vector() {
-    let aspect = 2.0;
+    let aspect = 2_f64;
     // 9.1478425198 Degrees.
-    let vfov = Degrees::from(Radians::atan2(8.0, 100.0) * 2.0);
-    let near = 1.0;
-    let far = 100.0;
+    let vfov = Degrees::from(Radians::atan2(8_f64, 100_f64) * 2_f64);
+    let near = 1_f64;
+    let far = 100_f64;
     let projection = OrthographicFov3::new(vfov, aspect, near, far);
-    let expected = Vector3::new(1.0, 1.0, 50.0);
+    let expected = Vector3::new(1_f64, 1_f64, 50_f64);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 

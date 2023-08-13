@@ -2534,13 +2534,13 @@ where
     /// #     assert_relative_eq,  
     /// # };
     /// #
-    /// let bias = Vector2::new(0.0, 2.0);
+    /// let bias = Vector2::new(0_f64, 2_f64);
     /// let normal = Unit::from_value(
-    ///     Vector2::new(-1.0 / f64::sqrt(5.0), 2.0 / f64::sqrt(5.0))
+    ///     Vector2::new(-1_f64 / f64::sqrt(5_f64), 2_f64 / f64::sqrt(5_f64))
     /// );
     /// let matrix = Matrix3x3::from_affine_reflection(&normal, &bias);
-    /// let vector = Vector3::new(1.0, 0.0, 1.0);
-    /// let expected = Vector3::new(-1.0, 4.0, 1.0);
+    /// let vector = Vector3::new(1_f64, 0_f64, 1_f64);
+    /// let expected = Vector3::new(-1_f64, 4_f64, 1_f64);
     /// let result = matrix * vector;
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
@@ -2587,9 +2587,9 @@ where
     /// #
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let expected = Matrix3x3::new(
-    ///     1.0, 0.0,  0.0, 
-    ///     0.0, 1.0,  0.0,  
-    ///     0.0, 0.0, -1.0
+    ///     1_f64, 0_f64,  0_f64, 
+    ///     0_f64, 1_f64,  0_f64,  
+    ///     0_f64, 0_f64, -1_f64
     /// );
     /// let result = Matrix3x3::from_reflection(&normal);
     ///
@@ -4174,17 +4174,17 @@ where
     /// #     Matrix4x4, 
     /// # };
     /// #
-    /// let left = -4.0;
-    /// let right = 4.0;
-    /// let bottom = -2.0;
-    /// let top = 2.0;
-    /// let near = 1.0;
-    /// let far = 100.0;
+    /// let left = -4_f64;
+    /// let right = 4_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
     /// let expected = Matrix4x4::new(
-    ///     1.0 / 4.0,  0.0,        0.0,          0.0,
-    ///     0.0,        1.0 / 2.0,  0.0,          0.0,
-    ///     0.0,        0.0,       -2.0 / 99.0,   0.0,
-    ///     0.0,        0.0,       -101.0 / 99.0, 1.0
+    ///     1_f64 / 4_f64,  0_f64,          0_f64,            0_f64,
+    ///     0_f64,          1_f64 / 2_f64,  0_f64,            0_f64,
+    ///     0_f64,          0_f64,         -2_f64 / 99_f64,   0_f64,
+    ///     0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64
     /// );
     /// let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
     ///
@@ -4227,15 +4227,15 @@ where
     /// #     assert_relative_eq, 
     /// # };
     /// #
-    /// let vfov = Degrees(90.0);
-    /// let aspect = 800 as f64 / 600 as f64;
-    /// let near = 1.0;
-    /// let far = 100.0;
+    /// let vfov = Degrees(90_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
     /// let expected = Matrix4x4::new(
-    ///     2.0 / 100.0, 0.0,         0.0,          0.0, 
-    ///     0.0,         2.0 / 75.0,  0.0,          0.0, 
-    ///     0.0,         0.0,        -2.0 / 99.0,   0.0, 
-    ///     0.0,         0.0,        -101.0 / 99.0, 1.0
+    ///     2_f64 / 100_f64, 0_f64,           0_f64,            0_f64, 
+    ///     0_f64,           2_f64 / 75_f64,  0_f64,            0_f64, 
+    ///     0_f64,           0_f64,          -2_f64 / 99_f64,   0_f64, 
+    ///     0_f64,           0_f64,          -101_f64 / 99_f64, 1_f64
     /// );
     /// let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
     ///
@@ -4270,17 +4270,17 @@ where
     /// #     Matrix4x4, 
     /// # };
     /// #
-    /// let left = -4.0;
-    /// let right = 4.0;
-    /// let bottom = -2.0;
-    /// let top = 3.0;
-    /// let near = 1.0;
-    /// let far = 100.0;
+    /// let left = -4_f64;
+    /// let right = 4_f64;
+    /// let bottom = -2_f64;
+    /// let top = 3_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
     /// let expected = Matrix4x4::new(
-    ///     1.0 / 4.0,  0.0,        0.0,           0.0,
-    ///     0.0,        2.0 / 5.0,  0.0,           0.0,
-    ///     0.0,        1.0 / 5.0, -101.0 / 99.0, -1.0,
-    ///     0.0,        0.0,       -200.0 / 99.0,  0.0
+    ///     1_f64 / 4_f64,  0_f64,          0_f64,             0_f64,
+    ///     0_f64,          2_f64 / 5_f64,  0_f64,             0_f64,
+    ///     0_f64,          1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
+    ///     0_f64,          0_f64,         -200_f64 / 99_f64,  0_f64
     /// );
     /// let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
     ///
@@ -4339,19 +4339,19 @@ where
     /// #     assert_relative_eq,
     /// # };
     /// #
-    /// let vfov = Degrees(72.0);
-    /// let aspect = 800 as f32 / 600 as f32;
-    /// let near = 0.1;
-    /// let far = 100.0;
+    /// let vfov = Degrees(72_f32);
+    /// let aspect = 800_f32 / 600_f32;
+    /// let near = 0.1_f32;
+    /// let far = 100_f32;
     /// let expected = Matrix4x4::new(
-    ///     1.0322863, 0.0,        0.0,       0.0, 
-    ///     0.0,       1.3763818,  0.0,       0.0, 
-    ///     0.0,       0.0,       -1.002002, -1.0, 
-    ///     0.0,       0.0,       -0.2002002, 0.0
+    ///     1.0322863_f32, 0_f32,          0_f32,          0_f32,
+    ///     0_f32,         1.3763818_f32,  0_f32,          0_f32,
+    ///     0_f32,         0_f32,         -1.002002_f32,  -1_f32,
+    ///     0_f32,         0_f32,         -0.2002002_f32,  0_f32
     /// );
     /// let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-6);
     /// ```
     #[rustfmt::skip]
     #[inline]

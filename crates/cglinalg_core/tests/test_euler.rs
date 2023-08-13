@@ -20,17 +20,17 @@ fn test_to_matrix() {
     let pitch_xy = Radians::full_turn_div_8();
     let euler = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
     
-    let c0r0 =  1.0 / 2.0;
-    let c0r1 =  1.0 / 2.0;
-    let c0r2 =  1.0 / f64::sqrt(2.0);
+    let c0r0 =  1_f64 / 2_f64;
+    let c0r1 =  1_f64 / 2_f64;
+    let c0r2 =  1_f64 / f64::sqrt(2_f64);
 
-    let c1r0 = -1.0 / 2.0;
-    let c1r1 = -1.0 / 2.0;
-    let c1r2 =  1.0 / f64::sqrt(2.0);
+    let c1r0 = -1_f64 / 2_f64;
+    let c1r1 = -1_f64 / 2_f64;
+    let c1r2 =  1_f64 / f64::sqrt(2_f64);
 
-    let c2r0 =  1.0 / f64::sqrt(2.0);
-    let c2r1 = -1.0 / f64::sqrt(2.0);
-    let c2r2 =  0.0;
+    let c2r0 =  1_f64 / f64::sqrt(2_f64);
+    let c2r1 = -1_f64 / f64::sqrt(2_f64);
+    let c2r2 =  0_f64;
 
     let expected = Matrix3x3::new(
         c0r0, c0r1, c0r2,
@@ -60,25 +60,25 @@ fn test_to_affine_matrix() {
     let pitch_xy = Radians::full_turn_div_8();
     let euler = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
     
-    let c0r0 =  1.0 / 2.0;
-    let c0r1 =  1.0 / 2.0;
-    let c0r2 =  1.0 / f64::sqrt(2.0);
-    let c0r3 =  0.0;
+    let c0r0 =  1_f64 / 2_f64;
+    let c0r1 =  1_f64 / 2_f64;
+    let c0r2 =  1_f64 / f64::sqrt(2_f64);
+    let c0r3 =  0_f64;
 
-    let c1r0 = -1.0 / 2.0;
-    let c1r1 = -1.0 / 2.0;
-    let c1r2 =  1.0 / f64::sqrt(2.0);
-    let c1r3 =  0.0;
+    let c1r0 = -1_f64 / 2_f64;
+    let c1r1 = -1_f64 / 2_f64;
+    let c1r2 =  1_f64 / f64::sqrt(2_f64);
+    let c1r3 =  0_f64;
 
-    let c2r0 =  1.0 / f64::sqrt(2.0);
-    let c2r1 = -1.0 / f64::sqrt(2.0);
-    let c2r2 =  0.0;
-    let c2r3 = 0.0;
+    let c2r0 =  1_f64 / f64::sqrt(2_f64);
+    let c2r1 = -1_f64 / f64::sqrt(2_f64);
+    let c2r2 =  0_f64;
+    let c2r3 = 0_f64;
 
-    let c3r0 = 0.0;
-    let c3r1 = 0.0;
-    let c3r2 = 0.0;
-    let c3r3 = 1.0;
+    let c3r0 = 0_f64;
+    let c3r1 = 0_f64;
+    let c3r2 = 0_f64;
+    let c3r3 = 1_f64;
 
     let expected = Matrix4x4::new(
         c0r0, c0r1, c0r2, c0r3,

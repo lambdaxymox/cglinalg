@@ -7,15 +7,15 @@ mod storage_tests {
 
     #[test]
     fn test_as_ref() {
-        let q: Quaternion<i32> = Quaternion::new(1, 2, 3, 4);
+        let q = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
         let q_ref: &[i32; 4] = q.as_ref();
 
-        assert_eq!(q_ref, &[1, 2, 3, 4]);
+        assert_eq!(q_ref, &[1_i32, 2_i32, 3_i32, 4_i32]);
     }
 
     #[test]
     fn test_indices_match_components() {
-        let q = Quaternion::new(1, 2, 3, 4);
+        let q = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
 
         assert_eq!(q[0], q.s);
         assert_eq!(q[1], q.v.x);
@@ -52,9 +52,9 @@ mod lerp_tests {
     fn test_nlerp() {
         let q1 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
         let q2 = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
-        let amount = 0.5;
+        let amount = 0.5_f64;
         let result = q1.nlerp(&q2, amount);
-        let expected = Quaternion::new(0.5, 0.5, 0.5, 0.5);
+        let expected = Quaternion::new(0.5_f64, 0.5_f64, 0.5_f64, 0.5_f64);
 
         assert_eq!(result, expected);
     }
@@ -119,9 +119,9 @@ mod arithmetic_tests {
 
     #[test]
     fn test_quaternion_addition() {
-        let q1 = Quaternion::new(1, 2, 3, 4);
-        let q2 = Quaternion::new(5, 6, 7, 8);
-        let expected = Quaternion::new(6, 8, 10, 12);
+        let q1 = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
+        let q2 = Quaternion::new(5_i32, 6_i32, 7_i32, 8_i32);
+        let expected = Quaternion::new(6_i32, 8_i32, 10_i32, 12_i32);
         let result = q1 + q2;
 
         assert_eq!(result, expected);
@@ -129,9 +129,9 @@ mod arithmetic_tests {
 
     #[test]
     fn test_quaternion_subtraction() {
-        let q1 = Quaternion::new(1, 2, 3, 4);
-        let q2 = Quaternion::new(5, 6, 7, 8);
-        let expected = Quaternion::new(-4, -4, -4, -4);
+        let q1 = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
+        let q2 = Quaternion::new(5_i32, 6_i32, 7_i32, 8_i32);
+        let expected = Quaternion::new(-4_i32, -4_i32, -4_i32, -4_i32);
         let result = q1 - q2;
 
         assert_eq!(result, expected);
@@ -199,16 +199,16 @@ mod norm_tests {
 
     #[test]
     fn test_quaternion_norm() {
-        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
+        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8_f64, 75.1939_f64, 1.0366_f64));
         let result = q.norm_squared();
-        let expected = 6875.23713677;
+        let expected = 6875.23713677_f64;
 
         assert_eq!(result, expected);
     }
 
     #[test]
     fn test_quaternion_normalized() {
-        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
+        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8_f64, 75.1939_f64, 1.0366_f64));
         let result = q.normalize().norm();
         let expected = 1_f64;
 
@@ -217,7 +217,7 @@ mod norm_tests {
 
     #[test]
     fn test_quaternion_normalized_to() {
-        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8, 75.1939, 1.0366));
+        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8_f64, 75.1939_f64, 1.0366_f64));
         let norm = 12_f64;
         let result = q.scale(norm).norm();
         let expected = norm;
@@ -257,7 +257,7 @@ mod slerp_tests {
             Angle::cos(angle_expected / 2_f64), 
             Angle::sin(angle_expected / 2_f64) * unit_z
         );
-        let result = q1.slerp(&q2, 0.5);
+        let result = q1.slerp(&q2, 0.5_f64);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -280,7 +280,7 @@ mod slerp_tests {
             Angle::cos(angle_expected / 2_f64), 
             Angle::sin(angle_expected / 2_f64) * unit_z
         );
-        let result = q1.slerp(&q2, 0.2);
+        let result = q1.slerp(&q2, 0.2_f64);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -303,7 +303,7 @@ mod slerp_tests {
             Angle::cos(angle_expected / 2_f64), 
             Angle::sin(angle_expected / 2_f64) * unit_z
         );
-        let result = q1.slerp(&q2, 0.5);
+        let result = q1.slerp(&q2, 0.5_f64);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -326,7 +326,7 @@ mod slerp_tests {
             Angle::cos(angle_expected / 2_f64), 
             Angle::sin(angle_expected / 2_f64) * unit_z
         );
-        let result = q1.slerp(&q2, 0.5);
+        let result = q1.slerp(&q2, 0.5_f64);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -346,10 +346,10 @@ mod slerp_tests {
         );
 
         // The slerp function can produce either the starting quaternion
-        // or its negation at 0.0. Both quaternions produce the same rotation.
+        // or its negation at 0. Both quaternions produce the same rotation.
         let expected1 = q0;
         let expected2 = -q0;
-        let result = q0.slerp(&q1, 0.0);
+        let result = q0.slerp(&q1, 0_f64);
 
         assert!(result == expected1 || result == expected2);
     }
@@ -369,7 +369,7 @@ mod slerp_tests {
         );
 
         let expected = q1;
-        let result = q0.slerp(&q1, 1.0);
+        let result = q0.slerp(&q1, 1_f64);
 
         assert_eq!(result, expected);
     }
@@ -423,7 +423,7 @@ mod exp_tests {
 
     #[test]
     fn test_quaternion_exp_power_times_pi() {
-        let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let sgn_qv = Quaternion::from_parts(0_f64, q.v / q.v.norm());
         let pi = core::f64::consts::PI;
         let expected = -Quaternion::identity();
@@ -465,7 +465,7 @@ mod exp_tests {
     #[test]
     fn test_quaternion_exp_power_times_pi_unit_scalar() {
         let qs = 3_f64;
-        let q: Quaternion<f64> = Quaternion::new(qs, 0_f64, 0_f64, 0_f64);
+        let q = Quaternion::new(qs, 0_f64, 0_f64, 0_f64);
         let expected = Quaternion::from_parts(qs.exp(), Vector3::zero());
         let result = q.exp();
 
@@ -507,7 +507,7 @@ mod exp_tests {
 
     #[test]
     fn test_quaternion_exp_inverse() {
-        let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let expected = Quaternion::identity();
         let result = (-q).exp() * q.exp();
 
@@ -516,7 +516,7 @@ mod exp_tests {
 
     #[test]
     fn test_quaternion_conjugate_commutes_with_exp() {
-        let q: Quaternion<f64> = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+        let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let result = q.exp().conjugate();
         let expected = q.conjugate().exp();
 
@@ -698,10 +698,10 @@ mod rotation_tests {
     #[test]
     fn test_rotation_between_same_unit_vectors() {
         let unit_v1: Unit<Vector3<f64>> = Unit::from_value(
-            Vector3::new(1.0, 1.0, 0.0)
+            Vector3::new(1_f64, 1_f64, 0_f64)
         );
         let unit_v2: Unit<Vector3<f64>> = Unit::from_value(
-            Vector3::new(1.0, 1.0, 0.0)
+            Vector3::new(1_f64, 1_f64, 0_f64)
         );
         let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
         let expected = Quaternion::from_axis_angle(
@@ -729,8 +729,8 @@ mod rotation_tests {
 
     #[test]
     fn test_rotation_between_same_vectors() {
-        let v1 = Vector3::new(1.0, 1.0, 0.0) * 3.0;
-        let v2 = Vector3::new(1.0, 1.0, 0.0) * 3.0;
+        let v1 = Vector3::new(1_f64, 1_f64, 0_f64) * 3_f64;
+        let v2 = Vector3::new(1_f64, 1_f64, 0_f64) * 3_f64;
         let unit_z = Vector3::unit_z();
         let expected = Quaternion::from_axis_angle(
             &Unit::from_value(unit_z), 
@@ -751,9 +751,9 @@ mod inverse_tests {
 
     #[test]
     fn test_inverse() {
-        let quaternion = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+        let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let norm = 30_f64;
-        let expected = Quaternion::new(1.0, -2.0, -3.0, -4.0) / norm;
+        let expected = Quaternion::new(1_f64, -2_f64, -3_f64, -4_f64) / norm;
         let result = quaternion.inverse().unwrap();
 
         assert_eq!(result, expected);
@@ -761,7 +761,7 @@ mod inverse_tests {
 
     #[test]
     fn test_is_invertible() {
-        let quaternion = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+        let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
 
         assert!(quaternion.is_invertible());
     }
@@ -918,7 +918,7 @@ mod square_tests {
         assert_ne!(unit_scalar * unit_scalar, q);
     }
 
-    /// There are infinite solutions of the quaternion polynomial equation
+    /// There are infinitely many solutions to the quaternion polynomial equation
     /// ```text
     /// q^2 + 1 = 0
     /// ```

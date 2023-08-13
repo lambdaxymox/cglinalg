@@ -110,7 +110,7 @@ fn test_unit_vector1() {
     let (wrapped, norm) = Unit::from_value_with_norm(vector);
     let unit_vector = wrapped.as_ref();
 
-    assert_relative_eq!(unit_vector.norm(), 1.0, epsilon = 1e-10);
+    assert_relative_eq!(unit_vector.norm(), 1_f64, epsilon = 1e-10);
     assert_eq!(vector.norm(), norm);
 }
 
@@ -120,7 +120,7 @@ fn test_unit_vector2() {
     let (wrapped, norm) = Unit::from_value_with_norm(vector);
     let unit_vector = wrapped.as_ref();
 
-    assert_relative_eq!(unit_vector.norm(), 1.0, epsilon = 1e-10);
+    assert_relative_eq!(unit_vector.norm(), 1_f64, epsilon = 1e-10);
     assert_eq!(vector.norm(), norm);
 }
 
@@ -130,7 +130,7 @@ fn test_unit_vector3() {
     let (wrapped, norm) = Unit::from_value_with_norm(vector);
     let unit_vector = wrapped.as_ref();
 
-    assert_relative_eq!(unit_vector.norm(), 1.0, epsilon = 1e-10);
+    assert_relative_eq!(unit_vector.norm(), 1_f64, epsilon = 1e-10);
     assert_eq!(vector.norm(), norm);
 }
 
@@ -140,7 +140,7 @@ fn test_unit_vector4() {
     let (wrapped, norm) = Unit::from_value_with_norm(vector);
     let unit_vector = wrapped.as_ref();
 
-    assert_relative_eq!(unit_vector.norm(), 1.0, epsilon = 1e-10);
+    assert_relative_eq!(unit_vector.norm(), 1_f64, epsilon = 1e-10);
     assert_eq!(vector.norm(), norm);
 }
 

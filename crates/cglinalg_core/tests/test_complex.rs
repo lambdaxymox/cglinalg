@@ -695,7 +695,7 @@ mod logarithm_tests {
     #[test]
     fn test_natural_logarithm6() {
         let z = Complex::new(1_f64, 3_f64);
-        let expected = Complex::new(1.151292546497023, 1.2490457723982544);
+        let expected = Complex::new(1.151292546497023_f64, 1.2490457723982544_f64);
         let result = z.ln();
         
         assert_eq!(result, expected);
@@ -756,7 +756,7 @@ mod square_root_tests {
     #[test]
     fn test_square_root_complex() {
         let z = Complex::new(2_f64, 5_f64);
-        let expected = Complex::new(1.9216093264675973, 1.3009928530039094);
+        let expected = Complex::new(1.9216093264675973_f64, 1.3009928530039094_f64);
         let result = z.sqrt();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);

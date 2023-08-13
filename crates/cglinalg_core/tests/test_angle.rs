@@ -706,3 +706,4 @@ mod degree_angle_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
+

@@ -52,20 +52,20 @@ use core::fmt;
 /// #     assert_relative_eq,
 /// # };
 ///
-/// let roll = Degrees(45.0);
-/// let yaw = Degrees(30.0);
-/// let pitch = Degrees(15.0);
+/// let roll = Degrees(45_f64);
+/// let yaw = Degrees(30_f64);
+/// let pitch = Degrees(15_f64);
 /// let euler = EulerAngles::new(roll, yaw, pitch);
 ///
-/// let c0r0 =  (1.0 / 4.0) * f64::sqrt(3.0 / 2.0) * (1.0 + f64::sqrt(3.0));
-/// let c0r1 =  (1.0 / 8.0) * (3.0 * f64::sqrt(3.0) - 1.0);
-/// let c0r2 =  (1.0 / 8.0) * (f64::sqrt(3.0) - 3.0);
-/// let c1r0 = -(1.0 / 4.0) * f64::sqrt(3.0 / 2.0) * (f64::sqrt(3.0) - 1.0);
-/// let c1r1 =  (1.0 / 8.0) * (3.0 + f64::sqrt(3.0));
-/// let c1r2 =  (1.0 / 8.0) * (3.0 * f64::sqrt(3.0) + 1.0);
-/// let c2r0 =  1.0 / 2.0;
-/// let c2r1 = -(1.0 / 2.0) * f64::sqrt(3.0 / 2.0);
-/// let c2r2 =  (1.0 / 2.0) * f64::sqrt(3.0 / 2.0);
+/// let c0r0 =  (1_f64 / 4_f64) * f64::sqrt(3_f64 / 2_f64) * (1_f64 + f64::sqrt(3_f64));
+/// let c0r1 =  (1_f64 / 8_f64) * (3_f64 * f64::sqrt(3_f64) - 1_f64);
+/// let c0r2 =  (1_f64 / 8_f64) * (f64::sqrt(3_f64) - 3_f64);
+/// let c1r0 = -(1_f64 / 4_f64) * f64::sqrt(3_f64 / 2_f64) * (f64::sqrt(3_f64) - 1_f64);
+/// let c1r1 =  (1_f64 / 8_f64) * (3_f64 + f64::sqrt(3_f64));
+/// let c1r2 =  (1_f64 / 8_f64) * (3_f64 * f64::sqrt(3_f64) + 1_f64);
+/// let c2r0 =  1_f64 / 2_f64;
+/// let c2r1 = -(1_f64 / 2_f64) * f64::sqrt(3_f64 / 2_f64);
+/// let c2r2 =  (1_f64 / 2_f64) * f64::sqrt(3_f64 / 2_f64);
 /// let expected = Matrix3x3::new(
 ///     c0r0, c0r1, c0r2,
 ///     c1r0, c1r1, c1r2,
@@ -131,29 +131,29 @@ use core::fmt;
 /// # };
 ///
 /// // Gimbal lock the x-axis.
-/// let roll = Degrees(45.0);
-/// let yaw = Degrees(90.0);
-/// let pitch = Degrees(15.0);
+/// let roll = Degrees(45_f64);
+/// let yaw = Degrees(90_f64);
+/// let pitch = Degrees(15_f64);
 /// let euler = EulerAngles::new(roll, yaw, pitch);
 /// let matrix_z_locked = Matrix3x3::from(euler);
 /// 
-/// assert_ulps_eq!(matrix_z_locked.c0r0, 0.0);
-/// assert_ulps_eq!(matrix_z_locked.c1r0, 0.0);
-/// assert_ulps_eq!(matrix_z_locked.c2r0, 1.0);
-/// assert_ulps_eq!(matrix_z_locked.c2r1, 0.0);
-/// assert_ulps_eq!(matrix_z_locked.c2r2, 0.0);
+/// assert_ulps_eq!(matrix_z_locked.c0r0, 0_f64);
+/// assert_ulps_eq!(matrix_z_locked.c1r0, 0_f64);
+/// assert_ulps_eq!(matrix_z_locked.c2r0, 1_f64);
+/// assert_ulps_eq!(matrix_z_locked.c2r1, 0_f64);
+/// assert_ulps_eq!(matrix_z_locked.c2r2, 0_f64);
 /// 
 /// // Attempt to roll in the gimbal locked state.
-/// let euler_roll = EulerAngles::new(Degrees(15.0), Degrees(0.0), Degrees(0.0));
+/// let euler_roll = EulerAngles::new(Degrees(15_f64), Degrees(0_f64), Degrees(0_f64));
 /// let matrix_roll = Matrix3x3::from(euler_roll);
 /// let matrix = matrix_roll * matrix_z_locked;
 ///
 /// // But the matrix is still gimbal locked.
-/// assert_ulps_eq!(matrix.c0r0, 0.0);
-/// assert_ulps_eq!(matrix.c1r0, 0.0);
-/// assert_ulps_eq!(matrix.c2r0, 1.0);
-/// assert_ulps_eq!(matrix.c2r1, 0.0);
-/// assert_ulps_eq!(matrix.c2r2, 0.0);
+/// assert_ulps_eq!(matrix.c0r0, 0_f64);
+/// assert_ulps_eq!(matrix.c1r0, 0_f64);
+/// assert_ulps_eq!(matrix.c2r0, 1_f64);
+/// assert_ulps_eq!(matrix.c2r1, 0_f64);
+/// assert_ulps_eq!(matrix.c2r2, 0_f64);
 /// ```
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]

@@ -113,13 +113,13 @@ where
     /// #     Vector3,
     /// # };
     /// #
-    /// let vector: Vector3<f64> = Vector3::new(0.0, 2.0, 0.0);
+    /// let vector: Vector3<f64> = Vector3::new(0_f64, 2_f64, 0_f64);
     /// let (wrapped, norm) = Unit::from_value_with_norm(vector);
     /// let unit_vector: &Vector3<f64> = &wrapped;
     /// 
-    /// assert_eq!(norm, 2.0);
-    /// assert_eq!(unit_vector.norm_squared(), 1.0, "unit_vector = {}", unit_vector);
-    /// assert_eq!(unit_vector.norm(), 1.0, "unit_vector = {}", unit_vector);
+    /// assert_eq!(norm, 2_f64);
+    /// assert_eq!(unit_vector.norm_squared(), 1_f64, "unit_vector = {}", unit_vector);
+    /// assert_eq!(unit_vector.norm(), 1_f64, "unit_vector = {}", unit_vector);
     /// ```
     #[inline]
     pub fn from_value_with_norm(value: T) -> (Self, T::Output) {
@@ -149,8 +149,8 @@ where
     /// #     Vector3,
     /// # };
     /// #
-    /// let vector: Vector3<f64> = Vector3::new(0.0, 1e-20, 0.0);
-    /// let threshold = 1e-10;
+    /// let vector: Vector3<f64> = Vector3::new(0_f64, 1e-20_f64, 0_f64);
+    /// let threshold = 1e-10_f64;
     /// let result = Unit::try_from_value_with_norm(vector, threshold);
     /// 
     /// assert!(result.is_none());
