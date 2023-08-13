@@ -299,23 +299,17 @@ macro_rules! approx_add_props {
                 prop_assert_eq!( v1 + &v2, &v1 + &v2);
             }
 
-            /// Given two vectors of floating point scalars, vector addition 
-            /// should be approximately commutative. 
+            /// Vector addition over floating point scalars should be commutative.
             ///
             /// Given vectors `v1` and `v2`, we have
             /// ```text
-            /// v1 + v2 ~= v2 + v1
+            /// v1 + v2 = v2 + v1
             /// ```
-            /// Note that floating point vector addition cannot be exactly 
-            /// commutative because arithmetic with floating point numbers 
-            /// is not commutative.
             #[test]
-            fn prop_vector_addition_almost_commutative(
+            fn prop_vector_addition_commutative(
                 v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
-                
-                let zero: $VectorN<$ScalarType> = $VectorN::zero();
 
-                prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
+                prop_assert_eq!(v1 + v2, v2 + v1);
             }
 
             /// Vector addition should be approximately associative. 
@@ -324,9 +318,6 @@ macro_rules! approx_add_props {
             /// ```text
             /// (v1 + v2) + v3 ~= v1 + (v2 + v3)
             /// ```
-            /// Note that floating point vector addition cannot be exactly 
-            /// associative because arithmetic with floating point numbers 
-            /// is not associative.
             #[test]
             fn prop_vector_addition_associative(
                 u in $Generator::<$ScalarType>(), 
@@ -435,9 +426,7 @@ macro_rules! exact_add_props {
             fn prop_vector_addition_commutative(
                 v1 in $Generator::<$ScalarType>(), v2 in $Generator::<$ScalarType>()) {
                 
-                let zero: $VectorN<$ScalarType> = $VectorN::zero();
-                
-                prop_assert_eq!((v1 + v2) - (v2 + v1), zero);
+                prop_assert_eq!(v1 + v2, v2 + v1);
             }
 
             /// Vector addition over integer scalars should be associative.
@@ -1303,29 +1292,20 @@ macro_rules! approx_mul_props {
 
 
         proptest! {
-            /// Multiplication of a scalar and a vector should be approximately 
-            /// commutative.
+            /// Multiplication of a scalar and a vector should be commutative.
             ///
             /// Given a constant `c` and a vector `v`
             /// ```text
-            /// c * v ~= v * c
+            /// c * v = v * c
             /// ```
             /// We deviate from the usual formalisms of vector algebra in that we 
             /// allow the ability to multiply scalars from the left of a vector, or 
             /// from the right of a vector.
-            ///
-            /// Note that floating point vector multiplication cannot be commutative 
-            /// because multiplication in the underlying floating point scalars is 
-            /// not commutative.
             #[test]
             fn prop_scalar_times_vector_equals_vector_times_scalar(
                 c in $ScalarGen::<$ScalarType>(), v in $Generator::<$ScalarType>()) {
                 
-                prop_assume!(c.is_finite());
-                prop_assume!(v.is_finite());
-                prop_assert!(
-                    relative_eq!(c * v, v * c, epsilon = $tolerance)
-                );
+                prop_assert_eq!(c * v, v * c);
             }
 
             /// A scalar `1` acts like a multiplicative identity element.

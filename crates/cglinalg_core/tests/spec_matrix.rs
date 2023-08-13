@@ -136,11 +136,11 @@ macro_rules! approx_addition_props {
             ///
             /// Given matrices `m1` and `m2`
             /// ```text
-            /// m1 + m2 ~= m2 + m1
+            /// m1 + m2 = m2 + m1
             /// ```
             #[test]
-            fn prop_matrix_addition_approx_commutative(m1 in $Generator(), m2 in $Generator::<$ScalarType>()) {
-                prop_assert!(relative_eq!(m1 + m2, m2 + m1, epsilon = $tolerance));
+            fn prop_matrix_addition_commutative(m1 in $Generator::<$ScalarType>(), m2 in $Generator::<$ScalarType>()) {
+                prop_assert_eq!(m1 + m2, m2 + m1);
             }
 
             /// Matrix addition over exact scalars is associative.

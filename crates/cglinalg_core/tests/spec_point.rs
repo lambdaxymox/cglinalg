@@ -127,16 +127,12 @@ macro_rules! approx_mul_props {
 
 
         proptest! {
-            /// Multiplication of a scalar and a point should be approximately 
-            /// commutative.
+            /// Multiplication of a scalar and a point should be commutative.
             ///
             /// Given a constant `c` and a point `p`
             /// ```text
-            /// c * p ~= p * c
+            /// c * p = p * c
             /// ```
-            /// Note that floating point scalar/point multiplication cannot be commutative 
-            /// because multiplication in the underlying floating point scalars is 
-            /// not commutative.
             #[test]
             fn prop_scalar_times_point_equals_point_times_scalar(
                 c in $ScalarGen::<$ScalarType>(), p in $Generator::<$ScalarType>()) {
@@ -192,8 +188,7 @@ macro_rules! exact_mul_props {
 
 
         proptest! {
-            /// Multiplication of a scalar and a point should be approximately 
-            /// commutative.
+            /// Multiplication of a scalar and a point should be commutative.
             ///
             /// Given a constant `c` and a point `p`
             /// ```text
@@ -326,9 +321,6 @@ macro_rules! approx_arithmetic_props {
             /// ```text
             /// (p + v1) + v2 ~= p + (v1 + v2)
             /// ```
-            /// Note that floating point vector addition cannot be exactly 
-            /// associative because arithmetic with floating point numbers 
-            /// is not associative.
             #[test]
             fn prop_point_vector_addition_compatible(
                 p in $PointGen::<$ScalarType>(), 
@@ -498,11 +490,8 @@ macro_rules! exact_arithmetic_props {
             /// 
             /// Given a point `p` and vectors `v1` and `v2`, we have
             /// ```text
-            /// (p + v1) + v2 = p + (v1 + v2)
+            /// (p + v1) + v2 ~= p + (v1 + v2)
             /// ```
-            /// Note that floating point vector addition cannot be exactly 
-            /// associative because arithmetic with floating point numbers 
-            /// is not associative.
             #[test]
             fn prop_point_vector_addition_compatible(
                 p in $PointGen::<$ScalarType>(), 

@@ -239,21 +239,17 @@ macro_rules! approx_add_props {
                 prop_assert_eq!( z1 + &z2, &z1 + &z2);
             }
 
-            /// Complex number addition over floating point scalars should be 
-            /// approximately commutative.
+            /// Complex number addition over floating point scalars should be commutative.
             /// 
             /// Given complex numbers `z1` and `z2`, we have
             /// ```text
-            /// z1 + z2 ~= z2 + z1
+            /// z1 + z2 = z2 + z1
             /// ```
-            /// Note that floating point complex number addition cannot be exactly 
-            /// commutative because arithmetic with floating point numbers is 
-            /// not commutative.
             #[test]
-            fn prop_complex_addition_almost_commutative(
+            fn prop_complex_addition_commutative(
                 z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
 
-                prop_assert!(relative_eq!(z1 + z2, z2 + z1, epsilon = $tolerance));
+                prop_assert_eq!(z1 + z2, z2 + z1);
             }
 
             /// Complex number addition over floating point scalars should be 
@@ -263,9 +259,6 @@ macro_rules! approx_add_props {
             /// ```text
             /// (z1 + z2) + z3 ~= z1 + (z2 + z3).
             /// ```
-            /// Note that floating point complex number addition cannot be exactly 
-            /// associative because arithmetic with floating point numbers is 
-            /// not associative.
             #[test]
             fn prop_complex_addition_almost_associative(
                 z1 in $Generator::<$ScalarType>(), 
@@ -369,10 +362,8 @@ macro_rules! exact_add_props {
             #[test]
             fn prop_complex_addition_commutative(
                 z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
-                
-                let zero = Complex::<$ScalarType>::zero();
 
-                prop_assert_eq!((z1 + z2) - (z2 + z1), zero);
+                prop_assert_eq!(z1 + z2, z2 + z1);
             }
 
             /// Given three complex numbers of integer scalars, complex number addition 
@@ -607,22 +598,16 @@ macro_rules! approx_mul_props {
 
 
         proptest! {
-            /// Multiplication of a scalar and a complex number should be approximately 
-            /// commutative.
+            /// Multiplication of a scalar and a complex number should be commutative.
             ///
             /// Given a constant `c` and a complex number `z`
             /// ```text
-            /// c * z ~= z * c
+            /// c * z = z * c
             /// ```
-            /// Note that floating point complex number multiplication cannot be commutative 
-            /// because multiplication in the underlying floating point scalars is not 
-            /// commutative.
             #[test]
             fn prop_scalar_times_complex_equals_complex_times_scalar(
                 c in $ScalarGen::<$ScalarType>(), z in $Generator::<$ScalarType>()) {
                 
-                prop_assume!(c.is_finite());
-                prop_assume!(z.is_finite());
                 prop_assert_eq!(c * z, z * c);
             }
 
@@ -648,9 +633,6 @@ macro_rules! approx_mul_props {
             /// ```text
             /// z * z_inv ~= z_inv * z ~= 1
             /// ```
-            /// Note that complex number algebra over floating point scalars is not 
-            /// commutative because multiplication of the underlying scalars is 
-            /// not commutative.
             #[test]
             fn prop_complex_multiplicative_inverse(z in $Generator::<$ScalarType>()) {
                 prop_assume!(z.is_finite());
@@ -671,9 +653,6 @@ macro_rules! approx_mul_props {
             /// ```text
             /// z1 * z2 ~= z2 * z1
             /// ```
-            /// Note that floating point complex number multiplication cannot be
-            /// exactly commutative because multiplication of floating point numbers
-            /// is not commutative.
             #[test]
             fn prop_complex_multiplication_commutative(
                 z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {

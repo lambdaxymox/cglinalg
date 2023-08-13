@@ -252,21 +252,17 @@ macro_rules! approx_add_props {
                 prop_assert_eq!( q1 + &q2, &q1 + &q2);
             }
 
-            /// Quaternion addition over floating point scalars should be 
-            /// approximately commutative.
+            /// Quaternion addition over floating point scalars should be commutative.
             /// 
             /// Given quaternions `q1` and `q2`, we have
             /// ```text
-            /// q1 + q2 ~= q2 + q1
+            /// q1 + q2 = q2 + q1
             /// ```
-            /// Note that floating point quaternion addition cannot be exactly 
-            /// commutative because arithmetic with floating point numbers is 
-            /// not commutative.
             #[test]
-            fn prop_quaternion_addition_almost_commutative(
+            fn prop_quaternion_addition_commutative(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
 
-                prop_assert!(relative_eq!(q1 + q2, q2 + q1, epsilon = $tolerance));
+                prop_assert_eq!(q1 + q2, q2 + q1);
             }
 
             /// Quaternion addition over floating point scalars should be 
@@ -276,9 +272,6 @@ macro_rules! approx_add_props {
             /// ```text
             /// (q1 + q2) + q3 ~= q1 + (q2 + q3).
             /// ```
-            /// Note that floating point quaternion addition cannot be exactly 
-            /// associative because arithmetic with floating point numbers is 
-            /// not associative.
             #[test]
             fn prop_quaternion_addition_almost_associative(
                 q1 in $Generator::<$ScalarType>(), 
@@ -382,10 +375,8 @@ macro_rules! exact_add_props {
             #[test]
             fn prop_quaternion_addition_commutative(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-                
-                let zero = Quaternion::<$ScalarType>::zero();
 
-                prop_assert_eq!((q1 + q2) - (q2 + q1), zero);
+                prop_assert_eq!(q1 + q2, q2 + q1);
             }
 
             /// Given three quaternions of integer scalars, quaternion addition 
@@ -620,22 +611,16 @@ macro_rules! approx_mul_props {
 
 
         proptest! {
-            /// Multiplication of a scalar and a quaternion should be approximately 
-            /// commutative.
+            /// Multiplication of a scalar and a quaternion should be commutative.
             ///
             /// Given a constant `c` and a quaternion `q`
             /// ```text
-            /// c * q ~= q * c
+            /// c * q = q * c
             /// ```
-            /// Note that floating point quaternion multiplication cannot be commutative 
-            /// because multiplication in the underlying floating point scalars is not 
-            /// commutative.
             #[test]
             fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
                 c in $ScalarGen::<$ScalarType>(), q in $Generator::<$ScalarType>()) {
                 
-                prop_assume!(c.is_finite());
-                prop_assume!(q.is_finite());
                 prop_assert_eq!(c * q, q * c);
             }
 
@@ -661,9 +646,6 @@ macro_rules! approx_mul_props {
             /// ```text
             /// q * q_inv ~= q_inv * q ~= 1
             /// ```
-            /// Note that quaternion algebra over floating point scalars is not 
-            /// commutative because multiplication of the underlying scalars is 
-            /// not commutative.
             #[test]
             fn prop_quaternion_multiplicative_inverse(q in $Generator::<$ScalarType>()) {
                 prop_assume!(q.is_finite());
