@@ -1488,9 +1488,6 @@ macro_rules! exact_l1_norm_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_ne,
-        };
         use super::{
             $Generator,
         };
