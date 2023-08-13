@@ -419,7 +419,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarSigned
 {
     /// Calculate the norm of a vector with respect to the supplied [`Norm`] type.
     /// 
@@ -465,6 +465,45 @@ where
         norm.metric_distance(self, other)
     }
 
+    /// Calculate the norm of a vector with respect to the **L1** norm.
+    /// 
+    /// # Examples
+    /// 
+    /// An example computing the **L1** norm of a vector of [`f64`] scalars.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(-2_f64, 7_f64, 8_f64);
+    /// let expected = 17_f64;
+    /// let result = vector.l1_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// An example of computing the **L1** norm of a vector of [`i32`] scalars.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(-2_i32, 7_i32, 8_i32);
+    /// let expected = 17_i32;
+    /// let result = vector.l1_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn l1_norm(&self) -> S {
+        self.apply_norm(&L1Norm::new())
+    }
+}
+
+impl<S, const N: usize> Vector<S, N>
+where
+    S: SimdScalarFloat
+{
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
     /// 
     /// # Example
@@ -537,26 +576,6 @@ where
         self.norm()
     }
 
-    /// Calculate the norm of a vector with respect to the **L1** norm.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// #
-    /// let vector = Vector3::new(-2_f64, 7_f64, 8_f64);
-    /// let expected = 17_f64;
-    /// let result = vector.l1_norm();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn l1_norm(&self) -> S {
-        self.apply_norm(&L1Norm::new())
-    }
-
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
     /// 
     /// This is a synonym for [`Vector::norm`].
@@ -610,8 +629,9 @@ where
 
     /// Calculate the norm of a vector with respect to the **L-infinity** norm.
     /// 
-    /// # Example
+    /// # Examples
     /// 
+    /// An example of computing the **L-infinity** norm of a vector of [`f64`] scalars.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector4,
@@ -631,24 +651,24 @@ where
 
 impl<S, const N: usize> Norm<Vector<S, N>> for L1Norm<Vector<S, N>> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarSigned
 {
     type Output = S;
 
     #[inline]
-    fn norm(&self, this: &Vector<S, N>) -> Self::Output {
+    fn norm(&self, rhs: &Vector<S, N>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
-            result += <S as num_traits::Float>::abs(this[i]);
+            result += rhs[i].abs();
         }
 
         result
     }
 
     #[inline]
-    fn metric_distance(&self, this: &Vector<S, N>, that: &Vector<S, N>) -> Self::Output {
-        self.norm(&(that - this))
+    fn metric_distance(&self, lhs: &Vector<S, N>, rhs: &Vector<S, N>) -> Self::Output {
+        self.norm(&(rhs - lhs))
     }
 }
 
@@ -659,13 +679,13 @@ where
     type Output = S;
 
     #[inline]
-    fn norm(&self, this: &Vector<S, N>) -> Self::Output {
-        Self::Output::sqrt(Vector::dot(this, this))
+    fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
+        Self::Output::sqrt(Vector::dot(lhs, lhs))
     }
 
     #[inline]
-    fn metric_distance(&self, this: &Vector<S, N>, that: &Vector<S, N>) -> Self::Output {
-        self.norm(&(that - this))
+    fn metric_distance(&self, lhs: &Vector<S, N>, rhs: &Vector<S, N>) -> Self::Output {
+        self.norm(&(rhs - lhs))
     }
 }
 
@@ -679,7 +699,7 @@ where
     fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
         let mut result = Self::Output::zero();
         for i in 0..N {
-            result += Self::Output::powi(<Self::Output as num_traits::Float>::abs(lhs[i]), self.p as i32);
+            result += lhs[i].abs().powi(self.p as i32);
         }
 
         result.powf(num_traits::cast(1_f64 / (self.p as f64)).unwrap())
@@ -701,7 +721,7 @@ where
     fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
         let mut result = Self::Output::zero();
         for i in 0..N {
-            result = Self::Output::max(result, <Self::Output as num_traits::Float>::abs(lhs[i]));
+            result = result.max(lhs[i].abs());
         }
 
         result

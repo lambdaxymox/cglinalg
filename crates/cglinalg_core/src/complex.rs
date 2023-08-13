@@ -540,11 +540,17 @@ where
     pub fn conjugate(self) -> Self {
         Self::new(self.re, -self.im)
     }
+}
 
+impl<S> Complex<S>
+where
+    S: SimdScalarSigned
+{
     /// Calculate the **L1** norm of a complex number.
     /// 
-    /// # Example
+    /// # Examples
     /// 
+    /// An example computing the **L1** norm of a [`f32`] complex number.
     /// ```
     /// # use cglinalg_core::{
     /// #     Complex,
@@ -552,6 +558,16 @@ where
     /// let z = Complex::new(2_f32, -5_f32);
     /// 
     /// assert_eq!(z.l1_norm(), 7_f32);
+    /// ```
+    /// 
+    /// An example computing the **L1** norm of an [`i32`] complex number.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// let z = Complex::new(2_i32, -5_i32);
+    /// 
+    /// assert_eq!(z.l1_norm(), 7_i32);
     /// ```
     #[inline]
     pub fn l1_norm(self) -> S { 

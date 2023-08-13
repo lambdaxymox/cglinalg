@@ -756,6 +756,45 @@ where
     }
 }
 
+impl<S> Quaternion<S> 
+where 
+    S: SimdScalarSigned 
+{
+    /// Calculate the norm of a quaternion qith respect to the **L1** norm.
+    /// 
+    /// # Examples
+    /// 
+    /// An example computing the **L1** norm of a quaternion of [`f64`] scalars.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, -3_f64, 4_f64);
+    /// let expected = 10_f64;
+    /// let result = quaternion.l1_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// An example of computing the **L1** norm of a vector of [`i32`] scalars.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let quaternion = Quaternion::new(1_i32, 2_i32, -3_i32, 4_i32);
+    /// let expected = 10_i32;
+    /// let result = quaternion.l1_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn l1_norm(&self) -> S {
+        self.coords.l1_norm()
+    }
+}
+
 impl<S> Quaternion<S>
 where
     S: SimdScalarFloat
@@ -874,26 +913,6 @@ where
     #[inline]
     pub fn l2_norm(&self) -> S {
         self.norm()
-    }
-
-    /// Calculate the norm of a quaternion qith respect to the **L1** norm.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// #
-    /// let quaternion = Quaternion::new(1_f64, 2_f64, -3_f64, 4_f64);
-    /// let expected = 10_f64;
-    /// let result = quaternion.l1_norm();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn l1_norm(&self) -> S {
-        self.coords.l1_norm()
     }
 }
 

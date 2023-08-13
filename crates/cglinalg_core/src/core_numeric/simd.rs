@@ -36,6 +36,27 @@ where
 {
 }
 
+/// Scalar numbers with a notion of subtraction and have additive 
+/// inverses. 
+pub trait SimdScalarSigned 
+where 
+    Self: SimdScalar + Signed
+{
+}
+
+/// Scalar numbers that have the properties of finite precision
+/// floating point arithmetic.
+pub trait SimdScalarFloat:
+      SimdScalarSigned
+    + Float
+    + approx::AbsDiffEq<Epsilon = Self>
+    + approx::RelativeEq<Epsilon = Self>
+    + approx::UlpsEq<Epsilon = Self>
+    + Neg<Output = Self> 
+{
+}
+
+
 impl<T> SimdScalar for T 
 where 
     T: Copy
@@ -52,29 +73,9 @@ where
 { 
 }
 
-/// Scalar numbers with a notion of subtraction and have additive 
-/// inverses. 
-pub trait SimdScalarSigned 
-where 
-    Self: SimdScalar + Signed
-{
-}
-
 impl<T> SimdScalarSigned for T 
 where 
     T: SimdScalar + Signed
-{
-}
-
-/// Scalar numbers that have the properties of finite precision
-/// floating point arithmetic.
-pub trait SimdScalarFloat:
-      SimdScalarSigned
-    + Float
-    + approx::AbsDiffEq<Epsilon = Self>
-    + approx::RelativeEq<Epsilon = Self>
-    + approx::UlpsEq<Epsilon = Self>
-    + Neg<Output = Self> 
 {
 }
 

@@ -1,4 +1,5 @@
 use crate::core_numeric::{
+    SimdScalarSigned,
     SimdScalarFloat,   
 };
 
@@ -99,7 +100,7 @@ where
 pub trait Norm<V>
 where
 {
-    type Output: SimdScalarFloat;
+    type Output: SimdScalarSigned;
 
     fn norm(&self, rhs: &V) -> Self::Output;
 
