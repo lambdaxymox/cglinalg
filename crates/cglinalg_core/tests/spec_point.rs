@@ -569,9 +569,9 @@ fn any_point1_norm_squared_f64<S>() -> impl Strategy<Value = Point1<f64>> {
     }
 
     any::<f64>().prop_map(|_x| {
-        let min_scale = f64::sqrt(f64::EPSILON);
-        let max_scale = f64::sqrt(f64::MAX);
-        let x = rescale(_x, min_scale, max_scale);
+        let min_value = f64::sqrt(f64::EPSILON);
+        let max_value = f64::sqrt(f64::MAX);
+        let x = rescale(_x, min_value, max_value);
 
         Point1::new(x)
     })
@@ -584,10 +584,10 @@ fn any_point2_norm_squared_f64<S>() -> impl Strategy<Value = Point2<f64>> {
     }
 
     any::<(f64, f64)>().prop_map(|(_x, _y)| {
-        let min_scale = f64::sqrt(f64::EPSILON);
-        let max_scale = f64::sqrt(f64::MAX);
-        let x = rescale(_x, min_scale, max_scale);
-        let y = rescale(_y, min_scale, max_scale);
+        let min_value = f64::sqrt(f64::EPSILON);
+        let max_value = f64::sqrt(f64::MAX);
+        let x = rescale(_x, min_value, max_value);
+        let y = rescale(_y, min_value, max_value);
 
         Point2::new(x, y)
     })
@@ -600,11 +600,11 @@ fn any_point3_norm_squared_f64<S>() -> impl Strategy<Value = Point3<f64>> {
     }
 
     any::<(f64, f64, f64)>().prop_map(|(_x, _y, _z)| {
-        let min_scale = f64::sqrt(f64::EPSILON);
-        let max_scale = f64::sqrt(f64::MAX);
-        let x = rescale(_x, min_scale, max_scale);
-        let y = rescale(_y, min_scale, max_scale);
-        let z = rescale(_z, min_scale, max_scale);
+        let min_value = f64::sqrt(f64::EPSILON);
+        let max_value = f64::sqrt(f64::MAX);
+        let x = rescale(_x, min_value, max_value);
+        let y = rescale(_y, min_value, max_value);
+        let z = rescale(_z, min_value, max_value);
 
         Point3::new(x, y, z)
     })

@@ -25,9 +25,9 @@ fn any_complex<S>() -> impl Strategy<Value = Complex<S>>
 where 
     S: SimdScalar + Arbitrary
 {
-    any::<(S, S)>().prop_map(|(x, y)| {
+    any::<(S, S)>().prop_map(|(re, im)| {
         let modulus: S = num_traits::cast(100_000_000).unwrap();
-        let complex = Complex::new(x, y);
+        let complex = Complex::new(re, im);
 
         complex % modulus
     })
@@ -1496,13 +1496,12 @@ macro_rules! approx_l1_norm_props {
             /// norm function.
             #[test]
             fn prop_l1_norm_approx_point_separating(
-                z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
-                
-                let zero: $ScalarType = num_traits::zero();
-
+                z1 in $Generator::<$ScalarType>(), 
+                z2 in $Generator::<$ScalarType>()
+            ) {
                 prop_assume!(relative_ne!(z1, z2, epsilon = $tolerance));
                 prop_assert!(
-                    relative_ne!((z1 - z2).l1_norm(), zero, epsilon = $tolerance),
+                    (z1 - z2).l1_norm() > $tolerance,
                     "\nl1_norm(z1 - z2) = {}\n",
                     (z1 - z2).l1_norm()
                 );
@@ -1624,7 +1623,11 @@ macro_rules! sqrt_props {
             fn prop_positive_square_root_squared(z in $Generator::<$ScalarType>()) {
                 let sqrt_z = z.sqrt();
 
-                prop_assert!(relative_eq!(sqrt_z * sqrt_z, z, epsilon = $tolerance));
+                prop_assert!(
+                    relative_eq!(sqrt_z * sqrt_z, z, epsilon = $tolerance),
+                    "z = {:?}\nsqrt_z = {:?}\nsqrt_z * sqrt_z = {:?}",
+                    z, sqrt_z, sqrt_z * sqrt_z
+                );
             }
 
             /// The square of the negative square root of a complex number is the original
@@ -1638,7 +1641,11 @@ macro_rules! sqrt_props {
             fn prop_negative_square_root_squared(z in $Generator::<$ScalarType>()) {
                 let minus_sqrt_z = -z.sqrt();
 
-                prop_assert!(relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = $tolerance));
+                prop_assert!(
+                    relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = $tolerance),
+                    "z = {:?}\nminus_sqrt_z = {:?}\nminus_sqrt_z * mins_sqrt_z = {:?}",
+                    z, minus_sqrt_z, minus_sqrt_z * minus_sqrt_z
+                );
             }
         }
     }

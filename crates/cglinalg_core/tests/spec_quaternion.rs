@@ -35,18 +35,6 @@ where
     .no_shrink()
 }
 
-fn any_quaternion_squared<S>() -> impl Strategy<Value = Quaternion<S>>
-where
-    S: SimdScalarFloat + Arbitrary
-{
-    any::<(S, S, S, S)>().prop_map(|(s, x, y, z)| {
-        let modulus: S = num_traits::cast(100_000_000).unwrap();
-        let quaternion = Quaternion::new(s.abs(), x.abs(), y.abs(), z.abs());
-
-        quaternion % modulus
-    })
-    .no_shrink()
-}
 
 /// Generate property tests for quaternion arithmetic over exact scalars. We 
 /// define an exact scalar type as a type where scalar arithmetic is 
@@ -1466,13 +1454,12 @@ macro_rules! norm_props {
             /// norm function.
             #[test]
             fn prop_norm_approx_point_separating(
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-                
-                let zero: $ScalarType = num_traits::zero();
-
+                q1 in $Generator::<$ScalarType>(), 
+                q2 in $Generator::<$ScalarType>()
+            ) {
                 prop_assume!(relative_ne!(q1, q2, epsilon = $tolerance));
                 prop_assert!(
-                    relative_ne!((q1 - q2).norm(), zero, epsilon = $tolerance),
+                    (q1 - q2).norm() > $tolerance,
                     "\n|q1 - q2| = {}\n",
                     (q1 - q2).norm()
                 );
@@ -1542,13 +1529,12 @@ macro_rules! l1_norm_props {
             /// norm function.
             #[test]
             fn prop_l1_norm_approx_point_separating(
-                q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-                
-                let zero: $ScalarType = num_traits::zero();
-
+                q1 in $Generator::<$ScalarType>(), 
+                q2 in $Generator::<$ScalarType>()
+            ) {
                 prop_assume!(relative_ne!(q1, q2, epsilon = $tolerance));
                 prop_assert!(
-                    relative_ne!((q1 - q2).l1_norm(), zero, epsilon = $tolerance),
+                    (q1 - q2).l1_norm() > $tolerance,
                     "\nl1_norm(q1 - q2) = {}\n",
                     (q1 - q2).l1_norm()
                 );
@@ -1624,6 +1610,19 @@ macro_rules! norm_synonym_props {
 
 norm_synonym_props!(quaternion_f64_norm_synonym_props, f64, any_quaternion, any_scalar, 1e-10);
 
+
+fn any_quaternion_squared<S>() -> impl Strategy<Value = Quaternion<S>>
+where
+    S: SimdScalarFloat + Arbitrary
+{
+    any::<(S, S, S, S)>().prop_map(|(s, x, y, z)| {
+        let modulus: S = num_traits::cast(100_000_000).unwrap();
+        let quaternion = Quaternion::new(s.abs(), x.abs(), y.abs(), z.abs());
+
+        quaternion % modulus
+    })
+    .no_shrink()
+}
 
 /// Generate property tests for quaternion square roots.
 ///
