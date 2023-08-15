@@ -978,7 +978,7 @@ macro_rules! exact_conjugation_props {
                 prop_assert_eq!(z.conjugate().conjugate(), z);
             }
 
-            /// Quaternion conjugation is linear.
+            /// Complex conjugation is linear.
             ///
             /// Given complex numbers `z1` and `z2`, complex number conjugation satisfies
             /// ```text
@@ -991,7 +991,7 @@ macro_rules! exact_conjugation_props {
                 prop_assert_eq!((z1 + z2).conjugate(), z1.conjugate() + z2.conjugate());
             }
 
-            /// Quaternion multiplication transposes under conjugation.
+            /// Complex multiplication transposes under conjugation.
             ///
             /// Given complex numbers `z1` and `z2`
             /// ```text
@@ -1012,6 +1012,20 @@ exact_conjugation_props!(complex_i32_conjugation_props, i32, any_complex);
 exact_conjugation_props!(complex_i64_conjugation_props, i64, any_complex);
 
 
+fn any_complex_modulus_squared_f64<S>() -> impl Strategy<Value = Complex<f64>> {
+    use cglinalg_core::Radians;
+
+    any::<(f64, f64)>().prop_map(|(_scale, _angle)| {
+        let min_scale = f64::sqrt(f64::EPSILON);
+        let max_scale = f64::sqrt(f64::MAX);
+        let scale = min_scale + (_scale % (max_scale - min_scale));
+        let angle = Radians(_angle % core::f64::consts::FRAC_PI_2);
+
+        Complex::from_polar_decomposition(scale, angle)
+    })
+    .no_shrink()
+}
+
 /// Generate property tests for the complex number squared modulus.
 ///
 /// ### Macro Parameters
@@ -1024,10 +1038,12 @@ exact_conjugation_props!(complex_i64_conjugation_props, i64, any_complex);
 ///    complex numbers.
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
+/// * `$input_tolerance` specifies the amount of acceptable error in the input for 
+///    a correct operation with floating point scalars.
+/// * `$output_tolerance` specifies the amount of acceptable error in the input for 
+///    a correct operation with floating point scalars.
 macro_rules! approx_modulus_squared_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $input_tolerance:expr, $output_tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         use approx::{
@@ -1070,13 +1086,12 @@ macro_rules! approx_modulus_squared_props {
             #[test]
             fn prop_modulus_squared_approx_point_separating(
                 z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
-                
-                let zero: $ScalarType = num_traits::zero();
 
-                prop_assume!(relative_ne!(z1, z2, epsilon = $tolerance));
+                prop_assume!(relative_ne!(z1, z2, epsilon = $input_tolerance));
                 prop_assert!(
-                    relative_ne!((z1 - z2).modulus_squared(), zero, epsilon = $tolerance),
-                    "\n|z1 - z2|^2 = {}\n",
+                    // relative_ne!((z1 - z2).modulus_squared(), zero, epsilon = $output_tolerance),
+                    (z1 - z2).modulus_squared() > $output_tolerance,
+                    "\n|z1 - z2|^2 = {:e}\n",
                     (z1 - z2).modulus_squared()
                 );
             }
@@ -1085,7 +1100,7 @@ macro_rules! approx_modulus_squared_props {
     }
 }
 
-approx_modulus_squared_props!(complex_f64_modulus_squared_props, f64, any_complex, any_scalar, 1e-8);
+approx_modulus_squared_props!(complex_f64_modulus_squared_props, f64, any_complex_modulus_squared_f64, any_scalar, 1e-10, 1e-20);
 
 
 /// Generate property tests for complex number squared modulus.
@@ -1136,6 +1151,34 @@ macro_rules! approx_modulus_squared_synonym_props {
 
 approx_modulus_squared_synonym_props!(complex_f64_modulus_squared_synonym_props, f64, any_complex);
 
+
+fn any_complex_modulus_squared_i32<S>() -> impl Strategy<Value = Complex<i32>> {
+    any::<(i32, i32)>().prop_map(|(_re, _im)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 2;
+        let re = min_value + (_re % (max_value - min_value + 1));
+        let im = min_value + (_im % (max_value - min_value + 1));
+        
+        Complex::new(re, im)
+    })
+    .no_shrink()
+}
+
+fn any_complex_modulus_squared_u32<S>() -> impl Strategy<Value = Complex<u32>> {
+    any::<(u32, u32)>().prop_map(|(_re, _im)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(u32::MAX as f64)) as u32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 2;
+        let re = min_value + (_re % (max_value - min_value + 1));
+        let im = min_value + (_im % (max_value - min_value + 1));
+
+        Complex::new(re, im)
+    })
+    .no_shrink()
+}
 
 /// Generate property tests for the complex number squared modulus.
 ///
@@ -1188,7 +1231,7 @@ macro_rules! exact_modulus_squared_props {
             /// For the sake of testability, we use the second form to test the 
             /// norm function.
             #[test]
-            fn prop_modulus_squared_approx_point_separating(
+            fn prop_modulus_squared_point_separating(
                 z1 in $Generator::<$ScalarType>(), z2 in $Generator::<$ScalarType>()) {
                 
                 let zero: $ScalarType = num_traits::zero();
@@ -1205,8 +1248,8 @@ macro_rules! exact_modulus_squared_props {
     }
 }
 
-exact_modulus_squared_props!(complex_i32_modulus_squared_props, i32, any_complex, any_scalar);
-exact_modulus_squared_props!(complex_u32_modulus_squared_props, u32, any_complex, any_scalar);
+exact_modulus_squared_props!(complex_i32_modulus_squared_props, i32, any_complex_modulus_squared_i32, any_scalar);
+exact_modulus_squared_props!(complex_u32_modulus_squared_props, u32, any_complex_modulus_squared_u32, any_scalar);
 
 
 /// Generate property tests for complex number squared modulus.

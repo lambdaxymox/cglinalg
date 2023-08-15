@@ -1118,6 +1118,39 @@ exact_conjugation_props!(quaternion_i32_conjugation_props, i32, any_quaternion);
 exact_conjugation_props!(quaternion_i64_conjugation_props, i64, any_quaternion);
 
 
+fn any_quaternion_norm_squared_f64<S>() -> impl Strategy<Value = Quaternion<f64>> {
+    use cglinalg_core::{
+        Radians,
+        Vector3,
+        Normed,
+        Unit,
+    };
+
+    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<(f64, f64, f64, f64, f64)>().prop_map(|(_scale, _angle, _x, _y, _z)| {
+        let min_scale = f64::sqrt(f64::EPSILON);
+        let max_scale = f64::sqrt(f64::MAX);
+        let scale = rescale(_scale, min_scale, max_scale);
+        let angle = Radians(_angle % core::f64::consts::FRAC_PI_2);
+        let unnormalized_axis = {
+            let min_value = f64::sqrt(f64::EPSILON);
+            let max_value = f64::sqrt(f64::MAX) / f64::sqrt(3_f64);
+            let x = rescale(_x, min_value, max_value);
+            let y = rescale(_y, min_value, max_value);
+            let z = rescale(_z, min_value, max_value);
+
+            Vector3::new(x, y, z)
+        };
+        let axis = Unit::from_value(unnormalized_axis);
+        
+        Quaternion::from_polar_decomposition(scale, angle, &axis)
+    })
+    .no_shrink()
+}
+
 /// Generate property tests for the quaternion squared **L2** norm.
 ///
 /// ### Macro Parameters
@@ -1130,10 +1163,12 @@ exact_conjugation_props!(quaternion_i64_conjugation_props, i64, any_quaternion);
 ///    quaternions.
 /// * `$Generator` is the name of a function or closure for generating examples.
 /// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
+/// * `$input_tolerance` specifies the amount of acceptable error in the input for 
+///    a correct operation with floating point scalars.
+/// * `$output_tolerance` specifies the amount of acceptable error in the input for 
+///    a correct operation with floating point scalars.
 macro_rules! approx_norm_squared_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $input_tolerance:expr, $output_tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         use approx::{
@@ -1176,13 +1211,11 @@ macro_rules! approx_norm_squared_props {
             #[test]
             fn prop_norm_squared_approx_point_separating(
                 q1 in $Generator::<$ScalarType>(), q2 in $Generator::<$ScalarType>()) {
-                
-                let zero: $ScalarType = num_traits::zero();
 
-                prop_assume!(relative_ne!(q1, q2, epsilon = $tolerance));
+                prop_assume!(relative_ne!(q1, q2, epsilon = $input_tolerance));
                 prop_assert!(
-                    relative_ne!((q1 - q2).norm_squared(), zero, epsilon = $tolerance),
-                    "\n|q1 - q2|^2 = {}\n",
+                    (q1 - q2).norm_squared() > $output_tolerance,
+                    "\n|q1 - q2|^2 = {:e}\n",
                     (q1 - q2).norm_squared()
                 );
             }
@@ -1191,7 +1224,7 @@ macro_rules! approx_norm_squared_props {
     }
 }
 
-approx_norm_squared_props!(quaternion_f64_norm_squared_props, f64, any_quaternion, any_scalar, 1e-10);
+approx_norm_squared_props!(quaternion_f64_norm_squared_props, f64, any_quaternion_norm_squared_f64, any_scalar, 1e-10, 1e-20);
 
 
 /// Generate property tests for quaternion squared **L2** norm.
@@ -1232,6 +1265,38 @@ macro_rules! approx_norm_squared_synonym_props {
 
 approx_norm_squared_synonym_props!(quaternion_f64_norm_squared_synonym_props, f64, any_quaternion);
 
+
+fn any_quaternion_norm_squared_i32<S>() -> impl Strategy<Value = Quaternion<i32>> {
+    any::<(i32, i32, i32, i32)>().prop_map(|(_s, _x, _y, _z)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 4;
+        let qs = min_value + (_s % (max_value - min_value + 1));
+        let qx = min_value + (_x % (max_value - min_value + 1));
+        let qy = min_value + (_y % (max_value - min_value + 1));
+        let qz = min_value + (_z % (max_value - min_value + 1));
+        
+        Quaternion::new(qs, qx, qy, qz)
+    })
+    .no_shrink()
+}
+
+fn any_quaternion_norm_squared_u32<S>() -> impl Strategy<Value = Quaternion<u32>> {
+    any::<(u32, u32, u32, u32)>().prop_map(|(_s, _x, _y, _z)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 4;
+        let qs = min_value + (_s % (max_value - min_value + 1));
+        let qx = min_value + (_x % (max_value - min_value + 1));
+        let qy = min_value + (_y % (max_value - min_value + 1));
+        let qz = min_value + (_z % (max_value - min_value + 1));
+        
+        Quaternion::new(qs, qx, qy, qz)
+    })
+    .no_shrink()
+}
 
 /// Generate property tests for the quaternion squared **L2** norm.
 ///
@@ -1301,8 +1366,8 @@ macro_rules! exact_norm_squared_props {
     }
 }
 
-exact_norm_squared_props!(quaternion_i32_norm_squared_props, i32, any_quaternion, any_scalar);
-exact_norm_squared_props!(quaternion_u32_norm_squared_props, u32, any_quaternion, any_scalar);
+exact_norm_squared_props!(quaternion_i32_norm_squared_props, i32, any_quaternion_norm_squared_i32, any_scalar);
+exact_norm_squared_props!(quaternion_u32_norm_squared_props, u32, any_quaternion_norm_squared_u32, any_scalar);
 
 
 /// Generate property tests for quaternion squared **L2** norm.

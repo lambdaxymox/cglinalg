@@ -644,6 +644,72 @@ exact_sub_props!(vector3_u32_sub_props, Vector3, u32, any_vector3);
 exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 
 
+fn any_vector1_norm_squared_f64<S>() -> impl Strategy<Value = Vector1<f64>> {
+    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<f64>().prop_map(|_x| {
+        let min_scale = f64::sqrt(f64::EPSILON);
+        let max_scale = f64::sqrt(f64::MAX);
+        let x = rescale(_x, min_scale, max_scale);
+
+        Vector1::new(x)
+    })
+    .no_shrink()
+}
+
+fn any_vector2_norm_squared_f64<S>() -> impl Strategy<Value = Vector2<f64>> {
+    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<(f64, f64)>().prop_map(|(_x, _y)| {
+        let min_scale = f64::sqrt(f64::EPSILON);
+        let max_scale = f64::sqrt(f64::MAX);
+        let x = rescale(_x, min_scale, max_scale);
+        let y = rescale(_y, min_scale, max_scale);
+
+        Vector2::new(x, y)
+    })
+    .no_shrink()
+}
+
+fn any_vector3_norm_squared_f64<S>() -> impl Strategy<Value = Vector3<f64>> {
+    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<(f64, f64, f64)>().prop_map(|(_x, _y, _z)| {
+        let min_scale = f64::sqrt(f64::EPSILON);
+        let max_scale = f64::sqrt(f64::MAX);
+        let x = rescale(_x, min_scale, max_scale);
+        let y = rescale(_y, min_scale, max_scale);
+        let z = rescale(_z, min_scale, max_scale);
+
+        Vector3::new(x, y, z)
+    })
+    .no_shrink()
+}
+
+fn any_vector4_norm_squared_f64<S>() -> impl Strategy<Value = Vector4<f64>> {
+    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<(f64, f64, f64, f64)>().prop_map(|(_x, _y, _z, _w)| {
+        let min_scale = f64::sqrt(f64::EPSILON);
+        let max_scale = f64::sqrt(f64::MAX);
+        let x = rescale(_x, min_scale, max_scale);
+        let y = rescale(_y, min_scale, max_scale);
+        let z = rescale(_z, min_scale, max_scale);
+        let w = rescale(_w, min_scale, max_scale);
+
+        Vector4::new(x, y, z, w)
+    })
+    .no_shrink()
+}
+
 /// Generate properties for the vector squared **L2** norm.
 ///
 /// ### Macro Parameters
@@ -656,10 +722,12 @@ exact_sub_props!(vector4_u32_sub_props, Vector4, u32, any_vector4);
 /// * `$ScalarType` denotes the underlying system of numbers that compose the 
 ///    set of vectors.
 /// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
+/// * `$input_tolerance` specifies the amount of acceptable error in the input for 
+///    a correct operation with floating point scalars.
+/// * `$output_tolerance` specifies the amount of acceptable error in the input for 
+///    a correct operation with floating point scalars.
 macro_rules! approx_norm_squared_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $input_tolerance:expr, $output_tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         use approx::{
@@ -700,13 +768,11 @@ macro_rules! approx_norm_squared_props {
             #[test]
             fn prop_norm_squared_approx_point_separating(
                 v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-                
-                let zero: $ScalarType = num_traits::zero();
 
-                prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
+                prop_assume!(relative_ne!(v, w, epsilon = $input_tolerance));
                 prop_assert!(
-                    relative_ne!((v - w).norm_squared(), zero, epsilon = $tolerance),
-                    "\n|v - w|^2 = {}\n", 
+                    (v - w).norm_squared() > $output_tolerance,
+                    "\n|v - w|^2 = {:e}\n", 
                     (v - w).norm_squared()
                 );
             }
@@ -715,10 +781,10 @@ macro_rules! approx_norm_squared_props {
     }
 }
 
-approx_norm_squared_props!(vector1_f64_norm_squared_props, Vector1, f64, any_vector1, 1e-8);
-approx_norm_squared_props!(vector2_f64_norm_squared_props, Vector2, f64, any_vector2, 1e-8);
-approx_norm_squared_props!(vector3_f64_norm_squared_props, Vector3, f64, any_vector3, 1e-8);
-approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, any_vector4, 1e-8);
+approx_norm_squared_props!(vector1_f64_norm_squared_props, Vector1, f64, any_vector1_norm_squared_f64, 1e-10, 1e-20);
+approx_norm_squared_props!(vector2_f64_norm_squared_props, Vector2, f64, any_vector2_norm_squared_f64, 1e-10, 1e-20);
+approx_norm_squared_props!(vector3_f64_norm_squared_props, Vector3, f64, any_vector3_norm_squared_f64, 1e-10, 1e-20);
+approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, any_vector4_norm_squared_f64, 1e-10, 1e-20);
 
 
 /// Generate properties for the vector squared **L2** norm.
@@ -763,6 +829,138 @@ approx_norm_squared_synonym_props!(vector2_f64_norm_squared_synonym_props, Vecto
 approx_norm_squared_synonym_props!(vector3_f64_norm_squared_synonym_props, Vector3, f64, any_vector3);
 approx_norm_squared_synonym_props!(vector4_f64_norm_squared_synonym_props, Vector4, f64, any_vector4);
 
+
+fn any_vector1_norm_squared_i32<S>() -> impl Strategy<Value = Vector1<i32>> 
+where 
+    S: SimdScalar + Arbitrary 
+{
+    any::<i32>().prop_map(|_x| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root;
+        let x = min_value + (_x % (max_value - min_value + 1));
+
+        Vector1::new(x)
+    })
+}
+
+fn any_vector2_norm_squared_i32<S>() -> impl Strategy<Value = Vector2<i32>> 
+where 
+    S: SimdScalar + Arbitrary
+{
+    any::<(i32, i32)>().prop_map(|(_x, _y)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 2;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+
+        Vector2::new(x, y)
+    })
+}
+
+fn any_vector3_norm_squared_i32<S>() -> impl Strategy<Value = Vector3<i32>>
+where 
+    S: SimdScalar + Arbitrary
+{
+    any::<(i32, i32, i32)>().prop_map(|(_x, _y, _z)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 3;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+        let z = min_value + (_z % (max_value - min_value + 1));
+
+        Vector3::new(x, y, z)
+    })
+}
+
+fn any_vector4_norm_squared_i32<S>() -> impl Strategy<Value = Vector4<i32>>
+where 
+    S: SimdScalar + Arbitrary
+{
+    any::<(i32, i32, i32, i32)>().prop_map(|(_x, _y, _z, _w)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 4;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+        let z = min_value + (_z % (max_value - min_value + 1));
+        let w = min_value + (_w % (max_value - min_value + 1));
+
+        Vector4::new(x, y, z, w)
+    })
+}
+
+fn any_vector1_norm_squared_u32<S>() -> impl Strategy<Value = Vector1<u32>> 
+where 
+    S: SimdScalar + Arbitrary 
+{
+    any::<u32>().prop_map(|_x| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root;
+        let x = min_value + (_x % (max_value - min_value + 1));
+
+        Vector1::new(x)
+    })
+}
+
+fn any_vector2_norm_squared_u32<S>() -> impl Strategy<Value = Vector2<u32>> 
+where 
+    S: SimdScalar + Arbitrary
+{
+    any::<(u32, u32)>().prop_map(|(_x, _y)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 2;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+
+        Vector2::new(x, y)
+    })
+}
+
+fn any_vector3_norm_squared_u32<S>() -> impl Strategy<Value = Vector3<u32>>
+where 
+    S: SimdScalar + Arbitrary
+{
+    any::<(u32, u32, u32)>().prop_map(|(_x, _y, _z)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 3;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+        let z = min_value + (_z % (max_value - min_value + 1));
+
+        Vector3::new(x, y, z)
+    })
+}
+
+fn any_vector4_norm_squared_u32<S>() -> impl Strategy<Value = Vector4<u32>>
+where 
+    S: SimdScalar + Arbitrary
+{
+    any::<(u32, u32, u32, u32)>().prop_map(|(_x, _y, _z, _w)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 4;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+        let z = min_value + (_z % (max_value - min_value + 1));
+        let w = min_value + (_w % (max_value - min_value + 1));
+
+        Vector4::new(x, y, z, w)
+    })
+}
 
 /// Generate properties for the vector squared **L2** norm.
 ///
@@ -831,15 +1029,15 @@ macro_rules! exact_norm_squared_props {
     }
 }
 
-exact_norm_squared_props!(vector1_i32_norm_squared_props, Vector1, i32, any_vector1, any_scalar);
-exact_norm_squared_props!(vector2_i32_norm_squared_props, Vector2, i32, any_vector2, any_scalar);
-exact_norm_squared_props!(vector3_i32_norm_squared_props, Vector3, i32, any_vector3, any_scalar);
-exact_norm_squared_props!(vector4_i32_norm_squared_props, Vector4, i32, any_vector4, any_scalar);
+exact_norm_squared_props!(vector1_i32_norm_squared_props, Vector1, i32, any_vector1_norm_squared_i32, any_scalar);
+exact_norm_squared_props!(vector2_i32_norm_squared_props, Vector2, i32, any_vector2_norm_squared_i32, any_scalar);
+exact_norm_squared_props!(vector3_i32_norm_squared_props, Vector3, i32, any_vector3_norm_squared_i32, any_scalar);
+exact_norm_squared_props!(vector4_i32_norm_squared_props, Vector4, i32, any_vector4_norm_squared_i32, any_scalar);
 
-exact_norm_squared_props!(vector1_u32_norm_squared_props, Vector1, u32, any_vector1, any_scalar);
-exact_norm_squared_props!(vector2_u32_norm_squared_props, Vector2, u32, any_vector2, any_scalar);
-exact_norm_squared_props!(vector3_u32_norm_squared_props, Vector3, u32, any_vector3, any_scalar);
-exact_norm_squared_props!(vector4_u32_norm_squared_props, Vector4, u32, any_vector4, any_scalar);
+exact_norm_squared_props!(vector1_u32_norm_squared_props, Vector1, u32, any_vector1_norm_squared_u32, any_scalar);
+exact_norm_squared_props!(vector2_u32_norm_squared_props, Vector2, u32, any_vector2_norm_squared_u32, any_scalar);
+exact_norm_squared_props!(vector3_u32_norm_squared_props, Vector3, u32, any_vector3_norm_squared_u32, any_scalar);
+exact_norm_squared_props!(vector4_u32_norm_squared_props, Vector4, u32, any_vector4_norm_squared_u32, any_scalar);
 
 
 /// Generate properties for the vector squared **L2** norm.

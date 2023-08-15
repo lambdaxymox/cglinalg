@@ -2993,8 +2993,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     pub fn from_polar_decomposition(
-        scale: S, angle: Radians<S>, axis: &Unit<Vector3<S>>) -> Self {
-
+        scale: S, angle: Radians<S>, axis: &Unit<Vector3<S>>) -> Self
+    {
         let two: S = num_traits::cast(2_i8).unwrap();
         let (sin_angle_over_two, cos_angle_over_two) = (angle / two).sin_cos();
         let scalar = cos_angle_over_two * scale;

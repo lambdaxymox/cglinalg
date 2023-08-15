@@ -820,9 +820,9 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ``` 
     #[inline]
-    pub fn from_polar_decomposition<A: Into<Radians<S>>>(radius: S, angle: A) -> Self {
+    pub fn from_polar_decomposition<A: Into<Radians<S>>>(scale: S, angle: A) -> Self {
         let _angle: Radians<S> = angle.into();
-        Self::new(radius * _angle.cos(), radius * _angle.sin())
+        Self::new(scale * _angle.cos(), scale * _angle.sin())
     }
 
     /// Construct a unit complex number from its polar form.
@@ -860,9 +860,9 @@ where
     /// # };
     /// #
     /// let z = Complex::from_polar_decomposition(3_f64, Radians(2_f64));
-    /// let (radius, angle) = z.polar_decomposition();
+    /// let (scale, angle) = z.polar_decomposition();
     /// 
-    /// assert_eq!(radius, 3_f64);
+    /// assert_eq!(scale, 3_f64);
     /// assert_eq!(angle, Radians(2_f64));
     /// ```
     #[inline]
