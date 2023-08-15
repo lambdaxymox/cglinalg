@@ -1122,7 +1122,6 @@ fn any_quaternion_norm_squared_f64<S>() -> impl Strategy<Value = Quaternion<f64>
     use cglinalg_core::{
         Radians,
         Vector3,
-        Normed,
         Unit,
     };
 

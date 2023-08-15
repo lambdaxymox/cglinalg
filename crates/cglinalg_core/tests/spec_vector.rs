@@ -16,7 +16,7 @@ use proptest::prelude::*;
 
 fn any_u32() -> impl Strategy<Value = u32> {
     any::<u32>().prop_map(|i| {
-        let modulus = 20;
+        let modulus = 64;
 
         i % modulus
     })
@@ -1144,14 +1144,13 @@ macro_rules! norm_props {
             /// function.
             #[test]
             fn prop_norm_approx_point_separating(
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-                
-                let zero: $ScalarType = num_traits::zero();
-
+                v in $Generator::<$ScalarType>(), 
+                w in $Generator::<$ScalarType>()
+            ) {
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
                 prop_assert!(
-                    relative_ne!((v - w).norm(), zero, epsilon = $tolerance),
-                    "\n|v - w| = {}\n",
+                    (v - w).norm() > $tolerance,
+                    "\n|v - w| = {:e}\n",
                     (v - w).norm()
                 );
             }
@@ -1222,14 +1221,13 @@ macro_rules! l1_norm_props {
             /// function.
             #[test]
             fn prop_l1_norm_approx_point_separating(
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-                
-                let zero: $ScalarType = num_traits::zero();
-
+                v in $Generator::<$ScalarType>(), 
+                w in $Generator::<$ScalarType>()
+            ) {
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
                 prop_assert!(
-                    relative_ne!((v - w).l1_norm(), zero, epsilon = $tolerance),
-                    "\nl1_norm(v - w) = {}\n", 
+                    (v - w).l1_norm() > $tolerance,
+                    "\nl1_norm(v - w) = {:e}\n", 
                     (v - w).l1_norm()
                 );
             }
@@ -1307,12 +1305,9 @@ macro_rules! lp_norm_props {
                 w in $Generator::<$ScalarType>(),
                 p in $DegreeGen()
             ) {
-                
-                let zero: $ScalarType = num_traits::zero();
-
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
                 prop_assert!(
-                    relative_ne!((v - w).lp_norm(p), zero, epsilon = $tolerance),
+                    (v - w).lp_norm(p) > $tolerance,
                     "\nlp_norm(v - w, p) = {}\n",
                     (v - w).lp_norm(p)
                 );
@@ -1384,13 +1379,12 @@ macro_rules! linf_norm_props {
             /// function.
             #[test]
             fn prop_linf_norm_approx_point_separating(
-                v in $Generator::<$ScalarType>(), w in $Generator::<$ScalarType>()) {
-                
-                let zero: $ScalarType = num_traits::zero();
-
+                v in $Generator::<$ScalarType>(), 
+                w in $Generator::<$ScalarType>()
+            ) {
                 prop_assume!(relative_ne!(v, w, epsilon = $tolerance));
                 prop_assert!(
-                    relative_ne!((v - w).linf_norm(), zero, epsilon = $tolerance),
+                    (v - w).linf_norm() > $tolerance,
                     "\nlinf_norm(v - w) = {}\n", 
                     (v - w).linf_norm()
                 );
@@ -1480,9 +1474,6 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_eq
-        };
         use super::{
             $Generator,
             $ScalarGen,
