@@ -116,26 +116,26 @@ mod matrix2x2_tests {
     }
 
     #[test]
-    fn test_identity_mat_times_identity_mat_equals_identity_mat() {
+    fn test_identity_matrix_times_identity_matrix_equals_identity_matrix() {
         let identity_matrix: Matrix2x2<f32> = Matrix2x2::identity();
         
         assert_eq!(identity_matrix * identity_matrix, identity_matrix);
     }
 
     #[test]
-    fn test_zero_mat_times_zero_mat_equals_zero_mat() {
+    fn test_zero_matrix_times_zero_matrix_equals_zero_matrix() {
         let zero_matrix: Matrix2x2<f32> = Matrix2x2::zero();
 
         assert_eq!(zero_matrix * zero_matrix, zero_matrix);
     }
 
     #[test]
-    fn test_mat_times_identity_equals_mat1() {
-        let a_mat = Matrix2x2::new(
+    fn test_matrix_times_identity_equals_matrix1() {
+        let a_matrix = Matrix2x2::new(
             80_f32,      23.43_f32,     
             426.1_f32,   23.5724_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             36.84_f32,   427.46894_f32, 
             7.04217_f32, 61.891390_f32
         );
@@ -143,20 +143,20 @@ mod matrix2x2_tests {
         //     185091.72_f32, 10939.63_f32, 
         //     26935.295_f32, 1623.9266_f32
         // );
-        let a_mat_times_identity = a_mat * Matrix2x2::identity();
-        let b_mat_times_identity = b_mat * Matrix2x2::identity();
+        let a_matrix_times_identity = a_matrix * Matrix2x2::identity();
+        let b_matrix_times_identity = b_matrix * Matrix2x2::identity();
 
-        assert_eq!(a_mat_times_identity, a_mat);
-        assert_eq!(b_mat_times_identity, b_mat);
+        assert_eq!(a_matrix_times_identity, a_matrix);
+        assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
     #[test]
-    fn test_mat_times_zero_equals_zero1() {
-        let a_mat = Matrix2x2::new(
+    fn test_matrix_times_zero_equals_zero1() {
+        let a_matrix = Matrix2x2::new(
             80_f32,      23.43_f32,     
             426.1_f32,   23.5724_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             36.84_f32,   427.46894_f32, 
             7.04217_f32, 61.891390_f32
         );
@@ -164,20 +164,20 @@ mod matrix2x2_tests {
         //     185091.72_f32, 10939.63_f32, 
         //     26935.295_f32, 1623.9266_f32
         // );
-        let a_mat_times_zero = a_mat * Matrix2x2::zero();
-        let b_mat_times_zero = b_mat * Matrix2x2::zero();
+        let a_matrix_times_zero_matrix = a_matrix * Matrix2x2::zero();
+        let b_matrix_times_zero_matrix = b_matrix * Matrix2x2::zero();
 
-        assert_eq!(a_mat_times_zero, Matrix2x2::zero());
-        assert_eq!(b_mat_times_zero, Matrix2x2::zero());
+        assert_eq!(a_matrix_times_zero_matrix, Matrix2x2::zero());
+        assert_eq!(b_matrix_times_zero_matrix, Matrix2x2::zero());
     }
 
     #[test]
-    fn test_zero_times_mat_equals_zero1() {
-        let a_mat = Matrix2x2::new(
+    fn test_zero_times_matrix_equals_zero1() {
+        let a_matrix = Matrix2x2::new(
             80_f32,      23.43_f32,     
             426.1_f32,   23.5724_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             36.84_f32,   427.46894_f32, 
             7.04217_f32, 61.891390_f32
         );
@@ -185,20 +185,20 @@ mod matrix2x2_tests {
         //     185091.72_f32, 10939.63_f32, 
         //     26935.295_f32, 1623.9266_f32
         // );
-        let zero_times_a_mat = Matrix2x2::zero() * a_mat;
-        let zero_times_b_mat = Matrix2x2::zero() * b_mat;
+        let zero_times_a_matrix = Matrix2x2::zero() * a_matrix;
+        let zero_times_b_matrix = Matrix2x2::zero() * b_matrix;
 
-        assert_eq!(zero_times_a_mat, Matrix2x2::zero());
-        assert_eq!(zero_times_b_mat, Matrix2x2::zero());
+        assert_eq!(zero_times_a_matrix, Matrix2x2::zero());
+        assert_eq!(zero_times_b_matrix, Matrix2x2::zero());
     }
 
     #[test]
-    fn test_mat_times_identity_equals_identity_times_mat1() {
-        let a_mat = Matrix2x2::new(
+    fn test_matrix_times_identity_equals_identity_times_matrix1() {
+        let a_matrix = Matrix2x2::new(
             80_f32,      23.43_f32,     
             426.1_f32,   23.5724_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             36.84_f32,   427.46894_f32, 
             7.04217_f32, 61.891390_f32
         );
@@ -206,22 +206,22 @@ mod matrix2x2_tests {
         //     185091.72_f32, 10939.63_f32, 
         //     26935.295_f32, 1623.9266_f32
         // );
-        let a_mat_times_identity = a_mat * Matrix2x2::identity();
-        let identity_times_a_mat = Matrix2x2::identity() * a_mat;
-        let b_mat_times_identity = b_mat * Matrix2x2::identity();
-        let identity_times_b_mat = Matrix2x2::identity() * b_mat;
+        let a_matrix_times_identity = a_matrix * Matrix2x2::identity();
+        let identity_times_a_matrix = Matrix2x2::identity() * a_matrix;
+        let b_matrix_times_identity = b_matrix * Matrix2x2::identity();
+        let identity_times_b_matrix = Matrix2x2::identity() * b_matrix;
 
-        assert_eq!(a_mat_times_identity, identity_times_a_mat);
-        assert_eq!(b_mat_times_identity, identity_times_b_mat);
+        assert_eq!(a_matrix_times_identity, identity_times_a_matrix);
+        assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
     #[test]
-    fn test_mat_transpose_transpose_equals_mat1() {
-        let a_mat = Matrix2x2::new(
+    fn test_matrix_transpose_transpose_equals_matrix1() {
+        let a_matrix = Matrix2x2::new(
             80_f32,      23.43_f32,     
             426.1_f32,   23.5724_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             36.84_f32,   427.46894_f32, 
             7.04217_f32, 61.891390_f32
         );
@@ -229,20 +229,20 @@ mod matrix2x2_tests {
         //     185091.72_f32, 10939.63_f32, 
         //     26935.295_f32, 1623.9266_f32
         // );
-        let a_mat_tr_tr = a_mat.transpose().transpose();
-        let b_mat_tr_tr = b_mat.transpose().transpose();
+        let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
+        let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
             
-        assert_eq!(a_mat_tr_tr, a_mat);
-        assert_eq!(b_mat_tr_tr, b_mat);
+        assert_eq!(a_matrix_transpose_transpose, a_matrix);
+        assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
     #[test]
     fn test_matrix_multiplication1() {
-        let a_mat = Matrix2x2::new(
+        let a_matrix = Matrix2x2::new(
             80_f32,      23.43_f32,     
             426.1_f32,   23.5724_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             36.84_f32,   427.46894_f32, 
             7.04217_f32, 61.891390_f32
         );
@@ -250,18 +250,18 @@ mod matrix2x2_tests {
             185091.72_f32, 10939.63_f32, 
             26935.295_f32, 1623.9266_f32
         );
-        let result = a_mat * b_mat;
+        let result = a_matrix * b_matrix;
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
-    fn test_mat_times_identity_equals_mat2() {
-        let a_mat = Matrix2x2::new(
+    fn test_matrix_times_identity_equals_matrix2() {
+        let a_matrix = Matrix2x2::new(
             68.32_f32, 0_f32, 
             0_f32,     37.397_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             57.72_f32, 0_f32, 
             0_f32,     9.5433127_f32
         );
@@ -269,20 +269,20 @@ mod matrix2x2_tests {
         //     3943.4304_f32, 0_f32, 
         //     0_f32,         356.89127_f32
         // );
-        let a_mat_times_identity = a_mat * Matrix2x2::identity();
-        let b_mat_times_identity = b_mat * Matrix2x2::identity();
+        let a_matrix_times_identity = a_matrix * Matrix2x2::identity();
+        let b_matrix_times_identity = b_matrix * Matrix2x2::identity();
 
-        assert_eq!(a_mat_times_identity, a_mat);
-        assert_eq!(b_mat_times_identity, b_mat);
+        assert_eq!(a_matrix_times_identity, a_matrix);
+        assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
     #[test]
-    fn test_mat_times_zero_equals_zero2() {
-        let a_mat = Matrix2x2::new(
+    fn test_matrix_times_zero_equals_zero2() {
+        let a_matrix = Matrix2x2::new(
             68.32_f32, 0_f32, 
             0_f32,     37.397_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             57.72_f32, 0_f32, 
             0_f32,     9.5433127_f32
         );
@@ -290,20 +290,20 @@ mod matrix2x2_tests {
         //     3943.4304_f32, 0_f32, 
         //     0_f32,         356.89127_f32
         // );
-        let a_mat_times_zero = a_mat * Matrix2x2::zero();
-        let b_mat_times_zero = b_mat * Matrix2x2::zero();
+        let a_matrix_times_zero_matrix = a_matrix * Matrix2x2::zero();
+        let b_matrix_times_zero_matrix = b_matrix * Matrix2x2::zero();
 
-        assert_eq!(a_mat_times_zero, Matrix2x2::zero());
-        assert_eq!(b_mat_times_zero, Matrix2x2::zero());
+        assert_eq!(a_matrix_times_zero_matrix, Matrix2x2::zero());
+        assert_eq!(b_matrix_times_zero_matrix, Matrix2x2::zero());
     }
 
     #[test]
-    fn test_zero_times_mat_equals_zero2() {
-        let a_mat = Matrix2x2::new(
+    fn test_zero_times_matrix_equals_zero2() {
+        let a_matrix = Matrix2x2::new(
             68.32_f32, 0_f32, 
             0_f32,     37.397_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             57.72_f32, 0_f32, 
             0_f32,     9.5433127_f32
         );
@@ -311,20 +311,20 @@ mod matrix2x2_tests {
         //     3943.4304_f32, 0_f32, 
         //     0_f32,         356.89127_f32
         // );
-        let zero_times_a_mat = Matrix2x2::zero() * a_mat;
-        let zero_times_b_mat = Matrix2x2::zero() * b_mat;
+        let zero_times_a_matrix = Matrix2x2::zero() * a_matrix;
+        let zero_times_b_matrix = Matrix2x2::zero() * b_matrix;
 
-        assert_eq!(zero_times_a_mat, Matrix2x2::zero());
-        assert_eq!(zero_times_b_mat, Matrix2x2::zero());
+        assert_eq!(zero_times_a_matrix, Matrix2x2::zero());
+        assert_eq!(zero_times_b_matrix, Matrix2x2::zero());
     }
 
     #[test]
-    fn test_mat_times_identity_equals_identity_times_mat2() {
-        let a_mat = Matrix2x2::new(
+    fn test_matrix_times_identity_equals_identity_times_matrix2() {
+        let a_matrix = Matrix2x2::new(
             68.32_f32, 0_f32, 
             0_f32,     37.397_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             57.72_f32, 0_f32, 
             0_f32,     9.5433127_f32
         );
@@ -332,22 +332,22 @@ mod matrix2x2_tests {
         //     3943.4304_f32, 0_f32, 
         //     0_f32,         356.89127_f32
         // );
-        let a_mat_times_identity = a_mat * Matrix2x2::identity();
-        let identity_times_a_mat = Matrix2x2::identity() * a_mat;
-        let b_mat_times_identity = b_mat * Matrix2x2::identity();
-        let identity_times_b_mat = Matrix2x2::identity() * b_mat;
+        let a_matrix_times_identity = a_matrix * Matrix2x2::identity();
+        let identity_times_a_matrix = Matrix2x2::identity() * a_matrix;
+        let b_matrix_times_identity = b_matrix * Matrix2x2::identity();
+        let identity_times_b_matrix = Matrix2x2::identity() * b_matrix;
 
-        assert_eq!(a_mat_times_identity, identity_times_a_mat);
-        assert_eq!(b_mat_times_identity, identity_times_b_mat);
+        assert_eq!(a_matrix_times_identity, identity_times_a_matrix);
+        assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
     #[test]
-    fn test_mat_transpose_transpose_equals_mat2() {
-        let a_mat = Matrix2x2::new(
+    fn test_matrix_transpose_transpose_equals_matrix2() {
+        let a_matrix = Matrix2x2::new(
             68.32_f32, 0_f32, 
             0_f32,     37.397_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             57.72_f32, 0_f32, 
             0_f32,     9.5433127_f32
         );
@@ -355,20 +355,20 @@ mod matrix2x2_tests {
         //     3943.4304_f32, 0_f32, 
         //     0_f32,         356.89127_f32
         // );
-        let a_mat_tr_tr = a_mat.transpose().transpose();
-        let b_mat_tr_tr = b_mat.transpose().transpose();
+        let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
+        let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
             
-        assert_eq!(a_mat_tr_tr, a_mat);
-        assert_eq!(b_mat_tr_tr, b_mat);
+        assert_eq!(a_matrix_transpose_transpose, a_matrix);
+        assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
     #[test]
     fn test_matrix_multiplication2() {
-        let a_mat = Matrix2x2::new(
+        let a_matrix = Matrix2x2::new(
             68.32_f32, 0_f32, 
             0_f32,     37.397_f32
         );
-        let b_mat = Matrix2x2::new(
+        let b_matrix = Matrix2x2::new(
             57.72_f32, 0_f32, 
             0_f32,     9.5433127_f32
         );
@@ -376,7 +376,7 @@ mod matrix2x2_tests {
             3943.4304_f32, 0_f32, 
             0_f32,         356.89127_f32
         );
-        let result = a_mat * b_mat;
+        let result = a_matrix * b_matrix;
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -384,9 +384,9 @@ mod matrix2x2_tests {
     #[test]
     fn test_identity_transpose_equals_identity() {
         let identity = Matrix2x2::<f32>::identity();
-        let identity_tr = identity.transpose();
+        let identity_transpose = identity.transpose();
             
-        assert_eq!(identity, identity_tr);
+        assert_eq!(identity, identity_transpose);
     }
 
     #[rustfmt::skip]
@@ -423,50 +423,50 @@ mod matrix2x2_tests {
     #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169_f64;
-        let id = Matrix2x2::identity();
+        let identity = Matrix2x2::identity();
         let expected = Matrix2x2::new(
             c,     0_f64, 
             0_f64, c
         );
 
-        assert_eq!(id * c, expected);
+        assert_eq!(identity * c, expected);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169_f64;
-        let id = Matrix2x2::identity();
+        let identity = Matrix2x2::identity();
         let expected = Matrix2x2::new(
             1_f64 / c, 0_f64, 
             0_f64,     1_f64 / c
         );
 
-        assert_eq!(id / c, expected);
+        assert_eq!(identity / c, expected);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero = Matrix2x2::zero();
+        let zero_matrix = Matrix2x2::zero();
         let matrix = Matrix2x2::new(
             36.84_f64, 427.46_f64, 
             7.47_f64,  61.89_f64
         );
 
-        assert_eq!(matrix + zero, matrix);
+        assert_eq!(matrix + zero_matrix, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero = Matrix2x2::zero();
+        let zero_matrix = Matrix2x2::zero();
         let matrix = Matrix2x2::new(
             36.84_f64, 427.46_f64, 
             7.47_f64,  61.89_f64
         );
 
-        assert_eq!(zero + matrix, matrix);
+        assert_eq!(zero_matrix + matrix, matrix);
     }
 
     #[rustfmt::skip]
@@ -520,7 +520,9 @@ mod matrix2x2_tests {
 
     #[test]
     fn test_identity_is_invertible() {
-        assert!(Matrix2x2::<f64>::identity().is_invertible());
+        let identity: Matrix2x2<f64> = Matrix2x2::identity();
+
+        assert!(identity.is_invertible());
     }
 
     #[test]
@@ -580,10 +582,10 @@ mod matrix2x2_tests {
             36.84_f64, 427.46_f64, 
             7.47_f64,  61.89_f64
         );
-        let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix2x2::identity();
+        let matrix_inverse = matrix.inverse().unwrap();
+        let identity = Matrix2x2::identity();
 
-        assert_relative_eq!(matrix * matrix_inv, one, epsilon = 1e-8);
+        assert_relative_eq!(matrix * matrix_inverse, identity, epsilon = 1e-8);
     }
 
     #[rustfmt::skip]
@@ -593,10 +595,10 @@ mod matrix2x2_tests {
             36.84_f64, 427.46_f64, 
             7.47_f64,  61.89_f64
         );
-        let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix2x2::identity();
+        let matrix_inverse = matrix.inverse().unwrap();
+        let identity = Matrix2x2::identity();
 
-        assert_relative_eq!(matrix_inv * matrix, one, epsilon = 1e-8);        
+        assert_relative_eq!(matrix_inverse * matrix, identity, epsilon = 1e-8);        
     }
 
     #[rustfmt::skip]
@@ -1040,27 +1042,27 @@ mod matrix3x3_tests {
     }
 
     #[test]
-    fn test_identity_mat_times_identity_mat_equals_identity_mat() {
-        let identity_mat: Matrix3x3<f32> = Matrix3x3::identity();
+    fn test_identity_matrix_times_identity_matrix_equals_identity_matrix() {
+        let identity_matrix: Matrix3x3<f32> = Matrix3x3::identity();
         
-        assert_eq!(identity_mat * identity_mat, identity_mat);
+        assert_eq!(identity_matrix * identity_matrix, identity_matrix);
     }
 
     #[test]
-    fn test_zero_mat_times_zero_mat_equals_zero_mat() {
-        let zero_mat: Matrix3x3<f32> = Matrix3x3::zero();
+    fn test_zero_matrix_times_zero_matrix_equals_zero_matrix() {
+        let zero_matrix: Matrix3x3<f32> = Matrix3x3::zero();
 
-        assert_eq!(zero_mat * zero_mat, zero_mat);
+        assert_eq!(zero_matrix * zero_matrix, zero_matrix);
     }
 
     #[test]
-    fn test_mat_times_identity_equals_mat1() {
-        let a_mat = Matrix3x3::new(
+    fn test_matrix_times_identity_equals_matrix1() {
+        let a_matrix = Matrix3x3::new(
             80_f32,     426.1_f32,   43.393_f32, 
             23.43_f32,  23.5724_f32, 1.27_f32, 
             81.439_f32, 12.19_f32,   43.36_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             36.84_f32,     7.04217_f32,  5.74_f32, 
             427.46894_f32, 61.89139_f32, 96.27_f32, 
             152.66_f32,    86.333_f32,   26.71_f32
@@ -1070,21 +1072,21 @@ mod matrix3x3_tests {
         //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
         //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
         // );
-        let a_mat_times_identity = a_mat * Matrix3x3::identity();
-        let b_mat_times_identity = b_mat * Matrix3x3::identity();
+        let a_matrix_times_identity = a_matrix * Matrix3x3::identity();
+        let b_matrix_times_identity = b_matrix * Matrix3x3::identity();
 
-        assert_eq!(a_mat_times_identity, a_mat);
-        assert_eq!(b_mat_times_identity, b_mat);
+        assert_eq!(a_matrix_times_identity, a_matrix);
+        assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
     #[test]
-    fn test_mat_times_zero_equals_zero1() {
-        let a_mat = Matrix3x3::new(
+    fn test_matrix_times_zero_equals_zero1() {
+        let a_matrix = Matrix3x3::new(
             80_f32,     426.1_f32,   43.393_f32, 
             23.43_f32,  23.5724_f32, 1.27_f32, 
             81.439_f32, 12.19_f32,   43.36_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             36.84_f32,     7.04217_f32,  5.74_f32, 
             427.46894_f32, 61.89139_f32, 96.27_f32, 
             152.66_f32,    86.333_f32,   26.71_f32
@@ -1094,21 +1096,21 @@ mod matrix3x3_tests {
         //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
         //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
         // );
-        let a_mat_times_zero = a_mat * Matrix3x3::zero();
-        let b_mat_times_zero = b_mat * Matrix3x3::zero();
+        let a_matrix_times_zero_matrix = a_matrix * Matrix3x3::zero();
+        let b_matrix_times_zero_matrix = b_matrix * Matrix3x3::zero();
 
-        assert_eq!(a_mat_times_zero, Matrix3x3::zero());
-        assert_eq!(b_mat_times_zero, Matrix3x3::zero());
+        assert_eq!(a_matrix_times_zero_matrix, Matrix3x3::zero());
+        assert_eq!(b_matrix_times_zero_matrix, Matrix3x3::zero());
     }
 
     #[test]
-    fn test_zero_times_mat_equals_zero1() {
-        let a_mat = Matrix3x3::new(
+    fn test_zero_times_matrix_equals_zero1() {
+        let a_matrix = Matrix3x3::new(
             80_f32,     426.1_f32,   43.393_f32, 
             23.43_f32,  23.5724_f32, 1.27_f32, 
             81.439_f32, 12.19_f32,   43.36_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             36.84_f32,     7.04217_f32,  5.74_f32, 
             427.46894_f32, 61.89139_f32, 96.27_f32, 
             152.66_f32,    86.333_f32,   26.71_f32
@@ -1118,21 +1120,21 @@ mod matrix3x3_tests {
         //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
         //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
         // );
-        let zero_times_a_mat = Matrix3x3::zero() * a_mat;
-        let zero_times_b_mat = Matrix3x3::zero() * b_mat;
+        let zero_times_a_matrix = Matrix3x3::zero() * a_matrix;
+        let zero_times_b_matrix = Matrix3x3::zero() * b_matrix;
 
-        assert_eq!(zero_times_a_mat, Matrix3x3::zero());
-        assert_eq!(zero_times_b_mat, Matrix3x3::zero());
+        assert_eq!(zero_times_a_matrix, Matrix3x3::zero());
+        assert_eq!(zero_times_b_matrix, Matrix3x3::zero());
     }
 
     #[test]
-    fn test_mat_times_identity_equals_identity_times_mat1() {
-        let a_mat = Matrix3x3::new(
+    fn test_matrix_times_identity_equals_identity_times_matrix1() {
+        let a_matrix = Matrix3x3::new(
             80_f32,     426.1_f32,   43.393_f32, 
             23.43_f32,  23.5724_f32, 1.27_f32, 
             81.439_f32, 12.19_f32,   43.36_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             36.84_f32,     7.04217_f32,  5.74_f32, 
             427.46894_f32, 61.89139_f32, 96.27_f32, 
             152.66_f32,    86.333_f32,   26.71_f32
@@ -1142,23 +1144,23 @@ mod matrix3x3_tests {
         //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
         //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
         // );
-        let a_mat_times_identity = a_mat * Matrix3x3::identity();
-        let identity_times_a_mat = Matrix3x3::identity() * a_mat;
-        let b_mat_times_identity = b_mat * Matrix3x3::identity();
-        let identity_times_b_mat = Matrix3x3::identity() * b_mat;
+        let a_matrix_times_identity = a_matrix * Matrix3x3::identity();
+        let identity_times_a_matrix = Matrix3x3::identity() * a_matrix;
+        let b_matrix_times_identity = b_matrix * Matrix3x3::identity();
+        let identity_times_b_matrix = Matrix3x3::identity() * b_matrix;
 
-        assert_eq!(a_mat_times_identity, identity_times_a_mat);
-        assert_eq!(b_mat_times_identity, identity_times_b_mat);
+        assert_eq!(a_matrix_times_identity, identity_times_a_matrix);
+        assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
     #[test]
-    fn test_mat_transpose_transpose_equals_mat1() {
-        let a_mat = Matrix3x3::new(
+    fn test_matrix_transpose_transpose_equals_matrix1() {
+        let a_matrix = Matrix3x3::new(
             80_f32,     426.1_f32,   43.393_f32, 
             23.43_f32,  23.5724_f32, 1.27_f32, 
             81.439_f32, 12.19_f32,   43.36_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             36.84_f32,     7.04217_f32,  5.74_f32, 
             427.46894_f32, 61.89139_f32, 96.27_f32, 
             152.66_f32,    86.333_f32,   26.71_f32
@@ -1168,21 +1170,21 @@ mod matrix3x3_tests {
         //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
         //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
         // );
-        let a_mat_tr_tr = a_mat.transpose().transpose();
-        let b_mat_tr_tr = b_mat.transpose().transpose();
+        let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
+        let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
             
-        assert_eq!(a_mat_tr_tr, a_mat);
-        assert_eq!(b_mat_tr_tr, b_mat);
+        assert_eq!(a_matrix_transpose_transpose, a_matrix);
+        assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
     #[test]
     fn test_matrix_multiplication1() {
-        let a_mat = Matrix3x3::new(
+        let a_matrix = Matrix3x3::new(
             80_f32,     426.1_f32,   43.393_f32, 
             23.43_f32,  23.5724_f32, 1.27_f32, 
             81.439_f32, 12.19_f32,   43.36_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             36.84_f32,     7.04217_f32,  5.74_f32, 
             427.46894_f32, 61.89139_f32, 96.27_f32, 
             152.66_f32,    86.333_f32,   26.71_f32
@@ -1192,19 +1194,19 @@ mod matrix3x3_tests {
             43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
             16410.8178_f32, 67409.1000_f32,  7892.1646_f32
         );
-        let result = a_mat * b_mat;
+        let result = a_matrix * b_matrix;
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
-    fn test_mat_times_identity_equals_mat2() {
-        let a_mat = Matrix3x3::new(
+    fn test_matrix_times_identity_equals_matrix2() {
+        let a_matrix = Matrix3x3::new(
             68.32_f32, 0_f32,      0_f32, 
             0_f32,     37.397_f32, 0_f32, 
             0_f32,     0_f32,      43.393_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             57.72_f32, 0_f32,         0_f32, 
             0_f32,     9.5433127_f32, 0_f32, 
             0_f32,     0_f32,         12.19_f32
@@ -1214,21 +1216,21 @@ mod matrix3x3_tests {
         //     0_f32,         356.89127_f32, 0_f32, 
         //     0_f32,         0_f32,         528.96067_f32
         // );
-        let a_mat_times_identity = a_mat * Matrix3x3::identity();
-        let b_mat_times_identity = b_mat * Matrix3x3::identity();
+        let a_matrix_times_identity = a_matrix * Matrix3x3::identity();
+        let b_matrix_times_identity = b_matrix * Matrix3x3::identity();
 
-        assert_eq!(a_mat_times_identity, a_mat);
-        assert_eq!(b_mat_times_identity, b_mat);
+        assert_eq!(a_matrix_times_identity, a_matrix);
+        assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
     #[test]
-    fn test_mat_times_zero_equals_zero2() {
-        let a_mat = Matrix3x3::new(
+    fn test_matrix_times_zero_equals_zero2() {
+        let a_matrix = Matrix3x3::new(
             68.32_f32, 0_f32,      0_f32, 
             0_f32,     37.397_f32, 0_f32, 
             0_f32,     0_f32,      43.393_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             57.72_f32, 0_f32,         0_f32, 
             0_f32,     9.5433127_f32, 0_f32, 
             0_f32,     0_f32,         12.19_f32
@@ -1238,21 +1240,21 @@ mod matrix3x3_tests {
         //     0_f32,         356.89127_f32, 0_f32, 
         //     0_f32,         0_f32,         528.96067_f32
         // );
-        let a_mat_times_zero = a_mat * Matrix3x3::zero();
-        let b_mat_times_zero = b_mat * Matrix3x3::zero();
+        let a_matrix_times_zero_matrix = a_matrix * Matrix3x3::zero();
+        let b_matrix_times_zero_matrix = b_matrix * Matrix3x3::zero();
 
-        assert_eq!(a_mat_times_zero, Matrix3x3::zero());
-        assert_eq!(b_mat_times_zero, Matrix3x3::zero());
+        assert_eq!(a_matrix_times_zero_matrix, Matrix3x3::zero());
+        assert_eq!(b_matrix_times_zero_matrix, Matrix3x3::zero());
     }
 
     #[test]
-    fn test_zero_times_mat_equals_zero2() {
-        let a_mat = Matrix3x3::new(
+    fn test_zero_times_matrix_equals_zero2() {
+        let a_matrix = Matrix3x3::new(
             68.32_f32, 0_f32,      0_f32, 
             0_f32,     37.397_f32, 0_f32, 
             0_f32,     0_f32,      43.393_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             57.72_f32, 0_f32,         0_f32, 
             0_f32,     9.5433127_f32, 0_f32, 
             0_f32,     0_f32,         12.19_f32
@@ -1262,21 +1264,21 @@ mod matrix3x3_tests {
         //     0_f32,         356.89127_f32, 0_f32, 
         //     0_f32,         0_f32,         528.96067_f32
         // );
-        let zero_times_a_mat = Matrix3x3::zero() * a_mat;
-        let zero_times_b_mat = Matrix3x3::zero() * b_mat;
+        let zero_times_a_matrix = Matrix3x3::zero() * a_matrix;
+        let zero_times_b_matrix = Matrix3x3::zero() * b_matrix;
 
-        assert_eq!(zero_times_a_mat, Matrix3x3::zero());
-        assert_eq!(zero_times_b_mat, Matrix3x3::zero());
+        assert_eq!(zero_times_a_matrix, Matrix3x3::zero());
+        assert_eq!(zero_times_b_matrix, Matrix3x3::zero());
     }
 
     #[test]
-    fn test_mat_times_identity_equals_identity_times_mat2() {
-        let a_mat = Matrix3x3::new(
+    fn test_matrix_times_identity_equals_identity_times_matrix2() {
+        let a_matrix = Matrix3x3::new(
             68.32_f32, 0_f32,      0_f32, 
             0_f32,     37.397_f32, 0_f32, 
             0_f32,     0_f32,      43.393_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             57.72_f32, 0_f32,         0_f32, 
             0_f32,     9.5433127_f32, 0_f32, 
             0_f32,     0_f32,         12.19_f32
@@ -1286,23 +1288,23 @@ mod matrix3x3_tests {
         //     0_f32,         356.89127_f32, 0_f32, 
         //     0_f32,         0_f32,         528.96067_f32
         // );
-        let a_mat_times_identity = a_mat * Matrix3x3::identity();
-        let identity_times_a_mat = Matrix3x3::identity() * a_mat;
-        let b_mat_times_identity = b_mat * Matrix3x3::identity();
-        let identity_times_b_mat = Matrix3x3::identity() * b_mat;
+        let a_matrix_times_identity = a_matrix * Matrix3x3::identity();
+        let identity_times_a_matrix = Matrix3x3::identity() * a_matrix;
+        let b_matrix_times_identity = b_matrix * Matrix3x3::identity();
+        let identity_times_b_matrix = Matrix3x3::identity() * b_matrix;
 
-        assert_eq!(a_mat_times_identity, identity_times_a_mat);
-        assert_eq!(b_mat_times_identity, identity_times_b_mat);
+        assert_eq!(a_matrix_times_identity, identity_times_a_matrix);
+        assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
     #[test]
-    fn test_mat_transpose_transpose_equals_mat2() {
-        let a_mat = Matrix3x3::new(
+    fn test_matrix_transpose_transpose_equals_matrix2() {
+        let a_matrix = Matrix3x3::new(
             68.32_f32, 0_f32,      0_f32, 
             0_f32,     37.397_f32, 0_f32, 
             0_f32,     0_f32,      43.393_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             57.72_f32, 0_f32,         0_f32, 
             0_f32,     9.5433127_f32, 0_f32, 
             0_f32,     0_f32,         12.19_f32
@@ -1312,21 +1314,21 @@ mod matrix3x3_tests {
         //     0_f32,         356.89127_f32, 0_f32, 
         //     0_f32,         0_f32,         528.96067_f32
         // );
-        let a_mat_tr_tr = a_mat.transpose().transpose();
-        let b_mat_tr_tr = b_mat.transpose().transpose();
+        let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
+        let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
             
-        assert_eq!(a_mat_tr_tr, a_mat);
-        assert_eq!(b_mat_tr_tr, b_mat);
+        assert_eq!(a_matrix_transpose_transpose, a_matrix);
+        assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
     #[test]
     fn test_matrix_multiplication2() {
-        let a_mat = Matrix3x3::new(
+        let a_matrix = Matrix3x3::new(
             68.32_f32, 0_f32,      0_f32, 
             0_f32,     37.397_f32, 0_f32, 
             0_f32,     0_f32,      43.393_f32
         );
-        let b_mat = Matrix3x3::new(
+        let b_matrix = Matrix3x3::new(
             57.72_f32, 0_f32,         0_f32, 
             0_f32,     9.5433127_f32, 0_f32, 
             0_f32,     0_f32,         12.19_f32
@@ -1336,7 +1338,7 @@ mod matrix3x3_tests {
             0_f32,         356.89127_f32, 0_f32, 
             0_f32,         0_f32,         528.96067_f32
         );
-        let result = a_mat * b_mat;
+        let result = a_matrix * b_matrix;
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -1344,9 +1346,9 @@ mod matrix3x3_tests {
     #[test]
     fn test_identity_transpose_equals_identity() {
         let identity = Matrix3x3::<f32>::identity();
-        let identity_tr = identity.transpose();
+        let identity_transpose = identity.transpose();
             
-        assert_eq!(identity, identity_tr);
+        assert_eq!(identity, identity_transpose);
     }
 
     #[rustfmt::skip]
@@ -1387,54 +1389,54 @@ mod matrix3x3_tests {
     #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169_f64;
-        let id = Matrix3x3::identity();
+        let identity = Matrix3x3::identity();
         let expected = Matrix3x3::new(
             c,     0_f64, 0_f64, 
             0_f64, c,     0_f64, 
             0_f64, 0_f64, c
         );
 
-        assert_eq!(id * c, expected);
+        assert_eq!(identity * c, expected);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169;
-        let id = Matrix3x3::identity();
+        let identity = Matrix3x3::identity();
         let expected = Matrix3x3::new(
             1_f64 / c, 0_f64,     0_f64, 
             0_f64,     1_f64 / c, 0_f64, 
             0_f64,     0_f64,     1_f64 / c
         );
 
-        assert_eq!(id / c, expected);
+        assert_eq!(identity / c, expected);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero = Matrix3x3::zero();
+        let zero_matrix = Matrix3x3::zero();
         let matrix = Matrix3x3::new(
             80_f64,     426.1_f64,   43.393_f64, 
             23.43_f64,  23.5724_f64, 1.27_f64, 
             81.439_f64, 12.19_f64,   43.36_f64
         );
 
-        assert_eq!(matrix + zero, matrix);
+        assert_eq!(matrix + zero_matrix, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero = Matrix3x3::zero();
+        let zero_matrix = Matrix3x3::zero();
         let matrix = Matrix3x3::new(
             80_f64,     426.1_f64,   43.393_f64, 
             23.43_f64,  23.5724_f64, 1.27_f64, 
             81.439_f64, 12.19_f64,   43.36_f64
         );
 
-        assert_eq!(zero + matrix, matrix);
+        assert_eq!(zero_matrix + matrix, matrix);
     }
 
     #[rustfmt::skip]
@@ -1557,10 +1559,10 @@ mod matrix3x3_tests {
             23.43_f64,  23.5724_f64, 1.27_f64, 
             81.439_f64, 12.19_f64,   43.36_f64
         );
-        let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix3x3::identity();
+        let matrix_inverse = matrix.inverse().unwrap();
+        let identity = Matrix3x3::identity();
 
-        assert_relative_eq!(matrix * matrix_inv, one, epsilon = 1e-8);
+        assert_relative_eq!(matrix * matrix_inverse, identity, epsilon = 1e-8);
     }
 
     #[rustfmt::skip]
@@ -1600,10 +1602,10 @@ mod matrix3x3_tests {
             23.43_f64,  23.5724_f64, 1.27_f64, 
             81.439_f64, 12.19_f64,   43.36_f64
         );
-        let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix3x3::identity();
+        let matrix_inverse = matrix.inverse().unwrap();
+        let identity = Matrix3x3::identity();
 
-        assert_relative_eq!(matrix_inv * matrix, one, epsilon = 1e-8);
+        assert_relative_eq!(matrix_inverse * matrix, identity, epsilon = 1e-8);
     }
 
     #[rustfmt::skip]
@@ -2194,6 +2196,9 @@ mod matrix4x4_tests {
     use approx::{
         assert_relative_eq,
     };
+    use num_traits::{
+        Zero,
+    };
 
 
     #[rustfmt::skip]
@@ -2337,28 +2342,28 @@ mod matrix4x4_tests {
     }
 
     #[test]
-    fn test_identity_mat_times_identity_mat_equals_identity_mat() {
-        let identity_mat: Matrix4x4<f32> = Matrix4x4::identity();
+    fn test_identity_matrix_times_identity_matrix_equals_identity_matrix() {
+        let identity_matrix: Matrix4x4<f32> = Matrix4x4::identity();
         
-        assert_eq!(identity_mat * identity_mat, identity_mat);
+        assert_eq!(identity_matrix * identity_matrix, identity_matrix);
     }
 
     #[test]
-    fn test_zero_mat_times_zero_mat_equals_zero_mat() {
-        let zero_mat: Matrix4x4<f32> = Matrix4x4::zero();
+    fn test_zero_matrix_times_zero_matrix_equals_zero_matrix() {
+        let zero_matrix: Matrix4x4<f32> = Matrix4x4::zero();
 
-        assert_eq!(zero_mat * zero_mat, zero_mat);
+        assert_eq!(zero_matrix * zero_matrix, zero_matrix);
     }
 
     #[test]
-    fn test_mat_times_identity_equals_mat1() {
-        let a_mat = Matrix4x4::new(
+    fn test_matrix_times_identity_equals_matrix1() {
+        let a_matrix = Matrix4x4::new(
             80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
             4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
             70_f64,    49_f64,     95_f64,    89.91_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
             7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
             72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
@@ -2370,22 +2375,22 @@ mod matrix4x4_tests {
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
         //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
         // );
-        let a_mat_times_identity = a_mat * Matrix4x4::identity();
-        let b_mat_times_identity = b_mat * Matrix4x4::identity();
+        let a_matrix_times_identity = a_matrix * Matrix4x4::identity();
+        let b_matrix_times_identity = b_matrix * Matrix4x4::identity();
 
-        assert_eq!(a_mat_times_identity, a_mat);
-        assert_eq!(b_mat_times_identity, b_mat);
+        assert_eq!(a_matrix_times_identity, a_matrix);
+        assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
     #[test]
-    fn test_mat_times_zero_equals_zero1() {
-        let a_mat = Matrix4x4::new(
+    fn test_matrix_times_zero_equals_zero1() {
+        let a_matrix = Matrix4x4::new(
             80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
             4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
             70_f64,    49_f64,     95_f64,    89.91_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
             7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
             72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
@@ -2397,22 +2402,22 @@ mod matrix4x4_tests {
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
         //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
         // );
-        let a_mat_times_zero = a_mat * Matrix4x4::zero();
-        let b_mat_times_zero = b_mat * Matrix4x4::zero();
+        let a_matrix_times_zero_matrix = a_matrix * Matrix4x4::zero();
+        let b_matrix_times_zero_matrix = b_matrix * Matrix4x4::zero();
 
-        assert_eq!(a_mat_times_zero, Matrix4x4::zero());
-        assert_eq!(b_mat_times_zero, Matrix4x4::zero());
+        assert_eq!(a_matrix_times_zero_matrix, Matrix4x4::zero());
+        assert_eq!(b_matrix_times_zero_matrix, Matrix4x4::zero());
     }
 
     #[test]
-    fn test_zero_times_mat_equals_zero1() {
-        let a_mat = Matrix4x4::new(
+    fn test_zero_times_matrix_equals_zero1() {
+        let a_matrix = Matrix4x4::new(
             80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
             4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
             70_f64,    49_f64,     95_f64,    89.91_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
             7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
             72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
@@ -2424,22 +2429,22 @@ mod matrix4x4_tests {
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
         //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
         // );
-        let zero_times_a_mat = Matrix4x4::zero() * a_mat;
-        let zero_times_b_mat = Matrix4x4::zero() * b_mat;
+        let zero_times_a_matrix = Matrix4x4::zero() * a_matrix;
+        let zero_times_b_matrix = Matrix4x4::zero() * b_matrix;
 
-        assert_eq!(zero_times_a_mat, Matrix4x4::zero());
-        assert_eq!(zero_times_b_mat, Matrix4x4::zero());
+        assert_eq!(zero_times_a_matrix, Matrix4x4::zero());
+        assert_eq!(zero_times_b_matrix, Matrix4x4::zero());
     }
 
     #[test]
-    fn test_mat_times_identity_equals_identity_times_mat1() {
-        let a_mat = Matrix4x4::new(
+    fn test_matrix_times_identity_equals_identity_times_matrix1() {
+        let a_matrix = Matrix4x4::new(
             80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
             4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
             70_f64,    49_f64,     95_f64,    89.91_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
             7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
             72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
@@ -2451,24 +2456,24 @@ mod matrix4x4_tests {
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
         //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
         // );
-        let a_mat_times_identity = a_mat * Matrix4x4::identity();
-        let identity_times_a_mat = Matrix4x4::identity() * a_mat;
-        let b_mat_times_identity = b_mat * Matrix4x4::identity();
-        let identity_times_b_mat = Matrix4x4::identity() * b_mat;
+        let a_matrix_times_identity = a_matrix * Matrix4x4::identity();
+        let identity_times_a_matrix = Matrix4x4::identity() * a_matrix;
+        let b_matrix_times_identity = b_matrix * Matrix4x4::identity();
+        let identity_times_b_matrix = Matrix4x4::identity() * b_matrix;
 
-        assert_eq!(a_mat_times_identity, identity_times_a_mat);
-        assert_eq!(b_mat_times_identity, identity_times_b_mat);
+        assert_eq!(a_matrix_times_identity, identity_times_a_matrix);
+        assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
     #[test]
-    fn test_mat_transpose_transpose_equals_mat1() {
-        let a_mat = Matrix4x4::new(
+    fn test_matrix_transpose_transpose_equals_matrix1() {
+        let a_matrix = Matrix4x4::new(
             80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
             4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
             70_f64,    49_f64,     95_f64,    89.91_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
             7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
             72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
@@ -2480,22 +2485,22 @@ mod matrix4x4_tests {
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
         //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
         // );
-        let a_mat_tr_tr = a_mat.transpose().transpose();
-        let b_mat_tr_tr = b_mat.transpose().transpose();
+        let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
+        let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
             
-        assert_eq!(a_mat_tr_tr, a_mat);
-        assert_eq!(b_mat_tr_tr, b_mat);
+        assert_eq!(a_matrix_transpose_transpose, a_matrix);
+        assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
     #[test]
     fn test_matrix_multiplication1() {
-        let a_mat = Matrix4x4::new(
+        let a_matrix = Matrix4x4::new(
             80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
             4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
             70_f64,    49_f64,     95_f64,    89.91_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
             7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
             72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
@@ -2507,20 +2512,20 @@ mod matrix4x4_tests {
             410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
             141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
         );
-        let result = a_mat * b_mat;
+        let result = a_matrix * b_matrix;
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
-    fn test_mat_times_identity_equals_mat2() {
-        let a_mat = Matrix4x4::new(
+    fn test_matrix_times_identity_equals_matrix2() {
+        let a_matrix = Matrix4x4::new(
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
             0_f64,     0_f64,      0_f64,     887.710_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             57.72_f64, 0_f64,      0_f64,       0_f64, 
             0_f64,     9.5433_f64, 0_f64,       0_f64, 
             0_f64,     0_f64,      86.7312_f64, 0_f64,
@@ -2532,22 +2537,22 @@ mod matrix4x4_tests {
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
         //     0_f64,         0_f64,           0_f64,           238894.656314_f64
         // );
-        let a_mat_times_identity = a_mat * Matrix4x4::identity();
-        let b_mat_times_identity = b_mat * Matrix4x4::identity();
+        let a_matrix_times_identity = a_matrix * Matrix4x4::identity();
+        let b_matrix_times_identity = b_matrix * Matrix4x4::identity();
 
-        assert_eq!(a_mat_times_identity, a_mat);
-        assert_eq!(b_mat_times_identity, b_mat);
+        assert_eq!(a_matrix_times_identity, a_matrix);
+        assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
     #[test]
-    fn test_mat_times_zero_equals_zero2() {
-        let a_mat = Matrix4x4::new(
+    fn test_matrix_times_zero_equals_zero2() {
+        let a_matrix = Matrix4x4::new(
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
             0_f64,     0_f64,      0_f64,     887.710_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             57.72_f64, 0_f64,      0_f64,       0_f64, 
             0_f64,     9.5433_f64, 0_f64,       0_f64, 
             0_f64,     0_f64,      86.7312_f64, 0_f64,
@@ -2559,22 +2564,22 @@ mod matrix4x4_tests {
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
         //     0_f64,         0_f64,           0_f64,           238894.656314_f64
         // );
-        let a_mat_times_zero = a_mat * Matrix4x4::zero();
-        let b_mat_times_zero = b_mat * Matrix4x4::zero();
+        let a_matrix_times_zero_matrix = a_matrix * Matrix4x4::zero();
+        let b_matrix_times_zero_matrix = b_matrix * Matrix4x4::zero();
 
-        assert_eq!(a_mat_times_zero, Matrix4x4::zero());
-        assert_eq!(b_mat_times_zero, Matrix4x4::zero());
+        assert_eq!(a_matrix_times_zero_matrix, Matrix4x4::zero());
+        assert_eq!(b_matrix_times_zero_matrix, Matrix4x4::zero());
     }
 
     #[test]
-    fn test_zero_times_mat_equals_zero2() {
-        let a_mat = Matrix4x4::new(
+    fn test_zero_times_matrix_equals_zero2() {
+        let a_matrix = Matrix4x4::new(
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
             0_f64,     0_f64,      0_f64,     887.710_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             57.72_f64, 0_f64,      0_f64,       0_f64, 
             0_f64,     9.5433_f64, 0_f64,       0_f64, 
             0_f64,     0_f64,      86.7312_f64, 0_f64,
@@ -2586,22 +2591,22 @@ mod matrix4x4_tests {
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
         //     0_f64,         0_f64,           0_f64,           238894.656314_f64
         // );
-        let zero_times_a_mat = Matrix4x4::zero() * a_mat;
-        let zero_times_b_mat = Matrix4x4::zero() * b_mat;
+        let zero_times_a_matrix = Matrix4x4::zero() * a_matrix;
+        let zero_times_b_matrix = Matrix4x4::zero() * b_matrix;
 
-        assert_eq!(zero_times_a_mat, Matrix4x4::zero());
-        assert_eq!(zero_times_b_mat, Matrix4x4::zero());
+        assert_eq!(zero_times_a_matrix, Matrix4x4::zero());
+        assert_eq!(zero_times_b_matrix, Matrix4x4::zero());
     }
 
     #[test]
-    fn test_mat_times_identity_equals_identity_times_mat2() {
-        let a_mat = Matrix4x4::new(
+    fn test_matrix_times_identity_equals_identity_times_matrix2() {
+        let a_matrix = Matrix4x4::new(
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
             0_f64,     0_f64,      0_f64,     887.710_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             57.72_f64, 0_f64,      0_f64,       0_f64, 
             0_f64,     9.5433_f64, 0_f64,       0_f64, 
             0_f64,     0_f64,      86.7312_f64, 0_f64,
@@ -2613,24 +2618,24 @@ mod matrix4x4_tests {
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
         //     0_f64,         0_f64,           0_f64,           238894.656314_f64
         // );
-        let a_mat_times_identity = a_mat * Matrix4x4::identity();
-        let identity_times_a_mat = Matrix4x4::identity() * a_mat;
-        let b_mat_times_identity = b_mat * Matrix4x4::identity();
-        let identity_times_b_mat = Matrix4x4::identity() * b_mat;
+        let a_matrix_times_identity = a_matrix * Matrix4x4::identity();
+        let identity_times_a_matrix = Matrix4x4::identity() * a_matrix;
+        let b_matrix_times_identity = b_matrix * Matrix4x4::identity();
+        let identity_times_b_matrix = Matrix4x4::identity() * b_matrix;
 
-        assert_eq!(a_mat_times_identity, identity_times_a_mat);
-        assert_eq!(b_mat_times_identity, identity_times_b_mat);
+        assert_eq!(a_matrix_times_identity, identity_times_a_matrix);
+        assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
     #[test]
-    fn test_mat_transpose_transpose_equals_mat2() {
-        let a_mat = Matrix4x4::new(
+    fn test_matrix_transpose_transpose_equals_matrix2() {
+        let a_matrix = Matrix4x4::new(
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
             0_f64,     0_f64,      0_f64,     887.710_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             57.72_f64, 0_f64,      0_f64,       0_f64, 
             0_f64,     9.5433_f64, 0_f64,       0_f64, 
             0_f64,     0_f64,      86.7312_f64, 0_f64,
@@ -2642,22 +2647,22 @@ mod matrix4x4_tests {
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
         //     0_f64,         0_f64,           0_f64,           238894.656314_f64
         // );
-        let a_mat_tr_tr = a_mat.transpose().transpose();
-        let b_mat_tr_tr = b_mat.transpose().transpose();
+        let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
+        let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
             
-        assert_eq!(a_mat_tr_tr, a_mat);
-        assert_eq!(b_mat_tr_tr, b_mat);
+        assert_eq!(a_matrix_transpose_transpose, a_matrix);
+        assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
     #[test]
     fn test_matrix_multiplication2() {
-        let a_mat = Matrix4x4::new(
+        let a_matrix = Matrix4x4::new(
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
             0_f64,     0_f64,      0_f64,     887.710_f64
         );
-        let b_mat = Matrix4x4::new(
+        let b_matrix = Matrix4x4::new(
             57.72_f64, 0_f64,      0_f64,       0_f64, 
             0_f64,     9.5433_f64, 0_f64,       0_f64, 
             0_f64,     0_f64,      86.7312_f64, 0_f64,
@@ -2669,7 +2674,7 @@ mod matrix4x4_tests {
             0_f64,         0_f64,           822.4719696_f64, 0_f64,
             0_f64,         0_f64,           0_f64,           238894.656314_f64
         );
-        let result = a_mat * b_mat;
+        let result = a_matrix * b_matrix;
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -2677,9 +2682,9 @@ mod matrix4x4_tests {
     #[test]
     fn test_identity_transpose_equals_identity() {
         let identity = Matrix4x4::<f32>::identity();
-        let identity_tr = identity.transpose();
+        let identity_transpose = identity.transpose();
             
-        assert_eq!(identity, identity_tr);
+        assert_eq!(identity, identity_transpose);
     }
 
     #[rustfmt::skip]
@@ -2721,21 +2726,21 @@ mod matrix4x4_tests {
     }
 
     #[test]
-    fn test_identity_mat4_translates_vector_along_vector() {
+    fn test_identity_matrix4x4_translates_vector_along_vector() {
         let vector = Vector3::from((2_f64, 2_f64, 2_f64));
-        let trans_mat = Matrix4x4::from_affine_translation(&vector);
-        let zero_vec4 = Vector4::from((0_f64, 0_f64, 0_f64, 1_f64));
-        let zero_vec3 = Vector3::from((0_f64, 0_f64, 0_f64));
+        let trans_matrix = Matrix4x4::from_affine_translation(&vector);
+        let zero_vector4 = Vector4::from((0_f64, 0_f64, 0_f64, 1_f64));
+        let zero_vector3 = Vector3::from((0_f64, 0_f64, 0_f64));
 
-        let result = trans_mat * zero_vec4;
-        assert_eq!(result, (zero_vec3 + vector).extend(1_f64));
+        let result = trans_matrix * zero_vector4;
+        assert_eq!(result, (zero_vector3 + vector).extend(1_f64));
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_constant_times_identity_is_constant_along_diagonal() {
         let c = 802.3435169_f64;
-        let id = Matrix4x4::identity();
+        let identity = Matrix4x4::identity();
         let expected = Matrix4x4::new(
             c,     0_f64, 0_f64, 0_f64, 
             0_f64, c,     0_f64, 0_f64, 
@@ -2743,14 +2748,14 @@ mod matrix4x4_tests {
             0_f64, 0_f64, 0_f64, c
         );
 
-        assert_eq!(id * c, expected);
+        assert_eq!(identity * c, expected);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_identity_divide_constant_is_constant_inverse_along_diagonal() {
         let c = 802.3435169_f64;
-        let id = Matrix4x4::identity();
+        let identity = Matrix4x4::identity();
         let expected = Matrix4x4::new(
             1_f64 / c, 0_f64,     0_f64,     0_f64, 
             0_f64,     1_f64 / c, 0_f64,     0_f64, 
@@ -2758,13 +2763,13 @@ mod matrix4x4_tests {
             0_f64,     0_f64,     0_f64,     1_f64 / c
         );
 
-        assert_eq!(id / c, expected);
+        assert_eq!(identity / c, expected);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero = Matrix4x4::zero();
+        let zero_matrix = Matrix4x4::zero();
         let matrix = Matrix4x4::new(
             36.84_f64,   427.46894_f64, 8827.1983_f64, 89.5049494_f64, 
             7.04217_f64, 61.891390_f64, 56.31_f64,     89_f64, 
@@ -2772,13 +2777,13 @@ mod matrix4x4_tests {
             37.6985_f64, 311.8_f64,     60.81_f64,     73.8393_f64
         );
 
-        assert_eq!(matrix + zero, matrix);
+        assert_eq!(matrix + zero_matrix, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero = Matrix4x4::zero();
+        let zero_matrix = Matrix4x4::zero();
         let matrix = Matrix4x4::new(
             36.84_f64,   427.46894_f64, 8827.1983_f64, 89.5049494_f64, 
             7.04217_f64, 61.891390_f64, 56.31_f64,     89_f64, 
@@ -2786,14 +2791,13 @@ mod matrix4x4_tests {
             37.6985_f64, 311.8_f64,     60.81_f64,     73.8393_f64
         );
 
-        assert_eq!(zero + matrix, matrix);
+        assert_eq!(zero_matrix + matrix, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_matrix_with_zero_determinant() {
         // This matrix should have a zero determinant since it has two repeating columns.
-        use num_traits::Zero;
         let matrix = Matrix4x4::new(
             1_f64,  2_f64,  3_f64,  4_f64, 
             5_f64,  6_f64,  7_f64,  8_f64,
@@ -2960,10 +2964,10 @@ mod matrix4x4_tests {
             72_f64,     936.5_f64,   413.80_f64,  50.311_f64,  
             37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64
         );
-        let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix4x4::identity();
+        let matrix_inverse = matrix.inverse().unwrap();
+        let identity = Matrix4x4::identity();
 
-        assert_relative_eq!(matrix * matrix_inv, one, epsilon = 1e-8);
+        assert_relative_eq!(matrix * matrix_inverse, identity, epsilon = 1e-8);
     }
 
     #[rustfmt::skip]
@@ -3006,10 +3010,10 @@ mod matrix4x4_tests {
             72_f64,     936.5_f64,   413.80_f64,  50.311_f64,  
             37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64
         );
-        let matrix_inv = matrix.inverse().unwrap();
-        let one = Matrix4x4::identity();
+        let matrix_inverse = matrix.inverse().unwrap();
+        let identity = Matrix4x4::identity();
         
-        assert_relative_eq!(matrix_inv * matrix, one, epsilon = 1e-8);
+        assert_relative_eq!(matrix_inverse * matrix, identity, epsilon = 1e-8);
     }
 
     #[rustfmt::skip]
@@ -3703,7 +3707,7 @@ mod matrix1x2_tests {
     }
 
     #[test]
-    fn test_mat_times_identity_equals_mat() {
+    fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix1x2::new(2_i32, 3_i32);
         let identity = Matrix2x2::identity();
 
@@ -3711,21 +3715,21 @@ mod matrix1x2_tests {
     }
 
     #[test]
-    fn test_mat_times_zero_equals_zero() {
+    fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix1x2::new(33_i32, 54_i32);
-        let zero_mat2x2 = Matrix2x2::zero();
-        let zero_mat1x2 = Matrix1x2::zero();
+        let zero_matrix2x2 = Matrix2x2::zero();
+        let zero_matrix1x2 = Matrix1x2::zero();
 
-        assert_eq!(matrix * zero_mat2x2, zero_mat1x2);
+        assert_eq!(matrix * zero_matrix2x2, zero_matrix1x2);
     }
 
     #[test]
-    fn test_zero_times_mat_equals_zero() {
+    fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix1x2::new(33_i32, 54_i32);
         let zero = 0_i32;
-        let zero_mat1x2 = Matrix1x2::zero();
+        let zero_matrix1x2 = Matrix1x2::zero();
 
-        assert_eq!(zero * matrix, zero_mat1x2);
+        assert_eq!(zero * matrix, zero_matrix1x2);
     }
 
     #[rustfmt::skip]
@@ -3774,18 +3778,18 @@ mod matrix1x2_tests {
 
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero_mat1x2 = Matrix1x2::zero();
+        let zero_matrix1x2 = Matrix1x2::zero();
         let matrix = Matrix1x2::new(3684_i32, 42746_i32);
 
-        assert_eq!(matrix + zero_mat1x2, matrix);
+        assert_eq!(matrix + zero_matrix1x2, matrix);
     }
 
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero_mat1x2 = Matrix1x2::zero();
+        let zero_matrix1x2 = Matrix1x2::zero();
         let matrix = Matrix1x2::new(3684_i32, 42746_i32);
 
-        assert_eq!(zero_mat1x2 + matrix, matrix);
+        assert_eq!(zero_matrix1x2 + matrix, matrix);
     }
 
     #[test]
@@ -3811,9 +3815,9 @@ mod matrix1x2_tests {
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix1x2::new(3_i32, 6_i32);
-        let zero_mat1x2 = Matrix1x2::zero();
+        let zero_matrix1x2 = Matrix1x2::zero();
 
-        assert_eq!(matrix - matrix, zero_mat1x2);
+        assert_eq!(matrix - matrix, zero_matrix1x2);
     }
 }
 
@@ -3894,7 +3898,7 @@ mod matrix1x3_tests {
     }
 
     #[test]
-    fn test_mat_times_identity_equals_mat() {
+    fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix1x3::new(2_i32, 3_i32, 4_i32);
         let identity = Matrix3x3::identity();
 
@@ -3902,21 +3906,21 @@ mod matrix1x3_tests {
     }
 
     #[test]
-    fn test_mat_times_zero_equals_zero() {
+    fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix1x3::new(33_i32, 54_i32, 19_i32);
-        let zero_mat3x3 = Matrix3x3::zero();
-        let zero_mat1x3 = Matrix1x3::zero();
+        let zero_matrix3x3 = Matrix3x3::zero();
+        let zero_matrix1x3 = Matrix1x3::zero();
 
-        assert_eq!(matrix * zero_mat3x3, zero_mat1x3);
+        assert_eq!(matrix * zero_matrix3x3, zero_matrix1x3);
     }
 
     #[test]
-    fn test_zero_times_mat_equals_zero() {
+    fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix1x3::new(33_i32, 54_i32, 19_i32);
         let zero = 0_i32;
-        let zero_mat1x3 = Matrix1x3::zero();
+        let zero_matrix1x3 = Matrix1x3::zero();
 
-        assert_eq!(zero * matrix, zero_mat1x3);
+        assert_eq!(zero * matrix, zero_matrix1x3);
     }
 
     #[rustfmt::skip]
@@ -3966,18 +3970,18 @@ mod matrix1x3_tests {
 
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero_mat1x3 = Matrix1x3::zero();
+        let zero_matrix1x3 = Matrix1x3::zero();
         let matrix = Matrix1x3::new(3684_i32, 42746_i32, 345_i32);
 
-        assert_eq!(matrix + zero_mat1x3, matrix);
+        assert_eq!(matrix + zero_matrix1x3, matrix);
     }
 
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero_mat1x3 = Matrix1x3::zero();
+        let zero_matrix1x3 = Matrix1x3::zero();
         let matrix = Matrix1x3::new(3684_i32, 42746_i32, 345_i32);
 
-        assert_eq!(zero_mat1x3 + matrix, matrix);
+        assert_eq!(zero_matrix1x3 + matrix, matrix);
     }
 
     #[test]
@@ -4003,9 +4007,9 @@ mod matrix1x3_tests {
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix1x3::new(3_i32, 6_i32, 9_i32);
-        let zero_mat1x3 = Matrix1x3::zero();
+        let zero_matrix1x3 = Matrix1x3::zero();
 
-        assert_eq!(matrix - matrix, zero_mat1x3);
+        assert_eq!(matrix - matrix, zero_matrix1x3);
     }
 }
 
@@ -4088,7 +4092,7 @@ mod matrix1x4_tests {
     }
 
     #[test]
-    fn test_mat_times_identity_equals_mat() {
+    fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix1x4::new(2_i32, 3_i32, 4_i32, 5_i32);
         let identity = Matrix4x4::identity();
 
@@ -4096,21 +4100,21 @@ mod matrix1x4_tests {
     }
 
     #[test]
-    fn test_mat_times_zero_equals_zero() {
+    fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix1x4::new(33_i32, 54_i32, 19_i32, 5_i32);
-        let zero_mat4x4 = Matrix4x4::zero();
-        let zero_mat1x4 = Matrix1x4::zero();
+        let zero_matrix4x4 = Matrix4x4::zero();
+        let zero_matrix1x4 = Matrix1x4::zero();
 
-        assert_eq!(matrix * zero_mat4x4, zero_mat1x4);
+        assert_eq!(matrix * zero_matrix4x4, zero_matrix1x4);
     }
 
     #[test]
-    fn test_zero_times_mat_equals_zero() {
+    fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix1x4::new(33_i32, 54_i32, 19_i32, 5_i32);
         let zero = 0_i32;
-        let zero_mat1x4 = Matrix1x4::zero();
+        let zero_matrix1x4 = Matrix1x4::zero();
 
-        assert_eq!(zero * matrix, zero_mat1x4);
+        assert_eq!(zero * matrix, zero_matrix1x4);
     }
 
     #[rustfmt::skip]
@@ -4161,18 +4165,18 @@ mod matrix1x4_tests {
 
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero_mat1x4 = Matrix1x4::zero();
+        let zero_matrix1x4 = Matrix1x4::zero();
         let matrix = Matrix1x4::new(3684_i32, 42746_i32, 345_i32, 546_i32);
 
-        assert_eq!(matrix + zero_mat1x4, matrix);
+        assert_eq!(matrix + zero_matrix1x4, matrix);
     }
 
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero_mat1x4 = Matrix1x4::zero();
+        let zero_matrix1x4 = Matrix1x4::zero();
         let matrix = Matrix1x4::new(3684_i32, 42746_i32, 345_i32, 546_i32);
 
-        assert_eq!(zero_mat1x4 + matrix, matrix);
+        assert_eq!(zero_matrix1x4 + matrix, matrix);
     }
 
     #[test]
@@ -4198,9 +4202,9 @@ mod matrix1x4_tests {
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix1x4::new(3_i32, 6_i32, 9_i32, 12_i32);
-        let zero_mat1x4 = Matrix1x4::zero();
+        let zero_matrix1x4 = Matrix1x4::zero();
 
-        assert_eq!(matrix - matrix, zero_mat1x4);
+        assert_eq!(matrix - matrix, zero_matrix1x4);
     }
 }
 
@@ -4332,7 +4336,7 @@ mod matrix2x3_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_identity_equals_mat() {
+    fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix2x3::new(
             2_i32, 3_i32, 
             4_i32, 5_i32,
@@ -4345,30 +4349,30 @@ mod matrix2x3_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_zero_equals_zero() {
+    fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix2x3::new(
             33_i32,  54_i32, 
             19_i32,  5_i32,
             793_i32, 23_i32
         );
-        let zero_mat3x3 = Matrix3x3::zero();
-        let zero_mat2x3 = Matrix2x3::zero();
+        let zero_matrix3x3 = Matrix3x3::zero();
+        let zero_matrix2x3 = Matrix2x3::zero();
 
-        assert_eq!(matrix * zero_mat3x3, zero_mat2x3);
+        assert_eq!(matrix * zero_matrix3x3, zero_matrix2x3);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_zero_times_mat_equals_zero() {
+    fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix2x3::new(
             33_i32,  54_i32, 
             19_i32,  5_i32,
             234_i32, 98_i32
         );
         let zero = 0_i32;
-        let zero_mat2x3 = Matrix2x3::zero();
+        let zero_matrix2x3 = Matrix2x3::zero();
 
-        assert_eq!(zero * matrix, zero_mat2x3);
+        assert_eq!(zero * matrix, zero_matrix2x3);
     }
 
     #[rustfmt::skip]
@@ -4471,27 +4475,27 @@ mod matrix2x3_tests {
     #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero_mat2x3 = Matrix2x3::zero();
+        let zero_matrix2x3 = Matrix2x3::zero();
         let matrix = Matrix2x3::new(
             3684_i32, 42746_i32, 
             345_i32,  546_i32,  
             76_i32,   167_i32
         );
 
-        assert_eq!(matrix + zero_mat2x3, matrix);
+        assert_eq!(matrix + zero_matrix2x3, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero_mat2x3 = Matrix2x3::zero();
+        let zero_matrix2x3 = Matrix2x3::zero();
         let matrix = Matrix2x3::new(
             3684_i32, 42746_i32, 
             345_i32,  546_i32,  
             76_i32,   167_i32
         );
 
-        assert_eq!(zero_mat2x3 + matrix, matrix);
+        assert_eq!(zero_matrix2x3 + matrix, matrix);
     }
 
     #[rustfmt::skip]
@@ -4549,9 +4553,9 @@ mod matrix2x3_tests {
             9_i32,  12_i32,
             15_i32, 18_i32
         );
-        let zero_mat2x3 = Matrix2x3::zero();
+        let zero_matrix2x3 = Matrix2x3::zero();
 
-        assert_eq!(matrix - matrix, zero_mat2x3);
+        assert_eq!(matrix - matrix, zero_matrix2x3);
     }
 
     #[rustfmt::skip]
@@ -4724,7 +4728,7 @@ mod matrix3x2_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_identity_equals_mat() {
+    fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix3x2::new(
             2_i32, 3_i32, 4_i32, 
             5_i32, 6_i32, 7_i32
@@ -4736,28 +4740,28 @@ mod matrix3x2_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_zero_equals_zero() {
+    fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix3x2::new(
             33_i32, 54_i32,  19_i32,
             5_i32,  793_i32, 23_i32
         );
-        let zero_mat2x2 = Matrix2x2::zero();
-        let zero_mat3x2 = Matrix3x2::zero();
+        let zero_matrix2x2 = Matrix2x2::zero();
+        let zero_matrix3x2 = Matrix3x2::zero();
 
-        assert_eq!(matrix * zero_mat2x2, zero_mat3x2);
+        assert_eq!(matrix * zero_matrix2x2, zero_matrix3x2);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_zero_times_mat_equals_zero() {
+    fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix3x2::new(
             33_i32, 54_i32,  19_i32,
             5_i32,  234_i32, 98_i32
         );
         let zero = 0_i32;
-        let zero_mat3x2 = Matrix3x2::zero();
+        let zero_matrix3x2 = Matrix3x2::zero();
 
-        assert_eq!(zero * matrix, zero_mat3x2);
+        assert_eq!(zero * matrix, zero_matrix3x2);
     }
 
     #[rustfmt::skip]
@@ -4853,25 +4857,25 @@ mod matrix3x2_tests {
     #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero_mat3x2 = Matrix3x2::zero();
+        let zero_matrix3x2 = Matrix3x2::zero();
         let matrix = Matrix3x2::new(
             3684_i32, 42746_i32, 345_i32, 
             546_i32,  76_i32,    167_i32
         );
 
-        assert_eq!(matrix + zero_mat3x2, matrix);
+        assert_eq!(matrix + zero_matrix3x2, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero_mat3x2 = Matrix3x2::zero();
+        let zero_matrix3x2 = Matrix3x2::zero();
         let matrix = Matrix3x2::new(
             3684_i32, 42746_i32, 345_i32, 
             546_i32,  76_i32,    167_i32
         );
 
-        assert_eq!(zero_mat3x2 + matrix, matrix);
+        assert_eq!(zero_matrix3x2 + matrix, matrix);
     }
 
     #[rustfmt::skip]
@@ -4921,9 +4925,9 @@ mod matrix3x2_tests {
             3_i32,  6_i32,  9_i32,
             12_i32, 15_i32, 18_i32
         );
-        let zero_mat3x2 = Matrix3x2::zero();
+        let zero_matrix3x2 = Matrix3x2::zero();
 
-        assert_eq!(matrix - matrix, zero_mat3x2);
+        assert_eq!(matrix - matrix, zero_matrix3x2);
     }
 
     #[rustfmt::skip]
@@ -5114,7 +5118,7 @@ mod matrix2x4_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_identity_equals_mat() {
+    fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix2x4::new(
             2_i32, 3_i32, 
             4_i32, 5_i32,
@@ -5128,37 +5132,37 @@ mod matrix2x4_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_zero_equals_zero() {
+    fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix2x4::new(
             33_i32,  54_i32, 
             19_i32,  5_i32,
             793_i32, 23_i32,
             49_i32,  11_i32
         );
-        let zero_mat4x4 = Matrix4x4::zero();
-        let zero_mat2x4 = Matrix2x4::zero();
+        let zero_matrix4x4 = Matrix4x4::zero();
+        let zero_matrix2x4 = Matrix2x4::zero();
 
-        assert_eq!(matrix * zero_mat4x4, zero_mat2x4);
+        assert_eq!(matrix * zero_matrix4x4, zero_matrix2x4);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_zero_mat_times_mat_equals_zero() {
+    fn test_zero_matrix_times_matrix_equals_zero() {
         let matrix = Matrix2x4::new(
             33_i32,  54_i32, 
             19_i32,  5_i32,
             793_i32, 23_i32,
             49_i32,  11_i32
         );
-        let zero_mat2x2 = Matrix2x2::zero();
-        let zero_mat2x4 = Matrix2x4::zero();
+        let zero_matrix2x2 = Matrix2x2::zero();
+        let zero_matrix2x4 = Matrix2x4::zero();
 
-        assert_eq!(zero_mat2x2 * matrix, zero_mat2x4);
+        assert_eq!(zero_matrix2x2 * matrix, zero_matrix2x4);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_zero_times_mat_equals_zero() {
+    fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix2x4::new(
             33_i32,  54_i32, 
             19_i32,  5_i32,
@@ -5166,9 +5170,9 @@ mod matrix2x4_tests {
             64_i32,  28_i32
         );
         let zero = 0_i32;
-        let zero_mat2x4 = Matrix2x4::zero();
+        let zero_matrix2x4 = Matrix2x4::zero();
 
-        assert_eq!(zero * matrix, zero_mat2x4);
+        assert_eq!(zero * matrix, zero_matrix2x4);
     }
 
     #[rustfmt::skip]
@@ -5274,7 +5278,7 @@ mod matrix2x4_tests {
     #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero_mat2x4 = Matrix2x4::zero();
+        let zero_matrix2x4 = Matrix2x4::zero();
         let matrix = Matrix2x4::new(
             3684_i32, 42746_i32, 
             345_i32,  546_i32,  
@@ -5282,13 +5286,13 @@ mod matrix2x4_tests {
             415_i32,  251_i32
         );
 
-        assert_eq!(matrix + zero_mat2x4, matrix);
+        assert_eq!(matrix + zero_matrix2x4, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero_mat2x4 = Matrix2x4::zero();
+        let zero_matrix2x4 = Matrix2x4::zero();
         let matrix = Matrix2x4::new(
             3684_i32, 42746_i32, 
             345_i32,  546_i32,  
@@ -5296,7 +5300,7 @@ mod matrix2x4_tests {
             415_i32,  251_i32
         );
 
-        assert_eq!(zero_mat2x4 + matrix, matrix);
+        assert_eq!(zero_matrix2x4 + matrix, matrix);
     }
 
     #[rustfmt::skip]
@@ -5360,9 +5364,9 @@ mod matrix2x4_tests {
             15_i32, 18_i32,
             21_i32, 24_i32
         );
-        let zero_mat2x4 = Matrix2x4::zero();
+        let zero_matrix2x4 = Matrix2x4::zero();
 
-        assert_eq!(matrix - matrix, zero_mat2x4);
+        assert_eq!(matrix - matrix, zero_matrix2x4);
     }
 
     #[rustfmt::skip]
@@ -5543,7 +5547,7 @@ mod matrix4x2_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_identity_equals_mat() {
+    fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix4x2::new(
             2_i32, 3_i32, 4_i32, 5_i32, 
             6_i32, 7_i32, 8_i32, 9_i32
@@ -5555,28 +5559,28 @@ mod matrix4x2_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_zero_equals_zero() {
+    fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix4x2::new(
             33_i32, 54_i32,  19_i32, 345_i32,
             5_i32,  793_i32, 23_i32, 324_i32
         );
-        let zero_mat2x2 = Matrix2x2::zero();
-        let zero_mat3x2 = Matrix4x2::zero();
+        let zero_matrix2x2 = Matrix2x2::zero();
+        let zero_matrix3x2 = Matrix4x2::zero();
 
-        assert_eq!(matrix * zero_mat2x2, zero_mat3x2);
+        assert_eq!(matrix * zero_matrix2x2, zero_matrix3x2);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_zero_times_mat_equals_zero() {
+    fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix4x2::new(
             33_i32, 54_i32,  19_i32, 29_i32,
             5_i32,  234_i32, 98_i32, 7_i32
         );
         let zero = 0_i32;
-        let zero_mat3x2 = Matrix4x2::zero();
+        let zero_matrix3x2 = Matrix4x2::zero();
 
-        assert_eq!(zero * matrix, zero_mat3x2);
+        assert_eq!(zero * matrix, zero_matrix3x2);
     }
 
     #[rustfmt::skip]
@@ -5674,25 +5678,25 @@ mod matrix4x2_tests {
     #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero_mat4x2 = Matrix4x2::zero();
+        let zero_matrix4x2 = Matrix4x2::zero();
         let matrix = Matrix4x2::new(
             3684_i32, 42746_i32, 345_i32, 456_i32,
             546_i32,  76_i32,    167_i32, 915_i32
         );
 
-        assert_eq!(matrix + zero_mat4x2, matrix);
+        assert_eq!(matrix + zero_matrix4x2, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero_mat4x2 = Matrix4x2::zero();
+        let zero_matrix4x2 = Matrix4x2::zero();
         let matrix = Matrix4x2::new(
             3684_i32, 42746_i32, 345_i32, 456_i32,
             546_i32,  76_i32,    167_i32, 915_i32
         );
 
-        assert_eq!(zero_mat4x2 + matrix, matrix);
+        assert_eq!(zero_matrix4x2 + matrix, matrix);
     }
 
     #[rustfmt::skip]
@@ -5742,9 +5746,9 @@ mod matrix4x2_tests {
             3_i32,  6_i32,  9_i32,  12_i32,
             12_i32, 15_i32, 18_i32, 21_i32
         );
-        let zero_mat3x2 = Matrix4x2::zero();
+        let zero_matrix3x2 = Matrix4x2::zero();
 
-        assert_eq!(matrix - matrix, zero_mat3x2);
+        assert_eq!(matrix - matrix, zero_matrix3x2);
     }
 
     #[rustfmt::skip]
@@ -5945,7 +5949,7 @@ mod matrix3x4_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_identity_equals_mat() {
+    fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix3x4::new(
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
@@ -5959,37 +5963,37 @@ mod matrix3x4_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_zero_equals_zero() {
+    fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix3x4::new(
             33_i32,  54_i32, 234_i32,
             19_i32,  5_i32,  308_i32,
             793_i32, 23_i32, 8_i32,
             49_i32,  11_i32, 27_i32
         );
-        let zero_mat4x4 = Matrix4x4::zero();
-        let zero_mat3x4 = Matrix3x4::zero();
+        let zero_matrix4x4 = Matrix4x4::zero();
+        let zero_matrix3x4 = Matrix3x4::zero();
 
-        assert_eq!(matrix * zero_mat4x4, zero_mat3x4);
+        assert_eq!(matrix * zero_matrix4x4, zero_matrix3x4);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_zero_mat_times_mat_equals_zero() {
+    fn test_zero_matrix_times_matrix_equals_zero() {
         let matrix = Matrix3x4::new(
             33_i32,  54_i32, 234_i32,
             19_i32,  5_i32,  308_i32,
             793_i32, 23_i32, 8_i32,
             49_i32,  11_i32, 27_i32
         );
-        let zero_mat3x3: Matrix3x3<i32> = Matrix3x3::zero();
-        let zero_mat3x4: Matrix3x4<i32> = Matrix3x4::zero();
+        let zero_matrix3x3: Matrix3x3<i32> = Matrix3x3::zero();
+        let zero_matrix3x4: Matrix3x4<i32> = Matrix3x4::zero();
 
-        assert_eq!(zero_mat3x3 * matrix, zero_mat3x4);
+        assert_eq!(zero_matrix3x3 * matrix, zero_matrix3x4);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_zero_times_mat_equals_zero() {
+    fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix3x4::new(
             33_i32,  54_i32, 234_i32,
             19_i32,  5_i32,  308_i32,
@@ -5997,9 +6001,9 @@ mod matrix3x4_tests {
             49_i32,  11_i32, 27_i32
         );
         let zero = 0_i32;
-        let zero_mat3x4 = Matrix3x4::zero();
+        let zero_matrix3x4 = Matrix3x4::zero();
 
-        assert_eq!(zero * matrix, zero_mat3x4);
+        assert_eq!(zero * matrix, zero_matrix3x4);
     }
 
     #[rustfmt::skip]
@@ -6113,7 +6117,7 @@ mod matrix3x4_tests {
     #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero_mat3x4 = Matrix3x4::zero();
+        let zero_matrix3x4 = Matrix3x4::zero();
         let matrix = Matrix3x4::new(
             3684_i32, 42746_i32, 2389_i32,
             345_i32,  546_i32,   234_i32,
@@ -6121,13 +6125,13 @@ mod matrix3x4_tests {
             415_i32,  251_i32,   2340_i32
         );
 
-        assert_eq!(matrix + zero_mat3x4, matrix);
+        assert_eq!(matrix + zero_matrix3x4, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero_mat3x4 = Matrix3x4::zero();
+        let zero_matrix3x4 = Matrix3x4::zero();
         let matrix = Matrix3x4::new(
             3684_i32, 42746_i32, 2389_i32,
             345_i32,  546_i32,   234_i32,
@@ -6135,7 +6139,7 @@ mod matrix3x4_tests {
             415_i32,  251_i32,   2340_i32
         );
 
-        assert_eq!(zero_mat3x4 + matrix, matrix);
+        assert_eq!(zero_matrix3x4 + matrix, matrix);
     }
 
     #[rustfmt::skip]
@@ -6199,9 +6203,9 @@ mod matrix3x4_tests {
             15_i32, 18_i32, 21_i32,
             21_i32, 24_i32, 27_i32
         );
-        let zero_mat3x4 = Matrix3x4::zero();
+        let zero_matrix3x4 = Matrix3x4::zero();
 
-        assert_eq!(matrix - matrix, zero_mat3x4);
+        assert_eq!(matrix - matrix, zero_matrix3x4);
     }
 
     #[rustfmt::skip]
@@ -6400,7 +6404,7 @@ mod matrix4x3_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_identity_equals_mat() {
+    fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix4x3::new(
             2_i32,  3_i32,  4_i32,  5_i32, 
             6_i32,  7_i32,  8_i32,  9_i32,
@@ -6413,30 +6417,30 @@ mod matrix4x3_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_mat_times_zero_equals_zero() {
+    fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix4x3::new(
             33_i32, 54_i32,  19_i32, 345_i32,
             5_i32,  793_i32, 23_i32, 324_i32,
             23_i32, 98_i32,  84_i32, 89_i32
         );
-        let zero_mat3x3 = Matrix3x3::zero();
-        let zero_mat4x3 = Matrix4x3::zero();
+        let zero_matrix3x3 = Matrix3x3::zero();
+        let zero_matrix4x3 = Matrix4x3::zero();
 
-        assert_eq!(matrix * zero_mat3x3, zero_mat4x3);
+        assert_eq!(matrix * zero_matrix3x3, zero_matrix4x3);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_zero_times_mat_equals_zero() {
+    fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix4x3::new(
             33_i32, 54_i32,  19_i32, 29_i32,
             5_i32,  234_i32, 98_i32, 7_i32,
             23_i32, 98_i32,  84_i32, 89_i32
         );
         let zero = 0_i32;
-        let zero_mat4x3 = Matrix4x3::zero();
+        let zero_matrix4x3 = Matrix4x3::zero();
 
-        assert_eq!(zero * matrix, zero_mat4x3);
+        assert_eq!(zero * matrix, zero_matrix4x3);
     }
 
     #[rustfmt::skip]
@@ -6543,27 +6547,27 @@ mod matrix4x3_tests {
     #[rustfmt::skip]
     #[test]
     fn test_matrix_plus_zero_equals_matrix() {
-        let zero_mat4x3 = Matrix4x3::zero();
+        let zero_matrix4x3 = Matrix4x3::zero();
         let matrix = Matrix4x3::new(
             3684_i32, 42746_i32, 345_i32, 456_i32,
             546_i32,  76_i32,    167_i32, 915_i32,
             320_i32,  2430_i32,  894_i32, 324_i32
         );
 
-        assert_eq!(matrix + zero_mat4x3, matrix);
+        assert_eq!(matrix + zero_matrix4x3, matrix);
     }
 
     #[rustfmt::skip]
     #[test]
     fn test_zero_plus_matrix_equals_matrix() {
-        let zero_mat4x3 = Matrix4x3::zero();
+        let zero_matrix4x3 = Matrix4x3::zero();
         let matrix = Matrix4x3::new(
             3684_i32, 42746_i32, 345_i32, 456_i32,
             546_i32,  76_i32,    167_i32, 915_i32,
             320_i32,  2430_i32,  894_i32, 324_i32
         );
 
-        assert_eq!(zero_mat4x3 + matrix, matrix);
+        assert_eq!(zero_matrix4x3 + matrix, matrix);
     }
 
     #[rustfmt::skip]
@@ -6620,9 +6624,9 @@ mod matrix4x3_tests {
             12_i32, 15_i32, 18_i32, 21_i32,
             34_i32, 17_i32, 8_i32,  84_i32
         );
-        let zero_mat4x3 = Matrix4x3::zero();
+        let zero_matrix4x3 = Matrix4x3::zero();
 
-        assert_eq!(matrix - matrix, zero_mat4x3);
+        assert_eq!(matrix - matrix, zero_matrix4x3);
     }
 
     #[rustfmt::skip]
