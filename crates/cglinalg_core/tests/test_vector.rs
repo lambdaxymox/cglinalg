@@ -81,43 +81,179 @@ mod vector1_tests {
     }
 
     #[test]
-    fn test_addition() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector1::from(test.v1.x + test.v2.x);
-            let result = test.v1 + test.v2;
+    fn test_addition1() {
+        // let c = 802.3435169_f32;
+        let v1 = Vector1::from(-23.43_f32);
+        let v2 = Vector1::from(426.1_f32);
+        let expected = Vector1::from(v1.x + v2.x);
+        let result = v1 + v2;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_subtraction() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector1::from(test.v1.x - test.v2.x);
-            let result = test.v1 - test.v2;
+    fn test_subtraction1() {
+        // let c = 802.3435169_f32;
+        let v1 = Vector1::from(-23.43_f32);
+        let v2 = Vector1::from(426.1_f32);
+        let expected = Vector1::from(v1.x - v2.x);
+        let result = v1 - v2;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_scalar_multiplication() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector1::from(test.c * test.v1.x);
-            let result = test.v1 * test.c;
+    fn test_scalar_multiplication1() {
+        let c = 802.3435169_f32;
+        let v1 = Vector1::from(-23.43_f32);
+        // let v2 = Vector1::from(426.1_f32);
+        let expected = Vector1::from(v1.x * c);
+        let result = v1 * c;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_scalar_division() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector1::from(test.v1.x / test.c);
-            let result = test.v1 / test.c;
+    fn test_scalar_division1() {
+        let c = 802.3435169_f32;
+        let v1 = Vector1::from(-23.43_f32);
+        // let v2 = Vector1::from(426.1_f32);
+        let expected = Vector1::from(v1.x / c);
+        let result = v1 / c;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition2() {
+        // let c = 33.249539_f32;
+        let v1 = Vector1::from(27.6189_f32);
+        let v2 = Vector1::from(258.083_f32);
+        let expected = Vector1::from(v1.x + v2.x);
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction2() {
+        // let c = 33.249539_f32;
+        let v1 = Vector1::from(27.6189_f32);
+        let v2 = Vector1::from(258.083_f32);
+        let expected = Vector1::from(v1.x - v2.x);
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication2() {
+        let c = 33.249539_f32;
+        let v1 = Vector1::from(27.6189_f32);
+        // let v2 = Vector1::from(258.083_f32);
+        let expected = Vector1::from(v1.x * c);
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division2() {
+        let c = 33.249539_f32;
+        let v1 = Vector1::from(27.6189_f32);
+        // let v2 = Vector1::from(258.083_f32);
+        let expected = Vector1::from(v1.x / c);
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition3() {
+        // let c = 7.04217_f32;
+        let v1 = Vector1::from(0_f32);
+        let v2 = Vector1::from(0_f32);
+        let expected = Vector1::from(v1.x + v2.x);
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction3() {
+        // let c = 7.04217_f32;
+        let v1 = Vector1::from(0_f32);
+        let v2 = Vector1::from(0_f32);
+        let expected = Vector1::from(v1.x - v2.x);
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication3() {
+        let c = 7.04217_f32;
+        let v1 = Vector1::from(0_f32);
+        // let v2 = Vector1::from(0_f32);
+        let expected = Vector1::from(v1.x * c);
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division3() {
+        let c = 7.04217_f32;
+        let v1 = Vector1::from(0_f32);
+        // let v2 = Vector1::from(0_f32);
+        let expected = Vector1::from(v1.x / c);
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition4() {
+        // let c = 61.891390_f32;
+        let v1 = Vector1::from(8827.1983_f32);
+        let v2 = Vector1::from(89_f32);
+        let expected = Vector1::from(v1.x + v2.x);
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction4() {
+        // let c = 61.891390_f32;
+        let v1 = Vector1::from(8827.1983_f32);
+        let v2 = Vector1::from(89_f32);
+        let expected = Vector1::from(v1.x - v2.x);
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication4() {
+        let c = 61.891390_f32;
+        let v1 = Vector1::from(8827.1983_f32);
+        // let v2 = Vector1::from(89_f32);
+        let expected = Vector1::from(c * v1.x);
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division4() {
+        let c = 61.891390_f32;
+        let v1 = Vector1::from(8827.1983_f32);
+        // let v2 = Vector1::from(89_f32);
+        let expected = Vector1::from(v1.x / c);
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -288,43 +424,179 @@ mod vector2_tests {
     }
 
     #[test]
-    fn test_addition() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector2::from((test.v1.x + test.v2.x, test.v1.y + test.v2.y));
-            let result = test.v1 + test.v2;
+    fn test_addition1() {
+        // let c = 802.3435169_f32;
+        let v1 = Vector2::from((80_f32, 43.569_f32));
+        let v2 = Vector2::from((6.741_f32, 23.5724_f32));
+        let expected = Vector2::from((v1.x + v2.x, v1.y + v2.y));
+        let result = v1 + v2;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_subtraction() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector2::from((test.v1.x - test.v2.x, test.v1.y - test.v2.y));
-            let result = test.v1 - test.v2;
+    fn test_subtraction1() {
+        // let c = 802.3435169_f32;
+        let v1 = Vector2::from((80_f32, 43.569_f32));
+        let v2 = Vector2::from((6.741_f32, 23.5724_f32));
+        let expected = Vector2::from((v1.x - v2.x, v1.y - v2.y));
+        let result = v1 - v2;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_scalar_multiplication() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector2::from((test.c * test.v1.x, test.c * test.v1.y));
-            let result = test.v1 * test.c;
+    fn test_scalar_multiplication1() {
+        let c = 802.3435169_f32;
+        let v1 = Vector2::from((80_f32, 43.569_f32));
+        // let v2 = Vector2::from((6.741_f32, 23.5724_f32));
+        let expected = Vector2::from((c * v1.x, c * v1.y));
+        let result = v1 * c;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_scalar_division() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector2::from((test.v1.x / test.c, test.v1.y / test.c));
-            let result = test.v1 / test.c;
+    fn test_scalar_division1() {
+        let c = 802.3435169_f32;
+        let v1 = Vector2::from((80_f32, 43.569_f32));
+        // let v2 = Vector2::from((6.741_f32, 23.5724_f32));
+        let expected = Vector2::from((v1.x / c, v1.y / c));
+        let result = v1 / c;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition2() {
+        // let c = 33.249539_f32;
+        let v1 = Vector2::from((27.6189_f32, 4.2219_f32));
+        let v2 = Vector2::from((258.083_f32, 42.17_f32));
+        let expected = Vector2::from((v1.x + v2.x, v1.y + v2.y));
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction2() {
+        // let c = 33.249539_f32;
+        let v1 = Vector2::from((27.6189_f32, 4.2219_f32));
+        let v2 = Vector2::from((258.083_f32, 42.17_f32));
+        let expected = Vector2::from((v1.x - v2.x, v1.y - v2.y));
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication2() {
+        let c = 33.249539_f32;
+        let v1 = Vector2::from((27.6189_f32, 4.2219_f32));
+        // let v2 = Vector2::from((258.083_f32, 42.17_f32));
+        let expected = Vector2::from((c * v1.x, c * v1.y));
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division2() {
+        let c = 33.249539_f32;
+        let v1 = Vector2::from((27.6189_f32, 4.2219_f32));
+        // let v2 = Vector2::from((258.083_f32, 42.17_f32));
+        let expected = Vector2::from((v1.x / c, v1.y / c));
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition3() {
+        // let c = 7.04217_f32;
+        let v1 = Vector2::from((70_f32, 49_f32));
+        let v2 = Vector2::from((89.9138_f32, 427.46894_f32));
+        let expected = Vector2::from((v1.x + v2.x, v1.y + v2.y));
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction3() {
+        // let c = 7.04217_f32;
+        let v1 = Vector2::from((70_f32, 49_f32));
+        let v2 = Vector2::from((89.9138_f32, 427.46894_f32));
+        let expected = Vector2::from((v1.x - v2.x, v1.y - v2.y));
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication3() {
+        let c = 7.04217_f32;
+        let v1 = Vector2::from((70_f32, 49_f32));
+        // let v2 = Vector2::from((89.9138_f32, 427.46894_f32));
+        let expected = Vector2::from((c * v1.x, c * v1.y));
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division3() {
+        let c = 7.04217_f32;
+        let v1 = Vector2::from((70_f32, 49_f32));
+        // let v2 = Vector2::from((89.9138_f32, 427.46894_f32));
+        let expected = Vector2::from((v1.x / c, v1.y / c));
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition4() {
+        // let c = 61.891390_f32;
+        let v1 = Vector2::from((8827.1983_f32, 56.31_f32));
+        let v2 = Vector2::from((89_f32, 936.5_f32));
+        let expected = Vector2::from((v1.x + v2.x, v1.y + v2.y));
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction4() {
+        // let c = 61.891390_f32;
+        let v1 = Vector2::from((8827.1983_f32, 56.31_f32));
+        let v2 = Vector2::from((89_f32, 936.5_f32));
+        let expected = Vector2::from((v1.x - v2.x, v1.y - v2.y));
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication4() {
+        let c = 61.891390_f32;
+        let v1 = Vector2::from((8827.1983_f32, 56.31_f32));
+        // let v2 = Vector2::from((89_f32, 936.5_f32));
+        let expected = Vector2::from((c * v1.x, c * v1.y));
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division4() {
+        let c = 61.891390_f32;
+        let v1 = Vector2::from((8827.1983_f32, 56.31_f32));
+        // let v2 = Vector2::from((89_f32, 936.5_f32));
+        let expected = Vector2::from((v1.x / c, v1.y / c));
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -527,43 +799,179 @@ mod vector3_tests {
     }
 
     #[test]
-    fn test_addition() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector3::from((test.x.x + test.y.x, test.x.y + test.y.y, test.x.z + test.y.z));
-            let result = test.x + test.y;
+    fn test_addition1() {
+        // let c = 802.3435169_f32;
+        let v1 = Vector3::from((80_f32, 23.43_f32, 43.569_f32));
+        let v2 = Vector3::from((6.741_f32, 426.1_f32, 23.5724_f32));
+        let expected = Vector3::from((v1.x + v2.x, v1.y + v2.y, v1.z + v2.z));
+        let result = v1 + v2;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_subtraction() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector3::from((test.x.x - test.y.x, test.x.y - test.y.y, test.x.z - test.y.z));
-            let result = test.x - test.y;
+    fn test_subtraction1() {
+        // let c = 802.3435169_f32;
+        let v1 = Vector3::from((80_f32, 23.43_f32, 43.569_f32));
+        let v2 = Vector3::from((6.741_f32, 426.1_f32, 23.5724_f32));
+        let expected = Vector3::from((v1.x - v2.x, v1.y - v2.y, v1.z - v2.z));
+        let result = v1 - v2;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_scalar_multiplication() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector3::from((test.c * test.x.x, test.c * test.x.y, test.c * test.x.z));
-            let result = test.x * test.c;
+    fn test_scalar_multiplication1() {
+        let c = 802.3435169_f32;
+        let v1 = Vector3::from((80_f32, 23.43_f32, 43.569_f32));
+        // let v2 = Vector3::from((6.741_f32, 426.1_f32, 23.5724_f32));
+        let expected = Vector3::from((c * v1.x, c * v1.y, c * v1.z));
+        let result = v1 * c;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_scalar_division() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector3::from((test.x.x / test.c, test.x.y / test.c, test.x.z / test.c));
-            let result = test.x / test.c;
+    fn test_scalar_division1() {
+        let c = 802.3435169_f32;
+        let v1 = Vector3::from((80_f32, 23.43_f32, 43.569_f32));
+        // let v2 = Vector3::from((6.741_f32, 426.1_f32, 23.5724_f32));
+        let expected = Vector3::from((v1.x / c, v1.y / c, v1.z / c));
+        let result = v1 / c;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition2() {
+        // let c = 33.249539_f32;
+        let v1 = Vector3::from((27.6189_f32, 13.90_f32, 4.2219_f32));
+        let v2 = Vector3::from((258.083_f32, 31.70_f32, 42.17_f32));
+        let expected = Vector3::from((v1.x + v2.x, v1.y + v2.y, v1.z + v2.z));
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction2() {
+        // let c = 33.249539_f32;
+        let v1 = Vector3::from((27.6189_f32, 13.90_f32, 4.2219_f32));
+        let v2 = Vector3::from((258.083_f32, 31.70_f32, 42.17_f32));
+        let expected = Vector3::from((v1.x - v2.x, v1.y - v2.y, v1.z - v2.z));
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication2() {
+        let c = 33.249539_f32;
+        let v1 = Vector3::from((27.6189_f32, 13.90_f32, 4.2219_f32));
+        // let v2 = Vector3::from((258.083_f32, 31.70_f32, 42.17_f32));
+        let expected = Vector3::from((c * v1.x, c * v1.y, c * v1.z));
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division2() {
+        let c = 33.249539_f32;
+        let v1 = Vector3::from((27.6189_f32, 13.90_f32, 4.2219_f32));
+        // let v2 = Vector3::from((258.083_f32, 31.70_f32, 42.17_f32));
+        let expected = Vector3::from((v1.x / c, v1.y / c, v1.z / c));
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition3() {
+        // let c = 7.04217_f32;
+        let v1 = Vector3::from((70_f32, 49_f32, 95_f32));
+        let v2 = Vector3::from((89.9138_f32, 36.84_f32, 427.46894_f32));
+        let expected = Vector3::from((v1.x + v2.x, v1.y + v2.y, v1.z + v2.z));
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction3() {
+        // let c = 7.04217_f32;
+        let v1 = Vector3::from((70_f32, 49_f32, 95_f32));
+        let v2 = Vector3::from((89.9138_f32, 36.84_f32, 427.46894_f32));
+        let expected = Vector3::from((v1.x - v2.x, v1.y - v2.y, v1.z - v2.z));
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication3() {
+        let c = 7.04217_f32;
+        let v1 = Vector3::from((70_f32, 49_f32, 95_f32));
+        // let v2 = Vector3::from((89.9138_f32, 36.84_f32, 427.46894_f32));
+        let expected = Vector3::from((c * v1.x, c * v1.y, c * v1.z));
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division3() {
+        let c = 7.04217_f32;
+        let v1 = Vector3::from((70_f32, 49_f32, 95_f32));
+        // let v2 = Vector3::from((89.9138_f32, 36.84_f32, 427.46894_f32));
+        let expected = Vector3::from((v1.x / c, v1.y / c, v1.z / c));
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition4() {
+        // let c = 61.891390_f32;
+        let v1 = Vector3::from((8827.1983_f32, 89.5049494_f32, 56.31_f32));
+        let v2 = Vector3::from((89_f32, 72_f32, 936.5_f32));
+        let expected = Vector3::from((v1.x + v2.x, v1.y + v2.y, v1.z + v2.z));
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction4() {
+        // let c = 61.891390_f32;
+        let v1 = Vector3::from((8827.1983_f32, 89.5049494_f32, 56.31_f32));
+        let v2 = Vector3::from((89_f32, 72_f32, 936.5_f32));
+        let expected = Vector3::from((v1.x - v2.x, v1.y - v2.y, v1.z - v2.z));
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication4() {
+        let c = 61.891390_f32;
+        let v1 = Vector3::from((8827.1983_f32, 89.5049494_f32, 56.31_f32));
+        // let v2 = Vector3::from((89_f32, 72_f32, 936.5_f32));
+        let expected = Vector3::from((c * v1.x, c * v1.y, c * v1.z));
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division4() {
+        let c = 61.891390_f32;
+        let v1 = Vector3::from((8827.1983_f32, 89.5049494_f32, 56.31_f32));
+        // let v2 = Vector3::from((89_f32, 72_f32, 936.5_f32));
+        let expected = Vector3::from((v1.x / c, v1.y / c, v1.z / c));
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -783,53 +1191,179 @@ mod vector4_tests {
     }
 
     #[test]
-    fn test_addition() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector4::from((
-                test.v1.x + test.v2.x, test.v1.y + test.v2.y,
-                test.v1.z + test.v2.z, test.v1.w + test.v2.w
-            ));
-            let result = test.v1 + test.v2;
+    fn test_addition1() {
+        // let c = 802.3435169_f32;
+        let v1 = Vector4::from((80_f32,  23.43_f32, 43.569_f32, 69.9093_f32));
+        let v2 = Vector4::from((6.741_f32, 426.1_f32, 23.5724_f32, 85567.75976_f32));
+        let expected = Vector4::from((v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w));
+        let result = v1 + v2;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_subtraction() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector4::from((
-                test.v1.x - test.v2.x, test.v1.y - test.v2.y,
-                test.v1.z - test.v2.z, test.v1.w - test.v2.w
-            ));
-            let result = test.v1 - test.v2;
+    fn test_subtraction1() {
+        // let c = 802.3435169_f32;
+        let v1 = Vector4::from((80_f32,  23.43_f32, 43.569_f32, 69.9093_f32));
+        let v2 = Vector4::from((6.741_f32, 426.1_f32, 23.5724_f32, 85567.75976_f32));
+        let expected = Vector4::from((v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w));
+        let result = v1 - v2;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_scalar_multiplication() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector4::from((
-                test.c * test.v1.x, test.c * test.v1.y, test.c * test.v1.z, test.c * test.v1.w
-            ));
-            let result = test.v1 * test.c;
+    fn test_scalar_multiplication1() {
+        let c = 802.3435169_f32;
+        let v1 = Vector4::from((80_f32,  23.43_f32, 43.569_f32, 69.9093_f32));
+        // let v2 = Vector4::from((6.741_f32, 426.1_f32, 23.5724_f32, 85567.75976_f32));
+        let expected = Vector4::from((c * v1.x, c * v1.y, c * v1.z, c * v1.w));
+        let result = v1 * c;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_scalar_division() {
-        test_cases().iter().for_each(|test| {
-            let expected = Vector4::from((
-                test.v1.x / test.c, test.v1.y / test.c, test.v1.z / test.c, test.v1.w / test.c
-            ));
-            let result = test.v1 / test.c;
+    fn test_scalar_division1() {
+        let c = 802.3435169_f32;
+        let v1 = Vector4::from((80_f32,  23.43_f32, 43.569_f32, 69.9093_f32));
+        // let v2 = Vector4::from((6.741_f32, 426.1_f32, 23.5724_f32, 85567.75976_f32));
+        let expected = Vector4::from((v1.x / c, v1.y / c, v1.z / c, v1.w / c));
+        let result = v1 / c;
 
-            assert_eq!(result, expected);
-        });
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition2() {
+        // let c = 33.249539_f32;
+        let v1 = Vector4::from((27.6189_f32, 13.90_f32, 4.2219_f32, 91.11955_f32));
+        let v2 = Vector4::from((258.083_f32, 31.70_f32, 42.17_f32, 8438.2376_f32));
+        let expected = Vector4::from((v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w));
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction2() {
+        // let c = 33.249539_f32;
+        let v1 = Vector4::from((27.6189_f32, 13.90_f32, 4.2219_f32, 91.11955_f32));
+        let v2 = Vector4::from((258.083_f32, 31.70_f32, 42.17_f32, 8438.2376_f32));
+        let expected = Vector4::from((v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w));
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication2() {
+        let c = 33.249539_f32;
+        let v1 = Vector4::from((27.6189_f32, 13.90_f32, 4.2219_f32, 91.11955_f32));
+        // let v2 = Vector4::from((258.083_f32, 31.70_f32, 42.17_f32, 8438.2376_f32));
+        let expected = Vector4::from((c * v1.x, c * v1.y, c * v1.z, c * v1.w));
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division2() {
+        let c = 33.249539_f32;
+        let v1 = Vector4::from((27.6189_f32, 13.90_f32, 4.2219_f32, 91.11955_f32));
+        // let v2 = Vector4::from((258.083_f32, 31.70_f32, 42.17_f32, 8438.2376_f32));
+        let expected = Vector4::from((v1.x / c, v1.y / c, v1.z / c, v1.w / c));
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition3() {
+        // let c = 7.04217_f32;
+        let v1 = Vector4::from((70_f32, 49_f32, 95_f32, 508.5602759_f32));
+        let v2 = Vector4::from((89.9138_f32, 36.84_f32, 427.46894_f32, 0.5796180917_f32));
+        let expected = Vector4::from((v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w));
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction3() {
+        // let c = 7.04217_f32;
+        let v1 = Vector4::from((70_f32, 49_f32, 95_f32, 508.5602759_f32));
+        let v2 = Vector4::from((89.9138_f32, 36.84_f32, 427.46894_f32, 0.5796180917_f32));
+        let expected = Vector4::from((v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w));
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication3() {
+        let c = 7.04217_f32;
+        let v1 = Vector4::from((70_f32, 49_f32, 95_f32, 508.5602759_f32));
+        // let v2 = Vector4::from((89.9138_f32, 36.84_f32, 427.46894_f32, 0.5796180917_f32));
+        let expected = Vector4::from((c * v1.x, c * v1.y, c * v1.z, c * v1.w));
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division3() {
+        let c = 7.04217_f32;
+        let v1 = Vector4::from((70_f32, 49_f32, 95_f32, 508.5602759_f32));
+        // let v2 = Vector4::from((89.9138_f32, 36.84_f32, 427.46894_f32, 0.5796180917_f32));
+        let expected = Vector4::from((v1.x / c, v1.y / c, v1.z / c, v1.w / c));
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_addition4() {
+        // let c = 61.891390_f32;
+        let v1 = Vector4::from((8827.1983_f32, 89.5049494_f32, 56.31_f32, 0.2888633714_f32));
+        let v2 = Vector4::from((89_f32, 72_f32, 936.5_f32, 0.2888633714_f32));
+        let expected = Vector4::from((v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w));
+        let result = v1 + v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_subtraction4() {
+        // let c = 61.891390_f32;
+        let v1 = Vector4::from((8827.1983_f32, 89.5049494_f32, 56.31_f32, 0.2888633714_f32));
+        let v2 = Vector4::from((89_f32, 72_f32, 936.5_f32, 0.2888633714_f32));
+        let expected = Vector4::from((v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w));
+        let result = v1 - v2;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_multiplication4() {
+        let c = 61.891390_f32;
+        let v1 = Vector4::from((8827.1983_f32, 89.5049494_f32, 56.31_f32, 0.2888633714_f32));
+        // let v2 = Vector4::from((89_f32, 72_f32, 936.5_f32, 0.2888633714_f32));
+        let expected = Vector4::from((c * v1.x, c * v1.y, c * v1.z, c * v1.w));
+        let result = v1 * c;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_scalar_division4() {
+        let c = 61.891390_f32;
+        let v1 = Vector4::from((8827.1983_f32, 89.5049494_f32, 56.31_f32, 0.2888633714_f32));
+        // let v2 = Vector4::from((89_f32, 72_f32, 936.5_f32, 0.2888633714_f32));
+        let expected = Vector4::from((v1.x / c, v1.y / c, v1.z / c, v1.w / c));
+        let result = v1 / c;
+
+        assert_eq!(result, expected);
     }
 
     #[test]
