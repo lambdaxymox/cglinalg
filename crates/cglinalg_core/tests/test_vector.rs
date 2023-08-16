@@ -6,48 +6,6 @@ mod vector1_tests {
     use cglinalg_core::{
         Vector1,
     };
-    use core::slice::Iter;
-
-
-    struct TestCase {
-        c: f32,
-        v1: Vector1<f32>,
-        v2: Vector1<f32>,
-    }
-
-    struct Test {
-        tests: Vec<TestCase>,
-    }
-
-    impl Test {
-        fn iter(&self) -> TestIter {
-            TestIter {
-                inner: self.tests.iter()
-            }
-        }
-    }
-
-    struct TestIter<'a> {
-        inner: Iter<'a, TestCase>,
-    }
-
-    impl<'a> Iterator for TestIter<'a> {
-        type Item = &'a TestCase;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            self.inner.next()
-        }
-    }
-
-    fn test_cases() -> Test {
-        Test {
-            tests: vec![
-                TestCase { c: 802.3435169_f32, v1: Vector1::from(-23.43_f32),  v2: Vector1::from(426.1_f32),   },
-                TestCase { c: 33.249539_f32,   v1: Vector1::from(27.6189_f32), v2: Vector1::from(258.083_f32), },
-                TestCase { c: 7.04217_f32,     v1: Vector1::from(0_f32),       v2: Vector1::from(0_f32),       },
-            ]
-        }
-    }
 
 
     #[test]
@@ -347,49 +305,7 @@ mod vector2_tests {
     use cglinalg_core::{
         Vector2,
     };
-    use core::slice::Iter;
 
-
-    struct TestCase {
-        c: f32,
-        v1: Vector2<f32>,
-        v2: Vector2<f32>,
-    }
-
-    struct Test {
-        tests: Vec<TestCase>,
-    }
-
-    impl Test {
-        fn iter(&self) -> TestIter {
-            TestIter {
-                inner: self.tests.iter()
-            }
-        }
-    }
-
-    struct TestIter<'a> {
-        inner: Iter<'a, TestCase>,
-    }
-
-    impl<'a> Iterator for TestIter<'a> {
-        type Item = &'a TestCase;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            self.inner.next()
-        }
-    }
-
-    fn test_cases() -> Test {
-        Test {
-            tests: vec![
-                TestCase { c: 802.3435169_f32, v1: Vector2::from((80_f32,  43.569_f32)),      v2: Vector2::from((6.741_f32, 23.5724_f32)),     },
-                TestCase { c: 33.249539_f32,   v1: Vector2::from((27.6189_f32, 4.2219_f32)),  v2: Vector2::from((258.083_f32, 42.17_f32))      },
-                TestCase { c: 7.04217_f32,     v1: Vector2::from((70_f32,  49_f32)),          v2: Vector2::from((89.9138_f32, 427.46894_f32)), },
-                TestCase { c: 61.891390_f32,   v1: Vector2::from((8827.1983_f32, 56.31_f32)), v2: Vector2::from((89_f32, 936.5_f32)),          }
-            ]
-        }
-    }
 
     #[test]
     fn test_components1() {
@@ -704,65 +620,7 @@ mod vector3_tests {
     use cglinalg_core::{
         Vector3,
     };
-    use core::slice::Iter;
 
-
-    struct TestCase {
-        c: f32,
-        x: Vector3<f32>,
-        y: Vector3<f32>,
-    }
-
-    struct Test {
-        tests: Vec<TestCase>,
-    }
-
-    impl Test {
-        fn iter(&self) -> TestIter {
-            TestIter {
-                inner: self.tests.iter()
-            }
-        }
-    }
-
-    struct TestIter<'a> {
-        inner: Iter<'a, TestCase>,
-    }
-
-    impl<'a> Iterator for TestIter<'a> {
-        type Item = &'a TestCase;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            self.inner.next()
-        }
-    }
-
-    fn test_cases() -> Test {
-        Test {
-            tests: vec![
-                TestCase {
-                    c: 802.3435169_f32,
-                    x: Vector3::from((80_f32,  23.43_f32, 43.569_f32)),
-                    y: Vector3::from((6.741_f32, 426.1_f32, 23.5724_f32)),
-                },
-                TestCase {
-                    c: 33.249539_f32,
-                    x: Vector3::from((27.6189_f32, 13.90_f32, 4.2219_f32)),
-                    y: Vector3::from((258.083_f32, 31.70_f32, 42.17_f32))
-                },
-                TestCase {
-                    c: 7.04217_f32,
-                    x: Vector3::from((70_f32,  49_f32,  95_f32)),
-                    y: Vector3::from((89.9138_f32, 36.84_f32, 427.46894_f32)),
-                },
-                TestCase {
-                    c: 61.891390_f32,
-                    x: Vector3::from((8827.1983_f32, 89.5049494_f32, 56.31_f32)),
-                    y: Vector3::from((89_f32, 72_f32, 936.5_f32)),
-                }
-            ]
-        }
-    }
 
     #[test]
     fn test_components1() {
@@ -1093,65 +951,6 @@ mod vector4_tests {
     use cglinalg_core::{
         Vector4,
     };
-    use core::slice::Iter;
-
-    
-    struct TestCase {
-        c: f32,
-        v1: Vector4<f32>,
-        v2: Vector4<f32>,
-    }
-
-    struct Test {
-        tests: Vec<TestCase>,
-    }
-
-    impl Test {
-        fn iter(&self) -> TestIter {
-            TestIter {
-                inner: self.tests.iter()
-            }
-        }
-    }
-
-    struct TestIter<'a> {
-        inner: Iter<'a, TestCase>,
-    }
-
-    impl<'a> Iterator for TestIter<'a> {
-        type Item = &'a TestCase;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            self.inner.next()
-        }
-    }
-
-    fn test_cases() -> Test {
-        Test {
-            tests: vec![
-                TestCase {
-                    c: 802.3435169_f32,
-                    v1: Vector4::from((80_f32,  23.43_f32, 43.569_f32, 69.9093_f32)),
-                    v2: Vector4::from((6.741_f32, 426.1_f32, 23.5724_f32, 85567.75976_f32)),
-                },
-                TestCase {
-                    c: 33.249539_f32,
-                    v1: Vector4::from((27.6189_f32, 13.90_f32, 4.2219_f32, 91.11955_f32)),
-                    v2: Vector4::from((258.083_f32, 31.70_f32, 42.17_f32, 8438.2376_f32))
-                },
-                TestCase {
-                    c: 7.04217_f32,
-                    v1: Vector4::from((70_f32, 49_f32, 95_f32, 508.5602759_f32)),
-                    v2: Vector4::from((89.9138_f32, 36.84_f32, 427.46894_f32, 0.5796180917_f32)),
-                },
-                TestCase {
-                    c: 61.891390_f32,
-                    v1: Vector4::from((8827.1983_f32, 89.5049494_f32, 56.31_f32, 0.2888633714_f32)),
-                    v2: Vector4::from((89_f32, 72_f32, 936.5_f32, 0.2888633714_f32)),
-                }
-            ]
-        }
-    }
 
 
     #[test]

@@ -13,83 +13,6 @@ mod matrix2x2_tests {
     use approx::{
         assert_relative_eq,
     };
-    use core::slice::Iter;
-
-
-    struct TestCase {
-        a_mat: Matrix2x2<f32>,
-        b_mat: Matrix2x2<f32>,
-        expected: Matrix2x2<f32>,
-    }
-
-    struct Test {
-        tests: Vec<TestCase>,
-    }
-
-    impl Test {
-        fn iter(&self) -> TestIter {
-            TestIter {
-                inner: self.tests.iter()
-            }
-        }
-    }
-
-    struct TestIter<'a> {
-        inner: Iter<'a, TestCase>,
-    }
-
-    impl<'a> Iterator for TestIter<'a> {
-        type Item = &'a TestCase;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            self.inner.next()
-        }
-    }
-
-    fn test_cases() -> Test {
-        Test {
-            tests: vec![
-                TestCase {
-                    a_mat: Matrix2x2::new(
-                        80_f32,      23.43_f32,     
-                        426.1_f32,   23.5724_f32
-                    ),
-                    b_mat: Matrix2x2::new(
-                        36.84_f32,   427.46894_f32, 
-                        7.04217_f32, 61.891390_f32
-                    ),
-                    expected: Matrix2x2::new(
-                        185091.72_f32, 10939.63_f32, 
-                        26935.295_f32, 1623.9266_f32
-                    ),
-                },
-                TestCase {
-                    a_mat: Matrix2x2::identity(),
-                    b_mat: Matrix2x2::identity(),
-                    expected: Matrix2x2::identity(),
-                },
-                TestCase {
-                    a_mat: Matrix2x2::zero(),
-                    b_mat: Matrix2x2::zero(),
-                    expected: Matrix2x2::zero(),
-                },
-                TestCase {
-                    a_mat: Matrix2x2::new(
-                        68.32_f32, 0_f32, 
-                        0_f32,     37.397_f32
-                    ),
-                    b_mat: Matrix2x2::new(
-                        57.72_f32, 0_f32, 
-                        0_f32,     9.5433127_f32
-                    ),
-                    expected: Matrix2x2::new(
-                        3943.4304_f32, 0_f32, 
-                        0_f32,         356.89127_f32
-                    ),
-                },
-            ]
-        }
-    }
 
 
     #[rustfmt::skip]
@@ -194,16 +117,16 @@ mod matrix2x2_tests {
 
     #[test]
     fn test_identity_mat_times_identity_mat_equals_identity_mat() {
-        let identity_mat: Matrix2x2<f32> = Matrix2x2::identity();
+        let identity_matrix: Matrix2x2<f32> = Matrix2x2::identity();
         
-        assert_eq!(identity_mat * identity_mat, identity_mat);
+        assert_eq!(identity_matrix * identity_matrix, identity_matrix);
     }
 
     #[test]
     fn test_zero_mat_times_zero_mat_equals_zero_mat() {
-        let zero_mat: Matrix2x2<f32> = Matrix2x2::zero();
+        let zero_matrix: Matrix2x2<f32> = Matrix2x2::zero();
 
-        assert_eq!(zero_mat * zero_mat, zero_mat);
+        assert_eq!(zero_matrix * zero_matrix, zero_matrix);
     }
 
     #[test]
@@ -993,90 +916,9 @@ mod matrix3x3_tests {
         Unit,
         Point3,
     };
-    use approx::assert_relative_eq;
-    use core::slice::Iter;
-
-
-    struct TestCase {
-        a_mat: Matrix3x3<f32>,
-        b_mat: Matrix3x3<f32>,
-        expected: Matrix3x3<f32>,
-    }
-
-    struct Test {
-        tests: Vec<TestCase>,
-    }
-
-    impl Test {
-        fn iter(&self) -> TestIter {
-            TestIter {
-                inner: self.tests.iter()
-            }
-        }
-    }
-
-    struct TestIter<'a> {
-        inner: Iter<'a, TestCase>,
-    }
-
-    impl<'a> Iterator for TestIter<'a> {
-        type Item = &'a TestCase;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            self.inner.next()
-        }
-    }
-
-    fn test_cases() -> Test {
-        Test {
-            tests: vec![
-                TestCase {
-                    a_mat: Matrix3x3::new(
-                        80_f32,     426.1_f32,   43.393_f32, 
-                        23.43_f32,  23.5724_f32, 1.27_f32, 
-                        81.439_f32, 12.19_f32,   43.36_f32
-                    ),
-                    b_mat: Matrix3x3::new(
-                        36.84_f32,     7.04217_f32,  5.74_f32, 
-                        427.46894_f32, 61.89139_f32, 96.27_f32, 
-                        152.66_f32,    86.333_f32,   26.71_f32
-                    ),
-                    expected: Matrix3x3::new(
-                        3579.6579_f32,  15933.496_f32,   1856.4281_f32, 
-                        43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
-                        16410.8178_f32, 67409.1000_f32,  7892.1646_f32
-                    ),
-                },
-                TestCase {
-                    a_mat: Matrix3x3::identity(),
-                    b_mat: Matrix3x3::identity(),
-                    expected: Matrix3x3::identity(),
-                },
-                TestCase {
-                    a_mat: Matrix3x3::zero(),
-                    b_mat: Matrix3x3::zero(),
-                    expected: Matrix3x3::zero(),
-                },
-                TestCase {
-                    a_mat: Matrix3x3::new(
-                        68.32_f32, 0_f32,      0_f32, 
-                        0_f32,     37.397_f32, 0_f32, 
-                        0_f32,     0_f32,      43.393_f32
-                    ),
-                    b_mat: Matrix3x3::new(
-                        57.72_f32, 0_f32,         0_f32, 
-                        0_f32,     9.5433127_f32, 0_f32, 
-                        0_f32,     0_f32,         12.19_f32
-                    ),
-                    expected: Matrix3x3::new(
-                        3943.4304_f32, 0_f32,         0_f32, 
-                        0_f32,         356.89127_f32, 0_f32, 
-                        0_f32,         0_f32,         528.96067_f32
-                    ),
-                },
-            ]
-        }
-    }
+    use approx::{
+        assert_relative_eq,
+    };
 
 
     #[rustfmt::skip]
@@ -2352,95 +2194,6 @@ mod matrix4x4_tests {
     use approx::{
         assert_relative_eq,
     };
-    use core::slice::Iter;
-
-
-    struct TestCase {
-        a_mat: Matrix4x4<f64>,
-        b_mat: Matrix4x4<f64>,
-        expected: Matrix4x4<f64>,
-    }
-
-    struct Test {
-        tests: Vec<TestCase>,
-    }
-
-    impl Test {
-        fn iter(&self) -> TestIter {
-            TestIter {
-                inner: self.tests.iter()
-            }
-        }
-    }
-
-    struct TestIter<'a> {
-        inner: Iter<'a, TestCase>,
-    }
-
-    impl<'a> Iterator for TestIter<'a> {
-        type Item = &'a TestCase;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            self.inner.next()
-        }
-    }
-
-    fn test_cases() -> Test {
-        Test {
-            tests: vec![
-                TestCase {
-                    a_mat: Matrix4x4::new(
-                        80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
-                        426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
-                        4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
-                        70_f64,    49_f64,     95_f64,    89.91_f64
-                    ),
-                    b_mat: Matrix4x4::new(
-                        36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
-                        7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
-                        72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
-                        37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64
-                    ),
-                    expected: Matrix4x4::new(
-                        195075.7478_f64, 242999.4886_f64, 49874.8440_f64, 51438.8929_f64,
-                        33402.1572_f64,  20517.1793_f64,  12255.4723_f64, 11284.3033_f64,
-                        410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
-                        141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
-                    ),
-                },
-                TestCase {
-                    a_mat: Matrix4x4::identity(),
-                    b_mat: Matrix4x4::identity(),
-                    expected: Matrix4x4::identity(),
-                },
-                TestCase {
-                    a_mat: Matrix4x4::zero(),
-                    b_mat: Matrix4x4::zero(),
-                    expected: Matrix4x4::zero(),
-                },
-                TestCase {
-                    a_mat: Matrix4x4::new(
-                        68.32_f64, 0_f64,      0_f64,     0_f64,
-                        0_f64,     37.397_f64, 0_f64,     0_f64,
-                        0_f64,     0_f64,      9.483_f64, 0_f64,
-                        0_f64,     0_f64,      0_f64,     887.710_f64
-                    ),
-                    b_mat: Matrix4x4::new(
-                        57.72_f64, 0_f64,      0_f64,       0_f64, 
-                        0_f64,     9.5433_f64, 0_f64,       0_f64, 
-                        0_f64,     0_f64,      86.7312_f64, 0_f64,
-                        0_f64,     0_f64,      0_f64,       269.1134_f64
-                    ),
-                    expected: Matrix4x4::new(
-                        3943.4304_f64, 0_f64,           0_f64,           0_f64,
-                        0_f64,         356.8907901_f64, 0_f64,           0_f64,
-                        0_f64,         0_f64,           822.4719696_f64, 0_f64,
-                        0_f64,         0_f64,           0_f64,           238894.656314_f64
-                    ),
-                },
-            ]
-        }
-    }
 
 
     #[rustfmt::skip]
