@@ -566,7 +566,7 @@ pub trait SimdScalarFloat:
     /// ```
     fn sqrt(self) -> Self;
 
-    /// Calculate the sube root of a number.
+    /// Calculate the cube root of a number.
     /// 
     /// # Examples
     /// 
@@ -589,9 +589,74 @@ pub trait SimdScalarFloat:
     fn powi(self, n: i32) -> Self;
     fn powf(self, n: Self) -> Self;
         
-    
+    /// Return `true` if `self` is neither infinite, nor `NaN`.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let f = 7.0f64;
+    /// let inf: f64 = f64::INFINITY;
+    /// let neg_inf: f64 = f64::NEG_INFINITY;
+    /// let nan: f64 = f64::NAN;
+    ///
+    /// assert!(f.is_finite());
+    ///
+    /// assert!(!nan.is_finite());
+    /// assert!(!inf.is_finite());
+    /// assert!(!neg_inf.is_finite());
+    /// ```
     fn is_finite(self) -> bool;
+
+    /// Return `true` if `self` is either positive infinity, or negative 
+    /// infinity, and `false` otherwise.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let f = 7.0f64;
+    /// let inf: f64 = f64::INFINITY;
+    /// let neg_inf: f64 = f64::NEG_INFINITY;
+    /// let nan: f64 = f64::NAN;
+    ///
+    /// assert!(!f.is_infinite());
+    ///
+    /// assert!(!nan.is_infinite());
+    /// assert!(inf.is_infinite());
+    /// assert!(neg_inf.is_infinite());
+    /// ```
     fn is_infinite(self) -> bool;
+
+    /// Return `true` if `self` is `NaN`, and `false` otherwise.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let f = 7.0f64;
+    /// let inf: f64 = f64::INFINITY;
+    /// let neg_inf: f64 = f64::NEG_INFINITY;
+    /// let nan: f64 = f64::NAN;
+    ///
+    /// assert!(!f.is_nan());
+    ///
+    /// assert!(nan.is_nan());
+    /// assert!(!inf.is_nan());
+    /// assert!(!neg_inf.is_nan());
+    /// ```
     fn is_nan(self) -> bool;
 
     
