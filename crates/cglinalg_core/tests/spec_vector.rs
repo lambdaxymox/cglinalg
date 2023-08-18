@@ -1914,7 +1914,7 @@ lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, any_vector4, any_scalar,
 /// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-macro_rules! linf_norm_props {
+macro_rules! approx_linf_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1970,10 +1970,84 @@ macro_rules! linf_norm_props {
     }
 }
 
-linf_norm_props!(vector1_f64_linf_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-8);
-linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
-linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
-linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
+approx_linf_norm_props!(vector1_f64_linf_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-8);
+approx_linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
+approx_linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
+approx_linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
+
+
+/// Generate properties for the vector **L-infinity** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+macro_rules! exact_linf_norm_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The **L-infinity** norm of a vector is nonnegative.
+            ///
+            /// Given a vector `v`
+            /// ```text
+            /// linf_norm(v) >= 0
+            /// ```
+            #[test]
+            fn prop_linf_norm_nonnegative(v in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+                
+                prop_assert!(v.linf_norm() >= zero);
+            }
+
+            /// The **L-infinity** norm function is point separating. In particular, if the 
+            /// distance between two vectors `v` and `w` is zero, then `v = w`.
+            ///
+            /// Given vectors `v` and `w`
+            /// ```text
+            /// linf_norm(v - w) = 0 => v = w 
+            /// ```
+            /// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+            /// ```text
+            /// v != w => linf_norm(v - w) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the norm
+            /// function.
+            #[test]
+            fn prop_linf_norm_approx_point_separating(
+                v in $Generator::<$ScalarType>(), 
+                w in $Generator::<$ScalarType>()
+            ) {
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(v != w);
+                prop_assert_ne!(
+                    (v - w).linf_norm(), zero,
+                    "\nlinf_norm(v - w) = {}\n", 
+                    (v - w).linf_norm()
+                );
+            }
+        }
+    }
+    }
+}
+
+exact_linf_norm_props!(vector1_i32_linf_norm_props, Vector1, i32, any_vector1, any_scalar);
+exact_linf_norm_props!(vector2_i32_linf_norm_props, Vector2, i32, any_vector2, any_scalar);
+exact_linf_norm_props!(vector3_i32_linf_norm_props, Vector3, i32, any_vector3, any_scalar);
+exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, any_vector4, any_scalar);
 
 
 /// Generate properties for vector norms.
