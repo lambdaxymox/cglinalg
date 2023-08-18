@@ -7,13 +7,13 @@ use proptest::prelude::*;
 use cglinalg_core::{
     Degrees,
     Radians,
-    SimdScalar,
+    SimdScalarFloat,
 };
 
 
 fn any_scalar<S>() -> impl Strategy<Value = S>
 where 
-    S: SimdScalar + Arbitrary
+    S: SimdScalarFloat + Arbitrary
 {
     any::<S>().prop_map(|scalar| {
         let modulus = num_traits::cast(100_000_000).unwrap();
@@ -24,26 +24,28 @@ where
 
 fn any_radians<S>() -> impl Strategy<Value = Radians<S>> 
 where 
-    S: SimdScalar + Arbitrary
+    S: SimdScalarFloat + Arbitrary
 {
     any::<S>()
         .prop_map(|dimensionless| {
             let two_pi: S = num_traits::cast(2_f64 * core::f64::consts::PI).unwrap();
-            let one_million: S = num_traits::cast(100_000_000).unwrap();
-            Radians(dimensionless % (one_million * two_pi))
+            let one_hundred_million: S = num_traits::cast(100_000_000).unwrap();
+
+            Radians(dimensionless % (one_hundred_million * two_pi))
         })
         .no_shrink()
 }
 
 fn any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
 where 
-    S: SimdScalar + Arbitrary
+    S: SimdScalarFloat + Arbitrary
 {
     any::<S>()
         .prop_map(|dimensionless| {
             let two_pi: S = num_traits::cast(360_f64).unwrap();
-            let one_million: S = num_traits::cast(100_000_000).unwrap();
-            Degrees(dimensionless % (one_million * two_pi)) 
+            let one_hundred_million: S = num_traits::cast(100_000_000).unwrap();
+
+            Degrees(dimensionless % (one_hundred_million * two_pi))
         })
         .no_shrink()
 }
@@ -283,4 +285,76 @@ macro_rules! approx_trigonometry_props {
 
 approx_trigonometry_props!(radians_f64_trigonometry_props, Radians, f64, any_radians, 1e-6);
 approx_trigonometry_props!(degrees_f64_trigonometry_props, Degrees, f64, any_degrees, 1e-6);
+
+
+/// Generate property tests for typed angle normalization.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$AngleType` is the name of the angle type, e.g. Radians or Degrees.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of typed angles.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! approx_normalize_props {
+    ($TestModuleName:ident, $AngleType:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            $AngleType,
+            Angle,
+        };
+        use super::$Generator;
+
+    
+        proptest! {
+            /// A normalized angle correctly falls into the range `[0, full_turn)`.
+            /// 
+            /// Given an angle `angle`, the normalized angle satisfies
+            /// ```text
+            /// normalize(angle) in [0, full_turn)
+            /// ```
+            #[test]
+            fn prop_normalize_normalizes_to_interval(angle in $Generator::<$ScalarType>()) {
+                let full_turn = $AngleType::full_turn();
+                let zero = $AngleType::zero();
+                let normalized_angle = angle.normalize();
+
+                prop_assert!(
+                    (normalized_angle >= zero) && (normalized_angle <= full_turn),
+                    "angle = {:?}; normalized_angle = {:?}",
+                    angle, normalized_angle
+                );
+            }
+
+            /// A signed normalized angle correctly falls into the range [-full_turn / 2, full_turn / 2).
+            /// 
+            /// Given an angle `angle`, the signed normalized angle satisfies
+            /// ```text
+            /// normalize_signed(angle) in [-full_turn / 2, full_turn / 2]
+            /// ```
+            #[test]
+            fn prop_normalize_signed_normalizes_to_interval(angle in $Generator::<$ScalarType>()) {
+                let full_turn_over_2 = $AngleType::full_turn_div_2();
+                let normalized_angle = angle.normalize_signed();
+
+                prop_assert!(
+                    (normalized_angle >= -full_turn_over_2) && (normalized_angle < full_turn_over_2),
+                    "angle = {:?}; normalized_angle = {:?}",
+                    angle, normalized_angle
+                );
+            }
+        }
+    }
+    }
+}
+
+approx_normalize_props!(radians_f64_normalize_props, Radians, f64, any_radians, 1e-10);
+approx_normalize_props!(degrees_f64_normalize_props, Degrees, f64, any_degrees, 1e-10);
 
