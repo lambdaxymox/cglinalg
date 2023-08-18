@@ -269,15 +269,90 @@ where
     Self: SimdScalar + PartialOrd
 {
     /// Calculate the maximum value of two numbers.
+    /// 
+    /// # Examples
+    /// 
+    /// Examples of using `max` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      SimdScalarOrd,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(SimdScalarOrd::max(1_f64, 2_f64), 2_f64);
+    /// assert_eq!(SimdScalarOrd::max(-1_f64, -2_f64), -1_f64);
+    /// ```
+    /// 
+    /// Examples of using `max` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      SimdScalarOrd,
+    /// # };
+    /// # // use core::i32;
+    /// #
+    /// assert_eq!(SimdScalarOrd::max(1_i32, 2_i32), 2_i32);
+    /// assert_eq!(SimdScalarOrd::max(-1_i32, -2_i32), -1_i32);
+    /// ```
     fn max(self, other: Self) -> Self;
 
     /// Calculate the minimum value of two numbers.
+    /// 
+    /// # Examples
+    /// 
+    /// Examples of using `min` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      SimdScalarOrd,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(SimdScalarOrd::min(1_f64, 2_f64), 1_f64);
+    /// assert_eq!(SimdScalarOrd::min(-1_f64, -2_f64), -2_f64);
+    /// ```
+    /// 
+    /// Examples of using `min` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      SimdScalarOrd,
+    /// # };
+    /// # use core::i32;
+    /// #
+    /// assert_eq!(SimdScalarOrd::min(1_i32, 2_i32), 1_i32);
+    /// assert_eq!(SimdScalarOrd::min(-1_i32, -2_i32), -2_i32);
+    /// ```
     fn min(self, other: Self) -> Self;
 
     /// Clamp the scalar to the range `[min_value, max_value]`.
     /// 
     /// This functions returns `min_value` if `self` < `min_value`, and it returns
     /// `max_value` if `self` > `max_value`.
+    /// 
+    /// # Examples
+    /// 
+    /// Examples of using `clamp` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarOrd,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(SimdScalarOrd::clamp(-3_f64, -2_f64, 1_f64), -2_f64);
+    /// assert_eq!(SimdScalarOrd::clamp(0_f64, -2_f64, 1_f64), 0_f64);
+    /// assert_eq!(SimdScalarOrd::clamp(2_f64, -2_f64, 1_f64), 1_f64);
+    /// assert!(SimdScalarOrd::clamp(f64::NAN, -2_f64, 1_f64).is_nan());
+    /// ```
+    /// 
+    /// Examples of using `clamp` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarOrd,
+    /// # };
+    /// # use core::i32;
+    /// #
+    /// assert_eq!(SimdScalarOrd::clamp(-3_i32, -2_i32, 1_i32), -2_i32);
+    /// assert_eq!(SimdScalarOrd::clamp(0_i32, -2_i32, 1_i32), 0_i32);
+    /// assert_eq!(SimdScalarOrd::clamp(2_i32, -2_i32, 1_i32), 1_i32);
+    /// ```
     fn clamp(self, min_value: Self, max_value: Self) -> Self;
 }
 
