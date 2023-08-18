@@ -1,6 +1,7 @@
 use crate::core_numeric::{
     SimdScalar,
     SimdScalarSigned,
+    SimdScalarOrd,
     SimdScalarFloat,
 };
 use crate::norm::{
@@ -502,6 +503,45 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    /// Calculate the norm of a vector with respect to the **L-infinity** norm.
+    /// 
+    /// # Examples
+    /// 
+    /// An example of computing the **L-infinity** norm of a vector of [`f64`] scalars.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let vector = Vector4::new(1_f64, 100_f64, 3_f64, 4_f64);
+    /// let expected = 100_f64;
+    /// let result = vector.linf_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// An example of computing the **L-infinity** norm of a vector of [`i32`] scalars.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let vector = Vector4::new(1_i32, 100_i32, 3_i32, 4_i32);
+    /// let expected = 100_i32;
+    /// let result = vector.linf_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn linf_norm(&self) -> S {
+        self.apply_norm(&LinfNorm::new())
+    }
+}
+
+impl<S, const N: usize> Vector<S, N>
+where
     S: SimdScalarFloat
 {
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
@@ -626,27 +666,6 @@ where
     pub fn lp_norm(&self, p: u32) -> S {
         self.apply_norm(&LpNorm::new(p))
     }
-
-    /// Calculate the norm of a vector with respect to the **L-infinity** norm.
-    /// 
-    /// # Examples
-    /// 
-    /// An example of computing the **L-infinity** norm of a vector of [`f64`] scalars.
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
-    /// #
-    /// let vector = Vector4::new(1_f64, 100_f64, 3_f64, 4_f64);
-    /// let expected = 100_f64;
-    /// let result = vector.linf_norm();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn linf_norm(&self) -> S {
-        self.apply_norm(&LinfNorm::new())
-    }
 }
 
 impl<S, const N: usize> Norm<Vector<S, N>> for L1Norm<Vector<S, N>> 
@@ -713,7 +732,7 @@ where
 
 impl<S, const N: usize> Norm<Vector<S, N>> for LinfNorm<Vector<S, N>> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarSigned + SimdScalarOrd
 {
     type Output = S;
 
