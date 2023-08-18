@@ -360,10 +360,60 @@ pub trait SimdScalarBounded
 where
     Self: SimdScalar + SimdScalarOrd
 {
-    /// Returns the smallest finite value of a scalar type.
+    /// Returns the smallest finite value of a number type.
+    /// 
+    /// # Example
+    /// 
+    /// An example of using `min_value` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarBounded,
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let min_value_f64 = f64::min_value();
+    /// 
+    /// assert_eq!(min_value_f64, f64::MIN);
+    /// ```
+    /// 
+    /// An example of using `min_value` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarBounded,
+    /// # };
+    /// # use core::i32;
+    /// #
+    /// let min_value_i32 = i32::min_value();
+    /// 
+    /// assert_eq!(min_value_i32, i32::MIN);
+    /// ```
     fn min_value() -> Self;
 
-    /// Returns the largest finite value of a scalar type.
+    /// Returns the largest finite value of a number type.
+    /// 
+    /// An example of using `max_value` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarBounded,
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let max_value_f64 = f64::max_value();
+    /// 
+    /// assert_eq!(max_value_f64, f64::MAX);
+    /// ```
+    /// 
+    /// An example of using `max_value` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarBounded,
+    /// # };
+    /// # use core::i32;
+    /// #
+    /// let max_value_i32 = i32::max_value();
+    /// 
+    /// assert_eq!(max_value_i32, i32::MAX);
+    /// ```
     fn max_value() -> Self;
 }
 
