@@ -167,7 +167,7 @@ impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> {
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; RC]>>::as_ref(self)
+        AsRef::<[S; RC]>::as_ref(self)
     }
 }
 

@@ -454,7 +454,7 @@ pub trait SimdScalarFloat:
     fn atanh(self) -> Self;
     
     fn sinh_cosh(self) -> (Self, Self) {
-        (<Self as SimdScalarFloat>::sinh(self), <Self as SimdScalarFloat>::cosh(self))
+        (SimdScalarFloat::sinh(self), SimdScalarFloat::cosh(self))
     }
     
     fn log(self, base: Self) -> Self;

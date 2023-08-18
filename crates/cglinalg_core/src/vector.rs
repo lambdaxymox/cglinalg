@@ -84,7 +84,7 @@ impl<S, const N: usize> Vector<S, N> {
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; N]>>::as_ref(self)
+        AsRef::<[S; N]>::as_ref(self)
     }
 }
 

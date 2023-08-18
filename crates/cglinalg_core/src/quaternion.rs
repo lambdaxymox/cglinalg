@@ -104,7 +104,7 @@ impl<S> Quaternion<S> {
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
-        <Self as AsRef<[S; 4]>>::as_ref(self)
+        AsRef::<[S; 4]>::as_ref(self)
     }
 }
 
