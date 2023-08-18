@@ -2728,7 +2728,7 @@ where
         // If `result` == `other`, there is no curve to interpolate; the angle 
         // between `result` and  `other` is zero. In this case we can return 
         // `result`.
-        if <S as SimdScalarSigned>::abs(cos_half_theta) >= one {
+        if SimdScalarSigned::abs(cos_half_theta) >= one {
             return result;
         }
 
@@ -2747,7 +2747,7 @@ where
         // an inverse trigonometric function.
         let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
         let threshold = num_traits::cast(0.001).unwrap();
-        if <S as SimdScalarSigned>::abs(sin_half_theta) < threshold {
+        if SimdScalarSigned::abs(sin_half_theta) < threshold {
             return result.nlerp(other, amount);
         }
         

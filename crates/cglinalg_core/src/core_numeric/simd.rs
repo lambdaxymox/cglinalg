@@ -553,12 +553,12 @@ macro_rules! impl_simd_scalar_signed_ord_integer {
         impl SimdScalarSigned for $ScalarType {
             #[inline]
             fn is_sign_positive(self) -> bool {
-                <Self as Signed>::is_positive(&self)
+                Signed::is_positive(&self)
             }
 
             #[inline]
             fn is_sign_negative(self) -> bool {
-                <Self as Signed>::is_negative(&self)
+                Signed::is_negative(&self)
             }
 
             #[inline]
@@ -572,29 +572,29 @@ macro_rules! impl_simd_scalar_signed_ord_integer {
 
             #[inline]
             fn signum(self) -> Self {
-                <Self as Signed>::signum(&self)
+                Signed::signum(&self)
             }
 
             #[inline]
             fn abs(self) -> Self {
-                <Self as Signed>::abs(&self)
+                Signed::abs(&self)
             }
         }
 
         impl SimdScalarOrd for $ScalarType {
             #[inline]
             fn max(self, other: Self) -> Self {
-                <Self as core::cmp::Ord>::max(self, other)
+                core::cmp::Ord::max(self, other)
             }
 
             #[inline]
             fn min(self, other: Self) -> Self {
-                <Self as core::cmp::Ord>::min(self, other)
+                core::cmp::Ord::min(self, other)
             }
 
             #[inline]
             fn clamp(self, min_value: Self, max_value: Self) -> Self {
-                <Self as core::cmp::Ord>::clamp(self, min_value, max_value)
+                core::cmp::Ord::clamp(self, min_value, max_value)
             }
         }
     )*}
@@ -608,39 +608,39 @@ macro_rules! impl_simd_scalar_signed_ord_float {
         impl SimdScalarSigned for $ScalarType {
             #[inline]
             fn is_sign_positive(self) -> bool {
-                <Self as num_traits::Float>::is_sign_positive(self)
+                num_traits::Float::is_sign_positive(self)
             }
             
             #[inline]
             fn is_sign_negative(self) -> bool {
-                <Self as num_traits::Float>::is_sign_negative(self)
+                num_traits::Float::is_sign_negative(self)
             }
 
             #[inline]
             fn copysign(self, sign: Self) -> Self {
-                <Self as num_traits::Float>::copysign(self, sign)
+                num_traits::Float::copysign(self, sign)
             }
 
             #[inline]
             fn signum(self) -> Self {
-                <Self as num_traits::Float>::signum(self)
+                num_traits::Float::signum(self)
             }
 
             #[inline]
             fn abs(self) -> Self {
-                <Self as num_traits::Float>::abs(self)
+                num_traits::Float::abs(self)
             }
         }
 
         impl SimdScalarOrd for $ScalarType {
             #[inline]
             fn max(self, other: Self) -> Self {
-                <Self as num_traits::Float>::max(self, other)
+                num_traits::Float::max(self, other)
             }
 
             #[inline]
             fn min(self, other: Self) -> Self {
-                <Self as num_traits::Float>::min(self, other)
+                num_traits::Float::min(self, other)
             }
 
             #[inline]
@@ -692,268 +692,268 @@ macro_rules! impl_simd_scalar_float {
         impl SimdScalarFloat for $ScalarType {
             #[inline]
             fn floor(self) -> Self {
-                <Self as num_traits::Float>::floor(self)
+                num_traits::Float::floor(self)
             }
 
             #[inline]
             fn ceil(self) -> Self {
-                <Self as num_traits::Float>::ceil(self)
+                num_traits::Float::ceil(self)
             }
 
             #[inline]
             fn round(self) -> Self {
-                <Self as num_traits::Float>::round(self)
+                num_traits::Float::round(self)
             }
 
             #[inline]
             fn trunc(self) -> Self {
-                <Self as num_traits::Float>::trunc(self)
+                num_traits::Float::trunc(self)
             }
 
             #[inline]
             fn fract(self) -> Self {
-                <Self as num_traits::Float>::fract(self)
+                num_traits::Float::fract(self)
             }
     
             #[inline]
             fn mul_add(self, a: Self, b: Self) -> Self {
-                <Self as num_traits::Float>::mul_add(self, a, b)
+                num_traits::Float::mul_add(self, a, b)
             }
 
             #[inline]
             fn hypot(self, other: Self) -> Self {
-                <Self as num_traits::Float>::hypot(self, other)
+                num_traits::Float::hypot(self, other)
             }
 
             #[inline]
             fn recip(self) -> Self {
-                <Self as num_traits::Float>::recip(self)
+                num_traits::Float::recip(self)
             }
     
             #[inline]
             fn atan2(self, other: Self) -> Self {
-                <Self as num_traits::Float>::atan2(self, other)
+                num_traits::Float::atan2(self, other)
             }
 
             #[inline]
             fn sin_cos(self) -> (Self, Self) {
-                <Self as num_traits::Float>::sin_cos(self)
+                num_traits::Float::sin_cos(self)
             }
 
             #[inline]
             fn sin(self) -> Self {
-                <Self as num_traits::Float>::sin(self)
+                num_traits::Float::sin(self)
             }
 
             #[inline]
             fn cos(self) -> Self {
-                <Self as num_traits::Float>::cos(self)
+                num_traits::Float::cos(self)
             }
 
             #[inline]
             fn tan(self) -> Self {
-                <Self as num_traits::Float>::tan(self)
+                num_traits::Float::tan(self)
             }
 
             #[inline]
             fn asin(self) -> Self {
-                <Self as num_traits::Float>::asin(self)
+                num_traits::Float::asin(self)
             }
 
             #[inline]
             fn acos(self) -> Self {
-                <Self as num_traits::Float>::acos(self)
+                num_traits::Float::acos(self)
             }
 
             #[inline]
             fn atan(self) -> Self {
-                <Self as num_traits::Float>::atan(self)
+                num_traits::Float::atan(self)
             }
     
             #[inline]
             fn sinh(self) -> Self {
-                <Self as num_traits::Float>::sinh(self)
+                num_traits::Float::sinh(self)
             }
 
             #[inline]
             fn cosh(self) -> Self {
-                <Self as num_traits::Float>::cosh(self)
+                num_traits::Float::cosh(self)
             }
 
             #[inline]
             fn tanh(self) -> Self {
-                <Self as num_traits::Float>::tanh(self)
+                num_traits::Float::tanh(self)
             }
 
             #[inline]
             fn asinh(self) -> Self {
-                <Self as num_traits::Float>::asinh(self)
+                num_traits::Float::asinh(self)
             }
 
             #[inline]
             fn acosh(self) -> Self {
-                <Self as num_traits::Float>::acosh(self)
+                num_traits::Float::acosh(self)
             }
 
             #[inline]
             fn atanh(self) -> Self {
-                <Self as num_traits::Float>::atanh(self)
+                num_traits::Float::atanh(self)
             }
     
             #[inline]
             fn log(self, base: Self) -> Self {
-                <Self as num_traits::Float>::log(self, base)
+                num_traits::Float::log(self, base)
             }
 
             #[inline]
             fn log2(self) -> Self {
-                <Self as num_traits::Float>::log2(self)
+                num_traits::Float::log2(self)
             }
 
             #[inline]
             fn log10(self) -> Self {
-                <Self as num_traits::Float>::log10(self)
+                num_traits::Float::log10(self)
             }
 
             #[inline]
             fn ln(self) -> Self {
-                <Self as num_traits::Float>::ln(self)
+                num_traits::Float::ln(self)
             }
 
             #[inline]
             fn ln_1p(self) -> Self {
-                <Self as num_traits::Float>::ln_1p(self)
+                num_traits::Float::ln_1p(self)
             }
         
             #[inline]
             fn sqrt(self) -> Self {
-                <Self as num_traits::Float>::sqrt(self)
+                num_traits::Float::sqrt(self)
             }
 
             #[inline]
             fn cbrt(self) -> Self {
-                <Self as num_traits::Float>::cbrt(self)
+                num_traits::Float::cbrt(self)
             }
     
             #[inline]
             fn exp(self) -> Self {
-                <Self as num_traits::Float>::exp(self)
+                num_traits::Float::exp(self)
             }
 
             #[inline]
             fn exp2(self) -> Self {
-                <Self as num_traits::Float>::exp2(self)
+                num_traits::Float::exp2(self)
             }
 
             #[inline]
             fn exp_m1(self) -> Self {
-                <Self as num_traits::Float>::exp_m1(self)
+                num_traits::Float::exp_m1(self)
             }
 
             #[inline]
             fn powi(self, n: i32) -> Self {
-                <Self as num_traits::Float>::powi(self, n)
+                num_traits::Float::powi(self, n)
             }
 
             #[inline]
             fn powf(self, n: Self) -> Self {
-                <Self as num_traits::Float>::powf(self, n)
+                num_traits::Float::powf(self, n)
             }
         
             #[inline]
             fn is_finite(self) -> bool {
-                <Self as num_traits::Float>::is_finite(self)
+                num_traits::Float::is_finite(self)
             }
 
             #[inline]
             fn is_infinite(self) -> bool {
-                <Self as num_traits::Float>::is_infinite(self)
+                num_traits::Float::is_infinite(self)
             }
 
             #[inline]
             fn is_nan(self) -> bool {
-                <Self as num_traits::Float>::is_nan(self)
+                num_traits::Float::is_nan(self)
             }
 
 
             #[inline]
             fn pi() -> Self {
-                <Self as num_traits::FloatConst>::PI()
+                num_traits::FloatConst::PI()
             }
 
             #[inline]
             fn two_pi() -> Self {
-                <Self as num_traits::FloatConst>::TAU()
+                num_traits::FloatConst::TAU()
             }
 
             #[inline]
             fn frac_pi_2() -> Self {
-                <Self as num_traits::FloatConst>::FRAC_PI_2()
+                num_traits::FloatConst::FRAC_PI_2()
             }
 
             #[inline]
             fn frac_pi_3() -> Self {
-                <Self as num_traits::FloatConst>::FRAC_PI_3()
+                num_traits::FloatConst::FRAC_PI_3()
             }
 
             #[inline]
             fn frac_pi_4() -> Self {
-                <Self as num_traits::FloatConst>::FRAC_PI_4()
+                num_traits::FloatConst::FRAC_PI_4()
             }
 
             #[inline]
             fn frac_pi_6() -> Self {
-                <Self as num_traits::FloatConst>::FRAC_PI_6()
+                num_traits::FloatConst::FRAC_PI_6()
             }
 
             #[inline]
             fn frac_pi_8() -> Self {
-                <Self as num_traits::FloatConst>::FRAC_PI_8()
+                num_traits::FloatConst::FRAC_PI_8()
             }
 
             #[inline]
             fn frac_1_pi() -> Self {
-                <Self as num_traits::FloatConst>::FRAC_1_PI()
+                num_traits::FloatConst::FRAC_1_PI()
             }
 
             #[inline]
             fn frac_2_pi() -> Self {
-                <Self as num_traits::FloatConst>::FRAC_2_PI()
+                num_traits::FloatConst::FRAC_2_PI()
             }
 
             #[inline]
             fn frac_2_sqrt_pi() -> Self {
-                <Self as num_traits::FloatConst>::FRAC_2_SQRT_PI()
+                num_traits::FloatConst::FRAC_2_SQRT_PI()
             }
 
             #[inline]
             fn e() -> Self {
-                <Self as num_traits::FloatConst>::E()
+                num_traits::FloatConst::E()
             }
 
             #[inline]
             fn log2_e() -> Self {
-                <Self as num_traits::FloatConst>::LOG2_E()
+                num_traits::FloatConst::LOG2_E()
             }
 
             #[inline]
             fn log10_e() -> Self {
-                <Self as num_traits::FloatConst>::LOG10_E()
+                num_traits::FloatConst::LOG10_E()
             }
 
             #[inline]
             fn ln_2() -> Self {
-                <Self as num_traits::FloatConst>::LN_2()
+                num_traits::FloatConst::LN_2()
             }
 
             #[inline]
             fn ln_10() -> Self {
-                <Self as num_traits::FloatConst>::LN_10()
+                num_traits::FloatConst::LN_10()
             }
 
             #[inline]
             fn sqrt_2() -> Self {
-                <Self as num_traits::FloatConst>::SQRT_2()
+                num_traits::FloatConst::SQRT_2()
             }
         }
     )*}
