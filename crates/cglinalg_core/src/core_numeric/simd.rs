@@ -41,10 +41,226 @@ pub trait SimdScalarSigned
 where
     Self: SimdScalar + Signed
 {
+    /// Determine whether the sign of the number is positive.
+    /// 
+    /// # Examples
+    /// 
+    /// Examples of using `is_sign_positive` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let nan = f64::NAN;
+    /// let neg_nan = -f64::NAN;
+    /// let value = 7_f64;
+    /// let neg_value = -7_f64;
+    /// 
+    /// assert!(value.is_sign_positive());
+    /// assert!(!neg_value.is_sign_positive());
+    /// assert!(nan.is_sign_positive());
+    /// assert!(!neg_nan.is_sign_positive());
+    /// ```
+    /// 
+    /// Examples of using `is_sign_positive` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::i32;
+    /// #
+    /// let value = 7_i32;
+    /// let neg_value = -7_i32;
+    /// 
+    /// assert!(value.is_sign_positive());
+    /// assert!(!neg_value.is_sign_positive());
+    /// ```
     fn is_sign_positive(self) -> bool;
+
+    /// Determine whether the sign of the number is negative.
+    /// 
+    /// # Examples
+    /// 
+    /// Examples of using `is_sign_negative` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let nan = f64::NAN;
+    /// let neg_nan = -f64::NAN;
+    /// let value = 7_f64;
+    /// let neg_value = -7_f64;
+    /// 
+    /// assert!(!value.is_sign_negative());
+    /// assert!(neg_value.is_sign_negative());
+    /// assert!(!nan.is_sign_negative());
+    /// assert!(neg_nan.is_sign_negative());
+    /// ```
+    /// 
+    /// Examples of using `is_sign_negative` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::i32;
+    /// #
+    /// let value = 7_i32;
+    /// let neg_value = -7_i32;
+    /// 
+    /// assert!(!value.is_sign_negative());
+    /// assert!(neg_value.is_sign_negative());
+    /// ```
     fn is_sign_negative(self) -> bool;
+
+    /// Copy the sign of `sign` to `self`.
+    /// 
+    /// The `copysign` function is defined as follows. Given a number `x` and a number `sign`
+    /// ```text
+    /// copysign(x) = signum(sign) * abs(x)
+    /// ```
+    /// 
+    /// # Examples
+    /// 
+    /// Examples of using `copysign` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value = 3.5_f64;
+    /// let sign = 0.5;
+    /// 
+    /// assert_eq!(value.copysign(sign),      value);
+    /// assert_eq!(value.copysign(-sign),    -value);
+    /// assert_eq!((-value).copysign(sign),   value);
+    /// assert_eq!((-value).copysign(-sign), -value);
+    /// 
+    /// assert!(f64::NAN.copysign(1_f64).is_nan());
+    /// assert!(f64::NAN.copysign(-1_f64).is_nan());
+    /// ```
+    /// 
+    /// Examples of using `copysign` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::i32;
+    /// #
+    /// let value = 3_i32;
+    /// let sign = 7_i32;
+    /// 
+    /// assert_eq!(value.copysign(sign),      value);
+    /// assert_eq!(value.copysign(-sign),    -value);
+    /// assert_eq!((-value).copysign(sign),   value);
+    /// assert_eq!((-value).copysign(-sign), -value);
+    /// ```
     fn copysign(self, sign: Self) -> Self;
+
+    /// Calculate the signum of the number.
+    /// 
+    /// The signum of a number is the number of the same type that represents its sign, 
+    /// such that given a number `x`
+    /// ```text
+    /// signum(x) * abs(x) = x
+    /// ```
+    /// NOTE: this is a more general condition than the definition
+    /// ```text
+    /// signum(x) = if x > 0 { 1 } else if x < 0 { -1 } else { 0 }
+    /// ```
+    /// For floating point number types, the number `0` is also 
+    /// signed: `signum(+0.0) == +1.0` and `signum(-0.0) == -1.0`. Moreover, the 
+    /// value `NaN` evaluates to `NaN`. Indeed, the direct definition for `signum` does 
+    /// not have a value for `NaN` in floating point types. For nonzero, non-`NaN`
+    /// floating point numbers, `signum` satisfies either relation.
+    /// 
+    /// # Examples
+    /// 
+    /// Examples of using `signum` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value = 6.9_f64;
+    /// 
+    /// assert_eq!(value.signum(), 1_f64);
+    /// assert_eq!((-value).signum(), -1_f64);
+    /// 
+    /// assert_eq!(0_f64.signum(), 1_f64);
+    /// assert_eq!((-0_f64).signum(), -1_f64);
+    /// 
+    /// assert!(f64::NAN.signum().is_nan());
+    /// 
+    /// assert_eq!(f64::INFINITY.signum(), 1_f64);
+    /// assert_eq!(f64::NEG_INFINITY.signum(), -1_f64);
+    /// ```
+    /// 
+    /// Examples of using `signum` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::i32;
+    /// #
+    /// let value = 6_i32;
+    /// 
+    /// assert_eq!(value.signum(), 1_i32);
+    /// assert_eq!((-value).signum(), -1_i32);
+    /// 
+    /// assert_eq!(0_i32.signum(), 0_i32);
+    /// assert_eq!((-0_i32).signum(), 0_i32);
+    /// ```
     fn signum(self) -> Self;
+
+    /// Calculate the absolute value of the number.
+    /// 
+    /// The absolute value of a number `x` is the number of the same type that satisfies
+    /// ```text
+    /// abs(x) = signum(x) * x
+    /// ```
+    /// For integer types, this corresponds to the conventional mathematical formula
+    /// ```text
+    /// abs(x) = if x >= 0 { x } else { -x }
+    /// ```
+    /// whereas for floating point types, the first relation accounts for the case where
+    /// `x` is `NaN`.
+    /// 
+    /// # Examples
+    /// 
+    /// Examples of using `abs` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value1 = 6.9_f64;
+    /// let value2 = -6.9_f64;
+    /// 
+    /// assert_eq!(value1.abs(), value1);
+    /// assert_eq!(value2.abs(), value1);
+    /// 
+    /// assert!(f64::NAN.abs().is_nan());
+    /// ```
+    /// 
+    /// Examples of using `abs` with integers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarSigned,
+    /// # };
+    /// # use core::i32;
+    /// #
+    /// let value1 = 6_i32;
+    /// let value2 = -6_i32;
+    /// 
+    /// assert_eq!(value1.abs(), value1);
+    /// assert_eq!(value2.abs(), value1);
+    /// ```
     fn abs(self) -> Self;
 }
 
@@ -52,8 +268,16 @@ pub trait SimdScalarOrd
 where
     Self: SimdScalar + PartialOrd
 {
+    /// Calculate the maximum value of two numbers.
     fn max(self, other: Self) -> Self;
+
+    /// Calculate the minimum value of two numbers.
     fn min(self, other: Self) -> Self;
+
+    /// Clamp the scalar to the range `[min_value, max_value]`.
+    /// 
+    /// This functions returns `min_value` if `self` < `min_value`, and it returns
+    /// `max_value` if `self` > `max_value`.
     fn clamp(self, min_value: Self, max_value: Self) -> Self;
 }
 
@@ -61,7 +285,10 @@ pub trait SimdScalarBounded
 where
     Self: SimdScalar + SimdScalarOrd
 {
+    /// Returns the smallest finite value of a scalar type.
     fn min_value() -> Self;
+
+    /// Returns the largest finite value of a scalar type.
     fn max_value() -> Self;
 }
 
@@ -110,8 +337,42 @@ pub trait SimdScalarFloat:
     fn log10(self) -> Self;
     fn ln(self) -> Self;
     fn ln_1p(self) -> Self;
-        
+    
+    /// Calculate the square root of a floating point number.
+    /// 
+    /// Returns `NaN` if `self` is a negative number other than `0.0`.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// #
+    /// let positive = 4_f64;
+    /// let negative = -4_f64;
+    /// let negative_zero = -0_f64;
+    ///
+    /// assert_eq!(positive.sqrt(), 2_f64);
+    /// assert!(negative.sqrt().is_nan());
+    /// assert!(negative_zero.sqrt() == negative_zero);
+    /// ```
     fn sqrt(self) -> Self;
+
+    /// Calculate the sube root of a number.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// #
+    /// let value = 8_f64;
+    /// 
+    /// assert_eq!(value.cbrt(), 2_f64);
+    /// assert_eq!((-value).cbrt(), -2_f64);
+    /// ```
     fn cbrt(self) -> Self;
     
     
