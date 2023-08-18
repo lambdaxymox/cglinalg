@@ -37,16 +37,87 @@ where
 {
     type Dimensionless: SimdScalarFloat;
 
-    /// The value of a full rotation around the unit circle for a typed angle.
+    /// The value of a full rotation around the unit circle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Degrees,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(Radians(2_f64 * f64::consts::PI), Radians::full_turn());
+    /// assert_eq!(Degrees(360_f64), Degrees::full_turn());
+    /// ```
     fn full_turn() -> Self;
 
     /// Compute the sine of a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi_over_4 = Radians(f64::consts::FRAC_PI_4);
+    /// let expected = 1_f64 / f64::sqrt(2_f64);
+    /// let result = pi_over_4.sin();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn sin(self) -> Self::Dimensionless;
 
     /// Compute the cosine of a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi_over_4 = Radians(f64::consts::FRAC_PI_4);
+    /// let expected = 1_f64 / f64::sqrt(2_f64);
+    /// let result = pi_over_4.cos();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn cos(self) -> Self::Dimensionless;
 
     /// Compute the tangent of a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi_over_4 = Radians(f64::consts::FRAC_PI_4);
+    /// let expected = 1_f64;
+    /// let result = pi_over_4.tan();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn tan(self) -> Self::Dimensionless;
 
     /// Compute the arcsine of a scalar value, returning a typed angle.
@@ -79,15 +150,83 @@ where
     /// y >= 0          -> (arctan(y / x) + pi) in (pi / 2, pi]
     /// y < 0           -> (arctan(y / x) - pi) in (-pi, -pi / 2)
     /// ```
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Radians,
+    /// #     Angle,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi = f64::consts::PI;
+    /// let x1 = 3_f64;
+    /// let y1 = -3_f64;
+    /// let x2 = -3_f64;
+    /// let y2 = 3_f64;
+    /// let expected1 = Radians(-pi / 4_f64);
+    /// let expected2 = Radians(3_f64 * pi / 4_f64);
+    /// let result1 = Radians::atan2(y1, x1);
+    /// let result2 = Radians::atan2(y2, x2);
+    /// 
+    /// assert_relative_eq!(result1, expected1, epsilon = 1e-10);
+    /// assert_relative_eq!(result2, expected2, epsilon = 1e-10);
+    /// ```
     fn atan2(y: Self::Dimensionless, x: Self::Dimensionless) -> Self;
 
-    /// Simultaneously compute the sine and cosine of an angle.
+    /// Simultaneously compute the sine and cosine of a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Radians,
+    /// #     Angle,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi_over_4 = Radians(f64::consts::FRAC_PI_4);
+    /// let expected = (1_f64/ f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
+    /// let result = pi_over_4.sin_cos();
+    /// 
+    /// assert_relative_eq!(result.0, expected.0, epsilon = 1e-10);
+    /// assert_relative_eq!(result.1, expected.1, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn sin_cos(self) -> (Self::Dimensionless, Self::Dimensionless) {
         (Self::sin(self), Self::cos(self))
     }
 
     /// The value of half of a full turn around the unit circle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let expected_radians = Radians(f64::consts::PI);
+    /// let expected_degrees = Degrees(180_f64);
+    /// let result_radians = Radians::full_turn_div_2();
+    /// let result_degrees = Degrees::full_turn_div_2();
+    /// 
+    /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
+    /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn full_turn_div_2() -> Self {
         let denominator: Self::Dimensionless = num_traits::cast(2).unwrap();
@@ -95,6 +234,28 @@ where
     }
 
     /// The value of a one fourth of a full turn around the unit circle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let expected_radians = Radians(f64::consts::FRAC_PI_2);
+    /// let expected_degrees = Degrees(90_f64);
+    /// let result_radians = Radians::full_turn_div_4();
+    /// let result_degrees = Degrees::full_turn_div_4();
+    /// 
+    /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
+    /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn full_turn_div_4() -> Self {
         let denominator: Self::Dimensionless = num_traits::cast(4).unwrap();
@@ -102,6 +263,28 @@ where
     }
 
     /// The value of one sixth of a full turn around the unit circle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let expected_radians = Radians(f64::consts::FRAC_PI_3);
+    /// let expected_degrees = Degrees(60_f64);
+    /// let result_radians = Radians::full_turn_div_6();
+    /// let result_degrees = Degrees::full_turn_div_6();
+    /// 
+    /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
+    /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn full_turn_div_6() -> Self {
         let denominator: Self::Dimensionless = num_traits::cast(6).unwrap();
@@ -109,6 +292,28 @@ where
     }
 
     /// The value of one eighth of a full turn around the unit circle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let expected_radians = Radians(f64::consts::FRAC_PI_4);
+    /// let expected_degrees = Degrees(45_f64);
+    /// let result_radians = Radians::full_turn_div_8();
+    /// let result_degrees = Degrees::full_turn_div_8();
+    /// 
+    /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
+    /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn full_turn_div_8() -> Self {
         let denominator: Self::Dimensionless = num_traits::cast(8).unwrap();
@@ -116,6 +321,25 @@ where
     }
 
     /// Map an angle to its smallest congruent angle in the range `[0, full_turn)`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(15_f64 * f64::consts::FRAC_PI_6);
+    /// let expected = Radians(f64::consts::FRAC_PI_2);
+    /// let result = angle.normalize();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn normalize(self) -> Self {
         let remainder = self % Self::full_turn();
@@ -126,8 +350,26 @@ where
         }
     }
 
-    /// Map an angle to its smallest congruent angle in the 
-    /// range `[-full_turn / 2, full_turn / 2)`.
+    /// Map an angle to its smallest congruent angle in the range `[-full_turn / 2, full_turn / 2)`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(15_f64 * f64::consts::FRAC_PI_6);
+    /// let expected = Radians(f64::consts::FRAC_PI_2);
+    /// let result = angle.normalize_signed();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn normalize_signed(self) -> Self {
         let remainder = self.normalize();
@@ -139,13 +381,60 @@ where
     }
 
     /// Compute the angle rotated by half of a turn.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Degrees(45_f64);
+    /// let expected = Degrees(225_f64);
+    /// let result = angle.opposite();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn opposite(self) -> Self {
         Self::normalize(self + Self::full_turn_div_2())
     }
 
-    /// Compute the interior bisector (the angle that is half-way between the angles) 
-    /// of `self` and `other`.
+    /// Compute the interior bisector of `self` and `other`, normalized to the
+    /// range `[0, full_turn)`.
+    /// 
+    /// The interior bisector between two congruent angles `angle1` and `angle2` is
+    /// given by
+    /// ```text
+    /// bisect(angle1, angle2) = angle1 + (1 / 2) * (angle2 - angle1)
+    /// ```
+    /// That is, the interior bisector between two angles is the angle that is 
+    /// interpolated half-way between `angle1` and `angle2`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle1 = Degrees(0_f64);
+    /// let angle2 = Degrees(120_f64);
+    /// let expected = Degrees(60_f64);
+    /// let result = Degrees::bisect(angle1, angle2);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn bisect(self, other: Self) -> Self {
         let one_half = num_traits::cast(0.5_f64).unwrap();

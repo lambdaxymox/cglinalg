@@ -581,8 +581,7 @@ pub trait SimdScalarFloat:
     /// ```
     fn recip(self) -> Self;
     
-    /// Compute the four quadrant arc tangent of two arguments, returning a 
-    /// typed angle.
+    /// Compute the four quadrant arctangent of two arguments.
     /// 
     /// The return value is the arc tangent of the quotient of the two input values. 
     /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent 
