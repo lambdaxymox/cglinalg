@@ -3,18 +3,8 @@ use num_traits::{
     NumCast,
     Signed,
 };
-use core::fmt::{
-    Debug,
-    Display,
-};
-use core::ops::{
-    AddAssign,
-    SubAssign,
-    MulAssign,
-    DivAssign,
-    RemAssign,
-    Neg,
-};
+use core::fmt;
+use core::ops;
 
 
 /// A data type with this trait has the properties of a 
@@ -24,16 +14,16 @@ pub trait SimdScalar
 where
     Self: Copy,
     Self: Clone,
-    Self: Debug,
-    Self: Display,
+    Self: fmt::Debug,
+    Self: fmt::Display,
     Self: Num,
     Self: NumCast,
     Self: PartialOrd, 
-    Self: AddAssign,
-    Self: SubAssign,
-    Self: MulAssign,
-    Self: DivAssign,
-    Self: RemAssign,
+    Self: ops::AddAssign,
+    Self: ops::SubAssign,
+    Self: ops::MulAssign,
+    Self: ops::DivAssign,
+    Self: ops::RemAssign,
 {
 }
 
@@ -427,7 +417,7 @@ pub trait SimdScalarFloat:
     + approx::AbsDiffEq<Epsilon = Self>
     + approx::RelativeEq<Epsilon = Self>
     + approx::UlpsEq<Epsilon = Self>
-    + Neg<Output = Self> 
+    + ops::Neg<Output = Self> 
 {    
     /// Return the largest integer less than or equal to `self`.
     /// 
@@ -1321,16 +1311,16 @@ impl<T> SimdScalar for T
 where 
     T: Copy
      + Clone 
-     + Debug 
-     + Display
+     + fmt::Debug 
+     + fmt::Display
      + Num 
      + NumCast 
      + PartialOrd 
-     + AddAssign 
-     + SubAssign 
-     + MulAssign 
-     + DivAssign 
-     + RemAssign 
+     + ops::AddAssign 
+     + ops::SubAssign 
+     + ops::MulAssign 
+     + ops::DivAssign 
+     + ops::RemAssign 
 { 
 }
 

@@ -24,8 +24,10 @@ use crate::point::{
 use crate::unit::{
     Unit,
 };
+use num_traits::{
+    NumCast,
+};
 
-use num_traits::NumCast;
 use core::fmt;
 use core::ops;
 
