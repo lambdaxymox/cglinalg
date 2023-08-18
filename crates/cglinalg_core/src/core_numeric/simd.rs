@@ -764,13 +764,176 @@ pub trait SimdScalarFloat:
     /// ```
     fn atan(self) -> Self;
     
+    /// Compute the hyperbolic sine of `self`.
+    /// 
+    /// Given a floating point number `x`, the hyperbolic sine of `x` is given
+    /// by
+    /// ```text
+    /// sinh(x) = (1 / 2) * (exp(x) - exp(-x))
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let expected = 1_f64 / 2_f64;
+    /// let result = SimdScalarFloat::sinh(SimdScalarFloat::ln(phi));
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn sinh(self) -> Self;
+
+    /// Compute the hyperbolic cosine of `self`.
+    /// 
+    /// Given a floating point number `x`, the hyperbolic cosine of `x` is given
+    /// by
+    /// ```text
+    /// cosh(x) = (1 / 2) * (exp(x) + exp(-x))
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let expected = (1_f64 / 2_f64) * f64::sqrt(5_f64);
+    /// let result = SimdScalarFloat::cosh(SimdScalarFloat::ln(phi));
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn cosh(self) -> Self;
+
+    /// Compute the hyperbolic tangent of `self`
+    /// 
+    /// Given a floating point number `x`, the hyperbolic tangent of `x` is given 
+    /// by
+    /// ```text
+    /// tanh(x) = (exp(x) - exp(-x)) / (exp(x) + exp(-x))
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let expected = (1_f64 / 5_f64) * f64::sqrt(5_f64);
+    /// let result = SimdScalarFloat::tanh(SimdScalarFloat::ln(phi));
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn tanh(self) -> Self;
+
+    /// Compute the inverse hyperbolic sine of `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let x = 1_f64;
+    /// let expected = 1_f64;
+    /// let result = x.sinh().asinh();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn asinh(self) -> Self;
+
+    /// Compute the inverse hyperbolic cosine of `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let x = 1_f64;
+    /// let expected = 1_f64;
+    /// let result = x.cosh().acosh();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn acosh(self) -> Self;
+
+    /// Compute the inverse hyperbolic tangent of `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let e = f64::e();
+    /// let expected = e;
+    /// let result = e.tanh().atanh();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn atanh(self) -> Self;
     
+    /// Simultaneously compute the hyperbolic sine and hyperbolic cosine of `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let sinh_ln_phi = 1_f64 / 2_f64;
+    /// let cosh_ln_phi = (1_f64 / 2_f64) * f64::sqrt(5_f64);
+    /// let expected = (sinh_ln_phi, cosh_ln_phi);
+    /// let result = SimdScalarFloat::sinh_cosh(SimdScalarFloat::ln(phi));
+    /// 
+    /// assert_eq!(result.0, expected.0);
+    /// assert_eq!(result.1, expected.1);
+    /// ```
     fn sinh_cosh(self) -> (Self, Self) {
         (SimdScalarFloat::sinh(self), SimdScalarFloat::cosh(self))
     }
@@ -989,7 +1152,47 @@ pub trait SimdScalarFloat:
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn exp_m1(self) -> Self;
+
+    /// Compute the power of `self` with respect to an integer power `n`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let x = 2_f64;
+    /// let expected = x * x;
+    /// let result = x.powi(2_i32);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn powi(self, n: i32) -> Self;
+
+    /// Compute the power of `self` with respect to a floating point power `n`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let x = 2_f64;
+    /// let expected = x * x;
+    /// let result = x.powf(2_f64);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn powf(self, n: Self) -> Self;
         
     /// Return `true` if `self` is neither infinite, nor `NaN`.
@@ -1062,23 +1265,55 @@ pub trait SimdScalarFloat:
     /// ```
     fn is_nan(self) -> bool;
 
-    
+    /// Returns a representation of the constant `π`.
     fn pi() -> Self;
+
+    /// Returns a representation of the constant `2π`.
     fn two_pi() -> Self;
+
+    /// Returns a representation of the constant `π / 2`.
     fn frac_pi_2() -> Self;
+
+    /// Returns a representation of the constant `π / 3`.
     fn frac_pi_3() -> Self;
+
+    /// Returns a representation of the constant `π / 4`.
     fn frac_pi_4() -> Self;
+
+    /// Returns a representation of the constant `π / 6`.
     fn frac_pi_6() -> Self;
+
+    /// Returns a representation of the constant `π / 8`.
     fn frac_pi_8() -> Self;
+
+    /// Returns a representation of the constant `1 / π`.
     fn frac_1_pi() -> Self;
+
+    /// Returns a representation of the constant `2 / π`.
     fn frac_2_pi() -> Self;
+
+    /// Returns a representation of the constant `2 / sqrt(π)`.
     fn frac_2_sqrt_pi() -> Self;
+
+    /// Returns a representation of the Euler's number `e`.
     fn e() -> Self;
+
+    /// Returns a representation of the constant `log2(e)`.
     fn log2_e() -> Self;
+
+    /// Returns a representation of the constant `log10(e)`.
     fn log10_e() -> Self;
+
+    /// Returns a representation of the constant `ln(2)`.
     fn ln_2() -> Self;
+
+    /// Returns a representation of the constant `ln(10)`.
     fn ln_10() -> Self;
+
+    /// Returns a representation of the constant `sqrt(2)`.
     fn sqrt_2() -> Self;
+
+    /// Returns a representation of the constant `1 / sqrt(2)`.
     fn frac_1_sqrt_2() -> Self;
 
 }
