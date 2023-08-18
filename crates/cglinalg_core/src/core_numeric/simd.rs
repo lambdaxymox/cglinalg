@@ -428,10 +428,89 @@ pub trait SimdScalarFloat:
     + approx::UlpsEq<Epsilon = Self>
     + Neg<Output = Self> 
 {    
+    /// Return the largest integer less than or equal to `self`.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(SimdScalarFloat::floor(3.01_f64), 3_f64);
+    /// assert_eq!(SimdScalarFloat::floor(3_f64), 3_f64);
+    /// assert_eq!(SimdScalarFloat::floor(-3.01_f64), -4_f64);
+    /// ```
     fn floor(self) -> Self;
+
+    /// Return the smallest integer greater than or equal to `self`.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(SimdScalarFloat::ceil(3.01_f64), 4_f64);
+    /// assert_eq!(SimdScalarFloat::ceil(3_f64), 3_f64);
+    /// assert_eq!(SimdScalarFloat::ceil(-3.01_f64), -3_f64);
+    /// ```
     fn ceil(self) -> Self;
+
+    /// Return the nearest integer to `self`, rounding half-way cases away from `0.0`.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(SimdScalarFloat::round(3.3_f64), 3_f64);
+    /// assert_eq!(SimdScalarFloat::round(-3.3_f64), -3_f64);
+    /// assert_eq!(SimdScalarFloat::round(-3.7_f64), -4_f64);
+    /// assert_eq!(SimdScalarFloat::round(3.5_f64), 4_f64);
+    /// assert_eq!(SimdScalarFloat::round(4.5_f64), 5_f64);
+    /// ```
     fn round(self) -> Self;
+
+    /// Return the integer part of `self`, where non-integer numbers are always 
+    /// truncated towards zero.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// assert_eq!(SimdScalarFloat::trunc(3.7_f64), 3_f64);
+    /// assert_eq!(SimdScalarFloat::trunc(3_f64), 3_f64);
+    /// assert_eq!(SimdScalarFloat::trunc(-3.7_f64), -3_f64);
+    /// ```
     fn trunc(self) -> Self;
+
+    /// Return the fractional part of `self`.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// assert_relative_eq!(SimdScalarFloat::fract(3.6_f64), 0.6_f64, epsilon = 1e-10);
+    /// assert_relative_eq!(SimdScalarFloat::fract(-3.6_f64), -0.6_f64, epsilon = 1e-10);
+    /// ```
     fn fract(self) -> Self;
     
     
