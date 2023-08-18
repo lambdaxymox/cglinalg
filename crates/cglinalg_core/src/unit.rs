@@ -5,10 +5,6 @@ use crate::norm::{
     Normed,
 };
 
-use num_traits::{
-    Float,
-};
-
 use core::fmt;
 use core::ops;
 

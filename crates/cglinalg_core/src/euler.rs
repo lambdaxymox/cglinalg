@@ -177,16 +177,16 @@ impl<A> EulerAngles<A> {
     }
 }
 
-impl<A> EulerAngles<A> 
+impl<S> EulerAngles<Radians<S>> 
 where 
-    A: num_traits::Zero 
+    S: SimdScalarFloat
 {
     /// Construct a zero element of the set of Euler angles.
     ///
     /// The zero element is the element where each Euler angle is zero.
     #[inline]
     pub fn zero() -> Self {
-        EulerAngles::new(A::zero(), A::zero(), A::zero())
+        EulerAngles::new(Radians::zero(), Radians::zero(), Radians::zero())
     }
     
     /// Test whether an Euler angle is self.
@@ -194,12 +194,7 @@ where
     pub fn is_zero(&self) -> bool {
         self.x.is_zero() && self.y.is_zero() && self.z.is_zero()
     }
-}
 
-impl<S> EulerAngles<Radians<S>> 
-where 
-    S: SimdScalarFloat
-{
     /// Construct an rotation matrix about an axis and an angle from a set 
     /// of Euler angles.
     ///

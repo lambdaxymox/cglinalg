@@ -4,7 +4,6 @@ use crate::core_numeric::{
     SimdScalarFloat,
 };
 use num_traits::{
-    Float,
     Zero,
 };
 
