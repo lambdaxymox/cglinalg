@@ -37,8 +37,7 @@ where
 {
 }
 
-/// Scalar numbers with a notion of subtraction and have additive 
-/// inverses. 
+/// A trait representing numbers with subtraction and additive inverses.
 pub trait SimdScalarSigned 
 where
     Self: SimdScalar + Signed
@@ -358,6 +357,8 @@ where
     fn clamp(self, min_value: Self, max_value: Self) -> Self;
 }
 
+/// A trait representing numbers that have finite minimum and maximum values
+/// that they can represent.
 pub trait SimdScalarBounded
 where
     Self: SimdScalar + SimdScalarOrd
@@ -419,7 +420,7 @@ where
     fn max_value() -> Self;
 }
 
-/// Scalar numbers that have the properties of finite precision
+/// A trait representing numbers that have the properties of finite precision
 /// floating point arithmetic.
 pub trait SimdScalarFloat:
       SimdScalarSigned + SimdScalarOrd
