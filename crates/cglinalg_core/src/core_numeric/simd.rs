@@ -514,18 +514,254 @@ pub trait SimdScalarFloat:
     /// ```
     fn fract(self) -> Self;
     
-    
+    /// Compute the fused multiply-add of `self` with `a` and `b`.
+    /// 
+    /// Given a floating point number `self`, and floating point numbers `a` and 
+    /// `b`, the fused multiply-add operation is given by
+    /// ```text
+    /// mul_add(self, a, b) = (self * a) + b 
+    /// ```
+    /// where the entire operation is done with only one rounding error, yielding 
+    /// a more accurate result than doing one multiply and one add separately. A
+    /// fused multiply-add operation can also be more performant than an unfused one 
+    /// on hardware architectures with a dedicated `fma` instruction.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let m = 10_f64;
+    /// let a = 4_f64;
+    /// let b = 60_f64;
+    /// 
+    /// assert_relative_eq!(m.mul_add(a, b), m * a + b, epsilon = 1e-10);
+    /// ```
     fn mul_add(self, a: Self, b: Self) -> Self;
+
+    /// Compute the length of the hypotenuse of a right triangle with legs of 
+    /// length `self` and `other`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let x = 3_f64;
+    /// let y = 4_f64;
+    /// let expected = 5_f64;
+    /// let result = x.hypot(y);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     fn hypot(self, other: Self) -> Self;
+
+    /// Compute the reciprocal (inverse) of a number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let x = 2_f64;
+    /// 
+    /// assert_eq!(x.recip(), 1_f64 / x);
+    /// ```
     fn recip(self) -> Self;
     
+    /// Compute the four quadrant arc tangent of two arguments, returning a 
+    /// typed angle.
+    /// 
+    /// The return value is the arc tangent of the quotient of the two input values. 
+    /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent 
+    /// satisfies
+    /// ```text
+    /// tan2(theta) := y / x
+    /// ```
+    /// The `atan2` function is defined as
+    /// ```text
+    /// atan2(y, x) := atan(y / x) == theta
+    /// ```
+    ///
+    /// The return values fall into the following value ranges.
+    /// ```text
+    /// x = 0 and y = 0 -> 0
+    /// x >= 0          ->  arctan(y / x)       in [-pi / 2, pi / 2]
+    /// y >= 0          -> (arctan(y / x) + pi) in (pi / 2, pi]
+    /// y < 0           -> (arctan(y / x) - pi) in (-pi, -pi / 2)
+    /// ```
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi = f64::pi();
+    /// let x1 = 3_f64;
+    /// let y1 = -3_f64;
+    /// let x2 = -3_f64;
+    /// let y2 = 3_f64;
+    /// 
+    /// assert_relative_eq!(SimdScalarFloat::atan2(y1, x1), -pi / 4_f64, epsilon = 1e-10);
+    /// assert_relative_eq!(SimdScalarFloat::atan2(y2, x2), 3_f64 * pi / 4_f64, epsilon = 1e-10);
+    /// ```
     fn atan2(self, other: Self) -> Self;
+
+    /// Simultaneously compute the sine and cosine of `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi_over_4 = f64::frac_pi_4();
+    /// let expected = (f64::frac_1_sqrt_2(), f64::frac_1_sqrt_2());
+    /// let result = SimdScalarFloat::sin_cos(pi_over_4);
+    /// 
+    /// assert_relative_eq!(result.0, expected.0, epsilon = 1e-10);
+    /// assert_relative_eq!(result.1, expected.1, epsilon = 1e-10);
+    /// ```
     fn sin_cos(self) -> (Self, Self);
+
+    /// Compute the sine of the number `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi_over_4 = f64::frac_pi_4();
+    /// let expected = f64::frac_1_sqrt_2();
+    /// let result = SimdScalarFloat::sin(pi_over_4);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn sin(self) -> Self;
+
+    /// Compute the cosine of the number `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi_over_4 = f64::frac_pi_4();
+    /// let expected = f64::frac_1_sqrt_2();
+    /// let result = SimdScalarFloat::cos(pi_over_4);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn cos(self) -> Self;
+
+    /// Compute the tangent of the number `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let pi_over_4 = f64::frac_pi_4();
+    /// let expected = 1_f64;
+    /// let result = SimdScalarFloat::tan(pi_over_4);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn tan(self) -> Self;
+
+    /// Compute the arcsine of `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let sin_pi_over_2 = 1_f64;
+    /// let expected = f64::frac_pi_2();
+    /// let result = SimdScalarFloat::asin(sin_pi_over_2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     fn asin(self) -> Self;
+    
+    /// Compute the arccosine of `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let cos_pi_over_4 = f64::frac_1_sqrt_2();
+    /// let expected = f64::frac_pi_4();
+    /// let result = SimdScalarFloat::acos(cos_pi_over_4);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     fn acos(self) -> Self;
+
+    /// Compute the arctangent of `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let tan_pi_over_4 = 1_f64;
+    /// let expected = f64::frac_pi_4();
+    /// let result = SimdScalarFloat::atan(tan_pi_over_4);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     fn atan(self) -> Self;
     
     fn sinh(self) -> Self;
@@ -539,13 +775,110 @@ pub trait SimdScalarFloat:
         (SimdScalarFloat::sinh(self), SimdScalarFloat::cosh(self))
     }
     
+    /// Compute the logarithm of a number `self` with respect to a base `base`.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value = 27_f64;
+    /// let base = 3_f64;
+    /// let expected = 3_f64;
+    /// let result = value.log(base);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn log(self, base: Self) -> Self;
+
+    /// Compute the logarithm of a number `self` with respect to a base of 2.
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value = 32_f64;
+    /// let expected = 5_f64;
+    /// let result = value.log2();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn log2(self) -> Self;
+
+    /// Compute the logarithm of a number `self` with respect to a base of 10.
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value = 100_f64;
+    /// let expected = 2_f64;
+    /// let result = value.log10();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn log10(self) -> Self;
+
+    /// Compute the natural logarithm of the number `self`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value = SimdScalarFloat::exp(1_f64);
+    /// let expected = 1_f64;
+    /// let result = value.ln();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn ln(self) -> Self;
+
+    /// Compute the value `ln(1 + self)` more accurately than if the operations
+    /// we performed separately.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #      SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value = f64::e() - 1_f64;
+    /// let expected = 1_f64;
+    /// let result = value.ln_1p();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn ln_1p(self) -> Self;
     
-    /// Calculate the square root of a floating point number.
+    /// Calculate the square root of the number `self`.
     /// 
     /// Returns `NaN` if `self` is a negative number other than `0.0`.
     /// 
@@ -566,7 +899,7 @@ pub trait SimdScalarFloat:
     /// ```
     fn sqrt(self) -> Self;
 
-    /// Calculate the cube root of a number.
+    /// Calculate the cube root of the number `self`.
     /// 
     /// # Examples
     /// 
@@ -582,9 +915,79 @@ pub trait SimdScalarFloat:
     /// ```
     fn cbrt(self) -> Self;
     
-    
+    /// Compute the exponential of the number `self`.
+    /// 
+    /// The exponential function is defined as follows. Given a floating point
+    /// number `x`
+    /// ```text
+    /// exp(x) = e^x
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let expected = 1_f64;
+    /// let e = SimdScalarFloat::exp(1_f64);
+    /// let result = SimdScalarFloat::ln(e);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn exp(self) -> Self;
+
+    /// Compute the exponential of the number `self` with respect to base 2.
+    /// 
+    /// Given a floating point number `x`
+    /// ```text
+    /// exp2(x) = 2^x
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value = 2_f64;
+    /// let expected = 4_f64;
+    /// let result = SimdScalarFloat::exp2(value);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn exp2(self) -> Self;
+
+    /// Compute the value `exp(self) - 1` in a way that remains accurate even 
+    /// when `self` is close to zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let value = 7_f64;
+    /// let expected = 6_f64;
+    /// let result = SimdScalarFloat::exp_m1(SimdScalarFloat::ln(value));
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn exp_m1(self) -> Self;
     fn powi(self, n: i32) -> Self;
     fn powf(self, n: Self) -> Self;
@@ -599,7 +1002,7 @@ pub trait SimdScalarFloat:
     /// # };
     /// # use core::f64;
     /// #
-    /// let f = 7.0f64;
+    /// let f = 7_f64;
     /// let inf: f64 = f64::INFINITY;
     /// let neg_inf: f64 = f64::NEG_INFINITY;
     /// let nan: f64 = f64::NAN;
@@ -623,7 +1026,7 @@ pub trait SimdScalarFloat:
     /// # };
     /// # use core::f64;
     /// #
-    /// let f = 7.0f64;
+    /// let f = 7_f64;
     /// let inf: f64 = f64::INFINITY;
     /// let neg_inf: f64 = f64::NEG_INFINITY;
     /// let nan: f64 = f64::NAN;
@@ -646,7 +1049,7 @@ pub trait SimdScalarFloat:
     /// # };
     /// # use core::f64;
     /// #
-    /// let f = 7.0f64;
+    /// let f = 7_f64;
     /// let inf: f64 = f64::INFINITY;
     /// let neg_inf: f64 = f64::NEG_INFINITY;
     /// let nan: f64 = f64::NAN;
@@ -676,6 +1079,7 @@ pub trait SimdScalarFloat:
     fn ln_2() -> Self;
     fn ln_10() -> Self;
     fn sqrt_2() -> Self;
+    fn frac_1_sqrt_2() -> Self;
 
 }
 
@@ -1102,6 +1506,11 @@ macro_rules! impl_simd_scalar_float {
             #[inline]
             fn sqrt_2() -> Self {
                 num_traits::FloatConst::SQRT_2()
+            }
+
+            #[inline]
+            fn frac_1_sqrt_2() -> Self {
+                num_traits::FloatConst::FRAC_1_SQRT_2()
             }
         }
     )*}

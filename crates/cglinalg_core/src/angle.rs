@@ -49,19 +49,19 @@ where
     /// Compute the tangent of a typed angle.
     fn tan(self) -> Self::Dimensionless;
 
-    /// Compute the arc sine of a scalar value, returning a typed angle.
+    /// Compute the arcsine of a scalar value, returning a typed angle.
     fn asin(ratio: Self::Dimensionless) -> Self;
 
-    /// Compute the arc cosine of a scalar value, returning a typed angle.
+    /// Compute the arccosine of a scalar value, returning a typed angle.
     fn acos(ratio: Self::Dimensionless) -> Self;
 
-    /// Compute the arc tangent of a scalar value, returning a typed angle.
+    /// Compute the arctangent of a scalar value, returning a typed angle.
     fn atan(ratio: Self::Dimensionless) -> Self;
 
-    /// Compute the four quadrant arc tangent of two arguments, returning a 
+    /// Compute the four quadrant arctangent of two arguments, returning a 
     /// typed angle.
     /// 
-    /// The return value is the arc tangent of the quotient of the two input values. 
+    /// The return value is the arctangent of the quotient of the two input values. 
     /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent 
     /// satisfies
     /// ```text
