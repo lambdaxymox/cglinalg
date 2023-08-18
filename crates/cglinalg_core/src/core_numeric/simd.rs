@@ -5,6 +5,7 @@ use num_traits::{
 };
 use core::fmt::{
     Debug,
+    Display,
 };
 use core::ops::{
     AddAssign,
@@ -24,6 +25,7 @@ where
     Self: Copy,
     Self: Clone,
     Self: Debug,
+    Self: Display,
     Self: Num,
     Self: NumCast,
     Self: PartialOrd, 
@@ -537,6 +539,7 @@ where
     T: Copy
      + Clone 
      + Debug 
+     + Display
      + Num 
      + NumCast 
      + PartialOrd 
