@@ -442,18 +442,73 @@ where
     }
 
     /// Compute the cosecant of a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let expected = 2_f64;
+    /// let result = angle.csc();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
     fn csc(self) -> Self::Dimensionless {
         Self::sin(self).recip()
     }
 
     /// Compute the cotangent of a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let expected = f64::sqrt(3_f64);
+    /// let result = angle.cot();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     #[inline]
     fn cot(self) -> Self::Dimensionless {
         Self::tan(self).recip()
     }
 
     /// Compute the secant of a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let expected = 2_f64 / f64::sqrt(3_f64);
+    /// let result = angle.sec();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     #[inline]
     fn sec(self) -> Self::Dimensionless {
         Self::cos(self).recip()
