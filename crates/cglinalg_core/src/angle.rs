@@ -121,12 +121,69 @@ where
     fn tan(self) -> Self::Dimensionless;
 
     /// Compute the arcsine of a scalar value, returning a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let sin_pi_over_3 = f64::sqrt(3_f64) / 2_f64;
+    /// let expected = Radians(f64::consts::FRAC_PI_3);
+    /// let result = Radians::asin(sin_pi_over_3);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn asin(ratio: Self::Dimensionless) -> Self;
 
     /// Compute the arccosine of a scalar value, returning a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let cos_pi_over_3 = 1_f64 / 2_f64;
+    /// let expected = Radians(f64::consts::FRAC_PI_3);
+    /// let result = Radians::acos(cos_pi_over_3);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn acos(ratio: Self::Dimensionless) -> Self;
 
     /// Compute the arctangent of a scalar value, returning a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let tan_pi_over_3 = f64::sqrt(3_f64);
+    /// let expected = Radians(f64::consts::FRAC_PI_3);
+    /// let result = Radians::atan(tan_pi_over_3);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn atan(ratio: Self::Dimensionless) -> Self;
 
     /// Compute the four quadrant arctangent of two arguments, returning a 
