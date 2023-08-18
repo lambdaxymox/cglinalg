@@ -1682,7 +1682,7 @@ norm_props!(vector4_f64_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-8)
 /// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-macro_rules! l1_norm_props {
+macro_rules! approx_l1_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1738,10 +1738,84 @@ macro_rules! l1_norm_props {
     }
 }
 
-l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-8);
-l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
-l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
-l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
+approx_l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, any_vector1, any_scalar, 1e-8);
+approx_l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
+approx_l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
+approx_l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
+
+
+/// Generate properties for the vector **L1** norm.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property tests 
+///    in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$VectorN` denotes the name of the vector type.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of vectors.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+macro_rules! exact_l1_norm_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            /// The **L1** norm of a vector is nonnegative.
+            ///
+            /// Given a vector `v`
+            /// ```text
+            /// l1_norm(v) >= 0
+            /// ```
+            #[test]
+            fn prop_l1_norm_nonnegative(v in $Generator::<$ScalarType>()) {
+                let zero: $ScalarType = num_traits::zero();
+                
+                prop_assert!(v.l1_norm() >= zero);
+            }
+
+            /// The **L1** norm function is point separating. In particular, if the 
+            /// distance between two vectors `v` and `w` is zero, then `v = w`.
+            ///
+            /// Given vectors `v` and `w`
+            /// ```text
+            /// l1_norm(v - w) = 0 => v = w 
+            /// ```
+            /// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+            /// ```text
+            /// v != w => l1_norm(v - w) != 0
+            /// ```
+            /// For the sake of testability, we use the second form to test the norm
+            /// function.
+            #[test]
+            fn prop_l1_norm_approx_point_separating(
+                v in $Generator::<$ScalarType>(), 
+                w in $Generator::<$ScalarType>()
+            ) {
+                let zero: $ScalarType = num_traits::zero();
+
+                prop_assume!(v != w);
+                prop_assert_ne!(
+                    (v - w).l1_norm(), zero,
+                    "\nl1_norm(v - w) = {:e}\n", 
+                    (v - w).l1_norm()
+                );
+            }
+        }
+    }
+    }
+}
+
+exact_l1_norm_props!(vector1_i32_l1_norm_props, Vector1, i32, any_vector1, any_scalar);
+exact_l1_norm_props!(vector2_i32_l1_norm_props, Vector2, i32, any_vector2, any_scalar);
+exact_l1_norm_props!(vector3_i32_l1_norm_props, Vector3, i32, any_vector3, any_scalar);
+exact_l1_norm_props!(vector4_i32_l1_norm_props, Vector4, i32, any_vector4, any_scalar);
 
 
 /// Generate properties for the vector **Lp** norm.
