@@ -181,12 +181,44 @@ where
     S: SimdScalar
 {
     /// Construct a typed angle of zero radians.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let zero_radians: Radians<f64> = Radians::zero();
+    /// 
+    /// assert!(zero_radians.is_zero());
+    /// ```
     #[inline]
     pub fn zero() -> Self {
         Self(S::zero())
     }
 
     /// Determine whether a typed angle is zero radians.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let zero_radians: Radians<f64> = Radians::zero();
+    /// 
+    /// assert!(zero_radians.is_zero());
+    /// 
+    /// let pi_radians: Radians<f64> = Radians(f64::consts::PI);
+    /// 
+    /// assert!(!pi_radians.is_zero());
+    /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.0.is_zero()
@@ -210,6 +242,7 @@ where
     /// # use core::f64;
     /// #
     /// let angle: Radians<f64> = Radians(f64::consts::PI / 4_f64);
+    /// 
     /// assert!(angle.is_finite());
     /// ```
     #[inline]
@@ -227,13 +260,45 @@ impl<S> Degrees<S>
 where 
     S: SimdScalar 
 {
-    /// Construct a typed angle of zero radians.
+    /// Construct a typed angle of zero degrees.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let zero_degrees: Degrees<f64> = Degrees::zero();
+    /// 
+    /// assert!(zero_degrees.is_zero());
+    /// ```
     #[inline]
     pub fn zero() -> Self {
         Self(S::zero())
     }
 
-    /// Determine whether a typed angle is zero radians.
+    /// Determine whether a typed angle is zero degrees.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let zero_degrees: Degrees<f64> = Degrees::zero();
+    /// 
+    /// assert!(zero_degrees.is_zero());
+    /// 
+    /// let one_eighty_degrees: Degrees<f64> = Degrees(180_f64);
+    /// 
+    /// assert!(!one_eighty_degrees.is_zero());
+    /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.0.is_zero()
@@ -256,6 +321,7 @@ where
     /// # };
     /// #
     /// let angle = Degrees(45_f64);
+    ///
     /// assert!(angle.is_finite()); 
     /// ```
     #[inline]
