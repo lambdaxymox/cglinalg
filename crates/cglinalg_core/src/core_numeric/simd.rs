@@ -355,7 +355,7 @@ where
 {
     /// Returns the smallest finite value of a number type.
     /// 
-    /// # Example
+    /// # Examples
     /// 
     /// An example of using `min_value` with floating point numbers.
     /// ```
@@ -383,6 +383,8 @@ where
     fn min_value() -> Self;
 
     /// Returns the largest finite value of a number type.
+    /// 
+    /// # Examples
     /// 
     /// An example of using `max_value` with floating point numbers.
     /// ```
@@ -413,7 +415,7 @@ where
 /// A trait representing numbers that have the properties of finite precision
 /// floating point arithmetic.
 pub trait SimdScalarFloat:
-      SimdScalarSigned + SimdScalarOrd
+      SimdScalarSigned + SimdScalarOrd + SimdScalarBounded
     + approx::AbsDiffEq<Epsilon = Self>
     + approx::RelativeEq<Epsilon = Self>
     + approx::UlpsEq<Epsilon = Self>
@@ -1194,16 +1196,16 @@ pub trait SimdScalarFloat:
     /// # };
     /// # use core::f64;
     /// #
-    /// let f = 7_f64;
-    /// let inf: f64 = f64::INFINITY;
-    /// let neg_inf: f64 = f64::NEG_INFINITY;
-    /// let nan: f64 = f64::NAN;
+    /// let value = 7_f64;
+    /// let infinity = f64::INFINITY;
+    /// let neg_infinity = f64::NEG_INFINITY;
+    /// let nan = f64::NAN;
     ///
-    /// assert!(f.is_finite());
+    /// assert!(value.is_finite());
     ///
     /// assert!(!nan.is_finite());
-    /// assert!(!inf.is_finite());
-    /// assert!(!neg_inf.is_finite());
+    /// assert!(!infinity.is_finite());
+    /// assert!(!neg_infinity.is_finite());
     /// ```
     fn is_finite(self) -> bool;
 
@@ -1218,16 +1220,16 @@ pub trait SimdScalarFloat:
     /// # };
     /// # use core::f64;
     /// #
-    /// let f = 7_f64;
-    /// let inf: f64 = f64::INFINITY;
-    /// let neg_inf: f64 = f64::NEG_INFINITY;
-    /// let nan: f64 = f64::NAN;
+    /// let value = 7_f64;
+    /// let infinity = f64::INFINITY;
+    /// let neg_infinity = f64::NEG_INFINITY;
+    /// let nan = f64::NAN;
     ///
-    /// assert!(!f.is_infinite());
+    /// assert!(!value.is_infinite());
     ///
     /// assert!(!nan.is_infinite());
-    /// assert!(inf.is_infinite());
-    /// assert!(neg_inf.is_infinite());
+    /// assert!(infinity.is_infinite());
+    /// assert!(neg_infinity.is_infinite());
     /// ```
     fn is_infinite(self) -> bool;
 
@@ -1241,18 +1243,96 @@ pub trait SimdScalarFloat:
     /// # };
     /// # use core::f64;
     /// #
-    /// let f = 7_f64;
-    /// let inf: f64 = f64::INFINITY;
-    /// let neg_inf: f64 = f64::NEG_INFINITY;
-    /// let nan: f64 = f64::NAN;
+    /// let value = 7_f64;
+    /// let infinity = f64::INFINITY;
+    /// let neg_infinity = f64::NEG_INFINITY;
+    /// let nan = f64::NAN;
     ///
-    /// assert!(!f.is_nan());
+    /// assert!(!value.is_nan());
     ///
     /// assert!(nan.is_nan());
-    /// assert!(!inf.is_nan());
-    /// assert!(!neg_inf.is_nan());
+    /// assert!(!infinity.is_nan());
+    /// assert!(!neg_infinity.is_nan());
     /// ```
     fn is_nan(self) -> bool;
+
+    /// Returns `true` if the floating point number is neither zero, 
+    /// infinite, subnormal, or `NaN`. The function returns `false` otherwise.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let min_positive_value = f64::MIN_POSITIVE;
+    /// let max_value = f64::MAX;
+    /// let less_than_min_value = 1e-308;
+    /// let zero = 0_f64;
+    /// let nan = f64::NAN;
+    /// let infinity = f64::INFINITY;
+    /// 
+    /// assert!(min_positive_value.is_normal());
+    /// assert!(max_value.is_normal());
+    /// 
+    /// assert!(!zero.is_normal());
+    /// assert!(!nan.is_normal());
+    /// assert!(!infinity.is_normal());
+    /// 
+    /// assert!(!less_than_min_value.is_normal());
+    /// ```
+    fn is_normal(self) -> bool;
+
+    /// Returns `true` if the floating point number is subnormal, and `false` 
+    /// otherwise.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let min_positive_value = f64::MIN_POSITIVE;
+    /// let max_value = f64::MAX;
+    /// let zero = 0_f64;
+    /// let nan = f64::NAN;
+    /// let infinity = f64::INFINITY;
+    /// let neg_infinity = f64::NEG_INFINITY;
+    /// let less_than_min_value = 1e-308;
+    /// 
+    /// assert!(!min_positive_value.is_subnormal());
+    /// assert!(!max_value.is_subnormal());
+    /// assert!(!zero.is_subnormal());
+    /// assert!(!nan.is_subnormal());
+    /// assert!(!infinity.is_subnormal());
+    /// assert!(!neg_infinity.is_subnormal());
+    /// 
+    /// assert!(less_than_min_value > zero);
+    /// assert!(less_than_min_value < min_positive_value);
+    /// assert!(less_than_min_value.is_subnormal());
+    /// ```
+    fn is_subnormal(self) -> bool;
+
+    /// Returns the smallest positive value that this type can represent.
+    /// 
+    /// # Example
+    /// 
+    /// An example of using `min_positive` with floating point numbers.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let min_positive = f64::min_positive_value();
+    /// 
+    /// assert_eq!(min_positive, f64::MIN_POSITIVE);
+    /// ```
+    fn min_positive_value() -> Self;
 
     /// Returns a representation of the constant `π`.
     fn pi() -> Self;
@@ -1305,6 +1385,105 @@ pub trait SimdScalarFloat:
     /// Returns a representation of the constant `1 / sqrt(2)`.
     fn frac_1_sqrt_2() -> Self;
 
+    /// Returns the `NaN` value for a floating point data type.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// #
+    /// let nan = f64::nan();
+    /// 
+    /// assert!(nan.is_nan());
+    /// 
+    /// let infinity = f64::INFINITY;
+    /// let neg_infinity = f64::NEG_INFINITY;
+    /// let e = f64::e();
+    /// 
+    /// assert!(!infinity.is_nan());
+    /// assert!(!neg_infinity.is_nan());
+    /// assert!(!e.is_nan());
+    /// ```
+    fn nan() -> Self;
+
+    /// Returns the positive infinite value for a floating point data type.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarBounded,
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let infinity = f64::infinity();
+    /// let max_value = f64::max_value();
+    ///
+    /// assert!(infinity.is_infinite());
+    /// assert!(!infinity.is_finite());
+    /// assert!(infinity > max_value);
+    /// ```
+    fn infinity() -> Self;
+
+    /// Returns the negative infinite value for a floating point data type.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarBounded,
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let neg_infinity = f64::neg_infinity();
+    /// let min_value = f64::min_value();
+    /// 
+    /// assert!(neg_infinity.is_infinite());
+    /// assert!(!neg_infinity.is_finite());
+    /// assert!(neg_infinity < min_value);
+    /// ```
+    fn neg_infinity() -> Self;
+
+    /// Returns a representation of `-0.0`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let neg_infinity = f64::neg_infinity();
+    /// let zero = 0_f64;
+    /// let neg_zero = f64::neg_zero();
+    /// 
+    /// assert_eq!(zero, neg_zero);
+    /// assert_eq!(7_f64 / neg_infinity, zero);
+    /// assert_eq!(neg_zero * 10_f64, zero);
+    /// ```
+    fn neg_zero() -> Self;
+
+    /// Returns the machine epsilon for a floating point data type.
+    /// 
+    /// The machine epsilon (or machine precision) is an upper bound on the 
+    /// relative approximation error due to rounding in floating point arithmetic.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     SimdScalarFloat,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(f64::machine_epsilon(), f64::EPSILON);
+    /// ```
+    fn machine_epsilon() -> Self;
 }
 
 impl<T> SimdScalar for T 
@@ -1651,6 +1830,20 @@ macro_rules! impl_simd_scalar_float {
                 num_traits::Float::is_nan(self)
             }
 
+            #[inline]
+            fn is_normal(self) -> bool {
+                num_traits::Float::is_normal(self)
+            }
+
+            #[inline]
+            fn is_subnormal(self) -> bool {
+                num_traits::Float::is_subnormal(self)
+            }
+
+            #[inline]
+            fn min_positive_value() -> Self {
+                num_traits::Float::min_positive_value()
+            }
 
             #[inline]
             fn pi() -> Self {
@@ -1735,6 +1928,31 @@ macro_rules! impl_simd_scalar_float {
             #[inline]
             fn frac_1_sqrt_2() -> Self {
                 num_traits::FloatConst::FRAC_1_SQRT_2()
+            }
+
+            #[inline]
+            fn nan() -> Self {
+                num_traits::Float::nan()
+            }
+
+            #[inline]
+            fn infinity() -> Self {
+                num_traits::Float::infinity()
+            }
+
+            #[inline]
+            fn neg_infinity() -> Self {
+                num_traits::Float::neg_infinity()
+            }
+
+            #[inline]
+            fn neg_zero() -> Self {
+                num_traits::Float::neg_zero()
+            }
+
+            #[inline]
+            fn machine_epsilon() -> Self {
+                num_traits::Float::epsilon()
             }
         }
     )*}
