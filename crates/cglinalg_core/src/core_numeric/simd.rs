@@ -3,6 +3,7 @@ use num_traits::{
     NumCast,
     Signed,
 };
+
 use core::fmt;
 use core::ops;
 
