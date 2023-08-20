@@ -511,6 +511,46 @@ where
     pub fn magnitude_squared(self) -> S {
         self.norm_squared()
     }
+
+    /// Scale a complex number `self` by multiplying it by the scalar `scale`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(1_f64, 2_f64);
+    /// let expected = Complex::new(3_f64, 6_f64);
+    /// let result = z.scale(3_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn scale(&self, scale: S) -> Self {
+        Self::new(self.re * scale, self.im * scale)
+    }
+
+    /// Unscale a complex number `self` by dividing it by the scalar `scale`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(3_f64, 6_f64);
+    /// let expected = Complex::new(1_f64, 2_f64);
+    /// let result = z.unscale(3_f64);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn unscale(&self, scale: S) -> Self {
+        Self::new(self.re / scale, self.im / scale)
+    }
 }
 
 impl<S> Complex<S>
