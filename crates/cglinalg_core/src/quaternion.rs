@@ -442,6 +442,28 @@ where
     pub fn identity() -> Self {
         Self::from_parts(S::one(), Vector3::zero())
     }
+
+    /// Construct the multiplicative identity quaternion.
+    ///
+    /// This is a synonym for [`Quaternion::identity`].
+    /// 
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let one = Quaternion::one();
+    /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    ///
+    /// assert_eq!(one * quaternion, quaternion);
+    /// assert_eq!(quaternion * one, quaternion);
+    /// ```
+    #[inline]
+    pub fn one() -> Self {
+        Self::identity()
+    }
     
     /// Determine whether a quaternion is equal to the identity quaternion.
     ///
@@ -740,7 +762,7 @@ where
     /// q.squared() := q * q
     /// ```
     /// 
-    ///  # Example
+    /// # Example
     /// 
     /// ```
     /// # use cglinalg_core::{
@@ -755,6 +777,28 @@ where
     /// ```
     pub fn squared(&self) -> Self {
         self * self
+    }
+
+    /// Divide a quaternion by scalar value two.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// let quaternion = Quaternion::new(2_f64, 4_f64, 6_f64, 8_f64);
+    /// let expected = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let result = quaternion.half();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn half(&self) -> Self {
+        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        
+        self * one_half
     }
 }
 
