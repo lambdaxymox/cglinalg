@@ -3048,6 +3048,367 @@ where
 
         Self::from_parts(scalar, vector)
     }
+
+    /// Compute the quaternionic cosine of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn cos(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic arccosine of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn acos(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic sine of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn sin(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic arcsine of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn asin(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic tangent of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn tan(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic arctangent of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn atan(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic secant of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn sec(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic arcsecant of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn asec(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic cosecant of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn csc(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic arccosecant of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn acsc(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic cotangent of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn cot(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic arccotangent of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn acot(&self) -> Self {
+        todo!()
+    }
+
+
+    /// Compute the quaternionic hyperbolic cosine of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn cosh(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic arccosine of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn acosh(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic sine of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn sinh(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic arcsine of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn asinh(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic tangent of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn tanh(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic arctangent of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn atanh(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic secant of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn sech(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic arcsecant of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn asech(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic cosecant of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn csch(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic arccosecant of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn acsch(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic cotangent of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn coth(&self) -> Self {
+        todo!()
+    }
+
+    /// Compute the quaternionic hyperbolic arccotangent of a quaternion.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// # };
+    /// #
+    /// ```
+    #[inline]
+    pub fn acoth(&self) -> Self {
+        todo!()
+    }
 }
 
 impl<S> AsRef<[S; 4]> for Quaternion<S> {
