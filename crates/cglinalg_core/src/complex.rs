@@ -1164,8 +1164,6 @@ where
     /// let result = z.cos();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
-    /// 
-    /// let expected = 
     /// ```
     #[inline]
     pub fn cos(self) -> Self {
@@ -1192,6 +1190,10 @@ where
     /// let result = z.acos();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(-2_f64, 5_f64);
+    /// 
+    /// assert_relative_eq!(z1.acos().cos(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn acos(self) -> Self {
@@ -1243,6 +1245,10 @@ where
     /// let result = z.asin();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(-2_f64, 5_f64);
+    /// 
+    /// assert_relative_eq!(z1.asin().sin(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn asin(self) -> Self {
@@ -1295,6 +1301,10 @@ where
     /// let result = z.atan();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(-2_f64, 5_f64);
+    /// 
+    /// assert_relative_eq!(z1.atan().tan(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn atan(self) -> Self {
@@ -1356,6 +1366,10 @@ where
     /// let result = z.asec();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(1_f64, -2_f64);
+    /// 
+    /// assert_relative_eq!(z1.asec().sec(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn asec(self) -> Self {
@@ -1413,6 +1427,10 @@ where
     /// let result = z.acsc();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(1_f64, -2_f64);
+    /// 
+    /// assert_relative_eq!(z1.acsc().csc(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn acsc(self) -> Self {
@@ -1470,6 +1488,10 @@ where
     /// let result = z.acot();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(1_f64, 1_f64);
+    /// 
+    /// assert_relative_eq!(z1.acot().cot(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn acot(self) -> Self {
@@ -1529,14 +1551,18 @@ where
     /// let result = z.acosh();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(2_f64, 3_f64);
+    /// 
+    /// assert_relative_eq!(z1.acosh().cosh(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn acosh(self) -> Self {
-        let one = S::one();
+        let one = Self::one();
         let two = one + one;
         let z = Self::sqrt((self + one) / two) + Self::sqrt((self - one) / two);
 
-        Self::ln(z) * two
+        two * Self::ln(z)
     }
 
     /// Compute the complex hyperbolic sine of a complex number.
@@ -1582,6 +1608,10 @@ where
     /// let result = z.asinh();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(2_f64, 3_f64);
+    /// 
+    /// assert_relative_eq!(z1.asinh().sinh(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn asinh(self) -> Self {
@@ -1610,6 +1640,15 @@ where
     /// ```
     #[inline]
     pub fn tanh(self) -> Self {
+        let remainder = (self.im - S::frac_pi_2()) % S::two_pi();
+        if remainder.is_zero() && remainder.is_sign_positive() {
+            return Complex::new(S::zero(), S::infinity());
+        }
+
+        if remainder.is_zero() && remainder.is_sign_negative() {
+            return Complex::new(S::zero(), S::neg_infinity());
+        }
+
         let two_times_re = self.re + self.re;
         let two_times_im = self.im + self.im;
         let denominator = S::cosh(two_times_re) + S::cos(two_times_im);
@@ -1619,7 +1658,7 @@ where
         Self::new(tanh_re, tanh_im) / denominator
     }
 
-    /// Compute the complex hyperbolic arctangent of a complex number.
+    /// Compute the principal value complex hyperbolic arctangent of a complex number.
     /// 
     /// # Example
     /// 
@@ -1636,6 +1675,10 @@ where
     /// let result = z.atanh();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(2_f64, 3_f64);
+    /// 
+    /// assert_relative_eq!(z1.atanh().tanh(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn atanh(self) -> Self {
@@ -1676,7 +1719,7 @@ where
         let two_times_im = self.im + self.im;
         let denominator = S::cosh(two_times_re) + S::cos(two_times_im);
         let sech_re = two * S::cosh(self.re) * S::cos(self.im);
-        let sech_im = -S::sinh(self.re) * S::sin(self.im);
+        let sech_im = -two * S::sinh(self.re) * S::sin(self.im);
 
         Self::new(sech_re, sech_im) / denominator
     }
@@ -1698,14 +1741,17 @@ where
     /// let result = z.asech();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(1_f64, 2_f64);
+    /// 
+    /// assert_relative_eq!(z1.asech().sech(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn asech(self) -> Self {
         let one = Self::one();
         let one_over_self = one / self;
-        // let one_over_self_squared = one / (self * self);
-        let z1 = Self::sqrt(one_over_self - one);
-        let z2 = Self::sqrt(one_over_self + one);
+        let z1 = Self::sqrt(one_over_self + one);
+        let z2 = Self::sqrt(one_over_self - one);
         
         Self::ln(one_over_self + z1 * z2)
     }
@@ -1758,6 +1804,10 @@ where
     /// let result = z.acsch();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(1_f64, 2_f64);
+    /// 
+    /// assert_relative_eq!(z1.acsch().csch(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn acsch(self) -> Self {
@@ -1814,6 +1864,10 @@ where
     /// let result = z.acoth();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// 
+    /// let z1 = Complex::new(2_f64, 3_f64);
+    /// 
+    /// assert_relative_eq!(z1.atanh().tanh(), z1, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn acoth(self) -> Self {
