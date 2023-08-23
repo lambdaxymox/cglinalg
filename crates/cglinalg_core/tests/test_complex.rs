@@ -784,646 +784,155 @@ mod trigonometry_tests {
     use core::f64;
 
 
-    #[test]
-    fn test_cos_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(0.540302305868_f64, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(0.540302305868_f64, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(1.54308063482_f64, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(1.54308063482_f64, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acos_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(0_f64, 0_f64);
-        let result = z.acos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acos_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(3.14159265359_f64, 0_f64);
-        let result = z.acos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acos_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(1.57079632679_f64, -0.881373587020_f64);
-        let result = z.acos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acos_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(1.57079632679_f64, 0.881373587020_f64);
-        let result = z.acos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_sin_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(0.841470984808_f64, 0_f64);
-        let result = z.sin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_sin_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(-0.841470984808_f64, 0_f64);
-        let result = z.sin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_sin_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(0_f64, 1.17520119364_f64);
-        let result = z.sin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_sin_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(0_f64, -1.17520119364_f64);
-        let result = z.sin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_asin_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(1.57079632679_f64, 0_f64);
-        let result = z.asin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_asin_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(-1.57079632679_f64, 0_f64);
-        let result = z.asin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_asin_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(0_f64, 0.881373587020_f64);
-        let result = z.asin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_asin_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(0_f64, -0.881373587020_f64);
-        let result = z.asin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_tan_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(1.55740772465_f64, 0_f64);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_tan_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(-1.55740772465_f64, 0_f64);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_tan_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(0_f64, 0.761594155956_f64);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_tan_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(0_f64, -0.761594155956_f64);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_atan_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(0.785398163397_f64, 0_f64);
-        let result = z.atan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_atan_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(-0.785398163397_f64, 0_f64);
-        let result = z.atan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_atan_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(0_f64, f64::INFINITY);
-        let result = z.atan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_atan_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(0_f64, f64::NEG_INFINITY);
-        let result = z.atan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_sec_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(1.85081571768_f64, 0_f64);
-        let result = z.sec();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_sec_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(1.85081571768_f64, 0_f64);
-        let result = z.sec();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_sec_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(0.648054273664_f64, 0_f64);
-        let result = z.sec();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_sec_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(0.648054273664_f64, 0_f64);
-        let result = z.sec();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_asec_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(0_f64, 0_f64);
-        let result = z.asec();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_asec_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(3.14159265359_f64, 0_f64);
-        let result = z.asec();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
+    const _0_I0: Complex<f64> = Complex::new(0_f64, 0_f64);
+    const _1_I0: Complex<f64> = Complex::new(1_f64, 0_f64);
+    const _0_I1: Complex<f64> = Complex::new(0_f64, 1_f64);
+    const _NEG1_I0: Complex<f64> = Complex::new(-1_f64, 0_f64);
+    const _0_I_NEG1: Complex<f64> = Complex::new(0_f64, -1_f64);
+    const _PI_I0: Complex<f64> = Complex::new(f64::consts::PI, 0_f64);
+    const _0_IPI: Complex<f64> = Complex::new(0_f64, f64::consts::PI);
+    const _0_I_INF: Complex<f64> = Complex::new(0_f64, f64::INFINITY);
+    const _0_I_NEGINF: Complex<f64> = Complex::new(0_f64, f64::NEG_INFINITY);
+    const _0_I_FRAC_PI_8: Complex<f64> = Complex::new(0_f64, f64::consts::FRAC_PI_8);
+    const _0_I_FRAC_PI_6: Complex<f64> = Complex::new(0_f64, f64::consts::FRAC_PI_6);
+    const _0_I_FRAC_PI_4: Complex<f64> = Complex::new(0_f64, f64::consts::FRAC_PI_4);
+    const _0_I_FRAC_PI_3: Complex<f64> = Complex::new(0_f64, f64::consts::FRAC_PI_3);
+    const _0_I_FRAC_PI_2: Complex<f64> = Complex::new(0_f64, f64::consts::FRAC_PI_2);
+    const _0_I_PI: Complex<f64> = Complex::new(0_f64, f64::consts::PI);
+    const _0_I_2_PI: Complex<f64> = Complex::new(0_f64, 2_f64 * f64::consts::PI);
 
-    #[test]
-    fn test_asec_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(1.57079632679_f64, 0.881373587020_f64);
-        let result = z.asec();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_asec_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(1.57079632679_f64, -0.881373587020_f64);
-        let result = z.asec();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_csc_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(1.18839510578_f64, 0_f64);
-        let result = z.csc();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_csc_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(-1.18839510578_f64, 0_f64);
-        let result = z.csc();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_csc_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(0_f64, -0.850918128239_f64);
-        let result = z.csc();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_csc_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(0_f64, 0.850918128239_f64);
-        let result = z.csc();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acsc_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(1.57079632679_f64, 0_f64);
-        let result = z.acsc();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acsc_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(-1.57079632679_f64, 0_f64);
-        let result = z.acsc();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acsc_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(0_f64, -0.881373587020_f64);
-        let result = z.acsc();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acsc_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(0_f64, 0.881373587020_f64);
-        let result = z.acsc();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cot_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(0.642092615934_f64, 0_f64);
-        let result = z.cot();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cot_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(-0.642092615934_f64, 0_f64);
-        let result = z.cot();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cot_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(0_f64, -1.31303528550_f64);
-        let result = z.cot();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cot_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(0_f64, 1.31303528550_f64);
-        let result = z.cot();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acot_unit_re() {
-        let z: Complex<f64> = Complex::unit_re();
-        let expected = Complex::new(0.785398163397, 0_f64);
-        let result = z.acot();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acot_minus_unit_re() {
-        let z: Complex<f64> = -Complex::unit_re();
-        let expected = Complex::new(-0.785398163397, 0_f64);
-        let result = z.acot();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acot_unit_im() {
-        let z: Complex<f64> = Complex::unit_im();
-        let expected = Complex::new(0_f64, f64::NEG_INFINITY);
-        let result = z.acot();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_acot_minus_unit_im() {
-        let z: Complex<f64> = -Complex::unit_im();
-        let expected = Complex::new(0_f64, f64::INFINITY);
-        let result = z.acot();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_unit_im_times_pi_over_8() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_8;
-        let expected_re = f64::cosh(f64::consts::FRAC_PI_8);
-        let expected = Complex::new(expected_re, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_unit_im_times_pi_over_6() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_6;
-        let expected_re = f64::cosh(f64::consts::FRAC_PI_6);
-        let expected = Complex::new(expected_re, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_unit_im_times_pi_over_4() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_4;
-        let expected_re = f64::cosh(f64::consts::FRAC_PI_4);
-        let expected = Complex::new(expected_re, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_unit_im_times_pi_over_3() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_3;
-        let expected_re = f64::cosh(f64::consts::FRAC_PI_3);
-        let expected = Complex::new(expected_re, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_unit_im_times_pi_over_2() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_2;
-        let expected_re = f64::cosh(f64::consts::FRAC_PI_2);
-        let expected = Complex::new(expected_re, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_unit_im_times_pi() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::PI;
-        let expected_re = f64::cosh(f64::consts::PI);
-        let expected = Complex::new(expected_re, 0_f64);
-        let result = z.cos();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_cos_unit_im_times_two_pi() {
-        let z: Complex<f64> = Complex::unit_im() * 2_f64 * f64::consts::PI;
-        let expected_re = f64::cosh(2_f64 * f64::consts::PI);
-        let expected = Complex::new(expected_re, 0_f64);
-        let result = z.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
+    fn test_fn<F>(func: F, z: Complex<f64>, expected: Complex<f64>) 
+    where
+        F: Fn(Complex<f64>) -> Complex<f64>
+    {
+        let result = func(z);
 
-    #[test]
-    fn test_sin_unit_im_times_pi_over_8() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_8;
-        let expected_im = f64::sinh(f64::consts::FRAC_PI_8);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.sin();
-
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-
-    #[test]
-    fn test_sin_unit_im_times_pi_over_6() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_6;
-        let expected_im = f64::sinh(f64::consts::FRAC_PI_6);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
 
     #[test]
-    fn test_sin_unit_im_times_pi_over_4() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_4;
-        let expected_im = f64::sinh(f64::consts::FRAC_PI_4);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.sin();
+    fn test_complex_cos() {
+        test_fn(Complex::cos, _0_I0, Complex::new(1_f64, 0_f64));
+        test_fn(Complex::cos, _1_I0, Complex::new(0.540302305868_f64, 0_f64));
+        test_fn(Complex::cos, _NEG1_I0, Complex::new(0.540302305868_f64, 0_f64));
+        test_fn(Complex::cos, _0_I1, Complex::new(1.54308063482_f64, 0_f64));
+        test_fn(Complex::cos, _0_I_NEG1, Complex::new(1.54308063482_f64, 0_f64));
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        test_fn(Complex::cos, _0_I_FRAC_PI_8, Complex::new(1.07810228857_f64, 0_f64));
+        test_fn(Complex::cos, _0_I_FRAC_PI_6, Complex::new(1.14023832108_f64, 0_f64));
+        test_fn(Complex::cos, _0_I_FRAC_PI_4, Complex::new(1.32460908925_f64, 0_f64));
+        test_fn(Complex::cos, _0_I_FRAC_PI_3, Complex::new(1.60028685770_f64, 0_f64));
+        test_fn(Complex::cos, _0_I_FRAC_PI_2, Complex::new(2.50917847866_f64, 0_f64));
+        test_fn(Complex::cos, _0_I_PI, Complex::new(11.5919532755_f64, 0_f64));
+        test_fn(Complex::cos, _0_I_2_PI, Complex::new(267.746761484_f64, 0_f64));
     }
 
     #[test]
-    fn test_sin_unit_im_times_pi_over_3() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_3;
-        let expected_im = f64::sinh(f64::consts::FRAC_PI_3);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.sin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    fn test_complex_acos() {
+        test_fn(Complex::acos, _1_I0, Complex::new(0_f64, 0_f64));
+        test_fn(Complex::acos, _NEG1_I0, _PI_I0);
+        test_fn(Complex::acos, _0_I1, Complex::new(1.57079632679_f64, -0.881373587020_f64));
+        test_fn(Complex::acos, _0_I_NEG1, Complex::new(1.57079632679_f64, 0.881373587020_f64));
     }
 
     #[test]
-    fn test_sin_unit_im_times_pi_over_2() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_2;
-        let expected_im = f64::sinh(f64::consts::FRAC_PI_2);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.sin();
+    fn test_complex_sin() {
+        test_fn(Complex::sin, _0_I0, Complex::new(0_f64, 0_f64));
+        test_fn(Complex::sin, _1_I0,  Complex::new(0.841470984808_f64, 0_f64));
+        test_fn(Complex::sin, _NEG1_I0, Complex::new(-0.841470984808_f64, 0_f64));
+        test_fn(Complex::sin, _0_I1, Complex::new(0_f64, 1.17520119364_f64));
+        test_fn(Complex::sin, _0_I_NEG1, Complex::new(0_f64, -1.17520119364_f64));
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        test_fn(Complex::sin, _0_I_FRAC_PI_8, Complex::new(0_f64, 0.402870381917_f64));
+        test_fn(Complex::sin, _0_I_FRAC_PI_6, Complex::new(0_f64, 0.547853473888_f64));
+        test_fn(Complex::sin, _0_I_FRAC_PI_4, Complex::new(0_f64, 0.868670961486_f64));
+        test_fn(Complex::sin, _0_I_FRAC_PI_3, Complex::new(0_f64, 1.24936705052_f64));
+        test_fn(Complex::sin, _0_I_FRAC_PI_2, Complex::new(0_f64, 2.30129890231_f64));
+        test_fn(Complex::sin, _0_I_PI, Complex::new(0_f64, 11.5487393573_f64));
+        test_fn(Complex::sin, _0_I_2_PI, Complex::new(0_f64, 267.744894041_f64));
     }
 
     #[test]
-    fn test_sin_unit_im_times_pi() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::PI;
-        let expected_im = f64::sinh(f64::consts::PI);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.sin();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    fn test_complex_asin() {
+        test_fn(Complex::asin, _1_I0, Complex::new(1.57079632679_f64, 0_f64));
+        test_fn(Complex::asin, _NEG1_I0, Complex::new(-1.57079632679_f64, 0_f64));
+        test_fn(Complex::asin, _0_I1, Complex::new(0_f64, 0.881373587020_f64));
+        test_fn(Complex::asin, _0_I_NEG1, Complex::new(0_f64, -0.881373587020_f64));
     }
 
     #[test]
-    fn test_sin_unit_im_times_two_pi() {
-        let z: Complex<f64> = Complex::unit_im() * 2_f64 * f64::consts::PI;
-        let expected_im = f64::sinh(2_f64 * f64::consts::PI);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.sin();
+    fn test_complex_tan() {
+        test_fn(Complex::tan, _0_I0, Complex::new(0_f64, 0_f64));
+        test_fn(Complex::tan, _1_I0, Complex::new(1.55740772465_f64, 0_f64));
+        test_fn(Complex::tan, _NEG1_I0, Complex::new(-1.55740772465_f64, 0_f64));
+        test_fn(Complex::tan, _0_I1, Complex::new(0_f64, 0.761594155956_f64));
+        test_fn(Complex::tan, _0_I_NEG1, Complex::new(0_f64, -0.761594155956_f64));
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        test_fn(Complex::tan, _0_I_FRAC_PI_8, Complex::new(0_f64, 0.373684747901_f64));
+        test_fn(Complex::tan, _0_I_FRAC_PI_6, Complex::new(0_f64, 0.480472778156_f64));
+        test_fn(Complex::tan, _0_I_FRAC_PI_4, Complex::new(0_f64, 0.655794202633_f64));
+        test_fn(Complex::tan, _0_I_FRAC_PI_3, Complex::new(0_f64, 0.780714435359_f64));
+        test_fn(Complex::tan, _0_I_FRAC_PI_2, Complex::new(0_f64, 0.917152335667_f64));
+        test_fn(Complex::tan, _0_I_PI, Complex::new(0_f64, 0.996272076221_f64));
+        test_fn(Complex::tan, _0_I_2_PI, Complex::new(0_f64, 0.999993025340_f64));
     }
 
     #[test]
-    fn test_tan_unit_im_times_pi_over_8() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_8;
-        let expected_im = f64::tanh(f64::consts::FRAC_PI_8);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    fn test_complex_atan() {
+        test_fn(Complex::atan, _1_I0, Complex::new(0.785398163397_f64, 0_f64));
+        test_fn(Complex::atan, _NEG1_I0, Complex::new(-0.785398163397_f64, 0_f64));
+        test_fn(Complex::atan, _0_I1, Complex::new(0_f64, f64::INFINITY));
+        test_fn(Complex::atan, _0_I_NEG1, Complex::new(0_f64, f64::NEG_INFINITY));
     }
 
     #[test]
-    fn test_tan_unit_im_times_pi_over_6() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_6;
-        let expected_im = f64::tanh(f64::consts::FRAC_PI_6);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    fn test_complex_sec() {
+        test_fn(Complex::sec, _1_I0, Complex::new(1.85081571768_f64, 0_f64));
+        test_fn(Complex::sec, _NEG1_I0, Complex::new(1.85081571768_f64, 0_f64));
+        test_fn(Complex::sec, _0_I1, Complex::new(0.648054273664_f64, 0_f64));
+        test_fn(Complex::sec, _0_I_NEG1, Complex::new(0.648054273664_f64, 0_f64));
     }
 
     #[test]
-    fn test_tan_unit_im_times_pi_over_4() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_4;
-        let expected_im = f64::tanh(f64::consts::FRAC_PI_4);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    fn test_complex_asec() {
+        test_fn(Complex::asec, _1_I0, Complex::new(0_f64, 0_f64));
+        test_fn(Complex::asec, _NEG1_I0, Complex::new(3.14159265359_f64, 0_f64));
+        test_fn(Complex::asec, _0_I1, Complex::new(1.57079632679_f64, 0.881373587020_f64));
+        test_fn(Complex::asec, _0_I_NEG1, Complex::new(1.57079632679_f64, -0.881373587020_f64));
     }
 
     #[test]
-    fn test_tan_unit_im_times_pi_over_3() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_3;
-        let expected_im = f64::tanh(f64::consts::FRAC_PI_3);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    fn test_complex_csc() {
+        test_fn(Complex::csc, _1_I0, Complex::new(1.18839510578_f64, 0_f64));
+        test_fn(Complex::csc, _NEG1_I0, Complex::new(-1.18839510578_f64, 0_f64));
+        test_fn(Complex::csc, _0_I1, Complex::new(0_f64, -0.850918128239_f64));
+        test_fn(Complex::csc, _0_I_NEG1, Complex::new(0_f64, 0.850918128239_f64));
     }
 
     #[test]
-    fn test_tan_unit_im_times_pi_over_2() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::FRAC_PI_2;
-        let expected_im = f64::tanh(f64::consts::FRAC_PI_2);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    fn test_complex_acsc() {
+        test_fn(Complex::acsc, _1_I0, Complex::new(1.57079632679_f64, 0_f64));
+        test_fn(Complex::acsc, _NEG1_I0, Complex::new(-1.57079632679_f64, 0_f64));
+        test_fn(Complex::acsc, _0_I1, Complex::new(0_f64, -0.881373587020_f64));
+        test_fn(Complex::acsc, _0_I_NEG1, Complex::new(0_f64, 0.881373587020_f64));
     }
 
     #[test]
-    fn test_tan_unit_im_times_pi() {
-        let z: Complex<f64> = Complex::unit_im() * f64::consts::PI;
-        let expected_im = f64::tanh(f64::consts::PI);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    fn test_complex_cot() {
+        test_fn(Complex::cot, _1_I0, Complex::new(0.642092615934_f64, 0_f64));
+        test_fn(Complex::cot, _NEG1_I0, Complex::new(-0.642092615934_f64, 0_f64));
+        test_fn(Complex::cot, _0_I1, Complex::new(0_f64, -1.31303528550_f64));
+        test_fn(Complex::cot, _0_I_NEG1, Complex::new(0_f64, 1.31303528550_f64));
     }
 
     #[test]
-    fn test_tan_unit_im_times_two_pi() {
-        let z: Complex<f64> = Complex::unit_im() * 2_f64 * f64::consts::PI;
-        let expected_im = f64::tanh(2_f64 * f64::consts::PI);
-        let expected = Complex::new(0_f64, expected_im);
-        let result = z.tan();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    fn test_complex_acot() {
+        test_fn(Complex::acot, _1_I0, Complex::new(0.785398163397, 0_f64));
+        test_fn(Complex::acot, _NEG1_I0, Complex::new(-0.785398163397, 0_f64));
+        test_fn(Complex::acot, _0_I1, Complex::new(0_f64, f64::NEG_INFINITY));
+        test_fn(Complex::acot, _0_I_NEG1, Complex::new(0_f64, f64::INFINITY));
     }
 }
 

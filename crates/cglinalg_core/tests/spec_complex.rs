@@ -3,10 +3,13 @@ extern crate num_traits;
 extern crate proptest;
 
 
+use std::ops::RangeInclusive;
+
 use proptest::prelude::*;
 use cglinalg_core::{
     Complex, 
     SimdScalar,
+    SimdScalarFloat,
 };
 
 
@@ -1653,4 +1656,172 @@ macro_rules! sqrt_props {
 }
 
 sqrt_props!(complex_f64_sqrt_props, f64, any_complex, any_scalar, 1e-7);
+
+
+/*
+fn imaginary_from_range<S>(min_value: S, max_value: S) -> Box<dyn Fn() -> proptest::strategy::NoShrink<proptest::strategy::Map<RangeInclusive<S>, Box<dyn Fn(S) -> Complex<S>>>>>
+where 
+    S: SimdScalarFloat + Arbitrary + 'static,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    Box::new(move || { 
+        let complex_fn: Box<dyn Fn(S) -> Complex<S>> = Box::new(Complex::from_imaginary);
+        
+        (min_value..=max_value).prop_map(complex_fn).no_shrink()
+    })
+}
+*/
+
+fn imaginary_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
+where 
+    S: SimdScalarFloat + Arbitrary,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    (min_value..=max_value)
+        .prop_map(Complex::from_imaginary)
+        .no_shrink()
+}
+
+
+/// Generate property tests for complex number trigonometry.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! complex_cos_sin_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Complex,
+        };
+        use approx::{
+            relative_eq,
+        };
+        use super::{
+            $Generator,
+        };
+
+
+        proptest! {
+            #[test]
+            fn prop_cos_real_equals_cos_real(z in $Generator()) {
+                let re_z = z.real();
+                let z_re = Complex::from_real(re_z);
+
+                prop_assert!(
+                    relative_eq!(z_re.cos().real(), re_z.cos(), epsilon = $tolerance),
+                    "z = {}; re(z) = {}; cos(re(z)) = {}; cos(z_re) = {}",
+                    z, re_z, re_z.cos(), z_re.cos()
+                );
+            }
+
+            #[test]
+            fn prop_sin_real_equals_sin_real(z in $Generator()) {
+                let re_z = z.real();
+                let z_re = Complex::from_real(re_z);
+
+                prop_assert!(
+                    relative_eq!(z_re.sin().real(), re_z.sin(), epsilon = $tolerance),
+                    "z = {}; re(z) = {}; sin(re(z)) = {}; sin(z_re) = {}",
+                    z, re_z, re_z.cos(), z_re.cos()
+                );
+            }
+
+            #[test]
+            fn prop_cos_imaginary_equals_imaginary_cosh(z in $Generator()) {
+                let zero: $ScalarType = num_traits::zero();
+                let i = Complex::unit_im();
+                let im_z = z.imaginary();
+
+                prop_assert!(
+                    relative_eq!((i * im_z).cos(), (im_z + i * zero).cosh(), epsilon = $tolerance),
+                    "z = {}; im_z = {}; cos(i * im_z) = {}, i * cosh(im_z) = {}",
+                    z, im_z, (i * im_z).cos(), (im_z + i * zero).cosh()
+                );
+            }
+
+            #[test]
+            fn prop_sin_imaginary_equals_imaginary_sinh(z in $Generator()) {
+                let i = Complex::unit_im();
+                let im_z = z.imaginary();
+
+                prop_assert!(
+                    relative_eq!((i * im_z).sin(), i * im_z.sinh(), epsilon = $tolerance),
+                    "z = {}; im_z = {}; sin(i * im_z) = {}, i * sinh(im_z) = {}",
+                    z, im_z, (i * im_z).sin(), i * im_z.sinh()
+                );
+            }
+        }
+    }
+    }
+}
+
+fn cos_sin_generator() -> impl Strategy<Value = Complex<f64>>{
+    imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
+}
+
+complex_cos_sin_props!(complex_f64_sin_cos_props, f64, cos_sin_generator, any_scalar, 1e-7);
+
+
+/// Generate property tests for complex number trigonometry.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! complex_tan_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Complex,
+        };
+        use approx::{
+            relative_eq,
+        };
+        use crate::{
+            $Generator,
+        };
+
+
+        proptest! {
+            #[test]
+            fn prop_tan_imaginary_equals_imaginary_tanh(z in $Generator()) {
+                let i = Complex::unit_im();
+                let im_z = z.imaginary();
+
+                prop_assert!(
+                    relative_eq!((i * im_z).tan(), i * im_z.tanh(), epsilon = $tolerance),
+                    "z = {}; (i * im_z).tan() = {}; i * im_z.tanh() = {}",
+                    z, (i * im_z).tan(), i * im_z.tanh()
+                );
+            }
+        }
+    }
+    }
+}
+
+fn tan_generator() -> impl Strategy<Value = Complex<f64>> {
+    imaginary_from_range(f64::EPSILON, 200_f64)
+}
+
+complex_tan_props!(complex_f64_tan_props, f64, tan_generator, any_scalar, 1e-7);
 

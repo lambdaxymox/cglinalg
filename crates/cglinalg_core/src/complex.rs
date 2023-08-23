@@ -1279,9 +1279,11 @@ where
     pub fn tan(self) -> Self {
         let two_times_re = self.re + self.re;
         let two_times_im = self.im + self.im;
-        let scale = two_times_re.cos() + two_times_im.cosh();
-
-        Self::new(two_times_re.sin(), two_times_im.sinh()).unscale(scale)
+        let denominator = two_times_re.cos() + two_times_im.cosh();
+        let tan_re = two_times_re.sin() / denominator;
+        let tan_im = two_times_im.sinh() / denominator;
+        eprintln!("denominator = {}; tan_re = {}; tan_im = {}", denominator, tan_re, tan_im);
+        Self::new(tan_re, tan_im)
     }
 
     /// Compute the complex arctangent of a complex number.
