@@ -1282,7 +1282,7 @@ where
         let denominator = two_times_re.cos() + two_times_im.cosh();
         let tan_re = two_times_re.sin() / denominator;
         let tan_im = two_times_im.sinh() / denominator;
-        eprintln!("denominator = {}; tan_re = {}; tan_im = {}", denominator, tan_re, tan_im);
+
         Self::new(tan_re, tan_im)
     }
 

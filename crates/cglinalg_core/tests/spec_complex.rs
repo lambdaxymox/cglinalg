@@ -1588,6 +1588,52 @@ macro_rules! exact_l1_norm_props {
 exact_l1_norm_props!(complex_i32_l1_norm_props, i32, any_complex, any_scalar);
 
 
+/*
+fn imaginary_from_range<S>(min_value: S, max_value: S) -> Box<dyn Fn() -> proptest::strategy::NoShrink<proptest::strategy::Map<RangeInclusive<S>, Box<dyn Fn(S) -> Complex<S>>>>>
+where 
+    S: SimdScalarFloat + Arbitrary + 'static,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    Box::new(move || { 
+        let complex_fn: Box<dyn Fn(S) -> Complex<S>> = Box::new(Complex::from_imaginary);
+        
+        (min_value..=max_value).prop_map(complex_fn).no_shrink()
+    })
+}
+*/
+
+fn imaginary_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
+where 
+    S: SimdScalarFloat + Arbitrary,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    (min_value..=max_value)
+        .prop_map(Complex::from_imaginary)
+        .no_shrink()
+}
+
+fn real_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
+where 
+    S: SimdScalarFloat + Arbitrary,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    (min_value..=max_value)
+        .prop_map(Complex::from_real)
+        .no_shrink()
+}
+
+fn complex_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
+where 
+    S: SimdScalarFloat + Arbitrary,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    let generator = (min_value..=max_value, min_value..=max_value);
+    generator
+        .prop_map(|(re, im)| Complex::new(re, im))
+        .no_shrink()
+}
+
+
 /// Generate property tests for complex number square roots.
 ///
 /// ### Macro Parameters
@@ -1623,11 +1669,11 @@ macro_rules! sqrt_props {
             /// sqrt(z) * sqrt(z) == z
             /// ```
             #[test]
-            fn prop_positive_square_root_squared(z in $Generator::<$ScalarType>()) {
+            fn prop_positive_square_root_squared(z in $Generator()) {
                 let sqrt_z = z.sqrt();
 
                 prop_assert!(
-                    relative_eq!(sqrt_z * sqrt_z, z, epsilon = $tolerance),
+                    relative_eq!(sqrt_z * sqrt_z, z, epsilon = $tolerance, max_relative = $tolerance),
                     "z = {:?}\nsqrt_z = {:?}\nsqrt_z * sqrt_z = {:?}",
                     z, sqrt_z, sqrt_z * sqrt_z
                 );
@@ -1641,12 +1687,12 @@ macro_rules! sqrt_props {
             /// -sqrt(z) * -sqrt(z) == z
             /// ```
             #[test]
-            fn prop_negative_square_root_squared(z in $Generator::<$ScalarType>()) {
+            fn prop_negative_square_root_squared(z in $Generator()) {
                 let minus_sqrt_z = -z.sqrt();
 
                 prop_assert!(
-                    relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = $tolerance),
-                    "z = {:?}\nminus_sqrt_z = {:?}\nminus_sqrt_z * mins_sqrt_z = {:?}",
+                    relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = $tolerance, max_relative = $tolerance),
+                    "z = {:?}\nminus_sqrt_z = {:?}\nminus_sqrt_z * minus_sqrt_z = {:?}",
                     z, minus_sqrt_z, minus_sqrt_z * minus_sqrt_z
                 );
             }
@@ -1655,32 +1701,11 @@ macro_rules! sqrt_props {
     }
 }
 
-sqrt_props!(complex_f64_sqrt_props, f64, any_complex, any_scalar, 1e-7);
-
-
-/*
-fn imaginary_from_range<S>(min_value: S, max_value: S) -> Box<dyn Fn() -> proptest::strategy::NoShrink<proptest::strategy::Map<RangeInclusive<S>, Box<dyn Fn(S) -> Complex<S>>>>>
-where 
-    S: SimdScalarFloat + Arbitrary + 'static,
-    RangeInclusive<S>: Strategy<Value = S>
-{
-    Box::new(move || { 
-        let complex_fn: Box<dyn Fn(S) -> Complex<S>> = Box::new(Complex::from_imaginary);
-        
-        (min_value..=max_value).prop_map(complex_fn).no_shrink()
-    })
+fn sqrt_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64))
 }
-*/
 
-fn imaginary_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
-where 
-    S: SimdScalarFloat + Arbitrary,
-    RangeInclusive<S>: Strategy<Value = S>
-{
-    (min_value..=max_value)
-        .prop_map(Complex::from_imaginary)
-        .no_shrink()
-}
+sqrt_props!(complex_f64_sqrt_props, f64, sqrt_strategy_f64, any_scalar, 1e-10);
 
 
 /// Generate property tests for complex number trigonometry.
@@ -1766,11 +1791,11 @@ macro_rules! complex_cos_sin_props {
     }
 }
 
-fn cos_sin_generator() -> impl Strategy<Value = Complex<f64>>{
+fn cos_sin_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
     imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
 
-complex_cos_sin_props!(complex_f64_sin_cos_props, f64, cos_sin_generator, any_scalar, 1e-7);
+complex_cos_sin_props!(complex_f64_sin_cos_props, f64, cos_sin_strategy_f64, any_scalar, 1e-10);
 
 
 /// Generate property tests for complex number trigonometry.
@@ -1787,7 +1812,57 @@ complex_cos_sin_props!(complex_f64_sin_cos_props, f64, cos_sin_generator, any_sc
 /// * `$ScalarGen` is the name of a function or closure for generating scalars.
 /// * `$tolerance` specifies the amount of acceptable error for a correct operation 
 ///    with floating point scalars.
-macro_rules! complex_tan_props {
+macro_rules! real_tan_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Complex,
+        };
+        use approx::{
+            relative_eq,
+        };
+        use crate::{
+            $Generator,
+        };
+
+
+        proptest! {
+            #[test]
+            fn prop_tan_real_equals_real_tan(z in $Generator()) {
+                prop_assert!(
+                    relative_eq!(z.tan().real(), z.real().tan(), epsilon = $tolerance),
+                    "z = {}; z.tan() = {}; z.tan().real() = {}; z.real().tan() = {}",
+                    z, z.tan(), z.tan().real(), z.real().tan()
+                );
+            }
+        }
+    }
+    }
+}
+
+fn tan_strategy_real_f64() -> impl Strategy<Value = Complex<f64>> {
+    real_from_range(f64::EPSILON, 200_f64)
+}
+
+real_tan_props!(complex_f64_tan_real_props, f64, tan_strategy_real_f64, any_scalar, 1e-7);
+
+
+/// Generate property tests for complex number trigonometry.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! imaginary_tan_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1819,9 +1894,9 @@ macro_rules! complex_tan_props {
     }
 }
 
-fn tan_generator() -> impl Strategy<Value = Complex<f64>> {
+fn tan_strategy_imaginary_f64() -> impl Strategy<Value = Complex<f64>> {
     imaginary_from_range(f64::EPSILON, 200_f64)
 }
 
-complex_tan_props!(complex_f64_tan_props, f64, tan_generator, any_scalar, 1e-7);
+imaginary_tan_props!(complex_f64_tan_imaginary_props, f64, tan_strategy_imaginary_f64, any_scalar, 1e-8);
 

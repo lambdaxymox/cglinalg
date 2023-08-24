@@ -742,6 +742,7 @@ mod square_root_tests {
         let result = z.sqrt();
 
         assert_eq!(result, expected);
+        assert_relative_eq!(result * result, z, epsilon = 1e-10);
     }
 
     #[test]
@@ -751,6 +752,7 @@ mod square_root_tests {
         let result = i.sqrt();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result * result, i, epsilon = 1e-10);
     }
 
     #[test]
@@ -760,6 +762,7 @@ mod square_root_tests {
         let result = (-i).sqrt();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result * result, -i, epsilon = 1e-10);
     }
 
     #[test]
@@ -769,6 +772,44 @@ mod square_root_tests {
         let result = z.sqrt();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result * result, z, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_complex_square_root_large_input1() {
+        // value = 9.480751908109174e153_f64
+        let value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
+        let z = Complex::new(value, value);
+        let expected = Complex::new(1.06977941273076882e77, 4.43117141500609302e76);
+        let sqrt_z = z.sqrt();
+        let result = sqrt_z;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-16);
+        assert_relative_eq!(sqrt_z * sqrt_z, z, epsilon = 1e-16);
+    }
+
+    #[test]
+    fn test_complex_square_root_large_input2() {
+        // value = 9.480751908109174e153_f64
+        let value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
+        let z = Complex::new(-value, -value);
+        let expected = Complex::new(4.43117141500609302e76, -1.06977941273076882e77);
+        let sqrt_z = z.sqrt();
+        let result = sqrt_z;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-16);
+        assert_relative_eq!(sqrt_z * sqrt_z, z, epsilon = 1e-16);
+    }
+
+    #[test]
+    fn test_complex_square_root_large_input3() {
+        let z = Complex::new(7.059507001456394e153, 1.1468385853229968e151);
+        let expected = Complex::new(8.40209001328809051e76, 6.82472208408411659e73);
+        let sqrt_z = z.sqrt();
+        let result = sqrt_z;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-16);
+        assert_relative_eq!((sqrt_z * sqrt_z).imaginary(), z.imaginary(), epsilon = 1e-10, max_relative = 1e-15);
     }
 }
 
@@ -784,13 +825,11 @@ mod trigonometry_tests {
     use core::f64;
 
 
-    const _0_I0: Complex<f64> = Complex::new(0_f64, 0_f64);
-    const _1_I0: Complex<f64> = Complex::new(1_f64, 0_f64);
-    const _0_I1: Complex<f64> = Complex::new(0_f64, 1_f64);
-    const _NEG1_I0: Complex<f64> = Complex::new(-1_f64, 0_f64);
+    const _0_I_0: Complex<f64> = Complex::new(0_f64, 0_f64);
+    const _1_I_0: Complex<f64> = Complex::new(1_f64, 0_f64);
+    const _0_I_1: Complex<f64> = Complex::new(0_f64, 1_f64);
+    const _NEG1_I_0: Complex<f64> = Complex::new(-1_f64, 0_f64);
     const _0_I_NEG1: Complex<f64> = Complex::new(0_f64, -1_f64);
-    const _PI_I0: Complex<f64> = Complex::new(f64::consts::PI, 0_f64);
-    const _0_IPI: Complex<f64> = Complex::new(0_f64, f64::consts::PI);
     const _0_I_INF: Complex<f64> = Complex::new(0_f64, f64::INFINITY);
     const _0_I_NEGINF: Complex<f64> = Complex::new(0_f64, f64::NEG_INFINITY);
     const _0_I_FRAC_PI_8: Complex<f64> = Complex::new(0_f64, f64::consts::FRAC_PI_8);
@@ -800,139 +839,310 @@ mod trigonometry_tests {
     const _0_I_FRAC_PI_2: Complex<f64> = Complex::new(0_f64, f64::consts::FRAC_PI_2);
     const _0_I_PI: Complex<f64> = Complex::new(0_f64, f64::consts::PI);
     const _0_I_2_PI: Complex<f64> = Complex::new(0_f64, 2_f64 * f64::consts::PI);
-
-
-    fn test_fn<F>(func: F, z: Complex<f64>, expected: Complex<f64>) 
-    where
-        F: Fn(Complex<f64>) -> Complex<f64>
-    {
-        let result = func(z);
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
+    const _FRAC_PI_8_I_0: Complex<f64> = Complex::new(f64::consts::FRAC_PI_8, 0_f64);
+    const _FRAC_PI_6_I_0: Complex<f64> = Complex::new(f64::consts::FRAC_PI_6, 0_f64);
+    const _FRAC_PI_4_I_0: Complex<f64> = Complex::new(f64::consts::FRAC_PI_4, 0_f64);
+    const _FRAC_PI_3_I_0: Complex<f64> = Complex::new(f64::consts::FRAC_PI_3, 0_f64);
+    const _FRAC_PI_2_I_0: Complex<f64> = Complex::new(f64::consts::FRAC_PI_2, 0_f64);
+    const _PI_I_0: Complex<f64> = Complex::new(f64::consts::PI, 0_f64);
+    const _2_PI_I_0: Complex<f64> = Complex::new(2_f64 * f64::consts::PI, 0_f64);
 
 
     #[test]
     fn test_complex_cos() {
-        test_fn(Complex::cos, _0_I0, Complex::new(1_f64, 0_f64));
-        test_fn(Complex::cos, _1_I0, Complex::new(0.540302305868_f64, 0_f64));
-        test_fn(Complex::cos, _NEG1_I0, Complex::new(0.540302305868_f64, 0_f64));
-        test_fn(Complex::cos, _0_I1, Complex::new(1.54308063482_f64, 0_f64));
-        test_fn(Complex::cos, _0_I_NEG1, Complex::new(1.54308063482_f64, 0_f64));
+        assert_relative_eq!(Complex::cos(_0_I_0),         Complex::new(1_f64, 0_f64),              epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_1_I_0),         Complex::new(0.540302305868_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_NEG1_I_0),      Complex::new(0.540302305868_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_0_I_1),         Complex::new(1.54308063482_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_0_I_NEG1),      Complex::new(1.54308063482_f64, 0_f64),  epsilon = 1e-8);
 
-        test_fn(Complex::cos, _0_I_FRAC_PI_8, Complex::new(1.07810228857_f64, 0_f64));
-        test_fn(Complex::cos, _0_I_FRAC_PI_6, Complex::new(1.14023832108_f64, 0_f64));
-        test_fn(Complex::cos, _0_I_FRAC_PI_4, Complex::new(1.32460908925_f64, 0_f64));
-        test_fn(Complex::cos, _0_I_FRAC_PI_3, Complex::new(1.60028685770_f64, 0_f64));
-        test_fn(Complex::cos, _0_I_FRAC_PI_2, Complex::new(2.50917847866_f64, 0_f64));
-        test_fn(Complex::cos, _0_I_PI, Complex::new(11.5919532755_f64, 0_f64));
-        test_fn(Complex::cos, _0_I_2_PI, Complex::new(267.746761484_f64, 0_f64));
+        assert_relative_eq!(Complex::cos(_0_I_FRAC_PI_8), Complex::new(1.07810228857_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_0_I_FRAC_PI_6), Complex::new(1.14023832108_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_0_I_FRAC_PI_4), Complex::new(1.32460908925_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_0_I_FRAC_PI_3), Complex::new(1.60028685770_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_0_I_FRAC_PI_2), Complex::new(2.50917847866_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_0_I_PI),        Complex::new(11.5919532755_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_0_I_2_PI),      Complex::new(267.746761484_f64, 0_f64),  epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::cos(_FRAC_PI_8_I_0), Complex::new(0.923879532511_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_FRAC_PI_6_I_0), Complex::new(0.866025403784_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_FRAC_PI_4_I_0), Complex::new(0.707106781187_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_FRAC_PI_3_I_0), Complex::new(0.500000000000_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_FRAC_PI_2_I_0), Complex::new(0_f64, 0_f64),              epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_PI_I_0),        Complex::new(-1_f64, 0_f64),             epsilon = 1e-8);
+        assert_relative_eq!(Complex::cos(_2_PI_I_0),      Complex::new(1_f64, 0_f64),              epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_acos() {
-        test_fn(Complex::acos, _1_I0, Complex::new(0_f64, 0_f64));
-        test_fn(Complex::acos, _NEG1_I0, _PI_I0);
-        test_fn(Complex::acos, _0_I1, Complex::new(1.57079632679_f64, -0.881373587020_f64));
-        test_fn(Complex::acos, _0_I_NEG1, Complex::new(1.57079632679_f64, 0.881373587020_f64));
+        assert_relative_eq!(Complex::acos(_1_I_0),    Complex::new(0_f64, 0_f64),                           epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(_NEG1_I_0), _PI_I_0,                                              epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(_0_I_1),    Complex::new(1.57079632679_f64, -0.881373587020_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(_0_I_NEG1), Complex::new(1.57079632679_f64,  0.881373587020_f64), epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::acos(Complex::new(1.07810228857_f64, 0_f64)), _0_I_FRAC_PI_8, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(1.14023832108_f64, 0_f64)), _0_I_FRAC_PI_6, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(1.32460908925_f64, 0_f64)), _0_I_FRAC_PI_4, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(1.60028685770_f64, 0_f64)), _0_I_FRAC_PI_3, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(2.50917847866_f64, 0_f64)), _0_I_FRAC_PI_2, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(11.5919532755_f64, 0_f64)), _0_I_PI,        epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(267.746761484_f64, 0_f64)), _0_I_2_PI,      epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::acos(Complex::new(0.923879532511_f64, 0_f64)), _FRAC_PI_8_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(0.866025403784_f64, 0_f64)), _FRAC_PI_6_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(0.707106781187_f64, 0_f64)), _FRAC_PI_4_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(0.500000000000_f64, 0_f64)), _FRAC_PI_3_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(0_f64, 0_f64)),              _FRAC_PI_2_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acos(Complex::new(-1_f64, 0_f64)),             _PI_I_0,        epsilon = 1e-8);
+        // assert_relative_eq!(Complex::acos(Complex::new(1_f64, 0_f64)),              _2_PI_I_0,      epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_sin() {
-        test_fn(Complex::sin, _0_I0, Complex::new(0_f64, 0_f64));
-        test_fn(Complex::sin, _1_I0,  Complex::new(0.841470984808_f64, 0_f64));
-        test_fn(Complex::sin, _NEG1_I0, Complex::new(-0.841470984808_f64, 0_f64));
-        test_fn(Complex::sin, _0_I1, Complex::new(0_f64, 1.17520119364_f64));
-        test_fn(Complex::sin, _0_I_NEG1, Complex::new(0_f64, -1.17520119364_f64));
+        assert_relative_eq!(Complex::sin(_0_I_0),    Complex::new(0_f64, 0_f64),               epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_1_I_0),    Complex::new(0.841470984808_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_NEG1_I_0), Complex::new(-0.841470984808_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_0_I_1),    Complex::new(0_f64, 1.17520119364_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_0_I_NEG1), Complex::new(0_f64, -1.17520119364_f64),  epsilon = 1e-8);
 
-        test_fn(Complex::sin, _0_I_FRAC_PI_8, Complex::new(0_f64, 0.402870381917_f64));
-        test_fn(Complex::sin, _0_I_FRAC_PI_6, Complex::new(0_f64, 0.547853473888_f64));
-        test_fn(Complex::sin, _0_I_FRAC_PI_4, Complex::new(0_f64, 0.868670961486_f64));
-        test_fn(Complex::sin, _0_I_FRAC_PI_3, Complex::new(0_f64, 1.24936705052_f64));
-        test_fn(Complex::sin, _0_I_FRAC_PI_2, Complex::new(0_f64, 2.30129890231_f64));
-        test_fn(Complex::sin, _0_I_PI, Complex::new(0_f64, 11.5487393573_f64));
-        test_fn(Complex::sin, _0_I_2_PI, Complex::new(0_f64, 267.744894041_f64));
+        assert_relative_eq!(Complex::sin(_0_I_FRAC_PI_8), Complex::new(0_f64, 0.402870381917_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_0_I_FRAC_PI_6), Complex::new(0_f64, 0.547853473888_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_0_I_FRAC_PI_4), Complex::new(0_f64, 0.868670961486_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_0_I_FRAC_PI_3), Complex::new(0_f64, 1.24936705052_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_0_I_FRAC_PI_2), Complex::new(0_f64, 2.30129890231_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_0_I_PI),        Complex::new(0_f64, 11.5487393573_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_0_I_2_PI),      Complex::new(0_f64, 267.744894041_f64),  epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::sin(_FRAC_PI_8_I_0), Complex::new(0.382683432365_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_FRAC_PI_6_I_0), Complex::new(0.500000000000_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_FRAC_PI_4_I_0), Complex::new(0.707106781187_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_FRAC_PI_3_I_0), Complex::new(0.866025403784_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_FRAC_PI_2_I_0), Complex::new(1_f64, 0_f64),              epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_PI_I_0),        Complex::new(0_f64, 0_f64),              epsilon = 1e-8);
+        assert_relative_eq!(Complex::sin(_2_PI_I_0),      Complex::new(0_f64, 0_f64),              epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_asin() {
-        test_fn(Complex::asin, _1_I0, Complex::new(1.57079632679_f64, 0_f64));
-        test_fn(Complex::asin, _NEG1_I0, Complex::new(-1.57079632679_f64, 0_f64));
-        test_fn(Complex::asin, _0_I1, Complex::new(0_f64, 0.881373587020_f64));
-        test_fn(Complex::asin, _0_I_NEG1, Complex::new(0_f64, -0.881373587020_f64));
+        assert_relative_eq!(Complex::asin(_1_I_0),    Complex::new(1.57079632679_f64, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(_NEG1_I_0), Complex::new(-1.57079632679_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(_0_I_1),    Complex::new(0_f64, 0.881373587020_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(_0_I_NEG1), Complex::new(0_f64, -0.881373587020_f64), epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 0.402870381917_f64)), _0_I_FRAC_PI_8, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 0.547853473888_f64)), _0_I_FRAC_PI_6, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 0.868670961486_f64)), _0_I_FRAC_PI_4, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 1.24936705052_f64)),  _0_I_FRAC_PI_3, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 2.30129890231_f64)),  _0_I_FRAC_PI_2, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 11.5487393573_f64)),  _0_I_PI,        epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 267.744894041_f64)),  _0_I_2_PI,      epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::asin(Complex::new(0.382683432365_f64, 0_f64)), _FRAC_PI_8_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0.500000000000_f64, 0_f64)), _FRAC_PI_6_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0.707106781187_f64, 0_f64)), _FRAC_PI_4_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0.866025403784_f64, 0_f64)), _FRAC_PI_3_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(1_f64, 0_f64)),              _FRAC_PI_2_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 0_f64)),              _0_I_0,          epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_tan() {
-        test_fn(Complex::tan, _0_I0, Complex::new(0_f64, 0_f64));
-        test_fn(Complex::tan, _1_I0, Complex::new(1.55740772465_f64, 0_f64));
-        test_fn(Complex::tan, _NEG1_I0, Complex::new(-1.55740772465_f64, 0_f64));
-        test_fn(Complex::tan, _0_I1, Complex::new(0_f64, 0.761594155956_f64));
-        test_fn(Complex::tan, _0_I_NEG1, Complex::new(0_f64, -0.761594155956_f64));
+        assert_relative_eq!(Complex::tan(_0_I_0),    Complex::new(0_f64, 0_f64),               epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_1_I_0),    Complex::new(1.55740772465_f64, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_NEG1_I_0), Complex::new(-1.55740772465_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_0_I_1),    Complex::new(0_f64, 0.761594155956_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_0_I_NEG1), Complex::new(0_f64, -0.761594155956_f64), epsilon = 1e-8);
 
-        test_fn(Complex::tan, _0_I_FRAC_PI_8, Complex::new(0_f64, 0.373684747901_f64));
-        test_fn(Complex::tan, _0_I_FRAC_PI_6, Complex::new(0_f64, 0.480472778156_f64));
-        test_fn(Complex::tan, _0_I_FRAC_PI_4, Complex::new(0_f64, 0.655794202633_f64));
-        test_fn(Complex::tan, _0_I_FRAC_PI_3, Complex::new(0_f64, 0.780714435359_f64));
-        test_fn(Complex::tan, _0_I_FRAC_PI_2, Complex::new(0_f64, 0.917152335667_f64));
-        test_fn(Complex::tan, _0_I_PI, Complex::new(0_f64, 0.996272076221_f64));
-        test_fn(Complex::tan, _0_I_2_PI, Complex::new(0_f64, 0.999993025340_f64));
+        assert_relative_eq!(Complex::tan(_0_I_FRAC_PI_8), Complex::new(0_f64, 0.373684747901_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_0_I_FRAC_PI_6), Complex::new(0_f64, 0.480472778156_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_0_I_FRAC_PI_4), Complex::new(0_f64, 0.655794202633_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_0_I_FRAC_PI_3), Complex::new(0_f64, 0.780714435359_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_0_I_FRAC_PI_2), Complex::new(0_f64, 0.917152335667_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_0_I_PI),        Complex::new(0_f64, 0.996272076221_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_0_I_2_PI),      Complex::new(0_f64, 0.999993025340_f64), epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::tan(_FRAC_PI_8_I_0), Complex::new(0.414213562373_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_FRAC_PI_6_I_0), Complex::new(0.577350269190_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_FRAC_PI_4_I_0), Complex::new(1_f64, 0_f64),              epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_FRAC_PI_3_I_0), Complex::new(1.73205080757_f64, 0_f64),  epsilon = 1e-8);
+        // assert_relative_eq!(Complex::tan(_FRAC_PI_2_I_0), Complex::new(f64::INFINITY, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_PI_I_0),        Complex::new(0_f64, 0_f64),              epsilon = 1e-8);
+        assert_relative_eq!(Complex::tan(_2_PI_I_0),      Complex::new(0_f64, 0_f64),              epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_atan() {
-        test_fn(Complex::atan, _1_I0, Complex::new(0.785398163397_f64, 0_f64));
-        test_fn(Complex::atan, _NEG1_I0, Complex::new(-0.785398163397_f64, 0_f64));
-        test_fn(Complex::atan, _0_I1, Complex::new(0_f64, f64::INFINITY));
-        test_fn(Complex::atan, _0_I_NEG1, Complex::new(0_f64, f64::NEG_INFINITY));
+        assert_relative_eq!(Complex::atan(_0_I_0),    Complex::new(0_f64, 0_f64),               epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(_1_I_0),    Complex::new(0.785398163397_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(_NEG1_I_0), Complex::new(-0.785398163397_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(_0_I_1),    Complex::new(0_f64, f64::INFINITY),       epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(_0_I_NEG1), Complex::new(0_f64, f64::NEG_INFINITY),   epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0.373684747901_f64)), _0_I_FRAC_PI_8, epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0.480472778156_f64)), _0_I_FRAC_PI_6, epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0.655794202633_f64)), _0_I_FRAC_PI_4, epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0.780714435359_f64)), _0_I_FRAC_PI_3, epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0.917152335667_f64)), _0_I_FRAC_PI_2, epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0.996272076221_f64)), _0_I_PI,        epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0.999993025340_f64)), _0_I_2_PI,      epsilon = 1e-7);
+
+        assert_relative_eq!(Complex::atan(Complex::new(0.414213562373_f64, 0_f64)), _FRAC_PI_8_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(Complex::new(0.577350269190_f64, 0_f64)), _FRAC_PI_6_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(Complex::new(1_f64, 0_f64)),              _FRAC_PI_4_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(Complex::new(1.73205080757_f64, 0_f64)),  _FRAC_PI_3_I_0, epsilon = 1e-8);
+        // assert_relative_eq!(Complex::atan(Complex::new(f64::INFINITY, 0_f64)),  _FRAC_PI_2_I_0 epsilon = 1e-8);
+        // assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0_f64)),              _PI_I_0,        epsilon = 1e-8);
+        // assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0_f64)),              _2_PI_I_0,      epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_sec() {
-        test_fn(Complex::sec, _1_I0, Complex::new(1.85081571768_f64, 0_f64));
-        test_fn(Complex::sec, _NEG1_I0, Complex::new(1.85081571768_f64, 0_f64));
-        test_fn(Complex::sec, _0_I1, Complex::new(0.648054273664_f64, 0_f64));
-        test_fn(Complex::sec, _0_I_NEG1, Complex::new(0.648054273664_f64, 0_f64));
+        assert_relative_eq!(Complex::sec(_0_I_0),    Complex::new(1_f64, 0_f64),              epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_1_I_0),    Complex::new(1.85081571768_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_NEG1_I_0), Complex::new(1.85081571768_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_0_I_1),    Complex::new(0.648054273664_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_0_I_NEG1), Complex::new(0.648054273664_f64, 0_f64), epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::sec(_0_I_FRAC_PI_8), Complex::new(0.927555771469_f64, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_0_I_FRAC_PI_6), Complex::new(0.877009640455_f64, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_0_I_FRAC_PI_4), Complex::new(0.754939708714_f64, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_0_I_FRAC_PI_3), Complex::new(0.624887966296_f64, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_0_I_FRAC_PI_2), Complex::new(0.398536815338_f64, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_0_I_PI),        Complex::new(0.0862667383341_f64, 0_f64) , epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_0_I_2_PI),      Complex::new(0.00373487243864_f64, 0_f64), epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::sec(_FRAC_PI_8_I_0), Complex::new(1.08239220029_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_FRAC_PI_6_I_0), Complex::new(1.15470053838_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_FRAC_PI_4_I_0), Complex::new(1.41421356237_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_FRAC_PI_3_I_0), Complex::new(2_f64, 0_f64),             epsilon = 1e-8);
+        // assert_relative_eq!(Complex::sec(_FRAC_PI_2_I_0), Complex::new(f64::INFINITY, 0_f64),     epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_PI_I_0),        Complex::new(-1_f64, 0_f64),            epsilon = 1e-8);
+        assert_relative_eq!(Complex::sec(_2_PI_I_0),      Complex::new(1_f64, 0_f64),             epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_asec() {
-        test_fn(Complex::asec, _1_I0, Complex::new(0_f64, 0_f64));
-        test_fn(Complex::asec, _NEG1_I0, Complex::new(3.14159265359_f64, 0_f64));
-        test_fn(Complex::asec, _0_I1, Complex::new(1.57079632679_f64, 0.881373587020_f64));
-        test_fn(Complex::asec, _0_I_NEG1, Complex::new(1.57079632679_f64, -0.881373587020_f64));
+        // assert_relative_eq!(Complex::asec(_0_I0),     Complex::new(f64::INFINITY, f64::INFINITY),           epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(_1_I_0),    Complex::new(0_f64, 0_f64),                           epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(_NEG1_I_0), Complex::new(3.14159265359_f64, 0_f64),               epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(_0_I_1),    Complex::new(1.57079632679_f64, 0.881373587020_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(_0_I_NEG1), Complex::new(1.57079632679_f64, -0.881373587020_f64), epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::asec(Complex::new(0.927555771469_f64, 0_f64)),   _0_I_FRAC_PI_8,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(0.877009640455_f64, 0_f64)),   _0_I_FRAC_PI_6,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(0.754939708714_f64, 0_f64)),   _0_I_FRAC_PI_4,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(0.624887966296_f64, 0_f64)),   _0_I_FRAC_PI_3,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(0.398536815338_f64, 0_f64)),   _0_I_FRAC_PI_2,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(0.0862667383341_f64, 0_f64)),  _0_I_PI,         epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(0.00373487243864_f64, 0_f64)), _0_I_2_PI,       epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::asec(Complex::new(1.08239220029_f64, 0_f64)), _FRAC_PI_8_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(1.15470053838_f64, 0_f64)), _FRAC_PI_6_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(1.41421356237_f64, 0_f64)), _FRAC_PI_4_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(2_f64, 0_f64)),             _FRAC_PI_3_I_0, epsilon = 1e-8);
+        // assert_relative_eq!(Complex::asec(Complex::new(f64::INFINITY, 0_f64)),  _FRAC_PI_2_I_0,   epsilon = 1e-8);
+        assert_relative_eq!(Complex::asec(Complex::new(-1_f64, 0_f64)),            _PI_I_0, epsilon = 1e-8);
+        // assert_relative_eq!(Complex::asec(Complex::new(1_f64, 0_f64)),             _2_PI_I_0, epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_csc() {
-        test_fn(Complex::csc, _1_I0, Complex::new(1.18839510578_f64, 0_f64));
-        test_fn(Complex::csc, _NEG1_I0, Complex::new(-1.18839510578_f64, 0_f64));
-        test_fn(Complex::csc, _0_I1, Complex::new(0_f64, -0.850918128239_f64));
-        test_fn(Complex::csc, _0_I_NEG1, Complex::new(0_f64, 0.850918128239_f64));
+        // assert_relative_eq!(Complex::csc(_0_I0),     Complex::new(), epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_1_I_0),    Complex::new(1.18839510578_f64, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_NEG1_I_0), Complex::new(-1.18839510578_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_0_I_1),    Complex::new(0_f64, -0.850918128239_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_0_I_NEG1), Complex::new(0_f64, 0.850918128239_f64),  epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::csc(_0_I_FRAC_PI_8), Complex::new(0_f64, -2.48218793162_f64),    epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_0_I_FRAC_PI_6), Complex::new(0_f64, -1.82530557469_f64),    epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_0_I_FRAC_PI_4), Complex::new(0_f64, -1.15118387092_f64),    epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_0_I_FRAC_PI_3), Complex::new(0_f64, -0.800405292889_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_0_I_FRAC_PI_2), Complex::new(0_f64, -0.434537208095_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_0_I_PI),        Complex::new(0_f64, -0.0865895375300_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_0_I_2_PI),      Complex::new(0_f64, -0.00373489848829_f64), epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::csc(_FRAC_PI_8_I_0), Complex::new(2.61312592975_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_FRAC_PI_6_I_0), Complex::new(2_f64, 0_f64),             epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_FRAC_PI_4_I_0), Complex::new(1.41421356237_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_FRAC_PI_3_I_0), Complex::new(1.15470053838_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::csc(_FRAC_PI_2_I_0), Complex::new(1_f64, 0_f64),             epsilon = 1e-8);
+        // assert_relative_eq!(Complex::csc(Complex::new(f64::INFINITY, 0_f64)),   _PI_I_0,  epsilon = 1e-8);
+        // assert_relative_eq!(Complex::csc(Complex::new(f64::INFINITY, 0_f64)),  _2_PI_I_0,   epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_acsc() {
-        test_fn(Complex::acsc, _1_I0, Complex::new(1.57079632679_f64, 0_f64));
-        test_fn(Complex::acsc, _NEG1_I0, Complex::new(-1.57079632679_f64, 0_f64));
-        test_fn(Complex::acsc, _0_I1, Complex::new(0_f64, -0.881373587020_f64));
-        test_fn(Complex::acsc, _0_I_NEG1, Complex::new(0_f64, 0.881373587020_f64));
+        // assert_relative_eq!(Complex::acsc(_0_I0),     Complex::new(), epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(_1_I_0),    Complex::new(1.57079632679_f64, 0_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(_NEG1_I_0), Complex::new(-1.57079632679_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(_0_I_1),    Complex::new(0_f64, -0.881373587020_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(_0_I_NEG1), Complex::new(0_f64, 0.881373587020_f64),  epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::acsc(Complex::new(0_f64, -2.48218793162_f64)),    _0_I_FRAC_PI_8,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(0_f64, -1.82530557469_f64)),    _0_I_FRAC_PI_6,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(0_f64, -1.15118387092_f64)),    _0_I_FRAC_PI_4,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(0_f64, -0.800405292889_f64)),   _0_I_FRAC_PI_3,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(0_f64, -0.434537208095_f64)),   _0_I_FRAC_PI_2,  epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(0_f64, -0.0865895375300_f64)),  _0_I_PI,         epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(0_f64, -0.00373489848829_f64)), _0_I_2_PI,       epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::acsc(Complex::new(2.61312592975_f64, 0_f64)), _FRAC_PI_8_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(2_f64, 0_f64)),             _FRAC_PI_6_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(1.41421356237_f64, 0_f64)), _FRAC_PI_4_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(1.15470053838_f64, 0_f64)), _FRAC_PI_3_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acsc(Complex::new(1_f64, 0_f64)),             _FRAC_PI_2_I_0, epsilon = 1e-8);
+        // assert_relative_eq!(Complex::acsc(Complex::new(f64::INFINITY, 0_f64)),     _PI_I_0, epsilon = 1e-8);
+        // assert_relative_eq!(Complex::acsc(Complex::new(f64::INFINITY, 0_f64)),     _2_PI_I_0, epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_cot() {
-        test_fn(Complex::cot, _1_I0, Complex::new(0.642092615934_f64, 0_f64));
-        test_fn(Complex::cot, _NEG1_I0, Complex::new(-0.642092615934_f64, 0_f64));
-        test_fn(Complex::cot, _0_I1, Complex::new(0_f64, -1.31303528550_f64));
-        test_fn(Complex::cot, _0_I_NEG1, Complex::new(0_f64, 1.31303528550_f64));
+        // assert_relative_eq!(Complex::cot(_0_I_0),     Complex::new(f64::INFINITY, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_1_I_0),    Complex::new(0.642092615934_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_NEG1_I_0), Complex::new(-0.642092615934_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_0_I_1),    Complex::new(0_f64, -1.31303528550_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_0_I_NEG1), Complex::new(0_f64, 1.31303528550_f64),   epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::cot(_0_I_FRAC_PI_8), Complex::new(0_f64, -2.67605248974_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_0_I_FRAC_PI_6), Complex::new(0_f64, -2.08128336393_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_0_I_FRAC_PI_4), Complex::new(0_f64, -1.52486861882_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_0_I_FRAC_PI_3), Complex::new(0_f64, -1.28087807105_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_0_I_FRAC_PI_2), Complex::new(0_f64, -1.09033141073_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_0_I_PI),        Complex::new(0_f64, -1.00374187320_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_0_I_2_PI),      Complex::new(0_f64, -1.00000697471_f64), epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::cot(_FRAC_PI_8_I_0), Complex::new(2.41421356237_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_FRAC_PI_6_I_0), Complex::new(1.73205080757_f64, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_FRAC_PI_4_I_0), Complex::new(1_f64, 0_f64),              epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_FRAC_PI_3_I_0), Complex::new(0.577350269190_f64, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::cot(_FRAC_PI_2_I_0), Complex::new(0_f64, 0_f64),              epsilon = 1e-8);
+        // assert_relative_eq!(Complex::cot(_PI_I_0),        Complex::new(f64::INFINITY, 0_f64),      epsilon = 1e-8);
+        // assert_relative_eq!(Complex::cot(_2_PI_I_0),      Complex::new(f64::INFINITY, 0_f64),      epsilon = 1e-8);
     }
 
     #[test]
     fn test_complex_acot() {
-        test_fn(Complex::acot, _1_I0, Complex::new(0.785398163397, 0_f64));
-        test_fn(Complex::acot, _NEG1_I0, Complex::new(-0.785398163397, 0_f64));
-        test_fn(Complex::acot, _0_I1, Complex::new(0_f64, f64::NEG_INFINITY));
-        test_fn(Complex::acot, _0_I_NEG1, Complex::new(0_f64, f64::INFINITY));
+        assert_relative_eq!(Complex::acot(_0_I_0),    Complex::new(f64::consts::FRAC_PI_2, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(_1_I_0),    Complex::new(0.785398163397, 0_f64),         epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(_NEG1_I_0), Complex::new(-0.785398163397, 0_f64),        epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(_0_I_1),    Complex::new(0_f64, f64::NEG_INFINITY),      epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(_0_I_NEG1), Complex::new(0_f64, f64::INFINITY),          epsilon = 1e-8);
+
+        assert_relative_eq!(Complex::acot(Complex::new(0_f64, -2.67605248974_f64)), _0_I_FRAC_PI_8, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(0_f64, -2.08128336393_f64)), _0_I_FRAC_PI_6, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(0_f64, -1.52486861882_f64)), _0_I_FRAC_PI_4, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(0_f64, -1.28087807105_f64)), _0_I_FRAC_PI_3, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(0_f64, -1.09033141073_f64)), _0_I_FRAC_PI_2, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(0_f64, -1.00374187320_f64)), _0_I_PI,        epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(0_f64, -1.00000697471_f64)), _0_I_2_PI,      epsilon = 1e-7);
+
+        assert_relative_eq!(Complex::acot(Complex::new(2.41421356237_f64, 0_f64)),  _FRAC_PI_8_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(1.73205080757_f64, 0_f64)),  _FRAC_PI_6_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(1_f64, 0_f64)),              _FRAC_PI_4_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(0.577350269190_f64, 0_f64)), _FRAC_PI_3_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::acot(Complex::new(0_f64, 0_f64)),              _FRAC_PI_2_I_0, epsilon = 1e-8);
+        // assert_relative_eq!(Complex::acot(Complex::new(f64::INFINITY, 0_f64)),      _PI_I_0,   epsilon = 1e-8);
+        // assert_relative_eq!(Complex::acot(Complex::new(f64::INFINITY, 0_f64)),      _2_PI_I_0,    epsilon = 1e-8);
     }
 }
 
