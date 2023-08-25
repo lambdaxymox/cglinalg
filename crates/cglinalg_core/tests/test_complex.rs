@@ -1182,6 +1182,8 @@ mod hyperbolic_trigonometry_tests {
     const _PI_I_0: Complex<f64> = Complex::new(f64::consts::PI, 0_f64);
     const _2_PI_I_0: Complex<f64> = Complex::new(2_f64 * f64::consts::PI, 0_f64);
 
+    const _INF_I_INF: Complex<f64> = Complex::new(f64::INFINITY, f64::INFINITY);
+
 
     #[test]
     fn test_complex_cosh() {
@@ -1306,6 +1308,14 @@ mod hyperbolic_trigonometry_tests {
         assert_relative_eq!(Complex::tanh(_FRAC_PI_2_I_0), Complex::new(0.917152335667274_f64, 0_f64), epsilon = 1e-8);
         assert_relative_eq!(Complex::tanh(_PI_I_0),        Complex::new(0.996272076220750_f64, 0_f64), epsilon = 1e-8);
         assert_relative_eq!(Complex::tanh(_2_PI_I_0),      Complex::new(0.999993025339611_f64, 0_f64), epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_complex_tanh_special_cases() {
+        assert_relative_eq!(Complex::tanh(_0_I_0),    _0_I_0,                                      epsilon = 1e-8);
+        assert_relative_eq!(Complex::tanh(Complex::new(f64::INFINITY, f64::INFINITY)), _1_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::tanh(Complex::new(f64::INFINITY, -f64::MIN_POSITIVE)), _1_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::tanh(Complex::new(f64::INFINITY, f64::MIN_POSITIVE)), _1_I_0, epsilon = 1e-8);
     }
 
     #[test]

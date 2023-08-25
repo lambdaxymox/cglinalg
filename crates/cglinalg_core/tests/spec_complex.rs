@@ -1900,3 +1900,58 @@ fn tan_strategy_imaginary_f64() -> impl Strategy<Value = Complex<f64>> {
 
 imaginary_tan_props!(complex_f64_tan_imaginary_props, f64, tan_strategy_imaginary_f64, any_scalar, 1e-8);
 
+
+/// Generate property tests for complex number hyperbolic trigonometry.
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+/// * `$ScalarGen` is the name of a function or closure for generating scalars.
+/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
+///    with floating point scalars.
+macro_rules! tanh_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        use cglinalg_core::{
+            Complex,
+        };
+        use approx::{
+            relative_eq,
+        };
+        use crate::{
+            $Generator,
+        };
+
+
+        proptest! {
+            #[test]
+            fn prop_tanh_conjugate_z_equals_conjugate_tanh_z(z in $Generator()) {
+                prop_assert_eq!(z.conjugate().tanh(), z.tanh().conjugate());
+            }
+
+            #[test]
+            fn prop_tanh_negative_z_equals_negative_tanh_z(z in $Generator()) {
+                prop_assert_eq!(
+                    (-z).tanh(), -z.tanh(),
+                    "z = {}; z.tanh() = {}; (-z).tanh() = {}; -z.tanh() = {}",
+                    z, z.tanh(), (-z).tanh(), -z.tanh()
+                );
+            }
+        }
+    }
+    }
+}
+
+fn tanh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 200_f64)
+}
+
+tanh_props!(complex_f64_tanh_props, f64, tanh_strategy_f64, any_scalar, 1e-7);
+
