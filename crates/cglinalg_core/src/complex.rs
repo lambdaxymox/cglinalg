@@ -1345,10 +1345,10 @@ where
         let one = S::one();
         let two = one + one;
         let denominator = S::cos(self.re + self.re) + S::cosh(self.im + self.im);
-        let sec_re = two * S::cos(self.re) * S::cosh(self.im); 
-        let sec_im = two * S::sin(self.re) * S::sinh(self.im);
+        let sec_re = two * S::cos(self.re) * S::cosh(self.im) / denominator;
+        let sec_im = two * S::sin(self.re) * S::sinh(self.im) / denominator;
 
-        Self::new(sec_re, sec_im) / denominator
+        Self::new(sec_re, sec_im)
     }
 
     /// Compute the complex arcsecant of a complex number.
@@ -1406,10 +1406,10 @@ where
         let one = S::one();
         let two = one + one;
         let denominator = S::cos(two * self.re) - S::cosh(two * self.im);
-        let csc_re = -two * S::sin(self.re) * S::cosh(self.im);
-        let csc_im = two * S::cos(self.re) * S::sinh(self.im);
+        let csc_re = -two * S::sin(self.re) * S::cosh(self.im) / denominator;
+        let csc_im = two * S::cos(self.re) * S::sinh(self.im) / denominator;
 
-        Self::new(csc_re, csc_im) / denominator
+        Self::new(csc_re, csc_im)
     }
 
     /// Compute the complex arccosecant of a complex number.
@@ -1467,10 +1467,10 @@ where
         let two_times_re = self.re + self.re;
         let two_times_im = self.im + self.im;
         let denominator = S::cos(two_times_re) - S::cosh(two_times_im);
-        let cot_re = -S::sin(two_times_re);
-        let cot_im = S::sinh(two_times_im);
+        let cot_re = -S::sin(two_times_re) / denominator;
+        let cot_im = S::sinh(two_times_im) / denominator;
 
-        Self::new(cot_re, cot_im) / denominator
+        Self::new(cot_re, cot_im)
     }
 
     /// Compute the complex arccotangent of a complex number.
@@ -1642,6 +1642,23 @@ where
     /// ```
     #[inline]
     pub fn tanh(self) -> Self {
+        if self.re.is_infinite() {
+            if !self.im.is_finite() {
+                return Self::new(S::copysign(S::one(), self.re), S::zero());
+            }
+
+            let one = S::one();
+            let two = one + one;
+            return Self::new(
+                S::copysign(S::one(), self.re), 
+                S::copysign(S::zero(), S::sin(two * self.im))
+            );
+        }
+
+        if self.re.is_nan() && self.im.is_zero() {
+            return self;
+        }
+
         let remainder = (self.im - S::frac_pi_2()) % S::two_pi();
         if remainder.is_zero() && remainder.is_sign_positive() {
             return Complex::new(S::zero(), S::infinity());
@@ -1654,10 +1671,10 @@ where
         let two_times_re = self.re + self.re;
         let two_times_im = self.im + self.im;
         let denominator = S::cosh(two_times_re) + S::cos(two_times_im);
-        let tanh_re = S::sinh(two_times_re);
-        let tanh_im = S::sin(two_times_im);
+        let tanh_re = S::sinh(two_times_re) / denominator;
+        let tanh_im = S::sin(two_times_im) / denominator;
 
-        Self::new(tanh_re, tanh_im) / denominator
+        Self::new(tanh_re, tanh_im)
     }
 
     /// Compute the principal value complex hyperbolic arctangent of a complex number.
@@ -1686,6 +1703,33 @@ where
     pub fn atanh(self) -> Self {
         let one = Self::one();
         let two = one + one;
+
+        if self.im.is_infinite() {
+            return Self::new(
+                S::copysign(S::zero(), self.re), 
+                S::copysign(S::frac_pi_2(), self.im)
+            );
+        }
+
+        if self.im.is_nan() {
+            if self.re.is_infinite() || self.re.is_zero() {
+                return Self::new(S::copysign(S::zero(), self.re), self.im);
+            }
+
+            return Self::new(self.im, self.im);
+        }
+
+        if self.re.is_nan() {
+            return Self::new(self.re, self.re);
+        }
+
+        if self.re.is_infinite() {
+            return Self::new(
+                S::copysign(S::zero(), self.re), 
+                S::copysign(S::frac_pi_2(), self.im)
+            );
+        }
+
         if self == one {
             return Self::new(S::infinity(), S::zero());
         } else if self == -one {
@@ -1720,10 +1764,10 @@ where
         let two_times_re = self.re + self.re;
         let two_times_im = self.im + self.im;
         let denominator = S::cosh(two_times_re) + S::cos(two_times_im);
-        let sech_re = two * S::cosh(self.re) * S::cos(self.im);
-        let sech_im = -two * S::sinh(self.re) * S::sin(self.im);
+        let sech_re = two * S::cosh(self.re) * S::cos(self.im) / denominator;
+        let sech_im = -two * S::sinh(self.re) * S::sin(self.im) / denominator;
 
-        Self::new(sech_re, sech_im) / denominator
+        Self::new(sech_re, sech_im)
     }
 
     /// Compute the complex hyperbolic arcsecant of a complex number.
@@ -1783,10 +1827,10 @@ where
         let two_times_re = self.re + self.re;
         let two_times_im = self.im + self.im;
         let denominator = S::cos(two_times_im) - S::cosh(two_times_re);
-        let csch_re = -two * S::sinh(self.re) * S::cos(self.im);
-        let csch_im = two * S::cosh(self.re) * S::sin(self.im);
+        let csch_re = -two * S::sinh(self.re) * S::cos(self.im) / denominator;
+        let csch_im = two * S::cosh(self.re) * S::sin(self.im) / denominator;
 
-        Self::new(csch_re, csch_im) / denominator
+        Self::new(csch_re, csch_im)
     }
 
     /// Compute the complex hyperbolic arccosecant of a complex number.
@@ -1843,10 +1887,10 @@ where
         let two_times_re = self.re + self.re;
         let two_times_im = self.im + self.im;
         let denominator = S::cos(two_times_im) - S::cosh(two_times_re);
-        let coth_re = -S::sinh(two_times_re);
-        let coth_im = S::sin(two_times_im);
+        let coth_re = -S::sinh(two_times_re) / denominator;
+        let coth_im = S::sin(two_times_im) / denominator;
 
-        Self::new(coth_re, coth_im) / denominator
+        Self::new(coth_re, coth_im)
     }
 
     /// Compute the complex hyperbolic arccotangent of a complex number.
