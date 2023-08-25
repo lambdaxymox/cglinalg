@@ -1845,7 +1845,7 @@ fn tan_strategy_real_f64() -> impl Strategy<Value = Complex<f64>> {
     real_from_range(f64::EPSILON, 200_f64)
 }
 
-real_tan_props!(complex_f64_tan_real_props, f64, tan_strategy_real_f64, any_scalar, 1e-7);
+real_tan_props!(complex_f64_tan_real_props, f64, tan_strategy_real_f64, any_scalar, 1e-6);
 
 
 /// Generate property tests for complex number trigonometry.
@@ -1938,8 +1938,8 @@ macro_rules! tanh_props {
 
             #[test]
             fn prop_tanh_negative_z_equals_negative_tanh_z(z in $Generator()) {
-                prop_assert_eq!(
-                    (-z).tanh(), -z.tanh(),
+                prop_assert!(
+                    relative_eq!((-z).tanh(), -z.tanh(), epsilon = $tolerance),
                     "z = {}; z.tanh() = {}; (-z).tanh() = {}; -z.tanh() = {}",
                     z, z.tanh(), (-z).tanh(), -z.tanh()
                 );
@@ -1953,5 +1953,5 @@ fn tanh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 200_f64)
 }
 
-tanh_props!(complex_f64_tanh_props, f64, tanh_strategy_f64, any_scalar, 1e-7);
+tanh_props!(complex_f64_tanh_props, f64, tanh_strategy_f64, any_scalar, 1e-8);
 

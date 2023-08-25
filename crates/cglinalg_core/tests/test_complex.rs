@@ -1211,6 +1211,63 @@ mod hyperbolic_trigonometry_tests {
     }
 
     #[test]
+    fn test_complex_cosh_special_values() {
+        assert_eq!(Complex::cosh(Complex::new(0_f64, 0_f64)), Complex::new(1_f64, 0_f64));
+        
+        let z_nan0 = Complex::cosh(Complex::new(0_f64, f64::INFINITY));
+        assert!(z_nan0.real().is_nan());
+        assert_eq!(z_nan0.imaginary(), 0_f64);
+
+        let z_nan1 = Complex::cosh(Complex::new(0_f64, f64::NAN));
+        assert!(z_nan1.real().is_nan());
+        assert_eq!(z_nan1.imaginary(), 0_f64);
+
+        let z_nan2 = Complex::cosh(Complex::new(-f64::MIN_POSITIVE, f64::INFINITY));
+        assert!(z_nan2.real().is_nan());
+        assert!(z_nan2.imaginary().is_nan());
+
+        let z_nan3 = Complex::cosh(Complex::new(f64::MIN_POSITIVE, f64::INFINITY));
+        assert!(z_nan3.real().is_nan());
+        assert!(z_nan3.imaginary().is_nan());
+
+        let z_nan4 = Complex::cosh(Complex::new(-f64::MIN_POSITIVE, f64::NAN));
+        assert!(z_nan4.real().is_nan());
+        assert!(z_nan4.imaginary().is_nan());
+
+        let z_nan5 = Complex::cosh(Complex::new(f64::MIN_POSITIVE, f64::NAN));
+        assert!(z_nan5.real().is_nan());
+        assert!(z_nan5.imaginary().is_nan());
+
+        assert_eq!(Complex::cosh(Complex::new(f64::INFINITY, 0_f64)), Complex::new(f64::INFINITY, 0_f64));
+        assert_eq!(Complex::cosh(Complex::new(f64::INFINITY, -f64::MIN_POSITIVE)), Complex::new(f64::INFINITY, -f64::INFINITY));
+        assert_eq!(Complex::cosh(Complex::new(f64::INFINITY, f64::MIN_POSITIVE)), Complex::new(f64::INFINITY, f64::INFINITY));
+
+        let z_nan6 = Complex::cosh(Complex::new(f64::INFINITY, f64::INFINITY));
+        assert!(z_nan6.real().is_infinite());
+        assert!(z_nan6.imaginary().is_nan());
+
+        let z_nan7 = Complex::cosh(Complex::new(f64::INFINITY, f64::NAN));
+        assert!(z_nan7.real().is_infinite());
+        assert!(z_nan7.imaginary().is_nan());
+
+        let z_nan7 = Complex::cosh(Complex::new(f64::NAN, 0_f64));
+        assert!(z_nan7.real().is_nan());
+        assert_eq!(z_nan7.imaginary(), 0_f64);
+
+        let z_nan8 = Complex::cosh(Complex::new(f64::NAN, -f64::MIN_POSITIVE));
+        assert!(z_nan8.real().is_nan());
+        assert!(z_nan8.imaginary().is_nan());
+
+        let z_nan9 = Complex::cosh(Complex::new(f64::NAN, f64::MIN_POSITIVE));
+        assert!(z_nan9.real().is_nan());
+        assert!(z_nan9.imaginary().is_nan());
+
+        let z_nan10 = Complex::cosh(Complex::new(f64::NAN, f64::NAN));
+        assert!(z_nan10.is_nan());
+        assert!(z_nan10.is_nan());
+    }
+
+    #[test]
     fn test_complex_acosh() {
         assert_relative_eq!(Complex::acosh(_0_I_0),    Complex::new(0_f64, 1.57079632679490_f64),                  epsilon = 1e-8);
         assert_relative_eq!(Complex::acosh(_1_I_0),    Complex::new(0_f64, 0_f64),                                 epsilon = 1e-8);
@@ -1233,6 +1290,59 @@ mod hyperbolic_trigonometry_tests {
         assert_relative_eq!(Complex::acosh(Complex::new(2.50917847865806_f64, 0_f64)),  _FRAC_PI_2_I_0, epsilon = 1e-8);
         assert_relative_eq!(Complex::acosh(Complex::new(11.5919532755215_f64, 0_f64)),  _PI_I_0,        epsilon = 1e-8);
         // assert_relative_eq!(Complex::acosh(Complex::new(267.746761483748_f64, 0_f64)),  _2_PI_I_0,      epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_complex_acosh_special_values() {
+        assert_eq!(Complex::acosh(Complex::new(0_f64, 0_f64)), Complex::new(0_f64, f64::consts::FRAC_PI_2));
+        
+        assert_eq!(Complex::acosh(Complex::new(0_f64, f64::INFINITY)), Complex::new(f64::INFINITY, f64::consts::FRAC_PI_2));
+        assert_eq!(Complex::acosh(Complex::new(-f64::MIN_POSITIVE, f64::INFINITY)), Complex::new(f64::INFINITY, f64::consts::FRAC_PI_2));
+        assert_eq!(Complex::acosh(Complex::new(f64::MIN_POSITIVE, f64::INFINITY)), Complex::new(f64::INFINITY, f64::consts::FRAC_PI_2));
+
+        let z_nan0 = Complex::acosh(Complex::new(0_f64, f64::NAN));
+        assert!(z_nan0.real().is_nan());
+        assert!(z_nan0.imaginary().is_nan());
+
+        let z_nan1 = Complex::acosh(Complex::new(-f64::MIN_POSITIVE, f64::NAN));
+        assert!(z_nan1.real().is_nan());
+        assert!(z_nan1.imaginary().is_nan());
+        
+        let z_nan2 = Complex::acosh(Complex::new(f64::MIN_POSITIVE, f64::NAN));
+        assert!(z_nan2.real().is_nan());
+        assert!(z_nan2.imaginary().is_nan());
+
+        assert_eq!(Complex::acosh(Complex::new(f64::NEG_INFINITY, f64::MIN_POSITIVE)), Complex::new(f64::INFINITY, f64::consts::PI));
+        assert_eq!(Complex::acosh(Complex::new(f64::INFINITY, f64::MIN_POSITIVE)), Complex::new(f64::INFINITY, 0_f64));
+        assert_eq!(Complex::acosh(Complex::new(f64::NEG_INFINITY, f64::INFINITY)), Complex::new(f64::INFINITY, 3_f64 * f64::consts::FRAC_PI_4));
+
+        let z_nan3 = Complex::acosh(Complex::new(f64::INFINITY, f64::NAN));
+        assert!(z_nan3.real().is_infinite());
+        assert!(z_nan3.imaginary().is_nan());
+
+        let z_nan4 = Complex::acosh(Complex::new(f64::NEG_INFINITY, f64::NAN));
+        assert!(z_nan4.real().is_infinite());
+        assert!(z_nan4.imaginary().is_nan());
+
+        let z_nan5 = Complex::acosh(Complex::new(f64::NAN, 0_f64));
+        assert!(z_nan5.real().is_nan());
+        assert!(z_nan5.imaginary().is_nan());
+
+        let z_nan6 = Complex::acosh(Complex::new(f64::NAN, -f64::MIN_POSITIVE));
+        assert!(z_nan6.real().is_nan());
+        assert!(z_nan6.imaginary().is_nan());
+
+        let z_nan7 = Complex::acosh(Complex::new(f64::NAN, f64::MIN_POSITIVE));
+        assert!(z_nan7.real().is_nan());
+        assert!(z_nan7.imaginary().is_nan());
+
+        let z_nan8 = Complex::acosh(Complex::new(f64::NAN, f64::INFINITY));
+        assert!(z_nan8.real().is_infinite());
+        assert!(z_nan8.imaginary().is_nan());
+
+        let z_nan9 = Complex::acosh(Complex::new(f64::NAN, f64::NAN));
+        assert!(z_nan9.real().is_nan());
+        assert!(z_nan9.imaginary().is_nan());
     }
 
     #[test]
@@ -1261,6 +1371,57 @@ mod hyperbolic_trigonometry_tests {
     }
 
     #[test]
+    fn test_complex_sinh_special_values() {
+        assert_eq!(Complex::sinh(Complex::new(0_f64, 0_f64)), Complex::new(0_f64, 0_f64));
+
+        let z_nan0 = Complex::sinh(Complex::new(0_f64, f64::INFINITY));
+        assert_eq!(z_nan0.real(), 0_f64);
+        assert!(z_nan0.imaginary().is_nan());
+
+        let z_nan1 = Complex::sinh(Complex::new(0_f64, f64::NAN));
+        assert_eq!(z_nan1.real(), 0_f64);
+        assert!(z_nan1.imaginary().is_nan());
+
+        let z_nan2 = Complex::sinh(Complex::new(f64::NAN, f64::NAN));
+        assert!(z_nan2.real().is_nan());
+        assert!(z_nan2.imaginary().is_nan());
+
+        let z_nan3 = Complex::sinh(Complex::new(f64::MIN_POSITIVE, f64::NAN));
+        assert!(z_nan3.real().is_nan());
+        assert!(z_nan3.imaginary().is_nan());
+        
+        assert_eq!(Complex::sinh(Complex::new(f64::INFINITY, 0_f64)), Complex::new(f64::INFINITY, 0_f64));
+        
+        assert_eq!(Complex::sinh(Complex::new(f64::INFINITY, 0_f64)), Complex::new(f64::INFINITY, 0_f64));
+        assert_eq!(Complex::sinh(Complex::new(f64::INFINITY, -f64::MIN_POSITIVE)), Complex::new(f64::INFINITY, -f64::INFINITY));
+        assert_eq!(Complex::sinh(Complex::new(f64::INFINITY, f64::MIN_POSITIVE)), Complex::new(f64::INFINITY, f64::INFINITY));
+        
+        let z_nan4 = Complex::sinh(Complex::new(f64::INFINITY, f64::INFINITY));
+        assert!(z_nan4.real().is_infinite());
+        assert!(z_nan4.imaginary().is_nan());
+
+        let z_nan5 = Complex::sinh(Complex::new(f64::INFINITY, f64::NAN));
+        assert!(z_nan5.real().is_infinite());
+        assert!(z_nan5.imaginary().is_nan());
+
+        let z_nan6 = Complex::sinh(Complex::new(f64::NAN, 0_f64));
+        assert!(z_nan6.real().is_nan());
+        assert_eq!(z_nan6.imaginary(), 0_f64);
+
+        let z_nan7 = Complex::sinh(Complex::new(f64::NAN, -f64::MIN_POSITIVE));
+        assert!(z_nan7.real().is_nan());
+        assert!(z_nan7.imaginary().is_nan());
+
+        let z_nan8 = Complex::sinh(Complex::new(f64::NAN, f64::MIN_POSITIVE));
+        assert!(z_nan8.real().is_nan());
+        assert!(z_nan8.imaginary().is_nan());
+
+        let z_nan9 = Complex::sinh(Complex::new(f64::NAN, f64::NAN));
+        assert!(z_nan9.real().is_nan());
+        assert!(z_nan9.imaginary().is_nan());
+    }
+
+    #[test]
     fn test_complex_asinh() {
         assert_relative_eq!(Complex::asinh(_0_I_0),    _0_I_0,                           epsilon = 1e-8);
         assert_relative_eq!(Complex::asinh(Complex::new(1.17520119364380_f64, 0_f64)),   _1_I_0,  epsilon = 1e-8);
@@ -1286,6 +1447,45 @@ mod hyperbolic_trigonometry_tests {
     }
 
     #[test]
+    fn test_complex_asinh_special_values() {
+        assert_eq!(Complex::asinh(Complex::new(0_f64, 0_f64)), Complex::new(0_f64, 0_f64));
+
+        assert_eq!(Complex::asinh(Complex::new(f64::MIN_POSITIVE, f64::INFINITY)), Complex::new(f64::INFINITY, f64::consts::FRAC_PI_2));
+
+        let z_nan0 = Complex::asinh(Complex::new(-f64::MIN_POSITIVE, f64::NAN));
+        assert!(z_nan0.real().is_nan());
+        assert!(z_nan0.imaginary().is_nan());
+
+        assert_eq!(Complex::asinh(Complex::new(f64::INFINITY, f64::MIN_POSITIVE)), Complex::new(f64::INFINITY, 0_f64));
+
+        assert_eq!(Complex::asinh(Complex::new(f64::INFINITY, f64::INFINITY)), Complex::new(f64::INFINITY, f64::consts::FRAC_PI_4));
+
+        let z_nan1 = Complex::asinh(Complex::new(f64::INFINITY, f64::NAN));
+        assert!(z_nan1.real().is_infinite());
+        assert!(z_nan1.imaginary().is_nan());
+
+        let z_nan2 = Complex::asinh(Complex::new(f64::NAN, 0_f64));
+        assert!(z_nan2.real().is_nan());
+        assert_eq!(z_nan2.imaginary(), 0_f64);
+
+        let z_nan3 = Complex::asinh(Complex::new(f64::NAN, -f64::MIN_POSITIVE));
+        assert!(z_nan3.real().is_nan());
+        assert!(z_nan3.imaginary().is_nan());
+
+        let z_nan4 = Complex::asinh(Complex::new(f64::NAN, f64::MIN_POSITIVE));
+        assert!(z_nan4.real().is_nan());
+        assert!(z_nan4.imaginary().is_nan());
+
+        let z_nan5 = Complex::asinh(Complex::new(f64::NAN, f64::INFINITY));
+        assert!(z_nan5.real().is_infinite());
+        assert!(z_nan5.imaginary().is_nan());
+
+        let z_nan6 = Complex::asinh(Complex::new(f64::NAN, f64::NAN));
+        assert!(z_nan6.real().is_nan());
+        assert!(z_nan6.imaginary().is_nan());
+    }
+
+    #[test]
     fn test_complex_tanh() {
         assert_relative_eq!(Complex::tanh(_0_I_0),    _0_I_0,                                      epsilon = 1e-8);
         assert_relative_eq!(Complex::tanh(_1_I_0),    Complex::new(0.761594155955765_f64, 0_f64),  epsilon = 1e-8);
@@ -1297,7 +1497,7 @@ mod hyperbolic_trigonometry_tests {
         assert_relative_eq!(Complex::tanh(_0_I_FRAC_PI_6), Complex::new(0_f64, 0.577350269189626_f64), epsilon = 1e-8);
         assert_relative_eq!(Complex::tanh(_0_I_FRAC_PI_4), Complex::new(0_f64, 1_f64),                 epsilon = 1e-8);
         assert_relative_eq!(Complex::tanh(_0_I_FRAC_PI_3), Complex::new(0_f64, 1.73205080756888_f64),  epsilon = 1e-8);
-        // assert_relative_eq!(Complex::tanh(_0_I_FRAC_PI_2), Complex::new(f64::INFINITY, 0_f64),                 epsilon = 1e-8);
+        // assert_relative_eq!(Complex::tanh(_0_I_FRAC_PI_2), Complex::new(0_64, f64::INFINITY),          epsilon = 1e-8);
         assert_relative_eq!(Complex::tanh(_0_I_PI),        Complex::new(0_f64, 0_f64),                 epsilon = 1e-8);
         assert_relative_eq!(Complex::tanh(_0_I_2_PI),      Complex::new(0_f64, 0_f64),                 epsilon = 1e-8);
     
@@ -1311,11 +1511,75 @@ mod hyperbolic_trigonometry_tests {
     }
 
     #[test]
-    fn test_complex_tanh_special_cases() {
-        assert_relative_eq!(Complex::tanh(_0_I_0),    _0_I_0,                                      epsilon = 1e-8);
-        assert_relative_eq!(Complex::tanh(Complex::new(f64::INFINITY, f64::INFINITY)), _1_I_0, epsilon = 1e-8);
-        assert_relative_eq!(Complex::tanh(Complex::new(f64::INFINITY, -f64::MIN_POSITIVE)), _1_I_0, epsilon = 1e-8);
-        assert_relative_eq!(Complex::tanh(Complex::new(f64::INFINITY, f64::MIN_POSITIVE)), _1_I_0, epsilon = 1e-8);
+    fn test_complex_tanh_imaginary_pi_over_two_periodic() {
+        for k in 0..100 {
+            let z = Complex::new(0_f64, f64::consts::FRAC_PI_2 + (k as f64) * f64::consts::PI);
+            let result = z.tanh();
+
+            assert!(result.is_nan());
+        }
+
+        for k in 0..100 {
+            let z = Complex::new(0_f64, f64::consts::FRAC_PI_2 - (k as f64) * f64::consts::PI);
+            let result = z.tanh();
+
+            assert!(result.is_nan());
+        }
+    }
+
+    #[test]
+    fn test_complex_tanh_special_values() {
+        assert_eq!(Complex::tanh(_0_I_0),    _0_I_0);
+        assert_eq!(Complex::tanh(Complex::new(f64::INFINITY, -f64::MIN_POSITIVE)), _1_I_0);
+        assert_eq!(Complex::tanh(Complex::new(f64::INFINITY, f64::MIN_POSITIVE)), _1_I_0);
+        assert_eq!(Complex::tanh(Complex::new(f64::INFINITY, f64::MIN_POSITIVE)), Complex::new(1_f64, 0_f64));
+        assert_eq!(Complex::tanh(Complex::new(f64::INFINITY, 0_f64)), Complex::new(1_f64, 0_f64));
+        assert_eq!(Complex::tanh(Complex::new(f64::INFINITY, f64::INFINITY)), _1_I_0);
+        assert_eq!(Complex::tanh(Complex::new(f64::INFINITY, f64::NAN)), Complex::new(1_f64, 0_f64));
+        
+        let z_nan0 = Complex::tanh(Complex::new(f64::NAN, 0_f64));
+        assert!(z_nan0.real().is_nan());
+        assert_eq!(z_nan0.imaginary(), 0_f64);
+
+        let z_nan1 = Complex::tanh(Complex::new(-f64::MIN_POSITIVE, f64::INFINITY));
+        assert!(z_nan1.real().is_nan());
+        assert!(z_nan1.imaginary().is_nan());
+
+        let z_nan2 = Complex::tanh(Complex::new(0_f64, f64::INFINITY));
+        assert!(z_nan2.real().is_nan());
+        assert!(z_nan2.imaginary().is_nan());
+
+        let z_nan3 = Complex::tanh(Complex::new(f64::MIN_POSITIVE, f64::INFINITY));
+        assert!(z_nan3.real().is_nan());
+        assert!(z_nan3.imaginary().is_nan());
+
+        let z_nan4 = Complex::tanh(Complex::new(-f64::MIN_POSITIVE, f64::NAN));
+        assert!(z_nan4.real().is_nan());
+        assert!(z_nan4.imaginary().is_nan());
+
+        let z_nan5 = Complex::tanh(Complex::new(0_f64, f64::NAN));
+        assert!(z_nan5.real().is_nan());
+        assert!(z_nan5.imaginary().is_nan());
+
+        let z_nan6 = Complex::tanh(Complex::new(f64::MIN_POSITIVE, f64::NAN));
+        assert!(z_nan6.real().is_nan());
+        assert!(z_nan6.imaginary().is_nan());
+
+        let z_nan7 = Complex::tanh(Complex::new(f64::NAN, f64::MIN_POSITIVE));
+        assert!(z_nan7.real().is_nan());
+        assert!(z_nan7.imaginary().is_nan());
+
+        let z_nan8 = Complex::tanh(Complex::new(f64::NAN, f64::MIN_POSITIVE));
+        assert!(z_nan8.real().is_nan());
+        assert!(z_nan8.imaginary().is_nan());
+
+        let z_nan9 = Complex::tanh(Complex::new(f64::NAN, -f64::MIN_POSITIVE));
+        assert!(z_nan9.real().is_nan());
+        assert!(z_nan9.imaginary().is_nan());
+
+        let z_nan10 = Complex::tanh(Complex::new(f64::NAN, f64::NAN));
+        assert!(z_nan10.real().is_nan());
+        assert!(z_nan10.imaginary().is_nan());
     }
 
     #[test]
@@ -1341,6 +1605,47 @@ mod hyperbolic_trigonometry_tests {
         assert_relative_eq!(Complex::atanh(Complex::new(0.917152335667274_f64, 0_f64)), _FRAC_PI_2_I_0, epsilon = 1e-8);
         assert_relative_eq!(Complex::atanh(Complex::new(0.996272076220750_f64, 0_f64)), _PI_I_0,        epsilon = 1e-8);
         assert_relative_eq!(Complex::atanh(Complex::new(0.999993025339611_f64, 0_f64)), _2_PI_I_0,      epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_complex_atanh_special_values() {
+        assert_eq!(Complex::atanh(_0_I_0), _0_I_0);
+        
+        let z_nan0 = Complex::atanh(Complex::new(0_f64, f64::NAN));
+        assert_eq!(z_nan0.real(), 0_f64);
+        assert!(z_nan0.imaginary().is_nan());
+
+        assert_eq!(Complex::atanh(Complex::new(1_f64, 0_f64)), Complex::new(f64::INFINITY, 0_f64));
+        assert_eq!(Complex::atanh(Complex::new(f64::MIN_POSITIVE, f64::INFINITY)), Complex::new(0_f64, f64::consts::FRAC_PI_2));
+
+        let z_nan1 = Complex::atanh(Complex::new(-f64::MIN_POSITIVE, f64::NAN));
+        assert!(z_nan1.real().is_nan());
+        assert!(z_nan1.imaginary().is_nan());
+
+        assert_eq!(Complex::atanh(Complex::new(f64::INFINITY, f64::MIN_POSITIVE)), Complex::new(0_f64, f64::consts::FRAC_PI_2));
+        assert_eq!(Complex::atanh(Complex::new(f64::INFINITY, f64::INFINITY)), Complex::new(0_f64, f64::consts::FRAC_PI_2));
+
+        let z_nan2 = Complex::atanh(Complex::new(f64::INFINITY, f64::NAN));
+        assert_eq!(z_nan2.real(), 0_f64);
+        assert!(z_nan2.imaginary().is_nan());
+
+        let z_nan3 = Complex::atanh(Complex::new(f64::NAN, 0_f64));
+        assert!(z_nan3.real().is_nan());
+        assert!(z_nan3.imaginary().is_nan());
+
+        let z_nan4 = Complex::atanh(Complex::new(f64::NAN, -f64::MIN_POSITIVE));
+        assert!(z_nan4.real().is_nan());
+        assert!(z_nan4.imaginary().is_nan());
+
+        let z_nan5 = Complex::atanh(Complex::new(f64::NAN, f64::MIN_POSITIVE));
+        assert!(z_nan5.real().is_nan());
+        assert!(z_nan5.imaginary().is_nan());
+
+        assert_eq!(Complex::atanh(Complex::new(f64::NAN, f64::INFINITY)), Complex::new(0_f64, f64::consts::FRAC_PI_2));
+
+        let z_nan6 = Complex::atanh(Complex::new(f64::NAN, f64::NAN));
+        assert!(z_nan6.real().is_nan());
+        assert!(z_nan6.imaginary().is_nan());
     }
 
     #[test]

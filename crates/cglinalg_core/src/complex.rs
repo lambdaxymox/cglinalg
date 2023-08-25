@@ -1530,10 +1530,26 @@ where
     /// ```
     #[inline]
     pub fn cosh(self) -> Self {
-        Self::new(
-            self.re.cosh() * self.im.cos(),
-            self.re.sinh() * self.im.sin()
-        )
+        if self.re.is_infinite() && !self.im.is_finite() {
+            return Self::new(self.re.abs(), S::nan());
+        }
+
+        if self.re.is_zero() && !self.im.is_finite() {
+            return Self::new(S::nan(), self.re);
+        }
+
+        if self.re.is_zero() && self.im.is_zero() {
+            return Self::new(S::one(), self.im);
+        }
+
+        if self.im.is_zero() && !self.re.is_finite() {
+            return Self::new(self.re.abs(), self.im);
+        }
+        
+        let cosh_re = self.re.cosh() * self.im.cos();
+        let cosh_im = self.re.sinh() * self.im.sin();
+
+        Self::new(cosh_re, cosh_im)
     }
 
     /// Compute the complex hyperbolic arccosine of a complex number.
@@ -1560,6 +1576,35 @@ where
     /// ```
     #[inline]
     pub fn acosh(self) -> Self {
+        if self.re.is_infinite() {
+            if self.im.is_nan() {
+                return Self::new(self.re.abs(), self.im);
+            }
+            if self.im.is_infinite() {
+                if self.re > S::zero() {
+                    return Self::new(self.re, S::copysign(S::frac_pi_4(), self.im));
+                } else {
+                    let three = S::one() + S::one() + S::one();
+                    return Self::new(-self.re, S::copysign(three * S::frac_pi_4(), self.im));
+                }
+            }
+            if self.re < S::zero() {
+                return Self::new(-self.re, S::copysign(S::pi(), self.im));
+            }
+
+            return Self::new(self.re, S::copysign(S::zero(), self.im));
+        }
+        if self.re.is_nan() {
+            if self.im.is_infinite() {
+                return Self::new(self.im.abs(), self.re);
+            }
+            
+            return Self::new(self.re, self.re);
+        }
+        if self.im.is_infinite() {
+            return Self::new(self.im.abs(), S::copysign(S::frac_pi_2(), self.im));
+        }
+
         let one = Self::one();
         let two = one + one;
         let z = Self::sqrt((self + one) / two) + Self::sqrt((self - one) / two);
@@ -1587,10 +1632,22 @@ where
     /// ```
     #[inline]
     pub fn sinh(self) -> Self {
-        Self::new(
-            self.re.sinh() * self.im.cos(),
-            self.re.cosh() * self.im.sin()
-        )
+        if self.re.is_infinite() && !self.im.is_finite() {
+            return Self::new(self.re, S::nan());
+        }
+
+        if self.re.is_zero() && !self.im.is_finite() {
+            return Self::new(self.re, S::nan());
+        }
+
+        if self.im.is_zero() && !self.re.is_finite() {
+            return self;
+        }
+        
+        let sinh_re = self.re.sinh() * self.im.cos();
+        let sinh_im = self.re.cosh() * self.im.sin();
+        
+        Self::new(sinh_re, sinh_im)
     }
 
     /// Compute the complex hyperbolic arcsine of a complex number.
@@ -1617,9 +1674,37 @@ where
     /// ```
     #[inline]
     pub fn asinh(self) -> Self {
-        let one = Self::one();
+        if self.re.is_infinite() {
+            if self.im.is_nan() {
+                return self;
+            }
 
-        Self::ln(self + Self::sqrt(one + self * self))
+            if self.im.is_infinite() {
+                return Self::new(self.re, S::copysign(S::frac_pi_4(), self.im));
+            }
+
+            return Self::new(self.re, S::copysign(S::zero(), self.im));
+        }
+        if self.re.is_nan() {
+            if self.im.is_infinite() {
+                return Self::new(self.im, self.re);
+            }
+
+            if self.im.is_zero() {
+                return self;
+            }
+
+            return Self::new(self.re, self.re);
+        }
+
+        if self.im.is_infinite() {
+            return Self::new(
+                S::copysign(self.im, self.re), 
+                S::copysign(S::frac_pi_2(), self.im)
+            );
+        }
+
+        Self::ln(self + Self::sqrt(Self::one() + self * self))
     }
 
     /// Compute the complex hyperbolic tangent of a complex number.
@@ -1657,15 +1742,6 @@ where
 
         if self.re.is_nan() && self.im.is_zero() {
             return self;
-        }
-
-        let remainder = (self.im - S::frac_pi_2()) % S::two_pi();
-        if remainder.is_zero() && remainder.is_sign_positive() {
-            return Complex::new(S::zero(), S::infinity());
-        }
-
-        if remainder.is_zero() && remainder.is_sign_negative() {
-            return Complex::new(S::zero(), S::neg_infinity());
         }
 
         let two_times_re = self.re + self.re;
