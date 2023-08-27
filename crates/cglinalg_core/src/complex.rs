@@ -1012,6 +1012,119 @@ where
         Self::new(norm_self.ln(), arg_self)
     }
 
+    /// Compute the exponential of `self` with respect to base `2`.
+    /// 
+    /// Given a complex number `2`, `exp2` is defined by
+    /// ```text
+    /// exp2(z) = 2^z
+    /// ```
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let z = Complex::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
+    /// let expected = Complex::new(1.440332964556895, 0.7684953440984348);
+    /// let result = z.exp2();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn exp2(self) -> Self {
+        Self::from_polar_decomposition(self.re.exp2(), Radians(self.im * S::ln_2()))
+    }
+
+    /// Calculate the principal value of the logarithm of a complex number `self` 
+    /// with respect to base `base`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let z = Complex::from_polar_decomposition(2_f64, angle);
+    /// let base = 3_f64;
+    /// let expected = Complex::new(0.6309297535714574_f64, 0.7149002168450318_f64);
+    /// let result = z.log(base);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn log(self, base: S) -> Self {
+        let (norm_self, arg_self) = self.polar_decomposition();
+        
+        Self::new(S::log(norm_self, base), arg_self.0 / S::ln(base))
+    }
+
+    /// Calculate the principal value of the logarithm of a complex number `self`
+    /// with respect to base `2`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let z = Complex::from_polar_decomposition(2_f64, angle);
+    /// let expected = Complex::new(1_f64, 1.1330900354567984_f64);
+    /// let result = z.log2();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn log2(self) -> Self {
+        Self::ln(self) / S::ln_2()
+    }
+
+    /// Calculate the principal value of the logarithm of a complex number `self` 
+    /// with respect to base `10`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let z = Complex::from_polar_decomposition(2_f64, angle);
+    /// let expected = Complex::new(0.3010299956639812_f64, 0.3410940884604603_f64);
+    /// let result = z.log10();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn log10(self) -> Self {
+        Self::ln(self) / S::ln_10()
+    }
+
     /// Calculate the positive square root of a complex number.
     /// 
     /// Given a complex number `z`, the square root of `z` is a complex number 
@@ -1086,6 +1199,41 @@ where
         let (sin_angle_over_two, cos_angle_over_two) = (angle / two).sin_cos();
 
         Self::new(sqrt_norm * cos_angle_over_two, sqrt_norm * sin_angle_over_two)
+    }
+
+    /// Compute the principal value of the cubed root of a complex number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let z1 = Complex::unit_im();
+    /// let expected1 = Complex::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
+    /// let result1 = z1.cbrt();
+    /// 
+    /// assert_relative_eq!(result1, expected1, epsilon = 1e-10);
+    /// 
+    /// let z2 = Complex::from_polar_decomposition(2_f64, Radians(f64::consts::FRAC_PI_4));
+    /// let expected2 = Complex::new(1.216990281178_f64, 0.326091563038_f64);
+    /// let result2 = z2.cbrt();
+    /// 
+    /// assert_relative_eq!(result2, expected2, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn cbrt(self) -> Self {
+        let one = S::one();
+        let three = one + one + one;
+        let (norm_self, arg_self) = self.polar_decomposition();
+
+        Self::from_polar_decomposition(norm_self.cbrt(), arg_self / three)
     }
 
     /// Calculate the power of a complex number where the exponent is a floating 
