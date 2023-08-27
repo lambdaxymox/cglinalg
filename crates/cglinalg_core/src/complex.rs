@@ -551,6 +551,31 @@ where
     pub fn unscale(self, scale: S) -> Self {
         Self::new(self.re / scale, self.im / scale)
     }
+
+    /// Compute the square of the complex number `self`.
+    /// 
+    /// Given a complex number `z`, the square of `z` is given by
+    /// ```text
+    /// squared(z) = z * z
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex
+    /// # };
+    /// #
+    /// let z = Complex::new(1_i32, 2_i32);
+    /// let expected = Complex::new(-3_i32, 4_i32);
+    /// let result = z.squared();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn squared(self) -> Self {
+        self * self
+    }
 }
 
 impl<S> Complex<S>
@@ -1167,10 +1192,10 @@ where
     /// ```
     #[inline]
     pub fn cos(self) -> Self {
-        Self::new(
-             self.re.cos() * self.im.cosh(),
-            -self.re.sin() * self.im.sinh()
-        )
+        // let z1 = i * self;
+        let z1 = Self::new(-self.im, self.re);
+        
+        Self::cosh(z1)
     }
 
     /// Compute the complex arccosine of a complex number.
@@ -1197,9 +1222,51 @@ where
     /// ```
     #[inline]
     pub fn acos(self) -> Self {
-        let i = Self::unit_im();
+        if self.re.is_infinite() {
+            if self.im.is_nan() {
+                return Self::new(self.im, self.re);
+            }
+            
+            if self.im.is_infinite() {
+                if self.re < S::zero() {
+                    let three = S::one() + S::one() + S::one();
+                    return Self::new(three * S::frac_pi_4(), -self.im);
+                }
 
-        -i * Self::ln((i * Self::sqrt(Self::one() - self * self)) + self)
+                return Self::new(S::frac_pi_4(), -self.im);
+            }
+
+            if self.re < S::zero() {
+                let acos_re = S::pi();
+                let acos_im = if self.im < S::zero() { -self.re } else { self.re };
+                
+                return Self::new(acos_re, acos_im);
+            }
+
+            let acos_re = S::zero();
+            let acos_im = if self.im < S::zero() { self.re } else { -self.re };
+            
+            return Self::new(acos_re, acos_im);
+        }
+        
+        if self.re.is_nan() {
+            if self.im.is_infinite() {
+                return Self::new(self.re, -self.im);
+            }
+
+            return Complex::new(self.re, self.re);
+        }
+
+        if self.im.is_infinite() {
+            return Self::new(S::frac_pi_2(), -self.im);
+        }
+        
+        if self.re.is_zero() && (self.im.is_zero() || self.im.is_nan()) {
+            return Self::new(S::frac_pi_2(), -self.im);
+        }
+        
+        let z = Self::ln((Self::unit_im() * Self::sqrt(Self::one() - self * self)) + self);
+        (-Self::unit_im()) * z
     }
 
     /// Compute the complex sine of a complex number.
@@ -1222,10 +1289,12 @@ where
     /// ```
     #[inline]
     pub fn sin(self) -> Self {
-        Self::new(
-            self.re.sin() * self.im.cosh(),
-            self.re.cos() * self.im.sinh()
-        )
+        // let z1 = i * self;
+        let z1 = Complex::new(-self.im, self.re);
+        let z2 = Self::sinh(z1);
+
+        // -i * z2
+        Self::new(z2.im, -z2.re)
     }
 
     /// Compute the complex arcsine of a complex number.
@@ -1252,9 +1321,12 @@ where
     /// ```
     #[inline]
     pub fn asin(self) -> Self {
-        let i = Self::unit_im();
-
-        -i * ((Self::one() - self * self).sqrt() + i * self).ln()
+        // let z1 = i * self;
+        let z1 = Self::new(-self.im, self.re);
+        let z2 = Self::asinh(z1);
+        
+        // -i * z2;
+        Self::new(z2.im, -z2.re)
     }
 
     /// Compute the complex tangent of a complex number.
@@ -1277,13 +1349,12 @@ where
     /// ```
     #[inline]
     pub fn tan(self) -> Self {
-        let two_times_re = self.re + self.re;
-        let two_times_im = self.im + self.im;
-        let denominator = two_times_re.cos() + two_times_im.cosh();
-        let tan_re = two_times_re.sin() / denominator;
-        let tan_im = two_times_im.sinh() / denominator;
-
-        Self::new(tan_re, tan_im)
+        // let z1 = i * self;
+        let z1 = Self::new(-self.im, self.re);
+        let z2 = Self::tanh(z1);
+        
+        // -i * z2
+        Self::new(z2.im, -z2.re)
     }
 
     /// Compute the complex arctangent of a complex number.
@@ -1310,16 +1381,12 @@ where
     /// ```
     #[inline]
     pub fn atan(self) -> Self {
-        let i = Self::unit_im();
-        let one = Self::one();
-        let two = one + one;
-        if self == i {
-            return Self::new(S::zero(), S::infinity());
-        } else if self == -i {
-            return Self::new(S::zero(), S::neg_infinity());
-        }
-
-        (Self::ln(one + i * self) - Self::ln(one - i * self)) / (two * i)
+        // let z1 = i * self;
+        let z1 = Self::new(-self.im, self.re);
+        let z2 = Self::atanh(z1);
+        
+        // -i * z2;
+        Self::new(z2.im, -z2.re)
     }
 
     /// Compute the complex secant of a complex number.
