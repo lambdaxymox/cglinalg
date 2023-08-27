@@ -1088,11 +1088,11 @@ mod trigonometry_tests {
 
     #[test]
     fn test_complex_asin() {
-        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 0_f64)), _0_I_0,                                      epsilon = 1e-8);
-        assert_relative_eq!(Complex::asin(_1_I_0),                     Complex::new(1.57079632679490_f64, 0_f64),   epsilon = 1e-8);
-        assert_relative_eq!(Complex::asin(_NEG1_I_0),                  Complex::new(-1.57079632679490_f64, 0_f64),  epsilon = 1e-8);
-        assert_relative_eq!(Complex::asin(_0_I_1),                     Complex::new(0_f64, 0.881373587019543_f64),  epsilon = 1e-8);
-        assert_relative_eq!(Complex::asin(_0_I_NEG1),                  Complex::new(0_f64, -0.881373587019543_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(Complex::new(0_f64, 0_f64)), _0_I_0,                                       epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(_1_I_0),                     Complex::new(f64::consts::FRAC_PI_2, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(_NEG1_I_0),                  Complex::new(-f64::consts::FRAC_PI_2, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(_0_I_1),                     Complex::new(0_f64, 0.881373587019543_f64),   epsilon = 1e-8);
+        assert_relative_eq!(Complex::asin(_0_I_NEG1),                  Complex::new(0_f64, -0.881373587019543_f64),  epsilon = 1e-8);
 
         assert_relative_eq!(Complex::asin(Complex::new(0_f64, 0.402870381917066_f64)), _0_I_FRAC_PI_8, epsilon = 1e-8);
         assert_relative_eq!(Complex::asin(Complex::new(0_f64, 0.547853473888040_f64)), _0_I_FRAC_PI_6, epsilon = 1e-8);
@@ -1221,11 +1221,11 @@ mod trigonometry_tests {
 
     #[test]
     fn test_complex_atan() {
-        assert_relative_eq!(Complex::atan(_0_I_0),    Complex::new(0_f64, 0_f64),                  epsilon = 1e-8);
-        assert_relative_eq!(Complex::atan(_1_I_0),    Complex::new(0.785398163397448_f64, 0_f64),  epsilon = 1e-8);
-        assert_relative_eq!(Complex::atan(_NEG1_I_0), Complex::new(-0.785398163397448_f64, 0_f64), epsilon = 1e-8);
-        assert_relative_eq!(Complex::atan(_0_I_1),    Complex::new(0_f64, f64::INFINITY),          epsilon = 1e-8);
-        assert_relative_eq!(Complex::atan(_0_I_NEG1), Complex::new(0_f64, f64::NEG_INFINITY),      epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(_0_I_0),    Complex::new(0_f64, 0_f64),                   epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(_1_I_0),    Complex::new(f64::consts::FRAC_PI_4, 0_f64),  epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(_NEG1_I_0), Complex::new(-f64::consts::FRAC_PI_4, 0_f64), epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(_0_I_1),    Complex::new(0_f64, f64::INFINITY),           epsilon = 1e-8);
+        assert_relative_eq!(Complex::atan(_0_I_NEG1), Complex::new(0_f64, f64::NEG_INFINITY),       epsilon = 1e-8);
 
         assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0.373684747901215_f64)), _0_I_FRAC_PI_8, epsilon = 1e-8);
         assert_relative_eq!(Complex::atan(Complex::new(0_f64, 0.480472778156452_f64)), _0_I_FRAC_PI_6, epsilon = 1e-8);
@@ -1560,10 +1560,10 @@ mod hyperbolic_trigonometry_tests {
 
     #[test]
     fn test_complex_acosh() {
-        assert_relative_eq!(Complex::acosh(_0_I_0),    Complex::new(0_f64, 1.57079632679490_f64),                  epsilon = 1e-8);
+        assert_relative_eq!(Complex::acosh(_0_I_0),    Complex::new(0_f64, f64::consts::FRAC_PI_2),                epsilon = 1e-8);
         assert_relative_eq!(Complex::acosh(_1_I_0),    Complex::new(0_f64, 0_f64),                                 epsilon = 1e-8);
         assert_relative_eq!(Complex::acosh(_0_I_1),    Complex::new(0.881373587019543_f64, 1.57079632679490_f64),  epsilon = 1e-8);
-        assert_relative_eq!(Complex::acosh(_NEG1_I_0), Complex::new(0_f64, 3.14159265358979_f64),                  epsilon = 1e-8);
+        assert_relative_eq!(Complex::acosh(_NEG1_I_0), Complex::new(0_f64, f64::consts::PI),                       epsilon = 1e-8);
         assert_relative_eq!(Complex::acosh(_0_I_NEG1), Complex::new(0.881373587019543_f64, -1.57079632679490_f64), epsilon = 1e-8);
 
         assert_relative_eq!(Complex::acosh(Complex::new(0.923879532511287_f64, 0_f64)), _0_I_FRAC_PI_8, epsilon = 1e-8);
@@ -1714,9 +1714,9 @@ mod hyperbolic_trigonometry_tests {
 
     #[test]
     fn test_complex_asinh() {
-        assert_relative_eq!(Complex::asinh(_0_I_0),    _0_I_0,                           epsilon = 1e-8);
-        assert_relative_eq!(Complex::asinh(Complex::new(1.17520119364380_f64, 0_f64)),   _1_I_0,  epsilon = 1e-8);
-        assert_relative_eq!(Complex::asinh(Complex::new(0_f64, 0.841470984807897_f64)),  _0_I_1, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asinh(_0_I_0),    _0_I_0,                                      epsilon = 1e-8);
+        assert_relative_eq!(Complex::asinh(Complex::new(1.17520119364380_f64, 0_f64)),   _1_I_0,    epsilon = 1e-8);
+        assert_relative_eq!(Complex::asinh(Complex::new(0_f64, 0.841470984807897_f64)),  _0_I_1,    epsilon = 1e-8);
         assert_relative_eq!(Complex::asinh(Complex::new(-1.17520119364380_f64, 0_f64)),  _NEG1_I_0, epsilon = 1e-8);
         assert_relative_eq!(Complex::asinh(Complex::new(0_f64, -0.841470984807897_f64)), _0_I_NEG1, epsilon = 1e-8);
 
@@ -1733,8 +1733,8 @@ mod hyperbolic_trigonometry_tests {
         assert_relative_eq!(Complex::asinh(Complex::new(0.868670961486010_f64, 0_f64)), _FRAC_PI_4_I_0, epsilon = 1e-8);
         assert_relative_eq!(Complex::asinh(Complex::new(1.24936705052398_f64, 0_f64)),  _FRAC_PI_3_I_0, epsilon = 1e-8);
         assert_relative_eq!(Complex::asinh(Complex::new(2.30129890230729_f64, 0_f64)),  _FRAC_PI_2_I_0, epsilon = 1e-8);
-        assert_relative_eq!(Complex::asinh(Complex::new(11.5487393572577_f64, 0_f64)),  _PI_I_0, epsilon = 1e-8);
-        assert_relative_eq!(Complex::asinh(Complex::new(267.744894041017_f64, 0_f64)),  _2_PI_I_0, epsilon = 1e-8);
+        assert_relative_eq!(Complex::asinh(Complex::new(11.5487393572577_f64, 0_f64)),  _PI_I_0,        epsilon = 1e-8);
+        assert_relative_eq!(Complex::asinh(Complex::new(267.744894041017_f64, 0_f64)),  _2_PI_I_0,      epsilon = 1e-8);
     }
 
     #[test]
