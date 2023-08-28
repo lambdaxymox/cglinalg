@@ -9,7 +9,12 @@ use proptest::prelude::*;
 use cglinalg_core::{
     Complex, 
     SimdScalar,
+    SimdScalarSigned,
     SimdScalarFloat,
+};
+use approx::{
+    relative_eq,
+    relative_ne,
 };
 
 
@@ -37,7 +42,494 @@ where
     .no_shrink()
 }
 
+/// A scalar `0` times a complex number should be a zero complex number.
+///
+/// Given a complex number `z`, it satisfies
+/// ```text
+/// 0 * z = 0.
+/// ```
+fn prop_zero_times_complex_equals_zero<S>(z: Complex<S>) -> bool
+where 
+    S: SimdScalar
+{
+    let zero_complex = Complex::zero();
 
+    zero_complex * z == zero_complex
+}
+
+/// A scalar `0` times a complex number should be zero.
+///
+/// Given a complex number `z`, it satisfies
+/// ```text
+/// z * 0 = 0
+/// ```
+fn prop_complex_times_zero_equals_zero<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let zero: S = num_traits::zero();
+    let zero_complex = Complex::zero();
+
+    z * zero == zero_complex
+}
+
+/// A zero complex number should act as the additive unit element of a set 
+/// of complex numbers.
+///
+/// Given a complex number `z`
+/// ```text
+/// z + 0 = z
+/// ```
+fn prop_complex_plus_zero_equals_complex<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let zero_complex = Complex::zero();
+
+    z + zero_complex == z
+}
+
+/// A zero complex number should act as the additive unit element of a set 
+/// of complex numbers.
+///
+/// Given a complex number `z`
+/// ```text
+/// 0 + z = z
+/// ```
+fn prop_zero_plus_complex_equals_complex<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let zero_complex = Complex::zero();
+
+    zero_complex + z == z
+}
+
+/// Multiplying a complex number by a scalar `1` should give the original 
+/// complex number.
+///
+/// Given a complex number `z`
+/// ```text
+/// 1 * z = z
+/// ```
+fn prop_one_times_complex_equal_complex<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let one = Complex::one();
+
+    one * z == z
+}
+
+/// Multiplying a complex number by a scalar `1` should give the original 
+/// complex number.
+///
+/// Given a complex number `z`
+/// ```text
+/// z * 1 = z.
+/// ```
+fn prop_complex_times_one_equals_complex<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let one: S = num_traits::one();
+
+    z * one == z
+}
+
+/// Given complex numbers `z1` and `z2`, we should be able to use `z1` 
+/// and `z2` interchangeably with their references `&z1` and `&z2` in 
+/// arithmetic expressions involving complex numbers.
+///
+/// Given complex numbers `z1` and `z2`, and their references `&z1` 
+/// and `&z2`, they should satisfy
+/// ```text
+///  z1 +  z2 = &z1 +  z2
+///  z1 +  z2 =  z1 + &z2
+///  z1 +  z2 = &z1 + &z2
+///  z1 + &z2 = &z1 +  z2
+/// &z1 +  z2 =  z1 + &z2
+/// &z1 +  z2 = &z1 + &z2
+///  z1 + &z2 = &z1 + &z2
+/// ```
+fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    ( z1 +  z2 == &z1 +  z2) &&
+    ( z1 +  z2 ==  z1 + &z2) &&
+    ( z1 +  z2 == &z1 + &z2) &&
+    ( z1 + &z2 == &z1 +  z2) &&
+    (&z1 +  z2 ==  z1 + &z2) &&
+    (&z1 +  z2 == &z1 + &z2) &&
+    ( z1 + &z2 == &z1 + &z2)
+}
+
+/// Complex number addition over floating point scalars should be commutative.
+/// 
+/// Given complex numbers `z1` and `z2`, we have
+/// ```text
+/// z1 + z2 = z2 + z1
+/// ```
+fn prop_complex_addition_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    z1 + z2 == z2 + z1
+}
+
+/// Complex number addition over floating point scalars should be 
+/// approximately associative. 
+///
+/// Given complex numbers `z1`, `z2`, and `z3` we have
+/// ```text
+/// (z1 + z2) + z3 ~= z1 + (z2 + z3).
+/// ```
+fn prop_complex_addition_almost_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>, tolerance: S) -> bool
+where
+    S: SimdScalarFloat
+{
+    relative_eq!((z1 + z2) + z3, z1 + (z2 + z3), epsilon = tolerance)
+}
+
+/// The zero complex number should act as an additive unit. 
+///
+/// Given a complex number `z`, we have
+/// ```text
+/// z - 0 = z
+/// ```
+fn prop_complex_minus_zero_equals_complex<S>(z: Complex<S>) -> bool
+where
+    S: SimdScalar
+{
+    let zero_complex = Complex::zero();
+
+    z - zero_complex == z
+}
+
+/// Every complex number should have an additive inverse. 
+///
+/// Given a complex number `z`, there is a complex number `-z` such that
+/// ```text
+/// z - z = z + (-z) = (-z) + z = 0
+/// ```
+fn prop_complex_minus_complex_equals_zero<S>(z: Complex<S>) -> bool
+where
+    S: SimdScalar
+{
+    let zero_complex = Complex::zero();
+
+    z - z == zero_complex
+}
+
+/// Given complex numbers `z1` and `z2`, we should be able to use `z1` 
+/// and `z2` interchangeably with their references `&z1` and `&z2` 
+/// in arithmetic expressions involving complex numbers.
+///
+/// Given complex numbers `z1` and `z2`, and their references `&z1` 
+/// and `&z2`, they should satisfy
+/// ```text
+///  z1 -  z2 = &z1 -  z2
+///  z1 -  z2 =  z1 - &z2
+///  z1 -  z2 = &z1 - &z2
+///  z1 - &z2 = &z1 -  z2
+/// &z1 -  z2 =  z1 - &z2
+/// &z1 -  z2 = &z1 - &z2
+///  z1 - &z2 = &z1 - &z2
+/// ```
+fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> bool
+where
+    S: SimdScalar
+{
+    ( z1 -  z2 == &z1 -  z2) &&
+    ( z1 -  z2 ==  z1 - &z2) &&
+    ( z1 -  z2 == &z1 - &z2) &&
+    ( z1 - &z2 == &z1 -  z2) &&
+    (&z1 -  z2 ==  z1 - &z2) &&
+    (&z1 -  z2 == &z1 - &z2) &&
+    ( z1 - &z2 == &z1 - &z2)
+}
+
+/// Multiplication of a scalar and a complex number should be commutative.
+///
+/// Given a constant `c` and a complex number `z`
+/// ```text
+/// c * z = z * c
+/// ```
+fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{   
+    let c_complex = Complex::from_real(c);
+
+    c_complex * z == z * c_complex
+}
+
+/// Complexs have a multiplicative unit element.
+///
+/// Given a complex number `z`, and the unit complex number `1`, we have
+/// ```text
+/// z * 1 = 1 * z = z
+/// ```
+fn prop_complex_multiplicative_unit<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let one = Complex::one();
+
+    (z * one == z) && (one * z == z) && (z * one == one * z)
+}
+
+/// Every nonzero complex number over floating point scalars has an 
+/// approximate multiplicative inverse.
+///
+/// Given a complex number `z` and its inverse `z_inv`, we have
+/// ```text
+/// z * z_inv ~= z_inv * z ~= 1
+/// ```
+fn prop_complex_approx_multiplicative_inverse<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    // prop_assume!(z.is_finite());
+    // prop_assume!(z.is_invertible());
+    let one = Complex::one();
+    let z_inv = z.inverse().unwrap();
+
+    relative_eq!(z * z_inv, one, epsilon = tolerance) && relative_eq!(z_inv * z, one, epsilon = tolerance)
+}
+
+/// Complex multiplication over floating point scalars is approximately
+/// commutative.
+/// 
+/// Given a complex number `z1`, and another complex number `z2`, we
+/// have
+/// ```text
+/// z1 * z2 ~= z2 * z1
+/// ```
+fn prop_complex_approx_multiplication_commutative<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    relative_eq!(z1 * z2, z2 * z1, epsilon = tolerance)
+}
+/*
+/// Multiplication of an integer scalar and a complex number over integer 
+/// scalars should be commutative.
+///
+/// Given a constant `c` and a complex number `z`
+/// ```text
+/// c * z = z * c
+/// ```
+fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    c * z == z * c
+}
+*/
+/// Exact multiplication of two scalars and a complex number should be 
+/// compatible with multiplication of all scalars. 
+///
+/// In other words, scalar multiplication of two scalars with a 
+/// complex number should act associatively just like the multiplication 
+/// of three scalars. 
+///
+/// Given scalars `a` and `b`, and a complex number `z`, we have
+/// ```text
+/// (a * b) * z = a * (b * z)
+/// ```
+fn prop_scalar_multiplication_compatibility<S>(a: S, b: S, z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let a_complex = Complex::from_real(a);
+    let b_complex = Complex::from_real(b);
+
+    a_complex * (b_complex * z) == (a_complex * b_complex) * z
+}
+
+/// Complex number multiplication over integer scalars is exactly associative.
+///
+/// Given complex numbers `z1`, `z2`, and `z3`, we have
+/// ```text
+/// (z1 * z2) * z3 = z1 * (z2 * z3)
+/// ```
+fn prop_complex_multiplication_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    z1 * (z2 * z3) == (z1 * z2) * z3
+}
+/*
+/// Complex numbers have a multiplicative unit element.
+///
+/// Given a complex number `z`, and the unit complex number `1`, we have
+/// ```text
+/// z * 1 = 1 * z = z
+/// ```
+fn prop_complex_multiplicative_unit<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalar 
+{
+    let one = Complex::one();
+
+    (z * one == z) && (one * z == z) && (z * one == one * z)
+}
+*/
+/// Multiplication of complex numbers over integer scalars is commutative.
+/// 
+/// Given a complex number `z1` and another complex number `z2`, we have
+/// ```text
+/// z1 * z2 = z2 * z1
+/// ```
+fn prop_complex_multiplication_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    z1 * z2 == z2 * z1
+}
+
+
+
+
+
+/// Scalar multiplication should distribute over complex number addition.
+///
+/// Given a scalar `a` and complex numbers `z1` and `z2`
+/// ```text
+/// a * (z1 + z2) = a * z1 + a * z2
+/// ```
+fn prop_distribution_over_complex_addition<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let a_complex = Complex::from_real(a);
+
+    (a_complex * (z1 + z2) == a_complex * z1 + a_complex * z2) && ((z1 + z2) * a_complex == z1 * a_complex + z2 * a_complex)
+}
+
+/// Multiplication of a sum of scalars should distribute over a 
+/// complex number.
+///
+/// Given scalars `a` and `b` and a complex number `z`, we have
+/// ```text
+/// (a + b) * z = a * z + b * z
+/// ```
+fn prop_distribution_over_scalar_addition<S>(a: S, b: S, z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let a_complex = Complex::from_real(a);
+    let b_complex = Complex::from_real(b);
+
+    ((a_complex + b_complex) * z == a_complex * z + b_complex * z) && 
+    (z * (a_complex + b_complex) == z * a_complex + z * b_complex)
+}
+
+/// Multiplication of two complex numbers by a scalar on the right 
+/// should distribute.
+///
+/// Given complex numbers `z1` and `z2`, and a scalar `a`
+/// ```text
+/// (z1 + z2) * a = z1 * a + z2 * a
+/// ```
+fn prop_distribution_over_complex_addition1<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    (z1 + z2) * a == z1 * a + z2 * a
+}
+
+/// Multiplication of a complex number on the right by the sum of two 
+/// scalars should distribute over the two scalars. 
+///
+/// Given a complex number `z` and scalars `a` and `b`
+/// ```text
+/// z * (a + b) = z * a + z * b
+/// ```
+fn prop_distribution_over_scalar_addition1<S>(a: S, b: S, z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    z * (a + b) == z * a + z * b
+}
+
+/// Complex number multiplication should be distributive on the right.
+///
+/// Given three complex numbers `z1`, `z2`, and `z3`
+/// ```text
+/// (z1 + z2) * z3 = z1 * z3 + z2 * z3
+/// ```
+fn prop_complex_multiplication_right_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    (z1 + z2) * z3 == z1 * z3 + z2 * z3
+}
+
+/// Complex Number multiplication should be distributive on the left.
+///
+/// Given three complex numbers `z1`, `z2`, and `z3`
+/// ```text
+/// z1 * (z2 + z3) = z1 * z2 + z1 * z3
+/// ```
+fn prop_complex_multiplication_left_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    (z1 + z2) * z3 == z1 * z3 + z2 * z3
+}
+
+
+
+
+
+/// Conjugating a complex number twice should give the original complex number.
+///
+/// Given a complex number `z`
+/// ```text
+/// z** = conjugate(conjugate(z)) = z
+/// ```
+fn prop_complex_conjugate_conjugate_equals_complex<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalarSigned
+{
+    z.conjugate().conjugate() == z
+}
+
+/// Complex conjugation is linear.
+///
+/// Given complex numbers `z1` and `z2`, complex number conjugation satisfies
+/// ```text
+/// conjugate(z1 + z2) = conjugate(z1) + conjugate(z2)
+/// ```
+fn prop_complex_conjugation_linear<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+where
+    S: SimdScalarSigned
+{
+    (z1 + z2).conjugate() == z1.conjugate() + z2.conjugate()
+}
+
+/// Complex multiplication transposes under conjugation.
+///
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// conjugate(z1 * z2) = conjugate(z2) * conjugate(z1)
+/// ```
+fn prop_complex_conjugation_transposes_products<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+where
+    S: SimdScalarSigned
+{
+    (z1 * z2).conjugate() == z2.conjugate() * z1.conjugate()
+}
+
+
+
+
+
+
+/*
 /// Generate property tests for complex number arithmetic over exact scalars. We 
 /// define an exact scalar type as a type where scalar arithmetic is 
 /// exact (e.g. integers).
@@ -156,8 +648,68 @@ macro_rules! exact_arithmetic_props {
 exact_arithmetic_props!(complex_f64_arithmetic_props, f64, any_complex);
 exact_arithmetic_props!(complex_i32_arithmetic_props, i32, any_complex);
 exact_arithmetic_props!(complex_u32_arithmetic_props, u32, any_complex);
+*/
+
+/// Generate property tests for complex number arithmetic over exact scalars. We 
+/// define an exact scalar type as a type where scalar arithmetic is 
+/// exact (e.g. integers).
+///
+/// ### Macro Parameters
+///
+/// The macro parameters are the following:
+/// * `$TestModuleName` is a name we give to the module we place the property 
+///    tests in to separate them from each other for each scalar type to prevent 
+///    namespace collisions.
+/// * `$ScalarType` denotes the underlying system of numbers that compose the 
+///    set of complex numbers.
+/// * `$Generator` is the name of a function or closure for generating examples.
+macro_rules! exact_arithmetic_props {
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, properties:[]) => {
+        #[cfg(test)]
+        mod $TestModuleName {
+
+        }
+    };
+    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, properties:[$($PropName:ident),*]) => {
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            use cglinalg_core::{
+                Complex,
+            };
+            use super::{
+                $Generator,
+            };
 
 
+            proptest! {
+                $(
+                #[test]
+                fn $PropName(_z in $Generator()) {
+                    let z: Complex<$ScalarType> = _z;
+                    let result = super::$PropName(z);
+
+                    prop_assert!(result);
+                })
+                *
+            }
+        }
+    };
+}
+
+exact_arithmetic_props!(complex_f64_arithmetic_props, f64, any_complex, properties: [
+    prop_zero_times_complex_equals_zero,
+    prop_complex_times_zero_equals_zero,
+    prop_complex_plus_zero_equals_complex,
+    prop_zero_plus_complex_equals_complex,
+    prop_one_times_complex_equal_complex,
+    prop_complex_times_one_equals_complex
+]);
+exact_arithmetic_props!(complex_i32_arithmetic_props, i32, any_complex, properties: []);
+exact_arithmetic_props!(complex_u32_arithmetic_props, u32, any_complex, properties: []);
+
+
+/*
 /// Generate property tests for complex number arithmetic over floating point scalars.
 ///
 /// ### Macro Parameters
@@ -275,8 +827,8 @@ macro_rules! approx_add_props {
 }
 
 approx_add_props!(complex_f64_add_props, f64, any_complex, 1e-7);
-
-
+*/
+/*
 /// Generate property tests for complex number arithmetic over exact scalars.
 ///
 /// ### Macro Parameters
@@ -390,8 +942,8 @@ macro_rules! exact_add_props {
 
 exact_add_props!(complex_i32_add_props, i32, any_complex);
 exact_add_props!(complex_u32_add_props, u32, any_complex);
-
-
+*/
+/*
 /// Generate property tests for complex number subtraction over floating point scalars.
 ///
 /// ### Macro Parameters
@@ -568,8 +1120,8 @@ macro_rules! exact_sub_props {
 
 exact_sub_props!(complex_i32_sub_props, i32, any_complex);
 exact_sub_props!(complex_u32_sub_props, u32, any_complex);
-
-
+*/
+/*
 /// Generate property tests for complex number multiplication over floating point 
 /// scalars.
 ///
@@ -774,8 +1326,8 @@ macro_rules! exact_mul_props {
 
 exact_mul_props!(complex_i32_mul_props, i32, any_complex);
 exact_mul_props!(complex_u32_mul_props, u32, any_complex);
-
-
+*/
+/*
 /// Generate property tests for complex number distribution over exact scalars.
 ///
 /// ### Macro Parameters
@@ -893,8 +1445,8 @@ macro_rules! exact_distributive_props {
 
 exact_distributive_props!(complex_i32_distributive_props, i32, any_complex);
 exact_distributive_props!(complex_u32_distributive_props, u32, any_complex);
-
-
+*/
+/*
 /// Generate property tests for complex number conjugation over floating point scalars.
 ///
 /// ### Macro Parameters
@@ -1013,7 +1565,7 @@ macro_rules! exact_conjugation_props {
 
 exact_conjugation_props!(complex_i32_conjugation_props, i32, any_complex);
 exact_conjugation_props!(complex_i64_conjugation_props, i64, any_complex);
-
+*/
 
 fn any_complex_modulus_squared_f64<S>() -> impl Strategy<Value = Complex<f64>> {
     use cglinalg_core::Radians;
@@ -1029,6 +1581,45 @@ fn any_complex_modulus_squared_f64<S>() -> impl Strategy<Value = Complex<f64>> {
     .no_shrink()
 }
 
+
+/// The squared modulus of a complex number is nonnegative. 
+///
+/// Given a complex number `z`
+/// ```text
+/// modulus_squared(z) >= 0
+/// ```
+fn prop_modulus_squared_nonnegative<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let zero = num_traits::zero();
+
+    z.modulus_squared() >= zero
+}
+
+/// The squared modulus function is point separating. In particular, if 
+/// the squared distance between two complex numbers `z1` and `z2` is 
+/// zero, then `z1 = z2`.
+///
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// modulus_squared(z1 - z2) = 0 => z1 = z2 
+/// ```
+/// Equivalently, if `z1` is not equal to `z2`, then their squared distance is 
+/// nonzero
+/// ```text
+/// z1 != z2 => modulus_squared(z1 - z2) != 0
+/// ```
+/// For the sake of testability, we use the second form to test the 
+/// norm function.
+fn prop_modulus_squared_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, output_tolerance: S) -> bool 
+where
+    S: SimdScalar
+{
+    // prop_assume!(relative_ne!(z1, z2, epsilon = $input_tolerance));
+    (z1 - z2).modulus_squared() > output_tolerance
+}
+/*
 /// Generate property tests for the complex number squared modulus.
 ///
 /// ### Macro Parameters
@@ -1104,8 +1695,33 @@ macro_rules! approx_modulus_squared_props {
 }
 
 approx_modulus_squared_props!(complex_f64_modulus_squared_props, f64, any_complex_modulus_squared_f64, any_scalar, 1e-10, 1e-20);
+*/
 
+/// The [`Complex::magnitude_squared`] function and the [`Complex::modulus_squared`]
+/// function are synonyms. In particular, given a complex number `z`
+/// ```text
+/// magnitude_squared(z) = modulus_squared(z)
+/// ```
+/// where equality is exact.
+fn prop_magnitude_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> bool
+where
+    S: SimdScalar
+{
+    z.magnitude_squared() == z.modulus_squared()
+}
 
+/// The [`Complex::norm_squared`] function and the [`Complex::modulus_squared`]
+/// functions are synonyms. In particular, given a complex number `z`
+/// ```text
+/// norm_squared(z) = modulus_squared(z)
+/// ```
+fn prop_norm_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    z.norm_squared() == z.modulus_squared()
+}
+/*
 /// Generate property tests for complex number squared modulus.
 ///
 /// ### Macro Parameters
@@ -1153,7 +1769,7 @@ macro_rules! approx_modulus_squared_synonym_props {
 }
 
 approx_modulus_squared_synonym_props!(complex_f64_modulus_squared_synonym_props, f64, any_complex);
-
+*/
 
 fn any_complex_modulus_squared_i32<S>() -> impl Strategy<Value = Complex<i32>> {
     any::<(i32, i32)>().prop_map(|(_re, _im)| {
@@ -1182,7 +1798,44 @@ fn any_complex_modulus_squared_u32<S>() -> impl Strategy<Value = Complex<u32>> {
     })
     .no_shrink()
 }
+/*
+/// The squared modulus of a complex number is nonnegative. 
+///
+/// Given a complex number `z`
+/// ```text
+/// modulus_squared(z) >= 0
+/// ```
+fn prop_modulus_squared_nonnegative<S>(z: Complex<S>) {
+    let zero = num_traits::zero();
 
+    prop_assert!(z.modulus_squared() >= zero);
+}
+*/
+/// The squared modulus function is point separating. In particular, if 
+/// the squared distance between two complex numbers `z1` and `z2` is 
+/// zero, then `z1 = z2`.
+///
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// modulus_squared(z1 - z2) = 0 => z1 = z2 
+/// ```
+/// Equivalently, if `z1` is not equal to `z2`, then their squared distance is 
+/// nonzero
+/// ```text
+/// z1 != z2 => modulus_squared(z1 - z2) != 0
+/// ```
+/// For the sake of testability, we use the second form to test the 
+/// norm function.
+fn prop_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+where
+    S: SimdScalar
+{
+    let zero = num_traits::zero();
+
+    // prop_assume!(z1 != z2);
+    (z1 - z2).modulus_squared() != zero
+}
+/*
 /// Generate property tests for the complex number squared modulus.
 ///
 /// ### Macro Parameters
@@ -1253,8 +1906,8 @@ macro_rules! exact_modulus_squared_props {
 
 exact_modulus_squared_props!(complex_i32_modulus_squared_props, i32, any_complex_modulus_squared_i32, any_scalar);
 exact_modulus_squared_props!(complex_u32_modulus_squared_props, u32, any_complex_modulus_squared_u32, any_scalar);
-
-
+*/
+/*
 /// Generate property tests for complex number squared modulus.
 ///
 /// ### Macro Parameters
@@ -1303,8 +1956,48 @@ macro_rules! exact_modulus_squared_synonym_props {
 
 exact_modulus_squared_synonym_props!(complex_i32_modulus_squared_synonym_props, i32, any_complex);
 exact_modulus_squared_synonym_props!(complex_u32_modulus_squared_synonym_props, u32, any_complex);
+*/
+/// The modulus of a complex number is nonnegative. 
+///
+/// Given a complex number `z`
+/// ```text
+/// modulus(z) >= 0
+/// ```
+fn prop_modulus_nonnegative<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let zero = num_traits::zero();
 
+    z.modulus() >= zero
+}
 
+/// The modulus function is point separating. In particular, if 
+/// the distance between two complex numbers `z1` and `z2` is 
+/// zero, then `z1 = z2`.
+///
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// modulus(z1 - z2) = 0 => z1 = z2 
+/// ```
+/// Equivalently, if `z1` is not equal to `z2`, then their distance is 
+/// nonzero
+/// ```text
+/// z1 != z2 => modulus(z1 - z2) != 0
+/// ```
+/// For the sake of testability, we use the second form to test the 
+/// norm function.
+fn prop_modulus_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let zero = num_traits::zero();
+
+    // prop_assume!(relative_ne!(z1, z2, epsilon = $tolerance));
+    relative_ne!((z1 - z2).modulus(), zero, epsilon = tolerance)
+}
+
+/*
 /// Generate property tests for the complex number modulus.
 ///
 /// ### Macro Parameters
@@ -1379,8 +2072,46 @@ macro_rules! modulus_props {
 }
 
 modulus_props!(complex_f64_modulus_props, f64, any_complex, any_scalar, 1e-8);
+*/
+/// The [`Complex::magnitude`] function and the [`Complex::modulus`] function 
+/// are synonyms. In particular, given a complex number `z`
+/// ```text
+/// magnitude(z) = norm(z)
+/// ```
+/// where equality is exact.
+fn prop_magnitude_modulus_synonyms<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalarFloat
+{
+    z.magnitude() == z.modulus()
+}
 
+/// The [`Complex::norm`] function and the [`Complex::modulus`] function
+/// are synonyms. In particular, given a complex number `z`
+/// ```text
+/// norm(z) = modulus(z)
+/// ```
+/// where equality is exact.
+fn prop_norm_modulus_synonyms<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalarFloat
+{
+    z.norm() == z.modulus()
+}
 
+/// The [`Complex::l2_norm`] function and the [`Complex::modulus`] function
+/// are synonyms. In particular, given a complex number `z`
+/// ```text
+/// l2_norm(z) = modulus(z)
+/// ```
+/// where equality is exact.
+fn prop_l2_norm_modulus_synonyms<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalarFloat
+{
+    z.l2_norm() == z.modulus()
+}
+/*
 /// Generate property tests for complex number norms.
 ///
 /// ### Macro Parameters
@@ -1440,8 +2171,45 @@ macro_rules! modulus_synonym_props {
 }
 
 modulus_synonym_props!(complex_f64_modulus_synonym_props, f64, any_complex);
+*/
+/// The **L1** norm of a complex number is nonnegative. 
+///
+/// Given a complex number `z`
+/// ```text
+/// l1_norm(z) >= 0
+/// ```
+fn prop_l1_norm_nonnegative<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let zero = num_traits::zero();
 
+    z.l1_norm() >= zero
+}
 
+/// The **L1** norm function is point separating. In particular, if 
+/// the distance between two complex numbers `z1` and `z2` is 
+/// zero, then `z1 = z2`.
+///
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// l1_norm(z1 - z2) = 0 => z1 = z2 
+/// ```
+/// Equivalently, if `z1` is not equal to `z2`, then their distance is 
+/// nonzero
+/// ```text
+/// z1 != z2 => l1_norm(z1 - z2) != 0
+/// ```
+/// For the sake of testability, we use the second form to test the 
+/// norm function.
+fn prop_l1_norm_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    // prop_assume!(relative_ne!(z1, z2, epsilon = $tolerance));
+    (z1 - z2).l1_norm() > tolerance
+}
+/*
 /// Generate property tests for the complex number **L1** norm.
 ///
 /// ### Macro Parameters
@@ -1515,8 +2283,33 @@ macro_rules! approx_l1_norm_props {
 }
 
 approx_l1_norm_props!(complex_f64_l1_norm_props, f64, any_complex, any_scalar, 1e-8);
+*/
 
+/// The **L1** norm function is point separating. In particular, if 
+/// the distance between two complex numbers `z1` and `z2` is 
+/// zero, then `z1 = z2`.
+///
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// l1_norm(z1 - z2) = 0 => z1 = z2 
+/// ```
+/// Equivalently, if `z1` is not equal to `z2`, then their distance is 
+/// nonzero
+/// ```text
+/// z1 != z2 => l1_norm(z1 - z2) != 0
+/// ```
+/// For the sake of testability, we use the second form to test the 
+/// norm function.
+fn prop_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+where 
+    S: SimdScalarFloat
+{    
+    let zero = num_traits::zero();
 
+    // prop_assume!(z1 != z2);
+    (z1 - z2).l1_norm() == zero
+}
+/*
 /// Generate property tests for the complex number **L1** norm.
 ///
 /// ### Macro Parameters
@@ -1586,7 +2379,7 @@ macro_rules! exact_l1_norm_props {
 }
 
 exact_l1_norm_props!(complex_i32_l1_norm_props, i32, any_complex, any_scalar);
-
+*/
 
 /*
 fn imaginary_from_range<S>(min_value: S, max_value: S) -> Box<dyn Fn() -> proptest::strategy::NoShrink<proptest::strategy::Map<RangeInclusive<S>, Box<dyn Fn(S) -> Complex<S>>>>>
@@ -1633,7 +2426,38 @@ where
         .no_shrink()
 }
 
+/// The square of the positive square root of a complex number is the original
+/// complex number.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// sqrt(z) * sqrt(z) == z
+/// ```
+fn prop_positive_square_root_squared<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let sqrt_z = z.sqrt();
 
+    relative_eq!(sqrt_z * sqrt_z, z, epsilon = tolerance, max_relative = tolerance)
+}
+
+/// The square of the negative square root of a complex number is the original
+/// complex number.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// -sqrt(z) * -sqrt(z) == z
+/// ```
+fn prop_negative_square_root_squared<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let minus_sqrt_z = -z.sqrt();
+
+    relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = tolerance, max_relative = tolerance)
+}
+/*
 /// Generate property tests for complex number square roots.
 ///
 /// ### Macro Parameters
@@ -1700,14 +2524,37 @@ macro_rules! sqrt_props {
     }
     }
 }
-
+*/
 fn sqrt_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64))
 }
-
+/*
 sqrt_props!(complex_f64_sqrt_props, f64, sqrt_strategy_f64, any_scalar, 1e-10);
+*/
+
+fn prop_cos_real_equals_cos_real<S>(z: Complex<S>, tolerance: S) -> bool
+where 
+    S: SimdScalarFloat
+{
+    let re_z = z.real();
+    let z_re = Complex::from_real(re_z);
+
+    relative_eq!(z_re.cos().real(), re_z.cos(), epsilon = tolerance)
+}
 
 
+fn prop_cos_imaginary_equals_imaginary_cosh<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let im_z = z.imaginary(); 
+    let lhs = Complex::cos(Complex::from_imaginary(im_z));
+    let rhs = Complex::cosh(Complex::from_real(im_z));
+
+    relative_eq!(lhs, rhs, epsilon = tolerance)
+}
+
+/*
 /// Generate property tests for complex number trigonometry.
 ///
 /// ### Macro Parameters
@@ -1766,14 +2613,33 @@ macro_rules! complex_cos_props {
     }
     }
 }
-
+*/
 fn cos_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
     imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
-
+/*
 complex_cos_props!(complex_f64_cos_props, f64, cos_strategy_f64, any_scalar, 1e-10);
+*/
+fn prop_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let re_z = z.real();
+    let z_re = Complex::from_real(re_z);
 
+    relative_eq!(z_re.sin().real(), re_z.sin(), epsilon = tolerance)
+}
 
+fn prop_sin_imaginary_equals_imaginary_sinh<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let i = Complex::unit_im();
+    let im_z = z.imaginary();
+
+    relative_eq!((i * im_z).sin(), i * im_z.sinh(), epsilon = tolerance)
+}
+/*
 /// Generate property tests for complex number trigonometry.
 ///
 /// ### Macro Parameters
@@ -1831,14 +2697,20 @@ macro_rules! complex_sin_props {
     }
     }
 }
-
+*/
 fn sin_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
     imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
-
+/*
 complex_sin_props!(complex_f64_sin_props, f64, sin_strategy_f64, any_scalar, 1e-10);
-
-
+*/
+fn prop_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    relative_eq!(z.tan().real(), z.real().tan(), epsilon = tolerance)
+}
+/*
 /// Generate property tests for complex number trigonometry.
 ///
 /// ### Macro Parameters
@@ -1881,14 +2753,23 @@ macro_rules! real_tan_props {
     }
     }
 }
-
+*/
 fn tan_strategy_real_f64() -> impl Strategy<Value = Complex<f64>> {
     real_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 real_tan_props!(complex_f64_tan_real_props, f64, tan_strategy_real_f64, any_scalar, 1e-6);
+*/
+fn prop_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let i = Complex::unit_im();
+    let im_z = z.imaginary();
 
-
+    relative_eq!((i * im_z).tan(), i * im_z.tanh(), epsilon = tolerance)
+}
+/*
 /// Generate property tests for complex number trigonometry.
 ///
 /// ### Macro Parameters
@@ -1934,14 +2815,26 @@ macro_rules! imaginary_tan_props {
     }
     }
 }
-
+*/
 fn tan_strategy_imaginary_f64() -> impl Strategy<Value = Complex<f64>> {
     imaginary_from_range(f64::EPSILON, 200_f64)
 }
-
+/*
 imaginary_tan_props!(complex_f64_tan_imaginary_props, f64, tan_strategy_imaginary_f64, any_scalar, 1e-8);
+*/
+fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let two = Complex::from_real(num_traits::cast(2).unwrap());
+    let lhs = (two * z).cos();
+    let cos_z_squared = z.cos().squared();
+    let sin_z_squared = z.sin().squared();
+    let rhs = cos_z_squared - sin_z_squared;
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = tolerance)
+}
+/*
 /// Generate property tests for complex number trigonometry.
 ///
 /// ### Macro Parameters
@@ -1990,14 +2883,25 @@ macro_rules! cos_double_angle_props {
     }
     }
 }
-
+*/
 fn cos_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 cos_double_angle_props!(complex_f64_cos_double_angle_props, f64, cos_double_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool
+where
+    S: SimdScalarFloat
+{
+    let one = Complex::one();
+    let two = one + one;
+    let lhs = (two * z).sin();
+    let rhs = two * z.sin() * z.cos();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number trigonometry.
 ///
 /// ### Macro Parameters
@@ -2044,14 +2948,27 @@ macro_rules! sin_double_angle_props {
     }
     }
 }
-
+*/
 fn sin_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 sin_double_angle_props!(complex_f64_sin_double_angle_props, f64, sin_double_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_tan_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool
+where
+    S: SimdScalarFloat
+{
+    let one = Complex::one();
+    let two = one + one;
+    let tan_two_z = (two * z).tan();
+    let tan_z_squared = z.tan().squared();
+    let lhs = tan_two_z * (one - tan_z_squared);
+    let rhs = two * z.tan();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2101,14 +3018,23 @@ macro_rules! tan_double_angle_props {
     }
     }
 }
-
+*/
 fn tan_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 tan_double_angle_props!(complex_f64_tan_double_angle_props, f64, tan_double_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 + z2).cos();
+    let rhs = z1.cos() * z2.cos() - z1.sin() * z2.sin();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2154,14 +3080,23 @@ macro_rules! cos_angle_sum_props {
     }
     }
 }
-
+*/
 fn cos_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 cos_angle_sum_props!(complex_f64_cos_angle_sum_props, f64, cos_angle_sum_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 + z2).sin();
+    let rhs = z1.sin() * z2.cos() + z1.cos() * z2.sin();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number trigonometry.
 ///
 /// ### Macro Parameters
@@ -2207,14 +3142,24 @@ macro_rules! sin_angle_sum_props {
     }
     }
 }
-
+*/
 fn sin_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 sin_angle_sum_props!(complex_f64_sin_angle_sum_props, f64, sin_angle_sum_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let one = Complex::one();
+    let lhs = (z1 + z2).tan() * (one - z1.tan() * z2.tan());
+    let rhs = z1.tan() + z2.tan();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2261,14 +3206,27 @@ macro_rules! tan_angle_sum_props {
     }
     }
 }
-
+*/
 fn tan_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 tan_angle_sum_props!(complex_f64_tan_angle_sum_props, f64, tan_angle_sum_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalarFloat
+{
+    z.conjugate().cosh() == z.cosh().conjugate()
+}
 
-
+fn prop_cosh_negative_z_equals_negative_cosh_z<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    relative_eq!((-z).cosh(), z.cosh(), epsilon = tolerance)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2316,13 +3274,27 @@ macro_rules! cosh_props {
     }
     }
 }
-
+*/
 fn cosh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
-
+/*
 cosh_props!(complex_f64_cosh_props, f64, cosh_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalarFloat
+{
+    z.conjugate().sinh() == z.sinh().conjugate()
+}
 
+fn prop_sinh_negative_z_equals_negative_sinh_z<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    relative_eq!((-z).sinh(), -z.sinh(), epsilon = tolerance)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2370,14 +3342,27 @@ macro_rules! sinh_props {
     }
     }
 }
-
+*/
 fn sinh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
-
+/*
 sinh_props!(complex_f64_sinh_props, f64, sinh_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> bool 
+where
+    S: SimdScalarFloat
+{
+    z.conjugate().tanh() == z.tanh().conjugate()
+}
 
-
+fn prop_tanh_negative_z_equals_negative_tanh_z<S>(z: Complex<S>, tolerance: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    relative_eq!((-z).tanh(), -z.tanh(), epsilon = tolerance)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2425,14 +3410,25 @@ macro_rules! tanh_props {
     }
     }
 }
-
+*/
 fn tanh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 200_f64)
 }
-
+/*
 tanh_props!(complex_f64_tanh_props, f64, tanh_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_cosh_two_times_angle_equals_two_times_cosh_squared_minus_one<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let one = Complex::one();
+    let two = one + one;
+    let lhs = (two * z).cosh();
+    let rhs = two * z.cosh().squared() - one;
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2477,14 +3473,25 @@ macro_rules! cosh_double_angle_props {
     }
     }
 }
-
+*/
 fn cosh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 200_f64)
 }
-
+/*
 cosh_double_angle_props!(complex_f64_cosh_double_angle_props, f64, cosh_double_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let one = Complex::one();
+    let two = one + one;
+    let lhs = (two * z).sinh();
+    let rhs = two * z.sinh() * z.cosh();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2528,14 +3535,27 @@ macro_rules! sinh_double_angle_props {
     }
     }
 }
-
+*/
 fn sinh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 200_f64)
 }
-
+/*
 sinh_double_angle_props!(complex_f64_sinh_double_angle_props, f64, sinh_double_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let one = Complex::one();
+    let two = one + one;
+    let tanh_two_z = (two * z).tanh();
+    let tanh_z_squared = z.tanh().squared(); 
+    let lhs = tanh_two_z * (one + tanh_z_squared);
+    let rhs = two * z.tanh();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2582,14 +3602,23 @@ macro_rules! tanh_double_angle_props {
     }
     }
 }
-
+*/
 fn tanh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 tanh_double_angle_props!(complex_f64_tanh_double_angle_props, f64, tanh_double_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 + z2).cosh();
+    let rhs = z1.cosh() * z2.cosh() + z1.sinh() * z2.sinh();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2632,14 +3661,23 @@ macro_rules! cosh_angle_sum_props {
     }
     }
 }
-
+*/
 fn cosh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 cosh_angle_sum_props!(complex_f64_cosh_angle_sum_props, f64, cosh_angle_sum_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 + z2).sinh();
+    let rhs = z1.sinh() * z2.cosh() + z1.cosh() * z2.sinh();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2682,14 +3720,24 @@ macro_rules! sinh_angle_sum_props {
     }
     }
 }
-
+*/
 fn sinh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 sinh_angle_sum_props!(complex_f64_sinh_angle_sum_props, f64, sinh_angle_sum_strategy_f64, any_scalar, 1e-8);
+*/
+fn prop_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+where
+    S: SimdScalarFloat
+{
+    let one = Complex::one();
+    let lhs = (z1 + z2).tanh() * (one + z1.tanh() * z2.tanh());
+    let rhs = z1.tanh() + z2.tanh();
 
-
+    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+}
+/*
 /// Generate property tests for complex number hyperbolic trigonometry.
 ///
 /// ### Macro Parameters
@@ -2736,10 +3784,11 @@ macro_rules! tanh_angle_sum_props {
     }
     }
 }
-
+*/
 fn tanh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-
+/*
 tanh_angle_sum_props!(complex_f64_tanh_angle_sum_props, f64, tanh_angle_sum_strategy_f64, any_scalar, 1e-8);
+*/
 
