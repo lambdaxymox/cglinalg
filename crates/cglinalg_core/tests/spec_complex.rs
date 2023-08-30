@@ -164,7 +164,7 @@ where
 /// &z1 +  z2 = &z1 + &z2
 ///  z1 + &z2 = &z1 + &z2
 /// ```
-fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
+fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
@@ -258,36 +258,6 @@ where
     let zero_complex = Complex::zero();
 
     prop_assert_eq!(z - z, zero_complex);
-
-    Ok(())
-}
-
-/// Given complex numbers `z1` and `z2`, we should be able to use `z1` 
-/// and `z2` interchangeably with their references `&z1` and `&z2` 
-/// in arithmetic expressions involving complex numbers.
-///
-/// Given complex numbers `z1` and `z2`, and their references `&z1` 
-/// and `&z2`, they should satisfy
-/// ```text
-///  z1 -  z2 = &z1 -  z2
-///  z1 -  z2 =  z1 - &z2
-///  z1 -  z2 = &z1 - &z2
-///  z1 - &z2 = &z1 -  z2
-/// &z1 -  z2 =  z1 - &z2
-/// &z1 -  z2 = &z1 - &z2
-///  z1 - &z2 = &z1 - &z2
-/// ```
-fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
-where
-    S: SimdScalar
-{
-    prop_assert_eq!( z1 -  z2, &z1 -  z2);
-    prop_assert_eq!( z1 -  z2,  z1 - &z2);
-    prop_assert_eq!( z1 -  z2, &z1 - &z2);
-    prop_assert_eq!( z1 - &z2, &z1 -  z2);
-    prop_assert_eq!(&z1 -  z2,  z1 - &z2);
-    prop_assert_eq!(&z1 -  z2, &z1 - &z2);
-    prop_assert_eq!( z1 - &z2, &z1 - &z2);
 
     Ok(())
 }
@@ -751,32 +721,6 @@ fn any_complex_modulus_squared_i32() -> impl Strategy<Value = Complex<i32>> {
     .no_shrink()
 }
 
-fn any_complex_modulus_squared_u32<S>() -> impl Strategy<Value = Complex<u32>> {
-    any::<(u32, u32)>().prop_map(|(_re, _im)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(u32::MAX as f64)) as u32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 2;
-        let re = min_value + (_re % (max_value - min_value + 1));
-        let im = min_value + (_im % (max_value - min_value + 1));
-
-        Complex::new(re, im)
-    })
-    .no_shrink()
-}
-/*
-/// The squared modulus of a complex number is nonnegative. 
-///
-/// Given a complex number `z`
-/// ```text
-/// modulus_squared(z) >= 0
-/// ```
-fn prop_modulus_squared_nonnegative<S>(z: Complex<S>) {
-    let zero = num_traits::zero();
-
-    prop_assert!(z.modulus_squared() >= zero);
-}
-*/
 /// The squared modulus function is point separating. In particular, if 
 /// the squared distance between two complex numbers `z1` and `z2` is 
 /// zero, then `z1 = z2`.
@@ -1100,71 +1044,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! complex_sin_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use super::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_sin_real_equals_sin_real(z in $Generator()) {
-                let re_z = z.real();
-                let z_re = Complex::from_real(re_z);
-
-                prop_assert!(
-                    relative_eq!(z_re.sin().real(), re_z.sin(), epsilon = $tolerance),
-                    "z = {}; re(z) = {}; sin(re(z)) = {}; sin(z_re) = {}",
-                    z, re_z, re_z.cos(), z_re.cos()
-                );
-            }
-
-            #[test]
-            fn prop_sin_imaginary_equals_imaginary_sinh(z in $Generator()) {
-                let i = Complex::unit_im();
-                let im_z = z.imaginary();
-
-                prop_assert!(
-                    relative_eq!((i * im_z).sin(), i * im_z.sinh(), epsilon = $tolerance),
-                    "z = {}; im_z = {}; sin(i * im_z) = {}, i * sinh(im_z) = {}",
-                    z, im_z, (i * im_z).sin(), i * im_z.sinh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn sin_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
     imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
-/*
-complex_sin_props!(complex_f64_sin_props, f64, sin_strategy_f64, any_scalar, 1e-10);
-*/
+
 fn prop_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1173,56 +1057,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! real_tan_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_tan_real_equals_real_tan(z in $Generator()) {
-                prop_assert!(
-                    relative_eq!(z.tan().real(), z.real().tan(), epsilon = $tolerance),
-                    "z = {}; z.tan() = {}; z.tan().real() = {}; z.real().tan() = {}",
-                    z, z.tan(), z.tan().real(), z.real().tan()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn tan_strategy_real_f64() -> impl Strategy<Value = Complex<f64>> {
     real_from_range(f64::EPSILON, 100_f64)
 }
-/*
-real_tan_props!(complex_f64_tan_real_props, f64, tan_strategy_real_f64, any_scalar, 1e-6);
-*/
+
 fn prop_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1234,59 +1073,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! imaginary_tan_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_tan_imaginary_equals_imaginary_tanh(z in $Generator()) {
-                let i = Complex::unit_im();
-                let im_z = z.imaginary();
-
-                prop_assert!(
-                    relative_eq!((i * im_z).tan(), i * im_z.tanh(), epsilon = $tolerance),
-                    "z = {}; (i * im_z).tan() = {}; i * im_z.tanh() = {}",
-                    z, (i * im_z).tan(), i * im_z.tanh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn tan_strategy_imaginary_f64() -> impl Strategy<Value = Complex<f64>> {
     imaginary_from_range(f64::EPSILON, 200_f64)
 }
-/*
-imaginary_tan_props!(complex_f64_tan_imaginary_props, f64, tan_strategy_imaginary_f64, any_scalar, 1e-8);
-*/
+
 fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1301,63 +1092,12 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! cos_double_angle_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z in $Generator()) {
-                let two: $ScalarType = num_traits::cast(2).unwrap();
-                let lhs = (two * z).cos();
-                let cos_z_squared = z.cos().squared();
-                let sin_z_squared = z.sin().squared();
-                let rhs = cos_z_squared - sin_z_squared;
-
-                prop_assert!(
-                    relative_eq!(lhs, rhs, epsilon = $tolerance, max_relative = 1e-12),
-                    "z = {}; cos(2 * z) = {}; cos(z) * cos(z) - sin(z) * sin(z) = {}",
-                    z, lhs, rhs
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn cos_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-cos_double_angle_props!(complex_f64_cos_double_angle_props, f64, cos_double_strategy_f64, any_scalar, 1e-8);
-*/
-fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool
+
+fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1366,63 +1106,16 @@ where
     let lhs = (two * z).sin();
     let rhs = two * z.sin() * z.cos();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
-/*
-/// Generate property tests for complex number trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! sin_double_angle_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z in $Generator()) {
-                let two: $ScalarType = num_traits::cast(2_f64).unwrap();
-                let lhs = (two * z).sin();
-                let rhs = two * z.sin() * z.cos();
-
-                prop_assert!(
-                    relative_eq!(lhs, rhs, epsilon = $tolerance, max_relative = 1e-12),
-                    "z = {}; sin(2 * z) = {}; 2 * sin(z) * cos(z) = {}",
-                    z, lhs, rhs
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn sin_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-sin_double_angle_props!(complex_f64_sin_double_angle_props, f64, sin_double_strategy_f64, any_scalar, 1e-8);
-*/
-fn prop_tan_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool
+
+fn prop_tan_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1433,65 +1126,15 @@ where
     let lhs = tan_two_z * (one - tan_z_squared);
     let rhs = two * z.tan();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! tan_double_angle_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_tan_two_times_angle(z in $Generator()) {
-                let one: $ScalarType = num_traits::cast(1).unwrap();
-                let two = one + one;
-                let tan_two_z = (two * z).tan();
-                let tan_z_squared = z.tan().squared();
-                let lhs = tan_two_z * (one - tan_z_squared);
-                let rhs = two * z.tan();
-
-                prop_assert!(
-                    relative_eq!(lhs, rhs, epsilon = $tolerance, max_relative = 1e-10),
-                    "z = {}; tan(2 * z) = {}; tan(2 * z) * (1 + tan(z) * tan(z)) = {}; 2 * tan(z) = {}",
-                    z, tan_two_z, lhs, rhs
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn tan_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-tan_double_angle_props!(complex_f64_tan_double_angle_props, f64, tan_double_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1503,59 +1146,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! cos_angle_sum_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_cos_angle_sum(z1 in $Generator(), z2 in $Generator()) {
-                let lhs = (z1 + z2).cos();
-                let rhs = z1.cos() * z2.cos() - z1.sin() * z2.sin();
-
-                prop_assert!(
-                    relative_eq!(lhs, rhs, epsilon = $tolerance, max_relative = 1e-10),
-                    "z1 = {}; z2 = {}; cos(z1 + z2) = {}; cos(z1) * cos(z2) - sin(z1) * sin(z2) = {}",
-                    z1, z2, lhs, rhs
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn cos_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-cos_angle_sum_props!(complex_f64_cos_angle_sum_props, f64, cos_angle_sum_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1567,59 +1162,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! sin_angle_sum_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_sin_angle_sum(z1 in $Generator(), z2 in $Generator()) {
-                let lhs = (z1 + z2).sin();
-                let rhs = z1.sin() * z2.cos() + z1.cos() * z2.sin();
-
-                prop_assert!(
-                    relative_eq!(lhs, rhs, epsilon = $tolerance, max_relative = 1e-10),
-                    "z1 = {}; z2 = {}, cos(z1 + z2) = {}; sin(z1) * cos(z2) + cos(z1) * sin(z2) = {}",
-                    z1, z2, lhs, rhs
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn sin_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-sin_angle_sum_props!(complex_f64_sin_angle_sum_props, f64, sin_angle_sum_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1632,60 +1179,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! tan_angle_sum_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_tan_angle_sum(z1 in $Generator(), z2 in $Generator()) {
-                let one = Complex::one();
-                let lhs = (z1 + z2).tan() * (one - z1.tan() * z2.tan());
-                let rhs = z1.tan() + z2.tan();
-
-                prop_assert!(
-                    relative_eq!(lhs, rhs, epsilon = $tolerance, max_relative = 1e-10),
-                    "z1 = {}; z2 = {}, tan(z1 + z2) * (1 - tan(z1) * tan(z2)) = {}; tan(z1) + tan(z2) = {}",
-                    z1, z2, lhs, rhs
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn tan_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-tan_angle_sum_props!(complex_f64_tan_angle_sum_props, f64, tan_angle_sum_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1703,61 +1201,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! cosh_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_cosh_conjugate_z_equals_conjugate_cosh_z(z in $Generator()) {
-                prop_assert_eq!(z.conjugate().cosh(), z.cosh().conjugate());
-            }
-
-            #[test]
-            fn prop_cosh_negative_z_equals_negative_cosh_z(z in $Generator()) {
-                prop_assert!(
-                    relative_eq!((-z).cosh(), z.cosh(), epsilon = $tolerance),
-                    "z = {}; z.cosh() = {}; (-z).cosh() = {}; -z.cosh() = {}",
-                    z, z.cosh(), (-z).cosh(), -z.cosh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn cosh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
-/*
-cosh_props!(complex_f64_cosh_props, f64, cosh_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1775,61 +1223,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! sinh_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_sinh_conjugate_z_equals_conjugate_sinh_z(z in $Generator()) {
-                prop_assert_eq!(z.conjugate().sinh(), z.sinh().conjugate());
-            }
-
-            #[test]
-            fn prop_sinh_negative_z_equals_negative_sinh_z(z in $Generator()) {
-                prop_assert!(
-                    relative_eq!((-z).sinh(), -z.sinh(), epsilon = $tolerance),
-                    "z = {}; z.sinh() = {}; (-z).sinh() = {}; -z.sinh() = {}",
-                    z, z.sinh(), (-z).sinh(), -z.sinh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn sinh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
-/*
-sinh_props!(complex_f64_sinh_props, f64, sinh_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1847,61 +1245,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! tanh_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_tanh_conjugate_z_equals_conjugate_tanh_z(z in $Generator()) {
-                prop_assert_eq!(z.conjugate().tanh(), z.tanh().conjugate());
-            }
-
-            #[test]
-            fn prop_tanh_negative_z_equals_negative_tanh_z(z in $Generator()) {
-                prop_assert!(
-                    relative_eq!((-z).tanh(), -z.tanh(), epsilon = $tolerance),
-                    "z = {}; z.tanh() = {}; (-z).tanh() = {}; -z.tanh() = {}",
-                    z, z.tanh(), (-z).tanh(), -z.tanh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn tanh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 200_f64)
 }
-/*
-tanh_props!(complex_f64_tanh_props, f64, tanh_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_cosh_two_times_angle_equals_two_times_cosh_squared_minus_one<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1915,58 +1263,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! cosh_double_angle_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_cosh_two_times_angle_equals_two_times_cosh_squared_minus_one(z in $Generator()) {
-                let one = Complex::one();
-                let two: $ScalarType = num_traits::cast(2).unwrap();
-                prop_assert!(
-                    relative_eq!((two * z).cosh(), two * z.cosh().squared() - one, epsilon = $tolerance, max_relative = 1e-12),
-                    "z = {}; sinh(two * z) = {}; two * sinh(z) * cosh(z) = {}",
-                    z, (two * z).sinh(), two * z.cosh().squared()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn cosh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 200_f64)
 }
-/*
-cosh_double_angle_props!(complex_f64_cosh_double_angle_props, f64, cosh_double_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1980,57 +1281,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! sinh_double_angle_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh(z in $Generator()) {
-                let two: $ScalarType = num_traits::cast(2_f64).unwrap();
-                prop_assert!(
-                    relative_eq!((two * z).sinh(), two * z.sinh() * z.cosh(), epsilon = $tolerance, max_relative = 1e-12),
-                    "z = {}; sinh(two * z) = {}; two * sinh(z) * cosh(z) = {}",
-                    z, (two * z).sinh(), two * z.sinh() * z.cosh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn sinh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 200_f64)
 }
-/*
-sinh_double_angle_props!(complex_f64_sinh_double_angle_props, f64, sinh_double_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -2046,60 +1301,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! tanh_double_angle_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_tanh_two_times_angle(z in $Generator()) {
-                let one: $ScalarType = num_traits::cast(1).unwrap();
-                let two = one + one;
-                let tanh_two_z = (two * z).tanh();
-                let tanh_z_squared = z.tanh().squared(); 
-                prop_assert!(
-                    relative_eq!(tanh_two_z * (one + tanh_z_squared), two * z.tanh(), epsilon = $tolerance, max_relative = 1e-12),
-                    "z = {}; tanh(2 * z) = {}; tanh(2 * z) * (1 + tanh(z) * tanh(z)) = {}; 2 * tanh(z) = {}",
-                    z, tanh_two_z, tanh_two_z * (one + tanh_z_squared), two * z.tanh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn tanh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-tanh_double_angle_props!(complex_f64_tanh_double_angle_props, f64, tanh_double_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -2111,56 +1317,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! cosh_angle_sum_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_cosh_angle_sum(z1 in $Generator(), z2 in $Generator()) {
-                prop_assert!(
-                    relative_eq!((z1 + z2).cosh(), z1.cosh() * z2.cosh() + z1.sinh() * z2.sinh(), epsilon = $tolerance, max_relative = 1e-10),
-                    "z1 = {}; z2 = {}; cosh(z1 + z2) = {}; cosh(z1) * cosh(z2) + sinh(z1) * sinh(z2) = {}",
-                    z1, z2, (z1 + z2).cosh(), z1.cosh() * z2.cosh() + z1.sinh() * z2.sinh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn cosh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-cosh_angle_sum_props!(complex_f64_cosh_angle_sum_props, f64, cosh_angle_sum_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -2172,56 +1333,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! sinh_angle_sum_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_sinh_angle_sum(z1 in $Generator(), z2 in $Generator()) {
-                prop_assert!(
-                    relative_eq!((z1 + z2).sinh(), z1.sinh() * z2.cosh() + z1.cosh() * z2.sinh(), epsilon = $tolerance, max_relative = 1e-10),
-                    "z1 = {}; z2 = {}, cosh(z1 + z2) = {}; sinh(z1) * cosh(z2) + cosh(z1) * sinh(z2) = {}",
-                    z1, z2, (z1 + z2).sinh(), z1.sinh() * z2.cosh() + z1.cosh() * z2.sinh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn sinh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-sinh_angle_sum_props!(complex_f64_sinh_angle_sum_props, f64, sinh_angle_sum_strategy_f64, any_scalar, 1e-8);
-*/
+
 fn prop_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -2234,60 +1350,11 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number hyperbolic trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! tanh_angle_sum_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use crate::{
-            $Generator,
-        };
 
-
-        proptest! {
-            #[test]
-            fn prop_tanh_angle_sum(z1 in $Generator(), z2 in $Generator()) {
-                let one = Complex::one();
-                let lhs = (z1 + z2).tanh() * (one + z1.tanh() * z2.tanh());
-                let rhs = z1.tanh() + z2.tanh();
-
-                prop_assert!(
-                    relative_eq!(lhs, rhs, epsilon = $tolerance, max_relative = 1e-10),
-                    "z1 = {}; z2 = {}, tanh(z1 + z2) = {}; tanh(z1 + z2) * (1 + tanh(z1) * tanh(z2)) = {}; tanh(z1) + tanh(z2) = {}",
-                    z1, z2, (z1 + z2).tanh(), (z1 + z2).tanh() * (one + z1.tanh() * z2.tanh()), z1.tanh() + z2.tanh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn tanh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, 100_f64)
 }
-/*
-tanh_angle_sum_props!(complex_f64_tanh_angle_sum_props, f64, tanh_angle_sum_strategy_f64, any_scalar, 1e-8);
-*/
+
 
 
 #[cfg(test)]
@@ -2394,7 +1461,7 @@ mod complex_f64_add_props {
         fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex(z1 in super::any_complex(), z2 in super::any_complex()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex(z1, z2)?
+            super::prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1, z2)?
         }
 
         #[test]
@@ -2434,7 +1501,7 @@ mod complex_i32_add_props {
         fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1 in super::any_complex(), z2 in super::any_complex()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex(z1, z2)?
+            super::prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1, z2)?
         }
 
         #[test]
@@ -2868,6 +1935,252 @@ mod complex_f64_cos_props {
         fn prop_cos_imaginary_equals_imaginary_cosh(z in super::cos_strategy_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_cos_imaginary_equals_imaginary_cosh(z, 1e-10)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_sin_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_sin_real_equals_sin_real(z in super::sin_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_sin_real_equals_sin_real(z, 1e-10)?
+        }
+
+        #[test]
+        fn prop_sin_imaginary_equals_imaginary_sinh(z in super::sin_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_sin_imaginary_equals_imaginary_sinh(z, 1e-10)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_tan_real_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_tan_real_equals_real_tan(z in super::tan_strategy_real_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_tan_real_equals_real_tan(z, 1e-6)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_tan_imaginary_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_tan_imaginary_equals_imaginary_tanh(z in super::tan_strategy_imaginary_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_tan_imaginary_equals_imaginary_tanh(z, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_cos_double_angle_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z in super::cos_double_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_sin_double_angle_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z in super::sin_double_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z, 1e-8, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_tan_double_angle_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_tan_two_times_angle(z in super::tan_double_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_tan_two_times_angle(z, 1e-8, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_cos_angle_sum_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_cos_angle_sum(z1 in super::cos_angle_sum_strategy_f64(), z2 in super::cos_angle_sum_strategy_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_cos_angle_sum(z1, z2, 1e-8, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_sin_angle_sum_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_sin_angle_sum(z1 in super::sin_angle_sum_strategy_f64(), z2 in super::sin_angle_sum_strategy_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_sin_angle_sum(z1, z2, 1e-8, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_tan_angle_sum_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_tan_angle_sum(z1 in super::tan_angle_sum_strategy_f64(), z2 in super::tan_angle_sum_strategy_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_tan_angle_sum(z1, z2, 1e-8, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_cosh_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_cosh_conjugate_z_equals_conjugate_cosh_z(z in super::cosh_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_cosh_conjugate_z_equals_conjugate_cosh_z(z)?
+        }
+
+        #[test]
+        fn prop_cosh_negative_z_equals_negative_cosh_z(z in super::cosh_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_cosh_negative_z_equals_negative_cosh_z(z, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_sinh_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_sinh_conjugate_z_equals_conjugate_sinh_z(z in super::sinh_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_sinh_conjugate_z_equals_conjugate_sinh_z(z)?
+        }
+
+        #[test]
+        fn prop_sinh_negative_z_equals_negative_sinh_z(z in super::sinh_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_sinh_negative_z_equals_negative_sinh_z(z, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_tanh_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_tanh_conjugate_z_equals_conjugate_tanh_z(z in super::tanh_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_tanh_conjugate_z_equals_conjugate_tanh_z(z)?
+        }
+
+        #[test]
+        fn prop_tanh_negative_z_equals_negative_tanh_z(z in super::tanh_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_tanh_negative_z_equals_negative_tanh_z(z, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_cosh_double_angle_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_cosh_two_times_angle_equals_two_times_cosh_squared_minus_one(z in super::cosh_double_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_cosh_two_times_angle_equals_two_times_cosh_squared_minus_one(z, 1e-8, 1e-12)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_sinh_double_angle_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh(z in super::sinh_double_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_sinh_two_times_angle_equals_two_times_sinh_cosh(z, 1e-8, 1e-12)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_tanh_double_angle_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_tanh_two_times_angle(z in super::tanh_double_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_tanh_two_times_angle(z, 1e-8, 1e-12)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_cosh_angle_sum_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_cosh_angle_sum(z1 in super::cosh_angle_sum_strategy_f64(), z2 in super::cosh_angle_sum_strategy_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_cosh_angle_sum(z1, z2, 1e-8, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_sinh_angle_sum_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_sinh_angle_sum(z1 in super::sinh_angle_sum_strategy_f64(), z2 in super::sinh_angle_sum_strategy_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_sinh_angle_sum(z1, z2, 1e-8, 1e-8)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_tanh_angle_sum_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_tanh_angle_sum(z1 in super::tanh_angle_sum_strategy_f64(), z2 in super::tanh_angle_sum_strategy_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_tanh_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
     }
 }
