@@ -70,20 +70,6 @@ fn any_complex_modulus_squared_i32() -> impl Strategy<Value = Complex<i32>> {
     .no_shrink()
 }
 
-/*
-fn imaginary_from_range<S>(min_value: S, max_value: S) -> Box<dyn Fn() -> proptest::strategy::NoShrink<proptest::strategy::Map<RangeInclusive<S>, Box<dyn Fn(S) -> Complex<S>>>>>
-where 
-    S: SimdScalarFloat + Arbitrary + 'static,
-    RangeInclusive<S>: Strategy<Value = S>
-{
-    Box::new(move || { 
-        let complex_fn: Box<dyn Fn(S) -> Complex<S>> = Box::new(Complex::from_imaginary);
-        
-        (min_value..=max_value).prop_map(complex_fn).no_shrink()
-    })
-}
-*/
-
 fn imaginary_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
 where 
     S: SimdScalarFloat + Arbitrary,
@@ -1271,8 +1257,6 @@ where
 
     Ok(())
 }
-
-
 
 fn prop_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
