@@ -327,30 +327,7 @@ where
 
     Ok(())
 }
-/*
-/// Every nonzero complex number over floating point scalars has an 
-/// approximate multiplicative inverse.
-///
-/// Given a complex number `z` and its inverse `z_inv`, we have
-/// ```text
-/// z * z_inv ~= z_inv * z ~= 1
-/// ```
-fn prop_complex_multiplicative_inverse<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
-where
-    S: SimdScalarFloat
-{
-    // prop_assume!(z.is_finite());
-    // prop_assume!(z.is_invertible());
 
-    let one = Complex::identity();
-    let z_inv = z.inverse().unwrap();
-
-    prop_assert!(relative_eq!(z * z_inv, one, epsilon = tolerance));
-    prop_assert!(relative_eq!(z_inv * z, one, epsilon = tolerance));
-
-    Ok(())
-}
-*/
 /// Every nonzero complex number over floating point scalars has an 
 /// approximate multiplicative inverse.
 ///
@@ -373,38 +350,6 @@ where
     Ok(())
 }
 
-/// Complex multiplication over floating point scalars is approximately
-/// commutative.
-/// 
-/// Given a complex number `z1`, and another complex number `z2`, we
-/// have
-/// ```text
-/// z1 * z2 ~= z2 * z1
-/// ```
-fn prop_complex_approx_multiplication_commutative<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
-where
-    S: SimdScalarFloat
-{
-    prop_assert!(relative_eq!(z1 * z2, z2 * z1, epsilon = tolerance));
-
-    Ok(())
-}
-
-/*
-/// Multiplication of an integer scalar and a complex number over integer 
-/// scalars should be commutative.
-///
-/// Given a constant `c` and a complex number `z`
-/// ```text
-/// c * z = z * c
-/// ```
-fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> Result<(), TestCaseError>
-where
-    S: SimdScalar
-{
-    c * z == z * c
-}
-*/
 /// Exact multiplication of two scalars and a complex number should be 
 /// compatible with multiplication of all scalars. 
 ///
@@ -442,22 +387,7 @@ where
 
     Ok(())
 }
-/*
-/// Complex numbers have a multiplicative unit element.
-///
-/// Given a complex number `z`, and the unit complex number `1`, we have
-/// ```text
-/// z * 1 = 1 * z = z
-/// ```
-fn prop_complex_multiplicative_unit<S>(z: Complex<S>) -> Result<(), TestCaseError>
-where
-    S: SimdScalar 
-{
-    let one = Complex::one();
 
-    (z * one == z) && (one * z == z) && (z * one == one * z)
-}
-*/
 /// Multiplication of complex numbers over integer scalars is commutative.
 /// 
 /// Given a complex number `z1` and another complex number `z2`, we have
