@@ -42,6 +42,161 @@ where
     .no_shrink()
 }
 
+fn any_complex_modulus_squared_f64() -> impl Strategy<Value = Complex<f64>> {
+    use cglinalg_core::Radians;
+
+    any::<(f64, f64)>().prop_map(|(_scale, _angle)| {
+        let min_scale = f64::sqrt(f64::EPSILON);
+        let max_scale = f64::sqrt(f64::MAX);
+        let scale = min_scale + (_scale % (max_scale - min_scale));
+        let angle = Radians(_angle % core::f64::consts::FRAC_PI_2);
+
+        Complex::from_polar_decomposition(scale, angle)
+    })
+    .no_shrink()
+}
+
+fn any_complex_modulus_squared_i32() -> impl Strategy<Value = Complex<i32>> {
+    any::<(i32, i32)>().prop_map(|(_re, _im)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 2;
+        let re = min_value + (_re % (max_value - min_value + 1));
+        let im = min_value + (_im % (max_value - min_value + 1));
+        
+        Complex::new(re, im)
+    })
+    .no_shrink()
+}
+
+/*
+fn imaginary_from_range<S>(min_value: S, max_value: S) -> Box<dyn Fn() -> proptest::strategy::NoShrink<proptest::strategy::Map<RangeInclusive<S>, Box<dyn Fn(S) -> Complex<S>>>>>
+where 
+    S: SimdScalarFloat + Arbitrary + 'static,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    Box::new(move || { 
+        let complex_fn: Box<dyn Fn(S) -> Complex<S>> = Box::new(Complex::from_imaginary);
+        
+        (min_value..=max_value).prop_map(complex_fn).no_shrink()
+    })
+}
+*/
+
+fn imaginary_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
+where 
+    S: SimdScalarFloat + Arbitrary,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    (min_value..=max_value)
+        .prop_map(Complex::from_imaginary)
+        .no_shrink()
+}
+
+fn real_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
+where 
+    S: SimdScalarFloat + Arbitrary,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    (min_value..=max_value)
+        .prop_map(Complex::from_real)
+        .no_shrink()
+}
+
+fn complex_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
+where 
+    S: SimdScalarFloat + Arbitrary,
+    RangeInclusive<S>: Strategy<Value = S>
+{
+    let generator = (min_value..=max_value, min_value..=max_value);
+    generator
+        .prop_map(|(re, im)| Complex::new(re, im))
+        .no_shrink()
+}
+
+fn sqrt_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64))
+}
+
+
+fn cos_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
+    imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
+}
+
+fn sin_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
+    imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
+}
+
+fn tan_strategy_real_f64() -> impl Strategy<Value = Complex<f64>> {
+    real_from_range(f64::EPSILON, 100_f64)
+}
+
+fn tan_strategy_imaginary_f64() -> impl Strategy<Value = Complex<f64>> {
+    imaginary_from_range(f64::EPSILON, 200_f64)
+}
+
+fn cos_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn sin_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn tan_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn cos_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn sin_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn tan_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn cosh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, f64::ln(f64::MAX))
+}
+
+fn sinh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, f64::ln(f64::MAX))
+}
+
+fn tanh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 200_f64)
+}
+
+fn cosh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 200_f64)
+}
+
+fn sinh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 200_f64)
+}
+
+fn tanh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn cosh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn sinh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn tanh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, 100_f64)
+}
+
+
 /// A scalar `0` times a complex number should be a zero complex number.
 ///
 /// Given a complex number `z`, it satisfies
@@ -549,23 +704,6 @@ where
     Ok(())
 }
 
-
-
-fn any_complex_modulus_squared_f64() -> impl Strategy<Value = Complex<f64>> {
-    use cglinalg_core::Radians;
-
-    any::<(f64, f64)>().prop_map(|(_scale, _angle)| {
-        let min_scale = f64::sqrt(f64::EPSILON);
-        let max_scale = f64::sqrt(f64::MAX);
-        let scale = min_scale + (_scale % (max_scale - min_scale));
-        let angle = Radians(_angle % core::f64::consts::FRAC_PI_2);
-
-        Complex::from_polar_decomposition(scale, angle)
-    })
-    .no_shrink()
-}
-
-
 /// The squared modulus of a complex number is nonnegative. 
 ///
 /// Given a complex number `z`
@@ -635,20 +773,6 @@ where
     prop_assert_eq!(z.norm_squared(), z.modulus_squared());
 
     Ok(())
-}
-
-fn any_complex_modulus_squared_i32() -> impl Strategy<Value = Complex<i32>> {
-    any::<(i32, i32)>().prop_map(|(_re, _im)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 2;
-        let re = min_value + (_re % (max_value - min_value + 1));
-        let im = min_value + (_im % (max_value - min_value + 1));
-        
-        Complex::new(re, im)
-    })
-    .no_shrink()
 }
 
 /// The squared modulus function is point separating. In particular, if 
@@ -836,51 +960,6 @@ where
     Ok(())
 }
 
-/*
-fn imaginary_from_range<S>(min_value: S, max_value: S) -> Box<dyn Fn() -> proptest::strategy::NoShrink<proptest::strategy::Map<RangeInclusive<S>, Box<dyn Fn(S) -> Complex<S>>>>>
-where 
-    S: SimdScalarFloat + Arbitrary + 'static,
-    RangeInclusive<S>: Strategy<Value = S>
-{
-    Box::new(move || { 
-        let complex_fn: Box<dyn Fn(S) -> Complex<S>> = Box::new(Complex::from_imaginary);
-        
-        (min_value..=max_value).prop_map(complex_fn).no_shrink()
-    })
-}
-*/
-
-fn imaginary_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
-where 
-    S: SimdScalarFloat + Arbitrary,
-    RangeInclusive<S>: Strategy<Value = S>
-{
-    (min_value..=max_value)
-        .prop_map(Complex::from_imaginary)
-        .no_shrink()
-}
-
-fn real_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
-where 
-    S: SimdScalarFloat + Arbitrary,
-    RangeInclusive<S>: Strategy<Value = S>
-{
-    (min_value..=max_value)
-        .prop_map(Complex::from_real)
-        .no_shrink()
-}
-
-fn complex_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
-where 
-    S: SimdScalarFloat + Arbitrary,
-    RangeInclusive<S>: Strategy<Value = S>
-{
-    let generator = (min_value..=max_value, min_value..=max_value);
-    generator
-        .prop_map(|(re, im)| Complex::new(re, im))
-        .no_shrink()
-}
-
 /// The square of the positive square root of a complex number is the original
 /// complex number.
 /// 
@@ -917,10 +996,6 @@ where
     Ok(())
 }
 
-fn sqrt_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64))
-}
-
 fn prop_cos_real_equals_cos_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where 
     S: SimdScalarFloat
@@ -947,10 +1022,6 @@ where
     Ok(())
 }
 
-fn cos_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
-    imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
-}
-
 fn prop_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -975,10 +1046,6 @@ where
     Ok(())
 }
 
-fn sin_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
-    imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
-}
-
 fn prop_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -986,10 +1053,6 @@ where
     prop_assert!(relative_eq!(z.tan().real(), z.real().tan(), epsilon = tolerance));
 
     Ok(())
-}
-
-fn tan_strategy_real_f64() -> impl Strategy<Value = Complex<f64>> {
-    real_from_range(f64::EPSILON, 100_f64)
 }
 
 fn prop_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
@@ -1002,10 +1065,6 @@ where
     prop_assert!(relative_eq!((i * im_z).tan(), i * im_z.tanh(), epsilon = tolerance));
 
     Ok(())
-}
-
-fn tan_strategy_imaginary_f64() -> impl Strategy<Value = Complex<f64>> {
-    imaginary_from_range(f64::EPSILON, 200_f64)
 }
 
 fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
@@ -1023,10 +1082,6 @@ where
     Ok(())
 }
 
-fn cos_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
-}
-
 fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1039,10 +1094,6 @@ where
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
-}
-
-fn sin_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
 }
 
 fn prop_tan_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
@@ -1061,10 +1112,6 @@ where
     Ok(())
 }
 
-fn tan_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
-}
-
 fn prop_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1077,9 +1124,6 @@ where
     Ok(())
 }
 
-fn cos_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
-}
 
 fn prop_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1093,10 +1137,6 @@ where
     Ok(())
 }
 
-fn sin_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
-}
-
 fn prop_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1108,10 +1148,6 @@ where
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
-}
-
-fn tan_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
 }
 
 fn prop_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
@@ -1132,10 +1168,6 @@ where
     Ok(())
 }
 
-fn cosh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, f64::ln(f64::MAX))
-}
-
 fn prop_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1152,10 +1184,6 @@ where
     prop_assert!(relative_eq!((-z).sinh(), -z.sinh(), epsilon = tolerance));
 
     Ok(())
-}
-
-fn sinh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
 
 fn prop_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
@@ -1176,10 +1204,6 @@ where
     Ok(())
 }
 
-fn tanh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 200_f64)
-}
-
 fn prop_cosh_two_times_angle_equals_two_times_cosh_squared_minus_one<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1194,10 +1218,6 @@ where
     Ok(())
 }
 
-fn cosh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 200_f64)
-}
-
 fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1210,10 +1230,6 @@ where
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
-}
-
-fn sinh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 200_f64)
 }
 
 fn prop_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
@@ -1232,10 +1248,6 @@ where
     Ok(())
 }
 
-fn tanh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
-}
-
 fn prop_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1246,10 +1258,6 @@ where
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
-}
-
-fn cosh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
 }
 
 fn prop_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
@@ -1264,9 +1272,7 @@ where
     Ok(())
 }
 
-fn sinh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
-}
+
 
 fn prop_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1279,10 +1285,6 @@ where
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
-}
-
-fn tanh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
-    complex_from_range(f64::EPSILON, 100_f64)
 }
 
 
