@@ -961,7 +961,7 @@ where
     let zero = num_traits::zero();
 
     prop_assume!(z1 != z2);
-    prop_assert_eq!((z1 - z2).l1_norm(), zero);
+    prop_assert_ne!((z1 - z2).l1_norm(), zero);
 
     Ok(())
 }
