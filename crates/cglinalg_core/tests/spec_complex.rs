@@ -982,6 +982,13 @@ where
     Ok(())
 }
 
+/// The cosine of a complex number with imaginary part zero equals the 
+/// cosine of the real part.
+/// 
+/// Given a complex number `z` with imaginary part `im(z) == 0`
+/// ```text
+/// cos(z) = cos(re(z))
+/// ```
 fn prop_cos_real_equals_cos_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where 
     S: SimdScalarFloat
@@ -994,7 +1001,13 @@ where
     Ok(())
 }
 
-
+/// The cosine of a complex number with real part zero equals i times the 
+/// hyperbolic cosine of the imaginary part.
+/// 
+/// Given a complex number `z` with real part `re(z) == 0`
+/// ```text
+/// cos(z) = i * cosh(im(z))
+/// ```
 fn prop_cos_imaginary_equals_imaginary_cosh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1008,6 +1021,13 @@ where
     Ok(())
 }
 
+/// The sine of a complex number with imaginary part zero equals the sine
+/// of the real part.
+/// 
+/// Given a complex number `z` such that `im(z) == 0`
+/// ```text
+/// sin(z) = sin(re(z))
+/// ```
 fn prop_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1020,6 +1040,13 @@ where
     Ok(())
 }
 
+/// The sine of a complex number with real part zero equals i times the 
+/// hyperbolic sine of the imaginary part.
+/// 
+/// Given a complex number `z` with real part `re(z) == 0`
+/// ```text
+/// sin(z) = i * sinh(im(z))
+/// ```
 fn prop_sin_imaginary_equals_imaginary_sinh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1032,6 +1059,13 @@ where
     Ok(())
 }
 
+/// The tangent of a complex number with imaginary part zero equals the tangent
+/// of the real part.
+/// 
+/// Given a complex number `z` such that `im(z) == 0`
+/// ```text
+/// tan(z) = tan(re(z))
+/// ```
 fn prop_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1041,6 +1075,13 @@ where
     Ok(())
 }
 
+/// The tangent of a complex number with real part zero equals i times the
+/// hyperbolic tangent of the imaginary part.
+/// 
+/// Given a complex number `z` such that `re(z) == 0`
+/// ```text
+/// tan(z) = i * tanh(im(z))
+/// ```
 fn prop_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1053,6 +1094,12 @@ where
     Ok(())
 }
 
+/// The complex cosine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// cos(2 * z) = cos(z) * cos(z) - sin(z) * sin(z)
+/// ```
 fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1068,6 +1115,12 @@ where
     Ok(())
 }
 
+/// The complex sine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// sin(2 * z) = 2 * sin(z) * cos(z)
+/// ```
 fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1082,6 +1135,12 @@ where
     Ok(())
 }
 
+/// The complex tangent function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// tan(z) * (1 - tan(z) * tan(z)) = 2 * tan(z)
+/// ```
 fn prop_tan_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1098,6 +1157,12 @@ where
     Ok(())
 }
 
+/// The complex cosine function satisfies the following relation.
+/// 
+/// Given two complex numbers `z1` and `z2`
+/// ```text
+/// cos(z1 + z2) = cos(z1) * cos(z2) - sin(z1) * cos(z2)
+/// ```
 fn prop_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1110,7 +1175,12 @@ where
     Ok(())
 }
 
-
+/// The complex sine function satisfies the following relation.
+/// 
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// sin(z1 + z2) = sin(z1) * cos(z2) + cos(z1) * sin(z2)
+/// ```
 fn prop_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1123,6 +1193,12 @@ where
     Ok(())
 }
 
+/// The complex tangent function satisfies the following relation.
+/// 
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// tan(z1 + z2) * (1 - tan(z1) * tan(z2)) = tan(z1) + tan(z2)
+/// ```
 fn prop_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1136,6 +1212,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic cosine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// cosh(conjugate(z)) = conjugate(cosh(z))
+/// ```
 fn prop_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1145,6 +1227,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic cosine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// cosh(-z) = cosh(z)
+/// ```
 fn prop_cosh_negative_z_equals_negative_cosh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1154,6 +1242,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic sine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// sinh(conjugate(z)) = conjugate(sinh(z))
+/// ```
 fn prop_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1163,6 +1257,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic sine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// sinh(-z) = -sinh(z)
+/// ```
 fn prop_sinh_negative_z_equals_negative_sinh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1172,6 +1272,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic tangent function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// tanh(conjugate(z)) = conjugate(tanh(z))
+/// ```
 fn prop_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1181,6 +1287,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic tangent function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// tanh(-z) = -tanh(z)
+/// ```
 fn prop_tanh_negative_z_equals_negative_tanh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1190,6 +1302,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic cosine satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// cosh(2 * z) = 2 * cosh(z) * cosh(z) - 1
+/// ```
 fn prop_cosh_two_times_angle_equals_two_times_cosh_squared_minus_one<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1204,6 +1322,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic sine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// sinh(2 * z) = 2 * sinh(z) * cosh(z)
+/// ```
 fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1218,6 +1342,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic tangent function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// tanh(2 * z) * (1 + tanh(z) * tanh(z)) = 2 * tanh(z)
+/// ```
 fn prop_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1234,6 +1364,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic cosine function satisfies the following relation.
+/// 
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// cosh(z1 + z2) = cosh(z1) * cosh(z2) + sinh(z1) * sinh(z2)
+/// ```
 fn prop_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1246,6 +1382,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic sine function satisfies the following relation.
+/// 
+/// Given complex numbers `z1` and `z1`
+/// ```text
+/// sinh(z1 + z2) = sinh(z1) * cosh(z2) + cosh(z1) * sinh(z2)
+/// ```
 fn prop_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1258,6 +1400,12 @@ where
     Ok(())
 }
 
+/// The hyperbolic tangent function satisfies the following relation.
+/// 
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// tanh(z1 + z2) * (1 + tanh(z1) * tanh(z2)) = tanh(z1) + tanh(z2)
+/// ```
 fn prop_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
