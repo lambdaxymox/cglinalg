@@ -604,10 +604,6 @@ where
     Ok(())
 }
 
-
-
-
-
 /// Conjugating a complex number twice should give the original complex number.
 ///
 /// Given a complex number `z`
@@ -1046,89 +1042,21 @@ where
 
     Ok(())
 }
-/*
-/// Generate property tests for complex number square roots.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! sqrt_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use approx::{
-            relative_eq,
-        };
-        use super::{
-            $Generator,
-        };
 
-
-        proptest! {
-            /// The square of the positive square root of a complex number is the original
-            /// complex number.
-            /// 
-            /// Given a complex number `z`
-            /// ```text
-            /// sqrt(z) * sqrt(z) == z
-            /// ```
-            #[test]
-            fn prop_positive_square_root_squared(z in $Generator()) {
-                let sqrt_z = z.sqrt();
-
-                prop_assert!(
-                    relative_eq!(sqrt_z * sqrt_z, z, epsilon = $tolerance, max_relative = $tolerance),
-                    "z = {:?}\nsqrt_z = {:?}\nsqrt_z * sqrt_z = {:?}",
-                    z, sqrt_z, sqrt_z * sqrt_z
-                );
-            }
-
-            /// The square of the negative square root of a complex number is the original
-            /// complex number.
-            /// 
-            /// Given a complex number `z`
-            /// ```text
-            /// -sqrt(z) * -sqrt(z) == z
-            /// ```
-            #[test]
-            fn prop_negative_square_root_squared(z in $Generator()) {
-                let minus_sqrt_z = -z.sqrt();
-
-                prop_assert!(
-                    relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = $tolerance, max_relative = $tolerance),
-                    "z = {:?}\nminus_sqrt_z = {:?}\nminus_sqrt_z * minus_sqrt_z = {:?}",
-                    z, minus_sqrt_z, minus_sqrt_z * minus_sqrt_z
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn sqrt_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64))
 }
-/*
-sqrt_props!(complex_f64_sqrt_props, f64, sqrt_strategy_f64, any_scalar, 1e-10);
-*/
 
-fn prop_cos_real_equals_cos_real<S>(z: Complex<S>, tolerance: S) -> bool
+fn prop_cos_real_equals_cos_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where 
     S: SimdScalarFloat
 {
     let re_z = z.real();
     let z_re = Complex::from_real(re_z);
 
-    relative_eq!(z_re.cos().real(), re_z.cos(), epsilon = tolerance)
+    prop_assert!(relative_eq!(z_re.cos().real(), re_z.cos(), epsilon = tolerance));
+
+    Ok(())
 }
 
 
@@ -1145,72 +1073,10 @@ where
     Ok(())
 }
 
-/*
-/// Generate property tests for complex number trigonometry.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-/// * `$ScalarGen` is the name of a function or closure for generating scalars.
-/// * `$tolerance` specifies the amount of acceptable error for a correct operation 
-///    with floating point scalars.
-macro_rules! complex_cos_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        use cglinalg_core::{
-            Complex,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use super::{
-            $Generator,
-        };
-
-
-        proptest! {
-            #[test]
-            fn prop_cos_real_equals_cos_real(z in $Generator()) {
-                let re_z = z.real();
-                let z_re = Complex::from_real(re_z);
-
-                prop_assert!(
-                    relative_eq!(z_re.cos().real(), re_z.cos(), epsilon = $tolerance),
-                    "z = {}; re(z) = {}; cos(re(z)) = {}; cos(z_re) = {}",
-                    z, re_z, re_z.cos(), z_re.cos()
-                );
-            }
-
-            #[test]
-            fn prop_cos_imaginary_equals_imaginary_cosh(z in $Generator()) {
-                let zero: $ScalarType = num_traits::zero();
-                let i = Complex::unit_im();
-                let im_z = z.imaginary();
-
-                prop_assert!(
-                    relative_eq!((i * im_z).cos(), (im_z + i * zero).cosh(), epsilon = $tolerance),
-                    "z = {}; im_z = {}; cos(i * im_z) = {}, i * cosh(im_z) = {}",
-                    z, im_z, (i * im_z).cos(), (im_z + i * zero).cosh()
-                );
-            }
-        }
-    }
-    }
-}
-*/
 fn cos_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
     imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
-/*
-complex_cos_props!(complex_f64_cos_props, f64, cos_strategy_f64, any_scalar, 1e-10);
-*/
+
 fn prop_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -2965,6 +2831,43 @@ mod complex_i32_l1_norm_props {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_l1_norm_point_separating(z1, z2)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_sqrt_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_positive_square_root_squared(z in super::sqrt_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_positive_square_root_squared(z, 1e-10)?
+        }
+
+        #[test]
+        fn prop_negative_square_root_squared(z in super::sqrt_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_negative_square_root_squared(z, 1e-10)?
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod complex_f64_cos_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_cos_real_equals_cos_real(z in super::cos_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_cos_real_equals_cos_real(z, 1e-10)?
+        }
+
+        #[test]
+        fn prop_cos_imaginary_equals_imaginary_cosh(z in super::cos_strategy_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_cos_imaginary_equals_imaginary_cosh(z, 1e-10)?
         }
     }
 }
