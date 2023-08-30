@@ -48,13 +48,15 @@ where
 /// ```text
 /// 0 * z = 0.
 /// ```
-fn prop_zero_times_complex_equals_zero<S>(z: Complex<S>) -> bool
+fn prop_zero_times_complex_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where 
     S: SimdScalar
 {
     let zero_complex = Complex::zero();
 
-    zero_complex * z == zero_complex
+    prop_assert_eq!(zero_complex * z, zero_complex);
+    
+    Ok(())
 }
 
 /// A scalar `0` times a complex number should be zero.
@@ -63,14 +65,16 @@ where
 /// ```text
 /// z * 0 = 0
 /// ```
-fn prop_complex_times_zero_equals_zero<S>(z: Complex<S>) -> bool 
+fn prop_complex_times_zero_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let zero: S = num_traits::zero();
     let zero_complex = Complex::zero();
 
-    z * zero == zero_complex
+    prop_assert_eq!(z * zero, zero_complex);
+    
+    Ok(())
 }
 
 /// A zero complex number should act as the additive unit element of a set 
@@ -80,13 +84,15 @@ where
 /// ```text
 /// z + 0 = z
 /// ```
-fn prop_complex_plus_zero_equals_complex<S>(z: Complex<S>) -> bool 
+fn prop_complex_plus_zero_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let zero_complex = Complex::zero();
 
-    z + zero_complex == z
+    prop_assert_eq!(z + zero_complex, z);
+    
+    Ok(())
 }
 
 /// A zero complex number should act as the additive unit element of a set 
@@ -96,13 +102,15 @@ where
 /// ```text
 /// 0 + z = z
 /// ```
-fn prop_zero_plus_complex_equals_complex<S>(z: Complex<S>) -> bool 
+fn prop_zero_plus_complex_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let zero_complex = Complex::zero();
 
-    zero_complex + z == z
+    prop_assert_eq!(zero_complex + z, z);
+    
+    Ok(())
 }
 
 /// Multiplying a complex number by a scalar `1` should give the original 
@@ -112,13 +120,15 @@ where
 /// ```text
 /// 1 * z = z
 /// ```
-fn prop_one_times_complex_equal_complex<S>(z: Complex<S>) -> bool 
+fn prop_one_times_complex_equal_complex<S>(z: Complex<S>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
     let one = Complex::one();
 
-    one * z == z
+    prop_assert_eq!(one * z, z);
+    
+    Ok(())
 }
 
 /// Multiplying a complex number by a scalar `1` should give the original 
@@ -128,13 +138,15 @@ where
 /// ```text
 /// z * 1 = z.
 /// ```
-fn prop_complex_times_one_equals_complex<S>(z: Complex<S>) -> bool 
+fn prop_complex_times_one_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let one: S = num_traits::one();
 
-    z * one == z
+    prop_assert_eq!(z * one, z);
+    
+    Ok(())
 }
 
 /// Given complex numbers `z1` and `z2`, we should be able to use `z1` 
@@ -152,17 +164,19 @@ where
 /// &z1 +  z2 = &z1 + &z2
 ///  z1 + &z2 = &z1 + &z2
 /// ```
-fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    ( z1 +  z2 == &z1 +  z2) &&
-    ( z1 +  z2 ==  z1 + &z2) &&
-    ( z1 +  z2 == &z1 + &z2) &&
-    ( z1 + &z2 == &z1 +  z2) &&
-    (&z1 +  z2 ==  z1 + &z2) &&
-    (&z1 +  z2 == &z1 + &z2) &&
-    ( z1 + &z2 == &z1 + &z2)
+    prop_assert_eq!( z1 +  z2, &z1 +  z2);
+    prop_assert_eq!( z1 +  z2,  z1 + &z2);
+    prop_assert_eq!( z1 +  z2, &z1 + &z2);
+    prop_assert_eq!( z1 + &z2, &z1 +  z2);
+    prop_assert_eq!(&z1 +  z2,  z1 + &z2);
+    prop_assert_eq!(&z1 +  z2, &z1 + &z2);
+    prop_assert_eq!( z1 + &z2, &z1 + &z2);
+    
+    Ok(())
 }
 
 /// Complex number addition over floating point scalars should be commutative.
@@ -171,11 +185,29 @@ where
 /// ```text
 /// z1 + z2 = z2 + z1
 /// ```
-fn prop_complex_addition_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+fn prop_complex_addition_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    z1 + z2 == z2 + z1
+    prop_assert_eq!(z1 + z2, z2 + z1);
+
+    Ok(())
+}
+
+/// Given three complex numbers of integer scalars, complex number addition 
+/// should be associative.
+///
+/// Given complex numbers `z1`, `z2`, and `z3`, we have
+/// ```text
+/// (z1 + z2) + z3 = z1 + (z2 + z3)
+/// ```
+fn prop_complex_addition_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalar
+{
+    prop_assert_eq!((z1 + z2) + z3, z1 + (z2 + z3));
+
+    Ok(())
 }
 
 /// Complex number addition over floating point scalars should be 
@@ -185,11 +217,15 @@ where
 /// ```text
 /// (z1 + z2) + z3 ~= z1 + (z2 + z3).
 /// ```
-fn prop_complex_addition_almost_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>, tolerance: S) -> bool
+fn prop_complex_addition_almost_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    relative_eq!((z1 + z2) + z3, z1 + (z2 + z3), epsilon = tolerance)
+    prop_assert!(
+        relative_eq!((z1 + z2) + z3, z1 + (z2 + z3), epsilon = tolerance)
+    );
+
+    Ok(())
 }
 
 /// The zero complex number should act as an additive unit. 
@@ -198,13 +234,15 @@ where
 /// ```text
 /// z - 0 = z
 /// ```
-fn prop_complex_minus_zero_equals_complex<S>(z: Complex<S>) -> bool
+fn prop_complex_minus_zero_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let zero_complex = Complex::zero();
 
-    z - zero_complex == z
+    prop_assert_eq!(z - zero_complex, z);
+
+    Ok(())
 }
 
 /// Every complex number should have an additive inverse. 
@@ -213,13 +251,15 @@ where
 /// ```text
 /// z - z = z + (-z) = (-z) + z = 0
 /// ```
-fn prop_complex_minus_complex_equals_zero<S>(z: Complex<S>) -> bool
+fn prop_complex_minus_complex_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let zero_complex = Complex::zero();
 
-    z - z == zero_complex
+    prop_assert_eq!(z - z, zero_complex);
+
+    Ok(())
 }
 
 /// Given complex numbers `z1` and `z2`, we should be able to use `z1` 
@@ -237,17 +277,49 @@ where
 /// &z1 -  z2 = &z1 - &z2
 ///  z1 - &z2 = &z1 - &z2
 /// ```
-fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> bool
+fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    ( z1 -  z2 == &z1 -  z2) &&
-    ( z1 -  z2 ==  z1 - &z2) &&
-    ( z1 -  z2 == &z1 - &z2) &&
-    ( z1 - &z2 == &z1 -  z2) &&
-    (&z1 -  z2 ==  z1 - &z2) &&
-    (&z1 -  z2 == &z1 - &z2) &&
-    ( z1 - &z2 == &z1 - &z2)
+    prop_assert_eq!( z1 -  z2, &z1 -  z2);
+    prop_assert_eq!( z1 -  z2,  z1 - &z2);
+    prop_assert_eq!( z1 -  z2, &z1 - &z2);
+    prop_assert_eq!( z1 - &z2, &z1 -  z2);
+    prop_assert_eq!(&z1 -  z2,  z1 - &z2);
+    prop_assert_eq!(&z1 -  z2, &z1 - &z2);
+    prop_assert_eq!( z1 - &z2, &z1 - &z2);
+
+    Ok(())
+}
+
+/// Given complex numbers `z1` and `z2`, we should be able to use `z1` 
+/// and `z2` interchangeably with their references `&z1` and `&z2` 
+/// in arithmetic expressions involving complex numbers.
+///
+/// Given complex numbers `z1` and `z2`, and their references `&z1` 
+/// and `&z2`, they should satisfy
+/// ```text
+///  z1 -  z2 = &z1 -  z2
+///  z1 -  z2 =  z1 - &z2
+///  z1 -  z2 = &z1 - &z2
+///  z1 - &z2 = &z1 -  z2
+/// &z1 -  z2 =  z1 - &z2
+/// &z1 -  z2 = &z1 - &z2
+///  z1 - &z2 = &z1 - &z2
+/// ```
+fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalar
+{
+    prop_assert_eq!( z1 -  z2, &z1 -  z2);
+    prop_assert_eq!( z1 -  z2,  z1 - &z2);
+    prop_assert_eq!( z1 -  z2, &z1 - &z2);
+    prop_assert_eq!( z1 - &z2, &z1 -  z2);
+    prop_assert_eq!(&z1 -  z2,  z1 - &z2);
+    prop_assert_eq!(&z1 -  z2, &z1 - &z2);
+    prop_assert_eq!( z1 - &z2, &z1 - &z2);
+
+    Ok(())
 }
 
 /// Multiplication of a scalar and a complex number should be commutative.
@@ -256,13 +328,15 @@ where
 /// ```text
 /// c * z = z * c
 /// ```
-fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> bool 
+fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {   
     let c_complex = Complex::from_real(c);
 
-    c_complex * z == z * c_complex
+    prop_assert_eq!(c_complex * z, z * c_complex);
+
+    Ok(())
 }
 
 /// Complexs have a multiplicative unit element.
@@ -271,15 +345,19 @@ where
 /// ```text
 /// z * 1 = 1 * z = z
 /// ```
-fn prop_complex_multiplicative_unit<S>(z: Complex<S>) -> bool 
+fn prop_complex_multiplicative_unit<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let one = Complex::one();
 
-    (z * one == z) && (one * z == z) && (z * one == one * z)
-}
+    prop_assert_eq!(z * one, z); 
+    prop_assert_eq!(one * z, z);
+    prop_assert_eq!(z * one, one * z);
 
+    Ok(())
+}
+/*
 /// Every nonzero complex number over floating point scalars has an 
 /// approximate multiplicative inverse.
 ///
@@ -287,16 +365,42 @@ where
 /// ```text
 /// z * z_inv ~= z_inv * z ~= 1
 /// ```
-fn prop_complex_approx_multiplicative_inverse<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_complex_multiplicative_inverse<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
     // prop_assume!(z.is_finite());
     // prop_assume!(z.is_invertible());
+
+    let one = Complex::identity();
+    let z_inv = z.inverse().unwrap();
+
+    prop_assert!(relative_eq!(z * z_inv, one, epsilon = tolerance));
+    prop_assert!(relative_eq!(z_inv * z, one, epsilon = tolerance));
+
+    Ok(())
+}
+*/
+/// Every nonzero complex number over floating point scalars has an 
+/// approximate multiplicative inverse.
+///
+/// Given a complex number `z` and its inverse `z_inv`, we have
+/// ```text
+/// z * z_inv ~= z_inv * z ~= 1
+/// ```
+fn prop_complex_approx_multiplicative_inverse<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    prop_assume!(z.is_finite());
+    prop_assume!(z.is_invertible());
     let one = Complex::one();
     let z_inv = z.inverse().unwrap();
 
-    relative_eq!(z * z_inv, one, epsilon = tolerance) && relative_eq!(z_inv * z, one, epsilon = tolerance)
+    prop_assert!(relative_eq!(z * z_inv, one, epsilon = tolerance));
+    prop_assert!(relative_eq!(z_inv * z, one, epsilon = tolerance));
+
+    Ok(())
 }
 
 /// Complex multiplication over floating point scalars is approximately
@@ -307,12 +411,15 @@ where
 /// ```text
 /// z1 * z2 ~= z2 * z1
 /// ```
-fn prop_complex_approx_multiplication_commutative<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> bool 
+fn prop_complex_approx_multiplication_commutative<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    relative_eq!(z1 * z2, z2 * z1, epsilon = tolerance)
+    prop_assert!(relative_eq!(z1 * z2, z2 * z1, epsilon = tolerance));
+
+    Ok(())
 }
+
 /*
 /// Multiplication of an integer scalar and a complex number over integer 
 /// scalars should be commutative.
@@ -321,7 +428,7 @@ where
 /// ```text
 /// c * z = z * c
 /// ```
-fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> bool 
+fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
@@ -339,14 +446,16 @@ where
 /// ```text
 /// (a * b) * z = a * (b * z)
 /// ```
-fn prop_scalar_multiplication_compatibility<S>(a: S, b: S, z: Complex<S>) -> bool 
+fn prop_scalar_multiplication_compatibility<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let a_complex = Complex::from_real(a);
     let b_complex = Complex::from_real(b);
 
-    a_complex * (b_complex * z) == (a_complex * b_complex) * z
+    prop_assert_eq!(a_complex * (b_complex * z), (a_complex * b_complex) * z);
+
+    Ok(())
 }
 
 /// Complex number multiplication over integer scalars is exactly associative.
@@ -355,11 +464,13 @@ where
 /// ```text
 /// (z1 * z2) * z3 = z1 * (z2 * z3)
 /// ```
-fn prop_complex_multiplication_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> bool 
+fn prop_complex_multiplication_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    z1 * (z2 * z3) == (z1 * z2) * z3
+    prop_assert_eq!(z1 * (z2 * z3), (z1 * z2) * z3);
+
+    Ok(())
 }
 /*
 /// Complex numbers have a multiplicative unit element.
@@ -368,7 +479,7 @@ where
 /// ```text
 /// z * 1 = 1 * z = z
 /// ```
-fn prop_complex_multiplicative_unit<S>(z: Complex<S>) -> bool 
+fn prop_complex_multiplicative_unit<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar 
 {
@@ -383,11 +494,13 @@ where
 /// ```text
 /// z1 * z2 = z2 * z1
 /// ```
-fn prop_complex_multiplication_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+fn prop_complex_multiplication_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    z1 * z2 == z2 * z1
+    prop_assert_eq!(z1 * z2, z2 * z1);
+
+    Ok(())
 }
 
 
@@ -400,13 +513,16 @@ where
 /// ```text
 /// a * (z1 + z2) = a * z1 + a * z2
 /// ```
-fn prop_distribution_over_complex_addition<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> bool 
+fn prop_distribution_over_complex_addition<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let a_complex = Complex::from_real(a);
 
-    (a_complex * (z1 + z2) == a_complex * z1 + a_complex * z2) && ((z1 + z2) * a_complex == z1 * a_complex + z2 * a_complex)
+    prop_assert_eq!(a_complex * (z1 + z2), a_complex * z1 + a_complex * z2);
+    prop_assert_eq!((z1 + z2) * a_complex, z1 * a_complex + z2 * a_complex);
+
+    Ok(())
 }
 
 /// Multiplication of a sum of scalars should distribute over a 
@@ -416,15 +532,17 @@ where
 /// ```text
 /// (a + b) * z = a * z + b * z
 /// ```
-fn prop_distribution_over_scalar_addition<S>(a: S, b: S, z: Complex<S>) -> bool 
+fn prop_distribution_over_scalar_addition<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let a_complex = Complex::from_real(a);
     let b_complex = Complex::from_real(b);
 
-    ((a_complex + b_complex) * z == a_complex * z + b_complex * z) && 
-    (z * (a_complex + b_complex) == z * a_complex + z * b_complex)
+    prop_assert_eq!((a_complex + b_complex) * z, a_complex * z + b_complex * z);
+    prop_assert_eq!(z * (a_complex + b_complex), z * a_complex + z * b_complex);
+
+    Ok(())
 }
 
 /// Multiplication of two complex numbers by a scalar on the right 
@@ -434,11 +552,13 @@ where
 /// ```text
 /// (z1 + z2) * a = z1 * a + z2 * a
 /// ```
-fn prop_distribution_over_complex_addition1<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> bool 
+fn prop_distribution_over_complex_addition1<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    (z1 + z2) * a == z1 * a + z2 * a
+    prop_assert_eq!((z1 + z2) * a, z1 * a + z2 * a);
+
+    Ok(())
 }
 
 /// Multiplication of a complex number on the right by the sum of two 
@@ -448,11 +568,13 @@ where
 /// ```text
 /// z * (a + b) = z * a + z * b
 /// ```
-fn prop_distribution_over_scalar_addition1<S>(a: S, b: S, z: Complex<S>) -> bool 
+fn prop_distribution_over_scalar_addition1<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    z * (a + b) == z * a + z * b
+    prop_assert_eq!(z * (a + b), z * a + z * b);
+
+    Ok(())
 }
 
 /// Complex number multiplication should be distributive on the right.
@@ -461,11 +583,13 @@ where
 /// ```text
 /// (z1 + z2) * z3 = z1 * z3 + z2 * z3
 /// ```
-fn prop_complex_multiplication_right_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> bool 
+fn prop_complex_multiplication_right_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    (z1 + z2) * z3 == z1 * z3 + z2 * z3
+    prop_assert_eq!((z1 + z2) * z3, z1 * z3 + z2 * z3);
+
+    Ok(())
 }
 
 /// Complex Number multiplication should be distributive on the left.
@@ -474,11 +598,13 @@ where
 /// ```text
 /// z1 * (z2 + z3) = z1 * z2 + z1 * z3
 /// ```
-fn prop_complex_multiplication_left_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> bool 
+fn prop_complex_multiplication_left_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    (z1 + z2) * z3 == z1 * z3 + z2 * z3
+    prop_assert_eq!((z1 + z2) * z3, z1 * z3 + z2 * z3);
+
+    Ok(())
 }
 
 
@@ -491,11 +617,13 @@ where
 /// ```text
 /// z** = conjugate(conjugate(z)) = z
 /// ```
-fn prop_complex_conjugate_conjugate_equals_complex<S>(z: Complex<S>) -> bool 
+fn prop_complex_conjugate_conjugate_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
 {
-    z.conjugate().conjugate() == z
+    prop_assert_eq!(z.conjugate().conjugate(), z);
+
+    Ok(())
 }
 
 /// Complex conjugation is linear.
@@ -504,11 +632,13 @@ where
 /// ```text
 /// conjugate(z1 + z2) = conjugate(z1) + conjugate(z2)
 /// ```
-fn prop_complex_conjugation_linear<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+fn prop_complex_conjugation_linear<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
 {
-    (z1 + z2).conjugate() == z1.conjugate() + z2.conjugate()
+    prop_assert_eq!((z1 + z2).conjugate(), z1.conjugate() + z2.conjugate());
+
+    Ok(())
 }
 
 /// Complex multiplication transposes under conjugation.
@@ -517,18 +647,20 @@ where
 /// ```text
 /// conjugate(z1 * z2) = conjugate(z2) * conjugate(z1)
 /// ```
-fn prop_complex_conjugation_transposes_products<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+fn prop_complex_conjugation_transposes_products<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
 {
-    (z1 * z2).conjugate() == z2.conjugate() * z1.conjugate()
+    prop_assert_eq!((z1 * z2).conjugate(), z2.conjugate() * z1.conjugate());
+
+    Ok(())
 }
 
 
 
 
 
-
+/*
 /*
 /// Generate property tests for complex number arithmetic over exact scalars. We 
 /// define an exact scalar type as a type where scalar arithmetic is 
@@ -649,66 +781,6 @@ exact_arithmetic_props!(complex_f64_arithmetic_props, f64, any_complex);
 exact_arithmetic_props!(complex_i32_arithmetic_props, i32, any_complex);
 exact_arithmetic_props!(complex_u32_arithmetic_props, u32, any_complex);
 */
-
-/// Generate property tests for complex number arithmetic over exact scalars. We 
-/// define an exact scalar type as a type where scalar arithmetic is 
-/// exact (e.g. integers).
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property 
-///    tests in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the 
-///    set of complex numbers.
-/// * `$Generator` is the name of a function or closure for generating examples.
-macro_rules! exact_arithmetic_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, properties:[]) => {
-        #[cfg(test)]
-        mod $TestModuleName {
-
-        }
-    };
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, properties:[$($PropName:ident),*]) => {
-        #[cfg(test)]
-        mod $TestModuleName {
-            use proptest::prelude::*;
-            use cglinalg_core::{
-                Complex,
-            };
-            use super::{
-                $Generator,
-            };
-
-
-            proptest! {
-                $(
-                #[test]
-                fn $PropName(_z in $Generator()) {
-                    let z: Complex<$ScalarType> = _z;
-                    let result = super::$PropName(z);
-
-                    prop_assert!(result);
-                })
-                *
-            }
-        }
-    };
-}
-
-exact_arithmetic_props!(complex_f64_arithmetic_props, f64, any_complex, properties: [
-    prop_zero_times_complex_equals_zero,
-    prop_complex_times_zero_equals_zero,
-    prop_complex_plus_zero_equals_complex,
-    prop_zero_plus_complex_equals_complex,
-    prop_one_times_complex_equal_complex,
-    prop_complex_times_one_equals_complex
-]);
-exact_arithmetic_props!(complex_i32_arithmetic_props, i32, any_complex, properties: []);
-exact_arithmetic_props!(complex_u32_arithmetic_props, u32, any_complex, properties: []);
-
-
 /*
 /// Generate property tests for complex number arithmetic over floating point scalars.
 ///
@@ -1566,6 +1638,7 @@ macro_rules! exact_conjugation_props {
 exact_conjugation_props!(complex_i32_conjugation_props, i32, any_complex);
 exact_conjugation_props!(complex_i64_conjugation_props, i64, any_complex);
 */
+*/
 
 fn any_complex_modulus_squared_f64<S>() -> impl Strategy<Value = Complex<f64>> {
     use cglinalg_core::Radians;
@@ -1588,13 +1661,15 @@ fn any_complex_modulus_squared_f64<S>() -> impl Strategy<Value = Complex<f64>> {
 /// ```text
 /// modulus_squared(z) >= 0
 /// ```
-fn prop_modulus_squared_nonnegative<S>(z: Complex<S>) -> bool 
+fn prop_modulus_squared_nonnegative<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     let zero = num_traits::zero();
 
-    z.modulus_squared() >= zero
+    prop_assert!(z.modulus_squared() >= zero);
+    
+    Ok(())
 }
 
 /// The squared modulus function is point separating. In particular, if 
@@ -1612,12 +1687,14 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_modulus_squared_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, output_tolerance: S) -> bool 
+fn prop_modulus_squared_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, output_tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
     // prop_assume!(relative_ne!(z1, z2, epsilon = $input_tolerance));
-    (z1 - z2).modulus_squared() > output_tolerance
+    prop_assert!((z1 - z2).modulus_squared() > output_tolerance);
+
+    Ok(())
 }
 /*
 /// Generate property tests for the complex number squared modulus.
@@ -1703,11 +1780,13 @@ approx_modulus_squared_props!(complex_f64_modulus_squared_props, f64, any_comple
 /// magnitude_squared(z) = modulus_squared(z)
 /// ```
 /// where equality is exact.
-fn prop_magnitude_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> bool
+fn prop_magnitude_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    z.magnitude_squared() == z.modulus_squared()
+    prop_assert_eq!(z.magnitude_squared(), z.modulus_squared());
+
+    Ok(())
 }
 
 /// The [`Complex::norm_squared`] function and the [`Complex::modulus_squared`]
@@ -1715,11 +1794,13 @@ where
 /// ```text
 /// norm_squared(z) = modulus_squared(z)
 /// ```
-fn prop_norm_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> bool 
+fn prop_norm_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
-    z.norm_squared() == z.modulus_squared()
+    prop_assert_eq!(z.norm_squared(), z.modulus_squared());
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number squared modulus.
@@ -1826,14 +1907,16 @@ fn prop_modulus_squared_nonnegative<S>(z: Complex<S>) {
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+fn prop_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
     let zero = num_traits::zero();
 
     // prop_assume!(z1 != z2);
-    (z1 - z2).modulus_squared() != zero
+    prop_assert_ne!((z1 - z2).modulus_squared(), zero);
+
+    Ok(())
 }
 /*
 /// Generate property tests for the complex number squared modulus.
@@ -1963,13 +2046,15 @@ exact_modulus_squared_synonym_props!(complex_u32_modulus_squared_synonym_props, 
 /// ```text
 /// modulus(z) >= 0
 /// ```
-fn prop_modulus_nonnegative<S>(z: Complex<S>) -> bool 
+fn prop_modulus_nonnegative<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let zero = num_traits::zero();
 
-    z.modulus() >= zero
+    prop_assert!(z.modulus() >= zero);
+
+    Ok(())
 }
 
 /// The modulus function is point separating. In particular, if 
@@ -1987,14 +2072,16 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_modulus_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> bool 
+fn prop_modulus_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let zero = num_traits::zero();
 
     // prop_assume!(relative_ne!(z1, z2, epsilon = $tolerance));
-    relative_ne!((z1 - z2).modulus(), zero, epsilon = tolerance)
+    prop_assert!(relative_ne!((z1 - z2).modulus(), zero, epsilon = tolerance));
+
+    Ok(())
 }
 
 /*
@@ -2079,11 +2166,13 @@ modulus_props!(complex_f64_modulus_props, f64, any_complex, any_scalar, 1e-8);
 /// magnitude(z) = norm(z)
 /// ```
 /// where equality is exact.
-fn prop_magnitude_modulus_synonyms<S>(z: Complex<S>) -> bool 
+fn prop_magnitude_modulus_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    z.magnitude() == z.modulus()
+    prop_assert_eq!(z.magnitude(), z.modulus());
+
+    Ok(())
 }
 
 /// The [`Complex::norm`] function and the [`Complex::modulus`] function
@@ -2092,11 +2181,13 @@ where
 /// norm(z) = modulus(z)
 /// ```
 /// where equality is exact.
-fn prop_norm_modulus_synonyms<S>(z: Complex<S>) -> bool 
+fn prop_norm_modulus_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    z.norm() == z.modulus()
+    prop_assert_eq!(z.norm(), z.modulus());
+
+    Ok(())
 }
 
 /// The [`Complex::l2_norm`] function and the [`Complex::modulus`] function
@@ -2105,11 +2196,13 @@ where
 /// l2_norm(z) = modulus(z)
 /// ```
 /// where equality is exact.
-fn prop_l2_norm_modulus_synonyms<S>(z: Complex<S>) -> bool 
+fn prop_l2_norm_modulus_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    z.l2_norm() == z.modulus()
+    prop_assert_eq!(z.l2_norm(), z.modulus());
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number norms.
@@ -2178,13 +2271,15 @@ modulus_synonym_props!(complex_f64_modulus_synonym_props, f64, any_complex);
 /// ```text
 /// l1_norm(z) >= 0
 /// ```
-fn prop_l1_norm_nonnegative<S>(z: Complex<S>) -> bool 
+fn prop_l1_norm_nonnegative<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let zero = num_traits::zero();
 
-    z.l1_norm() >= zero
+    prop_assert!(z.l1_norm() >= zero);
+
+    Ok(())
 }
 
 /// The **L1** norm function is point separating. In particular, if 
@@ -2202,12 +2297,14 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_l1_norm_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> bool 
+fn prop_l1_norm_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     // prop_assume!(relative_ne!(z1, z2, epsilon = $tolerance));
-    (z1 - z2).l1_norm() > tolerance
+    prop_assert!((z1 - z2).l1_norm() > tolerance);
+
+    Ok(())
 }
 /*
 /// Generate property tests for the complex number **L1** norm.
@@ -2300,14 +2397,16 @@ approx_l1_norm_props!(complex_f64_l1_norm_props, f64, any_complex, any_scalar, 1
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> bool 
+fn prop_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where 
     S: SimdScalarFloat
 {    
     let zero = num_traits::zero();
 
     // prop_assume!(z1 != z2);
-    (z1 - z2).l1_norm() == zero
+    prop_assert_eq!((z1 - z2).l1_norm(), zero);
+
+    Ok(())
 }
 /*
 /// Generate property tests for the complex number **L1** norm.
@@ -2433,13 +2532,15 @@ where
 /// ```text
 /// sqrt(z) * sqrt(z) == z
 /// ```
-fn prop_positive_square_root_squared<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_positive_square_root_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let sqrt_z = z.sqrt();
 
-    relative_eq!(sqrt_z * sqrt_z, z, epsilon = tolerance, max_relative = tolerance)
+    prop_assert!(relative_eq!(sqrt_z * sqrt_z, z, epsilon = tolerance, max_relative = tolerance));
+
+    Ok(())
 }
 
 /// The square of the negative square root of a complex number is the original
@@ -2449,13 +2550,15 @@ where
 /// ```text
 /// -sqrt(z) * -sqrt(z) == z
 /// ```
-fn prop_negative_square_root_squared<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_negative_square_root_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let minus_sqrt_z = -z.sqrt();
 
-    relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = tolerance, max_relative = tolerance)
+    prop_assert!(relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = tolerance, max_relative = tolerance));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number square roots.
@@ -2543,7 +2646,7 @@ where
 }
 
 
-fn prop_cos_imaginary_equals_imaginary_cosh<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_cos_imaginary_equals_imaginary_cosh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -2551,7 +2654,9 @@ where
     let lhs = Complex::cos(Complex::from_imaginary(im_z));
     let rhs = Complex::cosh(Complex::from_real(im_z));
 
-    relative_eq!(lhs, rhs, epsilon = tolerance)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
 }
 
 /*
@@ -2620,24 +2725,28 @@ fn cos_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
 /*
 complex_cos_props!(complex_f64_cos_props, f64, cos_strategy_f64, any_scalar, 1e-10);
 */
-fn prop_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let re_z = z.real();
     let z_re = Complex::from_real(re_z);
 
-    relative_eq!(z_re.sin().real(), re_z.sin(), epsilon = tolerance)
+    prop_assert!(relative_eq!(z_re.sin().real(), re_z.sin(), epsilon = tolerance));
+
+    Ok(())
 }
 
-fn prop_sin_imaginary_equals_imaginary_sinh<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_sin_imaginary_equals_imaginary_sinh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let i = Complex::unit_im();
     let im_z = z.imaginary();
 
-    relative_eq!((i * im_z).sin(), i * im_z.sinh(), epsilon = tolerance)
+    prop_assert!(relative_eq!((i * im_z).sin(), i * im_z.sinh(), epsilon = tolerance));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number trigonometry.
@@ -2704,11 +2813,13 @@ fn sin_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
 /*
 complex_sin_props!(complex_f64_sin_props, f64, sin_strategy_f64, any_scalar, 1e-10);
 */
-fn prop_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    relative_eq!(z.tan().real(), z.real().tan(), epsilon = tolerance)
+    prop_assert!(relative_eq!(z.tan().real(), z.real().tan(), epsilon = tolerance));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number trigonometry.
@@ -2760,14 +2871,16 @@ fn tan_strategy_real_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 real_tan_props!(complex_f64_tan_real_props, f64, tan_strategy_real_f64, any_scalar, 1e-6);
 */
-fn prop_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let i = Complex::unit_im();
     let im_z = z.imaginary();
 
-    relative_eq!((i * im_z).tan(), i * im_z.tanh(), epsilon = tolerance)
+    prop_assert!(relative_eq!((i * im_z).tan(), i * im_z.tanh(), epsilon = tolerance));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number trigonometry.
@@ -2822,7 +2935,7 @@ fn tan_strategy_imaginary_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 imaginary_tan_props!(complex_f64_tan_imaginary_props, f64, tan_strategy_imaginary_f64, any_scalar, 1e-8);
 */
-fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -2832,7 +2945,9 @@ where
     let sin_z_squared = z.sin().squared();
     let rhs = cos_z_squared - sin_z_squared;
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = tolerance)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = tolerance));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number trigonometry.
@@ -3025,14 +3140,16 @@ fn tan_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 tan_double_angle_props!(complex_f64_tan_double_angle_props, f64, tan_double_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+fn prop_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let lhs = (z1 + z2).cos();
     let rhs = z1.cos() * z2.cos() - z1.sin() * z2.sin();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3087,14 +3204,16 @@ fn cos_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 cos_angle_sum_props!(complex_f64_cos_angle_sum_props, f64, cos_angle_sum_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+fn prop_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let lhs = (z1 + z2).sin();
     let rhs = z1.sin() * z2.cos() + z1.cos() * z2.sin();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number trigonometry.
@@ -3149,7 +3268,7 @@ fn sin_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 sin_angle_sum_props!(complex_f64_sin_angle_sum_props, f64, sin_angle_sum_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+fn prop_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -3157,7 +3276,9 @@ where
     let lhs = (z1 + z2).tan() * (one - z1.tan() * z2.tan());
     let rhs = z1.tan() + z2.tan();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3213,18 +3334,22 @@ fn tan_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 tan_angle_sum_props!(complex_f64_tan_angle_sum_props, f64, tan_angle_sum_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> bool 
+fn prop_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    z.conjugate().cosh() == z.cosh().conjugate()
+    prop_assert_eq!(z.conjugate().cosh(), z.cosh().conjugate());
+
+    Ok(())
 }
 
-fn prop_cosh_negative_z_equals_negative_cosh_z<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_cosh_negative_z_equals_negative_cosh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    relative_eq!((-z).cosh(), z.cosh(), epsilon = tolerance)
+    prop_assert!(relative_eq!((-z).cosh(), z.cosh(), epsilon = tolerance));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3281,18 +3406,22 @@ fn cosh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 cosh_props!(complex_f64_cosh_props, f64, cosh_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> bool 
+fn prop_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    z.conjugate().sinh() == z.sinh().conjugate()
+    prop_assert_eq!(z.conjugate().sinh(), z.sinh().conjugate());
+
+    Ok(())
 }
 
-fn prop_sinh_negative_z_equals_negative_sinh_z<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_sinh_negative_z_equals_negative_sinh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    relative_eq!((-z).sinh(), -z.sinh(), epsilon = tolerance)
+    prop_assert!(relative_eq!((-z).sinh(), -z.sinh(), epsilon = tolerance));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3349,18 +3478,22 @@ fn sinh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 sinh_props!(complex_f64_sinh_props, f64, sinh_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> bool 
+fn prop_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    z.conjugate().tanh() == z.tanh().conjugate()
+    prop_assert_eq!(z.conjugate().tanh(), z.tanh().conjugate());
+
+    Ok(())
 }
 
-fn prop_tanh_negative_z_equals_negative_tanh_z<S>(z: Complex<S>, tolerance: S) -> bool 
+fn prop_tanh_negative_z_equals_negative_tanh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    relative_eq!((-z).tanh(), -z.tanh(), epsilon = tolerance)
+    prop_assert!(relative_eq!((-z).tanh(), -z.tanh(), epsilon = tolerance));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3417,7 +3550,7 @@ fn tanh_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 tanh_props!(complex_f64_tanh_props, f64, tanh_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_cosh_two_times_angle_equals_two_times_cosh_squared_minus_one<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool 
+fn prop_cosh_two_times_angle_equals_two_times_cosh_squared_minus_one<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -3426,7 +3559,9 @@ where
     let lhs = (two * z).cosh();
     let rhs = two * z.cosh().squared() - one;
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3480,7 +3615,7 @@ fn cosh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 cosh_double_angle_props!(complex_f64_cosh_double_angle_props, f64, cosh_double_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool 
+fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -3489,7 +3624,9 @@ where
     let lhs = (two * z).sinh();
     let rhs = two * z.sinh() * z.cosh();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3542,7 +3679,7 @@ fn sinh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 sinh_double_angle_props!(complex_f64_sinh_double_angle_props, f64, sinh_double_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> bool 
+fn prop_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -3553,7 +3690,9 @@ where
     let lhs = tanh_two_z * (one + tanh_z_squared);
     let rhs = two * z.tanh();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3609,14 +3748,16 @@ fn tanh_double_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 tanh_double_angle_props!(complex_f64_tanh_double_angle_props, f64, tanh_double_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+fn prop_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let lhs = (z1 + z2).cosh();
     let rhs = z1.cosh() * z2.cosh() + z1.sinh() * z2.sinh();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3668,14 +3809,16 @@ fn cosh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 cosh_angle_sum_props!(complex_f64_cosh_angle_sum_props, f64, cosh_angle_sum_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+fn prop_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let lhs = (z1 + z2).sinh();
     let rhs = z1.sinh() * z2.cosh() + z1.cosh() * z2.sinh();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3727,7 +3870,7 @@ fn sinh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 sinh_angle_sum_props!(complex_f64_sinh_angle_sum_props, f64, sinh_angle_sum_strategy_f64, any_scalar, 1e-8);
 */
-fn prop_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> bool 
+fn prop_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -3735,7 +3878,9 @@ where
     let lhs = (z1 + z2).tanh() * (one + z1.tanh() * z2.tanh());
     let rhs = z1.tanh() + z2.tanh();
 
-    relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative)
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
 }
 /*
 /// Generate property tests for complex number hyperbolic trigonometry.
@@ -3791,4 +3936,492 @@ fn tanh_angle_sum_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
 /*
 tanh_angle_sum_props!(complex_f64_tanh_angle_sum_props, f64, tanh_angle_sum_strategy_f64, any_scalar, 1e-8);
 */
+
+/*
+macro_rules! generate_props {
+    (module_name:$TestModuleName:ident, properties:[]) => {
+        // #[cfg(test)]
+        // mod $TestModuleName {
+        // 
+        // }
+    };
+    (module_name:$TestModuleName:ident, properties:[
+        $( $PropName:ident :: {
+            generators: [ $( $GeneratorName:ident :: ($Name:ident :: $GeneratorType:ty) ),+ ],
+        }),+
+    ]) => {
+        // #[cfg(test)]
+        // mod $TestModuleName {
+            use proptest::prelude::*;
+        //     use cglinalg_core::{
+        //         Complex,
+        //     };
+
+            proptest! {
+                $(
+                    #[test]
+                    fn $PropName($($Name in super::$GeneratorName()),+) {
+                        use super::Complex;
+                        $(
+                            let $Name: $GeneratorType = $Name;
+                        )+
+                        
+                        super::$PropName($($Name),+)?
+                    }
+                )+
+            }
+        // }
+    };
+    (module_name:$TestModuleName:ident, properties:[
+        $( $PropName:ident :: {
+            generators: [ $( $GeneratorName:ident :: ($Name:ident :: $GeneratorType:ty) ),+ ],
+            tolerance: $tolerance:expr,
+        }),+
+    ]) => {
+        // #[cfg(test)]
+        // mod $TestModuleName {
+            use proptest::prelude::*;
+        //    use cglinalg_core::{
+        //        Complex,
+        //  };
+        //
+        //
+            proptest! {
+                $(
+                    #[test]
+                    fn $PropName($($Name in super::$GeneratorName()),+) {
+                        use super::Complex;
+                        $(
+                            let $Name: $GeneratorType = $Name;
+                        )+
+                        
+                        super::$PropName($($Name),+)?
+                    }
+                )+
+            }
+        // }
+    };
+    (module_name:$TestModuleName:ident, properties:[
+        $( $PropName:ident :: {
+            generators: [ $( $GeneratorName:ident :: ($Name:ident :: $GeneratorType:ty) ),+ ],
+            input_tolerance: $input_tolerance:expr,
+            output_tolerance: $output_tolerance:expr
+        }),+
+    ]) => {
+        /*
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            use cglinalg_core::{
+                Complex,
+            };
+        */
+
+            proptest! {
+                $(
+                    #[test]
+                    fn $PropName($($Name in super::$GeneratorName()),+) {
+                        use super::$Complex;
+                        $(
+                            let $Name: $GeneratorType = $Name;
+                        )+
+                        
+                        super::$PropName($($Name),+)?
+                    }
+                )+
+            }
+        // }
+    };
+}
+*/
+
+#[cfg(test)]
+mod complex_f64_arithmetic_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_zero_times_complex_equals_zero(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_zero_times_complex_equals_zero(z)?
+        }
+    
+        #[test]
+        fn prop_complex_times_zero_equals_zero(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_times_zero_equals_zero(z)?
+        }
+
+        #[test]
+        fn prop_complex_plus_zero_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_plus_zero_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_zero_plus_complex_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_zero_plus_complex_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_one_times_complex_equal_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_one_times_complex_equal_complex(z)?
+        }
+
+        #[test]
+        fn prop_complex_times_one_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_times_one_equals_complex(z)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_i32_arithmetic_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_zero_times_complex_equals_zero(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_zero_times_complex_equals_zero(z)?
+        }
+    
+        #[test]
+        fn prop_complex_times_zero_equals_zero(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_complex_times_zero_equals_zero(z)?
+        }
+
+        #[test]
+        fn prop_complex_plus_zero_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_complex_plus_zero_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_zero_plus_complex_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_zero_plus_complex_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_one_times_complex_equal_complex(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_one_times_complex_equal_complex(z)?
+        }
+
+        #[test]
+        fn prop_complex_times_one_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_complex_times_one_equals_complex(z)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_add_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_complex_plus_zero_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_plus_zero_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_zero_plus_complex_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_zero_plus_complex_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex(z1, z2)?
+        }
+
+        #[test]
+        fn prop_complex_addition_commutative(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_complex_addition_commutative(z1, z2)?
+        }
+
+        #[test]
+        fn prop_complex_addition_almost_associative(z1 in super::any_complex(), z2 in super::any_complex(), z3 in super::any_complex()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            let z3: super::Complex<f64> = z3;
+            super::prop_complex_addition_almost_associative(z1, z2, z3, 1e-7)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_i32_add_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_complex_plus_zero_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_plus_zero_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_zero_plus_complex_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_zero_plus_complex_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex(z1, z2)?
+        }
+
+        #[test]
+        fn prop_complex_addition_commutative(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_complex_addition_commutative(z1, z2)?
+        }
+
+        #[test]
+        fn prop_complex_addition_associative(z1 in super::any_complex(), z2 in super::any_complex(), z3 in super::any_complex()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            let z3: super::Complex<i32> = z3;
+            super::prop_complex_addition_associative(z1, z2, z3)?
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod complex_f64_sub_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_complex_minus_zero_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_minus_zero_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_complex_minus_complex_equals_zero(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_minus_complex_equals_zero(z)?
+        }
+
+        #[test]
+        fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1, z2)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_i32_sub_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_complex_minus_zero_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_complex_minus_zero_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_complex_minus_complex_equals_zero(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_complex_minus_complex_equals_zero(z)?
+        }
+
+        #[test]
+        fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            super::prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1, z2)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_mul_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::any_scalar(), z in super::any_complex()) {
+            let c: f64 = c;
+            let z: super::Complex<f64> = z;
+            super::prop_scalar_times_complex_equals_complex_times_scalar(c, z)?
+        }
+
+        #[test]
+        fn prop_complex_multiplicative_unit(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_multiplicative_unit(z)?
+        }
+
+        #[test]
+        fn prop_complex_approx_multiplicative_inverse(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_approx_multiplicative_inverse(z, 1e-7)?
+        }
+
+        #[test]
+        fn prop_complex_multiplication_commutative(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_complex_multiplication_commutative(z1, z2)?
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod complex_i32_mul_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::any_scalar(), z in super::any_complex()) {
+            let c: i32 = c;
+            let z: super::Complex<i32> = z;
+            super::prop_scalar_times_complex_equals_complex_times_scalar(c, z)?
+        }
+
+        #[test]
+        fn prop_scalar_multiplication_compatibility(a in super::any_scalar(), b in super::any_scalar(), z in super::any_complex()) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let z: super::Complex<i32> = z;
+            super::prop_scalar_multiplication_compatibility(a, b, z)?
+        }
+
+        #[test]
+        fn prop_complex_multiplication_associative(z1 in super::any_complex(), z2 in super::any_complex(), z3 in super::any_complex()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            let z3: super::Complex<i32> = z3;
+            super::prop_complex_multiplication_associative(z1, z2, z3)?
+        }
+
+        #[test]
+        fn prop_complex_multiplicative_unit(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_complex_multiplicative_unit(z)?
+        }
+
+        #[test]
+        fn prop_complex_multiplication_commutative(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            super::prop_complex_multiplication_commutative(z1, z2)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_i32_distributive_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_distribution_over_complex_addition(a in super::any_scalar(), z1 in super::any_complex(), z2 in super::any_complex()) {
+            let a: i32 = a;
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            super::prop_distribution_over_complex_addition(a, z1, z2)?
+        }
+
+        #[test]
+        fn prop_distribution_over_scalar_addition(a in super::any_scalar(), b in super::any_scalar(), z in super::any_complex()) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let z: super::Complex<i32> = z;
+            super::prop_distribution_over_scalar_addition(a, b, z)?
+        }
+
+        #[test]
+        fn prop_distribution_over_complex_addition1(a in super::any_scalar(), z1 in super::any_complex(), z2 in super::any_complex()) {
+            let a: i32 = a;
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            super::prop_distribution_over_complex_addition1(a, z1, z2)?
+        }
+
+        #[test]
+        fn prop_distribution_over_scalar_addition1(a in super::any_scalar(), b in super::any_scalar(), z in super::any_complex()) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let z: super::Complex<i32> = z;
+            super::prop_distribution_over_scalar_addition1(a, b, z)?
+        }
+
+        #[test]
+        fn prop_complex_multiplication_right_distributive(z1 in super::any_complex(), z2 in super::any_complex(), z3 in super::any_complex()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            let z3: super::Complex<i32> = z3;
+            super::prop_complex_multiplication_right_distributive(z1, z2, z3)?
+        }
+
+        #[test]
+        fn prop_complex_multiplication_left_distributive(z1 in super::any_complex(), z2 in super::any_complex(), z3 in super::any_complex()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            let z3: super::Complex<i32> = z3;
+            super::prop_complex_multiplication_left_distributive(z1, z2, z3)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_conjugation_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_complex_conjugate_conjugate_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<f64> = z;
+            super::prop_complex_conjugate_conjugate_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_complex_conjugation_linear(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_complex_conjugation_linear(z1, z2)?
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod complex_i32_conjugation_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_complex_conjugate_conjugate_equals_complex(z in super::any_complex()) {
+            let z: super::Complex<i32> = z;
+            super::prop_complex_conjugate_conjugate_equals_complex(z)?
+        }
+
+        #[test]
+        fn prop_complex_conjugation_linear(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            super::prop_complex_conjugation_linear(z1, z2)?
+        }
+
+        #[test]
+        fn prop_complex_conjugation_transposes_products(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            super::prop_complex_conjugation_transposes_products(z1, z2)?
+        }
+    }
+}
 
