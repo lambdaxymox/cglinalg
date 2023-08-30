@@ -504,9 +504,6 @@ where
 }
 
 
-
-
-
 /// Scalar multiplication should distribute over complex number addition.
 ///
 /// Given a scalar `a` and complex numbers `z1` and `z2`
@@ -658,7 +655,7 @@ where
 
 
 
-fn any_complex_modulus_squared_f64<S>() -> impl Strategy<Value = Complex<f64>> {
+fn any_complex_modulus_squared_f64() -> impl Strategy<Value = Complex<f64>> {
     use cglinalg_core::Radians;
 
     any::<(f64, f64)>().prop_map(|(_scale, _angle)| {
@@ -705,11 +702,11 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_modulus_squared_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, output_tolerance: S) -> Result<(), TestCaseError>
+fn prop_modulus_squared_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalarFloat
 {
-    // prop_assume!(relative_ne!(z1, z2, epsilon = $input_tolerance));
+    prop_assume!(relative_ne!(z1, z2, epsilon = input_tolerance));
     prop_assert!((z1 - z2).modulus_squared() > output_tolerance);
 
     Ok(())
@@ -3442,4 +3439,24 @@ mod complex_i32_conjugation_props {
         }
     }
 }
+
+#[cfg(test)]
+mod complex_f64_modulus_squared_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_modulus_squared_nonnegative(z in super::any_complex_modulus_squared_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_modulus_squared_nonnegative(z)?
+        }
+
+        #[test]
+        fn prop_modulus_squared_approx_point_separating(z1 in super::any_complex_modulus_squared_f64(), z2 in super::any_complex_modulus_squared_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_modulus_squared_approx_point_separating(z1, z2, 1e-10, 1e-20)?
+        }
+    }
+}
+
 
