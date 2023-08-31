@@ -1852,6 +1852,13 @@ mod complex_f64_conjugation_props {
             let z2: super::Complex<f64> = z2;
             super::prop_complex_conjugation_linear(z1, z2)?
         }
+
+        #[test]
+        fn prop_complex_conjugation_transposes_products(z1 in super::any_complex(), z2 in super::any_complex()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            super::prop_complex_conjugation_transposes_products(z1, z2)?
+        }
     }
 }
 
@@ -2264,3 +2271,4 @@ mod complex_f64_hyperbolic_inverse_props {
         }
     }
 }
+
