@@ -105,6 +105,10 @@ fn sqrt_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
     complex_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64))
 }
 
+fn sqrt_product_strategy_f64() -> impl Strategy<Value = Complex<f64>> {
+    complex_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64))
+}
+
 fn cos_strategy_f64() -> impl Strategy<Value = Complex<f64>>{
     imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
@@ -981,6 +985,28 @@ where
     let minus_sqrt_z = -z.sqrt();
 
     prop_assert!(relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = tolerance, max_relative = tolerance));
+
+    Ok(())
+}
+
+/// The square root of the product of two complex numbers is the product
+/// of the square roots of the individual complex numbers.
+/// 
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// sqrt(z1 * z2) = sqrt(z1) * zqrt(z2)
+/// ```
+fn prop_square_root_product<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 * z2).sqrt();
+    let rhs = z1.sqrt() * z2.sqrt();
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = tolerance),
+        "z1 = {}; z2 = {}; sqrt(z1 * z2) = {}; sqrt(z1) * sqrt(z2) = {}",
+        z1, z2, lhs, rhs
+    );
 
     Ok(())
 }
@@ -2058,6 +2084,13 @@ mod complex_f64_sqrt_props {
         fn prop_negative_square_root_squared(z in super::sqrt_strategy_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_negative_square_root_squared(z, 1e-10)?
+        }
+
+        #[test]
+        fn prop_square_root_product(z1 in super::sqrt_product_strategy_f64(), z2 in super::sqrt_product_strategy_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_square_root_product(z1, z2, 1e-10)?
         }
     }
 }
