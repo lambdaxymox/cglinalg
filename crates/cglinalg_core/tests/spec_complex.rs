@@ -17,15 +17,34 @@ use approx::{
     relative_ne,
 };
 
+fn any_scalar_f64() -> impl Strategy<Value = f64> {
+    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
+        min_value + (value % (max_value - min_value))
+    }
 
-fn any_scalar<S>() -> impl Strategy<Value = S>
-where
-    S: SimdScalar + Arbitrary
-{
-    any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
+    any::<f64>().prop_map(|value| {
+        let min_value = f64::sqrt(f64::EPSILON);
+        let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
+        let sign_value = value.signum();
+        let abs_value = value.abs();
+        
+        sign_value * rescale(abs_value, min_value, max_value)
+    })
+}
 
-        scalar % modulus
+fn any_scalar_i32() -> impl Strategy<Value = i32> {
+    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<i32>().prop_map(|value| {
+        let min_value = 0_i32;
+        // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
+        let max_value = 32767_i32;
+        let sign_value = value.signum();
+        let abs_value = value.abs();
+        
+        sign_value * rescale(abs_value, min_value, max_value)
     })
 }
 
@@ -57,7 +76,7 @@ fn any_complex_i32() -> impl Strategy<Value = Complex<i32>> {
     any::<(i32, i32)>().prop_map(|(re, im)| {
         let min_value = 0_i32;
         // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
-        let max_value = 32767;
+        let max_value = 32767_i32;
         let sign_re = re.signum();
         let sign_im = im.signum();
         let abs_re = re.abs();
@@ -181,6 +200,7 @@ fn strategy_tan_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
 }
 
+/*
 fn strategy_cos_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
 }
@@ -188,6 +208,7 @@ fn strategy_cos_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
 fn strategy_sin_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
 }
+*/
 
 fn strategy_tan_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
@@ -229,6 +250,7 @@ fn strategy_tanh_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
 }
 
+/*
 fn strategy_cosh_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
 }
@@ -236,6 +258,7 @@ fn strategy_cosh_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
 fn strategy_sinh_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
 }
+*/
 
 fn strategy_tanh_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
@@ -1790,7 +1813,7 @@ mod complex_f64_arithmetic_props {
         }
 
         #[test]
-        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::any_scalar(), z in super::any_complex_f64()) {
+        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::any_scalar_f64(), z in super::any_complex_f64()) {
             let c: f64 = c;
             let z: super::Complex<f64> = z;
             super::prop_scalar_times_complex_equals_complex_times_scalar(c, z)?
@@ -1899,14 +1922,14 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::any_scalar(), z in super::any_complex_i32()) {
+        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::any_scalar_i32(), z in super::any_complex_i32()) {
             let c: i32 = c;
             let z: super::Complex<i32> = z;
             super::prop_scalar_times_complex_equals_complex_times_scalar(c, z)?
         }
 
         #[test]
-        fn prop_scalar_multiplication_compatibility(a in super::any_scalar(), b in super::any_scalar(), z in super::any_complex_i32()) {
+        fn prop_scalar_multiplication_compatibility(a in super::any_scalar_i32(), b in super::any_scalar_i32(), z in super::any_complex_i32()) {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
@@ -1941,7 +1964,7 @@ mod complex_i32_distributive_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_distribution_over_complex_addition(a in super::any_scalar(), z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_distribution_over_complex_addition(a in super::any_scalar_i32(), z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
             let a: i32 = a;
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
@@ -1949,7 +1972,7 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_distribution_over_scalar_addition(a in super::any_scalar(), b in super::any_scalar(), z in super::any_complex_i32()) {
+        fn prop_distribution_over_scalar_addition(a in super::any_scalar_i32(), b in super::any_scalar_i32(), z in super::any_complex_i32()) {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
@@ -1957,7 +1980,7 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_distribution_over_complex_addition1(a in super::any_scalar(), z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_distribution_over_complex_addition1(a in super::any_scalar_i32(), z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
             let a: i32 = a;
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
@@ -1965,7 +1988,7 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_distribution_over_scalar_addition1(a in super::any_scalar(), b in super::any_scalar(), z in super::any_complex_i32()) {
+        fn prop_distribution_over_scalar_addition1(a in super::any_scalar_i32(), b in super::any_scalar_i32(), z in super::any_complex_i32()) {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
