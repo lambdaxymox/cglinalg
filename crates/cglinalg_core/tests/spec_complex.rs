@@ -50,11 +50,22 @@ fn any_complex_f64() -> impl Strategy<Value = Complex<f64>> {
 }
 
 fn any_complex_i32() -> impl Strategy<Value = Complex<i32>> {
-    any::<(i32, i32)>().prop_map(|(re, im)| {
-        let modulus: i32 = num_traits::cast(100_000_000).unwrap();
-        let complex = Complex::new(re, im);
+    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
+        min_value + (value % (max_value - min_value))
+    }
 
-        complex % modulus
+    any::<(i32, i32)>().prop_map(|(re, im)| {
+        let min_value = 0_i32;
+        // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
+        let max_value = 32767;
+        let sign_re = re.signum();
+        let sign_im = im.signum();
+        let abs_re = re.abs();
+        let abs_im = im.abs();
+        let re = sign_re * rescale(abs_re, min_value, max_value);
+        let im = sign_im * rescale(abs_im, min_value, max_value);
+        
+        Complex::new(re, im)
     })
     .no_shrink()
 }
@@ -170,6 +181,18 @@ fn strategy_tan_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
 }
 
+fn strategy_cos_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn strategy_sin_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn strategy_tan_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_from_range(f64::EPSILON, 100_f64)
+}
+
 fn strategy_cosh_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
@@ -203,6 +226,18 @@ fn strategy_sinh_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
 }
 
 fn strategy_tanh_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn strategy_cosh_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn strategy_sinh_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_from_range(f64::EPSILON, 100_f64)
+}
+
+fn strategy_tanh_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_from_range(f64::EPSILON, 100_f64)
 }
 
@@ -1248,6 +1283,57 @@ where
     Ok(())
 }
 
+/*
+fn prop_cos_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 - z2).cos();
+    let rhs = z1.cos() * z2.cos() + z1.sin() * z2.sin();
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
+        "z1 = {}; z2 = {}; cos(z1 - z2) = {}; cos(z1) * cos(z2) + sin(z1) * sin(z2) = {}",
+        z1, z2, lhs, rhs
+    );
+
+    Ok(())
+}
+
+fn prop_sin_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 - z2).sin();
+    let rhs = z1.sin() * z2.cos() - z1.cos() * z2.sin();
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
+        "z1 = {}; z2 = {}; sin(z1 - z2) = {}; sin(z1) * cos(z2) - cos(z1) * sin(z2) = {}",
+        z1, z2, lhs, rhs
+    );
+
+    Ok(())
+}
+*/
+
+fn prop_tan_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let one = Complex::one();
+    let lhs = (z1 - z2).tan() * (one + z1.tan() * z2.tan());
+    let rhs = z1.tan() - z2.tan();
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
+        "z1 = {}; z2 = {}; tan(z1 - z2) * (1 - tan(z1) * tan(z2)) = {}; tan(z1) - tan(z2) = {}",
+        z1, z2, lhs, rhs
+    );
+
+    Ok(())
+}
+
 /// The cosine and arccosine functions satisfy the following relation.
 /// 
 /// Given a complex number `z`
@@ -1517,6 +1603,57 @@ where
     let rhs = z1.tanh() + z2.tanh();
 
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
+/*
+fn prop_cosh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 - z2).cosh();
+    let rhs = z1.cosh() * z2.cosh() - z1.sinh() * z2.sinh();
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
+        "z1 = {}; z2 = {}; cosh(z1 - z2) = {}; cosh(z1) * cosh(z2) - sinh(z1) * sinh(z2) = {}",
+        z1, z2, lhs, rhs
+    );
+
+    Ok(())
+}
+
+fn prop_sinh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 - z2).sinh();
+    let rhs = z1.sinh() * z2.cosh() - z1.cosh() * z2.sinh();
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
+        "z1 = {}; z2 = {}; sinh(z1 - z2) = {}; sinh(z1) * cosh(z2) - cosh(z1) * sinh(z2) = {}",
+        z1, z2, lhs, rhs
+    );
+
+    Ok(())
+}
+*/
+
+fn prop_tanh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let one = Complex::one();
+    let lhs = (z1 - z2).tanh() * (one - z1.tanh() * z2.tanh());
+    let rhs = z1.tanh() - z2.tanh();
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
+        "z1 = {}; z2 = {}; tanh(z1 - z2) * (1 - tanh(z1) * tanh(z2)) = {}; tanh(z1) - tanh(z2) = {}",
+        z1, z2, lhs, rhs
+    );
 
     Ok(())
 }
@@ -2164,6 +2301,29 @@ mod complex_f64_trigonometry_props {
             let z2: super::Complex<f64> = z2;
             super::prop_tan_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
+
+        /*
+        #[test]
+        fn prop_cos_angle_difference(z1 in super::strategy_cos_angle_difference_f64(), z2 in super::strategy_cos_angle_difference_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_cos_angle_difference(z1, z2, 1e-8, 1e-8)?
+        }
+
+        #[test]
+        fn prop_sin_angle_difference(z1 in super::strategy_sin_angle_difference_f64(), z2 in super::strategy_sin_angle_difference_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_sin_angle_difference(z1, z2, 1e-8, 1e-8)?
+        }
+        */
+
+        #[test]
+        fn prop_tan_angle_difference(z1 in super::strategy_tan_angle_difference_f64(), z2 in super::strategy_tan_angle_difference_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_tan_angle_difference(z1, z2, 1e-8, 1e-8)?
+        }
     }
 }
 
@@ -2268,6 +2428,29 @@ mod complex_f64_hyperbolic_props {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_tanh_angle_sum(z1, z2, 1e-8, 1e-8)?
+        }
+
+        /*
+        #[test]
+        fn prop_cosh_angle_difference(z1 in super::strategy_cosh_angle_difference_f64(), z2 in super::strategy_cosh_angle_difference_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_cosh_angle_difference(z1, z2, 1e-8, 1e-8)?
+        }
+
+        #[test]
+        fn prop_sinh_angle_difference(z1 in super::strategy_sinh_angle_difference_f64(), z2 in super::strategy_sinh_angle_difference_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_sinh_angle_difference(z1, z2, 1e-8, 1e-8)?
+        }
+        */
+
+        #[test]
+        fn prop_tanh_angle_difference(z1 in super::strategy_tanh_angle_difference_f64(), z2 in super::strategy_tanh_angle_difference_f64()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_tanh_angle_difference(z1, z2, 1e-8, 1e-8)?
         }
     }
 }
