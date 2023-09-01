@@ -1841,6 +1841,38 @@ where
         
         (Self::ln(one + self) - Self::ln(one - self)) / two
     }
+
+    /// Compute the `cis` function for the phase `phase`.
+    /// 
+    /// The complex `cis` function is defined as follows. Given a floating point 
+    /// number `phase`
+    /// ```text
+    /// cis(phase) := exp(i * phase) := cos(phase) + i * sin(phase).
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let phase = f64::consts::FRAC_PI_4;
+    /// let expected = Complex::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
+    /// let result = Complex::cis(phase);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn cis(phase: S) -> Self {
+        let (sin_phase, cos_phase) = phase.sin_cos();
+
+        Self::new(cos_phase, sin_phase)
+    }
 }
 
 impl<S> AsRef<[S; 2]> for Complex<S> {
