@@ -1068,6 +1068,18 @@ where
     Ok(())
 }
 
+fn prop_square_root_arg_range<S>(z: Complex<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let pi_over_2 = S::frac_pi_2();
+    let arg_sqrt_z = z.sqrt().arg();
+
+    prop_assert!((arg_sqrt_z >= -pi_over_2) && (arg_sqrt_z <= pi_over_2));
+
+    Ok(())
+}
+
 /// The cosine of a complex number with imaginary part zero equals the 
 /// cosine of the real part.
 /// 
@@ -2279,6 +2291,12 @@ mod complex_f64_sqrt_props {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_square_root_product(z1, z2, 1e-10)?
+        }
+
+        #[test]
+        fn prop_square_root_arg_range(z in super::strategy_sqrt_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_square_root_arg_range(z)?
         }
     }
 }
