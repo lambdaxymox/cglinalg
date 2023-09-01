@@ -17,6 +17,7 @@ use approx::{
     relative_ne,
 };
 
+
 fn any_scalar_f64() -> impl Strategy<Value = f64> {
     fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
         min_value + (value % (max_value - min_value))
