@@ -1087,6 +1087,18 @@ where
     Ok(())
 }
 
+fn prop_cos_negative_z_equals_cos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (-z).cos();
+    let rhs = z.cos();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
 /// The cosine of a complex number with real part zero equals i times the 
 /// hyperbolic cosine of the imaginary part.
 /// 
@@ -1122,6 +1134,18 @@ where
     let z_re = Complex::from_real(re_z);
 
     prop_assert!(relative_eq!(z_re.sin().real(), re_z.sin(), epsilon = tolerance));
+
+    Ok(())
+}
+
+fn prop_sin_negative_z_equals_negative_sin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (-z).sin();
+    let rhs = -(z.sin());
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
@@ -1168,6 +1192,19 @@ where
 
     Ok(())
 }
+
+fn prop_tan_negative_z_equals_negative_tan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (-z).tan();
+    let rhs = -(z.tan());
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
 
 /// The tangent of a complex number with real part zero equals i times the
 /// hyperbolic tangent of the imaginary part.
@@ -2257,15 +2294,33 @@ mod complex_f64_trigonometry_props {
         }
 
         #[test]
+        fn prop_cos_negative_z_equals_negative_cos_z(z in super::strategy_cos_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_cos_negative_z_equals_cos_z(z, 1e-8)?
+        }
+
+        #[test]
         fn prop_sin_real_equals_sin_real(z in super::strategy_sin_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_sin_real_equals_sin_real(z, 1e-10)?
         }
 
         #[test]
+        fn prop_sin_negative_z_equals_negative_sin_z(z in super::strategy_sin_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_sin_negative_z_equals_negative_sin_z(z, 1e-8)?
+        }
+
+        #[test]
         fn prop_tan_real_equals_real_tan(z in super::strategy_tan_real_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_tan_real_equals_real_tan(z, 1e-4)?
+        }
+
+        #[test]
+        fn prop_tan_negative_z_equals_negative_tan_z(z in super::strategy_tan_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_tan_negative_z_equals_negative_tan_z(z, 1e-8)?
         }
 
         #[test]
