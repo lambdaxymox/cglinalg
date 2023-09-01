@@ -1477,6 +1477,42 @@ where
     Ok(())
 }
 
+fn prop_acos_conjugate_z_equals_conjugate_acos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = z.conjugate().acos();
+    let rhs = z.acos().conjugate();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+fn prop_asin_conjugate_z_equals_conjugate_asin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = z.conjugate().asin();
+    let rhs = z.asin().conjugate();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+fn prop_atan_conjugate_z_equals_conjugate_atan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = z.conjugate().atan();
+    let rhs = z.atan().conjugate();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
 /// The cosine and arccosine functions satisfy the following relation.
 /// 
 /// Given a complex number `z`
@@ -1803,6 +1839,42 @@ where
         "z1 = {}; z2 = {}; tanh(z1 - z2) * (1 - tanh(z1) * tanh(z2)) = {}; tanh(z1) - tanh(z2) = {}",
         z1, z2, lhs, rhs
     );
+
+    Ok(())
+}
+
+fn prop_acosh_conjugate_z_equals_conjugate_acosh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = z.conjugate().acosh();
+    let rhs = z.acosh().conjugate();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+fn prop_asinh_conjugate_z_equals_conjugate_asinh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = z.conjugate().asinh();
+    let rhs = z.asinh().conjugate();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+fn prop_atanh_conjugate_z_equals_conjugate_atanh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = z.conjugate().atanh();
+    let rhs = z.atanh().conjugate();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
@@ -2519,6 +2591,24 @@ mod complex_f64_trigonometry_inverse_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
+        fn prop_acos_conjugate_z_equals_conjugate_acos_z(z in super::strategy_cos_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_acos_conjugate_z_equals_conjugate_acos_z(z, 1e-8)?
+        }
+
+        #[test]
+        fn prop_asin_conjugate_z_equals_conjugate_asin_z(z in super::strategy_sin_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_asin_conjugate_z_equals_conjugate_asin_z(z, 1e-8)?
+        }
+
+        #[test]
+        fn prop_atan_conjugate_z_equals_conjugate_atan_z(z in super::strategy_tan_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_atan_conjugate_z_equals_conjugate_atan_z(z, 1e-8)?
+        }
+
+        #[test]
         fn prop_cos_acos_equals_identity(z in super::strategy_cos_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_cos_acos_equals_identity(z, 1e-7)?
@@ -2646,6 +2736,24 @@ mod complex_f64_hyperbolic_props {
 mod complex_f64_hyperbolic_inverse_props {
     use proptest::prelude::*;
     proptest! {
+        #[test]
+        fn prop_acosh_conjugate_z_equals_conjugate_acosh_z(z in super::strategy_cosh_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_acosh_conjugate_z_equals_conjugate_acosh_z(z, 1e-8)?
+        }
+
+        #[test]
+        fn prop_asinh_conjugate_z_equals_conjugate_asinh_z(z in super::strategy_sinh_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_asinh_conjugate_z_equals_conjugate_asinh_z(z, 1e-8)?
+        }
+
+        #[test]
+        fn prop_atanh_conjugate_z_equals_conjugate_atanh_z(z in super::strategy_tanh_f64()) {
+            let z: super::Complex<f64> = z;
+            super::prop_atanh_conjugate_z_equals_conjugate_atanh_z(z, 1e-8)?
+        }
+
         #[test]
         fn prop_cosh_acosh_equals_identity(z in super::strategy_cos_f64()) {
             let z: super::Complex<f64> = z;
