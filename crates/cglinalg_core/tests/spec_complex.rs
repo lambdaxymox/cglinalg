@@ -959,6 +959,42 @@ where
     Ok(())
 }
 
+/// The **L1** norm function is homogeneous. 
+/// 
+/// Given a complex number `z` and a scalar `c`
+/// ```text
+/// l1_norm(c * z) = abs(c) * l1_norm(z)
+/// ```
+fn prop_l1_norm_homogeneous<S>(z: Complex<S>, c: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned
+{
+    let lhs = (z * c).l1_norm();
+    let rhs = z.l1_norm() * c.abs();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+/// The **L1** norm satisfies the triangle inequality.
+/// 
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// l1_norm(z1 + z2) <= l1_norm(z1) + l1_norm(z2)
+/// ```
+fn prop_l1_norm_triangle_inequality<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned
+{
+    let lhs = (z1 + z2).l1_norm();
+    let rhs = z1.l1_norm() + z2.l1_norm();
+
+    prop_assert!(lhs <= rhs);
+
+    Ok(())
+}
+
 /// The **L1** norm function is point separating. In particular, if 
 /// the distance between two complex numbers `z1` and `z2` is 
 /// zero, then `z1 = z2`.
@@ -1069,6 +1105,13 @@ where
     Ok(())
 }
 
+/// The argument of the square root of a complex number should satisfy the
+/// following property.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// pi / 2 =< arg(sqrt(z)) <= pi / 2
+/// ```
 fn prop_square_root_arg_range<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1100,6 +1143,13 @@ where
     Ok(())
 }
 
+/// The cosine of the negation of a complex number equals the cosine of the
+/// complex number.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// cos(-z) = cos(z)
+/// ```
 fn prop_cos_negative_z_equals_cos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1151,6 +1201,13 @@ where
     Ok(())
 }
 
+/// The sine of the negation of a complex number equals the negation of the sine
+/// of the complex number.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// sin(-z) = -sin(z)
+/// ```
 fn prop_sin_negative_z_equals_negative_sin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1206,6 +1263,13 @@ where
     Ok(())
 }
 
+/// The tangent of the negation of a complex number equals the negation of the
+/// tangent of a complex number.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// tan(-z) = -tan(z)
+/// ```
 fn prop_tan_negative_z_equals_negative_tan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1390,6 +1454,12 @@ where
 }
 */
 
+/// The complex tangent function satisfies the following relation.
+/// 
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// tan(z1 - z2) * (1 - tan(z1) * tan(z2)) = tan(z1) - tan(z2)
+/// ```
 fn prop_tan_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -1714,6 +1784,12 @@ where
 }
 */
 
+/// The hyperbolic tangent function satisfies the following relation.
+/// 
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// tanh(z1 - z2) * (1 - tanh(z1) * tanh(z2)) = tanh(z1) - tanh(z2)
+/// ```
 fn prop_tanh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -2267,6 +2343,20 @@ mod complex_i32_l1_norm_props {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_l1_norm_point_separating(z1, z2)?
+        }
+
+        #[test]
+        fn prop_l1_norm_homogeneous(z in super::any_complex_i32(), c in super::any_scalar_i32()) {
+            let z: super::Complex<i32> = z;
+            let c: i32 = c;
+            super::prop_l1_norm_homogeneous(z, c)?
+        }
+
+        #[test]
+        fn prop_l1_norm_triangle_inequality(z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+            let z1: super::Complex<i32> = z1;
+            let z2: super::Complex<i32> = z2;
+            super::prop_l1_norm_triangle_inequality(z1, z2)?
         }
     }
 }
