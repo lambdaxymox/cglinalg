@@ -1477,6 +1477,12 @@ where
     Ok(())
 }
 
+/// The complex arccosine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// acos(conjugate(z)) = conjugate(acos(z))
+/// ```
 fn prop_acos_conjugate_z_equals_conjugate_acos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -1489,6 +1495,12 @@ where
     Ok(())
 }
 
+/// The complex arcsine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// asin(conjugate(z)) = conjugate(asin(z))
+/// ```
 fn prop_asin_conjugate_z_equals_conjugate_asin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -1501,6 +1513,12 @@ where
     Ok(())
 }
 
+/// The complex arctangent function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// atan(conjugate(z)) = conjugate(atan(z))
+/// ```
 fn prop_atan_conjugate_z_equals_conjugate_atan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -1843,6 +1861,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic arccosine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// acosh(conjugate(z)) = conjugate(acosh(z))
+/// ```
 fn prop_acosh_conjugate_z_equals_conjugate_acosh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -1855,6 +1879,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic arcsine function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// asinh(conjugate(z)) = conjugate(asinh(z))
+/// ```
 fn prop_asinh_conjugate_z_equals_conjugate_asinh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -1867,6 +1897,12 @@ where
     Ok(())
 }
 
+/// The complex hyperbolic arctangent function satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// atanh(conjugate(z)) = conjugate(atanh(z))
+/// ```
 fn prop_atanh_conjugate_z_equals_conjugate_atanh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
