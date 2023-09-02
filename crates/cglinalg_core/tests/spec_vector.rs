@@ -1521,14 +1521,6 @@ macro_rules! exact_arithmetic_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $VectorN,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             /*
             #[test]
@@ -1591,17 +1583,6 @@ macro_rules! approx_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $VectorN,
-        };
-        use approx::{
-            relative_eq,
-        };
-        use super::{
-            $Generator,
-        };
-    
-
         proptest! {
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
@@ -1653,14 +1634,6 @@ macro_rules! exact_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $VectorN,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
@@ -1711,14 +1684,6 @@ macro_rules! approx_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $VectorN,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_vector_minus_zero_equals_vector(v in super::$Generator()) {
@@ -1754,14 +1719,6 @@ macro_rules! exact_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $VectorN,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_vector_minus_zero_equals_vector(v in super::$Generator()) {
@@ -1798,12 +1755,6 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-            $ScalarGen,
-        };
-
-
         proptest! {
             /*
             #[test]
@@ -1836,11 +1787,6 @@ macro_rules! exact_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             /*
             #[test]
@@ -1880,11 +1826,6 @@ macro_rules! exact_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_scalar_vector_addition_right_distributive(a in super::$ScalarGen(), v1 in super::$Generator(), v2 in super::$Generator()) {
@@ -1933,11 +1874,6 @@ macro_rules! exact_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-        
-    
         proptest! {
             #[test]
             fn prop_vector_dot_product_commutative(v1 in super::$Generator(), v2 in super::$Generator()) {
@@ -2006,14 +1942,6 @@ macro_rules! exact_cross_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Vector3,
-        };
-        use super::{
-            $Generator,
-        };
-
-    
         proptest! {
             #[test]
             fn prop_vector_cross_itself_is_zero(v in super::$Generator()) {
@@ -2071,14 +1999,6 @@ macro_rules! approx_norm_squared_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $input_tolerance:expr, $output_tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_ne,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_norm_squared_nonnegative(v in super::$Generator()) {
@@ -2108,11 +2028,6 @@ macro_rules! approx_norm_squared_synonym_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_magnitude_squared_norm_squared_synonyms(v in super::$Generator()) {
@@ -2135,11 +2050,6 @@ macro_rules! exact_norm_squared_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_norm_squared_nonnegative(v in super::$Generator()) {
@@ -2168,11 +2078,6 @@ macro_rules! exact_norm_squared_synonym_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_magnitude_squared_norm_squared_synonyms(v in super::$Generator()) {
@@ -2194,14 +2099,6 @@ macro_rules! norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_ne,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_norm_nonnegative(v in super::$Generator()) {
@@ -2230,14 +2127,6 @@ macro_rules! approx_l1_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_ne,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_l1_norm_nonnegative(v in super::$Generator()) {
@@ -2266,11 +2155,6 @@ macro_rules! exact_l1_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_l1_norm_nonnegative(v in super::$Generator()) {
@@ -2299,15 +2183,6 @@ macro_rules! lp_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $DegreeGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_ne,
-        };
-        use super::{
-            $Generator,
-            $DegreeGen,
-        };
-
-
         proptest! {
             #[test]
             fn prop_lp_norm_nonnegative(v in super::$Generator(), p in super::$DegreeGen()) {
@@ -2337,14 +2212,6 @@ macro_rules! approx_linf_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_ne,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_linf_norm_nonnegative(v in super::$Generator()) {
@@ -2374,11 +2241,6 @@ macro_rules! exact_linf_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_linf_norm_nonnegative(v in super::$Generator()) {
@@ -2408,11 +2270,6 @@ macro_rules! norm_synonym_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_magnitude_norm_synonyms(v in super::$Generator()) {
