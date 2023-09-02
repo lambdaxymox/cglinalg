@@ -716,6 +716,7 @@ where
 
     #[inline]
     fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result += lhs[i].abs().powi(self.p as i32);
@@ -738,6 +739,7 @@ where
 
     #[inline]
     fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
             result = result.max(lhs[i].abs());

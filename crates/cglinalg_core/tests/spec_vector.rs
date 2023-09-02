@@ -208,6 +208,201 @@ fn strategy_vector4_norm_squared_i32() -> impl Strategy<Value = Vector4<i32>> {
     })
 }
 
+fn strategy_scalar1_l1_norm_i32() -> impl Strategy<Value = i32> {
+    any::<i32>().prop_map(|value| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root;
+        
+        min_value + (value % (max_value - min_value + 1))
+    })
+}
+
+fn strategy_scalar2_l1_norm_i32() -> impl Strategy<Value = i32> {
+    any::<i32>().prop_map(|value| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 2;
+        
+        min_value + (value % (max_value - min_value + 1))
+    })
+}
+
+fn strategy_scalar3_l1_norm_i32() -> impl Strategy<Value = i32> {
+    any::<i32>().prop_map(|value| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 3;
+        
+        min_value + (value % (max_value - min_value + 1))
+    })
+}
+
+fn strategy_scalar4_l1_norm_i32() -> impl Strategy<Value = i32> {
+    any::<i32>().prop_map(|value| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 4;
+        
+        min_value + (value % (max_value - min_value + 1))
+    })
+}
+
+fn strategy_vector1_l1_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
+    any::<i32>().prop_map(|_x| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root;
+        let x = min_value + (_x % (max_value - min_value + 1));
+
+        Vector1::new(x)
+    })
+}
+
+fn strategy_vector2_l1_norm_i32() -> impl Strategy<Value = Vector2<i32>> {
+    any::<(i32, i32)>().prop_map(|(_x, _y)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 2;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+
+        Vector2::new(x, y)
+    })
+}
+
+fn strategy_vector3_l1_norm_i32() -> impl Strategy<Value = Vector3<i32>> {
+    any::<(i32, i32, i32)>().prop_map(|(_x, _y, _z)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 3;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+        let z = min_value + (_z % (max_value - min_value + 1));
+
+        Vector3::new(x, y, z)
+    })
+}
+
+fn strategy_vector4_l1_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
+    any::<(i32, i32, i32, i32)>().prop_map(|(_x, _y, _z, _w)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 4;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+        let z = min_value + (_z % (max_value - min_value + 1));
+        let w = min_value + (_w % (max_value - min_value + 1));
+
+        Vector4::new(x, y, z, w)
+    })
+}
+
+fn strategy_scalar1_linf_norm_i32() -> impl Strategy<Value = i32> {
+    any::<i32>().prop_map(|value| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root;
+        
+        min_value + (value % (max_value - min_value + 1))
+    })
+}
+
+fn strategy_scalar2_linf_norm_i32() -> impl Strategy<Value = i32> {
+    any::<i32>().prop_map(|value| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 2;
+        
+        min_value + (value % (max_value - min_value + 1))
+    })
+}
+
+fn strategy_scalar3_linf_norm_i32() -> impl Strategy<Value = i32> {
+    any::<i32>().prop_map(|value| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 3;
+        
+        min_value + (value % (max_value - min_value + 1))
+    })
+}
+
+fn strategy_scalar4_linf_norm_i32() -> impl Strategy<Value = i32> {
+    any::<i32>().prop_map(|value| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 4;
+        
+        min_value + (value % (max_value - min_value + 1))
+    })
+}
+
+fn strategy_vector1_linf_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
+    any::<i32>().prop_map(|_x| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root;
+        let x = min_value + (_x % (max_value - min_value + 1));
+
+        Vector1::new(x)
+    })
+}
+
+fn strategy_vector2_linf_norm_i32() -> impl Strategy<Value = Vector2<i32>> {
+    any::<(i32, i32)>().prop_map(|(_x, _y)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 2;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+
+        Vector2::new(x, y)
+    })
+}
+
+fn strategy_vector3_linf_norm_i32() -> impl Strategy<Value = Vector3<i32>> {
+    any::<(i32, i32, i32)>().prop_map(|(_x, _y, _z)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 3;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+        let z = min_value + (_z % (max_value - min_value + 1));
+
+        Vector3::new(x, y, z)
+    })
+}
+
+fn strategy_vector4_linf_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
+    any::<(i32, i32, i32, i32)>().prop_map(|(_x, _y, _z, _w)| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / 4;
+        let x = min_value + (_x % (max_value - min_value + 1));
+        let y = min_value + (_y % (max_value - min_value + 1));
+        let z = min_value + (_z % (max_value - min_value + 1));
+        let w = min_value + (_w % (max_value - min_value + 1));
+
+        Vector4::new(x, y, z, w)
+    })
+}
         
 /// A vector times a scalar zero should be a zero vector.
 ///
@@ -933,7 +1128,7 @@ where
     let lhs = (v * c).l1_norm();
     let rhs = v.l1_norm() * c.abs();
 
-    prop_assert_eq!(lhs, rhs);
+    prop_assert_eq!(lhs, rhs, "l1_norm(v) = {}; abs(c) = {}; l1_norm(v * c) = {}; l1_norm(v) * abs(c) = {}", v.l1_norm(), c.abs(), lhs, rhs);
 
     Ok(())
 }
@@ -1763,10 +1958,10 @@ macro_rules! exact_l1_norm_props {
     }
 }
 
-exact_l1_norm_props!(vector1_i32_l1_norm_props, Vector1, i32, strategy_any_vector1, strategy_any_scalar);
-exact_l1_norm_props!(vector2_i32_l1_norm_props, Vector2, i32, strategy_any_vector2, strategy_any_scalar);
-exact_l1_norm_props!(vector3_i32_l1_norm_props, Vector3, i32, strategy_any_vector3, strategy_any_scalar);
-exact_l1_norm_props!(vector4_i32_l1_norm_props, Vector4, i32, strategy_any_vector4, strategy_any_scalar);
+exact_l1_norm_props!(vector1_i32_l1_norm_props, Vector1, i32, strategy_vector1_l1_norm_i32, strategy_scalar1_l1_norm_i32);
+exact_l1_norm_props!(vector2_i32_l1_norm_props, Vector2, i32, strategy_vector2_l1_norm_i32, strategy_scalar2_l1_norm_i32);
+exact_l1_norm_props!(vector3_i32_l1_norm_props, Vector3, i32, strategy_vector3_l1_norm_i32, strategy_scalar3_l1_norm_i32);
+exact_l1_norm_props!(vector4_i32_l1_norm_props, Vector4, i32, strategy_vector4_l1_norm_i32, strategy_scalar4_l1_norm_i32);
 
 
 macro_rules! lp_norm_props {
@@ -1791,10 +1986,10 @@ macro_rules! lp_norm_props {
     }
 }
 
-lp_norm_props!(vector1_f64_lp_norm_props, Vector1, f64, strategy_any_vector1, any_scalar, strategy_lp_norm_degree, 1e-6);
-lp_norm_props!(vector2_f64_lp_norm_props, Vector2, f64, strategy_any_vector2, any_scalar, strategy_lp_norm_degree, 1e-6);
-lp_norm_props!(vector3_f64_lp_norm_props, Vector3, f64, strategy_any_vector3, any_scalar, strategy_lp_norm_degree, 1e-6);
-lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, strategy_any_vector4, any_scalar, strategy_lp_norm_degree, 1e-6);
+lp_norm_props!(vector1_f64_lp_norm_props, Vector1, f64, strategy_any_vector1, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
+lp_norm_props!(vector2_f64_lp_norm_props, Vector2, f64, strategy_any_vector2, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
+lp_norm_props!(vector3_f64_lp_norm_props, Vector3, f64, strategy_any_vector3, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
+lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, strategy_any_vector4, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
 
 
 macro_rules! approx_linf_norm_props {
@@ -1856,15 +2051,29 @@ macro_rules! exact_linf_norm_props {
                 let v2: super::$VectorN<$ScalarType> = v2;
                 super::prop_linf_norm_point_separating(v1, v2)?
             }
+
+            #[test]
+            fn prop_linf_norm_homogeneous(v in super::$Generator(), c in super::$ScalarGen()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                let c: $ScalarType = c;
+                super::prop_linf_norm_homogeneous(v, c)?
+            }
+    
+            #[test]
+            fn prop_linf_norm_triangle_inequality(v1 in super::$Generator(), v2 in super::$Generator()) {
+                let v1: super::$VectorN<$ScalarType> = v1;
+                let v2: super::$VectorN<$ScalarType> = v2;
+                super::prop_linf_norm_triangle_inequality(v1, v2)?
+            }
         }
     }
     }
 }
 
-exact_linf_norm_props!(vector1_i32_linf_norm_props, Vector1, i32, strategy_any_vector1, any_scalar);
-exact_linf_norm_props!(vector2_i32_linf_norm_props, Vector2, i32, strategy_any_vector2, any_scalar);
-exact_linf_norm_props!(vector3_i32_linf_norm_props, Vector3, i32, strategy_any_vector3, any_scalar);
-exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, strategy_any_vector4, any_scalar);
+exact_linf_norm_props!(vector1_i32_linf_norm_props, Vector1, i32, strategy_vector1_linf_norm_i32, strategy_scalar1_linf_norm_i32);
+exact_linf_norm_props!(vector2_i32_linf_norm_props, Vector2, i32, strategy_vector2_linf_norm_i32, strategy_scalar2_linf_norm_i32);
+exact_linf_norm_props!(vector3_i32_linf_norm_props, Vector3, i32, strategy_vector3_linf_norm_i32, strategy_scalar3_linf_norm_i32);
+exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, strategy_vector4_linf_norm_i32, strategy_scalar4_linf_norm_i32);
 
 
 macro_rules! norm_synonym_props {
