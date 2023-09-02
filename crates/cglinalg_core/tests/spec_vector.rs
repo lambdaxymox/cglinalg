@@ -412,11 +412,11 @@ where
 /// ```text
 /// (v1 + v2) + v3 = v1 + (v2 + v3)
 /// ```
-fn prop_vector_addition_approx_associative<S, const N: usize>(u: Vector<S, N>, v: Vector<S, N>, w: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_vector_addition_approx_associative<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
-    prop_assert!(relative_eq!((u + v) + w, u + (v + w), epsilon = tolerance));
+    prop_assert!(relative_eq!((v1 + v2) + v3, v1 + (v2 + v3), epsilon = tolerance));
 
     Ok(())
 }
@@ -515,12 +515,12 @@ where
 /// ```text
 /// (v1 + v2) + v3 = v1 + (v2 + v3)
 /// ```
-fn prop_vector_addition_associative<S, const N: usize>(u: Vector<S, N>, v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_vector_addition_associative<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
 
-    prop_assert_eq!((u + v) + w, u + (v + w));
+    prop_assert_eq!((v1 + v2) + v3, v1 + (v2 + v3));
 
     Ok(())
 }
@@ -768,15 +768,15 @@ where
 
 /// Scalar multiplication should distribute over vector addition.
 ///
-/// Given a scalar `a` and vectors `v` and `w`
+/// Given a scalar `a` and vectors `v1` and `v2`
 /// ```text
-/// a * (v + w) = a * v + a * w
+/// (v1 + v2) * a = v1 * a + v2 * a
 /// ```
-fn prop_scalar_vector_addition_right_distributive<S, const N: usize>(a: S, v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_scalar_vector_addition_right_distributive<S, const N: usize>(a: S, v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
-    prop_assert_eq!((v + w) * a,  v * a + w * a);
+    prop_assert_eq!((v1 + v2) * a,  v1 * a + v2 * a);
 
     Ok(())
 }
@@ -785,7 +785,7 @@ where
 ///
 /// Given scalars `a` and `b` and a vector `v`, we have
 /// ```text
-/// (a + b) * v = a * v + b * v
+/// v * (a + b) = v * a + v * b
 /// ```
 fn prop_vector_scalar_addition_left_distributive<S, const N: usize>(a: S, b: S, v: Vector<S, N>) -> Result<(), TestCaseError> 
 where
@@ -799,18 +799,18 @@ where
 /// Multiplication of two vectors by a scalar on the right should be 
 /// right distributive.
 ///
-/// Given vectors `v` and `w` and a scalar `a`
+/// Given vectors `v1` and `v2` and a scalar `a`
 /// ```text
-/// (v + w) * a = v * a + w * a
+/// (v1 + v2) * a = v1 * a + v2 * a
 /// ```
 /// We deviate from the usual formalisms of vector algebra in that we 
 /// allow the ability to multiply scalars from the left, or from the 
 /// right of a vector.
-fn prop_scalar_vector_addition_left_distributive<S, const N: usize>(a: S, v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_scalar_vector_addition_left_distributive<S, const N: usize>(a: S, v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
-    prop_assert_eq!((v + w) * a,  v * a + w * a);
+    prop_assert_eq!((v1 + v2) * a,  v1 * a + v2 * a);
 
     Ok(())
 }
@@ -839,31 +839,31 @@ where
 
 /// The dot product of vectors over integer scalars is commutative.
 ///
-/// Given vectors `v` and `w`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// dot(v, w) = dot(w, v)
+/// dot(v1, v2) = dot(v2, v1)
 /// ```
-fn prop_vector_dot_product_commutative<S, const N: usize>(v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_vector_dot_product_commutative<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
-    prop_assert_eq!(v.dot(&w), w.dot(&v));
+    prop_assert_eq!(v1.dot(&v2), v2.dot(&v1));
 
     Ok(())
 }
 
 /// The dot product of vectors over integer scalars is right distributive.
 ///
-/// Given vectors `u`, `v`, and `w`
+/// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// dot(u, v + w) = dot(u, v) + dot(u, w)
+/// dot(v1, v2 + v3) = dot(v1, v2) + dot(v1, v3)
 /// ```
-fn prop_vector_dot_product_right_distributive<S, const N: usize>(u: Vector<S, N>, v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_vector_dot_product_right_distributive<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
-    let lhs = u.dot(&(v + w));
-    let rhs = u.dot(&v) + u.dot(&w);
+    let lhs = v1.dot(&(v2 + v3));
+    let rhs = v1.dot(&v2) + v1.dot(&v3);
 
     prop_assert_eq!(lhs, rhs);
 
@@ -872,35 +872,34 @@ where
 
 /// The dot product of vectors over integer scalars is left distributive.
 ///
-/// Given vectors `u`, `v`, and `w`
+/// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// dot(u + v,  w) = dot(u, w) + dot(v, w)
+/// dot(v1 + v2, v3) = dot(v1, v3) + dot(v2, v3)
 /// ```
-fn prop_vector_dot_product_left_distributive<S, const N: usize>(u: Vector<S, N>, v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_vector_dot_product_left_distributive<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
-    let lhs = (u + v).dot(&w);
-    let rhs = u.dot(&w) + v.dot(&w);
+    let lhs = (v1 + v2).dot(&v3);
+    let rhs = v1.dot(&v3) + v2.dot(&v3);
 
     prop_assert_eq!(lhs, rhs);
 
     Ok(())
 }
 
-/// The dot product of vectors over integer scalars is commutative 
-/// with scalars.
+/// The dot product of vectors over integer scalars is commutative with scalars.
 ///
-/// Given vectors `v` and `w`, and scalars `a` and `b`
+/// Given vectors `v1` and `v2`, and scalars `a` and `b`
 /// ```text
-/// dot(a * v, b * w) = a * b * dot(v, w)
+/// dot(v1 * a, v2 * b) = dot(v1, v2) * (a * b)
 /// ```
-fn prop_vector_dot_product_times_scalars_commutative<S, const N: usize>(a: S, b: S, v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_vector_dot_product_times_scalars_commutative<S, const N: usize>(a: S, b: S, v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
-    let lhs = (v * a).dot(&(w * b));
-    let rhs = v.dot(&w) * (a * b);
+    let lhs = (v1 * a).dot(&(v2 * b));
+    let rhs = v1.dot(&v2) * (a * b);
 
     prop_assert_eq!(lhs, rhs);
 
@@ -909,16 +908,16 @@ where
 
 /// The dot product of vectors over integer scalars is right bilinear.
 ///
-/// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
+/// Given vectors `v1`, `v2` and `v3`, and scalars `a` and `b`
 /// ```text
-/// dot(u, a * v + b * w) = a * dot(u, v) + b * dot(u, w)
+/// dot(v1, v2 * a + v3 * b) = dot(v1, v2) * a + dot(v2, v3) * b
 /// ```
-fn prop_vector_dot_product_right_bilinear<S, const N: usize>(a: S, b: S, u: Vector<S, N>, v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_vector_dot_product_right_bilinear<S, const N: usize>(a: S, b: S, v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
-    let lhs = u.dot(&(v * a + w * b));
-    let rhs = u.dot(&v) * a + u.dot(&w) * b;
+    let lhs = v1.dot(&(v2 * a + v3 * b));
+    let rhs = v1.dot(&v2) * a + v1.dot(&v3) * b;
 
     prop_assert_eq!(lhs, rhs);
 
@@ -927,16 +926,16 @@ where
 
 /// The dot product of vectors over integer scalars is left bilinear.
 ///
-/// Given vectors `u`, `v` and `w`, and scalars `a` and `b`
+/// Given vectors `v1`, `v2` and `v3`, and scalars `a` and `b`
 /// ```text
-/// dot(a * u + b * v, w) = a * dot(u, w) + b * dot(v, w)
+/// dot(v1 * a + v2 * b, v3) = dot(v1, v3) * a + dot(v2, v3) * b
 /// ```
-fn prop_vector_dot_product_left_bilinear<S, const N: usize>(a: S, b: S, u: Vector<S, N>, v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_vector_dot_product_left_bilinear<S, const N: usize>(a: S, b: S, v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
-    let lhs = (u * a + v * b).dot(&w);
-    let rhs = u.dot(&w) * a + v.dot(&w) * b;
+    let lhs = (v1 * a + v2 * b).dot(&v3);
+    let rhs = v1.dot(&v3) * a + v2.dot(&v3) * b;
 
     prop_assert_eq!(lhs, rhs);
 
@@ -968,33 +967,33 @@ where
 /// The three-dimensional cross product should commute with 
 /// multiplication by a scalar.
 ///
-/// Given vectors `u` and `v` and a scalar constant `c`
+/// Given vectors `v1` and `v2` and a scalar constant `c`
 /// ```text
-/// (c * u) x v = c * (u x v) = u x (c * v)
+/// (v1 * c) x v2 = (v1 x v2) * c = v2 x (v2 * c)
 /// ```
-fn prop_vector_cross_product_multiplication_by_scalars<S>(c: S, u: Vector3<S>, v: Vector3<S>) -> Result<(), TestCaseError> 
+fn prop_vector_cross_product_multiplication_by_scalars<S>(c: S, v1: Vector3<S>, v2: Vector3<S>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
 
-    prop_assert_eq!((u * c).cross(&v), u.cross(&v) * c);
-    prop_assert_eq!(u.cross(&(v * c)), u.cross(&v) * c);
+    prop_assert_eq!((v1 * c).cross(&v2), v1.cross(&v2) * c);
+    prop_assert_eq!(v1.cross(&(v2 * c)), v1.cross(&v2) * c);
 
     Ok(())
 }
 
 /// The three-dimensional vector cross product is distributive.
 ///
-/// Given vectors `u`, `v`, and `w`
+/// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// u x (v + w) = u x v + u x w
+/// v1 x (v2 + v3) = v1 x v2 + v1 x v3
 /// ```
-fn prop_vector_cross_product_distribute<S>(u: Vector3<S>, v: Vector3<S>, w: Vector3<S>) -> Result<(), TestCaseError> 
+fn prop_vector_cross_product_distribute<S>(v1: Vector3<S>, v2: Vector3<S>, v3: Vector3<S>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
 
-    prop_assert_eq!(u.cross(&(v + w)), u.cross(&v) + u.cross(&w));
+    prop_assert_eq!(v1.cross(&(v2 + v3)), v1.cross(&v2) + v1.cross(&v3));
 
     Ok(())
 }
@@ -1002,32 +1001,32 @@ where
 /// The three-dimensional vector cross product satisfies the scalar 
 /// triple product.
 ///
-/// Given vectors `u`, `v`, and `w`
+/// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// u . (v x w) = (u x v) . w
+/// v1 . (v2 x v3) = (v1 x v2) . v3
 /// ```
-fn prop_vector_cross_product_scalar_triple_product<S>(u: Vector3<S>, v: Vector3<S>, w: Vector3<S>) -> Result<(), TestCaseError> 
+fn prop_vector_cross_product_scalar_triple_product<S>(v1: Vector3<S>, v2: Vector3<S>, v3: Vector3<S>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
 
-    prop_assert_eq!(u.dot(&(v.cross(&w))), u.cross(&v).dot(&w));
+    prop_assert_eq!(v1.dot(&(v2.cross(&v3))), v1.cross(&v2).dot(&v3));
 
     Ok(())
 }
 
 /// The three-dimensional vector cross product is anti-commutative.
 ///
-/// Given vectors `u` and `v`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// u x v = - v x u
+/// v1 x v2 = - v2 x v1
 /// ```
-fn prop_vector_cross_product_anticommutative<S>(u: Vector3<S>, v: Vector3<S>) -> Result<(), TestCaseError> 
+fn prop_vector_cross_product_anticommutative<S>(v1: Vector3<S>, v2: Vector3<S>) -> Result<(), TestCaseError> 
 where
     S: SimdScalarSigned
 {
 
-    prop_assert_eq!(u.cross(&v), -v.cross(&u));
+    prop_assert_eq!(v1.cross(&v2), -v2.cross(&v1));
 
     Ok(())
 }
@@ -1035,16 +1034,16 @@ where
 /// The three-dimensional vector cross product satisfies the vector 
 /// triple product.
 ///
-/// Given vectors `u`, `v`, and `w`
+/// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// u x (v x w) = (u . w) * v - (u . v) * w
+/// v1 x (v2 x v3) = (v1 . v3) x v2 - (v1 . v2) x v3
 /// ```
-fn prop_vector_cross_product_satisfies_vector_triple_product<S>(u: Vector3<S>, v: Vector3<S>, w: Vector3<S>) -> Result<(), TestCaseError> 
+fn prop_vector_cross_product_satisfies_vector_triple_product<S>(v1: Vector3<S>, v2: Vector3<S>, v3: Vector3<S>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
-    let lhs = u.cross(&v.cross(&w));
-    let rhs = v * u.dot(&w) - w * u.dot(&v);
+    let lhs = v1.cross(&v2.cross(&v3));
+    let rhs = v2 * v1.dot(&v3) - v3 * v1.dot(&v2);
     
     prop_assert_eq!(lhs, rhs);
 
@@ -1073,28 +1072,28 @@ where
 }
 
 /// The squared **L2** norm function is point separating. In particular, 
-/// if the squared distance between two vectors `v` and `w` is zero, then `v = w`.
+/// if the squared distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
-/// Given vectors `v` and `w`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// norm_squared(v - w) = 0 => v = w 
+/// norm_squared(v1 - v2) = 0 => v1 = v2 
 /// ```
-/// Equivalently, if `v` is not equal to `w`, then their squared distance is nonzero
+/// Equivalently, if `v1` is not equal to `v2`, then their squared distance is nonzero
 /// ```text
-/// v != w => norm_squared(v - w) != 0
+/// v1 != v2 => norm_squared(v1 - v2) != 0
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_norm_squared_approx_point_separating<S, const N: usize>(v: Vector<S, N>, w: Vector<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError> 
+fn prop_norm_squared_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
 
-    prop_assume!(relative_ne!(v, w, epsilon = input_tolerance));
+    prop_assume!(relative_ne!(v1, v2, epsilon = input_tolerance));
     prop_assert!(
-        (v - w).norm_squared() > output_tolerance,
+        (v1 - v2).norm_squared() > output_tolerance,
         "\n|v - w|^2 = {:?}\n", 
-        (v - w).norm_squared()
+        (v1 - v2).norm_squared()
     );
 
     Ok(())
@@ -1140,29 +1139,29 @@ where
 */
 
 /// The squared **L2** norm function is point separating. In particular, 
-/// if the squared distance between two vectors `v` and `w` is zero, then `v = w`.
+/// if the squared distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
-/// Given vectors `v` and `w`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// norm_squared(v - w) = 0 => v = w 
+/// norm_squared(v1 - v2) = 0 => v1 = v2 
 /// ```
-/// Equivalently, if `v` is not equal to `w`, then their squared distance is nonzero
+/// Equivalently, if `v1` is not equal to `v2`, then their squared distance is nonzero
 /// ```text
-/// v != w => norm_squared(v - w) != 0
+/// v1 != v2 => norm_squared(v1 - v2) != 0
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_norm_squared_point_separating<S, const N: usize>(v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_norm_squared_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
     let zero = num_traits::zero();
 
-    prop_assume!(v != w);
+    prop_assume!(v1 != v2);
     prop_assert_ne!(
-        (v - w).norm_squared(), zero,
+        (v1 - v2).norm_squared(), zero,
         "\n|v - w|^2 = {}\n", 
-        (v - w).norm_squared()
+        (v1 - v2).norm_squared()
     );
 
     Ok(())
@@ -1210,27 +1209,27 @@ where
 }
 
 /// The **L2** norm function is point separating. In particular, if the 
-/// distance between two vectors `v` and `w` is zero, then `v = w`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
-/// Given vectors `v` and `w`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// norm(v - w) = 0 => v = w 
+/// norm(v1 - v2) = 0 => v1 = v2 
 /// ```
-/// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+/// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v != w => norm(v - w) != 0
+/// v1 != v2 => norm(v1 - v2) != 0
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_norm_approx_point_separating<S, const N: usize>(v: Vector<S, N>, w: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_norm_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
-    prop_assume!(relative_ne!(v, w, epsilon = tolerance));
+    prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
     prop_assert!(
-        (v - w).norm() > tolerance,
+        (v1 - v2).norm() > tolerance,
         "\n|v - w| = {:?}\n",
-        (v - w).norm()
+        (v1 - v2).norm()
     );
 
     Ok(())
@@ -1258,27 +1257,27 @@ where
 }
 
 /// The **L1** norm function is point separating. In particular, if the 
-/// distance between two vectors `v` and `w` is zero, then `v = w`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
-/// Given vectors `v` and `w`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// l1_norm(v - w) = 0 => v = w 
+/// l1_norm(v1 - v2) = 0 => v1 = v2 
 /// ```
-/// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+/// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v != w => l1_norm(v - w) != 0
+/// v1 != v2 => l1_norm(v1 - v2) != 0
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_l1_norm_approx_point_separating<S, const N: usize>(v: Vector<S, N>, w: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_l1_norm_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
-    prop_assume!(relative_ne!(v, w, epsilon = tolerance));
+    prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
     prop_assert!(
-        (v - w).l1_norm() > tolerance,
+        (v1 - v2).l1_norm() > tolerance,
         "\nl1_norm(v - w) = {:?}\n", 
-        (v - w).l1_norm()
+        (v1 - v2).l1_norm()
     );
 
     Ok(())
@@ -1307,29 +1306,29 @@ where
 */
 
 /// The **L1** norm function is point separating. In particular, if the 
-/// distance between two vectors `v` and `w` is zero, then `v = w`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
-/// Given vectors `v` and `w`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// l1_norm(v - w) = 0 => v = w 
+/// l1_norm(v1 - v2) = 0 => v1 = v2 
 /// ```
-/// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+/// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v != w => l1_norm(v - w) != 0
+/// v1 != v2 => l1_norm(v1 - v2) != 0
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_l1_norm_point_separating<S, const N: usize>(v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_l1_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalarSigned
 {
     let zero = num_traits::zero();
 
-    prop_assume!(v != w);
+    prop_assume!(v1 != v2);
     prop_assert_ne!(
-        (v - w).l1_norm(), zero,
+        (v1 - v2).l1_norm(), zero,
         "\nl1_norm(v - w) = {:?}\n", 
-        (v - w).l1_norm()
+        (v1 - v2).l1_norm()
     );
 
     Ok(())
@@ -1356,27 +1355,27 @@ where
 }
 
 /// The **Lp** norm function is point separating. In particular, if the 
-/// distance between two vectors `v` and `w` is zero, then `v = w`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
-/// Given vectors `v` and `w`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// lp_norm(v - w) = 0 => v = w 
+/// lp_norm(v1 - v2) = 0 => v1 = v2 
 /// ```
-/// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+/// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v != w => lp_norm(v - w) != 0
+/// v1 != v2 => lp_norm(v1 - v2) != 0
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_lp_norm_approx_point_separating<S, const N: usize>(v: Vector<S, N>, w: Vector<S, N>, p: u32, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_lp_norm_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, p: u32, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
-    prop_assume!(relative_ne!(v, w, epsilon = tolerance));
+    prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
     prop_assert!(
-        (v - w).lp_norm(p) > tolerance,
+        (v1 - v2).lp_norm(p) > tolerance,
         "\nlp_norm(v - w, p) = {}\n",
-        (v - w).lp_norm(p)
+        (v1 - v2).lp_norm(p)
     );
 
     Ok(())
@@ -1403,27 +1402,27 @@ where
 }
 
 /// The **L-infinity** norm function is point separating. In particular, if the 
-/// distance between two vectors `v` and `w` is zero, then `v = w`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
-/// Given vectors `v` and `w`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// linf_norm(v - w) = 0 => v = w 
+/// linf_norm(v1 - v2) = 0 => v1 = v2 
 /// ```
-/// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+/// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v != w => linf_norm(v - w) != 0
+/// v1 != v2 => linf_norm(v1 - v2) != 0
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_linf_norm_approx_point_separating<S, const N: usize>(v: Vector<S, N>, w: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_linf_norm_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
-    prop_assume!(relative_ne!(v, w, epsilon = tolerance));
+    prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
     prop_assert!(
-        (v - w).linf_norm() > tolerance,
+        (v1 - v2).linf_norm() > tolerance,
         "\nlinf_norm(v - w) = {}\n", 
-        (v - w).linf_norm()
+        (v1 - v2).linf_norm()
     );
 
     Ok(())
@@ -1451,29 +1450,29 @@ where
 */
 
 /// The **L-infinity** norm function is point separating. In particular, if the 
-/// distance between two vectors `v` and `w` is zero, then `v = w`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
-/// Given vectors `v` and `w`
+/// Given vectors `v1` and `v2`
 /// ```text
-/// linf_norm(v - w) = 0 => v = w 
+/// linf_norm(v1 - v2) = 0 => v1 = v2 
 /// ```
-/// Equivalently, if `v` is not equal to `w`, then their distance is nonzero
+/// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v != w => linf_norm(v - w) != 0
+/// v1 != v2 => linf_norm(v1 - v2) != 0
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_linf_norm_point_separating<S, const N: usize>(v: Vector<S, N>, w: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalarSigned + SimdScalarOrd
 {
     let zero = num_traits::zero();
 
-    prop_assume!(v != w);
+    prop_assume!(v1 != v2);
     prop_assert_ne!(
-        (v - w).linf_norm(), zero,
+        (v1 - v2).linf_norm(), zero,
         "\nlinf_norm(v - w) = {}\n", 
-        (v - w).linf_norm()
+        (v1 - v2).linf_norm()
     );
 
     Ok(())
