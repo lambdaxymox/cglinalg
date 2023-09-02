@@ -963,7 +963,7 @@ where
 /// 
 /// Given a complex number `z` and a scalar `c`
 /// ```text
-/// l1_norm(c * z) = abs(c) * l1_norm(z)
+/// l1_norm(z * c) = l1_norm(z) * abs(c)
 /// ```
 fn prop_l1_norm_homogeneous<S>(z: Complex<S>, c: S) -> Result<(), TestCaseError>
 where
