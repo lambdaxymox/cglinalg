@@ -11,9 +11,13 @@ use cglinalg_core::{
     Vector3, 
     Vector4,
     SimdScalarSigned,
+    SimdScalarFloat,
+    Unit,
+    Normed,
 };
 
 use proptest::prelude::*;
+use core::fmt;
 
 
 fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
@@ -141,81 +145,133 @@ where
 }
 
 
-/// Generate property tests for normed data types.
-///
-/// ### Macro Parameters
-///
-/// The macro parameters are the following:
-/// * `$TestModuleName` is a name we give to the module we place the property tests 
-///    in to separate them from each other for each scalar type to prevent 
-///    namespace collisions.
-/// * `$VectorN` denotes the name of the normed type.
-/// * `$ScalarType` denotes the underlying system of numbers that compose the normed type.
-/// * `$Generator` is the name of a function or closure for generating examples.
+fn prop_from_value_normalized<S, T>(value: T) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat,
+    T: Normed<Output = S> + PartialEq + fmt::Debug
+{
+    let expected = value.normalize();
+    let unit_value = Unit::from_value(value);
+    let result = unit_value.into_inner();
+
+    prop_assert_eq!(result, expected);
+
+    Ok(())
+}
+
+
+fn prop_from_value_with_norm_normalized<S, T>(value: T) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat,
+    T: Normed<Output = S> + PartialEq + fmt::Debug
+{
+    let expected = value.normalize();
+    let (unit_value, _) = Unit::from_value_with_norm(value);
+    let result = unit_value.into_inner();
+
+    prop_assert_eq!(result, expected);
+
+    Ok(())
+}
+
+
+fn prop_from_value_with_norm_correct_norm<S, T>(value: T) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat,
+    T: Normed<Output = S> + PartialEq + fmt::Debug
+{
+    let expected = value.norm();
+    let (_, result) = Unit::from_value_with_norm(value);
+
+    prop_assert_eq!(result, expected);
+
+    Ok(())
+}
+
+
+fn prop_from_value_unchecked_into_inner<S, T>(value: T) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat,
+    T: Normed<Output = S> + PartialEq + fmt::Debug + Clone
+{
+    let expected = value.clone();
+    let unit_value = Unit::from_value_unchecked(value);
+    let result = unit_value.into_inner();
+
+    prop_assert_eq!(result, expected);
+
+    Ok(())
+}
+
+
+fn prop_try_from_value_with_norm_above_threshold_is_some<S, T>(value: T) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat,
+    T: Normed<Output = S> + PartialEq + fmt::Debug
+{
+    let threshold = num_traits::cast(1e-8).unwrap();
+    let result = Unit::try_from_value_with_norm(value, threshold);
+
+    prop_assert!(result.is_some());
+
+    Ok(())
+}
+
+
+fn prop_try_from_value_above_threshold_is_some<S, T>(value: T) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat,
+    T: Normed<Output = S> + PartialEq + fmt::Debug
+{
+    let threshold = num_traits::cast(1e-8).unwrap();
+    let result = Unit::try_from_value(value, threshold);
+
+    prop_assert!(result.is_some());
+
+    Ok(())
+}
+
+
 macro_rules! unit_props {
     ($TestModuleName:ident, $UnitType:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Normed,
-            Unit,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
-            fn prop_from_value_normalized(value in $Generator::<$ScalarType>()) {
-                let expected = value.normalize();
-                let unit_value = Unit::from_value(value);
-                let result = unit_value.into_inner();
-
-                prop_assert_eq!(result, expected);
+            fn prop_from_value_normalized(value in super::$Generator()) {
+                let value: super::$UnitType<$ScalarType> = value;
+                super::prop_from_value_normalized(value)?
             }
 
             #[test]
-            fn prop_from_value_with_norm_normalized(value in $Generator::<$ScalarType>()) {
-                let expected = value.normalize();
-                let (unit_value, _) = Unit::from_value_with_norm(value);
-                let result = unit_value.into_inner();
-
-                prop_assert_eq!(result, expected);
+            fn prop_from_value_with_norm_normalized(value in super::$Generator()) {
+                let value: super::$UnitType<$ScalarType> = value;
+                super::prop_from_value_with_norm_normalized(value)?
             }
 
             #[test]
-            fn prop_from_value_with_norm_correct_norm(value in $Generator::<$ScalarType>()) {
-                let expected = value.norm();
-                let (_, result) = Unit::from_value_with_norm(value);
-
-                prop_assert_eq!(result, expected);
+            fn prop_from_value_with_norm_correct_norm(value in super::$Generator()) {
+                let value: super::$UnitType<$ScalarType> = value;
+                super::prop_from_value_with_norm_correct_norm(value)?
             }
 
             #[test]
-            fn prop_from_value_unchecked_into_inner(value in $Generator::<$ScalarType>()) {
-                let expected = value;
-                let unit_value = Unit::from_value_unchecked(value);
-                let result = unit_value.into_inner();
-
-                prop_assert_eq!(result, expected);
+            fn prop_from_value_unchecked_into_inner(value in super::$Generator()) {
+                let value: super::$UnitType<$ScalarType> = value;
+                super::prop_from_value_unchecked_into_inner(value)?
             }
 
             #[test]
-            fn prop_try_from_value_with_norm_above_threshold_is_some(value in $Generator::<$ScalarType>()) {
-                let threshold = num_traits::cast::<f64, $ScalarType>(1e-8).unwrap();
-                let result = Unit::try_from_value_with_norm(value, threshold);
-
-                prop_assert!(result.is_some());
+            fn prop_try_from_value_with_norm_above_threshold_is_some(value in super::$Generator()) {
+                let value: super::$UnitType<$ScalarType> = value;
+                super::prop_try_from_value_with_norm_above_threshold_is_some(value)?
             }
 
             #[test]
-            fn prop_try_from_value_above_threshold_is_some(value in $Generator::<$ScalarType>()) {
-                let threshold = num_traits::cast::<f64, $ScalarType>(1e-8).unwrap();
-                let result = Unit::try_from_value(value, threshold);
-
-                prop_assert!(result.is_some());
+            fn prop_try_from_value_above_threshold_is_some(value in super::$Generator()) {
+                let value: super::$UnitType<$ScalarType> = value;
+                super::prop_try_from_value_above_threshold_is_some(value)?
             }
         }
     }
