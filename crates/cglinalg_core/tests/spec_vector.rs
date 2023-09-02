@@ -15,7 +15,6 @@ use cglinalg_core::{
     SimdScalarFloat,
 };
 use approx::{
-    relative_eq,
     relative_ne,
 };
 
