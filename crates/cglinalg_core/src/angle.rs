@@ -22,6 +22,7 @@ use core::ops;
 pub trait Angle 
 where 
     Self: Copy + Clone,
+    Self: fmt::Debug + fmt::Display,
     Self: PartialEq + PartialOrd,
     Self: num_traits::Zero,
     Self: ops::Neg<Output = Self>,

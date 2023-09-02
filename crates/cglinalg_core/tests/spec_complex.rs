@@ -18,7 +18,7 @@ use approx::{
 };
 
 
-fn any_scalar_f64() -> impl Strategy<Value = f64> {
+fn strategy_any_scalar_f64() -> impl Strategy<Value = f64> {
     fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
         min_value + (value % (max_value - min_value))
     }
@@ -33,7 +33,7 @@ fn any_scalar_f64() -> impl Strategy<Value = f64> {
     })
 }
 
-fn any_scalar_i32() -> impl Strategy<Value = i32> {
+fn strategy_any_scalar_i32() -> impl Strategy<Value = i32> {
     fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
         min_value + (value % (max_value - min_value))
     }
@@ -49,7 +49,7 @@ fn any_scalar_i32() -> impl Strategy<Value = i32> {
     })
 }
 
-fn any_complex_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64() -> impl Strategy<Value = Complex<f64>> {
     fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
         min_value + (value % (max_value - min_value))
     }
@@ -69,7 +69,7 @@ fn any_complex_f64() -> impl Strategy<Value = Complex<f64>> {
     .no_shrink()
 }
 
-fn any_complex_i32() -> impl Strategy<Value = Complex<i32>> {
+fn strategy_any_complex_i32() -> impl Strategy<Value = Complex<i32>> {
     fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
         min_value + (value % (max_value - min_value))
     }
@@ -90,7 +90,7 @@ fn any_complex_i32() -> impl Strategy<Value = Complex<i32>> {
     .no_shrink()
 }
 
-fn any_complex_modulus_squared_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_modulus_squared_f64() -> impl Strategy<Value = Complex<f64>> {
     use cglinalg_core::Radians;
 
     any::<(f64, f64)>().prop_map(|(_scale, _angle)| {
@@ -104,7 +104,7 @@ fn any_complex_modulus_squared_f64() -> impl Strategy<Value = Complex<f64>> {
     .no_shrink()
 }
 
-fn any_complex_modulus_squared_i32() -> impl Strategy<Value = Complex<i32>> {
+fn strategy_complex_modulus_squared_i32() -> impl Strategy<Value = Complex<i32>> {
     any::<(i32, i32)>().prop_map(|(_re, _im)| {
         let min_value = 0;
         // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
@@ -1978,95 +1978,95 @@ mod complex_f64_arithmetic_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_zero_times_complex_equals_zero(z in super::any_complex_f64()) {
+        fn prop_zero_times_complex_equals_zero(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_zero_times_complex_equals_zero(z)?
         }
     
         #[test]
-        fn prop_complex_times_zero_equals_zero(z in super::any_complex_f64()) {
+        fn prop_complex_times_zero_equals_zero(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_complex_times_zero_equals_zero(z)?
         }
 
         #[test]
-        fn prop_complex_plus_zero_equals_complex(z in super::any_complex_f64()) {
+        fn prop_complex_plus_zero_equals_complex(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_complex_plus_zero_equals_complex(z)?
         }
 
         #[test]
-        fn prop_zero_plus_complex_equals_complex(z in super::any_complex_f64()) {
+        fn prop_zero_plus_complex_equals_complex(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_zero_plus_complex_equals_complex(z)?
         }
 
         #[test]
-        fn prop_one_times_complex_equal_complex(z in super::any_complex_f64()) {
+        fn prop_one_times_complex_equal_complex(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_one_times_complex_equal_complex(z)?
         }
 
         #[test]
-        fn prop_complex_times_one_equals_complex(z in super::any_complex_f64()) {
+        fn prop_complex_times_one_equals_complex(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_complex_times_one_equals_complex(z)?
         }
 
         #[test]
-        fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex(z1 in super::any_complex_f64(), z2 in super::any_complex_f64()) {
+        fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1, z2)?
         }
 
         #[test]
-        fn prop_complex_addition_commutative(z1 in super::any_complex_f64(), z2 in super::any_complex_f64()) {
+        fn prop_complex_addition_commutative(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_complex_addition_commutative(z1, z2)?
         }
 
         #[test]
-        fn prop_complex_minus_zero_equals_complex(z in super::any_complex_f64()) {
+        fn prop_complex_minus_zero_equals_complex(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_complex_minus_zero_equals_complex(z)?
         }
 
         #[test]
-        fn prop_complex_minus_complex_equals_zero(z in super::any_complex_f64()) {
+        fn prop_complex_minus_complex_equals_zero(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_complex_minus_complex_equals_zero(z)?
         }
 
         #[test]
-        fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1 in super::any_complex_f64(), z2 in super::any_complex_f64()) {
+        fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1, z2)?
         }
 
         #[test]
-        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::any_scalar_f64(), z in super::any_complex_f64()) {
+        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::strategy_any_scalar_f64(), z in super::strategy_complex_f64()) {
             let c: f64 = c;
             let z: super::Complex<f64> = z;
             super::prop_scalar_times_complex_equals_complex_times_scalar(c, z)?
         }
 
         #[test]
-        fn prop_complex_multiplicative_unit(z in super::any_complex_f64()) {
+        fn prop_complex_multiplicative_unit(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_complex_multiplicative_unit(z)?
         }
 
         #[test]
-        fn prop_complex_approx_multiplicative_inverse(z in super::any_complex_f64()) {
+        fn prop_complex_approx_multiplicative_inverse(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_complex_approx_multiplicative_inverse(z, 1e-7)?
         }
 
         #[test]
-        fn prop_complex_multiplication_commutative(z1 in super::any_complex_f64(), z2 in super::any_complex_f64()) {
+        fn prop_complex_multiplication_commutative(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_complex_multiplication_commutative(z1, z2)?
@@ -2079,57 +2079,57 @@ mod complex_i32_arithmetic_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_zero_times_complex_equals_zero(z in super::any_complex_i32()) {
+        fn prop_zero_times_complex_equals_zero(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_zero_times_complex_equals_zero(z)?
         }
     
         #[test]
-        fn prop_complex_times_zero_equals_zero(z in super::any_complex_i32()) {
+        fn prop_complex_times_zero_equals_zero(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_complex_times_zero_equals_zero(z)?
         }
 
         #[test]
-        fn prop_complex_plus_zero_equals_complex(z in super::any_complex_i32()) {
+        fn prop_complex_plus_zero_equals_complex(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_complex_plus_zero_equals_complex(z)?
         }
 
         #[test]
-        fn prop_zero_plus_complex_equals_complex(z in super::any_complex_i32()) {
+        fn prop_zero_plus_complex_equals_complex(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_zero_plus_complex_equals_complex(z)?
         }
 
         #[test]
-        fn prop_one_times_complex_equal_complex(z in super::any_complex_i32()) {
+        fn prop_one_times_complex_equal_complex(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_one_times_complex_equal_complex(z)?
         }
 
         #[test]
-        fn prop_complex_times_one_equals_complex(z in super::any_complex_i32()) {
+        fn prop_complex_times_one_equals_complex(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_complex_times_one_equals_complex(z)?
         }
 
         #[test]
-        fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1, z2)?
         }
 
         #[test]
-        fn prop_complex_addition_commutative(z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_complex_addition_commutative(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_complex_addition_commutative(z1, z2)?
         }
 
         #[test]
-        fn prop_complex_addition_associative(z1 in super::any_complex_i32(), z2 in super::any_complex_i32(), z3 in super::any_complex_i32()) {
+        fn prop_complex_addition_associative(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32(), z3 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             let z3: super::Complex<i32> = z3;
@@ -2137,33 +2137,33 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex_minus_zero_equals_complex(z in super::any_complex_i32()) {
+        fn prop_complex_minus_zero_equals_complex(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_complex_minus_zero_equals_complex(z)?
         }
 
         #[test]
-        fn prop_complex_minus_complex_equals_zero(z in super::any_complex_i32()) {
+        fn prop_complex_minus_complex_equals_zero(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_complex_minus_complex_equals_zero(z)?
         }
 
         #[test]
-        fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1, z2)?
         }
 
         #[test]
-        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::any_scalar_i32(), z in super::any_complex_i32()) {
+        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::strategy_any_scalar_i32(), z in super::strategy_any_complex_i32()) {
             let c: i32 = c;
             let z: super::Complex<i32> = z;
             super::prop_scalar_times_complex_equals_complex_times_scalar(c, z)?
         }
 
         #[test]
-        fn prop_scalar_multiplication_compatibility(a in super::any_scalar_i32(), b in super::any_scalar_i32(), z in super::any_complex_i32()) {
+        fn prop_scalar_multiplication_compatibility(a in super::strategy_any_scalar_i32(), b in super::strategy_any_scalar_i32(), z in super::strategy_any_complex_i32()) {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
@@ -2171,7 +2171,7 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex_multiplication_associative(z1 in super::any_complex_i32(), z2 in super::any_complex_i32(), z3 in super::any_complex_i32()) {
+        fn prop_complex_multiplication_associative(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32(), z3 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             let z3: super::Complex<i32> = z3;
@@ -2179,13 +2179,13 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex_multiplicative_unit(z in super::any_complex_i32()) {
+        fn prop_complex_multiplicative_unit(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_complex_multiplicative_unit(z)?
         }
 
         #[test]
-        fn prop_complex_multiplication_commutative(z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_complex_multiplication_commutative(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_complex_multiplication_commutative(z1, z2)?
@@ -2198,7 +2198,7 @@ mod complex_i32_distributive_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_distribution_over_complex_addition(a in super::any_scalar_i32(), z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_distribution_over_complex_addition(a in super::strategy_any_scalar_i32(), z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let a: i32 = a;
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
@@ -2206,7 +2206,7 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_distribution_over_scalar_addition(a in super::any_scalar_i32(), b in super::any_scalar_i32(), z in super::any_complex_i32()) {
+        fn prop_distribution_over_scalar_addition(a in super::strategy_any_scalar_i32(), b in super::strategy_any_scalar_i32(), z in super::strategy_any_complex_i32()) {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
@@ -2214,7 +2214,7 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_distribution_over_complex_addition1(a in super::any_scalar_i32(), z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_distribution_over_complex_addition1(a in super::strategy_any_scalar_i32(), z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let a: i32 = a;
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
@@ -2222,7 +2222,7 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_distribution_over_scalar_addition1(a in super::any_scalar_i32(), b in super::any_scalar_i32(), z in super::any_complex_i32()) {
+        fn prop_distribution_over_scalar_addition1(a in super::strategy_any_scalar_i32(), b in super::strategy_any_scalar_i32(), z in super::strategy_any_complex_i32()) {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
@@ -2230,7 +2230,7 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_complex_multiplication_right_distributive(z1 in super::any_complex_i32(), z2 in super::any_complex_i32(), z3 in super::any_complex_i32()) {
+        fn prop_complex_multiplication_right_distributive(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32(), z3 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             let z3: super::Complex<i32> = z3;
@@ -2238,7 +2238,7 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_complex_multiplication_left_distributive(z1 in super::any_complex_i32(), z2 in super::any_complex_i32(), z3 in super::any_complex_i32()) {
+        fn prop_complex_multiplication_left_distributive(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32(), z3 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             let z3: super::Complex<i32> = z3;
@@ -2252,20 +2252,20 @@ mod complex_f64_conjugation_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_complex_conjugate_conjugate_equals_complex(z in super::any_complex_f64()) {
+        fn prop_complex_conjugate_conjugate_equals_complex(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_complex_conjugate_conjugate_equals_complex(z)?
         }
 
         #[test]
-        fn prop_complex_conjugation_linear(z1 in super::any_complex_f64(), z2 in super::any_complex_f64()) {
+        fn prop_complex_conjugation_linear(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_complex_conjugation_linear(z1, z2)?
         }
 
         #[test]
-        fn prop_complex_conjugation_transposes_products(z1 in super::any_complex_f64(), z2 in super::any_complex_f64()) {
+        fn prop_complex_conjugation_transposes_products(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_complex_conjugation_transposes_products(z1, z2)?
@@ -2279,20 +2279,20 @@ mod complex_i32_conjugation_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_complex_conjugate_conjugate_equals_complex(z in super::any_complex_i32()) {
+        fn prop_complex_conjugate_conjugate_equals_complex(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_complex_conjugate_conjugate_equals_complex(z)?
         }
 
         #[test]
-        fn prop_complex_conjugation_linear(z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_complex_conjugation_linear(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_complex_conjugation_linear(z1, z2)?
         }
 
         #[test]
-        fn prop_complex_conjugation_transposes_products(z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_complex_conjugation_transposes_products(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_complex_conjugation_transposes_products(z1, z2)?
@@ -2305,13 +2305,13 @@ mod complex_f64_modulus_squared_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_modulus_squared_nonnegative(z in super::any_complex_modulus_squared_f64()) {
+        fn prop_modulus_squared_nonnegative(z in super::strategy_complex_modulus_squared_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_modulus_squared_nonnegative(z)?
         }
 
         #[test]
-        fn prop_modulus_squared_approx_point_separating(z1 in super::any_complex_modulus_squared_f64(), z2 in super::any_complex_modulus_squared_f64()) {
+        fn prop_modulus_squared_approx_point_separating(z1 in super::strategy_complex_modulus_squared_f64(), z2 in super::strategy_complex_modulus_squared_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_modulus_squared_approx_point_separating(z1, z2, 1e-10, 1e-20)?
@@ -2324,13 +2324,13 @@ mod complex_f64_modulus_squared_synonym_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_magnitude_squared_modulus_squared_synonyms(z in super::any_complex_f64()) {
+        fn prop_magnitude_squared_modulus_squared_synonyms(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_magnitude_squared_modulus_squared_synonyms(z)?
         }
 
         #[test]
-        fn prop_norm_squared_modulus_squared_synonyms(z in super::any_complex_f64()) {
+        fn prop_norm_squared_modulus_squared_synonyms(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_norm_squared_modulus_squared_synonyms(z)?
         }
@@ -2342,13 +2342,13 @@ mod complex_i32_modulus_squared_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_modulus_squared_nonnegative(z in super::any_complex_modulus_squared_i32()) {
+        fn prop_modulus_squared_nonnegative(z in super::strategy_complex_modulus_squared_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_modulus_squared_nonnegative(z)?
         }
 
         #[test]
-        fn prop_modulus_squared_point_separating(z1 in super::any_complex_modulus_squared_i32(), z2 in super::any_complex_modulus_squared_i32()) {
+        fn prop_modulus_squared_point_separating(z1 in super::strategy_complex_modulus_squared_i32(), z2 in super::strategy_complex_modulus_squared_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_modulus_squared_point_separating(z1, z2)?
@@ -2361,13 +2361,13 @@ mod complex_i32_modulus_squared_synonym_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_magnitude_squared_modulus_squared_synonyms(z in super::any_complex_i32()) {
+        fn prop_magnitude_squared_modulus_squared_synonyms(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_magnitude_squared_modulus_squared_synonyms(z)?
         }
 
         #[test]
-        fn prop_norm_squared_modulus_squared_synonyms(z in super::any_complex_i32()) {
+        fn prop_norm_squared_modulus_squared_synonyms(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_norm_squared_modulus_squared_synonyms(z)?
         }
@@ -2379,13 +2379,13 @@ mod complex_f64_modulus_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_modulus_nonnegative(z in super::any_complex_f64()) {
+        fn prop_modulus_nonnegative(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_modulus_nonnegative(z)?
         }
 
         #[test]
-        fn prop_modulus_approx_point_separating(z1 in super::any_complex_f64(), z2 in super::any_complex_f64()) {
+        fn prop_modulus_approx_point_separating(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_modulus_approx_point_separating(z1, z2, 1e-8)?
@@ -2398,19 +2398,19 @@ mod complex_f64_modulus_synonym_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_magnitude_modulus_synonyms(z in super::any_complex_f64()) {
+        fn prop_magnitude_modulus_synonyms(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_magnitude_modulus_synonyms(z)?
         }
 
         #[test]
-        fn prop_norm_modulus_synonyms(z in super::any_complex_f64()) {
+        fn prop_norm_modulus_synonyms(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_norm_modulus_synonyms(z)?
         }
 
         #[test]
-        fn prop_l2_norm_modulus_synonyms(z in super::any_complex_f64()) {
+        fn prop_l2_norm_modulus_synonyms(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_l2_norm_modulus_synonyms(z)?
         }
@@ -2422,13 +2422,13 @@ mod complex_f64_l1_norm_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_l1_norm_nonnegative(z in super::any_complex_f64()) {
+        fn prop_l1_norm_nonnegative(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_l1_norm_nonnegative(z)?
         }
 
         #[test]
-        fn prop_l1_norm_approx_point_separating(z1 in super::any_complex_f64(), z2 in super::any_complex_f64()) {
+        fn prop_l1_norm_approx_point_separating(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_l1_norm_approx_point_separating(z1, z2, 1e-8)?
@@ -2441,27 +2441,27 @@ mod complex_i32_l1_norm_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_l1_norm_nonnegative(z in super::any_complex_i32()) {
+        fn prop_l1_norm_nonnegative(z in super::strategy_any_complex_i32()) {
             let z: super::Complex<i32> = z;
             super::prop_l1_norm_nonnegative(z)?
         }
 
         #[test]
-        fn prop_l1_norm_point_separating(z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_l1_norm_point_separating(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_l1_norm_point_separating(z1, z2)?
         }
 
         #[test]
-        fn prop_l1_norm_homogeneous(z in super::any_complex_i32(), c in super::any_scalar_i32()) {
+        fn prop_l1_norm_homogeneous(z in super::strategy_any_complex_i32(), c in super::strategy_any_scalar_i32()) {
             let z: super::Complex<i32> = z;
             let c: i32 = c;
             super::prop_l1_norm_homogeneous(z, c)?
         }
 
         #[test]
-        fn prop_l1_norm_triangle_inequality(z1 in super::any_complex_i32(), z2 in super::any_complex_i32()) {
+        fn prop_l1_norm_triangle_inequality(z1 in super::strategy_any_complex_i32(), z2 in super::strategy_any_complex_i32()) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_l1_norm_triangle_inequality(z1, z2)?
