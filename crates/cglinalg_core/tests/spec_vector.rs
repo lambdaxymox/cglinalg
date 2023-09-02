@@ -70,15 +70,6 @@ fn strategy_scalar_linf_norm_i32<const N: usize>() -> impl Strategy<Value = i32>
     strategy_scalar_from_range(min_value, max_value)
 }
 
-
-fn strategy_vector<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
-where 
-    S: SimdScalarSigned + Arbitrary 
-{
-    any::<[S; N]>().prop_map(Vector::from)
-}
-
-
 fn strategy_vector_from_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>> 
 where
     S: SimdScalarSigned + Arbitrary
@@ -122,23 +113,6 @@ where
 }
 
 fn strategy_vector_norm_squared_f64<const N: usize>() -> impl Strategy<Value = Vector<f64, N>> {
-    /*
-    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    fn rescale_vector<const N: usize>(value: Vector<f64, N>, min_value: f64, max_value: f64) -> Vector<f64, N> {
-        value.map(|element| rescale(element, min_value, max_value))
-    }
-
-    strategy_vector::<f64, N>().prop_map(|vector| {
-        let min_value = f64::sqrt(f64::EPSILON);
-        let max_value = f64::sqrt(f64::MAX);
-
-        rescale_vector(vector, min_value, max_value)
-    })
-    .no_shrink()
-    */
     let min_value = f64::sqrt(f64::EPSILON);
     let max_value = f64::sqrt(f64::MAX);
 
@@ -146,25 +120,6 @@ fn strategy_vector_norm_squared_f64<const N: usize>() -> impl Strategy<Value = V
 }
 
 fn strategy_vector_norm_squared_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
-    /*
-    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
-        value.map(|element| rescale(element, min_value, max_value))
-    }
-
-    strategy_vector::<i32, N>().prop_map(|vector| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / (N as i32);
-
-        rescale_vector(vector, min_value, max_value)
-    })
-    .no_shrink()
-    */
     let min_value = 0;
     // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
     let max_square_root = 46340;
@@ -174,25 +129,6 @@ fn strategy_vector_norm_squared_i32<const N: usize>() -> impl Strategy<Value = V
 }
 
 fn strategy_vector_l1_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
-    /*
-    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
-        value.map(|element| rescale(element, min_value, max_value))
-    }
-
-    strategy_vector::<i32, N>().prop_map(|vector| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / (N as i32);
-
-        rescale_vector(vector, min_value, max_value)
-    })
-    .no_shrink()
-    */
     let min_value = 0;
     // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
     let max_square_root = 46340;
@@ -202,25 +138,6 @@ fn strategy_vector_l1_norm_i32<const N: usize>() -> impl Strategy<Value = Vector
 }
 
 fn strategy_vector_linf_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
-    /*
-    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
-        value.map(|element| rescale(element, min_value, max_value))
-    }
-
-    strategy_vector::<i32, N>().prop_map(|vector| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / (N as i32);
-
-        rescale_vector(vector, min_value, max_value)
-    })
-    .no_shrink()
-    */
     let min_value = 0;
     // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
     let max_square_root = 46340;
