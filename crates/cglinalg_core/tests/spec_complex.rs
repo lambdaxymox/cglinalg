@@ -541,7 +541,7 @@ where
 /// ```text
 /// z * z_inv ~= z_inv * z ~= 1
 /// ```
-fn prop_complex_approx_multiplicative_inverse<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_complex_multiplicative_inverse<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -787,7 +787,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_modulus_squared_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -885,7 +885,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_modulus_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_modulus_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1010,7 +1010,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_l1_norm_approx_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -2060,9 +2060,9 @@ mod complex_f64_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex_approx_multiplicative_inverse(z in super::strategy_complex_f64()) {
+        fn prop_approx_complex_multiplicative_inverse(z in super::strategy_complex_f64()) {
             let z: super::Complex<f64> = z;
-            super::prop_complex_approx_multiplicative_inverse(z, 1e-7)?
+            super::prop_approx_complex_multiplicative_inverse(z, 1e-7)?
         }
 
         #[test]
@@ -2311,10 +2311,10 @@ mod complex_f64_modulus_squared_props {
         }
 
         #[test]
-        fn prop_modulus_squared_approx_point_separating(z1 in super::strategy_complex_modulus_squared_f64(), z2 in super::strategy_complex_modulus_squared_f64()) {
+        fn prop_approx_modulus_squared_point_separating(z1 in super::strategy_complex_modulus_squared_f64(), z2 in super::strategy_complex_modulus_squared_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_modulus_squared_approx_point_separating(z1, z2, 1e-10, 1e-20)?
+            super::prop_approx_modulus_squared_point_separating(z1, z2, 1e-10, 1e-20)?
         }
     }
 }
@@ -2385,10 +2385,10 @@ mod complex_f64_modulus_props {
         }
 
         #[test]
-        fn prop_modulus_approx_point_separating(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
+        fn prop_approx_modulus_point_separating(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_modulus_approx_point_separating(z1, z2, 1e-8)?
+            super::prop_approx_modulus_point_separating(z1, z2, 1e-8)?
         }
     }
 }
@@ -2428,10 +2428,10 @@ mod complex_f64_l1_norm_props {
         }
 
         #[test]
-        fn prop_l1_norm_approx_point_separating(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
+        fn prop_approx_l1_norm_point_separating(z1 in super::strategy_complex_f64(), z2 in super::strategy_complex_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_l1_norm_approx_point_separating(z1, z2, 1e-8)?
+            super::prop_approx_l1_norm_point_separating(z1, z2, 1e-8)?
         }
     }
 }

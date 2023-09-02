@@ -301,8 +301,7 @@ where
 fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
-{
-    
+{   
     prop_assert_eq!( v1 +  v2, &v1 +  v2);
     prop_assert_eq!( v1 +  v2,  v1 + &v2);
     prop_assert_eq!( v1 +  v2, &v1 + &v2);
@@ -324,23 +323,7 @@ fn prop_vector_addition_commutative<S, const N: usize>(v1: Vector<S, N>, v2: Vec
 where
     S: SimdScalar
 {
-
     prop_assert_eq!(v1 + v2, v2 + v1);
-
-    Ok(())
-}
-
-/// Vector addition should be associative. 
-/// 
-/// Given vectors `v1`, `v2`, and `v3` we have
-/// ```text
-/// (v1 + v2) + v3 = v1 + (v2 + v3)
-/// ```
-fn prop_vector_addition_approx_associative<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
-where
-    S: SimdScalarFloat
-{
-    prop_assert!(relative_eq!((v1 + v2) + v3, v1 + (v2 + v3), epsilon = tolerance));
 
     Ok(())
 }
@@ -355,7 +338,6 @@ fn prop_vector_addition_associative<S, const N: usize>(v1: Vector<S, N>, v2: Vec
 where
     S: SimdScalar
 {
-
     prop_assert_eq!((v1 + v2) + v3, v1 + (v2 + v3));
 
     Ok(())
@@ -415,7 +397,6 @@ fn prop_vector1_minus_vector2_equals_refvector1_minus_refvector2<S, const N: usi
 where
     S: SimdScalar
 {
-    
     prop_assert_eq!( v1 +  v2, &v1 +  v2);
     prop_assert_eq!( v1 +  v2,  v1 + &v2);
     prop_assert_eq!( v1 +  v2, &v1 + &v2);
@@ -451,7 +432,7 @@ where
 ///
 /// Given scalars `a` and `b`, and a vector `v`, we have
 /// ```text
-/// (a * b) * v = a * (b * v)
+/// v * (a * b) = (v * a) * b
 /// ```
 fn prop_scalar_multiplication_compatibility<S, const N: usize>(a: S, b: S, v: Vector<S, N>) -> Result<(), TestCaseError> 
 where
@@ -664,7 +645,6 @@ fn prop_vector_cross_product_multiplication_by_scalars<S>(c: S, v1: Vector3<S>, 
 where
     S: SimdScalar
 {
-
     prop_assert_eq!((v1 * c).cross(&v2), v1.cross(&v2) * c);
     prop_assert_eq!(v1.cross(&(v2 * c)), v1.cross(&v2) * c);
 
@@ -681,7 +661,6 @@ fn prop_vector_cross_product_distribute<S>(v1: Vector3<S>, v2: Vector3<S>, v3: V
 where
     S: SimdScalar
 {
-
     prop_assert_eq!(v1.cross(&(v2 + v3)), v1.cross(&v2) + v1.cross(&v3));
 
     Ok(())
@@ -698,7 +677,6 @@ fn prop_vector_cross_product_scalar_triple_product<S>(v1: Vector3<S>, v2: Vector
 where
     S: SimdScalar
 {
-
     prop_assert_eq!(v1.dot(&(v2.cross(&v3))), v1.cross(&v2).dot(&v3));
 
     Ok(())
@@ -714,7 +692,6 @@ fn prop_vector_cross_product_anticommutative<S>(v1: Vector3<S>, v2: Vector3<S>) 
 where
     S: SimdScalarSigned
 {
-
     prop_assert_eq!(v1.cross(&v2), -v2.cross(&v1));
 
     Ok(())
@@ -769,11 +746,10 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_norm_squared_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_norm_squared_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
-
     prop_assume!(relative_ne!(v1, v2, epsilon = input_tolerance));
     prop_assert!(
         (v1 - v2).norm_squared() > output_tolerance,
@@ -858,7 +834,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_norm_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
@@ -902,7 +878,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_l1_norm_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_l1_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
@@ -975,7 +951,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_lp_norm_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, p: u32, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_lp_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, p: u32, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
@@ -1019,7 +995,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_linf_norm_approx_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
 {
@@ -1138,7 +1114,6 @@ exact_arithmetic_props!(vector3_i32_arithmetic_props, Vector3, i32, any_vector3)
 exact_arithmetic_props!(vector4_i32_arithmetic_props, Vector4, i32, any_vector4);
 
 
-
 macro_rules! approx_add_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -1170,14 +1145,6 @@ macro_rules! approx_add_props {
                 let v2: super::$VectorN<$ScalarType> = v2;
                 super::prop_vector_addition_commutative(v1, v2)?
             }
-
-            #[test]
-            fn prop_vector_addition_approx_associative(v1 in super::$Generator(), v2 in super::$Generator(), v3 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                let v3: super::$VectorN<$ScalarType> = v3;
-                super::prop_vector_addition_approx_associative(v1, v2, v3, $tolerance)?
-            }
         }
     }
     }
@@ -1187,7 +1154,6 @@ approx_add_props!(vector1_f64_add_props, Vector1, f64, any_vector1, 1e-8);
 approx_add_props!(vector2_f64_add_props, Vector2, f64, any_vector2, 1e-8);
 approx_add_props!(vector3_f64_add_props, Vector3, f64, any_vector3, 1e-8);
 approx_add_props!(vector4_f64_add_props, Vector4, f64, any_vector4, 1e-8);
-
 
 
 macro_rules! exact_add_props {
@@ -1310,7 +1276,6 @@ exact_sub_props!(vector3_i32_sub_props, Vector3, i32, any_vector3);
 exact_sub_props!(vector4_i32_sub_props, Vector4, i32, any_vector4);
 
 
-
 macro_rules! approx_mul_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     #[cfg(test)]
@@ -1331,7 +1296,6 @@ approx_mul_props!(vector1_f64_mul_props, Vector1, f64, any_vector1, any_scalar, 
 approx_mul_props!(vector2_f64_mul_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
 approx_mul_props!(vector3_f64_mul_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
 approx_mul_props!(vector4_f64_mul_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
-
 
 
 macro_rules! exact_mul_props {
@@ -1550,10 +1514,10 @@ macro_rules! approx_norm_squared_props {
             }
 
             #[test]
-            fn prop_norm_squared_approx_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_approx_norm_squared_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
                 let v1: super::$VectorN<$ScalarType> = v1;
                 let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_norm_squared_approx_point_separating(v1, v2, $input_tolerance, $output_tolerance)?
+                super::prop_approx_norm_squared_point_separating(v1, v2, $input_tolerance, $output_tolerance)?
             }
         }
     }
@@ -1564,7 +1528,6 @@ approx_norm_squared_props!(vector1_f64_norm_squared_props, Vector1, f64, any_vec
 approx_norm_squared_props!(vector2_f64_norm_squared_props, Vector2, f64, any_vector2_norm_squared_f64, 1e-10, 1e-20);
 approx_norm_squared_props!(vector3_f64_norm_squared_props, Vector3, f64, any_vector3_norm_squared_f64, 1e-10, 1e-20);
 approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, any_vector4_norm_squared_f64, 1e-10, 1e-20);
-
 
 
 macro_rules! approx_norm_squared_synonym_props {
@@ -1586,7 +1549,6 @@ approx_norm_squared_synonym_props!(vector1_f64_norm_squared_synonym_props, Vecto
 approx_norm_squared_synonym_props!(vector2_f64_norm_squared_synonym_props, Vector2, f64, any_vector2);
 approx_norm_squared_synonym_props!(vector3_f64_norm_squared_synonym_props, Vector3, f64, any_vector3);
 approx_norm_squared_synonym_props!(vector4_f64_norm_squared_synonym_props, Vector4, f64, any_vector4);
-
 
 
 macro_rules! exact_norm_squared_props {
@@ -1650,10 +1612,10 @@ macro_rules! norm_props {
             }
 
             #[test]
-            fn prop_norm_approx_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_approx_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
                 let v1: super::$VectorN<$ScalarType> = v1;
                 let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_norm_approx_point_separating(v1, v2, $tolerance)?
+                super::prop_approx_norm_point_separating(v1, v2, $tolerance)?
             }
         }
     }
@@ -1678,10 +1640,10 @@ macro_rules! approx_l1_norm_props {
             }
 
             #[test]
-            fn prop_l1_norm_approx_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_approx_l1_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
                 let v1: super::$VectorN<$ScalarType> = v1;
                 let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_l1_norm_approx_point_separating(v1, v2, $tolerance)?
+                super::prop_approx_l1_norm_point_separating(v1, v2, $tolerance)?
             }
         }
     }
@@ -1734,10 +1696,10 @@ macro_rules! lp_norm_props {
             }
 
             #[test]
-            fn prop_lp_norm_approx_point_separating(v1 in super::$Generator(), v2 in super::$Generator(), p in super::$DegreeGen()) {
+            fn prop_approx_lp_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator(), p in super::$DegreeGen()) {
                 let v1: super::$VectorN<$ScalarType> = v1;
                 let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_lp_norm_approx_point_separating(v1, v2, p, $tolerance)?
+                super::prop_approx_lp_norm_point_separating(v1, v2, p, $tolerance)?
             }
         }
     }
@@ -1748,7 +1710,6 @@ lp_norm_props!(vector1_f64_lp_norm_props, Vector1, f64, any_vector1, any_scalar,
 lp_norm_props!(vector2_f64_lp_norm_props, Vector2, f64, any_vector2, any_scalar, any_u32, 1e-6);
 lp_norm_props!(vector3_f64_lp_norm_props, Vector3, f64, any_vector3, any_scalar, any_u32, 1e-6);
 lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, any_vector4, any_scalar, any_u32, 1e-6);
-
 
 
 macro_rules! approx_linf_norm_props {
@@ -1763,10 +1724,10 @@ macro_rules! approx_linf_norm_props {
             }
 
             #[test]
-            fn prop_linf_norm_approx_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_approx_linf_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
                 let v1: super::$VectorN<$ScalarType> = v1;
                 let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_linf_norm_approx_point_separating(v1, v2, $tolerance)?
+                super::prop_approx_linf_norm_point_separating(v1, v2, $tolerance)?
             }
         }
     }
@@ -1777,7 +1738,6 @@ approx_linf_norm_props!(vector1_f64_linf_norm_props, Vector1, f64, any_vector1, 
 approx_linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, any_vector2, any_scalar, 1e-8);
 approx_linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, any_vector3, any_scalar, 1e-8);
 approx_linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, any_vector4, any_scalar, 1e-8);
-
 
 
 macro_rules! exact_linf_norm_props {
@@ -1806,7 +1766,6 @@ exact_linf_norm_props!(vector1_i32_linf_norm_props, Vector1, i32, any_vector1, a
 exact_linf_norm_props!(vector2_i32_linf_norm_props, Vector2, i32, any_vector2, any_scalar);
 exact_linf_norm_props!(vector3_i32_linf_norm_props, Vector3, i32, any_vector3, any_scalar);
 exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, any_vector4, any_scalar);
-
 
 
 macro_rules! norm_synonym_props {

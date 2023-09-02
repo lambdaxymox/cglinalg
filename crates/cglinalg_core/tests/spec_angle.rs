@@ -110,7 +110,7 @@ where
 /// recovered_angle := asin(sin(angle))
 /// sin(recovered_angle) = sin(angle)
 /// ```
-fn prop_sine_and_arcsine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_sine_and_arcsine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>
@@ -135,7 +135,7 @@ where
 /// recovered_angle := acos(cos(angle))
 /// cos(recoved_angle) = cos(angle)
 /// ```
-fn prop_cosine_and_arccosine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_cosine_and_arccosine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>
@@ -162,7 +162,7 @@ where
 /// recovered_angle := atan(tan(angle))
 /// tan(recovered_angle) == tan(angle)
 /// ```
-fn prop_tangent_and_arctangent_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_tangent_and_arctangent_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>
@@ -189,7 +189,7 @@ where
 /// cos(angle) = cos(angle + k * full_turn())
 /// tan(angle) = tan(angle + k * full_turn())
 /// ```
-fn prop_congruent_angles<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_congruent_angles<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>
@@ -208,7 +208,7 @@ where
 /// ```text
 /// sin(angle)^2 + cos(angle)^2 = 1
 /// ```
-fn prop_pythagorean_identity<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_pythagorean_identity<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>
@@ -226,7 +226,7 @@ where
 /// 
 /// Given an angle `angle`, the normalized angle satisfies
 /// ```text
-/// normalize(angle) in [0, full_turn)
+/// 0 =< normalize(angle) < full_turn
 /// ```
 fn prop_normalize_normalizes_to_interval<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
@@ -250,7 +250,7 @@ where
 /// 
 /// Given an angle `angle`, the signed normalized angle satisfies
 /// ```text
-/// normalize_signed(angle) in [-full_turn / 2, full_turn / 2)
+/// -full_turn / 2 =< normalize_signed(angle) <= full_turn / 2
 /// ```
 fn prop_normalize_signed_normalizes_to_interval<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
@@ -299,33 +299,33 @@ mod radians_f64_trigonometry_prop {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_sine_and_arcsine_inverses(angle in super::strategy_any_radians()) {
+        fn prop_approx_sine_and_arcsine_inverses(angle in super::strategy_any_radians()) {
             let angle: super::Radians<f64> = angle;
-            super::prop_sine_and_arcsine_inverses(angle, 1e-6)?
+            super::prop_approx_sine_and_arcsine_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_cosine_and_arccosine_inverses(angle in super::strategy_any_radians()) {
+        fn prop_approx_cosine_and_arccosine_inverses(angle in super::strategy_any_radians()) {
             let angle: super::Radians<f64> = angle;
-            super::prop_cosine_and_arccosine_inverses(angle, 1e-6)?
+            super::prop_approx_cosine_and_arccosine_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_tangent_and_arctangent_inverses(angle in super::strategy_any_radians()) {
+        fn prop_approx_tangent_and_arctangent_inverses(angle in super::strategy_any_radians()) {
             let angle: super::Radians<f64> = angle;
-            super::prop_tangent_and_arctangent_inverses(angle, 1e-6)?
+            super::prop_approx_tangent_and_arctangent_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_congruent_angles(angle in super::strategy_any_radians()) {
+        fn prop_approx_congruent_angles(angle in super::strategy_any_radians()) {
             let angle: super::Radians<f64> = angle;
-            super::prop_congruent_angles(angle, 1e-6)?
+            super::prop_approx_congruent_angles(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_pythagorean_identity(angle in super::strategy_any_radians()) {
+        fn prop_approx_pythagorean_identity(angle in super::strategy_any_radians()) {
             let angle: super::Radians<f64> = angle;
-            super::prop_pythagorean_identity(angle, 1e-6)?
+            super::prop_approx_pythagorean_identity(angle, 1e-6)?
         }
     }
 }
@@ -378,33 +378,33 @@ mod degrees_f64_trigonometry_prop {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_sine_and_arcsine_inverses(angle in super::strategy_any_degrees()) {
+        fn prop_approx_sine_and_arcsine_inverses(angle in super::strategy_any_degrees()) {
             let angle: super::Degrees<f64> = angle;
-            super::prop_sine_and_arcsine_inverses(angle, 1e-6)?
+            super::prop_approx_sine_and_arcsine_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_cosine_and_arccosine_inverses(angle in super::strategy_any_degrees()) {
+        fn prop_approx_cosine_and_arccosine_inverses(angle in super::strategy_any_degrees()) {
             let angle: super::Degrees<f64> = angle;
-            super::prop_cosine_and_arccosine_inverses(angle, 1e-6)?
+            super::prop_approx_cosine_and_arccosine_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_tangent_and_arctangent_inverses(angle in super::strategy_any_degrees()) {
+        fn prop_approx_tangent_and_arctangent_inverses(angle in super::strategy_any_degrees()) {
             let angle: super::Degrees<f64> = angle;
-            super::prop_tangent_and_arctangent_inverses(angle, 1e-6)?
+            super::prop_approx_tangent_and_arctangent_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_congruent_angles(angle in super::strategy_any_degrees()) {
+        fn prop_approx_congruent_angles(angle in super::strategy_any_degrees()) {
             let angle: super::Degrees<f64> = angle;
-            super::prop_congruent_angles(angle, 1e-6)?
+            super::prop_approx_congruent_angles(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_pythagorean_identity(angle in super::strategy_any_degrees()) {
+        fn prop_approx_pythagorean_identity(angle in super::strategy_any_degrees()) {
             let angle: super::Degrees<f64> = angle;
-            super::prop_pythagorean_identity(angle, 1e-6)?
+            super::prop_approx_pythagorean_identity(angle, 1e-6)?
         }
     }
 }
