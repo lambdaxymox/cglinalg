@@ -21,73 +21,108 @@ use approx::{
 use proptest::prelude::*;
 
 
-fn strategy_any_scalar<S>() -> impl Strategy<Value = S>
-where 
-    S: SimdScalar + Arbitrary
+fn strategy_scalar_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
+where
+    S: SimdScalarSigned + Arbitrary
 {
-    any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
+    fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
+        min_value + (value % (max_value - min_value))
+    }
 
-        scalar % modulus
+    any::<S>().prop_map(move |value| {
+        let sign_value = value.signum();
+        let abs_value = value.abs();
+        
+        sign_value * rescale(abs_value, min_value, max_value)
     })
 }
 
-fn strategy_any_vector<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
-where 
-    S: SimdScalar + Arbitrary 
-{
-    any::<[S; N]>().prop_map(|array| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
-        let vector = Vector::from(array);
+fn strategy_any_scalar_f64() -> impl Strategy<Value = f64> {
+    let min_value = f64::sqrt(f64::EPSILON);
+    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
 
-        vector % modulus
-    })
+    strategy_scalar_from_range(min_value, max_value)
 }
+
+fn strategy_any_scalar_i32() -> impl Strategy<Value = i32> {
+    let min_value = 0_i32;
+    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
+    let max_value = 32767_i32;
+
+    strategy_scalar_from_range(min_value, max_value)
+}
+
+fn strategy_scalar_l1_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
+    let min_value = 0_i32;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340_i32;
+    let max_value = max_square_root / (N as i32);
+    
+    strategy_scalar_from_range(min_value, max_value)
+}
+
+fn strategy_scalar_linf_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
+    let min_value = 0_i32;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340_i32;
+    let max_value = max_square_root / (N as i32);
+    
+    strategy_scalar_from_range(min_value, max_value)
+}
+
 
 fn strategy_vector<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
 where 
-    S: SimdScalar + Arbitrary 
+    S: SimdScalarSigned + Arbitrary 
 {
     any::<[S; N]>().prop_map(Vector::from)
 }
 
-fn strategy_any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
-where 
-    S: SimdScalar + Arbitrary 
+
+fn strategy_vector_from_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>> 
+where
+    S: SimdScalarSigned + Arbitrary
 {
-    strategy_any_vector::<S, 1>()
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarSigned
+    {
+        min_value + (value % (max_value - min_value))
+    }
+
+    fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N> 
+    where
+        S: SimdScalarSigned
+    {
+        value.map(|element| rescale(element, min_value, max_value))
+    }
+
+    any::<[S; N]>().prop_map(move |array| {
+        let vector = Vector::from(array);
+        
+        rescale_vector(vector, min_value, max_value)
+    })
+    .no_shrink()
 }
 
-fn strategy_any_vector2<S>() -> impl Strategy<Value = Vector2<S>> 
+fn strategy_any_vector<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
 where 
-    S: SimdScalar + Arbitrary
+    S: SimdScalarSigned + Arbitrary 
 {
-    strategy_any_vector::<S, 2>()
-}
+    any::<[S; N]>().prop_map(|array| {        
+        let mut result = Vector::zero();
+        for i in 0..N {
+            let sign_value = array[i].signum();
+            let abs_value = array[i].abs();
+            result[i] = sign_value * abs_value;
+        }
 
-fn strategy_any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
-where 
-    S: SimdScalar + Arbitrary
-{
-    strategy_any_vector::<S, 3>()
-}
-
-fn strategy_any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
-where 
-    S: SimdScalar + Arbitrary
-{
-    strategy_any_vector::<S, 4>()
-}
-
-fn strategy_lp_norm_degree() -> impl Strategy<Value = u32> {
-    any::<u32>().prop_map(|i| {
-        let modulus = 50;
-
-        i % modulus
+        result
     })
 }
 
 fn strategy_vector_norm_squared_f64<const N: usize>() -> impl Strategy<Value = Vector<f64, N>> {
+    /*
     fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
         min_value + (value % (max_value - min_value))
     }
@@ -103,7 +138,136 @@ fn strategy_vector_norm_squared_f64<const N: usize>() -> impl Strategy<Value = V
         rescale_vector(vector, min_value, max_value)
     })
     .no_shrink()
+    */
+    let min_value = f64::sqrt(f64::EPSILON);
+    let max_value = f64::sqrt(f64::MAX);
+
+    strategy_vector_from_range(min_value, max_value)
 }
+
+fn strategy_vector_norm_squared_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
+    /*
+    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
+        value.map(|element| rescale(element, min_value, max_value))
+    }
+
+    strategy_vector::<i32, N>().prop_map(|vector| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / (N as i32);
+
+        rescale_vector(vector, min_value, max_value)
+    })
+    .no_shrink()
+    */
+    let min_value = 0;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340;
+    let max_value = max_square_root / (N as i32);
+
+    strategy_vector_from_range(min_value, max_value)
+}
+
+fn strategy_vector_l1_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
+    /*
+    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
+        value.map(|element| rescale(element, min_value, max_value))
+    }
+
+    strategy_vector::<i32, N>().prop_map(|vector| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / (N as i32);
+
+        rescale_vector(vector, min_value, max_value)
+    })
+    .no_shrink()
+    */
+    let min_value = 0;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340;
+    let max_value = max_square_root / (N as i32);
+
+    strategy_vector_from_range(min_value, max_value)
+}
+
+fn strategy_vector_linf_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
+    /*
+    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
+        value.map(|element| rescale(element, min_value, max_value))
+    }
+
+    strategy_vector::<i32, N>().prop_map(|vector| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / (N as i32);
+
+        rescale_vector(vector, min_value, max_value)
+    })
+    .no_shrink()
+    */
+    let min_value = 0;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340;
+    let max_value = max_square_root / (N as i32);
+
+    strategy_vector_from_range(min_value, max_value)
+}
+
+
+
+fn strategy_any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
+where 
+    S: SimdScalarSigned + Arbitrary 
+{
+    strategy_any_vector::<S, 1>()
+}
+
+fn strategy_any_vector2<S>() -> impl Strategy<Value = Vector2<S>> 
+where 
+    S: SimdScalarSigned + Arbitrary
+{
+    strategy_any_vector::<S, 2>()
+}
+
+fn strategy_any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
+where 
+    S: SimdScalarSigned + Arbitrary
+{
+    strategy_any_vector::<S, 3>()
+}
+
+fn strategy_any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
+where 
+    S: SimdScalarSigned + Arbitrary
+{
+    strategy_any_vector::<S, 4>()
+}
+
+fn strategy_lp_norm_degree() -> impl Strategy<Value = u32> {
+    any::<u32>().prop_map(|i| {
+        let modulus = 50;
+
+        i % modulus
+    })
+}
+
+
 
 
 fn strategy_vector1_norm_squared_f64() -> impl Strategy<Value = Vector1<f64>> {
@@ -122,25 +286,6 @@ fn strategy_vector4_norm_squared_f64() -> impl Strategy<Value = Vector4<f64>> {
     strategy_vector_norm_squared_f64::<4>()
 }
 
-fn strategy_vector_norm_squared_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
-    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
-        value.map(|element| rescale(element, min_value, max_value))
-    }
-
-    strategy_vector::<i32, N>().prop_map(|vector| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / (N as i32);
-
-        rescale_vector(vector, min_value, max_value)
-    })
-    .no_shrink()
-}
 
 fn strategy_vector1_norm_squared_i32() -> impl Strategy<Value = Vector1<i32>> {
     strategy_vector_norm_squared_i32::<1>()
@@ -158,18 +303,7 @@ fn strategy_vector4_norm_squared_i32() -> impl Strategy<Value = Vector4<i32>> {
     strategy_vector_norm_squared_i32::<4>()
 }
 
-fn strategy_scalar_from_range(min_value: i32, max_value: i32) -> impl Strategy<Value = i32> {
-    (min_value..=max_value).no_shrink()
-}
 
-fn strategy_scalar_l1_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
-    let min_value = 0;
-    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-    let max_square_root = 46340;
-    let max_value = max_square_root / (N as i32);
-    
-    strategy_scalar_from_range(min_value, max_value)
-}
 
 fn strategy_scalar1_l1_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_l1_norm_i32::<1>()
@@ -187,25 +321,9 @@ fn strategy_scalar4_l1_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_l1_norm_i32::<4>()
 }
 
-fn strategy_vector_l1_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
-    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
-        min_value + (value % (max_value - min_value))
-    }
 
-    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
-        value.map(|element| rescale(element, min_value, max_value))
-    }
 
-    strategy_vector::<i32, N>().prop_map(|vector| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / (N as i32);
 
-        rescale_vector(vector, min_value, max_value)
-    })
-    .no_shrink()
-}
 
 fn strategy_vector1_l1_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
     strategy_vector_l1_norm_i32::<1>()
@@ -223,14 +341,9 @@ fn strategy_vector4_l1_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
     strategy_vector_l1_norm_i32::<4>()
 }
 
-fn strategy_scalar_linf_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
-    let min_value = 0;
-    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-    let max_square_root = 46340;
-    let max_value = max_square_root / (N as i32);
-    
-    strategy_scalar_from_range(min_value, max_value)
-}
+
+
+
 
 fn strategy_scalar1_linf_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_linf_norm_i32::<1>()
@@ -248,25 +361,8 @@ fn strategy_scalar4_linf_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_linf_norm_i32::<4>()
 }
 
-fn strategy_vector_linf_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
-    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
-        min_value + (value % (max_value - min_value))
-    }
 
-    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
-        value.map(|element| rescale(element, min_value, max_value))
-    }
 
-    strategy_vector::<i32, N>().prop_map(|vector| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / (N as i32);
-
-        rescale_vector(vector, min_value, max_value)
-    })
-    .no_shrink()
-}
 
 fn strategy_vector1_linf_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
     strategy_vector_linf_norm_i32::<1>()
@@ -283,7 +379,8 @@ fn strategy_vector3_linf_norm_i32() -> impl Strategy<Value = Vector3<i32>> {
 fn strategy_vector4_linf_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
     strategy_vector_linf_norm_i32::<4>()
 }
-        
+
+
 /// A vector times a scalar zero should be a zero vector.
 ///
 /// Given a vector `v`
@@ -878,6 +975,28 @@ where
     Ok(())
 }
 
+/// The squared **L2** norm function is squared homogeneous.
+/// 
+/// Given a vector `v` and a scalar `c`, the **L2** norm satisfies
+/// ```text
+/// norm(v * c) = norm(v) * abs(c)
+/// ```
+/// and the squared **L2** norm function satisfies
+/// ```text
+/// norm(v * c)^2 = norm(v)^2 * abs(c)^2
+/// ```
+fn prop_norm_squared_homogeneous_squared<S, const N: usize>(v: Vector<S, N>, c: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarSigned
+{
+    let lhs = (v * c).norm_squared();
+    let rhs = v.norm_squared() * c.abs() * c.abs();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
 /// The **L2** norm of a vector is nonnegative.
 ///
 /// Given a vector `v`
@@ -1438,10 +1557,10 @@ macro_rules! approx_mul_props {
     }
 }
 
-approx_mul_props!(vector1_f64_mul_props, Vector1, f64, strategy_any_vector1, any_scalar, 1e-8);
-approx_mul_props!(vector2_f64_mul_props, Vector2, f64, strategy_any_vector2, any_scalar, 1e-8);
-approx_mul_props!(vector3_f64_mul_props, Vector3, f64, strategy_any_vector3, any_scalar, 1e-8);
-approx_mul_props!(vector4_f64_mul_props, Vector4, f64, strategy_any_vector4, any_scalar, 1e-8);
+approx_mul_props!(vector1_f64_mul_props, Vector1, f64, strategy_any_vector1, strategy_any_scalar_f64, 1e-8);
+approx_mul_props!(vector2_f64_mul_props, Vector2, f64, strategy_any_vector2, strategy_any_scalar_f64, 1e-8);
+approx_mul_props!(vector3_f64_mul_props, Vector3, f64, strategy_any_vector3, strategy_any_scalar_f64, 1e-8);
+approx_mul_props!(vector4_f64_mul_props, Vector4, f64, strategy_any_vector4, strategy_any_scalar_f64, 1e-8);
 
 
 macro_rules! exact_mul_props {
@@ -1468,10 +1587,10 @@ macro_rules! exact_mul_props {
     }
 }
 
-exact_mul_props!(vector1_i32_mul_props, Vector1, i32, strategy_any_vector1, strategy_any_scalar);
-exact_mul_props!(vector2_i32_mul_props, Vector2, i32, strategy_any_vector2, strategy_any_scalar);
-exact_mul_props!(vector3_i32_mul_props, Vector3, i32, strategy_any_vector3, strategy_any_scalar);
-exact_mul_props!(vector4_i32_mul_props, Vector4, i32, strategy_any_vector4, strategy_any_scalar);
+exact_mul_props!(vector1_i32_mul_props, Vector1, i32, strategy_any_vector1, strategy_any_scalar_i32);
+exact_mul_props!(vector2_i32_mul_props, Vector2, i32, strategy_any_vector2, strategy_any_scalar_i32);
+exact_mul_props!(vector3_i32_mul_props, Vector3, i32, strategy_any_vector3, strategy_any_scalar_i32);
+exact_mul_props!(vector4_i32_mul_props, Vector4, i32, strategy_any_vector4, strategy_any_scalar_i32);
 
 
 macro_rules! exact_distributive_props {
@@ -1516,10 +1635,10 @@ macro_rules! exact_distributive_props {
     }    
 }
 
-exact_distributive_props!(vector1_i32_distributive_props, Vector1, i32, strategy_any_vector1, strategy_any_scalar);
-exact_distributive_props!(vector2_i32_distributive_props, Vector2, i32, strategy_any_vector2, strategy_any_scalar);
-exact_distributive_props!(vector3_i32_distributive_props, Vector3, i32, strategy_any_vector3, strategy_any_scalar);
-exact_distributive_props!(vector4_i32_distributive_props, Vector4, i32, strategy_any_vector4, strategy_any_scalar);
+exact_distributive_props!(vector1_i32_distributive_props, Vector1, i32, strategy_any_vector1, strategy_any_scalar_i32);
+exact_distributive_props!(vector2_i32_distributive_props, Vector2, i32, strategy_any_vector2, strategy_any_scalar_i32);
+exact_distributive_props!(vector3_i32_distributive_props, Vector3, i32, strategy_any_vector3, strategy_any_scalar_i32);
+exact_distributive_props!(vector4_i32_distributive_props, Vector4, i32, strategy_any_vector4, strategy_any_scalar_i32);
 
 
 macro_rules! exact_dot_product_props {
@@ -1584,10 +1703,10 @@ macro_rules! exact_dot_product_props {
     }
 }
 
-exact_dot_product_props!(vector1_i32_dot_product_props, Vector1, i32, strategy_any_vector1, strategy_any_scalar);
-exact_dot_product_props!(vector2_i32_dot_product_props, Vector2, i32, strategy_any_vector2, strategy_any_scalar);
-exact_dot_product_props!(vector3_i32_dot_product_props, Vector3, i32, strategy_any_vector3, strategy_any_scalar);
-exact_dot_product_props!(vector4_i32_dot_product_props, Vector4, i32, strategy_any_vector4, strategy_any_scalar);
+exact_dot_product_props!(vector1_i32_dot_product_props, Vector1, i32, strategy_any_vector1, strategy_any_scalar_i32);
+exact_dot_product_props!(vector2_i32_dot_product_props, Vector2, i32, strategy_any_vector2, strategy_any_scalar_i32);
+exact_dot_product_props!(vector3_i32_dot_product_props, Vector3, i32, strategy_any_vector3, strategy_any_scalar_i32);
+exact_dot_product_props!(vector4_i32_dot_product_props, Vector4, i32, strategy_any_vector4, strategy_any_scalar_i32);
 
 
 macro_rules! exact_cross_product_props {
@@ -1645,7 +1764,7 @@ macro_rules! exact_cross_product_props {
     }
 }
 
-exact_cross_product_props!(vector3_i32_cross_product_props, i32, strategy_any_vector3, strategy_any_scalar);
+exact_cross_product_props!(vector3_i32_cross_product_props, i32, strategy_any_vector3, strategy_any_scalar_i32);
 
 
 macro_rules! approx_norm_squared_props {
@@ -1714,15 +1833,22 @@ macro_rules! exact_norm_squared_props {
                 let v2: super::$VectorN<$ScalarType> = v2;
                 super::prop_norm_squared_point_separating(v1, v2)?
             }
+
+            #[test]
+            fn prop_norm_squared_homogeneous_squared(v in super::$Generator(), c in super::$ScalarGen()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                let c: $ScalarType = c;
+                super::prop_norm_squared_homogeneous_squared(v, c)?
+            }
         }
     }
     }
 }
 
-exact_norm_squared_props!(vector1_i32_norm_squared_props, Vector1, i32, strategy_vector1_norm_squared_i32, any_scalar);
-exact_norm_squared_props!(vector2_i32_norm_squared_props, Vector2, i32, strategy_vector2_norm_squared_i32, any_scalar);
-exact_norm_squared_props!(vector3_i32_norm_squared_props, Vector3, i32, strategy_vector3_norm_squared_i32, any_scalar);
-exact_norm_squared_props!(vector4_i32_norm_squared_props, Vector4, i32, strategy_vector4_norm_squared_i32, any_scalar);
+exact_norm_squared_props!(vector1_i32_norm_squared_props, Vector1, i32, strategy_vector1_norm_squared_i32, strategy_any_scalar_i32);
+exact_norm_squared_props!(vector2_i32_norm_squared_props, Vector2, i32, strategy_vector2_norm_squared_i32, strategy_any_scalar_i32);
+exact_norm_squared_props!(vector3_i32_norm_squared_props, Vector3, i32, strategy_vector3_norm_squared_i32, strategy_any_scalar_i32);
+exact_norm_squared_props!(vector4_i32_norm_squared_props, Vector4, i32, strategy_vector4_norm_squared_i32, strategy_any_scalar_i32);
 
 
 macro_rules! exact_norm_squared_synonym_props {
@@ -1768,10 +1894,10 @@ macro_rules! norm_props {
     }
 }
 
-norm_props!(vector1_f64_norm_props, Vector1, f64, strategy_any_vector1, any_scalar, 1e-8);
-norm_props!(vector2_f64_norm_props, Vector2, f64, strategy_any_vector2, any_scalar, 1e-8);
-norm_props!(vector3_f64_norm_props, Vector3, f64, strategy_any_vector3, any_scalar, 1e-8);
-norm_props!(vector4_f64_norm_props, Vector4, f64, strategy_any_vector4, any_scalar, 1e-8);
+norm_props!(vector1_f64_norm_props, Vector1, f64, strategy_any_vector1, strategy_any_scalar_f64, 1e-8);
+norm_props!(vector2_f64_norm_props, Vector2, f64, strategy_any_vector2, strategy_any_scalar_f64, 1e-8);
+norm_props!(vector3_f64_norm_props, Vector3, f64, strategy_any_vector3, strategy_any_scalar_f64, 1e-8);
+norm_props!(vector4_f64_norm_props, Vector4, f64, strategy_any_vector4, strategy_any_scalar_f64, 1e-8);
 
 
 macro_rules! approx_l1_norm_props {
@@ -1796,10 +1922,10 @@ macro_rules! approx_l1_norm_props {
     }
 }
 
-approx_l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, strategy_any_vector1, any_scalar, 1e-8);
-approx_l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, strategy_any_vector2, any_scalar, 1e-8);
-approx_l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, strategy_any_vector3, any_scalar, 1e-8);
-approx_l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, strategy_any_vector4, any_scalar, 1e-8);
+approx_l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, strategy_any_vector1, strategy_any_scalar_f64, 1e-8);
+approx_l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, strategy_any_vector2, strategy_any_scalar_f64, 1e-8);
+approx_l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, strategy_any_vector3, strategy_any_scalar_f64, 1e-8);
+approx_l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, strategy_any_vector4, strategy_any_scalar_f64, 1e-8);
 
 
 macro_rules! exact_l1_norm_props {
@@ -1908,10 +2034,10 @@ macro_rules! approx_linf_norm_props {
     }
 }
 
-approx_linf_norm_props!(vector1_f64_linf_norm_props, Vector1, f64, strategy_any_vector1, strategy_any_scalar, 1e-8);
-approx_linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, strategy_any_vector2, strategy_any_scalar, 1e-8);
-approx_linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, strategy_any_vector3, strategy_any_scalar, 1e-8);
-approx_linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, strategy_any_vector4, strategy_any_scalar, 1e-8);
+approx_linf_norm_props!(vector1_f64_linf_norm_props, Vector1, f64, strategy_any_vector1, strategy_any_scalar_f64, 1e-8);
+approx_linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, strategy_any_vector2, strategy_any_scalar_f64, 1e-8);
+approx_linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, strategy_any_vector3, strategy_any_scalar_f64, 1e-8);
+approx_linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, strategy_any_vector4, strategy_any_scalar_f64, 1e-8);
 
 
 macro_rules! exact_linf_norm_props {
