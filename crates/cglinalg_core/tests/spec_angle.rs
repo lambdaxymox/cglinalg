@@ -15,17 +15,6 @@ use approx::{
 };
 
 
-fn strategy_any_scalar<S>() -> impl Strategy<Value = S>
-where 
-    S: SimdScalarFloat + Arbitrary
-{
-    any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
-
-        scalar % modulus
-    })
-}
-
 fn strategy_any_radians<S>() -> impl Strategy<Value = Radians<S>> 
 where 
     S: SimdScalarFloat + Arbitrary
