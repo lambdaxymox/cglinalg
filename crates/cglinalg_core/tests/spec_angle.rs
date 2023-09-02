@@ -54,27 +54,6 @@ where
         .no_shrink()
 }
 
-/*
-/// Multiplication of typed angles is compatible with dimensionless constants.
-///
-/// Given a typed angle `angle`, and dimensionless constants `a`, and `b`
-/// ```text
-/// (a * b) * angle = a * (b * angle)
-/// ```
-fn prop_angle_multiplication_compatible<S, A>(a: S, b: S, angle: A, tolerance: S) -> Result<(), TestCaseError> 
-where
-    S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
-{
-    let lhs = angle * (a * b);
-    let rhs = (angle * a) * b;
-
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
-
-    Ok(())
-}
-*/
-
 /// Typed angles have an additive unit element.
 ///
 /// Given a typed angle `angle`
