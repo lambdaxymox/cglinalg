@@ -32,52 +32,51 @@ where
     })
 }
 
+fn strategy_any_vector<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
+where 
+    S: SimdScalar + Arbitrary 
+{
+    any::<[S; N]>().prop_map(|array| {
+        let modulus = num_traits::cast(100_000_000).unwrap();
+        let vector = Vector::from(array);
+
+        vector % modulus
+    })
+}
+
+fn strategy_vector<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
+where 
+    S: SimdScalar + Arbitrary 
+{
+    any::<[S; N]>().prop_map(Vector::from)
+}
+
 fn strategy_any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
 where 
     S: SimdScalar + Arbitrary 
 {
-    any::<S>().prop_map(|x| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
-        let vector = Vector1::new(x);
-
-        vector % modulus
-    })
+    strategy_any_vector::<S, 1>()
 }
 
 fn strategy_any_vector2<S>() -> impl Strategy<Value = Vector2<S>> 
 where 
     S: SimdScalar + Arbitrary
 {
-    any::<(S, S)>().prop_map(|(x, y)| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
-        let vector = Vector2::new(x, y);
-
-        vector % modulus
-    })
+    strategy_any_vector::<S, 2>()
 }
 
 fn strategy_any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
 where 
     S: SimdScalar + Arbitrary
 {
-    any::<(S, S, S)>().prop_map(|(x, y, z)| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
-        let vector = Vector3::new(x, y, z);
-
-        vector % modulus
-    })
+    strategy_any_vector::<S, 3>()
 }
 
 fn strategy_any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
 where 
     S: SimdScalar + Arbitrary
 {
-    any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
-        let vector = Vector4::new(x, y, z, w);
-
-        vector % modulus
-    })
+    strategy_any_vector::<S, 4>()
 }
 
 fn strategy_lp_norm_degree() -> impl Strategy<Value = u32> {
@@ -88,320 +87,201 @@ fn strategy_lp_norm_degree() -> impl Strategy<Value = u32> {
     })
 }
 
-fn strategy_vector1_norm_squared_f64() -> impl Strategy<Value = Vector1<f64>> {
+fn strategy_vector_norm_squared_f64<const N: usize>() -> impl Strategy<Value = Vector<f64, N>> {
     fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
         min_value + (value % (max_value - min_value))
     }
 
-    any::<f64>().prop_map(|_x| {
+    fn rescale_vector<const N: usize>(value: Vector<f64, N>, min_value: f64, max_value: f64) -> Vector<f64, N> {
+        value.map(|element| rescale(element, min_value, max_value))
+    }
+
+    strategy_vector::<f64, N>().prop_map(|vector| {
         let min_value = f64::sqrt(f64::EPSILON);
         let max_value = f64::sqrt(f64::MAX);
-        let x = rescale(_x, min_value, max_value);
 
-        Vector1::new(x)
+        rescale_vector(vector, min_value, max_value)
     })
     .no_shrink()
+}
+
+
+fn strategy_vector1_norm_squared_f64() -> impl Strategy<Value = Vector1<f64>> {
+    strategy_vector_norm_squared_f64::<1>()
 }
 
 fn strategy_vector2_norm_squared_f64() -> impl Strategy<Value = Vector2<f64>> {
-    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<(f64, f64)>().prop_map(|(_x, _y)| {
-        let min_value = f64::sqrt(f64::EPSILON);
-        let max_value = f64::sqrt(f64::MAX);
-        let x = rescale(_x, min_value, max_value);
-        let y = rescale(_y, min_value, max_value);
-
-        Vector2::new(x, y)
-    })
-    .no_shrink()
+    strategy_vector_norm_squared_f64::<2>()
 }
 
 fn strategy_vector3_norm_squared_f64() -> impl Strategy<Value = Vector3<f64>> {
-    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<(f64, f64, f64)>().prop_map(|(_x, _y, _z)| {
-        let min_value = f64::sqrt(f64::EPSILON);
-        let max_value = f64::sqrt(f64::MAX);
-        let x = rescale(_x, min_value, max_value);
-        let y = rescale(_y, min_value, max_value);
-        let z = rescale(_z, min_value, max_value);
-
-        Vector3::new(x, y, z)
-    })
-    .no_shrink()
+    strategy_vector_norm_squared_f64::<3>()
 }
 
 fn strategy_vector4_norm_squared_f64() -> impl Strategy<Value = Vector4<f64>> {
-    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
+    strategy_vector_norm_squared_f64::<4>()
+}
+
+fn strategy_vector_norm_squared_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
+    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
         min_value + (value % (max_value - min_value))
     }
 
-    any::<(f64, f64, f64, f64)>().prop_map(|(_x, _y, _z, _w)| {
-        let min_value = f64::sqrt(f64::EPSILON);
-        let max_value = f64::sqrt(f64::MAX);
-        let x = rescale(_x, min_value, max_value);
-        let y = rescale(_y, min_value, max_value);
-        let z = rescale(_z, min_value, max_value);
-        let w = rescale(_w, min_value, max_value);
+    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
+        value.map(|element| rescale(element, min_value, max_value))
+    }
 
-        Vector4::new(x, y, z, w)
+    strategy_vector::<i32, N>().prop_map(|vector| {
+        let min_value = 0;
+        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+        let max_square_root = 46340;
+        let max_value = max_square_root / (N as i32);
+
+        rescale_vector(vector, min_value, max_value)
     })
     .no_shrink()
 }
 
 fn strategy_vector1_norm_squared_i32() -> impl Strategy<Value = Vector1<i32>> {
-    any::<i32>().prop_map(|_x| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root;
-        let x = min_value + (_x % (max_value - min_value + 1));
-
-        Vector1::new(x)
-    })
+    strategy_vector_norm_squared_i32::<1>()
 }
 
 fn strategy_vector2_norm_squared_i32() -> impl Strategy<Value = Vector2<i32>> {
-    any::<(i32, i32)>().prop_map(|(_x, _y)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 2;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-
-        Vector2::new(x, y)
-    })
+    strategy_vector_norm_squared_i32::<2>()
 }
 
 fn strategy_vector3_norm_squared_i32() -> impl Strategy<Value = Vector3<i32>> {
-    any::<(i32, i32, i32)>().prop_map(|(_x, _y, _z)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 3;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-        let z = min_value + (_z % (max_value - min_value + 1));
-
-        Vector3::new(x, y, z)
-    })
+    strategy_vector_norm_squared_i32::<3>()
 }
 
 fn strategy_vector4_norm_squared_i32() -> impl Strategy<Value = Vector4<i32>> {
-    any::<(i32, i32, i32, i32)>().prop_map(|(_x, _y, _z, _w)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 4;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-        let z = min_value + (_z % (max_value - min_value + 1));
-        let w = min_value + (_w % (max_value - min_value + 1));
+    strategy_vector_norm_squared_i32::<4>()
+}
 
-        Vector4::new(x, y, z, w)
-    })
+fn strategy_scalar_from_range(min_value: i32, max_value: i32) -> impl Strategy<Value = i32> {
+    (min_value..=max_value).no_shrink()
+}
+
+fn strategy_scalar_l1_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
+    let min_value = 0;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340;
+    let max_value = max_square_root / (N as i32);
+    
+    strategy_scalar_from_range(min_value, max_value)
 }
 
 fn strategy_scalar1_l1_norm_i32() -> impl Strategy<Value = i32> {
-    any::<i32>().prop_map(|value| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root;
-        
-        min_value + (value % (max_value - min_value + 1))
-    })
+    strategy_scalar_l1_norm_i32::<1>()
 }
 
 fn strategy_scalar2_l1_norm_i32() -> impl Strategy<Value = i32> {
-    any::<i32>().prop_map(|value| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 2;
-        
-        min_value + (value % (max_value - min_value + 1))
-    })
+    strategy_scalar_l1_norm_i32::<2>()
 }
 
 fn strategy_scalar3_l1_norm_i32() -> impl Strategy<Value = i32> {
-    any::<i32>().prop_map(|value| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 3;
-        
-        min_value + (value % (max_value - min_value + 1))
-    })
+    strategy_scalar_l1_norm_i32::<3>()
 }
 
 fn strategy_scalar4_l1_norm_i32() -> impl Strategy<Value = i32> {
-    any::<i32>().prop_map(|value| {
+    strategy_scalar_l1_norm_i32::<4>()
+}
+
+fn strategy_vector_l1_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
+    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
+        value.map(|element| rescale(element, min_value, max_value))
+    }
+
+    strategy_vector::<i32, N>().prop_map(|vector| {
         let min_value = 0;
         // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
         let max_square_root = 46340;
-        let max_value = max_square_root / 4;
-        
-        min_value + (value % (max_value - min_value + 1))
+        let max_value = max_square_root / (N as i32);
+
+        rescale_vector(vector, min_value, max_value)
     })
+    .no_shrink()
 }
 
 fn strategy_vector1_l1_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
-    any::<i32>().prop_map(|_x| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root;
-        let x = min_value + (_x % (max_value - min_value + 1));
-
-        Vector1::new(x)
-    })
+    strategy_vector_l1_norm_i32::<1>()
 }
 
 fn strategy_vector2_l1_norm_i32() -> impl Strategy<Value = Vector2<i32>> {
-    any::<(i32, i32)>().prop_map(|(_x, _y)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 2;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-
-        Vector2::new(x, y)
-    })
+    strategy_vector_l1_norm_i32::<2>()
 }
 
 fn strategy_vector3_l1_norm_i32() -> impl Strategy<Value = Vector3<i32>> {
-    any::<(i32, i32, i32)>().prop_map(|(_x, _y, _z)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 3;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-        let z = min_value + (_z % (max_value - min_value + 1));
-
-        Vector3::new(x, y, z)
-    })
+    strategy_vector_l1_norm_i32::<3>()
 }
 
 fn strategy_vector4_l1_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
-    any::<(i32, i32, i32, i32)>().prop_map(|(_x, _y, _z, _w)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 4;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-        let z = min_value + (_z % (max_value - min_value + 1));
-        let w = min_value + (_w % (max_value - min_value + 1));
+    strategy_vector_l1_norm_i32::<4>()
+}
 
-        Vector4::new(x, y, z, w)
-    })
+fn strategy_scalar_linf_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
+    let min_value = 0;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340;
+    let max_value = max_square_root / (N as i32);
+    
+    strategy_scalar_from_range(min_value, max_value)
 }
 
 fn strategy_scalar1_linf_norm_i32() -> impl Strategy<Value = i32> {
-    any::<i32>().prop_map(|value| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root;
-        
-        min_value + (value % (max_value - min_value + 1))
-    })
+    strategy_scalar_linf_norm_i32::<1>()
 }
 
 fn strategy_scalar2_linf_norm_i32() -> impl Strategy<Value = i32> {
-    any::<i32>().prop_map(|value| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 2;
-        
-        min_value + (value % (max_value - min_value + 1))
-    })
+    strategy_scalar_linf_norm_i32::<2>()
 }
 
 fn strategy_scalar3_linf_norm_i32() -> impl Strategy<Value = i32> {
-    any::<i32>().prop_map(|value| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 3;
-        
-        min_value + (value % (max_value - min_value + 1))
-    })
+    strategy_scalar_linf_norm_i32::<3>()
 }
 
 fn strategy_scalar4_linf_norm_i32() -> impl Strategy<Value = i32> {
-    any::<i32>().prop_map(|value| {
+    strategy_scalar_linf_norm_i32::<4>()
+}
+
+fn strategy_vector_linf_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
+    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
+        min_value + (value % (max_value - min_value))
+    }
+
+    fn rescale_vector<const N: usize>(value: Vector<i32, N>, min_value: i32, max_value: i32) -> Vector<i32, N> {
+        value.map(|element| rescale(element, min_value, max_value))
+    }
+
+    strategy_vector::<i32, N>().prop_map(|vector| {
         let min_value = 0;
         // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
         let max_square_root = 46340;
-        let max_value = max_square_root / 4;
-        
-        min_value + (value % (max_value - min_value + 1))
+        let max_value = max_square_root / (N as i32);
+
+        rescale_vector(vector, min_value, max_value)
     })
+    .no_shrink()
 }
 
 fn strategy_vector1_linf_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
-    any::<i32>().prop_map(|_x| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root;
-        let x = min_value + (_x % (max_value - min_value + 1));
-
-        Vector1::new(x)
-    })
+    strategy_vector_linf_norm_i32::<1>()
 }
 
 fn strategy_vector2_linf_norm_i32() -> impl Strategy<Value = Vector2<i32>> {
-    any::<(i32, i32)>().prop_map(|(_x, _y)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 2;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-
-        Vector2::new(x, y)
-    })
+    strategy_vector_linf_norm_i32::<2>()
 }
 
 fn strategy_vector3_linf_norm_i32() -> impl Strategy<Value = Vector3<i32>> {
-    any::<(i32, i32, i32)>().prop_map(|(_x, _y, _z)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 3;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-        let z = min_value + (_z % (max_value - min_value + 1));
-
-        Vector3::new(x, y, z)
-    })
+    strategy_vector_linf_norm_i32::<3>()
 }
 
 fn strategy_vector4_linf_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
-    any::<(i32, i32, i32, i32)>().prop_map(|(_x, _y, _z, _w)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 4;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-        let z = min_value + (_z % (max_value - min_value + 1));
-        let w = min_value + (_w % (max_value - min_value + 1));
-
-        Vector4::new(x, y, z, w)
-    })
+    strategy_vector_linf_norm_i32::<4>()
 }
         
 /// A vector times a scalar zero should be a zero vector.
