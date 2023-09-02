@@ -209,26 +209,6 @@ fn any_vector4_norm_squared_i32() -> impl Strategy<Value = Vector4<i32>> {
     })
 }
 
-
-/*
-/// A scalar zero times a vector should be a zero vector. 
-///
-/// Given a vector `v`
-/// ```text
-/// 0 * v = 0
-/// ```
-fn prop_zero_times_vector_equals_zero<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let zero: S = num_traits::zero();
-    let zero_vector = Vector::zero();
-
-    prop_assert_eq!(zero * v, zero_vector);
-
-    Ok(())
-}
-*/
         
 /// A vector times a scalar zero should be a zero vector.
 ///
@@ -283,24 +263,6 @@ where
 
     Ok(())
 }
-/*
-/// Multiplying a vector by scalar one should give the original vector.
-///
-/// Given a vector `v`
-/// ```text
-/// 1 * v = v
-/// ```
-fn prop_one_times_vector_equal_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let one: S = num_traits::one();
-
-    prop_assert_eq!(one * v, v);
-
-    Ok(())
-}
-*/
 
 /// Multiplying a vector by one should give the original vector.
 ///
@@ -320,44 +282,6 @@ where
 
     Ok(())
 }
-
-
-/*
-/// A vector plus a zero vector equals the same vector.
-///
-/// Given a vector `v`
-/// ```text
-/// v + 0 = v
-/// ```
-fn prop_vector_plus_zero_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let zero_vector = Vector::zero();
-
-    prop_assert_eq!(v + zero_vector, v);
-
-    Ok(())
-}
-*/
-/*
-/// A zero vector plus a vector equals the same vector.
-///
-/// Given a vector `v`
-/// ```text
-/// 0 + v = v
-/// ```
-fn prop_zero_plus_vector_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let zero_vector = Vector::zero();
-
-    prop_assert_eq!(zero_vector + v, v);
-
-    Ok(())
-}
-*/
 
 /// Given vectors `v1` and `v2`, we should be able to use `v1` and 
 /// `v2` interchangeably with their references `&v1` and `&v2` in 
@@ -421,94 +345,6 @@ where
     Ok(())
 }
 
-
-
-/*
-/// A vector plus a zero vector equals the same vector.
-///
-/// Given a vector `v`
-/// ```text
-/// v + 0 = v
-/// ```
-fn prop_vector_plus_zero_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let zero_vector = Vector::zero();
-
-    prop_assert_eq!(v + zero_vector, v);
-
-    Ok(())
-}
-*/
-/*
-/// A zero vector plus a vector equals the same vector.
-///
-/// Given a vector `v`
-/// ```text
-/// 0 + v = v
-/// ```
-fn prop_zero_plus_vector_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let zero_vector = Vector::zero();
-
-    prop_assert_eq!(zero_vector + v, v);
-
-    Ok(())
-}
-*/
-/*
-/// Given vectors `v1` and `v2`, we should be able to use `v1` and 
-/// `v2` interchangeably with their references `&v1` and `&v2` in 
-/// arithmetic expressions involving vectors.
-///
-/// Given two vectors `v1` and `v2`, and their references `&v1` and 
-/// `&v2`, we have
-/// ```text
-///  v1 +  v2 = &v1 +  v2
-///  v1 +  v2 =  v1 + &v2
-///  v1 +  v2 = &v1 + &v2
-///  v1 + &v2 = &v1 +  v2
-/// &v1 +  v2 =  v1 + &v2
-/// &v1 +  v2 = &v1 + &v2
-///  v1 + &v2 = &v1 + &v2
-/// ```
-fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    
-    prop_assert_eq!( v1 +  v2, &v1 +  v2);
-    prop_assert_eq!( v1 +  v2,  v1 + &v2);
-    prop_assert_eq!( v1 +  v2, &v1 + &v2);
-    prop_assert_eq!( v1 + &v2, &v1 +  v2);
-    prop_assert_eq!(&v1 +  v2,  v1 + &v2);
-    prop_assert_eq!(&v1 +  v2, &v1 + &v2);
-    prop_assert_eq!( v1 + &v2, &v1 + &v2);
-
-    Ok(())
-}
-*/
-/*
-/// Vector addition over integer scalars should be commutative.
-/// 
-/// Given vectors `v1` and `v2`
-/// ```text
-/// v1 + v2 = v2 + v1
-/// ```
-fn prop_vector_addition_commutative<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    
-    prop_assert_eq!(v1 + v2, v2 + v1);
-
-    Ok(())
-}
-*/
-
 /// Vector addition over integer scalars should be associative.
 ///
 /// Given three vectors `v1`, `v2`, and `v3`, we have
@@ -524,8 +360,6 @@ where
 
     Ok(())
 }
-
-
 
 /// The zero vector over vectors of floating point scalars should act as an 
 /// additive unit. 
@@ -593,97 +427,6 @@ where
     Ok(())
 }
 
-
-
-/*
-/// The zero vector should act as an additive unit.
-///
-/// Given a vector `v`
-/// ```text
-/// v - 0 = v
-/// ```
-fn prop_vector_minus_zero_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let zero_vector = $VectorN::<$ScalarType>::zero();
-
-    prop_assert_eq!(v - zero_vector, v);
-
-    Ok(())
-}
-*/
-/*
-/// Every vector should have an additive inverse.
-///
-/// Given a vector `v`, there is a vector `-v` such that
-/// ```text
-/// v - v = v + (-v) = (-v) + v = 0
-/// ```
-fn prop_vector_minus_vector_equals_zero<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let zero_vector = $VectorN::<$ScalarType>::zero();
-
-    prop_assert_eq!(v - v, zero_vector);
-
-    Ok(())
-}
-*/
-/*
-/// Given vectors `v1` and `v2`, we should be able to use `v1` and `v2` 
-/// interchangeably with their references `&v1` and `&v2` in arithmetic 
-/// expressions involving vectors. 
-///
-/// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, 
-/// they should satisfy
-/// ```text
-///  v1 -  v2 = &v1 -  v2
-///  v1 -  v2 =  v1 - &v2
-///  v1 -  v2 = &v1 - &v2
-///  v1 - &v2 = &v1 -  v2
-/// &v1 -  v2 =  v1 - &v2
-/// &v1 -  v2 = &v1 - &v2
-///  v1 - &v2 = &v1 - &v2
-/// ```
-fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    prop_assert_eq!( v1 +  v2, &v1 +  v2);
-    prop_assert_eq!( v1 +  v2,  v1 + &v2);
-    prop_assert_eq!( v1 +  v2, &v1 + &v2);
-    prop_assert_eq!( v1 + &v2, &v1 +  v2);
-    prop_assert_eq!(&v1 +  v2,  v1 + &v2);
-    prop_assert_eq!(&v1 +  v2, &v1 + &v2);
-    prop_assert_eq!( v1 + &v2, &v1 + &v2);
-
-    Ok(())
-}
-*/
-
-
-/*
-/// Multiplication of a scalar and a vector should be commutative.
-///
-/// Given a constant `c` and a vector `v`
-/// ```text
-/// c * v = v * c
-/// ```
-/// We deviate from the usual formalisms of vector algebra in that we 
-/// allow the ability to multiply scalars from the left of a vector, or 
-/// from the right of a vector.
-fn prop_scalar_times_vector_equals_vector_times_scalar<S, const N: usize>(c: S, v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    prop_assert_eq!(c * v, v * c);
-
-    Ok(())
-}
-*/
-
 /// A scalar `1` acts like a multiplicative identity element.
 ///
 /// Given a vector `v`
@@ -700,30 +443,6 @@ where
 
     Ok(())
 }
-
-
-
-
-
-/*
-/// Exact multiplication of a scalar and a vector should be commutative.
-///
-/// Given a constant `c` and a vector `v`
-/// ```text
-/// c * v = v * c
-/// ```
-/// We deviate from the usual formalisms of vector algebra in that we 
-/// allow the ability to multiply scalars from the left, or from the right 
-/// of a vector.
-fn prop_scalar_times_vector_equals_vector_times_scalar<S, const N: usize>(c: S, v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    prop_assert_eq!(c * v, v * c);
-
-    Ok(())
-}
-*/
 
 /// Exact multiplication of two scalars and a vector should be compatible 
 /// with multiplication of all scalars. In other words, scalar multiplication 
@@ -742,29 +461,6 @@ where
 
     Ok(())
 }
-
-/*
-/// A scalar `1` acts like a multiplicative identity element.
-///
-/// Given a vector `v`
-/// ```text
-/// 1 * v = v * 1 = v
-/// ```
-fn prop_one_times_vector_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let one = num_traits::one();
-    
-    prop_assert_eq!(v * one, v);
-
-    Ok(())
-}
-*/
-
-
-
-
 
 /// Scalar multiplication should distribute over vector addition.
 ///
@@ -833,9 +529,6 @@ where
 
     Ok(())
 }
-
-
-
 
 /// The dot product of vectors over integer scalars is commutative.
 ///
@@ -942,10 +635,6 @@ where
     Ok(())
 }
 
-
-
-
-
 /// The three-dimensional vector cross product of a vector with
 /// itself is zero.
 ///
@@ -1050,10 +739,6 @@ where
     Ok(())
 }
 
-
-
-
-
 /// The squared **L2** norm of a vector is nonnegative.
 ///
 /// Given a vector `v`
@@ -1099,9 +784,6 @@ where
     Ok(())
 }
 
-
-
-
 /// The [`Vector::magnitude_squared`] function and the [`Vector::norm_squared`] 
 /// function are synonyms. In particular, given a vector `v`
 /// ```text
@@ -1116,27 +798,6 @@ where
 
     Ok(())
 }
-
-
-
-/*
-/// The squared **L2** norm of a vector is nonnegative.
-///
-/// Given a vector `v`
-/// ```text
-/// norm_squared(v) >= 0
-/// ```
-fn prop_norm_squared_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    let zero = num_traits::zero();
-    
-    prop_assert!(v.norm_squared() >= zero);
-
-    Ok(())
-}
-*/
 
 /// The squared **L2** norm function is point separating. In particular, 
 /// if the squared distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
@@ -1166,30 +827,6 @@ where
 
     Ok(())
 }
-
-
-
-
-
-/*
-/// The [`Vector::magnitude_squared`] function and the [`Vector::norm_squared`] 
-/// function are synonyms. In particular, given a vector `v`
-/// ```text
-/// magnitude_squared(v) = norm_squared(v)
-/// ```
-/// where equality is exact.
-fn prop_magnitude_squared_norm_squared_synonyms<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    prop_assert_eq!(v.magnitude_squared(), v.norm_squared());
-
-    Ok(())
-}
-*/
-
-
-
 
 /// The **L2** norm of a vector is nonnegative.
 ///
@@ -1235,10 +872,6 @@ where
     Ok(())
 }
 
-
-
-
-
 /// The **L1** norm of a vector is nonnegative.
 ///
 /// Given a vector `v`
@@ -1283,28 +916,6 @@ where
     Ok(())
 }
 
-
-
-
-/*
-/// The **L1** norm of a vector is nonnegative.
-///
-/// Given a vector `v`
-/// ```text
-/// l1_norm(v) >= 0
-/// ```
-fn prop_l1_norm_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalarSigned
-{
-    let zero = num_traits::zero();
-    
-    prop_assert!(v.l1_norm() >= zero);
-
-    Ok(())
-}
-*/
-
 /// The **L1** norm function is point separating. In particular, if the 
 /// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
@@ -1333,9 +944,6 @@ where
 
     Ok(())
 }
-
-
-
 
 /// The **Lp** norm of a vector is nonnegative.
 ///
@@ -1381,9 +989,6 @@ where
     Ok(())
 }
 
-
-
-
 /// The **L-infinity** norm of a vector is nonnegative.
 ///
 /// Given a vector `v`
@@ -1428,27 +1033,6 @@ where
     Ok(())
 }
 
-
-
-/*
-/// The **L-infinity** norm of a vector is nonnegative.
-///
-/// Given a vector `v`
-/// ```text
-/// linf_norm(v) >= 0
-/// ```
-fn prop_linf_norm_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalarSigned + SimdScalarOrd
-{
-    let zero: $ScalarType = num_traits::zero();
-    
-    prop_assert!(v.linf_norm() >= zero);
-
-    Ok(())
-}
-*/
-
 /// The **L-infinity** norm function is point separating. In particular, if the 
 /// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
 ///
@@ -1477,9 +1061,6 @@ where
 
     Ok(())
 }
-
-
-
 
 /// The [`Vector::magnitude`] function and the [`Vector::norm`] function 
 /// are synonyms. In particular, given a vector `v`
@@ -1512,23 +1093,12 @@ where
 }
 
 
-
-
-
 macro_rules! exact_arithmetic_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
-            /*
-            #[test]
-            fn prop_zero_times_vector_equals_zero(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_zero_times_vector_equals_zero(v)?
-            }
-            */
-        
             #[test]
             fn prop_vector_times_zero_equals_zero(v in super::$Generator()) {
                 let v: super::$VectorN<$ScalarType> = v;
@@ -1546,14 +1116,6 @@ macro_rules! exact_arithmetic_props {
                 let v: super::$VectorN<$ScalarType> = v;
                 super::prop_zero_plus_vector_equals_vector(v)?
             }
-
-            /*
-            #[test]
-            fn prop_one_times_vector_equal_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_one_times_vector_equal_vector(v)?
-            }
-            */
 
             #[test]
             fn prop_vector_times_one_equals_vector(v in super::$Generator()) {
@@ -1755,15 +1317,6 @@ macro_rules! approx_mul_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
-            /*
-            #[test]
-            fn prop_scalar_times_vector_equals_vector_times_scalar(c in super::$ScalarGen(), v in super::$Generator()) {
-                let c: $ScalarType = c;
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_scalar_times_vector_equals_vector_times_scalar(c, v)?
-            }
-            */
-
             #[test]
             fn prop_one_times_vector_equals_vector(v in super::$Generator()) {
                 let v: super::$VectorN<$ScalarType> = v;
@@ -1787,15 +1340,6 @@ macro_rules! exact_mul_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
-            /*
-            #[test]
-            fn prop_scalar_times_vector_equals_vector_times_scalar(c in super::$ScalarGen(), v in super::$Generator()) {
-                let c: $ScalarType = c;
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_scalar_times_vector_equals_vector_times_scalar(c, v)?
-            }
-            */
-
             #[test]
             fn prop_scalar_multiplication_compatibility(a in super::$ScalarGen(), b in super::$ScalarGen(), v in super::$Generator()) {
                 let a: $ScalarType = a;
