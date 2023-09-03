@@ -58,20 +58,6 @@ where
 }
 
 fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
-    /*
-    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<f64>().prop_map(|value| {
-        let min_value = f64::sqrt(f64::EPSILON);
-        let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
-        let sign_value = value.signum();
-        let abs_value = value.abs();
-        
-        sign_value * rescale(abs_value, min_value, max_value)
-    })
-    */
     let min_value = f64::sqrt(f64::EPSILON);
     let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
 
@@ -79,21 +65,6 @@ fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
 }
 
 fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
-    /*
-    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<i32>().prop_map(|value| {
-        let min_value = 0_i32;
-        // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
-        let max_value = 32767_i32;
-        let sign_value = value.signum();
-        let abs_value = value.abs();
-        
-        sign_value * rescale(abs_value, min_value, max_value)
-    })
-    */
     let min_value = 0_i32;
     // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
     let max_value = 32767_i32;
@@ -102,25 +73,6 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
 }
 
 fn strategy_complex_f64_any() -> impl Strategy<Value = Complex<f64>> {
-    /*
-    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<(f64, f64)>().prop_map(|(re, im)| {
-        let min_value = f64::sqrt(f64::EPSILON);
-        let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
-        let sign_re = re.signum();
-        let sign_im = im.signum();
-        let abs_re = re.abs();
-        let abs_im = im.abs();
-        let re = sign_re * rescale(abs_re, min_value, max_value);
-        let im = sign_im * rescale(abs_im, min_value, max_value);
-        
-        Complex::new(re, im)
-    })
-    .no_shrink()
-    */
     let min_value = f64::sqrt(f64::EPSILON);
     let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
 
@@ -128,26 +80,6 @@ fn strategy_complex_f64_any() -> impl Strategy<Value = Complex<f64>> {
 }
 
 fn strategy_complex_i32_any() -> impl Strategy<Value = Complex<i32>> {
-    /*
-    fn rescale(value: i32, min_value: i32, max_value: i32) -> i32 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<(i32, i32)>().prop_map(|(re, im)| {
-        let min_value = 0_i32;
-        // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
-        let max_value = 32767_i32;
-        let sign_re = re.signum();
-        let sign_im = im.signum();
-        let abs_re = re.abs();
-        let abs_im = im.abs();
-        let re = sign_re * rescale(abs_re, min_value, max_value);
-        let im = sign_im * rescale(abs_im, min_value, max_value);
-        
-        Complex::new(re, im)
-    })
-    .no_shrink()
-    */
     let min_value = 0_i32;
     // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
     let max_value = 32767_i32;
@@ -180,19 +112,6 @@ where
 
 
 fn strategy_complex_f64_modulus_squared() -> impl Strategy<Value = Complex<f64>> {
-    /*
-    use cglinalg_core::Radians;
-
-    any::<(f64, f64)>().prop_map(|(_scale, _angle)| {
-        let min_scale = f64::sqrt(f64::EPSILON);
-        let max_scale = f64::sqrt(f64::MAX);
-        let scale = min_scale + (_scale % (max_scale - min_scale));
-        let angle = Radians(_angle % core::f64::consts::FRAC_PI_2);
-
-        Complex::from_polar_decomposition(scale, angle)
-    })
-    .no_shrink()
-    */
     let min_scale = f64::sqrt(f64::EPSILON);
     let max_scale = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
 
@@ -200,19 +119,6 @@ fn strategy_complex_f64_modulus_squared() -> impl Strategy<Value = Complex<f64>>
 }
 
 fn strategy_complex_i32_modulus_squared() -> impl Strategy<Value = Complex<i32>> {
-    /*
-    any::<(i32, i32)>().prop_map(|(_re, _im)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 2;
-        let re = min_value + (_re % (max_value - min_value + 1));
-        let im = min_value + (_im % (max_value - min_value + 1));
-        
-        Complex::new(re, im)
-    })
-    .no_shrink()
-    */
     let min_value = 0;
     // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
     let max_square_root = 46340;
