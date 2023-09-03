@@ -1068,7 +1068,15 @@ where
     Ok(())
 }
 
-
+/// The principal argument of two complex numbers that differ only by a phase factor
+/// of `2 * pi * k` for some integer `k` have the same argument up to a sign factor.
+/// 
+/// Given complex numbers `z1` and `z2` such that `z1 := r * exp(i * angle)` and 
+/// `z2 := r * exp(i * (angle + 2 * pi * k))` where `r` is a floating point number 
+/// and `k` is an integer
+/// ```text
+/// arg(z1) == arg(z2)
+/// ```
 fn prop_approx_arg_congruent<S>(z: Complex<S>, k: i32, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -1089,6 +1097,14 @@ where
     Ok(())
 }
 
+/// The argument of the quotient of two non-zero complex numbers satisfies the following
+/// relation.
+/// 
+/// Given two non-zero complex numbers `z1` and `z2`, there exists an integer `k` such 
+/// that
+/// ```text
+/// arg(z1 * z2) - (arg(z1) + arg(z2)) == 2 * pi * k
+/// ```
 fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1110,6 +1126,14 @@ where
     Ok(())
 }
 
+/// The argument of the quotient of two non-zero complex numbers satisfies the following
+/// relation.
+/// 
+/// Given two non-zero complex numbers `z1` and `z2`, there exists an integer `k` such 
+/// that
+/// ```text
+/// arg(z1 / z2) - (arg(z1) - arg(z2)) == 2 * pi * k
+/// ```
 fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1131,6 +1155,12 @@ where
     Ok(())
 }
 
+/// The principal argument of a complex number is in the range `[-pi, pi]`.
+/// 
+/// Given a complex number `z`
+/// ```
+/// -pi =< arg(z) <= pi
+/// ```
 fn prop_arg_range<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
