@@ -1897,6 +1897,7 @@ where
     Ok(())
 }
 
+
 /// The hyperbolic cosine and hyperbolic arccosine functions satisfy the 
 /// following relation.
 /// 
