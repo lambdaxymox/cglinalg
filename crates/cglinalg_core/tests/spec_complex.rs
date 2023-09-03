@@ -88,7 +88,7 @@ fn strategy_complex_i32_any() -> impl Strategy<Value = Complex<i32>> {
 }
 
 
-fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S) -> impl Strategy<Value = Complex<S>> 
+fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Complex<S>> 
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -103,7 +103,7 @@ where
 
     any::<(S, S)>().prop_map(move |(_scale, _angle)| {
         let scale = SimdScalarSigned::abs(rescale(_scale, min_scale, max_scale));
-        let angle = Radians(_angle.abs() % S::frac_pi_2());
+        let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
 
         Complex::from_polar_decomposition(scale, angle)
     })
@@ -179,11 +179,11 @@ where
 
 
 fn strategy_sqrt_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64))
+    strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
 }
 
 fn strategy_sqrt_product_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64))
+    strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
 }
 
 fn strategy_cos_f64() -> impl Strategy<Value = Complex<f64>>{
@@ -207,71 +207,83 @@ fn strategy_tan_imaginary_f64() -> impl Strategy<Value = Complex<f64>> {
 }
 
 fn strategy_cos_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_sin_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_tan_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_cos_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::pi())
 }
 
 fn strategy_sin_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::pi())
 }
 
 fn strategy_tan_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_tan_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_cosh_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX))
+    strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX), 0_f64, f64::pi())
 }
 
 fn strategy_sinh_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX))
+    strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX), 0_f64, f64::pi())
 }
 
 fn strategy_tanh_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_cosh_double_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_sinh_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_tanh_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_cosh_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::frac_pi_2())
 }
 
 fn strategy_sinh_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::frac_pi_2())
 }
 
 fn strategy_tanh_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::pi())
 }
 
 fn strategy_tanh_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
+}
+
+fn strategy_acosh_f64() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX), 0_f64, f64::frac_pi_2())
+}
+
+fn strategy_asinh_f64() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX), 0_f64, f64::frac_pi_2())
+}
+
+fn strategy_atanh_f64() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::frac_pi_2())
 }
 
 
@@ -1056,6 +1068,81 @@ where
     Ok(())
 }
 
+
+fn prop_approx_arg_congruent<S>(z: Complex<S>, k: i32, tolerance: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    use cglinalg_core::Radians;
+
+    let modulus_z = z.modulus();
+    let arg_z = z.arg();
+    let _k = num_traits::cast(k).unwrap();
+    let angle_z = Radians(arg_z + S::two_pi() * _k);
+    let new_z = Complex::from_polar_decomposition(modulus_z, angle_z);
+
+    let lhs = z.arg();
+    let rhs = new_z.arg();
+
+    prop_assert!(relative_eq!(lhs.abs(), rhs.abs(), epsilon = tolerance));
+
+    Ok(())
+}
+
+fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    prop_assume!(!z1.is_zero());
+    prop_assume!(!z2.is_zero());
+
+    let arg_z1_times_z2 = (z1 * z2).arg();
+    let arg_z1_plus_arg_z2 = z1.arg() + z2.arg();
+    let lhs = (arg_z1_times_z2 - arg_z1_plus_arg_z2) / S::two_pi();
+    let rhs = lhs.round();
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance),
+        "z1 = {}; z2 = {}; arg(z1 * z2) = {}; arg(z1) + arg(z2) = {}; lhs = {}, rhs = {}",
+        z1, z2, arg_z1_times_z2, arg_z1_plus_arg_z2, lhs, rhs
+    );
+
+    Ok(())
+}
+
+fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    prop_assume!(!z1.is_zero());
+    prop_assume!(!z2.is_zero());
+
+    let arg_z1_div_z2 = (z1 / z2).arg();
+    let arg_z1_minus_arg_z2 = z1.arg() - z2.arg();
+    let lhs = (arg_z1_div_z2 - arg_z1_minus_arg_z2) / S::two_pi();
+    let rhs = lhs.round();
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance),
+        "z1 = {}; z2 = {}; arg(z1 / z2) = {}; arg(z1) - arg(z2) = {}, lhs = {}; rhs = {}",
+        z1, z2, arg_z1_div_z2, arg_z1_minus_arg_z2, lhs, rhs
+    );
+
+    Ok(())
+}
+
+fn prop_arg_range<S>(z: Complex<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let arg_z = z.arg();
+
+    prop_assert!(arg_z >= -S::pi());
+    prop_assert!(arg_z <= S::pi());
+
+    Ok(())
+}
+
 /// The square of the positive square root of a complex number is the original
 /// complex number.
 /// 
@@ -1092,22 +1179,22 @@ where
     Ok(())
 }
 
-/// The square root of the product of two complex numbers is the product
-/// of the square roots of the individual complex numbers.
+/// The modulus of the square root of the product of two complex numbers is the 
+/// product of the moduli of the square roots of the individual complex numbers.
 /// 
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// sqrt(z1 * z2) = sqrt(z1) * zqrt(z2)
+/// modulus(sqrt(z1 * z2)) = modulus(sqrt(z1)) * modulus(zqrt(z2))
 /// ```
-fn prop_square_root_product<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_square_root_product_modulus<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    let lhs = (z1 * z2).sqrt();
-    let rhs = z1.sqrt() * z2.sqrt();
+    let lhs = (z1 * z2).sqrt().modulus();
+    let rhs = z1.sqrt().modulus() * z2.sqrt().modulus();
     prop_assert!(
         relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = tolerance),
-        "z1 = {}; z2 = {}; sqrt(z1 * z2) = {}; sqrt(z1) * sqrt(z2) = {}",
+        "z1 = {}; z2 = {}; modulus(sqrt(z1 * z2)) = {}; modulus(sqrt(z1)) * modulus(sqrt(z2)) = {}",
         z1, z2, lhs, rhs
     );
 
@@ -1802,60 +1889,6 @@ where
     Ok(())
 }
 
-/// The complex hyperbolic arccosine function satisfies the following relation.
-/// 
-/// Given a complex number `z`
-/// ```text
-/// acosh(conjugate(z)) = conjugate(acosh(z))
-/// ```
-fn prop_acosh_conjugate_z_equals_conjugate_acosh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
-where
-    S: SimdScalarFloat
-{
-    let lhs = z.conjugate().acosh();
-    let rhs = z.acosh().conjugate();
-
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
-
-    Ok(())
-}
-
-/// The complex hyperbolic arcsine function satisfies the following relation.
-/// 
-/// Given a complex number `z`
-/// ```text
-/// asinh(conjugate(z)) = conjugate(asinh(z))
-/// ```
-fn prop_asinh_conjugate_z_equals_conjugate_asinh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
-where
-    S: SimdScalarFloat
-{
-    let lhs = z.conjugate().asinh();
-    let rhs = z.asinh().conjugate();
-
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
-
-    Ok(())
-}
-
-/// The complex hyperbolic arctangent function satisfies the following relation.
-/// 
-/// Given a complex number `z`
-/// ```text
-/// atanh(conjugate(z)) = conjugate(atanh(z))
-/// ```
-fn prop_atanh_conjugate_z_equals_conjugate_atanh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
-where
-    S: SimdScalarFloat
-{
-    let lhs = z.conjugate().atanh();
-    let rhs = z.atanh().conjugate();
-
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}; rhs = {}", lhs, rhs);
-
-    Ok(())
-}
-
 /// The hyperbolic cosine and hyperbolic arccosine functions satisfy the 
 /// following relation.
 /// 
@@ -1889,7 +1922,7 @@ where
     let lhs = z.asinh().sinh();
     let rhs = z;
     
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}; rhs = {}", lhs, rhs);
 
     Ok(())
 }
@@ -2411,6 +2444,38 @@ mod complex_i32_l1_norm_props {
 }
 
 #[cfg(test)]
+mod complex_f64_arg_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_arg_congruent(z in super::strategy_complex_f64_any(), k in super::strategy_scalar_i32_any()) {
+            let z: super::Complex<f64> = z;
+            super::prop_approx_arg_congruent(z, k, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex(z1 in super::strategy_complex_f64_any(), z2 in super::strategy_complex_f64_any()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex(z1, z2, 1e-12)?
+        }
+
+        #[test]
+        fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex(z1 in super::strategy_complex_f64_any(), z2 in super::strategy_complex_f64_any()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex(z1, z2, 1e-12)?
+        }
+
+        #[test]
+        fn prop_approx_arg_range(z in super::strategy_complex_f64_any()) {
+            let z: super::Complex<f64> = z;
+            super::prop_arg_range(z)?
+        }
+    }
+}
+
+#[cfg(test)]
 mod complex_f64_sqrt_props {
     use proptest::prelude::*;
     proptest! {
@@ -2427,10 +2492,10 @@ mod complex_f64_sqrt_props {
         }
 
         #[test]
-        fn prop_square_root_product(z1 in super::strategy_sqrt_product_f64(), z2 in super::strategy_sqrt_product_f64()) {
+        fn prop_square_root_product_modulus(z1 in super::strategy_sqrt_product_f64(), z2 in super::strategy_sqrt_product_f64()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_square_root_product(z1, z2, 1e-10)?
+            super::prop_square_root_product_modulus(z1, z2, 1e-10)?
         }
 
         #[test]
@@ -2681,42 +2746,22 @@ mod complex_f64_hyperbolic_props {
 mod complex_f64_hyperbolic_inverse_props {
     use proptest::prelude::*;
     proptest! {
-        /*
         #[test]
-        fn prop_acosh_conjugate_z_equals_conjugate_acosh_z(z in super::strategy_cosh_f64()) {
-            let z: super::Complex<f64> = z;
-            super::prop_acosh_conjugate_z_equals_conjugate_acosh_z(z, 1e-8)?
-        }
-
-        #[test]
-        fn prop_asinh_conjugate_z_equals_conjugate_asinh_z(z in super::strategy_sinh_f64()) {
-            let z: super::Complex<f64> = z;
-            super::prop_asinh_conjugate_z_equals_conjugate_asinh_z(z, 1e-8)?
-        }
-
-        #[test]
-        fn prop_atanh_conjugate_z_equals_conjugate_atanh_z(z in super::strategy_tanh_f64()) {
-            let z: super::Complex<f64> = z;
-            super::prop_atanh_conjugate_z_equals_conjugate_atanh_z(z, 1e-8)?
-        }
-        */
-
-        #[test]
-        fn prop_cosh_acosh_equals_identity(z in super::strategy_cosh_f64()) {
+        fn prop_cosh_acosh_equals_identity(z in super::strategy_acosh_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_cosh_acosh_equals_identity(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sinh_asinh_equals_identity(z in super::strategy_sinh_f64()) {
+        fn prop_sinh_asinh_equals_identity(z in super::strategy_asinh_f64()) {
             let z: super::Complex<f64> = z;
             super::prop_sinh_asinh_equals_identity(z, 1e-8)?
         }
 
         #[test]
-        fn prop_tanh_atanh_equals_identity(z in super::strategy_tanh_f64()) {
+        fn prop_tanh_atanh_equals_identity(z in super::strategy_atanh_f64()) {
             let z: super::Complex<f64> = z;
-            super::prop_tanh_atanh_equals_identity(z, 1e-8)?
+            super::prop_tanh_atanh_equals_identity(z, 1e-6)?
         }
     }
 }

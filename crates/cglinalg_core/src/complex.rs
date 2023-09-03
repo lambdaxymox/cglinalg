@@ -832,7 +832,7 @@ where
     /// ```
     /// as desired. Incidentally, the principal argument is given by 
     /// ```text
-    /// Arg(z) = Arg(a + ib) := atan(b / a)`
+    /// Arg(z) = Arg(a + ib) := atan2(b, a)`
     /// ```
     /// where `a + ib` is the complex number `z` written out in cartesian form. 
     /// This can be obtained from polar form by writing
