@@ -16,6 +16,28 @@ use approx::{
 };
 
 
+fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Complex<S>> 
+where
+    S: SimdScalarFloat + Arbitrary
+{
+    use cglinalg_core::Radians;
+
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarFloat
+    {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<(S, S)>().prop_map(move |(_scale, _angle)| {
+        let scale = SimdScalarSigned::abs(rescale(_scale, min_scale, max_scale));
+        let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
+
+        Complex::from_polar_decomposition(scale, angle)
+    })
+    .no_shrink()
+}
+
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
 where
     S: SimdScalarSigned + Arbitrary
@@ -87,35 +109,13 @@ fn strategy_complex_i32_any() -> impl Strategy<Value = Complex<i32>> {
     strategy_complex_signed_from_abs_range(min_value, max_value)
 }
 
-
-fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Complex<S>> 
-where
-    S: SimdScalarFloat + Arbitrary
-{
-    use cglinalg_core::Radians;
-
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
-    where
-        S: SimdScalarFloat
-    {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<(S, S)>().prop_map(move |(_scale, _angle)| {
-        let scale = SimdScalarSigned::abs(rescale(_scale, min_scale, max_scale));
-        let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
-
-        Complex::from_polar_decomposition(scale, angle)
-    })
-    .no_shrink()
-}
-
-
 fn strategy_complex_f64_modulus_squared() -> impl Strategy<Value = Complex<f64>> {
     let min_scale = f64::sqrt(f64::EPSILON);
     let max_scale = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
 
-    strategy_complex_signed_from_abs_range(min_scale, max_scale)
+    strategy_complex_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 fn strategy_complex_i32_modulus_squared() -> impl Strategy<Value = Complex<i32>> {
@@ -180,7 +180,7 @@ fn strategy_imaginary_f64_sin() -> impl Strategy<Value = Complex<f64>>{
 }
 
 fn strategy_complex_f64_tan() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_signed_from_abs_range(f64::EPSILON, 100_f64)
+    strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
 fn strategy_real_f64_tan() -> impl Strategy<Value = Complex<f64>> {
