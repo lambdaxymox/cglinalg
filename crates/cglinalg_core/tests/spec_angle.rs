@@ -15,7 +15,7 @@ use approx::{
 };
 
 
-fn strategy_any_radians<S>() -> impl Strategy<Value = Radians<S>> 
+fn strategy_radians_any<S>() -> impl Strategy<Value = Radians<S>> 
 where 
     S: SimdScalarFloat + Arbitrary
 {
@@ -29,7 +29,7 @@ where
         .no_shrink()
 }
 
-fn strategy_any_degrees<S>() -> impl Strategy<Value = Degrees<S>>
+fn strategy_degrees_any<S>() -> impl Strategy<Value = Degrees<S>>
 where 
     S: SimdScalarFloat + Arbitrary
 {
@@ -275,19 +275,19 @@ mod radians_f64_arithmetic_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_angle_additive_zero(angle in super::strategy_any_radians()) {
+        fn prop_angle_additive_zero(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_angle_additive_zero(angle)?
         }
 
         #[test]
-        fn prop_angle_additive_identity(angle in super::strategy_any_radians()) {
+        fn prop_angle_additive_identity(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_angle_additive_identity(angle)?
         }
 
         #[test]
-        fn prop_angle_multiplication_dimensionless_unit_element(angle in super::strategy_any_radians()) {
+        fn prop_angle_multiplication_dimensionless_unit_element(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_angle_multiplication_dimensionless_unit_element(angle)?
         }
@@ -299,31 +299,31 @@ mod radians_f64_trigonometry_prop {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_approx_sine_and_arcsine_inverses(angle in super::strategy_any_radians()) {
+        fn prop_approx_sine_and_arcsine_inverses(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_approx_sine_and_arcsine_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_approx_cosine_and_arccosine_inverses(angle in super::strategy_any_radians()) {
+        fn prop_approx_cosine_and_arccosine_inverses(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_approx_cosine_and_arccosine_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_approx_tangent_and_arctangent_inverses(angle in super::strategy_any_radians()) {
+        fn prop_approx_tangent_and_arctangent_inverses(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_approx_tangent_and_arctangent_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_approx_congruent_angles(angle in super::strategy_any_radians()) {
+        fn prop_approx_congruent_angles(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_approx_congruent_angles(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_approx_pythagorean_identity(angle in super::strategy_any_radians()) {
+        fn prop_approx_pythagorean_identity(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_approx_pythagorean_identity(angle, 1e-6)?
         }
@@ -335,13 +335,13 @@ mod radians_f64_normalize_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_normalize_normalizes_to_interval(angle in super::strategy_any_radians()) {
+        fn prop_normalize_normalizes_to_interval(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_normalize_normalizes_to_interval(angle)?
         }
 
         #[test]
-        fn prop_normalize_signed_normalizes_to_interval(angle in super::strategy_any_radians()) {
+        fn prop_normalize_signed_normalizes_to_interval(angle in super::strategy_radians_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_normalize_signed_normalizes_to_interval(angle)?
         }
@@ -354,19 +354,19 @@ mod degrees_f64_arithmetic_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_angle_additive_zero(angle in super::strategy_any_degrees()) {
+        fn prop_angle_additive_zero(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_angle_additive_zero(angle)?
         }
 
         #[test]
-        fn prop_angle_additive_identity(angle in super::strategy_any_degrees()) {
+        fn prop_angle_additive_identity(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_angle_additive_identity(angle)?
         }
 
         #[test]
-        fn prop_angle_multiplication_dimensionless_unit_element(angle in super::strategy_any_degrees()) {
+        fn prop_angle_multiplication_dimensionless_unit_element(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_angle_multiplication_dimensionless_unit_element(angle)?
         }
@@ -378,31 +378,31 @@ mod degrees_f64_trigonometry_prop {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_approx_sine_and_arcsine_inverses(angle in super::strategy_any_degrees()) {
+        fn prop_approx_sine_and_arcsine_inverses(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_approx_sine_and_arcsine_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_approx_cosine_and_arccosine_inverses(angle in super::strategy_any_degrees()) {
+        fn prop_approx_cosine_and_arccosine_inverses(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_approx_cosine_and_arccosine_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_approx_tangent_and_arctangent_inverses(angle in super::strategy_any_degrees()) {
+        fn prop_approx_tangent_and_arctangent_inverses(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_approx_tangent_and_arctangent_inverses(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_approx_congruent_angles(angle in super::strategy_any_degrees()) {
+        fn prop_approx_congruent_angles(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_approx_congruent_angles(angle, 1e-6)?
         }
 
         #[test]
-        fn prop_approx_pythagorean_identity(angle in super::strategy_any_degrees()) {
+        fn prop_approx_pythagorean_identity(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_approx_pythagorean_identity(angle, 1e-6)?
         }
@@ -414,13 +414,13 @@ mod degrees_f64_normalize_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_normalize_normalizes_to_interval(angle in super::strategy_any_degrees()) {
+        fn prop_normalize_normalizes_to_interval(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_normalize_normalizes_to_interval(angle)?
         }
 
         #[test]
-        fn prop_normalize_signed_normalizes_to_interval(angle in super::strategy_any_degrees()) {
+        fn prop_normalize_signed_normalizes_to_interval(angle in super::strategy_degrees_any()) {
             let angle: super::Degrees<f64> = angle;
             super::prop_normalize_signed_normalizes_to_interval(angle)?
         }
