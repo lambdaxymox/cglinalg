@@ -193,45 +193,6 @@ fn strategy_point3_i32_norm_squared() -> impl Strategy<Value = Point3<i32>> {
     })
 }
 
-fn strategy_point1_u32_norm_squared() -> impl Strategy<Value = Point1<u32>> {
-    any::<u32>().prop_map(|_x| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root;
-        let x = min_value + (_x % (max_value - min_value + 1));
-
-        Point1::new(x)
-    })
-}
-
-fn strategy_point2_u32_norm_squared() -> impl Strategy<Value = Point2<u32>> {
-    any::<(u32, u32)>().prop_map(|(_x, _y)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 2;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-
-        Point2::new(x, y)
-    })
-}
-
-fn strategy_point3_u32_norm_squared<S>() -> impl Strategy<Value = Point3<u32>> {
-    any::<(u32, u32, u32)>().prop_map(|(_x, _y, _z)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 3;
-        let x = min_value + (_x % (max_value - min_value + 1));
-        let y = min_value + (_y % (max_value - min_value + 1));
-        let z = min_value + (_z % (max_value - min_value + 1));
-
-        Point3::new(x, y, z)
-    })
-}
-
 
 /// A scalar `1` acts like a multiplicative identity element.
 ///
