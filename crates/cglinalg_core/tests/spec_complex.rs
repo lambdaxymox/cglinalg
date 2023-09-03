@@ -164,103 +164,103 @@ fn strategy_sqrt_product_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
 }
 
-fn strategy_cos_f64() -> impl Strategy<Value = Complex<f64>>{
+fn strategy_imaginary_f64_cos() -> impl Strategy<Value = Complex<f64>>{
     strategy_imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
 
-fn strategy_sin_f64() -> impl Strategy<Value = Complex<f64>>{
+fn strategy_imaginary_f64_sin() -> impl Strategy<Value = Complex<f64>>{
     strategy_imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
 
-fn strategy_tan_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_tan() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_signed_from_abs_range(f64::EPSILON, 100_f64)
 }
 
-fn strategy_tan_real_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_real_f64_ran() -> impl Strategy<Value = Complex<f64>> {
     strategy_real_from_range(f64::EPSILON, 100_f64)
 }
 
-fn strategy_tan_imaginary_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_imaginary_f64_tan() -> impl Strategy<Value = Complex<f64>> {
     strategy_imaginary_from_range(f64::EPSILON, 100_f64)
 }
 
-fn strategy_cos_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_cos_double_angle() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_sin_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_sin_double_angle() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_tan_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_tan_double_angle() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_cos_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_cos_angle_sum() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::pi())
 }
 
-fn strategy_sin_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_sin_angle_sum() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::pi())
 }
 
-fn strategy_tan_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_tan_angle_sum() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_tan_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_tan_angle_difference() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_cosh_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_cosh() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX), 0_f64, f64::pi())
 }
 
-fn strategy_sinh_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_sinh() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX), 0_f64, f64::pi())
 }
 
-fn strategy_tanh_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_tanh() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_cosh_double_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_cosh_double_angle() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_sinh_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_sinh_double_angle() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_tanh_double_angle_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_tanh_double_angle() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_cosh_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_cosh_angle_sum() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::frac_pi_2())
 }
 
-fn strategy_sinh_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_sinh_angle_sum() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::frac_pi_2())
 }
 
-fn strategy_tanh_angle_sum_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_tanh_angle_sum() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::pi())
 }
 
-fn strategy_tanh_angle_difference_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_tanh_angle_difference() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::two_pi())
 }
 
-fn strategy_acosh_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_acosh() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX), 0_f64, f64::frac_pi_2())
 }
 
-fn strategy_asinh_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_asinh() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX), 0_f64, f64::frac_pi_2())
 }
 
-fn strategy_atanh_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_atanh() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::frac_pi_2())
 }
 
@@ -2520,100 +2520,100 @@ mod complex_f64_trigonometry_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_cos_real_equals_cos_real(z in super::strategy_cos_f64()) {
+        fn prop_cos_real_equals_cos_real(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
             super::prop_cos_real_equals_cos_real(z, 1e-10)?
         }
 
         #[test]
-        fn prop_cos_negative_z_equals_negative_cos_z(z in super::strategy_cos_f64()) {
+        fn prop_cos_negative_z_equals_negative_cos_z(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
             super::prop_cos_negative_z_equals_cos_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sin_real_equals_sin_real(z in super::strategy_sin_f64()) {
+        fn prop_sin_real_equals_sin_real(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
             super::prop_sin_real_equals_sin_real(z, 1e-10)?
         }
 
         #[test]
-        fn prop_sin_negative_z_equals_negative_sin_z(z in super::strategy_sin_f64()) {
+        fn prop_sin_negative_z_equals_negative_sin_z(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
             super::prop_sin_negative_z_equals_negative_sin_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_tan_real_equals_real_tan(z in super::strategy_tan_real_f64()) {
+        fn prop_tan_real_equals_real_tan(z in super::strategy_real_f64_ran()) {
             let z: super::Complex<f64> = z;
             super::prop_tan_real_equals_real_tan(z, 1e-4)?
         }
 
         #[test]
-        fn prop_tan_negative_z_equals_negative_tan_z(z in super::strategy_tan_f64()) {
+        fn prop_tan_negative_z_equals_negative_tan_z(z in super::strategy_complex_f64_tan()) {
             let z: super::Complex<f64> = z;
             super::prop_tan_negative_z_equals_negative_tan_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_cos_imaginary_equals_imaginary_cosh(z in super::strategy_cos_f64()) {
+        fn prop_cos_imaginary_equals_imaginary_cosh(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
             super::prop_cos_imaginary_equals_imaginary_cosh(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sin_imaginary_equals_imaginary_sinh(z in super::strategy_sin_f64()) {
+        fn prop_sin_imaginary_equals_imaginary_sinh(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
             super::prop_sin_imaginary_equals_imaginary_sinh(z, 1e-8)?
         }
 
         #[test]
-        fn prop_tan_imaginary_equals_imaginary_tanh(z in super::strategy_tan_imaginary_f64()) {
+        fn prop_tan_imaginary_equals_imaginary_tanh(z in super::strategy_imaginary_f64_tan()) {
             let z: super::Complex<f64> = z;
             super::prop_tan_imaginary_equals_imaginary_tanh(z, 1e-8)?
         }
 
         #[test]
-        fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z in super::strategy_cos_double_angle_f64()) {
+        fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z in super::strategy_complex_f64_cos_double_angle()) {
             let z: super::Complex<f64> = z;
             super::prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z in super::strategy_sin_double_angle_f64()) {
+        fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z in super::strategy_complex_f64_sin_double_angle()) {
             let z: super::Complex<f64> = z;
             super::prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_tan_two_times_angle(z in super::strategy_tan_double_angle_f64()) {
+        fn prop_tan_two_times_angle(z in super::strategy_complex_f64_tan_double_angle()) {
             let z: super::Complex<f64> = z;
             super::prop_tan_two_times_angle(z, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_cos_angle_sum(z1 in super::strategy_cos_angle_sum_f64(), z2 in super::strategy_cos_angle_sum_f64()) {
+        fn prop_cos_angle_sum(z1 in super::strategy_complex_f64_cos_angle_sum(), z2 in super::strategy_complex_f64_cos_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_cos_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_sin_angle_sum(z1 in super::strategy_sin_angle_sum_f64(), z2 in super::strategy_sin_angle_sum_f64()) {
+        fn prop_sin_angle_sum(z1 in super::strategy_complex_f64_sin_angle_sum(), z2 in super::strategy_complex_f64_sin_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_sin_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_tan_angle_sum(z1 in super::strategy_tan_angle_sum_f64(), z2 in super::strategy_tan_angle_sum_f64()) {
+        fn prop_tan_angle_sum(z1 in super::strategy_complex_f64_tan_angle_sum(), z2 in super::strategy_complex_f64_tan_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_tan_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_tan_angle_difference(z1 in super::strategy_tan_angle_difference_f64(), z2 in super::strategy_tan_angle_difference_f64()) {
+        fn prop_tan_angle_difference(z1 in super::strategy_complex_f64_tan_angle_difference(), z2 in super::strategy_complex_f64_tan_angle_difference()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_tan_angle_difference(z1, z2, 1e-8, 1e-8)?
@@ -2626,37 +2626,37 @@ mod complex_f64_trigonometry_inverse_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_acos_conjugate_z_equals_conjugate_acos_z(z in super::strategy_cos_f64()) {
+        fn prop_acos_conjugate_z_equals_conjugate_acos_z(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
             super::prop_acos_conjugate_z_equals_conjugate_acos_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_asin_conjugate_z_equals_conjugate_asin_z(z in super::strategy_sin_f64()) {
+        fn prop_asin_conjugate_z_equals_conjugate_asin_z(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
             super::prop_asin_conjugate_z_equals_conjugate_asin_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_atan_conjugate_z_equals_conjugate_atan_z(z in super::strategy_tan_f64()) {
+        fn prop_atan_conjugate_z_equals_conjugate_atan_z(z in super::strategy_complex_f64_tan()) {
             let z: super::Complex<f64> = z;
             super::prop_atan_conjugate_z_equals_conjugate_atan_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_cos_acos_equals_identity(z in super::strategy_cos_f64()) {
+        fn prop_cos_acos_equals_identity(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
             super::prop_cos_acos_equals_identity(z, 1e-7)?
         }
 
         #[test]
-        fn prop_sin_asin_equals_identity(z in super::strategy_sin_f64()) {
+        fn prop_sin_asin_equals_identity(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
             super::prop_sin_asin_equals_identity(z, 1e-7)?
         }
 
         #[test]
-        fn prop_tan_atan_equals_identity(z in super::strategy_tan_f64()) {
+        fn prop_tan_atan_equals_identity(z in super::strategy_complex_f64_tan()) {
             let z: super::Complex<f64> = z;
             super::prop_tan_atan_equals_identity(z, 1e-7)?
         }
@@ -2668,82 +2668,82 @@ mod complex_f64_hyperbolic_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_cosh_conjugate_z_equals_conjugate_cosh_z(z in super::strategy_cosh_f64()) {
+        fn prop_cosh_conjugate_z_equals_conjugate_cosh_z(z in super::strategy_complex_f64_cosh()) {
             let z: super::Complex<f64> = z;
             super::prop_cosh_conjugate_z_equals_conjugate_cosh_z(z)?
         }
 
         #[test]
-        fn prop_cosh_negative_z_equals_negative_cosh_z(z in super::strategy_cosh_f64()) {
+        fn prop_cosh_negative_z_equals_negative_cosh_z(z in super::strategy_complex_f64_cosh()) {
             let z: super::Complex<f64> = z;
             super::prop_cosh_negative_z_equals_negative_cosh_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sinh_conjugate_z_equals_conjugate_sinh_z(z in super::strategy_sinh_f64()) {
+        fn prop_sinh_conjugate_z_equals_conjugate_sinh_z(z in super::strategy_complex_f64_sinh()) {
             let z: super::Complex<f64> = z;
             super::prop_sinh_conjugate_z_equals_conjugate_sinh_z(z)?
         }
 
         #[test]
-        fn prop_sinh_negative_z_equals_negative_sinh_z(z in super::strategy_sinh_f64()) {
+        fn prop_sinh_negative_z_equals_negative_sinh_z(z in super::strategy_complex_f64_sinh()) {
             let z: super::Complex<f64> = z;
             super::prop_sinh_negative_z_equals_negative_sinh_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_tanh_conjugate_z_equals_conjugate_tanh_z(z in super::strategy_tanh_f64()) {
+        fn prop_tanh_conjugate_z_equals_conjugate_tanh_z(z in super::strategy_complex_f64_tanh()) {
             let z: super::Complex<f64> = z;
             super::prop_tanh_conjugate_z_equals_conjugate_tanh_z(z)?
         }
 
         #[test]
-        fn prop_tanh_negative_z_equals_negative_tanh_z(z in super::strategy_tanh_f64()) {
+        fn prop_tanh_negative_z_equals_negative_tanh_z(z in super::strategy_complex_f64_tanh()) {
             let z: super::Complex<f64> = z;
             super::prop_tanh_negative_z_equals_negative_tanh_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared(z in super::strategy_cosh_double_f64()) {
+        fn prop_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared(z in super::strategy_complex_f64_cosh_double_angle()) {
             let z: super::Complex<f64> = z;
             super::prop_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared(z, 1e-8, 1e-10)?
         }
 
         #[test]
-        fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh(z in super::strategy_sinh_double_angle_f64()) {
+        fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh(z in super::strategy_complex_f64_sinh_double_angle()) {
             let z: super::Complex<f64> = z;
             super::prop_sinh_two_times_angle_equals_two_times_sinh_cosh(z, 1e-8, 1e-10)?
         }
 
         #[test]
-        fn prop_tanh_two_times_angle(z in super::strategy_tanh_double_angle_f64()) {
+        fn prop_tanh_two_times_angle(z in super::strategy_complex_f64_tanh_double_angle()) {
             let z: super::Complex<f64> = z;
             super::prop_tanh_two_times_angle(z, 1e-8, 1e-10)?
         }
 
         #[test]
-        fn prop_cosh_angle_sum(z1 in super::strategy_cosh_angle_sum_f64(), z2 in super::strategy_cosh_angle_sum_f64()) {
+        fn prop_cosh_angle_sum(z1 in super::strategy_complex_f64_cosh_angle_sum(), z2 in super::strategy_complex_f64_cosh_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_cosh_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_sinh_angle_sum(z1 in super::strategy_sinh_angle_sum_f64(), z2 in super::strategy_sinh_angle_sum_f64()) {
+        fn prop_sinh_angle_sum(z1 in super::strategy_complex_f64_sinh_angle_sum(), z2 in super::strategy_complex_f64_sinh_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_sinh_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_tanh_angle_sum(z1 in super::strategy_tanh_angle_sum_f64(), z2 in super::strategy_tanh_angle_sum_f64()) {
+        fn prop_tanh_angle_sum(z1 in super::strategy_complex_f64_tanh_angle_sum(), z2 in super::strategy_complex_f64_tanh_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_tanh_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_tanh_angle_difference(z1 in super::strategy_tanh_angle_difference_f64(), z2 in super::strategy_tanh_angle_difference_f64()) {
+        fn prop_tanh_angle_difference(z1 in super::strategy_complex_f64_tanh_angle_difference(), z2 in super::strategy_complex_f64_tanh_angle_difference()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_tanh_angle_difference(z1, z2, 1e-8, 1e-8)?
@@ -2756,19 +2756,19 @@ mod complex_f64_hyperbolic_inverse_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_cosh_acosh_equals_identity(z in super::strategy_acosh_f64()) {
+        fn prop_cosh_acosh_equals_identity(z in super::strategy_complex_f64_acosh()) {
             let z: super::Complex<f64> = z;
             super::prop_cosh_acosh_equals_identity(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sinh_asinh_equals_identity(z in super::strategy_asinh_f64()) {
+        fn prop_sinh_asinh_equals_identity(z in super::strategy_complex_f64_asinh()) {
             let z: super::Complex<f64> = z;
             super::prop_sinh_asinh_equals_identity(z, 1e-8)?
         }
 
         #[test]
-        fn prop_tanh_atanh_equals_identity(z in super::strategy_atanh_f64()) {
+        fn prop_tanh_atanh_equals_identity(z in super::strategy_complex_f64_atanh()) {
             let z: super::Complex<f64> = z;
             super::prop_tanh_atanh_equals_identity(z, 1e-6)?
         }
