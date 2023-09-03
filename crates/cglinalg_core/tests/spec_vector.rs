@@ -21,7 +21,7 @@ use approx::{
 use proptest::prelude::*;
 
 
-fn strategy_scalar_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
+fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
 where
     S: SimdScalarSigned + Arbitrary
 {
@@ -35,42 +35,10 @@ where
         
         sign_value * rescale(abs_value, min_value, max_value)
     })
+    .no_shrink()
 }
 
-fn strategy_any_scalar_f64() -> impl Strategy<Value = f64> {
-    let min_value = f64::sqrt(f64::EPSILON);
-    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
-
-    strategy_scalar_from_range(min_value, max_value)
-}
-
-fn strategy_any_scalar_i32() -> impl Strategy<Value = i32> {
-    let min_value = 0_i32;
-    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
-    let max_value = 32767_i32;
-
-    strategy_scalar_from_range(min_value, max_value)
-}
-
-fn strategy_scalar_l1_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
-    let min_value = 0_i32;
-    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-    let max_square_root = 46340_i32;
-    let max_value = max_square_root / (N as i32);
-    
-    strategy_scalar_from_range(min_value, max_value)
-}
-
-fn strategy_scalar_linf_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
-    let min_value = 0_i32;
-    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-    let max_square_root = 46340_i32;
-    let max_value = max_square_root / (N as i32);
-    
-    strategy_scalar_from_range(min_value, max_value)
-}
-
-fn strategy_vector_from_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>> 
+fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>> 
 where
     S: SimdScalarSigned + Arbitrary
 {
@@ -112,11 +80,45 @@ where
     })
 }
 
+
+fn strategy_any_scalar_f64() -> impl Strategy<Value = f64> {
+    let min_value = f64::sqrt(f64::EPSILON);
+    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
+
+    strategy_scalar_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_any_scalar_i32() -> impl Strategy<Value = i32> {
+    let min_value = 0_i32;
+    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
+    let max_value = 32767_i32;
+
+    strategy_scalar_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_scalar_l1_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
+    let min_value = 0_i32;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340_i32;
+    let max_value = max_square_root / (N as i32);
+    
+    strategy_scalar_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_scalar_linf_norm_i32<const N: usize>() -> impl Strategy<Value = i32> {
+    let min_value = 0_i32;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340_i32;
+    let max_value = max_square_root / (N as i32);
+    
+    strategy_scalar_signed_from_abs_range(min_value, max_value)
+}
+
 fn strategy_vector_norm_squared_f64<const N: usize>() -> impl Strategy<Value = Vector<f64, N>> {
     let min_value = f64::sqrt(f64::EPSILON);
     let max_value = f64::sqrt(f64::MAX);
 
-    strategy_vector_from_range(min_value, max_value)
+    strategy_vector_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_vector_norm_squared_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
@@ -125,7 +127,7 @@ fn strategy_vector_norm_squared_i32<const N: usize>() -> impl Strategy<Value = V
     let max_square_root = 46340;
     let max_value = max_square_root / (N as i32);
 
-    strategy_vector_from_range(min_value, max_value)
+    strategy_vector_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_vector_l1_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
@@ -134,7 +136,7 @@ fn strategy_vector_l1_norm_i32<const N: usize>() -> impl Strategy<Value = Vector
     let max_square_root = 46340;
     let max_value = max_square_root / (N as i32);
 
-    strategy_vector_from_range(min_value, max_value)
+    strategy_vector_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_vector_linf_norm_i32<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
@@ -143,7 +145,15 @@ fn strategy_vector_linf_norm_i32<const N: usize>() -> impl Strategy<Value = Vect
     let max_square_root = 46340;
     let max_value = max_square_root / (N as i32);
 
-    strategy_vector_from_range(min_value, max_value)
+    strategy_vector_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_lp_norm_degree() -> impl Strategy<Value = u32> {
+    any::<u32>().prop_map(|i| {
+        let modulus = 50;
+
+        i % modulus
+    })
 }
 
 
@@ -174,14 +184,6 @@ where
     S: SimdScalarSigned + Arbitrary
 {
     strategy_any_vector::<S, 4>()
-}
-
-fn strategy_lp_norm_degree() -> impl Strategy<Value = u32> {
-    any::<u32>().prop_map(|i| {
-        let modulus = 50;
-
-        i % modulus
-    })
 }
 
 
@@ -221,7 +223,6 @@ fn strategy_vector4_norm_squared_i32() -> impl Strategy<Value = Vector4<i32>> {
 }
 
 
-
 fn strategy_scalar1_l1_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_l1_norm_i32::<1>()
 }
@@ -237,10 +238,6 @@ fn strategy_scalar3_l1_norm_i32() -> impl Strategy<Value = i32> {
 fn strategy_scalar4_l1_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_l1_norm_i32::<4>()
 }
-
-
-
-
 
 fn strategy_vector1_l1_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
     strategy_vector_l1_norm_i32::<1>()
@@ -259,9 +256,6 @@ fn strategy_vector4_l1_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
 }
 
 
-
-
-
 fn strategy_scalar1_linf_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_linf_norm_i32::<1>()
 }
@@ -278,9 +272,6 @@ fn strategy_scalar4_linf_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_linf_norm_i32::<4>()
 }
 
-
-
-
 fn strategy_vector1_linf_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
     strategy_vector_linf_norm_i32::<1>()
 }
@@ -296,6 +287,8 @@ fn strategy_vector3_linf_norm_i32() -> impl Strategy<Value = Vector3<i32>> {
 fn strategy_vector4_linf_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
     strategy_vector_linf_norm_i32::<4>()
 }
+
+
 
 
 /// A vector times a scalar zero should be a zero vector.
