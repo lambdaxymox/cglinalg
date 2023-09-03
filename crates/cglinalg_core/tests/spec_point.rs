@@ -224,7 +224,10 @@ fn prop_scalar_multiplication_compatibility<S, const N: usize>(a: S, b: S, p: Po
 where
     S: SimdScalar + Arbitrary
 {
-    prop_assert_eq!((p * a) * b, p * (a * b));
+    let lhs = (p * a) * b;
+    let rhs = p * (a * b);
+
+    prop_assert_eq!(lhs, rhs);
 
     Ok(())
 }
@@ -305,7 +308,10 @@ fn prop_approx_point_vector_addition_compatible<S, const N: usize>(p: Point<S, N
 where
     S: SimdScalarFloat + Arbitrary
 {
-    prop_assert!(relative_eq!((p + v1) + v2, p + (v1 + v2), epsilon = tolerance));
+    let lhs = (p + v1) + v2;
+    let rhs = p + (v1 + v2);
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
