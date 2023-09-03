@@ -155,12 +155,19 @@ where
     .no_shrink()
 }
 
+fn strategy_complex_f64_exp() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX) / 2_f64, 0_f64, f64::two_pi())
+}
 
-fn strategy_sqrt_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_ln() -> impl Strategy<Value = Complex<f64>> {
+    strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / 2_f64, 0_f64, f64::two_pi())
+}
+
+fn strategy_complex_f64_sqrt() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
 }
 
-fn strategy_sqrt_product_f64() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_complex_f64_sqrt_product() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
 }
 
@@ -176,7 +183,7 @@ fn strategy_complex_f64_tan() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_signed_from_abs_range(f64::EPSILON, 100_f64)
 }
 
-fn strategy_real_f64_ran() -> impl Strategy<Value = Complex<f64>> {
+fn strategy_real_f64_tan() -> impl Strategy<Value = Complex<f64>> {
     strategy_real_from_range(f64::EPSILON, 100_f64)
 }
 
@@ -1042,6 +1049,56 @@ where
 
     prop_assume!(z1 != z2);
     prop_assert_ne!((z1 - z2).l1_norm(), zero);
+
+    Ok(())
+}
+
+/// The exponential of the sum of two complex numbers is the product of the 
+/// exponentials of the two complex numbers.
+/// 
+/// Given complex numbers `z1` and `z2`
+/// ```text
+/// exp(z1 + z2) == exp(z1) * exp(z2)
+/// ```
+fn prop_approx_exp_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (z1 + z2).exp();
+    let rhs = z1.exp() * z2.exp();
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative), 
+        "z1 = {}; z1 = {}; exp(z1 + z2) = {}; exp(z1) * exp(z2) = {}",
+        z1, z2, lhs, rhs
+    );
+
+    Ok(())
+}
+
+/// The complex logarithm satisfiess the following relation.
+/// 
+/// Given non-zero complex numbers `z1` and `z2`, there is an integer `k` such that
+/// ```text
+/// ln(z1 * z2) - (ln(z1) + ln(z2)) == 2 * pi * k * i
+/// ```
+fn prop_approx_ln_product<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    prop_assume!(!z1.is_zero());
+    prop_assume!(!z2.is_zero());
+
+    let ln_z1_times_z2 = (z1 * z2).ln();
+    let ln_z1_plus_ln_z2 = z1.ln() + z2.ln();
+    let lhs = (ln_z1_times_z2 - ln_z1_plus_ln_z2) / S::two_pi();
+    let rhs = Complex::new(lhs.real().round(), lhs.imaginary().round());
+
+    prop_assert!(
+        relative_eq!(lhs, rhs, epsilon = tolerance),
+        "z1 = {}; z2 = {}; ln(z1 * z2) = {}; ln(z1) + ln(z2) = {}; (ln(z1 * z2) - (ln(z1) + ln(z2))) / (2 * pi) = {}",
+        z1, z2, ln_z1_times_z2, ln_z1_plus_ln_z2, lhs
+    );
 
     Ok(())
 }
@@ -2453,6 +2510,32 @@ mod complex_i32_l1_norm_props {
 }
 
 #[cfg(test)]
+mod complex_f64_exp_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_exp_sum(z1 in super::strategy_complex_f64_exp(), z2 in super::strategy_complex_f64_exp()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_approx_exp_sum(z1, z2, 1e-10, 1e-10)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_ln_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_ln_product(z1 in super::strategy_complex_f64_ln(), z2 in super::strategy_complex_f64_ln()) {
+            let z1: super::Complex<f64> = z1;
+            let z2: super::Complex<f64> = z2;
+            super::prop_approx_ln_product(z1, z2, 1e-10)?
+        }
+    }
+}
+
+#[cfg(test)]
 mod complex_f64_arg_props {
     use proptest::prelude::*;
     proptest! {
@@ -2489,26 +2572,26 @@ mod complex_f64_sqrt_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_positive_square_root_squared(z in super::strategy_sqrt_f64()) {
+        fn prop_positive_square_root_squared(z in super::strategy_complex_f64_sqrt()) {
             let z: super::Complex<f64> = z;
             super::prop_positive_square_root_squared(z, 1e-10)?
         }
 
         #[test]
-        fn prop_negative_square_root_squared(z in super::strategy_sqrt_f64()) {
+        fn prop_negative_square_root_squared(z in super::strategy_complex_f64_sqrt()) {
             let z: super::Complex<f64> = z;
             super::prop_negative_square_root_squared(z, 1e-10)?
         }
 
         #[test]
-        fn prop_square_root_product_modulus(z1 in super::strategy_sqrt_product_f64(), z2 in super::strategy_sqrt_product_f64()) {
+        fn prop_square_root_product_modulus(z1 in super::strategy_complex_f64_sqrt_product(), z2 in super::strategy_complex_f64_sqrt_product()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_square_root_product_modulus(z1, z2, 1e-10)?
         }
 
         #[test]
-        fn prop_square_root_arg_range(z in super::strategy_sqrt_f64()) {
+        fn prop_square_root_arg_range(z in super::strategy_complex_f64_sqrt()) {
             let z: super::Complex<f64> = z;
             super::prop_square_root_arg_range(z)?
         }
@@ -2544,7 +2627,7 @@ mod complex_f64_trigonometry_props {
         }
 
         #[test]
-        fn prop_tan_real_equals_real_tan(z in super::strategy_real_f64_ran()) {
+        fn prop_tan_real_equals_real_tan(z in super::strategy_real_f64_tan()) {
             let z: super::Complex<f64> = z;
             super::prop_tan_real_equals_real_tan(z, 1e-4)?
         }
