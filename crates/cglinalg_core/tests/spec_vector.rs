@@ -130,72 +130,6 @@ fn strategy_lp_norm_degree() -> impl Strategy<Value = u32> {
 }
 
 
-/*
-fn strategy_any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
-where 
-    S: SimdScalarSigned + Arbitrary 
-{
-    strategy_any_vector::<S, 1>()
-}
-
-fn strategy_any_vector2<S>() -> impl Strategy<Value = Vector2<S>> 
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    strategy_any_vector::<S, 2>()
-}
-
-fn strategy_any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    strategy_any_vector::<S, 3>()
-}
-
-fn strategy_any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    strategy_any_vector::<S, 4>()
-}
-*/
-
-
-/*
-fn strategy_vector1_norm_squared_f64() -> impl Strategy<Value = Vector1<f64>> {
-    strategy_vector_f64_norm_squared::<1>()
-}
-
-fn strategy_vector2_norm_squared_f64() -> impl Strategy<Value = Vector2<f64>> {
-    strategy_vector_f64_norm_squared::<2>()
-}
-
-fn strategy_vector3_norm_squared_f64() -> impl Strategy<Value = Vector3<f64>> {
-    strategy_vector_f64_norm_squared::<3>()
-}
-
-fn strategy_vector4_norm_squared_f64() -> impl Strategy<Value = Vector4<f64>> {
-    strategy_vector_f64_norm_squared::<4>()
-}
-*/
-/*
-fn strategy_vector1_norm_squared_i32() -> impl Strategy<Value = Vector1<i32>> {
-    strategy_vector_i32_max_safe_square_root::<1>()
-}
-
-fn strategy_vector2_norm_squared_i32() -> impl Strategy<Value = Vector2<i32>> {
-    strategy_vector_i32_max_safe_square_root::<2>()
-}
-
-fn strategy_vector3_norm_squared_i32() -> impl Strategy<Value = Vector3<i32>> {
-    strategy_vector_i32_max_safe_square_root::<3>()
-}
-
-fn strategy_vector4_norm_squared_i32() -> impl Strategy<Value = Vector4<i32>> {
-    strategy_vector_i32_max_safe_square_root::<4>()
-}
-*/
-
 fn strategy_scalar1_l1_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<1>()
 }
@@ -211,23 +145,7 @@ fn strategy_scalar3_l1_norm_i32() -> impl Strategy<Value = i32> {
 fn strategy_scalar4_l1_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<4>()
 }
-/*
-fn strategy_vector1_l1_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
-    strategy_vector_i32_max_safe_square_root::<1>()
-}
 
-fn strategy_vector2_l1_norm_i32() -> impl Strategy<Value = Vector2<i32>> {
-    strategy_vector_i32_max_safe_square_root::<2>()
-}
-
-fn strategy_vector3_l1_norm_i32() -> impl Strategy<Value = Vector3<i32>> {
-    strategy_vector_i32_max_safe_square_root::<3>()
-}
-
-fn strategy_vector4_l1_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
-    strategy_vector_i32_max_safe_square_root::<4>()
-}
-*/
 
 fn strategy_scalar1_linf_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<1>()
@@ -244,24 +162,6 @@ fn strategy_scalar3_linf_norm_i32() -> impl Strategy<Value = i32> {
 fn strategy_scalar4_linf_norm_i32() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<4>()
 }
-/*
-fn strategy_vector1_linf_norm_i32() -> impl Strategy<Value = Vector1<i32>> {
-    strategy_vector_i32_max_safe_square_root::<1>()
-}
-
-fn strategy_vector2_linf_norm_i32() -> impl Strategy<Value = Vector2<i32>> {
-    strategy_vector_i32_max_safe_square_root::<2>()
-}
-
-fn strategy_vector3_linf_norm_i32() -> impl Strategy<Value = Vector3<i32>> {
-    strategy_vector_i32_max_safe_square_root::<3>()
-}
-
-fn strategy_vector4_linf_norm_i32() -> impl Strategy<Value = Vector4<i32>> {
-    strategy_vector_i32_max_safe_square_root::<4>()
-}
-*/
-
 
 
 /// A vector times a scalar zero should be a zero vector.
