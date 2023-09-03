@@ -155,28 +155,6 @@ where
     .no_shrink()
 }
 
-/*
-fn strategy_complex_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
-    where
-        S: SimdScalarSigned
-    {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<(S, S)>().prop_map(move |(_re, _im)| {
-        let re = rescale(_re, min_value, max_value);
-        let im = rescale(_im, min_value, max_value);
-        
-        Complex::new(re, im)
-    })
-    .no_shrink()
-}
-*/
-
 
 fn strategy_sqrt_f64() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
