@@ -130,36 +130,36 @@ fn strategy_lp_norm_degree() -> impl Strategy<Value = u32> {
 }
 
 
-fn strategy_scalar1_l1_norm_i32() -> impl Strategy<Value = i32> {
+fn strategy_scalar1_i32_l1_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<1>()
 }
 
-fn strategy_scalar2_l1_norm_i32() -> impl Strategy<Value = i32> {
+fn strategy_scalar2_i32_l1_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<2>()
 }
 
-fn strategy_scalar3_l1_norm_i32() -> impl Strategy<Value = i32> {
+fn strategy_scalar3_i32_l1_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<3>()
 }
 
-fn strategy_scalar4_l1_norm_i32() -> impl Strategy<Value = i32> {
+fn strategy_scalar4_i32_l1_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<4>()
 }
 
 
-fn strategy_scalar1_linf_norm_i32() -> impl Strategy<Value = i32> {
+fn strategy_scalar1_i32_linf_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<1>()
 }
 
-fn strategy_scalar2_linf_norm_i32() -> impl Strategy<Value = i32> {
+fn strategy_scalar2_i32_linf_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<2>()
 }
 
-fn strategy_scalar3_linf_norm_i32() -> impl Strategy<Value = i32> {
+fn strategy_scalar3_i32_linf_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<3>()
 }
 
-fn strategy_scalar4_linf_norm_i32() -> impl Strategy<Value = i32> {
+fn strategy_scalar4_i32_linf_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<4>()
 }
 
@@ -1747,10 +1747,10 @@ macro_rules! exact_l1_norm_props {
     }
 }
 
-exact_l1_norm_props!(vector1_i32_l1_norm_props, Vector1, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar1_l1_norm_i32);
-exact_l1_norm_props!(vector2_i32_l1_norm_props, Vector2, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar2_l1_norm_i32);
-exact_l1_norm_props!(vector3_i32_l1_norm_props, Vector3, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar3_l1_norm_i32);
-exact_l1_norm_props!(vector4_i32_l1_norm_props, Vector4, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar4_l1_norm_i32);
+exact_l1_norm_props!(vector1_i32_l1_norm_props, Vector1, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar1_i32_l1_norm);
+exact_l1_norm_props!(vector2_i32_l1_norm_props, Vector2, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar2_i32_l1_norm);
+exact_l1_norm_props!(vector3_i32_l1_norm_props, Vector3, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar3_i32_l1_norm);
+exact_l1_norm_props!(vector4_i32_l1_norm_props, Vector4, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar4_i32_l1_norm);
 
 
 macro_rules! lp_norm_props {
@@ -1859,10 +1859,10 @@ macro_rules! exact_linf_norm_props {
     }
 }
 
-exact_linf_norm_props!(vector1_i32_linf_norm_props, Vector1, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar1_linf_norm_i32);
-exact_linf_norm_props!(vector2_i32_linf_norm_props, Vector2, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar2_linf_norm_i32);
-exact_linf_norm_props!(vector3_i32_linf_norm_props, Vector3, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar3_linf_norm_i32);
-exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar4_linf_norm_i32);
+exact_linf_norm_props!(vector1_i32_linf_norm_props, Vector1, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar1_i32_linf_norm);
+exact_linf_norm_props!(vector2_i32_linf_norm_props, Vector2, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar2_i32_linf_norm);
+exact_linf_norm_props!(vector3_i32_linf_norm_props, Vector3, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar3_i32_linf_norm);
+exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar4_i32_linf_norm);
 
 
 macro_rules! norm_synonym_props {
