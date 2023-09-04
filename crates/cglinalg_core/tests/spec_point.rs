@@ -66,32 +66,6 @@ where
     })
 }
 
-fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>> 
-where
-    S: SimdScalarSigned + Arbitrary
-{
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
-    where
-        S: SimdScalarSigned
-    {
-        min_value + (value % (max_value - min_value))
-    }
-
-    fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N> 
-    where
-        S: SimdScalarSigned
-    {
-        value.map(|element| rescale(element, min_value, max_value))
-    }
-
-    any::<[S; N]>().prop_map(move |array| {
-        let vector = Vector::from(array);
-        
-        rescale_vector(vector, min_value, max_value)
-    })
-    .no_shrink()
-}
-
 fn strategy_vector_any<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
 where 
     S: SimdScalarSigned + Arbitrary 
@@ -119,14 +93,14 @@ where
     })
 }
 
-fn strategy_point_f64_norm_squared<const N: usize>() -> impl Strategy<Value = Point<f64, N>> {
+fn strategy_point_f64_max_safe_square_root<const N: usize>() -> impl Strategy<Value = Point<f64, N>> {
     let min_value = f64::sqrt(f64::EPSILON);
     let max_value = f64::sqrt(f64::MAX);
 
     strategy_point_signed_from_abs_range(min_value, max_value)
 }
 
-fn strategy_point_i32_norm_squared<const N: usize>() -> impl Strategy<Value = Point<i32, N>> {
+fn strategy_point_i32_max_safe_square_root<const N: usize>() -> impl Strategy<Value = Point<i32, N>> {
     let min_value = 0;
     // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
     let max_square_root = 46340;
@@ -693,9 +667,9 @@ macro_rules! approx_norm_squared_props {
     }
 }
 
-approx_norm_squared_props!(point1_f64_norm_squared_props, Point1, f64, strategy_point_f64_norm_squared, any_scalar, 1e-10, 1e-20);
-approx_norm_squared_props!(point2_f64_norm_squared_props, Point2, f64, strategy_point_f64_norm_squared, any_scalar, 1e-10, 1e-20);
-approx_norm_squared_props!(point3_f64_norm_squared_props, Point3, f64, strategy_point_f64_norm_squared, any_scalar, 1e-10, 1e-20);
+approx_norm_squared_props!(point1_f64_norm_squared_props, Point1, f64, strategy_point_f64_max_safe_square_root, any_scalar, 1e-10, 1e-20);
+approx_norm_squared_props!(point2_f64_norm_squared_props, Point2, f64, strategy_point_f64_max_safe_square_root, any_scalar, 1e-10, 1e-20);
+approx_norm_squared_props!(point3_f64_norm_squared_props, Point3, f64, strategy_point_f64_max_safe_square_root, any_scalar, 1e-10, 1e-20);
 
 
 macro_rules! approx_norm_squared_synonym_props {
@@ -740,9 +714,9 @@ macro_rules! exact_norm_squared_props {
     }
 }
 
-exact_norm_squared_props!(point1_i32_norm_squared_props, Point1, i32, strategy_point_i32_norm_squared, any_scalar);
-exact_norm_squared_props!(point2_i32_norm_squared_props, Point2, i32, strategy_point_i32_norm_squared, any_scalar);
-exact_norm_squared_props!(point3_i32_norm_squared_props, Point3, i32, strategy_point_i32_norm_squared, any_scalar);
+exact_norm_squared_props!(point1_i32_norm_squared_props, Point1, i32, strategy_point_i32_max_safe_square_root, any_scalar);
+exact_norm_squared_props!(point2_i32_norm_squared_props, Point2, i32, strategy_point_i32_max_safe_square_root, any_scalar);
+exact_norm_squared_props!(point3_i32_norm_squared_props, Point3, i32, strategy_point_i32_max_safe_square_root, any_scalar);
 
 
 macro_rules! exact_norm_squared_synonym_props {
