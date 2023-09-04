@@ -36,19 +36,6 @@ where
     .no_shrink()
 }
 
-/*
-fn any_scalar<S>() -> impl Strategy<Value = S>
-where 
-    S: SimdScalar + Arbitrary
-{
-    any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
-
-        scalar % modulus
-    })
-}
-*/
-
 fn any_matrix2<S>() -> impl Strategy<Value = Matrix2x2<S>> 
 where 
     S: SimdScalar + Arbitrary
@@ -141,7 +128,7 @@ where
 /// ```text
 /// m + 0 = m
 /// ```
-fn prop_matrix_times_zero_equals_zero<S, const R: usize, const C: usize, const RC: usize>(
+fn prop_matrix_plus_zero_equals_zero<S, const R: usize, const C: usize, const RC: usize>(
     m: Matrix<S, R, C, RC>
 ) -> Result<(), TestCaseError>
 where
@@ -211,72 +198,6 @@ where
     Ok(())
 }
 
-
-
-
-
-/*
-/// A zero matrix should act as the additive unit element for matrices 
-/// over their underlying scalars. 
-///
-/// Given a matrix `m`
-/// ```text
-/// 0 + m = m
-/// ```
-fn prop_matrix_additive_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    let zero_matrix = Matrix::zero();
-
-    prop_assert_eq!(zero_matrix + m, m);
-
-    Ok(())
-}
-*/
-/*      
-/// A zero matrix should act as the additive unit element for matrices 
-/// over their underlying scalars. 
-///
-/// Given a matrix `m`
-/// ```text
-/// m + 0 = m
-/// ```
-fn prop_vector_times_zero_equals_zero<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    let zero_matrix = Matrix::zero();
-
-    prop_assert_eq!(m + zero_matrix, m);
-
-    Ok(())
-}
-*/
-/*
-/// Matrix addition over exact scalars is commutative.
-///
-/// Given matrices `m1` and `m2`
-/// ```text
-/// m1 + m2 = m2 + m1
-/// ```
-fn prop_matrix_addition_commutative<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    prop_assert_eq!(m1 + m2, m2 + m1);
-
-    Ok(())
-}
-*/
-
 /// Matrix addition over exact scalars is associative.
 ///
 /// Given matrices `m1`, `m2`, and `m3`
@@ -295,10 +216,6 @@ where
 
     Ok(())
 }
-
-
-
-
 
 /// Multiplication of a matrix by a scalar zero is the zero matrix.
 ///
@@ -392,8 +309,6 @@ where
 }
 */
 
-
-
 /// Multiplication of matrices by scalars is compatible with matrix 
 /// addition.
 ///
@@ -434,55 +349,6 @@ where
     Ok(())
 }
 
-/*
-/// Multiplication of a matrix by a scalar zero is the zero matrix.
-///
-/// Given a matrix `m` and a zero scalar `0`
-/// ```text
-/// 0 * m = m * 0 = 0
-/// ```
-/// Note that we diverge from tradition formalisms of matrix arithmetic 
-/// in that we allow multiplication of matrices by scalars on the right-hand 
-/// side as well as left-hand side. 
-fn prop_zero_times_matrix_equals_zero_matrix<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    let zero = num_traits::zero();
-    let zero_matrix = Matrix::zero();
-
-    prop_assert_eq!(zero * m, zero_matrix);
-    prop_assert_eq!(m * zero, zero_matrix);
-
-    Ok(())
-}
-*/
-/*
-/// Multiplication of a matrix by a scalar one is the original matrix.
-///
-/// Given a matrix `m` and a unit scalar `1`
-/// ```text
-/// 1 * m = m * 1 = m
-/// ```
-/// Note that we diverge from tradition formalisms of matrix arithmetic 
-/// in that we allow multiplication of matrices by scalars on the right-hand 
-/// side as well as left-hand side. 
-fn prop_one_times_matrix_equals_matrix<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    let one = num_traits::one();
-
-    prop_assert_eq!(one * m, m);
-    prop_assert_eq!(m * one, m);
-
-    Ok(())
-}
-*/
 /*
 /// Multiplication of a matrix by a scalar commutes with scalars.
 ///
@@ -525,9 +391,6 @@ where
     Ok(())
 }
 
-
-
-
 /*
 /// Multiplication of a matrix by a scalar commutes with scalars.
 ///
@@ -550,9 +413,6 @@ where
     Ok(())
 }
 */
-
-
-
 /*
 /// Matrices over a set of floating point scalars have a 
 /// multiplicative identity.
@@ -575,8 +435,6 @@ where
     Ok(())
 }
 */
-
-
 /*
 /// Multiplication of a matrix by a scalar zero is the zero matrix.
 ///
@@ -602,9 +460,27 @@ where
     Ok(())
 }
 */
+/*
+/// Multiplication of a matrix by the zero matrix is the zero matrix.
+///
+/// Given a matrix `m`, and the zero matrix `0`
+/// ```text
+/// 0 * m = m * 0 = 0
+/// ```
+fn prop_zero_matrix_times_matrix_equals_zero_matrix<S, const R: usize, const C: usize, const RC: usize>(
+    m: Matrix<S, R, C, RC>
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalar + Arbitrary
+{
+    let zero_matrix = Matrix::zero();
 
+    prop_assert_eq!(zero_matrix * m, zero_matrix);
+    prop_assert_eq!(m * zero_matrix, zero_matrix);
 
-
+    Ok(())
+}
+*/
 /*
 /// Matrix multiplication is associative.
 ///
@@ -624,7 +500,8 @@ where
 
     Ok(())
 }
-
+*/
+/*
 /// Matrix multiplication is distributive over matrix addition.
 ///
 /// Given matrices `m1`, `m2`, and `m3`
@@ -643,7 +520,8 @@ where
 
     Ok(())
 }
-
+*/
+/*
 /// Matrix multiplication is compatible with scalar multiplication.
 ///
 /// Given matrices `m1` and `m2` and a scalar `c`
@@ -663,6 +541,7 @@ where
     Ok(())
 }
 */
+
 /// Matrix multiplication is compatible with scalar multiplication.
 ///
 /// Given a matrix `m`, scalars `c1` and `c2`
@@ -681,7 +560,6 @@ where
 
     Ok(())
 }
-
 
 /*
 /// Matrices over a set of floating point scalars have a 
@@ -705,9 +583,6 @@ where
     Ok(())
 }
 */
-
-
-
 
 /// The double transpose of a matrix is the original matrix.
 ///
@@ -763,9 +638,6 @@ where
     Ok(())
 }
 
-
-
-
 /*
 /// The transpose of the product of two matrices equals the product 
 /// of the transposes of the two matrices swapped.
@@ -786,89 +658,6 @@ where
     Ok(())
 }
 */
-
-
-
-
-
-/*
-/// The double transpose of a matrix is the original matrix.
-///
-/// Given a matrix `m`
-/// ```text
-/// transpose(transpose(m)) = m
-/// ```
-fn prop_matrix_transpose_transpose_equals_matrix<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    prop_assert_eq!(m.transpose().transpose(), m);
-
-    Ok(())
-}
-*/
-/*
-/// The transposition operation is linear.
-/// 
-/// Given matrices `m1` and `m2`
-/// ```text
-/// transpose(m1 + m2) = transpose(m1) + transpose(m2)
-/// ```
-fn prop_transpose_linear<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    prop_assert_eq!((m1 + m2).transpose(), m1.transpose() + m2.transpose());
-
-    Ok(())
-}
-*/
-/*
-/// Scalar multiplication of a matrix and a scalar commutes with transposition.
-/// 
-/// Given a matrix `m` and a scalar `c`
-/// ```text
-/// transpose(c * m) = c * transpose(m)
-/// ```
-fn prop_transpose_scalar_multiplication<S, const R: usize, const C: usize, const RC: usize>(
-    c: S, 
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    prop_assert_eq!((c * m).transpose(), c * m.transpose());
-
-    Ok(())
-}
-*/
-/*
-/// The transpose of the product of two matrices equals the product of the transposes
-/// of the two matrices swapped.
-/// 
-/// Given matrices `m1` and `m2`
-/// ```text
-/// transpose(m1 * m2) = transpose(m2) * transpose(m1)
-/// ```
-fn prop_transpose_product<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    prop_assert_eq!((m1 * m2).transpose(), m2.transpose() * m1.transpose());
-
-    Ok(())
-}
-*/
-
-
 
 /// Swapping rows is commutative in the row arguments.
 ///
@@ -1107,9 +896,9 @@ macro_rules! approx_addition_props {
             }
         
             #[test]
-            fn prop_matrix_times_zero_equals_zero(m in super::$Generator()) {
+            fn prop_matrix_plus_zero_equals_zero(m in super::$Generator()) {
                 let m: super::$MatrixN<$ScalarType> = m;
-                super::prop_matrix_times_zero_equals_zero(m)?
+                super::prop_matrix_plus_zero_equals_zero(m)?
             }
 
             #[test]
@@ -1164,9 +953,9 @@ macro_rules! exact_addition_props {
             }
         
             #[test]
-            fn prop_matrix_times_zero_equals_zero(m in super::$Generator()) {
+            fn prop_matrix_plus_zero_equals_zero(m in super::$Generator()) {
                 let m: super::$MatrixN<$ScalarType> = m;
-                super::prop_matrix_times_zero_equals_zero(m)?
+                super::prop_matrix_plus_zero_equals_zero(m)?
             }
 
             #[test]
@@ -1372,6 +1161,13 @@ macro_rules! approx_multiplication_props {
                 super::prop_matrix_multiplication_identity(m)?
             }
             */
+            /*
+            #[test]
+            fn prop_zero_matrix_times_matrix_equals_zero_matrix(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_zero_matrix_times_matrix_equals_zero_matrix(m)?
+            }
+            */
 
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator()) {
@@ -1451,7 +1247,13 @@ macro_rules! exact_multiplication_props {
                 let m: super::$MatrixN<$ScalarType> = m;
                 super::prop_matrix_multiplication_compatible_with_scalar_multiplication1(c1, c2, m)?
             }
-
+            /*
+            #[test]
+            fn prop_zero_matrix_times_matrix_equals_zero_matrix(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_zero_matrix_times_matrix_equals_zero_matrix(m)?
+            }
+            */
             /*
             #[test]
             fn prop_matrix_multiplication_identity(m in super::$Generator()) {
