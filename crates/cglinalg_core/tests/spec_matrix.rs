@@ -149,18 +149,17 @@ where
 ///
 /// Given matrices `m1`, `m2`, and `m3`
 /// ```text
-/// (m1 + m2) + m3 ~= m1 + (m2 + m3)
+/// (m1 + m2) + m3 = m1 + (m2 + m3)
 /// ```
-fn prop_matrix_addition_approx_associative<S, const R: usize, const C: usize, const RC: usize>(
+fn prop_matrix_addition_associative<S, const R: usize, const C: usize, const RC: usize>(
     m1: Matrix<S, R, C, RC>, 
     m2: Matrix<S, R, C, RC>, 
-    m3: Matrix<S, R, C, RC>,
-    tolerance: S
+    m3: Matrix<S, R, C, RC>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalar + Arbitrary
 {
-    prop_assert!(relative_eq!((m1 + m2) + m3, m1 + (m2 + m3), epsilon = tolerance));
+    prop_assert_eq!((m1 + m2) + m3, m1 + (m2 + m3));
 
     Ok(())
 }
@@ -180,25 +179,6 @@ where
     S: SimdScalarSigned + Arbitrary
 {
     prop_assert_eq!(m1 + (-m2), m1 - m2);
-
-    Ok(())
-}
-
-/// Matrix addition over exact scalars is associative.
-///
-/// Given matrices `m1`, `m2`, and `m3`
-/// ```text
-/// (m1 + m2) + m3 = m1 + (m2 + m3)
-/// ```
-fn prop_matrix_addition_associative<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>, 
-    m3: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    prop_assert_eq!((m1 + m2) + m3, m1 + (m2 + m3));
 
     Ok(())
 }
@@ -881,14 +861,6 @@ macro_rules! approx_addition_props {
                 let m1: super::$MatrixN<$ScalarType> = m1;
                 let m2: super::$MatrixN<$ScalarType> = m2;
                 super::prop_matrix_addition_commutative(m1, m2)?
-            }
-
-            #[test]
-            fn prop_matrix_addition_approx_associative(m1 in super::$Generator(), m2 in super::$Generator(), m3 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
-                let m3: super::$MatrixN<$ScalarType> = m3;
-                super::prop_matrix_addition_approx_associative(m1, m2, m3, $tolerance)?
             }
 
             #[test]
