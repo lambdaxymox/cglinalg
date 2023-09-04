@@ -11,7 +11,6 @@ use cglinalg_core::{
     Matrix4x4,
     SimdScalar,
     SimdScalarSigned,
-    SimdScalarFloat,
 };
 use approx::{
     relative_eq,
