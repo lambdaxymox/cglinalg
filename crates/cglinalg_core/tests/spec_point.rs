@@ -130,7 +130,7 @@ fn strategy_point_i32_max_safe_square_root<const N: usize>() -> impl Strategy<Va
 /// ```text
 /// 1 * p = p * 1 = p
 /// ```
-fn prop_one_times_vector_equals_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_one_times_point_equals_point<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar + Arbitrary
 {
@@ -354,21 +354,6 @@ where
     Ok(())
 }
 
-/// The [`Point::magnitude_squared`] function and the [`Point::norm_squared`] 
-/// function are synonyms. In particular, given a point `p`
-/// ```text
-/// magnitude_squared(p) = norm_squared(p)
-/// ```
-/// where equality is exact.
-fn prop_magnitude_squared_norm_squared_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar + Arbitrary
-{
-    prop_assert_eq!(v.magnitude_squared(), v.norm_squared());
-
-    Ok(())
-}
-
 /// The squared **L2** norm function is point separating. In particular, if the 
 /// squared distance between two points `p1` and `p2` is zero, then `p1 = p2`.
 ///
@@ -394,6 +379,43 @@ where
         "\n|p1 - p2|^2 = {}\n",
         (p1 - p2).norm_squared()
     );
+
+    Ok(())
+}
+
+/// The squared **L2** norm function is squared homogeneous.
+/// 
+/// Given a point `p` and a scalar `c`, the **L2** norm satisfies
+/// ```text
+/// norm(p * c) = norm(p) * abs(c)
+/// ```
+/// and the squared **L2** norm function satisfies
+/// ```text
+/// norm(p * c)^2 = norm(p)^2 * abs(c)^2
+/// ```
+fn prop_norm_squared_homogeneous_squared<S, const N: usize>(v: Point<S, N>, c: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarSigned
+{
+    let lhs = (v * c).norm_squared();
+    let rhs = v.norm_squared() * c.abs() * c.abs();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+/// The [`Point::magnitude_squared`] function and the [`Point::norm_squared`] 
+/// function are synonyms. In particular, given a point `p`
+/// ```text
+/// magnitude_squared(p) = norm_squared(p)
+/// ```
+/// where equality is exact.
+fn prop_magnitude_squared_norm_squared_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalar + Arbitrary
+{
+    prop_assert_eq!(v.magnitude_squared(), v.norm_squared());
 
     Ok(())
 }
@@ -428,7 +450,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_norm_approx_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_norm_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat + Arbitrary
 {   
@@ -482,9 +504,9 @@ macro_rules! approx_mul_props {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_one_times_vector_equals_vector(p in super::$Generator()) {
+            fn prop_one_times_point_equals_point(p in super::$Generator()) {
                 let p: super::$PointN<$ScalarType> = p;
-                super::prop_one_times_vector_equals_vector(p)?
+                super::prop_one_times_point_equals_point(p)?
             }
         }
     }
@@ -511,9 +533,9 @@ macro_rules! exact_mul_props {
             }
 
             #[test]
-            fn prop_one_times_vector_equals_vector(p in super::$Generator()) {
+            fn prop_one_times_point_equals_point(p in super::$Generator()) {
                 let p: super::$PointN<$ScalarType> = p;
-                super::prop_one_times_vector_equals_vector(p)?
+                super::prop_one_times_point_equals_point(p)?
             }
         }
     }
@@ -660,7 +682,7 @@ exact_arithmetic_props!(point3_i64_arithmetic_props, Point3, Vector3, i64, strat
 
 
 macro_rules! approx_norm_squared_props {
-    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $input_tolerance:expr, $output_tolerance:expr) => {
+    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $input_tolerance:expr, $output_tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -681,9 +703,9 @@ macro_rules! approx_norm_squared_props {
     }
 }
 
-approx_norm_squared_props!(point1_f64_norm_squared_props, Point1, f64, strategy_point_f64_max_safe_square_root, any_scalar, 1e-10, 1e-20);
-approx_norm_squared_props!(point2_f64_norm_squared_props, Point2, f64, strategy_point_f64_max_safe_square_root, any_scalar, 1e-10, 1e-20);
-approx_norm_squared_props!(point3_f64_norm_squared_props, Point3, f64, strategy_point_f64_max_safe_square_root, any_scalar, 1e-10, 1e-20);
+approx_norm_squared_props!(point1_f64_norm_squared_props, Point1, f64, strategy_point_f64_max_safe_square_root, 1e-10, 1e-20);
+approx_norm_squared_props!(point2_f64_norm_squared_props, Point2, f64, strategy_point_f64_max_safe_square_root, 1e-10, 1e-20);
+approx_norm_squared_props!(point3_f64_norm_squared_props, Point3, f64, strategy_point_f64_max_safe_square_root, 1e-10, 1e-20);
 
 
 macro_rules! approx_norm_squared_synonym_props {
@@ -723,14 +745,21 @@ macro_rules! exact_norm_squared_props {
                 let p2: super::$PointN<$ScalarType> = p2;
                 super::prop_norm_squared_point_separating(p1, p2)?
             }
+
+            #[test]
+            fn prop_norm_squared_homogeneous_squared(v in super::$Generator(), c in super::$ScalarGen()) {
+                let v: super::$PointN<$ScalarType> = v;
+                let c: $ScalarType = c;
+                super::prop_norm_squared_homogeneous_squared(v, c)?
+            }
         }
     }
     }
 }
 
-exact_norm_squared_props!(point1_i32_norm_squared_props, Point1, i32, strategy_point_i32_max_safe_square_root, any_scalar);
-exact_norm_squared_props!(point2_i32_norm_squared_props, Point2, i32, strategy_point_i32_max_safe_square_root, any_scalar);
-exact_norm_squared_props!(point3_i32_norm_squared_props, Point3, i32, strategy_point_i32_max_safe_square_root, any_scalar);
+exact_norm_squared_props!(point1_i32_norm_squared_props, Point1, i32, strategy_point_i32_max_safe_square_root, strategy_scalar_i32_any);
+exact_norm_squared_props!(point2_i32_norm_squared_props, Point2, i32, strategy_point_i32_max_safe_square_root, strategy_scalar_i32_any);
+exact_norm_squared_props!(point3_i32_norm_squared_props, Point3, i32, strategy_point_i32_max_safe_square_root, strategy_scalar_i32_any);
 
 
 macro_rules! exact_norm_squared_synonym_props {
@@ -753,8 +782,8 @@ exact_norm_squared_synonym_props!(point2_i32_norm_squared_synonym_props, Point2,
 exact_norm_squared_synonym_props!(point3_i32_norm_squared_synonym_props, Point3, i32, strategy_point_any);
 
 
-macro_rules! norm_props {
-    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+macro_rules! approx_norm_props {
+    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -765,23 +794,23 @@ macro_rules! norm_props {
             }
 
             #[test]
-            fn prop_norm_approx_point_separating(p1 in super::$Generator(), p2 in super::$Generator()) {
+            fn prop_approx_norm_point_separating(p1 in super::$Generator(), p2 in super::$Generator()) {
                 let p1: super::$PointN<$ScalarType> = p1;
                 let p2: super::$PointN<$ScalarType> = p2;
-                super::prop_norm_approx_point_separating(p1, p2, 1e-8, 1e-8)?
+                super::prop_approx_norm_point_separating(p1, p2, 1e-8, 1e-8)?
             }
         }
     }
     }
 }
 
-norm_props!(point1_f64_norm_props, Point1, f64, strategy_point_any, any_scalar, 1e-8);
-norm_props!(point2_f64_norm_props, Point2, f64, strategy_point_any, any_scalar, 1e-8);
-norm_props!(point3_f64_norm_props, Point3, f64, strategy_point_any, any_scalar, 1e-8);
+approx_norm_props!(point1_f64_norm_props, Point1, f64, strategy_point_any, 1e-8);
+approx_norm_props!(point2_f64_norm_props, Point2, f64, strategy_point_any, 1e-8);
+approx_norm_props!(point3_f64_norm_props, Point3, f64, strategy_point_any, 1e-8);
 
 
 macro_rules! norm_synonym_props {
-    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -801,7 +830,7 @@ macro_rules! norm_synonym_props {
     }
 }
 
-norm_synonym_props!(point1_f64_norm_synonym_props, Point1, f64, strategy_point_any, any_scalar, 1e-8);
-norm_synonym_props!(point2_f64_norm_synonym_props, Point2, f64, strategy_point_any, any_scalar, 1e-8);
-norm_synonym_props!(point3_f64_norm_synonym_props, Point3, f64, strategy_point_any, any_scalar, 1e-8);
+norm_synonym_props!(point1_f64_norm_synonym_props, Point1, f64, strategy_point_any, 1e-8);
+norm_synonym_props!(point2_f64_norm_synonym_props, Point2, f64, strategy_point_any, 1e-8);
+norm_synonym_props!(point3_f64_norm_synonym_props, Point3, f64, strategy_point_any, 1e-8);
 

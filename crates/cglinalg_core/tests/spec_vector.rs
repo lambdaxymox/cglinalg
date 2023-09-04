@@ -1655,7 +1655,7 @@ exact_norm_squared_synonym_props!(vector3_i32_norm_squared_synonym_props, Vector
 exact_norm_squared_synonym_props!(vector4_i32_norm_squared_synonym_props, Vector4, i32, strategy_vector_any);
 
 
-macro_rules! norm_props {
+macro_rules! approx_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1677,10 +1677,10 @@ macro_rules! norm_props {
     }
 }
 
-norm_props!(vector1_f64_norm_props, Vector1, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-norm_props!(vector2_f64_norm_props, Vector2, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-norm_props!(vector3_f64_norm_props, Vector3, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-norm_props!(vector4_f64_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_norm_props!(vector1_f64_norm_props, Vector1, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_norm_props!(vector2_f64_norm_props, Vector2, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_norm_props!(vector3_f64_norm_props, Vector3, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_norm_props!(vector4_f64_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
 
 
 macro_rules! approx_l1_norm_props {
