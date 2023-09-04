@@ -877,17 +877,6 @@ macro_rules! approx_addition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_eq
-        };
-        use cglinalg_core::{
-            $MatrixN,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_matrix_additive_identity(m in super::$Generator()) {
@@ -937,14 +926,6 @@ macro_rules! exact_addition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $MatrixN,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_matrix_additive_identity(m in super::$Generator()) {
@@ -987,15 +968,6 @@ macro_rules! approx_scalar_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $MatrixN,
-        };
-        use super::{
-            $Generator,
-            $ScalarGen,
-        };
-
-
         proptest! {
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator()) {
@@ -1057,14 +1029,6 @@ macro_rules! exact_scalar_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $MatrixN, 
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_scalar_matrix_multiplication_compatible_addition(
@@ -1137,14 +1101,6 @@ macro_rules! approx_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $MatrixN,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             /*
             #[test]
@@ -1189,14 +1145,6 @@ macro_rules! exact_multiplication_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            $MatrixN,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             /*
             #[test]
@@ -1276,11 +1224,6 @@ macro_rules! approx_transposition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_matrix_transpose_transpose_equals_matrix(m in super::$Generator()) {
@@ -1325,11 +1268,6 @@ macro_rules! exact_transposition_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_matrix_transpose_transpose_equals_matrix(m in super::$Generator()) {
@@ -1374,11 +1312,6 @@ macro_rules! swap_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_swap_rows_commutative(
