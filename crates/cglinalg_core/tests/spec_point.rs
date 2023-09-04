@@ -118,7 +118,7 @@ where
         scalar % modulus
     })
 }
-
+/*
 fn strategy_vector1_any<S>() -> impl Strategy<Value = Vector1<S>> 
 where 
     S: SimdScalarSigned + Arbitrary 
@@ -139,7 +139,8 @@ where
 {
     strategy_vector_any()
 }
-
+*/
+/*
 fn strategy_point1_any<S>() -> impl Strategy<Value = Point1<S>> 
 where 
     S: SimdScalarSigned + Arbitrary 
@@ -160,6 +161,7 @@ where
 {
     strategy_point_any()
 }
+*/
 
 fn strategy_point_f64_norm_squared<const N: usize>() -> impl Strategy<Value = Point<f64, N>> {
     let min_value = f64::sqrt(f64::EPSILON);
@@ -545,9 +547,9 @@ macro_rules! approx_mul_props {
     }
 }
 
-approx_mul_props!(point1_f64_mul_props, Point1, f64, strategy_point1_any, strategy_scalar_any, 1e-7);
-approx_mul_props!(point2_f64_mul_props, Point2, f64, strategy_point2_any, strategy_scalar_any, 1e-7);
-approx_mul_props!(point3_f64_mul_props, Point3, f64, strategy_point3_any, strategy_scalar_any, 1e-7);
+approx_mul_props!(point1_f64_mul_props, Point1, f64, strategy_point_any, strategy_scalar_any, 1e-7);
+approx_mul_props!(point2_f64_mul_props, Point2, f64, strategy_point_any, strategy_scalar_any, 1e-7);
+approx_mul_props!(point3_f64_mul_props, Point3, f64, strategy_point_any, strategy_scalar_any, 1e-7);
 
 
 macro_rules! exact_mul_props {
@@ -574,9 +576,9 @@ macro_rules! exact_mul_props {
     }
 }
 
-exact_mul_props!(point1_i32_mul_props, Point1, i32, strategy_point1_any, strategy_scalar_any);
-exact_mul_props!(point2_i32_mul_props, Point2, i32, strategy_point2_any, strategy_scalar_any);
-exact_mul_props!(point3_i32_mul_props, Point3, i32, strategy_point3_any, strategy_scalar_any);
+exact_mul_props!(point1_i32_mul_props, Point1, i32, strategy_point_any, strategy_scalar_any);
+exact_mul_props!(point2_i32_mul_props, Point2, i32, strategy_point_any, strategy_scalar_any);
+exact_mul_props!(point3_i32_mul_props, Point3, i32, strategy_point_any, strategy_scalar_any);
 
 
 macro_rules! approx_arithmetic_props {
@@ -634,8 +636,8 @@ approx_arithmetic_props!(
     Point1, 
     Vector1, 
     f64, 
-    strategy_point1_any, 
-    strategy_vector1_any, 
+    strategy_point_any, 
+    strategy_vector_any, 
     1e-7
 );
 approx_arithmetic_props!(
@@ -643,8 +645,8 @@ approx_arithmetic_props!(
     Point2, 
     Vector2, 
     f64, 
-    strategy_point2_any, 
-    strategy_vector2_any, 
+    strategy_point_any, 
+    strategy_vector_any, 
     1e-7
 );
 approx_arithmetic_props!(
@@ -652,8 +654,8 @@ approx_arithmetic_props!(
     Point3, 
     Vector3, 
     f64, 
-    strategy_point3_any, 
-    strategy_vector3_any, 
+    strategy_point_any, 
+    strategy_vector_any, 
     1e-7
 );
 
@@ -708,9 +710,9 @@ macro_rules! exact_arithmetic_props {
     }
 }
 
-exact_arithmetic_props!(point1_i64_arithmetic_props, Point1, Vector1, i64, strategy_point1_any, strategy_vector1_any);
-exact_arithmetic_props!(point2_i64_arithmetic_props, Point2, Vector2, i64, strategy_point2_any, strategy_vector2_any);
-exact_arithmetic_props!(point3_i64_arithmetic_props, Point3, Vector3, i64, strategy_point3_any, strategy_vector3_any);
+exact_arithmetic_props!(point1_i64_arithmetic_props, Point1, Vector1, i64, strategy_point_any, strategy_vector_any);
+exact_arithmetic_props!(point2_i64_arithmetic_props, Point2, Vector2, i64, strategy_point_any, strategy_vector_any);
+exact_arithmetic_props!(point3_i64_arithmetic_props, Point3, Vector3, i64, strategy_point_any, strategy_vector_any);
 
 
 macro_rules! approx_norm_squared_props {
@@ -755,9 +757,9 @@ macro_rules! approx_norm_squared_synonym_props {
     }
 }
 
-approx_norm_squared_synonym_props!(point1_f64_norm_squared_synonym_props, Point1, f64, strategy_point1_any);
-approx_norm_squared_synonym_props!(point2_f64_norm_squared_synonym_props, Point2, f64, strategy_point2_any);
-approx_norm_squared_synonym_props!(point3_f64_norm_squared_synonym_props, Point3, f64, strategy_point3_any);
+approx_norm_squared_synonym_props!(point1_f64_norm_squared_synonym_props, Point1, f64, strategy_point_any);
+approx_norm_squared_synonym_props!(point2_f64_norm_squared_synonym_props, Point2, f64, strategy_point_any);
+approx_norm_squared_synonym_props!(point3_f64_norm_squared_synonym_props, Point3, f64, strategy_point_any);
 
 
 macro_rules! exact_norm_squared_props {
@@ -802,9 +804,9 @@ macro_rules! exact_norm_squared_synonym_props {
     }
 }
 
-exact_norm_squared_synonym_props!(point1_i32_norm_squared_synonym_props, Point1, i32, strategy_point1_any);
-exact_norm_squared_synonym_props!(point2_i32_norm_squared_synonym_props, Point2, i32, strategy_point2_any);
-exact_norm_squared_synonym_props!(point3_i32_norm_squared_synonym_props, Point3, i32, strategy_point3_any);
+exact_norm_squared_synonym_props!(point1_i32_norm_squared_synonym_props, Point1, i32, strategy_point_any);
+exact_norm_squared_synonym_props!(point2_i32_norm_squared_synonym_props, Point2, i32, strategy_point_any);
+exact_norm_squared_synonym_props!(point3_i32_norm_squared_synonym_props, Point3, i32, strategy_point_any);
 
 
 macro_rules! norm_props {
@@ -829,9 +831,9 @@ macro_rules! norm_props {
     }
 }
 
-norm_props!(point1_f64_norm_props, Point1, f64, strategy_point1_any, any_scalar, 1e-8);
-norm_props!(point2_f64_norm_props, Point2, f64, strategy_point2_any, any_scalar, 1e-8);
-norm_props!(point3_f64_norm_props, Point3, f64, strategy_point3_any, any_scalar, 1e-8);
+norm_props!(point1_f64_norm_props, Point1, f64, strategy_point_any, any_scalar, 1e-8);
+norm_props!(point2_f64_norm_props, Point2, f64, strategy_point_any, any_scalar, 1e-8);
+norm_props!(point3_f64_norm_props, Point3, f64, strategy_point_any, any_scalar, 1e-8);
 
 
 macro_rules! norm_synonym_props {
@@ -855,7 +857,7 @@ macro_rules! norm_synonym_props {
     }
 }
 
-norm_synonym_props!(point1_f64_norm_synonym_props, Point1, f64, strategy_point1_any, any_scalar, 1e-8);
-norm_synonym_props!(point2_f64_norm_synonym_props, Point2, f64, strategy_point2_any, any_scalar, 1e-8);
-norm_synonym_props!(point3_f64_norm_synonym_props, Point3, f64, strategy_point3_any, any_scalar, 1e-8);
+norm_synonym_props!(point1_f64_norm_synonym_props, Point1, f64, strategy_point_any, any_scalar, 1e-8);
+norm_synonym_props!(point2_f64_norm_synonym_props, Point2, f64, strategy_point_any, any_scalar, 1e-8);
+norm_synonym_props!(point3_f64_norm_synonym_props, Point3, f64, strategy_point_any, any_scalar, 1e-8);
 
