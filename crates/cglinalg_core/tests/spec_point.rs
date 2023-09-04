@@ -118,50 +118,6 @@ where
         scalar % modulus
     })
 }
-/*
-fn strategy_vector1_any<S>() -> impl Strategy<Value = Vector1<S>> 
-where 
-    S: SimdScalarSigned + Arbitrary 
-{
-    strategy_vector_any()
-}
-
-fn strategy_vector2_any<S>() -> impl Strategy<Value = Vector2<S>> 
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    strategy_vector_any()
-}
-
-fn strategy_vector3_any<S>() -> impl Strategy<Value = Vector3<S>>
-where
-    S: SimdScalarSigned + Arbitrary
-{
-    strategy_vector_any()
-}
-*/
-/*
-fn strategy_point1_any<S>() -> impl Strategy<Value = Point1<S>> 
-where 
-    S: SimdScalarSigned + Arbitrary 
-{
-    strategy_point_any()
-}
-
-fn strategy_point2_any<S>() -> impl Strategy<Value = Point2<S>> 
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    strategy_point_any()
-}
-
-fn strategy_point3_any<S>() -> impl Strategy<Value = Point3<S>>
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    strategy_point_any()
-}
-*/
 
 fn strategy_point_f64_norm_squared<const N: usize>() -> impl Strategy<Value = Point<f64, N>> {
     let min_value = f64::sqrt(f64::EPSILON);
