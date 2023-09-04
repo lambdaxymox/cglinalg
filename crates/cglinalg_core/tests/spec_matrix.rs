@@ -18,7 +18,6 @@ use approx::{
 };
 
 
-
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
 where
     S: SimdScalarSigned + Arbitrary
@@ -36,53 +35,40 @@ where
     .no_shrink()
 }
 
-fn any_matrix2<S>() -> impl Strategy<Value = Matrix2x2<S>> 
-where 
-    S: SimdScalar + Arbitrary
+fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize, const RC: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Matrix<S, R, C, RC>>
+where
+    S: SimdScalarSigned + Arbitrary
 {
-    any::<(S, S, S, S)>()
-        .prop_map(|(c0r0, c0r1, c1r0, c1r1)| {
-            let modulus = num_traits::cast(100_000_000).unwrap();
-            let matrix = Matrix2x2::new(c0r0, c0r1, c1r0, c1r1);
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarSigned
+    {
+        min_value + (value % (max_value - min_value))
+    }
 
-            matrix % modulus
-        })
+    fn rescale_matrix<S, const R: usize, const C: usize, const RC: usize>(value: Matrix<S, R, C, RC>, min_value: S, max_value: S) -> Matrix<S, R, C, RC> 
+    where
+        S: SimdScalarSigned
+    {
+        value.map(|element| rescale(element, min_value, max_value))
+    }
+
+    any::<[[S; R]; C]>().prop_map(move |array| {
+        let vector = Matrix::from(array);
+        
+        rescale_matrix(vector, min_value, max_value)
+    })
+    .no_shrink()
 }
 
-fn any_matrix3<S>() -> impl Strategy<Value = Matrix3x3<S>>
-where 
-    S: SimdScalar + Arbitrary
+fn strategy_matrix_any<S, const R: usize, const C: usize, const RC: usize>() -> impl Strategy<Value = Matrix<S, R, C, RC>>
+where
+    S: SimdScalarSigned + Arbitrary
 {
-    any::<((S, S, S), (S, S, S), (S, S, S))>()
-        .prop_map(|((c0r0, c0r1, c0r2), (c1r0, c1r1, c1r2), (c2r0, c2r1, c2r2))| {
-            let modulus = num_traits::cast(100_000_000).unwrap();
-            let matrix = Matrix3x3::new(
-                c0r0, c0r1, c0r2, 
-                c1r0, c1r1, c1r2, 
-                c2r0, c2r1, c2r2
-            );
+    let min_value = S::zero();
+    let max_value = num_traits::cast(1_000_000_000).unwrap();
 
-            matrix % modulus
-        })
-}
-
-fn any_matrix4<S>() -> impl Strategy<Value = Matrix4x4<S>> 
-where 
-    S: SimdScalar + Arbitrary
-{
-    any::<((S, S, S, S), (S, S, S, S), (S, S, S, S), (S, S, S, S))>().prop_map(
-        |((c0r0, c0r1, c0r2, c0r3), (c1r0, c1r1, c1r2, c1r3), (c2r0, c2r1, c2r2, c2r3), (c3r0, c3r1, c3r2, c3r3))| {
-            let modulus = num_traits::cast(100_000_000).unwrap();
-            let matrix = Matrix4x4::new(
-                c0r0, c0r1, c0r2, c0r3, 
-                c1r0, c1r1, c1r2, c1r3, 
-                c2r0, c2r1, c2r2, c2r3, 
-                c3r0, c3r1, c3r2, c3r3
-            );
-
-            matrix % modulus
-        }
-    )
+    strategy_matrix_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
@@ -916,9 +902,9 @@ macro_rules! approx_addition_props {
     }
 }
 
-approx_addition_props!(matrix2_f64_addition_props, Matrix2x2, f64, any_matrix2, 1e-7);
-approx_addition_props!(matrix3_f64_addition_props, Matrix3x3, f64, any_matrix3, 1e-7);
-approx_addition_props!(matrix4_f64_addition_props, Matrix4x4, f64, any_matrix4, 1e-7);
+approx_addition_props!(matrix2_f64_addition_props, Matrix2x2, f64, strategy_matrix_any, 1e-7);
+approx_addition_props!(matrix3_f64_addition_props, Matrix3x3, f64, strategy_matrix_any, 1e-7);
+approx_addition_props!(matrix4_f64_addition_props, Matrix4x4, f64, strategy_matrix_any, 1e-7);
 
 
 macro_rules! exact_addition_props {
@@ -958,9 +944,9 @@ macro_rules! exact_addition_props {
     }
 }
 
-exact_addition_props!(matrix2_i32_addition_props, Matrix2x2, i32, any_matrix2);
-exact_addition_props!(matrix3_i32_addition_props, Matrix3x3, i32, any_matrix3);
-exact_addition_props!(matrix4_i32_addition_props, Matrix4x4, i32, any_matrix4);
+exact_addition_props!(matrix2_i32_addition_props, Matrix2x2, i32, strategy_matrix_any);
+exact_addition_props!(matrix3_i32_addition_props, Matrix3x3, i32, strategy_matrix_any);
+exact_addition_props!(matrix4_i32_addition_props, Matrix4x4, i32, strategy_matrix_any);
 
 
 macro_rules! approx_scalar_multiplication_props {
@@ -1003,14 +989,14 @@ macro_rules! approx_scalar_multiplication_props {
 approx_scalar_multiplication_props!(
     matrix2_f64_scalar_multiplication_props, 
     Matrix2x2, f64, 
-    any_matrix2, 
+    strategy_matrix_any, 
     strategy_scalar_f64_any, 
     1e-7
 );
 approx_scalar_multiplication_props!(
     matrix3_f64_scalar_multiplication_props, 
     Matrix3x3, f64, 
-    any_matrix3, 
+    strategy_matrix_any, 
     strategy_scalar_f64_any, 
     1e-7
 );
@@ -1018,7 +1004,7 @@ approx_scalar_multiplication_props!(
     matrix4_f64_scalar_multiplication_props, 
     Matrix4x4, 
     f64, 
-    any_matrix4, 
+    strategy_matrix_any, 
     strategy_scalar_f64_any, 
     1e-7
 );
@@ -1091,9 +1077,9 @@ macro_rules! exact_scalar_multiplication_props {
     }
 }
 
-exact_scalar_multiplication_props!(matrix2_i32_scalar_multiplication_props, Matrix2x2, i32, any_matrix2, strategy_scalar_i32_any);
-exact_scalar_multiplication_props!(matrix3_i32_scalar_multiplication_props, Matrix3x3, i32, any_matrix3, strategy_scalar_i32_any);
-exact_scalar_multiplication_props!(matrix4_i32_scalar_multiplication_props, Matrix4x4, i32, any_matrix4, strategy_scalar_i32_any);
+exact_scalar_multiplication_props!(matrix2_i32_scalar_multiplication_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_scalar_multiplication_props!(matrix3_i32_scalar_multiplication_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_scalar_multiplication_props!(matrix4_i32_scalar_multiplication_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
 
 
 macro_rules! approx_multiplication_props {
@@ -1135,9 +1121,9 @@ macro_rules! approx_multiplication_props {
     }
 }
 
-approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2x2, f64, any_matrix2, strategy_scalar_f64_any);
-approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3x3, f64, any_matrix3, strategy_scalar_f64_any);
-approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4x4, f64, any_matrix4, strategy_scalar_f64_any);
+approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
 
 
 macro_rules! exact_multiplication_props {
@@ -1214,9 +1200,9 @@ macro_rules! exact_multiplication_props {
     }
 }
 
-exact_multiplication_props!(matrix2_i32_matrix_multiplication_props, Matrix2x2, i32, any_matrix2, strategy_scalar_i32_any);
-exact_multiplication_props!(matrix3_i32_matrix_multiplication_props, Matrix3x3, i32, any_matrix3, strategy_scalar_i32_any);
-exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4x4, i32, any_matrix4, strategy_scalar_i32_any);
+exact_multiplication_props!(matrix2_i32_matrix_multiplication_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_multiplication_props!(matrix3_i32_matrix_multiplication_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
 
 
 macro_rules! approx_transposition_props {
@@ -1258,9 +1244,9 @@ macro_rules! approx_transposition_props {
     }
 }
 
-approx_transposition_props!(matrix2_f64_transposition_props, Matrix2x2, f64, any_matrix2, strategy_scalar_f64_any, 1e-7);
-approx_transposition_props!(matrix3_f64_transposition_props, Matrix3x3, f64, any_matrix3, strategy_scalar_f64_any, 1e-7);
-approx_transposition_props!(matrix4_f64_transposition_props, Matrix4x4, f64, any_matrix4, strategy_scalar_f64_any, 1e-7);
+approx_transposition_props!(matrix2_f64_transposition_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any, 1e-7);
+approx_transposition_props!(matrix3_f64_transposition_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any, 1e-7);
+approx_transposition_props!(matrix4_f64_transposition_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any, 1e-7);
 
 
 macro_rules! exact_transposition_props {
@@ -1302,9 +1288,9 @@ macro_rules! exact_transposition_props {
     }
 }
 
-exact_transposition_props!(matrix2_i32_transposition_props, Matrix2x2, i32, any_matrix2, strategy_scalar_i32_any);
-exact_transposition_props!(matrix3_i32_transposition_props, Matrix3x3, i32, any_matrix3, strategy_scalar_i32_any);
-exact_transposition_props!(matrix4_i32_transposition_props, Matrix4x4, i32, any_matrix4, strategy_scalar_i32_any);
+exact_transposition_props!(matrix2_i32_transposition_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_transposition_props!(matrix3_i32_transposition_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_transposition_props!(matrix4_i32_transposition_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
 
 
 macro_rules! swap_props {
@@ -1394,7 +1380,7 @@ macro_rules! swap_props {
     }
 }
 
-swap_props!(matrix2_swap_props, Matrix2x2, i32, any_matrix2, 2);
-swap_props!(matrix3_swap_props, Matrix3x3, i32, any_matrix3, 3);
-swap_props!(matrix4_swap_props, Matrix4x4, i32, any_matrix4, 4);
+swap_props!(matrix2_swap_props, Matrix2x2, i32, strategy_matrix_any, 2);
+swap_props!(matrix3_swap_props, Matrix3x3, i32, strategy_matrix_any, 3);
+swap_props!(matrix4_swap_props, Matrix4x4, i32, strategy_matrix_any, 4);
 
