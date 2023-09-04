@@ -107,7 +107,7 @@ pub type Matrix4<S> = Matrix4x4<S>;
 #[inline(always)]
 fn dot_array_col<S, const M: usize, const N: usize>(arr: &[[S; M]; N], col: &[S; N], r: usize) -> S
 where
-    S: crate::SimdScalar + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
+    S: SimdScalar + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
 {
     // PERFORMANCE: The const loop should get unrolled during optimization.
     let mut result = S::zero();
@@ -1842,9 +1842,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn rotation_between_axis(
-        v1: &Unit<Vector2<S>>, v2: &Unit<Vector2<S>>) -> Self 
-    {
+    pub fn rotation_between_axis(v1: &Unit<Vector2<S>>, v2: &Unit<Vector2<S>>) -> Self {
         let cos_angle = v1.as_ref().dot(v2.as_ref());
         let sin_angle = S::sqrt(S::one() - cos_angle * cos_angle);
 
@@ -2547,9 +2545,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(
-        normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Self
-    {
+    pub fn from_affine_reflection(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Self {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -3309,9 +3305,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn rotation_between_axis(
-        unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Self> 
-    {
+    pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Self> {
         let cross = unit_v1.as_ref().cross(unit_v2.as_ref());
         let cos_angle = unit_v1.as_ref().dot(unit_v2.as_ref());
 
@@ -3897,9 +3891,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(
-        normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Self
-    {
+    pub fn from_affine_reflection(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Self {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -4135,9 +4127,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(
-        axis: &Unit<Vector3<S>>, angle: A) -> Self
-    {
+    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();
@@ -4192,9 +4182,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_orthographic(
-        left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self
-    {
+    pub fn from_orthographic(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         let zero = S::zero();
         let one  = S::one();
         let two = one + one;
@@ -4243,9 +4231,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_orthographic_fov<A: Into<Radians<S>>>(
-        vfov: A, aspect: S, near: S, far: S) -> Self
-    {
+    pub fn from_orthographic_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
         let one_half = num_traits::cast(0.5).unwrap();
         let width = far * Angle::tan(vfov.into() * one_half);
         let height = width / aspect;
@@ -4288,9 +4274,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_perspective(
-        left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self
-    {
+    pub fn from_perspective(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -4355,9 +4339,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_perspective_fov<A: Into<Radians<S>>>(
-        vfov: A, aspect: S, near: S, far: S) -> Self
-    {
+    pub fn from_perspective_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
