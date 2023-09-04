@@ -119,7 +119,7 @@ where
 }
 
 
-/// A stack-allocated **(`R` row, `C` column)** matrix in column-major order.
+/// A stack-allocated **(R row, C column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Matrix<S, const R: usize, const C: usize, const RC: usize> {

@@ -80,16 +80,3 @@ Specific features of the library include:
 * The library makes heavy use of statistical microbenchmarking using the 
   `criterion` crate.
 
-## Limitations On The Design
-The library has design limitations for a number of reasons. 
-* **cglinalg** is designed specifically with graphics applications in mind, which 
-  tend to be mathematically simpler than other modeling and simulation applications. 
-  As a consequence this library does not support most of the operations commonly used 
-  in modeling and simulation tasks. Moreover it can only do linear algebra up to 
-  dimension four. It is a Rust counterpart to `DirectXMath` or `glm`.
-* In keeping with simplicity as one of the project goals, the underlying storage of 
-  all data types in this library are statically allocated arrays. This is advantageous 
-  in the low-dimensional case when the data types have small sizes, but this is a 
-  limitation in the higher-dimensional case where dynamic storage allocation of storage 
-  or using the heap may be desirable.
-
