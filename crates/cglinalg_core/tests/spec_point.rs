@@ -50,6 +50,23 @@ where
     .no_shrink()
 }
 
+fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
+where
+    S: SimdScalarSigned + Arbitrary
+{
+    fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<S>().prop_map(move |value| {
+        let sign_value = value.signum();
+        let abs_value = value.abs();
+        
+        sign_value * rescale(abs_value, min_value, max_value)
+    })
+    .no_shrink()
+}
+
 fn strategy_point_any<S, const N: usize>() -> impl Strategy<Value = Point<S, N>>
 where 
     S: SimdScalarSigned + Arbitrary 
@@ -82,15 +99,12 @@ where
     })
 }
 
-fn strategy_scalar_any<S>() -> impl Strategy<Value = S>
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
+fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
+    let min_value = 0_i32;
+    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
+    let max_value = 32767_i32;
 
-        scalar % modulus
-    })
+    strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_point_f64_max_safe_square_root<const N: usize>() -> impl Strategy<Value = Point<f64, N>> {
@@ -506,9 +520,9 @@ macro_rules! exact_mul_props {
     }
 }
 
-exact_mul_props!(point1_i32_mul_props, Point1, i32, strategy_point_any, strategy_scalar_any);
-exact_mul_props!(point2_i32_mul_props, Point2, i32, strategy_point_any, strategy_scalar_any);
-exact_mul_props!(point3_i32_mul_props, Point3, i32, strategy_point_any, strategy_scalar_any);
+exact_mul_props!(point1_i32_mul_props, Point1, i32, strategy_point_any, strategy_scalar_i32_any);
+exact_mul_props!(point2_i32_mul_props, Point2, i32, strategy_point_any, strategy_scalar_i32_any);
+exact_mul_props!(point3_i32_mul_props, Point3, i32, strategy_point_any, strategy_scalar_i32_any);
 
 
 macro_rules! approx_arithmetic_props {
