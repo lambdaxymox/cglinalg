@@ -5,7 +5,9 @@ extern crate cglinalg_core;
 mod point1_tests {
     use cglinalg_core::{
         Point1,
+        Point2,
         Vector1,
+        Vector2,
     };
 
 
@@ -140,14 +142,52 @@ mod point1_tests {
 
         assert_eq!(p.x, p[0]);
     }
+
+    #[test]
+    fn test_extend() {
+        let point = Point1::new(1_i32);
+        let expected = Point2::new(1_i32, 2_i32);
+        let result = point.extend(2_i32);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_to_homogeneous() {
+        let point = Point1::new(1_f64);
+        let expected = Vector2::new(1_f64, 1_f64);
+        let result = point.to_homogeneous();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_homogeneous1() {
+        let vector = Vector2::new(4_f64, 2_f64);
+        let expected = Some(Point1::new(4_f64 / 2_f64));
+        let result = Point1::from_homogeneous(&vector);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_homogeneous2() {
+        let vector = Vector2::new(4_f64, 0_f64);
+        let result = Point1::from_homogeneous(&vector);
+
+        assert!(result.is_none());
+    }
 }
 
 
 #[cfg(test)]
 mod point2_tests {
     use cglinalg_core::{
+        Point1,
         Point2,
+        Point3,
         Vector2,
+        Vector3,
     };
 
 
@@ -286,14 +326,60 @@ mod point2_tests {
         assert_eq!(p.x, p[0]);
         assert_eq!(p.y, p[1]);
     }
+
+    #[test]
+    fn test_extend() {
+        let point = Point2::new(1_i32, 2_i32);
+        let expected = Point3::new(1_i32, 2_i32, 3_i32);
+        let result = point.extend(3_i32);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_contract() {
+        let point = Point2::new(1_i32, 2_i32);
+        let expected = Point1::new(1_i32);
+        let result = point.contract();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_to_homogeneous() {
+        let point = Point2::new(1_f64, 2_f64);
+        let expected = Vector3::new(1_f64, 2_f64, 1_f64);
+        let result = point.to_homogeneous();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_homogeneous1() {
+        let vector = Vector3::new(4_f64, 6_f64, 2_f64);
+        let expected = Some(Point2::new(4_f64 / 2_f64, 6_f64 / 2_f64));
+        let result = Point2::from_homogeneous(&vector);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_homogeneous2() {
+        let vector = Vector3::new(4_f64, 6_f64, 0_f64);
+        let result = Point2::from_homogeneous(&vector);
+
+        assert!(result.is_none());
+    }
 }
 
 
 #[cfg(test)]
 mod point3_tests {
     use cglinalg_core::{
+        Point2,
         Point3,
         Vector3,
+        Vector4,
     };
 
 
@@ -436,6 +522,32 @@ mod point3_tests {
         assert_eq!(p.x, p[0]);
         assert_eq!(p.y, p[1]);
         assert_eq!(p.z, p[2]);
+    }
+
+    #[test]
+    fn test_contract() {
+        let point = Point3::new(1_i32, 2_i32, 3_i32);
+        let expected = Point2::new(1_i32, 2_i32);
+        let result = point.contract();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_homogeneous1() {
+        let vector = Vector4::new(4_f64, 6_f64, 8_f64, 2_f64);
+        let expected = Some(Point3::new(4_f64 / 2_f64, 6_f64 / 2_f64, 8_f64 / 2_f64));
+        let result = Point3::from_homogeneous(&vector);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_homogeneous2() {
+        let vector = Vector4::new(4_f64, 6_f64, 8_f64, 0_f64);
+        let result = Point3::from_homogeneous(&vector);
+
+        assert!(result.is_none());
     }
 }
 

@@ -3,6 +3,14 @@ use crate::core_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
+use crate::constraints::{
+    Const,
+    DimAdd,
+    DimSub,
+    CanExtend,
+    CanContract,
+    ShapeConstraint,
+};
 use crate::norm::{
     Normed,
 };
@@ -419,6 +427,143 @@ where
     #[inline]
     pub fn l2_norm(&self) -> S {
         self.norm()
+    }
+}
+
+impl<S, const N: usize, const NPLUS1: usize> Point<S, N>
+where
+    S: SimdScalar,
+    ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>
+{
+    /// Expand a point to a point one dimension higher using
+    /// the supplied last element `last_element`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Point3,    
+    /// # };
+    /// #
+    /// let point = Point2::new(1_u32, 2_u32);
+    /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let result = point.extend(3_u32);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn extend(&self, last_element: S) -> Point<S, NPLUS1> {
+        // SAFETY: The output point has length `N + 1` with `last_element` in the 
+        // component `N` of the output vector.
+        let mut result = Point::default();
+        for i in 0..N {
+            result.coords[i] = self.coords[i];
+        }
+
+        result.coords[N] = last_element;
+
+        result
+    }
+
+    /// Convert a point to a vector in homogeneous coordinates.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = Vector3::new(1_f64, 2_f64, 1_f64);
+    /// let result = point.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector<S, NPLUS1> {
+        self.coords.extend(S::one())
+    }
+}
+
+impl<S, const N: usize, const NMINUS1: usize> Point<S, N>
+where
+    S: SimdScalar,
+    ShapeConstraint: CanContract<Const<N>, Const<NMINUS1>>,
+    ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>
+{
+    /// Contract a point to a point one dimension smaller the last component.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point1,
+    /// #     Point2, 
+    /// # };
+    /// #
+    /// let point = Point2::new(1_u32, 2_u32);
+    /// let expected = Point1::new(1_u32);
+    /// let result = point.contract();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn contract(&self) -> Point<S, NMINUS1> {
+        // SAFETY: The output vector has length `N - 1`.
+        let mut result = Point::default();
+        for i in 0..(N - 1) {
+            result.coords[i] = self.coords[i];
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize, const NPLUS1: usize> Point<S, N>
+where
+    S: SimdScalar,
+    ShapeConstraint: CanContract<Const<NPLUS1>, Const<N>>,
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>
+{
+    /// Convert a homogeneous vector into a point.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point2, 
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(3_f64, 6_f64, 3_f64);
+    /// let expected = Some(Point2::new(1_f64, 2_f64));
+    /// let result = Point2::from_homogeneous(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector_z_zero = Vector3::new(3_f64, 6_f64, 0_f64);
+    /// let result = Point2::from_homogeneous(&vector_z_zero);
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(vector: &Vector<S, NPLUS1>) -> Option<Point<S, N>> {
+        // SAFETY: `vector` has length `N + 1`.
+        if !vector[N].is_zero() {
+            let mut result = Point::default();
+            for i in 0..N {
+                result[i] = vector[i] / vector[N];
+            }
+            
+            Some(result)
+        } else {
+            None
+        }
     }
 }
 
@@ -1029,7 +1174,7 @@ impl<S> Point1<S> {
         }
     }
 }
-
+/*
 impl<S> Point1<S> 
 where 
     S: Copy
@@ -1056,7 +1201,7 @@ where
         Point2::new(self.coords[0], y)
     }
 }
-
+*/
 impl<S> Point2<S> {
     /// Construct a new point in Euclidean space.
     #[inline]
@@ -1066,7 +1211,7 @@ impl<S> Point2<S> {
         }
     }
 }
-
+/*
 impl<S> Point2<S> 
 where 
     S: Copy
@@ -1171,7 +1316,7 @@ where
         self.coords.extend(S::one())
     }
 }
-
+*/
 impl<S> Point3<S> {
     /// Construct a new point in Euclidean space.
     #[inline]
@@ -1181,7 +1326,7 @@ impl<S> Point3<S> {
         }
     }
 }
-
+/*
 impl<S> Point3<S> 
 where 
     S: Copy
@@ -1268,7 +1413,7 @@ where
         self.coords.extend(S::one())
     }
 }
-
+*/
 impl<S> From<S> for Point1<S> 
 where 
     S: Copy

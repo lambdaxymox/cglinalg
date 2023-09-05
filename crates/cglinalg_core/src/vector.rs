@@ -1020,8 +1020,7 @@ where
     ShapeConstraint: CanContract<Const<N>, Const<NMINUS1>>,
     ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>
 {
-    /// Contract a vector to a vector one dimension smaller the last last
-    /// component.
+    /// Contract a vector to a vector one dimension smaller the last component.
     ///
     /// # Example
     ///
