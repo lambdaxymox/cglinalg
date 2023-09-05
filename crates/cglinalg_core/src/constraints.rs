@@ -1,10 +1,10 @@
 pub trait Dim {}
 
-trait DimAdd<D1: Dim, D2: Dim>: Dim {
+pub trait DimAdd<D1: Dim, D2: Dim>: Dim {
     type Output: Dim;
 }
 
-trait DimSub<D1: Dim, D2: Dim>: Dim {
+pub trait DimSub<D1: Dim, D2: Dim>: Dim {
     type Output: Dim;
 }
 
@@ -34,11 +34,29 @@ impl<D: Dim> DimEq<D, D> for ShapeConstraint {
 impl Dim for ShapeConstraint {}
 
 
-pub trait CanMultiply<R1: Dim, C1: Dim, R2: Dim, C2: Dim> : DimEq<C1, R2> {}
+pub trait CanMultiply<R1: Dim, C1: Dim, R2: Dim, C2: Dim>: DimEq<C1, R2> {}
 
 impl<R1: Dim, C1: Dim, R2: Dim, C2: Dim> CanMultiply<R1, C1, R2, C2> for ShapeConstraint 
 where
     ShapeConstraint: DimEq<C1, R2> + DimEq<R2, C1>
+{
+
+}
+
+pub trait CanExtend<N1: Dim, N2: Dim>: DimAdd<N1, Const<1>, Output = N2> {}
+
+impl<N1: Dim, N2: Dim> CanExtend<N1, N2> for ShapeConstraint
+where
+    ShapeConstraint: DimAdd<N1, Const<1>, Output = N2>
+{
+
+}
+
+pub trait CanContract<N1: Dim, N2: Dim>: DimSub<N1, Const<1>, Output = N2> {}
+
+impl<N1: Dim, N2: Dim> CanContract<N1, N2> for ShapeConstraint
+where
+    ShapeConstraint: DimSub<N1, Const<1>, Output = N2>
 {
 
 }

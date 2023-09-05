@@ -4,6 +4,14 @@ use crate::core_numeric::{
     SimdScalarOrd,
     SimdScalarFloat,
 };
+use crate::constraints::{
+    Const,
+    DimAdd,
+    DimSub,
+    CanExtend,
+    CanContract,
+    ShapeConstraint,
+};
 use crate::norm::{
     Normed,
     Norm,
@@ -945,6 +953,136 @@ where
     }
 }
 
+impl<S, const N: usize, const NPLUS1: usize> Vector<S, N>
+where
+    S: SimdScalar,
+    ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>
+{
+    /// Extend a vector into a vector one dimension higher using the supplied 
+    /// last element `last_element`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let result = v.extend(4_f64);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn extend(&self, last_element: S) -> Vector<S, NPLUS1> {
+        // SAFETY: The output vector has length `N + 1` with `last_element` in the 
+        // component `N` of the output vector.
+        let mut result = Vector::default();
+        for i in 0..N {
+            result.data[i] = self.data[i];
+        }
+
+        result.data[N] = last_element;
+
+        result
+    }
+
+    /// Compute the coordinates of a vector in projective space.
+    ///
+    /// The function appends a `0` to the vector.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let expected = Vector4::new(1_i32, 2_i32, 3_i32, 0_i32);
+    /// let result = vector.to_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_homogeneous(&self) -> Vector<S, NPLUS1> {
+        self.extend(S::zero())
+    }
+}
+
+impl<S, const N: usize, const NMINUS1: usize> Vector<S, N>
+where
+    S: SimdScalar,
+    ShapeConstraint: CanContract<Const<N>, Const<NMINUS1>>,
+    ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>
+{
+    /// Contract a vector to a vector one dimension smaller the last last
+    /// component.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
+    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let result = v.contract();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn contract(&self) -> Vector<S, NMINUS1> {
+        // SAFETY: The output vector has length `N - 1`.
+        let mut result = Vector::default();
+        for i in 0..(N - 1) {
+            result.data[i] = self.data[i];
+        }
+
+        result
+    }
+
+    /// Compute the coordinates of a projective vector in Euclidean space.
+    ///
+    /// The function removes a `0` from the end of the vector, otherwise it
+    /// returns `None`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// #     Vector3, 
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_i32, 2_i32, 0_i32);
+    /// let expected = Some(Vector2::new(1_i32, 2_i32));
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert_eq!(result, expected);
+    ///
+    /// let vector = Vector3::new(1_i32, 2_i32, 1_i32);
+    /// let expected: Option<Vector2<i32>> = None;
+    /// let result = vector.from_homogeneous();
+    ///
+    /// assert!(result.is_none());
+    /// ```
+    #[inline]
+    pub fn from_homogeneous(&self) -> Option<Vector<S, NMINUS1>> {
+        if self.data[N - 1].is_zero() {
+            Some(self.contract())
+        } else {
+            None
+        }
+    }
+}
+
 impl<S, const N: usize> AsRef<[S; N]> for Vector<S, N> {
     #[inline]
     fn as_ref(&self) -> &[S; N] {
@@ -1605,7 +1743,7 @@ impl<S> Vector1<S> {
         }
     }
 }
-
+/*
 impl<S> Vector1<S> 
 where 
     S: Copy
@@ -1632,7 +1770,7 @@ where
         Vector2::new(self.data[0], y)
     }
 }
-
+*/
 impl<S> Vector1<S> 
 where 
     S: SimdScalar
@@ -1643,7 +1781,7 @@ where
     pub fn unit_x() -> Self {
         Vector1::new(S::one())
     }
-
+/*
     /// Compute the coordinates of a vector in projective space.
     ///
     /// The function appends a `0` to the vector.
@@ -1666,6 +1804,7 @@ where
     pub fn to_homogeneous(&self) -> Vector2<S> {
         self.extend(S::zero())
     }
+*/
 }
 
 
@@ -1678,7 +1817,7 @@ impl<S> Vector2<S> {
         }
     }
 }
-
+/*
 impl<S> Vector2<S> 
 where 
     S: Copy 
@@ -1727,7 +1866,7 @@ where
         Vector1::new(self.data[0])
     }
 }
-
+*/
 impl<S> Vector2<S> 
 where 
     S: SimdScalar 
@@ -1745,7 +1884,7 @@ where
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one())
     }
-
+/*
     /// Compute the coordinates of a vector in projective space.
     ///
     /// The function appends a `0` to the vector.
@@ -1802,6 +1941,7 @@ where
             None
         }
     }
+*/
 }
 
 impl<S> Vector3<S> {
@@ -1813,7 +1953,7 @@ impl<S> Vector3<S> {
         }
     }
 }
-
+/*
 impl<S> Vector3<S> 
 where 
     S: Copy
@@ -1862,7 +2002,7 @@ where
         Vector2::new(self.data[0], self.data[1])
     }
 }
-
+*/
 impl<S> Vector3<S> 
 where 
     S: SimdScalar
@@ -1887,7 +2027,7 @@ where
     pub fn unit_z() -> Self {
         Self::new(S::zero(), S::zero(), S::one())
     }
-
+/*
     /// Compute the coordinates of a vector in projective space.
     ///
     /// The function appends a `0` to the vector.
@@ -1944,7 +2084,7 @@ where
             None
         }
     }
-
+*/
     /// Compute the cross product of two three-dimensional vectors. 
     ///
     /// For the vector dimensions used in computer graphics 
@@ -2050,6 +2190,7 @@ impl<S> Vector4<S> {
     }
 }
 
+/*
 impl<S> Vector4<S> 
 where 
     S: Copy
@@ -2076,7 +2217,7 @@ where
         Vector3::new(self.data[0], self.data[1], self.data[2])
     }
 }
-
+*/
 impl<S> Vector4<S> 
 where 
     S: SimdScalar
@@ -2108,7 +2249,7 @@ where
     pub fn unit_w() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::one())
     }
-
+/*
     /// Compute the coordinates of a projective vector in Euclidean space.
     ///
     /// The function removes a `0` from the end of the vector, otherwise it
@@ -2142,6 +2283,7 @@ where
             None
         }
     }
+*/
 }
 
 impl<S> From<S> for Vector1<S> 
