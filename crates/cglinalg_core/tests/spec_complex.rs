@@ -16,7 +16,7 @@ use approx::{
 };
 
 
-fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Complex<S>> 
+fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Complex<S>>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -38,7 +38,7 @@ where
     .no_shrink()
 }
 
-fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
+fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
     S: SimdScalarSigned + Arbitrary
 {
@@ -55,7 +55,7 @@ where
     .no_shrink()
 }
 
-fn strategy_complex_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>> 
+fn strategy_complex_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
 where
     S: SimdScalarSigned + Arbitrary
 {
@@ -350,7 +350,7 @@ where
 /// ```text
 /// 1 * z = z
 /// ```
-fn prop_one_times_complex_equal_complex<S>(z: Complex<S>) -> Result<(), TestCaseError> 
+fn prop_one_times_complex_equal_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
@@ -793,7 +793,12 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_approx_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_modulus_squared_point_separating<S>(
+    z1: Complex<S>, 
+    z2: Complex<S>, 
+    input_tolerance: S, 
+    output_tolerance: S
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -847,7 +852,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError> 
+fn prop_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
@@ -1112,7 +1117,7 @@ where
 /// ```text
 /// arg(z1) == arg(z2)
 /// ```
-fn prop_approx_arg_congruent<S>(z: Complex<S>, k: i32, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_arg_congruent<S>(z: Complex<S>, k: i32, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1140,7 +1145,11 @@ where
 /// ```text
 /// arg(z1 * z2) - (arg(z1) + arg(z2)) == 2 * pi * k
 /// ```
-fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex<S>(
+    z1: Complex<S>, 
+    z2: Complex<S>, 
+    tolerance: S
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1169,7 +1178,11 @@ where
 /// ```text
 /// arg(z1 / z2) - (arg(z1) - arg(z2)) == 2 * pi * k
 /// ```
-fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex<S>(
+    z1: Complex<S>, 
+    z2: Complex<S>, 
+    tolerance: S
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1469,7 +1482,10 @@ where
 /// ```text
 /// cos(2 * z) = cos(z) * cos(z) - sin(z) * sin(z)
 /// ```
-fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(
+    z: Complex<S>, 
+    tolerance: S
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1490,7 +1506,11 @@ where
 /// ```text
 /// sin(2 * z) = 2 * sin(z) * cos(z)
 /// ```
-fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(
+    z: Complex<S>, 
+    tolerance: S, 
+    max_relative: S
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1587,7 +1607,7 @@ where
 /// ```text
 /// tan(z1 - z2) * (1 - tan(z1) * tan(z2)) = tan(z1) - tan(z2)
 /// ```
-fn prop_tan_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+fn prop_tan_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1610,7 +1630,7 @@ where
 /// ```text
 /// acos(conjugate(z)) = conjugate(acos(z))
 /// ```
-fn prop_acos_conjugate_z_equals_conjugate_acos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_acos_conjugate_z_equals_conjugate_acos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1628,7 +1648,7 @@ where
 /// ```text
 /// asin(conjugate(z)) = conjugate(asin(z))
 /// ```
-fn prop_asin_conjugate_z_equals_conjugate_asin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_asin_conjugate_z_equals_conjugate_asin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1646,7 +1666,7 @@ where
 /// ```text
 /// atan(conjugate(z)) = conjugate(atan(z))
 /// ```
-fn prop_atan_conjugate_z_equals_conjugate_atan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_atan_conjugate_z_equals_conjugate_atan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1664,7 +1684,7 @@ where
 /// ```text
 /// cos(acos(z)) == z
 /// ```
-fn prop_cos_acos_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_cos_acos_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1682,7 +1702,7 @@ where
 /// ```text
 /// sin(asin(z)) == z
 /// ```
-fn prop_sin_asin_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_sin_asin_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1704,7 +1724,7 @@ where
 /// ```text
 /// tan(atan(z)) == z
 /// ```
-fn prop_tan_atan_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_tan_atan_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1812,7 +1832,11 @@ where
 /// ```text
 /// cosh(2 * z) = cosh(z) * cosh(z) + sinh(z) * sinh(z)
 /// ```
-fn prop_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared<S>(
+    z: Complex<S>, 
+    tolerance: S, 
+    max_relative: S
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1836,7 +1860,11 @@ where
 /// ```text
 /// sinh(2 * z) = 2 * sinh(z) * cosh(z)
 /// ```
-fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(
+    z: Complex<S>, 
+    tolerance: S, 
+    max_relative: S
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1937,7 +1965,7 @@ where
 /// ```text
 /// tanh(z1 - z2) * (1 - tanh(z1) * tanh(z2)) = tanh(z1) - tanh(z2)
 /// ```
-fn prop_tanh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+fn prop_tanh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1962,7 +1990,7 @@ where
 /// ```text
 /// cosh(acosh(z)) == z
 /// ```
-fn prop_cosh_acosh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_cosh_acosh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1981,7 +2009,7 @@ where
 /// ```text
 /// sinh(asinh(z)) == z
 /// ```
-fn prop_sinh_asinh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_sinh_asinh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -2000,7 +2028,7 @@ where
 /// ```text
 /// tanh(atanh(z)) == z
 /// ```
-fn prop_tanh_atanh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_tanh_atanh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -2080,14 +2108,20 @@ mod complex_f64_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1 in super::strategy_complex_f64_any(), z2 in super::strategy_complex_f64_any()) {
+        fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(
+            z1 in super::strategy_complex_f64_any(), 
+            z2 in super::strategy_complex_f64_any()
+        ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1, z2)?
         }
 
         #[test]
-        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::strategy_scalar_f64_any(), z in super::strategy_complex_f64_any()) {
+        fn prop_scalar_times_complex_equals_complex_times_scalar(
+            c in super::strategy_scalar_f64_any(), 
+            z in super::strategy_complex_f64_any()
+        ) {
             let c: f64 = c;
             let z: super::Complex<f64> = z;
             super::prop_scalar_times_complex_equals_complex_times_scalar(c, z)?
@@ -2155,7 +2189,10 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any()) {
+        fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(
+            z1 in super::strategy_complex_i32_any(), 
+            z2 in super::strategy_complex_i32_any()
+        ) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(z1, z2)?
@@ -2169,7 +2206,11 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex_addition_associative(z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any(), z3 in super::strategy_complex_i32_any()) {
+        fn prop_complex_addition_associative(
+            z1 in super::strategy_complex_i32_any(), 
+            z2 in super::strategy_complex_i32_any(), 
+            z3 in super::strategy_complex_i32_any()
+        ) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             let z3: super::Complex<i32> = z3;
@@ -2189,21 +2230,31 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any()) {
+        fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(
+            z1 in super::strategy_complex_i32_any(), 
+            z2 in super::strategy_complex_i32_any()
+        ) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(z1, z2)?
         }
 
         #[test]
-        fn prop_scalar_times_complex_equals_complex_times_scalar(c in super::strategy_scalar_i32_any(), z in super::strategy_complex_i32_any()) {
+        fn prop_scalar_times_complex_equals_complex_times_scalar(
+            c in super::strategy_scalar_i32_any(), 
+            z in super::strategy_complex_i32_any()
+        ) {
             let c: i32 = c;
             let z: super::Complex<i32> = z;
             super::prop_scalar_times_complex_equals_complex_times_scalar(c, z)?
         }
 
         #[test]
-        fn prop_scalar_multiplication_compatibility(a in super::strategy_scalar_i32_any(), b in super::strategy_scalar_i32_any(), z in super::strategy_complex_i32_any()) {
+        fn prop_scalar_multiplication_compatibility(
+            a in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(), 
+            z in super::strategy_complex_i32_any()
+        ) {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
@@ -2211,7 +2262,11 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex_multiplication_associative(z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any(), z3 in super::strategy_complex_i32_any()) {
+        fn prop_complex_multiplication_associative(
+            z1 in super::strategy_complex_i32_any(), 
+            z2 in super::strategy_complex_i32_any(), 
+            z3 in super::strategy_complex_i32_any()
+        ) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             let z3: super::Complex<i32> = z3;
@@ -2225,7 +2280,10 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_complex_multiplication_commutative(z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any()) {
+        fn prop_complex_multiplication_commutative(
+            z1 in super::strategy_complex_i32_any(), 
+            z2 in super::strategy_complex_i32_any()
+        ) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_complex_multiplication_commutative(z1, z2)?
@@ -2238,7 +2296,11 @@ mod complex_i32_distributive_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_distribution_over_complex_addition(a in super::strategy_scalar_i32_any(), z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any()) {
+        fn prop_distribution_over_complex_addition(
+            a in super::strategy_scalar_i32_any(), 
+            z1 in super::strategy_complex_i32_any(), 
+            z2 in super::strategy_complex_i32_any()
+        ) {
             let a: i32 = a;
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
@@ -2246,7 +2308,11 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_distribution_over_scalar_addition(a in super::strategy_scalar_i32_any(), b in super::strategy_scalar_i32_any(), z in super::strategy_complex_i32_any()) {
+        fn prop_distribution_over_scalar_addition(
+            a in super::strategy_scalar_i32_any(),
+            b in super::strategy_scalar_i32_any(), 
+            z in super::strategy_complex_i32_any()
+        ) {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
@@ -2254,7 +2320,11 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_distribution_over_complex_addition1(a in super::strategy_scalar_i32_any(), z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any()) {
+        fn prop_distribution_over_complex_addition1(
+            a in super::strategy_scalar_i32_any(), 
+            z1 in super::strategy_complex_i32_any(), 
+            z2 in super::strategy_complex_i32_any()
+        ) {
             let a: i32 = a;
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
@@ -2262,7 +2332,11 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_distribution_over_scalar_addition1(a in super::strategy_scalar_i32_any(), b in super::strategy_scalar_i32_any(), z in super::strategy_complex_i32_any()) {
+        fn prop_distribution_over_scalar_addition1(
+            a in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(), 
+            z in super::strategy_complex_i32_any()
+        ) {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
@@ -2270,7 +2344,11 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_complex_multiplication_right_distributive(z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any(), z3 in super::strategy_complex_i32_any()) {
+        fn prop_complex_multiplication_right_distributive(
+            z1 in super::strategy_complex_i32_any(), 
+            z2 in super::strategy_complex_i32_any(), 
+            z3 in super::strategy_complex_i32_any()
+        ) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             let z3: super::Complex<i32> = z3;
@@ -2278,7 +2356,11 @@ mod complex_i32_distributive_props {
         }
 
         #[test]
-        fn prop_complex_multiplication_left_distributive(z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any(), z3 in super::strategy_complex_i32_any()) {
+        fn prop_complex_multiplication_left_distributive(
+            z1 in super::strategy_complex_i32_any(), 
+            z2 in super::strategy_complex_i32_any(), 
+            z3 in super::strategy_complex_i32_any()
+        ) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             let z3: super::Complex<i32> = z3;
@@ -2305,7 +2387,10 @@ mod complex_f64_conjugation_props {
         }
 
         #[test]
-        fn prop_complex_conjugation_transposes_products(z1 in super::strategy_complex_f64_any(), z2 in super::strategy_complex_f64_any()) {
+        fn prop_complex_conjugation_transposes_products(
+            z1 in super::strategy_complex_f64_any(), 
+            z2 in super::strategy_complex_f64_any()
+        ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_complex_conjugation_transposes_products(z1, z2)?
@@ -2351,7 +2436,10 @@ mod complex_f64_modulus_squared_props {
         }
 
         #[test]
-        fn prop_approx_modulus_squared_point_separating(z1 in super::strategy_complex_f64_modulus_squared(), z2 in super::strategy_complex_f64_modulus_squared()) {
+        fn prop_approx_modulus_squared_point_separating(
+            z1 in super::strategy_complex_f64_modulus_squared(), 
+            z2 in super::strategy_complex_f64_modulus_squared()
+        ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_approx_modulus_squared_point_separating(z1, z2, 1e-10, 1e-20)?
@@ -2388,7 +2476,10 @@ mod complex_i32_modulus_squared_props {
         }
 
         #[test]
-        fn prop_modulus_squared_point_separating(z1 in super::strategy_complex_i32_modulus_squared(), z2 in super::strategy_complex_i32_modulus_squared()) {
+        fn prop_modulus_squared_point_separating(
+            z1 in super::strategy_complex_i32_modulus_squared(), 
+            z2 in super::strategy_complex_i32_modulus_squared()
+        ) {
             let z1: super::Complex<i32> = z1;
             let z2: super::Complex<i32> = z2;
             super::prop_modulus_squared_point_separating(z1, z2)?
@@ -2425,7 +2516,10 @@ mod complex_f64_modulus_props {
         }
 
         #[test]
-        fn prop_approx_modulus_point_separating(z1 in super::strategy_complex_f64_any(), z2 in super::strategy_complex_f64_any()) {
+        fn prop_approx_modulus_point_separating(
+            z1 in super::strategy_complex_f64_any(),
+            z2 in super::strategy_complex_f64_any()
+        ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_approx_modulus_point_separating(z1, z2, 1e-8)?
@@ -2546,14 +2640,20 @@ mod complex_f64_arg_props {
         }
 
         #[test]
-        fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex(z1 in super::strategy_complex_f64_any(), z2 in super::strategy_complex_f64_any()) {
+        fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex(
+            z1 in super::strategy_complex_f64_any(),
+            z2 in super::strategy_complex_f64_any()
+        ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex(z1, z2, 1e-12)?
         }
 
         #[test]
-        fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex(z1 in super::strategy_complex_f64_any(), z2 in super::strategy_complex_f64_any()) {
+        fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex(
+            z1 in super::strategy_complex_f64_any(), 
+            z2 in super::strategy_complex_f64_any()
+        ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex(z1, z2, 1e-12)?
@@ -2696,7 +2796,10 @@ mod complex_f64_trigonometry_props {
         }
 
         #[test]
-        fn prop_tan_angle_difference(z1 in super::strategy_complex_f64_tan_angle_difference(), z2 in super::strategy_complex_f64_tan_angle_difference()) {
+        fn prop_tan_angle_difference(
+            z1 in super::strategy_complex_f64_tan_angle_difference(), 
+            z2 in super::strategy_complex_f64_tan_angle_difference()
+        ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_tan_angle_difference(z1, z2, 1e-8, 1e-8)?
@@ -2826,7 +2929,10 @@ mod complex_f64_hyperbolic_props {
         }
 
         #[test]
-        fn prop_tanh_angle_difference(z1 in super::strategy_complex_f64_tanh_angle_difference(), z2 in super::strategy_complex_f64_tanh_angle_difference()) {
+        fn prop_tanh_angle_difference(
+            z1 in super::strategy_complex_f64_tanh_angle_difference(), 
+            z2 in super::strategy_complex_f64_tanh_angle_difference()
+        ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_tanh_angle_difference(z1, z2, 1e-8, 1e-8)?

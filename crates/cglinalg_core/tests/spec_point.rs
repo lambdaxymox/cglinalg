@@ -24,7 +24,7 @@ use approx::{
 use proptest::prelude::*;
 
 
-fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>> 
+fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>>
 where
     S: SimdScalarSigned + Arbitrary
 {
@@ -35,7 +35,7 @@ where
         min_value + (value % (max_value - min_value))
     }
 
-    fn rescale_point<S, const N: usize>(value: Point<S, N>, min_value: S, max_value: S) -> Point<S, N> 
+    fn rescale_point<S, const N: usize>(value: Point<S, N>, min_value: S, max_value: S) -> Point<S, N>
     where
         S: SimdScalarSigned
     {
@@ -50,7 +50,7 @@ where
     .no_shrink()
 }
 
-fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
+fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
     S: SimdScalarSigned + Arbitrary
 {
@@ -130,7 +130,7 @@ fn strategy_point_i32_max_safe_square_root<const N: usize>() -> impl Strategy<Va
 /// ```text
 /// 1 * p = p * 1 = p
 /// ```
-fn prop_one_times_point_equals_point<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_one_times_point_equals_point<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -150,7 +150,7 @@ where
 /// ```text
 /// (a * b) * p = a * (b * p)
 /// ```
-fn prop_scalar_multiplication_compatibility<S, const N: usize>(a: S, b: S, p: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_scalar_multiplication_compatibility<S, const N: usize>(a: S, b: S, p: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -168,7 +168,7 @@ where
 /// ```text
 /// p + 0 = p
 /// ```
-fn prop_point_plus_zero_equals_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_point_plus_zero_equals_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -194,7 +194,10 @@ where
 /// &p +  v = &p + &v
 ///  p + &v = &p + &v
 /// ```
-fn prop_point_plus_vector_equals_refpoint_plus_refvector<S, const N: usize>(p: Point<S, N>, v: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_point_plus_vector_equals_refpoint_plus_refvector<S, const N: usize>(
+    p: Point<S, N>, 
+    v: Vector<S, N>
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {   
@@ -216,7 +219,11 @@ where
 /// ```text
 /// (p + v1) + v2 = p + (v1 + v2)
 /// ```
-fn prop_point_vector_addition_compatible<S, const N: usize>(p: Point<S, N>, v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_point_vector_addition_compatible<S, const N: usize>(
+    p: Point<S, N>, 
+    v1: Vector<S, N>, 
+    v2: Vector<S, N>
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -234,7 +241,12 @@ where
 /// ```text
 /// (p + v1) + v2 = p + (v1 + v2)
 /// ```
-fn prop_approx_point_vector_addition_compatible<S, const N: usize>(p: Point<S, N>, v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_point_vector_addition_compatible<S, const N: usize>(
+    p: Point<S, N>, 
+    v1: Vector<S, N>, 
+    v2: Vector<S, N>, 
+    tolerance: S
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -252,7 +264,7 @@ where
 /// ```text
 /// p - 0 = p
 /// ```
-fn prop_point_minus_zero_equals_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_point_minus_zero_equals_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -269,7 +281,7 @@ where
 /// ```text
 /// p - p = 0
 /// ```
-fn prop_point_minus_point_equals_zero_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_point_minus_point_equals_zero_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -295,7 +307,7 @@ where
 /// &p -  v = &p - &v
 ///  p - &v = &p - &v
 /// ```
-fn prop_point_minus_vector_equals_refpoint_plus_refvector<S, const N: usize>(p: Point<S, N>, v: Vector<S, N>) -> Result<(), TestCaseError> 
+fn prop_point_minus_vector_equals_refpoint_plus_refvector<S, const N: usize>(p: Point<S, N>, v: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {   
@@ -316,7 +328,7 @@ where
 /// ```text
 /// norm_squared(p) >= 0
 /// ```
-fn prop_norm_squared_nonnegative<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_norm_squared_nonnegative<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -340,7 +352,12 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_approx_norm_squared_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_norm_squared_point_separating<S, const N: usize>(
+    p1: Point<S, N>, 
+    p2: Point<S, N>, 
+    input_tolerance: S, 
+    output_tolerance: S
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -367,7 +384,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_norm_squared_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_norm_squared_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {   
@@ -393,7 +410,7 @@ where
 /// ```text
 /// norm(p * c)^2 = norm(p)^2 * abs(c)^2
 /// ```
-fn prop_norm_squared_homogeneous_squared<S, const N: usize>(v: Point<S, N>, c: S) -> Result<(), TestCaseError> 
+fn prop_norm_squared_homogeneous_squared<S, const N: usize>(v: Point<S, N>, c: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
 {
@@ -411,7 +428,7 @@ where
 /// magnitude_squared(p) = norm_squared(p)
 /// ```
 /// where equality is exact.
-fn prop_magnitude_squared_norm_squared_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_magnitude_squared_norm_squared_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -426,7 +443,7 @@ where
 /// ```text
 /// norm(p) >= 0
 /// ```
-fn prop_norm_nonnegative<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_norm_nonnegative<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -450,7 +467,12 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_approx_norm_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_norm_point_separating<S, const N: usize>(
+    p1: Point<S, N>, 
+    p2: Point<S, N>, 
+    input_tolerance: S, 
+    output_tolerance: S
+) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat + Arbitrary
 {   
@@ -472,7 +494,7 @@ where
 /// magnitude(p) = norm(p)
 /// ```
 /// where equality is exact.
-fn prop_magnitude_norm_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_magnitude_norm_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -487,7 +509,7 @@ where
 /// l2_norm(p) = norm(p)
 /// ```
 /// where equality is exact.
-fn prop_l2_norm_norm_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError> 
+fn prop_l2_norm_norm_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -498,7 +520,7 @@ where
 
 
 macro_rules! approx_mul_props {
-    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -513,9 +535,9 @@ macro_rules! approx_mul_props {
     }
 }
 
-approx_mul_props!(point1_f64_mul_props, Point1, f64, strategy_point_any, strategy_scalar_any, 1e-7);
-approx_mul_props!(point2_f64_mul_props, Point2, f64, strategy_point_any, strategy_scalar_any, 1e-7);
-approx_mul_props!(point3_f64_mul_props, Point3, f64, strategy_point_any, strategy_scalar_any, 1e-7);
+approx_mul_props!(point1_f64_mul_props, Point1, f64, strategy_point_any);
+approx_mul_props!(point2_f64_mul_props, Point2, f64, strategy_point_any);
+approx_mul_props!(point3_f64_mul_props, Point3, f64, strategy_point_any);
 
 
 macro_rules! exact_mul_props {
@@ -571,7 +593,7 @@ macro_rules! approx_arithmetic_props {
                 let p: super::$PointN<$ScalarType> = p;
                 let v1: super::$VectorN<$ScalarType> = v1;
                 let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_approx_point_vector_addition_compatible(p, v1, v2, 1e-7)?
+                super::prop_approx_point_vector_addition_compatible(p, v1, v2, $tolerance)?
             }
 
             #[test]
@@ -797,7 +819,7 @@ macro_rules! approx_norm_props {
             fn prop_approx_norm_point_separating(p1 in super::$Generator(), p2 in super::$Generator()) {
                 let p1: super::$PointN<$ScalarType> = p1;
                 let p2: super::$PointN<$ScalarType> = p2;
-                super::prop_approx_norm_point_separating(p1, p2, 1e-8, 1e-8)?
+                super::prop_approx_norm_point_separating(p1, p2, $tolerance, $tolerance)?
             }
         }
     }
@@ -810,7 +832,7 @@ approx_norm_props!(point3_f64_norm_props, Point3, f64, strategy_point_any, 1e-8)
 
 
 macro_rules! norm_synonym_props {
-    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -830,7 +852,7 @@ macro_rules! norm_synonym_props {
     }
 }
 
-norm_synonym_props!(point1_f64_norm_synonym_props, Point1, f64, strategy_point_any, 1e-8);
-norm_synonym_props!(point2_f64_norm_synonym_props, Point2, f64, strategy_point_any, 1e-8);
-norm_synonym_props!(point3_f64_norm_synonym_props, Point3, f64, strategy_point_any, 1e-8);
+norm_synonym_props!(point1_f64_norm_synonym_props, Point1, f64, strategy_point_any);
+norm_synonym_props!(point2_f64_norm_synonym_props, Point2, f64, strategy_point_any);
+norm_synonym_props!(point3_f64_norm_synonym_props, Point3, f64, strategy_point_any);
 
