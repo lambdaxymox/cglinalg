@@ -308,46 +308,30 @@ where
     }  
 }
 
-macro_rules! impl_matrix_array_conversion_ops {
-    ((R:$R:expr, C:$C:expr, RC:$RC:expr)) => {
-        impl<S> From<[S; $RC]> for Matrix<S, $R, $C> 
-        where 
-            S: Copy
-        {
-            #[inline]
-            fn from(array: [S; $RC]) -> Self {
-                let data: &[[S; $R]; $C] = unsafe { core::mem::transmute::<&[S; $RC], &[[S; $R]; $C]>(&array) };
-                Self { data: *data }
-            }
-        }
-
-        impl<'a, S> From<&'a [S; $RC]> for &'a Matrix<S, $R, $C> 
-        where 
-            S: Copy
-        {
-            #[inline]
-            fn from(array: &'a [S; $RC]) -> &'a Matrix<S, $R, $C> {
-                unsafe { 
-                    &*(array as *const [S; $RC] as *const Matrix<S, $R, $C>)
-                }
-            }
-        }
+impl<S, const R: usize, const C: usize, const RC: usize> From<[S; RC]> for Matrix<S, R, C> 
+where
+    S: Copy,
+    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+{
+    #[inline]
+    fn from(array: [S; RC]) -> Self {
+        let data: &[[S; R]; C] = unsafe { core::mem::transmute::<&[S; RC], &[[S; R]; C]>(&array) };
+        Self { data: *data }
     }
 }
 
-impl_matrix_array_conversion_ops!((R:1, C:1, RC:1));
-impl_matrix_array_conversion_ops!((R:2, C:2, RC:4));
-impl_matrix_array_conversion_ops!((R:3, C:3, RC:9));
-impl_matrix_array_conversion_ops!((R:4, C:4, RC:16));
-impl_matrix_array_conversion_ops!((R:1, C:2, RC:2));
-impl_matrix_array_conversion_ops!((R:1, C:3, RC:3));
-impl_matrix_array_conversion_ops!((R:1, C:4, RC:4));
-impl_matrix_array_conversion_ops!((R:2, C:3, RC:6));
-impl_matrix_array_conversion_ops!((R:3, C:2, RC:6));
-impl_matrix_array_conversion_ops!((R:2, C:4, RC:8));
-impl_matrix_array_conversion_ops!((R:4, C:2, RC:8));
-impl_matrix_array_conversion_ops!((R:3, C:4, RC:12));
-impl_matrix_array_conversion_ops!((R:4, C:3, RC:12));
+impl<'a, S, const R: usize, const C: usize, const RC: usize> From<&'a [S; RC]> for &'a Matrix<S, R, C>
+where 
+    S: Copy,
+    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+{
+    #[inline]
+    fn from(array: &'a [S; RC]) -> &'a Matrix<S, R, C> {
+        unsafe { 
+            &*(array as *const [S; RC] as *const Matrix<S, R, C>)
+        }
+    }
+}
 
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
