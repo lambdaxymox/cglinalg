@@ -249,29 +249,6 @@ where
     Ok(())
 }
 
-/*
-/// Multiplication of a matrix by a scalar commutes with scalars.
-///
-/// Given a matrix `m` and a scalar `c`
-/// ```text
-/// c * m ~= m * c
-/// ```
-/// Note that we diverse from traditional formalisms of matrix arithmetic 
-/// in that we allow multiplication of matrices by scalars on the left-hand 
-/// side as well as the right-hand side.
-fn prop_scalar_matrix_multiplication_commutative<S, const R: usize, const C: usize, const RC: usize>(
-    c: S, 
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    prop_assert_eq!(c * m, m * c);
-
-    Ok(())
-}
-*/
-
 /// Multiplication of matrices by scalars is compatible with matrix 
 /// addition.
 ///
@@ -355,29 +332,6 @@ where
 
     Ok(())
 }
-
-/*
-/// Multiplication of a matrix by a scalar commutes with scalars.
-///
-/// Given a matrix `m` and a scalar `c`
-/// ```text
-/// c * m = m * c
-/// ```
-/// Note that we diverse from traditional formalisms of matrix arithmetic 
-/// in that we allow multiplication of matrices by scalars on the left-hand 
-/// side as well as the right-hand side.
-fn prop_scalar_matrix_multiplication_commutative<S, const R: usize, const C: usize, const RC: usize>(
-    c: S, 
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    prop_assert_eq!(c * m, m * c);
-
-    Ok(())
-}
-*/
 
 /// Matrices over a set of floating point scalars have a 
 /// multiplicative identity.
