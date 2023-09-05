@@ -1163,7 +1163,7 @@ exact_arithmetic_props!(vector4_i32_arithmetic_props, Vector4, i32, strategy_vec
 
 
 macro_rules! approx_add_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1198,10 +1198,10 @@ macro_rules! approx_add_props {
     }
 }
 
-approx_add_props!(vector1_f64_add_props, Vector1, f64, strategy_vector_any, 1e-8);
-approx_add_props!(vector2_f64_add_props, Vector2, f64, strategy_vector_any, 1e-8);
-approx_add_props!(vector3_f64_add_props, Vector3, f64, strategy_vector_any, 1e-8);
-approx_add_props!(vector4_f64_add_props, Vector4, f64, strategy_vector_any, 1e-8);
+approx_add_props!(vector1_f64_add_props, Vector1, f64, strategy_vector_any);
+approx_add_props!(vector2_f64_add_props, Vector2, f64, strategy_vector_any);
+approx_add_props!(vector3_f64_add_props, Vector3, f64, strategy_vector_any);
+approx_add_props!(vector4_f64_add_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! exact_add_props {
@@ -1325,7 +1325,7 @@ exact_sub_props!(vector4_i32_sub_props, Vector4, i32, strategy_vector_any);
 
 
 macro_rules! approx_mul_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1340,10 +1340,10 @@ macro_rules! approx_mul_props {
     }
 }
 
-approx_mul_props!(vector1_f64_mul_props, Vector1, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_mul_props!(vector2_f64_mul_props, Vector2, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_mul_props!(vector3_f64_mul_props, Vector3, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_mul_props!(vector4_f64_mul_props, Vector4, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_mul_props!(vector1_f64_mul_props, Vector1, f64, strategy_vector_any);
+approx_mul_props!(vector2_f64_mul_props, Vector2, f64, strategy_vector_any);
+approx_mul_props!(vector3_f64_mul_props, Vector3, f64, strategy_vector_any);
+approx_mul_props!(vector4_f64_mul_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! exact_mul_props {
