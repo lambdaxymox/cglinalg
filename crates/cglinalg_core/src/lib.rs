@@ -10,6 +10,7 @@ mod unit;
 mod vector;
 
 mod coordinates;
+mod constraints;
 
 
 pub use core_numeric::*;
