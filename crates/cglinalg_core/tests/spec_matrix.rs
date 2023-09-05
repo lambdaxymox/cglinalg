@@ -312,7 +312,6 @@ where
     Ok(())
 }
 
-/*
 /// Multiplication of a matrix by a scalar commutes with scalars.
 ///
 /// Given a matrix `m` and a scalar `c`
@@ -322,18 +321,21 @@ where
 /// Note that we diverse from traditional formalisms of matrix arithmetic 
 /// in that we allow multiplication of matrices by scalars on the left-hand 
 /// side as well as the right-hand side.
-fn prop_scalar_matrix_multiplication_commutative<S, const R: usize, const C: usize, const RC: usize>(
+fn prop_scalar_matrix_multiplication_commutative<S, const N: usize, const NN: usize>(
     c: S, 
-    m: Matrix<S, R, C, RC>
+    m: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar + Arbitrary,
+    ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
-    prop_assert_eq!(c * m, m * c);
+    let c_matrix = Matrix::identity() * c;
+
+    prop_assert_eq!(c_matrix * m, m * c_matrix);
 
     Ok(())
 }
-*/
 
 /// Scalar multiplication of a matrix by scalars is compatible.
 ///
@@ -900,14 +902,12 @@ macro_rules! approx_scalar_multiplication_props {
                 super::prop_negative_one_times_matrix_equals_negative_matrix(m)?
             }
 
-            /*
             #[test]
             fn prop_scalar_matrix_multiplication_commutative(c in super::$ScalarGen(), m in super::$Generator()) {
                 let c: $ScalarType = c;
                 let m: super::$MatrixN<$ScalarType> = m;
                 super::prop_scalar_matrix_multiplication_commutative(c, m)?
             }
-            */
         }
     }
     }
@@ -979,14 +979,12 @@ macro_rules! exact_scalar_multiplication_props {
                 super::prop_one_times_matrix_equals_matrix(m)?
             }
 
-            /*
             #[test]
             fn prop_scalar_matrix_multiplication_commutative(c in super::$ScalarGen(), m in super::$Generator()) {
                 let c: $ScalarType = c;
                 let m: super::$MatrixN<$ScalarType> = m;
                 super::prop_scalar_matrix_multiplication_commutative(c, m)?
             }
-            */
 
             #[test]
             fn prop_scalar_matrix_multiplication_compatible(
@@ -1015,15 +1013,6 @@ macro_rules! approx_multiplication_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
-            /*
-            #[test]
-            fn prop_scalar_matrix_multiplication_commutative(c in super::$ScalarGen(), m in super::$Generator()) {
-                let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
-                super::prop_scalar_matrix_multiplication_commutative(c, m)?
-            }
-            */
-
             #[test]
             fn prop_matrix_multiplication_identity(m in super::$Generator()) {
                 let m: super::$MatrixN<$ScalarType> = m;
