@@ -957,7 +957,8 @@ impl<S, const N: usize, const NPLUS1: usize> Vector<S, N>
 where
     S: SimdScalar,
     ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
 {
     /// Extend a vector into a vector one dimension higher using the supplied 
     /// last element `last_element`.
@@ -1018,7 +1019,8 @@ impl<S, const N: usize, const NMINUS1: usize> Vector<S, N>
 where
     S: SimdScalar,
     ShapeConstraint: CanContract<Const<N>, Const<NMINUS1>>,
-    ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>
+    ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>,
+    ShapeConstraint: DimAdd<Const<NMINUS1>, Const<1>, Output = Const<N>>
 {
     /// Contract a vector to a vector one dimension smaller the last component.
     ///

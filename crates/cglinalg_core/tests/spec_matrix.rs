@@ -12,9 +12,6 @@ use cglinalg_core::{
     SimdScalar,
     SimdScalarSigned,
 };
-use approx::{
-    relative_eq,
-};
 use cglinalg_core::{
     Const,
     CanMultiply,

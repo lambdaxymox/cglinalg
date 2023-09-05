@@ -34,7 +34,7 @@ impl<D: Dim> DimEq<D, D> for ShapeConstraint {
 impl Dim for ShapeConstraint {}
 
 
-pub trait CanMultiply<R1: Dim, C1: Dim, R2: Dim, C2: Dim>: DimEq<C1, R2> {}
+pub trait CanMultiply<R1: Dim, C1: Dim, R2: Dim, C2: Dim>: DimEq<C1, R2> + DimEq<R2, C1> {}
 
 impl<R1: Dim, C1: Dim, R2: Dim, C2: Dim> CanMultiply<R1, C1, R2, C2> for ShapeConstraint 
 where
