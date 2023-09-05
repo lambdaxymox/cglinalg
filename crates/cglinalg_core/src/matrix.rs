@@ -127,10 +127,7 @@ pub struct Matrix<S, const R: usize, const C: usize> {
     data: [[S; R]; C],
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C> 
-where
-    Const<R>: DimMul<Const<C>, Output = Const<RC>>
-{
+impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
     /// Returns the length of the the underlying array storing the matrix 
     /// components.
     #[inline]
@@ -167,7 +164,12 @@ where
     pub fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.data[0][0]
     }
+}
 
+impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C> 
+where
+    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+{
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
@@ -5291,7 +5293,7 @@ where
     }
 }
 
-impl<'a, 'b, S, const R: usize, const C: usize> ops::Add<&'a Matrix<S, R, C>> for &'b Matrix<S, R, C, >
+impl<'a, 'b, S, const R: usize, const C: usize> ops::Add<&'a Matrix<S, R, C>> for &'b Matrix<S, R, C>
 where 
     S: SimdScalar
 {
@@ -5571,11 +5573,45 @@ macro_rules! impl_scalar_matrix_mul_ops {
             }
         }
 
+        impl<const R: usize, const C: usize> ops::Mul<&Matrix<$Lhs, R, C>> for $Lhs {
+            type Output = Matrix<$Lhs, R, C>;
+
+            #[inline]
+            fn mul(self, other: &Matrix<$Lhs, R, C>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
+                let mut result = Self::Output::zero();
+                for c in 0..C {
+                    for r in 0..R {
+                        result[c][r] = self * other.data[c][r];
+                    }
+                }
+
+                result
+            }
+        }
+
         impl<'a, const R: usize, const C: usize> ops::Mul<Matrix<$Lhs, R, C>> for &'a $Lhs {
             type Output = Matrix<$Lhs, R, C>;
 
             #[inline]
-            fn mul(self, other: Matrix<$Lhs, R, C >) -> Self::Output {
+            fn mul(self, other: Matrix<$Lhs, R, C>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
+                let mut result = Self::Output::zero();
+                for c in 0..C {
+                    for r in 0..R {
+                        result[c][r] = self * other.data[c][r];
+                    }
+                }
+
+                result
+            }
+        }
+
+        impl<'a, 'b, const R: usize, const C: usize> ops::Mul<&'b Matrix<$Lhs, R, C>> for &'a $Lhs {
+            type Output = Matrix<$Lhs, R, C>;
+
+            #[inline]
+            fn mul(self, other: &'b Matrix<$Lhs, R, C>) -> Self::Output {
                 // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Self::Output::zero();
                 for c in 0..C {
@@ -5894,147 +5930,6 @@ where
     }
 }
 
-
-/*
-macro_rules! impl_matrix_matrix_mul_ops {
-    ((R1:$R1:expr, C1:$C1:expr, R1C1:$R1C1:expr) => (R2:$R2:expr, C2:$C2:expr, R2C2:$R2C2:expr) => (R1, C2, R1C2:$R1C2:expr)) => {
-        impl<S> ops::Mul<Matrix<S, $R2, $C2, $R2C2>> for Matrix<S, $R1, $C1, $R1C1>
-        where 
-            S: SimdScalar
-        {
-            type Output = Matrix<S, $R1, $C2, $R1C2>;
-
-            #[inline]
-            fn mul(self, other: Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
-                // PERFORMANCE: The const loop should get unrolled during optimization.
-                let mut result = Self::Output::zero();
-                for c in 0..$C2 {
-                    for r in 0..$R1 {
-                        result[c][r] = dot_array_col(
-                            self.as_ref(), 
-                            &<Matrix<S,$R2,$C2,$R2C2> as AsRef<[[S; $R2]; $C2]>>::as_ref(&other)[c], 
-                            r
-                        );
-                    }
-                }
-
-                result
-            }
-        }
-
-        impl<S> ops::Mul<&Matrix<S, $R2, $C2, $R2C2>> for Matrix<S, $R1, $C1, $R1C1>
-        where 
-            S: SimdScalar
-        {
-            type Output = Matrix<S, $R1, $C2, $R1C2>;
-
-            #[inline]
-            fn mul(self, other: &Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
-                // PERFORMANCE: The const loop should get unrolled during optimization.
-                let mut result = Self::Output::zero();
-                for c in 0..$C2 {
-                    for r in 0..$R1 {
-                        result[c][r] = dot_array_col(
-                            self.as_ref(), 
-                            &<Matrix<S,$R2,$C2,$R2C2> as AsRef<[[S; $R2]; $C2]>>::as_ref(&other)[c], 
-                            r
-                        );
-                    }
-                }
-
-                result
-            }
-        }
-
-        impl<S> ops::Mul<Matrix<S, $R2, $C2, $R2C2>> for &Matrix<S, $R1, $C1, $R1C1>
-        where 
-            S: SimdScalar
-        {
-            type Output = Matrix<S, $R1, $C2, $R1C2>;
-
-            #[inline]
-            fn mul(self, other: Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
-                // PERFORMANCE: The const loop should get unrolled during optimization.
-                let mut result = Self::Output::zero();
-                for c in 0..$C2 {
-                    for r in 0..$R1 {
-                        result[c][r] = dot_array_col(
-                            self.as_ref(), 
-                            &<Matrix<S,$R2,$C2,$R2C2> as AsRef<[[S; $R2]; $C2]>>::as_ref(&other)[c], 
-                            r
-                        );
-                    }
-                }
-
-                result
-            }
-        }
-
-        impl<'a, 'b, S> ops::Mul<&'a Matrix<S, $R2, $C2, $R2C2>> for &'b Matrix<S, $R1, $C1, $R1C1>
-        where 
-            S: SimdScalar
-        {
-            type Output = Matrix<S, $R1, $C2, $R1C2>;
-
-            #[inline]
-            fn mul(self, other: &'a Matrix<S, $R2, $C2, $R2C2>) -> Self::Output {
-                // PERFORMANCE: The const loop should get unrolled during optimization.
-                let mut result = Self::Output::zero();
-                for c in 0..$C2 {
-                    for r in 0..$R1 {
-                        result[c][r] = dot_array_col(
-                            self.as_ref(), 
-                            &<Matrix<S,$R2,$C2,$R2C2> as AsRef<[[S; $R2]; $C2]>>::as_ref(&other)[c], 
-                            r
-                        );
-                    }
-                }
-
-                result
-            }
-        }
-    }
-}
-
-impl_matrix_matrix_mul_ops!((R1:1, C1:1, R1C1:1)  => (R2:1, C2:1, R2C2:1)  => (R1, C2, R1C2:1));
-impl_matrix_matrix_mul_ops!((R1:1, C1:1, R1C1:1)  => (R2:1, C2:2, R2C2:2)  => (R1, C2, R1C2:2));
-impl_matrix_matrix_mul_ops!((R1:1, C1:1, R1C1:1)  => (R2:1, C2:3, R2C2:3)  => (R1, C2, R1C2:3));
-impl_matrix_matrix_mul_ops!((R1:1, C1:1, R1C1:1)  => (R2:1, C2:4, R2C2:4)  => (R1, C2, R1C2:4));
-impl_matrix_matrix_mul_ops!((R1:2, C1:2, R1C1:4)  => (R2:2, C2:2, R2C2:4)  => (R1, C2, R1C2:4));
-impl_matrix_matrix_mul_ops!((R1:3, C1:3, R1C1:9)  => (R2:3, C2:3, R2C2:9)  => (R1, C2, R1C2:9));
-impl_matrix_matrix_mul_ops!((R1:4, C1:4, R1C1:16) => (R2:4, C2:4, R2C2:16) => (R1, C2, R1C2:16));
-impl_matrix_matrix_mul_ops!((R1:1, C1:2, R1C1:2)  => (R2:2, C2:2, R2C2:4)  => (R1, C2, R1C2:2));
-impl_matrix_matrix_mul_ops!((R1:1, C1:3, R1C1:3)  => (R2:3, C2:3, R2C2:9)  => (R1, C2, R1C2:3));
-impl_matrix_matrix_mul_ops!((R1:1, C1:4, R1C1:4)  => (R2:4, C2:4, R2C2:16) => (R1, C2, R1C2:4));
-impl_matrix_matrix_mul_ops!((R1:2, C1:3, R1C1:6)  => (R2:3, C2:3, R2C2:9)  => (R1, C2, R1C2:6));
-impl_matrix_matrix_mul_ops!((R1:2, C1:3, R1C1:6)  => (R2:3, C2:2, R2C2:6)  => (R1, C2, R1C2:4));
-impl_matrix_matrix_mul_ops!((R1:2, C1:2, R1C1:4)  => (R2:2, C2:3, R2C2:6)  => (R1, C2, R1C2:6));
-impl_matrix_matrix_mul_ops!((R1:1, C1:2, R1C1:2)  => (R2:2, C2:3, R2C2:6)  => (R1, C2, R1C2:3));
-impl_matrix_matrix_mul_ops!((R1:3, C1:2, R1C1:6)  => (R2:2, C2:2, R2C2:4)  => (R1, C2, R1C2:6));
-impl_matrix_matrix_mul_ops!((R1:3, C1:2, R1C1:6)  => (R2:2, C2:3, R2C2:6)  => (R1, C2, R1C2:9));
-impl_matrix_matrix_mul_ops!((R1:3, C1:3, R1C1:9)  => (R2:3, C2:2, R2C2:6)  => (R1, C2, R1C2:6));
-impl_matrix_matrix_mul_ops!((R1:1, C1:3, R1C1:3)  => (R2:3, C2:2, R2C2:6)  => (R1, C2, R1C2:2));
-impl_matrix_matrix_mul_ops!((R1:2, C1:4, R1C1:8)  => (R2:4, C2:4, R2C2:16) => (R1, C2, R1C2:8));
-impl_matrix_matrix_mul_ops!((R1:2, C1:2, R1C1:4)  => (R2:2, C2:4, R2C2:8)  => (R1, C2, R1C2:8));
-impl_matrix_matrix_mul_ops!((R1:2, C1:4, R1C1:8)  => (R2:4, C2:2, R2C2:8)  => (R1, C2, R1C2:4));
-impl_matrix_matrix_mul_ops!((R1:1, C1:2, R1C1:2)  => (R2:2, C2:4, R2C2:8)  => (R1, C2, R1C2:4));
-impl_matrix_matrix_mul_ops!((R1:4, C1:2, R1C1:8)  => (R2:2, C2:2, R2C2:4)  => (R1, C2, R1C2:8));
-impl_matrix_matrix_mul_ops!((R1:4, C1:2, R1C1:8)  => (R2:2, C2:4, R2C2:8)  => (R1, C2, R1C2:16));
-impl_matrix_matrix_mul_ops!((R1:4, C1:2, R1C1:8)  => (R2:2, C2:3, R2C2:6)  => (R1, C2, R1C2:12));
-impl_matrix_matrix_mul_ops!((R1:4, C1:4, R1C1:16) => (R2:4, C2:2, R2C2:8)  => (R1, C2, R1C2:8));
-impl_matrix_matrix_mul_ops!((R1:1, C1:4, R1C1:4)  => (R2:4, C2:2, R2C2:8)  => (R1, C2, R1C2:2));
-impl_matrix_matrix_mul_ops!((R1:3, C1:4, R1C1:12) => (R2:4, C2:2, R2C2:8)  => (R1, C2, R1C2:6));
-impl_matrix_matrix_mul_ops!((R1:3, C1:4, R1C1:12) => (R2:4, C2:4, R2C2:16) => (R1, C2, R1C2:12));
-impl_matrix_matrix_mul_ops!((R1:3, C1:4, R1C1:12) => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:9));
-impl_matrix_matrix_mul_ops!((R1:3, C1:3, R1C1:9)  => (R2:3, C2:4, R2C2:12) => (R1, C2, R1C2:12));
-impl_matrix_matrix_mul_ops!((R1:1, C1:3, R1C1:3)  => (R2:3, C2:4, R2C2:12) => (R1, C2, R1C2:4));
-impl_matrix_matrix_mul_ops!((R1:4, C1:3, R1C1:12) => (R2:3, C2:3, R2C2:9)  => (R1, C2, R1C2:12));
-impl_matrix_matrix_mul_ops!((R1:4, C1:3, R1C1:12) => (R2:3, C2:4, R2C2:12) => (R1, C2, R1C2:16));
-impl_matrix_matrix_mul_ops!((R1:4, C1:4, R1C1:16) => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:12));
-impl_matrix_matrix_mul_ops!((R1:1, C1:4, R1C1:4)  => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:3));
-impl_matrix_matrix_mul_ops!((R1:2, C1:4, R1C1:8)  => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:6));
-impl_matrix_matrix_mul_ops!((R1:4, C1:3, R1C1:12) => (R2:3, C2:2, R2C2:6)  => (R1, C2, R1C2:8));
-*/
 
 impl<S, const R: usize, const C: usize> ops::AddAssign<Matrix<S, R, C>> for Matrix<S, R, C>
 where 
