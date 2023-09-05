@@ -14,6 +14,7 @@ mod constraints;
 
 
 pub use core_numeric::*;
+pub use constraints::*;
 pub use angle::*;
 pub use complex::*;
 pub use euler::*;

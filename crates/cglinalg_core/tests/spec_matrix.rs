@@ -15,6 +15,12 @@ use cglinalg_core::{
 use approx::{
     relative_eq,
 };
+use cglinalg_core::{
+    Const,
+    CanMultiply,
+    DimMul,
+    ShapeConstraint,
+};
 
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
@@ -370,7 +376,7 @@ where
     Ok(())
 }
 */
-/*
+
 /// Matrices over a set of floating point scalars have a 
 /// multiplicative identity.
 /// 
@@ -378,11 +384,11 @@ where
 /// ```text
 /// m * identity = identity * m = m
 /// ```
-fn prop_matrix_multiplication_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
+fn prop_matrix_multiplication_identity<S, const N: usize, const NN: usize>(m: Matrix<S, N, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar + Arbitrary,
+    ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
     let identity = Matrix::identity();
 
@@ -391,44 +397,18 @@ where
 
     Ok(())
 }
-*/
-/*
-/// Multiplication of a matrix by a scalar zero is the zero matrix.
-///
-/// Given a matrix `m` and a zero scalar `0`
-/// ```text
-/// 0 * m = m * 0 = 0
-/// ```
-/// Note that we diverge from tradition formalisms of matrix arithmetic 
-/// in that we allow multiplication of matrices by scalars on the right-hand 
-/// side as well as left-hand side. 
-fn prop_zero_times_matrix_equals_zero_matrix<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    let zero = num_traits::zero();
-    let zero_matrix = Matrix::zero();
 
-    prop_assert_eq!(zero * m, zero_matrix);
-    prop_assert_eq!(m * zero, zero_matrix);
-
-    Ok(())
-}
-*/
-/*
 /// Multiplication of a matrix by the zero matrix is the zero matrix.
 ///
 /// Given a matrix `m`, and the zero matrix `0`
 /// ```text
 /// 0 * m = m * 0 = 0
 /// ```
-fn prop_zero_matrix_times_matrix_equals_zero_matrix<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
+fn prop_zero_matrix_times_matrix_equals_zero_matrix<S, const N: usize, const NN: usize>(m: Matrix<S, N, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar + Arbitrary,
+    ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
     let zero_matrix = Matrix::zero();
 
@@ -437,67 +417,72 @@ where
 
     Ok(())
 }
-*/
-/*
+
+
 /// Matrix multiplication is associative.
 ///
 /// Given matrices `m1`, `m2`, and `m3`
 /// ```text
 /// (m1 * m2) * m3 = m1 * (m2 * m3)
 /// ```
-fn prop_matrix_multiplication_associative<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>, 
-    m3: Matrix<S, R, C, RC>
+fn prop_matrix_multiplication_associative<S, const N: usize, const NN: usize>(
+    m1: Matrix<S, N, N>, 
+    m2: Matrix<S, N, N>, 
+    m3: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar + Arbitrary,
+    ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
     prop_assert_eq!((m1 * m2) * m3, m1* (m2 * m3));
 
     Ok(())
 }
-*/
-/*
+
+
 /// Matrix multiplication is distributive over matrix addition.
 ///
 /// Given matrices `m1`, `m2`, and `m3`
 /// ```text
 /// m1 * (m2 + m3) = m1 * m2 + m1 * m3
 /// ```
-fn prop_matrix_multiplication_distributive<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>, 
-    m3: Matrix<S, R, C, RC>
+fn prop_matrix_multiplication_distributive<S, const N: usize, const NN: usize>(
+    m1: Matrix<S, N, N>, 
+    m2: Matrix<S, N, N>, 
+    m3: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar + Arbitrary,
+    ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
     prop_assert_eq!(m1 * (m2 + m3), m1 * m2 + m1 * m3);
 
     Ok(())
 }
-*/
-/*
+
 /// Matrix multiplication is compatible with scalar multiplication.
 ///
 /// Given matrices `m1` and `m2` and a scalar `c`
 /// ```text
 /// c * (m1 * m2) = (c * m1) * m2 = m1 * (c * m2)
 /// ```
-fn prop_matrix_multiplication_compatible_with_scalar_multiplication<S, const R: usize, const C: usize, const RC: usize>(
+fn prop_matrix_multiplication_compatible_with_scalar_multiplication<S, const N: usize, const NN: usize>(
     c: S, 
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
+    m1: Matrix<S, N, N>, 
+    m2: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar + Arbitrary,
+    ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
     prop_assert_eq!((m1 * m2) * c, m1 * (m2 * c));
 
     Ok(())
 }
-*/
+
 
 /// Matrix multiplication is compatible with scalar multiplication.
 ///
@@ -517,29 +502,6 @@ where
 
     Ok(())
 }
-
-/*
-/// Matrices over a set of floating point scalars have a 
-/// multiplicative identity.
-/// 
-/// Given a matrix `m` there is a matrix `identity` such that
-/// ```text
-/// m * identity = identity * m = m
-/// ```
-fn prop_matrix_multiplication_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{
-    let identity = Matrix::identity();
-
-    prop_assert_eq!(m * identity, m);
-    prop_assert_eq!(identity * m, m);
-
-    Ok(())
-}
-*/
 
 /// The double transpose of a matrix is the original matrix.
 ///
@@ -595,7 +557,7 @@ where
     Ok(())
 }
 
-/*
+
 /// The transpose of the product of two matrices equals the product 
 /// of the transposes of the two matrices swapped.
 /// 
@@ -603,18 +565,20 @@ where
 /// ```text
 /// transpose(m1 * m2) = transpose(m2) * transpose(m1)
 /// ```
-fn prop_transpose_product<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
+fn prop_transpose_product<S, const N: usize, const NN: usize>(
+    m1: Matrix<S, N, N>, 
+    m2: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar + Arbitrary,
+    ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
     prop_assert_eq!((m1 * m2).transpose(), m2.transpose() * m1.transpose());
 
     Ok(())
 }
-*/
+
 
 /// Swapping rows is commutative in the row arguments.
 ///
@@ -1059,20 +1023,18 @@ macro_rules! approx_multiplication_props {
                 super::prop_scalar_matrix_multiplication_commutative(c, m)?
             }
             */
-            /*
+
             #[test]
             fn prop_matrix_multiplication_identity(m in super::$Generator()) {
                 let m: super::$MatrixN<$ScalarType> = m;
                 super::prop_matrix_multiplication_identity(m)?
             }
-            */
-            /*
+
             #[test]
             fn prop_zero_matrix_times_matrix_equals_zero_matrix(m in super::$Generator()) {
                 let m: super::$MatrixN<$ScalarType> = m;
                 super::prop_zero_matrix_times_matrix_equals_zero_matrix(m)?
             }
-            */
 
             #[test]
             fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator()) {
@@ -1095,7 +1057,6 @@ macro_rules! exact_multiplication_props {
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
-            /*
             #[test]
             fn prop_matrix_multiplication_associative(
                 m1 in super::$Generator(), 
@@ -1104,10 +1065,10 @@ macro_rules! exact_multiplication_props {
             ) {
                 let m1: super::$MatrixN<$ScalarType> = m1;
                 let m2: super::$MatrixN<$ScalarType> = m2;
-                super::prop_matrix_multiplication_associative(m1, m2)?
+                let m3: super::$MatrixN<$ScalarType> = m3;
+                super::prop_matrix_multiplication_associative(m1, m2, m3)?
             }
-            */
-            /*
+
             #[test]
             fn prop_matrix_multiplication_distributive(
                 m1 in super::$Generator(), 
@@ -1116,10 +1077,10 @@ macro_rules! exact_multiplication_props {
             ) {
                 let m1: super::$MatrixN<$ScalarType> = m1;
                 let m2: super::$MatrixN<$ScalarType> = m2;
+                let m3: super::$MatrixN<$ScalarType> = m3;
                 super::prop_matrix_multiplication_distributive(m1, m2, m3)?
             }
-            */
-            /*
+
             #[test]
             fn prop_matrix_multiplication_compatible_with_scalar_multiplication(
                 c in super::$ScalarGen(), 
@@ -1131,7 +1092,6 @@ macro_rules! exact_multiplication_props {
                 let m2: super::$MatrixN<$ScalarType> = m2;
                 super::prop_matrix_multiplication_compatible_with_scalar_multiplication(c, m1, m2)?
             }
-            */
 
             #[test]
             fn prop_matrix_multiplication_compatible_with_scalar_multiplication1(
@@ -1144,20 +1104,18 @@ macro_rules! exact_multiplication_props {
                 let m: super::$MatrixN<$ScalarType> = m;
                 super::prop_matrix_multiplication_compatible_with_scalar_multiplication1(c1, c2, m)?
             }
-            /*
+
             #[test]
             fn prop_zero_matrix_times_matrix_equals_zero_matrix(m in super::$Generator()) {
                 let m: super::$MatrixN<$ScalarType> = m;
                 super::prop_zero_matrix_times_matrix_equals_zero_matrix(m)?
             }
-            */
-            /*
+
             #[test]
             fn prop_matrix_multiplication_identity(m in super::$Generator()) {
                 let m: super::$MatrixN<$ScalarType> = m;
                 super::prop_matrix_multiplication_identity(m)?
             }
-            */
         }
     }
     }
@@ -1194,14 +1152,12 @@ macro_rules! approx_transposition_props {
                 super::prop_transpose_scalar_multiplication(c, m)?
             }
 
-            /*
             #[test]
             fn prop_transpose_product(m1 in super::$Generator(), m2 in super::$Generator()) {
                 let m1: super::$MatrixN<$ScalarType> = m1;
                 let m2: super::$MatrixN<$ScalarType> = m2;
                 super::prop_transpose_product(m1, m2)?
             }
-            */
         }
     }
     }
@@ -1238,14 +1194,12 @@ macro_rules! exact_transposition_props {
                 super::prop_transpose_scalar_multiplication(c, m)?
             }
 
-            /*
             #[test]
             fn prop_transpose_product(m1 in super::$Generator(), m2 in super::$Generator()) {
                 let m1: super::$MatrixN<$ScalarType> = m1;
                 let m2: super::$MatrixN<$ScalarType> = m2;
                 super::prop_transpose_product(m1, m2)?
             }
-            */
         }
     }
     }
