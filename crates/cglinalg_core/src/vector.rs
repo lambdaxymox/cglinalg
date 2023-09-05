@@ -1743,34 +1743,7 @@ impl<S> Vector1<S> {
         }
     }
 }
-/*
-impl<S> Vector1<S> 
-where 
-    S: Copy
-{
-    /// Extend a one-dimensional vector into a two-dimensional vector using 
-    /// the supplied value for the **y-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector1,
-    /// #     Vector2,   
-    /// # };
-    /// #
-    /// let vector = Vector1::new(1_f64);
-    /// let expected = Vector2::new(1_f64, 2_f64);
-    /// let result = vector.extend(2_f64);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub const fn extend(&self, y: S) -> Vector2<S> {
-        Vector2::new(self.data[0], y)
-    }
-}
-*/
+
 impl<S> Vector1<S> 
 where 
     S: SimdScalar
@@ -1781,30 +1754,6 @@ where
     pub fn unit_x() -> Self {
         Vector1::new(S::one())
     }
-/*
-    /// Compute the coordinates of a vector in projective space.
-    ///
-    /// The function appends a `0` to the vector.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector1,
-    /// #     Vector2, 
-    /// # };
-    /// #
-    /// let vector = Vector1::new(1_i32);
-    /// let expected = Vector2::new(1_i32, 0_i32);
-    /// let result = vector.to_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn to_homogeneous(&self) -> Vector2<S> {
-        self.extend(S::zero())
-    }
-*/
 }
 
 
@@ -1817,56 +1766,7 @@ impl<S> Vector2<S> {
         }
     }
 }
-/*
-impl<S> Vector2<S> 
-where 
-    S: Copy 
-{
-    /// Extend a two-dimensional vector into a three-dimensional vector using the 
-    /// supplied **z-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// #     Vector3,   
-    /// # };
-    /// #
-    /// let v = Vector2::new(1_f64, 2_f64);
-    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let result = v.extend(3_f64);
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub const fn extend(&self, z: S) -> Vector3<S> {
-        Vector3::new(self.data[0], self.data[1], z)
-    }
 
-    /// Contract a two-dimensional vector to a one-dimensional vector by removing
-    /// the **y-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector1,
-    /// #     Vector2,   
-    /// # };
-    /// #
-    /// let v = Vector2::new(1_f64, 2_f64);
-    /// let expected = Vector1::new(1_f64);
-    /// let result = v.contract();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub const fn contract(&self) -> Vector1<S> {
-        Vector1::new(self.data[0])
-    }
-}
-*/
 impl<S> Vector2<S> 
 where 
     S: SimdScalar 
@@ -1884,64 +1784,6 @@ where
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one())
     }
-/*
-    /// Compute the coordinates of a vector in projective space.
-    ///
-    /// The function appends a `0` to the vector.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// #     Vector3, 
-    /// # };
-    /// #
-    /// let vector = Vector2::new(1_i32, 2_i32);
-    /// let expected = Vector3::new(1_i32, 2_i32, 0_i32);
-    /// let result = vector.to_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn to_homogeneous(&self) -> Vector3<S> {
-        self.extend(S::zero())
-    }
-
-    /// Compute the coordinates of a projective vector in Euclidean space.
-    ///
-    /// The function removes a `0` from the end of the vector, otherwise it
-    /// returns `None`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector1,
-    /// #     Vector2, 
-    /// # };
-    /// #
-    /// let vector = Vector2::new(1_i32, 0_i32);
-    /// let expected = Some(Vector1::new(1_i32));
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    ///
-    /// let vector = Vector2::new(1_i32, 1_i32);
-    /// let expected: Option<Vector1<i32>> = None;
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert!(result.is_none());
-    /// ```
-    #[inline]
-    pub fn from_homogeneous(&self) -> Option<Vector1<S>> {
-        if self.data[1].is_zero() {
-            Some(self.contract())
-        } else {
-            None
-        }
-    }
-*/
 }
 
 impl<S> Vector3<S> {
@@ -1953,56 +1795,7 @@ impl<S> Vector3<S> {
         }
     }
 }
-/*
-impl<S> Vector3<S> 
-where 
-    S: Copy
-{
-    /// Extend a three-dimensional vector into a four-dimensional vector using the 
-    /// supplied **w-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let expected = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let result = v.extend(4_f64);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub const fn extend(&self, w: S) -> Vector4<S> {
-        Vector4::new(self.data[0], self.data[1], self.data[2], w)
-    }
 
-    /// Contract a three-dimensional vector to a two-dimensional vector
-    /// by removing the **z-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// #     Vector3, 
-    /// # };
-    /// #
-    /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let expected = Vector2::new(1_f64, 2_f64);
-    /// let result = v.contract();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub const fn contract(&self) -> Vector2<S> {
-        Vector2::new(self.data[0], self.data[1])
-    }
-}
-*/
 impl<S> Vector3<S> 
 where 
     S: SimdScalar
@@ -2027,64 +1820,7 @@ where
     pub fn unit_z() -> Self {
         Self::new(S::zero(), S::zero(), S::one())
     }
-/*
-    /// Compute the coordinates of a vector in projective space.
-    ///
-    /// The function appends a `0` to the vector.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
-    /// let expected = Vector4::new(1_i32, 2_i32, 3_i32, 0_i32);
-    /// let result = vector.to_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn to_homogeneous(&self) -> Vector4<S> {
-        self.extend(S::zero())
-    }
 
-    /// Compute the coordinates of a projective vector in Euclidean space.
-    ///
-    /// The function removes a `0` from the end of the vector, otherwise it
-    /// returns `None`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// #     Vector3, 
-    /// # };
-    /// #
-    /// let vector = Vector3::new(1_i32, 2_i32, 0_i32);
-    /// let expected = Some(Vector2::new(1_i32, 2_i32));
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    ///
-    /// let vector = Vector3::new(1_i32, 2_i32, 1_i32);
-    /// let expected: Option<Vector2<i32>> = None;
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert!(result.is_none());
-    /// ```
-    #[inline]
-    pub fn from_homogeneous(&self) -> Option<Vector2<S>> {
-        if self.data[2].is_zero() {
-            Some(self.contract())
-        } else {
-            None
-        }
-    }
-*/
     /// Compute the cross product of two three-dimensional vectors. 
     ///
     /// For the vector dimensions used in computer graphics 
@@ -2190,34 +1926,6 @@ impl<S> Vector4<S> {
     }
 }
 
-/*
-impl<S> Vector4<S> 
-where 
-    S: Copy
-{
-    /// Contract a four-dimensional vector to a three-dimensional vector
-    /// by removing the **w-component**.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
-    /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let result = v.contract();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub const fn contract(&self) -> Vector3<S> {
-        Vector3::new(self.data[0], self.data[1], self.data[2])
-    }
-}
-*/
 impl<S> Vector4<S> 
 where 
     S: SimdScalar
@@ -2249,41 +1957,6 @@ where
     pub fn unit_w() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::one())
     }
-/*
-    /// Compute the coordinates of a projective vector in Euclidean space.
-    ///
-    /// The function removes a `0` from the end of the vector, otherwise it
-    /// returns `None`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let vector = Vector4::new(1_i32, 2_i32, 3_i32, 0_i32);
-    /// let expected = Some(Vector3::new(1_i32, 2_i32, 3_i32));
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert_eq!(result, expected);
-    ///
-    /// let vector = Vector4::new(1_i32, 2_i32, 3_i32, 1_i32);
-    /// let expected: Option<Vector3<i32>> = None;
-    /// let result = vector.from_homogeneous();
-    ///
-    /// assert!(result.is_none());
-    /// ```
-    #[inline]
-    pub fn from_homogeneous(&self) -> Option<Vector3<S>> {
-        if self.data[3].is_zero() {
-            Some(self.contract())
-        } else {
-            None
-        }
-    }
-*/
 }
 
 impl<S> From<S> for Vector1<S> 
