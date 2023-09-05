@@ -2848,11 +2848,11 @@ macro_rules! impl_scalar_complex_add_ops {
             }
         }
 
-        impl<'a, 'b> ops::Add<&'a Complex<$Lhs>> for &'b $Lhs {
+        impl<'a, 'b> ops::Add<&'b Complex<$Lhs>> for &'a $Lhs {
             type Output = Complex<$Lhs>;
 
             #[inline]
-            fn add(self, other: &'a Complex<$Lhs>) -> Self::Output {
+            fn add(self, other: &'b Complex<$Lhs>) -> Self::Output {
                 Self::Output::new(self + other.re, other.im)
             }
         }
@@ -2891,11 +2891,11 @@ macro_rules! impl_scalar_complex_sub_ops {
             }
         }
 
-        impl<'a, 'b> ops::Sub<&'a Complex<$Lhs>> for &'b $Lhs {
+        impl<'a, 'b> ops::Sub<&'b Complex<$Lhs>> for &'a $Lhs {
             type Output = Complex<$Lhs>;
 
             #[inline]
-            fn sub(self, other: &'a Complex<$Lhs>) -> Self::Output {
+            fn sub(self, other: &'b Complex<$Lhs>) -> Self::Output {
                 Self::Output::new(self - other.re, other.im)
             }
         }
@@ -2934,11 +2934,11 @@ macro_rules! impl_scalar_complex_mul_ops {
             }
         }
 
-        impl<'a, 'b> ops::Mul<&'a Complex<$Lhs>> for &'b $Lhs {
+        impl<'a, 'b> ops::Mul<&'b Complex<$Lhs>> for &'a $Lhs {
             type Output = Complex<$Lhs>;
 
             #[inline]
-            fn mul(self, other: &'a Complex<$Lhs>) -> Self::Output {
+            fn mul(self, other: &'b Complex<$Lhs>) -> Self::Output {
                 Self::Output::new(self * other.re, self * other.im)
             }
         }
@@ -2989,11 +2989,11 @@ macro_rules! impl_scalar_complex_div_ops {
             }
         }
 
-        impl<'a, 'b> ops::Div<&'a Complex<$Lhs>> for &'b $Lhs {
+        impl<'a, 'b> ops::Div<&'b Complex<$Lhs>> for &'a $Lhs {
             type Output = Complex<$Lhs>;
 
             #[inline]
-            fn div(self, other: &'a Complex<$Lhs>) -> Self::Output {
+            fn div(self, other: &'b Complex<$Lhs>) -> Self::Output {
                 let denominator = other.re * other.re + other.im * other.im;
                 let re = (self * other.re) / denominator;
                 let im = -(self * other.im) / denominator;

@@ -5277,14 +5277,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const R: usize, const C: usize> ops::Add<&'a Matrix<S, R, C>> for &'b Matrix<S, R, C>
+impl<'a, 'b, S, const R: usize, const C: usize> ops::Add<&'b Matrix<S, R, C>> for &'a Matrix<S, R, C>
 where 
     S: SimdScalar
 {
     type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn add(self, other: &'a Matrix<S, R, C>) -> Self::Output {
+    fn add(self, other: &'b Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5357,14 +5357,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const R: usize, const C: usize> ops::Sub<&'a Matrix<S, R, C>> for &'b Matrix<S, R, C> 
+impl<'a, 'b, S, const R: usize, const C: usize> ops::Sub<&'b Matrix<S, R, C>> for &'a Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
     type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn sub(self, other: &'a Matrix<S, R, C>) -> Self::Output {
+    fn sub(self, other: &'b Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5667,14 +5667,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const R: usize, const C: usize> ops::Mul<&'a Vector<S, C>> for &'b Matrix<S, R, C> 
+impl<'a, 'b, S, const R: usize, const C: usize> ops::Mul<&'b Vector<S, C>> for &'a Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
     type Output = Vector<S, R>;
 
     #[inline]
-    fn mul(self, other: &'a Vector<S, C>) -> Self::Output {
+    fn mul(self, other: &'b Vector<S, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for r in 0..R {

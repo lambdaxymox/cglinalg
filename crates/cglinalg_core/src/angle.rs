@@ -824,14 +824,14 @@ where
     } 
 }
 
-impl<'a, 'b, S> ops::Add<&'a Degrees<S>> for &'b Degrees<S> 
+impl<'a, 'b, S> ops::Add<&'b Degrees<S>> for &'a Degrees<S> 
 where 
     S: SimdScalar
 {
     type Output = Degrees<S>;
 
     #[inline]
-    fn add(self, other: &'a Degrees<S>) -> Self::Output {
+    fn add(self, other: &'b Degrees<S>) -> Self::Output {
         Degrees(self.0 + other.0)
     } 
 }
@@ -872,14 +872,14 @@ where
     } 
 }
 
-impl<'a, 'b, S> ops::Sub<&'a Degrees<S>> for &'b Degrees<S> 
+impl<'a, 'b, S> ops::Sub<&'b Degrees<S>> for &'a Degrees<S> 
 where 
     S: SimdScalar
 {
     type Output = Degrees<S>;
 
     #[inline]
-    fn sub(self, other: &'a Degrees<S>) -> Self::Output {
+    fn sub(self, other: &'b Degrees<S>) -> Self::Output {
         Degrees(self.0 - other.0)
     } 
 }
@@ -968,14 +968,14 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Div<&'a Degrees<S>> for &'b Degrees<S> 
+impl<'a, 'b, S> ops::Div<&'b Degrees<S>> for &'a Degrees<S> 
 where 
     S: SimdScalarFloat
 {
     type Output = S;
 
     #[inline]
-    fn div(self, other: &'a Degrees<S>) -> Self::Output {
+    fn div(self, other: &'b Degrees<S>) -> Self::Output {
         self.0 / other.0
     }
 }
@@ -1016,14 +1016,14 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Rem<&'a Degrees<S>> for &'b Degrees<S> 
+impl<'a, 'b, S> ops::Rem<&'b Degrees<S>> for &'a Degrees<S> 
 where 
     S: SimdScalarFloat 
 {
     type Output = Degrees<S>;
 
     #[inline]
-    fn rem(self, other: &'a Degrees<S>) -> Self::Output {
+    fn rem(self, other: &'b Degrees<S>) -> Self::Output {
         Degrees(self.0 % other.0)
     }
 }
@@ -1200,14 +1200,14 @@ where
     } 
 }
 
-impl<'a, 'b, S> ops::Add<&'a Radians<S>> for &'b Radians<S> 
+impl<'a, 'b, S> ops::Add<&'b Radians<S>> for &'a Radians<S> 
 where 
     S: SimdScalar
 {
     type Output = Radians<S>;
 
     #[inline]
-    fn add(self, other: &'a Radians<S>) -> Self::Output {
+    fn add(self, other: &'b Radians<S>) -> Self::Output {
         Radians(self.0 + other.0)
     } 
 }
@@ -1248,14 +1248,14 @@ where
     } 
 }
 
-impl<'a, 'b, S> ops::Sub<&'a Radians<S>> for &'b Radians<S> 
+impl<'a, 'b, S> ops::Sub<&'b Radians<S>> for &'a Radians<S> 
 where 
     S: SimdScalar
 {
     type Output = Radians<S>;
 
     #[inline]
-    fn sub(self, other: &'a Radians<S>) -> Self::Output {
+    fn sub(self, other: &'b Radians<S>) -> Self::Output {
         Radians(self.0 - other.0)
     } 
 }
@@ -1344,14 +1344,14 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Div<&'a Radians<S>> for &'b Radians<S> 
+impl<'a, 'b, S> ops::Div<&'b Radians<S>> for &'a Radians<S> 
 where 
     S: SimdScalarFloat
 {
     type Output = S;
 
     #[inline]
-    fn div(self, other: &'a Radians<S>) -> Self::Output {
+    fn div(self, other: &'b Radians<S>) -> Self::Output {
         self.0 / other.0
     }
 }
@@ -1392,14 +1392,14 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Rem<&'a Radians<S>> for &'b Radians<S> 
+impl<'a, 'b, S> ops::Rem<&'b Radians<S>> for &'a Radians<S> 
 where 
     S: SimdScalarFloat
 {
     type Output = Radians<S>;
 
     #[inline]
-    fn rem(self, other: &'a Radians<S>) -> Self::Output {
+    fn rem(self, other: &'b Radians<S>) -> Self::Output {
         Radians(self.0 % other.0)
     }
 }

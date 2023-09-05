@@ -3862,11 +3862,11 @@ macro_rules! impl_scalar_quaternion_mul_ops {
             }
         }
 
-        impl<'a, 'b> ops::Mul<&'a Quaternion<$Lhs>> for &'b $Lhs {
+        impl<'a, 'b> ops::Mul<&'b Quaternion<$Lhs>> for &'a $Lhs {
             type Output = Quaternion<$Lhs>;
 
             #[inline]
-            fn mul(self, other: &'a Quaternion<$Lhs>) -> Self::Output {
+            fn mul(self, other: &'b Quaternion<$Lhs>) -> Self::Output {
                 Self::Output::from_parts(self * other.scalar(), self * other.vector())
             }
         }

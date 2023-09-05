@@ -1229,11 +1229,41 @@ macro_rules! impl_scalar_vector_mul_ops {
             }
         }
 
-        impl<'a, const N: usize> ops::Mul<Vector<$Lhs, N>> for &'a $Lhs {
+        impl<const N: usize> ops::Mul<&Vector<$Lhs, N>> for $Lhs {
+            type Output = Vector<$Lhs, N>;
+
+            #[inline]
+            fn mul(self, other: &Vector<$Lhs, N>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
+                let mut result = Vector::zero();
+                for i in 0..N {
+                    result[i] = self * other.data[i];
+                }
+
+                result
+            }
+        }
+
+        impl<const N: usize> ops::Mul<Vector<$Lhs, N>> for &$Lhs {
             type Output = Vector<$Lhs, N>;
 
             #[inline]
             fn mul(self, other: Vector<$Lhs, N>) -> Self::Output {
+                // PERFORMANCE: The const loop should get unrolled during optimization.
+                let mut result = Vector::zero();
+                for i in 0..N {
+                    result[i] = self * other.data[i];
+                }
+
+                result
+            }
+        }
+
+        impl<'a, 'b, const N: usize> ops::Mul<&'b Vector<$Lhs, N>> for &'a $Lhs {
+            type Output = Vector<$Lhs, N>;
+
+            #[inline]
+            fn mul(self, other: &'b Vector<$Lhs, N>) -> Self::Output {
                 // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Vector::zero();
                 for i in 0..N {
@@ -1348,14 +1378,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Add<&'a Vector<S, N>> for &'b Vector<S, N> 
+impl<'a, 'b, S, const N: usize> ops::Add<&'b Vector<S, N>> for &'a Vector<S, N> 
 where 
     S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
     #[inline]
-    fn add(self, other: &'a Vector<S, N>) -> Self::Output {
+    fn add(self, other: &'b Vector<S, N>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {
@@ -1420,14 +1450,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Sub<&'a Vector<S, N>> for &'b Vector<S, N> 
+impl<'a, 'b, S, const N: usize> ops::Sub<&'b Vector<S, N>> for &'a Vector<S, N> 
 where 
     S: SimdScalar 
 {
     type Output = Vector<S, N>;
 
     #[inline]
-    fn sub(self, other: &'a Vector<S, N>) -> Self::Output {
+    fn sub(self, other: &'b Vector<S, N>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for i in 0..N {

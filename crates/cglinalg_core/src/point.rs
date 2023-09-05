@@ -568,14 +568,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Add<&'a Vector<S, N>> for &'b Point<S, N> 
+impl<'a, 'b, S, const N: usize> ops::Add<&'b Vector<S, N>> for &'a Point<S, N> 
 where 
     S: SimdScalar 
 {
     type Output = Point<S, N>;
 
     #[inline]
-    fn add(self, other: &'a Vector<S, N>) -> Self::Output {
+    fn add(self, other: &'b Vector<S, N>) -> Self::Output {
         Self::Output {
             coords: self.coords + other,
         }
@@ -624,14 +624,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Sub<&'a Vector<S, N>> for &'b Point<S, N>
+impl<'a, 'b, S, const N: usize> ops::Sub<&'b Vector<S, N>> for &'a Point<S, N>
 where 
     S: SimdScalar
 {
     type Output = Point<S, N>;
 
     #[inline]
-    fn sub(self, other: &'a Vector<S, N>) -> Self::Output {
+    fn sub(self, other: &'b Vector<S, N>) -> Self::Output {
         Self::Output {
             coords: self.coords - other,
         }
@@ -674,14 +674,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Sub<&'a Point<S, N>> for &'b Point<S, N> 
+impl<'a, 'b, S, const N: usize> ops::Sub<&'b Point<S, N>> for &'a Point<S, N> 
 where 
     S: SimdScalar
 {
     type Output = Vector<S, N>;
 
     #[inline]
-    fn sub(self, other: &'a Point<S, N>) -> Self::Output {
+    fn sub(self, other: &'b Point<S, N>) -> Self::Output {
         self.coords - other.coords
     }
 }
