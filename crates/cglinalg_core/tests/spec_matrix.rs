@@ -750,7 +750,7 @@ where
 
 
 macro_rules! approx_addition_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -785,9 +785,9 @@ macro_rules! approx_addition_props {
     }
 }
 
-approx_addition_props!(matrix2_f64_addition_props, Matrix2x2, f64, strategy_matrix_any, 1e-7);
-approx_addition_props!(matrix3_f64_addition_props, Matrix3x3, f64, strategy_matrix_any, 1e-7);
-approx_addition_props!(matrix4_f64_addition_props, Matrix4x4, f64, strategy_matrix_any, 1e-7);
+approx_addition_props!(matrix2_f64_addition_props, Matrix2x2, f64, strategy_matrix_any);
+approx_addition_props!(matrix3_f64_addition_props, Matrix3x3, f64, strategy_matrix_any);
+approx_addition_props!(matrix4_f64_addition_props, Matrix4x4, f64, strategy_matrix_any);
 
 
 macro_rules! exact_addition_props {
@@ -833,7 +833,7 @@ exact_addition_props!(matrix4_i32_addition_props, Matrix4x4, i32, strategy_matri
 
 
 macro_rules! approx_scalar_multiplication_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -871,23 +871,20 @@ approx_scalar_multiplication_props!(
     matrix2_f64_scalar_multiplication_props, 
     Matrix2x2, f64, 
     strategy_matrix_any, 
-    strategy_scalar_f64_any, 
-    1e-7
+    strategy_scalar_f64_any
 );
 approx_scalar_multiplication_props!(
     matrix3_f64_scalar_multiplication_props, 
     Matrix3x3, f64, 
     strategy_matrix_any, 
-    strategy_scalar_f64_any, 
-    1e-7
+    strategy_scalar_f64_any
 );
 approx_scalar_multiplication_props!(
     matrix4_f64_scalar_multiplication_props, 
     Matrix4x4, 
     f64, 
     strategy_matrix_any, 
-    strategy_scalar_f64_any, 
-    1e-7
+    strategy_scalar_f64_any
 );
 
 
@@ -962,7 +959,7 @@ exact_scalar_multiplication_props!(matrix4_i32_scalar_multiplication_props, Matr
 
 
 macro_rules! approx_multiplication_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -989,9 +986,9 @@ macro_rules! approx_multiplication_props {
     }
 }
 
-approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
-approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
-approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2x2, f64, strategy_matrix_any);
+approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3x3, f64, strategy_matrix_any);
+approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4x4, f64, strategy_matrix_any);
 
 
 macro_rules! exact_multiplication_props {
@@ -1070,7 +1067,7 @@ exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4x4, 
 
 
 macro_rules! approx_transposition_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1106,9 +1103,9 @@ macro_rules! approx_transposition_props {
     }
 }
 
-approx_transposition_props!(matrix2_f64_transposition_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any, 1e-7);
-approx_transposition_props!(matrix3_f64_transposition_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any, 1e-7);
-approx_transposition_props!(matrix4_f64_transposition_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any, 1e-7);
+approx_transposition_props!(matrix2_f64_transposition_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_transposition_props!(matrix3_f64_transposition_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_transposition_props!(matrix4_f64_transposition_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
 
 
 macro_rules! exact_transposition_props {
