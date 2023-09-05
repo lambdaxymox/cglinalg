@@ -107,8 +107,8 @@ pub type Matrix4<S> = Matrix4x4<S>;
 #[inline(always)]
 fn dot_array_col<S, const R1: usize, const C1: usize, const R2: usize>(arr: &[[S; R1]; C1], col: &[S; R2], r: usize) -> S
 where
-    S: Copy + Clone + ops::Add<S, Output = S> + ops::Mul<S, Output = S>,
-    Const<C1>: DimEq<Const<R2>>
+    S: SimdScalar,
+    ShapeConstraint: DimEq<Const<C1>, Const<R2>>
 {
     // PERFORMANCE: The const loop should get unrolled during optimization.
     let mut result = unsafe { core::mem::zeroed() };
@@ -168,7 +168,7 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
 
 impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C> 
 where
-    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>
 {
     /// Get a slice of the underlying elements of the data type.
     #[inline]
@@ -215,7 +215,7 @@ impl<S, const R: usize, const C: usize> AsMut<[Vector<S, R>; C]> for Matrix<S, R
 
 impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[S; RC]> for Matrix<S, R, C> 
 where
-    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>
 {
     #[inline]
     fn as_ref(&self) -> &[S; RC] {
@@ -227,7 +227,7 @@ where
 
 impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[S; RC]> for Matrix<S, R, C> 
 where
-    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>
 {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; RC] {
@@ -311,7 +311,7 @@ where
 impl<S, const R: usize, const C: usize, const RC: usize> From<[S; RC]> for Matrix<S, R, C> 
 where
     S: Copy,
-    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>
 {
     #[inline]
     fn from(array: [S; RC]) -> Self {
@@ -323,7 +323,7 @@ where
 impl<'a, S, const R: usize, const C: usize, const RC: usize> From<&'a [S; RC]> for &'a Matrix<S, R, C>
 where 
     S: Copy,
-    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>
 {
     #[inline]
     fn from(array: &'a [S; RC]) -> &'a Matrix<S, R, C> {
@@ -5688,8 +5688,7 @@ where
 
 
 
-
-
+/*
 pub trait Dim {}
 
 pub trait DimAdd<D: Dim>: Dim {
@@ -5799,22 +5798,136 @@ impl_dim_mul!(4, 4);
 
 trait DimEq<D1: Dim> {}
 
+impl<const D: usize> DimEq<Const<D>> for Const<D> {}
+*/
+pub trait Dim {}
 
-impl<const D1: usize, const D2: usize> DimEq<Const<D1>> for Const<D2>
-where
-    Const<D2>: DimSub<Const<D1>, Output=Const<0>>
-{
-    
+trait DimAdd<D1: Dim, D2: Dim>: Dim {
+    type Output: Dim;
+}
+
+trait DimSub<D1: Dim, D2: Dim>: Dim {
+    type Output: Dim;
 }
 
 
+pub trait DimMul<D1: Dim, D2: Dim>: Dim {
+    type Output: Dim;
+}
+
+
+#[derive(Clone, Debug)]
+pub enum Const<const D: usize> {}
+
+impl<const D: usize> Dim for Const<D> {}
+
+
+pub trait DimEq<D1: Dim, D2: Dim> {
+    type Representative: Dim;
+}
+
+
+pub enum ShapeConstraint {}
+
+impl<D: Dim> DimEq<D, D> for ShapeConstraint {
+    type Representative = D;
+}
+
+impl Dim for ShapeConstraint {}
+
+
+pub trait CanMultiply<R1: Dim, C1: Dim, R2: Dim, C2: Dim> : DimEq<C1, R2> {}
+
+impl<R1: Dim, C1: Dim, R2: Dim, C2: Dim> CanMultiply<R1, C1, R2, C2> for ShapeConstraint 
+where
+    ShapeConstraint: DimEq<C1, R2> + DimEq<R2, C1>
+{
+
+}
+
+
+macro_rules! impl_dim_add {
+    ($D1:expr, $D2:expr) => {
+        impl DimAdd<Const<$D1>, Const<$D2>> for ShapeConstraint {
+            type Output = Const<{ $D1 + $D2 }>;
+        }
+    };
+}
+
+impl_dim_add!(1, 1);
+impl_dim_add!(1, 2);
+impl_dim_add!(1, 3);
+impl_dim_add!(1, 4);
+impl_dim_add!(2, 1);
+impl_dim_add!(2, 2);
+impl_dim_add!(2, 3);
+impl_dim_add!(2, 4);
+impl_dim_add!(3, 1);
+impl_dim_add!(3, 2);
+impl_dim_add!(3, 3);
+impl_dim_add!(3, 4);
+impl_dim_add!(4, 1);
+impl_dim_add!(4, 2);
+impl_dim_add!(4, 3);
+impl_dim_add!(4, 4);
+
+
+macro_rules! impl_dim_sub {
+    ($D1:expr, $D2:expr) => {
+        impl DimSub<Const<$D1>, Const<$D2>> for ShapeConstraint {
+            type Output = Const<{ $D1 - $D2 }>;
+        }
+    };
+}
+
+impl_dim_sub!(1, 1);
+// impl_dim_sub!(1, 2);
+// impl_dim_sub!(1, 3);
+// impl_dim_sub!(1, 4);
+impl_dim_sub!(2, 1);
+impl_dim_sub!(2, 2);
+// impl_dim_sub!(2, 3);
+// impl_dim_sub!(2, 4);
+impl_dim_sub!(3, 1);
+impl_dim_sub!(3, 2);
+impl_dim_sub!(3, 3);
+// impl_dim_sub!(3, 4);
+impl_dim_sub!(4, 1);
+impl_dim_sub!(4, 2);
+impl_dim_sub!(4, 3);
+impl_dim_sub!(4, 4);
+
+
+macro_rules! impl_dim_mul {
+    ($D1:expr, $D2:expr) => {
+        impl DimMul<Const<$D1>, Const<$D2>> for ShapeConstraint {
+            type Output = Const<{ $D1 * $D2 }>;
+        }
+    };
+}
+
+impl_dim_mul!(1, 1);
+impl_dim_mul!(1, 2);
+impl_dim_mul!(1, 3);
+impl_dim_mul!(1, 4);
+impl_dim_mul!(2, 1);
+impl_dim_mul!(2, 2);
+impl_dim_mul!(2, 3);
+impl_dim_mul!(2, 4);
+impl_dim_mul!(3, 1);
+impl_dim_mul!(3, 2);
+impl_dim_mul!(3, 3);
+impl_dim_mul!(3, 4);
+impl_dim_mul!(4, 1);
+impl_dim_mul!(4, 2);
+impl_dim_mul!(4, 3);
+impl_dim_mul!(4, 4);
 
 
 impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>> for Matrix<S, R1, C1>
 where 
     S: SimdScalar,
-    Const<R1>: DimMul<Const<C2>, Output = Const<R1C2>>,
-    Const<C1>: DimEq<Const<R2>>
+    ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>> + DimMul<Const<R1>, Const<C2>, Output = Const<R1C2>>
 {
     type Output = Matrix<S, R1, C2>;
 
@@ -5839,8 +5952,7 @@ where
 impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&Matrix<S, R2, C2>> for Matrix<S, R1, C1>
 where 
     S: SimdScalar,
-    Const<R1>: DimMul<Const<C2>, Output = Const<R1C2>>,
-    Const<C1>: DimEq<Const<R2>>
+    ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>> + DimMul<Const<R1>, Const<C2>, Output = Const<R1C2>>
 {
     type Output = Matrix<S, R1, C2>;
 
@@ -5865,8 +5977,7 @@ where
 impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>> for &Matrix<S, R1, C1>
 where 
     S: SimdScalar,
-    Const<R1>: DimMul<Const<C2>, Output = Const<R1C2>>,
-    Const<C1>: DimEq<Const<R2>>
+    ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>> + DimMul<Const<R1>, Const<C2>, Output = Const<R1C2>>
 {
     type Output = Matrix<S, R1, C2>;
 
@@ -5891,8 +6002,7 @@ where
 impl<'a, 'b, S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&'b Matrix<S, R2, C2>> for &'a Matrix<S, R1, C1>
 where 
     S: SimdScalar,
-    Const<R1>: DimMul<Const<C2>, Output = Const<R1C2>>,
-    Const<C1>: DimEq<Const<R2>>
+    ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>> + DimMul<Const<R1>, Const<C2>, Output = Const<R1C2>>
 {
     type Output = Matrix<S, R1, C2>;
 
