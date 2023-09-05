@@ -39,43 +39,43 @@ use core::ops;
 
 
 /// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
-pub type Matrix1x1<S> = Matrix<S, 1, 1, 1>;
+pub type Matrix1x1<S> = Matrix<S, 1, 1>;
 
 /// A stack-allocated **(2 row, 2 column)** matrix in column-major order.
-pub type Matrix2x2<S> = Matrix<S, 2, 2, 4>;
+pub type Matrix2x2<S> = Matrix<S, 2, 2>;
 
 /// A stack-allocated **(3 row, 3 column)** matrix in column-major order.
-pub type Matrix3x3<S> = Matrix<S, 3, 3, 9>;
+pub type Matrix3x3<S> = Matrix<S, 3, 3>;
 
 /// A stack-allocated **(4 row, 4 column)** matrix in column-major order.
-pub type Matrix4x4<S> = Matrix<S, 4, 4, 16>;
+pub type Matrix4x4<S> = Matrix<S, 4, 4>;
 
 /// A stack-allocated **(1 row, 2 column)** matrix in column-major order.
-pub type Matrix1x2<S> = Matrix<S, 1, 2, 2>;
+pub type Matrix1x2<S> = Matrix<S, 1, 2>;
 
 /// A stack-allocated **(1 row, 3 column)** matrix in column-major order.
-pub type Matrix1x3<S> = Matrix<S, 1, 3, 3>;
+pub type Matrix1x3<S> = Matrix<S, 1, 3>;
 
 /// A stack-allocated **(1 row, 4 column)** matrix in column-major order.
-pub type Matrix1x4<S> = Matrix<S, 1, 4, 4>;
+pub type Matrix1x4<S> = Matrix<S, 1, 4>;
 
 /// A stack-allocated **(2 row, 3 column)** matrix in column-major order.
-pub type Matrix2x3<S> = Matrix<S, 2, 3, 6>;
+pub type Matrix2x3<S> = Matrix<S, 2, 3>;
 
 /// A stack-allocated **(3 row, 2 column)** matrix in column-major order.
-pub type Matrix3x2<S> = Matrix<S, 3, 2, 6>;
+pub type Matrix3x2<S> = Matrix<S, 3, 2>;
 
 /// A stack-allocated **(2 row, 4 column)** matrix in column-major order.
-pub type Matrix2x4<S> = Matrix<S, 2, 4, 8>;
+pub type Matrix2x4<S> = Matrix<S, 2, 4>;
 
 /// A stack-allocated **(4 row, 2 column)** matrix in column-major order.
-pub type Matrix4x2<S> = Matrix<S, 4, 2, 8>;
+pub type Matrix4x2<S> = Matrix<S, 4, 2>;
 
 /// A stack-allocated **(3 row, 4 column)** matrix in column-major order.
-pub type Matrix3x4<S> = Matrix<S, 3, 4, 12>;
+pub type Matrix3x4<S> = Matrix<S, 3, 4>;
 
 /// A stack-allocated **(4 row, 3 column)** matrix in column-major order.
-pub type Matrix4x3<S> = Matrix<S, 4, 3, 12>;
+pub type Matrix4x3<S> = Matrix<S, 4, 3>;
 
 
 /// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
@@ -105,14 +105,15 @@ pub type Matrix4<S> = Matrix4x4<S>;
 
 
 #[inline(always)]
-fn dot_array_col<S, const M: usize, const N: usize>(arr: &[[S; M]; N], col: &[S; N], r: usize) -> S
+fn dot_array_col<S, const R1: usize, const C1: usize, const R2: usize>(arr: &[[S; R1]; C1], col: &[S; R2], r: usize) -> S
 where
-    S: SimdScalar + ops::Add<S, Output = S> + ops::Mul<S, Output = S>
+    S: Copy + Clone + ops::Add<S, Output = S> + ops::Mul<S, Output = S>,
+    Const<C1>: DimEq<Const<R2>>
 {
     // PERFORMANCE: The const loop should get unrolled during optimization.
-    let mut result = S::zero();
-    for i in 0..N {
-        result += arr[i][r] * col[i];
+    let mut result = unsafe { core::mem::zeroed() };
+    for i in 0..C1 {
+        result = result + arr[i][r] * col[i];
     }
 
     result
@@ -122,11 +123,14 @@ where
 /// A stack-allocated **(R row, C column)** matrix in column-major order.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-pub struct Matrix<S, const R: usize, const C: usize, const RC: usize> {
+pub struct Matrix<S, const R: usize, const C: usize> {
     data: [[S; R]; C],
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C> 
+where
+    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+{
     /// Returns the length of the the underlying array storing the matrix 
     /// components.
     #[inline]
@@ -171,61 +175,68 @@ impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> {
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[[S; R]; C]> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize> AsRef<[[S; R]; C]> for Matrix<S, R, C> {
     #[inline]
     fn as_ref(&self) -> &[[S; R]; C] {
         unsafe {
-            &*(self as *const Matrix<S, R, C, RC> as *const [[S; R]; C])
+            &*(self as *const Matrix<S, R, C> as *const [[S; R]; C])
         }
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[[S; R]; C]> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize> AsMut<[[S; R]; C]> for Matrix<S, R, C> {
     #[inline]
     fn as_mut(&mut self) -> &mut [[S; R]; C] {
         unsafe {
-            &mut *(self as *mut Matrix<S, R, C, RC> as *mut [[S; R]; C])
+            &mut *(self as *mut Matrix<S, R, C> as *mut [[S; R]; C])
         }
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[Vector<S, R>; C]> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize> AsRef<[Vector<S, R>; C]> for Matrix<S, R, C> {
     #[inline]
     fn as_ref(&self) -> &[Vector<S, R>; C] {
         unsafe {
-            &*(self as *const Matrix<S, R, C, RC> as *const [Vector<S, R>; C])
+            &*(self as *const Matrix<S, R, C> as *const [Vector<S, R>; C])
         }
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[Vector<S, R>; C]> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize> AsMut<[Vector<S, R>; C]> for Matrix<S, R, C> {
     #[inline]
     fn as_mut(&mut self) -> &mut [Vector<S, R>; C] {
         unsafe {
-            &mut *(self as *mut Matrix<S, R, C, RC> as *mut [Vector<S, R>; C])
+            &mut *(self as *mut Matrix<S, R, C> as *mut [Vector<S, R>; C])
         }
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[S; RC]> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[S; RC]> for Matrix<S, R, C> 
+where
+    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+{
     #[inline]
     fn as_ref(&self) -> &[S; RC] {
         unsafe {
-            &*(self as *const Matrix<S, R, C, RC> as *const [S; RC])
+            &*(self as *const Matrix<S, R, C> as *const [S; RC])
         }
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[S; RC]> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[S; RC]> for Matrix<S, R, C> 
+where
+    Const<R>: DimMul<Const<C>, Output = Const<RC>>
+{
     #[inline]
     fn as_mut(&mut self) -> &mut [S; RC] {
         unsafe {
-            &mut *(self as *mut Matrix<S, R, C, RC> as *mut [S; RC])
+            &mut *(self as *mut Matrix<S, R, C> as *mut [S; RC])
         }
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Index<usize> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize> ops::Index<usize> for Matrix<S, R, C> 
+{
     type Output = Vector<S, R>;
 
     #[inline]
@@ -235,7 +246,7 @@ impl<S, const R: usize, const C: usize, const RC: usize> ops::Index<usize> for M
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::IndexMut<usize> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize> ops::IndexMut<usize> for Matrix<S, R, C> {
     #[inline]
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         let v: &mut [Vector<S, R>; C] = self.as_mut();
@@ -243,7 +254,7 @@ impl<S, const R: usize, const C: usize, const RC: usize> ops::IndexMut<usize> fo
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Index<(usize, usize)> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize> ops::Index<(usize, usize)> for Matrix<S, R, C> {
     type Output = S;
 
     #[inline]
@@ -253,7 +264,7 @@ impl<S, const R: usize, const C: usize, const RC: usize> ops::Index<(usize, usiz
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::IndexMut<(usize, usize)> for Matrix<S, R, C, RC> {
+impl<S, const R: usize, const C: usize> ops::IndexMut<(usize, usize)> for Matrix<S, R, C> {
     #[inline]
     fn index_mut(&mut self, (column, row): (usize, usize)) -> &mut Self::Output {
         let v: &mut [[S; R]; C] = self.as_mut();
@@ -261,7 +272,7 @@ impl<S, const R: usize, const C: usize, const RC: usize> ops::IndexMut<(usize, u
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> From<[[S; R]; C]> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> From<[[S; R]; C]> for Matrix<S, R, C> 
 where 
     S: Copy
 {
@@ -271,33 +282,33 @@ where
     }
 }
 
-impl<'a, S, const R: usize, const C: usize, const RC: usize> From<&'a [[S; R]; C]> for &'a Matrix<S, R, C, RC>
+impl<'a, S, const R: usize, const C: usize> From<&'a [[S; R]; C]> for &'a Matrix<S, R, C>
 where
     S: Copy
 {
     #[inline]
-    fn from(data: &'a [[S; R]; C]) -> &'a Matrix<S, R, C, RC> {
+    fn from(data: &'a [[S; R]; C]) -> &'a Matrix<S, R, C> {
         unsafe { 
-            &*(data as *const [[S; R]; C] as *const Matrix<S, R, C, RC>)
+            &*(data as *const [[S; R]; C] as *const Matrix<S, R, C>)
         }
     }    
 }
 
-impl<'a, S, const R: usize, const C: usize, const RC: usize> From<&'a [Vector<S, R>; C]> for &'a Matrix<S, R, C, RC>
+impl<'a, S, const R: usize, const C: usize> From<&'a [Vector<S, R>; C]> for &'a Matrix<S, R, C>
 where
     S: Copy
 {
     #[inline]
-    fn from(data: &'a [Vector<S, R>; C]) -> &'a Matrix<S, R, C, RC> {
+    fn from(data: &'a [Vector<S, R>; C]) -> &'a Matrix<S, R, C> {
         unsafe { 
-            &*(data as *const [Vector<S, R>; C] as *const Matrix<S, R, C, RC>)
+            &*(data as *const [Vector<S, R>; C] as *const Matrix<S, R, C>)
         }
     }  
 }
 
 macro_rules! impl_matrix_array_conversion_ops {
     ((R:$R:expr, C:$C:expr, RC:$RC:expr)) => {
-        impl<S> From<[S; $RC]> for Matrix<S, $R, $C, $RC> 
+        impl<S> From<[S; $RC]> for Matrix<S, $R, $C> 
         where 
             S: Copy
         {
@@ -308,14 +319,14 @@ macro_rules! impl_matrix_array_conversion_ops {
             }
         }
 
-        impl<'a, S> From<&'a [S; $RC]> for &'a Matrix<S, $R, $C, $RC> 
+        impl<'a, S> From<&'a [S; $RC]> for &'a Matrix<S, $R, $C> 
         where 
             S: Copy
         {
             #[inline]
-            fn from(array: &'a [S; $RC]) -> &'a Matrix<S, $R, $C, $RC> {
+            fn from(array: &'a [S; $RC]) -> &'a Matrix<S, $R, $C> {
                 unsafe { 
-                    &*(array as *const [S; $RC] as *const Matrix<S, $R, $C, $RC>)
+                    &*(array as *const [S; $RC] as *const Matrix<S, $R, $C>)
                 }
             }
         }
@@ -337,7 +348,7 @@ impl_matrix_array_conversion_ops!((R:3, C:4, RC:12));
 impl_matrix_array_conversion_ops!((R:4, C:3, RC:12));
 
 
-impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
 where 
     S: Copy
 {
@@ -460,7 +471,7 @@ where
     /// ```
     #[allow(clippy::needless_range_loop)]
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix<T, R, C, RC> 
+    pub fn map<T, F>(&self, mut op: F) -> Matrix<T, R, C> 
     where 
         F: FnMut(S) -> T
     {
@@ -638,7 +649,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
 where 
     S: NumCast + Copy 
 {
@@ -659,7 +670,7 @@ where
     /// ```
     #[allow(clippy::needless_range_loop)]
     #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix<T, R, C, RC>> {
+    pub fn cast<T: NumCast>(&self) -> Option<Matrix<T, R, C>> {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
@@ -676,7 +687,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
+impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
     S: SimdScalar
 {
@@ -705,7 +716,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn transpose(&self) -> Matrix<S, C, R, RC> {
+    pub fn transpose(&self) -> Matrix<S, C, R> {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Matrix::zero();
         for c in 0..C {
@@ -854,7 +865,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
+impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
     S: SimdScalarSigned
 {
@@ -894,7 +905,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C, RC>
+impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
     S: SimdScalarFloat
 {
@@ -989,7 +1000,7 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> Matrix<S, N, N, NN>
+impl<S, const N: usize> Matrix<S, N, N>
 where
     S: SimdScalar
 {
@@ -1222,7 +1233,7 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> Matrix<S, N, N, NN>
+impl<S, const N: usize> Matrix<S, N, N>
 where
     S: SimdScalarFloat
 {
@@ -1314,7 +1325,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> Default for Matrix<S, R, C, RC>
+impl<S, const R: usize, const C: usize> Default for Matrix<S, R, C>
 where
     S: SimdScalar
 {
@@ -1323,7 +1334,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> fmt::Display for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> fmt::Display for Matrix<S, R, C>
 where 
     S: fmt::Display 
 {
@@ -1347,7 +1358,7 @@ impl<S> Matrix1x1<S> {
     #[inline]
     pub const fn new(c0r0: S) -> Self {
         Self {
-            data: [[c0r0]]
+            data: [[c0r0]],
         }
     }
 }
@@ -5220,14 +5231,14 @@ impl_coords_deref!(Matrix4x2, View4x2);
 impl_coords_deref!(Matrix4x3, View4x3);
 
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Add<Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Add<Matrix<S, R, C>> for Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn add(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+    fn add(self, other: Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5240,14 +5251,14 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Add<&Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Add<&Matrix<S, R, C>> for Matrix<S, R, C> 
 where 
     S: SimdScalar 
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn add(self, other: &Matrix<S, R, C, RC>) -> Self::Output {
+    fn add(self, other: &Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5260,14 +5271,14 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Add<Matrix<S, R, C, RC>> for &Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Add<Matrix<S, R, C>> for &Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn add(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+    fn add(self, other: Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5280,14 +5291,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const R: usize, const C: usize, const RC: usize> ops::Add<&'a Matrix<S, R, C, RC>> for &'b Matrix<S, R, C, RC> 
+impl<'a, 'b, S, const R: usize, const C: usize> ops::Add<&'a Matrix<S, R, C>> for &'b Matrix<S, R, C, >
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn add(self, other: &'a Matrix<S, R, C, RC>) -> Self::Output {
+    fn add(self, other: &'a Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5300,14 +5311,14 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Sub<Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Sub<Matrix<S, R, C>> for Matrix<S, R, C>
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn sub(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+    fn sub(self, other: Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5320,14 +5331,14 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Sub<&Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Sub<&Matrix<S, R, C>> for Matrix<S, R, C> 
 where 
     S: SimdScalar 
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn sub(self, other: &Matrix<S, R, C, RC>) -> Self::Output {
+    fn sub(self, other: &Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5340,14 +5351,14 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Sub<Matrix<S, R, C, RC>> for &Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Sub<Matrix<S, R, C>> for &Matrix<S, R, C>
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn sub(self, other: Matrix<S, R, C, RC>) -> Self::Output {
+    fn sub(self, other: Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5360,14 +5371,14 @@ where
     }
 }
 
-impl<'a, 'b, S, const R: usize, const C: usize, const RC: usize> ops::Sub<&'a Matrix<S, R, C, RC>> for &'b Matrix<S, R, C, RC> 
+impl<'a, 'b, S, const R: usize, const C: usize> ops::Sub<&'a Matrix<S, R, C>> for &'b Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
-    fn sub(self, other: &'a Matrix<S, R, C, RC>) -> Self::Output {
+    fn sub(self, other: &'a Matrix<S, R, C>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Self::Output::zero();
         for c in 0..C {
@@ -5380,11 +5391,11 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Neg for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Neg for Matrix<S, R, C>
 where 
     S: SimdScalarSigned
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
     fn neg(self) -> Self::Output {
@@ -5400,11 +5411,11 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Neg for &Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Neg for &Matrix<S, R, C>
 where 
     S: SimdScalarSigned 
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
     fn neg(self) -> Self::Output {
@@ -5420,11 +5431,11 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<S> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Mul<S> for Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
     fn mul(self, other: S) -> Self::Output {
@@ -5440,11 +5451,11 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<S> for &Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Mul<S> for &Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
     fn mul(self, other: S) -> Self::Output {
@@ -5460,11 +5471,11 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Div<S> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Div<S> for Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
     fn div(self, other: S) -> Self::Output {
@@ -5480,11 +5491,11 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Div<S> for &Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Div<S> for &Matrix<S, R, C>
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
     fn div(self, other: S) -> Self::Output {
@@ -5500,11 +5511,11 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Rem<S> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Rem<S> for Matrix<S, R, C>
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
     fn rem(self, other: S) -> Self::Output {
@@ -5520,11 +5531,11 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Rem<S> for &Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Rem<S> for &Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
-    type Output = Matrix<S, R, C, RC>;
+    type Output = Matrix<S, R, C>;
 
     #[inline]
     fn rem(self, other: S) -> Self::Output {
@@ -5543,11 +5554,11 @@ where
 
 macro_rules! impl_scalar_matrix_mul_ops {
     ($($Lhs:ty),* $(,)*) => {$(
-        impl<const R: usize, const C: usize, const RC: usize> ops::Mul<Matrix<$Lhs, R, C, RC>> for $Lhs {
-            type Output = Matrix<$Lhs, R, C, RC>;
+        impl<const R: usize, const C: usize> ops::Mul<Matrix<$Lhs, R, C>> for $Lhs {
+            type Output = Matrix<$Lhs, R, C>;
 
             #[inline]
-            fn mul(self, other: Matrix<$Lhs, R, C, RC>) -> Self::Output {
+            fn mul(self, other: Matrix<$Lhs, R, C>) -> Self::Output {
                 // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Self::Output::zero();
                 for c in 0..C {
@@ -5560,11 +5571,11 @@ macro_rules! impl_scalar_matrix_mul_ops {
             }
         }
 
-        impl<'a, const R: usize, const C: usize, const RC: usize> ops::Mul<Matrix<$Lhs, R, C, RC>> for &'a $Lhs {
-            type Output = Matrix<$Lhs, R, C, RC>;
+        impl<'a, const R: usize, const C: usize> ops::Mul<Matrix<$Lhs, R, C>> for &'a $Lhs {
+            type Output = Matrix<$Lhs, R, C>;
 
             #[inline]
-            fn mul(self, other: Matrix<$Lhs, R, C, RC>) -> Self::Output {
+            fn mul(self, other: Matrix<$Lhs, R, C >) -> Self::Output {
                 // PERFORMANCE: The const loop should get unrolled during optimization.
                 let mut result = Self::Output::zero();
                 for c in 0..C {
@@ -5582,7 +5593,7 @@ macro_rules! impl_scalar_matrix_mul_ops {
 impl_scalar_matrix_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
 
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<Vector<S, C>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Mul<Vector<S, C>> for Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
@@ -5600,7 +5611,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<&Vector<S, C>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Mul<&Vector<S, C>> for Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
@@ -5618,7 +5629,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::Mul<Vector<S, C>> for &Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::Mul<Vector<S, C>> for &Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
@@ -5636,7 +5647,7 @@ where
     }
 }
 
-impl<'a, 'b, S, const R: usize, const C: usize, const RC: usize> ops::Mul<&'a Vector<S, C>> for &'b Matrix<S, R, C, RC> 
+impl<'a, 'b, S, const R: usize, const C: usize> ops::Mul<&'a Vector<S, C>> for &'b Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
@@ -5655,6 +5666,236 @@ where
 }
 
 
+
+
+
+
+pub trait Dim {}
+
+pub trait DimAdd<D: Dim>: Dim {
+    type Output: Dim;
+}
+
+pub trait DimSub<D: Dim>: Dim {
+    type Output: Dim;
+}
+
+pub trait DimMul<D: Dim>: Dim {
+    type Output: Dim;
+}
+
+
+#[derive(Clone, Debug)]
+pub enum Const<const D: usize> {}
+
+impl<const D: usize> Dim for Const<D> {}
+
+
+macro_rules! impl_dim_add {
+    ($D1:expr, $D2: expr) => {
+        impl DimAdd<Const<$D1>> for Const<$D2> {
+            type Output = Const<{$D1 + $D2}>;
+        }
+    };
+}
+
+impl_dim_add!(1, 1);
+impl_dim_add!(1, 2);
+impl_dim_add!(1, 3);
+impl_dim_add!(1, 4);
+impl_dim_add!(2, 1);
+impl_dim_add!(2, 2);
+impl_dim_add!(2, 3);
+impl_dim_add!(2, 4);
+impl_dim_add!(3, 1);
+impl_dim_add!(3, 2);
+impl_dim_add!(3, 3);
+impl_dim_add!(3, 4);
+impl_dim_add!(4, 1);
+impl_dim_add!(4, 2);
+impl_dim_add!(4, 3);
+impl_dim_add!(4, 4);
+
+
+impl<const D: usize> DimSub<Const<D>> for Const<D> {
+    type Output = Const<0>;
+}
+
+macro_rules! impl_dim_sub {
+    ($D1:expr, $D2: expr) => {
+        impl DimSub<Const<$D1>> for Const<$D2> {
+            type Output = Const<{$D1 - $D2}>;
+        }
+    };
+}
+
+// impl_dim_sub!(1, 1);
+// impl_dim_sub!(1, 2);
+// impl_dim_sub!(1, 3);
+// impl_dim_sub!(1, 4);
+impl_dim_sub!(2, 1);
+// impl_dim_sub!(2, 2);
+// impl_dim_sub!(2, 3);
+// impl_dim_sub!(2, 4);
+impl_dim_sub!(3, 1);
+impl_dim_sub!(3, 2);
+// impl_dim_sub!(3, 3);
+// impl_dim_sub!(3, 4);
+impl_dim_sub!(4, 1);
+impl_dim_sub!(4, 2);
+impl_dim_sub!(4, 3);
+// impl_dim_sub!(4, 4);
+
+
+impl<const D: usize> DimMul<Const<0>> for Const<D> {
+    type Output = Const<0>;
+}
+
+macro_rules! impl_dim_mul {
+    ($D1:expr, $D2: expr) => {
+        impl DimMul<Const<$D1>> for Const<$D2> {
+            type Output = Const<{$D1 * $D2}>;
+        }
+    };
+}
+
+impl_dim_mul!(1, 1);
+impl_dim_mul!(1, 2);
+impl_dim_mul!(1, 3);
+impl_dim_mul!(1, 4);
+impl_dim_mul!(2, 1);
+impl_dim_mul!(2, 2);
+impl_dim_mul!(2, 3);
+impl_dim_mul!(2, 4);
+impl_dim_mul!(3, 1);
+impl_dim_mul!(3, 2);
+impl_dim_mul!(3, 3);
+impl_dim_mul!(3, 4);
+impl_dim_mul!(4, 1);
+impl_dim_mul!(4, 2);
+impl_dim_mul!(4, 3);
+impl_dim_mul!(4, 4);
+
+
+trait DimEq<D1: Dim> {}
+
+
+impl<const D1: usize, const D2: usize> DimEq<Const<D1>> for Const<D2>
+where
+    Const<D2>: DimSub<Const<D1>, Output=Const<0>>
+{
+    
+}
+
+
+
+
+impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>> for Matrix<S, R1, C1>
+where 
+    S: SimdScalar,
+    Const<R1>: DimMul<Const<C2>, Output = Const<R1C2>>,
+    Const<C1>: DimEq<Const<R2>>
+{
+    type Output = Matrix<S, R1, C2>;
+
+    #[inline]
+    fn mul(self, other: Matrix<S, R2, C2>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Self::Output::zero();
+        for c in 0..C2 {
+            for r in 0..R1 {
+                result[c][r] = dot_array_col(
+                    self.as_ref(), 
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c], 
+                    r
+                );
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&Matrix<S, R2, C2>> for Matrix<S, R1, C1>
+where 
+    S: SimdScalar,
+    Const<R1>: DimMul<Const<C2>, Output = Const<R1C2>>,
+    Const<C1>: DimEq<Const<R2>>
+{
+    type Output = Matrix<S, R1, C2>;
+
+    #[inline]
+    fn mul(self, other: &Matrix<S, R2, C2>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Self::Output::zero();
+        for c in 0..C2 {
+            for r in 0..R1 {
+                result[c][r] = dot_array_col(
+                    self.as_ref(), 
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c], 
+                    r
+                );
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>> for &Matrix<S, R1, C1>
+where 
+    S: SimdScalar,
+    Const<R1>: DimMul<Const<C2>, Output = Const<R1C2>>,
+    Const<C1>: DimEq<Const<R2>>
+{
+    type Output = Matrix<S, R1, C2>;
+
+    #[inline]
+    fn mul(self, other: Matrix<S, R2, C2>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Self::Output::zero();
+        for c in 0..C2 {
+            for r in 0..R1 {
+                result[c][r] = dot_array_col(
+                    self.as_ref(), 
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c], 
+                    r
+                );
+            }
+        }
+
+        result
+    }
+}
+
+impl<'a, 'b, S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&'b Matrix<S, R2, C2>> for &'a Matrix<S, R1, C1>
+where 
+    S: SimdScalar,
+    Const<R1>: DimMul<Const<C2>, Output = Const<R1C2>>,
+    Const<C1>: DimEq<Const<R2>>
+{
+    type Output = Matrix<S, R1, C2>;
+
+    #[inline]
+    fn mul(self, other: &'b Matrix<S, R2, C2>) -> Self::Output {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Self::Output::zero();
+        for c in 0..C2 {
+            for r in 0..R1 {
+                result[c][r] = dot_array_col(
+                    self.as_ref(), 
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c], 
+                    r
+                );
+            }
+        }
+
+        result
+    }
+}
+
+
+/*
 macro_rules! impl_matrix_matrix_mul_ops {
     ((R1:$R1:expr, C1:$C1:expr, R1C1:$R1C1:expr) => (R2:$R2:expr, C2:$C2:expr, R2C2:$R2C2:expr) => (R1, C2, R1C2:$R1C2:expr)) => {
         impl<S> ops::Mul<Matrix<S, $R2, $C2, $R2C2>> for Matrix<S, $R1, $C1, $R1C1>
@@ -5793,14 +6034,14 @@ impl_matrix_matrix_mul_ops!((R1:4, C1:4, R1C1:16) => (R2:4, C2:3, R2C2:12) => (R
 impl_matrix_matrix_mul_ops!((R1:1, C1:4, R1C1:4)  => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:3));
 impl_matrix_matrix_mul_ops!((R1:2, C1:4, R1C1:8)  => (R2:4, C2:3, R2C2:12) => (R1, C2, R1C2:6));
 impl_matrix_matrix_mul_ops!((R1:4, C1:3, R1C1:12) => (R2:3, C2:2, R2C2:6)  => (R1, C2, R1C2:8));
+*/
 
-
-impl<S, const R: usize, const C: usize, const RC: usize> ops::AddAssign<Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::AddAssign<Matrix<S, R, C>> for Matrix<S, R, C>
 where 
     S: SimdScalar
 {
     #[inline]
-    fn add_assign(&mut self, other: Matrix<S, R, C, RC>) {
+    fn add_assign(&mut self, other: Matrix<S, R, C>) {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
@@ -5810,12 +6051,12 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::AddAssign<&Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::AddAssign<&Matrix<S, R, C>> for Matrix<S, R, C>
 where 
     S: SimdScalar
 {
     #[inline]
-    fn add_assign(&mut self, other: &Matrix<S, R, C, RC>) {
+    fn add_assign(&mut self, other: &Matrix<S, R, C>) {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
@@ -5825,12 +6066,12 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::SubAssign<Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::SubAssign<Matrix<S, R, C>> for Matrix<S, R, C>
 where 
     S: SimdScalar
 {
     #[inline]
-    fn sub_assign(&mut self, other: Matrix<S, R, C, RC>) {
+    fn sub_assign(&mut self, other: Matrix<S, R, C>) {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
@@ -5840,12 +6081,12 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::SubAssign<&Matrix<S, R, C, RC>> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::SubAssign<&Matrix<S, R, C>> for Matrix<S, R, C>
 where 
     S: SimdScalar
 {
     #[inline]
-    fn sub_assign(&mut self, other: &Matrix<S, R, C, RC>) {
+    fn sub_assign(&mut self, other: &Matrix<S, R, C>) {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         for c in 0..C {
             for r in 0..R {
@@ -5855,7 +6096,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::MulAssign<S> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::MulAssign<S> for Matrix<S, R, C>
 where 
     S: SimdScalar
 {
@@ -5870,7 +6111,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::DivAssign<S> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::DivAssign<S> for Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
@@ -5885,7 +6126,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> ops::RemAssign<S> for Matrix<S, R, C, RC> 
+impl<S, const R: usize, const C: usize> ops::RemAssign<S> for Matrix<S, R, C> 
 where 
     S: SimdScalar
 {
@@ -5900,7 +6141,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> approx::AbsDiffEq for Matrix<S, R, C, RC>
+impl<S, const R: usize, const C: usize> approx::AbsDiffEq for Matrix<S, R, C>
 where 
     S: SimdScalarFloat
 {
@@ -5925,7 +6166,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> approx::RelativeEq for Matrix<S, R, C, RC>
+impl<S, const R: usize, const C: usize> approx::RelativeEq for Matrix<S, R, C>
 where 
     S: SimdScalarFloat
 {
@@ -5948,7 +6189,7 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> approx::UlpsEq for Matrix<S, R, C, RC>
+impl<S, const R: usize, const C: usize> approx::UlpsEq for Matrix<S, R, C>
 where 
     S: SimdScalarFloat
 {

@@ -34,7 +34,7 @@ where
     .no_shrink()
 }
 
-fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize, const RC: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Matrix<S, R, C, RC>>
+fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Matrix<S, R, C>>
 where
     S: SimdScalarSigned + Arbitrary
 {
@@ -45,7 +45,7 @@ where
         min_value + (value % (max_value - min_value))
     }
 
-    fn rescale_matrix<S, const R: usize, const C: usize, const RC: usize>(value: Matrix<S, R, C, RC>, min_value: S, max_value: S) -> Matrix<S, R, C, RC> 
+    fn rescale_matrix<S, const R: usize, const C: usize>(value: Matrix<S, R, C>, min_value: S, max_value: S) -> Matrix<S, R, C> 
     where
         S: SimdScalarSigned
     {
@@ -60,7 +60,7 @@ where
     .no_shrink()
 }
 
-fn strategy_matrix_any<S, const R: usize, const C: usize, const RC: usize>() -> impl Strategy<Value = Matrix<S, R, C, RC>>
+fn strategy_matrix_any<S, const R: usize, const C: usize>() -> impl Strategy<Value = Matrix<S, R, C>>
 where
     S: SimdScalarSigned + Arbitrary
 {
@@ -93,9 +93,7 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
 /// ```text
 /// 0 + m = m
 /// ```
-fn prop_matrix_additive_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
+fn prop_matrix_additive_identity<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -113,9 +111,7 @@ where
 /// ```text
 /// m + 0 = m
 /// ```
-fn prop_matrix_plus_zero_equals_zero<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
+fn prop_matrix_plus_zero_equals_zero<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -132,9 +128,9 @@ where
 /// ```text
 /// m1 + m2 = m2 + m1
 /// ```
-fn prop_matrix_addition_commutative<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
+fn prop_matrix_addition_commutative<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
@@ -150,10 +146,10 @@ where
 /// ```text
 /// (m1 + m2) + m3 = m1 + (m2 + m3)
 /// ```
-fn prop_matrix_addition_associative<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>, 
-    m3: Matrix<S, R, C, RC>
+fn prop_matrix_addition_associative<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>, 
+    m3: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
@@ -170,9 +166,9 @@ where
 /// ```text
 /// m1 + (-m2) = m1 - m2
 /// ```
-fn prop_matrix_subtraction<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
+fn prop_matrix_subtraction<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + Arbitrary
@@ -191,9 +187,7 @@ where
 /// Note that we diverge from traditional formalisms of matrix arithmetic 
 /// in that we allow multiplication of matrices by scalars on the right-hand 
 /// side as well as left-hand side. 
-fn prop_zero_times_matrix_equals_zero_matrix<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
+fn prop_zero_times_matrix_equals_zero_matrix<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -214,9 +208,7 @@ where
 /// Note that we diverge from traditional formalisms of matrix arithmetic 
 /// in that we allow multiplication of matrices by scalars on the right-hand 
 /// side as well as left-hand side. 
-fn prop_one_times_matrix_equals_matrix<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
-) -> Result<(), TestCaseError>
+fn prop_one_times_matrix_equals_matrix<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {
@@ -237,8 +229,8 @@ where
 /// Note that we diverge from traditional formalisms of matrix arithmetic 
 /// in that we allow multiplication of matrices by scalars on the right-hand 
 /// side as well as left-hand side. 
-fn prop_negative_one_times_matrix_equals_negative_matrix<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
+fn prop_negative_one_times_matrix_equals_negative_matrix<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + Arbitrary
@@ -281,10 +273,10 @@ where
 /// ```text
 /// c * (m1 + m2) = c * m1 + c * m2
 /// ```
-fn prop_scalar_matrix_multiplication_compatible_addition<S, const R: usize, const C: usize, const RC: usize>(
+fn prop_scalar_matrix_multiplication_compatible_addition<S, const R: usize, const C: usize>(
     c: S, 
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
@@ -301,10 +293,10 @@ where
 /// ```text
 /// c * (m1 - m2) = c * m1 - c * m2
 /// ```
-fn prop_scalar_matrix_multiplication_compatible_subtraction<S, const R: usize, const C: usize, const RC: usize>(
+fn prop_scalar_matrix_multiplication_compatible_subtraction<S, const R: usize, const C: usize>(
     c: S, 
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
@@ -343,10 +335,10 @@ where
 /// ```text
 /// (a * b) * m = a * (b * m)
 /// ```
-fn prop_scalar_matrix_multiplication_compatible<S, const R: usize, const C: usize, const RC: usize>(
+fn prop_scalar_matrix_multiplication_compatible<S, const R: usize, const C: usize>(
     a: S, 
     b: S, 
-    m: Matrix<S, R, C, RC>
+    m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
@@ -513,10 +505,10 @@ where
 /// ```text
 /// (c1 * c2) * m = c1 * (c2 * m)
 /// ```
-fn prop_matrix_multiplication_compatible_with_scalar_multiplication1<S, const R: usize, const C: usize, const RC: usize>(
+fn prop_matrix_multiplication_compatible_with_scalar_multiplication1<S, const R: usize, const C: usize>(
     c1: S, 
     c2: S, 
-    m: Matrix<S, R, C, RC>
+    m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
@@ -555,8 +547,8 @@ where
 /// ```text
 /// transpose(transpose(m)) = m
 /// ```
-fn prop_matrix_transpose_transpose_equals_matrix<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>
+fn prop_matrix_transpose_transpose_equals_matrix<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
@@ -572,9 +564,9 @@ where
 /// ```text
 /// transpose(m1 + m2) = transpose(m1) + transpose(m2)
 /// ```
-fn prop_transpose_linear<S, const R: usize, const C: usize, const RC: usize>(
-    m1: Matrix<S, R, C, RC>, 
-    m2: Matrix<S, R, C, RC>
+fn prop_transpose_linear<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
@@ -591,9 +583,9 @@ where
 /// ```text
 /// transpose(c * m) = c * transpose(m)
 /// ```
-fn prop_transpose_scalar_multiplication<S, const R: usize, const C: usize, const RC: usize>(
+fn prop_transpose_scalar_multiplication<S, const R: usize, const C: usize>(
     c: S, 
-    m: Matrix<S, R, C, RC>
+    m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
@@ -630,8 +622,8 @@ where
 /// ```text
 /// m.swap_rows(row1, row2) = m.swap_rows(row2, row1)
 /// ```
-fn prop_swap_rows_commutative<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>, 
+fn prop_swap_rows_commutative<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
     row1: usize, 
     row2: usize
 ) -> Result<(), TestCaseError>
@@ -654,8 +646,8 @@ where
 /// ```text
 /// m.swap_rows(row, row) = m
 /// ```
-fn prop_swap_identical_rows_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>, 
+fn prop_swap_identical_rows_identity<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
     row: usize
 ) -> Result<(), TestCaseError>
 where
@@ -676,8 +668,8 @@ where
 /// ```text
 /// m.swap_rows(row1, row2).swap_rows(row1, row2) = m
 /// ```
-fn prop_swap_rows_twice_is_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>, 
+fn prop_swap_rows_twice_is_identity<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
     row1: usize, 
     row2: usize
 ) -> Result<(), TestCaseError>
@@ -699,8 +691,8 @@ where
 /// ```text
 /// m.swap_columns(col1, col2) = m.swap_columns(col2, col1)
 /// ```
-fn prop_swap_columns_commutative<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>, 
+fn prop_swap_columns_commutative<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
     col1: usize, 
     col2: usize
 ) -> Result<(), TestCaseError>
@@ -723,8 +715,8 @@ where
 /// ```text
 /// m.swap_columns(col, col) = m
 /// ```
-fn prop_swap_identical_columns_is_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>, 
+fn prop_swap_identical_columns_is_identity<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
     col: usize
 ) -> Result<(), TestCaseError>
 where
@@ -745,8 +737,8 @@ where
 /// ```text
 /// m.swap_columns(col1, col2).swap_columns(col1, col2) = m
 /// ```
-fn prop_swap_columns_twice_is_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>, 
+fn prop_swap_columns_twice_is_identity<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
     col1: usize, 
     col2: usize
 ) -> Result<(), TestCaseError>
@@ -768,8 +760,8 @@ where
 /// ```text
 /// m.swap_elements((col1, row1), (col2, row2)) = m.swap_elements((col2, row2), (col1, row1))
 /// ```
-fn prop_swap_elements_commutative<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>, 
+fn prop_swap_elements_commutative<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
     col1: usize, 
     row1: usize, 
     col2: usize, 
@@ -794,8 +786,8 @@ where
 /// ```text
 /// m.swap_elements((col, row), (col, row)) = m
 /// ```
-fn prop_swap_identical_elements_is_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>, 
+fn prop_swap_identical_elements_is_identity<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
     col: usize, 
     row: usize
 ) -> Result<(), TestCaseError>
@@ -817,8 +809,8 @@ where
 /// ```text
 /// m.swap_elements((col1, row1), (col2, row2)).swap_elements((col1, row1), (col2, row2)) = m
 /// ```
-fn prop_swap_elements_twice_is_identity<S, const R: usize, const C: usize, const RC: usize>(
-    m: Matrix<S, R, C, RC>, 
+fn prop_swap_elements_twice_is_identity<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
     col1: usize, 
     row1: usize, 
     col2: usize, 
