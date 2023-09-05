@@ -749,7 +749,7 @@ where
 }
 
 
-macro_rules! approx_addition_props {
+macro_rules! approx_arithmetic_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
@@ -785,12 +785,12 @@ macro_rules! approx_addition_props {
     }
 }
 
-approx_addition_props!(matrix2_f64_addition_props, Matrix2x2, f64, strategy_matrix_any);
-approx_addition_props!(matrix3_f64_addition_props, Matrix3x3, f64, strategy_matrix_any);
-approx_addition_props!(matrix4_f64_addition_props, Matrix4x4, f64, strategy_matrix_any);
+approx_arithmetic_props!(matrix2_f64_arithmetic_props, Matrix2x2, f64, strategy_matrix_any);
+approx_arithmetic_props!(matrix3_f64_arithmetic_props, Matrix3x3, f64, strategy_matrix_any);
+approx_arithmetic_props!(matrix4_f64_arithmetic_props, Matrix4x4, f64, strategy_matrix_any);
 
 
-macro_rules! exact_addition_props {
+macro_rules! exact_arithmetic_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
@@ -816,6 +816,13 @@ macro_rules! exact_addition_props {
             }
 
             #[test]
+            fn prop_matrix_subtraction(m1 in super::$Generator(), m2 in super::$Generator()) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                super::prop_matrix_subtraction(m1, m2)?
+            }
+
+            #[test]
             fn prop_matrix_addition_associative(m1 in super::$Generator(), m2 in super::$Generator(), m3 in super::$Generator()) {
                 let m1: super::$MatrixN<$ScalarType> = m1;
                 let m2: super::$MatrixN<$ScalarType> = m2;
@@ -827,9 +834,9 @@ macro_rules! exact_addition_props {
     }
 }
 
-exact_addition_props!(matrix2_i32_addition_props, Matrix2x2, i32, strategy_matrix_any);
-exact_addition_props!(matrix3_i32_addition_props, Matrix3x3, i32, strategy_matrix_any);
-exact_addition_props!(matrix4_i32_addition_props, Matrix4x4, i32, strategy_matrix_any);
+exact_arithmetic_props!(matrix2_i32_arithmetic_props, Matrix2x2, i32, strategy_matrix_any);
+exact_arithmetic_props!(matrix3_i32_arithmetic_props, Matrix3x3, i32, strategy_matrix_any);
+exact_arithmetic_props!(matrix4_i32_arithmetic_props, Matrix4x4, i32, strategy_matrix_any);
 
 
 macro_rules! approx_scalar_multiplication_props {
@@ -1066,48 +1073,6 @@ exact_multiplication_props!(matrix3_i32_matrix_multiplication_props, Matrix3x3, 
 exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
 
 
-macro_rules! approx_transposition_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_matrix_transpose_transpose_equals_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
-                super::prop_matrix_transpose_transpose_equals_matrix(m)?
-            }
-
-            #[test]
-            fn prop_transpose_linear(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
-                super::prop_transpose_linear(m1, m2)?
-            }
-
-            #[test]
-            fn prop_transpose_scalar_multiplication(c in super::$ScalarGen(), m in super::$Generator()) {
-                let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
-                super::prop_transpose_scalar_multiplication(c, m)?
-            }
-
-            #[test]
-            fn prop_transpose_product(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
-                super::prop_transpose_product(m1, m2)?
-            }
-        }
-    }
-    }
-}
-
-approx_transposition_props!(matrix2_f64_transposition_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
-approx_transposition_props!(matrix3_f64_transposition_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
-approx_transposition_props!(matrix4_f64_transposition_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
-
-
 macro_rules! exact_transposition_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     #[cfg(test)]
@@ -1148,6 +1113,10 @@ macro_rules! exact_transposition_props {
 exact_transposition_props!(matrix2_i32_transposition_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
 exact_transposition_props!(matrix3_i32_transposition_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
 exact_transposition_props!(matrix4_i32_transposition_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
+
+exact_transposition_props!(matrix2_f64_transposition_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
+exact_transposition_props!(matrix3_f64_transposition_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
+exact_transposition_props!(matrix4_f64_transposition_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
 
 
 macro_rules! swap_props {
