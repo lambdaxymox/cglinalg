@@ -128,7 +128,7 @@ fn strategy_point_i32_max_safe_square_root<const N: usize>() -> impl Strategy<Va
 ///
 /// Given a vector `p`
 /// ```text
-/// 1 * p = p * 1 = p
+/// 1 * p == p * 1 == p
 /// ```
 fn prop_one_times_point_equals_point<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
@@ -148,7 +148,7 @@ where
 ///
 /// Given scalars `a` and `b`, and a point `p`, we have
 /// ```text
-/// (a * b) * p = a * (b * p)
+/// (a * b) * p == a * (b * p)
 /// ```
 fn prop_scalar_multiplication_compatibility<S, const N: usize>(a: S, b: S, p: Point<S, N>) -> Result<(), TestCaseError>
 where
@@ -166,7 +166,7 @@ where
 ///
 /// Given a point `p` and a vector `0`
 /// ```text
-/// p + 0 = p
+/// p + 0 == p
 /// ```
 fn prop_point_plus_zero_equals_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
@@ -186,13 +186,13 @@ where
 /// Given a point `p` and a vector `v`, and their references `&p` and 
 /// `&v`, they should satisfy
 /// ```text
-///  p +  v = &p +  v
-///  p +  v =  p + &v
-///  p +  v = &p + &v
-///  p + &v = &p +  v
-/// &p +  v =  p + &v
-/// &p +  v = &p + &v
-///  p + &v = &p + &v
+///  p +  v == &p +  v
+///  p +  v ==  p + &v
+///  p +  v == &p + &v
+///  p + &v == &p +  v
+/// &p +  v ==  p + &v
+/// &p +  v == &p + &v
+///  p + &v == &p + &v
 /// ```
 fn prop_point_plus_vector_equals_refpoint_plus_refvector<S, const N: usize>(
     p: Point<S, N>, 
@@ -217,7 +217,7 @@ where
 /// 
 /// Given a point `p` and vectors `v1` and `v2`, we have
 /// ```text
-/// (p + v1) + v2 = p + (v1 + v2)
+/// (p + v1) + v2 == p + (v1 + v2)
 /// ```
 fn prop_point_vector_addition_compatible<S, const N: usize>(
     p: Point<S, N>, 
@@ -239,7 +239,7 @@ where
 /// 
 /// Given a point `p` and vectors `v1` and `v2`, we have
 /// ```text
-/// (p + v1) + v2 = p + (v1 + v2)
+/// (p + v1) + v2 == p + (v1 + v2)
 /// ```
 fn prop_approx_point_vector_addition_compatible<S, const N: usize>(
     p: Point<S, N>, 
@@ -262,7 +262,7 @@ where
 ///
 /// Given a point `p` and a vector `0`
 /// ```text
-/// p - 0 = p
+/// p - 0 == p
 /// ```
 fn prop_point_minus_zero_equals_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
@@ -279,7 +279,7 @@ where
 ///
 /// Given a point `p` and a vector `0`
 /// ```text
-/// p - p = 0
+/// p - p == 0
 /// ```
 fn prop_point_minus_point_equals_zero_vector<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
@@ -299,13 +299,13 @@ where
 /// Given a point `p` and a vector `v`, and their references `&p` and 
 /// `&v`, they should satisfy
 /// ```text
-///  p -  v = &p -  v
-///  p -  v =  p - &v
-///  p -  v = &p - &v
-///  p - &v = &p -  v
-/// &p -  v =  p - &v
-/// &p -  v = &p - &v
-///  p - &v = &p - &v
+///  p -  v == &p -  v
+///  p -  v ==  p - &v
+///  p -  v == &p - &v
+///  p - &v == &p -  v
+/// &p -  v ==  p - &v
+/// &p -  v == &p - &v
+///  p - &v == &p - &v
 /// ```
 fn prop_point_minus_vector_equals_refpoint_plus_refvector<S, const N: usize>(p: Point<S, N>, v: Vector<S, N>) -> Result<(), TestCaseError>
 where
@@ -340,11 +340,11 @@ where
 }
 
 /// The squared **L2** norm function is point separating. In particular, if the 
-/// squared distance between two points `p1` and `p2` is zero, then `p1 = p2`.
+/// squared distance between two points `p1` and `p2` is zero, then `p1 == p2`.
 ///
 /// Given vectors `p1` and `p2`
 /// ```text
-/// norm_squared(p1 - p2) = 0 => p1 = p2 
+/// norm_squared(p1 - p2) == 0 => p1 == p2 
 /// ```
 /// Equivalently, if `p1` is not equal to `p2`, then their squared distance is nonzero
 /// ```text
@@ -372,11 +372,11 @@ where
 }
 
 /// The squared **L2** norm function is point separating. In particular, if the 
-/// squared distance between two points `p1` and `p2` is zero, then `p1 = p2`.
+/// squared distance between two points `p1` and `p2` is zero, then `p1 == p2`.
 ///
 /// Given vectors `p1` and `p2`
 /// ```text
-/// norm_squared(p1 - p2) = 0 => p1 = p2 
+/// norm_squared(p1 - p2) == 0 => p1 == p2 
 /// ```
 /// Equivalently, if `p1` is not equal to `p2`, then their squared distance is nonzero
 /// ```text
@@ -404,11 +404,11 @@ where
 /// 
 /// Given a point `p` and a scalar `c`, the **L2** norm satisfies
 /// ```text
-/// norm(p * c) = norm(p) * abs(c)
+/// norm(p * c) == norm(p) * abs(c)
 /// ```
 /// and the squared **L2** norm function satisfies
 /// ```text
-/// norm(p * c)^2 = norm(p)^2 * abs(c)^2
+/// norm(p * c)^2 == norm(p)^2 * abs(c)^2
 /// ```
 fn prop_norm_squared_homogeneous_squared<S, const N: usize>(v: Point<S, N>, c: S) -> Result<(), TestCaseError>
 where
@@ -425,7 +425,7 @@ where
 /// The [`Point::magnitude_squared`] function and the [`Point::norm_squared`] 
 /// function are synonyms. In particular, given a point `p`
 /// ```text
-/// magnitude_squared(p) = norm_squared(p)
+/// magnitude_squared(p) == norm_squared(p)
 /// ```
 /// where equality is exact.
 fn prop_magnitude_squared_norm_squared_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError>
@@ -455,11 +455,11 @@ where
 }
 
 /// The **L2** norm function is point separating. In particular, if the 
-/// distance between two points `p1` and `p2` is zero, then `p1 = p2`.
+/// distance between two points `p1` and `p2` is zero, then `p1 == p2`.
 ///
 /// Given vectors `p1` and `p2`
 /// ```text
-/// norm(p1 - p2) = 0 => p1 = p2 
+/// norm(p1 - p2) == 0 => p1 == p2 
 /// ```
 /// Equivalently, if `p1` is not equal to `p2`, then their distance is nonzero
 /// ```text
@@ -491,7 +491,7 @@ where
 /// The [`Point::magnitude`] function and the [`Point::norm`] function 
 /// are synonyms. In particular, given a point `p`
 /// ```text
-/// magnitude(p) = norm(p)
+/// magnitude(p) == norm(p)
 /// ```
 /// where equality is exact.
 fn prop_magnitude_norm_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError>
@@ -506,7 +506,7 @@ where
 /// The [`Point::l2_norm`] function and the [`Point::norm`] function
 /// are synonyms. In particular, given a point `p`
 /// ```text
-/// l2_norm(p) = norm(p)
+/// l2_norm(p) == norm(p)
 /// ```
 /// where equality is exact.
 fn prop_l2_norm_norm_synonyms<S, const N: usize>(v: Point<S, N>) -> Result<(), TestCaseError>

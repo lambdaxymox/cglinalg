@@ -45,8 +45,6 @@ mod conversion_tests {
         ]
     }
 
-    /// Converting an angle from radians to degrees should yield the correct angle in
-    /// in degrees.
     #[test]
     fn convert_radians_to_degrees() {
         radians_to_degrees_tests().iter().for_each(|test| {
@@ -57,8 +55,6 @@ mod conversion_tests {
         })
     }
 
-    /// Converting an angle from degrees to radians should yield the correct angle
-    /// in radians.
     #[test]
     fn convert_degrees_to_radians() {
         degrees_to_radians_tests().iter().for_each(|test| {
@@ -306,7 +302,7 @@ mod radians_arithmetic_tests {
     ///
     /// That is, given an angle `angle` smaller than modulus `modulus`, `angle` 
     /// is congruent to itself modulo `modulus`
-    /// ```
+    /// ```text
     /// angle = angle (mod modulus).
     /// ``` 
     #[test]
@@ -330,7 +326,7 @@ mod radians_arithmetic_tests {
 
     /// The remainder of an angle by a modulus larger than the modulus should be
     /// smaller then the modulus. That is, angles satisfy
-    /// ```
+    /// ```text
     /// For each angle > modulus, angle (mod modulus) < modulus.
     /// ``` 
     #[test]

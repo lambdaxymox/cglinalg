@@ -47,7 +47,7 @@ where
 ///
 /// Given a typed angle `angle`
 /// ```text
-/// angle + 0 = angle
+/// angle + 0 == angle
 /// ```
 fn prop_angle_additive_zero<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
@@ -65,7 +65,7 @@ where
 ///
 /// Given a typed angle `angle`, there is a typed angle `-angle` satisfying
 /// ```text
-/// angle - angle = angle + (-angle) = (-angle) + angle = 0
+/// angle - angle == angle + (-angle) = (-angle) + angle == 0
 /// ```
 fn prop_angle_additive_identity<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
@@ -85,7 +85,7 @@ where
 ///
 /// Given a typed angle `angle`, and the dimensionless constant `1`
 /// ```text
-/// angle * 1 = angle
+/// angle * 1 == angle
 /// ```
 fn prop_angle_multiplication_dimensionless_unit_element<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
@@ -108,7 +108,7 @@ where
 /// Given a typed angle `angle`
 /// ```text
 /// recovered_angle := asin(sin(angle))
-/// sin(recovered_angle) = sin(angle)
+/// sin(recovered_angle) == sin(angle)
 /// ```
 fn prop_approx_sine_and_arcsine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
@@ -133,7 +133,7 @@ where
 /// Given a typed angle `angle`
 /// ```text
 /// recovered_angle := acos(cos(angle))
-/// cos(recoved_angle) = cos(angle)
+/// cos(recoved_angle) == cos(angle)
 /// ```
 fn prop_approx_cosine_and_arccosine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
@@ -185,9 +185,9 @@ where
 ///
 /// Given a typed angle `angle` and an integer `k`
 /// ```text
-/// sin(angle) = sin(angle + k * full_turn())
-/// cos(angle) = cos(angle + k * full_turn())
-/// tan(angle) = tan(angle + k * full_turn())
+/// sin(angle) == sin(angle + k * full_turn())
+/// cos(angle) == cos(angle + k * full_turn())
+/// tan(angle) == tan(angle + k * full_turn())
 /// ```
 fn prop_approx_congruent_angles<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
@@ -206,7 +206,7 @@ where
 ///
 /// Given a typed angle `angle`
 /// ```text
-/// sin(angle)^2 + cos(angle)^2 = 1
+/// sin(angle)^2 + cos(angle)^2 == 1
 /// ```
 fn prop_approx_pythagorean_identity<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where

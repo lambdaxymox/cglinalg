@@ -94,7 +94,7 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
 ///
 /// Given a matrix `m` and a zero matrix `0`
 /// ```text
-/// 0 + m = m
+/// 0 + m == m
 /// ```
 fn prop_matrix_additive_identity<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
@@ -112,7 +112,7 @@ where
 ///
 /// Given a matrix `m` and a zero matrix `0`
 /// ```text
-/// m + 0 = m
+/// m + 0 == m
 /// ```
 fn prop_matrix_plus_zero_equals_zero<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
@@ -129,7 +129,7 @@ where
 ///
 /// Given matrices `m1` and `m2`
 /// ```text
-/// m1 + m2 = m2 + m1
+/// m1 + m2 == m2 + m1
 /// ```
 fn prop_matrix_addition_commutative<S, const R: usize, const C: usize>(
     m1: Matrix<S, R, C>, 
@@ -147,7 +147,7 @@ where
 ///
 /// Given matrices `m1`, `m2`, and `m3`
 /// ```text
-/// (m1 + m2) + m3 = m1 + (m2 + m3)
+/// (m1 + m2) + m3 == m1 + (m2 + m3)
 /// ```
 fn prop_matrix_addition_associative<S, const R: usize, const C: usize>(
     m1: Matrix<S, R, C>, 
@@ -167,7 +167,7 @@ where
 ///
 /// Given matrices `m1` and `m2`
 /// ```text
-/// m1 + (-m2) = m1 - m2
+/// m1 + (-m2) == m1 - m2
 /// ```
 fn prop_matrix_subtraction<S, const R: usize, const C: usize>(
     m1: Matrix<S, R, C>, 
@@ -185,7 +185,7 @@ where
 ///
 /// Given a matrix `m` and a zero scalar `0`
 /// ```text
-/// 0 * m = m * 0 = 0
+/// 0 * m == m * 0 == 0
 /// ```
 /// Note that we diverge from traditional formalisms of matrix arithmetic 
 /// in that we allow multiplication of matrices by scalars on the right-hand 
@@ -206,7 +206,7 @@ where
 ///
 /// Given a matrix `m` and a unit scalar `1`
 /// ```text
-/// 1 * m = m * 1 = m
+/// 1 * m == m * 1 == m
 /// ```
 /// Note that we diverge from traditional formalisms of matrix arithmetic 
 /// in that we allow multiplication of matrices by scalars on the right-hand 
@@ -227,7 +227,7 @@ where
 ///
 /// Given a matrix `m` and a negative unit scalar `-1`
 /// ```text
-/// (-1) * m = = m * (-1) = -m
+/// (-1) * m == m * (-1) == -m
 /// ```
 /// Note that we diverge from traditional formalisms of matrix arithmetic 
 /// in that we allow multiplication of matrices by scalars on the right-hand 
@@ -251,7 +251,7 @@ where
 ///
 /// Given matrices `m1` and `m2`, and a scalar `c`
 /// ```text
-/// (m1 + m2) * c = m1 * c + m2 * c
+/// (m1 + m2) * c == m1 * c + m2 * c
 /// ```
 fn prop_scalar_matrix_multiplication_compatible_addition<S, const R: usize, const C: usize>(
     c: S, 
@@ -271,7 +271,7 @@ where
 ///
 /// Given matrices `m1` and `m2`, and a scalar `c`
 /// ```text
-/// (m1 - m2) * c = m1 * c - m2 * c
+/// (m1 - m2) * c == m1 * c - m2 * c
 /// ```
 fn prop_scalar_matrix_multiplication_compatible_subtraction<S, const R: usize, const C: usize>(
     c: S, 
@@ -291,7 +291,7 @@ where
 /// Given a matrix `m`, a scalar `c`, and a matrix `c_matrix` that is `c` on the
 /// diagonal and zero elsewhere
 /// ```text
-/// c_matrix * m = m * c_matrix
+/// c_matrix * m == m * c_matrix
 /// ```
 /// Note that we diverse from traditional formalisms of matrix arithmetic 
 /// in that we allow multiplication of matrices by scalars on the left-hand 
@@ -316,7 +316,7 @@ where
 ///
 /// Given a matrix `m` and scalars `a` and `b`
 /// ```text
-/// m * (a * b) = (m * a) * b
+/// m * (a * b) == (m * a) * b
 /// ```
 fn prop_scalar_matrix_multiplication_compatible<S, const R: usize, const C: usize>(
     a: S, 
@@ -336,7 +336,7 @@ where
 /// 
 /// Given a matrix `m` there is a matrix `identity` such that
 /// ```text
-/// m * identity = identity * m = m
+/// m * identity == identity * m == m
 /// ```
 fn prop_matrix_multiplication_identity<S, const N: usize, const NN: usize>(m: Matrix<S, N, N>) -> Result<(), TestCaseError>
 where
@@ -356,7 +356,7 @@ where
 ///
 /// Given a matrix `m`, and the zero matrix `0`
 /// ```text
-/// 0 * m = m * 0 = 0
+/// 0 * m == m * 0 == 0
 /// ```
 fn prop_zero_matrix_times_matrix_equals_zero_matrix<S, const N: usize, const NN: usize>(m: Matrix<S, N, N>) -> Result<(), TestCaseError>
 where
@@ -377,7 +377,7 @@ where
 ///
 /// Given matrices `m1`, `m2`, and `m3`
 /// ```text
-/// (m1 * m2) * m3 = m1 * (m2 * m3)
+/// (m1 * m2) * m3 == m1 * (m2 * m3)
 /// ```
 fn prop_matrix_multiplication_associative<S, const N: usize, const NN: usize>(
     m1: Matrix<S, N, N>, 
@@ -399,7 +399,7 @@ where
 ///
 /// Given matrices `m1`, `m2`, and `m3`
 /// ```text
-/// m1 * (m2 + m3) = m1 * m2 + m1 * m3
+/// m1 * (m2 + m3) == m1 * m2 + m1 * m3
 /// ```
 fn prop_matrix_multiplication_distributive<S, const N: usize, const NN: usize>(
     m1: Matrix<S, N, N>, 
@@ -420,7 +420,7 @@ where
 ///
 /// Given matrices `m1` and `m2` and a scalar `c`
 /// ```text
-/// (m1 * m2) * c = m1 * (m2 * c)
+/// (m1 * m2) * c == m1 * (m2 * c)
 /// ```
 fn prop_matrix_multiplication_compatible_with_scalar_multiplication<S, const N: usize, const NN: usize>(
     c: S, 
@@ -442,7 +442,7 @@ where
 ///
 /// Given a matrix `m`, scalars `c1` and `c2`
 /// ```text
-/// m * (c1 * c2) = (m * c1) * c2
+/// m * (c1 * c2) == (m * c1) * c2
 /// ```
 fn prop_matrix_multiplication_compatible_with_scalar_multiplication1<S, const R: usize, const C: usize>(
     c1: S, 
@@ -461,7 +461,7 @@ where
 ///
 /// Given a matrix `m`
 /// ```text
-/// transpose(transpose(m)) = m
+/// transpose(transpose(m)) == m
 /// ```
 fn prop_matrix_transpose_transpose_equals_matrix<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>
@@ -478,7 +478,7 @@ where
 /// 
 /// Given matrices `m1` and `m2`
 /// ```text
-/// transpose(m1 + m2) = transpose(m1) + transpose(m2)
+/// transpose(m1 + m2) == transpose(m1) + transpose(m2)
 /// ```
 fn prop_transpose_linear<S, const R: usize, const C: usize>(
     m1: Matrix<S, R, C>, 
@@ -497,7 +497,7 @@ where
 /// 
 /// Given a matrix `m` and a scalar `c`
 /// ```text
-/// transpose(m * c) = transpose(m) * c
+/// transpose(m * c) == transpose(m) * c
 /// ```
 fn prop_transpose_scalar_multiplication<S, const R: usize, const C: usize>(
     c: S, 
@@ -517,7 +517,7 @@ where
 /// 
 /// Given matrices `m1` and `m2`
 /// ```text
-/// transpose(m1 * m2) = transpose(m2) * transpose(m1)
+/// transpose(m1 * m2) == transpose(m2) * transpose(m1)
 /// ```
 fn prop_transpose_product<S, const N: usize, const NN: usize>(
     m1: Matrix<S, N, N>, 
@@ -538,7 +538,7 @@ where
 ///
 /// Given a matrix `m`, and rows `row1` and `row2`
 /// ```text
-/// m.swap_rows(row1, row2) = m.swap_rows(row2, row1)
+/// m.swap_rows(row1, row2) == m.swap_rows(row2, row1)
 /// ```
 fn prop_swap_rows_commutative<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>, 
@@ -562,7 +562,7 @@ where
 ///
 /// Given a matrix `m`, and a row `row`
 /// ```text
-/// m.swap_rows(row, row) = m
+/// m.swap_rows(row, row) == m
 /// ```
 fn prop_swap_identical_rows_identity<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>, 
@@ -584,7 +584,7 @@ where
 ///
 /// Given a matrix `m`, and rows `row1` and `row2`
 /// ```text
-/// m.swap_rows(row1, row2).swap_rows(row1, row2) = m
+/// m.swap_rows(row1, row2).swap_rows(row1, row2) == m
 /// ```
 fn prop_swap_rows_twice_is_identity<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>, 
@@ -607,7 +607,7 @@ where
 ///
 /// Given a matrix `m`, and columns `col1` and `col2`
 /// ```text
-/// m.swap_columns(col1, col2) = m.swap_columns(col2, col1)
+/// m.swap_columns(col1, col2) == m.swap_columns(col2, col1)
 /// ```
 fn prop_swap_columns_commutative<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>, 
@@ -631,7 +631,7 @@ where
 ///
 /// Given a matrix `m`, and a column `col`
 /// ```text
-/// m.swap_columns(col, col) = m
+/// m.swap_columns(col, col) == m
 /// ```
 fn prop_swap_identical_columns_is_identity<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>, 
@@ -653,7 +653,7 @@ where
 ///
 /// Given a matrix `m`, and columns `col1` and `col2`
 /// ```text
-/// m.swap_columns(col1, col2).swap_columns(col1, col2) = m
+/// m.swap_columns(col1, col2).swap_columns(col1, col2) == m
 /// ```
 fn prop_swap_columns_twice_is_identity<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>, 
@@ -676,7 +676,7 @@ where
 ///
 /// Given a matrix `m`, and elements `(col1, row1)` and `(col2, row2)`
 /// ```text
-/// m.swap_elements((col1, row1), (col2, row2)) = m.swap_elements((col2, row2), (col1, row1))
+/// m.swap_elements((col1, row1), (col2, row2)) == m.swap_elements((col2, row2), (col1, row1))
 /// ```
 fn prop_swap_elements_commutative<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>, 
@@ -702,7 +702,7 @@ where
 ///
 /// Given a matrix `m`, and an element index `(col, row)`
 /// ```text
-/// m.swap_elements((col, row), (col, row)) = m
+/// m.swap_elements((col, row), (col, row)) == m
 /// ```
 fn prop_swap_identical_elements_is_identity<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>, 
@@ -725,7 +725,7 @@ where
 ///
 /// Given a matrix `m`, and elements `(col1, row1)` and `(col2, row2)`
 /// ```text
-/// m.swap_elements((col1, row1), (col2, row2)).swap_elements((col1, row1), (col2, row2)) = m
+/// m.swap_elements((col1, row1), (col2, row2)).swap_elements((col1, row1), (col2, row2)) == m
 /// ```
 fn prop_swap_elements_twice_is_identity<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>, 

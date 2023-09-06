@@ -276,7 +276,7 @@ fn strategy_complex_f64_atanh() -> impl Strategy<Value = Complex<f64>> {
 ///
 /// Given a complex number `z`, it satisfies
 /// ```text
-/// 0 * z = 0.
+/// 0 * z == 0.
 /// ```
 fn prop_zero_times_complex_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where 
@@ -293,7 +293,7 @@ where
 ///
 /// Given a complex number `z`, it satisfies
 /// ```text
-/// z * 0 = 0
+/// z * 0 == 0
 /// ```
 fn prop_complex_times_zero_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -312,7 +312,7 @@ where
 ///
 /// Given a complex number `z`
 /// ```text
-/// z + 0 = z
+/// z + 0 == z
 /// ```
 fn prop_complex_plus_zero_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -330,7 +330,7 @@ where
 ///
 /// Given a complex number `z`
 /// ```text
-/// 0 + z = z
+/// 0 + z == z
 /// ```
 fn prop_zero_plus_complex_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -348,7 +348,7 @@ where
 ///
 /// Given a complex number `z`
 /// ```text
-/// 1 * z = z
+/// 1 * z == z
 /// ```
 fn prop_one_times_complex_equal_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -366,7 +366,7 @@ where
 ///
 /// Given a complex number `z`
 /// ```text
-/// z * 1 = z.
+/// z * 1 == z.
 /// ```
 fn prop_complex_times_one_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -386,13 +386,13 @@ where
 /// Given complex numbers `z1` and `z2`, and their references `&z1` 
 /// and `&z2`, they should satisfy
 /// ```text
-///  z1 +  z2 = &z1 +  z2
-///  z1 +  z2 =  z1 + &z2
-///  z1 +  z2 = &z1 + &z2
-///  z1 + &z2 = &z1 +  z2
-/// &z1 +  z2 =  z1 + &z2
-/// &z1 +  z2 = &z1 + &z2
-///  z1 + &z2 = &z1 + &z2
+///  z1 +  z2 == &z1 +  z2
+///  z1 +  z2 ==  z1 + &z2
+///  z1 +  z2 == &z1 + &z2
+///  z1 + &z2 == &z1 +  z2
+/// &z1 +  z2 ==  z1 + &z2
+/// &z1 +  z2 == &z1 + &z2
+///  z1 + &z2 == &z1 + &z2
 /// ```
 fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -413,7 +413,7 @@ where
 /// 
 /// Given complex numbers `z1` and `z2`, we have
 /// ```text
-/// z1 + z2 = z2 + z1
+/// z1 + z2 == z2 + z1
 /// ```
 fn prop_complex_addition_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -429,7 +429,7 @@ where
 ///
 /// Given complex numbers `z1`, `z2`, and `z3`, we have
 /// ```text
-/// (z1 + z2) + z3 = z1 + (z2 + z3)
+/// (z1 + z2) + z3 == z1 + (z2 + z3)
 /// ```
 fn prop_complex_addition_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -444,7 +444,7 @@ where
 ///
 /// Given a complex number `z`, we have
 /// ```text
-/// z - 0 = z
+/// z - 0 == z
 /// ```
 fn prop_complex_minus_zero_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -461,7 +461,7 @@ where
 ///
 /// Given a complex number `z`, there is a complex number `-z` such that
 /// ```text
-/// z - z = z + (-z) = (-z) + z = 0
+/// z - z == z + (-z) == (-z) + z == 0
 /// ```
 fn prop_complex_minus_complex_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -481,13 +481,13 @@ where
 /// Given complex numbers `z1` and `z2`, and their references `&z1` 
 /// and `&z2`, they should satisfy
 /// ```text
-///  z1 -  z2 = &z1 -  z2
-///  z1 -  z2 =  z1 - &z2
-///  z1 -  z2 = &z1 - &z2
-///  z1 - &z2 = &z1 -  z2
-/// &z1 -  z2 =  z1 - &z2
-/// &z1 -  z2 = &z1 - &z2
-///  z1 - &z2 = &z1 - &z2
+///  z1 -  z2 == &z1 -  z2
+///  z1 -  z2 ==  z1 - &z2
+///  z1 -  z2 == &z1 - &z2
+///  z1 - &z2 == &z1 -  z2
+/// &z1 -  z2 ==  z1 - &z2
+/// &z1 -  z2 == &z1 - &z2
+///  z1 - &z2 == &z1 - &z2
 /// ```
 fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -508,7 +508,7 @@ where
 ///
 /// Given a constant `c` and a complex number `z`
 /// ```text
-/// c * z = z * c
+/// c * z == z * c
 /// ```
 fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -525,7 +525,7 @@ where
 ///
 /// Given a complex number `z`, and the unit complex number `1`, we have
 /// ```text
-/// z * 1 = 1 * z = z
+/// z * 1 == 1 * z == z
 /// ```
 fn prop_complex_multiplicative_unit<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -545,7 +545,7 @@ where
 ///
 /// Given a complex number `z` and its inverse `z_inv`, we have
 /// ```text
-/// z * z_inv ~= z_inv * z ~= 1
+/// z * z_inv == z_inv * z == 1
 /// ```
 fn prop_approx_complex_multiplicative_inverse<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -571,7 +571,7 @@ where
 ///
 /// Given scalars `a` and `b`, and a complex number `z`, we have
 /// ```text
-/// (a * b) * z = a * (b * z)
+/// (a * b) * z == a * (b * z)
 /// ```
 fn prop_scalar_multiplication_compatibility<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -589,7 +589,7 @@ where
 ///
 /// Given complex numbers `z1`, `z2`, and `z3`, we have
 /// ```text
-/// (z1 * z2) * z3 = z1 * (z2 * z3)
+/// (z1 * z2) * z3 == z1 * (z2 * z3)
 /// ```
 fn prop_complex_multiplication_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -604,7 +604,7 @@ where
 /// 
 /// Given a complex number `z1` and another complex number `z2`, we have
 /// ```text
-/// z1 * z2 = z2 * z1
+/// z1 * z2 == z2 * z1
 /// ```
 fn prop_complex_multiplication_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -620,7 +620,7 @@ where
 ///
 /// Given a scalar `a` and complex numbers `z1` and `z2`
 /// ```text
-/// a * (z1 + z2) = a * z1 + a * z2
+/// a * (z1 + z2) == a * z1 + a * z2
 /// ```
 fn prop_distribution_over_complex_addition<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -639,7 +639,7 @@ where
 ///
 /// Given scalars `a` and `b` and a complex number `z`, we have
 /// ```text
-/// (a + b) * z = a * z + b * z
+/// (a + b) * z == a * z + b * z
 /// ```
 fn prop_distribution_over_scalar_addition<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -659,7 +659,7 @@ where
 ///
 /// Given complex numbers `z1` and `z2`, and a scalar `a`
 /// ```text
-/// (z1 + z2) * a = z1 * a + z2 * a
+/// (z1 + z2) * a == z1 * a + z2 * a
 /// ```
 fn prop_distribution_over_complex_addition1<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -675,7 +675,7 @@ where
 ///
 /// Given a complex number `z` and scalars `a` and `b`
 /// ```text
-/// z * (a + b) = z * a + z * b
+/// z * (a + b) == z * a + z * b
 /// ```
 fn prop_distribution_over_scalar_addition1<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -690,7 +690,7 @@ where
 ///
 /// Given three complex numbers `z1`, `z2`, and `z3`
 /// ```text
-/// (z1 + z2) * z3 = z1 * z3 + z2 * z3
+/// (z1 + z2) * z3 == z1 * z3 + z2 * z3
 /// ```
 fn prop_complex_multiplication_right_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -705,7 +705,7 @@ where
 ///
 /// Given three complex numbers `z1`, `z2`, and `z3`
 /// ```text
-/// z1 * (z2 + z3) = z1 * z2 + z1 * z3
+/// z1 * (z2 + z3) == z1 * z2 + z1 * z3
 /// ```
 fn prop_complex_multiplication_left_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -720,7 +720,7 @@ where
 ///
 /// Given a complex number `z`
 /// ```text
-/// z** = conjugate(conjugate(z)) = z
+/// conjugate(conjugate(z)) == z
 /// ```
 fn prop_complex_conjugate_conjugate_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -735,7 +735,7 @@ where
 ///
 /// Given complex numbers `z1` and `z2`, complex number conjugation satisfies
 /// ```text
-/// conjugate(z1 + z2) = conjugate(z1) + conjugate(z2)
+/// conjugate(z1 + z2) == conjugate(z1) + conjugate(z2)
 /// ```
 fn prop_complex_conjugation_linear<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -750,7 +750,7 @@ where
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// conjugate(z1 * z2) = conjugate(z2) * conjugate(z1)
+/// conjugate(z1 * z2) == conjugate(z2) * conjugate(z1)
 /// ```
 fn prop_complex_conjugation_transposes_products<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -780,11 +780,11 @@ where
 
 /// The squared modulus function is point separating. In particular, if 
 /// the squared distance between two complex numbers `z1` and `z2` is 
-/// zero, then `z1 = z2`.
+/// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus_squared(z1 - z2) = 0 => z1 = z2 
+/// modulus_squared(z1 - z2) == 0 => z1 == z2 
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their squared distance is 
 /// nonzero
@@ -811,7 +811,7 @@ where
 /// The [`Complex::magnitude_squared`] function and the [`Complex::modulus_squared`]
 /// function are synonyms. In particular, given a complex number `z`
 /// ```text
-/// magnitude_squared(z) = modulus_squared(z)
+/// magnitude_squared(z) == modulus_squared(z)
 /// ```
 /// where equality is exact.
 fn prop_magnitude_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
@@ -826,7 +826,7 @@ where
 /// The [`Complex::norm_squared`] function and the [`Complex::modulus_squared`]
 /// functions are synonyms. In particular, given a complex number `z`
 /// ```text
-/// norm_squared(z) = modulus_squared(z)
+/// norm_squared(z) == modulus_squared(z)
 /// ```
 fn prop_norm_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -839,11 +839,11 @@ where
 
 /// The squared modulus function is point separating. In particular, if 
 /// the squared distance between two complex numbers `z1` and `z2` is 
-/// zero, then `z1 = z2`.
+/// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus_squared(z1 - z2) = 0 => z1 = z2 
+/// modulus_squared(z1 - z2) == 0 => z1 == z2 
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their squared distance is 
 /// nonzero
@@ -883,11 +883,11 @@ where
 
 /// The modulus function is point separating. In particular, if 
 /// the distance between two complex numbers `z1` and `z2` is 
-/// zero, then `z1 = z2`.
+/// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus(z1 - z2) = 0 => z1 = z2 
+/// modulus(z1 - z2) == 0 => z1 == z2 
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their distance is 
 /// nonzero
@@ -911,7 +911,7 @@ where
 /// The [`Complex::magnitude`] function and the [`Complex::modulus`] function 
 /// are synonyms. In particular, given a complex number `z`
 /// ```text
-/// magnitude(z) = norm(z)
+/// magnitude(z) == norm(z)
 /// ```
 /// where equality is exact.
 fn prop_magnitude_modulus_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
@@ -926,7 +926,7 @@ where
 /// The [`Complex::norm`] function and the [`Complex::modulus`] function
 /// are synonyms. In particular, given a complex number `z`
 /// ```text
-/// norm(z) = modulus(z)
+/// norm(z) == modulus(z)
 /// ```
 /// where equality is exact.
 fn prop_norm_modulus_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
@@ -941,7 +941,7 @@ where
 /// The [`Complex::l2_norm`] function and the [`Complex::modulus`] function
 /// are synonyms. In particular, given a complex number `z`
 /// ```text
-/// l2_norm(z) = modulus(z)
+/// l2_norm(z) == modulus(z)
 /// ```
 /// where equality is exact.
 fn prop_l2_norm_modulus_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
@@ -974,7 +974,7 @@ where
 /// 
 /// Given a complex number `z` and a scalar `c`
 /// ```text
-/// l1_norm(z * c) = l1_norm(z) * abs(c)
+/// l1_norm(z * c) == l1_norm(z) * abs(c)
 /// ```
 fn prop_l1_norm_homogeneous<S>(z: Complex<S>, c: S) -> Result<(), TestCaseError>
 where
@@ -1008,11 +1008,11 @@ where
 
 /// The **L1** norm function is point separating. In particular, if 
 /// the distance between two complex numbers `z1` and `z2` is 
-/// zero, then `z1 = z2`.
+/// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// l1_norm(z1 - z2) = 0 => z1 = z2 
+/// l1_norm(z1 - z2) == 0 => z1 == z2 
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their distance is 
 /// nonzero
@@ -1033,11 +1033,11 @@ where
 
 /// The **L1** norm function is point separating. In particular, if 
 /// the distance between two complex numbers `z1` and `z2` is 
-/// zero, then `z1 = z2`.
+/// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// l1_norm(z1 - z2) = 0 => z1 = z2 
+/// l1_norm(z1 - z2) == 0 => z1 == z2 
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their distance is 
 /// nonzero
@@ -1206,7 +1206,7 @@ where
 /// The principal argument of a complex number is in the range `[-pi, pi]`.
 /// 
 /// Given a complex number `z`
-/// ```
+/// ```text
 /// -pi =< arg(z) <= pi
 /// ```
 fn prop_arg_range<S>(z: Complex<S>) -> Result<(), TestCaseError>
@@ -1262,7 +1262,7 @@ where
 /// 
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus(sqrt(z1 * z2)) = modulus(sqrt(z1)) * modulus(zqrt(z2))
+/// modulus(sqrt(z1 * z2)) == modulus(sqrt(z1)) * modulus(zqrt(z2))
 /// ```
 fn prop_square_root_product_modulus<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1303,7 +1303,7 @@ where
 /// 
 /// Given a complex number `z` with imaginary part `im(z) == 0`
 /// ```text
-/// cos(z) = cos(re(z))
+/// cos(z) == cos(re(z))
 /// ```
 fn prop_cos_real_equals_cos_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where 
@@ -1322,7 +1322,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// cos(-z) = cos(z)
+/// cos(-z) == cos(z)
 /// ```
 fn prop_cos_negative_z_equals_cos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1341,7 +1341,7 @@ where
 /// 
 /// Given a complex number `z` with real part `re(z) == 0`
 /// ```text
-/// cos(z) = i * cosh(im(z))
+/// cos(z) == i * cosh(im(z))
 /// ```
 fn prop_cos_imaginary_equals_imaginary_cosh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1361,7 +1361,7 @@ where
 /// 
 /// Given a complex number `z` such that `im(z) == 0`
 /// ```text
-/// sin(z) = sin(re(z))
+/// sin(z) == sin(re(z))
 /// ```
 fn prop_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1380,7 +1380,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// sin(-z) = -sin(z)
+/// sin(-z) == -sin(z)
 /// ```
 fn prop_sin_negative_z_equals_negative_sin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1399,7 +1399,7 @@ where
 /// 
 /// Given a complex number `z` with real part `re(z) == 0`
 /// ```text
-/// sin(z) = i * sinh(im(z))
+/// sin(z) == i * sinh(im(z))
 /// ```
 fn prop_sin_imaginary_equals_imaginary_sinh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1418,7 +1418,7 @@ where
 /// 
 /// Given a complex number `z` such that `im(z) == 0`
 /// ```text
-/// tan(z) = tan(re(z))
+/// tan(z) == tan(re(z))
 /// ```
 fn prop_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1442,7 +1442,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// tan(-z) = -tan(z)
+/// tan(-z) == -tan(z)
 /// ```
 fn prop_tan_negative_z_equals_negative_tan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1462,7 +1462,7 @@ where
 /// 
 /// Given a complex number `z` such that `re(z) == 0`
 /// ```text
-/// tan(z) = i * tanh(im(z))
+/// tan(z) == i * tanh(im(z))
 /// ```
 fn prop_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1480,7 +1480,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// cos(2 * z) = cos(z) * cos(z) - sin(z) * sin(z)
+/// cos(2 * z) == cos(z) * cos(z) - sin(z) * sin(z)
 /// ```
 fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(
     z: Complex<S>, 
@@ -1504,7 +1504,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// sin(2 * z) = 2 * sin(z) * cos(z)
+/// sin(2 * z) == 2 * sin(z) * cos(z)
 /// ```
 fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(
     z: Complex<S>, 
@@ -1528,7 +1528,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// tan(z) * (1 - tan(z) * tan(z)) = 2 * tan(z)
+/// tan(z) * (1 - tan(z) * tan(z)) == 2 * tan(z)
 /// ```
 fn prop_tan_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1550,7 +1550,7 @@ where
 /// 
 /// Given two complex numbers `z1` and `z2`
 /// ```text
-/// cos(z1 + z2) = cos(z1) * cos(z2) - sin(z1) * cos(z2)
+/// cos(z1 + z2) == cos(z1) * cos(z2) - sin(z1) * cos(z2)
 /// ```
 fn prop_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1568,7 +1568,7 @@ where
 /// 
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// sin(z1 + z2) = sin(z1) * cos(z2) + cos(z1) * sin(z2)
+/// sin(z1 + z2) == sin(z1) * cos(z2) + cos(z1) * sin(z2)
 /// ```
 fn prop_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1586,7 +1586,7 @@ where
 /// 
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// tan(z1 + z2) * (1 - tan(z1) * tan(z2)) = tan(z1) + tan(z2)
+/// tan(z1 + z2) * (1 - tan(z1) * tan(z2)) == tan(z1) + tan(z2)
 /// ```
 fn prop_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1605,7 +1605,7 @@ where
 /// 
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// tan(z1 - z2) * (1 - tan(z1) * tan(z2)) = tan(z1) - tan(z2)
+/// tan(z1 - z2) * (1 - tan(z1) * tan(z2)) == tan(z1) - tan(z2)
 /// ```
 fn prop_tan_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1628,7 +1628,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// acos(conjugate(z)) = conjugate(acos(z))
+/// acos(conjugate(z)) == conjugate(acos(z))
 /// ```
 fn prop_acos_conjugate_z_equals_conjugate_acos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1646,7 +1646,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// asin(conjugate(z)) = conjugate(asin(z))
+/// asin(conjugate(z)) == conjugate(asin(z))
 /// ```
 fn prop_asin_conjugate_z_equals_conjugate_asin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1664,7 +1664,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// atan(conjugate(z)) = conjugate(atan(z))
+/// atan(conjugate(z)) == conjugate(atan(z))
 /// ```
 fn prop_atan_conjugate_z_equals_conjugate_atan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1740,7 +1740,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// cosh(conjugate(z)) = conjugate(cosh(z))
+/// cosh(conjugate(z)) == conjugate(cosh(z))
 /// ```
 fn prop_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -1755,7 +1755,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// cosh(-z) = cosh(z)
+/// cosh(-z) == cosh(z)
 /// ```
 fn prop_cosh_negative_z_equals_negative_cosh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1770,7 +1770,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// sinh(conjugate(z)) = conjugate(sinh(z))
+/// sinh(conjugate(z)) == conjugate(sinh(z))
 /// ```
 fn prop_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -1785,7 +1785,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// sinh(-z) = -sinh(z)
+/// sinh(-z) == -sinh(z)
 /// ```
 fn prop_sinh_negative_z_equals_negative_sinh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1800,7 +1800,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// tanh(conjugate(z)) = conjugate(tanh(z))
+/// tanh(conjugate(z)) == conjugate(tanh(z))
 /// ```
 fn prop_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -1815,7 +1815,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// tanh(-z) = -tanh(z)
+/// tanh(-z) == -tanh(z)
 /// ```
 fn prop_tanh_negative_z_equals_negative_tanh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1830,7 +1830,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// cosh(2 * z) = cosh(z) * cosh(z) + sinh(z) * sinh(z)
+/// cosh(2 * z) == cosh(z) * cosh(z) + sinh(z) * sinh(z)
 /// ```
 fn prop_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared<S>(
     z: Complex<S>, 
@@ -1858,7 +1858,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// sinh(2 * z) = 2 * sinh(z) * cosh(z)
+/// sinh(2 * z) == 2 * sinh(z) * cosh(z)
 /// ```
 fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(
     z: Complex<S>, 
@@ -1886,7 +1886,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// tanh(2 * z) * (1 + tanh(z) * tanh(z)) = 2 * tanh(z)
+/// tanh(2 * z) * (1 + tanh(z) * tanh(z)) == 2 * tanh(z)
 /// ```
 fn prop_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1908,7 +1908,7 @@ where
 /// 
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// cosh(z1 + z2) = cosh(z1) * cosh(z2) + sinh(z1) * sinh(z2)
+/// cosh(z1 + z2) == cosh(z1) * cosh(z2) + sinh(z1) * sinh(z2)
 /// ```
 fn prop_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1926,7 +1926,7 @@ where
 /// 
 /// Given complex numbers `z1` and `z1`
 /// ```text
-/// sinh(z1 + z2) = sinh(z1) * cosh(z2) + cosh(z1) * sinh(z2)
+/// sinh(z1 + z2) == sinh(z1) * cosh(z2) + cosh(z1) * sinh(z2)
 /// ```
 fn prop_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1944,7 +1944,7 @@ where
 /// 
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// tanh(z1 + z2) * (1 + tanh(z1) * tanh(z2)) = tanh(z1) + tanh(z2)
+/// tanh(z1 + z2) * (1 + tanh(z1) * tanh(z2)) == tanh(z1) + tanh(z2)
 /// ```
 fn prop_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1963,7 +1963,7 @@ where
 /// 
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// tanh(z1 - z2) * (1 - tanh(z1) * tanh(z2)) = tanh(z1) - tanh(z2)
+/// tanh(z1 - z2) * (1 - tanh(z1) * tanh(z2)) == tanh(z1) - tanh(z2)
 /// ```
 fn prop_tanh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where

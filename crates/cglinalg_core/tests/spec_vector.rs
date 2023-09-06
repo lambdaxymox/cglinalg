@@ -168,10 +168,8 @@ fn strategy_scalar4_i32_linf_norm() -> impl Strategy<Value = i32> {
 ///
 /// Given a vector `v`
 /// ```text
-/// v * 0 = 0
+/// v * 0 == 0
 /// ```
-/// Note that we deviate from the usual formalisms of vector algebra in that we 
-/// allow the ability to multiply scalars from the right of a vector.
 fn prop_vector_times_zero_equals_zero<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
@@ -188,7 +186,7 @@ where
 ///
 /// Given a vector `v`
 /// ```text
-/// v + 0 = v
+/// v + 0 == v
 /// ```
 fn prop_vector_plus_zero_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
@@ -205,7 +203,7 @@ where
 ///
 /// Given a vector `v`
 /// ```text
-/// 0 + v = v
+/// 0 + v == v
 /// ```
 fn prop_zero_plus_vector_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
@@ -222,10 +220,8 @@ where
 ///
 /// Given a vector `v`
 /// ```text
-/// v * 1 = v
+/// v * 1 == v
 /// ```
-/// Note that we deviate from the usual formalisms of vector algebra in that we 
-/// allow the ability to multiply scalars to the right of a vector.
 fn prop_vector_times_one_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
@@ -244,13 +240,13 @@ where
 /// Given vectors `v1` and `v2`, and their references `&v1` and 
 /// `&v2`, they should satisfy
 /// ```text
-///  v1 +  v2 = &v1 +  v2
-///  v1 +  v2 =  v1 + &v2
-///  v1 +  v2 = &v1 + &v2
-///  v1 + &v2 = &v1 +  v2
-/// &v1 +  v2 =  v1 + &v2
-/// &v1 +  v2 = &v1 + &v2
-///  v1 + &v2 = &v1 + &v2
+///  v1 +  v2 == &v1 +  v2
+///  v1 +  v2 ==  v1 + &v2
+///  v1 +  v2 == &v1 + &v2
+///  v1 + &v2 == &v1 +  v2
+/// &v1 +  v2 ==  v1 + &v2
+/// &v1 +  v2 == &v1 + &v2
+///  v1 + &v2 == &v1 + &v2
 /// ```
 fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2<S, const N: usize>(
     v1: Vector<S, N>, 
@@ -274,7 +270,7 @@ where
 ///
 /// Given vectors `v1` and `v2`, we have
 /// ```text
-/// v1 + v2 = v2 + v1
+/// v1 + v2 == v2 + v1
 /// ```
 fn prop_vector_addition_commutative<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
@@ -289,7 +285,7 @@ where
 ///
 /// Given three vectors `v1`, `v2`, and `v3`, we have
 /// ```text
-/// (v1 + v2) + v3 = v1 + (v2 + v3)
+/// (v1 + v2) + v3 == v1 + (v2 + v3)
 /// ```
 fn prop_vector_addition_associative<S, const N: usize>(
     v1: Vector<S, N>, 
@@ -309,7 +305,7 @@ where
 ///
 /// Given a vector `v`, we have
 /// ```text
-/// v - 0 = v
+/// v - 0 == v
 /// ```
 fn prop_vector_minus_zero_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
@@ -326,7 +322,7 @@ where
 ///
 /// Given a vector `v`, there is a vector `-v` such that
 /// ```text
-/// v - v = v + (-v) = (-v) + v = 0
+/// v - v == v + (-v) == (-v) + v == 0
 /// ```
 fn prop_vector_minus_vector_equals_zero<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
@@ -346,13 +342,13 @@ where
 /// Given vectors `v1` and `v2`, and their references `&v1` and `&v2`, 
 /// they should satisfy
 /// ```text
-///  v1 -  v2 = &v1 -  v2
-///  v1 -  v2 =  v1 - &v2
-///  v1 -  v2 = &v1 - &v2
-///  v1 - &v2 = &v1 -  v2
-/// &v1 -  v2 =  v1 - &v2
-/// &v1 -  v2 = &v1 - &v2
-///  v1 - &v2 = &v1 - &v2
+///  v1 -  v2 == &v1 -  v2
+///  v1 -  v2 ==  v1 - &v2
+///  v1 -  v2 == &v1 - &v2
+///  v1 - &v2 == &v1 -  v2
+/// &v1 -  v2 ==  v1 - &v2
+/// &v1 -  v2 == &v1 - &v2
+///  v1 - &v2 == &v1 - &v2
 /// ```
 fn prop_vector1_minus_vector2_equals_refvector1_minus_refvector2<S, const N: usize>(
     v1: Vector<S, N>, 
@@ -376,7 +372,7 @@ where
 ///
 /// Given a vector `v`
 /// ```text
-/// 1 * v = v * 1 = v
+/// 1 * v == v * 1 == v
 /// ```
 fn prop_one_times_vector_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
@@ -396,7 +392,7 @@ where
 ///
 /// Given scalars `a` and `b`, and a vector `v`, we have
 /// ```text
-/// v * (a * b) = (v * a) * b
+/// v * (a * b) == (v * a) * b
 /// ```
 fn prop_scalar_multiplication_compatibility<S, const N: usize>(
     a: S, 
@@ -415,7 +411,7 @@ where
 ///
 /// Given a scalar `a` and vectors `v1` and `v2`
 /// ```text
-/// (v1 + v2) * a = v1 * a + v2 * a
+/// (v1 + v2) * a == v1 * a + v2 * a
 /// ```
 fn prop_scalar_vector_addition_right_distributive<S, const N: usize>(
     a: S, 
@@ -434,7 +430,7 @@ where
 ///
 /// Given scalars `a` and `b` and a vector `v`, we have
 /// ```text
-/// v * (a + b) = v * a + v * b
+/// v * (a + b) == v * a + v * b
 /// ```
 fn prop_vector_scalar_addition_left_distributive<S, const N: usize>(
     a: S, 
@@ -454,7 +450,7 @@ where
 ///
 /// Given vectors `v1` and `v2` and a scalar `a`
 /// ```text
-/// (v1 + v2) * a = v1 * a + v2 * a
+/// (v1 + v2) * a == v1 * a + v2 * a
 /// ```
 /// We deviate from the usual formalisms of vector algebra in that we 
 /// allow the ability to multiply scalars from the left, or from the 
@@ -477,7 +473,7 @@ where
 /// 
 /// Given a vector `v` and scalars `a` and `b`
 /// ```text
-/// v * (a + b) = v * a + v * b
+/// v * (a + b) == v * a + v * b
 /// ```
 /// We deviate from the usual formalisms of vector algebra in that we 
 /// allow the ability to multiply scalars from the left, or from the 
@@ -495,7 +491,7 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// dot(v1, v2) = dot(v2, v1)
+/// dot(v1, v2) == dot(v2, v1)
 /// ```
 fn prop_vector_dot_product_commutative<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
@@ -510,7 +506,7 @@ where
 ///
 /// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// dot(v1, v2 + v3) = dot(v1, v2) + dot(v1, v3)
+/// dot(v1, v2 + v3) == dot(v1, v2) + dot(v1, v3)
 /// ```
 fn prop_vector_dot_product_right_distributive<S, const N: usize>(
     v1: Vector<S, N>, 
@@ -532,7 +528,7 @@ where
 ///
 /// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// dot(v1 + v2, v3) = dot(v1, v3) + dot(v2, v3)
+/// dot(v1 + v2, v3) == dot(v1, v3) + dot(v2, v3)
 /// ```
 fn prop_vector_dot_product_left_distributive<S, const N: usize>(
     v1: Vector<S, N>, 
@@ -554,7 +550,7 @@ where
 ///
 /// Given vectors `v1` and `v2`, and scalars `a` and `b`
 /// ```text
-/// dot(v1 * a, v2 * b) = dot(v1, v2) * (a * b)
+/// dot(v1 * a, v2 * b) == dot(v1, v2) * (a * b)
 /// ```
 fn prop_vector_dot_product_times_scalars_commutative<S, const N: usize>(
     a: S, 
@@ -577,7 +573,7 @@ where
 ///
 /// Given vectors `v1`, `v2` and `v3`, and scalars `a` and `b`
 /// ```text
-/// dot(v1, v2 * a + v3 * b) = dot(v1, v2) * a + dot(v2, v3) * b
+/// dot(v1, v2 * a + v3 * b) == dot(v1, v2) * a + dot(v2, v3) * b
 /// ```
 fn prop_vector_dot_product_right_bilinear<S, const N: usize>(
     a: S, 
@@ -601,7 +597,7 @@ where
 ///
 /// Given vectors `v1`, `v2` and `v3`, and scalars `a` and `b`
 /// ```text
-/// dot(v1 * a + v2 * b, v3) = dot(v1, v3) * a + dot(v2, v3) * b
+/// dot(v1 * a + v2 * b, v3) == dot(v1, v3) * a + dot(v2, v3) * b
 /// ```
 fn prop_vector_dot_product_left_bilinear<S, const N: usize>(
     a: S, 
@@ -626,7 +622,7 @@ where
 ///
 /// Given a vector `v`
 /// ```text
-/// v x v = 0
+/// v x v == 0
 /// ```
 fn prop_vector_cross_itself_is_zero<S>(v: Vector3<S>) -> Result<(), TestCaseError>
 where
@@ -644,7 +640,7 @@ where
 ///
 /// Given vectors `v1` and `v2` and a scalar constant `c`
 /// ```text
-/// (v1 * c) x v2 = (v1 x v2) * c = v2 x (v2 * c)
+/// (v1 * c) x v2 == (v1 x v2) * c == v2 x (v2 * c)
 /// ```
 fn prop_vector_cross_product_multiplication_by_scalars<S>(c: S, v1: Vector3<S>, v2: Vector3<S>) -> Result<(), TestCaseError>
 where
@@ -660,7 +656,7 @@ where
 ///
 /// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// v1 x (v2 + v3) = v1 x v2 + v1 x v3
+/// v1 x (v2 + v3) == v1 x v2 + v1 x v3
 /// ```
 fn prop_vector_cross_product_distribute<S>(v1: Vector3<S>, v2: Vector3<S>, v3: Vector3<S>) -> Result<(), TestCaseError>
 where
@@ -676,7 +672,7 @@ where
 ///
 /// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// v1 . (v2 x v3) = (v1 x v2) . v3
+/// v1 . (v2 x v3) == (v1 x v2) . v3
 /// ```
 fn prop_vector_cross_product_scalar_triple_product<S>(v1: Vector3<S>, v2: Vector3<S>, v3: Vector3<S>) -> Result<(), TestCaseError>
 where
@@ -691,7 +687,7 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// v1 x v2 = - v2 x v1
+/// v1 x v2 == - v2 x v1
 /// ```
 fn prop_vector_cross_product_anticommutative<S>(v1: Vector3<S>, v2: Vector3<S>) -> Result<(), TestCaseError> 
 where
@@ -707,7 +703,7 @@ where
 ///
 /// Given vectors `v1`, `v2`, and `v3`
 /// ```text
-/// v1 x (v2 x v3) = (v1 . v3) x v2 - (v1 . v2) x v3
+/// v1 x (v2 x v3) == (v1 . v3) x v2 - (v1 . v2) x v3
 /// ```
 fn prop_vector_cross_product_satisfies_vector_triple_product<S>(v1: Vector3<S>, v2: Vector3<S>, v3: Vector3<S>) -> Result<(), TestCaseError>
 where
@@ -739,11 +735,11 @@ where
 }
 
 /// The squared **L2** norm function is point separating. In particular, 
-/// if the squared distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
+/// if the squared distance between two vectors `v1` and `v2` is zero, then `v1 == v2`.
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// norm_squared(v1 - v2) = 0 => v1 = v2 
+/// norm_squared(v1 - v2) == 0 => v1 == v2 
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their squared distance is nonzero
 /// ```text
@@ -773,7 +769,7 @@ where
 /// The [`Vector::magnitude_squared`] function and the [`Vector::norm_squared`] 
 /// function are synonyms. In particular, given a vector `v`
 /// ```text
-/// magnitude_squared(v) = norm_squared(v)
+/// magnitude_squared(v) == norm_squared(v)
 /// ```
 /// where equality is exact.
 fn prop_magnitude_squared_norm_squared_synonyms<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
@@ -786,11 +782,11 @@ where
 }
 
 /// The squared **L2** norm function is point separating. In particular, 
-/// if the squared distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
+/// if the squared distance between two vectors `v1` and `v2` is zero, then `v1 == v2`.
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// norm_squared(v1 - v2) = 0 => v1 = v2 
+/// norm_squared(v1 - v2) == 0 => v1 == v2 
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their squared distance is nonzero
 /// ```text
@@ -818,11 +814,11 @@ where
 /// 
 /// Given a vector `v` and a scalar `c`, the **L2** norm satisfies
 /// ```text
-/// norm(v * c) = norm(v) * abs(c)
+/// norm(v * c) == norm(v) * abs(c)
 /// ```
 /// and the squared **L2** norm function satisfies
 /// ```text
-/// norm(v * c)^2 = norm(v)^2 * abs(c)^2
+/// norm(v * c)^2 == norm(v)^2 * abs(c)^2
 /// ```
 fn prop_norm_squared_homogeneous_squared<S, const N: usize>(v: Vector<S, N>, c: S) -> Result<(), TestCaseError>
 where
@@ -854,11 +850,11 @@ where
 }
 
 /// The **L2** norm function is point separating. In particular, if the 
-/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 == v2`.
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// norm(v1 - v2) = 0 => v1 = v2 
+/// norm(v1 - v2) == 0 => v1 == v2 
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
@@ -898,11 +894,11 @@ where
 }
 
 /// The **L1** norm function is point separating. In particular, if the 
-/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 == v2`.
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// l1_norm(v1 - v2) = 0 => v1 = v2 
+/// l1_norm(v1 - v2) == 0 => v1 == v2 
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
@@ -925,11 +921,11 @@ where
 }
 
 /// The **L1** norm function is point separating. In particular, if the 
-/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 == v2`.
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// l1_norm(v1 - v2) = 0 => v1 = v2 
+/// l1_norm(v1 - v2) = 0 => v1 == v2 
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
@@ -957,7 +953,7 @@ where
 /// 
 /// Given a vector `v` and a scalar `c`
 /// ```text
-/// l1_norm(v * c) = l1_norm(v) * abs(c)
+/// l1_norm(v * c) == l1_norm(v) * abs(c)
 /// ```
 fn prop_l1_norm_homogeneous<S, const N: usize>(v: Vector<S, N>, c: S) -> Result<(), TestCaseError>
 where
@@ -1007,11 +1003,11 @@ where
 }
 
 /// The **Lp** norm function is point separating. In particular, if the 
-/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 == v2`.
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// lp_norm(v1 - v2) = 0 => v1 = v2 
+/// lp_norm(v1 - v2) == 0 => v1 == v2 
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
@@ -1051,11 +1047,11 @@ where
 }
 
 /// The **L-infinity** norm function is point separating. In particular, if the 
-/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 == v2`.
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// linf_norm(v1 - v2) = 0 => v1 = v2 
+/// linf_norm(v1 - v2) == 0 => v1 == v2 
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
@@ -1078,11 +1074,11 @@ where
 }
 
 /// The **L-infinity** norm function is point separating. In particular, if the 
-/// distance between two vectors `v1` and `v2` is zero, then `v1 = v2`.
+/// distance between two vectors `v1` and `v2` is zero, then `v1 == v2`.
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// linf_norm(v1 - v2) = 0 => v1 = v2 
+/// linf_norm(v1 - v2) == 0 => v1 == v2 
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
@@ -1110,7 +1106,7 @@ where
 /// 
 /// Given a vector `v` and a scalar `c`
 /// ```text
-/// linf_norm(v * c) = linf_norm(v) * abs(c)
+/// linf_norm(v * c) == linf_norm(v) * abs(c)
 /// ```
 fn prop_linf_norm_homogeneous<S, const N: usize>(v: Vector<S, N>, c: S) -> Result<(), TestCaseError>
 where
@@ -1145,7 +1141,7 @@ where
 /// The [`Vector::magnitude`] function and the [`Vector::norm`] function 
 /// are synonyms. In particular, given a vector `v`
 /// ```text
-/// magnitude(v) = norm(v)
+/// magnitude(v) == norm(v)
 /// ```
 /// where equality is exact.
 fn prop_magnitude_norm_synonyms<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
@@ -1160,7 +1156,7 @@ where
 /// The [`Vector::l2_norm`] function and the [`Vector::norm`] function
 /// are synonyms. In particular, given a vector `v`
 /// ```text
-/// l2_norm(v) = norm(v)
+/// l2_norm(v) == norm(v)
 /// ```
 /// where equality is exact.
 fn prop_l2_norm_norm_synonyms<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>

@@ -127,7 +127,7 @@ where
 ///
 /// Given a quaternion `q`, it satisfies
 /// ```text
-/// 0 * q = 0.
+/// 0 * q == 0.
 /// ```
 fn prop_zero_times_quaternion_equals_zero<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -145,7 +145,7 @@ where
 ///
 /// Given a quaternion `q`, it satisfies
 /// ```text
-/// q * 0 = 0
+/// q * 0 == 0
 /// ```
 fn prop_quaternion_times_zero_equals_zero<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -164,7 +164,7 @@ where
 ///
 /// Given a quaternion `q`
 /// ```text
-/// q + 0 = q
+/// q + 0 == q
 /// ```
 fn prop_quaternion_plus_zero_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -182,7 +182,7 @@ where
 ///
 /// Given a quaternion `q`
 /// ```text
-/// 0 + q = q
+/// 0 + q == q
 /// ```
 fn prop_zero_plus_quaternion_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -201,7 +201,7 @@ where
 ///
 /// Given a quaternion `q`
 /// ```text
-/// 1 * q = q
+/// 1 * q == q
 /// ```
 fn prop_one_times_quaternion_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -220,7 +220,7 @@ where
 ///
 /// Given a quaternion `q`
 /// ```text
-/// q * 1 = q.
+/// q * 1 == q.
 /// ```
 fn prop_quaternion_times_one_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -240,13 +240,13 @@ where
 /// Given quaternions `q1` and `q2`, and their references `&q1` 
 /// and `&q2`, they should satisfy
 /// ```text
-///  q1 +  q2 = &q1 +  q2
-///  q1 +  q2 =  q1 + &q2
-///  q1 +  q2 = &q1 + &q2
-///  q1 + &q2 = &q1 +  q2
-/// &q1 +  q2 =  q1 + &q2
-/// &q1 +  q2 = &q1 + &q2
-///  q1 + &q2 = &q1 + &q2
+///  q1 +  q2 == &q1 +  q2
+///  q1 +  q2 ==  q1 + &q2
+///  q1 +  q2 == &q1 + &q2
+///  q1 + &q2 == &q1 +  q2
+/// &q1 +  q2 ==  q1 + &q2
+/// &q1 +  q2 == &q1 + &q2
+///  q1 + &q2 == &q1 + &q2
 /// ```
 fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2<S>(
     q1: Quaternion<S>, 
@@ -266,11 +266,11 @@ where
     Ok(())
 }
 
-/// Quaternion addition over floating point scalars should be commutative.
+/// Quaternion addition should be commutative.
 /// 
 /// Given quaternions `q1` and `q2`, we have
 /// ```text
-/// q1 + q2 = q2 + q1
+/// q1 + q2 == q2 + q1
 /// ```
 fn prop_quaternion_addition_commutative<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -286,7 +286,7 @@ where
 ///
 /// Given quaternions `q1`, `q2`, and `q3`, we have
 /// ```text
-/// (q1 + q2) + q3 = q1 + (q2 + q3)
+/// (q1 + q2) + q3 == q1 + (q2 + q3)
 /// ```
 fn prop_quaternion_addition_associative<S>(
     q1: Quaternion<S>, 
@@ -305,7 +305,7 @@ where
 ///
 /// Given a quaternion `q`, we have
 /// ```text
-/// q - 0 = q
+/// q - 0 == q
 /// ```
 fn prop_quaternion_minus_zero_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -322,7 +322,7 @@ where
 ///
 /// Given a quaternion `q`, there is a quaternion `-q` such that
 /// ```text
-/// q - q = q + (-q) = (-q) + q = 0
+/// q - q == q + (-q) = (-q) + q == 0
 /// ```
 fn prop_quaternion_minus_quaternion_equals_zero<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -344,13 +344,13 @@ where
 /// Given quaternions `q1` and `q2`, and their references `&q1` and 
 /// `&q2`, they should satisfy
 /// ```text
-///  q1 -  q2 = &q1 -  q2
-///  q1 -  q2 =  q1 - &q2
-///  q1 -  q2 = &q1 - &q2
-///  q1 - &q2 = &q1 -  q2
-/// &q1 -  q2 =  q1 - &q2
-/// &q1 -  q2 = &q1 - &q2
-///  q1 - &q2 = &q1 - &q2
+///  q1 -  q2 == &q1 -  q2
+///  q1 -  q2 ==  q1 - &q2
+///  q1 -  q2 == &q1 - &q2
+///  q1 - &q2 == &q1 -  q2
+/// &q1 -  q2 ==  q1 - &q2
+/// &q1 -  q2 == &q1 - &q2
+///  q1 - &q2 == &q1 - &q2
 /// ```
 fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2<S>(
     q1: Quaternion<S>, 
@@ -374,7 +374,7 @@ where
 ///
 /// Given a constant `c` and a quaternion `q`
 /// ```text
-/// c * q = q * c
+/// c * q == q * c
 /// ```
 fn prop_scalar_times_quaternion_equals_quaternion_times_scalar<S>(c: S, q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -391,7 +391,7 @@ where
 ///
 /// Given a quaternion `q`, and the unit quaternion `1`, we have
 /// ```text
-/// q * 1 = 1 * q = q
+/// q * 1 == 1 * q == q
 /// ```
 fn prop_quaternion_multiplicative_unit<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -411,7 +411,7 @@ where
 ///
 /// Given a quaternion `q` and its inverse `q_inv`, we have
 /// ```text
-/// q * q_inv ~= q_inv * q ~= 1
+/// q * q_inv == q_inv * q == 1
 /// ```
 fn prop_quaternion_multiplicative_inverse<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -438,7 +438,7 @@ where
 ///
 /// Given scalars `a` and `b`, and a quaternion `q`, we have
 /// ```text
-/// (a * b) * q = a * (b * q)
+/// q * (a * b) == (q * a) * b
 /// ```
 fn prop_scalar_multiplication_compatibility<S>(a: S, b: S, q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -452,11 +452,11 @@ where
     Ok(())
 }
 
-/// Quaternion multiplication over integer scalars is exactly associative.
+/// Quaternion multiplication over integer scalars is associative.
 ///
 /// Given quaternions `q1`, `q2`, and `q3`, we have
 /// ```text
-/// (q1 * q2) * q3 = q1 * (q2 * q3)
+/// (q1 * q2) * q3 == q1 * (q2 * q3)
 /// ```
 fn prop_quaternion_multiplication_associative<S>(
     q1: Quaternion<S>, 
@@ -475,7 +475,7 @@ where
 ///
 /// Given a scalar `a` and quaternions `q1` and `q2`
 /// ```text
-/// a * (q1 + q2) = a * q1 + a * q2
+/// (q1 + q2) * a == q1 * a + q2 * a
 /// ```
 fn prop_distribution_over_quaternion_addition<S>(
     a: S, 
@@ -485,24 +485,21 @@ fn prop_distribution_over_quaternion_addition<S>(
 where
     S: SimdScalar + Arbitrary
 {   
-    // prop_assert_eq!(a * (q1 + q2), a * q1 + a * q2);
     prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
 
     Ok(())
 }
 
-/// Multiplication of a sum of scalars should distribute over a 
-/// quaternion.
+/// Multiplication of a sum of scalars should distribute over a quaternion.
 ///
 /// Given scalars `a` and `b` and a quaternion `q`, we have
 /// ```text
-/// (a + b) * q = a * q + b * q
+/// q * (a + b) == q * a + q * b
 /// ```
 fn prop_distribution_over_scalar_addition<S>(a: S, b: S, q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar + Arbitrary
 {   
-    // prop_assert_eq!((a + b) * q, a * q + b * q);
     prop_assert_eq!(q * (a + b), q * a + q * b);
 
     Ok(())
@@ -513,7 +510,7 @@ where
 ///
 /// Given quaternions `q1` and `q2`, and a scalar `a`
 /// ```text
-/// (q1 + q2) * a = q1 * a + q2 * a
+/// (q1 + q2) * a == q1 * a + q2 * a
 /// ```
 fn prop_distribution_over_quaternion_addition1<S>(a: S, q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -524,6 +521,7 @@ where
     Ok(())
 }
 
+/*
 /// Multiplication of a quaternion on the right by the sum of two 
 /// scalars should distribute over the two scalars. 
 ///
@@ -539,12 +537,13 @@ where
 
     Ok(())
 }
+*/
 
 /// Quaternion multiplication should be distributive on the right.
 ///
 /// Given three quaternions `q1`, `q2`, and `q3`
 /// ```text
-/// (q1 + q2) * q3 = q1 * q3 + q2 * q3
+/// (q1 + q2) * q3 == q1 * q3 + q2 * q3
 /// ```
 fn prop_quaternion_multiplication_right_distributive<S>(
     q1: Quaternion<S>, 
@@ -563,7 +562,7 @@ where
 ///
 /// Given three quaternions `q1`, `q2`, and `q3`
 /// ```text
-/// q1 * (q2 + q3) = q1 * q2 + q1 * q3
+/// q1 * (q2 + q3) == q1 * q2 + q1 * q3
 /// ```
 fn prop_quaternion_multiplication_left_distributive<S>(
     q1: Quaternion<S>, 
@@ -582,7 +581,7 @@ where
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// dot(q1, q2) = dot(q2, q1)
+/// dot(q1, q2) == dot(q2, q1)
 /// ```
 fn prop_quaternion_dot_product_commutative<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -593,12 +592,11 @@ where
     Ok(())
 }
 
-/// The dot product of quaternions over integer scalars is right 
-/// distributive.
+/// The dot product of quaternions over integer scalars is right distributive.
 ///
 /// Given quaternions `q1`, `q2`, and `q3`
 /// ```text
-/// dot(q1, q2 + q3) = dot(q1, q2) + dot(q1, q3)
+/// dot(q1, q2 + q3) == dot(q1, q2) + dot(q1, q3)
 /// ```
 fn prop_quaternion_dot_product_right_distributive<S>(
     q1: Quaternion<S>,
@@ -618,7 +616,7 @@ where
 ///
 /// Given quaternions `q1`, `q2`, and `q3`
 /// ```text
-/// dot(q1 + q2,  q3) = dot(q1, q3) + dot(q2, q3)
+/// dot(q1 + q2,  q3) == dot(q1, q3) + dot(q2, q3)
 /// ```
 fn prop_quaternion_dot_product_left_distributive<S>(
     q1: Quaternion<S>,
@@ -633,12 +631,12 @@ where
     Ok(())
 }
 
-/// The dot product of quaternions over integer scalars is 
-/// commutative with scalars.
+/// The dot product of quaternions over integer scalars is commutative with 
+/// scalars.
 ///
 /// Given quaternions `q1` and `q2`, and scalars `a` and `b`
 /// ```text
-/// dot(a * q1, b * q2) = a * b * dot(q1, q2)
+/// dot(q1 * a, q2 * b) == dot(q1, q2) * (a * b)
 /// ```
 fn prop_quaternion_dot_product_times_scalars_commutative<S>(
     a: S, 
@@ -650,7 +648,7 @@ where
     S: SimdScalar + Arbitrary
 {
     let lhs = (q1 * a).dot(&(q2 * b));
-    let rhs = q1.dot(&q2) * (b * a);
+    let rhs = q1.dot(&q2) * (a * b);
 
     prop_assert_eq!(lhs, rhs);
 
@@ -662,7 +660,7 @@ where
 ///
 /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
 /// ```text
-/// dot(q1, a * q2 + b * q3) = a * dot(q1, q2) + b * dot(q1, q3)
+/// dot(q1, q2 * a + q3 * b) == dot(q1, q2) * a + dot(q1, q3) * b
 /// ```
 fn prop_quaternion_dot_product_right_bilinear<S>(
     a: S, b: S,
@@ -686,7 +684,7 @@ where
 ///
 /// Given quaternions `q1`, `q2` and `q3`, and scalars `a` and `b`
 /// ```text
-/// dot(a * q1 + b * q2, q3) = a * dot(q1, q3) + b * dot(q2, q3)
+/// dot(q1 * a + q2 * b, q3) == dot(q1, q3) * a + dot(q2, q3) * b
 /// ```
 fn prop_quaternion_dot_product_left_bilinear<S>(
     a: S, 
@@ -710,7 +708,7 @@ where
 ///
 /// Given a quaternion `q`
 /// ```text
-/// q** = conjugate(conjugate(q)) = q
+/// conjugate(conjugate(q)) == q
 /// ```
 fn prop_quaternion_conjugate_conjugate_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -725,7 +723,7 @@ where
 ///
 /// Given quaternions `q1` and `q2`, quaternion conjugation satisfies
 /// ```text
-/// conjugate(q1 + q2) = conjugate(q1) + conjugate(q2)
+/// conjugate(q1 + q2) == conjugate(q1) + conjugate(q2)
 /// ```
 fn prop_quaternion_conjugation_linear<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -740,7 +738,7 @@ where
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// conjugate(q1 * q2) = conjugate(q2) * conjugate(q1)
+/// conjugate(q1 * q2) == conjugate(q2) * conjugate(q1)
 /// ```
 fn prop_quaternion_conjugation_transposes_products<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -770,11 +768,11 @@ where
 
 /// The squared norm function is point separating. In particular, if 
 /// the squared distance between two quaternions `q1` and `q2` is 
-/// zero, then `q1 = q2`.
+/// zero, then `q1 == q2`.
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// norm_squared(q1 - q2) = 0 => q1 = q2 
+/// norm_squared(q1 - q2) == 0 => q1 == q2 
 /// ```
 /// Equivalently, if `q1` is not equal to `q2`, then their squared distance is 
 /// nonzero
@@ -801,11 +799,11 @@ where
 
 /// The squared norm function is point separating. In particular, if 
 /// the squared distance between two quaternions `q1` and `q2` is 
-/// zero, then `q1 = q2`.
+/// zero, then `q1 == q2`.
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// norm_squared(q1 - q2) = 0 => q1 = q2 
+/// norm_squared(q1 - q2) == 0 => q1 == q2 
 /// ```
 /// Equivalently, if `q1` is not equal to `q2`, then their squared distance is 
 /// nonzero
@@ -836,7 +834,7 @@ where
 /// The [`Quaternion::magnitude_squared`] function and the [`Quaternion::norm_squared`] 
 /// function are synonyms. In particular, given a quaternion `q`
 /// ```text
-/// magnitude_squared(q) = norm_squared(q)
+/// magnitude_squared(q) == norm_squared(q)
 /// ```
 /// where equality is exact.
 fn prop_magnitude_squared_norm_squared<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
@@ -867,11 +865,11 @@ where
 
 /// The norm function is point separating. In particular, if 
 /// the distance between two quaternions `q1` and `q2` is 
-/// zero, then `q1 = q2`.
+/// zero, then `q1 == q2`.
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// norm(q1 - q2) = 0 => q1 = q2 
+/// norm(q1 - q2) == 0 => q1 == q2 
 /// ```
 /// Equivalently, if `q1` is not equal to `q2`, then their distance is 
 /// nonzero
@@ -944,11 +942,11 @@ where
 
 /// The **L1** norm function is point separating. In particular, if 
 /// the distance between two quaternions `q1` and `q2` is 
-/// zero, then `q1 = q2`.
+/// zero, then `q1 == q2`.
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// l1_norm(q1 - q2) = 0 => q1 = q2 
+/// l1_norm(q1 - q2) == 0 => q1 == q2 
 /// ```
 /// Equivalently, if `q1` is not equal to `q2`, then their distance is 
 /// nonzero
@@ -974,7 +972,7 @@ where
 /// The [`Quaternion::magnitude`] function and the [`Quaternion::norm`] function
 /// are synonyms. In particular, given a quaternion `q`
 /// ```text
-/// magnitude(q) = norm(q)
+/// magnitude(q) == norm(q)
 /// ```
 /// where equality is exact.
 fn prop_magnitude_norm_synonyms<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
@@ -989,7 +987,7 @@ where
 /// The [`Quaternion::l2_norm`] function and the [`Quaternion::norm`] function
 /// are synonyms. In particular, given a quaternion `q`
 /// ```text
-/// l2_norm(q) = norm(q)
+/// l2_norm(q) == norm(q)
 /// ```
 /// where equality is exact.
 fn prop_l2_norm_norm_synonyms<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
@@ -1396,6 +1394,7 @@ mod quaternion_i32_distributive_props {
             super::prop_distribution_over_quaternion_addition1(a, q1, q2)?
         }
 
+        /*
         #[test]
         fn prop_distribution_over_scalar_addition1(
             a in super::strategy_scalar_i32_any(), 
@@ -1407,6 +1406,7 @@ mod quaternion_i32_distributive_props {
             let q: super::Quaternion<i32> = q;
             super::prop_distribution_over_scalar_addition1(a, b, q)?
         }
+        */
 
         #[test]
         fn prop_quaternion_multiplication_right_distributive(
