@@ -413,7 +413,7 @@ where
 /// ```text
 /// q * q_inv == q_inv * q == 1
 /// ```
-fn prop_quaternion_multiplicative_inverse<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_quaternion_multiplicative_inverse<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -988,7 +988,7 @@ where
 /// ```text
 /// sqrt(q) * sqrt(q) == q
 /// ```
-fn prop_positive_square_root_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_positive_square_root_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -1010,7 +1010,7 @@ where
 /// ```text
 /// -sqrt(q) * -sqrt(q) == q
 /// ```
-fn prop_negative_square_root_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_negative_square_root_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -1281,9 +1281,9 @@ mod quaternion_f64_mul_props {
         }
 
         #[test]
-        fn prop_quaternion_multiplicative_inverse(q in super::strategy_quaternion_any()) {
+        fn prop_approx_quaternion_multiplicative_inverse(q in super::strategy_quaternion_any()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_quaternion_multiplicative_inverse(q, 1e-8)?
+            super::prop_approx_quaternion_multiplicative_inverse(q, 1e-8)?
         }
     }
 }
@@ -1699,15 +1699,15 @@ mod quaternion_f64_sqrt_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_positive_square_root_squared(q in super::strategy_quaternion_squared_any()) {
+        fn prop_approx_positive_square_root_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_positive_square_root_squared(q, 1e-7)?
+            super::prop_approx_positive_square_root_squared(q, 1e-7)?
         }
 
         #[test]
-        fn prop_negative_square_root_squared(q in super::strategy_quaternion_squared_any()) {
+        fn prop_approx_negative_square_root_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_negative_square_root_squared(q, 1e-7)?
+            super::prop_approx_negative_square_root_squared(q, 1e-7)?
         }
     }
 }

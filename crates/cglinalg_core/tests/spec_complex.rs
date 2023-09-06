@@ -1250,7 +1250,7 @@ where
 /// ```text
 /// sqrt(z) * sqrt(z) == z
 /// ```
-fn prop_positive_square_root_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_positive_square_root_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1268,7 +1268,7 @@ where
 /// ```text
 /// -sqrt(z) * -sqrt(z) == z
 /// ```
-fn prop_negative_square_root_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_negative_square_root_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1286,7 +1286,7 @@ where
 /// ```text
 /// modulus(sqrt(z1 * z2)) == modulus(sqrt(z1)) * modulus(zqrt(z2))
 /// ```
-fn prop_square_root_product_modulus<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_square_root_product_modulus<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1327,7 +1327,7 @@ where
 /// ```text
 /// cos(z) == cos(re(z))
 /// ```
-fn prop_cos_real_equals_cos_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_cos_real_equals_cos_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where 
     S: SimdScalarFloat
 {
@@ -1346,7 +1346,7 @@ where
 /// ```text
 /// cos(-z) == cos(z)
 /// ```
-fn prop_cos_negative_z_equals_cos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_cos_negative_z_equals_cos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1365,7 +1365,7 @@ where
 /// ```text
 /// cos(z) == i * cosh(im(z))
 /// ```
-fn prop_cos_imaginary_equals_imaginary_cosh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_cos_imaginary_equals_imaginary_cosh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1385,7 +1385,7 @@ where
 /// ```text
 /// sin(z) == sin(re(z))
 /// ```
-fn prop_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1404,7 +1404,7 @@ where
 /// ```text
 /// sin(-z) == -sin(z)
 /// ```
-fn prop_sin_negative_z_equals_negative_sin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_sin_negative_z_equals_negative_sin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1423,7 +1423,7 @@ where
 /// ```text
 /// sin(z) == i * sinh(im(z))
 /// ```
-fn prop_sin_imaginary_equals_imaginary_sinh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_sin_imaginary_equals_imaginary_sinh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1442,7 +1442,7 @@ where
 /// ```text
 /// tan(z) == tan(re(z))
 /// ```
-fn prop_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1466,7 +1466,7 @@ where
 /// ```text
 /// tan(-z) == -tan(z)
 /// ```
-fn prop_tan_negative_z_equals_negative_tan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_tan_negative_z_equals_negative_tan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1486,7 +1486,7 @@ where
 /// ```text
 /// tan(z) == i * tanh(im(z))
 /// ```
-fn prop_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1504,7 +1504,7 @@ where
 /// ```text
 /// cos(2 * z) == cos(z) * cos(z) - sin(z) * sin(z)
 /// ```
-fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(
+fn prop_approx_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(
     z: Complex<S>, 
     tolerance: S
 ) -> Result<(), TestCaseError>
@@ -1529,7 +1529,7 @@ where
 /// ```text
 /// sin(2 * z) == 2 * sin(z) * cos(z)
 /// ```
-fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(
+fn prop_approx_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(
     z: Complex<S>, 
     tolerance: S, 
     max_relative: S
@@ -1553,7 +1553,7 @@ where
 /// ```text
 /// tan(z) * (1 - tan(z) * tan(z)) == 2 * tan(z)
 /// ```
-fn prop_tan_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_tan_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1575,7 +1575,7 @@ where
 /// ```text
 /// cos(z1 + z2) == cos(z1) * cos(z2) - sin(z1) * cos(z2)
 /// ```
-fn prop_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1593,7 +1593,7 @@ where
 /// ```text
 /// sin(z1 + z2) == sin(z1) * cos(z2) + cos(z1) * sin(z2)
 /// ```
-fn prop_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1611,7 +1611,7 @@ where
 /// ```text
 /// tan(z1 + z2) * (1 - tan(z1) * tan(z2)) == tan(z1) + tan(z2)
 /// ```
-fn prop_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1630,7 +1630,7 @@ where
 /// ```text
 /// tan(z1 - z2) * (1 - tan(z1) * tan(z2)) == tan(z1) - tan(z2)
 /// ```
-fn prop_tan_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_tan_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1653,7 +1653,7 @@ where
 /// ```text
 /// acos(conjugate(z)) == conjugate(acos(z))
 /// ```
-fn prop_acos_conjugate_z_equals_conjugate_acos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_acos_conjugate_z_equals_conjugate_acos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1671,7 +1671,7 @@ where
 /// ```text
 /// asin(conjugate(z)) == conjugate(asin(z))
 /// ```
-fn prop_asin_conjugate_z_equals_conjugate_asin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_asin_conjugate_z_equals_conjugate_asin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1689,7 +1689,7 @@ where
 /// ```text
 /// atan(conjugate(z)) == conjugate(atan(z))
 /// ```
-fn prop_atan_conjugate_z_equals_conjugate_atan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_atan_conjugate_z_equals_conjugate_atan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1707,7 +1707,7 @@ where
 /// ```text
 /// cos(acos(z)) == z
 /// ```
-fn prop_cos_acos_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_cos_acos_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1725,7 +1725,7 @@ where
 /// ```text
 /// sin(asin(z)) == z
 /// ```
-fn prop_sin_asin_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_sin_asin_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1747,7 +1747,7 @@ where
 /// ```text
 /// tan(atan(z)) == z
 /// ```
-fn prop_tan_atan_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_tan_atan_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1765,7 +1765,7 @@ where
 /// ```text
 /// cosh(conjugate(z)) == conjugate(cosh(z))
 /// ```
-fn prop_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
+fn prop_approx_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1780,7 +1780,7 @@ where
 /// ```text
 /// cosh(-z) == cosh(z)
 /// ```
-fn prop_cosh_negative_z_equals_negative_cosh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_cosh_negative_z_equals_negative_cosh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1795,7 +1795,7 @@ where
 /// ```text
 /// sinh(conjugate(z)) == conjugate(sinh(z))
 /// ```
-fn prop_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
+fn prop_approx_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1810,7 +1810,7 @@ where
 /// ```text
 /// sinh(-z) == -sinh(z)
 /// ```
-fn prop_sinh_negative_z_equals_negative_sinh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_sinh_negative_z_equals_negative_sinh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1825,7 +1825,7 @@ where
 /// ```text
 /// tanh(conjugate(z)) == conjugate(tanh(z))
 /// ```
-fn prop_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
+fn prop_approx_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1840,7 +1840,7 @@ where
 /// ```text
 /// tanh(-z) == -tanh(z)
 /// ```
-fn prop_tanh_negative_z_equals_negative_tanh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_tanh_negative_z_equals_negative_tanh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1855,7 +1855,7 @@ where
 /// ```text
 /// cosh(2 * z) == cosh(z) * cosh(z) + sinh(z) * sinh(z)
 /// ```
-fn prop_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared<S>(
+fn prop_approx_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared<S>(
     z: Complex<S>, 
     tolerance: S, 
     max_relative: S
@@ -1883,7 +1883,7 @@ where
 /// ```text
 /// sinh(2 * z) == 2 * sinh(z) * cosh(z)
 /// ```
-fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(
+fn prop_approx_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(
     z: Complex<S>, 
     tolerance: S, 
     max_relative: S
@@ -1911,7 +1911,7 @@ where
 /// ```text
 /// tanh(2 * z) * (1 + tanh(z) * tanh(z)) == 2 * tanh(z)
 /// ```
-fn prop_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1933,7 +1933,7 @@ where
 /// ```text
 /// cosh(z1 + z2) == cosh(z1) * cosh(z2) + sinh(z1) * sinh(z2)
 /// ```
-fn prop_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1951,7 +1951,7 @@ where
 /// ```text
 /// sinh(z1 + z2) == sinh(z1) * cosh(z2) + cosh(z1) * sinh(z2)
 /// ```
-fn prop_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1969,7 +1969,7 @@ where
 /// ```text
 /// tanh(z1 + z2) * (1 + tanh(z1) * tanh(z2)) == tanh(z1) + tanh(z2)
 /// ```
-fn prop_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1988,7 +1988,7 @@ where
 /// ```text
 /// tanh(z1 - z2) * (1 - tanh(z1) * tanh(z2)) == tanh(z1) - tanh(z2)
 /// ```
-fn prop_tanh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_tanh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -2013,7 +2013,7 @@ where
 /// ```text
 /// cosh(acosh(z)) == z
 /// ```
-fn prop_cosh_acosh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_cosh_acosh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -2032,7 +2032,7 @@ where
 /// ```text
 /// sinh(asinh(z)) == z
 /// ```
-fn prop_sinh_asinh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_sinh_asinh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -2051,7 +2051,7 @@ where
 /// ```text
 /// tanh(atanh(z)) == z
 /// ```
-fn prop_tanh_atanh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_tanh_atanh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -2707,22 +2707,22 @@ mod complex_f64_sqrt_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_positive_square_root_squared(z in super::strategy_complex_f64_sqrt()) {
+        fn prop_approx_positive_square_root_squared(z in super::strategy_complex_f64_sqrt()) {
             let z: super::Complex<f64> = z;
-            super::prop_positive_square_root_squared(z, 1e-10)?
+            super::prop_approx_positive_square_root_squared(z, 1e-10)?
         }
 
         #[test]
-        fn prop_negative_square_root_squared(z in super::strategy_complex_f64_sqrt()) {
+        fn prop_approx_negative_square_root_squared(z in super::strategy_complex_f64_sqrt()) {
             let z: super::Complex<f64> = z;
-            super::prop_negative_square_root_squared(z, 1e-10)?
+            super::prop_approx_negative_square_root_squared(z, 1e-10)?
         }
 
         #[test]
-        fn prop_square_root_product_modulus(z1 in super::strategy_complex_f64_sqrt_product(), z2 in super::strategy_complex_f64_sqrt_product()) {
+        fn prop_approx_square_root_product_modulus(z1 in super::strategy_complex_f64_sqrt_product(), z2 in super::strategy_complex_f64_sqrt_product()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_square_root_product_modulus(z1, z2, 1e-10)?
+            super::prop_approx_square_root_product_modulus(z1, z2, 1e-10)?
         }
 
         #[test]
@@ -2738,96 +2738,96 @@ mod complex_f64_trigonometry_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_cos_real_equals_cos_real(z in super::strategy_imaginary_f64_cos()) {
+        fn prop_approx_cos_real_equals_cos_real(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
-            super::prop_cos_real_equals_cos_real(z, 1e-10)?
+            super::prop_approx_cos_real_equals_cos_real(z, 1e-10)?
         }
 
         #[test]
-        fn prop_cos_negative_z_equals_negative_cos_z(z in super::strategy_imaginary_f64_cos()) {
+        fn prop_approx_cos_negative_z_equals_negative_cos_z(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
-            super::prop_cos_negative_z_equals_cos_z(z, 1e-8)?
+            super::prop_approx_cos_negative_z_equals_cos_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sin_real_equals_sin_real(z in super::strategy_imaginary_f64_sin()) {
+        fn prop_approx_sin_real_equals_sin_real(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
-            super::prop_sin_real_equals_sin_real(z, 1e-10)?
+            super::prop_approx_sin_real_equals_sin_real(z, 1e-10)?
         }
 
         #[test]
-        fn prop_sin_negative_z_equals_negative_sin_z(z in super::strategy_imaginary_f64_sin()) {
+        fn prop_approx_sin_negative_z_equals_negative_sin_z(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
-            super::prop_sin_negative_z_equals_negative_sin_z(z, 1e-8)?
+            super::prop_approx_sin_negative_z_equals_negative_sin_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_tan_real_equals_real_tan(z in super::strategy_real_f64_tan()) {
+        fn prop_approx_tan_real_equals_real_tan(z in super::strategy_real_f64_tan()) {
             let z: super::Complex<f64> = z;
-            super::prop_tan_real_equals_real_tan(z, 1e-4)?
+            super::prop_approx_tan_real_equals_real_tan(z, 1e-4)?
         }
 
         #[test]
-        fn prop_tan_negative_z_equals_negative_tan_z(z in super::strategy_complex_f64_tan()) {
+        fn prop_approx_tan_negative_z_equals_negative_tan_z(z in super::strategy_complex_f64_tan()) {
             let z: super::Complex<f64> = z;
-            super::prop_tan_negative_z_equals_negative_tan_z(z, 1e-8)?
+            super::prop_approx_tan_negative_z_equals_negative_tan_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_cos_imaginary_equals_imaginary_cosh(z in super::strategy_imaginary_f64_cos()) {
+        fn prop_approx_cos_imaginary_equals_imaginary_cosh(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
-            super::prop_cos_imaginary_equals_imaginary_cosh(z, 1e-8)?
+            super::prop_approx_cos_imaginary_equals_imaginary_cosh(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sin_imaginary_equals_imaginary_sinh(z in super::strategy_imaginary_f64_sin()) {
+        fn prop_approx_sin_imaginary_equals_imaginary_sinh(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
-            super::prop_sin_imaginary_equals_imaginary_sinh(z, 1e-8)?
+            super::prop_approx_sin_imaginary_equals_imaginary_sinh(z, 1e-8)?
         }
 
         #[test]
-        fn prop_tan_imaginary_equals_imaginary_tanh(z in super::strategy_imaginary_f64_tan()) {
+        fn prop_approx_tan_imaginary_equals_imaginary_tanh(z in super::strategy_imaginary_f64_tan()) {
             let z: super::Complex<f64> = z;
-            super::prop_tan_imaginary_equals_imaginary_tanh(z, 1e-8)?
+            super::prop_approx_tan_imaginary_equals_imaginary_tanh(z, 1e-8)?
         }
 
         #[test]
-        fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z in super::strategy_complex_f64_cos_double_angle()) {
+        fn prop_approx_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z in super::strategy_complex_f64_cos_double_angle()) {
             let z: super::Complex<f64> = z;
-            super::prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z, 1e-8)?
+            super::prop_approx_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z in super::strategy_complex_f64_sin_double_angle()) {
+        fn prop_approx_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z in super::strategy_complex_f64_sin_double_angle()) {
             let z: super::Complex<f64> = z;
-            super::prop_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z, 1e-8, 1e-8)?
+            super::prop_approx_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle(z, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_tan_two_times_angle(z in super::strategy_complex_f64_tan_double_angle()) {
+        fn prop_approx_tan_two_times_angle(z in super::strategy_complex_f64_tan_double_angle()) {
             let z: super::Complex<f64> = z;
-            super::prop_tan_two_times_angle(z, 1e-8, 1e-8)?
+            super::prop_approx_tan_two_times_angle(z, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_cos_angle_sum(z1 in super::strategy_complex_f64_cos_angle_sum(), z2 in super::strategy_complex_f64_cos_angle_sum()) {
+        fn prop_approx_cos_angle_sum(z1 in super::strategy_complex_f64_cos_angle_sum(), z2 in super::strategy_complex_f64_cos_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_cos_angle_sum(z1, z2, 1e-8, 1e-8)?
+            super::prop_approx_cos_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_sin_angle_sum(z1 in super::strategy_complex_f64_sin_angle_sum(), z2 in super::strategy_complex_f64_sin_angle_sum()) {
+        fn prop_approx_sin_angle_sum(z1 in super::strategy_complex_f64_sin_angle_sum(), z2 in super::strategy_complex_f64_sin_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_sin_angle_sum(z1, z2, 1e-8, 1e-8)?
+            super::prop_approx_sin_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_tan_angle_sum(z1 in super::strategy_complex_f64_tan_angle_sum(), z2 in super::strategy_complex_f64_tan_angle_sum()) {
+        fn prop_approx_tan_angle_sum(z1 in super::strategy_complex_f64_tan_angle_sum(), z2 in super::strategy_complex_f64_tan_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_tan_angle_sum(z1, z2, 1e-8, 1e-8)?
+            super::prop_approx_tan_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
@@ -2837,7 +2837,7 @@ mod complex_f64_trigonometry_props {
         ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_tan_angle_difference(z1, z2, 1e-8, 1e-8)?
+            super::prop_approx_tan_angle_difference(z1, z2, 1e-8, 1e-8)?
         }
     }
 }
@@ -2847,39 +2847,39 @@ mod complex_f64_trigonometry_inverse_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_acos_conjugate_z_equals_conjugate_acos_z(z in super::strategy_imaginary_f64_cos()) {
+        fn prop_approx_acos_conjugate_z_equals_conjugate_acos_z(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
-            super::prop_acos_conjugate_z_equals_conjugate_acos_z(z, 1e-8)?
+            super::prop_approx_acos_conjugate_z_equals_conjugate_acos_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_asin_conjugate_z_equals_conjugate_asin_z(z in super::strategy_imaginary_f64_sin()) {
+        fn prop_approx_asin_conjugate_z_equals_conjugate_asin_z(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
-            super::prop_asin_conjugate_z_equals_conjugate_asin_z(z, 1e-8)?
+            super::prop_approx_asin_conjugate_z_equals_conjugate_asin_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_atan_conjugate_z_equals_conjugate_atan_z(z in super::strategy_complex_f64_tan()) {
+        fn prop_approx_atan_conjugate_z_equals_conjugate_atan_z(z in super::strategy_complex_f64_tan()) {
             let z: super::Complex<f64> = z;
-            super::prop_atan_conjugate_z_equals_conjugate_atan_z(z, 1e-8)?
+            super::prop_approx_atan_conjugate_z_equals_conjugate_atan_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_cos_acos_equals_identity(z in super::strategy_imaginary_f64_cos()) {
+        fn prop_approx_cos_acos_equals_identity(z in super::strategy_imaginary_f64_cos()) {
             let z: super::Complex<f64> = z;
-            super::prop_cos_acos_equals_identity(z, 1e-7)?
+            super::prop_approx_cos_acos_equals_identity(z, 1e-7)?
         }
 
         #[test]
-        fn prop_sin_asin_equals_identity(z in super::strategy_imaginary_f64_sin()) {
+        fn prop_approx_sin_asin_equals_identity(z in super::strategy_imaginary_f64_sin()) {
             let z: super::Complex<f64> = z;
-            super::prop_sin_asin_equals_identity(z, 1e-7)?
+            super::prop_approx_sin_asin_equals_identity(z, 1e-7)?
         }
 
         #[test]
-        fn prop_tan_atan_equals_identity(z in super::strategy_complex_f64_tan()) {
+        fn prop_approx_tan_atan_equals_identity(z in super::strategy_complex_f64_tan()) {
             let z: super::Complex<f64> = z;
-            super::prop_tan_atan_equals_identity(z, 1e-7)?
+            super::prop_approx_tan_atan_equals_identity(z, 1e-7)?
         }
     }
 }
@@ -2889,88 +2889,88 @@ mod complex_f64_hyperbolic_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_cosh_conjugate_z_equals_conjugate_cosh_z(z in super::strategy_complex_f64_cosh()) {
+        fn prop_approx_cosh_conjugate_z_equals_conjugate_cosh_z(z in super::strategy_complex_f64_cosh()) {
             let z: super::Complex<f64> = z;
-            super::prop_cosh_conjugate_z_equals_conjugate_cosh_z(z)?
+            super::prop_approx_cosh_conjugate_z_equals_conjugate_cosh_z(z)?
         }
 
         #[test]
-        fn prop_cosh_negative_z_equals_negative_cosh_z(z in super::strategy_complex_f64_cosh()) {
+        fn prop_approx_cosh_negative_z_equals_negative_cosh_z(z in super::strategy_complex_f64_cosh()) {
             let z: super::Complex<f64> = z;
-            super::prop_cosh_negative_z_equals_negative_cosh_z(z, 1e-8)?
+            super::prop_approx_cosh_negative_z_equals_negative_cosh_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sinh_conjugate_z_equals_conjugate_sinh_z(z in super::strategy_complex_f64_sinh()) {
+        fn prop_approx_sinh_conjugate_z_equals_conjugate_sinh_z(z in super::strategy_complex_f64_sinh()) {
             let z: super::Complex<f64> = z;
-            super::prop_sinh_conjugate_z_equals_conjugate_sinh_z(z)?
+            super::prop_approx_sinh_conjugate_z_equals_conjugate_sinh_z(z)?
         }
 
         #[test]
-        fn prop_sinh_negative_z_equals_negative_sinh_z(z in super::strategy_complex_f64_sinh()) {
+        fn prop_approx_sinh_negative_z_equals_negative_sinh_z(z in super::strategy_complex_f64_sinh()) {
             let z: super::Complex<f64> = z;
-            super::prop_sinh_negative_z_equals_negative_sinh_z(z, 1e-8)?
+            super::prop_approx_sinh_negative_z_equals_negative_sinh_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_tanh_conjugate_z_equals_conjugate_tanh_z(z in super::strategy_complex_f64_tanh()) {
+        fn prop_approx_tanh_conjugate_z_equals_conjugate_tanh_z(z in super::strategy_complex_f64_tanh()) {
             let z: super::Complex<f64> = z;
-            super::prop_tanh_conjugate_z_equals_conjugate_tanh_z(z)?
+            super::prop_approx_tanh_conjugate_z_equals_conjugate_tanh_z(z)?
         }
 
         #[test]
-        fn prop_tanh_negative_z_equals_negative_tanh_z(z in super::strategy_complex_f64_tanh()) {
+        fn prop_approx_tanh_negative_z_equals_negative_tanh_z(z in super::strategy_complex_f64_tanh()) {
             let z: super::Complex<f64> = z;
-            super::prop_tanh_negative_z_equals_negative_tanh_z(z, 1e-8)?
+            super::prop_approx_tanh_negative_z_equals_negative_tanh_z(z, 1e-8)?
         }
 
         #[test]
-        fn prop_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared(z in super::strategy_complex_f64_cosh_double_angle()) {
+        fn prop_approx_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared(z in super::strategy_complex_f64_cosh_double_angle()) {
             let z: super::Complex<f64> = z;
-            super::prop_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared(z, 1e-8, 1e-10)?
+            super::prop_approx_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared(z, 1e-8, 1e-10)?
         }
 
         #[test]
-        fn prop_sinh_two_times_angle_equals_two_times_sinh_cosh(z in super::strategy_complex_f64_sinh_double_angle()) {
+        fn prop_approx_sinh_two_times_angle_equals_two_times_sinh_cosh(z in super::strategy_complex_f64_sinh_double_angle()) {
             let z: super::Complex<f64> = z;
-            super::prop_sinh_two_times_angle_equals_two_times_sinh_cosh(z, 1e-8, 1e-10)?
+            super::prop_approx_sinh_two_times_angle_equals_two_times_sinh_cosh(z, 1e-8, 1e-10)?
         }
 
         #[test]
-        fn prop_tanh_two_times_angle(z in super::strategy_complex_f64_tanh_double_angle()) {
+        fn prop_approx_tanh_two_times_angle(z in super::strategy_complex_f64_tanh_double_angle()) {
             let z: super::Complex<f64> = z;
-            super::prop_tanh_two_times_angle(z, 1e-8, 1e-10)?
+            super::prop_approx_tanh_two_times_angle(z, 1e-8, 1e-10)?
         }
 
         #[test]
-        fn prop_cosh_angle_sum(z1 in super::strategy_complex_f64_cosh_angle_sum(), z2 in super::strategy_complex_f64_cosh_angle_sum()) {
+        fn prop_approx_cosh_angle_sum(z1 in super::strategy_complex_f64_cosh_angle_sum(), z2 in super::strategy_complex_f64_cosh_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_cosh_angle_sum(z1, z2, 1e-8, 1e-8)?
+            super::prop_approx_cosh_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_sinh_angle_sum(z1 in super::strategy_complex_f64_sinh_angle_sum(), z2 in super::strategy_complex_f64_sinh_angle_sum()) {
+        fn prop_approx_sinh_angle_sum(z1 in super::strategy_complex_f64_sinh_angle_sum(), z2 in super::strategy_complex_f64_sinh_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_sinh_angle_sum(z1, z2, 1e-8, 1e-8)?
+            super::prop_approx_sinh_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_tanh_angle_sum(z1 in super::strategy_complex_f64_tanh_angle_sum(), z2 in super::strategy_complex_f64_tanh_angle_sum()) {
+        fn prop_approx_tanh_angle_sum(z1 in super::strategy_complex_f64_tanh_angle_sum(), z2 in super::strategy_complex_f64_tanh_angle_sum()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_tanh_angle_sum(z1, z2, 1e-8, 1e-8)?
+            super::prop_approx_tanh_angle_sum(z1, z2, 1e-8, 1e-8)?
         }
 
         #[test]
-        fn prop_tanh_angle_difference(
+        fn prop_approx_tanh_angle_difference(
             z1 in super::strategy_complex_f64_tanh_angle_difference(), 
             z2 in super::strategy_complex_f64_tanh_angle_difference()
         ) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_tanh_angle_difference(z1, z2, 1e-8, 1e-8)?
+            super::prop_approx_tanh_angle_difference(z1, z2, 1e-8, 1e-8)?
         }
     }
 }
@@ -2980,21 +2980,21 @@ mod complex_f64_hyperbolic_inverse_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_cosh_acosh_equals_identity(z in super::strategy_complex_f64_acosh()) {
+        fn prop_approx_cosh_acosh_equals_identity(z in super::strategy_complex_f64_acosh()) {
             let z: super::Complex<f64> = z;
-            super::prop_cosh_acosh_equals_identity(z, 1e-8)?
+            super::prop_approx_cosh_acosh_equals_identity(z, 1e-8)?
         }
 
         #[test]
-        fn prop_sinh_asinh_equals_identity(z in super::strategy_complex_f64_asinh()) {
+        fn prop_approx_sinh_asinh_equals_identity(z in super::strategy_complex_f64_asinh()) {
             let z: super::Complex<f64> = z;
-            super::prop_sinh_asinh_equals_identity(z, 1e-8)?
+            super::prop_approx_sinh_asinh_equals_identity(z, 1e-8)?
         }
 
         #[test]
-        fn prop_tanh_atanh_equals_identity(z in super::strategy_complex_f64_atanh()) {
+        fn prop_approx_tanh_atanh_equals_identity(z in super::strategy_complex_f64_atanh()) {
             let z: super::Complex<f64> = z;
-            super::prop_tanh_atanh_equals_identity(z, 1e-6)?
+            super::prop_approx_tanh_atanh_equals_identity(z, 1e-6)?
         }
     }
 }
