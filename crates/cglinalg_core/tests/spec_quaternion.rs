@@ -48,7 +48,7 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
     strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
 
-fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
+fn strategy_quaternion_any<S>() -> impl Strategy<Value = Quaternion<S>> 
 where 
     S: SimdScalar + Arbitrary
 {
@@ -61,7 +61,7 @@ where
     .no_shrink()
 }
 
-fn any_quaternion_norm_squared_f64() -> impl Strategy<Value = Quaternion<f64>> {
+fn strategy_quaternion_f64_norm_squared() -> impl Strategy<Value = Quaternion<f64>> {
     use cglinalg_core::{
         Radians,
         Vector3,
@@ -93,7 +93,7 @@ fn any_quaternion_norm_squared_f64() -> impl Strategy<Value = Quaternion<f64>> {
     .no_shrink()
 }
 
-fn any_quaternion_norm_squared_i32() -> impl Strategy<Value = Quaternion<i32>> {
+fn strategy_quaternion_i32_norm_squared() -> impl Strategy<Value = Quaternion<i32>> {
     any::<(i32, i32, i32, i32)>().prop_map(|(_s, _x, _y, _z)| {
         let min_value = 0;
         // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
@@ -109,7 +109,7 @@ fn any_quaternion_norm_squared_i32() -> impl Strategy<Value = Quaternion<i32>> {
     .no_shrink()
 }
 
-fn any_quaternion_squared<S>() -> impl Strategy<Value = Quaternion<S>>
+fn strategy_quaternion_squared_any<S>() -> impl Strategy<Value = Quaternion<S>>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -1092,8 +1092,8 @@ macro_rules! exact_arithmetic_props {
     }
 }
 
-exact_arithmetic_props!(quaternion_f64_arithmetic_props, f64, any_quaternion);
-exact_arithmetic_props!(quaternion_i32_arithmetic_props, i32, any_quaternion);
+exact_arithmetic_props!(quaternion_f64_arithmetic_props, f64, strategy_quaternion_any);
+exact_arithmetic_props!(quaternion_i32_arithmetic_props, i32, strategy_quaternion_any);
 
 
 macro_rules! approx_add_props {
@@ -1132,7 +1132,7 @@ macro_rules! approx_add_props {
     }
 }
 
-approx_add_props!(quaternion_f64_add_props, f64, any_quaternion, 1e-8);
+approx_add_props!(quaternion_f64_add_props, f64, strategy_quaternion_any, 1e-8);
 
 
 macro_rules! exact_add_props {
@@ -1179,7 +1179,7 @@ macro_rules! exact_add_props {
     }
 }
 
-exact_add_props!(quaternion_i32_add_props, i32, any_quaternion);
+exact_add_props!(quaternion_i32_add_props, i32, strategy_quaternion_any);
 
 
 macro_rules! approx_sub_props {
@@ -1211,7 +1211,7 @@ macro_rules! approx_sub_props {
     }
 }
 
-approx_sub_props!(quaternion_f64_sub_props, f64, any_quaternion, 1e-8);
+approx_sub_props!(quaternion_f64_sub_props, f64, strategy_quaternion_any, 1e-8);
 
 
 macro_rules! exact_sub_props {
@@ -1243,7 +1243,7 @@ macro_rules! exact_sub_props {
     }
 }
 
-exact_sub_props!(quaternion_i32_sub_props, i32, any_quaternion);
+exact_sub_props!(quaternion_i32_sub_props, i32, strategy_quaternion_any);
 
 
 macro_rules! approx_mul_props {
@@ -1275,7 +1275,7 @@ macro_rules! approx_mul_props {
     }
 }
 
-approx_mul_props!(quaternion_f64_mul_props, f64, any_quaternion, strategy_scalar_f64_any, 1e-8);
+approx_mul_props!(quaternion_f64_mul_props, f64, strategy_quaternion_any, strategy_scalar_f64_any, 1e-8);
 
 
 macro_rules! exact_mul_props {
@@ -1317,7 +1317,7 @@ macro_rules! exact_mul_props {
     }
 }
 
-exact_mul_props!(quaternion_i32_mul_props, i32, any_quaternion, strategy_scalar_i32_any);
+exact_mul_props!(quaternion_i32_mul_props, i32, strategy_quaternion_any, strategy_scalar_i32_any);
 
 
 macro_rules! exact_distributive_props {
@@ -1378,7 +1378,7 @@ macro_rules! exact_distributive_props {
     }    
 }
 
-exact_distributive_props!(quaternion_i32_distributive_props, i32, any_quaternion, strategy_scalar_i32_any);
+exact_distributive_props!(quaternion_i32_distributive_props, i32, strategy_quaternion_any, strategy_scalar_i32_any);
 
 
 macro_rules! exact_dot_product_props {
@@ -1468,7 +1468,7 @@ macro_rules! exact_dot_product_props {
     }
 }
 
-exact_dot_product_props!(quaternion_i32_dot_product_props, i32, any_quaternion, strategy_scalar_i32_any);
+exact_dot_product_props!(quaternion_i32_dot_product_props, i32, strategy_quaternion_any, strategy_scalar_i32_any);
 
 
 macro_rules! approx_conjugation_props {
@@ -1494,7 +1494,7 @@ macro_rules! approx_conjugation_props {
     }
 }
 
-approx_conjugation_props!(quaternion_f64_conjugation_props, f64, any_quaternion);
+approx_conjugation_props!(quaternion_f64_conjugation_props, f64, strategy_quaternion_any);
 
 
 macro_rules! exact_conjugation_props {
@@ -1527,8 +1527,8 @@ macro_rules! exact_conjugation_props {
     }
 }
 
-exact_conjugation_props!(quaternion_i32_conjugation_props, i32, any_quaternion);
-exact_conjugation_props!(quaternion_i64_conjugation_props, i64, any_quaternion);
+exact_conjugation_props!(quaternion_i32_conjugation_props, i32, strategy_quaternion_any);
+exact_conjugation_props!(quaternion_i64_conjugation_props, i64, strategy_quaternion_any);
 
 
 macro_rules! approx_norm_squared_props {
@@ -1554,7 +1554,7 @@ macro_rules! approx_norm_squared_props {
     }
 }
 
-approx_norm_squared_props!(quaternion_f64_norm_squared_props, f64, any_quaternion_norm_squared_f64, any_scalar_f64, 1e-10, 1e-20);
+approx_norm_squared_props!(quaternion_f64_norm_squared_props, f64, strategy_quaternion_f64_norm_squared, any_scalar_f64, 1e-10, 1e-20);
 
 
 macro_rules! approx_norm_squared_synonym_props {
@@ -1572,7 +1572,7 @@ macro_rules! approx_norm_squared_synonym_props {
     }
 }
 
-approx_norm_squared_synonym_props!(quaternion_f64_norm_squared_synonym_props, f64, any_quaternion);
+approx_norm_squared_synonym_props!(quaternion_f64_norm_squared_synonym_props, f64, strategy_quaternion_any);
 
 
 macro_rules! exact_norm_squared_props {
@@ -1597,7 +1597,7 @@ macro_rules! exact_norm_squared_props {
     }
 }
 
-exact_norm_squared_props!(quaternion_i32_norm_squared_props, i32, any_quaternion_norm_squared_i32, any_scalar);
+exact_norm_squared_props!(quaternion_i32_norm_squared_props, i32, strategy_quaternion_i32_norm_squared, any_scalar);
 
 
 macro_rules! exact_norm_squared_synonym_props {
@@ -1615,7 +1615,7 @@ macro_rules! exact_norm_squared_synonym_props {
     }
 }
 
-exact_norm_squared_synonym_props!(quaternion_i32_norm_squared_synonym_props, i32, any_quaternion);
+exact_norm_squared_synonym_props!(quaternion_i32_norm_squared_synonym_props, i32, strategy_quaternion_any);
 
 
 macro_rules! norm_props {
@@ -1640,7 +1640,7 @@ macro_rules! norm_props {
     }
 }
 
-norm_props!(quaternion_f64_norm_props, f64, any_quaternion, any_scalar_f64, 1e-10);
+norm_props!(quaternion_f64_norm_props, f64, strategy_quaternion_any, any_scalar_f64, 1e-10);
 
 
 macro_rules! approx_l1_norm_props {
@@ -1665,7 +1665,7 @@ macro_rules! approx_l1_norm_props {
     }
 }
 
-approx_l1_norm_props!(quaternion_f64_l1_norm_props, f64, any_quaternion, any_scalar_f64, 1e-10);
+approx_l1_norm_props!(quaternion_f64_l1_norm_props, f64, strategy_quaternion_any, any_scalar_f64, 1e-10);
 
 
 macro_rules! exact_l1_norm_props {
@@ -1690,7 +1690,7 @@ macro_rules! exact_l1_norm_props {
     }
 }
 
-exact_l1_norm_props!(quaternion_i32_l1_norm_props, i32, any_quaternion, any_scalar);
+exact_l1_norm_props!(quaternion_i32_l1_norm_props, i32, strategy_quaternion_any, any_scalar);
 
 
 macro_rules! norm_synonym_props {
@@ -1721,7 +1721,7 @@ macro_rules! norm_synonym_props {
     }
 }
 
-norm_synonym_props!(quaternion_f64_norm_synonym_props, f64, any_quaternion, any_scalar_f64, 1e-10);
+norm_synonym_props!(quaternion_f64_norm_synonym_props, f64, strategy_quaternion_any, any_scalar_f64, 1e-10);
 
 
 macro_rules! sqrt_props {
@@ -1745,5 +1745,5 @@ macro_rules! sqrt_props {
     }
 }
 
-sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion_squared, any_scalar_f64, 1e-7);
+sqrt_props!(quaternion_f64_sqrt_props, f64, strategy_quaternion_squared_any, any_scalar_f64, 1e-7);
 
