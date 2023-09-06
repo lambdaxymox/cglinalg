@@ -125,7 +125,7 @@ where
     Ok(())
 }
 
-/// Matrix addition over exact scalars is commutative.
+/// Matrix addition is commutative.
 ///
 /// Given matrices `m1` and `m2`
 /// ```text
@@ -251,7 +251,7 @@ where
 ///
 /// Given matrices `m1` and `m2`, and a scalar `c`
 /// ```text
-/// c * (m1 + m2) = c * m1 + c * m2
+/// (m1 + m2) * c = m1 * c + m2 * c
 /// ```
 fn prop_scalar_matrix_multiplication_compatible_addition<S, const R: usize, const C: usize>(
     c: S, 
@@ -271,7 +271,7 @@ where
 ///
 /// Given matrices `m1` and `m2`, and a scalar `c`
 /// ```text
-/// c * (m1 - m2) = c * m1 - c * m2
+/// (m1 - m2) * c = m1 * c - m2 * c
 /// ```
 fn prop_scalar_matrix_multiplication_compatible_subtraction<S, const R: usize, const C: usize>(
     c: S, 
@@ -286,11 +286,12 @@ where
     Ok(())
 }
 
-/// Multiplication of a matrix by a scalar commutes with scalars.
+/// Multiplication of a matrix by a scalar matrix commutes.
 ///
-/// Given a matrix `m` and a scalar `c`
+/// Given a matrix `m`, a scalar `c`, and a matrix `c_matrix` that is `c` on the
+/// diagonal and zero elsewhere
 /// ```text
-/// c * m = m * c
+/// c_matrix * m = m * c_matrix
 /// ```
 /// Note that we diverse from traditional formalisms of matrix arithmetic 
 /// in that we allow multiplication of matrices by scalars on the left-hand 
@@ -315,7 +316,7 @@ where
 ///
 /// Given a matrix `m` and scalars `a` and `b`
 /// ```text
-/// (a * b) * m = a * (b * m)
+/// m * (a * b) = (m * a) * b
 /// ```
 fn prop_scalar_matrix_multiplication_compatible<S, const R: usize, const C: usize>(
     a: S, 
@@ -372,7 +373,7 @@ where
 }
 
 
-/// Matrix multiplication is associative.
+/// Matrix multiplication over exact scalars is associative.
 ///
 /// Given matrices `m1`, `m2`, and `m3`
 /// ```text
@@ -419,7 +420,7 @@ where
 ///
 /// Given matrices `m1` and `m2` and a scalar `c`
 /// ```text
-/// c * (m1 * m2) = (c * m1) * m2 = m1 * (c * m2)
+/// (m1 * m2) * c = m1 * (m2 * c)
 /// ```
 fn prop_matrix_multiplication_compatible_with_scalar_multiplication<S, const N: usize, const NN: usize>(
     c: S, 
@@ -441,7 +442,7 @@ where
 ///
 /// Given a matrix `m`, scalars `c1` and `c2`
 /// ```text
-/// (c1 * c2) * m = c1 * (c2 * m)
+/// m * (c1 * c2) = (m * c1) * c2
 /// ```
 fn prop_matrix_multiplication_compatible_with_scalar_multiplication1<S, const R: usize, const C: usize>(
     c1: S, 
@@ -496,7 +497,7 @@ where
 /// 
 /// Given a matrix `m` and a scalar `c`
 /// ```text
-/// transpose(c * m) = c * transpose(m)
+/// transpose(m * c) = transpose(m) * c
 /// ```
 fn prop_transpose_scalar_multiplication<S, const R: usize, const C: usize>(
     c: S, 
