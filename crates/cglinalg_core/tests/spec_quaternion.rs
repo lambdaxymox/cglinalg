@@ -33,10 +33,17 @@ where
         min_value + (value % (max_value - min_value))
     }
 
-    any::<(S, S)>().prop_map(move |(_scale, _angle)| {
+    any::<(S, S, S, S, S)>().prop_map(move |(_scale, _angle, _axis_x, _axis_y, _axis_z)| {
         let scale = SimdScalarSigned::abs(rescale(_scale, min_scale, max_scale));
         let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
-        let axis = Unit::from_value(Vector3::unit_z());
+        let unnormalized_axis = {
+            let axis_x = rescale(_axis_x, S::machine_epsilon(), S::one());
+            let axis_y = rescale(_axis_y, S::machine_epsilon(), S::one());
+            let axis_z = rescale(_axis_z, S::machine_epsilon(), S::one());
+
+            Vector3::new(axis_x, axis_y, axis_z)
+        };
+        let axis = Unit::from_value(unnormalized_axis);
 
         Quaternion::from_polar_decomposition(scale, angle, &axis)
     })
@@ -77,7 +84,10 @@ fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl 
 where
     S: SimdScalarSigned + Arbitrary
 {
-    fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarSigned
+    {
         min_value + (value % (max_value - min_value))
     }
 
@@ -92,7 +102,7 @@ where
 
 fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
     let min_value = f64::sqrt(f64::EPSILON);
-    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
+    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(4_f64);
 
     strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
@@ -107,7 +117,7 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
 
 fn strategy_quaternion_f64_any() -> impl Strategy<Value = Quaternion<f64>> {
     let min_value = f64::sqrt(f64::EPSILON);
-    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
+    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(4_f64);
 
     strategy_quaternion_signed_from_abs_range(min_value, max_value)
 }
@@ -122,6 +132,7 @@ fn strategy_quaternion_i32_any() -> impl Strategy<Value = Quaternion<i32>> {
 }
 
 fn strategy_quaternion_f64_norm_squared() -> impl Strategy<Value = Quaternion<f64>> {
+    /*
     use cglinalg_core::{
         Radians,
         Vector3,
@@ -151,9 +162,17 @@ fn strategy_quaternion_f64_norm_squared() -> impl Strategy<Value = Quaternion<f6
         Quaternion::from_polar_decomposition(scale, angle, &axis)
     })
     .no_shrink()
+    */
+    let min_scale = f64::sqrt(f64::EPSILON);
+    let max_scale = f64::sqrt(f64::MAX) / f64::sqrt(3_f64);
+    let min_angle = 0_f64;
+    let max_angle = core::f64::consts::FRAC_PI_2;
+
+    strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 fn strategy_quaternion_i32_norm_squared() -> impl Strategy<Value = Quaternion<i32>> {
+    /*
     any::<(i32, i32, i32, i32)>().prop_map(|(_s, _x, _y, _z)| {
         let min_value = 0;
         // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
@@ -167,12 +186,17 @@ fn strategy_quaternion_i32_norm_squared() -> impl Strategy<Value = Quaternion<i3
         Quaternion::new(qs, qx, qy, qz)
     })
     .no_shrink()
+    */
+    let min_value = 0_i32;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340_i32;
+    let max_value = max_square_root / 4;
+
+    strategy_quaternion_signed_from_abs_range(min_value, max_value)
 }
 
-fn strategy_quaternion_squared_any<S>() -> impl Strategy<Value = Quaternion<S>>
-where
-    S: SimdScalarFloat + Arbitrary
-{
+fn strategy_quaternion_squared_any() -> impl Strategy<Value = Quaternion<f64>> {
+    /*
     any::<(S, S, S, S)>().prop_map(|(s, x, y, z)| {
         let modulus: S = num_traits::cast(100_000_000).unwrap();
         let quaternion = Quaternion::new(s.abs(), x.abs(), y.abs(), z.abs());
@@ -180,6 +204,11 @@ where
         quaternion % modulus
     })
     .no_shrink()
+    */
+    let min_value = f64::sqrt(f64::sqrt(f64::EPSILON));
+    let max_value = f64::sqrt(f64::sqrt(f64::MAX)) / 4_f64;
+
+    strategy_quaternion_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_quaternion_f64_sqrt() -> impl Strategy<Value = Quaternion<f64>> {
@@ -1080,14 +1109,14 @@ where
 /// ```text
 /// sqrt(q) * sqrt(q) == q
 /// ```
-fn prop_approx_positive_square_root_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_positive_square_root_squared<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let sqrt_q = q.sqrt();
 
     prop_assert!(
-        relative_eq!(sqrt_q * sqrt_q, q, epsilon = tolerance),
+        relative_eq!(sqrt_q * sqrt_q, q, epsilon = tolerance, max_relative = max_relative),
         "q = {:?}\nsqrt_q = {:?}\nsqrt_q * sqrt_q = {:?}",
         q, sqrt_q, sqrt_q * sqrt_q
     );
@@ -1102,14 +1131,14 @@ where
 /// ```text
 /// -sqrt(q) * -sqrt(q) == q
 /// ```
-fn prop_approx_negative_square_root_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_negative_square_root_squared<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let minus_sqrt_q = -q.sqrt();
 
     prop_assert!(
-        relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = tolerance),
+        relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = tolerance, max_relative = max_relative),
         "q = {:?}\nminus_sqrt_q = {:?}\nminus_sqrt_q * minus_sqrt_q = {:?}",
         q, minus_sqrt_q, minus_sqrt_q * minus_sqrt_q
     );
@@ -1131,7 +1160,7 @@ where
     let lhs = (q1 * q2).sqrt().norm();
     let rhs = q1.sqrt().norm() * q2.sqrt().norm();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}; rhs = {}", lhs, rhs);
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
@@ -1857,13 +1886,13 @@ mod quaternion_f64_sqrt_props {
         #[test]
         fn prop_approx_positive_square_root_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_approx_positive_square_root_squared(q, 1e-7)?
+            super::prop_approx_positive_square_root_squared(q, 1e-8, 1e-12)?
         }
 
         #[test]
         fn prop_approx_negative_square_root_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_approx_negative_square_root_squared(q, 1e-7)?
+            super::prop_approx_negative_square_root_squared(q, 1e-8, 1e-12)?
         }
         /*
         #[test]

@@ -42,7 +42,10 @@ fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl 
 where
     S: SimdScalarSigned + Arbitrary
 {
-    fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarSigned
+    {
         min_value + (value % (max_value - min_value))
     }
 
@@ -145,7 +148,10 @@ fn strategy_real_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Valu
 where 
     S: SimdScalarFloat + Arbitrary
 {
-    fn rescale<S: SimdScalarFloat>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarFloat
+    {
         min_value + (value % (max_value - min_value))
     }
 

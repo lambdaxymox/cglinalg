@@ -375,7 +375,7 @@ where
     /// A zero quaternion is a quaternion `zero` such that given another 
     /// quaternion `q`
     /// ```text
-    /// q + zero = zero + q = q
+    /// q + zero == zero + q = q
     /// ```
     ///
     /// # Example
@@ -699,7 +699,11 @@ where
     /// Compute the conjugate of a quaternion.
     ///
     /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
-    /// the conjugate of `q` is the quaternion `q* := s - v`.
+    /// the conjugate of `q` is the quaternion `q* := s - v`. Stated as a function,
+    /// we have
+    /// ```text
+    /// conjugate(s + v) := s - v
+    /// ```
     ///
     /// # Example
     ///
@@ -1053,8 +1057,7 @@ where
     /// from the components of the matrix.
     ///
     /// # Example
-    /// Here we extract a quaternion from a 60-degree rotation about 
-    /// the **z-axis**.
+    /// Here we extract a quaternion from a 60-degree rotation about the **z-axis**.
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -1569,10 +1572,10 @@ where
     /// Compute the principal argument of a quaternion.
     ///
     /// Every quaternion can be written in polar form. Let `q` be a quaternion
-    /// and let `q = qs + qv` where `qs` is the scalar part of `q` and `qv` is 
+    /// and let `q := qs + qv` where `qs` is the scalar part of `q` and `qv` is 
     /// the vector part of `q`. The polar form of q can be written as
     /// ```text
-    /// q = |q| * (cos(theta) + (qv / |qv|) * sin(theta))
+    /// q := |q| * (cos(theta) + (qv / |qv|) * sin(theta))
     /// ```
     /// The argument of `q` is the set of angles `theta` that satisfy the 
     /// relation above which we denote `arg(q)`. The principal argument of `q` 
@@ -1580,9 +1583,9 @@ where
     /// such that `theta` lies in the closed interval `[0, pi]`. For each 
     /// element `theta` in `arg(q)`, there is an integer `n` such that
     /// ```text
-    /// theta = Arg(q) + 2 * pi * n
+    /// theta == Arg(q) + 2 * pi * n
     /// ```
-    /// In the case of `theta = Arg(q)`, we have `n = 0`.
+    /// In the case of `theta = Arg(q)`, we have `n == 0`.
     ///
     /// # Example
     ///
@@ -1748,7 +1751,7 @@ where
     /// logarithm of a quaternion has multiple possible values. We define the 
     /// principal value of the quaternion logarithm
     /// ```text
-    /// Ln(q) = log(||q||, e) + sgn(Vec(q)) * Arg(q)
+    /// Ln(q) := log(||q||, e) + sgn(Vec(q)) * Arg(q)
     /// ```
     /// where `Arg(q)` is the principal argument of `q`, `||q||` is the 
     /// norm of `q`, `Vec(q)` is the vector part of `q`, `sgn(.)` is the 
@@ -1858,42 +1861,42 @@ where
     /// the following formula. Let `q := s + v` where `s` is the scalar part of 
     /// `q` and `v` is the vector part of `q`.
     /// ```text
-    ///                              t + 2 * pi * n      v         t + 2 * pi * n
-    /// sqrt(q) = sqrt(|q|) * ( cos(----------------) + --- * sin(----------------) )
-    ///                                    2            |v|               2
+    ///                               t + 2 * pi * n      v         t + 2 * pi * n
+    /// sqrt(q) := sqrt(|q|) * ( cos(----------------) + --- * sin(----------------) )
+    ///                                     2            |v|               2
     /// ```
     /// where `|q|` is the norm of `q`, `t` is the principal argument of `q`, and `n`
     /// is the nth angle satisfying the above equation. In the case of the square root, there
-    /// are two solutions: `n = 0` and `n = 1`. The `n = 0` case corresponds to the solution
-    /// `p` returned by the function, and the `n = 1` case corresponds to the solution `-p`,
+    /// are two solutions: `n == 0` and `n == 1`. The `n == 0` case corresponds to the solution
+    /// `p` returned by the function, and the `n == 1` case corresponds to the solution `-p`,
     /// which differs only by a sign. Indeed, let 
     /// ```text
     ///                              t      v         t
     /// p0 := p = sqrt(|q|) * ( cos(---) + --- * sin(---) )
     ///                              2     |v|        2
     /// ```
-    /// which is the `n = 0` solution. Let 
+    /// which is the `n == 0` solution. Let 
     /// ```text
-    ///                         t + 2 * pi      v         t + 2 * pi
-    /// p1 = sqrt(|q|) * ( cos(------------) + --- * sin(------------) )
-    ///                             2          |v|             2
+    ///                          t + 2 * pi      v         t + 2 * pi
+    /// p1 := sqrt(|q|) * ( cos(------------) + --- * sin(------------) )
+    ///                              2          |v|             2
     /// ```
     /// Observe that
     /// ```text
-    /// cos((t + 2 * pi) / 2) = cos((t / 2) + pi) = -cos(t / 2)
-    /// sin((t + 2 * pi) / 2) = sin((t / 2) + pi) = -sin(t / 2)
+    /// cos((t + 2 * pi) / 2) == cos((t / 2) + pi) = -cos(t / 2)
+    /// sin((t + 2 * pi) / 2) == sin((t / 2) + pi) = -sin(t / 2)
     /// ```
     /// so that
     /// ```text
-    ///                          t      v            t
-    /// p1 = sqrt(|q|) * ( -cos(---) + --- * ( -sin(---) )
-    ///                          2     |v|           2
+    ///                           t      v            t
+    /// p1 == sqrt(|q|) * ( -cos(---) + --- * ( -sin(---) )
+    ///                           2     |v|           2
     ///
-    ///                          t      v         t
-    ///    = -sqrt(|q|) * ( cos(---) + --- * sin(---) )
-    ///                          2     |v|        2
+    ///                           t      v         t
+    ///    == -sqrt(|q|) * ( cos(---) + --- * sin(---) )
+    ///                           2     |v|        2
     /// 
-    ///    = -p
+    ///    == -p
     /// ```
     /// Thus the quaternion square root is indeed a proper square root with two 
     /// solutions given by `p` and `-p`. We illustrate this with an example. 
@@ -1937,26 +1940,26 @@ where
     /// 
     /// The noncommutativity of quaternion multiplication has some counterintuitive 
     /// properties. Some quaternions can have more solutions than the degree of the 
-    /// corresponding polynomial equation. For example, consider the quaternion `q = -1`.
+    /// corresponding polynomial equation. For example, consider the quaternion `q := -1`.
     /// The square roots of `q` are those quaternions `p` such that
     /// ```text
     /// p * p + 1 == 0
     /// ```
     /// This polynomial has an infinite number of pure quaternion solutions
     /// ```text
-    /// p = b * i + c * j + d * k
+    /// p == b * i + c * j + d * k
     /// ```
-    /// To see this, let `p = a + b * i + c * j + d * k`, this yields solutions 
+    /// To see this, let `p := a + b * i + c * j + d * k`, this yields solutions 
     /// of the form
     /// ```text
     /// a * a - b * b  - c * c - d * d == -1
-    /// 2 * a * b = 0
-    /// 2 * a * c = 0
-    /// 2 * a * d = 0
+    /// 2 * a * b == 0
+    /// 2 * a * c == 0
+    /// 2 * a * d == 0
     /// ```
-    /// To satisfy this system of equations, either `a = 0`, or `b = c = d = 0`. 
-    /// If `a != 0` and `b = c = d = 0`, we have `a * a = -1` which is absurd, 
-    /// since `a` is a real number. This yields `a = 0` and 
+    /// To satisfy this system of equations, either `a == 0`, or `b == c == d == 0`. 
+    /// If `a != 0` and `b == c == d == 0`, we have `a * a == -1` which is absurd, 
+    /// since `a` is a real number. This yields `a == 0` and 
     /// `b * b + c * c + d * d != 1`. Therefore, a quaternion that squares to `-1`
     /// has as solutions pure unit quaternions. These solutions form a two-sphere
     /// centered at zero in the pure quaternion subspace[1]. 
@@ -2028,7 +2031,7 @@ where
 
     /// Compute the left quotient of two quaternions.
     /// 
-    /// Given quaternions `q = self` and `p = left`, the left quotient of
+    /// Given quaternions `q := self` and `p := left`, the left quotient of
     /// `q` by `p` is given by
     /// ```text
     /// div_left(q, p) := p_inv * q
@@ -2066,7 +2069,7 @@ where
 
     /// Compute the right quotient of two quaternions.
     /// 
-    /// Given quaternions `q = self` and `p = right`, the right quotient of
+    /// Given quaternions `q := self` and `p := right`, the right quotient of
     /// `q` by `p` is given by
     /// ```text
     /// div_right(q, p) := q * p_inv
@@ -2769,7 +2772,7 @@ where
 
         // We have two opportunities for performance optimizations:
         //
-        // If `result` == `other`, there is no curve to interpolate; the angle 
+        // If `result == other`, there is no curve to interpolate; the angle 
         // between `result` and  `other` is zero. In this case we can return 
         // `result`.
         if SimdScalarSigned::abs(cos_half_theta) >= one {
@@ -2905,7 +2908,7 @@ where
     /// projected onto `p`. The component `q_perpendicular` is the component 
     /// perpendicular to `p`, or  rejected by `p`. This leads to the decomposition
     /// ```text
-    /// q = q.project(p) + q.reject(p)
+    /// q == q.project(p) + q.reject(p)
     /// ```
     /// 
     /// # Example
@@ -3011,8 +3014,10 @@ where
     /// ```text
     /// q := |q| * (cos(angle / 2) + sin(angle / 2 * axis))
     ///   == |q| * cos(angle / 2) + |q| * sin(angle / 2) * axis
-    ///   =: s + v
+    ///   == s + v
     /// ```
+    /// where `s := |q| * cos(angle / 2)` is the scalar part of `q`, and 
+    /// `v := |q| * sin(angle / 2) * axis` is the vector part of `q`.
     ///
     /// # Example
     ///
