@@ -119,9 +119,9 @@ fn strategy_complex_f64_modulus_squared() -> impl Strategy<Value = Complex<f64>>
 }
 
 fn strategy_complex_i32_modulus_squared() -> impl Strategy<Value = Complex<i32>> {
-    let min_value = 0;
+    let min_value = 0_i32;
     // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-    let max_square_root = 46340;
+    let max_square_root = 46340_i32;
     let max_value = max_square_root / 2;
 
     strategy_complex_signed_from_abs_range(min_value, max_value)

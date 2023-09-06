@@ -16,15 +16,36 @@ use approx::{
 };
 
 
-fn any_scalar<S>() -> impl Strategy<Value = S>
+fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalarSigned + Arbitrary
 {
-    any::<S>().prop_map(|scalar| {
-        let modulus = num_traits::cast(100_000_000).unwrap();
+    fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
+        min_value + (value % (max_value - min_value))
+    }
 
-        scalar % modulus
+    any::<S>().prop_map(move |value| {
+        let sign_value = value.signum();
+        let abs_value = value.abs();
+        
+        sign_value * rescale(abs_value, min_value, max_value)
     })
+    .no_shrink()
+}
+
+fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
+    let min_value = f64::sqrt(f64::EPSILON);
+    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
+
+    strategy_scalar_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
+    let min_value = 0_i32;
+    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
+    let max_value = 46340_i32;
+
+    strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
 
 fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
@@ -280,8 +301,7 @@ where
     Ok(())
 }
 
-/// The zero quaternion over floating point scalars should act as an 
-/// additive unit.
+/// The zero quaternion should act as an additive unit.
 ///
 /// Given a quaternion `q`, we have
 /// ```text
@@ -763,6 +783,37 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
+fn prop_norm_squared_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + Arbitrary
+{   
+    let zero = num_traits::zero();
+
+    prop_assume!(q1 != q2);
+    prop_assert_ne!(
+        (q1 - q2).norm_squared(), zero,
+        "\n|q1 - q2|^2 = {}\n",
+        (q1 - q2).norm_squared()
+    );
+
+    Ok(())
+}
+
+/// The squared norm function is point separating. In particular, if 
+/// the squared distance between two quaternions `q1` and `q2` is 
+/// zero, then `q1 = q2`.
+///
+/// Given quaternions `q1` and `q2`
+/// ```text
+/// norm_squared(q1 - q2) = 0 => q1 = q2 
+/// ```
+/// Equivalently, if `q1` is not equal to `q2`, then their squared distance is 
+/// nonzero
+/// ```text
+/// q1 != q2 => norm_squared(q1 - q2) != 0
+/// ```
+/// For the sake of testability, we use the second form to test the 
+/// norm function.
 fn prop_approx_norm_squared_point_separating<S>(
     q1: Quaternion<S>, 
     q2: Quaternion<S>,
@@ -793,37 +844,6 @@ where
     S: SimdScalar + Arbitrary
 {
     prop_assert_eq!(q.magnitude_squared(), q.norm_squared());
-
-    Ok(())
-}
-
-/// The squared norm function is point separating. In particular, if 
-/// the squared distance between two quaternions `q1` and `q2` is 
-/// zero, then `q1 = q2`.
-///
-/// Given quaternions `q1` and `q2`
-/// ```text
-/// norm_squared(q1 - q2) = 0 => q1 = q2 
-/// ```
-/// Equivalently, if `q1` is not equal to `q2`, then their squared distance is 
-/// nonzero
-/// ```text
-/// q1 != q2 => norm_squared(q1 - q2) != 0
-/// ```
-/// For the sake of testability, we use the second form to test the 
-/// norm function.
-fn prop_norm_squared_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
-where
-    S: SimdScalarSigned + Arbitrary
-{   
-    let zero = num_traits::zero();
-
-    prop_assume!(q1 != q2);
-    prop_assert_ne!(
-        (q1 - q2).norm_squared(), zero,
-        "\n|q1 - q2|^2 = {}\n",
-        (q1 - q2).norm_squared()
-    );
 
     Ok(())
 }
@@ -906,13 +926,15 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_approx_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarSigned + Arbitrary
 {
-    prop_assume!(relative_ne!(q1, q2, epsilon = tolerance));
-    prop_assert!(
-        (q1 - q2).l1_norm() > tolerance,
+    let zero = num_traits::zero();
+
+    prop_assume!(q1 != q2);
+    prop_assert_ne!(
+        (q1 - q2).l1_norm(), zero,
         "\nl1_norm(q1 - q2) = {}\n",
         (q1 - q2).l1_norm()
     );
@@ -935,15 +957,13 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
+fn prop_approx_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarFloat + Arbitrary
 {
-    let zero = num_traits::zero();
-
-    prop_assume!(q1 != q2);
-    prop_assert_ne!(
-        (q1 - q2).l1_norm(), zero,
+    prop_assume!(relative_ne!(q1, q2, epsilon = tolerance));
+    prop_assert!(
+        (q1 - q2).l1_norm() > tolerance,
         "\nl1_norm(q1 - q2) = {}\n",
         (q1 - q2).l1_norm()
     );
@@ -1024,7 +1044,6 @@ where
 
     Ok(())
 }
-
 
 
 macro_rules! exact_arithmetic_props {
@@ -1256,7 +1275,7 @@ macro_rules! approx_mul_props {
     }
 }
 
-approx_mul_props!(quaternion_f64_mul_props, f64, any_quaternion, any_scalar, 1e-8);
+approx_mul_props!(quaternion_f64_mul_props, f64, any_quaternion, strategy_scalar_f64_any, 1e-8);
 
 
 macro_rules! exact_mul_props {
@@ -1298,7 +1317,7 @@ macro_rules! exact_mul_props {
     }
 }
 
-exact_mul_props!(quaternion_i32_mul_props, i32, any_quaternion, any_scalar);
+exact_mul_props!(quaternion_i32_mul_props, i32, any_quaternion, strategy_scalar_i32_any);
 
 
 macro_rules! exact_distributive_props {
@@ -1359,7 +1378,7 @@ macro_rules! exact_distributive_props {
     }    
 }
 
-exact_distributive_props!(quaternion_i32_distributive_props, i32, any_quaternion, any_scalar);
+exact_distributive_props!(quaternion_i32_distributive_props, i32, any_quaternion, strategy_scalar_i32_any);
 
 
 macro_rules! exact_dot_product_props {
@@ -1449,7 +1468,7 @@ macro_rules! exact_dot_product_props {
     }
 }
 
-exact_dot_product_props!(quaternion_i32_dot_product_props, i32, any_quaternion, any_scalar);
+exact_dot_product_props!(quaternion_i32_dot_product_props, i32, any_quaternion, strategy_scalar_i32_any);
 
 
 macro_rules! approx_conjugation_props {
@@ -1535,7 +1554,7 @@ macro_rules! approx_norm_squared_props {
     }
 }
 
-approx_norm_squared_props!(quaternion_f64_norm_squared_props, f64, any_quaternion_norm_squared_f64, any_scalar, 1e-10, 1e-20);
+approx_norm_squared_props!(quaternion_f64_norm_squared_props, f64, any_quaternion_norm_squared_f64, any_scalar_f64, 1e-10, 1e-20);
 
 
 macro_rules! approx_norm_squared_synonym_props {
@@ -1621,7 +1640,7 @@ macro_rules! norm_props {
     }
 }
 
-norm_props!(quaternion_f64_norm_props, f64, any_quaternion, any_scalar, 1e-10);
+norm_props!(quaternion_f64_norm_props, f64, any_quaternion, any_scalar_f64, 1e-10);
 
 
 macro_rules! approx_l1_norm_props {
@@ -1646,7 +1665,7 @@ macro_rules! approx_l1_norm_props {
     }
 }
 
-approx_l1_norm_props!(quaternion_f64_l1_norm_props, f64, any_quaternion, any_scalar, 1e-10);
+approx_l1_norm_props!(quaternion_f64_l1_norm_props, f64, any_quaternion, any_scalar_f64, 1e-10);
 
 
 macro_rules! exact_l1_norm_props {
@@ -1702,7 +1721,7 @@ macro_rules! norm_synonym_props {
     }
 }
 
-norm_synonym_props!(quaternion_f64_norm_synonym_props, f64, any_quaternion, any_scalar, 1e-10);
+norm_synonym_props!(quaternion_f64_norm_synonym_props, f64, any_quaternion, any_scalar_f64, 1e-10);
 
 
 macro_rules! sqrt_props {
@@ -1726,5 +1745,5 @@ macro_rules! sqrt_props {
     }
 }
 
-sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion_squared, any_scalar, 1e-7);
+sqrt_props!(quaternion_f64_sqrt_props, f64, any_quaternion_squared, any_scalar_f64, 1e-7);
 
