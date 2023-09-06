@@ -1108,16 +1108,6 @@ macro_rules! approx_add_props {
                 let q2: super::Quaternion<$ScalarType> = q2;
                 super::prop_quaternion_addition_commutative(q1, q2)?
             }
-
-            /*
-            #[test]
-            fn prop_quaternion_addition_almost_associative(q1 in super::$Generator(), q2 in super::$Generator(), q3 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                let q3: super::Quaternion<$ScalarType> = q3;
-                super::prop_quaternion_addition_almost_associative(q1, q2, q3, $tolerance)?
-            }
-            */
         }
     }
     }
