@@ -763,7 +763,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_norm_squared_approx_point_separating<S>(
+fn prop_approx_norm_squared_point_separating<S>(
     q1: Quaternion<S>, 
     q2: Quaternion<S>,
     input_tolerance: S,
@@ -860,7 +860,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_norm_approx_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -906,7 +906,7 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the 
 /// norm function.
-fn prop_l1_norm_approx_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
@@ -1525,10 +1525,10 @@ macro_rules! approx_norm_squared_props {
             }
 
             #[test]
-            fn prop_norm_squared_approx_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
+            fn prop_approx_norm_squared_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
                 let q1: super::Quaternion<$ScalarType> = q1;
                 let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_norm_squared_approx_point_separating(q1, q2, $input_tolerance, $output_tolerance)?
+                super::prop_approx_norm_squared_point_separating(q1, q2, $input_tolerance, $output_tolerance)?
             }
         }
     }
@@ -1611,10 +1611,10 @@ macro_rules! norm_props {
             }
 
             #[test]
-            fn prop_norm_approx_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
+            fn prop_approx_norm_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
                 let q1: super::Quaternion<$ScalarType> = q1;
                 let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_norm_approx_point_separating(q1, q2, $tolerance)?
+                super::prop_approx_norm_point_separating(q1, q2, $tolerance)?
             }
         }
     }
@@ -1636,10 +1636,10 @@ macro_rules! approx_l1_norm_props {
             }
 
             #[test]
-            fn prop_l1_norm_approx_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
+            fn prop_approx_l1_norm_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
                 let q1: super::Quaternion<$ScalarType> = q1;
                 let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_l1_norm_approx_point_separating(q1, q2, $tolerance)?
+                super::prop_approx_l1_norm_point_separating(q1, q2, $tolerance)?
             }
         }
     }
