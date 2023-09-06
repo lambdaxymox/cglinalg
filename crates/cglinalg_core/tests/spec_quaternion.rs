@@ -1053,14 +1053,6 @@ macro_rules! exact_arithmetic_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Quaternion,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_zero_times_quaternion_equals_zero(q in super::$Generator()) {
@@ -1104,7 +1096,6 @@ macro_rules! exact_arithmetic_props {
 
 exact_arithmetic_props!(quaternion_f64_arithmetic_props, f64, any_quaternion);
 exact_arithmetic_props!(quaternion_i32_arithmetic_props, i32, any_quaternion);
-exact_arithmetic_props!(quaternion_u32_arithmetic_props, u32, any_quaternion);
 
 
 macro_rules! approx_add_props {
@@ -1112,17 +1103,6 @@ macro_rules! approx_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Quaternion, 
-        };
-        use approx::{
-            relative_eq
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_quaternion_plus_zero_equals_quaternion(q in super::$Generator()) {
@@ -1172,14 +1152,6 @@ macro_rules! exact_add_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Quaternion, 
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_quaternion_plus_zero_equals_quaternion(q in super::$Generator()) {
@@ -1220,7 +1192,6 @@ macro_rules! exact_add_props {
 }
 
 exact_add_props!(quaternion_i32_add_props, i32, any_quaternion);
-exact_add_props!(quaternion_u32_add_props, u32, any_quaternion);
 
 
 macro_rules! approx_sub_props {
@@ -1228,14 +1199,6 @@ macro_rules! approx_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Quaternion,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_quaternion_minus_zero_equals_quaternion(q in super::$Generator()) {
@@ -1268,14 +1231,6 @@ macro_rules! exact_sub_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Quaternion,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_quaternion_minus_zero_equals_quaternion(q in super::$Generator()) {
@@ -1308,16 +1263,6 @@ macro_rules! approx_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::relative_eq;
-        use cglinalg_core::{
-            Quaternion,
-        };
-        use super::{
-            $Generator,
-            $ScalarGen,
-        };
-
-
         proptest! {
             #[test]
             fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(c in super::$ScalarGen(), q in super::$Generator()) {
@@ -1350,14 +1295,6 @@ macro_rules! exact_mul_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use cglinalg_core::{
-            Quaternion,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(c in super::$ScalarGen(), q in super::$Generator()) {
@@ -1400,11 +1337,6 @@ macro_rules! exact_distributive_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_distribution_over_quaternion_addition(a in super::$ScalarGen(), q1 in super::$Generator(), q2 in super::$Generator()) {
@@ -1459,7 +1391,6 @@ macro_rules! exact_distributive_props {
 }
 
 exact_distributive_props!(quaternion_i32_distributive_props, i32, any_quaternion, any_scalar);
-exact_distributive_props!(quaternion_u32_distributive_props, u32, any_quaternion, any_scalar);
 
 
 macro_rules! exact_dot_product_props {
@@ -1467,11 +1398,6 @@ macro_rules! exact_dot_product_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-    
         proptest! {
             #[test]
             fn prop_quaternion_dot_product_commutative(q1 in super::$Generator(), q2 in super::$Generator()) {
@@ -1555,7 +1481,6 @@ macro_rules! exact_dot_product_props {
 }
 
 exact_dot_product_props!(quaternion_i32_dot_product_props, i32, any_quaternion, any_scalar);
-exact_dot_product_props!(quaternion_u32_dot_product_props, u32, any_quaternion, any_scalar);
 
 
 macro_rules! approx_conjugation_props {
@@ -1563,11 +1488,6 @@ macro_rules! approx_conjugation_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-    
         proptest! {
             #[test]
             fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::$Generator()) {
@@ -1594,11 +1514,6 @@ macro_rules! exact_conjugation_props {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-    
         proptest! {
             #[test]
             fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::$Generator()) {
@@ -1632,14 +1547,6 @@ macro_rules! approx_norm_squared_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $input_tolerance:expr, $output_tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_ne,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_norm_squared_nonnegative(q in super::$Generator()) {
@@ -1666,11 +1573,6 @@ macro_rules! approx_norm_squared_synonym_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_magnitude_squared_norm_squared(q in super::$Generator()) {
@@ -1689,11 +1591,6 @@ macro_rules! exact_norm_squared_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_norm_squared_nonnegative(q in super::$Generator()) {
@@ -1719,11 +1616,6 @@ macro_rules! exact_norm_squared_synonym_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_magnitude_squared_norm_squared(q in super::$Generator()) {
@@ -1736,21 +1628,12 @@ macro_rules! exact_norm_squared_synonym_props {
 }
 
 exact_norm_squared_synonym_props!(quaternion_i32_norm_squared_synonym_props, i32, any_quaternion);
-exact_norm_squared_synonym_props!(quaternion_u32_norm_squared_synonym_props, u32, any_quaternion);
 
 
 macro_rules! norm_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_ne,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_norm_nonnegative(q in super::$Generator()) {
@@ -1776,14 +1659,6 @@ macro_rules! approx_l1_norm_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_ne,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_l1_norm_nonnegative(q in super::$Generator()) {
@@ -1809,11 +1684,6 @@ macro_rules! exact_l1_norm_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_l1_norm_nonnegative(q in super::$Generator()) {
@@ -1839,11 +1709,6 @@ macro_rules! norm_synonym_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_magnitude_norm_synonyms(q in super::$Generator()) {
@@ -1875,14 +1740,6 @@ macro_rules! sqrt_props {
     ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
     mod $TestModuleName {
         use proptest::prelude::*;
-        use approx::{
-            relative_eq,
-        };
-        use super::{
-            $Generator,
-        };
-
-
         proptest! {
             #[test]
             fn prop_positive_square_root_squared(q in super::$Generator()) {
