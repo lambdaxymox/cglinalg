@@ -10,59 +10,34 @@ mod conversion_tests {
     use core::f64;
 
 
-    struct Test<A, B> {
-        input: A,
-        expected: B, 
-    }
-
-    fn radians_to_degrees_tests() -> Vec<Test<Radians<f64>, Degrees<f64>>> {
-        let pi = f64::consts::PI;
-        vec![
-            Test { input: Radians(0_f64),              expected: Degrees(0_f64)   },
-            Test { input: Radians(pi / 4_f64),         expected: Degrees(45_f64)  },
-            Test { input: Radians(pi / 2_f64),         expected: Degrees(90_f64)  },
-            Test { input: Radians(3_f64 * pi / 4_f64), expected: Degrees(135_f64) },
-            Test { input: Radians(pi),                 expected: Degrees(180_f64) },
-            Test { input: Radians(5_f64 * pi / 4_f64), expected: Degrees(225_f64) },
-            Test { input: Radians(3_f64 * pi / 2_f64), expected: Degrees(270_f64) },
-            Test { input: Radians(7_f64 * pi / 4_f64), expected: Degrees(315_f64) },
-            Test { input: Radians(2_f64 * pi),         expected: Degrees(360_f64) },
-        ]
-    }
-
-    fn degrees_to_radians_tests() -> Vec<Test<Degrees<f64>, Radians<f64>>> {
-        let pi = f64::consts::PI;
-        vec![
-            Test { input: Degrees(0_f64),   expected: Radians(0_f64)              },
-            Test { input: Degrees(45_f64),  expected: Radians(pi / 4_f64)         },
-            Test { input: Degrees(90_f64),  expected: Radians(pi / 2_f64)         },
-            Test { input: Degrees(135_f64), expected: Radians(3_f64 * pi / 4_f64) },
-            Test { input: Degrees(180_f64), expected: Radians(pi)                 },
-            Test { input: Degrees(225_f64), expected: Radians(5_f64 * pi / 4_f64) },
-            Test { input: Degrees(270_f64), expected: Radians(3_f64 * pi / 2_f64) },
-            Test { input: Degrees(315_f64), expected: Radians(7_f64 * pi / 4_f64) },
-            Test { input: Degrees(360_f64), expected: Radians(2_f64 * pi)         },
-        ]
-    }
-
     #[test]
     fn convert_radians_to_degrees() {
-        radians_to_degrees_tests().iter().for_each(|test| {
-            let result = Degrees::from(test.input);
-            let expected = test.expected;
+        let pi = f64::consts::PI;
 
-            assert_eq!(result, expected);
-        })
+        assert_eq!(Degrees::from(Radians(0_f64)),              Degrees(0_f64));
+        assert_eq!(Degrees::from(Radians(pi / 4_f64)),         Degrees(45_f64));
+        assert_eq!(Degrees::from(Radians(pi / 2_f64)),         Degrees(90_f64));
+        assert_eq!(Degrees::from(Radians(3_f64 * pi / 4_f64)), Degrees(135_f64));
+        assert_eq!(Degrees::from(Radians(pi)),                 Degrees(180_f64));
+        assert_eq!(Degrees::from(Radians(5_f64 * pi / 4_f64)), Degrees(225_f64));
+        assert_eq!(Degrees::from(Radians(3_f64 * pi / 2_f64)), Degrees(270_f64));
+        assert_eq!(Degrees::from(Radians(7_f64 * pi / 4_f64)), Degrees(315_f64));
+        assert_eq!(Degrees::from(Radians(2_f64 * pi)),         Degrees(360_f64));
     }
 
     #[test]
     fn convert_degrees_to_radians() {
-        degrees_to_radians_tests().iter().for_each(|test| {
-            let result = Radians::from(test.input);
-            let expected = test.expected;
+        let pi = f64::consts::PI;
 
-            assert_eq!(result, expected);
-        })
+        assert_eq!(Radians::from(Degrees(0_f64)),   Radians(0_f64));
+        assert_eq!(Radians::from(Degrees(45_f64)),  Radians(pi / 4_f64));
+        assert_eq!(Radians::from(Degrees(90_f64)),  Radians(pi / 2_f64));
+        assert_eq!(Radians::from(Degrees(135_f64)), Radians(3_f64 * pi / 4_f64));
+        assert_eq!(Radians::from(Degrees(180_f64)), Radians(pi));
+        assert_eq!(Radians::from(Degrees(225_f64)), Radians(5_f64 * pi / 4_f64));
+        assert_eq!(Radians::from(Degrees(270_f64)), Radians(3_f64 * pi / 2_f64));
+        assert_eq!(Radians::from(Degrees(315_f64)), Radians(7_f64 * pi / 4_f64));
+        assert_eq!(Radians::from(Degrees(360_f64)), Radians(2_f64 * pi));
     }
 }
 
