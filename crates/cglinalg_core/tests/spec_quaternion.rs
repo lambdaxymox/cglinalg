@@ -43,6 +43,35 @@ where
     .no_shrink()
 }
 
+fn strategy_quaternion_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Quaternion<S>>
+where
+    S: SimdScalarSigned + Arbitrary
+{
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarSigned
+    {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<(S, S, S, S)>().prop_map(move |(_qs, _qx, _qy, _qz)| {
+        let sign_qs = _qs.signum();
+        let sign_qx = _qx.signum();
+        let sign_qy = _qy.signum();
+        let sign_qz = _qz.signum();
+        let abs_qs = _qs.abs();
+        let abs_qx = _qx.abs();
+        let abs_qy = _qy.abs();
+        let abs_qz = _qz.abs();
+        let qs = sign_qs * rescale(abs_qs, min_value, max_value);
+        let qx = sign_qx * rescale(abs_qx, min_value, max_value);
+        let qy = sign_qy * rescale(abs_qy, min_value, max_value);
+        let qz = sign_qz * rescale(abs_qz, min_value, max_value);
+        
+        Quaternion::new(qs, qx, qy, qz)
+    })
+    .no_shrink()
+}
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
@@ -76,17 +105,20 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
     strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
 
-fn strategy_quaternion_any<S>() -> impl Strategy<Value = Quaternion<S>> 
-where 
-    S: SimdScalar + Arbitrary
-{
-    any::<(S, S, S, S)>().prop_map(|(s, x, y, z)| {
-        let modulus: S = num_traits::cast(100_000_000).unwrap();
-        let quaternion = Quaternion::new(s, x, y, z);
+fn strategy_quaternion_f64_any() -> impl Strategy<Value = Quaternion<f64>> {
+    let min_value = f64::sqrt(f64::EPSILON);
+    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
 
-        quaternion % modulus
-    })
-    .no_shrink()
+    strategy_quaternion_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_quaternion_i32_any() -> impl Strategy<Value = Quaternion<i32>> {
+    let min_value = 0_i32;
+    // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_square_root = 46340_i32;
+    let max_value = max_square_root / 4;
+
+    strategy_quaternion_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_quaternion_f64_norm_squared() -> impl Strategy<Value = Quaternion<f64>> {
@@ -151,11 +183,11 @@ where
 }
 
 fn strategy_quaternion_f64_sqrt() -> impl Strategy<Value = Quaternion<f64>> {
-    strategy_quaternion_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(3_f64), 0_f64, f64::two_pi())
+    strategy_quaternion_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
 }
 
 fn strategy_quaternion_f64_sqrt_product() -> impl Strategy<Value = Quaternion<f64>> {
-    strategy_quaternion_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(3_f64), 0_f64, f64::two_pi())
+    strategy_quaternion_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
 }
 
 
@@ -958,6 +990,30 @@ where
     Ok(())
 }
 
+fn prop_l1_norm_homogeneous<S>(q: Quaternion<S>, c: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned
+{
+    let lhs = (q * c).l1_norm();
+    let rhs = q.l1_norm() * c.abs();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+fn prop_l1_norm_triangle_inequality<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned
+{
+    let lhs = (q1 + q2).l1_norm();
+    let rhs = q1.l1_norm() + q2.l1_norm();
+
+    prop_assert!(lhs <= rhs);
+
+    Ok(())
+}
+
 /// The **L1** norm function is point separating. In particular, if 
 /// the distance between two quaternions `q1` and `q2` is 
 /// zero, then `q1 == q2`.
@@ -1104,37 +1160,37 @@ mod quaternion_f64_arithmetic_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_zero_times_quaternion_equals_zero(q in super::strategy_quaternion_any()) {
+        fn prop_zero_times_quaternion_equals_zero(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_zero_times_quaternion_equals_zero(q)?
         }
         
         #[test]
-        fn prop_quaternion_times_zero_equals_zero(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_times_zero_equals_zero(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_quaternion_times_zero_equals_zero(q)?
         }
 
         #[test]
-        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_quaternion_plus_zero_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_zero_plus_quaternion_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_one_times_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_one_times_quaternion_equals_quaternion(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_one_times_quaternion_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_quaternion_times_one_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_times_one_equals_quaternion(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_quaternion_times_one_equals_quaternion(q)?
         }
@@ -1147,37 +1203,37 @@ mod quaternion_i32_arithmetic_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_zero_times_quaternion_equals_zero(q in super::strategy_quaternion_any()) {
+        fn prop_zero_times_quaternion_equals_zero(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_zero_times_quaternion_equals_zero(q)?
         }
         
         #[test]
-        fn prop_quaternion_times_zero_equals_zero(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_times_zero_equals_zero(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_quaternion_times_zero_equals_zero(q)?
         }
 
         #[test]
-        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_quaternion_plus_zero_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_zero_plus_quaternion_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_one_times_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_one_times_quaternion_equals_quaternion(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_one_times_quaternion_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_quaternion_times_one_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_times_one_equals_quaternion(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_quaternion_times_one_equals_quaternion(q)?
         }
@@ -1190,21 +1246,21 @@ mod complex_f64_add_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_quaternion_plus_zero_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_zero_plus_quaternion_equals_quaternion(q)?
         }
 
         #[test]
         fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_f64_any(), 
+            q2 in super::strategy_quaternion_f64_any()
         ) {
             let q1: super::Quaternion<f64> = q1;
             let q2: super::Quaternion<f64> = q2;
@@ -1213,8 +1269,8 @@ mod complex_f64_add_props {
 
         #[test]
         fn prop_quaternion_addition_commutative(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_f64_any(), 
+            q2 in super::strategy_quaternion_f64_any()
         ) {
             let q1: super::Quaternion<f64> = q1;
             let q2: super::Quaternion<f64> = q2;
@@ -1229,21 +1285,21 @@ mod quaternion_i32_add_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_quaternion_plus_zero_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_zero_plus_quaternion_equals_quaternion(q)?
         }
 
         #[test]
         fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1252,8 +1308,8 @@ mod quaternion_i32_add_props {
 
         #[test]
         fn prop_quaternion_addition_commutative(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1262,9 +1318,9 @@ mod quaternion_i32_add_props {
 
         #[test]
         fn prop_quaternion_addition_associative(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any(), 
-            q3 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any(), 
+            q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1280,21 +1336,21 @@ mod quaternion_f64_sub_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_quaternion_minus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_minus_zero_equals_quaternion(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_quaternion_minus_zero_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_quaternion_minus_quaternion_equals_zero(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_minus_quaternion_equals_zero(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_quaternion_minus_quaternion_equals_zero(q)?
         }
 
         #[test]
         fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_f64_any(), 
+            q2 in super::strategy_quaternion_f64_any()
         ) {
             let q1: super::Quaternion<f64> = q1;
             let q2: super::Quaternion<f64> = q2;
@@ -1309,21 +1365,21 @@ mod quaternion_i32_sub_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_quaternion_minus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_minus_zero_equals_quaternion(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_quaternion_minus_zero_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_quaternion_minus_quaternion_equals_zero(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_minus_quaternion_equals_zero(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_quaternion_minus_quaternion_equals_zero(q)?
         }
 
         #[test]
         fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1340,7 +1396,7 @@ mod quaternion_f64_mul_props {
         #[test]
         fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
             c in super::strategy_scalar_f64_any(), 
-            q in super::strategy_quaternion_any()
+            q in super::strategy_quaternion_f64_any()
         ) {
             let c: f64 = c;
             let q: super::Quaternion<f64> = q;
@@ -1348,13 +1404,13 @@ mod quaternion_f64_mul_props {
         }
 
         #[test]
-        fn prop_quaternion_multiplicative_unit(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_multiplicative_unit(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_quaternion_multiplicative_unit(q)?
         }
 
         #[test]
-        fn prop_approx_quaternion_multiplicative_inverse(q in super::strategy_quaternion_any()) {
+        fn prop_approx_quaternion_multiplicative_inverse(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_approx_quaternion_multiplicative_inverse(q, 1e-8)?
         }
@@ -1369,7 +1425,7 @@ mod quaternion_i32_mul_props {
         #[test]
         fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
             c in super::strategy_scalar_i32_any(), 
-            q in super::strategy_quaternion_any()
+            q in super::strategy_quaternion_i32_any()
         ) {
             let c: i32 = c;
             let q: super::Quaternion<i32> = q;
@@ -1380,7 +1436,7 @@ mod quaternion_i32_mul_props {
         fn prop_scalar_multiplication_compatibility(
             a in super::strategy_scalar_i32_any(), 
             b in super::strategy_scalar_i32_any(), 
-            q in super::strategy_quaternion_any()
+            q in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
             let b: i32 = b;
@@ -1390,9 +1446,9 @@ mod quaternion_i32_mul_props {
 
         #[test]
         fn prop_quaternion_multiplication_associative(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any(), 
-            q3 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any(), 
+            q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1401,7 +1457,7 @@ mod quaternion_i32_mul_props {
         }
 
         #[test]
-        fn prop_quaternion_multiplicative_unit(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_multiplicative_unit(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_quaternion_multiplicative_unit(q)?
         }
@@ -1416,8 +1472,8 @@ mod quaternion_i32_distributive_props {
         #[test]
         fn prop_distribution_over_quaternion_addition(
             a in super::strategy_scalar_i32_any(), 
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
             let q1: super::Quaternion<i32> = q1;
@@ -1429,7 +1485,7 @@ mod quaternion_i32_distributive_props {
         fn prop_distribution_over_scalar_addition(
             a in super::strategy_scalar_i32_any(), 
             b in super::strategy_scalar_i32_any(), 
-            q in super::strategy_quaternion_any()
+            q in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
             let b: i32 = b;
@@ -1440,8 +1496,8 @@ mod quaternion_i32_distributive_props {
         #[test]
         fn prop_distribution_over_quaternion_addition1(
             a in super::strategy_scalar_i32_any(), 
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
             let q1: super::Quaternion<i32> = q1;
@@ -1451,9 +1507,9 @@ mod quaternion_i32_distributive_props {
 
         #[test]
         fn prop_quaternion_multiplication_right_distributive(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any(), 
-            q3 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any(), 
+            q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1463,9 +1519,9 @@ mod quaternion_i32_distributive_props {
 
         #[test]
         fn prop_quaternion_multiplication_left_distributive(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any(), 
-            q3 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any(), 
+            q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1481,7 +1537,10 @@ mod quaternion_i32_dot_product_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_quaternion_dot_product_commutative(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+        fn prop_quaternion_dot_product_commutative(
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any()
+        ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
             super::prop_quaternion_dot_product_commutative(q1, q2)?
@@ -1489,9 +1548,9 @@ mod quaternion_i32_dot_product_props {
 
         #[test]
         fn prop_quaternion_dot_product_right_distributive(
-            q1 in super::strategy_quaternion_any(),
-            q2 in super::strategy_quaternion_any(), 
-            q3 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(),
+            q2 in super::strategy_quaternion_i32_any(), 
+            q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1501,9 +1560,9 @@ mod quaternion_i32_dot_product_props {
 
         #[test]
         fn prop_quaternion_dot_product_left_distributive(
-            q1 in super::strategy_quaternion_any(),
-            q2 in super::strategy_quaternion_any(), 
-            q3 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(),
+            q2 in super::strategy_quaternion_i32_any(), 
+            q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1515,8 +1574,8 @@ mod quaternion_i32_dot_product_props {
         fn prop_quaternion_dot_product_times_scalars_commutative(
             a in super::strategy_scalar_i32_any(), 
             b in super::strategy_scalar_i32_any(),
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
             let b: i32 = b;
@@ -1529,9 +1588,9 @@ mod quaternion_i32_dot_product_props {
         fn prop_quaternion_dot_product_right_bilinear(
             a in super::strategy_scalar_i32_any(), 
             b in super::strategy_scalar_i32_any(),
-            q1 in super::strategy_quaternion_any(),
-            q2 in super::strategy_quaternion_any(), 
-            q3 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(),
+            q2 in super::strategy_quaternion_i32_any(), 
+            q3 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
             let b: i32 = b;
@@ -1545,9 +1604,9 @@ mod quaternion_i32_dot_product_props {
         fn prop_quaternion_dot_product_left_bilinear(
             a in super::strategy_scalar_i32_any(), 
             b in super::strategy_scalar_i32_any(),
-            q1 in super::strategy_quaternion_any(),
-            q2 in super::strategy_quaternion_any(), 
-            q3 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(),
+            q2 in super::strategy_quaternion_i32_any(), 
+            q3 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
             let b: i32 = b;
@@ -1565,16 +1624,26 @@ mod quaternion_f64_conjugation_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_quaternion_conjugate_conjugate_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_quaternion_conjugation_linear(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+        fn prop_quaternion_conjugation_linear(q1 in super::strategy_quaternion_f64_any(), q2 in super::strategy_quaternion_f64_any()) {
             let q1: super::Quaternion<f64> = q1;
             let q2: super::Quaternion<f64> = q2;
             super::prop_quaternion_conjugation_linear(q1, q2)?
+        }
+
+        #[test]
+        fn prop_quaternion_conjugation_transposes_products(
+            q1 in super::strategy_quaternion_f64_any(), 
+            q2 in super::strategy_quaternion_f64_any()
+        ) {
+            let q1: super::Quaternion<f64> = q1;
+            let q2: super::Quaternion<f64> = q2;
+            super::prop_quaternion_conjugation_transposes_products(q1, q2)?
         }
     }
 }
@@ -1585,13 +1654,13 @@ mod quaternion_i32_conjugation_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::strategy_quaternion_any()) {
+        fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_quaternion_conjugate_conjugate_equals_quaternion(q)?
         }
 
         #[test]
-        fn prop_quaternion_conjugation_linear(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+        fn prop_quaternion_conjugation_linear(q1 in super::strategy_quaternion_i32_any(), q2 in super::strategy_quaternion_i32_any()) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
             super::prop_quaternion_conjugation_linear(q1, q2)?
@@ -1599,8 +1668,8 @@ mod quaternion_i32_conjugation_props {
 
         #[test]
         fn prop_quaternion_conjugation_transposes_products(
-            q1 in super::strategy_quaternion_any(), 
-            q2 in super::strategy_quaternion_any()
+            q1 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
@@ -1638,7 +1707,7 @@ mod quaternion_f64_norm_squared_synonym_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_magnitude_squared_norm_squared(q in super::strategy_quaternion_any()) {
+        fn prop_magnitude_squared_norm_squared(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_magnitude_squared_norm_squared(q)?
         }
@@ -1674,7 +1743,7 @@ mod quaternion_i32_norm_squared_synonym_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_magnitude_squared_norm_squared(q in super::strategy_quaternion_any()) {
+        fn prop_magnitude_squared_norm_squared(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_magnitude_squared_norm_squared(q)?
         }
@@ -1687,13 +1756,13 @@ mod quaternion_f64_norm_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_norm_nonnegative(q in super::strategy_quaternion_any()) {
+        fn prop_norm_nonnegative(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_norm_nonnegative(q)?
         }
 
         #[test]
-        fn prop_approx_norm_point_separating(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+        fn prop_approx_norm_point_separating(q1 in super::strategy_quaternion_f64_any(), q2 in super::strategy_quaternion_f64_any()) {
             let q1: super::Quaternion<f64> = q1;
             let q2: super::Quaternion<f64> = q2;
             super::prop_approx_norm_point_separating(q1, q2, 1e-10)?
@@ -1707,13 +1776,13 @@ mod quaternion_f64_l1_norm_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_l1_norm_nonnegative(q in super::strategy_quaternion_any()) {
+        fn prop_l1_norm_nonnegative(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_l1_norm_nonnegative(q)?
         }
 
         #[test]
-        fn prop_approx_l1_norm_point_separating(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+        fn prop_approx_l1_norm_point_separating(q1 in super::strategy_quaternion_f64_any(), q2 in super::strategy_quaternion_f64_any()) {
             let q1: super::Quaternion<f64> = q1;
             let q2: super::Quaternion<f64> = q2;
             super::prop_approx_l1_norm_point_separating(q1, q2, 1e-10)?
@@ -1727,16 +1796,30 @@ mod quaternion_i32_l1_norm_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_l1_norm_nonnegative(q in super::strategy_quaternion_any()) {
+        fn prop_l1_norm_nonnegative(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
             super::prop_l1_norm_nonnegative(q)?
         }
 
         #[test]
-        fn prop_l1_norm_point_separating(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+        fn prop_l1_norm_point_separating(q1 in super::strategy_quaternion_i32_any(), q2 in super::strategy_quaternion_i32_any()) {
             let q1: super::Quaternion<i32> = q1;
             let q2: super::Quaternion<i32> = q2;
             super::prop_l1_norm_point_separating(q1, q2)?
+        }
+
+        #[test]
+        fn prop_l1_norm_homogeneous(q in super::strategy_quaternion_i32_any(), c in super::strategy_scalar_i32_any()) {
+            let q: super::Quaternion<i32> = q;
+            let c: i32 = c;
+            super::prop_l1_norm_homogeneous(q, c)?
+        }
+
+        #[test]
+        fn prop_l1_norm_triangle_inequality(q1 in super::strategy_quaternion_i32_any(), q2 in super::strategy_quaternion_i32_any()) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_l1_norm_triangle_inequality(q1, q2)?
         }
     }
 }
@@ -1747,19 +1830,19 @@ mod quaternion_f64_norm_synonym_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_magnitude_norm_synonyms(q in super::strategy_quaternion_any()) {
+        fn prop_magnitude_norm_synonyms(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_magnitude_norm_synonyms(q)?
         }
 
         #[test]
-        fn prop_l2_norm_norm_synonyms(q in super::strategy_quaternion_any()) {
+        fn prop_l2_norm_norm_synonyms(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_l2_norm_norm_synonyms(q)?
         }
 
         #[test]
-        fn prop_magnitude_squared_norm_squared(q in super::strategy_quaternion_any()) {
+        fn prop_magnitude_squared_norm_squared(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_magnitude_squared_norm_squared(q)?
         }
