@@ -569,11 +569,13 @@ where
 /// complex number should act associatively just like the multiplication 
 /// of three scalars. 
 ///
-/// Given scalars `a` and `b`, and a complex number `z`, we have
+/// Given scalars `a` and `b`, and a complex number `z`, observe that `a == a + i0` 
+/// and `b == b + i0`. We have
 /// ```text
 /// (a * b) * z == a * (b * z)
+/// z * (a * b) == (z * a) * b
 /// ```
-fn prop_scalar_multiplication_compatibility<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
+fn prop_scalar_multiplication_compatibility1<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar
 {
@@ -581,6 +583,27 @@ where
     let b_complex = Complex::from_real(b);
 
     prop_assert_eq!(a_complex * (b_complex * z), (a_complex * b_complex) * z);
+    prop_assert_eq!(z * (a_complex * b_complex), (z * a_complex) * b_complex);
+
+    Ok(())
+}
+
+/// Exact multiplication of two scalars and a complex number should be 
+/// compatible with multiplication of all scalars. 
+///
+/// In other words, scalar multiplication of two scalars with a 
+/// complex number should act associatively just like the multiplication 
+/// of three scalars. 
+///
+/// Given scalars `a` and `b`, and a complex number `z`, we have
+/// ```text
+/// z * (a * b) == (z * a) * b
+/// ```
+fn prop_scalar_multiplication_compatibility2<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalar
+{
+    prop_assert_eq!(z * (a * b), (z * a) * b);
 
     Ok(())
 }
@@ -614,7 +637,6 @@ where
 
     Ok(())
 }
-
 
 /// Scalar multiplication should distribute over complex number addition.
 ///
@@ -2251,7 +2273,7 @@ mod complex_i32_arithmetic_props {
         }
 
         #[test]
-        fn prop_scalar_multiplication_compatibility(
+        fn prop_scalar_multiplication_compatibility1(
             a in super::strategy_scalar_i32_any(), 
             b in super::strategy_scalar_i32_any(), 
             z in super::strategy_complex_i32_any()
@@ -2259,7 +2281,19 @@ mod complex_i32_arithmetic_props {
             let a: i32 = a;
             let b: i32 = b;
             let z: super::Complex<i32> = z;
-            super::prop_scalar_multiplication_compatibility(a, b, z)?
+            super::prop_scalar_multiplication_compatibility1(a, b, z)?
+        }
+
+        #[test]
+        fn prop_scalar_multiplication_compatibility2(
+            a in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(), 
+            z in super::strategy_complex_i32_any()
+        ) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let z: super::Complex<i32> = z;
+            super::prop_scalar_multiplication_compatibility2(a, b, z)?
         }
 
         #[test]
