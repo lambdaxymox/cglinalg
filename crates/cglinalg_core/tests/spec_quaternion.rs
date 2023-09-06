@@ -521,24 +521,6 @@ where
     Ok(())
 }
 
-/*
-/// Multiplication of a quaternion on the right by the sum of two 
-/// scalars should distribute over the two scalars. 
-///
-/// Given a quaternion `q` and scalars `a` and `b`
-/// ```text
-/// q * (a + b) = q * a + q * b
-/// ```
-fn prop_distribution_over_scalar_addition1<S>(a: S, b: S, q: Quaternion<S>) -> Result<(), TestCaseError>
-where
-    S: SimdScalar + Arbitrary
-{   
-    prop_assert_eq!(q * (a + b), q * a + q * b);
-
-    Ok(())
-}
-*/
-
 /// Quaternion multiplication should be distributive on the right.
 ///
 /// Given three quaternions `q1`, `q2`, and `q3`
@@ -1393,20 +1375,6 @@ mod quaternion_i32_distributive_props {
             let q2: super::Quaternion<i32> = q2;
             super::prop_distribution_over_quaternion_addition1(a, q1, q2)?
         }
-
-        /*
-        #[test]
-        fn prop_distribution_over_scalar_addition1(
-            a in super::strategy_scalar_i32_any(), 
-            b in super::strategy_scalar_i32_any(), 
-            q in super::strategy_quaternion_any()
-        ) {
-            let a: i32 = a;
-            let b: i32 = b;
-            let q: super::Quaternion<i32> = q;
-            super::prop_distribution_over_scalar_addition1(a, b, q)?
-        }
-        */
 
         #[test]
         fn prop_quaternion_multiplication_right_distributive(
