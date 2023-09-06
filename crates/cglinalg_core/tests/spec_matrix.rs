@@ -98,7 +98,7 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
 /// ```
 fn prop_matrix_additive_identity<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let zero_matrix = Matrix::zero();
 
@@ -116,7 +116,7 @@ where
 /// ```
 fn prop_matrix_plus_zero_equals_zero<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let zero_matrix = Matrix::zero();
 
@@ -136,7 +136,7 @@ fn prop_matrix_addition_commutative<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!(m1 + m2, m2 + m1);
 
@@ -155,7 +155,7 @@ fn prop_matrix_addition_associative<S, const R: usize, const C: usize>(
     m3: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!((m1 + m2) + m3, m1 + (m2 + m3));
 
@@ -174,7 +174,7 @@ fn prop_matrix_subtraction<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned
 {
     prop_assert_eq!(m1 + (-m2), m1 - m2);
 
@@ -192,7 +192,7 @@ where
 /// side as well as left-hand side. 
 fn prop_zero_times_matrix_equals_zero_matrix<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let zero = S::zero();
     let zero_matrix = Matrix::zero();
@@ -213,7 +213,7 @@ where
 /// side as well as left-hand side. 
 fn prop_one_times_matrix_equals_matrix<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let one = S::one();
 
@@ -236,7 +236,7 @@ fn prop_negative_one_times_matrix_equals_negative_matrix<S, const R: usize, cons
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned
 {
     let one = S::one();
     let minus_one = -one;
@@ -259,7 +259,7 @@ fn prop_scalar_matrix_multiplication_compatible_addition<S, const R: usize, cons
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!((m1 + m2) * c, m1 * c + m2 * c);
 
@@ -279,7 +279,7 @@ fn prop_scalar_matrix_multiplication_compatible_subtraction<S, const R: usize, c
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!((m1 - m2) * c, m1 * c - m2 * c);
 
@@ -301,7 +301,7 @@ fn prop_scalar_matrix_multiplication_commutative<S, const N: usize, const NN: us
     m: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary,
+    S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
@@ -324,7 +324,7 @@ fn prop_scalar_matrix_multiplication_compatible<S, const R: usize, const C: usiz
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!(m * (a * b), (m * a) * b);
 
@@ -340,7 +340,7 @@ where
 /// ```
 fn prop_matrix_multiplication_identity<S, const N: usize, const NN: usize>(m: Matrix<S, N, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary,
+    S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
@@ -360,7 +360,7 @@ where
 /// ```
 fn prop_zero_matrix_times_matrix_equals_zero_matrix<S, const N: usize, const NN: usize>(m: Matrix<S, N, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary,
+    S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
@@ -385,7 +385,7 @@ fn prop_matrix_multiplication_associative<S, const N: usize, const NN: usize>(
     m3: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary,
+    S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
@@ -407,7 +407,7 @@ fn prop_matrix_multiplication_distributive<S, const N: usize, const NN: usize>(
     m3: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary,
+    S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
@@ -428,7 +428,7 @@ fn prop_matrix_multiplication_compatible_with_scalar_multiplication<S, const N: 
     m2: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary,
+    S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
@@ -450,7 +450,7 @@ fn prop_matrix_multiplication_compatible_with_scalar_multiplication1<S, const R:
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!(m * (c1 * c2), (m * c1) * c2);
 
@@ -467,7 +467,7 @@ fn prop_matrix_transpose_transpose_equals_matrix<S, const R: usize, const C: usi
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!(m.transpose().transpose(), m);
 
@@ -485,7 +485,7 @@ fn prop_transpose_linear<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!((m1 + m2).transpose(), m1.transpose() + m2.transpose());
 
@@ -504,7 +504,7 @@ fn prop_transpose_scalar_multiplication<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!((m * c).transpose(), m.transpose() * c);
 
@@ -524,7 +524,7 @@ fn prop_transpose_product<S, const N: usize, const NN: usize>(
     m2: Matrix<S, N, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary,
+    S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
@@ -546,7 +546,7 @@ fn prop_swap_rows_commutative<S, const R: usize, const C: usize>(
     row2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let mut m1 = m;
     let mut m2 = m;
@@ -569,7 +569,7 @@ fn prop_swap_identical_rows_identity<S, const R: usize, const C: usize>(
     row: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let mut m1 = m;
     m1.swap_rows(row, row);
@@ -592,7 +592,7 @@ fn prop_swap_rows_twice_is_identity<S, const R: usize, const C: usize>(
     row2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let mut m1 = m;
     m1.swap_rows(row1, row2);
@@ -615,7 +615,7 @@ fn prop_swap_columns_commutative<S, const R: usize, const C: usize>(
     col2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let mut m1 = m;
     let mut m2 = m;
@@ -638,7 +638,7 @@ fn prop_swap_identical_columns_is_identity<S, const R: usize, const C: usize>(
     col: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let mut m1 = m;
     m1.swap_columns(col, col);
@@ -661,7 +661,7 @@ fn prop_swap_columns_twice_is_identity<S, const R: usize, const C: usize>(
     col2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let mut m1 = m;
     m1.swap_columns(col1, col2);
@@ -686,7 +686,7 @@ fn prop_swap_elements_commutative<S, const R: usize, const C: usize>(
     row2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let mut m1 = m;
     let mut m2 = m;
@@ -710,7 +710,7 @@ fn prop_swap_identical_elements_is_identity<S, const R: usize, const C: usize>(
     row: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let mut m1 = m;
     m1.swap((col, row), (col, row));
@@ -735,7 +735,7 @@ fn prop_swap_elements_twice_is_identity<S, const R: usize, const C: usize>(
     row2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let mut m1 = m;
     m1.swap((col1, row1), (col2, row2));

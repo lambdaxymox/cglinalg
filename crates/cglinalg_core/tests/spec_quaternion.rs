@@ -16,6 +16,34 @@ use approx::{
 };
 
 
+fn strategy_quaternion_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Quaternion<S>>
+where
+    S: SimdScalarFloat + Arbitrary
+{
+    use cglinalg_core::{
+        Radians,
+        Unit,
+        Vector3,
+    };
+
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarFloat
+    {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<(S, S)>().prop_map(move |(_scale, _angle)| {
+        let scale = SimdScalarSigned::abs(rescale(_scale, min_scale, max_scale));
+        let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
+        let axis = Unit::from_value(Vector3::unit_z());
+
+        Quaternion::from_polar_decomposition(scale, angle, &axis)
+    })
+    .no_shrink()
+}
+
+
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
     S: SimdScalarSigned + Arbitrary
@@ -122,6 +150,14 @@ where
     .no_shrink()
 }
 
+fn strategy_quaternion_f64_sqrt() -> impl Strategy<Value = Quaternion<f64>> {
+    strategy_quaternion_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(3_f64), 0_f64, f64::two_pi())
+}
+
+fn strategy_quaternion_f64_sqrt_product() -> impl Strategy<Value = Quaternion<f64>> {
+    strategy_quaternion_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(3_f64), 0_f64, f64::two_pi())
+}
+
 
 /// A scalar `0` times a quaternion should be a zero quaternion.
 ///
@@ -131,7 +167,7 @@ where
 /// ```
 fn prop_zero_times_quaternion_equals_zero<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let zero_quat = Quaternion::zero();
 
@@ -149,7 +185,7 @@ where
 /// ```
 fn prop_quaternion_times_zero_equals_zero<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let zero = S::zero();
     let zero_quat = Quaternion::zero();
@@ -168,7 +204,7 @@ where
 /// ```
 fn prop_quaternion_plus_zero_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let zero_quat = Quaternion::zero();
 
@@ -186,7 +222,7 @@ where
 /// ```
 fn prop_zero_plus_quaternion_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let zero_quat = Quaternion::zero();
 
@@ -205,7 +241,7 @@ where
 /// ```
 fn prop_one_times_quaternion_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let one_quat: Quaternion<S> = Quaternion::one();
 
@@ -224,7 +260,7 @@ where
 /// ```
 fn prop_quaternion_times_one_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let one_quat = Quaternion::one();
 
@@ -253,7 +289,7 @@ fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2<S
     q2: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!( q1 +  q2, &q1 +  q2);
     prop_assert_eq!( q1 +  q2,  q1 + &q2);
@@ -274,7 +310,7 @@ where
 /// ```
 fn prop_quaternion_addition_commutative<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!(q1 + q2, q2 + q1);
 
@@ -294,7 +330,7 @@ fn prop_quaternion_addition_associative<S>(
     q3: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!((q1 + q2) + q3, q1 + (q2 + q3));
 
@@ -309,7 +345,7 @@ where
 /// ```
 fn prop_quaternion_minus_zero_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let zero_quat = Quaternion::zero();
 
@@ -326,7 +362,7 @@ where
 /// ```
 fn prop_quaternion_minus_quaternion_equals_zero<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned
 {
     let zero_quat = Quaternion::zero();
 
@@ -357,7 +393,7 @@ fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2
     q2: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {    
     prop_assert_eq!( q1 -  q2, &q1 -  q2);
     prop_assert_eq!( q1 -  q2,  q1 - &q2);
@@ -378,7 +414,7 @@ where
 /// ```
 fn prop_scalar_times_quaternion_equals_quaternion_times_scalar<S>(c: S, q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let c_quaternion = Quaternion::from_real(c);
 
@@ -395,7 +431,7 @@ where
 /// ```
 fn prop_quaternion_multiplicative_unit<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let one = Quaternion::identity();
 
@@ -415,7 +451,7 @@ where
 /// ```
 fn prop_approx_quaternion_multiplicative_inverse<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat
 {
     prop_assume!(q.is_finite());
     prop_assume!(q.is_invertible());
@@ -442,7 +478,7 @@ where
 /// ```
 fn prop_scalar_multiplication_compatibility<S>(a: S, b: S, q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let lhs = q * (a * b);
     let rhs = (q * a) * b;
@@ -464,7 +500,7 @@ fn prop_quaternion_multiplication_associative<S>(
     q3: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!(q1 * (q2 * q3), (q1 * q2) * q3);
 
@@ -483,7 +519,7 @@ fn prop_distribution_over_quaternion_addition<S>(
     q2: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {   
     prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
 
@@ -498,7 +534,7 @@ where
 /// ```
 fn prop_distribution_over_scalar_addition<S>(a: S, b: S, q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {   
     prop_assert_eq!(q * (a + b), q * a + q * b);
 
@@ -514,7 +550,7 @@ where
 /// ```
 fn prop_distribution_over_quaternion_addition1<S>(a: S, q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {       
     prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
 
@@ -533,7 +569,7 @@ fn prop_quaternion_multiplication_right_distributive<S>(
     q3: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3);
 
@@ -552,7 +588,7 @@ fn prop_quaternion_multiplication_left_distributive<S>(
     q3: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!((q1 + q2) * q3, q1 * q3 + q2 * q3);
 
@@ -567,7 +603,7 @@ where
 /// ```
 fn prop_quaternion_dot_product_commutative<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!(q1.dot(&q2), q2.dot(&q1));
 
@@ -586,7 +622,7 @@ fn prop_quaternion_dot_product_right_distributive<S>(
     q3: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!(q1.dot(&(q2 + q3)), q1.dot(&q2) + q1.dot(&q3));
 
@@ -606,7 +642,7 @@ fn prop_quaternion_dot_product_left_distributive<S>(
     q3: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!((q1 + q2).dot(&q3), q1.dot(&q3) + q2.dot(&q3));
 
@@ -627,7 +663,7 @@ fn prop_quaternion_dot_product_times_scalars_commutative<S>(
     q2: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let lhs = (q1 * a).dot(&(q2 * b));
     let rhs = q1.dot(&q2) * (a * b);
@@ -651,7 +687,7 @@ fn prop_quaternion_dot_product_right_bilinear<S>(
     q3: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let lhs = q1.dot(&(q2 * a + q3 * b));
     let rhs = q1.dot(&q2) * a + q1.dot(&q3) * b;
@@ -676,7 +712,7 @@ fn prop_quaternion_dot_product_left_bilinear<S>(
     q3: Quaternion<S>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let lhs = (q1 * a + q2 * b).dot(&q3);
     let rhs = q1.dot(&q3) * a + q2.dot(&q3) * b;
@@ -694,7 +730,7 @@ where
 /// ```
 fn prop_quaternion_conjugate_conjugate_equals_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned
 {
     prop_assert_eq!(q.conjugate().conjugate(), q);
 
@@ -709,7 +745,7 @@ where
 /// ```
 fn prop_quaternion_conjugation_linear<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned
 {
     prop_assert_eq!((q1 + q2).conjugate(), q1.conjugate() + q2.conjugate());
 
@@ -724,7 +760,7 @@ where
 /// ```
 fn prop_quaternion_conjugation_transposes_products<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned
 {
     prop_assert_eq!((q1 * q2).conjugate(), q2.conjugate() * q1.conjugate());
 
@@ -739,7 +775,7 @@ where
 /// ```
 fn prop_norm_squared_nonnegative<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     let zero = S::zero();
 
@@ -765,7 +801,7 @@ where
 /// norm function.
 fn prop_norm_squared_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned
 {   
     let zero = S::zero();
 
@@ -801,7 +837,7 @@ fn prop_approx_norm_squared_point_separating<S>(
     output_tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(q1, q2, epsilon = input_tolerance));
     prop_assert!(
@@ -821,7 +857,7 @@ where
 /// where equality is exact.
 fn prop_magnitude_squared_norm_squared<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar + Arbitrary
+    S: SimdScalar
 {
     prop_assert_eq!(q.magnitude_squared(), q.norm_squared());
 
@@ -836,7 +872,7 @@ where
 /// ```
 fn prop_norm_nonnegative<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat
 {
     let zero = S::zero();
 
@@ -862,7 +898,7 @@ where
 /// norm function.
 fn prop_approx_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(q1, q2, epsilon = tolerance));
     prop_assert!(
@@ -882,7 +918,7 @@ where
 /// ```
 fn prop_l1_norm_nonnegative<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned
 {
     let zero = S::zero();
 
@@ -908,7 +944,7 @@ where
 /// norm function.
 fn prop_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned
 {
     let zero = S::zero();
 
@@ -939,7 +975,7 @@ where
 /// norm function.
 fn prop_approx_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(q1, q2, epsilon = tolerance));
     prop_assert!(
@@ -959,7 +995,7 @@ where
 /// where equality is exact.
 fn prop_magnitude_norm_synonyms<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat
 {
     prop_assert_eq!(q.magnitude(), q.norm());
 
@@ -974,7 +1010,7 @@ where
 /// where equality is exact.
 fn prop_l2_norm_norm_synonyms<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat
 {
     prop_assert_eq!(q.l2_norm(), q.norm());
 
@@ -990,7 +1026,7 @@ where
 /// ```
 fn prop_approx_positive_square_root_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat
 {
     let sqrt_q = q.sqrt();
 
@@ -1012,7 +1048,7 @@ where
 /// ```
 fn prop_approx_negative_square_root_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat
 {
     let minus_sqrt_q = -q.sqrt();
 
@@ -1021,6 +1057,43 @@ where
         "q = {:?}\nminus_sqrt_q = {:?}\nminus_sqrt_q * minus_sqrt_q = {:?}",
         q, minus_sqrt_q, minus_sqrt_q * minus_sqrt_q
     );
+
+    Ok(())
+}
+
+/// The norm of the square root of the product of two quaternions is the product 
+/// of the norms of the square roots of the two quaternions separately.
+/// 
+/// Given quaternions `q1` and `q2`
+/// ```text
+/// norm(sqrt(q1 * q2)) == norm(sqrt(q2)) * norm(sqrt(q2))
+/// ```
+fn prop_approx_square_root_product_norm<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (q1 * q2).sqrt().norm();
+    let rhs = q1.sqrt().norm() * q2.sqrt().norm();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}; rhs = {}", lhs, rhs);
+
+    Ok(())
+}
+
+/// The principal argument of a quaternion is in the range `[-pi, pi]`.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// -pi =< arg(q) <= pi
+/// ```
+fn prop_square_root_arg_range<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let arg_q = q.arg();
+
+    prop_assert!(arg_q >= -S::pi());
+    prop_assert!(arg_q <= S::pi());
 
     Ok(())
 }
@@ -1708,6 +1781,20 @@ mod quaternion_f64_sqrt_props {
         fn prop_approx_negative_square_root_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_approx_negative_square_root_squared(q, 1e-7)?
+        }
+        /*
+        #[test]
+        fn prop_approx_square_root_product_norm(q1 in super::strategy_quaternion_f64_sqrt_product(), q2 in super::strategy_quaternion_f64_sqrt_product()) {
+            let q1: super::Quaternion<f64> = q1;
+            let q2: super::Quaternion<f64> = q2;
+            super::prop_approx_square_root_product_norm(q1, q2, 1e-10)?
+        }
+        */
+
+        #[test]
+        fn prop_square_root_arg_range(q in super::strategy_quaternion_f64_sqrt()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_square_root_arg_range(q)?
         }
     }
 }
