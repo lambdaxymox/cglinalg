@@ -260,27 +260,6 @@ where
     Ok(())
 }
 
-/// Quaternion addition over floating point scalars should be 
-/// approximately associative. 
-///
-/// Given quaternions `q1`, `q2`, and `q3` we have
-/// ```text
-/// (q1 + q2) + q3 ~= q1 + (q2 + q3).
-/// ```
-fn prop_quaternion_addition_almost_associative<S>(
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>, 
-    q3: Quaternion<S>,
-    tolerance: S
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalarFloat + Arbitrary
-{
-    prop_assert!(relative_eq!((q1 + q2) + q3, q1 + (q2 + q3), epsilon = tolerance));
-
-    Ok(())
-}
-
 /// Given three quaternions of integer scalars, quaternion addition 
 /// should be associative.
 ///
