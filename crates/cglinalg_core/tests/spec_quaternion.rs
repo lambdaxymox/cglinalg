@@ -1731,13 +1731,13 @@ mod quaternion_f64_sqrt_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_positive_square_root_squared(q in super::strategy_quaternion_any()) {
+        fn prop_positive_square_root_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_positive_square_root_squared(q, 1e-7)?
         }
 
         #[test]
-        fn prop_negative_square_root_squared(q in super::strategy_quaternion_any()) {
+        fn prop_negative_square_root_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_negative_square_root_squared(q, 1e-7)?
         }
