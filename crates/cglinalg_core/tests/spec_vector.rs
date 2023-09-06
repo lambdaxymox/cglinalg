@@ -1608,6 +1608,7 @@ exact_cross_product_props!(vector3_i32_cross_product_props, i32, strategy_vector
 
 macro_rules! approx_norm_squared_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $input_tolerance:expr, $output_tolerance:expr) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1636,6 +1637,7 @@ approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, strateg
 
 macro_rules! approx_norm_squared_synonym_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1657,6 +1659,7 @@ approx_norm_squared_synonym_props!(vector4_f64_norm_squared_synonym_props, Vecto
 
 macro_rules! exact_norm_squared_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1692,6 +1695,7 @@ exact_norm_squared_props!(vector4_i32_norm_squared_props, Vector4, i32, strategy
 
 macro_rules! exact_norm_squared_synonym_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1713,6 +1717,7 @@ exact_norm_squared_synonym_props!(vector4_i32_norm_squared_synonym_props, Vector
 
 macro_rules! approx_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1741,6 +1746,7 @@ approx_norm_props!(vector4_f64_norm_props, Vector4, f64, strategy_vector_any, st
 
 macro_rules! approx_l1_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1769,6 +1775,7 @@ approx_l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, strategy_vector_a
 
 macro_rules! exact_l1_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1811,6 +1818,7 @@ exact_l1_norm_props!(vector4_i32_l1_norm_props, Vector4, i32, strategy_vector_i3
 
 macro_rules! lp_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $DegreeGen:ident, $tolerance:expr) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1839,6 +1847,7 @@ lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, strategy_vector_any, str
 
 macro_rules! approx_linf_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1881,6 +1890,7 @@ approx_linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, strategy_vect
 
 macro_rules! exact_linf_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -1923,6 +1933,7 @@ exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, strategy_vecto
 
 macro_rules! norm_synonym_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {

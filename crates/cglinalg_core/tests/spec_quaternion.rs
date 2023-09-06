@@ -1046,704 +1046,701 @@ where
 }
 
 
-macro_rules! exact_arithmetic_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_zero_times_quaternion_equals_zero(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_zero_times_quaternion_equals_zero(q)?
-            }
+#[cfg(test)]
+mod quaternion_f64_arithmetic_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_zero_times_quaternion_equals_zero(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_zero_times_quaternion_equals_zero(q)?
+        }
         
-            #[test]
-            fn prop_quaternion_times_zero_equals_zero(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_times_zero_equals_zero(q)?
-            }
-
-            #[test]
-            fn prop_quaternion_plus_zero_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_plus_zero_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_zero_plus_quaternion_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_zero_plus_quaternion_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_one_times_quaternion_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_one_times_quaternion_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_quaternion_times_one_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_times_one_equals_quaternion(q)?
-            }
+        #[test]
+        fn prop_quaternion_times_zero_equals_zero(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_times_zero_equals_zero(q)?
         }
-    }
+
+        #[test]
+        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_plus_zero_equals_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_zero_plus_quaternion_equals_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_one_times_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_one_times_quaternion_equals_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_quaternion_times_one_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_times_one_equals_quaternion(q)?
+        }
     }
 }
 
-exact_arithmetic_props!(quaternion_f64_arithmetic_props, f64, strategy_quaternion_any);
-exact_arithmetic_props!(quaternion_i32_arithmetic_props, i32, strategy_quaternion_any);
 
-
-macro_rules! approx_add_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_quaternion_plus_zero_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_plus_zero_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_zero_plus_quaternion_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_zero_plus_quaternion_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(q1, q2)?
-            }
-
-            #[test]
-            fn prop_quaternion_addition_commutative(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion_addition_commutative(q1, q2)?
-            }
+#[cfg(test)]
+mod quaternion_i32_arithmetic_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_zero_times_quaternion_equals_zero(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_zero_times_quaternion_equals_zero(q)?
         }
-    }
+        
+        #[test]
+        fn prop_quaternion_times_zero_equals_zero(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_quaternion_times_zero_equals_zero(q)?
+        }
+
+        #[test]
+        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_quaternion_plus_zero_equals_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_zero_plus_quaternion_equals_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_one_times_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_one_times_quaternion_equals_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_quaternion_times_one_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_quaternion_times_one_equals_quaternion(q)?
+        }
     }
 }
 
-approx_add_props!(quaternion_f64_add_props, f64, strategy_quaternion_any, 1e-8);
 
-
-macro_rules! exact_add_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_quaternion_plus_zero_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_plus_zero_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_zero_plus_quaternion_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_zero_plus_quaternion_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(q1, q2)?
-            }
-
-            #[test]
-            fn prop_quaternion_addition_commutative(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion_addition_commutative(q1, q2)?
-            }
-
-            #[test]
-            fn prop_quaternion_addition_associative(q1 in super::$Generator(), q2 in super::$Generator(), q3 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                let q3: super::Quaternion<$ScalarType> = q3;
-                super::prop_quaternion_addition_associative(q1, q2, q3)?
-            }
+#[cfg(test)]
+mod complex_f64_add_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_plus_zero_equals_quaternion(q)?
         }
-    }
+
+        #[test]
+        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_zero_plus_quaternion_equals_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<f64> = q1;
+            let q2: super::Quaternion<f64> = q2;
+            super::prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(q1, q2)?
+        }
+
+        #[test]
+        fn prop_quaternion_addition_commutative(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<f64> = q1;
+            let q2: super::Quaternion<f64> = q2;
+            super::prop_quaternion_addition_commutative(q1, q2)?
+        }
     }
 }
 
-exact_add_props!(quaternion_i32_add_props, i32, strategy_quaternion_any);
 
-
-macro_rules! approx_sub_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_quaternion_minus_zero_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_minus_zero_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_quaternion_minus_quaternion_equals_zero(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_minus_quaternion_equals_zero(q)?
-            }
-
-            #[test]
-            fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(q1, q2)?
-            }
+#[cfg(test)]
+mod quaternion_i32_add_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_quaternion_plus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_quaternion_plus_zero_equals_quaternion(q)?
         }
-    }
+
+        #[test]
+        fn prop_zero_plus_quaternion_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_zero_plus_quaternion_equals_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(q1, q2)?
+        }
+
+        #[test]
+        fn prop_quaternion_addition_commutative(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_quaternion_addition_commutative(q1, q2)?
+        }
+
+        #[test]
+        fn prop_quaternion_addition_associative(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any(), 
+            q3 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            let q3: super::Quaternion<i32> = q3;
+            super::prop_quaternion_addition_associative(q1, q2, q3)?
+        }
     }
 }
 
-approx_sub_props!(quaternion_f64_sub_props, f64, strategy_quaternion_any, 1e-8);
 
-
-macro_rules! exact_sub_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_quaternion_minus_zero_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_minus_zero_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_quaternion_minus_quaternion_equals_zero(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_minus_quaternion_equals_zero(q)?
-            }
-
-            #[test]
-            fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(q1, q2)?
-            }
+#[cfg(test)]
+mod quaternion_f64_sub_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_quaternion_minus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_minus_zero_equals_quaternion(q)?
         }
-    }
+
+        #[test]
+        fn prop_quaternion_minus_quaternion_equals_zero(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_minus_quaternion_equals_zero(q)?
+        }
+
+        #[test]
+        fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<f64> = q1;
+            let q2: super::Quaternion<f64> = q2;
+            super::prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(q1, q2)?
+        }
     }
 }
 
-exact_sub_props!(quaternion_i32_sub_props, i32, strategy_quaternion_any);
 
-
-macro_rules! approx_mul_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(c in super::$ScalarGen(), q in super::$Generator()) {
-                let c: $ScalarType = c;
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_scalar_times_quaternion_equals_quaternion_times_scalar(c, q)?
-            }
-
-            #[test]
-            fn prop_quaternion_multiplicative_unit(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_multiplicative_unit(q)?
-            }
-
-            #[test]
-            fn prop_quaternion_multiplicative_inverse(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_multiplicative_inverse(q, $tolerance)?
-            }
+#[cfg(test)]
+mod quaternion_i32_sub_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_quaternion_minus_zero_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_quaternion_minus_zero_equals_quaternion(q)?
         }
-    }
+
+        #[test]
+        fn prop_quaternion_minus_quaternion_equals_zero(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_quaternion_minus_quaternion_equals_zero(q)?
+        }
+
+        #[test]
+        fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(q1, q2)?
+        }
     }
 }
 
-approx_mul_props!(quaternion_f64_mul_props, f64, strategy_quaternion_any, strategy_scalar_f64_any, 1e-8);
 
-
-macro_rules! exact_mul_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(c in super::$ScalarGen(), q in super::$Generator()) {
-                let c: $ScalarType = c;
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_scalar_times_quaternion_equals_quaternion_times_scalar(c, q)?
-            }
-
-            #[test]
-            fn prop_scalar_multiplication_compatibility(a in super::$ScalarGen(), b in super::$ScalarGen(), q in super::$Generator()) {
-                let a: $ScalarType = a;
-                let b: $ScalarType = b;
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_scalar_multiplication_compatibility(a, b, q)?
-            }
-
-            #[test]
-            fn prop_quaternion_multiplication_associative(q1 in super::$Generator(), q2 in super::$Generator(), q3 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                let q3: super::Quaternion<$ScalarType> = q3;
-                super::prop_quaternion_multiplication_associative(q1, q2, q3)?
-            }
-
-            #[test]
-            fn prop_quaternion_multiplicative_unit(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_multiplicative_unit(q)?
-            }
+#[cfg(test)]
+mod quaternion_f64_mul_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
+            c in super::strategy_scalar_f64_any(), 
+            q in super::strategy_quaternion_any()
+        ) {
+            let c: f64 = c;
+            let q: super::Quaternion<f64> = q;
+            super::prop_scalar_times_quaternion_equals_quaternion_times_scalar(c, q)?
         }
-    }
+
+        #[test]
+        fn prop_quaternion_multiplicative_unit(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_multiplicative_unit(q)?
+        }
+
+        #[test]
+        fn prop_quaternion_multiplicative_inverse(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_multiplicative_inverse(q, 1e-8)?
+        }
     }
 }
 
-exact_mul_props!(quaternion_i32_mul_props, i32, strategy_quaternion_any, strategy_scalar_i32_any);
 
-
-macro_rules! exact_distributive_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_distribution_over_quaternion_addition(a in super::$ScalarGen(), q1 in super::$Generator(), q2 in super::$Generator()) {
-                let a: $ScalarType = a;
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_distribution_over_quaternion_addition(a, q1, q2)?
-            }
-
-            #[test]
-            fn prop_distribution_over_scalar_addition(a in super::$ScalarGen(), b in super::$ScalarGen(), q in super::$Generator()) {
-                let a: $ScalarType = a;
-                let b: $ScalarType = b;
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_distribution_over_scalar_addition(a, b, q)?
-            }
-
-            #[test]
-            fn prop_distribution_over_quaternion_addition1(a in super::$ScalarGen(), q1 in super::$Generator(), q2 in super::$Generator()) {
-                let a: $ScalarType = a;
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_distribution_over_quaternion_addition1(a, q1, q2)?
-            }
-
-            #[test]
-            fn prop_distribution_over_scalar_addition1(a in super::$ScalarGen(), b in super::$ScalarGen(), q in super::$Generator()) {
-                let a: $ScalarType = a;
-                let b: $ScalarType = b;
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_distribution_over_scalar_addition1(a, b, q)?
-            }
-
-            #[test]
-            fn prop_quaternion_multiplication_right_distributive(q1 in super::$Generator(), q2 in super::$Generator(), q3 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                let q3: super::Quaternion<$ScalarType> = q3;
-                super::prop_quaternion_multiplication_right_distributive(q1, q2, q3)?
-            }
-
-            #[test]
-            fn prop_quaternion_multiplication_left_distributive(q1 in super::$Generator(), q2 in super::$Generator(), q3 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                let q3: super::Quaternion<$ScalarType> = q3;
-                super::prop_quaternion_multiplication_left_distributive(q1, q2, q3)?
-            }
+#[cfg(test)]
+mod quaternion_i32_mul_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
+            c in super::strategy_scalar_i32_any(), 
+            q in super::strategy_quaternion_any()
+        ) {
+            let c: i32 = c;
+            let q: super::Quaternion<i32> = q;
+            super::prop_scalar_times_quaternion_equals_quaternion_times_scalar(c, q)?
         }
-    }
-    }    
-}
 
-exact_distributive_props!(quaternion_i32_distributive_props, i32, strategy_quaternion_any, strategy_scalar_i32_any);
-
-
-macro_rules! exact_dot_product_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_quaternion_dot_product_commutative(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion_dot_product_commutative(q1, q2)?
-            }
-
-            #[test]
-            fn prop_quaternion_dot_product_right_distributive(
-                q1 in super::$Generator(),
-                q2 in super::$Generator(), 
-                q3 in super::$Generator()
-            ) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                let q3: super::Quaternion<$ScalarType> = q3;
-                super::prop_quaternion_dot_product_right_distributive(q1, q2, q3)?
-            }
-
-            #[test]
-            fn prop_quaternion_dot_product_left_distributive(
-                q1 in super::$Generator(),
-                q2 in super::$Generator(), 
-                q3 in super::$Generator()
-            ) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                let q3: super::Quaternion<$ScalarType> = q3;
-                super::prop_quaternion_dot_product_left_distributive(q1, q2, q3)?
-            }
-
-            #[test]
-            fn prop_quaternion_dot_product_times_scalars_commutative(
-                a in super::$ScalarGen(), 
-                b in super::$ScalarGen(),
-                q1 in super::$Generator(), 
-                q2 in super::$Generator()
-            ) {
-                let a: $ScalarType = a;
-                let b: $ScalarType = b;
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion_dot_product_times_scalars_commutative(a, b, q1, q2)?
-            }
-
-            #[test]
-            fn prop_quaternion_dot_product_right_bilinear(
-                a in super::$ScalarGen(), 
-                b in super::$ScalarGen(),
-                q1 in super::$Generator(),
-                q2 in super::$Generator(), 
-                q3 in super::$Generator()
-            ) {
-                let a: $ScalarType = a;
-                let b: $ScalarType = b;
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                let q3: super::Quaternion<$ScalarType> = q3;
-                super::prop_quaternion_dot_product_right_bilinear(a, b, q1, q2, q3)?
-            }
-
-            #[test]
-            fn prop_quaternion_dot_product_left_bilinear(
-                a in super::$ScalarGen(), 
-                b in super::$ScalarGen(),
-                q1 in super::$Generator(),
-                q2 in super::$Generator(), 
-                q3 in super::$Generator()
-            ) {
-                let a: $ScalarType = a;
-                let b: $ScalarType = b;
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                let q3: super::Quaternion<$ScalarType> = q3;
-                super::prop_quaternion_dot_product_left_bilinear(a, b, q1, q2, q3)?
-            }
+        #[test]
+        fn prop_scalar_multiplication_compatibility(
+            a in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(), 
+            q in super::strategy_quaternion_any()
+        ) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let q: super::Quaternion<i32> = q;
+            super::prop_scalar_multiplication_compatibility(a, b, q)?
         }
-    }
+
+        #[test]
+        fn prop_quaternion_multiplication_associative(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any(), 
+            q3 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            let q3: super::Quaternion<i32> = q3;
+            super::prop_quaternion_multiplication_associative(q1, q2, q3)?
+        }
+
+        #[test]
+        fn prop_quaternion_multiplicative_unit(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_quaternion_multiplicative_unit(q)?
+        }
     }
 }
 
-exact_dot_product_props!(quaternion_i32_dot_product_props, i32, strategy_quaternion_any, strategy_scalar_i32_any);
 
-
-macro_rules! approx_conjugation_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_conjugate_conjugate_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_quaternion_conjugation_linear(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion_conjugation_linear(q1, q2)?
-            }
+#[cfg(test)]
+mod quaternion_i32_distributive_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_distribution_over_quaternion_addition(
+            a in super::strategy_scalar_i32_any(), 
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let a: i32 = a;
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_distribution_over_quaternion_addition(a, q1, q2)?
         }
-    }
+
+        #[test]
+        fn prop_distribution_over_scalar_addition(
+            a in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(), 
+            q in super::strategy_quaternion_any()
+        ) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let q: super::Quaternion<i32> = q;
+            super::prop_distribution_over_scalar_addition(a, b, q)?
+        }
+
+        #[test]
+        fn prop_distribution_over_quaternion_addition1(
+            a in super::strategy_scalar_i32_any(), 
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let a: i32 = a;
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_distribution_over_quaternion_addition1(a, q1, q2)?
+        }
+
+        #[test]
+        fn prop_distribution_over_scalar_addition1(
+            a in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(), 
+            q in super::strategy_quaternion_any()
+        ) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let q: super::Quaternion<i32> = q;
+            super::prop_distribution_over_scalar_addition1(a, b, q)?
+        }
+
+        #[test]
+        fn prop_quaternion_multiplication_right_distributive(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any(), 
+            q3 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            let q3: super::Quaternion<i32> = q3;
+            super::prop_quaternion_multiplication_right_distributive(q1, q2, q3)?
+        }
+
+        #[test]
+        fn prop_quaternion_multiplication_left_distributive(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any(), 
+            q3 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            let q3: super::Quaternion<i32> = q3;
+            super::prop_quaternion_multiplication_left_distributive(q1, q2, q3)?
+        }
     }
 }
 
-approx_conjugation_props!(quaternion_f64_conjugation_props, f64, strategy_quaternion_any);
 
-
-macro_rules! exact_conjugation_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_quaternion_conjugate_conjugate_equals_quaternion(q)?
-            }
-
-            #[test]
-            fn prop_quaternion_conjugation_linear(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion_conjugation_linear(q1, q2)?
-            }
-
-            #[test]
-            fn prop_quaternion_conjugation_transposes_products(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_quaternion_conjugation_transposes_products(q1, q2)?
-            }
+#[cfg(test)]
+mod quaternion_i32_dot_product_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_quaternion_dot_product_commutative(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_quaternion_dot_product_commutative(q1, q2)?
         }
-    }
+
+        #[test]
+        fn prop_quaternion_dot_product_right_distributive(
+            q1 in super::strategy_quaternion_any(),
+            q2 in super::strategy_quaternion_any(), 
+            q3 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            let q3: super::Quaternion<i32> = q3;
+            super::prop_quaternion_dot_product_right_distributive(q1, q2, q3)?
+        }
+
+        #[test]
+        fn prop_quaternion_dot_product_left_distributive(
+            q1 in super::strategy_quaternion_any(),
+            q2 in super::strategy_quaternion_any(), 
+            q3 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            let q3: super::Quaternion<i32> = q3;
+            super::prop_quaternion_dot_product_left_distributive(q1, q2, q3)?
+        }
+
+        #[test]
+        fn prop_quaternion_dot_product_times_scalars_commutative(
+            a in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(),
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_quaternion_dot_product_times_scalars_commutative(a, b, q1, q2)?
+        }
+
+        #[test]
+        fn prop_quaternion_dot_product_right_bilinear(
+            a in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(),
+            q1 in super::strategy_quaternion_any(),
+            q2 in super::strategy_quaternion_any(), 
+            q3 in super::strategy_quaternion_any()
+        ) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            let q3: super::Quaternion<i32> = q3;
+            super::prop_quaternion_dot_product_right_bilinear(a, b, q1, q2, q3)?
+        }
+
+        #[test]
+        fn prop_quaternion_dot_product_left_bilinear(
+            a in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(),
+            q1 in super::strategy_quaternion_any(),
+            q2 in super::strategy_quaternion_any(), 
+            q3 in super::strategy_quaternion_any()
+        ) {
+            let a: i32 = a;
+            let b: i32 = b;
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            let q3: super::Quaternion<i32> = q3;
+            super::prop_quaternion_dot_product_left_bilinear(a, b, q1, q2, q3)?
+        }
     }
 }
 
-exact_conjugation_props!(quaternion_i32_conjugation_props, i32, strategy_quaternion_any);
-exact_conjugation_props!(quaternion_i64_conjugation_props, i64, strategy_quaternion_any);
 
-
-macro_rules! approx_norm_squared_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $input_tolerance:expr, $output_tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_norm_squared_nonnegative(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_norm_squared_nonnegative(q)?
-
-            }
-
-            #[test]
-            fn prop_approx_norm_squared_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_approx_norm_squared_point_separating(q1, q2, $input_tolerance, $output_tolerance)?
-            }
+#[cfg(test)]
+mod quaternion_f64_conjugation_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_conjugate_conjugate_equals_quaternion(q)?
         }
-    }
+
+        #[test]
+        fn prop_quaternion_conjugation_linear(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+            let q1: super::Quaternion<f64> = q1;
+            let q2: super::Quaternion<f64> = q2;
+            super::prop_quaternion_conjugation_linear(q1, q2)?
+        }
     }
 }
 
-approx_norm_squared_props!(quaternion_f64_norm_squared_props, f64, strategy_quaternion_f64_norm_squared, any_scalar_f64, 1e-10, 1e-20);
 
-
-macro_rules! approx_norm_squared_synonym_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_magnitude_squared_norm_squared(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_magnitude_squared_norm_squared(q)?
-            }
+#[cfg(test)]
+mod quaternion_i32_conjugation_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_quaternion_conjugate_conjugate_equals_quaternion(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_quaternion_conjugate_conjugate_equals_quaternion(q)?
         }
-    }
+
+        #[test]
+        fn prop_quaternion_conjugation_linear(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_quaternion_conjugation_linear(q1, q2)?
+        }
+
+        #[test]
+        fn prop_quaternion_conjugation_transposes_products(
+            q1 in super::strategy_quaternion_any(), 
+            q2 in super::strategy_quaternion_any()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_quaternion_conjugation_transposes_products(q1, q2)?
+        }
     }
 }
 
-approx_norm_squared_synonym_props!(quaternion_f64_norm_squared_synonym_props, f64, strategy_quaternion_any);
 
-
-macro_rules! exact_norm_squared_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_norm_squared_nonnegative(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_norm_squared_nonnegative(q)?
-            }
-
-            #[test]
-            fn prop_norm_squared_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_norm_squared_point_separating(q1, q2)?
-            }
+#[cfg(test)]
+mod quaternion_f64_norm_squared_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_norm_squared_nonnegative(q in super::strategy_quaternion_f64_norm_squared()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_norm_squared_nonnegative(q)?
         }
-    }
+
+        #[test]
+        fn prop_approx_norm_squared_point_separating(
+            q1 in super::strategy_quaternion_f64_norm_squared(), 
+            q2 in super::strategy_quaternion_f64_norm_squared()
+        ) {
+            let q1: super::Quaternion<f64> = q1;
+            let q2: super::Quaternion<f64> = q2;
+            super::prop_approx_norm_squared_point_separating(q1, q2, 1e-10, 1e-20)?
+        }
     }
 }
 
-exact_norm_squared_props!(quaternion_i32_norm_squared_props, i32, strategy_quaternion_i32_norm_squared, any_scalar);
 
-
-macro_rules! exact_norm_squared_synonym_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_magnitude_squared_norm_squared(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_magnitude_squared_norm_squared(q)?
-            }
+#[cfg(test)]
+mod quaternion_f64_norm_squared_synonym_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_magnitude_squared_norm_squared(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_magnitude_squared_norm_squared(q)?
         }
-    }
     }
 }
 
-exact_norm_squared_synonym_props!(quaternion_i32_norm_squared_synonym_props, i32, strategy_quaternion_any);
 
-
-macro_rules! norm_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_norm_nonnegative(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_norm_nonnegative(q)?
-            }
-
-            #[test]
-            fn prop_approx_norm_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_approx_norm_point_separating(q1, q2, $tolerance)?
-            }
+#[cfg(test)]
+mod quaternion_i32_norm_squared_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_norm_squared_nonnegative(q in super::strategy_quaternion_i32_norm_squared()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_norm_squared_nonnegative(q)?
         }
-    }
+
+        #[test]
+        fn prop_norm_squared_point_separating(
+            q1 in super::strategy_quaternion_i32_norm_squared(),
+            q2 in super::strategy_quaternion_i32_norm_squared()
+        ) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_norm_squared_point_separating(q1, q2)?
+        }
     }
 }
 
-norm_props!(quaternion_f64_norm_props, f64, strategy_quaternion_any, any_scalar_f64, 1e-10);
 
-
-macro_rules! approx_l1_norm_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_l1_norm_nonnegative(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_l1_norm_nonnegative(q)?
-            }
-
-            #[test]
-            fn prop_approx_l1_norm_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_approx_l1_norm_point_separating(q1, q2, $tolerance)?
-            }
+#[cfg(test)]
+mod quaternion_i32_norm_squared_synonym_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_magnitude_squared_norm_squared(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_magnitude_squared_norm_squared(q)?
         }
-    }
     }
 }
 
-approx_l1_norm_props!(quaternion_f64_l1_norm_props, f64, strategy_quaternion_any, any_scalar_f64, 1e-10);
 
-
-macro_rules! exact_l1_norm_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_l1_norm_nonnegative(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_l1_norm_nonnegative(q)?
-            }
-
-            #[test]
-            fn prop_l1_norm_point_separating(q1 in super::$Generator(), q2 in super::$Generator()) {
-                let q1: super::Quaternion<$ScalarType> = q1;
-                let q2: super::Quaternion<$ScalarType> = q2;
-                super::prop_l1_norm_point_separating(q1, q2)?
-            }
+#[cfg(test)]
+mod quaternion_f64_norm_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_norm_nonnegative(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_norm_nonnegative(q)?
         }
-    }
+
+        #[test]
+        fn prop_approx_norm_point_separating(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+            let q1: super::Quaternion<f64> = q1;
+            let q2: super::Quaternion<f64> = q2;
+            super::prop_approx_norm_point_separating(q1, q2, 1e-10)?
+        }
     }
 }
 
-exact_l1_norm_props!(quaternion_i32_l1_norm_props, i32, strategy_quaternion_any, any_scalar);
 
-
-macro_rules! norm_synonym_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_magnitude_norm_synonyms(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_magnitude_norm_synonyms(q)?
-            }
-
-            #[test]
-            fn prop_l2_norm_norm_synonyms(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_l2_norm_norm_synonyms(q)?
-            }
-
-            #[test]
-            fn prop_magnitude_squared_norm_squared(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_magnitude_squared_norm_squared(q)?
-
-            }
+#[cfg(test)]
+mod quaternion_f64_l1_norm_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_l1_norm_nonnegative(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_l1_norm_nonnegative(q)?
         }
-    }
+
+        #[test]
+        fn prop_approx_l1_norm_point_separating(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+            let q1: super::Quaternion<f64> = q1;
+            let q2: super::Quaternion<f64> = q2;
+            super::prop_approx_l1_norm_point_separating(q1, q2, 1e-10)?
+        }
     }
 }
 
-norm_synonym_props!(quaternion_f64_norm_synonym_props, f64, strategy_quaternion_any, any_scalar_f64, 1e-10);
 
-
-macro_rules! sqrt_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_positive_square_root_squared(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_positive_square_root_squared(q, $tolerance)?
-            }
-
-            #[test]
-            fn prop_negative_square_root_squared(q in super::$Generator()) {
-                let q: super::Quaternion<$ScalarType> = q;
-                super::prop_negative_square_root_squared(q, $tolerance)?
-            }
+#[cfg(test)]
+mod quaternion_i32_l1_norm_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_l1_norm_nonnegative(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_l1_norm_nonnegative(q)?
         }
-    }
+
+        #[test]
+        fn prop_l1_norm_point_separating(q1 in super::strategy_quaternion_any(), q2 in super::strategy_quaternion_any()) {
+            let q1: super::Quaternion<i32> = q1;
+            let q2: super::Quaternion<i32> = q2;
+            super::prop_l1_norm_point_separating(q1, q2)?
+        }
     }
 }
 
-sqrt_props!(quaternion_f64_sqrt_props, f64, strategy_quaternion_squared_any, any_scalar_f64, 1e-7);
+
+#[cfg(test)]
+mod quaternion_f64_norm_synonym_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_magnitude_norm_synonyms(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_magnitude_norm_synonyms(q)?
+        }
+
+        #[test]
+        fn prop_l2_norm_norm_synonyms(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_l2_norm_norm_synonyms(q)?
+        }
+
+        #[test]
+        fn prop_magnitude_squared_norm_squared(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_magnitude_squared_norm_squared(q)?
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod quaternion_f64_sqrt_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_positive_square_root_squared(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_positive_square_root_squared(q, 1e-7)?
+        }
+
+        #[test]
+        fn prop_negative_square_root_squared(q in super::strategy_quaternion_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_negative_square_root_squared(q, 1e-7)?
+        }
+    }
+}
 

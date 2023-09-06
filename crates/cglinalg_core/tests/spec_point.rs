@@ -705,6 +705,7 @@ exact_arithmetic_props!(point3_i64_arithmetic_props, Point3, Vector3, i64, strat
 
 macro_rules! approx_norm_squared_props {
     ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $input_tolerance:expr, $output_tolerance:expr) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -732,6 +733,7 @@ approx_norm_squared_props!(point3_f64_norm_squared_props, Point3, f64, strategy_
 
 macro_rules! approx_norm_squared_synonym_props {
     ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -752,6 +754,7 @@ approx_norm_squared_synonym_props!(point3_f64_norm_squared_synonym_props, Point3
 
 macro_rules! exact_norm_squared_props {
     ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -786,6 +789,7 @@ exact_norm_squared_props!(point3_i32_norm_squared_props, Point3, i32, strategy_p
 
 macro_rules! exact_norm_squared_synonym_props {
     ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -806,6 +810,7 @@ exact_norm_squared_synonym_props!(point3_i32_norm_squared_synonym_props, Point3,
 
 macro_rules! approx_norm_props {
     ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident, $tolerance:expr) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
@@ -833,6 +838,7 @@ approx_norm_props!(point3_f64_norm_props, Point3, f64, strategy_point_any, 1e-8)
 
 macro_rules! norm_synonym_props {
     ($TestModuleName:ident, $PointN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
