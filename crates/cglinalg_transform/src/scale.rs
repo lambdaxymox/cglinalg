@@ -23,7 +23,7 @@ use core::ops;
 /// vector by a specified amount. Let `sx` be a scaling factor for the 
 /// **x-component** and `sy` be a scaling factor for the **y-component** of a 
 /// two-dimensional vector. Then the scale transformation `S` acts on a 
-/// vector `v = [vx, vy]^T` as follows:
+/// vector `v := [vx, vy]^T` as follows:
 /// ```text
 /// Sv == [sx * vx, sy * vy]^T
 /// ```
@@ -444,7 +444,7 @@ where
 /// vector by a specified amount. Let `sx` be a scaling factor for the 
 /// **x-component**, `sy` be a scaling factor for the **y-component**, and `sz` be 
 /// the scaling factor for **z-component** of a three-dimensional vector. Then the 
-/// scale transformation `S` acts on a vector `v = [vx, vy, vz]^T` as follows:
+/// scale transformation `S` acts on a vector `v := [vx, vy, vz]^T` as follows:
 /// ```text
 /// Sv == [sx * vx, sy * vy, sz * vz]^T
 /// ```

@@ -111,7 +111,7 @@ where
     /// 
     /// The `copysign` function is defined as follows. Given a number `x` and a number `sign`
     /// ```text
-    /// copysign(x) = signum(sign) * abs(x)
+    /// copysign(x) == signum(sign) * abs(x)
     /// ```
     /// 
     /// # Examples
@@ -157,11 +157,11 @@ where
     /// The signum of a number is the number of the same type that represents its sign, 
     /// such that given a number `x`
     /// ```text
-    /// signum(x) * abs(x) = x
+    /// signum(x) * abs(x) == x
     /// ```
     /// NOTE: this is a more general condition than the definition
     /// ```text
-    /// signum(x) = if x > 0 { 1 } else if x < 0 { -1 } else { 0 }
+    /// signum(x) := if x > 0 { 1 } else if x < 0 { -1 } else { 0 }
     /// ```
     /// For floating point number types, the number `0` is also 
     /// signed: `signum(+0.0) == +1.0` and `signum(-0.0) == -1.0`. Moreover, the 
@@ -213,11 +213,11 @@ where
     /// 
     /// The absolute value of a number `x` is the number of the same type that satisfies
     /// ```text
-    /// abs(x) = signum(x) * x
+    /// abs(x) == signum(x) * x
     /// ```
     /// For integer types, this corresponds to the conventional mathematical formula
     /// ```text
-    /// abs(x) = if x >= 0 { x } else { -x }
+    /// abs(x) == if x >= 0 { x } else { -x }
     /// ```
     /// whereas for floating point types, the first relation accounts for the case where
     /// `x` is `NaN`.
@@ -512,7 +512,7 @@ pub trait SimdScalarFloat:
     /// Given a floating point number `self`, and floating point numbers `a` and 
     /// `b`, the fused multiply-add operation is given by
     /// ```text
-    /// mul_add(self, a, b) = (self * a) + b 
+    /// mul_add(self, a, b) := (self * a) + b 
     /// ```
     /// where the entire operation is done with only one rounding error, yielding 
     /// a more accurate result than doing one multiply and one add separately. A
@@ -761,7 +761,7 @@ pub trait SimdScalarFloat:
     /// Given a floating point number `x`, the hyperbolic sine of `x` is given
     /// by
     /// ```text
-    /// sinh(x) = (1 / 2) * (exp(x) - exp(-x))
+    /// sinh(x) := (1 / 2) * (exp(x) - exp(-x))
     /// ```
     /// 
     /// # Example
@@ -789,7 +789,7 @@ pub trait SimdScalarFloat:
     /// Given a floating point number `x`, the hyperbolic cosine of `x` is given
     /// by
     /// ```text
-    /// cosh(x) = (1 / 2) * (exp(x) + exp(-x))
+    /// cosh(x) := (1 / 2) * (exp(x) + exp(-x))
     /// ```
     /// 
     /// # Example
@@ -817,7 +817,7 @@ pub trait SimdScalarFloat:
     /// Given a floating point number `x`, the hyperbolic tangent of `x` is given 
     /// by
     /// ```text
-    /// tanh(x) = (exp(x) - exp(-x)) / (exp(x) + exp(-x))
+    /// tanh(x) := (exp(x) - exp(-x)) / (exp(x) + exp(-x))
     /// ```
     /// 
     /// # Example
@@ -1101,7 +1101,7 @@ pub trait SimdScalarFloat:
     /// 
     /// Given a floating point number `x`
     /// ```text
-    /// exp2(x) = 2^x
+    /// exp2(x) := 2^x
     /// ```
     /// 
     /// # Example

@@ -445,14 +445,14 @@ where
     /// The modulus of a complex number is its Euclidean norm, defined as follows.
     /// Given a complex number `z`
     /// ```text
-    /// modulus(z) = sqrt(re(z) * re(z) + im(z) * im(z))
+    /// modulus(z) := sqrt(re(z) * re(z) + im(z) * im(z))
     /// ```
     /// where `re(z)` is the real part of `z`, and `im(z)` is the imaginary part
     /// of `z`. The squared modulus of `z` is then defined to be
     /// ```text
-    /// modulus_squared(z) = modulus(z) * modulus(z)
-    ///                    = sqrt(re(z) * re(z) + im(z) * im(z)) * sqrt(re(z) * re(z) + im(z) * im(z))
-    ///                    = re(z) * re(z) + im(z) * im(z)
+    /// modulus_squared(z) := modulus(z) * modulus(z)
+    ///                    == sqrt(re(z) * re(z) + im(z) * im(z)) * sqrt(re(z) * re(z) + im(z) * im(z))
+    ///                    == re(z) * re(z) + im(z) * im(z)
     /// ```
     /// 
     /// 
@@ -556,7 +556,7 @@ where
     /// 
     /// Given a complex number `z`, the square of `z` is given by
     /// ```text
-    /// squared(z) = z * z
+    /// squared(z) := z * z
     /// ```
     /// 
     /// # Example
@@ -586,7 +586,10 @@ where
     /// 
     /// Given a complex number `z`, the complex conjugate of `z`
     /// is `z` with the sign of the imaginary part flipped, i.e.
-    /// let `z := a + ib`, then `z* := a - ib`.
+    /// let `z := a + ib`, then `z* := a - ib`. Stated as a function, we have
+    /// ```text
+    /// conjugate(a + ib) := a - ib
+    /// ```
     /// 
     /// # Example
     /// 
@@ -722,7 +725,7 @@ where
     /// The modulus of a complex number is its Euclidean norm, defined as follows.
     /// Given a complex number `z`
     /// ```text
-    /// modulus(z) = sqrt(re(z) * re(z) + im(z) * im(z))
+    /// modulus(z) := sqrt(re(z) * re(z) + im(z) * im(z))
     /// ```
     /// where `re(z)` is the real part of `z`, and `im(z)` is the imaginary part
     /// of `z`.
@@ -822,22 +825,22 @@ where
     /// earlier, such that `angle1 == angle + 2 * pi * n1` for some integer `n1`. 
     /// We have
     /// ```text
-    /// z1 = |z1| * exp(i * angle1) 
-    ///    = |z1| * ( cos(angle1) + i * sin(angle1) )
-    ///    = |z1| * ( cos(angle + 2 * pi * n1) + i * sin(angle + 2 * pi * n1) )
-    ///    = |z1| * ( cos(angle) + i * sin(angle) )
-    ///    = |z| * ( cos(angle) + i * sin(angle) )
-    ///    = |z| * exp(i * angle)
-    ///    = z
+    /// z1 == |z1| * exp(i * angle1) 
+    ///    == |z1| * ( cos(angle1) + i * sin(angle1) )
+    ///    == |z1| * ( cos(angle + 2 * pi * n1) + i * sin(angle + 2 * pi * n1) )
+    ///    == |z1| * ( cos(angle) + i * sin(angle) )
+    ///    == |z| * ( cos(angle) + i * sin(angle) )
+    ///    == |z| * exp(i * angle)
+    ///    == z
     /// ```
     /// as desired. Incidentally, the principal argument is given by 
     /// ```text
-    /// Arg(z) = Arg(a + ib) := atan2(b, a)`
+    /// Arg(z) == Arg(a + ib) := atan2(b, a)`
     /// ```
     /// where `a + ib` is the complex number `z` written out in cartesian form. 
     /// This can be obtained from polar form by writing
     /// ```text
-    /// z = |z| * (cos(angle) + i * sin(angle)) = |z| * cos(angle) + i * |z| * sin(angle)
+    /// z == |z| * (cos(angle) + i * sin(angle)) == |z| * cos(angle) + i * |z| * sin(angle)
     /// ```
     /// and reading off the resulting components.
     ///  
@@ -937,12 +940,12 @@ where
 
     /// Compute the exponential of a complex number.
     /// 
-    /// Given a complex number `z = a + ib`, the exponential of z is given by
+    /// Given a complex number `z := a + ib`, the exponential of z is given by
     /// ```text
     /// exp(z) := exp(a + ib) 
-    ///         = exp(a) * exp(ib) 
-    ///         = exp(a) * (cos(b) + i * sin(b))
-    ///         = exp(a) * cos(b) + i * exp(a) * sin(b)
+    ///        == exp(a) * exp(ib) 
+    ///        == exp(a) * (cos(b) + i * sin(b))
+    ///        == exp(a) * cos(b) + i * exp(a) * sin(b)
     /// ```
     /// 
     /// # Example
@@ -1016,7 +1019,7 @@ where
     /// 
     /// Given a complex number `2`, `exp2` is defined by
     /// ```text
-    /// exp2(z) = 2^z
+    /// exp2(z) := 2^z
     /// ```
     /// 
     /// # Examples
@@ -1128,46 +1131,46 @@ where
     /// Calculate the positive square root of a complex number.
     /// 
     /// Given a complex number `z`, the square root of `z` is a complex number 
-    /// `w` such that `w * w = z`. The formula for `sqrt(z)` is given by the following
+    /// `w` such that `w * w == z`. The formula for `sqrt(z)` is given by the following
     /// formula. Let `z := a + ib` where `a` is the real parts of `z`, and `b` is the 
     /// imaginary part of `z`.
     /// ```text
-    ///                              t + 2 * pi * n              t + 2 * pi * n
-    /// sqrt(z) = sqrt(|z|) * ( cos(----------------) + i * sin(----------------) )
+    ///                               t + 2 * pi * n              t + 2 * pi * n
+    /// sqrt(z) := sqrt(|z|) * ( cos(----------------) + i * sin(----------------) )
     ///                                     2                           2
     /// ```
     /// where `|z|` is the modulus (norm) of `z`, `t` is the principal argument of `z`, and `n`
     /// is the nth angle satisfying the above equation. In the case of the square root, there
-    /// are two solutions: `n = 0` and `n = 1`. The `n = 0` solution corresponds 
-    /// to the solution returned by the function, and the `n = 1` case corresponds to the
+    /// are two solutions: `n == 0` and `n == 1`. The `n == 0` solution corresponds 
+    /// to the solution returned by the function, and the `n == 1` case corresponds to the
     /// solution `-w` which differs only by a sign. Indeed, let
     /// ```text
-    ///                                        t               t
-    /// w0 := w = sqrt(z) = sqrt(|z|) * ( cos(---) + i * sin (---) )
-    ///                                        2               2
+    ///                                          t               t
+    /// w0 := w := sqrt(z) == sqrt(|z|) * ( cos(---) + i * sin (---) )
+    ///                                          2               2
     /// ```
-    /// which is the `n = 0` solution. Let
+    /// which is the `n == 0` solution. Let
     /// ```text
-    ///                         t + 2 * pi              t + 2 * pi
-    /// w1 = sqrt(|z|) * ( cos(------------) + i * sin(------------) )
-    ///                              2                       2
+    ///                          t + 2 * pi              t + 2 * pi
+    /// w1 := sqrt(|z|) * ( cos(------------) + i * sin(------------) )
+    ///                               2                       2
     /// ```
     /// Observe that
     /// ```text
-    /// cos((t + 2 * pi) / 2) = cos((t / 2) + pi) = -cos(t / 2)
-    /// sin((t + 2 * pi) / 2) = sin((t / 2) + pi) = -sin(t / 2)
+    /// cos((t + 2 * pi) / 2) == cos((t / 2) + pi) == -cos(t / 2)
+    /// sin((t + 2 * pi) / 2) == sin((t / 2) + pi) == -sin(t / 2)
     /// ```
     /// so that
     /// ```text
-    ///                          t                 t
-    /// w1 = sqrt(|z|) * ( -cos(---) + i * ( -sin(---) )
-    ///                          2                 2
+    ///                           t                 t
+    /// w1 == sqrt(|z|) * ( -cos(---) + i * ( -sin(---) )
+    ///                           2                 2
     ///
-    ///                          t              t
-    ///    = -sqrt(|z|) * ( cos(---) + i * sin(---) )
-    ///                          2              2
+    ///                           t              t
+    ///    == -sqrt(|z|) * ( cos(---) + i * sin(---) )
+    ///                           2              2
     /// 
-    ///    = -w
+    ///    == -w
     /// ```
     /// Thus the complex number square root is indeed a proper square root with two 
     /// solutions given by `p` and `-p`. We illustate this with an example.
@@ -1266,7 +1269,7 @@ where
     /// Calculate the multiplicative inverse of a complex number.
     /// 
     /// The multiplicative inverse of a complex number `z` is a complex 
-    /// number `w` such that `w * z = z * w = 1`.
+    /// number `w` such that `w * z == z * w == 1`.
     /// 
     /// # Example
     /// 

@@ -469,7 +469,7 @@ where
     /// The interior bisector between two congruent angles `angle1` and `angle2` is
     /// given by
     /// ```text
-    /// bisect(angle1, angle2) = angle1 + (1 / 2) * (angle2 - angle1)
+    /// bisect(angle1, angle2) := angle1 + (1 / 2) * (angle2 - angle1)
     /// ```
     /// That is, the interior bisector between two angles is the angle that is 
     /// interpolated half-way between `angle1` and `angle2`.

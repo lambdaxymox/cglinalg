@@ -39,14 +39,14 @@ use core::ops;
 /// homogeneous coordinates, and by the linearity of `T`
 /// ```text
 /// T(v) := T(p - q) 
-///       = T((p - O) - (q - O)) 
-///       = T(p - O) - T(q - O) 
-///       = ((p - O) + t) - ((q - O) + t) 
-///       = (p + (t - O)) - (q + (t - O))
-///       = (p + t) - (q + t)
-///       = (p - q) + (t - t) 
-///       = p - q 
-///       = v
+///      == T((p - O) - (q - O)) 
+///      == T(p - O) - T(q - O) 
+///      == ((p - O) + t) - ((q - O) + t) 
+///      == (p + (t - O)) - (q + (t - O))
+///      == (p + t) - (q + t)
+///      == (p - q) + (t - t) 
+///      == p - q 
+///      == v
 /// ```
 /// as desired.
 #[repr(transparent)]
@@ -212,9 +212,9 @@ where
     /// Apply the translation operation to a vector. 
     ///
     /// This should act as the identity since vectors represent differences 
-    /// between points. Let `p1` and `p2` be points and let `v = p2 - p1` 
+    /// between points. Let `p1` and `p2` be points and let `v := p2 - p1` 
     /// be their difference. If we translate each point by a vector `a`, 
-    /// then `(p2 + a) - (p1 + a) = p2 - p1 = v`.
+    /// then `(p2 + a) - (p1 + a) == p2 - p1 == v`.
     ///
     /// # Example
     ///
@@ -557,14 +557,14 @@ where
 /// homogeneous coordinates, and by the linearity of `T`
 /// ```text
 /// T(v) := T(p - q) 
-///       = T((p - O) - (q - O)) 
-///       = T(p - O) - T(q - O) 
-///       = ((p - O) + t) - ((q - O) + t) 
-///       = (p + (t - O)) - (q + (t - O))
-///       = (p + t) - (q + t)
-///       = (p - q) + (t - t) 
-///       = p - q 
-///       = v
+///      == T((p - O) - (q - O)) 
+///      == T(p - O) - T(q - O) 
+///      == ((p - O) + t) - ((q - O) + t) 
+///      == (p + (t - O)) - (q + (t - O))
+///      == (p + t) - (q + t)
+///      == (p - q) + (t - t) 
+///      == p - q 
+///      == v
 /// ```
 /// as desired.
 #[repr(transparent)]

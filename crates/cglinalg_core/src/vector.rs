@@ -273,7 +273,7 @@ where
     /// Given `N`-dimensional vectors `v1` and `v2`, the component product of `v1` and `v2` is a 
     /// `N`-dimensional vector `v3` such that
     /// ```text
-    /// for all i in 0..N. v3[i] = v1[i] * v2[i]
+    /// for all i in 0..N. v3[i] := v1[i] * v2[i]
     /// ```
     /// 
     /// # Example
@@ -891,7 +891,7 @@ where
     /// Given two vectors `v1` and `v2`, the minimum of `v1` and `v2` is a vector `v3`
     /// such that
     /// ```text
-    /// for all i in 0..N. v3[i] = min(v1[i], v2[i])
+    /// for all i in 0..N. v3[i] := min(v1[i], v2[i])
     /// ```
     /// 
     /// # Example
@@ -924,7 +924,7 @@ where
     /// Given two vectors `v1` and `v2`, the minimum of `v1` and `v2` is a vector `v3`
     /// such that
     /// ```text
-    /// for all i in 0..N. v3[i] = max(v1[i], v2[i])
+    /// for all i in 0..N. v3[i] := max(v1[i], v2[i])
     /// ```
     /// 
     /// # Example

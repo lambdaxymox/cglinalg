@@ -782,7 +782,7 @@ where
     /// the component product of `m1` and `m2` is a matrix `m3` with `rows` rows 
     /// and `columns` such that
     /// ```text
-    /// for all c in 0..C. for all r in 0..R. m3[c][r] = m1[c][r] * m2[c][r]
+    /// for all c in 0..C. for all r in 0..R. m3[c][r] := m1[c][r] * m2[c][r]
     /// ```
     /// 
     /// # Example
@@ -1396,7 +1396,7 @@ where
     /// Given a square matrix `self` Compute the matrix `m` if it exists 
     /// such that
     /// ```text
-    /// m * self = self * m = 1.
+    /// m * self == self * m == 1.
     /// ```
     /// Not every square matrix has an inverse.
     ///
@@ -1431,7 +1431,7 @@ where
 
     /// Determine whether a square matrix has an inverse matrix.
     ///
-    /// A matrix is invertible is its determinant is not zero.
+    /// A matrix is invertible if its determinant is not zero.
     ///
     /// # Example
     ///
@@ -1572,7 +1572,7 @@ where
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
     /// calling `from_scale(scale)` is equivalent to calling 
-    /// `from_nonuniform_scale(scale, scale)`.
+    /// `Self::from_nonuniform_scale(scale, scale)`.
     ///
     /// # Example 
     /// 
@@ -1863,7 +1863,7 @@ where
     /// Given a square matrix `self` Compute the matrix `m` if it exists 
     /// such that
     /// ```text
-    /// m * self = self * m = 1.
+    /// m * self == self * m == 1.
     /// ```
     /// Not every square matrix has an inverse.
     ///
@@ -1907,7 +1907,7 @@ where
 
     /// Determine whether a square matrix has an inverse matrix.
     ///
-    /// A matrix is invertible is its determinant is not zero.
+    /// A matrix is invertible if its determinant is not zero.
     ///
     /// # Example
     ///
@@ -2010,7 +2010,7 @@ where
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
     /// calling `from_scale(scale)` is equivalent to calling 
-    /// `from_nonuniform_scale(scale, scale, scale)`.
+    /// `Self::from_nonuniform_scale(scale, scale, scale)`.
     ///
     /// # Example
     /// 
@@ -2072,8 +2072,8 @@ where
     ///
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
-    /// calling `from_scale(scale)` is equivalent to calling 
-    /// `from_affine_nonuniform_scale(scale, scale)`. The **z-component** is 
+    /// calling `Self::from_scale(scale)` is equivalent to calling 
+    /// `Self::from_affine_nonuniform_scale(scale, scale)`. The **z-component** is 
     /// unaffected since this is an affine matrix.
     ///
     /// # Example
@@ -2442,7 +2442,7 @@ where
     ///
     /// In particular, consider a line of the form
     /// ```text
-    /// L = { (x, y) | a * (x - x0) + b * (y - y0) == 0 } 
+    /// L := { (x, y) | a * (x - x0) + b * (y - y0) == 0 } 
     /// where (x0, x0) is a known point in L.
     /// ```
     /// A bare reflection matrix assumes that we can use the origin 
@@ -2661,7 +2661,7 @@ where
     /// The cross matrix for a vector `a` is the matrix `A` such that for any
     /// vector `v`, `A` satisfies
     /// ```text
-    /// A * v = cross(a, v)
+    /// A * v == cross(a, v)
     /// ```
     /// 
     /// # Example
@@ -3336,7 +3336,7 @@ where
     /// Given a square matrix `self` Compute the matrix `m` if it exists 
     /// such that
     /// ```text
-    /// m * self = self * m = 1.
+    /// m * self == self * m == 1.
     /// ```
     /// Not every square matrix has an inverse.
     ///
@@ -3391,7 +3391,7 @@ where
 
     /// Determine whether a square matrix has an inverse matrix.
     ///
-    /// A matrix is invertible is its determinant is not zero.
+    /// A matrix is invertible if its determinant is not zero.
     ///
     /// # Example
     ///
@@ -3529,8 +3529,8 @@ where
     ///
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
-    /// calling `from_scale(scale)` is equivalent to calling 
-    /// `from_nonuniform_scale(scale, scale, scale)`. Since this is an affine 
+    /// calling `Sel::from_scale(scale)` is equivalent to calling 
+    /// `Self::from_nonuniform_scale(scale, scale, scale)`. Since this is an affine 
     /// matrix the `w` component is unaffected.
     ///
     /// # Example
@@ -3828,7 +3828,7 @@ where
     ///
     /// In particular, consider a plane of the form
     /// ```text
-    /// P = { (x, y, z) | a * (x - x0) + b * (y - y0) + c * (z - z0) == 0 }
+    /// P := { (x, y, z) | a * (x - x0) + b * (y - y0) + c * (z - z0) == 0 }
     /// where (x0, y0, z0) is a known point in P.
     /// ```
     /// A bare reflection matrix assumes that the the **x-axis** intercept `x0` 
@@ -4828,7 +4828,7 @@ where
     /// Given a square matrix `self` Compute the matrix `m` if it exists 
     /// such that
     /// ```text
-    /// m * self = self * m = 1.
+    /// m * self == self * m == 1.
     /// ```
     /// Not every square matrix has an inverse.
     ///
@@ -4930,7 +4930,7 @@ where
 
     /// Determine whether a square matrix has an inverse matrix.
     ///
-    /// A matrix is invertible is its determinant is not zero.
+    /// A matrix is invertible if its determinant is not zero.
     ///
     /// # Example
     ///

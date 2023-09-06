@@ -357,7 +357,7 @@ where
     /// Extract Euler angles from a rotation matrix, in units of radians.
     ///
     /// We explain the method because the formulas are not exactly obvious. 
-    /// The method is based on the method derived by Ken Shoemake in [1]
+    /// The method is based on the method derived by Ken Shoemake in [1].
     ///
     /// ## The Setup For Extracting Euler Angles
     ///
@@ -419,7 +419,7 @@ where
     /// ```
     /// We now derive the formula for the `roll` angle
     /// ```text
-    /// roll = atan2(-m[2, 1], m[2, 2])
+    /// roll == atan2(-m[2, 1], m[2, 2])
     /// ```
     /// To derive the formula for the `yaw` angle, observe the entries `m[0, 0]` 
     /// and `m[1, 0]` from the matrix.
