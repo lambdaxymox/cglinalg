@@ -21,7 +21,7 @@ where
 {
     any::<S>()
         .prop_map(|dimensionless| {
-            let two_pi: S = num_traits::cast(2_f64 * core::f64::consts::PI).unwrap();
+            let two_pi = S::two_pi();
             let one_hundred_million: S = num_traits::cast(100_000_000).unwrap();
 
             Radians(dimensionless % (one_hundred_million * two_pi))
@@ -92,7 +92,7 @@ where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>
 {
-    let one = num_traits::one();
+    let one = S::one();
 
     prop_assert_eq!(angle * one, angle);
 
@@ -213,7 +213,7 @@ where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>
 {
-    let one = num_traits::one();
+    let one = S::one();
     let lhs = angle.cos() * angle.cos() + angle.sin() * angle.sin();
     let rhs = one;
 

@@ -134,7 +134,7 @@ fn prop_one_times_point_equals_point<S, const N: usize>(p: Point<S, N>) -> Resul
 where
     S: SimdScalar + Arbitrary
 {
-    let one = num_traits::one();
+    let one = S::one();
 
     prop_assert_eq!(p * one, p);
 
@@ -332,7 +332,7 @@ fn prop_norm_squared_nonnegative<S, const N: usize>(p: Point<S, N>) -> Result<()
 where
     S: SimdScalar + Arbitrary
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
     
     prop_assert!(p.norm_squared() >= zero);
 
@@ -388,7 +388,7 @@ fn prop_norm_squared_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Po
 where
     S: SimdScalar + Arbitrary
 {   
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assume!(p1 != p2);
     prop_assert_ne!(
@@ -447,7 +447,7 @@ fn prop_norm_nonnegative<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCa
 where
     S: SimdScalarFloat + Arbitrary
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
     
     prop_assert!(p.norm() >= zero);
 
@@ -476,7 +476,7 @@ fn prop_approx_norm_point_separating<S, const N: usize>(
 where
     S: SimdScalarFloat + Arbitrary
 {   
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assume!(relative_ne!(p1, p2, epsilon = input_tolerance));
     prop_assert!(

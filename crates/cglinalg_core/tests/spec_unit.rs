@@ -25,7 +25,7 @@ where
     S: SimdScalarSigned + Arbitrary 
 {
     any::<S>().prop_map(|x| {
-        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let offset = num_traits::cast(1e-6_f64).unwrap();
         let signum_x = x.signum();
         let vector_offset = Vector1::new(
             signum_x * offset
@@ -42,7 +42,7 @@ where
     S: SimdScalarSigned + Arbitrary
 {
     any::<(S, S)>().prop_map(|(x, y)| {
-        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let offset = num_traits::cast(1e-6_f64).unwrap();
         let signum_x = x.signum();
         let signum_y = y.signum();
         let vector_offset = Vector2::new(
@@ -61,7 +61,7 @@ where
     S: SimdScalarSigned + Arbitrary
 {
     any::<(S, S, S)>().prop_map(|(x, y, z)| {
-        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let offset = num_traits::cast(1e-6_f64).unwrap();
         let signum_x = x.signum();
         let signum_y = y.signum();
         let signum_z = z.signum();
@@ -82,7 +82,7 @@ where
     S: SimdScalarSigned + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
-        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let offset = num_traits::cast(1e-6_f64).unwrap();
         let signum_x = x.signum();
         let signum_y = y.signum();
         let signum_z = z.signum();
@@ -105,7 +105,7 @@ where
     S: SimdScalarSigned + Arbitrary
 {
     any::<(S, S, S, S)>().prop_map(|(s, x, y, z)| {
-        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let offset = num_traits::cast(1e-6_f64).unwrap();
         let signum_s = s.signum();
         let signum_x = x.signum();
         let signum_y = y.signum();
@@ -129,7 +129,7 @@ where
     S: SimdScalarSigned + Arbitrary
 {
     any::<(S, S)>().prop_map(|(re, im)| {
-        let offset = num_traits::cast::<f64, S>(1e-6_f64).unwrap();
+        let offset = num_traits::cast(1e-6_f64).unwrap();
         let signum_re = re.signum();
         let signum_im = im.signum();
         let complex_offset = Complex::new(

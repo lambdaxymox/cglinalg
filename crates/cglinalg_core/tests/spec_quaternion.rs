@@ -151,7 +151,7 @@ fn prop_quaternion_times_zero_equals_zero<S>(q: Quaternion<S>) -> Result<(), Tes
 where
     S: SimdScalar + Arbitrary
 {
-    let zero: S = num_traits::zero();
+    let zero = S::zero();
     let zero_quat = Quaternion::zero();
 
     prop_assert_eq!(q * zero, zero_quat);
@@ -741,7 +741,7 @@ fn prop_norm_squared_nonnegative<S>(q: Quaternion<S>) -> Result<(), TestCaseErro
 where
     S: SimdScalar + Arbitrary
 {
-    let zero: S = num_traits::zero();
+    let zero = S::zero();
 
     prop_assert!(q.norm_squared() >= zero);
 
@@ -767,7 +767,7 @@ fn prop_norm_squared_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -
 where
     S: SimdScalarSigned + Arbitrary
 {   
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assume!(q1 != q2);
     prop_assert_ne!(
@@ -838,7 +838,7 @@ fn prop_norm_nonnegative<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat + Arbitrary
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assert!(q.norm() >= zero);
 
@@ -884,7 +884,7 @@ fn prop_l1_norm_nonnegative<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + Arbitrary
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assert!(q.l1_norm() >= zero);
 
@@ -910,7 +910,7 @@ fn prop_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Res
 where
     S: SimdScalarSigned + Arbitrary
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assume!(q1 != q2);
     prop_assert_ne!(

@@ -299,7 +299,7 @@ fn prop_complex_times_zero_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseE
 where
     S: SimdScalar
 {
-    let zero: S = num_traits::zero();
+    let zero = S::zero();
     let zero_complex = Complex::zero();
 
     prop_assert_eq!(z * zero, zero_complex);
@@ -372,7 +372,7 @@ fn prop_complex_times_one_equals_complex<S>(z: Complex<S>) -> Result<(), TestCas
 where
     S: SimdScalar
 {
-    let one: S = num_traits::one();
+    let one = S::one();
 
     prop_assert_eq!(z * one, z);
     
@@ -771,7 +771,7 @@ fn prop_modulus_squared_nonnegative<S>(z: Complex<S>) -> Result<(), TestCaseErro
 where
     S: SimdScalar
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assert!(z.modulus_squared() >= zero);
     
@@ -856,7 +856,7 @@ fn prop_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> R
 where
     S: SimdScalar
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     // prop_assume!(z1 != z2);
     prop_assert_ne!((z1 - z2).modulus_squared(), zero);
@@ -874,7 +874,7 @@ fn prop_modulus_nonnegative<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assert!(z.modulus() >= zero);
 
@@ -900,7 +900,7 @@ fn prop_approx_modulus_point_separating<S>(z1: Complex<S>, z2: Complex<S>, toler
 where
     S: SimdScalarFloat
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assume!(relative_ne!(z1, z2, epsilon = tolerance));
     prop_assert!(relative_ne!((z1 - z2).modulus(), zero, epsilon = tolerance));
@@ -963,7 +963,7 @@ fn prop_l1_norm_nonnegative<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assert!(z.l1_norm() >= zero);
 
@@ -1050,7 +1050,7 @@ fn prop_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<()
 where 
     S: SimdScalarSigned
 {    
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assume!(z1 != z2);
     prop_assert_ne!((z1 - z2).l1_norm(), zero);
@@ -1489,7 +1489,8 @@ fn prop_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_s
 where
     S: SimdScalarFloat
 {
-    let two = Complex::from_real(num_traits::cast(2).unwrap());
+    let one = Complex::one();
+    let two = one + one;
     let lhs = (two * z).cos();
     let cos_z_squared = z.cos().squared();
     let sin_z_squared = z.sin().squared();

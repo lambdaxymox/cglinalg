@@ -174,7 +174,7 @@ fn prop_vector_times_zero_equals_zero<S, const N: usize>(v: Vector<S, N>) -> Res
 where
     S: SimdScalar
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
     let zero_vector = Vector::zero();
 
     prop_assert_eq!(v * zero, zero_vector);
@@ -226,7 +226,7 @@ fn prop_vector_times_one_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Re
 where
     S: SimdScalar
 {
-    let one = num_traits::one();
+    let one = S::one();
 
     prop_assert_eq!(v * one, v);
 
@@ -378,7 +378,7 @@ fn prop_one_times_vector_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Re
 where
     S: SimdScalar
 {
-    let one = num_traits::one();
+    let one = S::one();
 
     prop_assert_eq!(v * one, v);
 
@@ -727,7 +727,7 @@ fn prop_norm_squared_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(
 where
     S: SimdScalar
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
     
     prop_assert!(v.norm_squared() >= zero);
 
@@ -798,7 +798,7 @@ fn prop_norm_squared_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: V
 where
     S: SimdScalar
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assume!(v1 != v2);
     prop_assert_ne!(
@@ -842,7 +842,7 @@ fn prop_norm_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestC
 where
     S: SimdScalarFloat
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
     
     prop_assert!(v.norm() >= zero);
 
@@ -886,7 +886,7 @@ fn prop_l1_norm_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), Te
 where
     S: SimdScalarSigned
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
     
     prop_assert!(v.l1_norm() >= zero);
 
@@ -937,7 +937,7 @@ fn prop_l1_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector
 where
     S: SimdScalarSigned
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assume!(v1 != v2);
     prop_assert_ne!(
@@ -995,7 +995,7 @@ fn prop_lp_norm_nonnegative<S, const N: usize>(v: Vector<S, N>, p: u32) -> Resul
 where
     S: SimdScalarFloat
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
     
     prop_assert!(v.lp_norm(p) >= zero);
 
@@ -1039,7 +1039,7 @@ fn prop_linf_norm_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), 
 where
     S: SimdScalarSigned + SimdScalarOrd
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
     
     prop_assert!(v.linf_norm() >= zero);
 
@@ -1090,7 +1090,7 @@ fn prop_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vect
 where
     S: SimdScalarSigned + SimdScalarOrd
 {
-    let zero = num_traits::zero();
+    let zero = S::zero();
 
     prop_assume!(v1 != v2);
     prop_assert_ne!(

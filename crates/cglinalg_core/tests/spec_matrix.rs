@@ -194,7 +194,7 @@ fn prop_zero_times_matrix_equals_zero_matrix<S, const R: usize, const C: usize>(
 where
     S: SimdScalar + Arbitrary
 {
-    let zero: S = num_traits::zero();
+    let zero = S::zero();
     let zero_matrix = Matrix::zero();
 
     prop_assert_eq!(m * zero, zero_matrix);
@@ -215,7 +215,7 @@ fn prop_one_times_matrix_equals_matrix<S, const R: usize, const C: usize>(m: Mat
 where
     S: SimdScalar + Arbitrary
 {
-    let one: S = num_traits::one();
+    let one = S::one();
 
     prop_assert_eq!(m * one, m);
 
@@ -238,7 +238,7 @@ fn prop_negative_one_times_matrix_equals_negative_matrix<S, const R: usize, cons
 where
     S: SimdScalarSigned + Arbitrary
 {
-    let one: S = num_traits::one();
+    let one = S::one();
     let minus_one = -one;
 
     prop_assert_eq!(m * minus_one, -m);
