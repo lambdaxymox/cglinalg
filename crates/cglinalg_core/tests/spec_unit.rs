@@ -50,29 +50,12 @@ fn strategy_vector_f64_any<const N: usize>() -> impl Strategy<Value = Vector<f64
     strategy_vector_any(min_value, max_value)
 }
 
-
-fn strategy_vector1_f64_any() -> impl Strategy<Value = Vector1<f64>> {
-    strategy_vector_f64_any()
-}
-
-fn strategy_vector2_f64_any() -> impl Strategy<Value = Vector2<f64>> {
-    strategy_vector_f64_any()
-}
-
-fn strategy_vector3_f64_any() -> impl Strategy<Value = Vector3<f64>> {
-    strategy_vector_f64_any()
-}
-
-fn strategy_vector4_f64_any() -> impl Strategy<Value = Vector4<f64>> {
-    strategy_vector_f64_any()
-}
-
 fn strategy_quaternion_f64_any() -> impl Strategy<Value = Quaternion<f64>> {
-    strategy_vector4_f64_any().prop_map(|vector| Quaternion::from(vector))
+    strategy_vector_f64_any().prop_map(|vector| Quaternion::from(vector))
 }
 
 fn strategy_complex_f64_any() -> impl Strategy<Value = Complex<f64>> {
-    strategy_vector2_f64_any().prop_map(|vector| Complex::new(vector[0], vector[1]))
+    strategy_vector_f64_any::<2>().prop_map(|vector| Complex::new(vector[0], vector[1]))
 }
 
 
@@ -209,10 +192,10 @@ macro_rules! unit_props {
     }
 }
 
-unit_props!(unit_vector1_f64_props, Vector1, f64, strategy_vector1_f64_any);
-unit_props!(unit_vector2_f64_props, Vector2, f64, strategy_vector2_f64_any);
-unit_props!(unit_vector3_f64_props, Vector3, f64, strategy_vector3_f64_any);
-unit_props!(unit_vector4_f64_props, Vector4, f64, strategy_vector4_f64_any);
+unit_props!(unit_vector1_f64_props, Vector1, f64, strategy_vector_f64_any);
+unit_props!(unit_vector2_f64_props, Vector2, f64, strategy_vector_f64_any);
+unit_props!(unit_vector3_f64_props, Vector3, f64, strategy_vector_f64_any);
+unit_props!(unit_vector4_f64_props, Vector4, f64, strategy_vector_f64_any);
 
 unit_props!(unit_quaternion_f64_props, Quaternion, f64, strategy_quaternion_f64_any);
 
