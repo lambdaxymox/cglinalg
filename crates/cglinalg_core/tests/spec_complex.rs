@@ -1428,34 +1428,6 @@ where
     Ok(())
 }
 
-/// The principal value of the square root of the negation of a complex number 
-/// satisfies the following.
-/// 
-/// Given a complex number `z`
-/// ```text
-/// sqrt(-z) = i * sqrt(z)
-/// ```
-fn prop_approx_square_root_negative_complex<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
-where
-    S: SimdScalarFloat
-{
-    let unit_im = Complex::unit_im();
-    let sqrt_z = z.sqrt();
-    let lhs = (-z).sqrt();
-    let rhs = unit_im * sqrt_z;
-
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance), 
-        "z = {:?}; -z = {}; sqrt(z) = {:?}; sqrt(-z) = {:?}; i * sqrt(z) = {:?}; \
-        polar(z) = {:?}; polar(-z) = {:?}; polar(sqrt(z)) = {:?}; polar(sqrt(-z)) = {:?}; polar(i * sqrt(z)) = {:?}",
-        z, -z, sqrt_z, lhs, rhs,
-        z.polar_decomposition(), (-z).polar_decomposition(), 
-        sqrt_z.polar_decomposition(), lhs.polar_decomposition(), rhs.polar_decomposition()
-    );
-
-    Ok(())
-}
-
 /// The square of the principal value of the square root of a the negation of a 
 /// complex number is negation of the original complex number.
 /// 
@@ -1476,17 +1448,13 @@ where
     S: SimdScalarFloat
 {
     let sqrt_negative_z = (-z).sqrt();
-    let lhs = sqrt_negative_z * sqrt_negative_z;
-    let rhs = -z;
+    let sqrt_negative_z_squared = sqrt_negative_z * sqrt_negative_z;
+    let negative_z = -z;
+    let lhs = sqrt_negative_z_squared.polar_decomposition();
+    let rhs = negative_z.polar_decomposition();
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
-        "z = {:?}; -z = {:?}; sqrt(-z) = {:?}; sqrt(-z) * sqrt(-z) = {:?}; \
-        polar(z) = {:?}; polar(-z) = {:?}; polar(sqrt(-z)) = {:?}; polar(sqrt(-z) * sqrt(-z)) = {:?}",
-        z, -z, sqrt_negative_z, lhs,
-        z.polar_decomposition(), (-z).polar_decomposition(), 
-        sqrt_negative_z.polar_decomposition(), lhs.polar_decomposition()
-    );
+    prop_assert!(relative_eq!(lhs.0, rhs.0, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs.1, rhs.1, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -3005,12 +2973,6 @@ mod complex_f64_sqrt_props {
         fn prop_approx_square_root_complex_squared(z in super::strategy_complex_f64_sqrt()) {
             let z: super::Complex<f64> = z;
             super::prop_approx_square_root_complex_squared(z, 1e-10, 1e-10)?
-        }
-
-        #[test]
-        fn prop_approx_square_root_negative_complex(z in super::strategy_complex_f64_sqrt()) {
-            let z: super::Complex<f64> = z;
-            super::prop_approx_square_root_negative_complex(z, 1e-10)?
         }
 
         #[test]

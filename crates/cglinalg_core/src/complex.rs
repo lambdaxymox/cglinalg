@@ -469,7 +469,7 @@ where
     /// ```
     #[inline]
     pub fn modulus_squared(self) -> S {
-        self.norm_squared()
+        self.re * self.re + self.im * self.im
     }
 
     /// Calculate the squared norm of a complex number.
@@ -489,7 +489,7 @@ where
     /// ```
     #[inline]
     pub fn norm_squared(self) -> S {
-        self.re * self.re + self.im * self.im
+        self.modulus_squared()
     }
 
     /// Calculate the squared norm of a complex number.
@@ -509,7 +509,7 @@ where
     /// ```
     #[inline]
     pub fn magnitude_squared(self) -> S {
-        self.norm_squared()
+        self.modulus_squared()
     }
 
     /// Scale a complex number `self` by multiplying it by the scalar `scale`.

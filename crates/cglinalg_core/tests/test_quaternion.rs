@@ -175,7 +175,7 @@ mod arithmetic_tests {
 }
 
 #[cfg(test)]
-mod norm_tests {
+mod modulus_tests {
     use cglinalg_core::{
         Quaternion,
         Normed,
@@ -198,9 +198,9 @@ mod norm_tests {
     }
 
     #[test]
-    fn test_quaternion_norm() {
+    fn test_quaternion_modulus() {
         let q = Quaternion::from_parts(3_f64, Vector3::new(34.8_f64, 75.1939_f64, 1.0366_f64));
-        let result = q.norm_squared();
+        let result = q.modulus_squared();
         let expected = 6875.23713677_f64;
 
         assert_eq!(result, expected);
@@ -209,7 +209,7 @@ mod norm_tests {
     #[test]
     fn test_quaternion_normalized() {
         let q = Quaternion::from_parts(3_f64, Vector3::new(34.8_f64, 75.1939_f64, 1.0366_f64));
-        let result = q.normalize().norm();
+        let result = q.normalize().modulus();
         let expected = 1_f64;
 
         assert_eq!(result, expected);
@@ -219,7 +219,7 @@ mod norm_tests {
     fn test_quaternion_normalized_to() {
         let q = Quaternion::from_parts(3_f64, Vector3::new(34.8_f64, 75.1939_f64, 1.0366_f64));
         let norm = 12_f64;
-        let result = q.scale(norm).norm();
+        let result = q.scale(norm).modulus();
         let expected = norm;
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
@@ -421,7 +421,7 @@ mod arg_tests {
     }
 
     #[test]
-    fn test_quaterion_arg3() {
+    fn test_quaternion_arg3() {
         let angle = Radians(f64::consts::FRAC_PI_2);
         let axis = Unit::from_value(Vector3::unit_z());
         let quaternion = Quaternion::from_axis_angle(&axis, angle);
@@ -432,7 +432,7 @@ mod arg_tests {
     }
 
     #[test]
-    fn test_quaterion_arg4() {
+    fn test_quaternion_arg4() {
         let angle = Radians(f64::consts::PI);
         let axis = Unit::from_value(Vector3::unit_z());
         let quaternion = Quaternion::from_axis_angle(&axis, angle);
@@ -443,7 +443,7 @@ mod arg_tests {
     }
 
     #[test]
-    fn test_quaterion_arg5() {
+    fn test_quaternion_arg5() {
         let angle = -Radians(f64::consts::FRAC_PI_2);
         let axis = Unit::from_value(Vector3::unit_z());
         let quaternion = Quaternion::from_axis_angle(&axis, angle);
@@ -454,7 +454,7 @@ mod arg_tests {
     }
 
     #[test]
-    fn test_quaterion_arg6() {
+    fn test_quaternion_arg6() {
         let angle = -Radians(f64::consts::PI);
         let axis = Unit::from_value(Vector3::unit_z());
         let quaternion = Quaternion::from_axis_angle(&axis, angle);

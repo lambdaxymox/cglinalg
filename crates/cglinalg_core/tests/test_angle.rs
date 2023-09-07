@@ -499,6 +499,17 @@ mod radian_angle_tests {
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
+
+    #[test]
+    fn test_atan2_special_values() {
+        let pi = Radians(f64::consts::PI);
+        let negative_pi = Radians(-f64::consts::PI).tan();
+        let tan_negative_pi = negative_pi.tan();
+        let expected = pi;
+        let result = Radians::atan2(tan_negative_pi, -1_f64);
+
+        assert_eq!(result, expected);
+    }
 }
 
 #[cfg(test)]
@@ -675,6 +686,17 @@ mod degree_angle_tests {
         let result = Degrees(30_f64).sec();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_atan2_special_values() {
+        let pi = Degrees(180_f64);
+        let negative_pi = Degrees(-180_f64).tan();
+        let tan_negative_pi = negative_pi.tan();
+        let expected = pi;
+        let result = Degrees::atan2(tan_negative_pi, -1_f64);
+
+        assert_eq!(result, expected);
     }
 }
 

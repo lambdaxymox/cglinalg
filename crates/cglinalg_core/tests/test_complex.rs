@@ -714,11 +714,14 @@ mod logarithm_tests {
 #[cfg(test)]
 mod square_root_tests {
     use cglinalg_core::{
+        Radians,
         Complex,
     };
     use approx::{
         assert_relative_eq,
     };
+
+    use core::f64;
 
 
     #[test]
@@ -810,6 +813,56 @@ mod square_root_tests {
 
         assert_relative_eq!(result, expected, epsilon = 1e-16);
         assert_relative_eq!((sqrt_z * sqrt_z).imaginary(), z.imaginary(), epsilon = 1e-10, max_relative = 1e-15);
+    }
+
+    #[test]
+    fn test_complex_square_root_negative_value_squared1() {
+        let scale = 100_f64;
+        let angle = Radians(-f64::consts::FRAC_PI_3);
+        let z = Complex::from_polar_decomposition(scale, angle);
+        let expected = -z;
+        let result = (-z).sqrt() * (-z).sqrt();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_complex_square_root_negative_value_squared2() {
+        let scale = 100_f64;
+        let angle = Radians(-f64::consts::FRAC_PI_3 + 2_f64 * f64::consts::PI * 30_f64);
+        let z = Complex::from_polar_decomposition(scale, angle);
+        let expected = -z;
+        let result = (-z).sqrt() * (-z).sqrt();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_complex_square_root_negative_value_squared_many1() {
+        let scale = 100_f64;
+        let base_angle = Radians(0_f64);
+        for i in 0..400 {
+            let angle = base_angle + Radians(f64::consts::FRAC_PI_8 * (i as f64));
+            let z = Complex::from_polar_decomposition(scale, angle);
+            let expected = -z;
+            let result = (-z).sqrt() * (-z).sqrt();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-10);
+        }
+    }
+
+    #[test]
+    fn test_complex_square_root_negative_value_squared_many2() {
+        let scale = 100_f64;
+        let base_angle = Radians(0_f64);
+        for i in 0..400 {
+            let angle = base_angle - Radians(f64::consts::FRAC_PI_8 * (i as f64));
+            let z = Complex::from_polar_decomposition(scale, angle);
+            let expected = -z;
+            let result = (-z).sqrt() * (-z).sqrt();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-10);
+        }
     }
 }
 

@@ -166,7 +166,7 @@ where
     /// Construct a new quaternion from a [`Vector4`].
     /// 
     /// The `vector[0]` component of the vector corresponds to the scalar component
-    /// of the quaterion. The `(vector[1], vector[2], vector[3])` components 
+    /// of the quaternion. The `(vector[1], vector[2], vector[3])` components 
     /// correspond to the vector component.
     /// 
     /// # Example
@@ -602,7 +602,45 @@ where
         self.coords.dot(&other.coords)
     }
 
-    /// Calculate the squared norm of a quaternion with respect to the **L2** (Euclidean) norm. 
+    /// Calculate the squared modulus of a quaternion.
+    /// 
+    /// The modulus of a quaternion is the **L2** norm of the quaternion when 
+    /// considered as a vector. Given a quaternion `q`, the modulus of `q` is 
+    /// ```text 
+    /// modulus(q) := sqrt(scalar(q) * scalar(q) + dot(vector(q), vector(q)))
+    /// ```
+    /// where `scalar(q)` is the scalar part of `q`, and `vector(q)` is the vector
+    /// part of `q`. The squared modulus of `q` is then defined to be
+    /// ```text
+    /// modulus_squared(q) := scalar(q) * scalar(q) + dot(vector(q), vector(q))
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Unit,
+    /// #     Radians,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = 1_f64;
+    /// let result = quaternion.norm_squared();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn modulus_squared(self) -> S {
+        self.coords.norm_squared()
+    }
+
+    /// Calculate the squared norm of a quaternion with respect to the **L2** norm. 
     /// 
     /// # Example
     /// 
@@ -626,12 +664,12 @@ where
     /// ```
     #[inline]
     pub fn norm_squared(&self) -> S {
-        self.coords.norm_squared()
+        self.modulus_squared()
     }
 
-    /// Calculate the squared norm of a quaternion with respect to the **L2** (Euclidean) norm.
+    /// Calculate the squared norm of a quaternion with respect to the **L2** norm.
     /// 
-    /// This is a synonym for [`Quaternion::norm_squared`].
+    /// This is a synonym for [`Quaternion::modulus_squared`].
     /// 
     /// # Example
     /// 
@@ -655,7 +693,7 @@ where
     /// ```
     #[inline]
     pub fn magnitude_squared(&self) -> S {
-        self.norm_squared()
+        self.modulus_squared()
     }
 
     /// Calculate the squared metric distance between two quaternions with respect
@@ -730,7 +768,11 @@ where
     /// with the conjugated one.
     ///
     /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
-    /// the conjugate of `q` is the quaternion `q* := s - v`.
+    /// the conjugate of `q` is the quaternion `q* := s - v`. Stated as a function,
+    /// we have
+    /// ```text
+    /// conjugate(s + v) := s - v
+    /// ```
     ///
     /// # Example
     ///
@@ -758,12 +800,12 @@ where
         self.coords[3] = -self.coords[3];
     }
 
-    /// Compute the square of a quaterion.
+    /// Compute the square of a quaternion.
     /// 
     /// Given a quaternion `q`, the square of `q` is the product of
     /// `q` with itself. In particular, given a quaternion `q`
     /// ```text
-    /// q.squared() := q * q
+    /// squared(q) := q * q
     /// ```
     /// 
     /// # Example
@@ -849,8 +891,45 @@ impl<S> Quaternion<S>
 where
     S: SimdScalarFloat
 {
-    /// Calculate the norm of a quaternion with respect to the **L2** (Euclidean) norm. 
+    /// Calculate the modulus of a quaternion.
     /// 
+    /// The modulus of a quaternion is the **L2** norm of the quaternion when 
+    /// considered as a vector. Given a quaternion `q`, the modulus of `q` is 
+    /// ```text 
+    /// modulus(q) := sqrt(scalar(q) * scalar(q) + dot(vector(q), vector(q)))
+    /// ```
+    /// where `scalar(q)` is the scalar part of `q`, and `vector(q)` is the vector
+    /// part of `q`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Angle,
+    /// #     Unit,
+    /// #     Radians,
+    /// #     Vector3,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let angle: Radians<f64> = Radians::full_turn_div_4();
+    /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
+    /// let expected = 1_f64;
+    /// let result = quaternion.norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn modulus(self) -> S {
+        self.coords.norm()
+    }
+
+    /// Calculate the norm of a quaternion with respect to the **L2** norm. 
+    ///
+    /// This is a synonym for [`Quaternion::modulus`].
+    ///  
     /// # Example
     /// 
     /// ```
@@ -909,9 +988,9 @@ where
         self.coords.metric_distance(&other.coords)
     }
 
-    /// Calculate the norm of a quaternion with respect to the **L2** (Euclidean) norm. 
+    /// Calculate the norm of a quaternion with respect to the **L2** norm. 
     /// 
-    /// This is a synonym for [`Quaternion::norm`].
+    /// This is a synonym for [`Quaternion::modulus`].
     /// 
     /// # Example
     /// 
@@ -937,9 +1016,9 @@ where
         self.norm()
     }
 
-    /// Calculate the norm of a quaternion with respect to the **L2** (Euclidean) norm. 
+    /// Calculate the norm of a quaternion with respect to the **L2** norm. 
     /// 
-    /// This is a synonym for [`Quaternion::norm`].
+    /// This is a synonym for [`Quaternion::modulus`].
     /// 
     /// # Example
     /// 
@@ -2766,7 +2845,7 @@ where
             // If the dot product is negative, the shortest path between two 
             // points on the great circle arc swept out by the quaternions runs 
             // in the opposite direction from the positive case, so we must 
-            // negate one of the quaterions to take the short way around 
+            // negate one of the quaternions to take the short way around 
             // instead of the long way around.
             let _result = -self;
             (_result, (_result).dot(other))
