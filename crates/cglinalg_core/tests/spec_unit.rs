@@ -10,6 +10,7 @@ use cglinalg_core::{
     Vector2, 
     Vector3, 
     Vector4,
+    Vector,
     SimdScalarSigned,
     SimdScalarFloat,
     Unit,
@@ -20,128 +21,58 @@ use proptest::prelude::*;
 use core::fmt;
 
 
-fn any_vector1<S>() -> impl Strategy<Value = Vector1<S>> 
-where 
-    S: SimdScalarSigned + Arbitrary 
-{
-    any::<S>().prop_map(|x| {
-        let offset = num_traits::cast(1e-6_f64).unwrap();
-        let signum_x = x.signum();
-        let vector_offset = Vector1::new(
-            signum_x * offset
-        );
-        let modulus = num_traits::cast(100_000_000).unwrap();
-        let vector = Vector1::new(x) % modulus;
-
-        vector_offset + vector
-    })
-}
-
-fn any_vector2<S>() -> impl Strategy<Value = Vector2<S>> 
+fn strategy_vector_any<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where 
     S: SimdScalarSigned + Arbitrary
 {
-    any::<(S, S)>().prop_map(|(x, y)| {
-        let offset = num_traits::cast(1e-6_f64).unwrap();
-        let signum_x = x.signum();
-        let signum_y = y.signum();
-        let vector_offset = Vector2::new(
-            signum_x * offset,
-            signum_y * offset
-        );
-        let modulus = num_traits::cast(100_000_000).unwrap();
-        let vector = Vector2::new(x, y) % modulus;
+    fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
+        min_value + (value % (max_value - min_value))
+    }
 
-        vector_offset + vector
+    any::<[S; N]>().prop_map(move |array| {
+        let abs_offset = num_traits::cast(1e-6_f64).unwrap();
+        let mut vector = Vector::zero();
+        for i in 0..N {
+            let signum = array[i].signum();
+            let offset = signum * abs_offset;
+            let value = signum * rescale(array[i].abs(), min_value, max_value);
+            vector[i] = offset + value;
+        }
+
+        vector
     })
 }
 
-fn any_vector3<S>() -> impl Strategy<Value = Vector3<S>>
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    any::<(S, S, S)>().prop_map(|(x, y, z)| {
-        let offset = num_traits::cast(1e-6_f64).unwrap();
-        let signum_x = x.signum();
-        let signum_y = y.signum();
-        let signum_z = z.signum();
-        let vector_offset = Vector3::new(
-            signum_x * offset,
-            signum_y * offset,
-            signum_z * offset
-        );
-        let modulus = num_traits::cast(100_000_000).unwrap();
-        let vector = Vector3::new(x, y, z) % modulus;
+fn strategy_vector_f64_any<const N: usize>() -> impl Strategy<Value = Vector<f64, N>> {
+    let min_value = f64::sqrt(f64::EPSILON);
+    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
 
-        vector_offset + vector
-    })
+    strategy_vector_any(min_value, max_value)
 }
 
-fn any_vector4<S>() -> impl Strategy<Value = Vector4<S>>
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    any::<(S, S, S, S)>().prop_map(|(x, y, z, w)| {
-        let offset = num_traits::cast(1e-6_f64).unwrap();
-        let signum_x = x.signum();
-        let signum_y = y.signum();
-        let signum_z = z.signum();
-        let signum_w = w.signum();
-        let vector_offset = Vector4::new(
-            signum_x * offset,
-            signum_y * offset,
-            signum_z * offset,
-            signum_w * offset
-        );
-        let modulus = num_traits::cast(100_000_000).unwrap();
-        let vector = Vector4::new(x, y, z, w) % modulus;
 
-        vector_offset + vector
-    })
+fn strategy_vector1_f64_any() -> impl Strategy<Value = Vector1<f64>> {
+    strategy_vector_f64_any()
 }
 
-fn any_quaternion<S>() -> impl Strategy<Value = Quaternion<S>> 
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    any::<(S, S, S, S)>().prop_map(|(s, x, y, z)| {
-        let offset = num_traits::cast(1e-6_f64).unwrap();
-        let signum_s = s.signum();
-        let signum_x = x.signum();
-        let signum_y = y.signum();
-        let signum_z = z.signum();
-        let quaternion_offset = Quaternion::new(
-            signum_s * offset,
-            signum_x * offset,
-            signum_y * offset,
-            signum_z * offset
-        );
-        let modulus: S = num_traits::cast(100_000_000).unwrap();
-        let quaternion = Quaternion::new(s, x, y, z) % modulus;
-
-        quaternion_offset + quaternion
-    })
-    .no_shrink()
+fn strategy_vector2_f64_any() -> impl Strategy<Value = Vector2<f64>> {
+    strategy_vector_f64_any()
 }
 
-fn any_complex<S>() -> impl Strategy<Value = Complex<S>> 
-where 
-    S: SimdScalarSigned + Arbitrary
-{
-    any::<(S, S)>().prop_map(|(re, im)| {
-        let offset = num_traits::cast(1e-6_f64).unwrap();
-        let signum_re = re.signum();
-        let signum_im = im.signum();
-        let complex_offset = Complex::new(
-            signum_re * offset, 
-            signum_im * offset
-        );
-        let modulus: S = num_traits::cast(100_000_000).unwrap();
-        let complex = Complex::new(re, im) % modulus;
+fn strategy_vector3_f64_any() -> impl Strategy<Value = Vector3<f64>> {
+    strategy_vector_f64_any()
+}
 
-        complex_offset + complex
-    })
-    .no_shrink()
+fn strategy_vector4_f64_any() -> impl Strategy<Value = Vector4<f64>> {
+    strategy_vector_f64_any()
+}
+
+fn strategy_quaternion_f64_any() -> impl Strategy<Value = Quaternion<f64>> {
+    strategy_vector4_f64_any().prop_map(|vector| Quaternion::from(vector))
+}
+
+fn strategy_complex_f64_any() -> impl Strategy<Value = Complex<f64>> {
+    strategy_vector2_f64_any().prop_map(|vector| Complex::new(vector[0], vector[1]))
 }
 
 
@@ -278,12 +209,12 @@ macro_rules! unit_props {
     }
 }
 
-unit_props!(unit_vector1_f64_props, Vector1, f64, any_vector1);
-unit_props!(unit_vector2_f64_props, Vector2, f64, any_vector2);
-unit_props!(unit_vector3_f64_props, Vector3, f64, any_vector3);
-unit_props!(unit_vector4_f64_props, Vector4, f64, any_vector4);
+unit_props!(unit_vector1_f64_props, Vector1, f64, strategy_vector1_f64_any);
+unit_props!(unit_vector2_f64_props, Vector2, f64, strategy_vector2_f64_any);
+unit_props!(unit_vector3_f64_props, Vector3, f64, strategy_vector3_f64_any);
+unit_props!(unit_vector4_f64_props, Vector4, f64, strategy_vector4_f64_any);
 
-unit_props!(unit_quaternion_f64_props, Quaternion, f64, any_quaternion);
+unit_props!(unit_quaternion_f64_props, Quaternion, f64, strategy_quaternion_f64_any);
 
-unit_props!(unit_complex_f64_props, Complex, f64, any_complex);
+unit_props!(unit_complex_f64_props, Complex, f64, strategy_complex_f64_any);
 
