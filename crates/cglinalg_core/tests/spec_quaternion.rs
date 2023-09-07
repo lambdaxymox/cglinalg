@@ -1256,7 +1256,7 @@ where
 /// ```text
 /// sqrt(q) * sqrt(q) == q
 /// ```
-fn prop_approx_positive_square_root_squared<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_square_root_quaternion_squared<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1271,23 +1271,23 @@ where
     Ok(())
 }
 
-/// The square of the negative square root of a quaternion is the original
-/// quaternion.
+/// The square of the square root of the negation of a quaternion is the 
+/// negation of the original quaternion.
 /// 
 /// Given a quaternion `q`
 /// ```text
-/// -sqrt(q) * -sqrt(q) == q
+/// sqrt(-q) * sqrt(-q) == -q
 /// ```
-fn prop_approx_negative_square_root_squared<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_square_root_negative_quaterion_squared<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    let minus_sqrt_q = -q.sqrt();
+    let sqrt_negative_q = (-q).sqrt();
 
     prop_assert!(
-        relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = tolerance, max_relative = max_relative),
+        relative_eq!(sqrt_negative_q * sqrt_negative_q, q, epsilon = tolerance, max_relative = max_relative),
         "q = {:?}\nminus_sqrt_q = {:?}\nminus_sqrt_q * minus_sqrt_q = {:?}",
-        q, minus_sqrt_q, minus_sqrt_q * minus_sqrt_q
+        q, sqrt_negative_q, sqrt_negative_q * sqrt_negative_q
     );
 
     Ok(())
@@ -2112,15 +2112,15 @@ mod quaternion_f64_sqrt_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_approx_positive_square_root_squared(q in super::strategy_quaternion_squared_any()) {
+        fn prop_approx_square_root_quaternion_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_approx_positive_square_root_squared(q, 1e-10, 1e-10)?
+            super::prop_approx_square_root_quaternion_squared(q, 1e-10, 1e-10)?
         }
 
         #[test]
-        fn prop_approx_negative_square_root_squared(q in super::strategy_quaternion_squared_any()) {
+        fn prop_approx_square_root_negative_quaternion_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_approx_negative_square_root_squared(q, 1e-10, 1e-10)?
+            super::prop_approx_square_root_negative_quaterion_squared(q, 1e-10, 1e-10)?
         }
 
         #[test]

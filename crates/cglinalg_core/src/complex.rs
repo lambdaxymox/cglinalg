@@ -1153,7 +1153,7 @@ where
         Self::ln(self) / S::ln_10()
     }
 
-    /// Calculate the positive square root of a complex number.
+    /// Calculate the principal value of the square root of a complex number.
     /// 
     /// Given a complex number `z`, the square root of `z` is a complex number 
     /// `w` such that `w * w == z`. The formula for `sqrt(z)` is given by the following
