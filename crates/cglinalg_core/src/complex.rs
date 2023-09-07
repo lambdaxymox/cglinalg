@@ -563,7 +563,7 @@ where
     /// 
     /// ```
     /// # use cglinalg_core::{
-    /// #     Complex
+    /// #     Complex,
     /// # };
     /// #
     /// let z = Complex::new(1_i32, 2_i32);
@@ -575,6 +575,31 @@ where
     #[inline]
     pub fn squared(self) -> Self {
         self * self
+    }
+
+    /// Compute the cube of the complex number `self`
+    /// 
+    /// Given a complex number `z`, the cube of `z` is given by
+    /// ```text
+    /// cubed(z) := z * z * z
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// # };
+    /// #
+    /// let z = Complex::new(1_i32, 1_i32);
+    /// let expected = Complex::new(-2_i32, 2_i32);
+    /// let result = z.cubed();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn cubed(self) -> Self {
+        self * self * self
     }
 }
 
@@ -1239,33 +1264,6 @@ where
         Self::from_polar_decomposition(norm_self.cbrt(), arg_self / three)
     }
 
-    /// Calculate the power of a complex number where the exponent is a floating 
-    /// point number.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Complex,
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// #
-    /// let pi_over_four = core::f64::consts::FRAC_PI_4;
-    /// let z = Complex::from_polar_decomposition(2_f64, Radians(pi_over_four));
-    /// let exponent = 5_f64;
-    /// let expected = Complex::from_polar_decomposition(32_f64, Radians(exponent * pi_over_four));
-    /// let result = z.powf(exponent);
-    /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// ```
-    #[inline]
-    pub fn powf(self, exponent: S) -> Self {
-        (self.ln() * exponent).exp()
-    }
-
     /// Calculate the multiplicative inverse of a complex number.
     /// 
     /// The multiplicative inverse of a complex number `z` is a complex 
@@ -1321,6 +1319,205 @@ where
     #[inline]
     fn is_invertible_eps(self, epsilon: S) -> bool {
         self.norm_squared() >= epsilon * epsilon
+    }
+
+    /// Compute the power of a complex number to an unsigned integer power.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let z = Complex::from_angle(Radians(f64::consts::FRAC_PI_4));
+    /// let expected = Complex::from_angle(Radians(f64::consts::PI));
+    /// let result = z.powu(4);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn powu(self, exponent: u32) -> Self {
+        if exponent == 0 {
+            return Complex::one();
+        }
+        
+        // exponent != 0
+        let mut _exponent = exponent;
+        let mut base = self;
+        
+        while _exponent % 2 == 0 {
+            base = base * base;
+            _exponent >>= 1;
+        }
+
+        if _exponent == 1 {
+            return base;
+        }
+
+        let mut result = base;
+        while _exponent > 1 {
+            _exponent >>= 1;
+            base = base * base;
+            if _exponent % 2 == 1 {
+                result = result * base;
+            }
+        }
+
+        result
+    }
+
+    /// Compute the power of a complex number to an signed integer power.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let z = Complex::from_angle(Radians(f64::consts::FRAC_PI_4));
+    /// let expected = Complex::from_angle(Radians(-f64::consts::PI));
+    /// let result = z.powi(-4);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn powi(self, exponent: i32) -> Self {
+        if exponent == 0 {
+            return Complex::one();
+        }
+        
+        // exponent != 0
+        let mut _exponent = exponent;
+        let mut base = if _exponent > 0 {
+            self
+        } else {
+            let norm_squared = self.norm_squared();
+            if norm_squared.is_zero() {
+                Complex::new(S::nan(), S::nan())
+            } else {
+                Self::new(self.re / norm_squared, -self.im / norm_squared)
+            }
+        };
+
+        if base.is_nan() {
+            return base;
+        }
+        
+        while _exponent % 2 == 0 {
+            base = base * base;
+            _exponent >>= 1;
+        }
+
+        if _exponent == 1 {
+            return base;
+        }
+
+        let mut result = base;
+        while _exponent > 1 {
+            _exponent >>= 1;
+            base = base * base;
+            if _exponent % 2 == 1 {
+                result = result * base;
+            }
+        }
+
+        result
+    }
+
+    /// Calculate the power of a complex number where the exponent is a floating 
+    /// point number.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let pi_over_four = core::f64::consts::FRAC_PI_4;
+    /// let z = Complex::from_polar_decomposition(2_f64, Radians(pi_over_four));
+    /// let exponent = 5_f64;
+    /// let expected = Complex::from_polar_decomposition(32_f64, Radians(exponent * pi_over_four));
+    /// let result = z.powf(exponent);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn powf(self, exponent: S) -> Self {
+        (self.ln() * exponent).exp()
+    }
+
+    /// Calculate the power of a complex number where the exponent is a complex 
+    /// number.
+    /// 
+    /// The complex power of a complex number `z` raised to the power of a complex
+    /// number `w` is given by
+    /// ```text
+    /// powc(z, w) := exp(w * ln(z))
+    /// ```
+    /// 
+    /// # Examples
+    /// 
+    /// A canonical example that exponentiating an imaginary number to another 
+    /// imaginary number produces a real number.
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// // i^i == exp(-pi / 2)
+    /// let unit_im = Complex::unit_im();
+    /// let expected = Complex::from_real(f64::exp(-f64::consts::FRAC_PI_2));
+    /// let result = Complex::powc(unit_im, unit_im);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// Exponentiating a complex number to the power of another complex number.
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Complex
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let z = Complex::new(1_f64, 1_f64);
+    /// let expected = {
+    ///     let modulus = f64::sqrt(2_f64) * f64::exp(-f64::consts::FRAC_PI_4);
+    ///     let angle = f64::consts::FRAC_PI_4 + (1_f64 / 2_f64) * f64::ln(2_f64);
+    ///     let exp_i_angle = Complex::new(f64::cos(angle), f64::sin(angle));
+    ///     
+    ///     exp_i_angle * modulus
+    /// };
+    /// let result = Complex::powc(z, z);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn powc(self, exponent: Self) -> Self {
+        if exponent.is_zero() {
+            return Self::unit_re();
+        }
+
+        (exponent * self.ln()).exp()
     }
 
     /// Compute the complex cosine of a complex number.

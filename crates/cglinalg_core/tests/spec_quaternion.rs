@@ -102,14 +102,14 @@ where
 
 fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
     let min_value = f64::sqrt(f64::EPSILON);
-    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(4_f64);
+    let max_value = f64::sqrt(f64::MAX) / 2_f64;
 
     strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
     let min_value = 0_i32;
-    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
+    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
     let max_value = 46340_i32;
 
     strategy_scalar_signed_from_abs_range(min_value, max_value)
@@ -117,7 +117,7 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
 
 fn strategy_quaternion_f64_any() -> impl Strategy<Value = Quaternion<f64>> {
     let min_value = f64::sqrt(f64::EPSILON);
-    let max_value = f64::sqrt(f64::MAX) / f64::sqrt(4_f64);
+    let max_value = f64::sqrt(f64::MAX) / 2_f64;
 
     strategy_quaternion_signed_from_abs_range(min_value, max_value)
 }
@@ -132,61 +132,15 @@ fn strategy_quaternion_i32_any() -> impl Strategy<Value = Quaternion<i32>> {
 }
 
 fn strategy_quaternion_f64_norm_squared() -> impl Strategy<Value = Quaternion<f64>> {
-    /*
-    use cglinalg_core::{
-        Radians,
-        Vector3,
-        Unit,
-    };
-
-    fn rescale(value: f64, min_value: f64, max_value: f64) -> f64 {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<(f64, f64, f64, f64, f64)>().prop_map(|(_scale, _angle, _x, _y, _z)| {
-        let min_scale = f64::sqrt(f64::EPSILON);
-        let max_scale = f64::sqrt(f64::MAX);
-        let scale = rescale(_scale, min_scale, max_scale);
-        let angle = Radians(_angle % core::f64::consts::FRAC_PI_2);
-        let unnormalized_axis = {
-            let min_value = f64::sqrt(f64::EPSILON);
-            let max_value = f64::sqrt(f64::MAX) / f64::sqrt(3_f64);
-            let x = rescale(_x, min_value, max_value);
-            let y = rescale(_y, min_value, max_value);
-            let z = rescale(_z, min_value, max_value);
-
-            Vector3::new(x, y, z)
-        };
-        let axis = Unit::from_value(unnormalized_axis);
-        
-        Quaternion::from_polar_decomposition(scale, angle, &axis)
-    })
-    .no_shrink()
-    */
     let min_scale = f64::sqrt(f64::EPSILON);
-    let max_scale = f64::sqrt(f64::MAX) / f64::sqrt(3_f64);
+    let max_scale = f64::sqrt(f64::MAX) / 2_f64;
     let min_angle = 0_f64;
-    let max_angle = core::f64::consts::FRAC_PI_2;
+    let max_angle = f64::two_pi();
 
     strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 fn strategy_quaternion_i32_norm_squared() -> impl Strategy<Value = Quaternion<i32>> {
-    /*
-    any::<(i32, i32, i32, i32)>().prop_map(|(_s, _x, _y, _z)| {
-        let min_value = 0;
-        // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-        let max_square_root = 46340;
-        let max_value = max_square_root / 4;
-        let qs = min_value + (_s % (max_value - min_value + 1));
-        let qx = min_value + (_x % (max_value - min_value + 1));
-        let qy = min_value + (_y % (max_value - min_value + 1));
-        let qz = min_value + (_z % (max_value - min_value + 1));
-        
-        Quaternion::new(qs, qx, qy, qz)
-    })
-    .no_shrink()
-    */
     let min_value = 0_i32;
     // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
     let max_square_root = 46340_i32;
@@ -196,27 +150,39 @@ fn strategy_quaternion_i32_norm_squared() -> impl Strategy<Value = Quaternion<i3
 }
 
 fn strategy_quaternion_squared_any() -> impl Strategy<Value = Quaternion<f64>> {
-    /*
-    any::<(S, S, S, S)>().prop_map(|(s, x, y, z)| {
-        let modulus: S = num_traits::cast(100_000_000).unwrap();
-        let quaternion = Quaternion::new(s.abs(), x.abs(), y.abs(), z.abs());
+    let min_scale = f64::sqrt(f64::EPSILON);
+    let max_scale = f64::sqrt(f64::MAX) / 2_f64;
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
 
-        quaternion % modulus
-    })
-    .no_shrink()
-    */
-    let min_value = f64::sqrt(f64::sqrt(f64::EPSILON));
-    let max_value = f64::sqrt(f64::sqrt(f64::MAX)) / 4_f64;
+    strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
+}
 
-    strategy_quaternion_signed_from_abs_range(min_value, max_value)
+fn strategy_quaternion_f64_exp() -> impl Strategy<Value = Quaternion<f64>> {
+    let min_scale = f64::ln(f64::EPSILON);
+    let max_scale = f64::ln(f64::MAX) / 4_f64;
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
+
+    strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 fn strategy_quaternion_f64_sqrt() -> impl Strategy<Value = Quaternion<f64>> {
-    strategy_quaternion_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
+    let min_scale = f64::sqrt(f64::EPSILON);
+    let max_scale = f64::sqrt(f64::MAX) / 2_f64;
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
+
+    strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 fn strategy_quaternion_f64_sqrt_product() -> impl Strategy<Value = Quaternion<f64>> {
-    strategy_quaternion_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
+    let min_scale = f64::sqrt(f64::sqrt(f64::EPSILON));
+    let max_scale = f64::sqrt(f64::sqrt(f64::MAX)) / 4_f64;
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
+
+    strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 
@@ -876,6 +842,24 @@ where
     Ok(())
 }
 
+/// The squared norm function is homogeneous.
+/// 
+/// Given a quaterion `q` and a scalar `c`
+/// ```text
+/// norm_squared(q * c) == norm_squared(q) * abs(c) * abs(c)
+/// ```
+fn prop_norm_squared_homogeneous_squared<S>(q: Quaternion<S>, c: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned
+{
+    let lhs = (q * c).norm_squared();
+    let rhs = q.norm_squared() * c.abs() * c.abs();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
 /// The squared norm function is point separating. In particular, if 
 /// the squared distance between two quaternions `q1` and `q2` is 
 /// zero, then `q1 == q2`.
@@ -1019,6 +1003,12 @@ where
     Ok(())
 }
 
+/// The quaternion **L1** norm is homogeneous.
+/// 
+/// Given a quaternion `q` and a constant scalar `c`
+/// ```text
+/// l1_norm(q * c) == l1_norm(q) * abs(c)
+/// ```
 fn prop_l1_norm_homogeneous<S>(q: Quaternion<S>, c: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
@@ -1031,6 +1021,12 @@ where
     Ok(())
 }
 
+/// The quaternion **L1** norm satisfies the triangle inequality.
+/// 
+/// Given quaternions `q1` and `q2`
+/// ```text
+/// l1_norm(q1 + q1) <= l1_norm(q1) + l1_norm(q2)
+/// ```
 fn prop_l1_norm_triangle_inequality<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
@@ -1102,6 +1098,157 @@ where
     Ok(())
 }
 
+/// The quaternion exponential satisfies the following relationship.
+/// 
+/// Given a quaternion `q`, let `s := scalar(q)` be the scalar part of `q`, and
+/// let `v := vector(q)` be the vector part of `q`. Then
+/// ```text
+/// exp(q) == exp(s + v) == exp(s) * exp(v)
+/// ```
+fn prop_approx_exp_scalar_vector_sum<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let q_scalar = Quaternion::from_real(q.scalar());
+    let q_vector = Quaternion::from_pure(q.vector());
+    let lhs = (q_scalar + q_vector).exp();
+    let rhs = q_scalar.exp() * q_vector.exp();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
+/// The exponential of a quaternion is non-zero.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// exp(q) != 0
+/// ```
+fn prop_exp_quaternion_nonzero<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let zero_quaternion = Quaternion::zero();
+
+    prop_assert_ne!(q.exp(), zero_quaternion);
+
+    Ok(())
+}
+
+/// The quaternion exponential satisfies the following relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// exp(q) * exp(-q) == exp(-q) * exp(q) == 1
+/// ```
+fn prop_approx_exp_quaternion_exp_negative_quaternion<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let unit_s = Quaternion::unit_s();
+    let exp_q = q.exp();
+    let exp_negative_q = (-q).exp();
+
+    prop_assert!(relative_eq!(exp_negative_q * exp_q, unit_s, epsilon = tolerance));
+    prop_assert!(relative_eq!(exp_q * exp_negative_q, unit_s, epsilon = tolerance));
+
+    Ok(())
+}
+
+/// The scalar part of the principal value of a quaternion satisfies the following
+/// relation.
+/// 
+/// Given a quaterion `q`
+/// ```text
+/// scalar(ln(q)) == ln(norm(q))
+/// ```
+fn prop_approx_quaternion_ln_scalar_part<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = q.ln().scalar();
+    let rhs = q.norm().ln();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+/// The quaternion exponential and principal value of the quaternion logarithm 
+/// satisfy the following relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// exp(ln(q)) == q
+/// ```
+fn prop_approx_exp_ln_identity<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = q.ln().exp();
+    let rhs = q;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative), "lhs = {}; rhs = {}", lhs, rhs);
+
+    Ok(())
+}
+
+/// The principal argument of two quaternions that differ only by a phase factor
+/// of `2 * pi * k` for some integer `k` have the same argument up to a sign factor.
+/// 
+/// Given quaternions `q1` and `q2` such that `q1 := r * exp(v * angle)` and 
+/// `q2 := r * exp(v * (angle + 2 * pi * k))` where `r` is a floating point number 
+/// and `k` is an integer
+/// ```text
+/// arg(q1) == arg(q2)
+/// ```
+/// Moreover, this indicates that the `arg` function correctly implements the fact
+/// that the principal argument is unique on the interval `[0, pi]`.
+fn prop_approx_arg_congruent<S>(q: Quaternion<S>, k: i32, tolerance: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    use cglinalg_core::Radians;
+
+    let (norm_q, _, axis_q) = q.polar_decomposition();
+    let arg_q = q.arg();
+    let _k = num_traits::cast(k).unwrap();
+    let arg_new_q = arg_q + S::two_pi() * _k;
+    let angle_new_q = {
+        // NOTE: The argument of the quaternion is half of the angle of rotation, 
+        // not the full angle of rotation.
+        let two = S::one() + S::one();
+        Radians(two * arg_new_q)
+    };
+    let new_q = Quaternion::from_polar_decomposition(norm_q, angle_new_q, &axis_q.unwrap());
+
+    let lhs = q.arg();
+    let rhs = new_q.arg();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "q = {:?}; new_q = {:?}; lhs = {}; rhs = {}", q, new_q, lhs, rhs);
+
+    Ok(())
+}
+
+/// The principal argument of a quaternion is in the closed interval `[0, pi]`.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// 0 =< arg(q) <= pi
+/// ```
+fn prop_approx_arg_range<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let arg_q = q.arg();
+
+    prop_assert!(arg_q >= S::zero());
+    prop_assert!(arg_q <= S::pi());
+
+    Ok(())
+}
+
 /// The square of the positive square root of a quaternion is the original
 /// quaternion.
 /// 
@@ -1153,14 +1300,14 @@ where
 /// ```text
 /// norm(sqrt(q1 * q2)) == norm(sqrt(q2)) * norm(sqrt(q2))
 /// ```
-fn prop_approx_square_root_product_norm<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_square_root_product_norm<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let lhs = (q1 * q2).sqrt().norm();
     let rhs = q1.sqrt().norm() * q2.sqrt().norm();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative), "lhs = {}; rhs = {}", lhs, rhs);
 
     Ok(())
 }
@@ -1763,6 +1910,16 @@ mod quaternion_i32_norm_squared_props {
             let q2: super::Quaternion<i32> = q2;
             super::prop_norm_squared_point_separating(q1, q2)?
         }
+
+        #[test]
+        fn prop_norm_squared_homogeneous_squared(
+            q in super::strategy_quaternion_i32_norm_squared(),
+            c in super::strategy_scalar_i32_any()
+        ) {
+            let q: super::Quaternion<i32> = q;
+            let c: i32 = c;
+            super::prop_norm_squared_homogeneous_squared(q, c)?
+        }
     }
 }
 
@@ -1880,28 +2037,98 @@ mod quaternion_f64_norm_synonym_props {
 
 
 #[cfg(test)]
+mod quaternion_f64_exp_prop {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_exp_scalar_vector_sum(q in super::strategy_quaternion_f64_exp()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_exp_scalar_vector_sum(q, 1e-10, 1e-12)?
+        }
+
+        #[test]
+        fn prop_exp_quaternion_nonzero(q in super::strategy_quaternion_f64_exp()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_exp_quaternion_nonzero(q)?
+        }
+
+        #[test]
+        fn prop_approx_exp_quaternion_exp_negative_quaternion(q in super::strategy_quaternion_f64_exp()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_exp_quaternion_exp_negative_quaternion(q, 1e-10)?
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod quaternion_f64_ln_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_quaternion_ln_scalar_part(q in super::strategy_quaternion_f64_exp()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_quaternion_ln_scalar_part(q, 1e-10)?
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod quaternion_f64_exp_ln_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_exp_ln_identity(q in super::strategy_quaternion_f64_exp()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_exp_ln_identity(q, 1e-4, 1e-4)?
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod quaternion_f64_arg_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_arg_congruent(q in super::strategy_quaternion_f64_any(), k in super::strategy_scalar_i32_any()) {
+            let q: super::Quaternion<f64> = q;
+            let k: i32 = k;
+            super::prop_approx_arg_congruent(q, k, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_arg_range(q in super::strategy_quaternion_f64_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_arg_range(q)?
+        }
+    }
+}
+
+
+#[cfg(test)]
 mod quaternion_f64_sqrt_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
         fn prop_approx_positive_square_root_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_approx_positive_square_root_squared(q, 1e-8, 1e-12)?
+            super::prop_approx_positive_square_root_squared(q, 1e-10, 1e-10)?
         }
 
         #[test]
         fn prop_approx_negative_square_root_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_approx_negative_square_root_squared(q, 1e-8, 1e-12)?
+            super::prop_approx_negative_square_root_squared(q, 1e-10, 1e-10)?
         }
-        /*
+
         #[test]
         fn prop_approx_square_root_product_norm(q1 in super::strategy_quaternion_f64_sqrt_product(), q2 in super::strategy_quaternion_f64_sqrt_product()) {
             let q1: super::Quaternion<f64> = q1;
             let q2: super::Quaternion<f64> = q2;
-            super::prop_approx_square_root_product_norm(q1, q2, 1e-10)?
+            super::prop_approx_square_root_product_norm(q1, q2, 1e-10, 1e-10)?
         }
-        */
 
         #[test]
         fn prop_square_root_arg_range(q in super::strategy_quaternion_f64_sqrt()) {

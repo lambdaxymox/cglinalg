@@ -1585,7 +1585,12 @@ where
     /// ```text
     /// theta == Arg(q) + 2 * pi * n
     /// ```
-    /// In the case of `theta = Arg(q)`, we have `n == 0`.
+    /// In the case of `theta == Arg(q)`, we have `n == 0`. Using the principal
+    /// argument of the quaternion `q`, we can write `q` in polar form as 
+    /// ```text
+    /// q := |q| * exp(vec(q) * Arg(q))
+    /// ```
+    /// where `vec(q)` denotes the vector part of `q`.
     ///
     /// # Example
     ///
@@ -1620,9 +1625,9 @@ where
     #[inline]
     fn arg_eps(&self, epsilon: S) -> S {
         if self.scalar() * self.scalar() <= epsilon * epsilon {
-            num_traits::cast(core::f64::consts::FRAC_PI_2).unwrap()
+            S::frac_pi_2()
         } else {
-            S::atan(self.vector().norm() / self.scalar())
+            S::atan2(self.vector().norm(), self.scalar())
         }
     }
 
@@ -1871,9 +1876,9 @@ where
     /// `p` returned by the function, and the `n == 1` case corresponds to the solution `-p`,
     /// which differs only by a sign. Indeed, let 
     /// ```text
-    ///                              t      v         t
-    /// p0 := p = sqrt(|q|) * ( cos(---) + --- * sin(---) )
-    ///                              2     |v|        2
+    ///                               t      v         t
+    /// p0 := p == sqrt(|q|) * ( cos(---) + --- * sin(---) )
+    ///                               2     |v|        2
     /// ```
     /// which is the `n == 0` solution. Let 
     /// ```text
@@ -1889,7 +1894,7 @@ where
     /// so that
     /// ```text
     ///                           t      v            t
-    /// p1 == sqrt(|q|) * ( -cos(---) + --- * ( -sin(---) )
+    /// p1 == sqrt(|q|) * ( -cos(---) + --- * ( -sin(---) ) )
     ///                           2     |v|           2
     ///
     ///                           t      v         t
@@ -2022,7 +2027,7 @@ where
             }
         } else {
             // Otherwise, we can treat the quaternion as normal.
-            let one_half: S = num_traits::cast(0.5).unwrap();
+            let one_half: S = num_traits::cast(0.5_f64).unwrap();
             let c = S::sqrt(one_half / (norm_self + self.scalar()));
 
             Self::from_parts((norm_self + self.scalar()) * c, self.vector() * c)
@@ -2785,7 +2790,7 @@ where
         // `other`.
         //
         // For very small angles, `sin_half_theta` is approximately equal to the 
-        // angle `half_theta`. That is, `sin(theta / 2) ~= theta / 2` as 
+        // angle `half_theta`. That is, `sin(theta / 2) / (theta / 2) -> 1` as 
         // `theta -> 0`. Therefore, we can use the sine of the angle between two 
         // quaternions to determine when to approximate spherical linear 
         // interpolation with normalized linear interpolation. Using the sine of 
@@ -3042,7 +3047,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     pub fn from_polar_decomposition(scale: S, angle: Radians<S>, axis: &Unit<Vector3<S>>) -> Self {
-        let two: S = num_traits::cast(2_i8).unwrap();
+        let one = S::one();
+        let two: S = one + one;
         let (sin_angle_over_two, cos_angle_over_two) = (angle / two).sin_cos();
         let scalar = cos_angle_over_two * scale;
         let vector = axis.as_ref() * sin_angle_over_two * scale;

@@ -91,8 +91,16 @@ fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
 
 fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
     let min_value = 0_i32;
-    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
-    let max_value = 32767_i32;
+    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_value = 46340_i32;
+
+    strategy_scalar_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_scalar_i32_power() -> impl Strategy<Value = i32> {
+    let min_value = 0_i32;
+    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_value = 100_i32;
 
     strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
@@ -106,8 +114,8 @@ fn strategy_complex_f64_any() -> impl Strategy<Value = Complex<f64>> {
 
 fn strategy_complex_i32_any() -> impl Strategy<Value = Complex<i32>> {
     let min_value = 0_i32;
-    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
-    let max_value = 32767_i32;
+    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_value = 46340_i32;
 
     strategy_complex_signed_from_abs_range(min_value, max_value)
 }
@@ -162,19 +170,43 @@ where
 }
 
 fn strategy_complex_f64_exp() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, f64::ln(f64::MAX) / 2_f64, 0_f64, f64::two_pi())
+    let min_scale = f64::ln(f64::EPSILON);
+    let max_scale = f64::ln(f64::MAX) / 4_f64;
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
+
+    strategy_complex_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 fn strategy_complex_f64_ln() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / 2_f64, 0_f64, f64::two_pi())
+    let min_scale = f64::ln(f64::EPSILON);
+    let max_scale = f64::ln(f64::MAX) / 4_f64;
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
+
+    strategy_complex_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 fn strategy_complex_f64_sqrt() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::MAX) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
+    let min_scale = f64::EPSILON;
+    let max_scale = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
+
+    strategy_complex_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 fn strategy_complex_f64_sqrt_product() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
+}
+
+fn strategy_complex_f64_cbrt() -> impl Strategy<Value = Complex<f64>> {
+    let min_scale = f64::EPSILON;
+    let max_scale = f64::cbrt(f64::MAX) / f64::cbrt(2_f64);
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
+
+    strategy_complex_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
 fn strategy_imaginary_f64_cos() -> impl Strategy<Value = Complex<f64>>{
@@ -892,6 +924,24 @@ where
     Ok(())
 }
 
+/// The squared modulus function is homogeneous.
+/// 
+/// Given a complex number `z` and a scalar `c`
+/// ```text
+/// modulus_squared(z * c) == modulus_squared(z) * abs(c) * abs(c)
+/// ```
+fn prop_modulus_squared_homogeneous_squared<S>(z: Complex<S>, c: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarSigned
+{
+    let lhs = (z * c).modulus_squared();
+    let rhs = z.modulus_squared() * c.abs() * c.abs();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
 /// The modulus of a complex number is nonnegative. 
 ///
 /// Given a complex number `z`
@@ -1109,6 +1159,50 @@ where
     Ok(())
 }
 
+/// The complex exponential of a complex number is nonzero.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// exp(z) != 0
+/// ```
+fn prop_exp_complex_nonzero<S>(z: Complex<S>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let zero_complex = Complex::zero();
+
+    prop_assert_ne!(z.exp(), zero_complex);
+
+    Ok(())
+}
+
+/// The complex exponential satisfies the following relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// exp(-z) * exp(z) == exp(z) * exp(-z) == 1
+/// ```
+fn prop_approx_exp_complex_exp_negative_complex<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let unit_re = Complex::unit_re();
+    let exp_z = z.exp();
+    let exp_negative_z = (-z).exp();
+
+    let lhs1 = exp_negative_z * exp_z;
+    let rhs1 = unit_re;
+
+    prop_assert!(relative_eq!(lhs1, rhs1, epsilon = tolerance));
+
+    let lhs2 = exp_z * exp_negative_z;
+    let rhs2 = unit_re;
+
+    prop_assert!(relative_eq!(lhs2, rhs2, epsilon = tolerance));
+
+    Ok(())
+}
+
 /// The complex logarithm satisfiess the following relation.
 /// 
 /// Given non-zero complex numbers `z1` and `z2`, there is an integer `k` such that
@@ -1136,6 +1230,44 @@ where
     Ok(())
 }
 
+/// The real part of the complex logarithm is the logarithm of the complex modulus.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// re(ln(z)) == ln(modulus(z))
+/// ```
+fn prop_approx_complex_ln_real_part<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = z.ln().real();
+    let rhs = z.modulus().ln();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+/// The complex exponential and the principal value of the complex logarithm
+/// satisfy the foloowing relation.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// ln(exp(z)) == z
+/// ```
+fn prop_approx_exp_ln_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = z.ln().exp();
+    let rhs = z;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+
 /// The principal argument of two complex numbers that differ only by a phase factor
 /// of `2 * pi * k` for some integer `k` have the same argument up to a sign factor.
 /// 
@@ -1145,6 +1277,8 @@ where
 /// ```text
 /// arg(z1) == arg(z2)
 /// ```
+/// Moreover, this indicates that the `arg` function correctly implements the fact
+/// that the principal argument is unique on the interval `[-pi, pi]`.
 fn prop_approx_arg_congruent<S>(z: Complex<S>, k: i32, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1152,10 +1286,11 @@ where
     use cglinalg_core::Radians;
 
     let modulus_z = z.modulus();
-    let arg_z = z.arg();
+    let principal_arg_z = z.arg();
     let _k = num_traits::cast(k).unwrap();
-    let angle_z = Radians(arg_z + S::two_pi() * _k);
-    let new_z = Complex::from_polar_decomposition(modulus_z, angle_z);
+    let arg_new_z = principal_arg_z + S::two_pi() * _k;
+    let angle_new_z = Radians(arg_new_z);
+    let new_z = Complex::from_polar_decomposition(modulus_z, angle_new_z);
 
     let lhs = z.arg();
     let rhs = new_z.arg();
@@ -1256,31 +1391,31 @@ where
 /// ```text
 /// sqrt(z) * sqrt(z) == z
 /// ```
-fn prop_approx_positive_square_root_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_square_root_positive_complex_squared<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let sqrt_z = z.sqrt();
 
-    prop_assert!(relative_eq!(sqrt_z * sqrt_z, z, epsilon = tolerance, max_relative = tolerance));
+    prop_assert!(relative_eq!(sqrt_z * sqrt_z, z, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
 
-/// The square of the negative square root of a complex number is the original
-/// complex number.
+/// The square of the square root of a the negation of a complex number is negation 
+/// of the original complex number.
 /// 
 /// Given a complex number `z`
 /// ```text
-/// -sqrt(z) * -sqrt(z) == z
+/// sqrt(-z) * sqrt(-z) == -z
 /// ```
-fn prop_approx_negative_square_root_squared<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_square_root_negative_complex_squared<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let minus_sqrt_z = -z.sqrt();
 
-    prop_assert!(relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = tolerance, max_relative = tolerance));
+    prop_assert!(relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -1292,14 +1427,14 @@ where
 /// ```text
 /// modulus(sqrt(z1 * z2)) == modulus(sqrt(z1)) * modulus(zqrt(z2))
 /// ```
-fn prop_approx_square_root_product_modulus<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_square_root_product_modulus<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
     let lhs = (z1 * z2).sqrt().modulus();
     let rhs = z1.sqrt().modulus() * z2.sqrt().modulus();
     prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = tolerance),
+        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
         "z1 = {}; z2 = {}; modulus(sqrt(z1 * z2)) = {}; modulus(sqrt(z1)) * modulus(sqrt(z2)) = {}",
         z1, z2, lhs, rhs
     );
@@ -1322,6 +1457,25 @@ where
     let arg_sqrt_z = z.sqrt().arg();
 
     prop_assert!((arg_sqrt_z >= -pi_over_2) && (arg_sqrt_z <= pi_over_2));
+
+    Ok(())
+}
+
+/// The cube of the cubed root of a complex number is the original complex number.
+/// 
+/// Given a complex number `z`
+/// ```text
+/// cubed(cbrt(z)) == z
+/// ```
+fn prop_approx_cubed_root_complex_cubed<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let cbrt_z = z.cbrt();
+    let lhs = cbrt_z.cubed();
+    let rhs = z;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -1512,7 +1666,8 @@ where
 /// ```
 fn prop_approx_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(
     z: Complex<S>, 
-    tolerance: S
+    tolerance: S,
+    max_relative: S
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1524,7 +1679,7 @@ where
     let sin_z_squared = z.sin().squared();
     let rhs = cos_z_squared - sin_z_squared;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -2525,6 +2680,13 @@ mod complex_i32_modulus_squared_props {
             let z2: super::Complex<i32> = z2;
             super::prop_modulus_squared_point_separating(z1, z2)?
         }
+
+        #[test]
+        fn prop_modulus_squared_homogeneous_squared(z in super::strategy_complex_i32_modulus_squared(), c in super::strategy_scalar_i32_any()) {
+            let z: super::Complex<i32> = z;
+            let c: i32 = c;
+            super::prop_modulus_squared_homogeneous_squared(z, c)?
+        }
     }
 }
 
@@ -2654,6 +2816,18 @@ mod complex_f64_exp_props {
             let z2: super::Complex<f64> = z2;
             super::prop_approx_exp_sum(z1, z2, 1e-10, 1e-10)?
         }
+
+        #[test]
+        fn prop_exp_complex_nonzero(z in super::strategy_complex_f64_exp()) {
+            let z: super::Complex<f64> = z;
+            super::prop_exp_complex_nonzero(z)?
+        }
+
+        #[test]
+        fn prop_approx_exp_complex_exp_negative_complex(z in super::strategy_complex_f64_exp()) {
+            let z: super::Complex<f64> = z;
+            super::prop_approx_exp_complex_exp_negative_complex(z, 1e-10)?
+        }
     }
 }
 
@@ -2666,6 +2840,24 @@ mod complex_f64_ln_props {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
             super::prop_approx_ln_product(z1, z2, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_complex_ln_real_part(z in super::strategy_complex_f64_ln()) {
+            let z: super::Complex<f64> = z;
+            super::prop_approx_complex_ln_real_part(z, 1e-10)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_exp_ln_props {
+    use proptest::prelude::*;
+    proptest!{
+        #[test]
+        fn prop_approx_exp_ln_identity(z in super::strategy_complex_f64_ln()) {
+            let z: super::Complex<f64> = z;
+            super::prop_approx_exp_ln_identity(z, 1e-10)?
         }
     }
 }
@@ -2713,28 +2905,40 @@ mod complex_f64_sqrt_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_approx_positive_square_root_squared(z in super::strategy_complex_f64_sqrt()) {
+        fn prop_approx_square_root_positive_complex_squared(z in super::strategy_complex_f64_sqrt()) {
             let z: super::Complex<f64> = z;
-            super::prop_approx_positive_square_root_squared(z, 1e-10)?
+            super::prop_approx_square_root_positive_complex_squared(z, 1e-10, 1e-10)?
         }
 
         #[test]
-        fn prop_approx_negative_square_root_squared(z in super::strategy_complex_f64_sqrt()) {
+        fn prop_approx_square_root_negative_complex_squared(z in super::strategy_complex_f64_sqrt()) {
             let z: super::Complex<f64> = z;
-            super::prop_approx_negative_square_root_squared(z, 1e-10)?
+            super::prop_approx_square_root_negative_complex_squared(z, 1e-10, 1e-10)?
         }
 
         #[test]
         fn prop_approx_square_root_product_modulus(z1 in super::strategy_complex_f64_sqrt_product(), z2 in super::strategy_complex_f64_sqrt_product()) {
             let z1: super::Complex<f64> = z1;
             let z2: super::Complex<f64> = z2;
-            super::prop_approx_square_root_product_modulus(z1, z2, 1e-10)?
+            super::prop_approx_square_root_product_modulus(z1, z2, 1e-10, 1e-10)?
         }
 
         #[test]
         fn prop_square_root_arg_range(z in super::strategy_complex_f64_sqrt()) {
             let z: super::Complex<f64> = z;
             super::prop_square_root_arg_range(z)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod complex_f64_cbrt_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_cubed_root_complex_cubed(z in super::strategy_complex_f64_cbrt()) {
+            let z: super::Complex<f64> = z;
+            super::prop_approx_cubed_root_complex_cubed(z, 1e-10, 1e-10)?
         }
     }
 }
@@ -2800,7 +3004,7 @@ mod complex_f64_trigonometry_props {
         #[test]
         fn prop_approx_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z in super::strategy_complex_f64_cos_double_angle()) {
             let z: super::Complex<f64> = z;
-            super::prop_approx_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z, 1e-8)?
+            super::prop_approx_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared(z, 1e-8, 1e-8)?
         }
 
         #[test]

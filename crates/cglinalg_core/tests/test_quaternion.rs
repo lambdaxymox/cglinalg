@@ -377,7 +377,18 @@ mod slerp_tests {
 
 #[cfg(test)]
 mod arg_tests {
-    use cglinalg_core::Quaternion;
+    use cglinalg_core::{
+        Angle,
+        Radians,
+        Quaternion,
+        Unit,
+        Vector3,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+    use core::f64;
 
     
     #[test]
@@ -396,6 +407,84 @@ mod arg_tests {
         let result = q.arg();
 
         assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaternion_arg2() {
+        let angle = Radians(0_f64);
+        let axis = Unit::from_value(Vector3::unit_z());
+        let quaternion = Quaternion::from_axis_angle(&axis, angle);
+        let expected = 0_f64;
+        let result = quaternion.arg();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_quaterion_arg3() {
+        let angle = Radians(f64::consts::FRAC_PI_2);
+        let axis = Unit::from_value(Vector3::unit_z());
+        let quaternion = Quaternion::from_axis_angle(&axis, angle);
+        let expected = f64::consts::FRAC_PI_4;
+        let result = quaternion.arg();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_quaterion_arg4() {
+        let angle = Radians(f64::consts::PI);
+        let axis = Unit::from_value(Vector3::unit_z());
+        let quaternion = Quaternion::from_axis_angle(&axis, angle);
+        let expected = f64::consts::FRAC_PI_2;
+        let result = quaternion.arg();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_quaterion_arg5() {
+        let angle = -Radians(f64::consts::FRAC_PI_2);
+        let axis = Unit::from_value(Vector3::unit_z());
+        let quaternion = Quaternion::from_axis_angle(&axis, angle);
+        let expected = f64::consts::FRAC_PI_4;
+        let result = quaternion.arg();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_quaterion_arg6() {
+        let angle = -Radians(f64::consts::PI);
+        let axis = Unit::from_value(Vector3::unit_z());
+        let quaternion = Quaternion::from_axis_angle(&axis, angle);
+        let expected = f64::consts::FRAC_PI_2;
+        let result = quaternion.arg();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_quaternion_arg_branches() {
+        let angle = Radians(f64::consts::FRAC_PI_4);
+        let axis = Unit::from_value(Vector3::unit_z());
+        let q = Quaternion::from_axis_angle(&axis, angle);
+
+        // The principal argument is half of the angle of rotation.
+        let principal_arg_q = q.arg();
+
+        assert_relative_eq!(principal_arg_q, f64::consts::FRAC_PI_8, epsilon = 1e-10);
+        
+        for k in 0..100 {
+            let _k = k as f64;
+            let arg_plus_2k_pi = principal_arg_q + 2_f64 * f64::consts::PI * _k;
+            let angle_new_q = Radians(2_f64 * arg_plus_2k_pi);
+            let new_q = Quaternion::from_axis_angle(&axis, angle_new_q);
+            let expected = principal_arg_q;
+            let result = new_q.arg();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-10);
+        }
     }
 }
 
