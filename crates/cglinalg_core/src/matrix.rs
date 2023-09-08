@@ -728,7 +728,12 @@ where
 
     /// Construct a zero matrix.
     ///
-    /// A zero matrix is a matrix in which all of its elements are zero.
+    /// A zero matrix is a matrix in which all of its elements are zero. In
+    /// particular, the **(R row, C column)** zero matrix is the matrix `zero` 
+    /// such that
+    /// ```text
+    /// forall c in 0..C. forall r in 0..R. zero[c][r] == 0
+    /// ```
     ///
     /// # Example
     ///
@@ -782,7 +787,7 @@ where
     /// the component product of `m1` and `m2` is a matrix `m3` with `rows` rows 
     /// and `columns` such that
     /// ```text
-    /// for all c in 0..C. for all r in 0..R. m3[c][r] := m1[c][r] * m2[c][r]
+    /// forall c in 0..C. forall r in 0..R. m3[c][r] := m1[c][r] * m2[c][r]
     /// ```
     /// 
     /// # Example
@@ -1040,7 +1045,12 @@ where
     /// Compute an identity matrix.
     ///
     /// An identity matrix is a matrix where the diagonal elements are one
-    /// and the off-diagonal elements are zero.
+    /// and the off-diagonal elements are zero. In particular, the identity
+    /// matrix is the matrix `identity` such that
+    /// ```text
+    /// forall i in 0..N. identity[i][i] == 1
+    /// forall i in 0..N. forall j in 0..N. i != j => identity[i][j] == 0
+    /// ```
     ///
     /// # Example
     ///
@@ -1104,7 +1114,11 @@ where
     }
 
     /// Construct a new diagonal matrix from a given value where
-    /// each element along the diagonal is equal to `value`.
+    /// each element along the diagonal is equal to `value`. The resulting 
+    /// matrix `m` satisfies the predicate
+    /// ```text
+    /// forall i in 0..N. m[i][i] == value
+    /// ```
     ///
     /// # Example
     ///
