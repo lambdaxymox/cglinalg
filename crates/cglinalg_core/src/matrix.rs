@@ -346,6 +346,31 @@ where
 }
 
 
+impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
+    /// Determine whether this matrix is a square matrix.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix2x3,
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let zero_matrix2x3: Matrix2x3<i32> = Matrix2x3::zero();
+    /// let zero_matrix3x3: Matrix3x3<i32> = Matrix3x3::zero();
+    /// 
+    /// assert!(!zero_matrix2x3.is_square());
+    /// assert!(zero_matrix3x3.is_square());
+    /// ```
+    #[inline]
+    pub const fn is_square(&self) -> bool {
+        let shape = self.shape();
+
+        shape.0 == shape.1
+    }
+}
+
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
 where 
     S: Copy

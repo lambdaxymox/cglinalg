@@ -703,7 +703,6 @@ mod exp_ln_tests {
     };
     use approx::{
         assert_relative_eq,
-        assert_relative_ne,
     };
 
     use core::f64;
