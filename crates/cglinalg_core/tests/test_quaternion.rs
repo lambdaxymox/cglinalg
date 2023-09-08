@@ -378,7 +378,6 @@ mod slerp_tests {
 #[cfg(test)]
 mod arg_tests {
     use cglinalg_core::{
-        Angle,
         Radians,
         Quaternion,
         Unit,

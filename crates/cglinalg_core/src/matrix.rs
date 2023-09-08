@@ -689,7 +689,14 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
     S: SimdScalar
 {
-    /// Transpose a matrix.
+    /// Compute the transpose of a matrix.
+    /// 
+    /// Given a matrix `m`, the transpose of `m` is the matrix `m_tr` such that
+    /// ```text
+    /// forall c in 0..C. forall r in 0..R. m_tr[c][r] == m[r][c]
+    /// ```
+    /// in other words, every column of `m_tr` is a row of `m`, and every row of 
+    /// `m_tr` is a column of `m`.
     ///
     /// # Example
     ///
@@ -865,6 +872,52 @@ where
                 self.data[c][r] *= other.data[c][r];
             }
         }
+    }
+}
+
+impl<S, const R: usize, const C: usize> Matrix<S, R, C>
+where
+    S: SimdScalar
+{
+    /// Compute the dot product of two matrices.
+    /// 
+    /// # Example
+    /// 
+    /// An example involving integer scalars.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix2x3,
+    /// # };
+    /// #
+    /// let matrix1 = Matrix2x3::new(
+    ///     2_i32,  1_i32,
+    ///     0_i32, -1_i32, 
+    ///     6_i32,  2_i32,
+    /// );
+    /// let matrix2 = Matrix2x3::new(
+    ///      8_i32,  4_i32,
+    ///     -3_i32,  1_i32, 
+    ///      2_i32, -5_i32
+    /// );
+    /// let expected = 21_i32;
+    /// let result = Matrix2x3::dot(&matrix1, &matrix2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn dot<const R1: usize, const C1: usize>(&self, other: &Matrix<S, R1, C1>) -> S 
+    where
+        ShapeConstraint: DimEq<Const<R>, Const<R1>> + DimEq<Const<R1>, Const<R>>,
+        ShapeConstraint: DimEq<Const<C>, Const<C1>> + DimEq<Const<C1>, Const<C>>
+    {
+        let mut result = S::zero();
+        for r in 0..R {
+            for c in 0..C {
+                result += self.data[c][r] * other.data[c][r]
+            }
+        }
+
+        result
     }
 }
 
@@ -1049,8 +1102,9 @@ where
     /// matrix is the matrix `identity` such that
     /// ```text
     /// forall i in 0..N. identity[i][i] == 1
-    /// forall i in 0..N. forall j in 0..N. i != j => identity[i][j] == 0
+    /// forall i, j in 0..N. i != j ==> identity[i][j] == 0
     /// ```
+    /// In other words, every off-diagonal element is zero.
     ///
     /// # Example
     ///
@@ -1115,10 +1169,12 @@ where
 
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`. The resulting 
-    /// matrix `m` satisfies the predicate
+    /// matrix `matrix` satisfies the predicate
     /// ```text
-    /// forall i in 0..N. m[i][i] == value
+    /// forall i in 0..N. matrix[i][i] == value
+    /// forall i, j in 0..N. i != j ==> matrix[i][j] == 0
     /// ```
+    /// In other words, every off-diagonal element is zero.
     ///
     /// # Example
     ///
@@ -1149,7 +1205,15 @@ where
     }
 
     /// Construct a new diagonal matrix from a vector of values
-    /// representing the elements along the diagonal.
+    /// representing the elements along the diagonal. 
+    /// 
+    /// The resulting matrix `matrix` satisfies the predicate. Given a vector of 
+    /// length `N` `diagonal`
+    /// ```text
+    /// forall i in 0..N. m[i][i] == diangonal[i]
+    /// forall i, j in 0..N. i != j ==> matrix[i][j] == 0
+    /// ```
+    /// In other words, every off-diagonal element is zero.
     ///
     /// # Example
     ///
@@ -1183,6 +1247,12 @@ where
     }
 
     /// Get the diagonal part of a square matrix.
+    /// 
+    /// The resulting vector is a vector of all elements of the matrix `matrix`
+    /// on the diagonal. It is the vector `diagonal` such that
+    /// ```text
+    /// forall i in 0..N. diagonal[i] == matrix[i][i]
+    /// ```
     ///
     /// # Example
     ///
