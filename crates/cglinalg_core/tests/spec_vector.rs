@@ -90,8 +90,8 @@ fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
 
 fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
     let min_value = 0_i32;
-    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64 / 2_f64)) as i32;
-    let max_value = 32767_i32;
+    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
+    let max_value = 46340_i32;
 
     strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
@@ -1636,6 +1636,28 @@ exact_norm_squared_props!(vector3_i32_norm_squared_props, Vector3, i32, strategy
 exact_norm_squared_props!(vector4_i32_norm_squared_props, Vector4, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar_i32_any);
 
 
+macro_rules! exact_norm_squared_synonym_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$Generator()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                super::prop_magnitude_squared_norm_squared_synonyms(v)?
+            }
+        }
+    }
+    }
+}
+
+exact_norm_squared_synonym_props!(vector1_i32_norm_squared_synonym_props, Vector1, i32, strategy_vector_any);
+exact_norm_squared_synonym_props!(vector2_i32_norm_squared_synonym_props, Vector2, i32, strategy_vector_any);
+exact_norm_squared_synonym_props!(vector3_i32_norm_squared_synonym_props, Vector3, i32, strategy_vector_any);
+exact_norm_squared_synonym_props!(vector4_i32_norm_squared_synonym_props, Vector4, i32, strategy_vector_any);
+
+
 macro_rules! approx_norm_squared_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $input_tolerance:expr, $output_tolerance:expr) => {
     #[cfg(test)]
@@ -1663,28 +1685,6 @@ approx_norm_squared_props!(vector1_f64_norm_squared_props, Vector1, f64, strateg
 approx_norm_squared_props!(vector2_f64_norm_squared_props, Vector2, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
 approx_norm_squared_props!(vector3_f64_norm_squared_props, Vector3, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
 approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
-
-
-macro_rules! exact_norm_squared_synonym_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_magnitude_squared_norm_squared_synonyms(v)?
-            }
-        }
-    }
-    }
-}
-
-exact_norm_squared_synonym_props!(vector1_i32_norm_squared_synonym_props, Vector1, i32, strategy_vector_any);
-exact_norm_squared_synonym_props!(vector2_i32_norm_squared_synonym_props, Vector2, i32, strategy_vector_any);
-exact_norm_squared_synonym_props!(vector3_i32_norm_squared_synonym_props, Vector3, i32, strategy_vector_any);
-exact_norm_squared_synonym_props!(vector4_i32_norm_squared_synonym_props, Vector4, i32, strategy_vector_any);
 
 
 macro_rules! approx_norm_squared_synonym_props {
@@ -1810,7 +1810,7 @@ approx_l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, strategy_vector_a
 approx_l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
 
 
-macro_rules! lp_norm_props {
+macro_rules! approx_lp_norm_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $DegreeGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
@@ -1833,10 +1833,53 @@ macro_rules! lp_norm_props {
     }
 }
 
-lp_norm_props!(vector1_f64_lp_norm_props, Vector1, f64, strategy_vector_any, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
-lp_norm_props!(vector2_f64_lp_norm_props, Vector2, f64, strategy_vector_any, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
-lp_norm_props!(vector3_f64_lp_norm_props, Vector3, f64, strategy_vector_any, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
-lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
+approx_lp_norm_props!(vector1_f64_lp_norm_props, Vector1, f64, strategy_vector_any, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
+approx_lp_norm_props!(vector2_f64_lp_norm_props, Vector2, f64, strategy_vector_any, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
+approx_lp_norm_props!(vector3_f64_lp_norm_props, Vector3, f64, strategy_vector_any, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
+approx_lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar, strategy_lp_norm_degree, 1e-6);
+
+
+macro_rules! exact_linf_norm_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_linf_norm_nonnegative(v in super::$Generator()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                super::prop_linf_norm_nonnegative(v)?
+            }
+
+            #[test]
+            fn prop_linf_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
+                let v1: super::$VectorN<$ScalarType> = v1;
+                let v2: super::$VectorN<$ScalarType> = v2;
+                super::prop_linf_norm_point_separating(v1, v2)?
+            }
+
+            #[test]
+            fn prop_linf_norm_homogeneous(v in super::$Generator(), c in super::$ScalarGen()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                let c: $ScalarType = c;
+                super::prop_linf_norm_homogeneous(v, c)?
+            }
+    
+            #[test]
+            fn prop_linf_norm_triangle_inequality(v1 in super::$Generator(), v2 in super::$Generator()) {
+                let v1: super::$VectorN<$ScalarType> = v1;
+                let v2: super::$VectorN<$ScalarType> = v2;
+                super::prop_linf_norm_triangle_inequality(v1, v2)?
+            }
+        }
+    }
+    }
+}
+
+exact_linf_norm_props!(vector1_i32_linf_norm_props, Vector1, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar1_i32_linf_norm);
+exact_linf_norm_props!(vector2_i32_linf_norm_props, Vector2, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar2_i32_linf_norm);
+exact_linf_norm_props!(vector3_i32_linf_norm_props, Vector3, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar3_i32_linf_norm);
+exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar4_i32_linf_norm);
 
 
 macro_rules! approx_linf_norm_props {
@@ -1881,48 +1924,6 @@ approx_linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, strategy_vect
 approx_linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, strategy_vector_any, strategy_scalar_f64_any, 1e-8);
 approx_linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, strategy_vector_any, strategy_scalar_f64_any, 1e-8);
 
-
-macro_rules! exact_linf_norm_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_linf_norm_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_linf_norm_nonnegative(v)?
-            }
-
-            #[test]
-            fn prop_linf_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_linf_norm_point_separating(v1, v2)?
-            }
-
-            #[test]
-            fn prop_linf_norm_homogeneous(v in super::$Generator(), c in super::$ScalarGen()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                let c: $ScalarType = c;
-                super::prop_linf_norm_homogeneous(v, c)?
-            }
-    
-            #[test]
-            fn prop_linf_norm_triangle_inequality(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_linf_norm_triangle_inequality(v1, v2)?
-            }
-        }
-    }
-    }
-}
-
-exact_linf_norm_props!(vector1_i32_linf_norm_props, Vector1, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar1_i32_linf_norm);
-exact_linf_norm_props!(vector2_i32_linf_norm_props, Vector2, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar2_i32_linf_norm);
-exact_linf_norm_props!(vector3_i32_linf_norm_props, Vector3, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar3_i32_linf_norm);
-exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar4_i32_linf_norm);
 
 
 macro_rules! norm_synonym_props {
