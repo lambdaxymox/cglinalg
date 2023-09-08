@@ -1201,57 +1201,15 @@ macro_rules! exact_arithmetic_props {
     }
 }
 
-exact_arithmetic_props!(vector1_f64_arithmetic_props, Vector1, f64, strategy_vector_any);
-exact_arithmetic_props!(vector2_f64_arithmetic_props, Vector2, f64, strategy_vector_any);
-exact_arithmetic_props!(vector3_f64_arithmetic_props, Vector3, f64, strategy_vector_any);
-exact_arithmetic_props!(vector4_f64_arithmetic_props, Vector4, f64, strategy_vector_any);
-
 exact_arithmetic_props!(vector1_i32_arithmetic_props, Vector1, i32, strategy_vector_any);
 exact_arithmetic_props!(vector2_i32_arithmetic_props, Vector2, i32, strategy_vector_any);
 exact_arithmetic_props!(vector3_i32_arithmetic_props, Vector3, i32, strategy_vector_any);
 exact_arithmetic_props!(vector4_i32_arithmetic_props, Vector4, i32, strategy_vector_any);
 
-
-macro_rules! approx_add_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_vector_plus_zero_equals_vector(v)?
-            }
-
-            #[test]
-            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_zero_plus_vector_equals_vector(v)?
-            }
-
-            #[test]
-            fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1, v2)?
-            }
-
-            #[test]
-            fn prop_vector_addition_commutative(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_vector_addition_commutative(v1, v2)?
-            }
-        }
-    }
-    }
-}
-
-approx_add_props!(vector1_f64_add_props, Vector1, f64, strategy_vector_any);
-approx_add_props!(vector2_f64_add_props, Vector2, f64, strategy_vector_any);
-approx_add_props!(vector3_f64_add_props, Vector3, f64, strategy_vector_any);
-approx_add_props!(vector4_f64_add_props, Vector4, f64, strategy_vector_any);
+exact_arithmetic_props!(vector1_f64_arithmetic_props, Vector1, f64, strategy_vector_any);
+exact_arithmetic_props!(vector2_f64_arithmetic_props, Vector2, f64, strategy_vector_any);
+exact_arithmetic_props!(vector3_f64_arithmetic_props, Vector3, f64, strategy_vector_any);
+exact_arithmetic_props!(vector4_f64_arithmetic_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! exact_add_props {
@@ -1304,39 +1262,46 @@ exact_add_props!(vector3_i32_add_props, Vector3, i32, strategy_vector_any);
 exact_add_props!(vector4_i32_add_props, Vector4, i32, strategy_vector_any);
 
 
-macro_rules! approx_sub_props {
+macro_rules! approx_add_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_vector_minus_zero_equals_vector(v in super::$Generator()) {
+            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
                 let v: super::$VectorN<$ScalarType> = v;
-                super::prop_vector_minus_zero_equals_vector(v)?
+                super::prop_vector_plus_zero_equals_vector(v)?
             }
 
             #[test]
-            fn prop_vector_minus_vector_equals_zero(v in super::$Generator()) {
+            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
                 let v: super::$VectorN<$ScalarType> = v;
-                super::prop_vector_minus_vector_equals_zero(v)?
+                super::prop_zero_plus_vector_equals_vector(v)?
             }
 
             #[test]
-            fn prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1 in super::$Generator(), v2 in super::$Generator()) {
                 let v1: super::$VectorN<$ScalarType> = v1;
                 let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1, v2)?
+                super::prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1, v2)?
+            }
+
+            #[test]
+            fn prop_vector_addition_commutative(v1 in super::$Generator(), v2 in super::$Generator()) {
+                let v1: super::$VectorN<$ScalarType> = v1;
+                let v2: super::$VectorN<$ScalarType> = v2;
+                super::prop_vector_addition_commutative(v1, v2)?
             }
         }
     }
     }
 }
 
-approx_sub_props!(vector1_f64_sub_props, Vector1, f64, strategy_vector_any);
-approx_sub_props!(vector2_f64_sub_props, Vector2, f64, strategy_vector_any);
-approx_sub_props!(vector3_f64_sub_props, Vector3, f64, strategy_vector_any);
-approx_sub_props!(vector4_f64_sub_props, Vector4, f64, strategy_vector_any);
+approx_add_props!(vector1_f64_add_props, Vector1, f64, strategy_vector_any);
+approx_add_props!(vector2_f64_add_props, Vector2, f64, strategy_vector_any);
+approx_add_props!(vector3_f64_add_props, Vector3, f64, strategy_vector_any);
+approx_add_props!(vector4_f64_add_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! exact_sub_props {
@@ -1374,26 +1339,39 @@ exact_sub_props!(vector3_i32_sub_props, Vector3, i32, strategy_vector_any);
 exact_sub_props!(vector4_i32_sub_props, Vector4, i32, strategy_vector_any);
 
 
-macro_rules! approx_mul_props {
+macro_rules! approx_sub_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_one_times_vector_equals_vector(v in super::$Generator()) {
+            fn prop_vector_minus_zero_equals_vector(v in super::$Generator()) {
                 let v: super::$VectorN<$ScalarType> = v;
-                super::prop_one_times_vector_equals_vector(v)?
+                super::prop_vector_minus_zero_equals_vector(v)?
+            }
+
+            #[test]
+            fn prop_vector_minus_vector_equals_zero(v in super::$Generator()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                super::prop_vector_minus_vector_equals_zero(v)?
+            }
+
+            #[test]
+            fn prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1 in super::$Generator(), v2 in super::$Generator()) {
+                let v1: super::$VectorN<$ScalarType> = v1;
+                let v2: super::$VectorN<$ScalarType> = v2;
+                super::prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1, v2)?
             }
         }
     }
     }
 }
 
-approx_mul_props!(vector1_f64_mul_props, Vector1, f64, strategy_vector_any);
-approx_mul_props!(vector2_f64_mul_props, Vector2, f64, strategy_vector_any);
-approx_mul_props!(vector3_f64_mul_props, Vector3, f64, strategy_vector_any);
-approx_mul_props!(vector4_f64_mul_props, Vector4, f64, strategy_vector_any);
+approx_sub_props!(vector1_f64_sub_props, Vector1, f64, strategy_vector_any);
+approx_sub_props!(vector2_f64_sub_props, Vector2, f64, strategy_vector_any);
+approx_sub_props!(vector3_f64_sub_props, Vector3, f64, strategy_vector_any);
+approx_sub_props!(vector4_f64_sub_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! exact_mul_props {
@@ -1424,6 +1402,28 @@ exact_mul_props!(vector1_i32_mul_props, Vector1, i32, strategy_vector_any, strat
 exact_mul_props!(vector2_i32_mul_props, Vector2, i32, strategy_vector_any, strategy_scalar_i32_any);
 exact_mul_props!(vector3_i32_mul_props, Vector3, i32, strategy_vector_any, strategy_scalar_i32_any);
 exact_mul_props!(vector4_i32_mul_props, Vector4, i32, strategy_vector_any, strategy_scalar_i32_any);
+
+
+macro_rules! approx_mul_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_one_times_vector_equals_vector(v in super::$Generator()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                super::prop_one_times_vector_equals_vector(v)?
+            }
+        }
+    }
+    }
+}
+
+approx_mul_props!(vector1_f64_mul_props, Vector1, f64, strategy_vector_any);
+approx_mul_props!(vector2_f64_mul_props, Vector2, f64, strategy_vector_any);
+approx_mul_props!(vector3_f64_mul_props, Vector3, f64, strategy_vector_any);
+approx_mul_props!(vector4_f64_mul_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! exact_distributive_props {
@@ -1600,57 +1600,6 @@ macro_rules! exact_cross_product_props {
 exact_cross_product_props!(vector3_i32_cross_product_props, i32, strategy_vector_any, strategy_scalar_i32_any);
 
 
-macro_rules! approx_norm_squared_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $input_tolerance:expr, $output_tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_norm_squared_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_norm_squared_nonnegative(v)?
-            }
-
-            #[test]
-            fn prop_approx_norm_squared_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_approx_norm_squared_point_separating(v1, v2, $input_tolerance, $output_tolerance)?
-            }
-        }
-    }
-    }
-}
-
-approx_norm_squared_props!(vector1_f64_norm_squared_props, Vector1, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
-approx_norm_squared_props!(vector2_f64_norm_squared_props, Vector2, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
-approx_norm_squared_props!(vector3_f64_norm_squared_props, Vector3, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
-approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
-
-
-macro_rules! approx_norm_squared_synonym_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_magnitude_squared_norm_squared_synonyms(v)?
-            }
-        }
-    }
-    }
-}
-
-approx_norm_squared_synonym_props!(vector1_f64_norm_squared_synonym_props, Vector1, f64, strategy_vector_any);
-approx_norm_squared_synonym_props!(vector2_f64_norm_squared_synonym_props, Vector2, f64, strategy_vector_any);
-approx_norm_squared_synonym_props!(vector3_f64_norm_squared_synonym_props, Vector3, f64, strategy_vector_any);
-approx_norm_squared_synonym_props!(vector4_f64_norm_squared_synonym_props, Vector4, f64, strategy_vector_any);
-
-
 macro_rules! exact_norm_squared_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
     #[cfg(test)]
@@ -1687,6 +1636,35 @@ exact_norm_squared_props!(vector3_i32_norm_squared_props, Vector3, i32, strategy
 exact_norm_squared_props!(vector4_i32_norm_squared_props, Vector4, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar_i32_any);
 
 
+macro_rules! approx_norm_squared_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $input_tolerance:expr, $output_tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_norm_squared_nonnegative(v in super::$Generator()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                super::prop_norm_squared_nonnegative(v)?
+            }
+
+            #[test]
+            fn prop_approx_norm_squared_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
+                let v1: super::$VectorN<$ScalarType> = v1;
+                let v2: super::$VectorN<$ScalarType> = v2;
+                super::prop_approx_norm_squared_point_separating(v1, v2, $input_tolerance, $output_tolerance)?
+            }
+        }
+    }
+    }
+}
+
+approx_norm_squared_props!(vector1_f64_norm_squared_props, Vector1, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
+approx_norm_squared_props!(vector2_f64_norm_squared_props, Vector2, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
+approx_norm_squared_props!(vector3_f64_norm_squared_props, Vector3, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
+approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
+
+
 macro_rules! exact_norm_squared_synonym_props {
     ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
     #[cfg(test)]
@@ -1707,6 +1685,28 @@ exact_norm_squared_synonym_props!(vector1_i32_norm_squared_synonym_props, Vector
 exact_norm_squared_synonym_props!(vector2_i32_norm_squared_synonym_props, Vector2, i32, strategy_vector_any);
 exact_norm_squared_synonym_props!(vector3_i32_norm_squared_synonym_props, Vector3, i32, strategy_vector_any);
 exact_norm_squared_synonym_props!(vector4_i32_norm_squared_synonym_props, Vector4, i32, strategy_vector_any);
+
+
+macro_rules! approx_norm_squared_synonym_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$Generator()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                super::prop_magnitude_squared_norm_squared_synonyms(v)?
+            }
+        }
+    }
+    }
+}
+
+approx_norm_squared_synonym_props!(vector1_f64_norm_squared_synonym_props, Vector1, f64, strategy_vector_any);
+approx_norm_squared_synonym_props!(vector2_f64_norm_squared_synonym_props, Vector2, f64, strategy_vector_any);
+approx_norm_squared_synonym_props!(vector3_f64_norm_squared_synonym_props, Vector3, f64, strategy_vector_any);
+approx_norm_squared_synonym_props!(vector4_f64_norm_squared_synonym_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! approx_norm_props {
@@ -1736,35 +1736,6 @@ approx_norm_props!(vector1_f64_norm_props, Vector1, f64, strategy_vector_any, st
 approx_norm_props!(vector2_f64_norm_props, Vector2, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
 approx_norm_props!(vector3_f64_norm_props, Vector3, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
 approx_norm_props!(vector4_f64_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-
-
-macro_rules! approx_l1_norm_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_l1_norm_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
-                super::prop_l1_norm_nonnegative(v)?
-            }
-
-            #[test]
-            fn prop_approx_l1_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                super::prop_approx_l1_norm_point_separating(v1, v2, $tolerance)?
-            }
-        }
-    }
-    }
-}
-
-approx_l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
 
 
 macro_rules! exact_l1_norm_props {
@@ -1808,6 +1779,35 @@ exact_l1_norm_props!(vector1_i32_l1_norm_props, Vector1, i32, strategy_vector_i3
 exact_l1_norm_props!(vector2_i32_l1_norm_props, Vector2, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar2_i32_l1_norm);
 exact_l1_norm_props!(vector3_i32_l1_norm_props, Vector3, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar3_i32_l1_norm);
 exact_l1_norm_props!(vector4_i32_l1_norm_props, Vector4, i32, strategy_vector_i32_max_safe_square_root, strategy_scalar4_i32_l1_norm);
+
+
+macro_rules! approx_l1_norm_props {
+    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_l1_norm_nonnegative(v in super::$Generator()) {
+                let v: super::$VectorN<$ScalarType> = v;
+                super::prop_l1_norm_nonnegative(v)?
+            }
+
+            #[test]
+            fn prop_approx_l1_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
+                let v1: super::$VectorN<$ScalarType> = v1;
+                let v2: super::$VectorN<$ScalarType> = v2;
+                super::prop_approx_l1_norm_point_separating(v1, v2, $tolerance)?
+            }
+        }
+    }
+    }
+}
+
+approx_l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
 
 
 macro_rules! lp_norm_props {
