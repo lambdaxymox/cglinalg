@@ -1203,12 +1203,48 @@ where
     Ok(())
 }
 
-/// The complex logarithm satisfiess the following relation.
+/// The principal value of the complex logarithm satisfiess the following relation.
 /// 
 /// Given non-zero complex numbers `z1` and `z2`, there is an integer `k` such that
 /// ```text
 /// ln(z1 * z2) - (ln(z1) + ln(z2)) == 2 * pi * k * i
 /// ```
+/// In particular `ln(z1 * z2)` and `ln(z1) + ln(z2)` are the same 
+/// modulo a branch cut. In particular, if we write `z1 := |z1| * exp(i * Arg(z1))`
+/// and `z2 := |z2| * exp(i * Arg(z2))`, we see that 
+/// ```text
+/// z1 * z2 == |z1| * exp(i * Arg(z1)) * |z2| * exp(i * Arg(z2))
+///         == |z1| * |z2| * exp(i * Arg(z1)) * exp(i * Arg(z2))
+///         == |z1| * |z2| * exp(i * (Arg(z1) + Arg(z2)))
+/// ```
+/// Thus if the sum of principal arguments of `z1` and `z2` lie in the principal
+/// branch of the complex numbers, i.e. `Arg(z1) + Arg(z2) in (-pi, pi]`, we see
+/// that 
+/// ```text
+/// Arg(z1) + Arg(z2) == Arg(z1 * z2)
+/// ```
+/// and therefore
+/// ```text
+/// z1 * z2 == |z1| * |z2| * exp(i * (Arg(z1) + Arg(z2)))
+///         == |z1| * |z2| * exp(i * Arg(z1 * z2))
+///         == |z1 * z2| * exp(i * Arg(z1 * z2))
+/// ```
+/// and taking principal values of the logarithm of both sides yields
+/// ```text
+/// Ln(z1 * z2) == Ln(|z1| * |z2| * exp(i * Arg(z1 * z2)))
+///             == ln(|z1|) + ln(|z2|) + Ln(exp(i * Arg(z1 * z2)))
+///             == ln(|z1|) + ln(|z2|) + i * Arg(z1 * z2)
+///             == ln(|z1|) + ln(|z2|) + i * (Arg(z1) + Arg(z2))
+///             == ln(|z1|) + ln(|z1|) + i * Arg(z1) + i * Arg(z2)
+///             == [ln(|z1|) + i * Arg(z1)] + [ln(|z2|) + i * Arg(z2)]
+///             == Ln(z1)                   + Ln(z2)
+/// ```
+/// which implies that
+/// ```text
+/// Ln(z1 * z2) - [Ln(z1) + Ln(z2)] == 0 == 2 * pi * 0 * i
+/// ```
+/// which implies that when `z1 * z2` is on the principal branch, 
+/// that `k == 0`.
 fn prop_approx_ln_product<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1253,7 +1289,7 @@ where
 /// 
 /// Given a complex number `z`
 /// ```text
-/// ln(exp(z)) == z
+/// exp(ln(z)) == z
 /// ```
 fn prop_approx_exp_ln_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1274,6 +1310,9 @@ where
 /// ```text
 /// ln(exp(z)) - z == 2 * pi * k * i
 /// ```
+/// In particular, when the logarithm acts on the exponential of `z`,
+/// the difference between `ln(exp(z))` and `z` is the same up to
+/// the numbers of crossings of a branch cut.
 fn prop_approx_ln_exp_identity_up_to_phase<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1330,7 +1369,7 @@ where
 /// Given two non-zero complex numbers `z1` and `z2`, there exists an integer `k` such 
 /// that
 /// ```text
-/// arg(z1 * z2) - (arg(z1) + arg(z2)) == 2 * pi * k
+/// arg(z1 * z2) - (arg(z1) + arg(z2)) == 2 * pi * k * i
 /// ```
 fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex<S>(
     z1: Complex<S>, 
@@ -1363,7 +1402,7 @@ where
 /// Given two non-zero complex numbers `z1` and `z2`, there exists an integer `k` such 
 /// that
 /// ```text
-/// arg(z1 / z2) - (arg(z1) - arg(z2)) == 2 * pi * k
+/// arg(z1 / z2) - (arg(z1) - arg(z2)) == 2 * pi * k * i
 /// ```
 fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex<S>(
     z1: Complex<S>, 
