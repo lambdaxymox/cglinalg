@@ -695,6 +695,103 @@ mod logarithm_tests {
 }
 
 #[cfg(test)]
+mod exp_ln_tests {
+    use cglinalg_core::{
+        Radians,
+        Quaternion,
+        Unit,
+        Vector3,
+    };
+    use approx::{
+        assert_relative_eq,
+        assert_relative_ne,
+    };
+
+    use core::f64;
+
+
+
+    #[test]
+    fn test_quaternion_ln_exp_pi_i() {
+        let pi = f64::consts::PI;
+        let quaternion = Quaternion::unit_x() * pi;
+        let expected = Quaternion::zero();
+        let result = quaternion.exp().ln();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_quaternion_ln_exp_pi_j() {
+        let pi = f64::consts::PI;
+        let quaternion = Quaternion::unit_y() * pi;
+        let expected = Quaternion::zero();
+        let result = quaternion.exp().ln();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_quaternion_ln_exp_pi_k() {
+        let pi = f64::consts::PI;
+        let quaternion = Quaternion::unit_z() * pi;
+        let expected = Quaternion::zero();
+        let result = quaternion.exp().ln();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+
+    #[test]
+    fn test_quaternion_ln_exp_inside_principal_branch_xy() {
+        let scalar = 100_f64;
+        let norm_vector = f64::consts::PI - 2_f64 * f64::EPSILON;
+        let axis = Unit::from_value(Vector3::unit_z());
+        for i in 0..400 {
+            let angle = Radians(f64::consts::FRAC_PI_8 * (i as f64));
+            let vector = (Quaternion::from_axis_angle(&axis, angle) * norm_vector).vector();
+            let quaternion = Quaternion::from_parts(scalar, vector);
+            let expected = quaternion;
+            let result = quaternion.exp().ln();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-10);
+        }
+    }
+
+    #[test]
+    fn test_quaternion_ln_exp_inside_principal_branch_yz() {
+        let scalar = 100_f64;
+        let norm_vector = f64::consts::PI - 2_f64 * f64::EPSILON;
+        let axis = Unit::from_value(Vector3::unit_x());
+        for i in 0..400 {
+            let angle = Radians(f64::consts::FRAC_PI_8 * (i as f64));
+            let vector = (Quaternion::from_axis_angle(&axis, angle) * norm_vector).vector();
+            let quaternion = Quaternion::from_parts(scalar, vector);
+            let expected = quaternion;
+            let result = quaternion.exp().ln();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-10);
+        }
+    }
+
+    #[test]
+    fn test_quaternion_ln_exp_inside_principal_branch_zx() {
+        let scalar = 100_f64;
+        let norm_vector = f64::consts::PI - 2_f64 * f64::EPSILON;
+        let axis = Unit::from_value(Vector3::unit_y());
+        for i in 0..400 {
+            let angle = Radians(f64::consts::FRAC_PI_8 * (i as f64));
+            let vector = (Quaternion::from_axis_angle(&axis, angle) * norm_vector).vector();
+            let quaternion = Quaternion::from_parts(scalar, vector);
+            let expected = quaternion;
+            let result = quaternion.exp().ln();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-10);
+        }
+    }
+}
+
+#[cfg(test)]
 mod power_tests {
     use cglinalg_core::{
         Quaternion,
