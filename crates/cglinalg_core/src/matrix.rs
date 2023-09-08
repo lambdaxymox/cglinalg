@@ -1,6 +1,7 @@
 use crate::core_numeric::{
     SimdScalar,
     SimdScalarSigned,
+    SimdScalarOrd,
     SimdScalarFloat,
 };
 use crate::constraints::{
@@ -16,6 +17,7 @@ use crate::angle::{
 };
 use crate::norm::{
     Normed,
+    Norm,
 };
 use crate::unit::{
     Unit,
@@ -1448,6 +1450,415 @@ where
         write!(formatter, "{}]", self.data[C - 1][R - 1])
     }
 }
+
+
+impl<S, const R: usize, const C: usize> Matrix<S, R, C>
+where
+    S: SimdScalarSigned
+{
+    /// Calculate the norm of a matrix with respect to the supplied [`Norm`] type.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     L1MatrixNorm,
+    /// #     LinfMatrixNorm,
+    /// #     FrobeniusNorm,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_f64, 2_f64, 3_f64,
+    ///     5_f64, 6_f64, 7_f64,
+    ///     8_f64, 9_f64, 10_f64
+    /// );
+    /// let l1_norm = L1MatrixNorm::new();
+    /// let linf_norm = LinfMatrixNorm::new();
+    /// let frobenius_norm = FrobeniusNorm::new();
+    /// 
+    /// assert_eq!(matrix.apply_norm(&l1_norm), 27_f64);
+    /// assert_eq!(matrix.apply_norm(&linf_norm), 20_f64);
+    /// assert_relative_eq!(matrix.apply_norm(&frobenius_norm), 19.209372712298546, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn apply_norm(&self, norm: &impl Norm<Matrix<S, R, C>, Output = S>) -> S {
+        norm.norm(self)
+    }
+
+    /// Calculate the metric distance between two matrices with respect to the 
+    /// supplied [`Norm`] type.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     L1MatrixNorm,
+    /// #     LinfMatrixNorm,
+    /// #     FrobeniusNorm,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let matrix1 = Matrix3x3::new(
+    ///     1_f64, 2_f64, 3_f64,
+    ///     5_f64, 6_f64, 7_f64,
+    ///     8_f64, 9_f64, 10_f64
+    /// );
+    /// let matrix2 = Matrix3x3::new(
+    ///     0_f64, -5_f64,  6_f64,
+    ///    -3_f64,  1_f64,  20_f64,
+    ///     7_f64,  12_f64, 4_f64
+    /// );
+    /// let l1_norm = L1MatrixNorm::new();
+    /// let linf_norm = LinfMatrixNorm::new();
+    /// let frobenius_norm = FrobeniusNorm::new();
+    /// 
+    /// assert_eq!(matrix1.apply_metric_distance(&matrix2, &l1_norm), 26_f64);
+    /// assert_eq!(matrix1.apply_metric_distance(&matrix2, &linf_norm), 22_f64);
+    /// assert_relative_eq!(matrix1.apply_metric_distance(&matrix2, &frobenius_norm), 19.05255888325765, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn apply_metric_distance(&self, other: &Self, norm: &impl Norm<Matrix<S, R, C>, Output = S>) -> S {
+        norm.metric_distance(self, other)
+    }
+
+    /// Compute the squared Frobenius norm of a matrix.
+    /// 
+    /// The squared Frobenius norm of a matrix is the sum of the squares of all 
+    /// the elements of the matrix.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     -7_i32,  1_i32, 5_i32, 0_i32,
+    ///      1_i32, -5_i32, 8_i32, 2_i32,
+    ///      5_i32,  6_i32, 3_i32, 6_i32,
+    ///      0_i32,  4_i32, 0_i32, 15_i32
+    /// );
+    /// let expected = 516_i32;
+    /// let result = matrix.norm_squared();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn norm_squared(&self) -> S {
+        self.dot(&self)
+    }
+
+    /// Compute the squared Frobenius norm of a matrix.
+    /// 
+    /// This is a synonym for [`Matrix::norm_squared`].
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     -7_i32,  1_i32, 5_i32, 0_i32,
+    ///      1_i32, -5_i32, 8_i32, 2_i32,
+    ///      5_i32,  6_i32, 3_i32, 6_i32,
+    ///      0_i32,  4_i32, 0_i32, 15_i32
+    /// );
+    /// let expected = 516_i32;
+    /// let result = matrix.norm_squared();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn magnitude_squared(&self) -> S {
+        self.norm_squared()
+    }
+
+    /// Compute the squared metric distance between two matrices with respect
+    /// to the metric induced by the Frobenius norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3
+    /// # };
+    /// #
+    /// let matrix1 = Matrix3x3::new(
+    ///     -7_i32,  5_i32, -9_i32,
+    ///      1_i32, -5_i32,  8_i32,
+    ///      5_i32,  6_i32,  3_i32
+    /// );
+    /// let matrix2 = Matrix3x3::new(
+    ///     2_i32, 6_i32, 1_i32,
+    ///     1_i32, 2_i32, 8_i32,
+    ///     3_i32, 1_i32, 3_i32
+    /// );
+    /// let expected = 260_i32;
+    /// let result = matrix1.metric_distance_squared(&matrix2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn metric_distance_squared(&self, other: &Self) -> S {
+        (self - other).norm_squared()
+    }
+}
+
+impl<S, const R: usize, const C: usize> Matrix<S, R, C>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    /// Compute the **L1** norm of a matrix.
+    /// 
+    /// The matrix **L1** norm is also called the **maximum column sum norm**.
+    /// 
+    /// # Example
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     -3_i32, 2_i32, 0_i32,
+    ///      5_i32, 6_i32, 2_i32,
+    ///      7_i32, 4_i32, 8_i32
+    /// );
+    /// let expected = 19_i32;
+    /// let result = matrix.l1_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn l1_norm(&self) -> S {
+        let mut result = S::zero();
+        for c in 0..C {
+            result = S::max(result, self[c].l1_norm());
+        }
+
+        result
+    }
+
+    /// Compute the **L-infinity** norm of a matrix.
+    /// 
+    /// The matrix **L-infinity** norm is also called the **maximum row sum norm**.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     -7_i32,  1_i32, 5_i32, 0_i32,
+    ///      1_i32, -5_i32, 8_i32, 2_i32,
+    ///      5_i32,  6_i32, 3_i32, 6_i32,
+    ///      0_i32,  4_i32, 0_i32, 15_i32
+    /// );
+    /// let expected = 23_i32;
+    /// let result = matrix.linf_norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn linf_norm(&self) -> S {
+        let mut result = S::zero();
+        for r in 0..R {
+            let mut row_sum = S::zero();
+            for c in 0..C {
+                row_sum += self.data[c][r].abs();
+            }
+
+            result = S::max(result, row_sum);
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize> Matrix<S, R, C>
+where
+    S: SimdScalarFloat
+{
+    /// Compute the Frobenius norm of a matrix.
+    /// 
+    /// The squared Frobenius norm of a matrix is the sum of the squares of all 
+    /// the elements of the matrix.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     -7_f64,  1_f64, 5_f64, 0_f64,
+    ///      1_f64, -5_f64, 8_f64, 2_f64,
+    ///      5_f64,  6_f64, 3_f64, 6_f64,
+    ///      0_f64,  4_f64, 0_f64, 15_f64
+    /// );
+    /// let expected = 22.715633383201094;
+    /// let result = matrix.norm();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn norm(&self) -> S {
+        self.norm_squared().sqrt()
+    }
+
+    /// Compute the Frobenius norm of a matrix.
+    /// 
+    /// This is a synonym for [`Matrix::norm`].
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     -7_f64,  1_f64, 5_f64, 0_f64,
+    ///      1_f64, -5_f64, 8_f64, 2_f64,
+    ///      5_f64,  6_f64, 3_f64, 6_f64,
+    ///      0_f64,  4_f64, 0_f64, 15_f64
+    /// );
+    /// let expected = 22.715633383201094;
+    /// let result = matrix.magnitude();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn magnitude(&self) -> S {
+        self.norm()
+    }
+
+    /// Compute the metric distance between two matrices with respect to the 
+    /// metric induced by the Frobenius norm.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let matrix1 = Matrix3x3::new(
+    ///     -7_f64,  5_f64, -9_f64,
+    ///      1_f64, -5_f64,  8_f64,
+    ///      5_f64,  6_f64,  3_f64
+    /// );
+    /// let matrix2 = Matrix3x3::new(
+    ///     2_f64, 6_f64, 1_f64,
+    ///     1_f64, 2_f64, 8_f64,
+    ///     3_f64, 1_f64, 3_f64
+    /// );
+    /// let expected = 16.124515496597099;
+    /// let result = matrix1.metric_distance(&matrix2);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn metric_distance(&self, other: &Self) -> S {
+        (self - other).norm()
+    }
+}
+
+
+#[derive(Copy, Clone, Debug)]
+pub struct L1MatrixNorm {}
+
+impl L1MatrixNorm {
+    #[inline]
+    pub const fn new() -> Self {
+        Self {}
+    }
+}
+
+impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for L1MatrixNorm 
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    type Output = S;
+
+    fn norm(&self, rhs: &Matrix<S, R, C>) -> Self::Output {
+        rhs.l1_norm()
+    }
+
+    fn metric_distance(&self, lhs: &Matrix<S, R, C>, rhs: &Matrix<S, R, C>) -> Self::Output {
+        (lhs - rhs).l1_norm()
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
+pub struct FrobeniusNorm {}
+
+impl FrobeniusNorm {
+    #[inline]
+    pub const fn new() -> Self {
+        Self {}
+    }
+}
+
+impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for FrobeniusNorm 
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    fn norm(&self, rhs: &Matrix<S, R, C>) -> Self::Output {
+        rhs.norm()
+    }
+
+    fn metric_distance(&self, lhs: &Matrix<S, R, C>, rhs: &Matrix<S, R, C>) -> Self::Output {
+        lhs.metric_distance(rhs)
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
+pub struct LinfMatrixNorm {}
+
+impl LinfMatrixNorm {
+    #[inline]
+    pub const fn new() -> Self {
+        Self {}
+    }
+}
+
+impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for LinfMatrixNorm 
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    type Output = S;
+
+    fn norm(&self, rhs: &Matrix<S, R, C>) -> Self::Output {
+        rhs.linf_norm()
+    }
+
+    fn metric_distance(&self, lhs: &Matrix<S, R, C>, rhs: &Matrix<S, R, C>) -> Self::Output {
+        (lhs - rhs).linf_norm()
+    }
+}
+
 
 
 impl<S> Matrix1x1<S> {
