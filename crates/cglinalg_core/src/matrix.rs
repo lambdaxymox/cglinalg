@@ -1805,7 +1805,7 @@ where
     }
 
     fn metric_distance(&self, lhs: &Matrix<S, R, C>, rhs: &Matrix<S, R, C>) -> Self::Output {
-        (lhs - rhs).l1_norm()
+        self.norm(&(lhs - rhs))
     }
 }
 
@@ -1855,10 +1855,9 @@ where
     }
 
     fn metric_distance(&self, lhs: &Matrix<S, R, C>, rhs: &Matrix<S, R, C>) -> Self::Output {
-        (lhs - rhs).linf_norm()
+        self.norm(&(lhs - rhs))
     }
 }
-
 
 
 impl<S> Matrix1x1<S> {

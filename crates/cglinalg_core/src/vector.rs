@@ -15,10 +15,6 @@ use crate::constraints::{
 use crate::norm::{
     Normed,
     Norm,
-    L1Norm,
-    L2Norm,
-    LpNorm,
-    LinfNorm,
 };
 use crate::{
     impl_coords,
@@ -324,8 +320,41 @@ where
             self.data[i] *= other.data[i];
         }
     }
+}
 
-    /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
+impl<S, const N: usize> Vector<S, N> 
+where 
+    S: SimdScalarSigned
+{
+    /// Compute the negation of a vector mutably in place.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let mut result = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let expected = -result;
+    /// result.neg_mut();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn neg_mut(&mut self) {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        for i in 0..N {
+            self.data[i] = -self.data[i];
+        }
+    }
+}
+
+impl<S, const N: usize> Vector<S, N>
+where
+    S: SimdScalar
+{
+        /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
     /// 
     /// # Example
     /// 
@@ -395,34 +424,6 @@ where
     #[inline]
     pub fn magnitude_squared(&self) -> S {
         self.norm_squared()
-    }
-}
-
-impl<S, const N: usize> Vector<S, N> 
-where 
-    S: SimdScalarSigned
-{
-    /// Compute the negation of a vector mutably in place.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4, 
-    /// # };
-    /// #
-    /// let mut result = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
-    /// let expected = -result;
-    /// result.neg_mut();
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn neg_mut(&mut self) {
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        for i in 0..N {
-            self.data[i] = -self.data[i];
-        }
     }
 }
 
@@ -505,7 +506,13 @@ where
     /// ```
     #[inline]
     pub fn l1_norm(&self) -> S {
-        self.apply_norm(&L1Norm::new())
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = S::zero();
+        for i in 0..N {
+            result += self.data[i].abs();
+        }
+
+        result
     }
 }
 
@@ -544,7 +551,13 @@ where
     /// ```
     #[inline]
     pub fn linf_norm(&self) -> S {
-        self.apply_norm(&LinfNorm::new())
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = S::zero();
+        for i in 0..N {
+            result = result.max(self.data[i].abs());
+        }
+
+        result
     }
 }
 
@@ -595,7 +608,7 @@ where
     /// ```
     #[inline]
     pub fn metric_distance(&self, other: &Self) -> S {
-        self.apply_metric_distance(other, &L2Norm::new())
+        (self - other).norm()
     }
 
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
@@ -672,11 +685,30 @@ where
     /// ```
     #[inline]
     pub fn lp_norm(&self, p: u32) -> S {
-        self.apply_norm(&LpNorm::new(p))
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = S::zero();
+        for i in 0..N {
+            result += self.data[i].abs().powi(p as i32);
+        }
+        
+        result.powf(num_traits::cast((p as f64).recip()).unwrap())
     }
 }
 
-impl<S, const N: usize> Norm<Vector<S, N>> for L1Norm<Vector<S, N>> 
+pub type UniformNorm = LinfNorm;
+pub type EuclideanNorm = L2Norm;
+
+#[derive(Copy, Clone, Debug)]
+pub struct L1Norm {}
+
+impl L1Norm {
+    #[inline]
+    pub const fn new() -> Self {
+        Self {}
+    }
+}
+
+impl<S, const N: usize> Norm<Vector<S, N>> for L1Norm 
 where
     S: SimdScalarSigned
 {
@@ -684,13 +716,7 @@ where
 
     #[inline]
     fn norm(&self, rhs: &Vector<S, N>) -> Self::Output {
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut result = Self::Output::zero();
-        for i in 0..N {
-            result += rhs[i].abs();
-        }
-
-        result
+        rhs.l1_norm()
     }
 
     #[inline]
@@ -699,7 +725,17 @@ where
     }
 }
 
-impl<S, const N: usize> Norm<Vector<S, N>> for L2Norm<Vector<S, N>>
+#[derive(Copy, Clone, Debug)]
+pub struct L2Norm {}
+
+impl L2Norm {
+    #[inline]
+    pub const fn new() -> Self {
+        Self {}
+    }
+}
+
+impl<S, const N: usize> Norm<Vector<S, N>> for L2Norm
 where 
     S: SimdScalarFloat
 {
@@ -716,30 +752,17 @@ where
     }
 }
 
-impl<S, const N: usize> Norm<Vector<S, N>> for LpNorm<Vector<S, N>> 
-where
-    S: SimdScalarFloat
-{
-    type Output = S;
+#[derive(Copy, Clone, Debug)]
+pub struct LinfNorm {}
 
+impl LinfNorm {
     #[inline]
-    fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut result = Self::Output::zero();
-        for i in 0..N {
-            result += lhs[i].abs().powi(self.p as i32);
-        }
-
-        result.powf(num_traits::cast(1_f64 / (self.p as f64)).unwrap())
-    }
-
-    #[inline]
-    fn metric_distance(&self, lhs: &Vector<S, N>, rhs: &Vector<S, N>) -> Self::Output {
-        self.norm(&(rhs - lhs))
+    pub const fn new() -> Self {
+        Self {}
     }
 }
 
-impl<S, const N: usize> Norm<Vector<S, N>> for LinfNorm<Vector<S, N>> 
+impl<S, const N: usize> Norm<Vector<S, N>> for LinfNorm 
 where
     S: SimdScalarSigned + SimdScalarOrd
 {
@@ -747,13 +770,7 @@ where
 
     #[inline]
     fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut result = Self::Output::zero();
-        for i in 0..N {
-            result = result.max(lhs[i].abs());
-        }
-
-        result
+        lhs.linf_norm()
     }
 
     #[inline]
@@ -761,6 +778,38 @@ where
         self.norm(&(rhs - lhs))
     }
 }
+
+#[derive(Copy, Clone, Debug)]
+pub struct LpNorm {
+    pub p: u32,
+}
+
+impl LpNorm {
+    #[inline]
+    pub const fn new(p: u32) -> Self {
+        Self { 
+            p,
+        }
+    }
+}
+
+impl<S, const N: usize> Norm<Vector<S, N>> for LpNorm 
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+
+    #[inline]
+    fn norm(&self, lhs: &Vector<S, N>) -> Self::Output {
+        lhs.lp_norm(self.p)
+    }
+
+    #[inline]
+    fn metric_distance(&self, lhs: &Vector<S, N>, rhs: &Vector<S, N>) -> Self::Output {
+        self.norm(&(rhs - lhs))
+    }
+}
+
 
 impl<S, const N: usize> Vector<S, N>
 where
