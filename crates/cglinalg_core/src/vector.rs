@@ -354,7 +354,7 @@ impl<S, const N: usize> Vector<S, N>
 where
     S: SimdScalar
 {
-        /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
+    /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
     /// 
     /// # Example
     /// 
@@ -439,12 +439,24 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     L1Norm,
+    /// #     L2Norm,
+    /// #     LinfNorm,
+    /// #     LpNorm,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
-    /// let norm = L1Norm::new();
+    /// let l1_norm = L1Norm::new();
+    /// let l2_norm = L2Norm::new();
+    /// let linf_norm = LinfNorm::new();
+    /// let lp_norm = LpNorm::new(5_u32);
     /// 
-    /// assert_eq!(vector.apply_norm(&norm), 6_f64);
+    /// assert_eq!(vector.apply_norm(&l1_norm), 6_f64);
+    /// assert_eq!(vector.apply_norm(&l2_norm), f64::sqrt(14_f64));
+    /// assert_eq!(vector.apply_norm(&linf_norm), 3_f64);
+    /// assert_relative_eq!(vector.apply_norm(&lp_norm), 3.07738488539406275, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn apply_norm(&self, norm: &impl Norm<Vector<S, N>, Output = S>) -> S {
@@ -460,15 +472,25 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     L1Norm,
+    /// #     L2Norm,
+    /// #     LinfNorm,
+    /// #     LpNorm,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vector1 = Vector3::new(0_f64, -5_f64, 6_f64);
     /// let vector2 = Vector3::new(-3_f64, 1_f64, 2_f64);
-    /// let norm = L1Norm::new();
-    /// let expected = 13_f64;
-    /// let result = vector1.apply_metric_distance(&vector2, &norm);
+    /// let l1_norm = L1Norm::new();
+    /// let l2_norm = L2Norm::new();
+    /// let linf_norm = LinfNorm::new();
+    /// let lp_norm = LpNorm::new(5_u32);
     /// 
-    /// assert_eq!(result, expected);
+    /// assert_eq!(vector1.apply_metric_distance(&vector2, &l1_norm), 13_f64);
+    /// assert_eq!(vector1.apply_metric_distance(&vector2, &l2_norm), f64::sqrt(61_f64));
+    /// assert_eq!(vector1.apply_metric_distance(&vector2, &linf_norm), 6_f64);
+    /// assert_relative_eq!(vector1.apply_metric_distance(&vector2, &lp_norm), 6.18390068614692783, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn apply_metric_distance(&self, other: &Self, norm: &impl Norm<Vector<S, N>, Output = S>) -> S {
