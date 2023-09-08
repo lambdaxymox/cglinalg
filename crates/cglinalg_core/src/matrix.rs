@@ -873,12 +873,7 @@ where
             }
         }
     }
-}
 
-impl<S, const R: usize, const C: usize> Matrix<S, R, C>
-where
-    S: SimdScalar
-{
     /// Compute the dot product of two matrices.
     /// 
     /// # Example
@@ -905,11 +900,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn dot<const R1: usize, const C1: usize>(&self, other: &Matrix<S, R1, C1>) -> S 
-    where
-        ShapeConstraint: DimEq<Const<R>, Const<R1>> + DimEq<Const<R1>, Const<R>>,
-        ShapeConstraint: DimEq<Const<C>, Const<C1>> + DimEq<Const<C1>, Const<C>>
-    {
+    pub fn dot(&self, other: &Self) -> S {
         let mut result = S::zero();
         for r in 0..R {
             for c in 0..C {

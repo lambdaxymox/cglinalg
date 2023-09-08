@@ -6,6 +6,7 @@ extern crate proptest;
 use proptest::prelude::*;
 use cglinalg_core::{
     Matrix,
+    Matrix1x1,
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
@@ -69,6 +70,14 @@ where
 {
     let min_value = S::zero();
     let max_value = num_traits::cast(1_000_000_000).unwrap();
+
+    strategy_matrix_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_matrix_i32_norm<const R: usize, const C: usize>() -> impl Strategy<Value = Matrix<i32, R, C>> {
+    let min_value = 0_i32;
+    // let max_value = (f64::floor(f64::sqrt(i32::MAX as f64) / 4_f64)) as i32;
+    let max_value = 11585_i32;
 
     strategy_matrix_signed_from_abs_range(min_value, max_value)
 }
@@ -746,6 +755,142 @@ where
     Ok(())
 }
 
+/// The matrix dot product is nonnegative.
+/// 
+/// Given a matrix `m` the dot product of `m` satisfies
+/// ```text
+/// dot(m, m) >= 0
+/// ```
+fn prop_matrix_dot_product_nonnegative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalar
+{
+    let zero = S::zero();
+
+    prop_assert!(m.dot(&m) >= zero);
+
+    Ok(())
+}
+
+/// The matrix dot product is point separating from zero.
+/// 
+/// Given a matrix `m`, the dot product of `m` with itself satisfies the property
+/// ```text
+/// dot(m, m) != 0 ==> m != 0
+/// ```
+/// Equivalently, the matrix dot product satisfies
+/// ```text
+/// m != 0 ==> dot(m, m) != 0
+/// ```
+/// which is the relation the property uses for testability reasons.
+fn prop_matrix_dot_product_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalar
+{
+    let zero = S::zero();
+    let zero_matrix = Matrix::zero();
+
+    prop_assume!(m != zero_matrix);
+    prop_assert_ne!(m.dot(&m), zero);
+
+    Ok(())
+}
+
+/// The matrix dot product is point separating.
+/// 
+/// Given matrices `m1` and `m2`, the dot product of `m1` with `m2` satisfies
+/// ```text
+/// dot(m1, m2) != 0 ==> m1 != m2
+/// ```
+/// Equivalently, the matrix dot product satisfies
+/// ```text
+/// m1 != m2 ==> dot(m1, m2) != 0
+/// ```
+/// which is the relation the property uses for testability reasons.
+fn prop_matrix_dot_product_point_separating2<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>
+) -> Result<(), TestCaseError> 
+where
+    S: SimdScalar
+{
+    prop_assume!(m1 != m2);
+
+    let zero = S::zero();
+
+    prop_assert_ne!(m1.dot(&m2), zero);
+
+    Ok(())
+}
+
+/// The matrix dot product is left bilinear.
+/// 
+/// Given matrices `m1`, `m2`, and `m3`, the matrix dot product satisfies
+/// ```text
+/// dot(m1 + m2, m3) == dot(m1, m3) + dot(m2, m3)
+/// ```
+fn prop_matrix_dot_product_left_bilinear<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+    m3: Matrix<S, R, C>
+) -> Result<(), TestCaseError> 
+where
+    S: SimdScalar
+{
+    let lhs = (m1 + m2).dot(&m3);
+    let rhs = m1.dot(&m3) + m2.dot(&m3);
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+/// The matrix dot product is right bilinear
+/// 
+/// Given matrices `m1`, `m2`, and `m3`, the matrix dot product satisfies
+/// ```text
+/// dot(m1, m2 + m3) == dot(m1, m2) + dot(m1, m3)
+/// ```
+fn prop_matrix_dot_product_right_bilinear<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>, 
+    m3: Matrix<S, R, C>
+) -> Result<(), TestCaseError> 
+where
+    S: SimdScalar
+{
+    let lhs = m1.dot(&(m2 + m3));
+    let rhs = m1.dot(&m2) + m1.dot(&m3);
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+/// The matrix dot product is homogeneous.
+/// 
+/// Given constants `c1` and `c2`, and matrices `m1` and `m2`, the matrix dot
+/// product satisfies
+/// ```text
+/// dot(m1 * c1, m2 * c2) == dot(m1, m2) * (c1 * c2)
+/// ```
+fn prop_matrix_dot_product_homogeneous<S, const R: usize, const C: usize>(
+    c1: S, 
+    c2: S, 
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalar
+{
+    let lhs = (m1 * c1).dot(&(m2 * c2));
+    let rhs = (m1.dot(&m2)) * (c1 * c2);
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
 
 macro_rules! approx_arithmetic_props {
     ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
@@ -783,9 +928,9 @@ macro_rules! approx_arithmetic_props {
     }
 }
 
-approx_arithmetic_props!(matrix2_f64_arithmetic_props, Matrix2x2, f64, strategy_matrix_any);
-approx_arithmetic_props!(matrix3_f64_arithmetic_props, Matrix3x3, f64, strategy_matrix_any);
-approx_arithmetic_props!(matrix4_f64_arithmetic_props, Matrix4x4, f64, strategy_matrix_any);
+approx_arithmetic_props!(matrix2x2_f64_arithmetic_props, Matrix2x2, f64, strategy_matrix_any);
+approx_arithmetic_props!(matrix3x3_f64_arithmetic_props, Matrix3x3, f64, strategy_matrix_any);
+approx_arithmetic_props!(matrix4x4_f64_arithmetic_props, Matrix4x4, f64, strategy_matrix_any);
 
 
 macro_rules! exact_arithmetic_props {
@@ -832,9 +977,9 @@ macro_rules! exact_arithmetic_props {
     }
 }
 
-exact_arithmetic_props!(matrix2_i32_arithmetic_props, Matrix2x2, i32, strategy_matrix_any);
-exact_arithmetic_props!(matrix3_i32_arithmetic_props, Matrix3x3, i32, strategy_matrix_any);
-exact_arithmetic_props!(matrix4_i32_arithmetic_props, Matrix4x4, i32, strategy_matrix_any);
+exact_arithmetic_props!(matrix2x2_i32_arithmetic_props, Matrix2x2, i32, strategy_matrix_any);
+exact_arithmetic_props!(matrix3x3_i32_arithmetic_props, Matrix3x3, i32, strategy_matrix_any);
+exact_arithmetic_props!(matrix4x4_i32_arithmetic_props, Matrix4x4, i32, strategy_matrix_any);
 
 
 macro_rules! approx_scalar_multiplication_props {
@@ -873,19 +1018,19 @@ macro_rules! approx_scalar_multiplication_props {
 }
 
 approx_scalar_multiplication_props!(
-    matrix2_f64_scalar_multiplication_props, 
+    matrix2x2_f64_scalar_multiplication_props, 
     Matrix2x2, f64, 
     strategy_matrix_any, 
     strategy_scalar_f64_any
 );
 approx_scalar_multiplication_props!(
-    matrix3_f64_scalar_multiplication_props, 
+    matrix3x3_f64_scalar_multiplication_props, 
     Matrix3x3, f64, 
     strategy_matrix_any, 
     strategy_scalar_f64_any
 );
 approx_scalar_multiplication_props!(
-    matrix4_f64_scalar_multiplication_props, 
+    matrix4x4_f64_scalar_multiplication_props, 
     Matrix4x4, 
     f64, 
     strategy_matrix_any, 
@@ -958,9 +1103,9 @@ macro_rules! exact_scalar_multiplication_props {
     }
 }
 
-exact_scalar_multiplication_props!(matrix2_i32_scalar_multiplication_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
-exact_scalar_multiplication_props!(matrix3_i32_scalar_multiplication_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
-exact_scalar_multiplication_props!(matrix4_i32_scalar_multiplication_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_scalar_multiplication_props!(matrix2x2_i32_scalar_multiplication_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_scalar_multiplication_props!(matrix3x3_i32_scalar_multiplication_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_scalar_multiplication_props!(matrix4x4_i32_scalar_multiplication_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
 
 
 macro_rules! approx_multiplication_props {
@@ -991,9 +1136,9 @@ macro_rules! approx_multiplication_props {
     }
 }
 
-approx_multiplication_props!(matrix2_f64_matrix_multiplication_props, Matrix2x2, f64, strategy_matrix_any);
-approx_multiplication_props!(matrix3_f64_matrix_multiplication_props, Matrix3x3, f64, strategy_matrix_any);
-approx_multiplication_props!(matrix4_f64_matrix_multiplication_props, Matrix4x4, f64, strategy_matrix_any);
+approx_multiplication_props!(matrix2x2_f64_matrix_multiplication_props, Matrix2x2, f64, strategy_matrix_any);
+approx_multiplication_props!(matrix3x3_f64_matrix_multiplication_props, Matrix3x3, f64, strategy_matrix_any);
+approx_multiplication_props!(matrix4x4_f64_matrix_multiplication_props, Matrix4x4, f64, strategy_matrix_any);
 
 
 macro_rules! exact_multiplication_props {
@@ -1066,9 +1211,9 @@ macro_rules! exact_multiplication_props {
     }
 }
 
-exact_multiplication_props!(matrix2_i32_matrix_multiplication_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
-exact_multiplication_props!(matrix3_i32_matrix_multiplication_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
-exact_multiplication_props!(matrix4_i32_matrix_multiplication_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_multiplication_props!(matrix2x2_i32_matrix_multiplication_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_multiplication_props!(matrix3x3_i32_matrix_multiplication_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_multiplication_props!(matrix4x4_i32_matrix_multiplication_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
 
 
 macro_rules! exact_transposition_props {
@@ -1108,13 +1253,16 @@ macro_rules! exact_transposition_props {
     }
 }
 
-exact_transposition_props!(matrix2_i32_transposition_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
-exact_transposition_props!(matrix3_i32_transposition_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
-exact_transposition_props!(matrix4_i32_transposition_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_transposition_props!(matrix2x2_i32_transposition_props, Matrix2x2, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_transposition_props!(matrix3x3_i32_transposition_props, Matrix3x3, i32, strategy_matrix_any, strategy_scalar_i32_any);
+exact_transposition_props!(matrix4x4_i32_transposition_props, Matrix4x4, i32, strategy_matrix_any, strategy_scalar_i32_any);
 
-exact_transposition_props!(matrix2_f64_transposition_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
-exact_transposition_props!(matrix3_f64_transposition_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
-exact_transposition_props!(matrix4_f64_transposition_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
+exact_transposition_props!(matrix2x2_f64_transposition_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
+exact_transposition_props!(matrix3x3_f64_transposition_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
+exact_transposition_props!(matrix4x4_f64_transposition_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
+
+
+
 
 
 macro_rules! swap_props {
@@ -1192,7 +1340,7 @@ macro_rules! swap_props {
 
             #[test]
             fn prop_swap_elements_twice_is_identity(
-                m in super::$Generator(), 
+                m in super::$Generator(),
                 col1 in 0..$UpperBound as usize, row1 in 0..$UpperBound as usize, 
                 col2 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize
             ) {
@@ -1204,7 +1352,80 @@ macro_rules! swap_props {
     }
 }
 
-swap_props!(matrix2_swap_props, Matrix2x2, i32, strategy_matrix_any, 2);
-swap_props!(matrix3_swap_props, Matrix3x3, i32, strategy_matrix_any, 3);
-swap_props!(matrix4_swap_props, Matrix4x4, i32, strategy_matrix_any, 4);
+swap_props!(matrix2x2_swap_props, Matrix2x2, i32, strategy_matrix_any, 2);
+swap_props!(matrix3x3_swap_props, Matrix3x3, i32, strategy_matrix_any, 3);
+swap_props!(matrix4x4_swap_props, Matrix4x4, i32, strategy_matrix_any, 4);
+
+
+macro_rules! exact_dot_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_matrix_dot_product_nonnegative(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_dot_product_nonnegative(m)?
+            }
+
+            #[test]
+            fn prop_matrix_dot_product_point_separating1(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_dot_product_point_separating1(m)?
+            }
+
+            #[test]
+            fn prop_matrix_dot_product_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                super::prop_matrix_dot_product_point_separating2(m1, m2)?
+            }
+
+            #[test]
+            fn prop_matrix_dot_product_left_bilinear(
+                m1 in super::$Generator(),
+                m2 in super::$Generator(),
+                m3 in super::$Generator()
+            ) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                let m3: super::$MatrixN<$ScalarType> = m3;
+                super::prop_matrix_dot_product_left_bilinear(m1, m2, m3)?
+            }
+
+            #[test]
+            fn prop_matrix_dot_product_right_bilinear(
+                m1 in super::$Generator(),
+                m2 in super::$Generator(),
+                m3 in super::$Generator()
+            ) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                let m3: super::$MatrixN<$ScalarType> = m3;
+                super::prop_matrix_dot_product_right_bilinear(m1, m2, m3)?
+            }
+
+            #[test]
+            fn prop_matrix_dot_product_homogeneous(
+                c1 in super::$ScalarGen(), 
+                c2 in super::$ScalarGen(), 
+                m1 in super::$Generator(),
+                m2 in super::$Generator(),
+            ) {
+                let c1: $ScalarType = c1;
+                let c2: $ScalarType = c2;
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                super::prop_matrix_dot_product_homogeneous(c1, c2, m1, m2)?
+            }
+        }
+    }
+    }
+}
+
+exact_dot_props!(matrix1x1_i32_dot_product_props, Matrix1x1, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_dot_props!(matrix2x2_i32_dot_product_props, Matrix2x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_dot_props!(matrix3x3_i32_dot_product_props, Matrix3x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_dot_props!(matrix4x4_i32_dot_product_props, Matrix4x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
 
