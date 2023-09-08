@@ -13,12 +13,16 @@ use cglinalg_core::{
     SimdScalar,
     SimdScalarOrd,
     SimdScalarSigned,
+    SimdScalarFloat,
 };
 use cglinalg_core::{
     Const,
     CanMultiply,
     DimMul,
     ShapeConstraint,
+};
+use approx::{
+    relative_ne,
 };
 
 
@@ -919,7 +923,7 @@ where
 /// ```text
 /// m != 0 ==> l1_norm(m) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the function.
+/// For the sake of testability, we use the second form.
 fn prop_matrix_l1_norm_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd
@@ -933,7 +937,17 @@ where
     Ok(())
 }
 
-
+/// The matrix **L1** norm is point separating.
+/// 
+/// Given matrices `m1` and `m2`
+/// ```text
+/// l1_norm(m1) == l1_norm(m2) ==> m1 == m2
+/// ```
+/// Equivalently
+/// ```text
+/// m1 != m2 ==> l1_norm(m1) != l1_norm(m2)
+/// ```
+/// For the sake of testability, we use the second form.
 fn prop_matrix_l1_norm_point_separating2<S, const R: usize, const C: usize>(
     m1: Matrix<S, R, C>, 
     m2: Matrix<S, R, C>
@@ -949,7 +963,12 @@ where
     Ok(())
 }
 
-
+/// The matrix **L1** norm is homogeneous.
+/// 
+/// Given a constant `c` and a matrix `m`
+/// ```text
+/// l1_norm(m * c) == l1_norm(m) * abs(c)
+/// ```
 fn prop_matrix_l1_norm_homogeneous<S, const R: usize, const C: usize>(c: S, m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd
@@ -962,6 +981,12 @@ where
     Ok(())
 }
 
+/// The matrix **L1** norm satisfies the triangle inequality.
+/// 
+/// Given matrices `m1` and `m2`
+/// ```text
+/// l1_norm(m1 + m2) <= l1_norm(m1) + l1_norm(m2)
+/// ```
 fn prop_matrix_l1_norm_triangle_inequality<S, const R: usize, const C: usize>(
     m1: Matrix<S, R, C>,
     m2: Matrix<S, R, C>
@@ -973,6 +998,403 @@ where
     let rhs = m1.l1_norm() + m2.l1_norm();
 
     prop_assert!(lhs <= rhs);
+
+    Ok(())
+}
+
+/// The matrix **L1** norm is point separating from zero.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// l1_norm(m) == 0 ==> m == 0
+/// ```
+/// Equivalently, if `m` is not zero
+/// ```text
+/// m != 0 ==> l1_norm(m) != 0
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_approx_matrix_l1_norm_point_separating1<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>,
+    tolerance: S
+) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let zero_matrix = Matrix::zero();
+
+    prop_assume!(relative_ne!(m, zero_matrix, epsilon = tolerance));
+    prop_assert!(m.l1_norm() > tolerance);
+
+    Ok(())
+}
+
+/// The matrix **L1** norm is point separating.
+/// 
+/// Given matrices `m1` and `m2`
+/// ```text
+/// l1_norm(m1) == l1_norm(m2) ==> m1 == m2
+/// ```
+/// Equivalently
+/// ```text
+/// m1 != m2 ==> l1_norm(m1) != l1_norm(m2)
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_approx_matrix_l1_norm_point_separating2<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>, 
+    tolerance: S
+) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    prop_assume!(relative_ne!(m1, m2, epsilon = tolerance));
+    prop_assert!((m1 - m2).l1_norm() > tolerance);
+
+    Ok(())
+}
+
+/// The matrix **L-infinity** norm is nonnegative.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// linf_norm(m) >= 0
+/// ```
+fn prop_matrix_linf_norm_nonnegative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    let zero = S::zero();
+
+    prop_assert!(m.linf_norm() >= zero);
+
+    Ok(())
+}
+
+/// The matrix **L-infinity** norm is point separating from zero.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// linf_norm(m) == 0 ==> m == 0
+/// ```
+/// Equivalently, if `m` is not zero
+/// ```text
+/// m != 0 ==> linf_norm(m) != 0
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_matrix_linf_norm_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    let zero = S::zero();
+    let zero_matrix = Matrix::zero();
+
+    prop_assume!(m != zero_matrix);
+    prop_assert_ne!(m.linf_norm(), zero);
+
+    Ok(())
+}
+
+/// The matrix **L-infinity** norm is point separating.
+/// 
+/// Given matrices `m1` and `m2`
+/// ```text
+/// linf_norm(m1) == linf_norm(m2) ==> m1 == m2
+/// ```
+/// Equivalently
+/// ```text
+/// m1 != m2 ==> linf_norm(m1) != linf_norm(m2)
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_matrix_linf_norm_point_separating2<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    let zero = S::zero();
+
+    prop_assume!(m1 != m2);
+    prop_assert_ne!((m1 - m2).linf_norm(), zero);
+
+    Ok(())
+}
+
+/// The matrix **L-infinity** norm is homogeneous.
+/// 
+/// Given a constant `c` and a matrix `m`
+/// ```text
+/// linf_norm(m * c) == linf_norm(m) * abs(c)
+/// ```
+fn prop_matrix_linf_norm_homogeneous<S, const R: usize, const C: usize>(c: S, m: Matrix<S, R, C>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    let lhs = (m * c).linf_norm();
+    let rhs = m.linf_norm() * c.abs();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+/// The matrix **L-infinity** norm is point separating from zero.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// linf_norm(m) == 0 ==> m == 0
+/// ```
+/// Equivalently, if `m` is not zero
+/// ```text
+/// m != 0 ==> linf_norm(m) != 0
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_approx_matrix_linf_norm_point_separating1<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
+    tolerance: S
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let zero_matrix = Matrix::zero();
+
+    prop_assume!(relative_ne!(m, zero_matrix, epsilon = tolerance));
+    prop_assert!(m.linf_norm() > tolerance);
+
+    Ok(())
+}
+
+/// The matrix **L-infinity** norm is point separating.
+/// 
+/// Given matrices `m1` and `m2`
+/// ```text
+/// linf_norm(m1) == linf_norm(m2) ==> m1 == m2
+/// ```
+/// Equivalently
+/// ```text
+/// m1 != m2 ==> linf_norm(m1) != linf_norm(m2)
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_approx_matrix_linf_norm_point_separating2<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+    tolerance: S
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    prop_assume!(relative_ne!(m1, m2, epsilon = tolerance));
+    prop_assert!((m1 - m2).linf_norm() > tolerance);
+
+    Ok(())
+}
+
+/// The matrix **L-infinity** norm satisfies the triangle inequality.
+/// 
+/// Given matrices `m1` and `m2`
+/// ```text
+/// linf_norm(m1 + m2) <= linf_norm(m1) + linf_norm(m2)
+/// ```
+fn prop_matrix_linf_norm_triangle_inequality<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    let lhs = (m1 + m2).linf_norm();
+    let rhs = m1.linf_norm() + m2.linf_norm();
+
+    prop_assert!(lhs <= rhs);
+
+    Ok(())
+}
+
+/// The squared matrix **Frobenius** norm is nonnegative.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// norm_squared(m) >= 0
+/// ```
+fn prop_matrix_norm_squared_nonnegative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    let zero = S::zero();
+
+    prop_assert!(m.norm_squared() >= zero);
+
+    Ok(())
+}
+
+/// The squared matrix **Frobenius** norm is point separating from zero.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// norm_squared(m) == 0 ==> m == 0
+/// ```
+/// Equivalently, if `m` is not zero
+/// ```text
+/// m != 0 ==> norm_squared(m) != 0
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_matrix_norm_squared_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    let zero = S::zero();
+    let zero_matrix = Matrix::zero();
+
+    prop_assume!(m != zero_matrix);
+    prop_assert_ne!(m.norm_squared(), zero);
+
+    Ok(())
+}
+
+/// The squared matrix **Frobenius** norm is point separating.
+/// 
+/// Given matrices `m1` and `m2`
+/// ```text
+/// norm_squared(m1) == norm_squared(m2) ==> m1 == m2
+/// ```
+/// Equivalently
+/// ```text
+/// m1 != m2 ==> norm_squared(m1) != norm_squared(m2)
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_matrix_norm_squared_point_separating2<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    let zero = S::zero();
+
+    prop_assume!(m1 != m2);
+    prop_assert_ne!((m1 - m2).norm_squared(), zero);
+
+    Ok(())
+}
+
+/// The squared matrix **Frobenius** norm is homogeneous.
+/// 
+/// Given a constant `c` and a matrix `m`
+/// ```text
+/// norm_squared(m * c) == norm_squared(m) * abs(c) * abs(c)
+/// ```
+fn prop_matrix_norm_squared_homogeneous_squared<S, const R: usize, const C: usize>(c: S, m: Matrix<S, R, C>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned + SimdScalarOrd
+{
+    let lhs = (m * c).norm_squared();
+    let rhs = m.norm_squared() * c.abs() * c.abs();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+/// The [`Matrix::magnitude`] function and [`Matrix::norm`] function are synonyms.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// magnitude(m) == norm(m)
+/// ```
+fn prop_matrix_magnitude_norm_synonyms<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    prop_assert_eq!(m.magnitude(), m.norm());
+
+    Ok(())
+}
+
+/// The [`Matrix::magnitude_squared`] function and [`Matrix::norm_squared`] function
+/// are synonyms.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// magnitude_squared(m) == norm_squared(m)
+/// ```
+fn prop_matrix_magnitude_squared_norm_squared_synonyms<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned
+{
+    prop_assert_eq!(m.magnitude_squared(), m.norm_squared());
+
+    Ok(())
+}
+
+/// The matrix **Frobenius** norm is nonnegative.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// norm(m) >= 0
+/// ```
+fn prop_matrix_norm_nonnegative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let zero = S::zero();
+
+    prop_assert!(m.norm() >= zero);
+
+    Ok(())
+}
+
+/// The matrix **Frobenius** norm is point separating from zero.
+/// 
+/// Given a matrix `m`
+/// ```text
+/// norm(m) == 0 ==> m == 0
+/// ```
+/// Equivalently, if `m` is not zero
+/// ```text
+/// m != 0 ==> norm(m) != 0
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_approx_matrix_norm_point_separating1<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>, 
+    tolerance: S
+) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let zero = S::zero();
+    let zero_matrix = Matrix::zero();
+
+    prop_assume!(relative_ne!(m, zero_matrix, epsilon = tolerance));
+    prop_assert!(relative_ne!(m.norm(), zero, epsilon = tolerance));
+
+    Ok(())
+}
+
+/// The matrix **Frobenius** norm is point separating.
+/// 
+/// Given matrices `m1` and `m2`
+/// ```text
+/// norm(m1) == norm(m2) ==> m1 == m2
+/// ```
+/// Equivalently
+/// ```text
+/// m1 != m2 ==> norm(m1) != norm(m2)
+/// ```
+/// For the sake of testability, we use the second form.
+fn prop_approx_matrix_norm_point_separating2<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>, 
+    m2: Matrix<S, R, C>, 
+    tolerance: S
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    prop_assume!(relative_ne!(m1, m2, epsilon = tolerance));
+    prop_assert!(relative_ne!(m1.norm(), m2.norm(), epsilon = tolerance));
 
     Ok(())
 }
@@ -1563,5 +1985,245 @@ exact_l1_norm_props!(matrix1x1_i32_l1_norm_props, Matrix1x1, i32, strategy_matri
 exact_l1_norm_props!(matrix2x2_i32_l1_norm_props, Matrix2x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
 exact_l1_norm_props!(matrix3x3_i32_l1_norm_props, Matrix3x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
 exact_l1_norm_props!(matrix4x4_i32_l1_norm_props, Matrix4x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+
+
+macro_rules! approx_l1_norm_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_matrix_l1_norm_nonnegative(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_l1_norm_nonnegative(m)?
+            }
+
+            #[test]
+            fn prop_approx_matrix_l1_norm_point_separating1(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_approx_matrix_l1_norm_point_separating1(m, 1e-10)?
+            }
+
+            #[test]
+            fn prop_approx_matrix_l1_norm_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                super::prop_approx_matrix_l1_norm_point_separating2(m1, m2, 1e-10)?
+            }
+        }
+    }
+    }
+}
+
+approx_l1_norm_props!(matrix1x1_f64_l1_norm_props, Matrix1x1, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_l1_norm_props!(matrix2x2_f64_l1_norm_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_l1_norm_props!(matrix3x3_f64_l1_norm_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_l1_norm_props!(matrix4x4_f64_l1_norm_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
+
+
+macro_rules! exact_linf_norm_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_matrix_linf_norm_nonnegative(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_linf_norm_nonnegative(m)?
+            }
+
+            #[test]
+            fn prop_matrix_linf_norm_point_separating1(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_linf_norm_point_separating1(m)?
+            }
+
+            #[test]
+            fn prop_matrix_linf_norm_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                super::prop_matrix_linf_norm_point_separating2(m1, m2)?
+            }
+
+            #[test]
+            fn prop_matrix_linf_norm_homogeneous(c in super::$ScalarGen(), m in super::$Generator()) {
+                let c: $ScalarType = c;
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_linf_norm_homogeneous(c, m)?
+            }
+
+            #[test]
+            fn prop_matrix_linf_norm_triangle_inequality(m1 in super::$Generator(), m2 in super::$Generator()) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                super::prop_matrix_linf_norm_triangle_inequality(m1, m2)?
+            }
+        }
+    }
+    }
+}
+
+exact_linf_norm_props!(matrix1x1_i32_linf_norm_props, Matrix1x1, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_linf_norm_props!(matrix2x2_i32_linf_norm_props, Matrix2x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_linf_norm_props!(matrix3x3_i32_linf_norm_props, Matrix3x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_linf_norm_props!(matrix4x4_i32_linf_norm_props, Matrix4x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+
+
+macro_rules! approx_linf_norm_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_matrix_linf_norm_nonnegative(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_linf_norm_nonnegative(m)?
+            }
+
+            #[test]
+            fn prop_approx_matrix_linf_norm_point_separating1(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_approx_matrix_linf_norm_point_separating1(m, 1e-10)?
+            }
+
+            #[test]
+            fn prop_approx_matrix_linf_norm_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                super::prop_approx_matrix_linf_norm_point_separating2(m1, m2, 1e-10)?
+            }
+        }
+    }
+    }
+}
+
+approx_linf_norm_props!(matrix1x1_f64_linf_norm_props, Matrix1x1, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_linf_norm_props!(matrix2x2_f64_linf_norm_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_linf_norm_props!(matrix3x3_f64_linf_norm_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_linf_norm_props!(matrix4x4_f64_linf_norm_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
+
+
+macro_rules! exact_norm_squared_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_matrix_norm_squared_nonnegative(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_norm_squared_nonnegative(m)?
+            }
+
+            #[test]
+            fn prop_matrix_norm_squared_point_separating1(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_norm_squared_point_separating1(m)?
+            }
+
+            #[test]
+            fn prop_matrix_norm_squared_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                super::prop_matrix_norm_squared_point_separating2(m1, m2)?
+            }
+
+            #[test]
+            fn prop_matrix_norm_squared_homogeneous_squared(c in super::$ScalarGen(), m in super::$Generator()) {
+                let c: $ScalarType = c;
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_norm_squared_homogeneous_squared(c, m)?
+            }
+        }
+    }
+    }
+}
+
+exact_norm_squared_props!(matrix1x1_i32_norm_squared_props, Matrix1x1, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_norm_squared_props!(matrix2x2_i32_norm_squared_props, Matrix2x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_norm_squared_props!(matrix3x3_i32_norm_squared_props, Matrix3x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_norm_squared_props!(matrix4x4_i32_norm_squared_props, Matrix4x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+
+
+macro_rules! norm_synonym_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_matrix_magnitude_norm_synonyms(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_magnitude_norm_synonyms(m)?
+            }
+        }
+    }
+    }
+}
+
+norm_synonym_props!(matrix1x1_f64_norm_synonym_props, Matrix1x1, f64, strategy_matrix_any, strategy_scalar_f64_any);
+norm_synonym_props!(matrix2x2_f64_norm_synonym_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
+norm_synonym_props!(matrix3x3_f64_norm_synonym_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
+norm_synonym_props!(matrix4x4_f64_norm_synonym_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
+
+
+macro_rules! norm_squared_synonym_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_matrix_magnitude_squared_norm_squared_synonyms(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_magnitude_squared_norm_squared_synonyms(m)?
+            }
+        }
+    }
+    }
+}
+
+norm_squared_synonym_props!(matrix1x1_i32_norm_squared_synonym_props, Matrix1x1, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+norm_squared_synonym_props!(matrix2x2_i32_norm_squared_synonym_props, Matrix2x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+norm_squared_synonym_props!(matrix3x3_i32_norm_squared_synonym_props, Matrix3x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+norm_squared_synonym_props!(matrix4x4_i32_norm_squared_synonym_props, Matrix4x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+
+
+macro_rules! approx_norm_props {
+    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_matrix_norm_nonnegative(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_matrix_norm_nonnegative(m)?
+            }
+
+            #[test]
+            fn prop_approx_matrix_norm_point_separating1(m in super::$Generator()) {
+                let m: super::$MatrixN<$ScalarType> = m;
+                super::prop_approx_matrix_norm_point_separating1(m, 1e-10)?
+            }
+
+            #[test]
+            fn prop_approx_matrix_norm_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
+                let m1: super::$MatrixN<$ScalarType> = m1;
+                let m2: super::$MatrixN<$ScalarType> = m2;
+                super::prop_approx_matrix_norm_point_separating2(m1, m2, 1e-10)?
+            }
+        }
+    }
+    }
+}
+
+approx_norm_props!(matrix1x1_f64_norm_props, Matrix1x1, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_norm_props!(matrix2x2_f64_norm_props, Matrix2x2, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_norm_props!(matrix3x3_f64_norm_props, Matrix3x3, f64, strategy_matrix_any, strategy_scalar_f64_any);
+approx_norm_props!(matrix4x4_f64_norm_props, Matrix4x4, f64, strategy_matrix_any, strategy_scalar_f64_any);
 
 

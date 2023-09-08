@@ -1528,9 +1528,9 @@ where
         norm.metric_distance(self, other)
     }
 
-    /// Compute the squared Frobenius norm of a matrix.
+    /// Compute the squared **Frobenius** norm of a matrix.
     /// 
-    /// The squared Frobenius norm of a matrix is the sum of the squares of all 
+    /// The squared **Frobenius** norm of a matrix is the sum of the squares of all 
     /// the elements of the matrix.
     /// 
     /// # Example
@@ -1556,7 +1556,7 @@ where
         self.dot(&self)
     }
 
-    /// Compute the squared Frobenius norm of a matrix.
+    /// Compute the squared **Frobenius** norm of a matrix.
     /// 
     /// This is a synonym for [`Matrix::norm_squared`].
     /// 
@@ -1584,7 +1584,7 @@ where
     }
 
     /// Compute the squared metric distance between two matrices with respect
-    /// to the metric induced by the Frobenius norm.
+    /// to the metric induced by the **Frobenius** norm.
     /// 
     /// # Example
     /// 
@@ -1690,9 +1690,9 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
     S: SimdScalarFloat
 {
-    /// Compute the Frobenius norm of a matrix.
+    /// Compute the **Frobenius** norm of a matrix.
     /// 
-    /// The squared Frobenius norm of a matrix is the sum of the squares of all 
+    /// The squared **Frobenius** norm of a matrix is the sum of the squares of all 
     /// the elements of the matrix.
     /// 
     /// # Example
@@ -1721,7 +1721,7 @@ where
         self.norm_squared().sqrt()
     }
 
-    /// Compute the Frobenius norm of a matrix.
+    /// Compute the **Frobenius** norm of a matrix.
     /// 
     /// This is a synonym for [`Matrix::norm`].
     /// 
@@ -1750,7 +1750,7 @@ where
     }
 
     /// Compute the metric distance between two matrices with respect to the 
-    /// metric induced by the Frobenius norm.
+    /// metric induced by the **Frobenius** norm.
     /// 
     /// # Example
     /// 

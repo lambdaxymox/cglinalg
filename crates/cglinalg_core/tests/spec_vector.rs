@@ -1057,8 +1057,7 @@ where
 /// ```text
 /// v1 != v2 => linf_norm(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
+/// For the sake of testability, we use the second form.
 fn prop_approx_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1084,8 +1083,7 @@ where
 /// ```text
 /// v1 != v2 => linf_norm(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
+/// For the sake of testability, we use the second form.
 fn prop_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd
