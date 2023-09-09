@@ -1,21 +1,24 @@
+extern crate cglinalg_numeric;
 extern crate cglinalg_core;
-extern crate num_traits;
 extern crate proptest;
 
 
-use proptest::prelude::*;
-use cglinalg_core::{
-    Quaternion,
-    Vector3,
+use cglinalg_numeric::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
+};
+use cglinalg_core::{
+    Quaternion,
+    Vector3,
 };
 use approx::{
     relative_eq,
     relative_ne,
     abs_diff_ne,
 };
+
+use proptest::prelude::*;
 
 
 fn strategy_quaternion_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Quaternion<S>>
@@ -1283,7 +1286,7 @@ where
 
     let (norm_q, _, axis_q) = q.polar_decomposition();
     let arg_q = q.arg();
-    let _k = cglinalg_core::cast(k);
+    let _k = cglinalg_numeric::cast(k);
     let arg_new_q = arg_q + S::two_pi() * _k;
     let angle_new_q = {
         // NOTE: The principal argument of the quaternion is half of the angle 
@@ -1333,7 +1336,7 @@ where
 {
     // Ensure that the vector part is sufficiently far from zero for the square 
     // root to be well-defined for `q`.
-    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = cglinalg_core::cast(1e-6)));
+    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = cglinalg_numeric::cast(1e-6)));
     
     let sqrt_q = q.sqrt();
     let lhs = sqrt_q * sqrt_q;

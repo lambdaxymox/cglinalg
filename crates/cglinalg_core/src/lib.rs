@@ -1,4 +1,3 @@
-mod core_numeric;
 mod angle;
 mod complex;
 mod euler;
@@ -13,7 +12,6 @@ mod coordinates;
 mod constraints;
 
 
-pub use core_numeric::*;
 pub use constraints::*;
 pub use angle::*;
 pub use complex::*;

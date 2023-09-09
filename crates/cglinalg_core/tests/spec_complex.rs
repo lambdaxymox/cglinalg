@@ -1,19 +1,22 @@
+extern crate cglinalg_numeric;
 extern crate cglinalg_core;
-extern crate num_traits;
 extern crate proptest;
 
 
-use proptest::prelude::*;
-use cglinalg_core::{
-    Complex, 
+use cglinalg_numeric::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
+};
+use cglinalg_core::{
+    Complex, 
 };
 use approx::{
     relative_eq,
     relative_ne,
 };
+
+use proptest::prelude::*;
 
 
 fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Complex<S>>
@@ -1350,7 +1353,7 @@ where
 
     let modulus_z = z.modulus();
     let principal_arg_z = z.arg();
-    let _k = cglinalg_core::cast(k);
+    let _k = cglinalg_numeric::cast(k);
     let arg_new_z = principal_arg_z + S::two_pi() * _k;
     let angle_new_z = Radians(arg_new_z);
     let new_z = Complex::from_polar_decomposition(modulus_z, angle_new_z);

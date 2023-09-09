@@ -1,5 +1,7 @@
-use cglinalg_core::{
+use cglinalg_numeric::{
     SimdScalarFloat,
+};
+use cglinalg_core::{
     Angle,
     Radians,
     Matrix2x2,
@@ -658,7 +660,7 @@ where
     /// ```
     #[inline]
     pub fn angle(&self) -> Radians<S> {
-        let two = cglinalg_core::cast(2);
+        let two = cglinalg_numeric::cast(2);
         Radians::acos((
             self.matrix.c0r0 + self.matrix.c1r1 + self.matrix.c2r2 - S::one()) / two
         )

@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use cglinalg_numeric::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
@@ -2881,7 +2881,7 @@ where
         // cosine we already calculated instead of calculating the angle from 
         // an inverse trigonometric function.
         let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
-        let threshold = crate::cast(0.0005);
+        let threshold = cglinalg_numeric::cast(0.0005);
         if SimdScalarSigned::abs(sin_half_theta) < threshold {
             return result.nlerp(other, amount);
         }

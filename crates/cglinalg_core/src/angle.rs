@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use cglinalg_numeric::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
@@ -284,7 +284,7 @@ where
     /// ```
     #[inline]
     fn full_turn_div_2() -> Self {
-        let denominator: Self::Dimensionless = crate::cast(2);
+        let denominator: Self::Dimensionless = cglinalg_numeric::cast(2);
         Self::full_turn() / denominator
     }
 
@@ -313,7 +313,7 @@ where
     /// ```
     #[inline]
     fn full_turn_div_4() -> Self {
-        let denominator: Self::Dimensionless = crate::cast(4);
+        let denominator: Self::Dimensionless = cglinalg_numeric::cast(4);
         Self::full_turn() / denominator
     }
 
@@ -342,7 +342,7 @@ where
     /// ```
     #[inline]
     fn full_turn_div_6() -> Self {
-        let denominator: Self::Dimensionless = crate::cast(6);
+        let denominator: Self::Dimensionless = cglinalg_numeric::cast(6);
         Self::full_turn() / denominator
     }
 
@@ -371,7 +371,7 @@ where
     /// ```
     #[inline]
     fn full_turn_div_8() -> Self {
-        let denominator: Self::Dimensionless = crate::cast(8);
+        let denominator: Self::Dimensionless = cglinalg_numeric::cast(8);
         Self::full_turn() / denominator
     }
 
@@ -492,7 +492,7 @@ where
     /// ```
     #[inline]
     fn bisect(self, other: Self) -> Self {
-        let one_half = crate::cast(0.5);
+        let one_half = cglinalg_numeric::cast(0.5);
         Self::normalize((other - self) * one_half + self)
     }
 
@@ -753,7 +753,7 @@ where
 {
     #[inline]
     fn from(degrees: Degrees<S>) -> Self {
-        Self(degrees.0 * crate::cast(f64::consts::PI / 180_f64))
+        Self(degrees.0 * cglinalg_numeric::cast(f64::consts::PI / 180_f64))
     }
 }
 
@@ -763,7 +763,7 @@ where
 {
     #[inline]
     fn from(radians: Radians<S>) -> Self {
-        Self(radians.0 * crate::cast(180_f64 / f64::consts::PI))
+        Self(radians.0 * cglinalg_numeric::cast(180_f64 / f64::consts::PI))
     }
 }
 
@@ -1545,7 +1545,7 @@ where
 
     #[inline]
     fn full_turn() -> Self {
-        Self(crate::cast(2_f64 * f64::consts::PI))
+        Self(cglinalg_numeric::cast(2_f64 * f64::consts::PI))
     }
 
     #[inline]
@@ -1592,7 +1592,7 @@ where
 
     #[inline]
     fn full_turn() -> Self {
-        Self(crate::cast(360))
+        Self(cglinalg_numeric::cast(360))
     }
 
     #[inline]

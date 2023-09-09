@@ -1,8 +1,12 @@
+extern crate cglinalg_numeric;
 extern crate cglinalg_core;
-extern crate num_traits;
 extern crate proptest;
 
 
+use cglinalg_numeric::{
+    SimdScalarSigned,
+    SimdScalarFloat,
+};
 use cglinalg_core::{
     Complex,
     Quaternion,
@@ -11,8 +15,6 @@ use cglinalg_core::{
     Vector3, 
     Vector4,
     Vector,
-    SimdScalarSigned,
-    SimdScalarFloat,
     Unit,
     Normed,
 };
@@ -30,7 +32,7 @@ where
     }
 
     any::<[S; N]>().prop_map(move |array| {
-        let abs_offset = cglinalg_core::cast(1e-6_f64);
+        let abs_offset = cglinalg_numeric::cast(1e-6_f64);
         let mut vector = Vector::zero();
         for i in 0..N {
             let signum = array[i].signum();
@@ -123,7 +125,7 @@ where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug
 {
-    let threshold = cglinalg_core::cast(1e-8);
+    let threshold = cglinalg_numeric::cast(1e-8);
     let result = Unit::try_from_value_with_norm(value, threshold);
 
     prop_assert!(result.is_some());
@@ -137,7 +139,7 @@ where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug
 {
-    let threshold = cglinalg_core::cast(1e-8);
+    let threshold = cglinalg_numeric::cast(1e-8);
     let result = Unit::try_from_value(value, threshold);
 
     prop_assert!(result.is_some());

@@ -51,6 +51,10 @@ version = "0.2.16"
 default-features = false
 features = ["libm"]
 
+[dependencies.cglinalg_numeric]
+path = "../cglinalg_numeric"
+version = "0.16.10"
+
 [dependencies.cglinalg_core]
 path = "../cglinalg_core"
 version = "0.16.10"

@@ -41,6 +41,10 @@ alloc = []
 std = []
 
 
+[dependencies.cglinalg_numeric]
+path = "../cglinalg_numeric"
+version = "0.16.10"
+
 [dependencies.approx]
 version = "0.5.1"
 default-features = false

@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use cglinalg_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,   
 };

@@ -1,18 +1,21 @@
+extern crate cglinalg_numeric;
 extern crate cglinalg_core;
-extern crate num_traits;
 extern crate proptest;
 
 
-use proptest::prelude::*;
+use cglinalg_numeric::{
+    SimdScalarFloat,  
+};
 use cglinalg_core::{
     Degrees,
     Radians,
-    SimdScalarFloat,
     Angle,
 };
 use approx::{
     relative_eq,
 };
+
+use proptest::prelude::*;
 
 
 fn strategy_radians_any<S>() -> impl Strategy<Value = Radians<S>> 
@@ -22,7 +25,7 @@ where
     any::<S>()
         .prop_map(|dimensionless| {
             let two_pi = S::two_pi();
-            let one_hundred_million: S = cglinalg_core::cast(100_000_000);
+            let one_hundred_million: S = cglinalg_numeric::cast(100_000_000);
 
             Radians(dimensionless % (one_hundred_million * two_pi))
         })
@@ -35,8 +38,8 @@ where
 {
     any::<S>()
         .prop_map(|dimensionless| {
-            let two_pi: S = cglinalg_core::cast(360_f64);
-            let one_hundred_million: S = cglinalg_core::cast(100_000_000);
+            let two_pi: S = cglinalg_numeric::cast(360_f64);
+            let one_hundred_million: S = cglinalg_numeric::cast(100_000_000);
 
             Degrees(dimensionless % (one_hundred_million * two_pi))
         })

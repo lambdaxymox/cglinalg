@@ -1,8 +1,13 @@
+extern crate cglinalg_numeric;
 extern crate cglinalg_core;
-extern crate num_traits;
 extern crate proptest;
 
 
+use cglinalg_numeric::{
+    SimdScalar,
+    SimdScalarSigned,
+    SimdScalarFloat,
+};
 use cglinalg_core::{
     Point,
     Point1,
@@ -12,9 +17,6 @@ use cglinalg_core::{
     Vector1, 
     Vector2, 
     Vector3, 
-    SimdScalar,
-    SimdScalarSigned,
-    SimdScalarFloat,
 };
 use approx::{
     relative_eq,

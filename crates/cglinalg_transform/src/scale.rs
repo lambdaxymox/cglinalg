@@ -1,6 +1,8 @@
-use cglinalg_core::{
+use cglinalg_numeric::{
     SimdScalar,
     SimdScalarFloat,
+};
+use cglinalg_core::{
     Matrix3x3,
     Matrix4x4,
     Vector2,

@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use cglinalg_numeric::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarOrd,
@@ -701,7 +701,7 @@ where
         let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
         for c in 0..C {
             for r in 0..R {
-                data[c][r] = match crate::try_cast(self.data[c][r]) {
+                data[c][r] = match cglinalg_numeric::try_cast(self.data[c][r]) {
                     Some(value) => value,
                     None => return None,
                 };

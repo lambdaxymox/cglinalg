@@ -1,5 +1,7 @@
-use cglinalg_core::{
+use cglinalg_numeric::{
     SimdScalarFloat,
+};
+use cglinalg_core::{
     Angle,
     Radians,
     Matrix4x4,

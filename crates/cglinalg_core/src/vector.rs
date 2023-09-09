@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use cglinalg_numeric::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarOrd,
@@ -118,7 +118,7 @@ where
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut data: [T; N] = unsafe { core::mem::zeroed() };
         for i in 0..N {
-            data[i] = match crate::try_cast(self.data[i]) {
+            data[i] = match cglinalg_numeric::try_cast(self.data[i]) {
                 Some(value) => value,
                 None => return None,
             };
@@ -713,7 +713,7 @@ where
             result += self.data[i].abs().powi(p as i32);
         }
         
-        result.powf(crate::cast((p as f64).recip()))
+        result.powf(cglinalg_numeric::cast((p as f64).recip()))
     }
 }
 

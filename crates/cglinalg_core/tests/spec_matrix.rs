@@ -1,9 +1,14 @@
+extern crate cglinalg_numeric;
 extern crate cglinalg_core;
-extern crate num_traits;
 extern crate proptest;
 
 
-use proptest::prelude::*;
+use cglinalg_numeric::{
+    SimdScalar,
+    SimdScalarOrd,
+    SimdScalarSigned,
+    SimdScalarFloat,
+};
 use cglinalg_core::{
     Matrix,
     Matrix1x1,
@@ -16,10 +21,6 @@ use cglinalg_core::{
     Matrix4x2,
     Matrix3x4,
     Matrix4x3,
-    SimdScalar,
-    SimdScalarOrd,
-    SimdScalarSigned,
-    SimdScalarFloat,
 };
 use cglinalg_core::{
     Const,
@@ -31,6 +32,8 @@ use approx::{
     relative_eq,
     relative_ne,
 };
+
+use proptest::prelude::*;
 
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 

@@ -1,18 +1,20 @@
+extern crate cglinalg_numeric;
 extern crate cglinalg_core;
-extern crate num_traits;
 extern crate proptest;
 
 
+use cglinalg_numeric::{
+    SimdScalar,
+    SimdScalarSigned,
+    SimdScalarOrd,
+    SimdScalarFloat,
+};
 use cglinalg_core::{
     Vector,
     Vector1,
     Vector2,
     Vector3,
     Vector4, 
-    SimdScalar,
-    SimdScalarSigned,
-    SimdScalarOrd,
-    SimdScalarFloat,
 };
 use approx::{
     relative_ne,

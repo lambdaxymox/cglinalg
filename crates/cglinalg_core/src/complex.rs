@@ -1,4 +1,4 @@
-use crate::core_numeric::{
+use cglinalg_numeric::{
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
@@ -98,11 +98,11 @@ where
     where
         T: num_traits::NumCast
     {
-        let re = match crate::try_cast(self.re) {
+        let re = match cglinalg_numeric::try_cast(self.re) {
             Some(value) => value,
             None => return None,
         };
-        let im = match crate::try_cast(self.im) {
+        let im = match cglinalg_numeric::try_cast(self.im) {
             Some(value) => value,
             None => return None,
         };
