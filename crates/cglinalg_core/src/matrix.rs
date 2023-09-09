@@ -1800,10 +1800,12 @@ where
 {
     type Output = S;
 
+    #[inline]
     fn norm(&self, rhs: &Matrix<S, R, C>) -> Self::Output {
         rhs.l1_norm()
     }
 
+    #[inline]
     fn metric_distance(&self, lhs: &Matrix<S, R, C>, rhs: &Matrix<S, R, C>) -> Self::Output {
         self.norm(&(lhs - rhs))
     }
@@ -1825,10 +1827,12 @@ where
 {
     type Output = S;
 
+    #[inline]
     fn norm(&self, rhs: &Matrix<S, R, C>) -> Self::Output {
         rhs.norm()
     }
 
+    #[inline]
     fn metric_distance(&self, lhs: &Matrix<S, R, C>, rhs: &Matrix<S, R, C>) -> Self::Output {
         lhs.metric_distance(rhs)
     }
@@ -1850,10 +1854,12 @@ where
 {
     type Output = S;
 
+    #[inline]
     fn norm(&self, rhs: &Matrix<S, R, C>) -> Self::Output {
         rhs.linf_norm()
     }
 
+    #[inline]
     fn metric_distance(&self, lhs: &Matrix<S, R, C>, rhs: &Matrix<S, R, C>) -> Self::Output {
         self.norm(&(lhs - rhs))
     }
