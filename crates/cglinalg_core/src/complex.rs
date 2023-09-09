@@ -1,4 +1,5 @@
 use cglinalg_numeric::{
+    SimdCast,
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
@@ -76,7 +77,7 @@ impl<S> Complex<S> {
 
 impl<S> Complex<S> 
 where 
-    S: num_traits::NumCast + Copy 
+    S: SimdCast + Copy 
 {
     /// Cast a complex number from one type of scalars to another type of scalars.
     ///
@@ -96,7 +97,7 @@ where
     #[inline]
     pub fn try_cast<T>(self) -> Option<Complex<T>> 
     where
-        T: num_traits::NumCast
+        T: SimdCast
     {
         let re = match cglinalg_numeric::try_cast(self.re) {
             Some(value) => value,
@@ -1365,7 +1366,7 @@ where
             _exponent >>= 1;
             base = base * base;
             if _exponent % 2 == 1 {
-                result = result * base;
+                result *= base;
             }
         }
 
@@ -1429,7 +1430,7 @@ where
             _exponent >>= 1;
             base = base * base;
             if _exponent % 2 == 1 {
-                result = result * base;
+                result *= base;
             }
         }
 

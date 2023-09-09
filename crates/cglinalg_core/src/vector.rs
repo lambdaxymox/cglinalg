@@ -1,4 +1,5 @@
 use cglinalg_numeric::{
+    SimdCast,
     SimdScalar,
     SimdScalarSigned,
     SimdScalarOrd,
@@ -91,7 +92,7 @@ impl<S, const N: usize> Vector<S, N> {
 
 impl<S, const N: usize> Vector<S, N> 
 where 
-    S: num_traits::NumCast + Copy
+    S: SimdCast + Copy
 {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
@@ -112,7 +113,7 @@ where
     #[inline]
     pub fn try_cast<T>(&self) -> Option<Vector<T, N>> 
     where
-        T: num_traits::NumCast
+        T: SimdCast
     {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         // PERFORMANCE: The const loop should get unrolled during optimization.

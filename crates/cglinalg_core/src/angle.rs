@@ -17,11 +17,10 @@ use core::ops;
 /// radians to degrees, or passing an angle in degrees to a trigonometric 
 /// function when one meant to pass an angle in units of radians.
 pub trait Angle 
-where 
+where
     Self: Copy + Clone,
     Self: fmt::Debug + fmt::Display,
     Self: PartialEq + PartialOrd,
-    Self: num_traits::Zero,
     Self: ops::Neg<Output = Self>,
     Self: ops::Add<Self, Output = Self>,
     Self: ops::Sub<Self, Output = Self>,
@@ -34,6 +33,22 @@ where
     Self: approx::UlpsEq<Epsilon = <Self as Angle>::Dimensionless>,
 {
     type Dimensionless: SimdScalarFloat;
+
+    /// The additive unit of a typed angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// assert_eq!(Radians(0_f64), Radians::zero());
+    /// assert_eq!(Degrees(0_f64), Degrees::zero());
+    /// ```
+    fn zero() -> Self;
 
     /// The value of a full rotation around the unit circle.
     /// 
@@ -1099,21 +1114,6 @@ where
     } 
 }
 
-impl<S> num_traits::Zero for Degrees<S> 
-where 
-    S: SimdScalar 
-{
-    #[inline]
-    fn zero() -> Self {
-        Self(S::zero())
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        self.0.is_zero()
-    }
-}
-
 impl<S> approx::AbsDiffEq for Degrees<S> 
 where 
     S: SimdScalarFloat 
@@ -1475,21 +1475,6 @@ where
     } 
 }
 
-impl<S> num_traits::Zero for Radians<S> 
-where 
-    S: SimdScalar 
-{
-    #[inline]
-    fn zero() -> Self {
-        Self(S::zero())
-    }
-
-    #[inline]
-    fn is_zero(&self) -> bool {
-        self.0.is_zero()
-    }
-}
-
 impl<S> approx::AbsDiffEq for Radians<S> 
 where 
     S: SimdScalarFloat
@@ -1544,6 +1529,11 @@ where
     type Dimensionless = S;
 
     #[inline]
+    fn zero() -> Self {
+        Radians(S::zero())
+    }
+
+    #[inline]
     fn full_turn() -> Self {
         Self(cglinalg_numeric::cast(2_f64 * f64::consts::PI))
     }
@@ -1589,6 +1579,11 @@ where
     S: SimdScalarFloat
 {
     type Dimensionless = S;
+
+    #[inline]
+    fn zero() -> Self {
+        Degrees(S::zero())
+    }
 
     #[inline]
     fn full_turn() -> Self {

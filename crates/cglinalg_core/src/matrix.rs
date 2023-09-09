@@ -1,4 +1,5 @@
 use cglinalg_numeric::{
+    SimdCast,
     SimdScalar,
     SimdScalarSigned,
     SimdScalarOrd,
@@ -119,7 +120,7 @@ where
     // PERFORMANCE: The const loop should get unrolled during optimization.
     let mut result = unsafe { core::mem::zeroed() };
     for i in 0..C1 {
-        result = result + arr[i][r] * col[i];
+        result += arr[i][r] * col[i];
     }
 
     result
@@ -428,7 +429,7 @@ where
             &*(columns as *const [Vector<S, R>; C] as *const [[S; R]; C])
         };
     
-        Self { data: data_ptr.clone() }
+        Self { data: *data_ptr }
     }
 
     /// Construct a matrix from a set of row vectors.
@@ -673,7 +674,7 @@ where
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
 where 
-    S: num_traits::NumCast + Copy 
+    S: SimdCast + Copy 
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
@@ -694,7 +695,7 @@ where
     #[inline]
     pub fn try_cast<T>(&self) -> Option<Matrix<T, R, C>> 
     where
-        T: num_traits::NumCast
+        T: SimdCast
     {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -1553,7 +1554,7 @@ where
     /// ```
     #[inline]
     pub fn norm_squared(&self) -> S {
-        self.dot(&self)
+        self.dot(self)
     }
 
     /// Compute the squared **Frobenius** norm of a matrix.
@@ -6338,7 +6339,7 @@ where
             for r in 0..R1 {
                 result[c][r] = dot_array_col(
                     self.as_ref(), 
-                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c], 
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(other)[c], 
                     r
                 );
             }
@@ -6392,7 +6393,7 @@ where
             for r in 0..R1 {
                 result[c][r] = dot_array_col(
                     self.as_ref(), 
-                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c], 
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(other)[c], 
                     r
                 );
             }

@@ -1,4 +1,5 @@
 use cglinalg_numeric::{
+    SimdCast,
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
@@ -92,7 +93,7 @@ impl<S, const N: usize> Point<S, N> {
 
 impl<S, const N: usize> Point<S, N> 
 where 
-    S: num_traits::NumCast + Copy
+    S: SimdCast + Copy
 {
     /// Cast a point from one type of scalars to another type of scalars.
     ///
@@ -112,7 +113,7 @@ where
     #[inline]
     pub fn try_cast<T>(&self) -> Option<Point<T, N>> 
     where
-        T: num_traits::NumCast
+        T: SimdCast
     {
         self.coords.try_cast::<T>().map(|coords| Point { coords })
     }

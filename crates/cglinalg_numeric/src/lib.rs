@@ -31,8 +31,8 @@ use core::ops;
 #[inline]
 pub fn cast<From, To>(value: From) -> To 
 where
-    From: num_traits::NumCast,
-    To: num_traits::NumCast
+    From: SimdCast,
+    To: SimdCast
 {
     num_traits::cast(value).unwrap()
 }
@@ -65,11 +65,23 @@ where
 #[inline]
 pub fn try_cast<From, To>(value: From) -> Option<To> 
 where
-    From: num_traits::NumCast,
-    To: num_traits::NumCast
+    From: SimdCast,
+    To: SimdCast,
 {
     num_traits::cast(value)
 }
+
+/// A data type with this trait can be cast to between numeric types.
+/// 
+/// This trait is a fascade on [`num_traits::NumCast`] to uncouple the rest of [`cglinalg`]
+/// from [`num_traits`] outside of the [`cglinalg_numeric`] crate.
+pub trait SimdCast
+where
+    Self: num_traits::NumCast
+{
+}
+
+impl<T> SimdCast for T where T: num_traits::NumCast {}
 
 
 /// A data type with this trait has the properties of a 
@@ -82,7 +94,7 @@ where
     Self: fmt::Debug,
     Self: fmt::Display,
     Self: num_traits::Num,
-    Self: num_traits::NumCast,
+    Self: SimdCast,
     Self: PartialOrd, 
     Self: ops::AddAssign,
     Self: ops::SubAssign,
@@ -1558,7 +1570,7 @@ where
      + fmt::Debug 
      + fmt::Display
      + num_traits::Num 
-     + num_traits::NumCast 
+     + num_traits::NumCast
      + PartialOrd 
      + ops::AddAssign 
      + ops::SubAssign 

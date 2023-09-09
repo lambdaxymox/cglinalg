@@ -1,4 +1,5 @@
 use cglinalg_numeric::{
+    SimdCast,
     SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
@@ -109,7 +110,7 @@ impl<S> Quaternion<S> {
 
 impl<S> Quaternion<S> 
 where 
-    S: num_traits::NumCast + Copy 
+    S: SimdCast + Copy 
 {
     /// Cast a quaternion from one type of scalars to another type of scalars.
     ///
@@ -129,7 +130,7 @@ where
     #[inline]
     pub fn try_cast<T>(&self) -> Option<Quaternion<T>> 
     where
-        T: num_traits::NumCast
+        T: SimdCast
     {
         self.coords.try_cast().map(|new_coords| Quaternion { coords: new_coords })
     }
