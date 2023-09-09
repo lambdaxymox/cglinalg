@@ -54,8 +54,9 @@ where
 
     /// Compute the squared **L2** norm of a vector.
     /// 
-    /// # Example
+    /// # Examples
     /// 
+    /// Computing the squared **L2** norm of a vector.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -66,12 +67,31 @@ where
     /// 
     /// assert_eq!(vector.norm_squared(), 14_f64);
     /// ```
+    /// 
+    /// Computing the squared **Frobenius** norm of a matrix.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Normed,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let matrix = Matrix3x3::from_axis_angle(&axis, angle);
+    /// 
+    /// assert_eq!(matrix.norm_squared(), 3_f64);
+    /// ```
     fn norm_squared(&self) -> Self::Output;
 
     /// Compute the **L2** norm of a vector.
     /// 
-    /// # Example
+    /// # Examples
     /// 
+    /// Computing the **L2** norm of a vector.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -82,14 +102,33 @@ where
     /// 
     /// assert_eq!(vector.norm(), f64::sqrt(14_f64));
     /// ```
+    /// 
+    /// Computing the **Frobenius** norm of a matrix.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Normed,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let matrix = Matrix3x3::from_axis_angle(&axis, angle);
+    /// 
+    /// assert_eq!(matrix.norm(), f64::sqrt(3_f64));
+    /// ```
     fn norm(&self) -> Self::Output;
 
     /// Scale a vector by a factor `scale`.
     /// 
     /// This function multiples each element of a vector by `scale.`
     /// 
-    /// # Example
+    /// # Examples
     /// 
+    /// Scaling a vector.
     /// ```
     /// # use cglinalg_core::{
     /// #      Vector3,
@@ -105,14 +144,34 @@ where
     /// assert_eq!(result, expected);
     /// assert_eq!(result.norm(), norm * scale);
     /// ```
+    /// 
+    /// Scaling a matrix.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Normed,
+    /// # };
+    /// #
+    /// let scale = 3_f64;
+    /// let matrix = Matrix3x3::identity();
+    /// let expected = Matrix3x3::new(
+    ///     3_f64, 0_f64, 0_f64,
+    ///     0_f64, 3_f64, 0_f64,
+    ///     0_f64, 0_f64, 3_f64
+    /// );
+    /// let result = matrix.scale(scale);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     fn scale(&self, scale: Self::Output) -> Self;
 
     /// Scale a vector mutably in place to a specified norm `norm`.
     /// 
     /// This function multiples each element of a vector by `scale.`
     /// 
-    /// # Example
+    /// # Examples
     /// 
+    /// Mutably scaling a vector.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -128,14 +187,34 @@ where
     /// assert_eq!(result, expected);
     /// assert_eq!(result.norm(), scale * norm);
     /// ```
+    /// 
+    /// Mutably scaling a matrix.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Normed,
+    /// # };
+    /// #
+    /// let scale = 3_f64;
+    /// let expected = Matrix3x3::new(
+    ///     3_f64, 0_f64, 0_f64,
+    ///     0_f64, 3_f64, 0_f64,
+    ///     0_f64, 0_f64, 3_f64
+    /// );
+    /// let mut result = Matrix3x3::identity();
+    /// result.scale_mut(scale);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     fn scale_mut(&mut self, scale: Self::Output);
 
     /// Scale a vector to by a factor `1 / scale`.
     /// 
     /// This function multiples each element of a vector by `1 / scale.`
     /// 
-    /// # Example
+    /// # Examples
     /// 
+    /// Unscaling a vector.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -154,14 +233,42 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_eq!(result.norm(), norm / scale);
     /// ```
+    /// 
+    /// Unscaling a matrix.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Normed,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 5_f64;
+    /// let matrix = Matrix3x3::new(
+    ///     1_f64,  9_f64,   74_f64, 
+    ///     98_f64, 75_f64,  28_f64, 
+    ///     36_f64, 100_f64, 86_f64
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     0.2_f64,  1.8_f64,  14.8_f64, 
+    ///     19.6_f64, 15.0_f64, 5.6_f64, 
+    ///     7.2_f64,  20.0_f64, 17.2_f64
+    /// );
+    /// let result = matrix.unscale(scale);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn unscale(&self, scale: Self::Output) -> Self;
 
     /// Scale a vector mutably in place to a specified norm `1 / norm`.
     /// 
     /// This function multiples each element of a vector by `1 / scale.`
     /// 
-    /// # Example
+    /// # Examples
     /// 
+    /// Mutably unscaling a vector.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -180,12 +287,40 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_eq!(result.norm(), norm / scale);
     /// ```
+    /// 
+    /// Mutably unscaling a matrix.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Normed,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 5_f64;
+    /// let mut result = Matrix3x3::new(
+    ///     1_f64,  9_f64,   74_f64, 
+    ///     98_f64, 75_f64,  28_f64, 
+    ///     36_f64, 100_f64, 86_f64
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     0.2_f64,  1.8_f64,  14.8_f64, 
+    ///     19.6_f64, 15.0_f64, 5.6_f64, 
+    ///     7.2_f64,  20.0_f64, 17.2_f64
+    /// );
+    /// result.unscale_mut(scale);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     fn unscale_mut(&mut self, scale: Self::Output);
 
     /// Normalize a vector to a unit vector.
     /// 
-    /// # Example
+    /// # Examples
     /// 
+    /// Normalizing a vector.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -203,6 +338,32 @@ where
     /// assert_eq!(result, expected);
     /// assert_eq!(result.norm(), 1_f64);
     /// ```
+    /// 
+    /// Normalizing a matrix.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Normed,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(-f64::consts::FRAC_PI_3);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let matrix = Matrix3x3::from_axis_angle(&axis, angle);
+    /// 
+    /// // The norm of the matrix is not the same as the determinant.
+    /// assert_eq!(matrix.determinant(), 1_f64);
+    /// assert_eq!(matrix.norm(), f64::sqrt(3_f64));
+    /// 
+    /// let normalized_matrix = matrix.normalize();
+    /// let expected = 1_f64;
+    /// let result = normalized_matrix.norm();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     fn normalize(&self) -> Self;
 
     /// Normalize a vector to a unit vector mutably in place and return its norm 
@@ -210,6 +371,7 @@ where
     /// 
     /// # Example
     /// 
+    /// Mutably normalizing a vector.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -227,6 +389,36 @@ where
     /// assert_eq!(result, expected);
     /// assert_eq!(result.norm(), 1_f64);
     /// assert_eq!(old_norm, f64::sqrt(3_f64));
+    /// ```
+    /// 
+    /// Mutably normalizing a matrix.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Radians,
+    /// #     Unit,
+    /// #     Normed,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(-f64::consts::FRAC_PI_3);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let matrix = Matrix3x3::from_axis_angle(&axis, angle);
+    /// 
+    /// // The norm of the matrix is not the same as the determinant.
+    /// assert_eq!(matrix.determinant(), 1_f64);
+    /// assert_eq!(matrix.norm(), f64::sqrt(3_f64));
+    /// 
+    /// let mut normalized_matrix = matrix.clone();
+    /// let unnormalized_norm = normalized_matrix.normalize_mut();
+    /// 
+    /// assert_eq!(unnormalized_norm, matrix.norm());
+    /// 
+    /// let expected = 1_f64;
+    /// let result = normalized_matrix.norm();
+    /// 
+    /// assert_eq!(result, expected);
     /// ```
     fn normalize_mut(&mut self) -> Self::Output;
 
