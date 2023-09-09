@@ -565,44 +565,9 @@ where
     S: SimdScalarFloat 
 {
     #[inline]
-    fn from(src: Quaternion<S>) -> EulerAngles<Radians<S>> {
-        let sig: S = crate::cast(0.499);
-        let one: S = S::one();
-        let two: S = one + one;
-
-        let (qw, qx, qy, qz) = (src.s, src.v.x, src.v.y, src.v.z);
-        let (sqw, sqx, sqy, sqz) = (qw * qw, qx * qx, qy * qy, qz * qz);
-
-        let unit = sqx + sqz + sqy + sqw;
-        let test = qx * qz + qy * qw;
-
-        // We set x to zero and z to the value, but the other way would work too.
-        if test > sig * unit {
-            // x + z = 2 * atan(x / w)
-            EulerAngles::new(
-                Radians::zero(),
-                Radians::full_turn_div_4(),
-                Radians::atan2(qx, qw) * two,
-            )
-        } else if test < -sig * unit {
-            // x - z = 2 * atan(x / w)
-            EulerAngles::new(
-                 Radians::zero(),
-                -Radians::full_turn_div_4(),
-                -Radians::atan2(qx, qw) * two,
-            )
-        } else {
-            // Using the quat-to-matrix equation from either
-            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
-            // or equation 15 on page 7 of
-            // http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770024290.pdf
-            // to fill in the equations on page A-2 of the NASA document gives the below.
-            EulerAngles::new(
-                Radians::atan2(two * (-qy * qz + qx * qw), one - two * (sqx + sqy)),
-                Radians::asin(two * (qx * qz + qy * qw)),
-                Radians::atan2(two * (-qx * qy + qz * qw), one - two * (sqy + sqz)),
-            )
-        }
+    fn from(quaternion: Quaternion<S>) -> EulerAngles<Radians<S>> {
+        let rotation_matrix = quaternion.to_matrix3x3();
+        Self::from_matrix(&rotation_matrix)
     }
 }
 
