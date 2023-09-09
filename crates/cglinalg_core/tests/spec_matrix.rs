@@ -794,7 +794,7 @@ where
 /// m != 0 ==> dot(m, m) != 0
 /// ```
 /// which is the relation the property uses for testability reasons.
-fn prop_matrix_dot_product_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError> 
+fn prop_matrix_dot_product_nonzero<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
 {
@@ -803,33 +803,6 @@ where
 
     prop_assume!(m != zero_matrix);
     prop_assert_ne!(m.dot(&m), zero);
-
-    Ok(())
-}
-
-/// The matrix dot product is point separating.
-/// 
-/// Given matrices `m1` and `m2`, the dot product of `m1` with `m2` satisfies
-/// ```text
-/// dot(m1, m2) != 0 ==> m1 != m2
-/// ```
-/// Equivalently, the matrix dot product satisfies
-/// ```text
-/// m1 != m2 ==> dot(m1, m2) != 0
-/// ```
-/// which is the relation the property uses for testability reasons.
-fn prop_matrix_dot_product_point_separating2<S, const R: usize, const C: usize>(
-    m1: Matrix<S, R, C>, 
-    m2: Matrix<S, R, C>
-) -> Result<(), TestCaseError> 
-where
-    S: SimdScalar
-{
-    prop_assume!(m1 != m2);
-
-    let zero = S::zero();
-
-    prop_assert_ne!(m1.dot(&m2), zero);
 
     Ok(())
 }
@@ -1943,18 +1916,11 @@ macro_rules! exact_dot_product_props {
             }
 
             #[test]
-            fn prop_matrix_dot_product_point_separating1(m in super::$Generator()) {
+            fn prop_matrix_dot_product_nonzero(m in super::$Generator()) {
                 let m: super::$MatrixN<$ScalarType> = m;
-                super::prop_matrix_dot_product_point_separating1(m)?
+                super::prop_matrix_dot_product_nonzero(m)?
             }
-
-            #[test]
-            fn prop_matrix_dot_product_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
-                super::prop_matrix_dot_product_point_separating2(m1, m2)?
-            }
-
+            
             #[test]
             fn prop_matrix_dot_product_left_bilinear(
                 m1 in super::$Generator(),

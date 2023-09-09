@@ -1359,23 +1359,23 @@ where
     }
 
     #[inline]
-    fn scale(&self, norm: Self::Output) -> Self {
-        self * (norm / self.norm())
+    fn scale(&self, scale: Self::Output) -> Self {
+        self * scale
     }
 
     #[inline]
-    fn scale_mut(&mut self, norm: Self::Output) {
-        *self = self.scale(norm);
+    fn scale_mut(&mut self, scale: Self::Output) {
+        *self = self.scale(scale);
     }
 
     #[inline]
-    fn unscale(&self, norm: Self::Output) -> Self {
-        self * (Self::Output::one() / norm)
+    fn unscale(&self, scale: Self::Output) -> Self {
+        self * (Self::Output::one() / scale)
     }
 
     #[inline]
-    fn unscale_mut(&mut self, norm: Self::Output) {
-        *self = self.unscale(norm);
+    fn unscale_mut(&mut self, scale: Self::Output) {
+        *self = self.unscale(scale);
     }
     
     #[inline]

@@ -214,16 +214,6 @@ mod modulus_tests {
 
         assert_eq!(result, expected);
     }
-
-    #[test]
-    fn test_quaternion_normalized_to() {
-        let q = Quaternion::from_parts(3_f64, Vector3::new(34.8_f64, 75.1939_f64, 1.0366_f64));
-        let norm = 12_f64;
-        let result = q.scale(norm).modulus();
-        let expected = norm;
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
 }
 
 #[cfg(test)]
