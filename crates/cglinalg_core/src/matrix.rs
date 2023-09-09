@@ -1865,6 +1865,86 @@ where
     }
 }
 
+impl<S, const R: usize, const C: usize> Normed for Matrix<S, R, C>
+where
+    S: SimdScalarFloat
+{
+    type Output = S;
+    
+    #[inline]
+    fn norm_squared(&self) -> Self::Output {
+        self.norm_squared()
+    }
+    
+    #[inline]
+    fn norm(&self) -> Self::Output {
+        self.norm()
+    }
+    
+    #[inline]
+    fn scale(&self, scale: Self::Output) -> Self {
+        self * scale
+    }
+    
+    #[inline]
+    fn scale_mut(&mut self, scale: Self::Output) {
+        *self = self.scale(scale);
+    }
+    
+    #[inline]
+    fn unscale(&self, scale: Self::Output) -> Self {
+        self * (Self::Output::one() / scale)
+    }
+    
+    #[inline]
+    fn unscale_mut(&mut self, scale: Self::Output) {
+        *self = self.unscale(scale);
+    }
+
+    #[inline]
+    fn normalize(&self) -> Self {
+        self * (S::one() / self.norm())
+    }
+
+    #[inline]
+    fn normalize_mut(&mut self) -> Self::Output {
+        let norm = self.norm();
+        *self = self.normalize();
+        
+        norm
+    }
+    
+    #[inline]
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let norm = self.norm();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
+    
+    #[inline]
+    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
+        let norm = self.norm();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize_mut())
+        }
+    }
+    
+    #[inline]
+    fn distance_squared(&self, other: &Self) -> Self::Output {
+        self.metric_distance_squared(other)
+    }
+    
+    #[inline]
+    fn distance(&self, other: &Self) -> Self::Output {
+        self.metric_distance(other)
+    }
+}
+
 
 impl<S> Matrix1x1<S> {
     /// Construct a new matrix from its elements.
