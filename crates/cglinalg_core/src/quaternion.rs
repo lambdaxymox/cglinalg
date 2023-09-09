@@ -842,7 +842,8 @@ where
     /// ```
     #[inline]
     pub fn half(&self) -> Self {
-        let one_half: S = crate::cast(0.5);
+        let one = S::one();
+        let one_half = one / (one + one);
         
         self * one_half
     }
@@ -1122,7 +1123,8 @@ where
     /// ```
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
-        let one_half = crate::cast(0.5);
+        let one = S::one();
+        let one_half = one / (one + one);
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
         let _axis = axis.into_inner();
     
@@ -1158,8 +1160,9 @@ where
     /// ```
     #[inline]
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> Self {
+        let one = S::one();
+        let one_half = one / (one + one);
         let trace = matrix.trace();
-        let one_half: S = crate::cast(0.5);
         if trace >= S::zero() {
             let s = (S::one() + trace).sqrt();
             let qs = one_half * s;
@@ -2106,7 +2109,8 @@ where
             }
         } else {
             // Otherwise, we can treat the quaternion as normal.
-            let one_half: S = crate::cast(0.5);
+            let one = S::one();
+            let one_half = one / (one + one);
             let c = S::sqrt(one_half / (norm_self + self.scalar()));
 
             Self::from_parts((norm_self + self.scalar()) * c, self.vector() * c)
@@ -2877,7 +2881,7 @@ where
         // cosine we already calculated instead of calculating the angle from 
         // an inverse trigonometric function.
         let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
-        let threshold = crate::cast(0.001);
+        let threshold = crate::cast(0.0005);
         if SimdScalarSigned::abs(sin_half_theta) < threshold {
             return result.nlerp(other, amount);
         }

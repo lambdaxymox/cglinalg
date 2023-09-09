@@ -4837,7 +4837,8 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_orthographic_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
-        let one_half = crate::cast(0.5);
+        let one = S::one();
+        let one_half = one / (one + one);
         let width = far * Angle::tan(vfov.into() * one_half);
         let height = width / aspect;
 

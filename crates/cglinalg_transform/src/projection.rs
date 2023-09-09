@@ -1222,7 +1222,8 @@ where
     /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
-        let one_half: S = cglinalg_core::cast(0.5);
+        let one = S::one();
+        let one_half = one / (one + one);
         let c0r0 =  one_half * (self.right - self.left);
         let c1r1 =  one_half * (self.top - self.bottom);
         let c2r2 = -one_half * (self.far - self.near);
@@ -1268,7 +1269,8 @@ where
     /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        let one_half: S = cglinalg_core::cast(0.5_f64);
+        let one = S::one();
+        let one_half = one / (one + one);
         let c0r0 =  one_half * (self.right - self.left);
         let c1r1 =  one_half * (self.top - self.bottom);
         let c2r2 = -one_half * (self.far - self.near);
@@ -1625,7 +1627,8 @@ where
     /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
-        let one_half: S = cglinalg_core::cast(0.5_f64);
+        let one = S::one();
+        let one_half = one / (one + one);
         let width = self.far * Angle::tan(self.vfov * one_half);
         let height = width / self.aspect;
         let left = -width * one_half;
@@ -1681,7 +1684,8 @@ where
     /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        let one_half: S = cglinalg_core::cast(0.5_f64);
+        let one = S::one();
+        let one_half = one / (one + one);
         let width = self.far * Angle::tan(self.vfov * one_half);
         let height = width / self.aspect;
         let left = -width * one_half;
