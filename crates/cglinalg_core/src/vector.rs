@@ -20,9 +20,6 @@ use crate::{
     impl_coords,
     impl_coords_deref,
 };
-use num_traits::{
-    NumCast,
-};
 
 use core::fmt;
 use core::ops;
@@ -94,7 +91,7 @@ impl<S, const N: usize> Vector<S, N> {
 
 impl<S, const N: usize> Vector<S, N> 
 where 
-    S: NumCast + Copy
+    S: num_traits::NumCast + Copy
 {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
@@ -113,12 +110,15 @@ where
     /// ```
     #[allow(clippy::needless_range_loop)]
     #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Vector<T, N>> {
+    pub fn cast<T>(&self) -> Option<Vector<T, N>> 
+    where
+        T: num_traits::NumCast
+    {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut data: [T; N] = unsafe { core::mem::zeroed() };
         for i in 0..N {
-            data[i] = match num_traits::cast(self.data[i]) {
+            data[i] = match crate::try_cast(self.data[i]) {
                 Some(value) => value,
                 None => return None,
             };
@@ -713,7 +713,7 @@ where
             result += self.data[i].abs().powi(p as i32);
         }
         
-        result.powf(num_traits::cast((p as f64).recip()).unwrap())
+        result.powf(crate::cast((p as f64).recip()))
     }
 }
 

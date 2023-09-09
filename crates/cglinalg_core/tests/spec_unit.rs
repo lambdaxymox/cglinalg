@@ -30,7 +30,7 @@ where
     }
 
     any::<[S; N]>().prop_map(move |array| {
-        let abs_offset = num_traits::cast(1e-6_f64).unwrap();
+        let abs_offset = cglinalg_core::cast(1e-6_f64);
         let mut vector = Vector::zero();
         for i in 0..N {
             let signum = array[i].signum();
@@ -123,7 +123,7 @@ where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug
 {
-    let threshold = num_traits::cast(1e-8).unwrap();
+    let threshold = cglinalg_core::cast(1e-8);
     let result = Unit::try_from_value_with_norm(value, threshold);
 
     prop_assert!(result.is_some());
@@ -137,7 +137,7 @@ where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug
 {
-    let threshold = num_traits::cast(1e-8).unwrap();
+    let threshold = cglinalg_core::cast(1e-8);
     let result = Unit::try_from_value(value, threshold);
 
     prop_assert!(result.is_some());

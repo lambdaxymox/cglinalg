@@ -1350,7 +1350,7 @@ where
 
     let modulus_z = z.modulus();
     let principal_arg_z = z.arg();
-    let _k = num_traits::cast(k).unwrap();
+    let _k = cglinalg_core::cast(k);
     let arg_new_z = principal_arg_z + S::two_pi() * _k;
     let angle_new_z = Radians(arg_new_z);
     let new_z = Complex::from_polar_decomposition(modulus_z, angle_new_z);

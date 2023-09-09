@@ -1283,7 +1283,7 @@ where
 
     let (norm_q, _, axis_q) = q.polar_decomposition();
     let arg_q = q.arg();
-    let _k = num_traits::cast(k).unwrap();
+    let _k = cglinalg_core::cast(k);
     let arg_new_q = arg_q + S::two_pi() * _k;
     let angle_new_q = {
         // NOTE: The principal argument of the quaternion is half of the angle 
@@ -1333,7 +1333,7 @@ where
 {
     // Ensure that the vector part is sufficiently far from zero for the square 
     // root to be well-defined for `q`.
-    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = num_traits::cast(1e-6).unwrap()));
+    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = cglinalg_core::cast(1e-6)));
     
     let sqrt_q = q.sqrt();
     let lhs = sqrt_q * sqrt_q;
@@ -1359,7 +1359,7 @@ where
 {
     // Ensure that the vector part is sufficiently far from zero for the square 
     // root to be well-defined for `q`.
-    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = num_traits::cast(1e-4).unwrap()));
+    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = cglinalg_core::cast(1e-4)));
     
     let negative_q = -q;
     let sqrt_negative_q = negative_q.sqrt();

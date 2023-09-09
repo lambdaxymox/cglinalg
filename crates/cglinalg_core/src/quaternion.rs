@@ -24,9 +24,6 @@ use crate::point::{
 use crate::unit::{
     Unit,
 };
-use num_traits::{
-    NumCast,
-};
 
 use core::fmt;
 use core::ops;
@@ -112,7 +109,7 @@ impl<S> Quaternion<S> {
 
 impl<S> Quaternion<S> 
 where 
-    S: NumCast + Copy 
+    S: num_traits::NumCast + Copy 
 {
     /// Cast a quaternion from one type of scalars to another type of scalars.
     ///
@@ -130,7 +127,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Quaternion<T>> {
+    pub fn cast<T>(&self) -> Option<Quaternion<T>> 
+    where
+        T: num_traits::NumCast
+    {
         self.coords.cast().map(|new_coords| Quaternion { coords: new_coords })
     }
 }
@@ -842,7 +842,7 @@ where
     /// ```
     #[inline]
     pub fn half(&self) -> Self {
-        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        let one_half: S = crate::cast(0.5);
         
         self * one_half
     }
@@ -1122,7 +1122,7 @@ where
     /// ```
     #[inline]
     pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
-        let one_half = num_traits::cast(0.5_f64).unwrap();
+        let one_half = crate::cast(0.5);
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
         let _axis = axis.into_inner();
     
@@ -1159,7 +1159,7 @@ where
     #[inline]
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> Self {
         let trace = matrix.trace();
-        let one_half: S = num_traits::cast(0.5_f64).unwrap();
+        let one_half: S = crate::cast(0.5);
         if trace >= S::zero() {
             let s = (S::one() + trace).sqrt();
             let qs = one_half * s;
@@ -2106,7 +2106,7 @@ where
             }
         } else {
             // Otherwise, we can treat the quaternion as normal.
-            let one_half: S = num_traits::cast(0.5_f64).unwrap();
+            let one_half: S = crate::cast(0.5);
             let c = S::sqrt(one_half / (norm_self + self.scalar()));
 
             Self::from_parts((norm_self + self.scalar()) * c, self.vector() * c)
@@ -2877,7 +2877,7 @@ where
         // cosine we already calculated instead of calculating the angle from 
         // an inverse trigonometric function.
         let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
-        let threshold = num_traits::cast(0.001).unwrap();
+        let threshold = crate::cast(0.001);
         if SimdScalarSigned::abs(sin_half_theta) < threshold {
             return result.nlerp(other, amount);
         }

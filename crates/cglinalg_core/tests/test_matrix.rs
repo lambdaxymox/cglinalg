@@ -2196,9 +2196,6 @@ mod matrix4x4_tests {
     use approx::{
         assert_relative_eq,
     };
-    use num_traits::{
-        Zero,
-    };
 
 
     #[rustfmt::skip]
@@ -2805,7 +2802,7 @@ mod matrix4x4_tests {
             9_f64,  10_f64, 11_f64, 12_f64
         );
         
-        assert!(matrix.determinant().is_zero());
+        assert_eq!(matrix.determinant(), 0_f64);
     }
 
     #[rustfmt::skip]

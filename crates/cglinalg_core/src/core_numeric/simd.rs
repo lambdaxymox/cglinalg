@@ -8,6 +8,76 @@ use core::fmt;
 use core::ops;
 
 
+/// Cast a value from one primitive numeric type to another primitive numeric 
+/// type without checking that the result failed.
+/// 
+/// The main purpose of this function is to convert numeric constants inside 
+/// numeric algorithms between numeric data types in generic code.
+/// 
+/// # Example
+/// 
+/// ```
+/// # use cglinalg_core::{
+/// #     
+/// # };
+/// # use core::i16;
+/// # use core::i32;
+/// #
+/// let value_i16 = i16::MAX;
+/// let expected_i32 = 32767_i32;
+/// let result_i32: i32 = cglinalg_core::cast(value_i16);
+/// 
+/// assert_eq!(result_i32, expected_i32);
+/// 
+/// let expected_f32 = 32767_f32;
+/// let result_f32: f32 = cglinalg_core::cast(value_i16);
+/// 
+/// assert_eq!(result_f32, expected_f32);
+/// ```
+#[inline]
+pub fn cast<From, To>(value: From) -> To 
+where
+    From: num_traits::NumCast,
+    To: num_traits::NumCast
+{
+    num_traits::cast(value).unwrap()
+}
+
+/// Safely cast a value from one numeric type to another numeric type.
+/// 
+/// # Example
+/// 
+/// ```
+/// # use cglinalg_core::{
+/// #     
+/// # };
+/// # use core::i16;
+/// # use core::i32;
+/// # use core::i64;
+/// #
+/// let value_i16 = i16::MAX;
+/// let expected_i32 = Some(32767_i32);
+/// let result_i32: Option<i32> = cglinalg_core::try_cast(value_i16);
+/// 
+/// assert_eq!(result_i32, expected_i32);
+/// 
+/// let expected_f32 = Some(32767_f32);
+/// let result_f32: Option<f32> = cglinalg_core::try_cast(value_i16);
+/// 
+/// assert_eq!(result_f32, expected_f32);
+/// 
+/// assert!(cglinalg_core::try_cast::<f32, i32>(f32::MAX).is_none());
+/// ```
+#[inline]
+pub fn try_cast<From, To>(value: From) -> Option<To> 
+where
+    From: num_traits::NumCast,
+    To: num_traits::NumCast
+{
+    num_traits::cast(value)
+}
+
+
 /// A data type with this trait has the properties of a 
 /// set of scalar numbers underlying vector and matrix 
 /// data types.

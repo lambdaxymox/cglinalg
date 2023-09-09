@@ -22,7 +22,7 @@ where
     any::<S>()
         .prop_map(|dimensionless| {
             let two_pi = S::two_pi();
-            let one_hundred_million: S = num_traits::cast(100_000_000).unwrap();
+            let one_hundred_million: S = cglinalg_core::cast(100_000_000);
 
             Radians(dimensionless % (one_hundred_million * two_pi))
         })
@@ -35,8 +35,8 @@ where
 {
     any::<S>()
         .prop_map(|dimensionless| {
-            let two_pi: S = num_traits::cast(360_f64).unwrap();
-            let one_hundred_million: S = num_traits::cast(100_000_000).unwrap();
+            let two_pi: S = cglinalg_core::cast(360_f64);
+            let one_hundred_million: S = cglinalg_core::cast(100_000_000);
 
             Degrees(dimensionless % (one_hundred_million * two_pi))
         })

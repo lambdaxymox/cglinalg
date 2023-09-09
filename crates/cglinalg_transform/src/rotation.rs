@@ -658,7 +658,7 @@ where
     /// ```
     #[inline]
     pub fn angle(&self) -> Radians<S> {
-        let two = num_traits::cast(2_i8).unwrap();
+        let two = cglinalg_core::cast(2);
         Radians::acos((
             self.matrix.c0r0 + self.matrix.c1r1 + self.matrix.c2r2 - S::one()) / two
         )

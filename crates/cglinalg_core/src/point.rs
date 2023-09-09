@@ -24,9 +24,6 @@ use crate::{
     impl_coords,
     impl_coords_deref,
 };
-use num_traits::{
-    NumCast,
-};
 
 use core::fmt;
 use core::ops;
@@ -95,7 +92,7 @@ impl<S, const N: usize> Point<S, N> {
 
 impl<S, const N: usize> Point<S, N> 
 where 
-    S: NumCast + Copy
+    S: num_traits::NumCast + Copy
 {
     /// Cast a point from one type of scalars to another type of scalars.
     ///
@@ -113,7 +110,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Point<T, N>> {
+    pub fn cast<T>(&self) -> Option<Point<T, N>> 
+    where
+        T: num_traits::NumCast
+    {
         self.coords.cast::<T>().map(|coords| Point { coords })
     }
 }

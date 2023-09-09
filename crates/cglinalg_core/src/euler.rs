@@ -566,9 +566,9 @@ where
 {
     #[inline]
     fn from(src: Quaternion<S>) -> EulerAngles<Radians<S>> {
-        let sig: S = num_traits::cast(0.499).unwrap();
-        let two: S = num_traits::cast(2).unwrap();
-        let one: S = num_traits::cast(1).unwrap();
+        let sig: S = crate::cast(0.499);
+        let one: S = S::one();
+        let two: S = one + one;
 
         let (qw, qx, qy, qz) = (src.s, src.v.x, src.v.y, src.v.z);
         let (sqw, sqx, sqy, sqz) = (qw * qw, qx * qx, qy * qy, qz * qz);

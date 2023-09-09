@@ -3,9 +3,6 @@ use crate::core_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use num_traits::{
-    Zero,
-};
 
 use core::f64;
 use core::fmt;
@@ -287,7 +284,7 @@ where
     /// ```
     #[inline]
     fn full_turn_div_2() -> Self {
-        let denominator: Self::Dimensionless = num_traits::cast(2).unwrap();
+        let denominator: Self::Dimensionless = crate::cast(2);
         Self::full_turn() / denominator
     }
 
@@ -316,7 +313,7 @@ where
     /// ```
     #[inline]
     fn full_turn_div_4() -> Self {
-        let denominator: Self::Dimensionless = num_traits::cast(4).unwrap();
+        let denominator: Self::Dimensionless = crate::cast(4);
         Self::full_turn() / denominator
     }
 
@@ -345,7 +342,7 @@ where
     /// ```
     #[inline]
     fn full_turn_div_6() -> Self {
-        let denominator: Self::Dimensionless = num_traits::cast(6).unwrap();
+        let denominator: Self::Dimensionless = crate::cast(6);
         Self::full_turn() / denominator
     }
 
@@ -374,7 +371,7 @@ where
     /// ```
     #[inline]
     fn full_turn_div_8() -> Self {
-        let denominator: Self::Dimensionless = num_traits::cast(8).unwrap();
+        let denominator: Self::Dimensionless = crate::cast(8);
         Self::full_turn() / denominator
     }
 
@@ -495,7 +492,7 @@ where
     /// ```
     #[inline]
     fn bisect(self, other: Self) -> Self {
-        let one_half = num_traits::cast(0.5_f64).unwrap();
+        let one_half = crate::cast(0.5);
         Self::normalize((other - self) * one_half + self)
     }
 
@@ -756,7 +753,7 @@ where
 {
     #[inline]
     fn from(degrees: Degrees<S>) -> Self {
-        Self(degrees.0 * num_traits::cast(f64::consts::PI / 180_f64).unwrap())
+        Self(degrees.0 * crate::cast(f64::consts::PI / 180_f64))
     }
 }
 
@@ -766,7 +763,7 @@ where
 {
     #[inline]
     fn from(radians: Radians<S>) -> Self {
-        Self(radians.0 * num_traits::cast(180_f64 / f64::consts::PI).unwrap())
+        Self(radians.0 * crate::cast(180_f64 / f64::consts::PI))
     }
 }
 
@@ -1102,7 +1099,7 @@ where
     } 
 }
 
-impl<S> Zero for Degrees<S> 
+impl<S> num_traits::Zero for Degrees<S> 
 where 
     S: SimdScalar 
 {
@@ -1478,7 +1475,7 @@ where
     } 
 }
 
-impl<S> Zero for Radians<S> 
+impl<S> num_traits::Zero for Radians<S> 
 where 
     S: SimdScalar 
 {
@@ -1548,7 +1545,7 @@ where
 
     #[inline]
     fn full_turn() -> Self {
-        Self(num_traits::cast(2_f64 * f64::consts::PI).unwrap())
+        Self(crate::cast(2_f64 * f64::consts::PI))
     }
 
     #[inline]
@@ -1595,7 +1592,7 @@ where
 
     #[inline]
     fn full_turn() -> Self {
-        Self(num_traits::cast(360).unwrap())
+        Self(crate::cast(360))
     }
 
     #[inline]

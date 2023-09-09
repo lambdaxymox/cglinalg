@@ -39,9 +39,6 @@ use approx::{
     ulps_eq,
     ulps_ne,
 };
-use num_traits::{
-    NumCast,
-};
 
 use core::fmt;
 use core::ops;
@@ -676,7 +673,7 @@ where
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
 where 
-    S: NumCast + Copy 
+    S: num_traits::NumCast + Copy 
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
@@ -695,13 +692,16 @@ where
     /// ```
     #[allow(clippy::needless_range_loop)]
     #[inline]
-    pub fn cast<T: NumCast>(&self) -> Option<Matrix<T, R, C>> {
+    pub fn cast<T>(&self) -> Option<Matrix<T, R, C>> 
+    where
+        T: num_traits::NumCast
+    {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut data: [[T; R]; C] = unsafe { core::mem::zeroed() };
         for c in 0..C {
             for r in 0..R {
-                data[c][r] = match num_traits::cast(self.data[c][r]) {
+                data[c][r] = match crate::try_cast(self.data[c][r]) {
                     Some(value) => value,
                     None => return None,
                 };
@@ -4837,7 +4837,7 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_orthographic_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
-        let one_half = num_traits::cast(0.5).unwrap();
+        let one_half = crate::cast(0.5);
         let width = far * Angle::tan(vfov.into() * one_half);
         let height = width / aspect;
 

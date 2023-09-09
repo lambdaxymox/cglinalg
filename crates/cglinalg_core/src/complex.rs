@@ -10,9 +10,6 @@ use crate::angle::{
 use crate::norm::{
     Normed,
 };
-use num_traits::{
-    NumCast,
-};
 
 use core::fmt;
 use core::ops;
@@ -79,7 +76,7 @@ impl<S> Complex<S> {
 
 impl<S> Complex<S> 
 where 
-    S: NumCast + Copy 
+    S: num_traits::NumCast + Copy 
 {
     /// Cast a complex number from one type of scalars to another type of scalars.
     ///
@@ -97,12 +94,15 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn cast<T: NumCast>(self) -> Option<Complex<T>> {
-        let re = match num_traits::cast(self.re) {
+    pub fn cast<T>(self) -> Option<Complex<T>> 
+    where
+        T: num_traits::NumCast
+    {
+        let re = match crate::try_cast(self.re) {
             Some(value) => value,
             None => return None,
         };
-        let im = match num_traits::cast(self.im) {
+        let im = match crate::try_cast(self.im) {
             Some(value) => value,
             None => return None,
         };
