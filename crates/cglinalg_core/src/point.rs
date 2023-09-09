@@ -105,16 +105,16 @@ where
     /// #
     /// let point: Point3<u32> = Point3::new(1_u32, 2_u32, 3_u32);
     /// let expected: Option<Point3<i32>> = Some(Point3::new(1_i32, 2_i32, 3_i32));
-    /// let result = point.cast::<i32>();
+    /// let result = point.try_cast::<i32>();
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn cast<T>(&self) -> Option<Point<T, N>> 
+    pub fn try_cast<T>(&self) -> Option<Point<T, N>> 
     where
         T: num_traits::NumCast
     {
-        self.coords.cast::<T>().map(|coords| Point { coords })
+        self.coords.try_cast::<T>().map(|coords| Point { coords })
     }
 }
 

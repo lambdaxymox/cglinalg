@@ -122,16 +122,16 @@ where
     /// #
     /// let quaternion: Quaternion<u32> = Quaternion::new(1_u32, 2_u32, 3_u32, 4_u32);
     /// let expected: Option<Quaternion<i32>> = Some(Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32));
-    /// let result = quaternion.cast::<i32>();
+    /// let result = quaternion.try_cast::<i32>();
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn cast<T>(&self) -> Option<Quaternion<T>> 
+    pub fn try_cast<T>(&self) -> Option<Quaternion<T>> 
     where
         T: num_traits::NumCast
     {
-        self.coords.cast().map(|new_coords| Quaternion { coords: new_coords })
+        self.coords.try_cast().map(|new_coords| Quaternion { coords: new_coords })
     }
 }
 

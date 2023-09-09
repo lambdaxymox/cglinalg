@@ -686,13 +686,13 @@ where
     /// # 
     /// let matrix: Matrix2x2<u32> = Matrix2x2::new(1_u32, 2_u32, 3_u32, 4_u32);
     /// let expected: Option<Matrix2x2<i32>> = Some(Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32));
-    /// let result = matrix.cast::<i32>();
+    /// let result = matrix.try_cast::<i32>();
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[allow(clippy::needless_range_loop)]
     #[inline]
-    pub fn cast<T>(&self) -> Option<Matrix<T, R, C>> 
+    pub fn try_cast<T>(&self) -> Option<Matrix<T, R, C>> 
     where
         T: num_traits::NumCast
     {

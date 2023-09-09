@@ -104,13 +104,13 @@ where
     /// #
     /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
     /// let expected: Option<Vector4<i32>> = Some(Vector4::new(1_i32, 2_i32, 3_i32, 4_i32));
-    /// let result = vector.cast::<i32>();
+    /// let result = vector.try_cast::<i32>();
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[allow(clippy::needless_range_loop)]
     #[inline]
-    pub fn cast<T>(&self) -> Option<Vector<T, N>> 
+    pub fn try_cast<T>(&self) -> Option<Vector<T, N>> 
     where
         T: num_traits::NumCast
     {
