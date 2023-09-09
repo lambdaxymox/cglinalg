@@ -46,11 +46,6 @@ std = []
 version = "0.5.1"
 default-features = false
 
-[dependencies.num-traits]
-version = "0.2.16"
-default-features = false
-features = ["libm"]
-
 [dependencies.cglinalg_numeric]
 path = "../cglinalg_numeric"
 version = "0.16.10"
