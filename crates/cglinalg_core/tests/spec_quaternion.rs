@@ -53,34 +53,6 @@ where
     .no_shrink()
 }
 
-/*
-fn strategy_quaternion_polar_from_range_z_axis<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Quaternion<S>>
-where
-    S: SimdScalarFloat + Arbitrary
-{
-    use cglinalg_core::{
-        Radians,
-        Unit,
-    };
-
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
-    where
-        S: SimdScalarFloat
-    {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<(S, S)>().prop_map(move |(_scale, _angle)| {
-        let scale = SimdScalarSigned::abs(rescale(_scale, min_scale, max_scale));
-        let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
-        let axis = Unit::from_value(Vector3::unit_z());
-
-        Quaternion::from_polar_decomposition(scale, angle, &axis)
-    })
-    .no_shrink()
-}
-*/
-
 fn strategy_quaternion_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Quaternion<S>>
 where
     S: SimdScalarSigned + Arbitrary
@@ -188,17 +160,6 @@ fn strategy_quaternion_squared_any() -> impl Strategy<Value = Quaternion<f64>> {
 
     strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
-
-/*
-fn strategy_quaternion_squared_z_axis() -> impl Strategy<Value = Quaternion<f64>> {
-    let min_scale = 1e-4;
-    let max_scale = 100_f64;
-    let min_angle = 0_f64;
-    let max_angle = f64::two_pi();
-
-    strategy_quaternion_polar_from_range_z_axis(min_scale, max_scale, min_angle, max_angle)
-}
-*/
 
 fn strategy_quaternion_f64_exp() -> impl Strategy<Value = Quaternion<f64>> {
     let min_scale = f64::ln(f64::EPSILON) / 4_f64;
@@ -1346,39 +1307,6 @@ where
     Ok(())
 }
 
-/*
-/// The square of the square root of the negation of a quaternion is the 
-/// negation of the original quaternion.
-/// 
-/// Given a quaternion `q` such that `vector(q) != 0`
-/// ```text
-/// sqrt(-q) * sqrt(-q) == -q
-/// ```
-/// When `vector(q) == 0`, the quaterion square root is not well-defined.
-fn prop_approx_square_root_negative_quaternion_squared<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
-where
-    S: SimdScalarFloat
-{
-    // Ensure that the vector part is sufficiently far from zero for the square 
-    // root to be well-defined for `q`.
-    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = cglinalg_core::cast(1e-4)));
-    
-    let negative_q = -q;
-    let sqrt_negative_q = negative_q.sqrt();
-    let sqrt_negative_q_squared = sqrt_negative_q * sqrt_negative_q;
-    
-    let lhs = sqrt_negative_q_squared;
-    let rhs = negative_q;
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
-        "q = {:?};\n-q = {:?};\nsqrt(-q) = {:?};\nsqrt(-q) * sqrt(-q) = {:?}",
-        q, negative_q, sqrt_negative_q, lhs
-    );
-
-    Ok(())
-}
-*/
-
 /// The norm of the square root of the product of two quaternions is the product 
 /// of the norms of the square roots of the two quaternions separately.
 /// 
@@ -2212,14 +2140,6 @@ mod quaternion_f64_sqrt_props {
             let q: super::Quaternion<f64> = q;
             super::prop_approx_square_root_quaternion_squared(q, 1e-8, 1e-8)?
         }
-
-        /*
-        #[test]
-        fn prop_approx_square_root_negative_quaternion_squared(q in super::strategy_quaternion_squared_z_axis()) {
-            let q: super::Quaternion<f64> = q;
-            super::prop_approx_square_root_negative_quaternion_squared(q, 1e-6, 1e-6)?
-        }
-        */
 
         #[test]
         fn prop_approx_square_root_product_norm(q1 in super::strategy_quaternion_f64_sqrt_product(), q2 in super::strategy_quaternion_f64_sqrt_product()) {
