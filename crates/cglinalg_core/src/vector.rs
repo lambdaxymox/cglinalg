@@ -47,7 +47,7 @@ pub struct Vector<S, const N: usize> {
 }
 
 impl<S, const N: usize> Vector<S, N> {
-    /// Returns the length of the the underlying array storing the vector components.
+    /// Returns the length of the underlying array storing the vector components.
     #[inline]
     pub const fn len(&self) -> usize {
         N

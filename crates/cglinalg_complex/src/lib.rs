@@ -40,7 +40,7 @@ impl<S> Complex<S> {
         (2, 1)
     }
 
-    /// The length of the the underlying array storing the complex number components.
+    /// The length of the underlying array storing the complex number components.
     #[inline]
     pub const fn len(&self) -> usize {
         2

@@ -135,8 +135,7 @@ pub struct Matrix<S, const R: usize, const C: usize> {
 }
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
-    /// Returns the length of the the underlying array storing the matrix 
-    /// components.
+    /// Returns the length of the underlying array storing the matrix omponents.
     #[inline]
     pub const fn len(&self) -> usize {
         R * C
