@@ -6,6 +6,7 @@ extern crate cglinalg_core;
 mod storage_tests {
     use cglinalg_core::Quaternion;
 
+
     #[test]
     fn test_as_ref() {
         let q = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
@@ -181,9 +182,6 @@ mod modulus_tests {
         Quaternion,
         Normed,
         Vector3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -703,7 +701,6 @@ mod exp_ln_tests {
     };
 
     use core::f64;
-
 
 
     #[test]
