@@ -2823,6 +2823,29 @@ where
         self + (other - self) * amount
     }
 
+    /// Compute the normalized linear interpolation between two quaternions.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Normed,
+    /// # };
+    /// #
+    /// let v0 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
+    /// let v1 = Quaternion::new(10_f64, 20_f64, 30_f64, 40_f64);
+    /// let amount = 0.7_f64;
+    /// let expected = v0.lerp(&v1, amount).normalize();
+    /// let result = v0.nlerp(&v1, amount);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn nlerp(&self, other: &Self, amount: S) -> Self {
+        (self * (S::one() - amount) + other * amount).normalize()
+    }
+
     /// Spherically linearly interpolate between two unit quaternions.
     ///
     /// In the case where the angle between quaternions is 180 degrees, the
@@ -2867,6 +2890,11 @@ where
     /// ```
     #[inline]
     pub fn slerp(&self, other: &Self, amount: S) -> Self {
+        Self::slerp_eps(self, other, amount, cglinalg_numeric::cast(0.0005))
+    }
+
+    #[inline]
+    fn slerp_eps(&self, other: &Self, amount: S, lerp_threshold: S) -> Self {
         let zero = S::zero();
         let one = S::one();
         // There are two possible routes along a great circle arc between two 
@@ -2896,7 +2924,7 @@ where
             return result;
         }
 
-        // If `result` == `minus other` then the angle between them is 180 degrees.
+        // If `result == -other` then the angle between them is 180 degrees.
         // In this case the slerp function is not well defined because we can 
         // rotate around any axis normal to the plane swept out by `result` and
         // `other`.
@@ -2910,8 +2938,7 @@ where
         // cosine we already calculated instead of calculating the angle from 
         // an inverse trigonometric function.
         let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
-        let threshold = cglinalg_numeric::cast(0.0005);
-        if SimdScalarSigned::abs(sin_half_theta) < threshold {
+        if SimdScalarSigned::abs(sin_half_theta) < lerp_threshold {
             return result.nlerp(other, amount);
         }
         
@@ -2923,29 +2950,6 @@ where
         let q_vector = result.vector() * a + other.vector() * b;
 
         Self::from_parts(q_scalar, q_vector)
-    }
-
-    /// Compute the normalized linear interpolation between two quaternions.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// #     Normed,
-    /// # };
-    /// #
-    /// let v0 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
-    /// let v1 = Quaternion::new(10_f64, 20_f64, 30_f64, 40_f64);
-    /// let amount = 0.7_f64;
-    /// let expected = v0.lerp(&v1, amount).normalize();
-    /// let result = v0.nlerp(&v1, amount);
-    ///
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn nlerp(&self, other: &Self, amount: S) -> Self {
-        (self * (S::one() - amount) + other * amount).normalize()
     }
 
     /// Returns `true` if the elements of a quaternion are all finite. 
