@@ -101,14 +101,6 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
     strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
 
-fn strategy_scalar_i32_power() -> impl Strategy<Value = i32> {
-    let min_value = 0_i32;
-    // let max_value = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
-    let max_value = 100_i32;
-
-    strategy_scalar_signed_from_abs_range(min_value, max_value)
-}
-
 fn strategy_complex_f64_any() -> impl Strategy<Value = Complex<f64>> {
     let min_value = f64::sqrt(f64::EPSILON);
     let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
