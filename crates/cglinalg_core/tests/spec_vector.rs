@@ -1170,32 +1170,32 @@ where
 
 
 macro_rules! exact_arithmetic_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_vector_times_zero_equals_zero(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_vector_times_zero_equals_zero(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_times_zero_equals_zero(v)?
             }
 
             #[test]
-            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_vector_plus_zero_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_plus_zero_equals_vector(v)?
             }
 
             #[test]
-            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_zero_plus_vector_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_zero_plus_vector_equals_vector(v)?
             }
 
             #[test]
-            fn prop_vector_times_one_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_vector_times_one_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_times_one_equals_vector(v)?
             }
         }
@@ -1215,42 +1215,42 @@ exact_arithmetic_props!(vector4_f64_arithmetic_props, Vector4, f64, strategy_vec
 
 
 macro_rules! exact_add_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_vector_plus_zero_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_plus_zero_equals_vector(v)?
             }
 
             #[test]
-            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_zero_plus_vector_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_zero_plus_vector_equals_vector(v)?
             }
 
             #[test]
-            fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1, v2)?
             }
 
             #[test]
-            fn prop_vector_addition_commutative(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_vector_addition_commutative(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_vector_addition_commutative(v1, v2)?
             }
 
             #[test]
-            fn prop_vector_addition_associative(v1 in super::$Generator(), v2 in super::$Generator(), v3 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                let v3: super::$VectorN<$ScalarType> = v3;
+            fn prop_vector_addition_associative(v1 in super::$VectorGen(), v2 in super::$VectorGen(), v3 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
+                let v3: super::$VectorType<$ScalarType> = v3;
                 super::prop_vector_addition_associative(v1, v2, v3)?
             }
         }
@@ -1265,34 +1265,34 @@ exact_add_props!(vector4_i32_add_props, Vector4, i32, strategy_vector_any);
 
 
 macro_rules! approx_add_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_vector_plus_zero_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_vector_plus_zero_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_plus_zero_equals_vector(v)?
             }
 
             #[test]
-            fn prop_zero_plus_vector_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_zero_plus_vector_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_zero_plus_vector_equals_vector(v)?
             }
 
             #[test]
-            fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_vector1_plus_vector2_equals_refvector1_plus_refvector2(v1, v2)?
             }
 
             #[test]
-            fn prop_vector_addition_commutative(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_vector_addition_commutative(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_vector_addition_commutative(v1, v2)?
             }
         }
@@ -1307,27 +1307,27 @@ approx_add_props!(vector4_f64_add_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! exact_sub_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_vector_minus_zero_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_vector_minus_zero_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_minus_zero_equals_vector(v)?
             }
 
             #[test]
-            fn prop_vector_minus_vector_equals_zero(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_vector_minus_vector_equals_zero(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_minus_vector_equals_zero(v)?
             }
 
             #[test]
-            fn prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1, v2)?
             }
         }
@@ -1342,27 +1342,27 @@ exact_sub_props!(vector4_i32_sub_props, Vector4, i32, strategy_vector_any);
 
 
 macro_rules! approx_sub_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_vector_minus_zero_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_vector_minus_zero_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_minus_zero_equals_vector(v)?
             }
 
             #[test]
-            fn prop_vector_minus_vector_equals_zero(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_vector_minus_vector_equals_zero(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_minus_vector_equals_zero(v)?
             }
 
             #[test]
-            fn prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_vector1_minus_vector2_equals_refvector1_minus_refvector2(v1, v2)?
             }
         }
@@ -1377,22 +1377,22 @@ approx_sub_props!(vector4_f64_sub_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! exact_mul_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_scalar_multiplication_compatibility(a in super::$ScalarGen(), b in super::$ScalarGen(), v in super::$Generator()) {
+            fn prop_scalar_multiplication_compatibility(a in super::$ScalarGen(), b in super::$ScalarGen(), v in super::$VectorGen()) {
                 let a: $ScalarType = a;
                 let b: $ScalarType = b;
-                let v: super::$VectorN<$ScalarType> = v;
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_scalar_multiplication_compatibility(a, b, v)?
             }
 
             #[test]
-            fn prop_one_times_vector_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_one_times_vector_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_one_times_vector_equals_vector(v)?
             }
         }
@@ -1407,14 +1407,14 @@ exact_mul_props!(vector4_i32_mul_props, Vector4, i32, strategy_vector_any, strat
 
 
 macro_rules! approx_mul_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_one_times_vector_equals_vector(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_one_times_vector_equals_vector(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_one_times_vector_equals_vector(v)?
             }
         }
@@ -1429,40 +1429,40 @@ approx_mul_props!(vector4_f64_mul_props, Vector4, f64, strategy_vector_any);
 
 
 macro_rules! exact_distributive_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_scalar_vector_addition_right_distributive(a in super::$ScalarGen(), v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_scalar_vector_addition_right_distributive(a in super::$ScalarGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
                 let a: $ScalarType = a;
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_scalar_vector_addition_right_distributive(a, v1, v2)?
             }
 
             #[test]
-            fn prop_vector_scalar_addition_left_distributive(a in super::$ScalarGen(), b in super::$ScalarGen(), v in super::$Generator()) {
+            fn prop_vector_scalar_addition_left_distributive(a in super::$ScalarGen(), b in super::$ScalarGen(), v in super::$VectorGen()) {
                 let a: $ScalarType = a;
                 let b: $ScalarType = b;
-                let v: super::$VectorN<$ScalarType> = v;
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_scalar_addition_left_distributive(a, b, v)?
             }
 
             #[test]
-            fn prop_scalar_vector_addition_left_distributive(a in super::$ScalarGen(), v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_scalar_vector_addition_left_distributive(a in super::$ScalarGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
                 let a: $ScalarType = a;
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_scalar_vector_addition_left_distributive(a, v1, v2)?
             }
 
             #[test]
-            fn prop_vector_scalar_addition_right_distributive(a in super::$ScalarGen(), b in super::$ScalarGen(), v in super::$Generator()) {
+            fn prop_vector_scalar_addition_right_distributive(a in super::$ScalarGen(), b in super::$ScalarGen(), v in super::$VectorGen()) {
                 let a: $ScalarType = a;
                 let b: $ScalarType = b;
-                let v: super::$VectorN<$ScalarType> = v;
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_vector_scalar_addition_right_distributive(a, b, v)?
             }
         }
@@ -1477,60 +1477,60 @@ exact_distributive_props!(vector4_i32_distributive_props, Vector4, i32, strategy
 
 
 macro_rules! exact_dot_product_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_vector_dot_product_commutative(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_vector_dot_product_commutative(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_vector_dot_product_commutative(v1, v2)?
             }
 
             #[test]
-            fn prop_vector_dot_product_right_distributive(v1 in super::$Generator(), v2 in super::$Generator(), v3 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                let v3: super::$VectorN<$ScalarType> = v3;
+            fn prop_vector_dot_product_right_distributive(v1 in super::$VectorGen(), v2 in super::$VectorGen(), v3 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
+                let v3: super::$VectorType<$ScalarType> = v3;
                 super::prop_vector_dot_product_right_distributive(v1, v2, v3)?
             }
 
             #[test]
-            fn prop_vector_dot_product_left_distributive(v1 in super::$Generator(), v2 in super::$Generator(), v3 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                let v3: super::$VectorN<$ScalarType> = v3;
+            fn prop_vector_dot_product_left_distributive(v1 in super::$VectorGen(), v2 in super::$VectorGen(), v3 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
+                let v3: super::$VectorType<$ScalarType> = v3;
                 super::prop_vector_dot_product_left_distributive(v1, v2, v3)?
             }
 
             #[test]
-            fn prop_vector_dot_product_times_scalars_commutative(a in super::$ScalarGen(), b in super::$ScalarGen(), v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_vector_dot_product_times_scalars_commutative(a in super::$ScalarGen(), b in super::$ScalarGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
                 let a: $ScalarType = a;
                 let b: $ScalarType = b;
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_vector_dot_product_times_scalars_commutative(a, b, v1, v2)?
             }
 
             #[test]
-            fn prop_vector_dot_product_right_bilinear(a in super::$ScalarGen(), b in super::$ScalarGen(), v1 in super::$Generator(), v2 in super::$Generator(), v3 in super::$Generator()) {
+            fn prop_vector_dot_product_right_bilinear(a in super::$ScalarGen(), b in super::$ScalarGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen(), v3 in super::$VectorGen()) {
                 let a: $ScalarType = a;
                 let b: $ScalarType = b;
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                let v3: super::$VectorN<$ScalarType> = v3;
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
+                let v3: super::$VectorType<$ScalarType> = v3;
                 super::prop_vector_dot_product_right_bilinear(a, b, v1, v2, v3)?
             }
 
             #[test]
-            fn prop_vector_dot_product_left_bilinear(a in super::$ScalarGen(), b in super::$ScalarGen(), v1 in super::$Generator(), v2 in super::$Generator(), v3 in super::$Generator()) {
+            fn prop_vector_dot_product_left_bilinear(a in super::$ScalarGen(), b in super::$ScalarGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen(), v3 in super::$VectorGen()) {
                 let a: $ScalarType = a;
                 let b: $ScalarType = b;
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
-                let v3: super::$VectorN<$ScalarType> = v3;
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
+                let v3: super::$VectorType<$ScalarType> = v3;
                 super::prop_vector_dot_product_left_bilinear(a, b, v1, v2, v3)?
             }
         }
@@ -1545,19 +1545,19 @@ exact_dot_product_props!(vector4_i32_dot_product_props, Vector4, i32, strategy_v
 
 
 macro_rules! exact_cross_product_props {
-    ($TestModuleName:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_vector_cross_itself_is_zero(v in super::$Generator()) {
+            fn prop_vector_cross_itself_is_zero(v in super::$VectorGen()) {
                 let v: super::Vector3<$ScalarType> = v;
                 super::prop_vector_cross_itself_is_zero(v)?
             }
 
             #[test]
-            fn prop_vector_cross_product_multiplication_by_scalars(c in super::$ScalarGen(), v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_vector_cross_product_multiplication_by_scalars(c in super::$ScalarGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
                 let c: $ScalarType = c;
                 let v1: super::Vector3<$ScalarType> = v1;
                 let v2: super::Vector3<$ScalarType> = v2;
@@ -1565,7 +1565,7 @@ macro_rules! exact_cross_product_props {
             }
 
             #[test]
-            fn prop_vector_cross_product_distribute(v1 in super::$Generator(), v2 in super::$Generator(), v3 in super::$Generator()) {
+            fn prop_vector_cross_product_distribute(v1 in super::$VectorGen(), v2 in super::$VectorGen(), v3 in super::$VectorGen()) {
                 let v1: super::Vector3<$ScalarType> = v1;
                 let v2: super::Vector3<$ScalarType> = v2;
                 let v3: super::Vector3<$ScalarType> = v3;
@@ -1573,7 +1573,7 @@ macro_rules! exact_cross_product_props {
             }
 
             #[test]
-            fn prop_vector_cross_product_scalar_triple_product(v1 in super::$Generator(), v2 in super::$Generator(), v3 in super::$Generator()) {
+            fn prop_vector_cross_product_scalar_triple_product(v1 in super::$VectorGen(), v2 in super::$VectorGen(), v3 in super::$VectorGen()) {
                 let v1: super::Vector3<$ScalarType> = v1;
                 let v2: super::Vector3<$ScalarType> = v2;
                 let v3: super::Vector3<$ScalarType> = v3;
@@ -1581,14 +1581,14 @@ macro_rules! exact_cross_product_props {
             }
 
             #[test]
-            fn prop_vector_cross_product_anticommutative(v1 in super::$Generator(), v2 in super::$Generator()) {
+            fn prop_vector_cross_product_anticommutative(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
                 let v1: super::Vector3<$ScalarType> = v1;
                 let v2: super::Vector3<$ScalarType> = v2;
                 super::prop_vector_cross_product_anticommutative(v1, v2)?
             }
 
             #[test]
-            fn prop_vector_cross_product_satisfies_vector_triple_product(v1 in super::$Generator(), v2 in super::$Generator(), v3 in super::$Generator()) {
+            fn prop_vector_cross_product_satisfies_vector_triple_product(v1 in super::$VectorGen(), v2 in super::$VectorGen(), v3 in super::$VectorGen()) {
                 let v1: super::Vector3<$ScalarType> = v1;
                 let v2: super::Vector3<$ScalarType> = v2;
                 let v3: super::Vector3<$ScalarType> = v3;
@@ -1603,27 +1603,27 @@ exact_cross_product_props!(vector3_i32_cross_product_props, i32, strategy_vector
 
 
 macro_rules! exact_norm_squared_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_norm_squared_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_norm_squared_nonnegative(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_norm_squared_nonnegative(v)?
             }
 
             #[test]
-            fn prop_norm_squared_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_norm_squared_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_norm_squared_point_separating(v1, v2)?
             }
 
             #[test]
-            fn prop_norm_squared_homogeneous_squared(v in super::$Generator(), c in super::$ScalarGen()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_norm_squared_homogeneous_squared(v in super::$VectorGen(), c in super::$ScalarGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 let c: $ScalarType = c;
                 super::prop_norm_squared_homogeneous_squared(v, c)?
             }
@@ -1639,14 +1639,14 @@ exact_norm_squared_props!(vector4_i32_norm_squared_props, Vector4, i32, strategy
 
 
 macro_rules! exact_norm_squared_synonym_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_magnitude_squared_norm_squared_synonyms(v)?
             }
         }
@@ -1661,21 +1661,21 @@ exact_norm_squared_synonym_props!(vector4_i32_norm_squared_synonym_props, Vector
 
 
 macro_rules! approx_norm_squared_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $input_tolerance:expr, $output_tolerance:expr) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $input_tolerance:expr, $output_tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_norm_squared_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_norm_squared_nonnegative(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_norm_squared_nonnegative(v)?
             }
 
             #[test]
-            fn prop_approx_norm_squared_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_approx_norm_squared_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_approx_norm_squared_point_separating(v1, v2, $input_tolerance, $output_tolerance)?
             }
         }
@@ -1690,14 +1690,14 @@ approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, strateg
 
 
 macro_rules! approx_norm_squared_synonym_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_magnitude_squared_norm_squared_synonyms(v)?
             }
         }
@@ -1712,21 +1712,21 @@ approx_norm_squared_synonym_props!(vector4_f64_norm_squared_synonym_props, Vecto
 
 
 macro_rules! approx_norm_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_norm_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_norm_nonnegative(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_norm_nonnegative(v)?
             }
 
             #[test]
-            fn prop_approx_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_approx_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_approx_norm_point_separating(v1, v2, $tolerance)?
             }
         }
@@ -1741,35 +1741,35 @@ approx_norm_props!(vector4_f64_norm_props, Vector4, f64, strategy_vector_any, st
 
 
 macro_rules! exact_l1_norm_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_l1_norm_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_l1_norm_nonnegative(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_l1_norm_nonnegative(v)?
             }
 
             #[test]
-            fn prop_l1_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_l1_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_l1_norm_point_separating(v1, v2)?
             }
 
             #[test]
-            fn prop_l1_norm_homogeneous(v in super::$Generator(), c in super::$ScalarGen()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_l1_norm_homogeneous(v in super::$VectorGen(), c in super::$ScalarGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 let c: $ScalarType = c;
                 super::prop_l1_norm_homogeneous(v, c)?
             }
     
             #[test]
-            fn prop_l1_norm_triangle_inequality(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_l1_norm_triangle_inequality(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_l1_norm_triangle_inequality(v1, v2)?
             }
         }
@@ -1784,21 +1784,21 @@ exact_l1_norm_props!(vector4_i32_l1_norm_props, Vector4, i32, strategy_vector_i3
 
 
 macro_rules! approx_l1_norm_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_l1_norm_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_l1_norm_nonnegative(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_l1_norm_nonnegative(v)?
             }
 
             #[test]
-            fn prop_approx_l1_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_approx_l1_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_approx_l1_norm_point_separating(v1, v2, $tolerance)?
             }
         }
@@ -1813,21 +1813,21 @@ approx_l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, strategy_vector_a
 
 
 macro_rules! approx_lp_norm_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $DegreeGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident, $DegreeGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_lp_norm_nonnegative(v in super::$Generator(), p in super::$DegreeGen()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_lp_norm_nonnegative(v in super::$VectorGen(), p in super::$DegreeGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_lp_norm_nonnegative(v, p)?
             }
 
             #[test]
-            fn prop_approx_lp_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator(), p in super::$DegreeGen()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_approx_lp_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen(), p in super::$DegreeGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_approx_lp_norm_point_separating(v1, v2, p, $tolerance)?
             }
         }
@@ -1842,35 +1842,35 @@ approx_lp_norm_props!(vector4_f64_lp_norm_props, Vector4, f64, strategy_vector_a
 
 
 macro_rules! exact_linf_norm_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_linf_norm_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_linf_norm_nonnegative(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_linf_norm_nonnegative(v)?
             }
 
             #[test]
-            fn prop_linf_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_linf_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_linf_norm_point_separating(v1, v2)?
             }
 
             #[test]
-            fn prop_linf_norm_homogeneous(v in super::$Generator(), c in super::$ScalarGen()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_linf_norm_homogeneous(v in super::$VectorGen(), c in super::$ScalarGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 let c: $ScalarType = c;
                 super::prop_linf_norm_homogeneous(v, c)?
             }
     
             #[test]
-            fn prop_linf_norm_triangle_inequality(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_linf_norm_triangle_inequality(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_linf_norm_triangle_inequality(v1, v2)?
             }
         }
@@ -1885,35 +1885,35 @@ exact_linf_norm_props!(vector4_i32_linf_norm_props, Vector4, i32, strategy_vecto
 
 
 macro_rules! approx_linf_norm_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident, $tolerance:expr) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident, $tolerance:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_linf_norm_nonnegative(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_linf_norm_nonnegative(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_linf_norm_nonnegative(v)?
             }
 
             #[test]
-            fn prop_approx_linf_norm_point_separating(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_approx_linf_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_approx_linf_norm_point_separating(v1, v2, $tolerance)?
             }
 
             #[test]
-            fn prop_linf_norm_homogeneous(v in super::$Generator(), c in super::$ScalarGen()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_linf_norm_homogeneous(v in super::$VectorGen(), c in super::$ScalarGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 let c: $ScalarType = c;
                 super::prop_linf_norm_homogeneous(v, c)?
             }
     
             #[test]
-            fn prop_linf_norm_triangle_inequality(v1 in super::$Generator(), v2 in super::$Generator()) {
-                let v1: super::$VectorN<$ScalarType> = v1;
-                let v2: super::$VectorN<$ScalarType> = v2;
+            fn prop_linf_norm_triangle_inequality(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                let v1: super::$VectorType<$ScalarType> = v1;
+                let v2: super::$VectorType<$ScalarType> = v2;
                 super::prop_linf_norm_triangle_inequality(v1, v2)?
             }
         }
@@ -1929,20 +1929,20 @@ approx_linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, strategy_vect
 
 
 macro_rules! norm_synonym_props {
-    ($TestModuleName:ident, $VectorN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_magnitude_norm_synonyms(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_magnitude_norm_synonyms(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_magnitude_norm_synonyms(v)?
             }
 
             #[test]
-            fn prop_l2_norm_norm_synonyms(v in super::$Generator()) {
-                let v: super::$VectorN<$ScalarType> = v;
+            fn prop_l2_norm_norm_synonyms(v in super::$VectorGen()) {
+                let v: super::$VectorType<$ScalarType> = v;
                 super::prop_l2_norm_norm_synonyms(v)?
             }
         }

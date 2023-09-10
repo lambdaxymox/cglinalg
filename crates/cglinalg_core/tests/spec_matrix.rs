@@ -1500,34 +1500,34 @@ where
 
 
 macro_rules! approx_arithmetic_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_additive_identity(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_additive_identity(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_additive_identity(m)?
             }
         
             #[test]
-            fn prop_matrix_plus_zero_equals_zero(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_plus_zero_equals_zero(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_plus_zero_equals_zero(m)?
             }
 
             #[test]
-            fn prop_matrix_addition_commutative(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_addition_commutative(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_addition_commutative(m1, m2)?
             }
 
             #[test]
-            fn prop_matrix_subtraction(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_subtraction(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_subtraction(m1, m2)?
             }
         }
@@ -1542,42 +1542,42 @@ approx_arithmetic_props!(matrix4x4_f64_arithmetic_props, Matrix4x4, f64, strateg
 
 
 macro_rules! exact_arithmetic_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_additive_identity(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_additive_identity(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_additive_identity(m)?
             }
         
             #[test]
-            fn prop_matrix_plus_zero_equals_zero(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_plus_zero_equals_zero(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_plus_zero_equals_zero(m)?
             }
 
             #[test]
-            fn prop_matrix_addition_commutative(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_addition_commutative(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_addition_commutative(m1, m2)?
             }
 
             #[test]
-            fn prop_matrix_subtraction(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_subtraction(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_subtraction(m1, m2)?
             }
 
             #[test]
-            fn prop_matrix_addition_associative(m1 in super::$Generator(), m2 in super::$Generator(), m3 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
-                let m3: super::$MatrixN<$ScalarType> = m3;
+            fn prop_matrix_addition_associative(m1 in super::$MatrixGen(), m2 in super::$MatrixGen(), m3 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
+                let m3: super::$MatrixType<$ScalarType> = m3;
                 super::prop_matrix_addition_associative(m1, m2, m3)?
             }
         }
@@ -1599,33 +1599,33 @@ exact_arithmetic_props!(matrix4x3_i32_arithmetic_props, Matrix4x3, i32, strategy
 
 
 macro_rules! approx_scalar_multiplication_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_zero_times_matrix_equals_zero_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_zero_times_matrix_equals_zero_matrix(m)?
             }
 
             #[test]
-            fn prop_one_times_matrix_equals_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_one_times_matrix_equals_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_one_times_matrix_equals_matrix(m)?
             }
 
             #[test]
-            fn prop_negative_one_times_matrix_equals_negative_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_negative_one_times_matrix_equals_negative_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_negative_one_times_matrix_equals_negative_matrix(m)?
             }
 
             #[test]
-            fn prop_scalar_matrix_multiplication_commutative(c in super::$ScalarGen(), m in super::$Generator()) {
+            fn prop_scalar_matrix_multiplication_commutative(c in super::$ScalarGen(), m in super::$MatrixGen()) {
                 let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_scalar_matrix_multiplication_commutative(c, m)?
             }
         }
@@ -1664,7 +1664,7 @@ approx_scalar_multiplication_props!(
 
 
 macro_rules! exact_scalar_multiplication_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -1672,43 +1672,43 @@ macro_rules! exact_scalar_multiplication_props {
             #[test]
             fn prop_scalar_matrix_multiplication_compatible_addition(
                 c in super::$ScalarGen(), 
-                m1 in super::$Generator(), 
-                m2 in super::$Generator()
+                m1 in super::$MatrixGen(), 
+                m2 in super::$MatrixGen()
             ) {
                 let c: $ScalarType = c;
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_scalar_matrix_multiplication_compatible_addition(c, m1, m2)?
             }
 
             #[test]
             fn prop_scalar_matrix_multiplication_compatible_subtraction(
                 c in super::$ScalarGen(), 
-                m1 in super::$Generator(), 
-                m2 in super::$Generator()
+                m1 in super::$MatrixGen(), 
+                m2 in super::$MatrixGen()
             ) {
                 let c: $ScalarType = c;
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_scalar_matrix_multiplication_compatible_subtraction(c, m1, m2)?
             }
 
             #[test]
-            fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_zero_times_matrix_equals_zero_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_zero_times_matrix_equals_zero_matrix(m)?
             }
 
             #[test]
-            fn prop_one_times_matrix_equals_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_one_times_matrix_equals_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_one_times_matrix_equals_matrix(m)?
             }
 
             #[test]
-            fn prop_scalar_matrix_multiplication_commutative(c in super::$ScalarGen(), m in super::$Generator()) {
+            fn prop_scalar_matrix_multiplication_commutative(c in super::$ScalarGen(), m in super::$MatrixGen()) {
                 let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_scalar_matrix_multiplication_commutative(c, m)?
             }
 
@@ -1716,11 +1716,11 @@ macro_rules! exact_scalar_multiplication_props {
             fn prop_scalar_matrix_multiplication_compatible(
                 a in super::$ScalarGen(), 
                 b in super::$ScalarGen(), 
-                m in super::$Generator()
+                m in super::$MatrixGen()
             ) {
                 let a: $ScalarType = a;
                 let b: $ScalarType = b;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_scalar_matrix_multiplication_compatible(a, b, m)?
             }
         }
@@ -1735,44 +1735,44 @@ exact_scalar_multiplication_props!(matrix4x4_i32_scalar_multiplication_props, Ma
 
 
 macro_rules! exact_multiplication_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
             fn prop_matrix_multiplication_associative(
-                m1 in super::$Generator(), 
-                m2 in super::$Generator(), 
-                m3 in super::$Generator()
+                m1 in super::$MatrixGen(), 
+                m2 in super::$MatrixGen(), 
+                m3 in super::$MatrixGen()
             ) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
-                let m3: super::$MatrixN<$ScalarType> = m3;
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
+                let m3: super::$MatrixType<$ScalarType> = m3;
                 super::prop_matrix_multiplication_associative(m1, m2, m3)?
             }
 
             #[test]
             fn prop_matrix_multiplication_distributive(
-                m1 in super::$Generator(), 
-                m2 in super::$Generator(), 
-                m3 in super::$Generator()
+                m1 in super::$MatrixGen(), 
+                m2 in super::$MatrixGen(), 
+                m3 in super::$MatrixGen()
             ) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
-                let m3: super::$MatrixN<$ScalarType> = m3;
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
+                let m3: super::$MatrixType<$ScalarType> = m3;
                 super::prop_matrix_multiplication_distributive(m1, m2, m3)?
             }
 
             #[test]
             fn prop_matrix_multiplication_compatible_with_scalar_multiplication(
                 c in super::$ScalarGen(), 
-                m1 in super::$Generator(), 
-                m2 in super::$Generator()
+                m1 in super::$MatrixGen(), 
+                m2 in super::$MatrixGen()
             ) {
                 let c: $ScalarType = c;
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_multiplication_compatible_with_scalar_multiplication(c, m1, m2)?
             }
 
@@ -1780,23 +1780,23 @@ macro_rules! exact_multiplication_props {
             fn prop_matrix_multiplication_compatible_with_scalar_multiplication1(
                 c1 in super::$ScalarGen(), 
                 c2 in super::$ScalarGen(), 
-                m in super::$Generator()
+                m in super::$MatrixGen()
             ) {
                 let c1: $ScalarType = c1;
                 let c2: $ScalarType = c2;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_multiplication_compatible_with_scalar_multiplication1(c1, c2, m)?
             }
 
             #[test]
-            fn prop_zero_matrix_times_matrix_equals_zero_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_zero_matrix_times_matrix_equals_zero_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_zero_matrix_times_matrix_equals_zero_matrix(m)?
             }
 
             #[test]
-            fn prop_matrix_multiplication_identity(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_multiplication_identity(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_multiplication_identity(m)?
             }
         }
@@ -1811,26 +1811,26 @@ exact_multiplication_props!(matrix4x4_i32_matrix_multiplication_props, Matrix4x4
 
 
 macro_rules! approx_multiplication_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_multiplication_identity(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_multiplication_identity(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_multiplication_identity(m)?
             }
 
             #[test]
-            fn prop_zero_matrix_times_matrix_equals_zero_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_zero_matrix_times_matrix_equals_zero_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_zero_matrix_times_matrix_equals_zero_matrix(m)?
             }
 
             #[test]
-            fn prop_zero_times_matrix_equals_zero_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_zero_times_matrix_equals_zero_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_zero_times_matrix_equals_zero_matrix(m)?
             }
         }
@@ -1845,35 +1845,35 @@ approx_multiplication_props!(matrix4x4_f64_matrix_multiplication_props, Matrix4x
 
 
 macro_rules! exact_transposition_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_transpose_transpose_equals_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_transpose_transpose_equals_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_transpose_transpose_equals_matrix(m)?
             }
 
             #[test]
-            fn prop_transpose_linear(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_transpose_linear(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_transpose_linear(m1, m2)?
             }
 
             #[test]
-            fn prop_transpose_scalar_multiplication(c in super::$ScalarGen(), m in super::$Generator()) {
+            fn prop_transpose_scalar_multiplication(c in super::$ScalarGen(), m in super::$MatrixGen()) {
                 let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_transpose_scalar_multiplication(c, m)?
             }
 
             #[test]
-            fn prop_transpose_product(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_transpose_product(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_transpose_product(m1, m2)?
             }
         }
@@ -1888,35 +1888,35 @@ exact_transposition_props!(matrix4x4_i32_transposition_props, Matrix4x4, i32, st
 
 
 macro_rules! approx_transposition_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_transpose_transpose_equals_matrix(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_transpose_transpose_equals_matrix(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_transpose_transpose_equals_matrix(m)?
             }
 
             #[test]
-            fn prop_transpose_linear(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_transpose_linear(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_transpose_linear(m1, m2)?
             }
 
             #[test]
-            fn prop_transpose_scalar_multiplication(c in super::$ScalarGen(), m in super::$Generator()) {
+            fn prop_transpose_scalar_multiplication(c in super::$ScalarGen(), m in super::$MatrixGen()) {
                 let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_transpose_scalar_multiplication(c, m)?
             }
 
             #[test]
-            fn prop_transpose_product(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_transpose_product(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_transpose_product(m1, m2)?
             }
         }
@@ -1931,85 +1931,85 @@ approx_transposition_props!(matrix4x4_f64_transposition_props, Matrix4x4, f64, s
 
 
 macro_rules! swap_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $UpperBound:expr) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $UpperBound:expr) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
             fn prop_swap_rows_commutative(
-                m in super::$Generator(), 
+                m in super::$MatrixGen(), 
                 row1 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize
             ) {
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_swap_rows_commutative(m, row1, row2)?
             }
 
             #[test]
-            fn prop_swap_identical_rows_identity(m in super::$Generator(), row in 0..$UpperBound as usize) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_swap_identical_rows_identity(m in super::$MatrixGen(), row in 0..$UpperBound as usize) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_swap_identical_rows_identity(m, row)?
             }
 
             #[test]
             fn prop_swap_rows_twice_is_identity(
-                m in super::$Generator(), 
+                m in super::$MatrixGen(), 
                 row1 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize
             ) {
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_swap_rows_twice_is_identity(m, row1, row2)?
             }
 
             #[test]
             fn prop_swap_columns_commutative(
-                m in super::$Generator(), 
+                m in super::$MatrixGen(), 
                 col1 in 0..$UpperBound as usize, col2 in 0..$UpperBound as usize
             ) {
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_swap_columns_commutative(m, col1, col2)?
             }
 
             #[test]
-            fn prop_swap_identical_columns_is_identity(m in super::$Generator(), col in 0..$UpperBound as usize) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_swap_identical_columns_is_identity(m in super::$MatrixGen(), col in 0..$UpperBound as usize) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_swap_identical_columns_is_identity(m, col)?
             }
 
             #[test]
             fn prop_swap_columns_twice_is_identity(
-                m in super::$Generator(), 
+                m in super::$MatrixGen(), 
                 col1 in 0..$UpperBound as usize, col2 in 0..$UpperBound as usize
             ) {
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_swap_columns_twice_is_identity(m, col1, col2)?
             }
 
             #[test]
             fn prop_swap_elements_commutative(
-                m in super::$Generator(), 
+                m in super::$MatrixGen(), 
                 col1 in 0..$UpperBound as usize, row1 in 0..$UpperBound as usize,
                 col2 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize
             ) {
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_swap_elements_commutative(m, col1, row1, col2, row2)?
             }
 
             #[test]
             fn prop_swap_identical_elements_is_identity(
-                m in super::$Generator(), 
+                m in super::$MatrixGen(), 
                 col in 0..$UpperBound as usize, row in 0..$UpperBound as usize
             ) {
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_swap_identical_elements_is_identity(m, col, row)?
             }
 
             #[test]
             fn prop_swap_elements_twice_is_identity(
-                m in super::$Generator(),
+                m in super::$MatrixGen(),
                 col1 in 0..$UpperBound as usize, row1 in 0..$UpperBound as usize, 
                 col2 in 0..$UpperBound as usize, row2 in 0..$UpperBound as usize
             ) {
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_swap_elements_twice_is_identity(m, col1, row1, col2, row2)?
             }
         }
@@ -2024,44 +2024,44 @@ swap_props!(matrix4x4_swap_props, Matrix4x4, i32, strategy_matrix_i32_any, 4);
 
 
 macro_rules! exact_dot_product_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_dot_product_nonnegative(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_dot_product_nonnegative(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_dot_product_nonnegative(m)?
             }
 
             #[test]
-            fn prop_matrix_dot_product_nonzero(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_dot_product_nonzero(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_dot_product_nonzero(m)?
             }
 
             #[test]
             fn prop_matrix_dot_product_left_bilinear(
-                m1 in super::$Generator(),
-                m2 in super::$Generator(),
-                m3 in super::$Generator()
+                m1 in super::$MatrixGen(),
+                m2 in super::$MatrixGen(),
+                m3 in super::$MatrixGen()
             ) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
-                let m3: super::$MatrixN<$ScalarType> = m3;
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
+                let m3: super::$MatrixType<$ScalarType> = m3;
                 super::prop_matrix_dot_product_left_bilinear(m1, m2, m3)?
             }
 
             #[test]
             fn prop_matrix_dot_product_right_bilinear(
-                m1 in super::$Generator(),
-                m2 in super::$Generator(),
-                m3 in super::$Generator()
+                m1 in super::$MatrixGen(),
+                m2 in super::$MatrixGen(),
+                m3 in super::$MatrixGen()
             ) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
-                let m3: super::$MatrixN<$ScalarType> = m3;
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
+                let m3: super::$MatrixType<$ScalarType> = m3;
                 super::prop_matrix_dot_product_right_bilinear(m1, m2, m3)?
             }
 
@@ -2069,13 +2069,13 @@ macro_rules! exact_dot_product_props {
             fn prop_matrix_dot_product_homogeneous(
                 c1 in super::$ScalarGen(), 
                 c2 in super::$ScalarGen(), 
-                m1 in super::$Generator(),
-                m2 in super::$Generator(),
+                m1 in super::$MatrixGen(),
+                m2 in super::$MatrixGen(),
             ) {
                 let c1: $ScalarType = c1;
                 let c2: $ScalarType = c2;
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_dot_product_homogeneous(c1, c2, m1, m2)?
             }
         }
@@ -2097,41 +2097,41 @@ exact_dot_product_props!(matrix4x3_i32_dot_product_props, Matrix4x3, i32, strate
 
 
 macro_rules! exact_l1_norm_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_l1_norm_nonnegative(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_l1_norm_nonnegative(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_l1_norm_nonnegative(m)?
             }
 
             #[test]
-            fn prop_matrix_l1_norm_point_separating1(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_l1_norm_point_separating1(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_l1_norm_point_separating1(m)?
             }
 
             #[test]
-            fn prop_matrix_l1_norm_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_l1_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_l1_norm_point_separating2(m1, m2)?
             }
 
             #[test]
-            fn prop_matrix_l1_norm_homogeneous(c in super::$ScalarGen(), m in super::$Generator()) {
+            fn prop_matrix_l1_norm_homogeneous(c in super::$ScalarGen(), m in super::$MatrixGen()) {
                 let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_l1_norm_homogeneous(c, m)?
             }
 
             #[test]
-            fn prop_matrix_l1_norm_triangle_inequality(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_l1_norm_triangle_inequality(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_l1_norm_triangle_inequality(m1, m2)?
             }
         }
@@ -2153,27 +2153,27 @@ exact_l1_norm_props!(matrix4x3_i32_l1_norm_props, Matrix4x3, i32, strategy_matri
 
 
 macro_rules! approx_l1_norm_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_l1_norm_nonnegative(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_l1_norm_nonnegative(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_l1_norm_nonnegative(m)?
             }
 
             #[test]
-            fn prop_approx_matrix_l1_norm_point_separating1(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_approx_matrix_l1_norm_point_separating1(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_approx_matrix_l1_norm_point_separating1(m, 1e-10)?
             }
 
             #[test]
-            fn prop_approx_matrix_l1_norm_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_approx_matrix_l1_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_approx_matrix_l1_norm_point_separating2(m1, m2, 1e-10)?
             }
         }
@@ -2195,41 +2195,41 @@ approx_l1_norm_props!(matrix4x3_f64_l1_norm_props, Matrix4x3, f64, strategy_matr
 
 
 macro_rules! exact_linf_norm_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_linf_norm_nonnegative(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_linf_norm_nonnegative(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_linf_norm_nonnegative(m)?
             }
 
             #[test]
-            fn prop_matrix_linf_norm_point_separating1(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_linf_norm_point_separating1(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_linf_norm_point_separating1(m)?
             }
 
             #[test]
-            fn prop_matrix_linf_norm_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_linf_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_linf_norm_point_separating2(m1, m2)?
             }
 
             #[test]
-            fn prop_matrix_linf_norm_homogeneous(c in super::$ScalarGen(), m in super::$Generator()) {
+            fn prop_matrix_linf_norm_homogeneous(c in super::$ScalarGen(), m in super::$MatrixGen()) {
                 let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_linf_norm_homogeneous(c, m)?
             }
 
             #[test]
-            fn prop_matrix_linf_norm_triangle_inequality(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_linf_norm_triangle_inequality(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_linf_norm_triangle_inequality(m1, m2)?
             }
         }
@@ -2251,27 +2251,27 @@ exact_linf_norm_props!(matrix4x3_i32_linf_norm_props, Matrix4x3, i32, strategy_m
 
 
 macro_rules! approx_linf_norm_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_linf_norm_nonnegative(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_linf_norm_nonnegative(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_linf_norm_nonnegative(m)?
             }
 
             #[test]
-            fn prop_approx_matrix_linf_norm_point_separating1(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_approx_matrix_linf_norm_point_separating1(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_approx_matrix_linf_norm_point_separating1(m, 1e-10)?
             }
 
             #[test]
-            fn prop_approx_matrix_linf_norm_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_approx_matrix_linf_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_approx_matrix_linf_norm_point_separating2(m1, m2, 1e-10)?
             }
         }
@@ -2293,34 +2293,34 @@ approx_linf_norm_props!(matrix4x3_f64_linf_norm_props, Matrix4x3, f64, strategy_
 
 
 macro_rules! exact_norm_squared_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_norm_squared_nonnegative(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_norm_squared_nonnegative(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_norm_squared_nonnegative(m)?
             }
 
             #[test]
-            fn prop_matrix_norm_squared_point_separating1(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_norm_squared_point_separating1(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_norm_squared_point_separating1(m)?
             }
 
             #[test]
-            fn prop_matrix_norm_squared_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_norm_squared_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_norm_squared_point_separating2(m1, m2)?
             }
 
             #[test]
-            fn prop_matrix_norm_squared_homogeneous_squared(c in super::$ScalarGen(), m in super::$Generator()) {
+            fn prop_matrix_norm_squared_homogeneous_squared(c in super::$ScalarGen(), m in super::$MatrixGen()) {
                 let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_norm_squared_homogeneous_squared(c, m)?
             }
         }
@@ -2342,14 +2342,14 @@ exact_norm_squared_props!(matrix4x3_i32_norm_squared_props, Matrix4x3, i32, stra
 
 
 macro_rules! norm_synonym_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_magnitude_norm_synonyms(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_magnitude_norm_synonyms(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_magnitude_norm_synonyms(m)?
             }
         }
@@ -2371,14 +2371,14 @@ norm_synonym_props!(matrix4x3_f64_norm_synonym_props, Matrix4x3, f64, strategy_m
 
 
 macro_rules! norm_squared_synonym_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_magnitude_squared_norm_squared_synonyms(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_magnitude_squared_norm_squared_synonyms(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_magnitude_squared_norm_squared_synonyms(m)?
             }
         }
@@ -2400,27 +2400,27 @@ norm_squared_synonym_props!(matrix4x3_i32_norm_squared_synonym_props, Matrix4x3,
 
 
 macro_rules! approx_norm_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_norm_nonnegative(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_norm_nonnegative(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_norm_nonnegative(m)?
             }
 
             #[test]
-            fn prop_approx_matrix_norm_point_separating1(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_approx_matrix_norm_point_separating1(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_approx_matrix_norm_point_separating1(m, 1e-10)?
             }
 
             #[test]
-            fn prop_approx_matrix_norm_point_separating2(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_approx_matrix_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_approx_matrix_norm_point_separating2(m1, m2, 1e-10)?
             }
         }
@@ -2442,35 +2442,35 @@ approx_norm_props!(matrix4x3_f64_norm_props, Matrix4x3, f64, strategy_matrix_f64
 
 
 macro_rules! exact_trace_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_matrix_trace_linear(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_trace_linear(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_trace_linear(m1, m2)?
             }
 
             #[test]
-            fn prop_matrix_trace_transpose(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_trace_transpose(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_trace_transpose(m)?
             }
 
             #[test]
-            fn prop_matrix_trace_product(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_matrix_trace_product(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_matrix_trace_product(m1, m2)?
             }
 
             #[test]
-            fn prop_matrix_trace_scalar_product(c in super::$ScalarGen(), m in super::$Generator()) {
+            fn prop_matrix_trace_scalar_product(c in super::$ScalarGen(), m in super::$MatrixGen()) {
                 let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_trace_scalar_product(c, m)?
             }
         }
@@ -2485,35 +2485,35 @@ exact_trace_props!(matrix4x4_i32_trace_props, Matrix4x4, i32, strategy_matrix_i3
 
 
 macro_rules! approx_trace_props {
-    ($TestModuleName:ident, $MatrixN:ident, $ScalarType:ty, $Generator:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
         proptest! {
             #[test]
-            fn prop_approx_matrix_trace_linear(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_approx_matrix_trace_linear(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_approx_matrix_trace_linear(m1, m2, 1e-10, 1e-10)?
             }
 
             #[test]
-            fn prop_matrix_trace_transpose(m in super::$Generator()) {
-                let m: super::$MatrixN<$ScalarType> = m;
+            fn prop_matrix_trace_transpose(m in super::$MatrixGen()) {
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_matrix_trace_transpose(m)?
             }
 
             #[test]
-            fn prop_approx_matrix_trace_product(m1 in super::$Generator(), m2 in super::$Generator()) {
-                let m1: super::$MatrixN<$ScalarType> = m1;
-                let m2: super::$MatrixN<$ScalarType> = m2;
+            fn prop_approx_matrix_trace_product(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
                 super::prop_approx_matrix_trace_product(m1, m2, 1e-10, 1e-10)?
             }
 
             #[test]
-            fn prop_approx_matrix_trace_scalar_product(c in super::$ScalarGen(), m in super::$Generator()) {
+            fn prop_approx_matrix_trace_scalar_product(c in super::$ScalarGen(), m in super::$MatrixGen()) {
                 let c: $ScalarType = c;
-                let m: super::$MatrixN<$ScalarType> = m;
+                let m: super::$MatrixType<$ScalarType> = m;
                 super::prop_approx_matrix_trace_scalar_product(c, m, 1e-10, 1e-10)?
             }
         }
