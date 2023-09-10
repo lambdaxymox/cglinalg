@@ -143,6 +143,30 @@ fn strategy_quaternion_f64_norm_squared() -> impl Strategy<Value = Quaternion<f6
     strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
+fn strategy_quaternion_f64_pure_unit<S>() -> impl Strategy<Value = Quaternion<S>> 
+where
+    S: SimdScalarFloat + Arbitrary
+{
+    use cglinalg_core::Normed;
+
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarFloat
+    {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<(S, S, S)>().prop_map(move |(_qx, _qy, _qz)| {
+        let qx = rescale(_qx, S::machine_epsilon(), S::one());
+        let qy = rescale(_qy, S::machine_epsilon(), S::one());
+        let qz = rescale(_qz, S::machine_epsilon(), S::one());
+        let vector = Vector3::new(qx, qy, qz).normalize();
+
+        Quaternion::from_pure(vector)
+    })
+    .no_shrink()
+}
+
 fn strategy_quaternion_i32_norm_squared() -> impl Strategy<Value = Quaternion<i32>> {
     let min_value = 0_i32;
     // let max_square_root = f64::floor(f64::sqrt(i32::MAX as f64)) as i32;
@@ -1344,6 +1368,36 @@ where
     Ok(())
 }
 
+/// A pure unit quaternion always squared to `-1`.
+/// 
+/// A pure unit quaternion is a quaternion with scalar part `0`, whose vector part 
+/// is a unit vector. Pure unit quaternions satisfy the following relationship.
+/// ```text
+/// forall q in H. norm(q) == 1 and scalar(q) == 0 ==> squared(q) == -1
+/// ```
+/// There are infinitely many solutions to the quaternion polynomial equation
+/// ```text
+/// q * q + 1 == 0
+/// ```
+/// whose solutions are the square roots of a quaternion `q` whose square is `-1`.
+/// In particular, the solution set is a unit two-sphere centered at the origin
+/// in the pure vector subspace of the space of quaternions. This solution set 
+/// includes the poles of the imaginary part of the complex plane `i` and `-i`.
+/// 
+/// In other words, pure unit quaternions are the quaternionic counterpart of 
+/// imaginary numbers.
+fn prop_quaternion_squared_plus_one_equals_zero_pure_unit<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let one = S::one();
+    let negative_one = Quaternion::from_real(-one);
+    prop_assume!(q.is_pure());
+    prop_assert!(relative_eq!(q.squared(), negative_one, epsilon = tolerance));
+
+    Ok(())
+}
+
 
 #[cfg(test)]
 mod quaternion_f64_arithmetic_props {
@@ -2152,6 +2206,18 @@ mod quaternion_f64_sqrt_props {
         fn prop_square_root_arg_range(q in super::strategy_quaternion_f64_sqrt()) {
             let q: super::Quaternion<f64> = q;
             super::prop_square_root_arg_range(q)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod quaternion_f64_polynomial_solutions {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_quaternion_squared_plus_one_equals_zero_pure_unit(q in super::strategy_quaternion_f64_pure_unit()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_squared_plus_one_equals_zero_pure_unit(q, 1e-15)?
         }
     }
 }
