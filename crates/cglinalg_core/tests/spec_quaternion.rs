@@ -1232,6 +1232,25 @@ where
     Ok(())
 }
 
+/// The principal argument of the principal value of the logarithm of a 
+/// quaternion lies in the range `[0, pi]`.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// 0 <= arg(ln(q)) <= pi
+/// ```
+fn prop_quaternion_ln_arg_range<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let arg_ln_q = q.ln().arg();
+
+    prop_assert!(arg_ln_q >= S::zero());
+    prop_assert!(arg_ln_q <= S::pi());
+
+    Ok(())
+}
+
 /// The quaternion exponential and principal value of the quaternion logarithm 
 /// satisfy the following relation.
 /// 
@@ -1350,20 +1369,20 @@ where
     Ok(())
 }
 
-/// The principal argument of a quaternion is in the range `[-pi, pi]`.
+/// The principal argument of the square root of a quaternion is in the range `[0, pi / 2]`.
 /// 
 /// Given a quaternion `q`
 /// ```text
-/// -pi =< arg(q) <= pi
+/// 0 =< arg(sqrt(q)) <= pi / 2
 /// ```
 fn prop_square_root_arg_range<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    let arg_q = q.arg();
+    let arg_sqrt_q = q.sqrt().arg();
 
-    prop_assert!(arg_q >= -S::pi());
-    prop_assert!(arg_q <= S::pi());
+    prop_assert!(arg_sqrt_q >= S::zero());
+    prop_assert!(arg_sqrt_q <= S::frac_pi_2());
 
     Ok(())
 }
@@ -2147,6 +2166,12 @@ mod quaternion_f64_ln_props {
         fn prop_approx_quaternion_ln_scalar_part(q in super::strategy_quaternion_f64_exp()) {
             let q: super::Quaternion<f64> = q;
             super::prop_approx_quaternion_ln_scalar_part(q, 1e-10)?
+        }
+
+        #[test]
+        fn prop_quaternion_ln_arg_range(q in super::strategy_quaternion_f64_exp()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_quaternion_ln_arg_range(q)?
         }
     }
 }

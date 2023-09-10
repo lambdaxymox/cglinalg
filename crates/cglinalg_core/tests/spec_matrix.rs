@@ -1386,7 +1386,12 @@ where
     Ok(())
 }
 
-
+/// The matrix trace is linear.
+/// 
+/// Given square matrices `m1` and `m2`
+/// ```text
+/// trace(m1 + m2) == trace(m1) + trace(m2)
+/// ```
 fn prop_matrix_trace_linear<S, const N: usize>(m1: Matrix<S, N, N>, m2: Matrix<S, N, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
