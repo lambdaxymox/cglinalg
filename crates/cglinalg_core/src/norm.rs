@@ -70,10 +70,12 @@ where
     /// 
     /// Computing the squared **Frobenius** norm of a matrix.
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// #     Normed,
     /// # };
@@ -105,10 +107,12 @@ where
     /// 
     /// Computing the **Frobenius** norm of a matrix.
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #      Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// #     Normed,
     /// # };
@@ -341,10 +345,12 @@ where
     /// 
     /// Normalizing a matrix.
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// #     Normed,
     /// # };
@@ -393,10 +399,12 @@ where
     /// 
     /// Mutably normalizing a matrix.
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// #     Normed,
     /// # };

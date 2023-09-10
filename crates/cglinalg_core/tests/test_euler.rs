@@ -1,10 +1,13 @@
+extern crate cglinalg_trigonometry;
 extern crate cglinalg_core;
 
 
+use cglinalg_trigonometry::{
+    Angle,
+    Radians,
+};
 use cglinalg_core::{
     EulerAngles,
-    Radians,
-    Angle,
     Matrix3x3,
     Matrix4x4,
 };

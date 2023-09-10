@@ -1,5 +1,6 @@
 extern crate cglinalg_numeric;
-extern crate cglinalg_core;
+extern crate cglinalg_trigonometry;
+extern crate cglinalg_complex;
 extern crate proptest;
 
 
@@ -8,7 +9,7 @@ use cglinalg_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use cglinalg_core::{
+use cglinalg_complex::{
     Complex, 
 };
 use approx::{
@@ -23,7 +24,7 @@ fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S
 where
     S: SimdScalarFloat + Arbitrary
 {
-    use cglinalg_core::Radians;
+    use cglinalg_trigonometry::Radians;
 
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
@@ -1349,7 +1350,7 @@ fn prop_approx_arg_congruent<S>(z: Complex<S>, k: i32, tolerance: S) -> Result<(
 where
     S: SimdScalarFloat
 {
-    use cglinalg_core::Radians;
+    use cglinalg_trigonometry::Radians;
 
     let modulus_z = z.modulus();
     let principal_arg_z = z.arg();

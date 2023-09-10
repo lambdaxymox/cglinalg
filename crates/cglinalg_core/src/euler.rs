@@ -1,7 +1,7 @@
 use cglinalg_numeric::{
     SimdScalarFloat,
 };
-use crate::angle::{
+use cglinalg_trigonometry::{
     Angle,
     Radians,
 };
@@ -43,8 +43,10 @@ use core::fmt;
 /// 
 /// The following example is a rotation without gimbal lock.
 /// ```
-/// # use cglinalg_core::{
+/// # use cglinalg_trigonometry::{
 /// #     Degrees,
+/// # };
+/// # use cglinalg_core::{
 /// #     EulerAngles,
 /// #     Matrix3x3,
 /// # };
@@ -121,8 +123,10 @@ use core::fmt;
 /// effect: it rotates an object about the **z-axis**. We have lost the ability 
 /// to roll about the **x-axis**. Let's illustrate this effect with some code.
 /// ```
+/// # use cglinalg_trigonometry::{
+/// #     Degrees,
+/// # };
 /// # use cglinalg_core::{
-/// #    Degrees,
 /// #    EulerAngles,
 /// #    Matrix3x3,
 /// # };

@@ -1,9 +1,9 @@
-extern crate cglinalg_core;
+extern crate cglinalg_trigonometry;
 
 
 #[cfg(test)]
 mod conversion_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Radians,
         Degrees,
     };
@@ -43,7 +43,9 @@ mod conversion_tests {
 
 #[cfg(test)]
 mod degrees_arithmetic_tests {
-    use cglinalg_core::Degrees;
+    use cglinalg_trigonometry::{
+        Degrees,
+    };
 
 
     #[test]
@@ -183,8 +185,12 @@ mod degrees_arithmetic_tests {
 
 #[cfg(test)]
 mod radians_arithmetic_tests {
-    use cglinalg_core::Radians;
-    use approx::assert_relative_eq;
+    use cglinalg_trigonometry::{
+        Radians,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
     use core::f64;
 
     const PI: Radians<f64> = Radians(f64::consts::PI);
@@ -326,11 +332,13 @@ mod radians_arithmetic_tests {
 
 #[cfg(test)]
 mod radian_angle_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Radians,
         Angle
     };
-    use approx::assert_relative_eq;
+    use approx::{
+        assert_relative_eq,
+    };
     use core::f64;
 
 
@@ -514,11 +522,13 @@ mod radian_angle_tests {
 
 #[cfg(test)]
 mod degree_angle_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Degrees,
         Angle,
     };
-    use approx::assert_relative_eq;
+    use approx::{
+        assert_relative_eq,
+    };
     use core::f64;
 
 

@@ -1,4 +1,3 @@
-mod angle;
 mod complex;
 mod euler;
 mod norm;
@@ -13,7 +12,6 @@ mod constraints;
 
 
 pub use constraints::*;
-pub use angle::*;
 pub use complex::*;
 pub use euler::*;
 pub use norm::*;

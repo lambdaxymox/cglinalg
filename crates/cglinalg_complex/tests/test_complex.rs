@@ -1,9 +1,10 @@
-extern crate cglinalg_core;
+extern crate cglinalg_trigonometry;
+extern crate cglinalg_complex;
 
 
 #[cfg(test)]
 mod index_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
 
@@ -44,8 +45,10 @@ mod index_tests {
 
 #[cfg(test)]
 mod constructor_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
+    };
+    use cglinalg_trigonometry::{
         Radians,
     };
     use approx::{
@@ -169,7 +172,7 @@ mod constructor_tests {
 
 #[cfg(test)]
 mod arithmetic_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
 
@@ -428,7 +431,7 @@ mod arithmetic_tests {
 
 #[cfg(test)]
 mod norm_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
 
@@ -451,7 +454,7 @@ mod norm_tests {
 
 #[cfg(test)]
 mod conjugate_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
 
@@ -469,7 +472,7 @@ mod conjugate_tests {
 
 #[cfg(test)]
 mod arg_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
 
@@ -550,7 +553,7 @@ mod arg_tests {
 
 #[cfg(test)]
 mod inverse_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
 
@@ -607,7 +610,7 @@ mod inverse_tests {
 
 #[cfg(test)]
 mod exp_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
     use approx::{
@@ -646,7 +649,7 @@ mod exp_tests {
 
 #[cfg(test)]
 mod logarithm_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
 
@@ -713,9 +716,11 @@ mod logarithm_tests {
 
 #[cfg(test)]
 mod square_root_tests {
-    use cglinalg_core::{
-        Radians,
+    use cglinalg_complex::{
         Complex,
+    };
+    use cglinalg_trigonometry::{
+        Radians,
     };
     use approx::{
         assert_relative_eq,
@@ -869,7 +874,7 @@ mod square_root_tests {
 
 #[cfg(test)]
 mod trigonometry_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
     use approx::{
@@ -1345,7 +1350,7 @@ mod trigonometry_tests {
 
 #[cfg(test)]
 mod hyperbolic_trigonometry_tests {
-    use cglinalg_core::{
+    use cglinalg_complex::{
         Complex,
     };
     use approx::{

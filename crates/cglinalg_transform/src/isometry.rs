@@ -1,6 +1,10 @@
 use cglinalg_numeric::{
     SimdScalarFloat,
 };
+use cglinalg_trigonometry::{
+    Angle,
+    Radians,
+};
 use cglinalg_core::{
     Matrix3x3,
     Matrix4x4,
@@ -8,8 +12,6 @@ use cglinalg_core::{
     Point3,
     Vector2,
     Vector3,
-    Radians,
-    Angle,
     Unit,
 };
 use crate::rotation::{
@@ -75,10 +77,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
-    /// #     Degrees, 
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector2, 
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -109,8 +113,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg_core::{
     /// #     Point2, 
     /// # };
     /// # use cglinalg_transform::{
@@ -216,10 +222,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector2,
-    /// #     Degrees, 
+    /// #     Vector2, 
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -272,8 +280,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
     /// # };
@@ -309,10 +319,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
-    /// #     Degrees, 
+    /// #     Vector2, 
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -344,10 +356,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
-    /// #     Radians,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -380,9 +394,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Vector2,
-    /// #     Radians,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -415,10 +431,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
-    /// #     Radians,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -450,9 +468,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Vector2,
-    /// #     Radians,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -482,10 +502,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
-    /// #     Radians,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -749,9 +771,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Degrees,
     /// #     Unit, 
     /// # };
     /// # use cglinalg_transform::{
@@ -797,9 +821,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Degrees,
     /// #     Unit, 
     /// # };
     /// # use cglinalg_transform::{
@@ -830,7 +856,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Degrees,
     /// # };
     /// # use cglinalg_transform::{
@@ -859,7 +885,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Degrees,
     /// # };
     /// # use cglinalg_transform::{
@@ -888,7 +914,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Degrees,
     /// # };
     /// # use cglinalg_transform::{
@@ -1405,10 +1431,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
-    /// #     Degrees,
     /// #     Unit, 
     /// # };
     /// # use cglinalg_transform::{
@@ -1465,8 +1493,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Degrees,
+    /// # };
+    /// # use cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
     /// #     Unit,
@@ -1504,10 +1534,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
-    /// #     Degrees,
     /// #     Unit, 
     /// # };
     /// # use cglinalg_transform::{
@@ -1541,10 +1573,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
@@ -1579,9 +1613,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
@@ -1615,10 +1651,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
@@ -1652,9 +1690,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
@@ -1686,10 +1726,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
-    /// #     Radians,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry3,

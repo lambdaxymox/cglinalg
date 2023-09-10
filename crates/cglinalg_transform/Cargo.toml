@@ -50,6 +50,10 @@ default-features = false
 path = "../cglinalg_numeric"
 version = "0.16.10"
 
+[dependencies.cglinalg_trigonometry]
+path = "../cglinalg_trigonometry"
+version = "0.16.10"
+
 [dependencies.cglinalg_core]
 path = "../cglinalg_core"
 version = "0.16.10"

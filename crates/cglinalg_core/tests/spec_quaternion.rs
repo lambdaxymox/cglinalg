@@ -1,4 +1,5 @@
 extern crate cglinalg_numeric;
+extern crate cglinalg_trigonometry;
 extern crate cglinalg_core;
 extern crate proptest;
 
@@ -25,10 +26,8 @@ fn strategy_quaternion_polar_from_range<S>(min_scale: S, max_scale: S, min_angle
 where
     S: SimdScalarFloat + Arbitrary
 {
-    use cglinalg_core::{
-        Radians,
-        Unit,
-    };
+    use cglinalg_trigonometry::Radians;
+    use cglinalg_core::Unit;
 
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
@@ -1282,7 +1281,7 @@ fn prop_approx_arg_congruent<S>(q: Quaternion<S>, k: i32, tolerance: S) -> Resul
 where
     S: SimdScalarFloat
 {
-    use cglinalg_core::Radians;
+    use cglinalg_trigonometry::Radians;
 
     let (norm_q, _, axis_q) = q.polar_decomposition();
     let arg_q = q.arg();

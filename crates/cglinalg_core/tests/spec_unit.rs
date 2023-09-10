@@ -1,4 +1,5 @@
 extern crate cglinalg_numeric;
+extern crate cglinalg_complex;
 extern crate cglinalg_core;
 extern crate proptest;
 
@@ -7,8 +8,10 @@ use cglinalg_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use cglinalg_core::{
+use cglinalg_complex::{
     Complex,
+};
+use cglinalg_core::{
     Quaternion,
     Vector1, 
     Vector2, 

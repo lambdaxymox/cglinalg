@@ -4,7 +4,7 @@ use cglinalg_numeric::{
     SimdScalarSigned,
     SimdScalarFloat,
 };
-use crate::angle::{
+use cglinalg_trigonometry::{
     Angle,
     Radians,
 };
@@ -619,11 +619,13 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Angle,
     /// #     Unit,
-    /// #     Radians,
     /// #     Vector3,
     /// # };
     /// # use core::f64;
@@ -646,11 +648,13 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Angle,
     /// #     Unit,
-    /// #     Radians,
     /// #     Vector3,
     /// # };
     /// # use core::f64;
@@ -675,11 +679,13 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Angle,
     /// #     Unit,
-    /// #     Radians,
     /// #     Vector3,
     /// # };
     /// # use core::f64;
@@ -703,10 +709,12 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
@@ -906,11 +914,13 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Angle,
     /// #     Unit,
-    /// #     Radians,
     /// #     Vector3,
     /// # };
     /// # use core::f64;
@@ -935,11 +945,13 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Angle,
     /// #     Unit,
-    /// #     Radians,
     /// #     Vector3,
     /// # };
     /// # use core::f64;
@@ -963,10 +975,12 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
@@ -997,10 +1011,12 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
-    /// #     Radians,
     /// #     Vector3,
     /// # };
     /// # use core::f64;
@@ -1025,10 +1041,12 @@ where
     /// # Example
     /// 
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
-    /// #     Radians,
     /// #     Vector3,
     /// # };
     /// # use core::f64;
@@ -1058,12 +1076,14 @@ where
     ///
     /// Construct a quaternion for performing a 30 degree rotation about the **z-axis**.
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
-    /// #     Angle,
-    /// #     Radians,
     /// #     Normed,
     /// # };
     /// # use approx::{
@@ -1101,10 +1121,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Angle, 
-    /// #     Quaternion,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
@@ -2311,10 +2333,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Radians,
-    /// #     Angle,
     /// #     Vector3,
     /// #     Unit,
     /// # };
@@ -2351,10 +2375,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Radians,
-    /// #     Angle,
     /// #     Unit,
     /// #     Vector3,
     /// # };
@@ -2807,11 +2833,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     Degrees,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,   
@@ -3046,10 +3074,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// # };
     /// # use approx::{
@@ -3111,10 +3141,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     Radians,
     /// #     Unit,
     /// # };
     /// #

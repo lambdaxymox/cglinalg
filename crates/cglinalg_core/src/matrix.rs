@@ -5,16 +5,16 @@ use cglinalg_numeric::{
     SimdScalarOrd,
     SimdScalarFloat,
 };
+use cglinalg_trigonometry::{
+    Angle,
+    Radians,
+};
 use crate::constraints::{
     Const,
     DimMul,
     DimEq,
     CanMultiply,
     ShapeConstraint,
-};
-use crate::angle::{
-    Angle,
-    Radians,
 };
 use crate::norm::{
     Normed,
@@ -2317,10 +2317,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
-    /// #     Radians,
-    /// #     Angle,
     /// #     Vector2, 
     /// # };
     /// # use approx::{
@@ -3299,10 +3301,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
     /// #     Vector3, 
     /// # };
     /// # use approx::{
@@ -3337,10 +3341,12 @@ where
     /// 
     /// In this example the rotation is in the **yz-plane**.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
     /// #     Vector3, 
     /// # };
     /// # use approx::{
@@ -3373,10 +3379,12 @@ where
     /// 
     /// In this example the rotation is in the **zx-plane**.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
     /// #     Vector3, 
     /// # };
     /// # use approx::{
@@ -3409,10 +3417,12 @@ where
     /// 
     /// In this example the rotation is in the **xy-plane**.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
     /// #     Vector3, 
     /// # };
     /// # use approx::{
@@ -3445,10 +3455,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Angle, 
-    /// #     Matrix3x3,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
     /// #     Unit,
     /// #     Vector3,
     /// # };
@@ -3844,10 +3856,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Radians,
-    /// #     Angle,
     /// #     Vector3,
     /// # };
     /// # use approx::{
@@ -3890,10 +3904,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Radians,
-    /// #     Angle,
     /// #     Vector3,
     /// #     Unit,
     /// # };
@@ -4591,11 +4607,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector4, 
-    /// #     Radians,
-    /// #     Angle, 
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,   
@@ -4631,10 +4649,12 @@ where
     /// 
     /// In this example the rotation is in the **zx-plane**.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
     /// #     Vector4, 
     /// # };
     /// # use approx::{
@@ -4671,10 +4691,12 @@ where
     /// 
     /// In this example the rotation is in the **xy-plane**.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
     /// #     Vector4, 
     /// # };
     /// # use approx::{
@@ -4710,10 +4732,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Angle, 
-    /// #     Matrix4x4,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
     /// #     Radians,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
     /// #     Unit,
     /// #     Vector4,
     /// #     Vector3,
@@ -4813,9 +4837,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Degrees,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq, 
@@ -4922,9 +4948,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Degrees,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,

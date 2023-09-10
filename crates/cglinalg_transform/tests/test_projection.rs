@@ -1,11 +1,14 @@
+extern crate cglinalg_trigonometry;
 extern crate cglinalg_transform;
 
 
-use cglinalg_core::{
-    Matrix4x4,
+use cglinalg_trigonometry::{
     Angle,
     Degrees,
     Radians,
+};
+use cglinalg_core::{
+    Matrix4x4,
     Point3,
     Vector3,
 };

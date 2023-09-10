@@ -1,12 +1,12 @@
 extern crate cglinalg_numeric;
-extern crate cglinalg_core;
+extern crate cglinalg_trigonometry;
 extern crate proptest;
 
 
 use cglinalg_numeric::{
     SimdScalarFloat,  
 };
-use cglinalg_core::{
+use cglinalg_trigonometry::{
     Degrees,
     Radians,
     Angle,

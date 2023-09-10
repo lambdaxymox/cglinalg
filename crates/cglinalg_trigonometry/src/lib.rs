@@ -39,7 +39,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
@@ -55,7 +55,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
@@ -72,7 +72,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -94,7 +94,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -116,7 +116,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -138,7 +138,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -160,7 +160,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -182,7 +182,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -224,7 +224,7 @@ where
     /// # Examples
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// #     Angle,
     /// # };
@@ -253,7 +253,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// #     Angle,
     /// # };
@@ -279,7 +279,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
@@ -308,7 +308,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
@@ -337,7 +337,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
@@ -366,7 +366,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
@@ -395,7 +395,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -425,7 +425,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -455,7 +455,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Degrees,
     /// # };
@@ -489,7 +489,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Degrees,
     /// # };
@@ -516,7 +516,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -541,7 +541,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -565,7 +565,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -599,7 +599,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -619,7 +619,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// # };
@@ -649,7 +649,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,  
     /// # };
@@ -679,7 +679,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Degrees,
     /// # };
@@ -699,7 +699,7 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Degrees,
     /// # };
@@ -729,7 +729,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
+    /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Degrees,  
     /// # };

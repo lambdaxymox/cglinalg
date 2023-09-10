@@ -1,13 +1,16 @@
+extern crate cglinalg_trigonometry;
 extern crate cglinalg_core;
 
 
 #[cfg(test)]
 mod matrix2x2_tests {
+    use cglinalg_trigonometry::{
+        Angle,
+        Radians,
+    };
     use cglinalg_core::{
         Vector2,
         Matrix2x2,
-        Radians,
-        Angle,
         Unit,
     };
     use approx::{
@@ -908,13 +911,15 @@ mod matrix2x2_tests {
 
 #[cfg(test)]
 mod matrix3x3_tests {
+    use cglinalg_trigonometry::{
+        Angle,
+        Radians,
+    };
     use cglinalg_core::{
         Vector2,
         Vector3,
         Normed,
         Matrix3x3,
-        Angle,
-        Radians,
         Unit,
         Point3,
     };
@@ -2182,14 +2187,16 @@ mod matrix3x3_tests {
 
 #[cfg(test)]
 mod matrix4x4_tests {
+    use cglinalg_trigonometry::{
+        Angle,
+        Radians,
+        Degrees,
+    };
     use cglinalg_core::{
         Vector3,
         Vector4,
         Normed,
         Matrix4x4,
-        Radians,
-        Degrees,
-        Angle,
         Unit,
         Point3,
     };

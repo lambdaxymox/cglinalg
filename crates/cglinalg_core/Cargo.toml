@@ -45,6 +45,14 @@ std = []
 path = "../cglinalg_numeric"
 version = "0.16.10"
 
+[dependencies.cglinalg_trigonometry]
+path = "../cglinalg_trigonometry"
+version = "0.16.10"
+
+[dependencies.cglinalg_complex]
+path = "../cglinalg_complex"
+version = "0.16.10"
+
 [dependencies.approx]
 version = "0.5.1"
 default-features = false

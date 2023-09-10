@@ -1,9 +1,11 @@
 use cglinalg_numeric::{
     SimdScalarFloat,
 };
-use cglinalg_core::{
+use cglinalg_trigonometry::{
     Angle,
     Radians,
+};
+use cglinalg_core::{
     Matrix4x4,
     Point3,
     Vector3,
@@ -584,10 +586,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Degrees,
-    /// #     Angle,
     /// # };
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -623,10 +627,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Degrees,
-    /// #     Angle,
     /// #     Point3,
     /// # };
     /// # use cglinalg_transform::{
@@ -663,10 +669,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Degrees,
-    /// #     Angle,
     /// #     Vector3,
     /// # };
     /// # use cglinalg_transform::{
@@ -704,10 +712,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Degrees,
-    /// #     Angle,
     /// #     Point3,
     /// # };
     /// # use cglinalg_transform::{
@@ -788,10 +798,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Degrees,
-    /// #     Angle,
     /// #     Vector3,
     /// # };
     /// # use cglinalg_transform::{
@@ -1493,9 +1505,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Degrees,
     /// # };
     /// # use cglinalg_transform::{
     /// #     OrthographicFov3,
@@ -1529,9 +1543,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Degrees,
     /// # };
     /// # use cglinalg_transform::{
     /// #     OrthographicFov3,
@@ -1565,9 +1581,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Degrees,
     /// # };
     /// # use cglinalg_transform::{
     /// #     OrthographicFov3,
@@ -1604,9 +1622,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Degrees,
     /// # };
     /// # use cglinalg_transform::{
     /// #     OrthographicFov3,
@@ -1661,9 +1681,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Degrees,
     /// # };
     /// # use cglinalg_transform::{
     /// #     OrthographicFov3,

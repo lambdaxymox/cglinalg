@@ -1,3 +1,4 @@
+extern crate cglinalg_trigonometry;
 extern crate cglinalg_core;
 
 
@@ -218,10 +219,12 @@ mod modulus_tests {
 
 #[cfg(test)]
 mod slerp_tests {
-    use cglinalg_core::{
-        Quaternion,
+    use cglinalg_trigonometry::{
         Angle,
         Degrees,
+    };
+    use cglinalg_core::{
+        Quaternion,
         Vector3,
     };
     use approx::{
@@ -367,8 +370,10 @@ mod slerp_tests {
 
 #[cfg(test)]
 mod arg_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Radians,
+    };
+    use cglinalg_core::{
         Quaternion,
         Unit,
         Vector3,
@@ -685,8 +690,10 @@ mod logarithm_tests {
 
 #[cfg(test)]
 mod exp_ln_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Radians,
+    };
+    use cglinalg_core::{
         Quaternion,
         Unit,
         Vector3,
@@ -843,9 +850,11 @@ mod power_tests {
 
 #[cfg(test)]
 mod rotation_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Angle,
         Radians,
+    };
+    use cglinalg_core::{
         Unit,
         Vector3,
         Quaternion,

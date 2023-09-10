@@ -1,11 +1,14 @@
+extern crate cglinalg_trigonometry;
 extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod isometry2_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Angle,
         Degrees,
+    };
+    use cglinalg_core::{
         Matrix3x3,
         Point2,
         Unit,
@@ -187,9 +190,11 @@ mod isometry2_tests {
 
 #[cfg(test)]
 mod isometry3_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Angle,
         Degrees,
+    };
+    use cglinalg_core::{
         Matrix4x4,
         Point3,
         Unit,

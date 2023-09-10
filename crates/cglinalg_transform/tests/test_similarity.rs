@@ -1,15 +1,18 @@
+extern crate cglinalg_trigonometry;
 extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod similarity2_tests {
+    use cglinalg_trigonometry::{
+        Angle,
+        Degrees,
+        Radians,
+    };
     use cglinalg_core::{
         Vector2,
         Point2,
-        Degrees,
-        Radians,
         Matrix3x3,
-        Angle,
     };
     use cglinalg_transform::{
         Similarity2,
@@ -208,12 +211,14 @@ mod similarity2_tests {
 
 #[cfg(test)]
 mod similarity3_tests {
+    use cglinalg_trigonometry::{
+        Degrees,
+        Radians,
+    };
     use cglinalg_core::{
         Vector3,
         Point3,
-        Degrees,
         Normed,
-        Radians,
         Matrix4x4,
         Unit,
     };

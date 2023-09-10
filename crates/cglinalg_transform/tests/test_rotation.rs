@@ -1,10 +1,13 @@
+extern crate cglinalg_trigonometry;
 extern crate cglinalg_transform;
 
 
 #[cfg(test)]
 mod rotation2_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Degrees,
+    };
+    use cglinalg_core::{
         Point2,
         Vector2,
         Unit,
@@ -182,10 +185,12 @@ mod rotation2_tests {
 
 #[cfg(test)]
 mod rotation3_tests {
-    use cglinalg_core::{
+    use cglinalg_trigonometry::{
         Angle,
         Degrees,
         Radians,
+    };
+    use cglinalg_core::{
         Point3,
         Vector3,
         Unit,
@@ -197,6 +202,7 @@ mod rotation3_tests {
         assert_relative_eq,
     };
 
+    
     #[test]
     fn test_from_angle_x_rotation_should_not_rotate_x_axis() {
         let rotation = Rotation3::from_angle_x(Degrees(70_f64));
