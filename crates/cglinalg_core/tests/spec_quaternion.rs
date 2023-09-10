@@ -1350,6 +1350,31 @@ where
     Ok(())
 }
 
+/// The square of the square root of the conjugate of a quaternion is the 
+/// conjugate of the quaternion.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// sqrt(conjugate(q)) * sqrt(conjugate(q)) == conjugate(q)
+/// ```
+fn prop_approx_square_root_quaternion_conjugate_squared<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    // Ensure that the vector part is sufficiently far from zero for the square 
+    // root to be well-defined for `q`.
+    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = cglinalg_numeric::cast(1e-6)));
+
+    let q_conjugate = q.conjugate();
+    let sqrt_q_conjugate = q_conjugate.sqrt();
+    let lhs = sqrt_q_conjugate * sqrt_q_conjugate;
+    let rhs = q_conjugate;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
 /// The norm of the square root of the product of two quaternions is the product 
 /// of the norms of the square roots of the two quaternions separately.
 /// 
@@ -2218,6 +2243,12 @@ mod quaternion_f64_sqrt_props {
         fn prop_approx_square_root_quaternion_squared(q in super::strategy_quaternion_squared_any()) {
             let q: super::Quaternion<f64> = q;
             super::prop_approx_square_root_quaternion_squared(q, 1e-8, 1e-8)?
+        }
+
+        #[test]
+        fn prop_approx_square_root_quaternion_conjugate_squared(q in super::strategy_quaternion_squared_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_square_root_quaternion_conjugate_squared(q, 1e-8, 1e-8)?
         }
 
         #[test]

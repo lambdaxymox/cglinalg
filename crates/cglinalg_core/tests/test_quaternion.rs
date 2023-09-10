@@ -4,7 +4,9 @@ extern crate cglinalg_core;
 
 #[cfg(test)]
 mod storage_tests {
-    use cglinalg_core::Quaternion;
+    use cglinalg_core::{
+        Quaternion, 
+    };
 
 
     #[test]
