@@ -1,6 +1,6 @@
-mod complex;
+mod complex_normed_impl;
 mod euler;
-mod norm;
+mod normed;
 mod matrix;
 mod point;
 mod quaternion;
@@ -12,9 +12,9 @@ mod constraints;
 
 
 pub use constraints::*;
-pub use complex::*;
+pub use complex_normed_impl::*;
 pub use euler::*;
-pub use norm::*;
+pub use normed::*;
 pub use matrix::*;
 pub use point::*;
 pub use quaternion::*;

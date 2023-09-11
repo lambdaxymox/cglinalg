@@ -8,7 +8,7 @@ use cglinalg_trigonometry::{
     Angle,
     Radians,
 };
-use crate::norm::{
+use crate::normed::{
     Normed,
 };
 use crate::matrix::{
@@ -68,15 +68,15 @@ impl<S> Quaternion<S> {
     /// The length of the the underlying array storing the quaternion components.
     #[inline]
     pub const fn len(&self) -> usize {
-        4
+        self.coords.len()
     }
 
     /// Tests whether the number of elements in the quaternion is zero.
     /// 
-    /// This functions always returns `false`, since a quaternion has four scalar 
+    /// This function always returns `false`, since a quaternion has four scalar 
     /// elements.
     pub const fn is_empty(&self) -> bool {
-        false
+        self.coords.is_empty()
     }
 
     /// The shape of the underlying array storing the quaternion components.
@@ -86,7 +86,7 @@ impl<S> Quaternion<S> {
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub const fn shape(&self) -> (usize, usize) {
-        (4, 1)
+        self.coords.shape()
     }
 
     /// Get a pointer to the underlying array.
@@ -104,7 +104,7 @@ impl<S> Quaternion<S> {
     /// Get a slice of the underlying elements of the data type.
     #[inline]
     pub fn as_slice(&self) -> &[S] {
-        AsRef::<[S; 4]>::as_ref(self)
+        self.coords.as_slice()
     }
 }
 
@@ -3184,11 +3184,31 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    /// let quaternion = Quaternion::new(pi_over_two, 0_f64, 0_f64, f64::ln(2_f64));
+    /// let expected = Quaternion::new(0_f64, 0_f64, 0_f64, -3_f64 / 4_f64);
+    /// let result = quaternion.cos();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn cos(&self) -> Self {
-        todo!()
+        let norm_vec_self = self.vector().norm();
+        if norm_vec_self.is_zero() {
+            let scalar = self.scalar().cos() * norm_vec_self.cosh();
+
+            return Self::from_real(scalar);
+        }
+
+        let scalar = self.scalar().cos() * norm_vec_self.cosh();
+        let vector = self.vector() * (-self.scalar().sin() * norm_vec_self.sinh() / norm_vec_self);
+
+        Self::from_parts(scalar, vector)
     }
 
     /// Compute the quaternionic arccosine of a quaternion.
@@ -3199,7 +3219,6 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
-    /// #
     /// ```
     #[inline]
     pub fn acos(&self) -> Self {
@@ -3214,11 +3233,31 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    /// let quaternion = Quaternion::new(pi_over_two, 0_f64, 0_f64, f64::ln(2_f64));
+    /// let expected = Quaternion::from_real(5_f64 / 4_f64);
+    /// let result = quaternion.sin();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn sin(&self) -> Self {
-        todo!()
+        let norm_vec_self = self.vector().norm();
+        if norm_vec_self.is_zero() {
+            let scalar = self.scalar().sin() * norm_vec_self.cosh();
+
+            return Self::from_real(scalar);
+        }
+
+        let scalar = self.scalar().sin() * norm_vec_self.cosh();
+        let vector = self.vector() * (self.scalar().cos() * norm_vec_self.sinh() / norm_vec_self);
+
+        Self::from_parts(scalar, vector)
     }
 
     /// Compute the quaternionic arcsine of a quaternion.
@@ -3244,11 +3283,35 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    /// let quaternion = Quaternion::new(pi_over_two, 0_f64, 0_f64, f64::ln(2_f64));
+    /// let expected = Quaternion::new(0_f64, 0_f64, 0_f64, 5_f64 / 3_f64);
+    /// let result = quaternion.tan();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn tan(&self) -> Self {
-        todo!()
+        let norm_v = self.vector().norm();
+        if norm_v.is_zero() {
+            return Self::from_real(self.scalar().tan());
+        }
+
+        let cosh_norm_v = norm_v.cosh();
+        let sinh_norm_v = norm_v.sinh();
+        let cos_s = self.scalar().cos();
+        let sin_s = self.scalar().sin();
+        let denom_s = cos_s * cos_s + sinh_norm_v * sinh_norm_v;
+        let denom_v = denom_s * norm_v;
+        let scalar = cos_s * sin_s / denom_s;
+        let vector = self.vector() * (cosh_norm_v * sinh_norm_v / denom_v);
+
+        Self::from_parts(scalar, vector)
     }
 
     /// Compute the quaternionic arctangent of a quaternion.
@@ -3274,11 +3337,33 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    /// let quaternion = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
+    /// let expected = Quaternion::new(0_f64, f64::sqrt(5_f64) / 2_f64, 0_f64, 0_f64);
+    /// let result = quaternion.cosh();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn cosh(&self) -> Self {
-        todo!()
+        let norm_vec_self = self.vector().norm();
+        if norm_vec_self.is_zero() {
+            let scalar = self.scalar().cosh() * norm_vec_self.cos();
+
+            return Self::from_real(scalar);
+        }
+
+        let scalar = self.scalar().cosh() * norm_vec_self.cos();
+        let vector = self.vector() * (self.scalar().sinh() * norm_vec_self.sin() / norm_vec_self);
+
+        Self::from_parts(scalar, vector)
     }
 
     /// Compute the quaternionic hyperbolic arccosine of a quaternion.
@@ -3304,11 +3389,33 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    /// let quaternion = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
+    /// let expected = Quaternion::new(0_f64, 3_f64 / 2_f64, 0_f64, 0_f64);
+    /// let result = quaternion.sinh();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn sinh(&self) -> Self {
-        todo!()
+        let norm_vec_self = self.vector().norm();
+        if norm_vec_self.is_zero() {
+            let scalar = self.scalar().sinh() * norm_vec_self.cos();
+
+            return Self::from_real(scalar);
+        }
+
+        let scalar = self.scalar().sinh() * norm_vec_self.cos();
+        let vector = self.vector() * (self.scalar().cosh() * norm_vec_self.sin() / norm_vec_self);
+
+        Self::from_parts(scalar, vector)
     }
 
     /// Compute the quaternionic hyperbolic arcsine of a quaternion.
@@ -3334,11 +3441,40 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    /// let quaternion = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
+    /// let expected = Quaternion::from_real(3_f64 / f64::sqrt(5_f64));
+    /// let result = quaternion.tanh();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn tanh(&self) -> Self {
-        todo!()
+        let norm_v = self.vector().norm();
+        if norm_v.is_zero() {
+            return Self::from_real(self.scalar().tanh());
+        }
+
+        let cos_norm_v = norm_v.cos();
+        let sin_norm_v = norm_v.sin();
+        let cosh_s = self.scalar().cosh();
+        let sinh_s = self.scalar().sinh();
+        let denom_s = sinh_s * sinh_s + cos_norm_v * cos_norm_v; // cosh_s * cosh_s - sin_norm_v * sin_norm_v;
+        let denom_v = denom_s * norm_v;
+        let scalar = cosh_s * sinh_s / denom_s;
+        let vector = self.vector() * (cos_norm_v * sin_norm_v / denom_v);
+
+        Self::from_parts(scalar, vector)
+        /*
+        self.sinh().div_right(&self.cosh()).unwrap()
+        */
     }
 
     /// Compute the quaternionic hyperbolic arctangent of a quaternion.

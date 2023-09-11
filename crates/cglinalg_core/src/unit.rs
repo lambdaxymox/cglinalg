@@ -1,7 +1,7 @@
 use cglinalg_numeric::{
     SimdScalarFloat,
 };
-use crate::norm::{
+use crate::normed::{
     Normed,
 };
 

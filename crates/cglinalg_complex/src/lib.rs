@@ -1663,7 +1663,7 @@ where
         let z1 = Complex::new(-self.im, self.re);
         let z2 = Self::sinh(z1);
 
-        // -i * z2
+        // -i * z2 == -i * sinh(z1)
         Self::new(z2.im, -z2.re)
     }
 
@@ -1695,7 +1695,7 @@ where
         let z1 = Self::new(-self.im, self.re);
         let z2 = Self::asinh(z1);
         
-        // -i * z2;
+        // -i * z2 == -i * asinh(z1)
         Self::new(z2.im, -z2.re)
     }
 
@@ -1723,7 +1723,7 @@ where
         let z1 = Self::new(-self.im, self.re);
         let z2 = Self::tanh(z1);
         
-        // -i * z2
+        // -i * z2 == -i * tanh(z1)
         Self::new(z2.im, -z2.re)
     }
 
@@ -1755,7 +1755,7 @@ where
         let z1 = Self::new(-self.im, self.re);
         let z2 = Self::atanh(z1);
         
-        // -i * z2;
+        // -i * z2 == -i * atanh(z1)
         Self::new(z2.im, -z2.re)
     }
 

@@ -16,7 +16,7 @@ use crate::constraints::{
     CanMultiply,
     ShapeConstraint,
 };
-use crate::norm::{
+use crate::normed::{
     Normed,
     Norm,
 };

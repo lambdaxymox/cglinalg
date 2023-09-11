@@ -12,7 +12,7 @@ use crate::constraints::{
     CanContract,
     ShapeConstraint,
 };
-use crate::norm::{
+use crate::normed::{
     Normed,
 };
 use crate::vector::{
