@@ -759,11 +759,7 @@ where
     S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(v1, v2, epsilon = input_tolerance));
-    prop_assert!(
-        (v1 - v2).norm_squared() > output_tolerance,
-        "\n|v - w|^2 = {:?}\n", 
-        (v1 - v2).norm_squared()
-    );
+    prop_assert!((v1 - v2).norm_squared() > output_tolerance);
 
     Ok(())
 }
@@ -803,11 +799,7 @@ where
     let zero = S::zero();
 
     prop_assume!(v1 != v2);
-    prop_assert_ne!(
-        (v1 - v2).norm_squared(), zero,
-        "\n|v - w|^2 = {}\n", 
-        (v1 - v2).norm_squared()
-    );
+    prop_assert_ne!((v1 - v2).norm_squared(), zero);
 
     Ok(())
 }
@@ -869,11 +861,7 @@ where
     S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
-    prop_assert!(
-        (v1 - v2).norm() > tolerance,
-        "\n|v - w| = {:?}\n",
-        (v1 - v2).norm()
-    );
+    prop_assert!((v1 - v2).norm() > tolerance);
 
     Ok(())
 }
@@ -913,11 +901,7 @@ where
     S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
-    prop_assert!(
-        (v1 - v2).l1_norm() > tolerance,
-        "\nl1_norm(v - w) = {:?}\n", 
-        (v1 - v2).l1_norm()
-    );
+    prop_assert!((v1 - v2).l1_norm() > tolerance);
 
     Ok(())
 }
@@ -942,11 +926,7 @@ where
     let zero = S::zero();
 
     prop_assume!(v1 != v2);
-    prop_assert_ne!(
-        (v1 - v2).l1_norm(), zero,
-        "\nl1_norm(v - w) = {:?}\n", 
-        (v1 - v2).l1_norm()
-    );
+    prop_assert_ne!((v1 - v2).l1_norm(), zero);
 
     Ok(())
 }
@@ -964,7 +944,7 @@ where
     let lhs = (v * c).l1_norm();
     let rhs = v.l1_norm() * c.abs();
 
-    prop_assert_eq!(lhs, rhs, "l1_norm(v) = {}; abs(c) = {}; l1_norm(v * c) = {}; l1_norm(v) * abs(c) = {}", v.l1_norm(), c.abs(), lhs, rhs);
+    prop_assert_eq!(lhs, rhs);
 
     Ok(())
 }
@@ -1065,11 +1045,7 @@ where
     S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
-    prop_assert!(
-        (v1 - v2).linf_norm() > tolerance,
-        "\nlinf_norm(v - w) = {}\n", 
-        (v1 - v2).linf_norm()
-    );
+    prop_assert!((v1 - v2).linf_norm() > tolerance);
 
     Ok(())
 }
@@ -1093,11 +1069,7 @@ where
     let zero = S::zero();
 
     prop_assume!(v1 != v2);
-    prop_assert_ne!(
-        (v1 - v2).linf_norm(), zero,
-        "\nlinf_norm(v - w) = {}\n", 
-        (v1 - v2).linf_norm()
-    );
+    prop_assert_ne!((v1 - v2).linf_norm(), zero);
 
     Ok(())
 }

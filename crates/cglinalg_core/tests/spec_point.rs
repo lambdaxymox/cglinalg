@@ -364,11 +364,7 @@ where
     S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(p1, p2, epsilon = input_tolerance));
-    prop_assert!(
-        (p1 - p2).norm_squared() > output_tolerance,
-        "\n|p1 - p2|^2 = {}\n",
-        (p1 - p2).norm_squared()
-    );
+    prop_assert!((p1 - p2).norm_squared() > output_tolerance);
 
     Ok(())
 }
@@ -393,11 +389,7 @@ where
     let zero = S::zero();
 
     prop_assume!(p1 != p2);
-    prop_assert_ne!(
-        (p1 - p2).norm_squared(), zero,
-        "\n|p1 - p2|^2 = {}\n",
-        (p1 - p2).norm_squared()
-    );
+    prop_assert_ne!((p1 - p2).norm_squared(), zero);
 
     Ok(())
 }
@@ -481,11 +473,7 @@ where
     let zero = S::zero();
 
     prop_assume!(relative_ne!(p1, p2, epsilon = input_tolerance));
-    prop_assert!(
-        relative_ne!((p1 - p2).norm(), zero, epsilon = output_tolerance),
-        "\n|p1 - p2| = {}\n",
-        (p1 - p2).norm()
-    );
+    prop_assert!(relative_ne!((p1 - p2).norm(), zero, epsilon = output_tolerance));
 
     Ok(())
 }

@@ -860,11 +860,7 @@ where
     let zero = S::zero();
 
     prop_assume!(q1 != q2);
-    prop_assert_ne!(
-        (q1 - q2).modulus_squared(), zero,
-        "\n|q1 - q2|^2 = {}\n",
-        (q1 - q2).modulus_squared()
-    );
+    prop_assert_ne!((q1 - q2).modulus_squared(), zero);
 
     Ok(())
 }
@@ -912,11 +908,7 @@ where
     S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(q1, q2, epsilon = input_tolerance));
-    prop_assert!(
-        (q1 - q2).modulus_squared() > output_tolerance,
-        "\n|q1 - q2|^2 = {}\n",
-        (q1 - q2).modulus_squared()
-    );
+    prop_assert!((q1 - q2).modulus_squared() > output_tolerance);
 
     Ok(())
 }
@@ -988,11 +980,7 @@ where
     S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(q1, q2, epsilon = tolerance));
-    prop_assert!(
-        (q1 - q2).modulus() > tolerance,
-        "\n|q1 - q2| = {}\n",
-        (q1 - q2).modulus()
-    );
+    prop_assert!((q1 - q2).modulus() > tolerance);
 
     Ok(())
 }
@@ -1036,11 +1024,7 @@ where
     let zero = S::zero();
 
     prop_assume!(q1 != q2);
-    prop_assert_ne!(
-        (q1 - q2).l1_norm(), zero,
-        "\nl1_norm(q1 - q2) = {}\n",
-        (q1 - q2).l1_norm()
-    );
+    prop_assert_ne!((q1 - q2).l1_norm(), zero);
 
     Ok(())
 }
@@ -1101,11 +1085,7 @@ where
     S: SimdScalarFloat
 {
     prop_assume!(relative_ne!(q1, q2, epsilon = tolerance));
-    prop_assert!(
-        (q1 - q2).l1_norm() > tolerance,
-        "\nl1_norm(q1 - q2) = {}\n",
-        (q1 - q2).l1_norm()
-    );
+    prop_assert!((q1 - q2).l1_norm() > tolerance);
 
     Ok(())
 }
