@@ -1674,13 +1674,13 @@ where
         self.norm_squared() >= epsilon * epsilon
     }
 
-    /// Compute the principal argument of a quaternion.
+    /// Compute the principal (value of the) argument of a quaternion.
     ///
     /// Every quaternion can be written in polar form. Let `q` be a quaternion
-    /// and let `q := qs + qv` where `qs` is the scalar part of `q` and `qv` is 
+    /// and let `q := s + v` where `s` is the scalar part of `q` and `v` is 
     /// the vector part of `q`. The polar form of q can be written as
     /// ```text
-    /// q := |q| * (cos(theta) + (qv / |qv|) * sin(theta))
+    /// q := |q| * (cos(theta) + (v / |v|) * sin(theta))
     /// ```
     /// The argument of `q` is the set of angles `theta` that satisfy the 
     /// relation above which we denote `arg(q)`. The principal argument of `q` 
@@ -1693,9 +1693,9 @@ where
     /// In the case of `theta == Arg(q)`, we have `n == 0`. Using the principal
     /// argument of the quaternion `q`, we can write `q` in polar form as 
     /// ```text
-    /// q := |q| * exp(vec(q) * Arg(q))
+    /// q := |q| * exp(vector(q) * Arg(q))
     /// ```
-    /// where `vec(q)` denotes the vector part of `q`.
+    /// where `vector(q)` denotes the vector part of `q`.
     ///
     /// # Example
     ///
@@ -1736,7 +1736,14 @@ where
         }
     }
 
-    /// Calculate the exponential of a quaternion.
+    /// Calculate the natural exponential of a quaternion.
+    /// 
+    /// The natural exponential of a quaternion `q := s + v` where s is the 
+    /// scalar part of `q` and `v` is the vector part of `q` is defined by
+    /// ```text
+    /// exp(q) := exp(s) * (cos(|v|) + sgn(v) * sin(|v|))
+    /// ```
+    /// where `|v|` is the norm of the vector part of `q`.
     ///
     /// # Examples
     ///
@@ -1859,15 +1866,27 @@ where
     ///
     /// Like the natural logarithm of a complex number, the natural 
     /// logarithm of a quaternion has multiple possible values. We define the 
-    /// principal value of the quaternion logarithm
+    /// principal value of the quaternion natural logarithm for a quaternion
+    /// `q` by
     /// ```text
-    /// Ln(q) := log(||q||, e) + sgn(Vec(q)) * Arg(q)
+    /// Ln(q) := ln(|q|) + sgn(vector(q)) * Arg(q)
     /// ```
-    /// where `Arg(q)` is the principal argument of `q`, `||q||` is the 
-    /// norm of `q`, `Vec(q)` is the vector part of `q`, `sgn(.)` is the 
-    /// signum function, and `log(., e)` denotes the natural logarithm of a 
-    /// scalar. Returning the principal value allows us to define a unique 
-    /// natural logarithm for each quaternion `q`.
+    /// when `|vector(q)| != 0` and 
+    /// ```text
+    /// Ln(q) := ln(|scalar(q)|)
+    /// ```
+    /// when `|vector(q)| == 0`. Here `Arg(q)` is the principal argument of 
+    /// `q`, `|q|` is the norm of `q`, `vector(q)` is the vector part of 
+    /// `q`, `sgn(.)` is the signum function, and `ln(.)` denotes the natural 
+    /// logarithm of a scalar. Returning the principal value allows us to define 
+    /// a unique natural logarithm for each quaternion `q`.
+    /// 
+    /// # Discussion
+    /// 
+    /// The principal value of the natural logarithm of `q` is well-defined when 
+    /// `|vector(q)| == 0` due to the continuity of the function when |v| = 0.
+    /// That is, `Arg(q) / |vector(q)| -> 0` as `|vector(q)| -> 0` so that 
+    /// `Ln(q) -> ln(|scalar(q)|)` as `|v| -> 0`.
     ///
     /// # Example
     ///
@@ -1920,6 +1939,10 @@ where
     fn ln_eps(&self, epsilon: S) -> Self {
         let norm_v_squared = self.vector().norm_squared();
         if norm_v_squared <= epsilon * epsilon {
+            // The principal value of the natural logarithm of `q` is well-defined when 
+            // `|vector(q)| == 0` due to the continuity of the function when |v| = 0.
+            // That is, `Arg(q) / |vector(q)| -> 0` as `|vector(q)| -> 0` so that 
+            // `Ln(q) -> ln(|scalar(q)|)` as `|v| -> 0`.
             let norm = self.scalar().abs();
             
             Self::from_parts(norm.ln(), Vector3::zero())
@@ -1964,22 +1987,50 @@ where
     /// Calculate the prinicipal value of the square root of a quaternion.
     /// 
     /// If the input quaternion is a negative real quaternion, the function 
-    /// returns a pure quaternion with non-zero real-part.
+    /// returns a pure quaternion with zero real-part
+    /// ```text
+    /// sqrt(-|s|) == sqrt(|s|) * i
+    /// ```
+    /// When `scalar(q) < 0` and `|vector(q)| == 0`, the square root does not have a 
+    /// unique value, so we return a canonically chosen value on the **x-axis** of 
+    /// the vector part, so that it is analagous to the square root of a complex 
+    /// number with negative real part and zero imaginary part.
     /// 
-    /// Given a quaternion `q`, the square root of `q` is a quaternion
-    /// `p` such that `p * p == q`. The formula for `sqrt(q)` is given by
-    /// the following formula. Let `q := s + v` where `s` is the scalar part of 
-    /// `q` and `v` is the vector part of `q`.
+    /// The principal value of the square root of a quaternion is defined as 
+    /// follows. Let `q := s + v` where `s` is the scalar part of `q` and `v` is the 
+    /// vector part of `q`. The principal value for the square root of `q` is 
+    /// given by
+    /// ```text
+    /// sqrt(q) := sqrt(|q|) * ( cos(|Arg(q) / 2|) + sgn(v) * sin(|Arg(q) / 2|) )
+    /// ```
+    /// where `|q|` is the norm of `q`, and `Arg(q)` is the principal argument of `q`.
+    /// 
+    /// # Derivation Of The Square Root Formula
+    /// 
+    /// The formula for the principal value for the square root of a quaterion is derived 
+    /// as follows. Given a quaternion `q`, the square root of `q` is a quaternion `p` 
+    /// such that `p * p == q`. The formula for `sqrt(q)` is given by the following 
+    /// formula.
+    /// ```text
+    /// sqrt(q) := exp(Ln(q) / 2)
+    ///         == exp( (1 / 2) * (ln(|q|) + sgn(v) * Arg(q)) )
+    ///         == exp(ln(|q|) / 2) * exp( sgn(v) * (Arg(q) / 2)) )
+    ///         == exp(ln(sqrt(|q|))) * exp( sgn(v) * (Arg(q) / 2) )
+    ///         == sqrt(|q|) * exp( sgn(v) * (Arg(q) / 2) )
+    ///         == sqrt(|q|) * ( cos(|Arg(q) / 2|) + sgn(v) * sin(|Arg(q) / 2|) )
+    ///         == sqrt(|q|) * ( cos(Arg(q) / 2) + sgn(v) * Sin(Arg(q) / 2) )
+    /// ```
+    /// Any square root of the quaternion `q` satisfies
     /// ```text
     ///                               t + 2 * pi * n      v         t + 2 * pi * n
-    /// sqrt(q) := sqrt(|q|) * ( cos(----------------) + --- * sin(----------------) )
+    /// sqrt(q) == sqrt(|q|) * ( cos(----------------) + --- * sin(----------------) )
     ///                                     2            |v|               2
     /// ```
     /// where `|q|` is the norm of `q`, `t` is the principal argument of `q`, and `n`
-    /// is the nth angle satisfying the above equation. In the case of the square root, there
-    /// are two solutions: `n == 0` and `n == 1`. The `n == 0` case corresponds to the principal 
-    /// value `p` returned by the function, and the `n == 1` case corresponds to the solution 
-    /// `-p`, which differs only by a sign. Indeed, let 
+    /// is the nth angle satisfying the above equation. There are two solutions: `n == 0` 
+    /// and `n == 1`. The `n == 0` case corresponds to the principal value `p` returned 
+    /// by the function, and the `n == 1` case corresponds to the solution `-p`, which 
+    /// differs only by a sign. Indeed, let 
     /// ```text
     ///                               t      v         t
     /// p0 := p == sqrt(|q|) * ( cos(---) + --- * sin(---) )
@@ -2128,9 +2179,7 @@ where
                 // centered at the origin in the vector subspace of the space of
                 // quaternions, so we choose a canonical one on the imaginary axis 
                 // in the complex plane.
-                Self::from_pure(
-                    Vector3::new(sqrt_norm_self, S::zero(), S::zero())
-                )
+                Self::from_pure(Vector3::new(sqrt_norm_self, S::zero(), S::zero()))
             }
         } else {
             // Otherwise, we can treat the quaternion as normal.
