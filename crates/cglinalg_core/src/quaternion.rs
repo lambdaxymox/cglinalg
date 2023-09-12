@@ -3176,7 +3176,21 @@ where
         Self::from_parts(scalar, vector)
     }
 
-    /// Compute the quaternionic cosine of a quaternion.
+    /// Compute the quaternionic cosine of `self`.
+    /// 
+    /// The quaternionic cosine is defined as follows. Given a quaternion 
+    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector 
+    /// part of `q`
+    /// ```text                               
+    /// cos(q) := cos(s) * cosh(|v|) - sin(s) * sinh(|v|) * (v / |v|)
+    /// ```
+    /// when `norm(v) := |v| != 0` and
+    /// ```text
+    /// cos(q) := cos(s)
+    /// ```
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions because 
+    /// `sinh(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `cos(q)` goes to 
+    /// zero as `|v| -> 0`.
     /// 
     /// # Example
     /// 
@@ -3200,6 +3214,10 @@ where
     pub fn cos(&self) -> Self {
         let norm_vec_self = self.vector().norm();
         if norm_vec_self.is_zero() {
+            // The quaternionic cosine is continuous at |v| = 0. In particular, 
+            // `sinh(|v|) / |v| -> 1` as `|v| -> 0` so that `vector(q) -> 0` as 
+            // `|v| -> 0` and thus the quaternionic cosine is well-defined 
+            // for real quaternions.
             let scalar = self.scalar().cos() * norm_vec_self.cosh();
 
             return Self::from_real(scalar);
@@ -3225,7 +3243,21 @@ where
         todo!()
     }
 
-    /// Compute the quaternionic sine of a quaternion.
+    /// Compute the quaternionic sine of `self`.
+    /// 
+    /// The quaternionic sine is defined as follows. Given a quaternion 
+    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector 
+    /// part of `q`
+    /// ```text                               
+    /// sin(q) := sin(s) * cosh(|v|) + cos(s) * sinh(|v|) * (v / |v|)
+    /// ```
+    /// when `norm(v) := |v| != 0` and
+    /// ```text
+    /// sin(q) := sin(s)
+    /// ```
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions because 
+    /// `sinh(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `sin(q)` goes to 
+    /// zero as `|v| -> 0`.
     /// 
     /// # Example
     /// 
@@ -3249,6 +3281,10 @@ where
     pub fn sin(&self) -> Self {
         let norm_vec_self = self.vector().norm();
         if norm_vec_self.is_zero() {
+            // The quaternionic sine is continuous at |v| = 0. In particular, 
+            // `sinh(|v|) / |v| -> 1` as `|v| -> 0` so that `vector(q) -> 0` as 
+            // `|v| -> 0` and thus the quaternionic sine is well-defined 
+            // for real quaternions.
             let scalar = self.scalar().sin() * norm_vec_self.cosh();
 
             return Self::from_real(scalar);
@@ -3275,7 +3311,30 @@ where
         todo!()
     }
 
-    /// Compute the quaternionic tangent of a quaternion.
+    /// Compute the quaternionic tangent of `self`.
+    /// 
+    /// The quaternionic tangent is defined as follows. Given a quaternion 
+    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector 
+    /// part of `q`
+    /// ```text
+    /// tan(q) := sin(q) / cos(q)
+    ///        := sin(q) * cos(q)^-1
+    ///        == cos(s) * sin(s) / (cos(s) * cos(s) + sinh(|v|) * sinh(|v|))
+    ///         + (cosh(|v|) * sinh(|v|) / (cos(s) * cos(s) + sinh(|v|) * sinh(|v|))) * (v / |v|)
+    ///        == scalar(tan(q)) + vector(tan(q))
+    /// ```
+    /// where
+    /// ```text                         
+    /// scalar(q) := cos(s) * sin(s) / (cos(s) * cos(s) + sinh(|v|) * sinh(|v|))
+    /// vector(q) := (cosh(|v|) * sinh(|v|) / (cos(s) * cos(s) + sinh(|v|) * sinh(|v|))) * (v / |v|)
+    /// ```
+    /// when `q != (n + 1 / 2) * pi` where `n` is an integer, and
+    /// ```text
+    /// tan(q) := tan(s)
+    /// ```
+    /// when `q == (n + 1 / 2) * pi`. This function is well-defined for real quaternions 
+    /// because `sinh(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `tan(q)` 
+    /// goes to zero as `|v| -> 0`.
     /// 
     /// # Example
     /// 
@@ -3299,6 +3358,10 @@ where
     pub fn tan(&self) -> Self {
         let norm_v = self.vector().norm();
         if norm_v.is_zero() {
+            // The quaternionic tangent is continuous at |v| = 0. In particular, 
+            // `sinh(|v|) / |v| -> 1` as `|v| -> 0` so that `vector(q) -> 0` as 
+            // `|v| -> 0` and thus the quaternionic tangent is well-defined 
+            // for real quaternions.
             return Self::from_real(self.scalar().tan());
         }
 
@@ -3329,7 +3392,21 @@ where
         todo!()
     }
 
-    /// Compute the quaternionic hyperbolic cosine of a quaternion.
+    /// Compute the quaternionic hyperbolic cosine of `self`.
+    /// 
+    /// The quaternionic hyperbolic cosine is defined as follows. Given a 
+    /// quaternion `q := s + v` where `s` is the scalar part of `q` and `v` is 
+    /// the vector part of `q`
+    /// ```text                               
+    /// cosh(q) := cosh(s) * cos(|v|) + sinh(s) * sin(|v|) * (v / |v|)
+    /// ```
+    /// when `norm(v) := |v| != 0` and
+    /// ```text
+    /// cosh(q) := cosh(s)
+    /// ```
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions 
+    /// because `sin(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of 
+    /// `cosh(q)` goes to zero as `|v| -> 0`.
     /// 
     /// # Example
     /// 
@@ -3355,6 +3432,10 @@ where
     pub fn cosh(&self) -> Self {
         let norm_vec_self = self.vector().norm();
         if norm_vec_self.is_zero() {
+            // The quaternionic hyperbolic cosine is continuous at |v| = 0. In 
+            // particular, `sin(|v|) / |v| -> 1` as `|v| -> 0` so that 
+            // `vector(q) -> 0` as `|v| -> 0` and thus the quaternionic hyperbolic 
+            // cosine is well-defined for real quaternions.
             let scalar = self.scalar().cosh() * norm_vec_self.cos();
 
             return Self::from_real(scalar);
@@ -3381,7 +3462,21 @@ where
         todo!()
     }
 
-    /// Compute the quaternionic hyperbolic sine of a quaternion.
+    /// Compute the quaternionic hyperbolic sine of `self`.
+    /// 
+    /// The quaternionic hyperbolic sine is defined as follows. Given a 
+    /// quaternion `q := s + v` where `s` is the scalar part of `q` and `v` is 
+    /// the vector part of `q`
+    /// ```text                               
+    /// sinh(q) := sinh(s) * cos(|v|) + cosh(s) * sin(|v|) * (v / |v|)
+    /// ```
+    /// when `norm(v) := |v| != 0` and
+    /// ```text
+    /// sinh(q) := sinh(s)
+    /// ```
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions 
+    /// because `sin(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of 
+    /// `sinh(q)` goes to zero as `|v| -> 0`.
     /// 
     /// # Example
     /// 
@@ -3407,6 +3502,10 @@ where
     pub fn sinh(&self) -> Self {
         let norm_vec_self = self.vector().norm();
         if norm_vec_self.is_zero() {
+            // The quaternionic hyperbolic sine is continuous at |v| = 0. In 
+            // particular, `sin(|v|) / |v| -> 1` as `|v| -> 0` so that 
+            // `vector(q) -> 0` as `|v| -> 0` and thus the quaternionic hyperbolic 
+            // sine is well-defined for real quaternions.
             let scalar = self.scalar().sinh() * norm_vec_self.cos();
 
             return Self::from_real(scalar);
@@ -3433,7 +3532,30 @@ where
         todo!()
     }
 
-    /// Compute the quaternionic hyperbolic tangent of a quaternion.
+    /// Compute the quaternionic hyperbolic tangent of `self`.
+    /// 
+    /// The quaternionic hyperbolic tangent is defined as follows. Given a quaternion 
+    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector 
+    /// part of `q`
+    /// ```text
+    /// tan(q) := sinh(q) / cosh(q)
+    ///        := sinh(q) * cosh(q)^-1
+    ///        == cosh(s) * sinh(s) / (sinh(s) * sinh(s) + cos(|v|) * cos(|v|))
+    ///         + (cos(|v|) * sin(|v|) / (sinh(s) * sinh(s) + cos(|v|) * cos(|v|))) * (v / |v|)
+    ///        == scalar(tanh(q)) + vector(tanh(q))
+    /// ```
+    /// where
+    /// ```text                         
+    /// scalar(tanh(q)) := cosh(s) * sinh(s) / (sinh(s) * sinh(s) + cos(|v|) * cos(|v|))
+    /// vector(tanh(q)) := (cos(|v|) * sin(|v|) / (sinh(s) * sinh(s) + cos(|v|) * cos(|v|))) * (v / |v|)
+    /// ```
+    /// when `q != ((n + (1 / 2)) * pi) * (v / |v|)` where `n` is an integer, and
+    /// ```text
+    /// tanh(q) := tanh(s)
+    /// ```
+    /// when `q == ((n + (1 / 2)) * pi) * (v / |v|)` where `n` is an integer. This function 
+    /// is well-defined for real quaternions because `sin(|v|) / |v| -> 1` as `|v| -> 0`, 
+    /// so that the vector part of `tanh(q)` goes to zero as `|v| -> 0`.
     /// 
     /// # Example
     /// 
@@ -3459,6 +3581,10 @@ where
     pub fn tanh(&self) -> Self {
         let norm_v = self.vector().norm();
         if norm_v.is_zero() {
+            // The quaternionic hyperbolic tangent is continuous at |v| = 0. In 
+            // particular, `sin(|v|) / |v| -> 1` as `|v| -> 0` so that 
+            // `vector(q) -> 0` as `|v| -> 0` and thus the quaternionic hyperbolic 
+            // tangent is well-defined for real quaternions.
             return Self::from_real(self.scalar().tanh());
         }
 
@@ -3466,15 +3592,12 @@ where
         let sin_norm_v = norm_v.sin();
         let cosh_s = self.scalar().cosh();
         let sinh_s = self.scalar().sinh();
-        let denom_s = sinh_s * sinh_s + cos_norm_v * cos_norm_v; // cosh_s * cosh_s - sin_norm_v * sin_norm_v;
+        let denom_s = sinh_s * sinh_s + cos_norm_v * cos_norm_v;
         let denom_v = denom_s * norm_v;
         let scalar = cosh_s * sinh_s / denom_s;
         let vector = self.vector() * (cos_norm_v * sin_norm_v / denom_v);
 
         Self::from_parts(scalar, vector)
-        /*
-        self.sinh().div_right(&self.cosh()).unwrap()
-        */
     }
 
     /// Compute the quaternionic hyperbolic arctangent of a quaternion.
