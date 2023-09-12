@@ -1305,7 +1305,7 @@ mod trigonometry_cos_tests {
 
 
     #[test]
-    fn test_quaternion_non_zero_cos_real() {
+    fn test_quaternion_cos_real() {
         let base_angle = 0_f64;
         let angle_multiple = f64::consts::FRAC_PI_8;
         for i in 0..400 {
@@ -1410,7 +1410,7 @@ mod trigonometry_cos_tests {
 
     #[test]
     fn test_quaternion_cos6() {
-        // quaternion := 0 + 0i + 1j + 1k
+        // quaternion := 0 + 0i + 1j + 0k
         let quaternion = {
             let scalar = 0_f64;
             let vector = Vector3::new(0_f64, 1_f64, 0_f64);
@@ -1770,6 +1770,178 @@ mod trigonometry_cos_tests {
 }
 
 #[cfg(test)]
+mod trigonometry_acos_tests {
+    use cglinalg_core::{
+        Vector3,
+        Quaternion,  
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+    use core::f64;
+
+
+    const SQRT_3: f64 = 1.73205080756887729_f64;
+    const COS_1: f64 = 0.54030230586813972_f64;
+    const SIN_1: f64 = 0.84147098480789651_f64;
+    const COSH_1: f64 = 1.54308063481524378_f64;
+    const SINH_1: f64 = 1.17520119364380146_f64;
+    const COSH_SQRT_3: f64 = 2.9145774401759282_f64;
+    const SINH_SQRT_3: f64 = 2.7376562338581640_f64;
+    const TAN_1: f64 = 1.55740772465490223_f64;
+    const TANH_1: f64 = 0.76159415595576489_f64;
+    const SQRT_2: f64 = 1.41421356237309505_f64;
+    const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
+    const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
+
+
+    #[test]
+    fn test_quaternion_acos1() {
+        let quaternion = {
+            let scalar = COS_1 * COSH_SQRT_3;
+            let vector = Vector3::new(1_f64, 1_f64, 1_f64) * (-SIN_1 * SINH_SQRT_3 / SQRT_3);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 1i + 1j + 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.acos();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_acos2() {
+        let quaternion = {
+            let scalar = COS_1 * COSH_SQRT_3;
+            let vector = Vector3::new(-1_f64, -1_f64, -1_f64) * (-SIN_1 * SINH_SQRT_3 / SQRT_3);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 - 1i - 1j - 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(-1_f64, -1_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.acos();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_acos3() {
+        let quaternion = {
+            let scalar = COS_1 * COSH_1;
+            let vector = Vector3::new(1_f64, 0_f64, 0_f64) * (-SIN_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 1i + 0j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.acos();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_acos4() {
+        let quaternion = {
+            let scalar = COS_1 * COSH_1;
+            let vector = Vector3::new(-1_f64, 0_f64, 0_f64) * (-SIN_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 - 1i + 0j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.acos();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_acos5() {
+        let quaternion = {
+            let scalar = COS_1 * COSH_1;
+            let vector = Vector3::new(0_f64, 1_f64, 0_f64) * (-SIN_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i + 1j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.acos();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_acos6() {
+        let quaternion = {
+            let scalar = COS_1 * COSH_1;
+            let vector = Vector3::new(0_f64, -1_f64, 0_f64) * (-SIN_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i - 1j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, -1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.acos();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_acos7() {
+        let quaternion = {
+            let scalar = COS_1 * COSH_1;
+            let vector = Vector3::new(0_f64, 0_f64, 1_f64) * (-SIN_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i + 0j + 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, 0_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.acos();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_acos8() {
+        let quaternion = {
+            let scalar = COS_1 * COSH_1;
+            let vector = Vector3::new(0_f64, 0_f64, -1_f64) * (-SIN_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i + 0j - 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, 0_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.acos();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+}
+
+#[cfg(test)]
 mod trigonometry_sin_tests {
     use cglinalg_core::{
         Vector3,
@@ -1797,7 +1969,7 @@ mod trigonometry_sin_tests {
 
 
     #[test]
-    fn test_quaternion_non_zero_sin_real() {
+    fn test_quaternion_sin_real() {
         let base_angle = 0_f64;
         let angle_multiple = f64::consts::FRAC_PI_8;
         for i in 0..400 {
@@ -2005,7 +2177,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
     }
 
     #[test]
@@ -2256,6 +2428,448 @@ mod trigonometry_sin_tests {
             Quaternion::from_parts(scalar, vector)
         };
         let result = quaternion.sin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+}
+
+#[cfg(test)]
+mod trigonometry_asin_tests {
+    use cglinalg_core::{
+        Vector3,
+        Quaternion,  
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+    use core::f64;
+
+
+    const SQRT_3: f64 = 1.73205080756887729_f64;
+    const COS_1: f64 = 0.54030230586813972_f64;
+    const SIN_1: f64 = 0.84147098480789651_f64;
+    const COSH_1: f64 = 1.54308063481524378_f64;
+    const SINH_1: f64 = 1.17520119364380146_f64;
+    const COSH_SQRT_3: f64 = 2.9145774401759282_f64;
+    const SINH_SQRT_3: f64 = 2.7376562338581640_f64;
+    const TAN_1: f64 = 1.55740772465490223_f64;
+    const TANH_1: f64 = 0.76159415595576489_f64;
+    const SQRT_2: f64 = 1.41421356237309505_f64;
+    const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
+    const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
+
+
+    #[test]
+    fn test_quaternion_asin1() {
+        let quaternion = {
+            let scalar = SIN_1 * COSH_SQRT_3;
+            let vector = Vector3::new(1_f64, 1_f64, 1_f64) * (COS_1 * SINH_SQRT_3 / SQRT_3);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 1i + 1j + 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin2() {
+        let quaternion = {
+            let scalar = SIN_1 * COSH_SQRT_3;
+            let vector = Vector3::new(-1_f64, -1_f64, -1_f64) * (COS_1 * SINH_SQRT_3 / SQRT_3);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 - 1i - 1j - 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(-1_f64, -1_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin3() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 0_f64) * SINH_1;
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i + 0j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin4() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 0_f64) * SINH_1;
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i + 1j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin5() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 0_f64, 1_f64) * SINH_1;
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i + 0j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 0_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin6() {
+        let quaternion = {
+            let scalar = SIN_1 * COSH_1;
+            let vector = Vector3::new(1_f64, 0_f64, 0_f64) * (COS_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 1i + 0j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin7() {
+        let quaternion = {
+            let scalar = SIN_1 * COSH_1;
+            let vector = Vector3::new(-1_f64, 0_f64, 0_f64) * (COS_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 - 1i + 0j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin8() {
+        let quaternion = {
+            let scalar = SIN_1 * COSH_1;
+            let vector = Vector3::new(0_f64, 1_f64, 0_f64) * (COS_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i + 1j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin9() {
+        let quaternion = {
+            let scalar = SIN_1 * COSH_1;
+            let vector = Vector3::new(0_f64, -1_f64, 0_f64) * (COS_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i - 1j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, -1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin10() {
+        let quaternion = {
+            let scalar = SIN_1 * COSH_1;
+            let vector = Vector3::new(0_f64, 0_f64, 1_f64) * (COS_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i + 0j + 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, 0_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin11() {
+        let quaternion = {
+            let scalar = SIN_1 * COSH_1;
+            let vector = Vector3::new(0_f64, 0_f64, -1_f64) * (COS_1 * SINH_1);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i + 0j - 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, 0_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin12() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 1_f64, 0_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i + 1j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin13() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, -1_f64, 0_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i - 1j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, -1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin14() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 1_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i + 1j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin15() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, -1_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i + 1j - 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin16() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 1_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i + 0j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin17() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, -1_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i + 0j - 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin18() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 1_f64, 0_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 - 1i + 1j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin19() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, -1_f64, 0_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 - 1i - 1j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, -1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin20() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, -1_f64, 1_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i - 1j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, -1_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin21() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, -1_f64, -1_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i - 1j - 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, -1_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin22() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, 1_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 - 1i + 0j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_quaternion_asin23() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, -1_f64) * (SINH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 - 1i + 0j - 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.asin();
 
         assert_relative_eq!(result, expected, epsilon = 1e-15);
     }
@@ -2829,32 +3443,6 @@ mod trigonometry_tan_tests {
 }
 
 #[cfg(test)]
-mod trigonometry_acos_tests {
-    use cglinalg_core::{
-        Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
-    };
-
-
-}
-
-#[cfg(test)]
-mod trigonometry_asin_tests {
-    use cglinalg_core::{
-        Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
-    };
-
-
-}
-
-#[cfg(test)]
 mod trigonometry_atan_tests {
     use cglinalg_core::{
         Vector3,
@@ -2864,9 +3452,512 @@ mod trigonometry_atan_tests {
         assert_relative_eq,
     };
 
+    use core::f64;
 
+
+    const SQRT_3: f64 = 1.73205080756887729_f64;
+    const COS_1: f64 = 0.54030230586813972_f64;
+    const SIN_1: f64 = 0.84147098480789651_f64;
+    const COSH_1: f64 = 1.54308063481524378_f64;
+    const SINH_1: f64 = 1.17520119364380146_f64;
+    const COSH_SQRT_3: f64 = 2.9145774401759282_f64;
+    const SINH_SQRT_3: f64 = 2.7376562338581640_f64;
+    const TAN_1: f64 = 1.55740772465490223_f64;
+    const TANH_1: f64 = 0.7615941559557647_f64;
+    const SQRT_2: f64 = 1.41421356237309505_f64;
+    const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
+    const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
+    const TANH_SQRT_2: f64 = 0.88838556158566054_f64;
+
+
+    #[test]
+    fn test_quaternion_atan2() {
+        let quaternion = {
+            let scalar = {
+                let numerator = SIN_1 * COS_1;
+                let denominator = COS_1 * COS_1 + SINH_SQRT_3 * SINH_SQRT_3;
+                numerator / denominator
+            };
+            let vector = {
+                let numerator = COSH_SQRT_3 * SINH_SQRT_3;
+                let denominator = (COS_1 * COS_1 + SINH_SQRT_3 * SINH_SQRT_3) * SQRT_3;
+                let scale = numerator / denominator;
+                Vector3::new(1_f64, 1_f64, 1_f64) * scale
+            };
+            
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 1i + 1j + 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan3() {
+        let quaternion = {
+            let scalar = {
+                let numerator = SIN_1 * COS_1;
+                let denominator = COS_1 * COS_1 + SINH_SQRT_3 * SINH_SQRT_3;
+                numerator / denominator
+            };
+            let vector = {
+                let numerator = COSH_SQRT_3 * SINH_SQRT_3;
+                let denominator = (COS_1 * COS_1 + SINH_SQRT_3 * SINH_SQRT_3) * SQRT_3;
+                let scale = numerator / denominator;
+                Vector3::new(-1_f64, -1_f64, -1_f64) * scale
+            };
+            
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 - 1i - 1j - 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(-1_f64, -1_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan5() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 0_f64) * TANH_1;
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i + 0j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan6() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 0_f64) * TANH_1;
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i + 1j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan7() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 0_f64, 1_f64) * TANH_1;
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i + 0j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 0_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan8() {
+        let quaternion = {
+            let scalar = {
+                let numerator = SIN_1 * COS_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                numerator / denominator
+            };
+            let vector = {
+                let numerator = COSH_1 * SINH_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                let scale = numerator / denominator;
+                Vector3::new(1_f64, 0_f64, 0_f64) * scale
+            };
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 1i + 0j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan9() {
+        let quaternion = {
+            let scalar = {
+                let numerator = SIN_1 * COS_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                numerator / denominator
+            };
+            let vector = {
+                let numerator = COSH_1 * SINH_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                let scale = numerator / denominator;
+                Vector3::new(-1_f64, 0_f64, 0_f64) * scale
+            };
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 - 1i + 0j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan10() {
+        let quaternion = {
+            let scalar = {
+                let numerator = SIN_1 * COS_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                numerator / denominator
+            };
+            let vector = {
+                let numerator = COSH_1 * SINH_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                let scale = numerator / denominator;
+                Vector3::new(0_f64, 1_f64, 0_f64) * scale
+            };
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i + 1j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan11() {
+        let quaternion = {
+            let scalar = {
+                let numerator = SIN_1 * COS_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                numerator / denominator
+            };
+            let vector = {
+                let numerator = COSH_1 * SINH_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                let scale = numerator / denominator;
+                Vector3::new(0_f64, -1_f64, 0_f64) * scale
+            };
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i - 1j + 0k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, -1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan12() {
+        let quaternion = {
+            let scalar = {
+                let numerator = SIN_1 * COS_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                numerator / denominator
+            };
+            let vector = {
+                let numerator = COSH_1 * SINH_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                let scale = numerator / denominator;
+                Vector3::new(0_f64, 0_f64, 1_f64) * scale
+            };
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i + 0j + 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, 0_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan13() {
+        let quaternion = {
+            let scalar = {
+                let numerator = SIN_1 * COS_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                numerator / denominator
+            };
+            let vector = {
+                let numerator = COSH_1 * SINH_1;
+                let denominator = COS_1 * COS_1 + SINH_1 * SINH_1;
+                let scale = numerator / denominator;
+                Vector3::new(0_f64, 0_f64, -1_f64) * scale
+            };
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 1 + 0i + 0j - 1k
+        let expected = {
+            let scalar = 1_f64;
+            let vector = Vector3::new(0_f64, 0_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan14() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 1_f64, 0_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i + 1j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan15() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, -1_f64, 0_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i - 1j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, -1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan16() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 1_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i + 1j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan17() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, -1_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i + 1j - 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, 1_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan18() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 1_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i + 0j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan19() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, -1_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 1i + 0j - 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(1_f64, 0_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan20() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 1_f64, 0_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 - 1i + 1j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan21() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, -1_f64, 0_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 - 1i - 1j + 0k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, -1_f64, 0_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan22() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, -1_f64, 1_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i - 1j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, -1_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan23() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, -1_f64, -1_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 + 0i - 1j - 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(0_f64, -1_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan24() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, 1_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 - 1i + 0j + 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, 1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
+
+    #[test]
+    fn test_quaternion_atan25() {
+        let quaternion = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, -1_f64) * (TANH_SQRT_2 / SQRT_2);
+            Quaternion::from_parts(scalar, vector)
+        };
+        // expected := 0 - 1i + 0j - 1k
+        let expected = {
+            let scalar = 0_f64;
+            let vector = Vector3::new(-1_f64, 0_f64, -1_f64);
+            Quaternion::from_parts(scalar, vector)
+        };
+        let result = quaternion.atan();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-13);
+    }
 }
-
 
 #[cfg(test)]
 mod trigonometry_cosh_tests {
@@ -2899,7 +3990,7 @@ mod trigonometry_cosh_tests {
 
 
     #[test]
-    fn test_quaternion_non_zero_cosh_real() {
+    fn test_quaternion_cosh_real() {
         let base_angle = 0_f64;
         let angle_multiple = f64::consts::FRAC_PI_8;
         for i in 0..400 {
@@ -3395,7 +4486,7 @@ mod trigonometry_sinh_tests {
 
 
     #[test]
-    fn test_quaternion_non_zero_sinh_real() {
+    fn test_quaternion_sinh_real() {
         let base_angle = 0_f64;
         let angle_multiple = f64::consts::FRAC_PI_8;
         for i in 0..400 {
@@ -3603,7 +4694,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_eq!(result, expected);
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
     }
 
     #[test]

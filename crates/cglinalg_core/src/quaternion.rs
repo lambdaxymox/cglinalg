@@ -3229,7 +3229,7 @@ where
         Self::from_parts(scalar, vector)
     }
 
-    /// Compute the quaternionic arccosine of a quaternion.
+    /// Compute the quaternionic arccosine of `self`.
     /// 
     /// # Example
     /// 
@@ -3240,7 +3240,11 @@ where
     /// ```
     #[inline]
     pub fn acos(&self) -> Self {
-        todo!()
+        let signum_vec_self = Self::from_pure(self.vector().normalize());
+        let identity = Self::identity();
+        let q = (self + (self.squared() - identity).sqrt()).ln();
+
+        -(signum_vec_self * q)
     }
 
     /// Compute the quaternionic sine of `self`.
@@ -3296,7 +3300,7 @@ where
         Self::from_parts(scalar, vector)
     }
 
-    /// Compute the quaternionic arcsine of a quaternion.
+    /// Compute the quaternionic arcsine of `self`.
     /// 
     /// # Example
     /// 
@@ -3308,7 +3312,11 @@ where
     /// ```
     #[inline]
     pub fn asin(&self) -> Self {
-        todo!()
+        let signum_vec_self = Self::from_pure(self.vector().normalize());
+        let identity = Self::identity();
+        let q = ((signum_vec_self * self) + (identity - self.squared()).sqrt()).ln();
+
+        -(signum_vec_self * q)
     }
 
     /// Compute the quaternionic tangent of `self`.
@@ -3380,7 +3388,7 @@ where
         Self::from_parts(scalar, vector)
     }
 
-    /// Compute the quaternionic arctangent of a quaternion.
+    /// Compute the quaternionic arctangent of `self`.
     /// 
     /// # Example
     /// 
@@ -3392,7 +3400,12 @@ where
     /// ```
     #[inline]
     pub fn atan(&self) -> Self {
-        todo!()
+        let signum_vec_self = Self::from_pure(self.vector().normalize());
+        let numerator = signum_vec_self + self;
+        let denominator = signum_vec_self - self;
+        let q = numerator.div_right(&denominator).unwrap();
+        
+        signum_vec_self.half() * q.ln()
     }
 
     /// Compute the quaternionic hyperbolic cosine of `self`.
@@ -3450,7 +3463,7 @@ where
         Self::from_parts(scalar, vector)
     }
 
-    /// Compute the quaternionic hyperbolic arccosine of a quaternion.
+    /// Compute the quaternionic hyperbolic arccosine of `self`.
     /// 
     /// # Example
     /// 
@@ -3520,7 +3533,7 @@ where
         Self::from_parts(scalar, vector)
     }
 
-    /// Compute the quaternionic hyperbolic arcsine of a quaternion.
+    /// Compute the quaternionic hyperbolic arcsine of `self`.
     /// 
     /// # Example
     /// 
@@ -3607,7 +3620,7 @@ where
         Self::from_parts(scalar, vector)
     }
 
-    /// Compute the quaternionic hyperbolic arctangent of a quaternion.
+    /// Compute the quaternionic hyperbolic arctangent of `self`.
     /// 
     /// # Example
     /// 
