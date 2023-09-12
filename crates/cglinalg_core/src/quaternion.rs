@@ -2048,6 +2048,8 @@ where
     /// assert_relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = 1e-10);
     /// ```
     /// 
+    /// # Discussion
+    /// 
     /// The noncommutativity of quaternion multiplication has some counterintuitive 
     /// properties. Some quaternions can have more solutions than the degree of the 
     /// corresponding polynomial equation. For example, consider the quaternion `q := -1`.
