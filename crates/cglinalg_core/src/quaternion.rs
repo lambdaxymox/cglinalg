@@ -1961,7 +1961,7 @@ where
         (self.ln() * exponent).exp()
     }
 
-    /// Calculate the square root of a quaternion.
+    /// Calculate the prinicipal value of the square root of a quaternion.
     /// 
     /// If the input quaternion is a negative real quaternion, the function 
     /// returns a pure quaternion with non-zero real-part.
@@ -1977,9 +1977,9 @@ where
     /// ```
     /// where `|q|` is the norm of `q`, `t` is the principal argument of `q`, and `n`
     /// is the nth angle satisfying the above equation. In the case of the square root, there
-    /// are two solutions: `n == 0` and `n == 1`. The `n == 0` case corresponds to the solution
-    /// `p` returned by the function, and the `n == 1` case corresponds to the solution `-p`,
-    /// which differs only by a sign. Indeed, let 
+    /// are two solutions: `n == 0` and `n == 1`. The `n == 0` case corresponds to the principal 
+    /// value `p` returned by the function, and the `n == 1` case corresponds to the solution 
+    /// `-p`, which differs only by a sign. Indeed, let 
     /// ```text
     ///                               t      v         t
     /// p0 := p == sqrt(|q|) * ( cos(---) + --- * sin(---) )
@@ -3237,6 +3237,25 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// // Golden Ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let ln_phi = phi.ln();
+    /// let pi_over_4 = f64::consts::FRAC_PI_4;
+    /// let expected = Quaternion::new(pi_over_4, 0_f64, 0_f64, ln_phi);
+    /// let quaternion = Quaternion::new(
+    ///     f64::sqrt(5_f64) * f64::sqrt(2_f64) / 4_f64,
+    ///     0_f64,
+    ///     0_f64,
+    ///     -f64::sqrt(2_f64) / 4_f64
+    /// );
+    /// let result = quaternion.acos();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn acos(&self) -> Self {
@@ -3308,7 +3327,25 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// // Golden Ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let ln_phi = phi.ln();
+    /// let pi_over_4 = f64::consts::FRAC_PI_4;
+    /// let expected = Quaternion::new(pi_over_4, 0_f64, 0_f64, ln_phi);
+    /// let quaternion = Quaternion::new(
+    ///     f64::sqrt(5_f64) * f64::sqrt(2_f64) / 4_f64,
+    ///     0_f64,
+    ///     0_f64,
+    ///     f64::sqrt(2_f64) / 4_f64
+    /// );
+    /// let result = quaternion.asin();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn asin(&self) -> Self {
@@ -3396,7 +3433,25 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// // Golden Ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let ln_phi = phi.ln();
+    /// let pi_over_4 = f64::consts::FRAC_PI_4;
+    /// let expected = Quaternion::new(pi_over_4, 0_f64, 0_f64, ln_phi);
+    /// let quaternion = Quaternion::new(
+    ///     2_f64 / 3_f64,
+    ///     0_f64,
+    ///     0_f64,
+    ///     f64::sqrt(5_f64) / 3_f64
+    /// );
+    /// let result = quaternion.atan();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn atan(&self) -> Self {
