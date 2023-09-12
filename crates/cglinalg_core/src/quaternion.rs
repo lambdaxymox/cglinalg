@@ -3526,11 +3526,25 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    /// let quaternion = Quaternion::new(0_f64, f64::sqrt(5_f64) / 2_f64, 0_f64, 0_f64);
+    /// let expected = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
+    /// let result = quaternion.acosh();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn acosh(&self) -> Self {
-        todo!()
+        let identity = Self::identity();
+        
+        (self + (self + identity).sqrt() * (self - identity).sqrt()).ln()
     }
 
     /// Compute the quaternionic hyperbolic sine of `self`.
@@ -3596,11 +3610,25 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    /// let quaternion = Quaternion::new(0_f64, 3_f64 / 2_f64, 0_f64, 0_f64);
+    /// let expected = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
+    /// let result = quaternion.asinh();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn asinh(&self) -> Self {
-        todo!()
+        let identity = Self::identity();
+        
+        (self + (self.squared() + identity).sqrt()).ln()
     }
 
     /// Compute the quaternionic hyperbolic tangent of `self`.
@@ -3683,11 +3711,25 @@ where
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
+    /// // Golden ratio.
+    /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
+    /// let pi_over_two = f64::consts::FRAC_PI_2;
+    /// let quaternion = Quaternion::from_real(3_f64 / f64::sqrt(5_f64));
+    /// let expected = Quaternion::new(f64::ln(1_f64 + phi), 0_f64, 0_f64, 0_f64);
+    /// let result = quaternion.atanh();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn atanh(&self) -> Self {
-        todo!()
+        let identity = Self::identity();
+
+        ((identity + self).ln() - (identity - self).ln()).half()
     }
 }
 
