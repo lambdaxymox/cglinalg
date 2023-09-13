@@ -2581,7 +2581,7 @@ approx_trace_props!(matrix3x3_f64_trace_props, Matrix3x3, f64, strategy_matrix_f
 approx_trace_props!(matrix4x4_f64_trace_props, Matrix4x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
 
 
-macro_rules! row_vector_dot_product_props {
+macro_rules! exact_row_vector_dot_product_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
@@ -2598,8 +2598,8 @@ macro_rules! row_vector_dot_product_props {
     }
 }
 
-row_vector_dot_product_props!(matrix1x1_i32_column_vector_dot_product_props, Matrix1x1, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
-row_vector_dot_product_props!(matrix1x2_i32_column_vector_dot_product_props, Matrix1x2, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
-row_vector_dot_product_props!(matrix1x3_i32_column_vector_dot_product_props, Matrix1x3, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
-row_vector_dot_product_props!(matrix1x4_i32_column_vector_dot_product_props, Matrix1x4, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
+exact_row_vector_dot_product_props!(matrix1x1_i32_column_vector_dot_product_props, Matrix1x1, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
+exact_row_vector_dot_product_props!(matrix1x2_i32_column_vector_dot_product_props, Matrix1x2, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
+exact_row_vector_dot_product_props!(matrix1x3_i32_column_vector_dot_product_props, Matrix1x3, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
+exact_row_vector_dot_product_props!(matrix1x4_i32_column_vector_dot_product_props, Matrix1x4, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
 
