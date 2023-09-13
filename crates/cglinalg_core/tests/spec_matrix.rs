@@ -12,6 +12,9 @@ use cglinalg_numeric::{
 use cglinalg_core::{
     Matrix,
     Matrix1x1,
+    Matrix1x2,
+    Matrix1x3,
+    Matrix1x4,
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
@@ -1404,7 +1407,12 @@ where
     Ok(())
 }
 
-
+/// The matrix trace satisfies the following relation.
+/// 
+/// Given a square matrix `m`
+/// ```text
+/// trace(transpose(m)) == trace(m)
+/// ```
 fn prop_matrix_trace_transpose<S, const N: usize>(m: Matrix<S, N, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
@@ -1417,7 +1425,12 @@ where
     Ok(())
 }
 
-
+/// Matrix multiplication is commutative under the matrix trace.
+/// 
+/// Given two square matrices `m1` and `m2` of identical shape
+/// ```text
+/// trace(m1 * m2) == trace(m2 * m1)
+/// ```
 fn prop_matrix_trace_product<S, const N: usize, const NN: usize>(m1: Matrix<S, N, N,>, m2: Matrix<S, N, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar,
@@ -1431,7 +1444,12 @@ where
     Ok(())
 }
 
-
+/// The matrix trace satisfies the following relation.
+/// 
+/// Given a matrix `m` and a constant `c`
+/// ```text
+/// trace(m * c) == trace(m) * c
+/// ```
 fn prop_matrix_trace_scalar_product<S, const N: usize>(c: S, m: Matrix<S, N, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar
@@ -1444,6 +1462,12 @@ where
     Ok(())
 }
 
+/// The matrix trace is linear.
+/// 
+/// Given two square matrices `m1` and `m2` of identical shape
+/// ```text
+/// trace(m1 + m2) == trace(m1) = trace(m2)
+/// ```
 fn prop_approx_matrix_trace_linear<S, const N: usize>(
     m1: Matrix<S, N, N>, 
     m2: Matrix<S, N, N>,
@@ -1461,7 +1485,12 @@ where
     Ok(())
 }
 
-
+/// Matrix multiplication is commutative under the matrix trace.
+/// 
+/// Given two square matrices `m1` and `m2` of identical shape
+/// ```text
+/// trace(m1 * m2) == trace(m2 * m1)
+/// ```
 fn prop_approx_matrix_trace_product<S, const N: usize, const NN: usize>(
     m1: Matrix<S, N, N,>, 
     m2: Matrix<S, N, N>,
@@ -1480,7 +1509,12 @@ where
     Ok(())
 }
 
-
+/// The matrix trace satisfies the following relation.
+/// 
+/// Given a matrix `m` and a constant `c`
+/// ```text
+/// trace(m * c) == trace(m) * c
+/// ```
 fn prop_approx_matrix_trace_scalar_product<S, const N: usize>(
     c: S, 
     m: Matrix<S, N, N>,
@@ -1494,6 +1528,26 @@ where
     let rhs = m.trace() * c;
 
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
+/// Matrix multiplication of two row vectors satisfies the following relation.
+/// 
+/// Given two row vectors `m1` and `m2` with the same number of columns, we have
+/// ```text
+/// dot(m1, m2) == m1 * transpose(m2) == m2 * transpose(m1)
+/// ```
+fn prop_rows_vector_dot_product<S, const C: usize>(m1: Matrix<S, 1, C>, m2: Matrix<S, 1, C>) -> Result<(), TestCaseError>
+where
+    S: SimdScalar
+{
+    let lhs = m1.dot(&m2);
+    let rhs1 = (m1 * m2.transpose())[0][0];
+    let rhs2 = (m2 * m1.transpose())[0][0];
+    
+    prop_assert_eq!(lhs, rhs1);
+    prop_assert_eq!(lhs, rhs2);
 
     Ok(())
 }
@@ -2526,4 +2580,26 @@ approx_trace_props!(matrix2x2_f64_trace_props, Matrix2x2, f64, strategy_matrix_f
 approx_trace_props!(matrix3x3_f64_trace_props, Matrix3x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
 approx_trace_props!(matrix4x4_f64_trace_props, Matrix4x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
 
+
+macro_rules! row_vector_dot_product_props {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_row_vector_dot_product(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
+                let m1: super::$MatrixType<$ScalarType> = m1;
+                let m2: super::$MatrixType<$ScalarType> = m2;
+                super::prop_rows_vector_dot_product(m1, m2)?
+            }
+        }
+    }
+    }
+}
+
+row_vector_dot_product_props!(matrix1x1_i32_column_vector_dot_product_props, Matrix1x1, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
+row_vector_dot_product_props!(matrix1x2_i32_column_vector_dot_product_props, Matrix1x2, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
+row_vector_dot_product_props!(matrix1x3_i32_column_vector_dot_product_props, Matrix1x3, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
+row_vector_dot_product_props!(matrix1x4_i32_column_vector_dot_product_props, Matrix1x4, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
 
