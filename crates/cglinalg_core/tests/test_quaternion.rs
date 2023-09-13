@@ -1325,6 +1325,69 @@ mod trigonometry_cos_tests {
     }
 
     #[test]
+    fn test_quaternion_cos_n_plus_one_half_times_pi_over_two() {
+        for i in 0..400 {
+            let angle = (i as f64 + 1_f64 / 2_f64) * f64::consts::PI;
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::zero();
+            let result = quaternion.cos();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+
+        for i in 0..400 {
+            let angle = -(i as f64 + 1_f64 / 2_f64) * f64::consts::PI;
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::zero();
+            let result = quaternion.cos();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+    }
+
+    #[test]
+    fn test_quaternion_cos_pi_plus_n_times_two_pi() {
+        for i in 0..400 {
+            let angle = f64::consts::PI + (i as f64) * (2_f64 * f64::consts::PI);
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::from_real(-1_f64);
+            let result = quaternion.cos();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+
+        for i in 0..400 {
+            let angle = f64::consts::PI - (i as f64) * (2_f64 * f64::consts::PI);
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::from_real(-1_f64);
+            let result = quaternion.cos();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+    }
+
+    #[test]
+    fn test_quaternion_cos_n_times_two_pi() {
+        for i in 0..400 {
+            let angle = (i as f64) * (2_f64 * f64::consts::PI);
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::from_real(1_f64);
+            let result = quaternion.cos();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+
+        for i in 0..400 {
+            let angle = -(i as f64) * (2_f64 * f64::consts::PI);
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::from_real(1_f64);
+            let result = quaternion.cos();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+    }
+
+    #[test]
     fn test_quaternion_cos1() {
         // quaternion := 0 + 0i + 0k + 0k
         let quaternion = {
@@ -1997,6 +2060,69 @@ mod trigonometry_sin_tests {
             let result = quaternion.sin();
 
             assert_relative_eq!(result, expected, epsilon = 1e-15);
+        }
+    }
+
+    #[test]
+    fn test_quaternion_sin_n_times_pi() {
+        for i in 0..400 {
+            let angle = (i as f64) * f64::consts::PI;
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::zero();
+            let result = quaternion.sin();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+
+        for i in 0..400 {
+            let angle = -(i as f64) * f64::consts::PI;
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::zero();
+            let result = quaternion.sin();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+    }
+
+    #[test]
+    fn test_quaternion_sin_pi_over_two_plus_n_times_two_pi() {
+        for i in 0..400 {
+            let angle = f64::consts::FRAC_PI_2 + (i as f64) * (2_f64 * f64::consts::PI);
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::from_real(1_f64);
+            let result = quaternion.sin();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+
+        for i in 0..400 {
+            let angle = -(f64::consts::FRAC_PI_2 + (i as f64) * (2_f64 * f64::consts::PI));
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::from_real(-1_f64);
+            let result = quaternion.sin();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+    }
+
+    #[test]
+    fn test_quaternion_cos_n_times_two_pi() {
+        for i in 0..400 {
+            let angle = (i as f64) * (2_f64 * f64::consts::PI);
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::from_real(1_f64);
+            let result = quaternion.cos();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
+        }
+
+        for i in 0..400 {
+            let angle = -(i as f64) * (2_f64 * f64::consts::PI);
+            let quaternion = Quaternion::from_real(angle);
+            let expected = Quaternion::from_real(1_f64);
+            let result = quaternion.cos();
+
+            assert_relative_eq!(result, expected, epsilon = 1e-12);
         }
     }
 

@@ -194,6 +194,15 @@ fn strategy_quaternion_f64_exp() -> impl Strategy<Value = Quaternion<f64>> {
     strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
+fn strategy_quaternion_f64_trig() -> impl Strategy<Value = Quaternion<f64>> {
+    let min_scale = f64::EPSILON;
+    let max_scale = f64::ln(f64::ln(f64::MAX));
+    let min_angle = 0_f64;
+    let max_angle = f64::two_pi();
+
+    strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
+}
+
 fn strategy_quaternion_f64_sqrt() -> impl Strategy<Value = Quaternion<f64>> {
     let min_scale = f64::sqrt(f64::EPSILON) / 2_f64;
     let max_scale = f64::sqrt(f64::MAX) / 2_f64;
@@ -1410,7 +1419,7 @@ where
 /// 
 /// In other words, pure unit quaternions are the quaternionic counterpart of 
 /// imaginary numbers.
-fn prop_quaternion_squared_plus_one_equals_zero_pure_unit<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_quaternion_squared_plus_one_equals_zero_pure_unit<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
@@ -1418,6 +1427,249 @@ where
     let negative_one = Quaternion::from_real(-one);
     prop_assume!(q.is_pure());
     prop_assert!(relative_eq!(q.squared(), negative_one, epsilon = tolerance));
+
+    Ok(())
+}
+
+/// The quaternionic cosine and quaternionic sine satisfu the following relation.
+/// 
+/// Given a quaternion `q` and the identity quaterion `1`
+/// ```text
+/// cos(q) * cos(q) + sin(q) + sin(q) == 1
+/// ```
+fn prop_approx_cos_squared_plus_sin_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = q.cos() * q.cos() + q.sin() * q.sin();
+    let rhs = Quaternion::identity();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+/// The quaternionic cosine satisfies the following relation.
+/// 
+/// Given a quaternion `q` and the identity quaternion `1`
+/// ```text
+/// cos(2 * q) == 2 * cos(q) * cos(q) - 1
+/// ```
+fn prop_approx_cos_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let two = S::one() + S::one();
+    let identity = Quaternion::identity();
+    let lhs = (q + q).cos();
+    let rhs = q.cos() * q.cos() * two - identity;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
+/// The quaternionic sine satisfies the following relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// sin(2 * q) == 2 * sin(q) * cos(q)
+/// ```
+fn prop_approx_sin_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let two = S::one() + S::one();
+    let lhs = (q + q).sin();
+    let rhs = q.sin() * q.cos() * two;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
+/// The quaternionic tangent satisfies the following relation.
+/// 
+/// Given a quaternion `q` and the identity quaternion `1`
+/// ```text
+/// tan(2 * q) * (1 - tan(q) * tan(q)) == 2 * tan(q)
+/// ```
+fn prop_approx_tan_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let two = S::one() + S::one();
+    let identity = Quaternion::identity();
+    let tan_q = q.tan();
+    let tan_2q = (q + q).tan();
+    let lhs = tan_2q * (identity - tan_q * tan_q);
+    let rhs = tan_q * two;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
+/// The quaternionic cosine satisfies the following relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// cos(-q) == cos(q)
+/// ```
+fn prop_cos_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = (-q).cos();
+    let rhs = q.cos();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+/// The quaternionic sine satisfies the following the relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// sin(-q) == -sin(q)
+/// ```
+fn prop_sin_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = (-q).sin();
+    let rhs = -q.sin();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+/// The quaternionic tangent satisfies the following relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// tan(-q) = -tan(q)
+/// ```
+fn prop_tan_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (-q).tan();
+    let rhs = -q.tan();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+/// The quaternionic hyperbolic cosine and the quaternionic hyperbolic sine
+/// satisfy the following relation.
+/// 
+/// Given a quaternion `q` and the identity quaternion `1`
+/// ```text
+/// cosh(q) * cosh(q) - sinh(q) * sinh(q) == 1
+/// ```
+fn prop_approx_cosh_squared_minus_sinh_squared<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = q.cosh() * q.cosh() - q.sinh() * q.sinh();
+    let rhs = Quaternion::identity();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+/// The quaternionic hyperbolic cosine satisfies the following relation.
+/// 
+/// Given a quaternion `q` and the identity quaternion `1`
+/// ```text
+/// cosh(2 * q) == 2 * sinh(q) * sinh(q) + 1
+/// ```
+fn prop_approx_cosh_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let two = S::one() + S::one();
+    let identity = Quaternion::identity();
+    let lhs = (q + q).cosh();
+    let rhs = q.sinh() * q.sinh() * two + identity;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
+/// The quaternionic hyperbolic sine satisfies the following relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// sinh(2 * q) == 2 * sinh(q) * cosh(q)
+/// ```
+fn prop_approx_sinh_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let two = S::one() + S::one();
+    let lhs = (q + q).sinh();
+    let rhs = q.sinh() * q.cosh() * two;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
+fn prop_approx_tanh_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let two = S::one() + S::one();
+    let identity = Quaternion::identity();
+    let tanh_q = q.tanh();
+    let tanh_2q = (q + q).tanh();
+    let lhs = tanh_2q * (identity + tanh_q * tanh_q);
+    let rhs = tanh_q * two;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+
+    Ok(())
+}
+
+fn prop_cosh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = (-q).cosh();
+    let rhs = q.cosh();
+    
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+fn prop_sinh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let lhs = (-q).sinh();
+    let rhs = -q.sinh();
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+fn prop_tanh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = (-q).tanh();
+    let rhs = -q.tanh();
+
+    prop_assert_eq!(lhs, rhs);
 
     Ok(())
 }
@@ -2247,14 +2499,109 @@ mod quaternion_f64_sqrt_props {
 }
 
 #[cfg(test)]
-mod quaternion_f64_polynomial_solutions {
+mod quaternion_f64_polynomial_solution_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_quaternion_squared_plus_one_equals_zero_pure_unit(q in super::strategy_quaternion_f64_pure_unit()) {
+        fn prop_approx_quaternion_squared_plus_one_equals_zero_pure_unit(q in super::strategy_quaternion_f64_pure_unit()) {
             let q: super::Quaternion<f64> = q;
-            super::prop_quaternion_squared_plus_one_equals_zero_pure_unit(q, 1e-15)?
+            super::prop_approx_quaternion_squared_plus_one_equals_zero_pure_unit(q, 1e-15)?
         }
     }
 }
 
+#[cfg(test)]
+mod quaternion_f64_trigonometry_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_cos_squared_plus_sin_squared(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_cos_squared_plus_sin_squared(q, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_cos_double_angle(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_cos_double_angle(q, 1e-10, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_sin_double_angle(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_sin_double_angle(q, 1e-10, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_tan_double_angle(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_tan_double_angle(q, 1e-10, 1e-10)?
+        }
+
+        #[test]
+        fn prop_cos_negative_quaternion(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_cos_negative_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_sin_negative_quaternion(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_sin_negative_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_tan_negative_quaternion(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_tan_negative_quaternion(q)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod quaternion_f64_hyperbolic_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_cosh_squared_minus_sinh_squared(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_cosh_squared_minus_sinh_squared(q, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_cosh_double_angle(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_cosh_double_angle(q, 1e-10, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_sinh_double_angle(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_sinh_double_angle(q, 1e-10, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_tanh_double_angle(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_tanh_double_angle(q, 1e-10, 1e-10)?
+        }
+
+        #[test]
+        fn prop_cosh_negative_quaternion(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_cosh_negative_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_quaternion_sinh_negative_quaternion(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_sinh_negative_quaternion(q)?
+        }
+
+        #[test]
+        fn prop_tanh_negative_quaternion(q in super::strategy_quaternion_f64_trig()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_tanh_negative_quaternion(q)?
+        }
+    }
+}
