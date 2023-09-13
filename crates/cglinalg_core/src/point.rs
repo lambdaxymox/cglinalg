@@ -1169,6 +1169,19 @@ where
 
 impl<S> Point1<S> {
     /// Construct a new point in Euclidean space.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point1,
+    /// # };
+    /// #
+    /// let x = 1_i32;
+    /// let point = Point1::new(x);
+    /// 
+    /// assert_eq!(point[0], x);
+    /// ```
     #[inline]
     pub const fn new(x: S) -> Self {
         Self { 
@@ -1179,6 +1192,21 @@ impl<S> Point1<S> {
 
 impl<S> Point2<S> {
     /// Construct a new point in Euclidean space.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let x = 1_i32;
+    /// let y = 2_i32;
+    /// let point = Point2::new(x, y);
+    /// 
+    /// assert_eq!(point[0], x);
+    /// assert_eq!(point[1], y);
+    /// ```
     #[inline]
     pub const fn new(x: S, y: S) -> Self {
         Self { 
@@ -1189,6 +1217,23 @@ impl<S> Point2<S> {
 
 impl<S> Point3<S> {
     /// Construct a new point in Euclidean space.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let x = 1_i32;
+    /// let y = 2_i32;
+    /// let z = 3_i32;
+    /// let point = Point3::new(x, y, z);
+    /// 
+    /// assert_eq!(point[0], x);
+    /// assert_eq!(point[1], y);
+    /// assert_eq!(point[2], z);
+    /// ```
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Self {
         Self { 

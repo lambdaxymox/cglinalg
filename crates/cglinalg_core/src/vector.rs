@@ -1809,6 +1809,19 @@ where
 
 impl<S> Vector1<S> {
     /// Construct a new vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector1,
+    /// # };
+    /// #
+    /// let x = 1_i32;
+    /// let vector = Vector1::new(x);
+    /// 
+    /// assert_eq!(vector[0], x);
+    /// ```
     #[inline]
     pub const fn new(x: S) -> Self {
         Self { 
@@ -1823,6 +1836,18 @@ where
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector1,
+    /// # };
+    /// #
+    /// let vector: Vector1<i32> = Vector1::unit_x();
+    /// 
+    /// assert_eq!(vector[0], 1_i32);
+    /// ```
     #[inline]
     pub fn unit_x() -> Self {
         Vector1::new(S::one())
@@ -1832,6 +1857,21 @@ where
 
 impl<S> Vector2<S> {
     /// Construct a new vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let x = 1_i32;
+    /// let y = 2_i32;
+    /// let vector = Vector2::new(x, y);
+    /// 
+    /// assert_eq!(vector[0], x);
+    /// assert_eq!(vector[1], y);
+    /// ```
     #[inline]
     pub const fn new(x: S, y: S) -> Self {
         Self { 
@@ -1846,6 +1886,19 @@ where
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let vector: Vector2<i32> = Vector2::unit_x();
+    /// 
+    /// assert_eq!(vector[0], 1_i32);
+    /// assert_eq!(vector[1], 0_i32);
+    /// ```
     #[inline]
     pub fn unit_x() -> Self {
         Self::new(S::one(), S::zero())
@@ -1853,6 +1906,19 @@ where
 
     /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let vector: Vector2<i32> = Vector2::unit_y();
+    /// 
+    /// assert_eq!(vector[0], 0_i32);
+    /// assert_eq!(vector[1], 1_i32);
+    /// ```
     #[inline]
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one())
@@ -1861,6 +1927,23 @@ where
 
 impl<S> Vector3<S> {
     /// Construct a new vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let x = 1_i32;
+    /// let y = 2_i32;
+    /// let z = 3_i32;
+    /// let vector = Vector3::new(x, y, z);
+    /// 
+    /// assert_eq!(vector[0], x);
+    /// assert_eq!(vector[1], y);
+    /// assert_eq!(vector[2], z);
+    /// ```
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Self {
         Self { 
@@ -1875,6 +1958,20 @@ where
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector: Vector3<i32> = Vector3::unit_x();
+    /// 
+    /// assert_eq!(vector[0], 1_i32);
+    /// assert_eq!(vector[1], 0_i32);
+    /// assert_eq!(vector[2], 0_i32);
+    /// ```
     #[inline]
     pub fn unit_x() -> Self {
         Self::new(S::one(), S::zero(), S::zero())
@@ -1882,6 +1979,20 @@ where
 
     /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector: Vector3<i32> = Vector3::unit_y();
+    /// 
+    /// assert_eq!(vector[0], 0_i32);
+    /// assert_eq!(vector[1], 1_i32);
+    /// assert_eq!(vector[2], 0_i32);
+    /// ```
     #[inline]
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one(), S::zero())
@@ -1889,6 +2000,20 @@ where
     
     /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector: Vector3<i32> = Vector3::unit_z();
+    /// 
+    /// assert_eq!(vector[0], 0_i32);
+    /// assert_eq!(vector[1], 0_i32);
+    /// assert_eq!(vector[2], 1_i32);
+    /// ```
     #[inline]
     pub fn unit_z() -> Self {
         Self::new(S::zero(), S::zero(), S::one())
@@ -1991,6 +2116,25 @@ where
 
 impl<S> Vector4<S> {
     /// Construct a new vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let x = 1_i32;
+    /// let y = 2_i32;
+    /// let z = 3_i32;
+    /// let w = 4_i32;
+    /// let vector = Vector4::new(x, y, z, w);
+    /// 
+    /// assert_eq!(vector[0], x);
+    /// assert_eq!(vector[1], y);
+    /// assert_eq!(vector[2], z);
+    /// assert_eq!(vector[3], w);
+    /// ```
     #[inline]
     pub const fn new(x: S, y: S, z: S, w: S) -> Self {
         Self { 
@@ -2005,6 +2149,21 @@ where
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let vector: Vector4<i32> = Vector4::unit_x();
+    /// 
+    /// assert_eq!(vector[0], 1_i32);
+    /// assert_eq!(vector[1], 0_i32);
+    /// assert_eq!(vector[2], 0_i32);
+    /// assert_eq!(vector[3], 0_i32);
+    /// ```
     #[inline]
     pub fn unit_x() -> Self {
         Self::new(S::one(), S::zero(), S::zero(), S::zero())
@@ -2012,6 +2171,21 @@ where
 
     /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let vector: Vector4<i32> = Vector4::unit_y();
+    /// 
+    /// assert_eq!(vector[0], 0_i32);
+    /// assert_eq!(vector[1], 1_i32);
+    /// assert_eq!(vector[2], 0_i32);
+    /// assert_eq!(vector[3], 0_i32);
+    /// ```
     #[inline]
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one(), S::zero(), S::zero())
@@ -2019,6 +2193,21 @@ where
     
     /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let vector: Vector4<i32> = Vector4::unit_z();
+    /// 
+    /// assert_eq!(vector[0], 0_i32);
+    /// assert_eq!(vector[1], 0_i32);
+    /// assert_eq!(vector[2], 1_i32);
+    /// assert_eq!(vector[3], 0_i32);
+    /// ```
     #[inline]
     pub fn unit_z() -> Self {
         Self::new(S::zero(), S::zero(), S::one(), S::zero())
@@ -2026,6 +2215,21 @@ where
 
     /// Returns the **w-axis** unit vector, a unit vector with the **w-component**
     /// component as a `1` and the rest of the components are zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let vector: Vector4<i32> = Vector4::unit_w();
+    /// 
+    /// assert_eq!(vector[0], 0_i32);
+    /// assert_eq!(vector[1], 0_i32);
+    /// assert_eq!(vector[2], 0_i32);
+    /// assert_eq!(vector[3], 1_i32);
+    /// ```
     #[inline]
     pub fn unit_w() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::one())
