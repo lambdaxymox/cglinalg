@@ -1622,6 +1622,12 @@ where
     Ok(())
 }
 
+/// The quaterionic hyperbolic tangent satisfies the following relation.
+/// 
+/// Given a quaternion `q` and the identity quaternion `1`
+/// ```text
+/// tanh(2 * q) * (1 + tanh(q) * tanh(q)) == 2 * tanh(q)
+/// ```
 fn prop_approx_tanh_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -1638,6 +1644,12 @@ where
     Ok(())
 }
 
+/// The quaternionic hyperbolic cosine satisfies the following relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// cosh(-q) == cosh(q)
+/// ```
 fn prop_cosh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -1650,6 +1662,12 @@ where
     Ok(())
 }
 
+/// The quaternionic hyperbolic sine satisfies the following relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// sinh(-q) == -sinh(q)
+/// ```
 fn prop_sinh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat
@@ -1662,6 +1680,12 @@ where
     Ok(())
 }
 
+/// The quaternionic hyperbolic tangent satisfies the following relation.
+/// 
+/// Given a quaternion `q`
+/// ```text
+/// tanh(-q) == -tanh(q)
+/// ```
 fn prop_tanh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
