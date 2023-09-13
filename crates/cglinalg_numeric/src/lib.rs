@@ -73,7 +73,7 @@ where
 
 /// A data type with this trait can be cast to between numeric types.
 /// 
-/// This trait is a fascade on [`num_traits::NumCast`] to uncouple the rest of [`cglinalg`]
+/// This trait is a facade on [`num_traits::NumCast`] to uncouple the rest of [`cglinalg`]
 /// from [`num_traits`] outside of the [`cglinalg_numeric`] crate.
 pub trait SimdCast
 where

@@ -789,7 +789,7 @@ where
         self.norm_squared().sqrt()
     }
 
-    /// Calculate the L2 (Euclidean) norm of a complex number.
+    /// Calculate the **L2** (Euclidean) norm of a complex number.
     /// 
     /// This is a synonym for [`Complex::modulus`].
     /// 
@@ -811,7 +811,7 @@ where
 
     /// Calculate the **L2** (Euclidean) norm of a complex number.
     /// 
-    /// This is a synonuym for [`Complex::norm`].
+    /// This is a synonym for [`Complex::norm`].
     /// 
     /// # Example
     /// 
@@ -1212,7 +1212,7 @@ where
     ///    == -w
     /// ```
     /// Thus the complex number square root is indeed a proper square root with two 
-    /// solutions given by `p` and `-p`. We illustate this with an example.
+    /// solutions given by `p` and `-p`. We illustrate this with an example.
     /// 
     /// # Example
     /// 
