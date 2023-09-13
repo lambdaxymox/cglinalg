@@ -22,28 +22,24 @@ fn strategy_radians_any<S>() -> impl Strategy<Value = Radians<S>>
 where 
     S: SimdScalarFloat + Arbitrary
 {
-    any::<S>()
-        .prop_map(|dimensionless| {
-            let two_pi = S::two_pi();
-            let one_hundred_million: S = cglinalg_numeric::cast(100_000_000);
+    any::<S>().prop_map(|dimensionless| {
+        let two_pi = S::two_pi();
+        let one_hundred_million: S = cglinalg_numeric::cast(100_000_000);
 
-            Radians(dimensionless % (one_hundred_million * two_pi))
-        })
-        .no_shrink()
+        Radians(dimensionless % (one_hundred_million * two_pi))
+    })
 }
 
 fn strategy_degrees_any<S>() -> impl Strategy<Value = Degrees<S>>
 where 
     S: SimdScalarFloat + Arbitrary
 {
-    any::<S>()
-        .prop_map(|dimensionless| {
-            let two_pi: S = cglinalg_numeric::cast(360_f64);
-            let one_hundred_million: S = cglinalg_numeric::cast(100_000_000);
+    any::<S>().prop_map(|dimensionless| {
+        let two_pi: S = cglinalg_numeric::cast(360_f64);
+        let one_hundred_million: S = cglinalg_numeric::cast(100_000_000);
 
-            Degrees(dimensionless % (one_hundred_million * two_pi))
-        })
-        .no_shrink()
+        Degrees(dimensionless % (one_hundred_million * two_pi))
+    })
 }
 
 /// Typed angles have an additive unit element.

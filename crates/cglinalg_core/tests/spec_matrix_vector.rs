@@ -54,7 +54,6 @@ where
         
         rescale_matrix(vector, min_value, max_value)
     })
-    .no_shrink()
 }
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
@@ -80,7 +79,6 @@ where
         
         rescale_vector(vector, min_value, max_value)
     })
-    .no_shrink()
 }
 
 fn strategy_matrix_i32_any<const R: usize, const C: usize>() -> impl Strategy<Value = Matrix<i32, R, C>> {

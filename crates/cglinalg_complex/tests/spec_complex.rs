@@ -39,7 +39,6 @@ where
 
         Complex::from_polar_decomposition(scale, angle)
     })
-    .no_shrink()
 }
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
@@ -59,7 +58,6 @@ where
         
         sign_value * rescale(abs_value, min_value, max_value)
     })
-    .no_shrink()
 }
 
 fn strategy_complex_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
@@ -83,7 +81,6 @@ where
         
         Complex::new(re, im)
     })
-    .no_shrink()
 }
 
 fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
@@ -145,7 +142,6 @@ where
     any::<S>().prop_map(move |im| {
         Complex::from_imaginary(rescale(im, min_value, max_value))
     })
-    .no_shrink()
 }
 
 fn strategy_real_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
@@ -162,7 +158,6 @@ where
     any::<S>().prop_map(move |re| {
         Complex::from_real(rescale(re, min_value, max_value))
     })
-    .no_shrink()
 }
 
 fn strategy_complex_f64_exp() -> impl Strategy<Value = Complex<f64>> {

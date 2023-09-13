@@ -49,7 +49,6 @@ where
         
         rescale_point(point, min_value, max_value)
     })
-    .no_shrink()
 }
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
@@ -66,7 +65,6 @@ where
         
         sign_value * rescale(abs_value, min_value, max_value)
     })
-    .no_shrink()
 }
 
 fn strategy_point_any<S, const N: usize>() -> impl Strategy<Value = Point<S, N>>

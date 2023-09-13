@@ -50,7 +50,6 @@ where
 
         Quaternion::from_polar_decomposition(scale, angle, &axis)
     })
-    .no_shrink()
 }
 
 fn strategy_quaternion_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Quaternion<S>>
@@ -80,7 +79,6 @@ where
         
         Quaternion::new(qs, qx, qy, qz)
     })
-    .no_shrink()
 }
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
@@ -100,7 +98,6 @@ where
         
         sign_value * rescale(abs_value, min_value, max_value)
     })
-    .no_shrink()
 }
 
 fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
@@ -164,7 +161,6 @@ where
 
         Quaternion::from_pure(vector)
     })
-    .no_shrink()
 }
 
 fn strategy_quaternion_i32_norm_squared() -> impl Strategy<Value = Quaternion<i32>> {

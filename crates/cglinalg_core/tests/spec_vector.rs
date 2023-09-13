@@ -37,7 +37,6 @@ where
         
         sign_value * rescale(abs_value, min_value, max_value)
     })
-    .no_shrink()
 }
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
@@ -63,7 +62,6 @@ where
         
         rescale_vector(vector, min_value, max_value)
     })
-    .no_shrink()
 }
 
 fn strategy_vector_any<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
