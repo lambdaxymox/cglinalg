@@ -1948,6 +1948,19 @@ where
 
 impl<S> Matrix1x1<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix1x1,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32;
+    /// let matrix = Matrix1x1::new(c0r0);
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S) -> Self {
@@ -2050,6 +2063,26 @@ where
 
 impl<S> Matrix2x2<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix2x2,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32; let c0r1 = 2_i32;
+    /// let c1r0 = 2_i32; let c1r1 = 3_i32;
+    /// let matrix = Matrix2x2::new(
+    ///     c0r0, c0r1,
+    ///     c1r0, c1r1
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[0][1], c0r1);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[1][1], c1r1);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S, c0r1: S, c1r0: S, c1r1: S) -> Self {
@@ -2530,6 +2563,33 @@ where
 
 impl<S> Matrix3x3<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32; let c0r1 = 2_i32; let c0r2 = 3_i32;
+    /// let c1r0 = 4_i32; let c1r1 = 5_i32; let c1r2 = 6_i32;
+    /// let c2r0 = 7_i32; let c2r1 = 8_i32; let c2r2 = 9_i32;
+    /// let matrix = Matrix3x3::new(
+    ///     c0r0, c0r1, c0r2,
+    ///     c1r0, c1r1, c1r2,
+    ///     c2r0, c2r1, c2r2
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[0][1], c0r1);
+    /// assert_eq!(matrix[0][2], c0r2);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[1][1], c1r1);
+    /// assert_eq!(matrix[1][2], c1r2);
+    /// assert_eq!(matrix[2][0], c2r0);
+    /// assert_eq!(matrix[2][1], c2r1);
+    /// assert_eq!(matrix[2][2], c2r2);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
@@ -4059,6 +4119,42 @@ where
 
 impl<S> Matrix4x4<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32;  let c0r1 = 2_i32;  let c0r2 = 3_i32;  let c0r3 = 4_i32;
+    /// let c1r0 = 5_i32;  let c1r1 = 6_i32;  let c1r2 = 7_i32;  let c1r3 = 8_i32;
+    /// let c2r0 = 9_i32;  let c2r1 = 10_i32; let c2r2 = 11_i32; let c2r3 = 12_i32;
+    /// let c3r0 = 13_i32; let c3r1 = 14_i32; let c3r2 = 15_i32; let c3r3 = 16_i32;
+    /// let matrix = Matrix4x4::new(
+    ///     c0r0, c0r1, c0r2, c0r3,
+    ///     c1r0, c1r1, c1r2, c1r3,
+    ///     c2r0, c2r1, c2r2, c2r3,
+    ///     c3r0, c3r1, c3r2, c3r3
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[0][1], c0r1);
+    /// assert_eq!(matrix[0][2], c0r2);
+    /// assert_eq!(matrix[0][3], c0r3);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[1][1], c1r1);
+    /// assert_eq!(matrix[1][2], c1r2);
+    /// assert_eq!(matrix[1][3], c1r3);
+    /// assert_eq!(matrix[2][0], c2r0);
+    /// assert_eq!(matrix[2][1], c2r1);
+    /// assert_eq!(matrix[2][2], c2r2);
+    /// assert_eq!(matrix[2][3], c2r3);
+    /// assert_eq!(matrix[3][0], c3r0);
+    /// assert_eq!(matrix[3][1], c3r1);
+    /// assert_eq!(matrix[3][2], c3r2);
+    /// assert_eq!(matrix[3][3], c3r3);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
@@ -5654,6 +5750,24 @@ where
 
 impl<S> Matrix1x2<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix1x2,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32;
+    /// let c1r0 = 2_i32;
+    /// let matrix = Matrix1x2::new(
+    ///     c0r0,
+    ///     c1r0
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S, c1r0: S) -> Self {
@@ -5668,6 +5782,27 @@ impl<S> Matrix1x2<S> {
 
 impl<S> Matrix1x3<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix1x3,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32;
+    /// let c1r0 = 2_i32;
+    /// let c2r0 = 3_i32;
+    /// let matrix = Matrix1x3::new(
+    ///     c0r0,
+    ///     c1r0,
+    ///     c2r0
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[2][0], c2r0);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S, c1r0: S, c2r0: S) -> Self {
@@ -5683,6 +5818,30 @@ impl<S> Matrix1x3<S> {
 
 impl<S> Matrix1x4<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix1x4,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32;
+    /// let c1r0 = 2_i32;
+    /// let c2r0 = 3_i32;
+    /// let c3r0 = 4_i32;
+    /// let matrix = Matrix1x4::new(
+    ///     c0r0,
+    ///     c1r0,
+    ///     c2r0,
+    ///     c3r0
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[2][0], c2r0);
+    /// assert_eq!(matrix[3][0], c3r0);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(c0r0: S, c1r0: S, c2r0: S, c3r0: S) -> Self {
@@ -5699,6 +5858,30 @@ impl<S> Matrix1x4<S> {
 
 impl<S> Matrix2x3<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix2x3,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32; let c0r1 = 2_i32;
+    /// let c1r0 = 3_i32; let c1r1 = 4_i32;
+    /// let c2r0 = 5_i32; let c2r1 = 6_i32;
+    /// let matrix = Matrix2x3::new(
+    ///     c0r0, c0r1,
+    ///     c1r0, c1r1,
+    ///     c2r0, c2r1
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[0][1], c0r1);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[1][1], c1r1);
+    /// assert_eq!(matrix[2][0], c2r0);
+    /// assert_eq!(matrix[2][1], c2r1);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
@@ -5718,6 +5901,28 @@ impl<S> Matrix2x3<S> {
 
 impl<S> Matrix3x2<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x2,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32; let c0r1 = 2_i32; let c0r2 = 3_i32;
+    /// let c1r0 = 4_i32; let c1r1 = 5_i32; let c1r2 = 6_i32;
+    /// let matrix = Matrix3x2::new(
+    ///     c0r0, c0r1, c0r2,
+    ///     c1r0, c1r1, c1r2
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[0][1], c0r1);
+    /// assert_eq!(matrix[0][2], c0r2);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[1][1], c1r1);
+    /// assert_eq!(matrix[1][2], c1r2);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
@@ -5735,6 +5940,34 @@ impl<S> Matrix3x2<S> {
 
 impl<S> Matrix2x4<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix2x4,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32; let c0r1 = 2_i32;
+    /// let c1r0 = 3_i32; let c1r1 = 4_i32;
+    /// let c2r0 = 5_i32; let c2r1 = 6_i32;
+    /// let c3r0 = 7_i32; let c3r1 = 8_i32;
+    /// let matrix = Matrix2x4::new(
+    ///     c0r0, c0r1,
+    ///     c1r0, c1r1,
+    ///     c2r0, c2r1,
+    ///     c3r0, c3r1
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[0][1], c0r1);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[1][1], c1r1);
+    /// assert_eq!(matrix[2][0], c2r0);
+    /// assert_eq!(matrix[2][1], c2r1);
+    /// assert_eq!(matrix[3][0], c3r0);
+    /// assert_eq!(matrix[3][1], c3r1);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
@@ -5756,6 +5989,36 @@ impl<S> Matrix2x4<S> {
 
 impl<S> Matrix4x2<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x2,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32;
+    /// let c0r1 = 2_i32;
+    /// let c0r2 = 3_i32;
+    /// let c0r3 = 4_i32;
+    /// let c1r0 = 5_i32;
+    /// let c1r1 = 6_i32;
+    /// let c1r2 = 7_i32;
+    /// let c1r3 = 8_i32;
+    /// let matrix = Matrix4x2::new(
+    ///     c0r0, c0r1, c0r2, c0r3,
+    ///     c1r0, c1r1, c1r2, c1r3
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[0][1], c0r1);
+    /// assert_eq!(matrix[0][2], c0r2);
+    /// assert_eq!(matrix[0][3], c0r3);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[1][1], c1r1);
+    /// assert_eq!(matrix[1][2], c1r2);
+    /// assert_eq!(matrix[1][3], c1r3);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
@@ -5773,6 +6036,34 @@ impl<S> Matrix4x2<S> {
 
 impl<S> Matrix3x4<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x4,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32;  let c0r1 = 2_i32;  let c0r2 = 3_i32;
+    /// let c1r0 = 4_i32;  let c1r1 = 5_i32;  let c1r2 = 6_i32;
+    /// let c2r0 = 7_i32;  let c2r1 = 8_i32;  let c2r2 = 9_i32;
+    /// let c3r0 = 10_i32; let c3r1 = 11_i32; let c3r2 = 12_i32;
+    /// let matrix = Matrix3x4::new(
+    ///     c0r0, c0r1, c0r2,
+    ///     c1r0, c1r1, c1r2,
+    ///     c2r0, c2r1, c2r2,
+    ///     c3r0, c3r1, c3r2
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[0][1], c0r1);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[1][1], c1r1);
+    /// assert_eq!(matrix[2][0], c2r0);
+    /// assert_eq!(matrix[2][1], c2r1);
+    /// assert_eq!(matrix[3][0], c3r0);
+    /// assert_eq!(matrix[3][1], c3r1);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
@@ -5794,6 +6085,36 @@ impl<S> Matrix3x4<S> {
 
 impl<S> Matrix4x3<S> {
     /// Construct a new matrix from its elements.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x3,
+    /// # };
+    /// #
+    /// let c0r0 = 1_i32; let c0r1 = 2_i32;  let c0r2 = 3_i32;  let c0r3 = 4_i32;
+    /// let c1r0 = 5_i32; let c1r1 = 6_i32;  let c1r2 = 7_i32;  let c1r3 = 8_i32;
+    /// let c2r0 = 9_i32; let c2r1 = 10_i32; let c2r2 = 11_i32; let c2r3 = 12_i32;
+    /// let matrix = Matrix4x3::new(
+    ///     c0r0, c0r1, c0r2, c0r3,
+    ///     c1r0, c1r1, c1r2, c1r3,
+    ///     c2r0, c2r1, c2r2, c2r3
+    /// );
+    /// 
+    /// assert_eq!(matrix[0][0], c0r0);
+    /// assert_eq!(matrix[0][1], c0r1);
+    /// assert_eq!(matrix[0][2], c0r2);
+    /// assert_eq!(matrix[0][3], c0r3);
+    /// assert_eq!(matrix[1][0], c1r0);
+    /// assert_eq!(matrix[1][1], c1r1);
+    /// assert_eq!(matrix[1][2], c1r2);
+    /// assert_eq!(matrix[1][3], c1r3);
+    /// assert_eq!(matrix[2][0], c2r0);
+    /// assert_eq!(matrix[2][1], c2r1);
+    /// assert_eq!(matrix[2][2], c2r2);
+    /// assert_eq!(matrix[2][3], c2r3);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
