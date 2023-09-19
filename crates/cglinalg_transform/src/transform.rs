@@ -23,7 +23,10 @@ use core::fmt;
 use core::ops;
 
 
+/// A generic two-dimensional transformation in homogeneous coordinates.
 pub type Transform2<S> = Transform<S, 2, 3>;
+
+/// A generic three-dimensional transformation in homogeneous coordinates.
 pub type Transform3<S> = Transform<S, 3, 4>;
 
 
@@ -44,7 +47,7 @@ where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
-    /// Convert a homogeneous matrix to a transformation. 
+    /// Convert a matrix to a transformation. 
     /// This function is for internal use in implementing type conversions.
     #[inline]
     pub(crate) fn from_specialized<T: Into<Matrix<S, NPLUS1, NPLUS1>>>(transform: T) -> Self {
@@ -76,11 +79,27 @@ where
         &mut self.matrix
     }
 
-    /// The identity transformation for a generic three-dimensional 
-    /// transformation.
+    /// The identity transformation for a generic transformation in homogeneous 
+    /// coordinates.
     ///
-    /// # Example
+    /// # Examples
+    /// 
+    /// An example in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Transform2,
+    /// # };
+    /// #
+    /// let transform = Transform2::identity();
+    /// let point = Point2::new(1_f64, 2_f64);
     ///
+    /// assert_eq!(transform * point, point);
+    /// ```
+    /// 
+    /// An example in three dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -149,8 +168,32 @@ where
 {
     /// Apply the transformation to a vector.
     ///
-    /// # Example
+    /// # Examples
     ///
+    /// An example in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// #     Matrix3x3, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Transform2,
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     6_f64, 7_f64, 0_f64,
+    ///     8_f64, 9_f64, 0_f64,
+    ///     2_f64, 3_f64, 1_f64,   
+    /// );
+    /// let transform = Transform2::from_matrix_unchecked(matrix);
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let expected = Vector2::new(22_f64, 25_f64);
+    /// let result = transform.transform_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// An example in three dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -180,8 +223,32 @@ where
 
     /// Apply the inverse of the transformation to a point.
     ///
-    /// # Example
+    /// # Examples
     ///
+    /// An example in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Matrix3x3, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Transform2,
+    /// # };
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     6_f64, 7_f64, 0_f64,
+    ///     8_f64, 9_f64, 0_f64,
+    ///     2_f64, 3_f64, 1_f64,   
+    /// );
+    /// let transform = Transform2::from_matrix_unchecked(matrix);
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// let expected = Point2::new(24_f64, 28_f64);
+    /// let result = transform.transform_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// An example in three dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
