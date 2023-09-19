@@ -594,18 +594,14 @@ where
 impl<S, const N: usize> AsRef<[S; N]> for Point<S, N> {
     #[inline]
     fn as_ref(&self) -> &[S; N] {
-        unsafe {
-            &*(self as *const Point<S, N> as *const [S; N])
-        }
+        self.coords.as_ref()
     }
 }
 
 impl<S, const N: usize> AsMut<[S; N]> for Point<S, N> {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; N] {
-        unsafe {
-            &mut *(self as *mut Point<S, N> as *mut [S; N])
-        }
+        self.coords.as_mut()
     }
 }
 
@@ -1363,18 +1359,14 @@ macro_rules! impl_as_ref_ops {
         impl<S> AsRef<$RefType> for $PointType {
             #[inline]
             fn as_ref(&self) -> &$RefType {
-                unsafe {
-                    &*(self as *const $PointType as *const $RefType)
-                }
+                self.coords.as_ref()
             }
         }
 
         impl<S> AsMut<$RefType> for $PointType {
             #[inline]
             fn as_mut(&mut self) -> &mut $RefType {
-                unsafe {
-                    &mut *(self as *mut $PointType as *mut $RefType)
-                }
+                self.coords.as_mut()
             }
         }
     }
