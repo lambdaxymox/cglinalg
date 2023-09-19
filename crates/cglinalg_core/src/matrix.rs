@@ -118,7 +118,7 @@ where
     ShapeConstraint: DimEq<Const<C1>, Const<R2>> + DimEq<Const<R2>, Const<C1>>
 {
     // PERFORMANCE: The const loop should get unrolled during optimization.
-    let mut result = unsafe { core::mem::zeroed() };
+    let mut result = S::zero();
     for i in 0..C1 {
         result += arr[i][r] * col[i];
     }
@@ -187,18 +187,14 @@ where
 impl<S, const R: usize, const C: usize> AsRef<[[S; R]; C]> for Matrix<S, R, C> {
     #[inline]
     fn as_ref(&self) -> &[[S; R]; C] {
-        unsafe {
-            &*(self as *const Matrix<S, R, C> as *const [[S; R]; C])
-        }
+        &self.data
     }
 }
 
 impl<S, const R: usize, const C: usize> AsMut<[[S; R]; C]> for Matrix<S, R, C> {
     #[inline]
     fn as_mut(&mut self) -> &mut [[S; R]; C] {
-        unsafe {
-            &mut *(self as *mut Matrix<S, R, C> as *mut [[S; R]; C])
-        }
+        &mut self.data
     }
 }
 

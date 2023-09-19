@@ -1159,18 +1159,14 @@ where
 impl<S, const N: usize> AsRef<[S; N]> for Vector<S, N> {
     #[inline]
     fn as_ref(&self) -> &[S; N] {
-        unsafe {
-            &*(self as *const Vector<S, N> as *const [S; N])
-        }
+        &self.data
     }
 }
 
 impl<S, const N: usize> AsMut<[S; N]> for Vector<S, N> {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; N] {
-        unsafe {
-            &mut *(self as *mut Vector<S, N> as *mut [S; N])
-        }
+        &mut self.data
     }
 }
 
