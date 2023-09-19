@@ -4125,7 +4125,7 @@ where
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         writeln!(
             formatter, 
-            "{} + i{} + j{} + k{}", 
+            "{} + [{}, {}, {}]", 
             self.coords[0], self.coords[1], self.coords[2], self.coords[3]
         )
     }
