@@ -3787,36 +3787,28 @@ where
 impl<S> AsRef<[S; 4]> for Quaternion<S> {
     #[inline]
     fn as_ref(&self) -> &[S; 4] {
-        unsafe { 
-            &*(self as *const Quaternion<S> as *const [S; 4])
-        }
+        self.coords.as_ref()
     }
 }
 
 impl<S> AsRef<(S, S, S, S)> for Quaternion<S> {
     #[inline]
     fn as_ref(&self) -> &(S, S, S, S) {
-        unsafe { 
-            &*(self as *const Quaternion<S> as *const (S, S, S, S))
-        }
+        self.coords.as_ref()
     }
 }
 
 impl<S> AsMut<[S; 4]> for Quaternion<S> {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; 4] {
-        unsafe { 
-            &mut *(self as *mut Quaternion<S> as *mut [S; 4])
-        }
+        self.coords.as_mut()
     }
 }
 
 impl<S> AsMut<(S, S, S, S)> for Quaternion<S> {
     #[inline]
     fn as_mut(&mut self) -> &mut (S, S, S, S) {
-        unsafe { 
-            &mut *(self as *mut Quaternion<S> as *mut (S, S, S, S))
-        }
+        self.coords.as_mut()
     }
 }
 
