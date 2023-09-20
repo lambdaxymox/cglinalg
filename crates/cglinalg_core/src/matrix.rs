@@ -15,6 +15,7 @@ use crate::constraints::{
     DimSub,
     DimMul,
     DimEq,
+    DimLt,
     CanMultiply,
     CanTransposeMultiply,
     ShapeConstraint,
@@ -4532,6 +4533,7 @@ where
     }
 }
 
+/*
 impl<S> From<Matrix2x2<S>> for Matrix3x3<S> 
 where 
     S: SimdScalar
@@ -4559,6 +4561,46 @@ where
             matrix[1][0], matrix[1][1], S::zero(),
             S::zero(),    S::zero(),    S::one()
         )
+    }
+}
+*/
+impl<S, const M: usize, const N: usize> From<Matrix<S, M, M>> for Matrix<S, N, N>
+where
+    S: SimdScalar,
+    ShapeConstraint: DimLt<Const<M>, Const<N>>,
+{
+    #[inline]
+    fn from(matrix: Matrix<S, M, M>) -> Matrix<S, N, N> {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        // SAFETY: M < N so the conversion cannot fail.
+        let mut result = Matrix::identity();
+        for c in 0..M {
+            for r in 0..M {
+                result[c][r] = matrix[c][r];
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const M: usize, const N: usize> From<&Matrix<S, M, M>> for Matrix<S, N, N>
+where
+    S: SimdScalar,
+    ShapeConstraint: DimLt<Const<M>, Const<N>>,
+{
+    #[inline]
+    fn from(matrix: &Matrix<S, M, M>) -> Matrix<S, N, N> {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        // SAFETY: M < N so the conversion cannot fail.
+        let mut result = Matrix::identity();
+        for c in 0..M {
+            for r in 0..M {
+                result[c][r] = matrix[c][r];
+            }
+        }
+
+        result
     }
 }
 
@@ -5994,7 +6036,7 @@ where
         ulps_ne!(self.determinant(), S::zero())
     }
 }
-
+/*
 impl<S> From<Matrix2x2<S>> for Matrix4x4<S> 
 where 
     S: SimdScalar 
@@ -6066,6 +6108,7 @@ where
         )
     }
 }
+*/
 
 impl<S> Matrix1x2<S> {
     /// Construct a new matrix from its elements.

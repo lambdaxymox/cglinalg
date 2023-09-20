@@ -148,3 +148,31 @@ impl_dim_mul!(4, 2);
 impl_dim_mul!(4, 3);
 impl_dim_mul!(4, 4);
 
+
+pub trait DimLt<D1: Dim, D2: Dim>: Dim {}
+
+macro_rules! impl_dim_lt {
+    ($D1:expr, $D2:expr) => {
+        impl DimLt<Const<$D1>, Const<$D2>> for ShapeConstraint {
+            
+        }
+    }
+}
+
+// impl_dim_lt!(1, 1);
+impl_dim_lt!(1, 2);
+impl_dim_lt!(1, 3);
+impl_dim_lt!(1, 4);
+// impl_dim_lt!(2, 1);
+// impl_dim_lt!(2, 2);
+impl_dim_lt!(2, 3);
+impl_dim_lt!(2, 4);
+// impl_dim_lt!(3, 1);
+// impl_dim_lt!(3, 2);
+// impl_dim_lt!(3, 3);
+impl_dim_lt!(3, 4);
+// impl_dim_lt!(4, 1);
+// impl_dim_lt!(4, 2);
+// impl_dim_lt!(4, 3);
+// impl_dim_lt!(4, 4);
+

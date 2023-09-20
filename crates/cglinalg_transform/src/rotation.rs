@@ -8,7 +8,9 @@ use cglinalg_trigonometry::{
 use cglinalg_core::{
     Const,
     ShapeConstraint,
+    DimAdd,
     DimMul,
+    DimLt,
     Matrix,
     Matrix2x2,
     Matrix3x3,
@@ -22,8 +24,7 @@ use cglinalg_core::{
     Unit,
 };
 use crate::transform::{
-    Transform2,
-    Transform3,
+    Transform,
 };
 
 use core::fmt;
@@ -507,6 +508,176 @@ impl<S, const N: usize> AsRef<Matrix<S, N, N>> for Rotation<S, N> {
     }
 }
 
+impl<S, const N: usize, const NPLUS1: usize> Rotation<S, N> 
+where 
+    S: SimdScalarFloat,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+{
+    /// Convert a rotation to a generic transformation.
+    /// 
+    /// # Examples
+    /// 
+    /// An example in two dimensions.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Rotation2,
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix2x2,
+    /// #     Matrix3x3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let matrix = Matrix3x3::from(Matrix2x2::new(
+    ///      1_f64 / 2_f64,             f64::sqrt(3_f64) / 2_f64,
+    ///     -f64::sqrt(3_f64) / 2_f64,  1_f64 / 2_f64
+    /// ));
+    /// let expected = Transform2::from_matrix_unchecked(matrix);
+    /// let result = rotation.to_transform();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    /// 
+    /// An example in three dimensions.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Rotation3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let matrix = Matrix4x4::from(Matrix3x3::new(
+    ///      1_f64 / 2_f64,             f64::sqrt(3_f64) / 2_f64, 0_f64,
+    ///     -f64::sqrt(3_f64) / 2_f64,  1_f64 / 2_f64,            0_f64,
+    ///      0_f64,                     0_f64,                    1_f64
+    /// ));
+    /// let expected = Transform3::from_matrix_unchecked(matrix);
+    /// let result = rotation.to_transform();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    #[inline]
+    pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
+        Transform::from_specialized(self.matrix)
+    }
+
+    /// Convert a rotation into a generic affine matrix.
+    /// 
+    /// # Examples
+    /// 
+    /// An example in two dimensions.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Rotation2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix2x2,
+    /// #     Matrix3x3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let expected = Matrix3x3::new(
+    ///      1_f64 / 2_f64,             f64::sqrt(3_f64) / 2_f64, 0_f64,
+    ///     -f64::sqrt(3_f64) / 2_f64,  1_f64 / 2_f64,            0_f64,
+    ///      0_f64,                     0_f64,                    1_f64
+    /// );
+    /// let result = rotation.to_affine_matrix();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    /// 
+    /// An example in three dimensions.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Rotation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let axis = Unit::from_value(Vector3::unit_z());
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let expected = Matrix4x4::new(
+    ///      1_f64 / 2_f64,             f64::sqrt(3_f64) / 2_f64, 0_f64, 0_f64,
+    ///     -f64::sqrt(3_f64) / 2_f64,  1_f64 / 2_f64,            0_f64, 0_f64,
+    ///      0_f64,                     0_f64,                    1_f64, 0_f64,
+    ///      0_f64,                     0_f64,                    0_f64, 1_f64
+    /// );
+    /// let result = rotation.to_affine_matrix();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    #[inline]
+    pub fn to_affine_matrix(&self) -> Matrix<S, NPLUS1, NPLUS1> {
+        Matrix::from(&self.matrix)
+    }
+}
+
+impl<S, const N: usize> From<Rotation<S, N>> for Matrix<S, N, N> 
+where 
+    S: SimdScalarFloat 
+{
+    #[inline]
+    fn from(rotation: Rotation<S, N>) -> Matrix<S, N, N> {
+        rotation.matrix
+    }
+}
+
+impl<S, const N: usize> From<&Rotation<S, N>> for Matrix<S, N, N> 
+where 
+    S: SimdScalarFloat 
+{
+    #[inline]
+    fn from(rotation: &Rotation<S, N>) -> Matrix<S, N, N> {
+        rotation.matrix
+    }
+}
+
 impl<S, const N: usize> approx::AbsDiffEq for Rotation<S, N> 
 where 
     S: SimdScalarFloat 
@@ -797,36 +968,6 @@ where
         } else {
             Self::identity()
         }
-    }
-
-    /// Convert a rotation into a generic transformation.
-    #[inline]
-    pub fn to_transform(&self) -> Transform2<S> {
-        Transform2::from_specialized(self.matrix)
-    }
-
-    /// Convert a rotation into a generic affine matrix.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
-        let zero = S::zero();
-        let one = S::one();
-
-        Matrix3x3::new(
-            self.matrix.c0r0, self.matrix.c0r1, zero,
-            self.matrix.c1r0, self.matrix.c1r1, zero,
-            zero,             zero,             one
-        )
-    }
-}
-
-impl<S> From<Rotation2<S>> for Matrix2x2<S> 
-where 
-    S: SimdScalarFloat 
-{
-    #[inline]
-    fn from(rotation: Rotation2<S>) -> Matrix2x2<S> {
-        rotation.matrix
     }
 }
 
@@ -1549,27 +1690,6 @@ where
     #[inline]
     pub fn rotation_between_axis(v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> {
         Quaternion::rotation_between_axis(v1, v2).map(|q| q.into())
-    }
-
-    /// Convert a rotation to a generic transformation.
-    #[inline]
-    pub fn to_transform(&self) -> Transform3<S> {
-        Transform3::from_specialized(self.matrix)
-    }
-
-    /// Convert a rotation into a generic affine matrix.
-    #[rustfmt::skip]
-    #[inline]
-    pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
-        let zero = S::zero();
-        let one = S::one();
-
-        Matrix4x4::new(
-            self.matrix.c0r0, self.matrix.c0r1, self.matrix.c0r2, zero,
-            self.matrix.c1r0, self.matrix.c1r1, self.matrix.c1r2, zero,
-            self.matrix.c2r0, self.matrix.c2r1, self.matrix.c2r2, zero,
-            zero,             zero,             zero,             one
-        )
     }
 }
 
