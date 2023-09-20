@@ -719,7 +719,7 @@ mod matrix2x2_tests {
 
     #[test]
     fn test_from_nonuniform_scale() {
-        let matrix = Matrix2x2::from_nonuniform_scale(3_i32, 7_i32);
+        let matrix = Matrix2x2::from_nonuniform_scale(&Vector2::new(3_i32, 7_i32));
         let unit_x = Vector2::unit_x();
         let unit_y = Vector2::unit_y();
         let expected = unit_x * 3_i32 + unit_y * 7_i32;
@@ -1715,7 +1715,7 @@ mod matrix3x3_tests {
 
     #[test]
     fn test_from_nonuniform_scale() {
-        let matrix = Matrix3x3::from_nonuniform_scale(3_i32, 5_i32, 7_i32);
+        let matrix = Matrix3x3::from_nonuniform_scale(&Vector3::new(3_i32, 5_i32, 7_i32));
         let unit_x = Vector3::unit_x();
         let unit_y = Vector3::unit_y();
         let unit_z = Vector3::unit_z();

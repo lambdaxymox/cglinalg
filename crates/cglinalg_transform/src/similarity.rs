@@ -463,14 +463,7 @@ where
         let scale = self.scale;
         let mut rotation = self.isometry.rotation().matrix().clone();
         rotation.scale_mut(scale);
-        /*
-        Matrix4x4::new(
-            scale * rotation.c0r0, scale * rotation.c0r1, scale * rotation.c0r2, S::zero(),
-            scale * rotation.c1r0, scale * rotation.c1r1, scale * rotation.c1r2, S::zero(),
-            scale * rotation.c2r0, scale * rotation.c2r1, scale * rotation.c2r2, S::zero(),
-            distance.x,            distance.y,            distance.z,            S::one()
-        )
-        */
+        
         let mut result = Matrix::from(rotation);
         for i in 0..N {
             result[N][i] = translation[i];

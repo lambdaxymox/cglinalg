@@ -2075,6 +2075,122 @@ impl<S, const N: usize> Matrix<S, N, N>
 where
     S: SimdScalar
 {
+    /// Construct a uniform scaling matrix.
+    ///
+    /// The matrix applies the same scale factor to all dimensions, so each
+    /// component of a vector will be scaled by the same factor. In particular,
+    /// calling `from_scale(scale)` is equivalent to calling 
+    /// [`Self::from_nonuniform_scale`] with `scale` as each entry in the vector
+    /// of scale factors.
+    ///
+    /// # Examples
+    /// 
+    /// An example in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix2x2, 
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let scale = 11_u32;
+    /// let matrix = Matrix2x2::from_scale(scale);
+    /// let vector = Vector2::new(1, 2);
+    /// let expected = Vector2::new(11, 22);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// An example in three dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let scale = 5_i32;
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let matrix = Matrix3x3::from_scale(scale);
+    /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_scale(scale: S) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::identity();
+        for i in 0..N {
+            result[i][i] = scale;
+        }
+
+        result
+    }
+
+    /// Construct a general scaling matrix.
+    ///
+    /// This is the most general case for scaling matrices: the scale factor
+    /// in each dimension need not be identical.
+    ///
+    /// # Examples
+    /// 
+    /// An example in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix2x2, 
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let scale_x = 3_u32;
+    /// let scale_y = 5_u32;
+    /// let scale_vector = Vector2::new(scale_x, scale_y);
+    /// let matrix = Matrix2x2::from_nonuniform_scale(&scale_vector);
+    /// let vector = Vector2::new(1, 2);
+    /// let expected = Vector2::new(3, 10);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// An example in three dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let scale_x = 5_i32;
+    /// let scale_y = 10_i32;
+    /// let scale_z = 15_i32;
+    /// let scale_vector = Vector3::new(scale_x, scale_y, scale_z);
+    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
+    /// let matrix = Matrix3x3::from_nonuniform_scale(&scale_vector);
+    /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_nonuniform_scale(scale: &Vector<S, N>) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::identity();
+        for i in 0..N {
+            result[i][i] = scale[i];
+        }
+
+        result
+        /*
+        let zero = S::zero();
+
+        Self::new(
+            scale_x,   zero,      zero,
+            zero,      scale_y,   zero,
+            zero,      zero,      scale_z,
+        )
+        */
+    }
+
     /// Construct a uniform affine scaling matrix.
     ///
     /// The matrix applies the same scale factor to all dimensions, so each
@@ -2754,6 +2870,7 @@ where
         )
     }
 
+    /*
     /// Construct a two-dimensional uniform scaling matrix.
     ///
     /// The matrix applies the same scale factor to all dimensions, so each
@@ -2781,7 +2898,8 @@ where
     pub fn from_scale(scale: S) -> Self {
         Self::from_nonuniform_scale(scale, scale)
     }
-        
+    */
+    /*  
     /// Construct two-dimensional general scaling matrix.
     ///
     /// This is the most general case for scaling matrices: the scale factor
@@ -2814,6 +2932,7 @@ where
             zero,      scale_y,
         )
     }
+    */
 }
 
 impl<S> Matrix2x2<S> 
@@ -3169,6 +3288,7 @@ impl<S> Matrix3x3<S>
 where 
     S: SimdScalar
 {   
+    /*
     /// Construct a three-dimensional uniform scaling matrix.
     ///
     /// The matrix applies the same scale factor to all dimensions, so each
@@ -3196,7 +3316,8 @@ where
     pub fn from_scale(scale: S) -> Self {
         Self::from_nonuniform_scale(scale, scale, scale)
     }
-
+    */
+    /*
     /// Construct a three-dimensional general scaling matrix.
     ///
     /// This is the most general case for scaling matrices: the scale factor
@@ -3231,6 +3352,7 @@ where
             zero,      zero,      scale_z,
         )
     }
+    */
 }
 
 impl<S> Matrix3x3<S> 
