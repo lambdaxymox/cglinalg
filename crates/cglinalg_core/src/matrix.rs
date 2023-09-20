@@ -4533,37 +4533,6 @@ where
     }
 }
 
-/*
-impl<S> From<Matrix2x2<S>> for Matrix3x3<S> 
-where 
-    S: SimdScalar
-{
-    #[rustfmt::skip]
-    #[inline]
-    fn from(matrix: Matrix2x2<S>) -> Self {
-        Self::new(
-            matrix[0][0], matrix[0][1], S::zero(),
-            matrix[1][0], matrix[1][1], S::zero(),
-            S::zero(),    S::zero(),    S::one()
-        )
-    }
-}
-
-impl<S> From<&Matrix2x2<S>> for Matrix3x3<S> 
-where 
-    S: SimdScalar
-{
-    #[rustfmt::skip]
-    #[inline]
-    fn from(matrix: &Matrix2x2<S>) -> Self {
-        Self::new(
-            matrix[0][0], matrix[0][1], S::zero(),
-            matrix[1][0], matrix[1][1], S::zero(),
-            S::zero(),    S::zero(),    S::one()
-        )
-    }
-}
-*/
 impl<S, const M: usize, const N: usize> From<Matrix<S, M, M>> for Matrix<S, N, N>
 where
     S: SimdScalar,
@@ -6036,79 +6005,6 @@ where
         ulps_ne!(self.determinant(), S::zero())
     }
 }
-/*
-impl<S> From<Matrix2x2<S>> for Matrix4x4<S> 
-where 
-    S: SimdScalar 
-{
-    #[rustfmt::skip]
-    #[inline]
-    fn from(matrix: Matrix2x2<S>) -> Self {
-        let one = S::one();
-        let zero = S::zero();
-        Self::new(
-            matrix[0][0], matrix[0][1], zero, zero,
-            matrix[1][0], matrix[1][1], zero, zero,
-            zero,         zero,         one,  zero,
-            zero,         zero,         zero, one
-        )
-    }
-}
-
-impl<S> From<&Matrix2x2<S>> for Matrix4x4<S> 
-where 
-    S: SimdScalar
-{
-    #[rustfmt::skip]
-    #[inline]
-    fn from(matrix: &Matrix2x2<S>) -> Self {
-        let one = S::one();
-        let zero = S::zero();
-        Self::new(
-            matrix[0][0], matrix[0][1], zero, zero,
-            matrix[1][0], matrix[1][1], zero, zero,
-            zero,         zero,         one,  zero,
-            zero,         zero,         zero, one
-        )
-    }
-}
-
-impl<S> From<Matrix3x3<S>> for Matrix4x4<S> 
-where 
-    S: SimdScalar
-{
-    #[rustfmt::skip]
-    #[inline]
-    fn from(matrix: Matrix3x3<S>) -> Self {
-        let one = S::one();
-        let zero = S::zero();
-        Self::new(
-            matrix[0][0], matrix[0][1], matrix[0][2], zero,
-            matrix[1][0], matrix[1][1], matrix[1][2], zero,
-            matrix[2][0], matrix[2][1], matrix[2][2], zero,
-            zero,         zero,         zero,         one
-        )
-    }
-}
-
-impl<S> From<&Matrix3x3<S>> for Matrix4x4<S> 
-where 
-    S: SimdScalar
-{
-    #[rustfmt::skip]
-    #[inline]
-    fn from(matrix: &Matrix3x3<S>) -> Self {
-        let one = S::one();
-        let zero = S::zero();
-        Self::new(
-            matrix[0][0], matrix[0][1], matrix[0][2], zero,
-            matrix[1][0], matrix[1][1], matrix[1][2], zero,
-            matrix[2][0], matrix[2][1], matrix[2][2], zero,
-            zero,         zero,         zero,         one
-        )
-    }
-}
-*/
 
 impl<S> Matrix1x2<S> {
     /// Construct a new matrix from its elements.
