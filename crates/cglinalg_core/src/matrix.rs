@@ -11,6 +11,8 @@ use cglinalg_trigonometry::{
 };
 use crate::constraints::{
     Const,
+    DimAdd,
+    DimSub,
     DimMul,
     DimEq,
     CanMultiply,
@@ -1941,6 +1943,415 @@ where
     }
 }
 
+impl<S, const N: usize> Matrix<S, N, N>
+where
+    S: SimdScalar
+{
+    /// Construct a uniform affine scaling matrix.
+    ///
+    /// The matrix applies the same scale factor to all dimensions, so each
+    /// component of a vector will be scaled by the same factor. In particular,
+    /// given a vector `v`, the resulting matrix `m` satisfies
+    /// ```text
+    /// forall i in 0..(N - 1). (m * v)[i] == scale * v[i]
+    /// ```
+    /// where `scale` is the uniform scaling factor, and `N` is the dimensionality
+    /// of the matrix. Moreover, the matrix `m` has a form that satisfies
+    /// ```text
+    /// forall i in 0..(N - 1). m[i][i] == scale
+    /// m[N - 1][N - 1] == 1
+    /// forall i, j in 0..N. i != j ==> m[i][j] == 0
+    /// ```
+    /// The uniform affine scaling matrix has the general form
+    /// ```text
+    /// | scale  0      ...  0       0 |
+    /// | 0      scale  ...  0       0 |
+    /// | .      .           .       . |
+    /// | .      .           .       . |
+    /// | 0      ...    ...  scale   0 |
+    /// | 0      ...    ...  0       1 |
+    /// ```
+    /// In particular, this is a special case of the more general form in 
+    /// [`Self::from_affine_nonuniform_scale`].
+    /// 
+    /// # Examples
+    ///
+    /// An example in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let scale = 5_i32;
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let matrix = Matrix3x3::from_affine_scale(scale);
+    /// let expected = Vector3::new(5_i32, 10_i32, 3_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// The form of the uniform affine scaling matrix in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let scale = 5_i32;
+    /// let expected = Matrix3x3::new(
+    ///     scale, 0_i32, 0_i32,
+    ///     0_i32, scale, 0_i32,
+    ///     0_i32, 0_i32, 1_i32
+    /// );
+    /// let result = Matrix3x3::from_affine_scale(scale);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// An example in three dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let scale = 4_i32;
+    /// let matrix = Matrix4x4::from_affine_scale(scale);
+    /// let vector = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let expected = Vector4::new(4_i32, 8_i32, 12_i32, 4_i32);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// The form of the uniform affine scaling matrix in three dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4, 
+    /// # };
+    /// #
+    /// let scale = 4_i32;
+    /// let expected = Matrix4x4::new(
+    ///     scale, 0_i32, 0_i32, 0_i32,
+    ///     0_i32, scale, 0_i32, 0_i32,
+    ///     0_i32, 0_i32, scale, 0_i32,
+    ///     0_i32, 0_i32, 0_i32, 1_i32
+    /// );
+    /// let result = Matrix4x4::from_affine_scale(scale);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_affine_scale(scale: S) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::identity();
+        for i in 0..(N - 1) {
+            result[i][i] = scale;
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize, const NMINUS1: usize> Matrix<S, N, N>
+where 
+    S: SimdScalar,
+    ShapeConstraint: DimAdd<Const<NMINUS1>, Const<1>, Output = Const<N>>,
+    ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>
+{
+    /// Construct an affine scaling matrix.
+    ///
+    /// This is the most general case for affine scaling matrices: the scale 
+    /// factor in each dimension need not be identical. Since this is an 
+    /// affine matrix, the `w` component is unaffected.
+    /// 
+    /// Let `scale` be a vector of scale factors, such that `scale[i]` is the
+    /// scale factor for component `i` of a vector. Let `m` be the affine 
+    /// scaling matrix corresponding to `scale`. The matrix `m` satisfies the 
+    /// following: given a vector `v`
+    /// ```text
+    /// forall i in 0..(N - 1). (m * v)[i] == scale[i] * v[i]
+    /// ```
+    /// where `N` is the dimensionality of `m`. Since `m` is affine, `v` has 
+    /// dimension `N - 1`. Morever, the matrix `m` has a form that satisfies
+    /// ```text
+    /// forall i in 0..(N - 1). m[i][i] == scale[i]
+    /// m[N - 1][N - 1] == 1
+    /// forall i, j in 0..N. i != j ==> m[i][j] == 0
+    /// ```
+    /// The affine scaling matrix has the general form
+    /// ```text
+    /// | scale[0] 0         ...  0             0 |
+    /// | 0        scale[1]  ...  0             0 |
+    /// | .        .              .             . |
+    /// | .        .              .             . |
+    /// | 0        ...       ...  scale[N - 2]  0 |
+    /// | 0        ...       ...  0             1 |
+    /// ```
+    ///
+    /// # Examples
+    ///
+    /// An example in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let scale_x = 5_i32;
+    /// let scale_y = 10_i32;
+    /// let vector = Vector3::new(1_i32, 1_i32, 3_i32);
+    /// let matrix = Matrix3x3::from_affine_nonuniform_scale(&Vector2::new(
+    ///     scale_x, 
+    ///     scale_y
+    /// ));
+    /// let expected = Vector3::new(5_i32, 10_i32, 3_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// The form of the affine scaling matrix in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let scale_x = 5_i32;
+    /// let scale_y = 10_i32;
+    /// let expected = Matrix3x3::new(
+    ///     scale_x, 0_i32,   0_i32,
+    ///     0_i32,   scale_y, 0_i32,
+    ///     0_i32,   0_i32,   1_i32
+    /// );
+    /// let result = Matrix3x3::from_affine_nonuniform_scale(&Vector2::new(
+    ///     scale_x, 
+    ///     scale_y
+    /// ));
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// An example in three dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let scale_x = 4_i32;
+    /// let scale_y = 6_i32;
+    /// let scale_z = 8_i32;
+    /// let matrix = Matrix4x4::from_affine_nonuniform_scale(&Vector3::new(
+    ///     scale_x,
+    ///     scale_y,
+    ///     scale_z
+    /// ));
+    /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
+    /// let expected = Vector4::new(4_i32, 6_i32, 8_i32, 1_i32);
+    /// let result = matrix * vector;
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// The form of the affine scaling matrix in three dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// # };
+    /// let scale_x = 4_i32;
+    /// let scale_y = 6_i32;
+    /// let scale_z = 8_i32;
+    /// let expected = Matrix4x4::new(
+    ///     scale_x, 0_i32,   0_i32,   0_i32,
+    ///     0_i32,   scale_y, 0_i32,   0_i32,
+    ///     0_i32,   0_i32,   scale_z, 0_i32, 
+    ///     0_i32,   0_i32,   0_i32,   1_i32
+    /// );
+    /// let result = Matrix4x4::from_affine_nonuniform_scale(&Vector3::new(
+    ///     scale_x,
+    ///     scale_y,
+    ///     scale_z
+    /// ));
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_affine_nonuniform_scale(scale: &Vector<S, NMINUS1>) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::identity();
+        for i in 0..(N - 1) {
+            result[i][i] = scale[i];
+        }
+
+        result
+    }
+
+    /// Construct an affine translation matrix.
+    /// 
+    /// Let `distance` be a vector of displacements: component `i` of `distance`
+    /// adds `distance[i]` to component `i` of a vector. Let `m` be the affine
+    /// translation matrix corresponding to `distance`. Then the matrix `m` satisfies
+    /// the following: given a vector `v`
+    /// ```text
+    /// forall i in 0..(N - 1). (m * v)[i] == v[i] + distance[i]
+    /// ```
+    /// where `N` is the dimensionality of `m`. Since `m` is affine, `distance`
+    /// and `v` have dimensionality `N - 1`. Moreover, form of the matrix `m` is all `
+    /// 1`'s along the diagonal, and `0` among all over elements except for the last 
+    /// column, where each row except the last is the corresponding entry of `distance`. 
+    /// More precisely, the form of the matrix `m` satisfies
+    /// ```text
+    /// forall i in 0..N. m[i][i] == 1
+    /// forall r in 0..(N - 1). m[N - 1][r] == distance[r]
+    /// forall c in 0..(N - 1). forall r in 0..N. c != r ==> m[c][r] == 0
+    /// ```
+    /// Note that we are indexing in column-major order, so that the last constraint clause 
+    /// indicates that every entry except the last one in the bottom row is zero. In 
+    /// particular, the affine translation matrix has the form
+    /// ```text
+    /// | 1  0   ...   distance[0]     |
+    /// | 0  1   ...   distance[1]     |
+    /// | .  .   ...   .               |
+    /// | .  .   ...   .               |
+    /// | 0  0   ...   distance[N - 2] |
+    /// | 0  0   ...   1               |
+    /// ```
+    ///
+    /// # Examples (Two Dimensions)
+    /// 
+    /// A homogeneous vector with a zero **z-component** should not translate.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector2::new(3_i32, 7_i32);
+    /// let matrix = Matrix3x3::from_affine_translation(&distance);
+    /// let vector = Vector3::new(1_i32, 1_i32, 0_i32);
+    /// let expected = Vector3::new(1_i32, 1_i32, 0_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected); 
+    /// ```
+    /// 
+    /// A homogeneous vector with a unit **z-component** should translate.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector2::new(3_i32, 7_i32);
+    /// let matrix = Matrix3x3::from_affine_translation(&distance);
+    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
+    /// let expected = Vector3::new(1_i32 + distance.x, 1_i32 + distance.y, 1_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected); 
+    /// ```
+    /// 
+    /// The form of the affine translation matrix in two dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector2::new(3_i32, 7_i32);
+    /// let expected = Matrix3x3::new(
+    ///     1_i32,       0_i32,       0_i32,
+    ///     0_i32,       1_i32,       0_i32,
+    ///     distance[0], distance[1], 1_i32
+    /// );
+    /// let result = Matrix3x3::from_affine_translation(&distance);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Examples (Three Dimensions)
+    /// 
+    /// A homogeneous vector with a zero **w-component** should not translate.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector3::new(3_i32, 7_i32, 11_i32);
+    /// let matrix = Matrix4x4::from_affine_translation(&distance);
+    /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 0_i32);
+    /// let expected = Vector4::new(1_i32, 1_i32, 1_i32, 0_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected); 
+    /// ```
+    /// 
+    /// A homogeneous vector with a unit **w-component** should translate.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector3::new(3_i32, 7_i32, 11_i32);
+    /// let matrix = Matrix4x4::from_affine_translation(&distance);
+    /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
+    /// let expected = Vector4::new(
+    ///     1_i32 + distance.x, 
+    ///     1_i32 + distance.y, 
+    ///     1_i32 + distance.z, 
+    ///     1_i32
+    /// );
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected); 
+    /// ```
+    /// 
+    /// The form of the affine translation matrix in three dimensions.
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let distance = Vector3::new(3_i32, 7_i32, 11_i32);
+    /// let expected = Matrix4x4::new(
+    ///     1_i32,       0_i32,       0_i32,       0_i32,
+    ///     0_i32,       1_i32,       0_i32,       0_i32,
+    ///     0_i32,       0_i32,       1_i32,       0_i32,
+    ///     distance[0], distance[1], distance[2], 1_i32
+    /// );
+    /// let result = Matrix4x4::from_affine_translation(&distance);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_affine_translation(distance: &Vector<S, NMINUS1>) -> Self {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::identity();
+        for r in 0..(N - 1) {
+            result[N - 1][r] = distance[r];
+        }
+
+        result
+    }
+}
+
 
 impl<S> Matrix1x1<S> {
     /// Construct a new matrix from its elements.
@@ -2606,7 +3017,76 @@ impl<S> Matrix3x3<S> {
 impl<S> Matrix3x3<S> 
 where 
     S: SimdScalar
-{
+{   
+    /// Construct a three-dimensional uniform scaling matrix.
+    ///
+    /// The matrix applies the same scale factor to all dimensions, so each
+    /// component of a vector will be scaled by the same factor. In particular,
+    /// calling `from_scale(scale)` is equivalent to calling 
+    /// `Self::from_nonuniform_scale(scale, scale, scale)`.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let scale = 5_i32;
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let matrix = Matrix3x3::from_scale(scale);
+    /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn from_scale(scale: S) -> Self {
+        Self::from_nonuniform_scale(scale, scale, scale)
+    }
+
+    /// Construct a three-dimensional general scaling matrix.
+    ///
+    /// This is the most general case for scaling matrices: the scale factor
+    /// in each dimension need not be identical.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,  
+    /// # };
+    /// #
+    /// let scale_x = 5_i32;
+    /// let scale_y = 10_i32;
+    /// let scale_z = 15_i32;
+    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
+    /// let matrix = Matrix3x3::from_nonuniform_scale(scale_x, scale_y, scale_z);
+    /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
+    /// let result = matrix * vector;
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Self {
+        let zero = S::zero();
+
+        Self::new(
+            scale_x,   zero,      zero,
+            zero,      scale_y,   zero,
+            zero,      zero,      scale_z,
+        )
+    }
+}
+
+/*
+impl<S> Matrix3x3<S> 
+where 
+    S: SimdScalar
+{   
     /// Construct a two-dimensional affine translation matrix.
     ///
     /// This represents a translation in the **xy-plane** as an affine 
@@ -2656,69 +3136,6 @@ where
             one,        zero,       zero,
             zero,       one,        zero,
             distance.x, distance.y, one
-        )
-    }
-    
-    /// Construct a three-dimensional uniform scaling matrix.
-    ///
-    /// The matrix applies the same scale factor to all dimensions, so each
-    /// component of a vector will be scaled by the same factor. In particular,
-    /// calling `from_scale(scale)` is equivalent to calling 
-    /// `Self::from_nonuniform_scale(scale, scale, scale)`.
-    ///
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// #     Vector3,  
-    /// # };
-    /// #
-    /// let scale = 5_i32;
-    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
-    /// let matrix = Matrix3x3::from_scale(scale);
-    /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
-    /// let result = matrix * vector;
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn from_scale(scale: S) -> Self {
-        Self::from_nonuniform_scale(scale, scale, scale)
-    }
-    
-    /// Construct a three-dimensional general scaling matrix.
-    ///
-    /// This is the most general case for scaling matrices: the scale factor
-    /// in each dimension need not be identical.
-    ///
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// #     Vector3,  
-    /// # };
-    /// #
-    /// let scale_x = 5_i32;
-    /// let scale_y = 10_i32;
-    /// let scale_z = 15_i32;
-    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
-    /// let matrix = Matrix3x3::from_nonuniform_scale(scale_x, scale_y, scale_z);
-    /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
-    /// let result = matrix * vector;
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_nonuniform_scale(scale_x: S, scale_y: S, scale_z: S) -> Self {
-        let zero = S::zero();
-
-        Self::new(
-            scale_x,   zero,      zero,
-            zero,      scale_y,   zero,
-            zero,      zero,      scale_z,
         )
     }
 
@@ -2786,7 +3203,13 @@ where
             zero,      zero,      one,
         )
     }
+}
+*/
 
+impl<S> Matrix3x3<S> 
+where 
+    S: SimdScalar
+{
     /// Construct a three-dimensional shearing matrix for shearing along the 
     /// **x-axis**, holding the **y-axis** constant and the **z-axis** constant.
     ///
@@ -4170,6 +4593,7 @@ impl<S> Matrix4x4<S> {
     }
 }
 
+/*
 impl<S> Matrix4x4<S>
 where 
     S: SimdScalar
@@ -4299,7 +4723,13 @@ where
             zero,    zero,    zero,    one
         )
     }
+}
+*/
 
+impl<S> Matrix4x4<S>
+where 
+    S: SimdScalar
+{
     /// Construct a three-dimensional affine shearing matrix for shearing 
     /// along the **x-axis**, holding the **y-axis** constant and the **z-axis** 
     /// constant.

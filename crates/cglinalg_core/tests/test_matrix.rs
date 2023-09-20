@@ -1737,7 +1737,7 @@ mod matrix3x3_tests {
 
     #[test]
     fn test_from_affine_nonuniform_scale() {
-        let matrix = Matrix3x3::from_affine_nonuniform_scale(7_i32, 11_i32);
+        let matrix = Matrix3x3::from_affine_nonuniform_scale(&Vector2::new(7_i32, 11_i32));
         let expected = Vector3::new(7_i32, 11_i32, 1_i32);
         let result = matrix * Vector3::new(1_i32, 1_i32, 1_i32);
 
@@ -1746,7 +1746,7 @@ mod matrix3x3_tests {
 
     #[test]
     fn test_from_affine_nonuniform_scale_does_not_change_last_coordinate() {
-        let matrix = Matrix3x3::from_affine_nonuniform_scale(7_i32, 11_i32);
+        let matrix = Matrix3x3::from_affine_nonuniform_scale(&Vector2::new(7_i32, 11_i32));
         let unit_z = Vector3::unit_z();
         let expected = unit_z;
         let result = matrix * unit_z;
@@ -3136,7 +3136,7 @@ mod matrix4x4_tests {
 
     #[test]
     fn test_from_affine_nonuniform_scale() {
-        let matrix = Matrix4x4::from_affine_nonuniform_scale(5_i32, 7_i32, 11_i32);
+        let matrix = Matrix4x4::from_affine_nonuniform_scale(&Vector3::new(5_i32, 7_i32, 11_i32));
         let unit_w = Vector4::unit_w();
         let expected = Vector4::new(5_i32, 7_i32, 11_i32, 1_i32);
         let result = matrix * Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
