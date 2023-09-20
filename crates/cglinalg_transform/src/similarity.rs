@@ -11,31 +11,21 @@ use cglinalg_core::{
     DimMul,
     DimLt,
     Matrix,
-    Matrix3x3,
-    Matrix4x4,
     Point,
-    Point2,
     Point3,
     Vector,
-    Vector2,
     Vector3,
     Unit,
     Normed,
 };
 use crate::rotation::{
     Rotation,
-    Rotation2,
-    Rotation3,
 };
 use crate::translation::{
     Translation,
-    Translation2,
-    Translation3,
 };
 use crate::transform::{
     Transform,
-    Transform2,
-    Transform3,
 };
 use crate::isometry::{
     Isometry,

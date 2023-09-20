@@ -739,7 +739,7 @@ macro_rules! approx_norm_squared_props {
             }
 
             #[test]
-            fn prop_norm_squared_approx_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
+            fn prop_approx_norm_squared_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
                 let p1: super::$PointType<$ScalarType> = p1;
                 let p2: super::$PointType<$ScalarType> = p2;
                 super::prop_approx_norm_squared_point_separating(p1, p2, $input_tolerance, $output_tolerance)?
