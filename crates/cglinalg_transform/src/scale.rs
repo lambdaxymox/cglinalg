@@ -36,7 +36,7 @@ pub type Scale3<S> = Scale<S, 3>;
 /// component `i` of `v`. The scale transformation `S` acts on a vector `v` 
 /// as follows
 /// ```text
-/// forall i in 0..N. (Sv)[i] := si * v[i]
+/// forall i in 0..N. (Sv)[i] := s[i] * v[i]
 /// ```
 /// where `N` is the dimensionality of the vector `v`. In particular, in
 /// Euclidean space, the scale transformation `S` acts as a diagonal matrix 
@@ -54,15 +54,13 @@ impl<S, const N: usize> Scale<S, N>
 where 
     S: SimdScalar 
 {
-    /// Construct a three-dimensional scale transformation from a nonuniform scale 
-    /// across coordinates.
+    /// Construct a scale transformation from a nonuniform scale across coordinates.
     #[inline]
     pub const fn from_nonuniform_scale(vector: Vector<S, N>) -> Self {
         Self { vector, }
     }
 
-    /// Construct a three-dimensional scale transformation from a uniform scale 
-    /// factor.
+    /// Construct a scale transformation from a uniform scale factor.
     #[inline]
     pub const fn from_scale(scale: S) -> Self {
         Self {

@@ -257,11 +257,7 @@ where
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter,
-            "Transform{} [{}]",
-            N, self.matrix
-        )
+        write!(formatter, "Transform{} [{}]", N, self.matrix)
     }
 }
 

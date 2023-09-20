@@ -44,9 +44,9 @@ pub type Translation3<S> = Translation<S, 3>;
 /// ```
 /// Because `v` is a vector and not a point, `v` describes the **difference** 
 /// between two points, rather than an arbitary position in Euclidean space. Indeed, 
-/// let `E^3` be three-dimensional Euclidean space with origin `O`. Let `p` and `q` be 
-/// points in `E^N`, where `N` is the number of dimensions, and `v := p - q` be the 
-/// difference between them. Then in homogeneous coordinates, and by the linearity of `T`
+/// let `E^N` be `N`-dimensional Euclidean space with origin `O`. Let `p` and `q` be 
+/// points in `E^N`, and `v := p - q` be the difference between them. Then in 
+/// homogeneous coordinates, and by the linearity of `T`
 /// ```text
 /// T(v) := T(p - q) 
 ///      == T((p - O) - (q - O)) 
@@ -553,11 +553,7 @@ where
     S: fmt::Display 
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter, 
-            "Translation{} {}",
-            N, self.vector
-        )
+        write!(formatter, "Translation{} {}", N, self.vector)
     }
 }
 
