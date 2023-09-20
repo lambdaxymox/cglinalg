@@ -100,7 +100,8 @@ where
     #[inline]
     pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
         let matrix = self.to_affine_matrix();
-        Transform::from_specialized(matrix)
+        
+        Transform::from_matrix_unchecked(matrix)
     }
 
     /// Convert an isometry to an equivalent affine transformation matrix.

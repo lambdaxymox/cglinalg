@@ -66,7 +66,7 @@ mod similarity2_tests {
         let angle = Radians(f64::consts::FRAC_PI_3);
         let distance = Vector2::new(5_f64, 5_f64);
         let isometry = Isometry2::from_angle_translation(angle, &distance);
-        let similarity = Similarity2::from_isometry(isometry);
+        let similarity = Similarity2::from_isometry(&isometry);
         let point = Point2::new(2_f64, 0_f64);
         let expected = Point2::new(6_f64, f64::sqrt(3_f64) + 5_f64);
         let result = similarity.transform_point(&point);
