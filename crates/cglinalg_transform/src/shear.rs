@@ -21,7 +21,7 @@ use core::ops;
 
 
 /// A shear transformation in two dimensions.
-#[repr(transparent)]
+#[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear2<S> {
     matrix: Matrix2x2<S>,
@@ -485,7 +485,7 @@ where
 
 
 /// A shearing transformation in three dimensions.
-#[repr(transparent)]
+#[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear3<S> {
     matrix: Matrix3x3<S>,

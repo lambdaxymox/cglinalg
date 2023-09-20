@@ -2504,6 +2504,29 @@ impl<S> Matrix1x1<S> {
     }
 }
 
+impl<S> Matrix1x1<S>
+where
+    S: Copy
+{
+    /// Convert this 1x1 matrix into a scalar.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix1x1,
+    /// # };
+    /// #
+    /// let vector = Matrix1x1::new(1_i32);
+    /// 
+    /// assert_eq!(vector.to_scalar(), 1_i32);
+    /// ```
+    #[inline]
+    pub const fn to_scalar(&self) -> S {
+        self.data[0][0]
+    }
+}
+
 impl<S> Matrix1x1<S> 
 where 
     S: SimdScalarSigned 

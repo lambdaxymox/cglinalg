@@ -31,7 +31,7 @@ pub type Transform3<S> = Transform<S, 3, 4>;
 
 
 /// A generic transformation in homogeneous coordinates.
-#[repr(transparent)]
+#[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Transform<S, const N: usize, const NPLUS1: usize> 
 where

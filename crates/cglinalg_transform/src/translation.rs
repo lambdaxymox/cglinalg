@@ -59,7 +59,7 @@ pub type Translation3<S> = Translation<S, 3>;
 ///      == v
 /// ```
 /// as desired.
-#[repr(transparent)]
+#[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Translation<S, const N: usize> {
     pub(crate) vector: Vector<S, N>,

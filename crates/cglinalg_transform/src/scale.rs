@@ -44,7 +44,7 @@ pub type Scale3<S> = Scale<S, 3>;
 /// ```text
 /// forall i in 0..N. S[i][i] := s[i]
 /// ```
-#[repr(transparent)]
+#[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Scale<S, const N: usize> {
     vector: Vector<S, N>,

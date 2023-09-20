@@ -1850,6 +1850,28 @@ where
     }
 }
 
+impl<S> Vector1<S>
+where
+    S: Copy
+{
+    /// Convert this vector into a scalar.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector1,
+    /// # };
+    /// #
+    /// let vector = Vector1::new(1_i32);
+    /// 
+    /// assert_eq!(vector.to_scalar(), 1_i32);
+    /// ```
+    #[inline]
+    pub const fn to_scalar(&self) -> S {
+        self.data[0]
+    }
+}
 
 impl<S> Vector2<S> {
     /// Construct a new vector.

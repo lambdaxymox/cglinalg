@@ -31,6 +31,16 @@ use core::ops;
 
 
 /// A rotation matrix in two dimensions.
+pub type Rotation2<S> = Rotation<S, 2>;
+
+/// A rotation matrix in three dimensions.
+pub type Rotation3<S> = Rotation<S, 3>;
+
+
+/// A rotation matrix.
+///
+/// This is the most general rotation type. The vast majority of applications 
+/// should use [`Rotation2`] or [`Rotation3`] instead of this type directly.
 /// 
 /// Two-dimensional rotations are different than three-dimensional rotations 
 /// because mathematically we cannot define an axis of rotation in two 
@@ -42,22 +52,7 @@ use core::ops;
 /// If one wants to talk about rotating a vector in the the **xy-plane** about a 
 /// normal vector, we are implicitly rotating about the **z-axis** in 
 /// three dimensions.
-pub type Rotation2<S> = Rotation<S, 2>;
-
-/// A rotation matrix in three dimensions.
-///
-/// A rotation is an operation that creates circular motions and 
-/// preserves at least one point. Rotations preserve the length of vectors and 
-/// therefore act as a class of rigid body transformations.
-pub type Rotation3<S> = Rotation<S, 3>;
-
-
-/// A rotation matrix.
-///
-/// A rotation is an operation that creates circular motions and 
-/// preserves at least one point. Rotations preserve the length of vectors and 
-/// therefore act as a class of rigid body transformations.
-#[repr(transparent)]
+#[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Rotation<S, const N: usize> {
     matrix: Matrix<S, N, N>,
