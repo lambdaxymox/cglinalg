@@ -28,6 +28,8 @@ use cglinalg_core::{
 use cglinalg_core::{
     Const,
     CanMultiply,
+    CanTransposeMultiply,
+    DimEq,
     DimMul,
     ShapeConstraint,
 };
@@ -1551,6 +1553,42 @@ where
 }
 
 
+fn prop_tr_mul_equals_transpose_mul<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const C1C2: usize>(
+    m1: Matrix<S, R1, C1>,
+    m2: Matrix<S, R2, C2>
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalar,
+    ShapeConstraint: CanTransposeMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
+    ShapeConstraint: DimMul<Const<C1>, Const<C2>, Output = Const<C1C2>>,
+    ShapeConstraint: DimMul<Const<C2>, Const<C1>, Output = Const<C1C2>>
+{
+    let lhs = m1.tr_mul(&m2);
+    let rhs = m1.transpose() * m2;
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+fn prop_tr_dot_equals_transpose_dot<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize>(
+    m1: Matrix<S, R1, C1>,
+    m2: Matrix<S, R2, C2>
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalar,
+    ShapeConstraint: DimEq<Const<R1>, Const<C2>> + DimEq<Const<C2>, Const<R1>>,
+    ShapeConstraint: DimEq<Const<R2>, Const<C1>> + DimEq<Const<C1>, Const<R2>>
+{
+    let lhs = m1.tr_dot(&m2);
+    let rhs = m1.transpose().dot(&m2);
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
+
 macro_rules! approx_arithmetic_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
     #[cfg(test)]
@@ -2580,7 +2618,7 @@ approx_trace_props!(matrix4x4_f64_trace_props, Matrix4x4, f64, strategy_matrix_f
 
 
 macro_rules! exact_row_vector_dot_product_props {
-    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
+    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
     #[cfg(test)]
     mod $TestModuleName {
         use proptest::prelude::*;
@@ -2596,8 +2634,120 @@ macro_rules! exact_row_vector_dot_product_props {
     }
 }
 
-exact_row_vector_dot_product_props!(matrix1x1_i32_column_vector_dot_product_props, Matrix1x1, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
-exact_row_vector_dot_product_props!(matrix1x2_i32_column_vector_dot_product_props, Matrix1x2, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
-exact_row_vector_dot_product_props!(matrix1x3_i32_column_vector_dot_product_props, Matrix1x3, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
-exact_row_vector_dot_product_props!(matrix1x4_i32_column_vector_dot_product_props, Matrix1x4, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
+exact_row_vector_dot_product_props!(matrix1x1_i32_column_vector_dot_product_props, Matrix1x1, i32, strategy_matrix_i32_any);
+exact_row_vector_dot_product_props!(matrix1x2_i32_column_vector_dot_product_props, Matrix1x2, i32, strategy_matrix_i32_any);
+exact_row_vector_dot_product_props!(matrix1x3_i32_column_vector_dot_product_props, Matrix1x3, i32, strategy_matrix_i32_any);
+exact_row_vector_dot_product_props!(matrix1x4_i32_column_vector_dot_product_props, Matrix1x4, i32, strategy_matrix_i32_any);
+
+
+macro_rules! exact_tr_mul_props {
+    ($TestModuleName:ident, $MatrixType1:ident, $MatrixType2:ident, $ScalarType:ty, $MatrixGen1:ident, $MatrixGen2:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_tr_mul_equals_transpose_mul(m1 in super::$MatrixGen1(), m2 in super::$MatrixGen2()) {
+                let m1: super::$MatrixType1<$ScalarType> = m1;
+                let m2: super::$MatrixType2<$ScalarType> = m2;
+                super::prop_tr_mul_equals_transpose_mul(m1, m2)?
+            }
+        }
+    }
+    }
+}
+
+exact_tr_mul_props!(
+    matrix1x1_i32_matrix1x1_i32_tr_mul_props, Matrix1x1, Matrix1x1, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix2x2_i32_matrix2x2_i32_tr_mul_props, Matrix2x2, Matrix2x2, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix3x3_i32_matrix3x3_i32_tr_mul_props, Matrix3x3, Matrix3x3, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix4x4_i32_matrix4x4_i32_tr_mul_props, Matrix4x4, Matrix4x4, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+
+exact_tr_mul_props!(
+    matrix2x3_i32_matrix2x3_i32_tr_mul_props, Matrix2x3, Matrix2x3, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix3x2_i32_matrix3x2_i32_tr_mul_props, Matrix3x2, Matrix3x2, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix2x4_i32_matrix2x4_i32_tr_mul_props, Matrix2x4, Matrix2x4, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix4x2_i32_matrix4x2_i32_tr_mul_props, Matrix4x2, Matrix4x2, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix3x4_i32_matrix3x4_i32_tr_mul_props, Matrix3x4, Matrix3x4, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix4x3_i32_matrix4x3_i32_tr_mul_props, Matrix4x2, Matrix4x3, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix3x2_i32_matrix3x3_i32_tr_mul_props, Matrix3x2, Matrix3x3, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix4x2_i32_matrix4x4_i32_tr_mul_props, Matrix4x2, Matrix4x4, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix3x4_i32_matrix3x3_i32_tr_mul_props, Matrix3x4, Matrix3x3, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_mul_props!(
+    matrix4x3_i32_matrix4x4_i32_tr_mul_props, Matrix4x3, Matrix4x4, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+
+
+macro_rules! exact_tr_dot_props {
+    ($TestModuleName:ident, $MatrixType1:ident, $MatrixType2:ident, $ScalarType:ty, $MatrixGen1:ident, $MatrixGen2:ident) => {
+    #[cfg(test)]
+    mod $TestModuleName {
+        use proptest::prelude::*;
+        proptest! {
+            #[test]
+            fn prop_tr_dot_equals_transpose_dot(m1 in super::$MatrixGen1(), m2 in super::$MatrixGen2()) {
+                let m1: super::$MatrixType1<$ScalarType> = m1;
+                let m2: super::$MatrixType2<$ScalarType> = m2;
+                super::prop_tr_dot_equals_transpose_dot(m1, m2)?
+            }
+        }
+    }
+    }
+}
+
+exact_tr_dot_props!(
+    matrix1x1_i32_matrix1x1_i32_tr_dot_props, Matrix1x1, Matrix1x1, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_dot_props!(
+    matrix2x2_i32_matrix2x2_i32_tr_dot_props, Matrix2x2, Matrix2x2, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_dot_props!(
+    matrix3x3_i32_matrix3x3_i32_tr_dot_props, Matrix3x3, Matrix3x3, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_dot_props!(
+    matrix4x4_i32_matrix4x4_i32_tr_dot_props, Matrix4x4, Matrix4x4, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+
+exact_tr_dot_props!(
+    matrix2x3_i32_matrix3x2_i32_tr_dot_props, Matrix2x3, Matrix3x2, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_dot_props!(
+    matrix3x2_i32_matrix2x3_i32_tr_dot_props, Matrix3x2, Matrix2x3, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_dot_props!(
+    matrix2x4_i32_matrix4x2_i32_tr_dot_props, Matrix2x4, Matrix4x2, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_dot_props!(
+    matrix4x2_i32_matrix2x4_i32_tr_dot_props, Matrix4x2, Matrix2x4, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_dot_props!(
+    matrix3x4_i32_matrix4x3_i32_tr_dot_props, Matrix3x4, Matrix4x3, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
+exact_tr_dot_props!(
+    matrix4x3_i32_matrix3x4_i32_tr_dot_props, Matrix4x3, Matrix3x4, i32, strategy_matrix_i32_any, strategy_matrix_i32_any
+);
 

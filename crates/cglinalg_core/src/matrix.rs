@@ -16,6 +16,7 @@ use crate::constraints::{
     DimMul,
     DimEq,
     CanMultiply,
+    CanTransposeMultiply,
     ShapeConstraint,
 };
 use crate::normed::{
@@ -898,7 +899,12 @@ where
             }
         }
     }
+}
 
+impl<S, const R1: usize, const C1: usize> Matrix<S, R1, C1>
+where
+    S: SimdScalar
+{
     /// Compute the dot product of two matrices.
     /// 
     /// # Example
@@ -925,11 +931,132 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn dot(&self, other: &Self) -> S {
+    pub fn dot<const R2: usize, const C2: usize>(&self, other: &Matrix<S, R2, C2>) -> S 
+    where
+        ShapeConstraint: DimEq<Const<R1>, Const<R2>> + DimEq<Const<R2>, Const<R1>>,
+        ShapeConstraint: DimEq<Const<C1>, Const<C2>> + DimEq<Const<C2>, Const<C1>>
+    {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = S::zero();
-        for r in 0..R {
-            for c in 0..C {
+        for r in 0..R1 {
+            for c in 0..C1 {
                 result += self.data[c][r] * other.data[c][r]
+            }
+        }
+
+        result
+    }
+
+    /// Compute the matrix product of the transpose of `self` with `other`.
+    /// 
+    /// The function `tr_mul` satisfies the following property: Given a matrix 
+    /// `m2` with `R1` rows and `C1` columns, and a matrix `m2` with `R2` rows 
+    /// and `C2` columns, such that `R1 == R2`, the transpose product of `m1`
+    /// and `m2` is given by
+    /// ```text
+    /// tr_mul(m1, m2) := transpose(m1) * m2
+    /// ```
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix2x2,
+    /// #     Matrix3x2,
+    /// # };
+    /// #
+    /// let matrix1 = Matrix3x2::new(
+    ///     1_i32, 3_i32, 5_i32,
+    ///     2_i32, 4_i32, 6_i32
+    /// );
+    /// let matrix2 = Matrix3x2::new(
+    ///     7_i32, 9_i32,  11_i32,
+    ///     8_i32, 10_i32, 12_i32
+    /// );
+    /// let expected = Matrix2x2::new(
+    ///     89_i32, 116_i32,
+    ///     98_i32, 128_i32
+    /// );
+    /// let result = matrix1.tr_mul(&matrix2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// let matrix1_tr = matrix1.transpose();
+    /// let result_tr = matrix1_tr * matrix2;
+    /// 
+    /// assert_eq!(result_tr, expected);
+    /// ```
+    #[inline]
+    pub fn tr_mul<const R2: usize, const C2: usize, const C1C2: usize>(&self, other: &Matrix<S, R2, C2>) -> Matrix<S, C1, C2> 
+    where
+        ShapeConstraint: CanTransposeMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
+        ShapeConstraint: DimMul<Const<C1>, Const<C2>, Output = Const<C1C2>>,
+        ShapeConstraint: DimMul<Const<C2>, Const<C1>, Output = Const<C1C2>>
+    {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::zero();
+        for c1 in 0..C1 {
+            for c2 in 0..C2 {
+                let mut result_c1c2 = S::zero();
+                for r in 0..R1 {
+                    result_c1c2 += self.data[c1][r] * other.data[c2][r];
+                }
+                
+                result[c2][c1] = result_c1c2;
+            }
+        }
+
+        result
+    }
+
+    /// Compute the dot product between the transpose of `self` and `other`.
+    /// 
+    /// Given a matrix `m1` with `R1` rows and `C1` columns, and a matrix `m2` with
+    /// `R2` rows and `C2` columns, such that `C1 == R2` and `R1 == C2`, the transpose
+    /// dot product of `m1` and `m2` is given by
+    /// ```text
+    /// tr_dot(m1, m2) := dot(transpose(m1), m2)
+    /// ```
+    /// where `transpose(m1)` has a shape of `C1` rows and `R1` columns, so that we can
+    /// indeed compute the matrix dot product for `transpose(m1)` and `m2`.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix2x3,
+    /// #     Matrix3x2,
+    /// # };
+    /// #
+    /// let matrix1 = Matrix2x3::new(
+    ///     1_i32, 4_i32,
+    ///     2_i32, 5_i32,
+    ///     3_i32, 6_i32
+    /// );
+    /// let matrix2 = Matrix3x2::new(
+    ///     7_i32, 9_i32,  11_i32,
+    ///     8_i32, 10_i32, 12_i32
+    /// );
+    /// let expected = 212_i32;
+    /// let result = matrix1.tr_dot(&matrix2);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// let matrix1_tr = matrix1.transpose();
+    /// let result_tr = matrix1_tr.dot(&matrix2);
+    /// 
+    /// assert_eq!(result_tr, expected);
+    /// ```
+    #[inline]
+    pub fn tr_dot<const R2: usize, const C2: usize>(&self, other: &Matrix<S, R2, C2>) -> S 
+    where
+        ShapeConstraint: DimEq<Const<R1>, Const<C2>> + DimEq<Const<C2>, Const<R1>>,
+        ShapeConstraint: DimEq<Const<R2>, Const<C1>> + DimEq<Const<C1>, Const<R2>>
+    {
+        let mut result = S::zero();
+        for c in 0..R1 {
+            for r in 0..C1 {
+                result += self.data[r][c] * other.data[c][r];
             }
         }
 
