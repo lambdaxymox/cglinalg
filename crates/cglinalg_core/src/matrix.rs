@@ -3529,9 +3529,9 @@ where
     /// (x0 = 0, y0 = 0) as a known point, which makes the translation terms 
     /// zero. This yields the matrix formula
     /// ```text
-    /// |  1 - 2*nx*nx  -2*nx*ny       0 |
-    /// | -2*nx*ny       1 - 2*ny*ny   0 |
-    /// |  0             0             1 |
+    /// |  1 - 2 * nx * nx  -2 * nx * ny       0 |
+    /// | -2 * nx * ny       1 - 2 * ny * ny   0 |
+    /// |  0                 0                 1 |
     /// ```
     /// In the case where the the line `L` does not cross the origin, we must 
     /// first do a coordinate transformation to coordinates where the line passes 
@@ -3547,20 +3547,20 @@ where
     /// through the origin. In this coordinate system, we can now apply the 
     /// reflection matrix, which gives a homogeneous matrix equation 
     /// ```text
-    /// | 1 0  -x0 |   |xr|    |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  -x0 |   |x|
-    /// | 0 1  -y0 | * |yr| == | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1  -y0 | * |y|
-    /// | 0 0   1  |   |1 |    |  0              0            1 |   | 0 0   1  |   |1|
+    /// | 1 0  -x0 |   |xr|    |  1 - 2 * nx * nx   -2 * nx * ny      0 |   | 1 0  -x0 |   |x|
+    /// | 0 1  -y0 | * |yr| == | -2 * nx * ny        1 - 2 * ny * ny  0 | * | 0 1  -y0 | * |y|
+    /// | 0 0   1  |   |1 |    |  0                  0                1 |   | 0 0   1  |   |1|
     /// ```
     /// Then to solve for the reflection components, we invert the translation 
     /// matrix on the left hand side to get an equation of the form
     /// ```text
-    /// |xr|    | 1 0  x0 |   |  1 - 2*nx*nx   -2*nx*ny      0 |   | 1 0  -x0 |   |x|
-    /// |yr| == | 0 1  y0 | * | -2*nx*ny        1 - 2*ny*ny  0 | * | 0 1  -y0 | * |y|
-    /// |1 |    | 0 0  1  |   |  0              0            1 |   | 0 0   1  |   |1|
+    /// |xr|    | 1 0  x0 |   |  1 - 2 * nx * nx   -2 * nx * ny      0 |   | 1 0  -x0 |   |x|
+    /// |yr| == | 0 1  y0 | * | -2 * nx * ny        1 - 2 * ny * ny  0 | * | 0 1  -y0 | * |y|
+    /// |1 |    | 0 0  1  |   |  0              0                    1 |   | 0 0   1  |   |1|
     ///
-    ///         |  1 - 2*nx*nx   -2*nx*ny       2*nx*(nx*n0 + ny*y0) |   |x|
-    ///      == | -2*nx*ny        1 - 2*ny*ny   2*ny*(nx*x0 + ny*y0) | * |y|
-    ///         |  0              0             1                    |   |1|
+    ///         |  1 - 2 * nx * nx   -2 * nx * ny       2 * nx * (nx * n0 + ny * y0) |   |x|
+    ///      == | -2 * nx * ny        1 - 2 * ny * ny   2 * ny * (nx * x0 + ny * y0) | * |y|
+    ///         |  0                  0                 1                            |   |1|
     /// ```
     /// Here the terms `xr` and `yr` are the coordinates of the reflected point 
     /// across the line `L`.
@@ -4839,15 +4839,15 @@ where
     /// and the **y-axis** intercept `y0` are both zero, in which case the 
     /// translation terms are zero. This yields the matrix formula
     /// ```text
-    /// |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |
-    /// | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       0 |
-    /// | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   0 |
-    /// |  0              0             0              1 |
+    /// |  1 - 2 * nx * nx   -2 * nx * ny       -2 * nx * nz       0 |
+    /// | -2 * nx * ny        1 - 2 * ny * ny   -2 * ny * nz       0 |
+    /// | -2 * nx * nz       -2 * ny * nz        1 - 2 * nz * nz   0 |
+    /// |  0                  0                  0                 1 |
     /// ```
     /// In the case where the the plane `P` does not cross the origin, we must 
     /// first do a coordinate transformation to coordinates where the line 
-    /// passes through the origin; just shift by the bias `(x0, y0)` from 
-    /// `(x, y)` to `(x - x0, y - y0)`. We achieve this transformation in 
+    /// passes through the origin; just shift by the bias `(x0, y0, z0)` from 
+    /// `(x, y, z)` to `(x - x0, y - y0, z - z0)`. We achieve this transformation in 
     /// homogeneous coordinates by the matrix
     /// ```text
     /// | 1  0  0  -x0 |
@@ -4859,23 +4859,23 @@ where
     /// through the origin. In this coordinate system, we can now apply the 
     /// reflection matrix, which gives a homogeneous matrix equation 
     /// ```text
-    /// | 1  0  0  -x0 |   |xr|    |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |   | 1  0  0  -x0 |   |x|
-    /// | 0  1  0  -y0 | * |yr| == | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       0 | * | 0  1  0  -y0 | * |y|
-    /// | 0  0  1  -z0 |   |zr|    | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   0 |   | 0  0  1  -z0 |   |z|
-    /// | 0  0  0   1  |   |1 |    |  0              0             0              1 |   | 0  0  0   1  |   |1| 
+    /// | 1  0  0  -x0 |   |xr|    |  1 - 2 * nx * nx   -2 * nx * ny       -2 * nx * nz       0 |   | 1  0  0  -x0 |   |x|
+    /// | 0  1  0  -y0 | * |yr| == | -2 * nx * ny        1 - 2 * ny * ny   -2 * ny * nz       0 | * | 0  1  0  -y0 | * |y|
+    /// | 0  0  1  -z0 |   |zr|    | -2 * nx * nz       -2 * ny * nz        1 - 2 * nz * nz   0 |   | 0  0  1  -z0 |   |z|
+    /// | 0  0  0   1  |   |1 |    |  0                  0                  0                 1 |   | 0  0  0   1  |   |1| 
     /// ```
     /// Then to solve for the reflection components, we invert the translation 
     /// matrix on the left hand side to get an equation of the form
     /// ```text
-    /// |xr|    | 1  0  0  x0 |   |  1 - 2*nx*nx   -2*nx*ny       -2*nx*nz       0 |   | 1  0  0  -x0 |   |x|
-    /// |yr| == | 0  1  0  y0 | * | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       0 | * | 0  1  0  -y0 | * |y|
-    /// |zr|    | 0  0  1  z0 |   | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   0 |   | 0  0  1  -z0 |   |z|
-    /// |1 |    | 0  0  0  1  |   |  0              0             0              1 |   | 0  0  0   1  |   |1| 
+    /// |xr|    | 1  0  0  x0 |   |  1 - 2 * nx * nx   -2 * nx * ny       -2 * nx * nz       0 |   | 1  0  0  -x0 |   |x|
+    /// |yr| == | 0  1  0  y0 | * | -2 * nx * ny        1 - 2 * ny * ny   -2 * ny * nz       0 | * | 0  1  0  -y0 | * |y|
+    /// |zr|    | 0  0  1  z0 |   | -2 * nx * nz       -2 * ny * nz        1 - 2 * nz * nz   0 |   | 0  0  1  -z0 |   |z|
+    /// |1 |    | 0  0  0  1  |   |  0                  0                  0                 1 |   | 0  0  0   1  |   |1| 
     ///
-    ///         |  1 - 2*nx*nx   -2*nx*ny       -2*nx*xz       2*nx*(nx*n0 + ny*y0 + nz*z0) |   |x|
-    ///      == | -2*nx*ny        1 - 2*ny*ny   -2*ny*nz       2*ny*(nx*x0 + ny*y0 + nz*z0) | * |y|
-    ///         | -2*nx*nz       -2*ny*nz        1 - 2*nz*nz   2*nz*(nx*x0 + ny*y0 + nz*z0) |   |z|
-    ///         |  0              0              0             1                            |   |1|
+    ///         |  1 - 2 * nx * nx   -2 * nx * ny       -2 * nx * xz       2 * nx * (nx * n0 + ny * y0 + nz * z0) |   |x|
+    ///      == | -2 * nx * ny        1 - 2 * ny * ny   -2 * ny * nz       2 * ny * (nx * x0 + ny * y0 + nz * z0) | * |y|
+    ///         | -2 * nx * nz       -2 * ny * nz        1 - 2 * nz * nz   2 * nz * (nx * x0 + ny * y0 + nz * z0) |   |z|
+    ///         |  0                  0                  0                 1                                      |   |1|
     /// ```
     /// Here the terms `xr`, `yr`, and `zr` are the coordinates of the 
     /// reflected point across the plane `P`.

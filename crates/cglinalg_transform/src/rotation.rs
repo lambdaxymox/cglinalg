@@ -8,14 +8,12 @@ use cglinalg_trigonometry::{
 use cglinalg_core::{
     Const,
     ShapeConstraint,
-    DimAdd,
     DimMul,
     Matrix,
     Matrix2x2,
     Matrix3x3,
     Matrix4x4,
     Point,
-    Point2,
     Point3,
     Vector,
     Vector2,
@@ -24,7 +22,6 @@ use cglinalg_core::{
     Unit,
 };
 use crate::transform::{
-    Transform,
     Transform2,
     Transform3,
 };
